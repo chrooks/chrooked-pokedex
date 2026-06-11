@@ -1,0 +1,5 @@
+name: Shieldon
+chrooked_id: shieldon
+aka: { pokeemerald: SPECIES_SHIELDON }
+abilities:
+  secondary: Battle Armor

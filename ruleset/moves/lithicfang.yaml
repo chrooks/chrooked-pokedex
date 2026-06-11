@@ -1,0 +1,9 @@
+name: Lithic Fang
+chrooked_id: lithicfang
+aka: { pokeemerald: MOVE_LITHIC_FANG }
+type: Rock
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: May cause flinching or crack the foe's defense.

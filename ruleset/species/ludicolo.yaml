@@ -1,0 +1,6 @@
+name: Ludicolo
+chrooked_id: ludicolo
+aka: { pokeemerald: SPECIES_LUDICOLO }
+abilities:
+  hidden: Chloroplast
+stats: { spa: 100, spe: 80 }

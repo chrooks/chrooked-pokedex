@@ -1,0 +1,5 @@
+name: Bellsprout
+chrooked_id: bellsprout
+aka: { pokeemerald: SPECIES_BELLSPROUT }
+abilities:
+  secondary: Flytrap

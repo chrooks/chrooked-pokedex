@@ -1,0 +1,25 @@
+name: Dragonite
+chrooked_id: dragonite
+aka: { pokeemerald: SPECIES_DRAGONITE }
+learnset:
+  - { level: 0, move: Hurricane }
+  - { level: 1, move: Roost }
+  - { level: 1, move: Extreme Speed }
+  - { level: 1, move: Twister }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Fire Punch }
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Thunder Punch }
+  - { level: 1, move: Leer }
+  - { level: 15, move: Dragon Tail }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Slam }
+  - { level: 33, move: Aqua Tail }
+  - { level: 39, move: Dragon Rush }
+  - { level: 41, move: Outrage }
+  - { level: 46, move: Safeguard }
+  - { level: 53, move: Rain Dance }
+  - { level: 62, move: Dragon Dance }
+  - { level: 80, move: Hyper Beam }
+  - { level: 30, move: Draconic Fang }

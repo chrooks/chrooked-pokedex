@@ -1,0 +1,22 @@
+name: Palpitoad
+chrooked_id: palpitoad
+aka: { pokeemerald: SPECIES_PALPITOAD }
+abilities:
+  secondary: Venomous
+learnset:
+  - { level: 1, move: Bubble }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Acid Spray }
+  - { level: 1, move: Bubble Beam }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Mud Bomb }
+  - { level: 23, move: Echoed Voice }
+  - { level: 26, move: Rain Dance }
+  - { level: 30, move: Sludge Wave }
+  - { level: 33, move: Muddy Water }
+  - { level: 36, move: Earth Power }
+  - { level: 42, move: Drain Punch }
+  - { level: 48, move: Hydro Pump }

@@ -1,0 +1,19 @@
+name: Dragonair
+chrooked_id: dragonair
+aka: { pokeemerald: SPECIES_DRAGONAIR }
+learnset:
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Twister }
+  - { level: 15, move: Dragon Tail }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Slam }
+  - { level: 33, move: Aqua Tail }
+  - { level: 39, move: Dragon Rush }
+  - { level: 46, move: Safeguard }
+  - { level: 53, move: Rain Dance }
+  - { level: 60, move: Dragon Dance }
+  - { level: 67, move: Outrage }
+  - { level: 74, move: Hyper Beam }
+  - { level: 25, move: Draconic Fang }

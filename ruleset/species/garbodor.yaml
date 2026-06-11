@@ -1,0 +1,8 @@
+name: Garbodor
+chrooked_id: garbodor
+aka: { pokeemerald: SPECIES_GARBODOR }
+types: [Poison, Steel]
+abilities:
+  secondary: Carnivore
+  hidden: Corrosion
+stats: { hp: 100, spa: 85, spe: 55 }

@@ -1,0 +1,24 @@
+name: Tinkaton
+chrooked_id: tinkaton
+aka: { pokeemerald: SPECIES_TINKATON }
+abilities:
+  secondary: Sledgehammer
+stats: { atk: 120 }
+learnset:
+  - { level: 0, move: Gigaton Hammer }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Fairy Wind }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Draining Kiss }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Slam }
+  - { level: 1, move: Cutsie Slap }
+  - { level: 1, move: Iron Head }
+  - { level: 30, move: Play Rough }
+  - { level: 34, move: Knock Off }
+  - { level: 38, move: Heavy Slam }
+  - { level: 42, move: Swords Dance }
+  - { level: 46, move: Hammer Arm }
+  - { level: 52, move: Stomping Tantrum }

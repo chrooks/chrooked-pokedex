@@ -1,0 +1,6 @@
+name: Granbull
+chrooked_id: granbull
+aka: { pokeemerald: SPECIES_GRANBULL }
+abilities:
+  secondary: Quick Feet
+stats: { atk: 135, def: 80, spe: 75 }

@@ -1,0 +1,9 @@
+name: Lightning Slam
+chrooked_id: lightningslam
+aka: { pokeemerald: MOVE_LIGHTNING_SLAM }
+type: Electric
+category: physical
+power: 90
+accuracy: 100
+pp: 15
+description: An electrified body slam. May paralyze the target.

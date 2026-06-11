@@ -1,0 +1,7 @@
+name: Slugma
+chrooked_id: slugma
+aka: { pokeemerald: SPECIES_SLUGMA }
+abilities:
+  primary: Gooey
+  hidden: Mountaineer
+stats: { def: 50, spd: 50 }

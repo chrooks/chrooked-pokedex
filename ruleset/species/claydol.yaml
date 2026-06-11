@@ -1,0 +1,6 @@
+name: Claydol
+chrooked_id: claydol
+aka: { pokeemerald: SPECIES_CLAYDOL }
+abilities:
+  hidden: Mystic Power
+stats: { spe: 85 }

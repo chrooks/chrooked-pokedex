@@ -1,0 +1,17 @@
+name: Chewtle
+chrooked_id: chewtle
+aka: { pokeemerald: SPECIES_CHEWTLE }
+abilities:
+  hidden: Carnivore
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 7, move: Bite }
+  - { level: 14, move: Protect }
+  - { level: 21, move: Headbutt }
+  - { level: 28, move: Counter }
+  - { level: 35, move: Jaw Lock }
+  - { level: 42, move: Liquidation }
+  - { level: 49, move: Body Slam }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

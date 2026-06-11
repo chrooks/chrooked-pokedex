@@ -1,0 +1,27 @@
+name: Lokix
+chrooked_id: lokix
+aka: { pokeemerald: SPECIES_LOKIX }
+abilities:
+  primary: Blitz
+  secondary: Striker
+stats: { atk: 115, spe: 110 }
+learnset:
+  - { level: 0, move: Lunge }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Low Kick }
+  - { level: 1, move: U-turn }
+  - { level: 4, move: Struggle Bug }
+  - { level: 6, move: Astonish }
+  - { level: 9, move: Assurance }
+  - { level: 11, move: Double Kick }
+  - { level: 14, move: Screech }
+  - { level: 18, move: Bug Bite }
+  - { level: 22, move: Sucker Punch }
+  - { level: 28, move: Leech Life }
+  - { level: 32, move: Throat Chop }
+  - { level: 36, move: First Impression }
+  - { level: 40, move: Heel Drop }
+  - { level: 44, move: Bounce }
+  - { level: 48, move: Axe Kick }
+  - { level: 53, move: Guillotine }

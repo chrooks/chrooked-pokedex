@@ -1,0 +1,6 @@
+name: Flamigo
+chrooked_id: flamigo
+aka: { pokeemerald: SPECIES_FLAMIGO }
+abilities:
+  secondary: Striker
+stats: { spd: 74 }

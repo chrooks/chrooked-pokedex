@@ -1,0 +1,5 @@
+name: Deoxys Attack
+chrooked_id: deoxysattack
+aka: { pokeemerald: SPECIES_DEOXYS_ATTACK }
+abilities:
+  primary: Guts

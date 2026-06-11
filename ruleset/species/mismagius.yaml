@@ -1,0 +1,5 @@
+name: Mismagius
+chrooked_id: mismagius
+aka: { pokeemerald: SPECIES_MISMAGIUS }
+types: [Ghost, Fairy]
+stats: { spa: 120 }

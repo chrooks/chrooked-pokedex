@@ -1,0 +1,7 @@
+name: Sneasel Hisui
+chrooked_id: sneaselhisui
+aka: { pokeemerald: SPECIES_SNEASEL_HISUI }
+abilities:
+  primary: Mountaineer
+  secondary: Unburden
+  hidden: Venomize

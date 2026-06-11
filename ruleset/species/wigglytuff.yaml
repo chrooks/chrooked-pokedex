@@ -1,0 +1,7 @@
+name: Wigglytuff
+chrooked_id: wigglytuff
+aka: { pokeemerald: SPECIES_WIGGLYTUFF }
+types: [Normal, Fairy]
+abilities:
+  secondary: Competitive
+stats: { spa: 85 }

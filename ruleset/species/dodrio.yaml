@@ -1,0 +1,8 @@
+name: Dodrio
+chrooked_id: dodrio
+aka: { pokeemerald: SPECIES_DODRIO }
+abilities:
+  primary: Moxie
+  secondary: Technician
+  hidden: Striker
+stats: { spe: 110 }

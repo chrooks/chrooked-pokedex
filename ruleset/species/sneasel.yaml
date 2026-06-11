@@ -1,0 +1,6 @@
+name: Sneasel
+chrooked_id: sneasel
+aka: { pokeemerald: SPECIES_SNEASEL }
+abilities:
+  primary: Carnivore
+  hidden: Refrigerate

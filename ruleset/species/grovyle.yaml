@@ -1,0 +1,9 @@
+name: Grovyle
+chrooked_id: grovyle
+aka: { pokeemerald: SPECIES_GROVYLE }
+types: [Grass, Dragon]
+abilities:
+  primary: Forestry
+  secondary: Chloroplast
+  hidden: Sharpness
+stats: { atk: 70, def: 40 }

@@ -1,0 +1,8 @@
+name: Victreebel
+chrooked_id: victreebel
+aka: { pokeemerald: SPECIES_VICTREEBEL }
+abilities:
+  primary: Corrosion
+  secondary: Flytrap
+  hidden: Chlorophyll
+stats: { spa: 105, spd: 70 }

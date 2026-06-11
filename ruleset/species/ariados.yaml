@@ -1,0 +1,6 @@
+name: Ariados
+chrooked_id: ariados
+aka: { pokeemerald: SPECIES_ARIADOS }
+abilities:
+  secondary: Venomous
+stats: { hp: 90, atk: 110, def: 80, spd: 80, spe: 55 }

@@ -1,0 +1,26 @@
+name: Greavard
+chrooked_id: greavard
+aka: { pokeemerald: SPECIES_GREAVARD }
+types: [Ghost, Ground]
+abilities:
+  primary: Fluffy
+  secondary: Daunt
+  hidden: Sand Rush
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Lick }
+  - { level: 6, move: Tail Whip }
+  - { level: 6, move: Bite }
+  - { level: 9, move: Roar }
+  - { level: 12, move: Headbutt }
+  - { level: 16, move: Dig }
+  - { level: 24, move: Rest }
+  - { level: 28, move: Crunch }
+  - { level: 32, move: Play Rough }
+  - { level: 37, move: Helping Hand }
+  - { level: 41, move: Phantom Force }
+  - { level: 46, move: Charm }
+  - { level: 52, move: Double-Edge }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

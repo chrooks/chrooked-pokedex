@@ -1,0 +1,7 @@
+name: Skeledirge
+chrooked_id: skeledirge
+aka: { pokeemerald: SPECIES_SKELEDIRGE }
+abilities:
+  secondary: Amplifier
+  hidden: Pyre
+stats: { hp: 105, def: 105, spd: 80, spe: 65 }

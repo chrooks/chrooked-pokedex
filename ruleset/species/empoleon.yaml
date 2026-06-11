@@ -1,0 +1,6 @@
+name: Empoleon
+chrooked_id: empoleon
+aka: { pokeemerald: SPECIES_EMPOLEON }
+abilities:
+  hidden: Competitive
+stats: { hp: 95, atk: 75, def: 90, spa: 120, spd: 100 }

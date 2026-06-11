@@ -1,0 +1,24 @@
+name: Emboar
+chrooked_id: emboar
+aka: { pokeemerald: SPECIES_EMBOAR }
+types: [Fire, Dark]
+stats: { atk: 125, def: 75, spa: 90, spd: 75 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Endure }
+  - { level: 1, move: Hammer Arm }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Arm Thrust }
+  - { level: 13, move: Defense Curl }
+  - { level: 15, move: Flame Charge }
+  - { level: 20, move: Smog }
+  - { level: 23, move: Rollout }
+  - { level: 28, move: Take Down }
+  - { level: 31, move: Heat Crash }
+  - { level: 38, move: Assurance }
+  - { level: 43, move: Flamethrower }
+  - { level: 50, move: Head Smash }
+  - { level: 55, move: Roar }
+  - { level: 62, move: Flare Blitz }

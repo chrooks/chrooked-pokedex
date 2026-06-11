@@ -1,0 +1,7 @@
+name: Shaymin Land
+chrooked_id: shayminland
+aka: { pokeemerald: SPECIES_SHAYMIN_LAND }
+abilities:
+  primary: Serene Grace
+  secondary: Bloom
+  hidden: Foliate

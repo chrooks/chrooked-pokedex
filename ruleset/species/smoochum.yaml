@@ -1,0 +1,6 @@
+name: Smoochum
+chrooked_id: smoochum
+aka: { pokeemerald: SPECIES_SMOOCHUM }
+types: [Psychic, Ice]
+abilities:
+  secondary: Forewarn

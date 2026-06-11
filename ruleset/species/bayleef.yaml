@@ -1,0 +1,7 @@
+name: Bayleef
+chrooked_id: bayleef
+aka: { pokeemerald: SPECIES_BAYLEEF }
+types: [Grass, Fairy]
+abilities:
+  secondary: Triage
+  hidden: Petal Barrier

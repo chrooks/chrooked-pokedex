@@ -1,0 +1,9 @@
+name: Excalibur
+chrooked_id: excalibur
+aka: { pokeemerald: MOVE_EXCALIBUR }
+type: Steel
+category: physical
+power: 90
+accuracy: 100
+pp: 10
+description: A holy sword strike that never misses its mark.

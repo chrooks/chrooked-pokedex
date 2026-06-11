@@ -1,0 +1,6 @@
+name: Chikorita
+chrooked_id: chikorita
+aka: { pokeemerald: SPECIES_CHIKORITA }
+abilities:
+  secondary: Triage
+  hidden: Petal Barrier

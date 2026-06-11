@@ -1,0 +1,24 @@
+name: Sudowoodo
+chrooked_id: sudowoodo
+aka: { pokeemerald: SPECIES_SUDOWOODO }
+types: [Rock, Grass]
+abilities:
+  primary: Stonebark
+  hidden: Foliate
+stats: { hp: 95, atk: 110, def: 120, spd: 100, spe: 50 }
+learnset:
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Mimic }
+  - { level: 1, move: Rock Throw }
+  - { level: 8, move: Synthesis }
+  - { level: 10, move: Bullet Seed }
+  - { level: 14, move: Rock Tomb }
+  - { level: 18, move: Low Kick }
+  - { level: 22, move: Seed Bomb }
+  - { level: 26, move: Sucker Punch }
+  - { level: 30, move: Rock Slide }
+  - { level: 34, move: Hammer Arm }
+  - { level: 38, move: Earthquake }
+  - { level: 42, move: Wood Hammer }
+  - { level: 46, move: Double-Edge }
+  - { level: 50, move: Head Smash }

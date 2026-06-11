@@ -1,0 +1,5 @@
+name: Arbok
+chrooked_id: arbok
+aka: { pokeemerald: SPECIES_ARBOK }
+types: [Poison, Dark]
+stats: { hp: 80, atk: 105, def: 70, spd: 95 }

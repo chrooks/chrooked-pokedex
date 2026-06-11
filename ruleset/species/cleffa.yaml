@@ -1,0 +1,6 @@
+name: Cleffa
+chrooked_id: cleffa
+aka: { pokeemerald: SPECIES_CLEFFA }
+types: [Fairy]
+abilities:
+  secondary: Magic Guard

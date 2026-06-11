@@ -1,0 +1,22 @@
+name: Gurdurr
+chrooked_id: gurdurr
+aka: { pokeemerald: SPECIES_GURDURR }
+abilities:
+  primary: Hammerfist
+  hidden: Guts
+stats: { hp: 75, atk: 95, def: 75, spa: 50 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Low Kick }
+  - { level: 1, move: Rock Throw }
+  - { level: 12, move: Focus Energy }
+  - { level: 16, move: Bulk Up }
+  - { level: 18, move: Mach Punch }
+  - { level: 22, move: Rock Slide }
+  - { level: 26, move: Slam }
+  - { level: 30, move: Drain Punch }
+  - { level: 36, move: Dynamic Punch }
+  - { level: 42, move: Hammer Arm }
+  - { level: 48, move: Stone Edge }
+  - { level: 54, move: Superpower }

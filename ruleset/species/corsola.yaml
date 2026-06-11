@@ -1,0 +1,4 @@
+name: Corsola
+chrooked_id: corsola
+aka: { pokeemerald: SPECIES_CORSOLA }
+stats: { hp: 65, def: 100, spd: 100 }

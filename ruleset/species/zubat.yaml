@@ -1,0 +1,7 @@
+name: Zubat
+chrooked_id: zubat
+aka: { pokeemerald: SPECIES_ZUBAT }
+abilities:
+  primary: Mountaineer
+  secondary: Infiltrator
+  hidden: Tinted Lens

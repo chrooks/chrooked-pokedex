@@ -1,0 +1,6 @@
+name: Ambipom
+chrooked_id: ambipom
+aka: { pokeemerald: SPECIES_AMBIPOM }
+abilities:
+  primary: Run Away
+stats: { atk: 105, spe: 120 }

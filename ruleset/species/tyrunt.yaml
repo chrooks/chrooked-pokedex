@@ -1,0 +1,23 @@
+name: Tyrunt
+chrooked_id: tyrunt
+aka: { pokeemerald: SPECIES_TYRUNT }
+abilities:
+  secondary: Carnivore
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 4, move: Bite }
+  - { level: 8, move: Rock Tomb }
+  - { level: 12, move: Stomp }
+  - { level: 16, move: Fire Fang }
+  - { level: 20, move: Dragon Tail }
+  - { level: 24, move: Rock Slide }
+  - { level: 28, move: Crunch }
+  - { level: 32, move: Dragon Claw }
+  - { level: 36, move: Ice Fang }
+  - { level: 39, move: Psychic Fangs }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Head Smash }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
+  - { level: 25, move: Draconic Fang }

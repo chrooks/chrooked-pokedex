@@ -1,0 +1,7 @@
+name: Grumpig
+chrooked_id: grumpig
+aka: { pokeemerald: SPECIES_GRUMPIG }
+abilities:
+  secondary: Psyonize
+  hidden: Magical Fists
+stats: { hp: 95, spd: 120 }

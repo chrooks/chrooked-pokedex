@@ -1,0 +1,7 @@
+name: Butterfree
+chrooked_id: butterfree
+aka: { pokeemerald: SPECIES_BUTTERFREE }
+types: [Bug, Psychic]
+abilities:
+  primary: Levitate
+stats: { spa: 105 }

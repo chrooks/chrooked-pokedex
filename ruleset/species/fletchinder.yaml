@@ -1,0 +1,27 @@
+name: Fletchinder
+chrooked_id: fletchinder
+aka: { pokeemerald: SPECIES_FLETCHINDER }
+abilities:
+  primary: Reckless
+  secondary: Gale Wings
+  hidden: Rapid Combustion
+learnset:
+  - { level: 0, move: Flame Charge }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Quick Attack }
+  - { level: 5, move: Fire Fang }
+  - { level: 10, move: Wing Attack }
+  - { level: 14, move: Fire Spin }
+  - { level: 17, move: Acrobatics }
+  - { level: 21, move: Agility }
+  - { level: 25, move: Aerial Ace }
+  - { level: 29, move: Roost }
+  - { level: 32, move: Take Down }
+  - { level: 35, move: Incinerate }
+  - { level: 39, move: Tailwind }
+  - { level: 43, move: Steel Wing }
+  - { level: 47, move: Flamethrower }
+  - { level: 51, move: Fly }
+  - { level: 55, move: Double-Edge }

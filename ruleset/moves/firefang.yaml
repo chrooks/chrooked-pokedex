@@ -1,0 +1,9 @@
+name: Fire Fang
+chrooked_id: firefang
+aka: { pokeemerald: MOVE_FIRE_FANG }
+type: Fire
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: May cause flinching or leave the foe with a burn.

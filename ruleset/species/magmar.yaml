@@ -1,0 +1,5 @@
+name: Magmar
+chrooked_id: magmar
+aka: { pokeemerald: SPECIES_MAGMAR }
+abilities:
+  secondary: Flame Body

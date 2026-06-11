@@ -1,0 +1,6 @@
+name: Azumarill
+chrooked_id: azumarill
+aka: { pokeemerald: SPECIES_AZUMARILL }
+abilities:
+  primary: Huge Power
+stats: { spa: 60 }

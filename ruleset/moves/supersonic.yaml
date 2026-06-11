@@ -1,0 +1,9 @@
+name: Supersonic
+chrooked_id: supersonic
+aka: { pokeemerald: MOVE_SUPERSONIC }
+type: Normal
+category: status
+power: 0
+accuracy: 65
+pp: 20
+description: Emits bizarre sound waves that may confuse the foe.

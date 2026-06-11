@@ -1,0 +1,7 @@
+name: Tsareena
+chrooked_id: tsareena
+aka: { pokeemerald: SPECIES_TSAREENA }
+types: [Grass, Fighting]
+abilities:
+  primary: Striker
+stats: { hp: 70, def: 90, spd: 95, spe: 100 }

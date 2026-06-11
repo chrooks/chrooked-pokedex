@@ -1,0 +1,5 @@
+name: Bulbasaur
+chrooked_id: bulbasaur
+aka: { pokeemerald: SPECIES_BULBASAUR }
+abilities:
+  secondary: Chloroplast

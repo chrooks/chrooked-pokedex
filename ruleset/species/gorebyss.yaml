@@ -1,0 +1,8 @@
+name: Gorebyss
+chrooked_id: gorebyss
+aka: { pokeemerald: SPECIES_GOREBYSS }
+types: [Water, Fairy]
+abilities:
+  secondary: Hydration
+  hidden: Carnivore
+stats: { atk: 85, spa: 115, spd: 80, spe: 50 }

@@ -1,0 +1,6 @@
+name: Sableye
+chrooked_id: sableye
+aka: { pokeemerald: SPECIES_SABLEYE }
+abilities:
+  secondary: Stall
+stats: { hp: 80, spa: 75 }

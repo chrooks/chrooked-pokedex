@@ -1,0 +1,6 @@
+name: Skrelp
+chrooked_id: skrelp
+aka: { pokeemerald: SPECIES_SKRELP }
+abilities:
+  primary: Venomous
+  secondary: Corrosion

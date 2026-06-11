@@ -1,0 +1,7 @@
+name: Golbat
+chrooked_id: golbat
+aka: { pokeemerald: SPECIES_GOLBAT }
+abilities:
+  primary: Mountaineer
+  secondary: Infiltrator
+  hidden: Tinted Lens

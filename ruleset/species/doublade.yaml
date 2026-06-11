@@ -1,0 +1,17 @@
+name: Doublade
+chrooked_id: doublade
+aka: { pokeemerald: SPECIES_DOUBLADE }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Shadow Sneak }
+  - { level: 1, move: Metal Sound }
+  - { level: 13, move: Aerial Ace }
+  - { level: 17, move: Iron Defense }
+  - { level: 21, move: Slash }
+  - { level: 25, move: Shadow Claw }
+  - { level: 29, move: Night Slash }
+  - { level: 35, move: Iron Head }
+  - { level: 41, move: Swords Dance }
+  - { level: 47, move: Sacred Sword }
+  - { level: 53, move: Excalibur }

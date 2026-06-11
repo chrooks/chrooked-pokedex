@@ -1,0 +1,7 @@
+name: Clefable
+chrooked_id: clefable
+aka: { pokeemerald: SPECIES_CLEFABLE }
+types: [Fairy]
+abilities:
+  secondary: Magic Guard
+stats: { hp: 110, def: 75, spa: 100, spd: 100 }

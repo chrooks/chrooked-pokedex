@@ -1,0 +1,9 @@
+name: Thunder Fang
+chrooked_id: thunderfang
+aka: { pokeemerald: MOVE_THUNDER_FANG }
+type: Electric
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: May cause flinching or leave the foe paralyzed.

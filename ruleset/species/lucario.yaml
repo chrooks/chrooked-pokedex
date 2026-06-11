@@ -1,0 +1,7 @@
+name: Lucario
+chrooked_id: lucario
+aka: { pokeemerald: SPECIES_LUCARIO }
+abilities:
+  primary: Magical Fists
+  hidden: Mega Launcher
+stats: { atk: 120, spa: 120, spe: 100 }

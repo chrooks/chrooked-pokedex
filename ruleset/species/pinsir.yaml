@@ -1,0 +1,24 @@
+name: Pinsir
+chrooked_id: pinsir
+aka: { pokeemerald: SPECIES_PINSIR }
+types: [Bug, Dark]
+abilities:
+  primary: Death Grip
+  secondary: Mold Breaker
+learnset:
+  - { level: 1, move: Vise Grip }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Bite }
+  - { level: 4, move: Focus Energy }
+  - { level: 8, move: Bug Bite }
+  - { level: 12, move: Pursuit }
+  - { level: 16, move: Seismic Toss }
+  - { level: 20, move: Storm Throw }
+  - { level: 24, move: Knock Off }
+  - { level: 28, move: X-Scissor }
+  - { level: 32, move: Throat Chop }
+  - { level: 36, move: Swords Dance }
+  - { level: 40, move: Strength }
+  - { level: 44, move: Crunch }
+  - { level: 48, move: Superpower }
+  - { level: 52, move: Guillotine }

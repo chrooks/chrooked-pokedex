@@ -1,0 +1,6 @@
+name: Litwick
+chrooked_id: litwick
+aka: { pokeemerald: SPECIES_LITWICK }
+abilities:
+  secondary: Pyre
+stats: { atk: 50, spd: 65 }

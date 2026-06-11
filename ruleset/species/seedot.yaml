@@ -1,0 +1,5 @@
+name: Seedot
+chrooked_id: seedot
+aka: { pokeemerald: SPECIES_SEEDOT }
+abilities:
+  secondary: Forestry

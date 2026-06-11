@@ -1,0 +1,9 @@
+name: One-Inch Punch
+chrooked_id: oneinchpunch
+aka: { pokeemerald: MOVE_ONE_INCH_PUNCH }
+type: Fighting
+category: physical
+power: 90
+accuracy: 0
+pp: 10
+description: A focused strike that can't miss. High critical-hit rate.

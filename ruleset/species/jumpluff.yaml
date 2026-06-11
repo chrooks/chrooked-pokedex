@@ -1,0 +1,6 @@
+name: Jumpluff
+chrooked_id: jumpluff
+aka: { pokeemerald: SPECIES_JUMPLUFF }
+abilities:
+  secondary: Leaf Guard
+stats: { spd: 95, spe: 115 }

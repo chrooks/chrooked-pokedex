@@ -1,0 +1,31 @@
+name: Steelix Mega
+chrooked_id: steelixmega
+aka: { pokeemerald: SPECIES_STEELIX_MEGA }
+learnset:
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Rock Polish }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Rock Throw }
+  - { level: 4, move: Smack Down }
+  - { level: 8, move: Autotomize }
+  - { level: 12, move: Dragon Breath }
+  - { level: 16, move: Curse }
+  - { level: 20, move: Rock Slide }
+  - { level: 24, move: Screech }
+  - { level: 28, move: Sand Tomb }
+  - { level: 32, move: Stealth Rock }
+  - { level: 36, move: Slam }
+  - { level: 40, move: Sandstorm }
+  - { level: 44, move: Dig }
+  - { level: 48, move: Iron Tail }
+  - { level: 52, move: Stone Edge }
+  - { level: 56, move: Double-Edge }
+  - { level: 60, move: Magnet Rise }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Metallic Fang }

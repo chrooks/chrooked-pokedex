@@ -1,0 +1,5 @@
+name: Growlithe
+chrooked_id: growlithe
+aka: { pokeemerald: SPECIES_GROWLITHE }
+abilities:
+  hidden: Immolate

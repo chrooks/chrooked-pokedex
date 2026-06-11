@@ -1,0 +1,9 @@
+name: Fissure
+chrooked_id: fissure
+aka: { pokeemerald: MOVE_FISSURE }
+type: Ground
+category: physical
+power: 120
+accuracy: 85
+pp: 5
+description: Opens a fissure to swallow the foe. Very powerful.

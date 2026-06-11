@@ -1,0 +1,7 @@
+name: Tropius
+chrooked_id: tropius
+aka: { pokeemerald: SPECIES_TROPIUS }
+types: [Grass, Dragon]
+abilities:
+  secondary: Solar Power
+stats: { hp: 100, atk: 90, def: 95, spa: 90, spd: 100, spe: 50 }

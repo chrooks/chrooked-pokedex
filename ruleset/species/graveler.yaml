@@ -1,0 +1,5 @@
+name: Graveler
+chrooked_id: graveler
+aka: { pokeemerald: SPECIES_GRAVELER }
+abilities:
+  hidden: Mineralize

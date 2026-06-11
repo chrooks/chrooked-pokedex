@@ -1,0 +1,7 @@
+name: Bombirdier
+chrooked_id: bombirdier
+aka: { pokeemerald: SPECIES_BOMBIRDIER }
+abilities:
+  primary: Rocky Payload
+  hidden: Mountaineer
+stats: { atk: 115, def: 95 }

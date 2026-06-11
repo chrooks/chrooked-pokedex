@@ -1,0 +1,9 @@
+name: Rage
+chrooked_id: rage
+aka: { pokeemerald: MOVE_RAGE }
+type: Normal
+category: physical
+power: 30
+accuracy: 100
+pp: 20
+description: Raises the user's Attack every time it is hit.

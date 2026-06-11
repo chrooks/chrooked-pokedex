@@ -1,0 +1,6 @@
+name: Lanturn
+chrooked_id: lanturn
+aka: { pokeemerald: SPECIES_LANTURN }
+abilities:
+  secondary: Water Absorb
+stats: { spa: 90, spd: 86 }

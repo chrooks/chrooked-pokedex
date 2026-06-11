@@ -1,0 +1,5 @@
+name: Chinchou
+chrooked_id: chinchou
+aka: { pokeemerald: SPECIES_CHINCHOU }
+abilities:
+  secondary: Water Absorb

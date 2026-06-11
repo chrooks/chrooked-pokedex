@@ -1,0 +1,6 @@
+name: Carnivine
+chrooked_id: carnivine
+aka: { pokeemerald: SPECIES_CARNIVINE }
+abilities:
+  secondary: Flytrap
+stats: { hp: 80, atk: 110 }

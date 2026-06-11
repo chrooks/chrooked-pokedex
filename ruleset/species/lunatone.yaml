@@ -1,0 +1,7 @@
+name: Lunatone
+chrooked_id: lunatone
+aka: { pokeemerald: SPECIES_LUNATONE }
+types: [Rock, Fairy]
+abilities:
+  secondary: Full Moon
+stats: { hp: 90, spa: 120, spd: 115 }

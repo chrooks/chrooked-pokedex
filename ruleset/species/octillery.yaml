@@ -1,0 +1,6 @@
+name: Octillery
+chrooked_id: octillery
+aka: { pokeemerald: SPECIES_OCTILLERY }
+abilities:
+  secondary: Sniper
+stats: { hp: 80, atk: 95, def: 80, spa: 125 }

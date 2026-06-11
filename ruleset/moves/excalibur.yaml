@@ -3,7 +3,7 @@ chrooked_id: excalibur
 aka: { pokeemerald: MOVE_EXCALIBUR }
 type: Steel
 category: physical
-power: 90
-accuracy: 100
-pp: 10
-description: A holy sword strike that never misses its mark.
+power: 120
+accuracy: 80
+pp: 5
+description: A legendary blade strike. Super effective on Dragons.

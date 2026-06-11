@@ -1,0 +1,23 @@
+name: Iron Hands
+chrooked_id: ironhands
+aka: { pokeemerald: SPECIES_IRON_HANDS }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Electric Terrain }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Arm Thrust }
+  - { level: 7, move: Fake Out }
+  - { level: 14, move: Whirlwind }
+  - { level: 21, move: Thunder Punch }
+  - { level: 28, move: Slam }
+  - { level: 35, move: Force Palm }
+  - { level: 42, move: Seismic Toss }
+  - { level: 49, move: Charge }
+  - { level: 56, move: Wild Charge }
+  - { level: 63, move: Close Combat }
+  - { level: 70, move: Detect }
+  - { level: 77, move: Heavy Slam }
+  - { level: 84, move: Belly Drum }
+  - { level: 91, move: Focus Punch }

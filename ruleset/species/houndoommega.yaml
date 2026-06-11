@@ -1,0 +1,23 @@
+name: Houndoom Mega
+chrooked_id: houndoommega
+aka: { pokeemerald: SPECIES_HOUNDOOM_MEGA }
+stats: { atk: 130, def: 80, spa: 130, spd: 86, spe: 114 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Smog }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Howl }
+  - { level: 1, move: Nasty Plot }
+  - { level: 13, move: Roar }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Incinerate }
+  - { level: 26, move: Beat Up }
+  - { level: 30, move: Fire Fang }
+  - { level: 35, move: Torment }
+  - { level: 41, move: Comeuppance }
+  - { level: 45, move: Foul Play }
+  - { level: 50, move: Flamethrower }
+  - { level: 56, move: Crunch }
+  - { level: 62, move: Inferno }

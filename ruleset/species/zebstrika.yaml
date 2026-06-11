@@ -1,0 +1,18 @@
+name: Zebstrika
+chrooked_id: zebstrika
+aka: { pokeemerald: SPECIES_ZEBSTRIKA }
+stats: { atk: 110, def: 60, spa: 75, spd: 60, spe: 125 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Charge }
+  - { level: 11, move: Shock Wave }
+  - { level: 18, move: Flame Charge }
+  - { level: 25, move: Spark }
+  - { level: 31, move: Stomp }
+  - { level: 36, move: Discharge }
+  - { level: 42, move: Agility }
+  - { level: 47, move: Wild Charge }
+  - { level: 53, move: Thrash }

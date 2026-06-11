@@ -1,0 +1,21 @@
+name: Durant
+chrooked_id: durant
+aka: { pokeemerald: SPECIES_DURANT }
+learnset:
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Sand Attack }
+  - { level: 4, move: Vise Grip }
+  - { level: 8, move: Metal Claw }
+  - { level: 12, move: Beat Up }
+  - { level: 16, move: Bug Bite }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Agility }
+  - { level: 28, move: Dig }
+  - { level: 32, move: X-Scissor }
+  - { level: 36, move: Crunch }
+  - { level: 40, move: Metal Sound }
+  - { level: 44, move: Iron Head }
+  - { level: 48, move: Entrainment }
+  - { level: 52, move: Iron Defense }
+  - { level: 56, move: Guillotine }
+  - { level: 25, move: Metallic Fang }

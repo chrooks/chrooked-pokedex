@@ -1,0 +1,26 @@
+name: Arcanine Hisui
+chrooked_id: arcaninehisui
+aka: { pokeemerald: SPECIES_ARCANINE_HISUI }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Extreme Speed }
+  - { level: 1, move: Extreme Speed }
+  - { level: 1, move: Flame Wheel }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Howl }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Rock Slide }
+  - { level: 5, move: Flamethrower }
+  - { level: 15, move: Morning Sun }
+  - { level: 25, move: Slam }
+  - { level: 35, move: Stone Edge }
+  - { level: 40, move: Wild Charge }
+  - { level: 45, move: Close Combat }
+  - { level: 50, move: Flare Blitz }
+  - { level: 56, move: Head Smash }
+  - { level: 64, move: Raging Fury }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

@@ -1,0 +1,4 @@
+# Attacker/defender multiplier overrides relative to the base type chart.
+# multiplier: 0 = immune, 0.5 = not very effective, 1 = neutral, 2 = super effective.
+overrides:
+  - { attacker: Flying, defender: Ice, multiplier: 0.5 }

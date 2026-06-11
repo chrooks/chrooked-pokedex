@@ -1,0 +1,8 @@
+name: Fly
+chrooked_id: fly
+aka: { pokeemerald: MOVE_FLY }
+type: Flying
+category: physical
+accuracy: 100
+pp: 15
+description: Flies up on the first turn, then strikes the next turn.

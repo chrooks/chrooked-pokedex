@@ -1,0 +1,7 @@
+name: Seaking
+chrooked_id: seaking
+aka: { pokeemerald: SPECIES_SEAKING }
+abilities:
+  primary: Hydrate
+  secondary: Impale
+stats: { atk: 112, spa: 75 }

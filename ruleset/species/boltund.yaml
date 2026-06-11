@@ -1,0 +1,19 @@
+name: Boltund
+chrooked_id: boltund
+aka: { pokeemerald: SPECIES_BOLTUND }
+stats: { hp: 80, spe: 125 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Electrify }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Nuzzle }
+  - { level: 1, move: Bite }
+  - { level: 15, move: Roar }
+  - { level: 20, move: Spark }
+  - { level: 28, move: Charm }
+  - { level: 34, move: Crunch }
+  - { level: 41, move: Charge }
+  - { level: 48, move: Wild Charge }
+  - { level: 55, move: Play Rough }
+  - { level: 62, move: Electric Terrain }

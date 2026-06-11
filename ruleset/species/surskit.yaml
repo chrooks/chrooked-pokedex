@@ -1,0 +1,6 @@
+name: Surskit
+chrooked_id: surskit
+aka: { pokeemerald: SPECIES_SURSKIT }
+abilities:
+  primary: Intimidate
+  secondary: Daunt

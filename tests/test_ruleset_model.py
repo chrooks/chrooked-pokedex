@@ -13,7 +13,10 @@ from chrooked_pokedex.model import Ruleset
 from chrooked_pokedex.model.schema import MoveDef
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
-_RULESET_DIR = _REPO_ROOT / "ruleset"
+# The controlled sample Ruleset — the canonical schema reference for tests.
+# It lives in tests/fixtures (not the repo-root ruleset/) so that seeding real
+# Dreamstone data into ruleset/ in Milestone 2 cannot disturb these assertions.
+_RULESET_DIR = _REPO_ROOT / "tests" / "fixtures" / "sample_ruleset"
 
 
 def test_loads_real_ruleset() -> None:

@@ -1,0 +1,8 @@
+name: Revavroom
+chrooked_id: revavroom
+aka: { pokeemerald: SPECIES_REVAVROOM }
+abilities:
+  primary: Filter
+  secondary: Motor Drive
+  hidden: Exhaust
+stats: { atk: 120, spe: 115 }

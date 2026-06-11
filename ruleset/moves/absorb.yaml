@@ -1,0 +1,8 @@
+name: Absorb
+chrooked_id: absorb
+aka: { pokeemerald: MOVE_ABSORB }
+type: Grass
+category: special
+power: 30
+accuracy: 100
+description: An attack that absorbs half the damage inflicted.

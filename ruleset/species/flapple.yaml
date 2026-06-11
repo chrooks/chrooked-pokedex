@@ -1,0 +1,25 @@
+name: Flapple
+chrooked_id: flapple
+aka: { pokeemerald: SPECIES_FLAPPLE }
+abilities:
+  secondary: Tough Claws
+  hidden: Aerodynamic
+stats: { atk: 120, spa: 65, spd: 70, spe: 80 }
+learnset:
+  - { level: 0, move: Wing Attack }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Recycle }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Tackle }
+  - { level: 8, move: Acrobatics }
+  - { level: 12, move: Leech Seed }
+  - { level: 16, move: Bullet Seed }
+  - { level: 20, move: Dragon Breath }
+  - { level: 24, move: Dragon Dance }
+  - { level: 28, move: Iron Head }
+  - { level: 32, move: Grav Apple }
+  - { level: 36, move: Protect }
+  - { level: 40, move: Wood Hammer }
+  - { level: 44, move: Dragon Rush }
+  - { level: 50, move: Outrage }

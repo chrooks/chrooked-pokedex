@@ -1,0 +1,6 @@
+name: Metang
+chrooked_id: metang
+aka: { pokeemerald: SPECIES_METANG }
+abilities:
+  secondary: Carnivore
+  hidden: Battle Armor

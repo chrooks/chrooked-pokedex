@@ -1,0 +1,7 @@
+name: Dusknoir
+chrooked_id: dusknoir
+aka: { pokeemerald: SPECIES_DUSKNOIR }
+types: [Ghost, Fighting]
+abilities:
+  hidden: Frisk
+stats: { hp: 65 }

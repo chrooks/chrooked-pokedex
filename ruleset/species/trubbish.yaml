@@ -1,0 +1,7 @@
+name: Trubbish
+chrooked_id: trubbish
+aka: { pokeemerald: SPECIES_TRUBBISH }
+abilities:
+  secondary: Carnivore
+  hidden: Corrosion
+stats: { hp: 65, spa: 50 }

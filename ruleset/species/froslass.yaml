@@ -1,0 +1,6 @@
+name: Froslass
+chrooked_id: froslass
+aka: { pokeemerald: SPECIES_FROSLASS }
+abilities:
+  secondary: Whiteout
+stats: { spa: 120 }

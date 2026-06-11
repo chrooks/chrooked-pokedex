@@ -1,0 +1,22 @@
+name: Zigzagoon Galar
+chrooked_id: zigzagoongalar
+aka: { pokeemerald: SPECIES_ZIGZAGOON_GALAR }
+abilities:
+  primary: Spiteful Block
+  secondary: Reckless
+  hidden: Defiant
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 3, move: Sand Attack }
+  - { level: 6, move: Lick }
+  - { level: 9, move: Snarl }
+  - { level: 12, move: Headbutt }
+  - { level: 15, move: Baby-Doll Eyes }
+  - { level: 18, move: Pin Missile }
+  - { level: 20, move: Take Down }
+  - { level: 23, move: Rest }
+  - { level: 26, move: Scary Face }
+  - { level: 29, move: Counter }
+  - { level: 32, move: Taunt }
+  - { level: 35, move: Double-Edge }

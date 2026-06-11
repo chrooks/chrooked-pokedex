@@ -1,0 +1,9 @@
+name: Strength
+chrooked_id: strength
+aka: { pokeemerald: MOVE_STRENGTH }
+type: Rock
+category: physical
+power: 90
+accuracy: 100
+pp: 15
+description: Builds enormous power, then slams the foe.

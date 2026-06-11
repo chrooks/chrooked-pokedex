@@ -1,0 +1,8 @@
+name: Exeggutor
+chrooked_id: exeggutor
+aka: { pokeemerald: SPECIES_EXEGGUTOR }
+abilities:
+  primary: Chloroplast
+  secondary: Harvest
+  hidden: Drought
+stats: { hp: 100, spe: 45 }

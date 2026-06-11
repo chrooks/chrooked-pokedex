@@ -1,0 +1,27 @@
+name: Ursaring
+chrooked_id: ursaring
+aka: { pokeemerald: SPECIES_URSARING }
+abilities:
+  secondary: Quick Feet
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Fake Tears }
+  - { level: 8, move: Fury Swipes }
+  - { level: 13, move: Payback }
+  - { level: 17, move: Night Slash }
+  - { level: 22, move: Slash }
+  - { level: 25, move: Shadow Claw }
+  - { level: 30, move: Facade }
+  - { level: 34, move: Bulk Up }
+  - { level: 38, move: Crunch }
+  - { level: 42, move: Rest }
+  - { level: 42, move: Snore }
+  - { level: 47, move: Cross Chop }
+  - { level: 52, move: Thrash }
+  - { level: 58, move: Hammer Arm }
+  - { level: 64, move: Superpower }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

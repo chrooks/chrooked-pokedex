@@ -1,0 +1,5 @@
+name: Scizor Mega
+chrooked_id: scizormega
+aka: { pokeemerald: SPECIES_SCIZOR_MEGA }
+abilities:
+  secondary: Sharpness

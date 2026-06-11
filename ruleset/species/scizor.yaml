@@ -1,0 +1,7 @@
+name: Scizor
+chrooked_id: scizor
+aka: { pokeemerald: SPECIES_SCIZOR }
+abilities:
+  secondary: Sharpness
+  hidden: Death Grip
+stats: { def: 105 }

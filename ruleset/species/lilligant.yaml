@@ -1,0 +1,6 @@
+name: Lilligant
+chrooked_id: lilligant
+aka: { pokeemerald: SPECIES_LILLIGANT }
+abilities:
+  secondary: Bloom
+  hidden: Chloroplast

@@ -1,0 +1,27 @@
+name: Aerodactyl
+chrooked_id: aerodactyl
+aka: { pokeemerald: SPECIES_AERODACTYL }
+abilities:
+  secondary: Strong Jaw
+  hidden: Carnivore
+stats: { atk: 115 }
+learnset:
+  - { level: 1, move: Bite }
+  - { level: 1, move: Ancient Power }
+  - { level: 5, move: Supersonic }
+  - { level: 10, move: Wing Attack }
+  - { level: 15, move: Scary Face }
+  - { level: 20, move: Rock Slide }
+  - { level: 25, move: Roar }
+  - { level: 30, move: Crunch }
+  - { level: 35, move: Iron Head }
+  - { level: 40, move: Take Down }
+  - { level: 45, move: Stone Edge }
+  - { level: 50, move: Agility }
+  - { level: 55, move: Hyper Beam }
+  - { level: 60, move: Giga Impact }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
+  - { level: 48, move: Dragon Rush }
+  - { level: 52, move: Brave Bird }
+  - { level: 58, move: Head Smash }

@@ -1,0 +1,9 @@
+name: Kricketune
+chrooked_id: kricketune
+aka: { pokeemerald: SPECIES_KRICKETUNE }
+types: [Bug, Normal]
+abilities:
+  primary: Chitinize
+  secondary: Technician
+  hidden: Sharpness
+stats: { atk: 105, def: 61, spd: 86 }

@@ -1,0 +1,18 @@
+name: Silicobra
+chrooked_id: silicobra
+aka: { pokeemerald: SPECIES_SILICOBRA }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Wrap }
+  - { level: 5, move: Minimize }
+  - { level: 10, move: Brutal Swing }
+  - { level: 15, move: Bulldoze }
+  - { level: 20, move: Headbutt }
+  - { level: 25, move: Glare }
+  - { level: 30, move: Dig }
+  - { level: 35, move: Sandstorm }
+  - { level: 40, move: Slam }
+  - { level: 45, move: Coil }
+  - { level: 50, move: Sand Tomb }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

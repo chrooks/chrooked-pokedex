@@ -1,0 +1,9 @@
+name: Bounce
+chrooked_id: bounce
+aka: { pokeemerald: MOVE_BOUNCE }
+type: Flying
+category: physical
+power: 90
+accuracy: 90
+pp: 5
+description: Bounces up, then down the next turn. May paralyze.

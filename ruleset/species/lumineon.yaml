@@ -1,0 +1,8 @@
+name: Lumineon
+chrooked_id: lumineon
+aka: { pokeemerald: SPECIES_LUMINEON }
+types: [Water, Fairy]
+abilities:
+  primary: Dazzling
+  hidden: Updraft
+stats: { hp: 80, atk: 70, def: 75, spa: 105, spd: 85, spe: 90 }

@@ -1,0 +1,6 @@
+name: Spiritomb
+chrooked_id: spiritomb
+aka: { pokeemerald: SPECIES_SPIRITOMB }
+abilities:
+  secondary: Insidious
+stats: { hp: 60, atk: 100, def: 110, spa: 100, spd: 110 }

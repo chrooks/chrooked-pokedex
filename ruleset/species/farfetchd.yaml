@@ -1,0 +1,8 @@
+name: Farfetchd
+chrooked_id: farfetchd
+aka: { pokeemerald: SPECIES_FARFETCHD }
+types: [Fighting, Flying]
+abilities:
+  primary: Sharpness
+  hidden: Martialize
+stats: { atk: 90, spe: 100 }

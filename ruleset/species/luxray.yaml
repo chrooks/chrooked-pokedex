@@ -1,0 +1,25 @@
+name: Luxray
+chrooked_id: luxray
+aka: { pokeemerald: SPECIES_LUXRAY }
+types: [Electric, Dark]
+abilities:
+  primary: Strong Jaw
+  secondary: Carnivore
+stats: { def: 75, spa: 75, spd: 75, spe: 100 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Electric Terrain }
+  - { level: 12, move: Bite }
+  - { level: 18, move: Spark }
+  - { level: 24, move: Roar }
+  - { level: 33, move: Volt Switch }
+  - { level: 40, move: Scary Face }
+  - { level: 48, move: Thunder Wave }
+  - { level: 56, move: Crunch }
+  - { level: 64, move: Discharge }
+  - { level: 72, move: Swagger }
+  - { level: 80, move: Wild Charge }

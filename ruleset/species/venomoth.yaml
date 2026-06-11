@@ -1,0 +1,5 @@
+name: Venomoth
+chrooked_id: venomoth
+aka: { pokeemerald: SPECIES_VENOMOTH }
+abilities:
+  secondary: Tinted Lens

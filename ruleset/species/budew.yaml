@@ -1,0 +1,6 @@
+name: Budew
+chrooked_id: budew
+aka: { pokeemerald: SPECIES_BUDEW }
+abilities:
+  secondary: Venomous
+  hidden: Bloom

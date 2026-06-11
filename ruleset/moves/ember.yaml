@@ -1,0 +1,9 @@
+name: Ember
+chrooked_id: ember
+aka: { pokeemerald: MOVE_EMBER }
+type: Fire
+category: special
+power: 45
+accuracy: 100
+pp: 25
+description: A weak fire attack that may inflict a burn.

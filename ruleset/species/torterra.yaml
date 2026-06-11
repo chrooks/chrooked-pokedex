@@ -1,0 +1,25 @@
+name: Torterra
+chrooked_id: torterra
+aka: { pokeemerald: SPECIES_TORTERRA }
+abilities:
+  secondary: Chloroplast
+  hidden: Rock Head
+stats: { atk: 120, def: 125, spd: 70, spe: 55 }
+learnset:
+  - { level: 0, move: Earthquake }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Wood Hammer }
+  - { level: 17, move: Curse }
+  - { level: 22, move: Bite }
+  - { level: 27, move: Mega Drain }
+  - { level: 33, move: Leech Seed }
+  - { level: 39, move: Synthesis }
+  - { level: 45, move: Crunch }
+  - { level: 51, move: Giga Drain }
+  - { level: 57, move: Leaf Storm }
+  - { level: 63, move: Headlong Rush }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

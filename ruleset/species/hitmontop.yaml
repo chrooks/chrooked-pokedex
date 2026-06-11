@@ -1,0 +1,6 @@
+name: Hitmontop
+chrooked_id: hitmontop
+aka: { pokeemerald: SPECIES_HITMONTOP }
+abilities:
+  secondary: Technician
+stats: { atk: 100, def: 100, spe: 75 }

@@ -1,0 +1,6 @@
+name: Mandibuzz
+chrooked_id: mandibuzz
+aka: { pokeemerald: SPECIES_MANDIBUZZ }
+abilities:
+  primary: Carnivore
+  hidden: Stamina

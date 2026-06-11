@@ -1,0 +1,9 @@
+name: Lovely Bite
+chrooked_id: lovelybite
+aka: { pokeemerald: MOVE_LOVELY_BITE }
+type: Fairy
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: An affectionate but strong bite. May attract or flinch.

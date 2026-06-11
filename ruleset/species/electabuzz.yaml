@@ -1,0 +1,20 @@
+name: Electabuzz
+chrooked_id: electabuzz
+aka: { pokeemerald: SPECIES_ELECTABUZZ }
+types: [Electric, Fighting]
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Swift }
+  - { level: 1, move: Low Kick }
+  - { level: 1, move: Thunder Punch }
+  - { level: 20, move: Thunder Wave }
+  - { level: 24, move: Brick Break }
+  - { level: 28, move: Ice Punch }
+  - { level: 32, move: Discharge }
+  - { level: 36, move: Bulk Up }
+  - { level: 46, move: Thunderbolt }
+  - { level: 52, move: Close Combat }
+  - { level: 58, move: Thunder }

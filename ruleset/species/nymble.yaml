@@ -1,0 +1,19 @@
+name: Nymble
+chrooked_id: nymble
+aka: { pokeemerald: SPECIES_NYMBLE }
+abilities:
+  secondary: Striker
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Struggle Bug }
+  - { level: 6, move: Astonish }
+  - { level: 9, move: Assurance }
+  - { level: 11, move: Double Kick }
+  - { level: 14, move: Screech }
+  - { level: 18, move: Bug Bite }
+  - { level: 22, move: Sucker Punch }
+  - { level: 24, move: First Impression }
+  - { level: 27, move: Agility }
+  - { level: 30, move: Leech Life }
+  - { level: 34, move: Guillotine }

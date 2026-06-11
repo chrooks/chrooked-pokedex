@@ -1,0 +1,20 @@
+name: Regieleki
+chrooked_id: regieleki
+aka: { pokeemerald: SPECIES_REGIELEKI }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Rapid Spin }
+  - { level: 6, move: Electroweb }
+  - { level: 12, move: Ancient Power }
+  - { level: 18, move: Shock Wave }
+  - { level: 24, move: Thunder Wave }
+  - { level: 30, move: Extreme Speed }
+  - { level: 36, move: Thunder Cage }
+  - { level: 42, move: Thunderbolt }
+  - { level: 48, move: Magnet Rise }
+  - { level: 54, move: Thrash }
+  - { level: 60, move: Lock-On }
+  - { level: 66, move: Zap Cannon }
+  - { level: 72, move: Hyper Beam }
+  - { level: 78, move: Explosion }

@@ -1,0 +1,23 @@
+name: Aggron
+chrooked_id: aggron
+aka: { pokeemerald: SPECIES_AGGRON }
+stats: { hp: 95, atk: 115, spa: 65, spd: 75 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Rock Tomb }
+  - { level: 12, move: Roar }
+  - { level: 16, move: Headbutt }
+  - { level: 20, move: Protect }
+  - { level: 24, move: Rock Slide }
+  - { level: 28, move: Iron Head }
+  - { level: 35, move: Metal Sound }
+  - { level: 40, move: Take Down }
+  - { level: 48, move: Autotomize }
+  - { level: 56, move: Iron Tail }
+  - { level: 64, move: Iron Defense }
+  - { level: 72, move: Heavy Slam }
+  - { level: 80, move: Double-Edge }
+  - { level: 88, move: Metal Burst }
+  - { level: 30, move: Metallic Fang }

@@ -1,0 +1,6 @@
+name: Arboliva
+chrooked_id: arboliva
+aka: { pokeemerald: SPECIES_ARBOLIVA }
+abilities:
+  secondary: Chloroplast
+stats: { hp: 80, atk: 70, spd: 110, spe: 40 }

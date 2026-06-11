@@ -1,0 +1,32 @@
+name: Obstagoon
+chrooked_id: obstagoon
+aka: { pokeemerald: SPECIES_OBSTAGOON }
+abilities:
+  primary: Spiteful Block
+  secondary: Reckless
+stats: { atk: 95, def: 106 }
+learnset:
+  - { level: 0, move: Obstruct }
+  - { level: 1, move: Obstruct }
+  - { level: 1, move: Cross Chop }
+  - { level: 1, move: Submission }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Switcheroo }
+  - { level: 1, move: Pin Missile }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Lick }
+  - { level: 9, move: Snarl }
+  - { level: 12, move: Headbutt }
+  - { level: 15, move: Hone Claws }
+  - { level: 18, move: Fury Swipes }
+  - { level: 23, move: Rest }
+  - { level: 28, move: Take Down }
+  - { level: 35, move: Scary Face }
+  - { level: 42, move: Counter }
+  - { level: 46, move: Heel Drop }
+  - { level: 49, move: Taunt }
+  - { level: 53, move: Triple Hit }
+  - { level: 56, move: Double-Edge }

@@ -1,0 +1,32 @@
+name: Lycanroc Dusk
+chrooked_id: lycanrocdusk
+aka: { pokeemerald: SPECIES_LYCANROC_DUSK }
+abilities:
+  primary: Carnivore
+  hidden: Steadfast
+learnset:
+  - { level: 0, move: Crush Claw }
+  - { level: 1, move: Accelerock }
+  - { level: 1, move: Sucker Punch }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Endure }
+  - { level: 1, move: Quick Guard }
+  - { level: 1, move: Reversal }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Counter }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Quick Attack }
+  - { level: 12, move: Rock Throw }
+  - { level: 16, move: Howl }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Rock Tomb }
+  - { level: 30, move: Roar }
+  - { level: 36, move: Rock Slide }
+  - { level: 42, move: Crunch }
+  - { level: 48, move: Scary Face }
+  - { level: 54, move: Stealth Rock }
+  - { level: 60, move: Stone Edge }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

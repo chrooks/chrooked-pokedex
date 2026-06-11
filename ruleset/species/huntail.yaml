@@ -1,0 +1,8 @@
+name: Huntail
+chrooked_id: huntail
+aka: { pokeemerald: SPECIES_HUNTAIL }
+types: [Water, Dark]
+abilities:
+  secondary: Strong Jaw
+  hidden: Carnivore
+stats: { atk: 115, spa: 95, spd: 80, spe: 50 }

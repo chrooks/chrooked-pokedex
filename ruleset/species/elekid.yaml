@@ -1,0 +1,16 @@
+name: Elekid
+chrooked_id: elekid
+aka: { pokeemerald: SPECIES_ELEKID }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 4, move: Thunder Shock }
+  - { level: 7, move: Charge }
+  - { level: 10, move: Swift }
+  - { level: 13, move: Thunder Wave }
+  - { level: 16, move: Shock Wave }
+  - { level: 19, move: Low Kick }
+  - { level: 22, move: Thunder Punch }
+  - { level: 24, move: Discharge }
+  - { level: 30, move: Thunderbolt }
+  - { level: 36, move: Thunder }

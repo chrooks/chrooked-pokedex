@@ -1,0 +1,6 @@
+name: Whiscash
+chrooked_id: whiscash
+aka: { pokeemerald: SPECIES_WHISCASH }
+abilities:
+  secondary: Anticipation
+stats: { atk: 90, def: 80, spa: 75, spd: 75 }

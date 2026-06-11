@@ -1,0 +1,7 @@
+name: Archeops
+chrooked_id: archeops
+aka: { pokeemerald: SPECIES_ARCHEOPS }
+abilities:
+  primary: Carnivore
+  hidden: Rock Head
+stats: { atk: 125, spa: 110 }

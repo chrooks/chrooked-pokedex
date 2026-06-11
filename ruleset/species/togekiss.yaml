@@ -1,0 +1,6 @@
+name: Togekiss
+chrooked_id: togekiss
+aka: { pokeemerald: SPECIES_TOGEKISS }
+abilities:
+  primary: Aerodynamic
+  hidden: Regenerator

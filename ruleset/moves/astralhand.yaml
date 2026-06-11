@@ -1,0 +1,9 @@
+name: Astral Hand
+chrooked_id: astralhand
+aka: { pokeemerald: MOVE_ASTRAL_HAND }
+type: Psychic
+category: physical
+power: 80
+accuracy: 100
+pp: 15
+description: Strikes with a projected fist. Ignores stat changes.

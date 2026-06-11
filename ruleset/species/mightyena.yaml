@@ -1,0 +1,32 @@
+name: Mightyena
+chrooked_id: mightyena
+aka: { pokeemerald: SPECIES_MIGHTYENA }
+abilities:
+  secondary: Quick Feet
+stats: { atk: 115, spa: 65, spd: 65, spe: 80 }
+learnset:
+  - { level: 0, move: Snarl }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Thief }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Tackle }
+  - { level: 13, move: Howl }
+  - { level: 13, move: Leer }
+  - { level: 16, move: Roar }
+  - { level: 20, move: Swagger }
+  - { level: 24, move: Assurance }
+  - { level: 28, move: Scary Face }
+  - { level: 36, move: Taunt }
+  - { level: 44, move: Yawn }
+  - { level: 48, move: Take Down }
+  - { level: 52, move: Sucker Punch }
+  - { level: 56, move: Play Rough }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Draconic Fang }
+  - { level: 30, move: Metallic Fang }
+  - { level: 30, move: Lovely Bite }

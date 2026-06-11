@@ -1,0 +1,25 @@
+name: Ursaluna Bloodmoon
+chrooked_id: ursalunabloodmoon
+aka: { pokeemerald: SPECIES_URSALUNA_BLOODMOON }
+abilities:
+  primary: Guts
+learnset:
+  - { level: 1, move: Moonlight }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Headlong Rush }
+  - { level: 8, move: Mud-Slap }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Snarl }
+  - { level: 22, move: Earth Power }
+  - { level: 26, move: Calm Mind }
+  - { level: 30, move: Hyper Voice }
+  - { level: 34, move: Shadow Ball }
+  - { level: 38, move: Dark Pulse }
+  - { level: 42, move: Rest }
+  - { level: 46, move: Focus Blast }
+  - { level: 50, move: Moonblast }
+  - { level: 55, move: Lunar Blessing }
+  - { level: 60, move: Tri Attack }
+  - { level: 66, move: Blood Moon }

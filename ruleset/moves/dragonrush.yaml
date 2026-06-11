@@ -1,0 +1,9 @@
+name: Dragon Rush
+chrooked_id: dragonrush
+aka: { pokeemerald: MOVE_DRAGON_RUSH }
+type: Dragon
+category: physical
+power: 120
+accuracy: 100
+pp: 15
+description: A reckless charge that also hurts the user.

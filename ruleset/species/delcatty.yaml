@@ -1,0 +1,7 @@
+name: Delcatty
+chrooked_id: delcatty
+aka: { pokeemerald: SPECIES_DELCATTY }
+types: [Normal, Fairy]
+abilities:
+  secondary: Normalize
+stats: { hp: 90, spd: 65, spe: 100 }

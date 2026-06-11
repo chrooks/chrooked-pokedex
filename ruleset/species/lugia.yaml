@@ -1,0 +1,8 @@
+name: Lugia
+chrooked_id: lugia
+aka: { pokeemerald: SPECIES_LUGIA }
+types: [Psychic, Water]
+abilities:
+  primary: Multiscale
+  hidden: Updraft
+stats: { hp: 105, spd: 155 }

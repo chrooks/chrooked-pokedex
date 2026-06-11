@@ -1,0 +1,30 @@
+name: Talonflame
+chrooked_id: talonflame
+aka: { pokeemerald: SPECIES_TALONFLAME }
+abilities:
+  primary: Reckless
+  secondary: Gale Wings
+  hidden: Rapid Combustion
+stats: { atk: 100, spa: 75, spd: 70 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Flame Charge }
+  - { level: 1, move: Fire Fang }
+  - { level: 5, move: Wing Attack }
+  - { level: 10, move: Acrobatics }
+  - { level: 15, move: Agility }
+  - { level: 20, move: Aerial Ace }
+  - { level: 25, move: Roost }
+  - { level: 29, move: Swords Dance }
+  - { level: 33, move: Take Down }
+  - { level: 35, move: Flare Blitz }
+  - { level: 38, move: Tailwind }
+  - { level: 41, move: Steel Wing }
+  - { level: 44, move: Heat Wave }
+  - { level: 48, move: U-turn }
+  - { level: 52, move: Double-Edge }
+  - { level: 56, move: Brave Bird }

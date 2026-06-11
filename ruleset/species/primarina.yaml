@@ -1,0 +1,4 @@
+name: Primarina
+chrooked_id: primarina
+aka: { pokeemerald: SPECIES_PRIMARINA }
+stats: { hp: 85, atk: 75, def: 75, spa: 125, spd: 115, spe: 65 }

@@ -1,0 +1,8 @@
+name: Ledian
+chrooked_id: ledian
+aka: { pokeemerald: SPECIES_LEDIAN }
+types: [Bug, Fighting]
+abilities:
+  primary: Huge Power
+  secondary: Aerodynamic
+stats: { atk: 75, def: 60, spe: 95 }

@@ -1,0 +1,6 @@
+name: Miltank
+chrooked_id: miltank
+aka: { pokeemerald: SPECIES_MILTANK }
+abilities:
+  secondary: Scrappy
+stats: { hp: 100, atk: 85 }

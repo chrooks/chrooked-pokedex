@@ -1,0 +1,24 @@
+name: Charizard
+chrooked_id: charizard
+aka: { pokeemerald: SPECIES_CHARIZARD }
+types: [Fire, Dragon]
+abilities:
+  secondary: Updraft
+stats: { hp: 70, atk: 105, def: 75, spa: 110, spd: 75, spe: 105 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Air Slash }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Smokescreen }
+  - { level: 1, move: Heat Wave }
+  - { level: 1, move: Dragon Claw }
+  - { level: 12, move: Dragon Breath }
+  - { level: 19, move: Fire Fang }
+  - { level: 24, move: Slash }
+  - { level: 30, move: Flamethrower }
+  - { level: 39, move: Scary Face }
+  - { level: 46, move: Fire Spin }
+  - { level: 54, move: Inferno }
+  - { level: 62, move: Flare Blitz }

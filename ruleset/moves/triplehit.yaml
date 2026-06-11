@@ -1,0 +1,9 @@
+name: Triple Hit
+chrooked_id: triplehit
+aka: { pokeemerald: MOVE_TRIPLE_HIT }
+type: Normal
+category: physical
+power: 15
+accuracy: 100
+pp: 10
+description: Hits three times with rising power. May flinch.

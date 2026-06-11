@@ -1,0 +1,6 @@
+name: Stonjourner
+chrooked_id: stonjourner
+aka: { pokeemerald: SPECIES_STONJOURNER }
+abilities:
+  secondary: Mineralize
+  hidden: Striker

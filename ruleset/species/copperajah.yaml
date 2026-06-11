@@ -1,0 +1,6 @@
+name: Copperajah
+chrooked_id: copperajah
+aka: { pokeemerald: SPECIES_COPPERAJAH }
+abilities:
+  secondary: Stampede
+stats: { hp: 130, def: 85, spd: 70 }

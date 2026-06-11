@@ -1,0 +1,5 @@
+name: Pidgey
+chrooked_id: pidgey
+aka: { pokeemerald: SPECIES_PIDGEY }
+abilities:
+  secondary: Tangled Feet

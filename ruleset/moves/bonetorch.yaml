@@ -1,0 +1,9 @@
+name: Bone Torch
+chrooked_id: bonetorch
+aka: { pokeemerald: MOVE_BONE_TORCH }
+type: Fire
+category: physical
+power: 75
+accuracy: 100
+pp: 15
+description: A blazing bone strike. May burn the target.

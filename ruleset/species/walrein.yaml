@@ -1,0 +1,27 @@
+name: Walrein
+chrooked_id: walrein
+aka: { pokeemerald: SPECIES_WALREIN }
+abilities:
+  secondary: Ice Body
+  hidden: Permafrost
+stats: { atk: 100, def: 100, spa: 90, spd: 100, spe: 50 }
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 12, move: Powder Snow }
+  - { level: 16, move: Rest }
+  - { level: 20, move: Snore }
+  - { level: 24, move: Brine }
+  - { level: 28, move: Aurora Beam }
+  - { level: 35, move: Encore }
+  - { level: 40, move: Body Slam }
+  - { level: 48, move: Surf }
+  - { level: 56, move: Blizzard }
+  - { level: 64, move: Hail }
+  - { level: 72, move: Sheer Cold }

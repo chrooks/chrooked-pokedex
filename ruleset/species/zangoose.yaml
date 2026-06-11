@@ -1,0 +1,6 @@
+name: Zangoose
+chrooked_id: zangoose
+aka: { pokeemerald: SPECIES_ZANGOOSE }
+abilities:
+  primary: Toxic Boost
+stats: { atk: 125, spa: 50, spe: 110 }

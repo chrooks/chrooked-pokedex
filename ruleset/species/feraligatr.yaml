@@ -1,0 +1,7 @@
+name: Feraligatr
+chrooked_id: feraligatr
+aka: { pokeemerald: SPECIES_FERALIGATR }
+types: [Water, Dragon]
+abilities:
+  secondary: Carnivore
+stats: { atk: 115, spa: 70, spd: 85, spe: 85 }

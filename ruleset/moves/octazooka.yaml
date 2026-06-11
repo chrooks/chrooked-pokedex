@@ -1,0 +1,9 @@
+name: Octazooka
+chrooked_id: octazooka
+aka: { pokeemerald: MOVE_OCTAZOOKA }
+type: Water
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: Fires a lump of ink to damage and cut accuracy.

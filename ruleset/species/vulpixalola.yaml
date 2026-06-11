@@ -1,0 +1,18 @@
+name: Vulpix Alola
+chrooked_id: vulpixalola
+aka: { pokeemerald: SPECIES_VULPIX_ALOLA }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Powder Snow }
+  - { level: 4, move: Disable }
+  - { level: 8, move: Ice Shard }
+  - { level: 12, move: Icy Wind }
+  - { level: 16, move: Confuse Ray }
+  - { level: 20, move: Aurora Beam }
+  - { level: 24, move: Disarming Voice }
+  - { level: 28, move: Extrasensory }
+  - { level: 32, move: Ice Beam }
+  - { level: 36, move: Aurora Veil }
+  - { level: 40, move: Freeze-Dry }
+  - { level: 44, move: Draining Kiss }
+  - { level: 48, move: Blizzard }

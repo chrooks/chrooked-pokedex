@@ -1,4 +1,10 @@
 # Attacker/defender multiplier overrides relative to the base type chart.
 # multiplier: 0 = immune, 0.5 = not very effective, 1 = neutral, 2 = super effective.
 overrides:
+  - { attacker: Bug, defender: Fairy, multiplier: 2 }
+  - { attacker: Fairy, defender: Grass, multiplier: 0.5 }
   - { attacker: Flying, defender: Ice, multiplier: 0.5 }
+  - { attacker: Ghost, defender: Grass, multiplier: 0.5 }
+  - { attacker: Ground, defender: Ice, multiplier: 0.5 }
+  - { attacker: Poison, defender: Water, multiplier: 2 }
+  - { attacker: Psychic, defender: Bug, multiplier: 0.5 }

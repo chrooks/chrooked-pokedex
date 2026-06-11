@@ -1,0 +1,6 @@
+name: Spritzee
+chrooked_id: spritzee
+aka: { pokeemerald: SPECIES_SPRITZEE }
+types: [Fairy, Poison]
+abilities:
+  primary: Venomize

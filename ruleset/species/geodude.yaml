@@ -1,0 +1,5 @@
+name: Geodude
+chrooked_id: geodude
+aka: { pokeemerald: SPECIES_GEODUDE }
+abilities:
+  hidden: Mineralize

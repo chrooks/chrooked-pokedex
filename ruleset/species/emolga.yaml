@@ -1,0 +1,21 @@
+name: Emolga
+chrooked_id: emolga
+aka: { pokeemerald: SPECIES_EMOLGA }
+abilities:
+  secondary: Aerodynamic
+stats: { atk: 95, spa: 95, spe: 110 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Nuzzle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Double Team }
+  - { level: 10, move: Quick Attack }
+  - { level: 15, move: Thunder Shock }
+  - { level: 20, move: Charge }
+  - { level: 25, move: Acrobatics }
+  - { level: 30, move: Spark }
+  - { level: 35, move: Encore }
+  - { level: 40, move: Volt Switch }
+  - { level: 45, move: Light Screen }
+  - { level: 50, move: Discharge }
+  - { level: 55, move: Agility }

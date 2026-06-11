@@ -1,0 +1,9 @@
+name: Pixie Slash
+chrooked_id: pixieslash
+aka: { pokeemerald: MOVE_PIXIE_SLASH }
+type: Fairy
+category: physical
+power: 80
+accuracy: 100
+pp: 15
+description: Slashes the foe with a whimsical blade. High crit.

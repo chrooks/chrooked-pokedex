@@ -1,0 +1,6 @@
+name: Breloom
+chrooked_id: breloom
+aka: { pokeemerald: SPECIES_BRELOOM }
+abilities:
+  secondary: Poison Heal
+stats: { hp: 80 }

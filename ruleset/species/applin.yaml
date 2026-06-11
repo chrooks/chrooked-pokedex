@@ -1,0 +1,12 @@
+name: Applin
+chrooked_id: applin
+aka: { pokeemerald: SPECIES_APPLIN }
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Sweet Scent }
+  - { level: 8, move: Bullet Seed }
+  - { level: 12, move: Acid Spray }
+  - { level: 16, move: Dragon Tail }
+  - { level: 20, move: Recover }

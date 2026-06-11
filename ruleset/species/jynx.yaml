@@ -1,0 +1,7 @@
+name: Jynx
+chrooked_id: jynx
+aka: { pokeemerald: SPECIES_JYNX }
+types: [Psychic, Ice]
+abilities:
+  secondary: Forewarn
+stats: { spa: 130 }

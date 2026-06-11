@@ -1,0 +1,21 @@
+name: Stantler
+chrooked_id: stantler
+aka: { pokeemerald: SPECIES_STANTLER }
+types: [Normal, Psychic]
+abilities:
+  secondary: Frisk
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 3, move: Leer }
+  - { level: 7, move: Astonish }
+  - { level: 10, move: Hypnosis }
+  - { level: 13, move: Stomp }
+  - { level: 16, move: Sand Attack }
+  - { level: 21, move: Take Down }
+  - { level: 23, move: Confuse Ray }
+  - { level: 27, move: Calm Mind }
+  - { level: 31, move: Zen Headbutt }
+  - { level: 33, move: Role Play }
+  - { level: 37, move: Psyshield Bash }
+  - { level: 49, move: Imprison }
+  - { level: 55, move: Double-Edge }

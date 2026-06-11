@@ -1,0 +1,9 @@
+name: Water Whip
+chrooked_id: waterwhip
+aka: { pokeemerald: MOVE_WATER_WHIP }
+type: Water
+category: physical
+power: 60
+accuracy: 100
+pp: 20
+description: Lashes the foe with a whip of water. May cause flinch.

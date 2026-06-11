@@ -1,0 +1,6 @@
+name: Crabominable
+chrooked_id: crabominable
+aka: { pokeemerald: SPECIES_CRABOMINABLE }
+abilities:
+  primary: Sledgehammer
+  hidden: Permafrost

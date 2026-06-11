@@ -1,0 +1,6 @@
+name: Carvanha
+chrooked_id: carvanha
+aka: { pokeemerald: SPECIES_CARVANHA }
+abilities:
+  primary: Carnivore
+  secondary: Blitz

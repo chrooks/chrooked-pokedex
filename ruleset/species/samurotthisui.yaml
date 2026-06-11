@@ -1,0 +1,7 @@
+name: Samurott Hisui
+chrooked_id: samurotthisui
+aka: { pokeemerald: SPECIES_SAMUROTT_HISUI }
+abilities:
+  secondary: Sharpness
+  hidden: Shell Armor
+stats: { hp: 95, atk: 115 }

@@ -1,0 +1,22 @@
+name: Drednaw
+chrooked_id: drednaw
+aka: { pokeemerald: SPECIES_DREDNAW }
+abilities:
+  hidden: Carnivore
+learnset:
+  - { level: 0, move: Rock Tomb }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Rock Polish }
+  - { level: 1, move: Razor Shell }
+  - { level: 21, move: Headbutt }
+  - { level: 30, move: Counter }
+  - { level: 39, move: Jaw Lock }
+  - { level: 48, move: Liquidation }
+  - { level: 57, move: Body Slam }
+  - { level: 66, move: Head Smash }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

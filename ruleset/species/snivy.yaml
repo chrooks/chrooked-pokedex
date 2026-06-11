@@ -1,0 +1,6 @@
+name: Snivy
+chrooked_id: snivy
+aka: { pokeemerald: SPECIES_SNIVY }
+abilities:
+  primary: Chloroplast
+stats: { atk: 50, spa: 50 }

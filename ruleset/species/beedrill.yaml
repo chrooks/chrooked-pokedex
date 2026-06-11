@@ -1,0 +1,6 @@
+name: Beedrill
+chrooked_id: beedrill
+aka: { pokeemerald: SPECIES_BEEDRILL }
+abilities:
+  primary: Levitate
+stats: { atk: 105 }

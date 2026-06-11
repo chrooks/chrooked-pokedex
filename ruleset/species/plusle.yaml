@@ -1,0 +1,6 @@
+name: Plusle
+chrooked_id: plusle
+aka: { pokeemerald: SPECIES_PLUSLE }
+abilities:
+  hidden: Lightning Rod
+stats: { spa: 95, spe: 100 }

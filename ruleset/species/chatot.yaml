@@ -1,0 +1,6 @@
+name: Chatot
+chrooked_id: chatot
+aka: { pokeemerald: SPECIES_CHATOT }
+abilities:
+  hidden: Amplifier
+stats: { atk: 90, def: 55, spa: 110, spd: 52, spe: 105 }

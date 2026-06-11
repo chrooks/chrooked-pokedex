@@ -1,0 +1,6 @@
+name: Clefairy
+chrooked_id: clefairy
+aka: { pokeemerald: SPECIES_CLEFAIRY }
+types: [Fairy]
+abilities:
+  secondary: Magic Guard

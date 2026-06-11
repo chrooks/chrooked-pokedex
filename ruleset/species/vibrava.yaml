@@ -1,0 +1,7 @@
+name: Vibrava
+chrooked_id: vibrava
+aka: { pokeemerald: SPECIES_VIBRAVA }
+types: [Bug, Dragon]
+abilities:
+  secondary: Amplifier
+  hidden: Tinted Lens

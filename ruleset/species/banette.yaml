@@ -1,0 +1,8 @@
+name: Banette
+chrooked_id: banette
+aka: { pokeemerald: SPECIES_BANETTE }
+types: [Ghost, Normal]
+abilities:
+  primary: Guts
+  secondary: Infiltrator
+  hidden: Insidious

@@ -1,0 +1,6 @@
+name: Minun
+chrooked_id: minun
+aka: { pokeemerald: SPECIES_MINUN }
+abilities:
+  hidden: Volt Absorb
+stats: { spd: 95, spe: 100 }

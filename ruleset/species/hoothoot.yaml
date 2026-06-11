@@ -1,0 +1,5 @@
+name: Hoothoot
+chrooked_id: hoothoot
+aka: { pokeemerald: SPECIES_HOOTHOOT }
+abilities:
+  secondary: Psyonize

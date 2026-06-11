@@ -1,0 +1,7 @@
+name: Milotic
+chrooked_id: milotic
+aka: { pokeemerald: SPECIES_MILOTIC }
+types: [Water, Fairy]
+abilities:
+  secondary: Competitive
+stats: { hp: 100, def: 85, spe: 80 }

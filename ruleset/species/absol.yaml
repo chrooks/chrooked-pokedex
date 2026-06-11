@@ -1,0 +1,7 @@
+name: Absol
+chrooked_id: absol
+aka: { pokeemerald: SPECIES_ABSOL }
+types: [Dark, Fairy]
+abilities:
+  primary: Sharpness
+stats: { spe: 100 }

@@ -1,0 +1,21 @@
+name: Gothita
+chrooked_id: gothita
+aka: { pokeemerald: SPECIES_GOTHITA }
+abilities:
+  primary: Starfall
+  secondary: Competitive
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Confusion }
+  - { level: 4, move: Play Nice }
+  - { level: 8, move: Tickle }
+  - { level: 12, move: Psybeam }
+  - { level: 15, move: Charm }
+  - { level: 18, move: Psyshock }
+  - { level: 22, move: Calm Mind }
+  - { level: 26, move: Fake Tears }
+  - { level: 30, move: Shadow Ball }
+  - { level: 34, move: Psychic }
+  - { level: 38, move: Thunderbolt }
+  - { level: 42, move: Future Sight }
+  - { level: 46, move: Magic Room }

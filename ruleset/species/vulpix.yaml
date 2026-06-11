@@ -1,0 +1,18 @@
+name: Vulpix
+chrooked_id: vulpix
+aka: { pokeemerald: SPECIES_VULPIX }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Ember }
+  - { level: 4, move: Disable }
+  - { level: 8, move: Quick Attack }
+  - { level: 12, move: Fire Spin }
+  - { level: 16, move: Incinerate }
+  - { level: 20, move: Confuse Ray }
+  - { level: 24, move: Will-O-Wisp }
+  - { level: 28, move: Disarming Voice }
+  - { level: 32, move: Flamethrower }
+  - { level: 36, move: Extrasensory }
+  - { level: 40, move: Mystical Fire }
+  - { level: 44, move: Draining Kiss }
+  - { level: 48, move: Fire Blast }

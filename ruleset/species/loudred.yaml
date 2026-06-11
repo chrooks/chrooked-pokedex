@@ -1,0 +1,6 @@
+name: Loudred
+chrooked_id: loudred
+aka: { pokeemerald: SPECIES_LOUDRED }
+abilities:
+  secondary: Amplifier
+stats: { spa: 95 }

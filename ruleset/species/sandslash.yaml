@@ -1,0 +1,28 @@
+name: Sandslash
+chrooked_id: sandslash
+aka: { pokeemerald: SPECIES_SANDSLASH }
+abilities:
+  primary: Rough Skin
+  secondary: Sand Rush
+  hidden: Hustle
+stats: { hp: 95, spd: 60 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Crush Claw }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Spiky Shield }
+  - { level: 9, move: Rollout }
+  - { level: 12, move: Fury Cutter }
+  - { level: 15, move: Rapid Spin }
+  - { level: 18, move: Bulldoze }
+  - { level: 21, move: Swift }
+  - { level: 26, move: Fury Swipes }
+  - { level: 31, move: Sand Tomb }
+  - { level: 36, move: Slash }
+  - { level: 41, move: Dig }
+  - { level: 46, move: Gyro Ball }
+  - { level: 51, move: Swords Dance }
+  - { level: 56, move: Sandstorm }
+  - { level: 61, move: Earthquake }

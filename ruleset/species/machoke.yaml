@@ -1,0 +1,5 @@
+name: Machoke
+chrooked_id: machoke
+aka: { pokeemerald: SPECIES_MACHOKE }
+abilities:
+  secondary: No Guard

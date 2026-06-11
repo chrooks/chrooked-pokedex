@@ -1,0 +1,6 @@
+name: Weezing
+chrooked_id: weezing
+aka: { pokeemerald: SPECIES_WEEZING }
+abilities:
+  secondary: Neutralizing Gas
+  hidden: Exhaust

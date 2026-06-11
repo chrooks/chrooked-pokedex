@@ -1,0 +1,27 @@
+name: Heatmor
+chrooked_id: heatmor
+aka: { pokeemerald: SPECIES_HEATMOR }
+types: [Fire, Steel]
+abilities:
+  primary: Flash Fire
+  secondary: Earth Eater
+  hidden: Immolate
+stats: { atk: 110, def: 86, spa: 95, spd: 86 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Fury Swipes }
+  - { level: 10, move: Incinerate }
+  - { level: 15, move: Bug Bite }
+  - { level: 20, move: Stockpile }
+  - { level: 20, move: Swallow }
+  - { level: 20, move: Spit Up }
+  - { level: 25, move: Slash }
+  - { level: 30, move: Bind }
+  - { level: 35, move: Fire Lash }
+  - { level: 40, move: Hone Claws }
+  - { level: 45, move: Amnesia }
+  - { level: 50, move: Fire Spin }
+  - { level: 55, move: Inferno }
+  - { level: 60, move: Flare Blitz }

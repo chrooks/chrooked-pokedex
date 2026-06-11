@@ -1,0 +1,25 @@
+name: Cloyster
+chrooked_id: cloyster
+aka: { pokeemerald: SPECIES_CLOYSTER }
+abilities:
+  secondary: Skill Link
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 0, move: Icicle Spear }
+  - { level: 1, move: Icicle Crash }
+  - { level: 1, move: Shell Smash }
+  - { level: 1, move: Ice Shard }
+  - { level: 1, move: Toxic Spikes }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Whirlpool }
+  - { level: 1, move: Spikes }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Aurora Beam }
+  - { level: 1, move: Ice Beam }
+  - { level: 1, move: Hydro Pump }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Razor Shell }

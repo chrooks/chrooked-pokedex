@@ -1,0 +1,4 @@
+name: Bronzong
+chrooked_id: bronzong
+aka: { pokeemerald: SPECIES_BRONZONG }
+stats: { hp: 75, atk: 90, def: 115, spa: 80, spd: 115, spe: 30 }

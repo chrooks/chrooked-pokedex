@@ -1,0 +1,22 @@
+name: Rockruff
+chrooked_id: rockruff
+aka: { pokeemerald: SPECIES_ROCKRUFF }
+abilities:
+  primary: Carnivore
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Sand Attack }
+  - { level: 8, move: Double Team }
+  - { level: 12, move: Rock Throw }
+  - { level: 16, move: Howl }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Rock Tomb }
+  - { level: 28, move: Roar }
+  - { level: 32, move: Rock Slide }
+  - { level: 36, move: Crunch }
+  - { level: 40, move: Scary Face }
+  - { level: 44, move: Stealth Rock }
+  - { level: 48, move: Stone Edge }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

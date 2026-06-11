@@ -1,0 +1,8 @@
+name: Shuppet
+chrooked_id: shuppet
+aka: { pokeemerald: SPECIES_SHUPPET }
+types: [Ghost, Normal]
+abilities:
+  primary: Guts
+  secondary: Infiltrator
+  hidden: Insidious

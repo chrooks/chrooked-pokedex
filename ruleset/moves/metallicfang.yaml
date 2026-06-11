@@ -1,0 +1,9 @@
+name: Metallic Fang
+chrooked_id: metallicfang
+aka: { pokeemerald: MOVE_METALLIC_FANG }
+type: Steel
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: May cause flinching or pierce the foe's armor.

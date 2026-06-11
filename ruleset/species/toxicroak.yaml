@@ -1,0 +1,7 @@
+name: Toxicroak
+chrooked_id: toxicroak
+aka: { pokeemerald: SPECIES_TOXICROAK }
+abilities:
+  primary: Venomous
+  hidden: Anticipation
+stats: { spe: 100 }

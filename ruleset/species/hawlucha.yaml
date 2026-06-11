@@ -1,0 +1,7 @@
+name: Hawlucha
+chrooked_id: hawlucha
+aka: { pokeemerald: SPECIES_HAWLUCHA }
+abilities:
+  primary: Unburden
+  secondary: Aerodynamic
+stats: { atk: 100 }

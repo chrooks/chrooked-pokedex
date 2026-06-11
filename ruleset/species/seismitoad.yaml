@@ -1,0 +1,26 @@
+name: Seismitoad
+chrooked_id: seismitoad
+aka: { pokeemerald: SPECIES_SEISMITOAD }
+abilities:
+  secondary: Venomous
+stats: { hp: 100, def: 80, spa: 95, spd: 80, spe: 70 }
+learnset:
+  - { level: 1, move: Bubble }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Acid Spray }
+  - { level: 1, move: Bubble Beam }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Mud Bomb }
+  - { level: 23, move: Echoed Voice }
+  - { level: 26, move: Rain Dance }
+  - { level: 30, move: Sludge Wave }
+  - { level: 33, move: Muddy Water }
+  - { level: 36, move: Earth Power }
+  - { level: 40, move: Drain Punch }
+  - { level: 46, move: Aqua Tail }
+  - { level: 52, move: Poison Jab }
+  - { level: 58, move: Earthquake }
+  - { level: 64, move: Boomburst }

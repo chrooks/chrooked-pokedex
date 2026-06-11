@@ -1,0 +1,7 @@
+name: Dragalge
+chrooked_id: dragalge
+aka: { pokeemerald: SPECIES_DRAGALGE }
+abilities:
+  primary: Venomous
+  secondary: Corrosion
+stats: { hp: 70, spa: 110 }

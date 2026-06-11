@@ -1,0 +1,6 @@
+name: Hitmonchan
+chrooked_id: hitmonchan
+aka: { pokeemerald: SPECIES_HITMONCHAN }
+abilities:
+  secondary: Iron Fist
+stats: { atk: 120, def: 80, spe: 75 }

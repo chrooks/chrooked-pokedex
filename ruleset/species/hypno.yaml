@@ -1,0 +1,9 @@
+name: Hypno
+chrooked_id: hypno
+aka: { pokeemerald: SPECIES_HYPNO }
+types: [Psychic, Dark]
+abilities:
+  primary: Bad Dreams
+  secondary: Daunt
+  hidden: Hubris
+stats: { spa: 85 }

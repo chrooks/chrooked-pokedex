@@ -1,0 +1,9 @@
+name: Overdrive
+chrooked_id: overdrive
+aka: { pokeemerald: MOVE_OVERDRIVE }
+type: Electric
+category: special
+power: 100
+accuracy: 100
+pp: 10
+description: The user twangs its guitar, causing strong vibrations.

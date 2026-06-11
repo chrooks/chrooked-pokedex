@@ -1,0 +1,8 @@
+name: Muk
+chrooked_id: muk
+aka: { pokeemerald: SPECIES_MUK }
+abilities:
+  primary: Corrosion
+  secondary: Venomous
+  hidden: Regenerator
+stats: { spd: 105 }

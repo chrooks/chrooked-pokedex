@@ -1,0 +1,6 @@
+name: Sneasler
+chrooked_id: sneasler
+aka: { pokeemerald: SPECIES_SNEASLER }
+abilities:
+  primary: Mountaineer
+  hidden: Venomize

@@ -1,0 +1,22 @@
+name: Aron
+chrooked_id: aron
+aka: { pokeemerald: SPECIES_ARON }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 4, move: Metal Claw }
+  - { level: 8, move: Rock Tomb }
+  - { level: 12, move: Roar }
+  - { level: 16, move: Headbutt }
+  - { level: 20, move: Protect }
+  - { level: 24, move: Rock Slide }
+  - { level: 28, move: Iron Head }
+  - { level: 33, move: Metal Sound }
+  - { level: 36, move: Take Down }
+  - { level: 40, move: Autotomize }
+  - { level: 44, move: Iron Tail }
+  - { level: 48, move: Iron Defense }
+  - { level: 52, move: Heavy Slam }
+  - { level: 56, move: Double-Edge }
+  - { level: 60, move: Metal Burst }
+  - { level: 25, move: Metallic Fang }

@@ -1,0 +1,5 @@
+name: Spheal
+chrooked_id: spheal
+aka: { pokeemerald: SPECIES_SPHEAL }
+abilities:
+  secondary: Ice Body

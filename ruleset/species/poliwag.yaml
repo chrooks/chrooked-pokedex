@@ -1,0 +1,5 @@
+name: Poliwag
+chrooked_id: poliwag
+aka: { pokeemerald: SPECIES_POLIWAG }
+abilities:
+  secondary: Hydrate

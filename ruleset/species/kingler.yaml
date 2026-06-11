@@ -1,0 +1,6 @@
+name: Kingler
+chrooked_id: kingler
+aka: { pokeemerald: SPECIES_KINGLER }
+types: [Water, Steel]
+abilities:
+  hidden: Death Grip

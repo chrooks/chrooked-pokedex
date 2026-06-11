@@ -1,0 +1,20 @@
+name: Kilowattrel
+chrooked_id: kilowattrel
+aka: { pokeemerald: SPECIES_KILOWATTREL }
+stats: { spe: 140 }
+learnset:
+  - { level: 0, move: Air Slash }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 4, move: Thunder Shock }
+  - { level: 7, move: Quick Attack }
+  - { level: 11, move: Gust }
+  - { level: 15, move: Charge }
+  - { level: 18, move: Air Cutter }
+  - { level: 22, move: Roost }
+  - { level: 28, move: Tailwind }
+  - { level: 34, move: Volt Switch }
+  - { level: 40, move: Discharge }
+  - { level: 46, move: Agility }
+  - { level: 52, move: Thunderbolt }
+  - { level: 58, move: Hurricane }

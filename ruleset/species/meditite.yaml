@@ -1,0 +1,7 @@
+name: Meditite
+chrooked_id: meditite
+aka: { pokeemerald: SPECIES_MEDITITE }
+abilities:
+  primary: Huge Power
+  secondary: Mountaineer
+  hidden: Psyonize

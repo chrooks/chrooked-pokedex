@@ -1,0 +1,6 @@
+name: Vanillish
+chrooked_id: vanillish
+aka: { pokeemerald: SPECIES_VANILLISH }
+types: [Ice, Fairy]
+abilities:
+  secondary: Snow Cloak

@@ -1,0 +1,6 @@
+name: Servine
+chrooked_id: servine
+aka: { pokeemerald: SPECIES_SERVINE }
+abilities:
+  primary: Chloroplast
+stats: { atk: 70, spa: 70 }

@@ -1,0 +1,4 @@
+name: Duraludon
+chrooked_id: duraludon
+aka: { pokeemerald: SPECIES_DURALUDON }
+stats: { def: 120, spa: 125, spd: 75 }

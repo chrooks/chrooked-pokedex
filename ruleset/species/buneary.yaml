@@ -1,0 +1,18 @@
+name: Buneary
+chrooked_id: buneary
+aka: { pokeemerald: SPECIES_BUNEARY }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 4, move: Defense Curl }
+  - { level: 8, move: Baby-Doll Eyes }
+  - { level: 12, move: After You }
+  - { level: 16, move: Quick Attack }
+  - { level: 20, move: Double Kick }
+  - { level: 24, move: Charm }
+  - { level: 28, move: Baton Pass }
+  - { level: 32, move: Headbutt }
+  - { level: 36, move: Agility }
+  - { level: 40, move: Entrainment }
+  - { level: 44, move: Flatter }
+  - { level: 48, move: Bounce }
+  - { level: 52, move: Healing Wish }

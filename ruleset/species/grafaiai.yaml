@@ -1,0 +1,6 @@
+name: Grafaiai
+chrooked_id: grafaiai
+aka: { pokeemerald: SPECIES_GRAFAIAI }
+abilities:
+  secondary: Venomous
+stats: { atk: 105 }

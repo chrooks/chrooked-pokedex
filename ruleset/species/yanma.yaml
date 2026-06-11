@@ -1,0 +1,6 @@
+name: Yanma
+chrooked_id: yanma
+aka: { pokeemerald: SPECIES_YANMA }
+abilities:
+  primary: Aerodynamic
+  hidden: Speed Boost

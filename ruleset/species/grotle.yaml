@@ -1,0 +1,20 @@
+name: Grotle
+chrooked_id: grotle
+aka: { pokeemerald: SPECIES_GROTLE }
+abilities:
+  secondary: Chloroplast
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Withdraw }
+  - { level: 13, move: Razor Leaf }
+  - { level: 17, move: Curse }
+  - { level: 22, move: Bite }
+  - { level: 27, move: Mega Drain }
+  - { level: 32, move: Leech Seed }
+  - { level: 37, move: Synthesis }
+  - { level: 42, move: Crunch }
+  - { level: 47, move: Giga Drain }
+  - { level: 52, move: Leaf Storm }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

@@ -1,0 +1,6 @@
+name: Drapion
+chrooked_id: drapion
+aka: { pokeemerald: SPECIES_DRAPION }
+abilities:
+  hidden: Death Grip
+stats: { atk: 110, def: 120 }

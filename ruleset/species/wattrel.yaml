@@ -1,0 +1,16 @@
+name: Wattrel
+chrooked_id: wattrel
+aka: { pokeemerald: SPECIES_WATTREL }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 4, move: Thunder Shock }
+  - { level: 7, move: Quick Attack }
+  - { level: 11, move: Gust }
+  - { level: 15, move: Charge }
+  - { level: 18, move: Air Cutter }
+  - { level: 21, move: Roost }
+  - { level: 24, move: Spark }
+  - { level: 27, move: Agility }
+  - { level: 31, move: Volt Switch }
+  - { level: 36, move: Discharge }

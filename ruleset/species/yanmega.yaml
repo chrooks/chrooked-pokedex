@@ -1,0 +1,26 @@
+name: Yanmega
+chrooked_id: yanmega
+aka: { pokeemerald: SPECIES_YANMEGA }
+types: [Bug, Dragon]
+abilities:
+  primary: Levitate
+  secondary: Compound Eyes
+  hidden: Speed Boost
+stats: { def: 76, spd: 51, spe: 115 }
+learnset:
+  - { level: 1, move: Hypnosis }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Air Slash }
+  - { level: 1, move: Bug Buzz }
+  - { level: 1, move: Quick Attack }
+  - { level: 17, move: Detect }
+  - { level: 22, move: Supersonic }
+  - { level: 27, move: Uproar }
+  - { level: 30, move: Bug Bite }
+  - { level: 33, move: Ancient Power }
+  - { level: 38, move: Feint }
+  - { level: 43, move: Slash }
+  - { level: 46, move: Screech }
+  - { level: 49, move: U-turn }

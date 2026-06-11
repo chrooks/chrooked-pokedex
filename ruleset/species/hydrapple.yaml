@@ -1,0 +1,25 @@
+name: Hydrapple
+chrooked_id: hydrapple
+aka: { pokeemerald: SPECIES_HYDRAPPLE }
+stats: { spa: 130 }
+learnset:
+  - { level: 0, move: Fickle Beam }
+  - { level: 1, move: Yawn }
+  - { level: 1, move: Double Hit }
+  - { level: 1, move: Infestation }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Recycle }
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Dragon Tail }
+  - { level: 8, move: Growth }
+  - { level: 12, move: Dragon Breath }
+  - { level: 16, move: Protect }
+  - { level: 20, move: Bullet Seed }
+  - { level: 28, move: Syrup Bomb }
+  - { level: 32, move: Dragon Pulse }
+  - { level: 36, move: Recover }
+  - { level: 40, move: Earth Power }
+  - { level: 44, move: Energy Ball }
+  - { level: 48, move: Draco Meteor }
+  - { level: 54, move: Power Whip }

@@ -1,0 +1,19 @@
+name: Tympole
+chrooked_id: tympole
+aka: { pokeemerald: SPECIES_TYMPOLE }
+abilities:
+  secondary: Venomous
+learnset:
+  - { level: 1, move: Bubble }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Supersonic }
+  - { level: 8, move: Water Gun }
+  - { level: 11, move: Mud-Slap }
+  - { level: 14, move: Acid Spray }
+  - { level: 17, move: Bubble Beam }
+  - { level: 20, move: Mud Shot }
+  - { level: 23, move: Rain Dance }
+  - { level: 25, move: Mud Bomb }
+  - { level: 30, move: Round }
+  - { level: 34, move: Muddy Water }
+  - { level: 40, move: Hydro Pump }

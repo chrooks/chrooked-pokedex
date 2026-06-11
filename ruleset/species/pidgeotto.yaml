@@ -1,0 +1,6 @@
+name: Pidgeotto
+chrooked_id: pidgeotto
+aka: { pokeemerald: SPECIES_PIDGEOTTO }
+abilities:
+  secondary: Tangled Feet
+stats: { atk: 50, spa: 65 }

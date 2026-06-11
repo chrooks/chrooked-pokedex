@@ -1,0 +1,4 @@
+name: Maractus
+chrooked_id: maractus
+aka: { pokeemerald: SPECIES_MARACTUS }
+stats: { atk: 85, def: 80, spa: 110, spd: 80 }

@@ -1,0 +1,7 @@
+name: Qwilfish
+chrooked_id: qwilfish
+aka: { pokeemerald: SPECIES_QWILFISH }
+abilities:
+  primary: Venomous
+  secondary: Toxic Debris
+stats: { def: 115 }

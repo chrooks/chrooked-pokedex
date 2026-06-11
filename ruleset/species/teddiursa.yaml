@@ -1,0 +1,23 @@
+name: Teddiursa
+chrooked_id: teddiursa
+aka: { pokeemerald: SPECIES_TEDDIURSA }
+abilities:
+  secondary: Quick Feet
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 5, move: Covet }
+  - { level: 8, move: Fury Swipes }
+  - { level: 12, move: Fake Tears }
+  - { level: 16, move: Metal Claw }
+  - { level: 20, move: Slash }
+  - { level: 23, move: Play Nice }
+  - { level: 26, move: Charm }
+  - { level: 29, move: Play Rough }
+  - { level: 33, move: Rest }
+  - { level: 33, move: Snore }
+  - { level: 37, move: Facade }
+  - { level: 41, move: Thrash }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

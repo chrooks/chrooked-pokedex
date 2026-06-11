@@ -1,0 +1,24 @@
+name: Electivire
+chrooked_id: electivire
+aka: { pokeemerald: SPECIES_ELECTIVIRE }
+types: [Electric, Fighting]
+abilities:
+  primary: Static
+  secondary: Vital Spirit
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Swift }
+  - { level: 1, move: Thunder Punch }
+  - { level: 1, move: Ice Punch }
+  - { level: 1, move: Fire Punch }
+  - { level: 1, move: Brick Break }
+  - { level: 1, move: Lightning Slam }
+  - { level: 24, move: Thunder Wave }
+  - { level: 30, move: Discharge }
+  - { level: 36, move: Bulk Up }
+  - { level: 42, move: Thunderbolt }
+  - { level: 48, move: Close Combat }
+  - { level: 54, move: Thunder }
+  - { level: 60, move: Giga Impact }

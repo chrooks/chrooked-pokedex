@@ -1,0 +1,27 @@
+name: Lycanroc Midnight
+chrooked_id: lycanrocmidnight
+aka: { pokeemerald: SPECIES_LYCANROC_MIDNIGHT }
+abilities:
+  primary: Carnivore
+  hidden: Steadfast
+learnset:
+  - { level: 0, move: Counter }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Reversal }
+  - { level: 1, move: Endure }
+  - { level: 1, move: Taunt }
+  - { level: 12, move: Rock Throw }
+  - { level: 16, move: Howl }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Rock Tomb }
+  - { level: 30, move: Roar }
+  - { level: 36, move: Rock Slide }
+  - { level: 42, move: Crunch }
+  - { level: 48, move: Scary Face }
+  - { level: 54, move: Stealth Rock }
+  - { level: 60, move: Stone Edge }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

@@ -1,0 +1,9 @@
+name: Wild Charge
+chrooked_id: wildcharge
+aka: { pokeemerald: MOVE_WILD_CHARGE }
+type: Electric
+category: physical
+power: 120
+accuracy: 100
+pp: 15
+description: An electrical tackle that also hurts the user.

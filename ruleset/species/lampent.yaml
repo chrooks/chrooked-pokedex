@@ -1,0 +1,6 @@
+name: Lampent
+chrooked_id: lampent
+aka: { pokeemerald: SPECIES_LAMPENT }
+abilities:
+  secondary: Pyre
+stats: { atk: 55, def: 65, spd: 65 }

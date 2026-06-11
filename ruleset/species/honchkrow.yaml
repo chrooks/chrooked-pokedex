@@ -1,0 +1,8 @@
+name: Honchkrow
+chrooked_id: honchkrow
+aka: { pokeemerald: SPECIES_HONCHKROW }
+abilities:
+  primary: Moxie
+  secondary: Intimidate
+  hidden: Prankster
+stats: { def: 50, spd: 50, spe: 75 }

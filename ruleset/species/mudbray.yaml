@@ -1,0 +1,22 @@
+name: Mudbray
+chrooked_id: mudbray
+aka: { pokeemerald: SPECIES_MUDBRAY }
+abilities:
+  primary: Striker
+  hidden: Water Compaction
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Rock Smash }
+  - { level: 4, move: Iron Defense }
+  - { level: 8, move: Double Kick }
+  - { level: 12, move: Bulldoze }
+  - { level: 16, move: Stomp }
+  - { level: 20, move: Strength }
+  - { level: 24, move: Counter }
+  - { level: 28, move: High Horsepower }
+  - { level: 32, move: Heavy Slam }
+  - { level: 36, move: Earthquake }
+  - { level: 40, move: Mega Kick }
+  - { level: 44, move: Superpower }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

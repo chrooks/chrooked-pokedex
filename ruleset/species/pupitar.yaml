@@ -1,0 +1,23 @@
+name: Pupitar
+chrooked_id: pupitar
+aka: { pokeemerald: SPECIES_PUPITAR }
+learnset:
+  - { level: 0, move: Iron Defense }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Payback }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Rock Throw }
+  - { level: 9, move: Bite }
+  - { level: 12, move: Scary Face }
+  - { level: 15, move: Rock Slide }
+  - { level: 18, move: Stomping Tantrum }
+  - { level: 21, move: Screech }
+  - { level: 24, move: Smack Down }
+  - { level: 27, move: Crunch }
+  - { level: 33, move: Earthquake }
+  - { level: 37, move: Stone Edge }
+  - { level: 42, move: Thrash }
+  - { level: 47, move: Sandstorm }
+  - { level: 52, move: Hyper Beam }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

@@ -1,0 +1,6 @@
+name: Jigglypuff
+chrooked_id: jigglypuff
+aka: { pokeemerald: SPECIES_JIGGLYPUFF }
+types: [Normal, Fairy]
+abilities:
+  secondary: Competitive

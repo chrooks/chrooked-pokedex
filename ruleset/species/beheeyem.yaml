@@ -1,0 +1,6 @@
+name: Beheeyem
+chrooked_id: beheeyem
+aka: { pokeemerald: SPECIES_BEHEEYEM }
+abilities:
+  hidden: Insidious
+stats: { def: 85 }

@@ -1,0 +1,23 @@
+name: Gothitelle
+chrooked_id: gothitelle
+aka: { pokeemerald: SPECIES_GOTHITELLE }
+abilities:
+  primary: Starfall
+  secondary: Competitive
+stats: { hp: 80, spa: 105, spd: 130 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Tickle }
+  - { level: 12, move: Psybeam }
+  - { level: 15, move: Charm }
+  - { level: 18, move: Psyshock }
+  - { level: 22, move: Calm Mind }
+  - { level: 26, move: Fake Tears }
+  - { level: 30, move: Shadow Ball }
+  - { level: 36, move: Psychic }
+  - { level: 42, move: Thunderbolt }
+  - { level: 48, move: Future Sight }
+  - { level: 56, move: Astral Hand }
+  - { level: 64, move: Magic Room }

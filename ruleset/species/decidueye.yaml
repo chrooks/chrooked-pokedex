@@ -1,0 +1,7 @@
+name: Decidueye
+chrooked_id: decidueye
+aka: { pokeemerald: SPECIES_DECIDUEYE }
+abilities:
+  secondary: Long Reach
+  hidden: Blitz
+stats: { hp: 80, atk: 120, spa: 80, spd: 75, spe: 110 }

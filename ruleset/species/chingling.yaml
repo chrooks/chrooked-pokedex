@@ -1,0 +1,6 @@
+name: Chingling
+chrooked_id: chingling
+aka: { pokeemerald: SPECIES_CHINGLING }
+types: [Steel, Psychic]
+abilities:
+  primary: Sacred Toll

@@ -1,0 +1,18 @@
+name: Mareep
+chrooked_id: mareep
+aka: { pokeemerald: SPECIES_MAREEP }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Thunder Wave }
+  - { level: 8, move: Thunder Shock }
+  - { level: 11, move: Cotton Spore }
+  - { level: 14, move: Charge Beam }
+  - { level: 18, move: Confuse Ray }
+  - { level: 22, move: Volt Switch }
+  - { level: 26, move: Power Gem }
+  - { level: 30, move: Discharge }
+  - { level: 34, move: Cotton Guard }
+  - { level: 38, move: Dazzling Gleam }
+  - { level: 42, move: Light Screen }
+  - { level: 46, move: Thunderbolt }

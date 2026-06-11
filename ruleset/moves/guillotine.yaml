@@ -1,0 +1,9 @@
+name: Guillotine
+chrooked_id: guillotine
+aka: { pokeemerald: MOVE_GUILLOTINE }
+type: Bug
+category: physical
+power: 120
+accuracy: 80
+pp: 5
+description: A powerful pincer attack with huge claws.

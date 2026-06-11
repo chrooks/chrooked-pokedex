@@ -1,0 +1,6 @@
+name: Shiftry
+chrooked_id: shiftry
+aka: { pokeemerald: SPECIES_SHIFTRY }
+abilities:
+  secondary: Wind Rider
+stats: { spe: 90 }

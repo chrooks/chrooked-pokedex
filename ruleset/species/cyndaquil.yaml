@@ -1,0 +1,6 @@
+name: Cyndaquil
+chrooked_id: cyndaquil
+aka: { pokeemerald: SPECIES_CYNDAQUIL }
+abilities:
+  secondary: Earth Eater
+  hidden: Rapid Combustion

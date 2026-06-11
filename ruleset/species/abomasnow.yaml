@@ -1,0 +1,23 @@
+name: Abomasnow
+chrooked_id: abomasnow
+aka: { pokeemerald: SPECIES_ABOMASNOW }
+abilities:
+  secondary: Ice Scales
+  hidden: Mountaineer
+stats: { atk: 102, def: 85, spa: 102, spd: 95 }
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 0, move: Ice Punch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Mist }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Leafage }
+  - { level: 1, move: Aurora Veil }
+  - { level: 15, move: Ice Shard }
+  - { level: 20, move: Razor Leaf }
+  - { level: 25, move: Icy Wind }
+  - { level: 30, move: Swagger }
+  - { level: 35, move: Ingrain }
+  - { level: 43, move: Wood Hammer }
+  - { level: 49, move: Blizzard }
+  - { level: 56, move: Sheer Cold }

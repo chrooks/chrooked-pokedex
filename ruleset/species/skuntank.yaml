@@ -1,0 +1,4 @@
+name: Skuntank
+chrooked_id: skuntank
+aka: { pokeemerald: SPECIES_SKUNTANK }
+stats: { hp: 105, atk: 105, def: 65, spa: 85, spd: 60, spe: 85 }

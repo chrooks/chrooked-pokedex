@@ -1,0 +1,6 @@
+name: Persian
+chrooked_id: persian
+aka: { pokeemerald: SPECIES_PERSIAN }
+abilities:
+  secondary: Technician
+stats: { atk: 90, spa: 60 }

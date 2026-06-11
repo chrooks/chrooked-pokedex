@@ -1,13 +1,27 @@
 name: Goodra
 chrooked_id: goodra
-aka: { dex: 706, pokeemerald: SPECIES_GOODRA }
-types: [Water, Dragon]
+aka: { pokeemerald: SPECIES_GOODRA }
+types: [Dragon, Water]
 abilities:
-  primary: Poison Heal
-  hidden: Sap Sipper
-stats: { spe: 80 }              # only overridden stats appear
-learnset:                        # whole list = owned; applier replaces
-  - { level: 1,  move: Dragon Breath }
-  - { level: 30, move: Liquidation }
-  - { level: 45, move: Excalibur }
-evolution: { from: Sliggoo, method: { level: 50, condition: raining } }
+  secondary: Hydrate
+  hidden: Poison Heal
+stats: { hp: 95, atk: 80, def: 100, spd: 135 }
+learnset:
+  - { level: 0, move: Aqua Tail }
+  - { level: 1, move: Tearful Look }
+  - { level: 1, move: Feint }
+  - { level: 1, move: Poison Tail }
+  - { level: 1, move: Acid Spray }
+  - { level: 1, move: Dragon Breath }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Water Gun }
+  - { level: 15, move: Protect }
+  - { level: 20, move: Flail }
+  - { level: 25, move: Water Pulse }
+  - { level: 30, move: Rain Dance }
+  - { level: 43, move: Curse }
+  - { level: 49, move: Body Slam }
+  - { level: 58, move: Muddy Water }
+  - { level: 67, move: Power Whip }
+  - { level: 30, move: Draconic Fang }

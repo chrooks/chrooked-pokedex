@@ -1,0 +1,6 @@
+name: Tauros
+chrooked_id: tauros
+aka: { pokeemerald: SPECIES_TAUROS }
+abilities:
+  secondary: Anger Point
+stats: { atk: 120 }

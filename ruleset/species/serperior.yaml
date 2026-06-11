@@ -1,0 +1,7 @@
+name: Serperior
+chrooked_id: serperior
+aka: { pokeemerald: SPECIES_SERPERIOR }
+types: [Grass, Dragon]
+abilities:
+  primary: Chloroplast
+stats: { atk: 85, def: 90, spa: 85, spe: 110 }

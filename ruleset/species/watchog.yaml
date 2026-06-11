@@ -1,0 +1,4 @@
+name: Watchog
+chrooked_id: watchog
+aka: { pokeemerald: SPECIES_WATCHOG }
+stats: { hp: 70, atk: 95, spe: 110 }

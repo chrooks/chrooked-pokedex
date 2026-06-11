@@ -1,0 +1,6 @@
+name: Vullaby
+chrooked_id: vullaby
+aka: { pokeemerald: SPECIES_VULLABY }
+abilities:
+  primary: Carnivore
+  hidden: Stamina

@@ -1,0 +1,6 @@
+name: Cinderace
+chrooked_id: cinderace
+aka: { pokeemerald: SPECIES_CINDERACE }
+abilities:
+  secondary: Striker
+stats: { atk: 115, spa: 70, spe: 125 }

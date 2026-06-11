@@ -1,0 +1,7 @@
+name: Falinks
+chrooked_id: falinks
+aka: { pokeemerald: SPECIES_FALINKS }
+abilities:
+  primary: Skill Link
+  secondary: Battle Armor
+  hidden: Martialize

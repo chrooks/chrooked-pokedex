@@ -1,0 +1,6 @@
+name: Ceruledge
+chrooked_id: ceruledge
+aka: { pokeemerald: SPECIES_CERULEDGE }
+abilities:
+  secondary: Sharpness
+stats: { hp: 80, atk: 130 }

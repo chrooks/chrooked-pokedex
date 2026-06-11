@@ -1,0 +1,6 @@
+name: Squirtle
+chrooked_id: squirtle
+aka: { pokeemerald: SPECIES_SQUIRTLE }
+abilities:
+  secondary: Mega Launcher
+  hidden: Shell Armor

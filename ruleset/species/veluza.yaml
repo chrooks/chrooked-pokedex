@@ -1,0 +1,6 @@
+name: Veluza
+chrooked_id: veluza
+aka: { pokeemerald: SPECIES_VELUZA }
+abilities:
+  secondary: Hydrate
+stats: { atk: 112, spe: 100 }

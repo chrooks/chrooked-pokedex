@@ -1,0 +1,20 @@
+name: Rhyhorn
+chrooked_id: rhyhorn
+aka: { pokeemerald: SPECIES_RHYHORN }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Smack Down }
+  - { level: 10, move: Bulldoze }
+  - { level: 15, move: Horn Attack }
+  - { level: 20, move: Scary Face }
+  - { level: 25, move: Stomp }
+  - { level: 30, move: Rock Blast }
+  - { level: 35, move: Drill Run }
+  - { level: 40, move: Take Down }
+  - { level: 45, move: Earthquake }
+  - { level: 50, move: Stone Edge }
+  - { level: 55, move: Megahorn }
+  - { level: 60, move: Horn Drill }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

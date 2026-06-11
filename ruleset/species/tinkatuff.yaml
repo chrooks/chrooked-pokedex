@@ -1,0 +1,22 @@
+name: Tinkatuff
+chrooked_id: tinkatuff
+aka: { pokeemerald: SPECIES_TINKATUFF }
+abilities:
+  secondary: Sledgehammer
+stats: { atk: 80 }
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Fairy Wind }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Covet }
+  - { level: 4, move: Baby-Doll Eyes }
+  - { level: 10, move: Draining Kiss }
+  - { level: 14, move: Iron Defense }
+  - { level: 18, move: Slam }
+  - { level: 22, move: Cutsie Slap }
+  - { level: 26, move: Iron Head }
+  - { level: 30, move: Play Rough }
+  - { level: 34, move: Knock Off }
+  - { level: 38, move: Heavy Slam }
+  - { level: 42, move: Swords Dance }
+  - { level: 46, move: Hammer Arm }

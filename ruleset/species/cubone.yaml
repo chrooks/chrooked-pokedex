@@ -1,0 +1,20 @@
+name: Cubone
+chrooked_id: cubone
+aka: { pokeemerald: SPECIES_CUBONE }
+abilities:
+  secondary: Bone Breaker
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Tail Whip }
+  - { level: 8, move: Bone Club }
+  - { level: 12, move: Headbutt }
+  - { level: 16, move: Rock Slide }
+  - { level: 20, move: Stomping Tantrum }
+  - { level: 24, move: Knock Off }
+  - { level: 28, move: Bone Rush }
+  - { level: 32, move: Swords Dance }
+  - { level: 36, move: Slam }
+  - { level: 40, move: Bonemerang }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Double-Edge }

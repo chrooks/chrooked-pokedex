@@ -1,0 +1,19 @@
+name: Aegislash Blade
+chrooked_id: aegislashblade
+aka: { pokeemerald: SPECIES_AEGISLASH_BLADE }
+learnset:
+  - { level: 0, move: King's Shield }
+  - { level: 1, move: King's Shield }
+  - { level: 1, move: Excalibur }
+  - { level: 1, move: Sacred Sword }
+  - { level: 1, move: Iron Head }
+  - { level: 1, move: Shadow Claw }
+  - { level: 1, move: Shadow Sneak }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Slash }
+  - { level: 1, move: Aerial Ace }
+  - { level: 1, move: Swords Dance }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Metal Sound }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Tackle }

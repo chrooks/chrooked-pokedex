@@ -1,0 +1,18 @@
+name: Flaaffy
+chrooked_id: flaaffy
+aka: { pokeemerald: SPECIES_FLAAFFY }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Thunder Shock }
+  - { level: 6, move: Thunder Wave }
+  - { level: 9, move: Cotton Spore }
+  - { level: 13, move: Charge Beam }
+  - { level: 18, move: Confuse Ray }
+  - { level: 22, move: Volt Switch }
+  - { level: 27, move: Power Gem }
+  - { level: 30, move: Discharge }
+  - { level: 35, move: Cotton Guard }
+  - { level: 40, move: Dazzling Gleam }
+  - { level: 45, move: Light Screen }
+  - { level: 50, move: Thunderbolt }

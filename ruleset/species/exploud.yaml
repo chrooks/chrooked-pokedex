@@ -1,0 +1,6 @@
+name: Exploud
+chrooked_id: exploud
+aka: { pokeemerald: SPECIES_EXPLOUD }
+abilities:
+  secondary: Amplifier
+stats: { hp: 105, atk: 95, def: 65, spa: 130, spd: 75, spe: 80 }

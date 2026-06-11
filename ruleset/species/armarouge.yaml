@@ -1,0 +1,6 @@
+name: Armarouge
+chrooked_id: armarouge
+aka: { pokeemerald: SPECIES_ARMAROUGE }
+abilities:
+  secondary: Mega Launcher
+stats: { spa: 130, spe: 80 }

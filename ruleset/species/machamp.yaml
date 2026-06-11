@@ -1,0 +1,6 @@
+name: Machamp
+chrooked_id: machamp
+aka: { pokeemerald: SPECIES_MACHAMP }
+abilities:
+  secondary: No Guard
+stats: { hp: 100, spd: 90, spe: 65 }

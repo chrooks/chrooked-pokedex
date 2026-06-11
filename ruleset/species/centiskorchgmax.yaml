@@ -1,0 +1,19 @@
+name: Centiskorch Gmax
+chrooked_id: centiskorchgmax
+aka: { pokeemerald: SPECIES_CENTISKORCH_GMAX }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Inferno }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Smokescreen }
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Bite }
+  - { level: 15, move: Flame Wheel }
+  - { level: 20, move: Bug Bite }
+  - { level: 25, move: Coil }
+  - { level: 32, move: Slam }
+  - { level: 39, move: Fire Spin }
+  - { level: 46, move: Crunch }
+  - { level: 53, move: Fire Lash }
+  - { level: 60, move: Lunge }
+  - { level: 67, move: Burn Up }

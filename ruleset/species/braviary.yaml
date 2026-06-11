@@ -1,0 +1,7 @@
+name: Braviary
+chrooked_id: braviary
+aka: { pokeemerald: SPECIES_BRAVIARY }
+abilities:
+  primary: Wingspan
+  hidden: Hustle
+stats: { atk: 130 }

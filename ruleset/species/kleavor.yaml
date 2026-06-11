@@ -1,0 +1,7 @@
+name: Kleavor
+chrooked_id: kleavor
+aka: { pokeemerald: SPECIES_KLEAVOR }
+abilities:
+  primary: Mountaineer
+  secondary: Sharpness
+stats: { spe: 90 }

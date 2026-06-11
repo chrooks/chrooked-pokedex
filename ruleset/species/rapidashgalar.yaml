@@ -1,0 +1,25 @@
+name: Rapidash Galar
+chrooked_id: rapidashgalar
+aka: { pokeemerald: SPECIES_RAPIDASH_GALAR }
+abilities:
+  secondary: Psyonize
+  hidden: Blitz
+stats: { spe: 115 }
+learnset:
+  - { level: 0, move: Psycho Cut }
+  - { level: 1, move: Psycho Cut }
+  - { level: 1, move: Megahorn }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Disarming Voice }
+  - { level: 16, move: Agility }
+  - { level: 20, move: Stomp }
+  - { level: 24, move: Play Rough }
+  - { level: 30, move: Zen Headbutt }
+  - { level: 36, move: Take Down }
+  - { level: 42, move: Swords Dance }
+  - { level: 48, move: High Horsepower }
+  - { level: 54, move: Double-Edge }
+  - { level: 60, move: Healing Wish }

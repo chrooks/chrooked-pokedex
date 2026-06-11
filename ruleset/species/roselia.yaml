@@ -1,0 +1,6 @@
+name: Roselia
+chrooked_id: roselia
+aka: { pokeemerald: SPECIES_ROSELIA }
+abilities:
+  secondary: Corrosion
+  hidden: Bloom

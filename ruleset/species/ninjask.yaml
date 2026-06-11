@@ -1,0 +1,6 @@
+name: Ninjask
+chrooked_id: ninjask
+aka: { pokeemerald: SPECIES_NINJASK }
+abilities:
+  hidden: Aerodynamic
+stats: { hp: 60, atk: 95 }

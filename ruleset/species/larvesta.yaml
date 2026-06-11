@@ -1,0 +1,18 @@
+name: Larvesta
+chrooked_id: larvesta
+aka: { pokeemerald: SPECIES_LARVESTA }
+stats: { hp: 75, spa: 85, spe: 70 }
+learnset:
+  - { level: 1, move: Ember }
+  - { level: 1, move: String Shot }
+  - { level: 6, move: Flame Charge }
+  - { level: 12, move: Struggle Bug }
+  - { level: 18, move: Flame Wheel }
+  - { level: 24, move: Bug Bite }
+  - { level: 30, move: Screech }
+  - { level: 36, move: Leech Life }
+  - { level: 42, move: Bug Buzz }
+  - { level: 48, move: Take Down }
+  - { level: 54, move: Amnesia }
+  - { level: 60, move: Double-Edge }
+  - { level: 66, move: Flare Blitz }

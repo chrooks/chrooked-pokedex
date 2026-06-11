@@ -1,0 +1,23 @@
+name: Mudsdale
+chrooked_id: mudsdale
+aka: { pokeemerald: SPECIES_MUDSDALE }
+abilities:
+  primary: Striker
+  hidden: Water Compaction
+stats: { spd: 90 }
+learnset:
+  - { level: 1, move: Double Kick }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Rock Smash }
+  - { level: 1, move: Iron Defense }
+  - { level: 12, move: Bulldoze }
+  - { level: 16, move: Stomp }
+  - { level: 20, move: Strength }
+  - { level: 24, move: Counter }
+  - { level: 28, move: High Horsepower }
+  - { level: 34, move: Heavy Slam }
+  - { level: 40, move: Earthquake }
+  - { level: 46, move: Mega Kick }
+  - { level: 52, move: Superpower }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

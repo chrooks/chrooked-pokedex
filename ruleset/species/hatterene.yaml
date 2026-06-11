@@ -1,0 +1,6 @@
+name: Hatterene
+chrooked_id: hatterene
+aka: { pokeemerald: SPECIES_HATTERENE }
+abilities:
+  primary: Insidious
+stats: { def: 100 }

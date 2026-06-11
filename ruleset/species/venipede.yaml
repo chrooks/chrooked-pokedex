@@ -1,0 +1,5 @@
+name: Venipede
+chrooked_id: venipede
+aka: { pokeemerald: SPECIES_VENIPEDE }
+abilities:
+  hidden: Speed Boost

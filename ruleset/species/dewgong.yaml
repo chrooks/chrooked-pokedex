@@ -1,0 +1,7 @@
+name: Dewgong
+chrooked_id: dewgong
+aka: { pokeemerald: SPECIES_DEWGONG }
+abilities:
+  secondary: Hydration
+  hidden: Permafrost
+stats: { atk: 80, def: 70, spa: 100, spe: 90 }

@@ -1,0 +1,24 @@
+name: Chien Pao
+chrooked_id: chienpao
+aka: { pokeemerald: SPECIES_CHIEN_PAO }
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 1, move: Spite }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Mean Look }
+  - { level: 5, move: Icy Wind }
+  - { level: 10, move: Payback }
+  - { level: 15, move: Mist }
+  - { level: 15, move: Haze }
+  - { level: 20, move: Ice Shard }
+  - { level: 25, move: Swords Dance }
+  - { level: 30, move: Snowscape }
+  - { level: 35, move: Night Slash }
+  - { level: 40, move: Dark Pulse }
+  - { level: 45, move: Icicle Crash }
+  - { level: 50, move: Ruination }
+  - { level: 55, move: Sucker Punch }
+  - { level: 60, move: Sacred Sword }
+  - { level: 65, move: Recover }
+  - { level: 70, move: Throat Chop }
+  - { level: 75, move: Sheer Cold }

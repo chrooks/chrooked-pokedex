@@ -1,0 +1,8 @@
+name: Klinklang
+chrooked_id: klinklang
+aka: { pokeemerald: SPECIES_KLINKLANG }
+abilities:
+  primary: Steelworker
+  secondary: Plus
+  hidden: Minus
+stats: { hp: 70, atk: 110, def: 125 }

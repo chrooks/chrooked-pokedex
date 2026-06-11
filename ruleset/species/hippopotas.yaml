@@ -1,0 +1,21 @@
+name: Hippopotas
+chrooked_id: hippopotas
+aka: { pokeemerald: SPECIES_HIPPOPOTAS }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Bite }
+  - { level: 8, move: Yawn }
+  - { level: 12, move: Sand Tomb }
+  - { level: 16, move: Dig }
+  - { level: 20, move: Crunch }
+  - { level: 24, move: Sandstorm }
+  - { level: 28, move: Take Down }
+  - { level: 32, move: Roar }
+  - { level: 36, move: Rest }
+  - { level: 40, move: Earthquake }
+  - { level: 44, move: Double-Edge }
+  - { level: 48, move: Fissure }
+  - { level: 52, move: Slack Off }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

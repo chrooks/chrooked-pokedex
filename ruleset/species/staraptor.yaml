@@ -1,0 +1,6 @@
+name: Staraptor
+chrooked_id: staraptor
+aka: { pokeemerald: SPECIES_STARAPTOR }
+types: [Fighting, Flying]
+abilities:
+  secondary: Blitz

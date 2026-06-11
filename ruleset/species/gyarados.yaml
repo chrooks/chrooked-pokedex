@@ -1,0 +1,7 @@
+name: Gyarados
+chrooked_id: gyarados
+aka: { pokeemerald: SPECIES_GYARADOS }
+types: [Water, Dragon]
+abilities:
+  primary: Levitate
+stats: { def: 80, spe: 85 }

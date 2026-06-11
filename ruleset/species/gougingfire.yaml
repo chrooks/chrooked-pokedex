@@ -1,0 +1,25 @@
+name: Gouging Fire
+chrooked_id: gougingfire
+aka: { pokeemerald: SPECIES_GOUGING_FIRE }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Double Kick }
+  - { level: 1, move: Ancient Power }
+  - { level: 1, move: Noble Roar }
+  - { level: 1, move: Stomp }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Incinerate }
+  - { level: 1, move: Sunny Day }
+  - { level: 7, move: Fire Fang }
+  - { level: 14, move: Howl }
+  - { level: 21, move: Bite }
+  - { level: 28, move: Dragon Claw }
+  - { level: 35, move: Crush Claw }
+  - { level: 42, move: Morning Sun }
+  - { level: 49, move: Burning Bulwark }
+  - { level: 56, move: Dragon Rush }
+  - { level: 63, move: Fire Blast }
+  - { level: 70, move: Lava Plume }
+  - { level: 77, move: Outrage }
+  - { level: 84, move: Flare Blitz }
+  - { level: 91, move: Raging Fury }

@@ -1,0 +1,6 @@
+name: Doduo
+chrooked_id: doduo
+aka: { pokeemerald: SPECIES_DODUO }
+abilities:
+  secondary: Technician
+  hidden: Striker

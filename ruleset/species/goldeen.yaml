@@ -1,0 +1,6 @@
+name: Goldeen
+chrooked_id: goldeen
+aka: { pokeemerald: SPECIES_GOLDEEN }
+abilities:
+  primary: Water Veil
+  secondary: Impale

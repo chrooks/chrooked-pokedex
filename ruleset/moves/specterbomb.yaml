@@ -1,0 +1,9 @@
+name: Specter Bomb
+chrooked_id: specterbomb
+aka: { pokeemerald: MOVE_SPECTER_BOMB }
+type: Ghost
+category: special
+power: 110
+accuracy: 85
+pp: 5
+description: A spectral burst that may lower the foe's Sp. Def.

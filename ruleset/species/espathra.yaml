@@ -1,0 +1,6 @@
+name: Espathra
+chrooked_id: espathra
+aka: { pokeemerald: SPECIES_ESPATHRA }
+abilities:
+  secondary: Mystic Power
+stats: { spa: 105, spd: 70 }

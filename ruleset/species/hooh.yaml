@@ -1,0 +1,7 @@
+name: Ho Oh
+chrooked_id: hooh
+aka: { pokeemerald: SPECIES_HO_OH }
+abilities:
+  primary: Regenerator
+  hidden: Updraft
+stats: { hp: 105, spd: 155 }

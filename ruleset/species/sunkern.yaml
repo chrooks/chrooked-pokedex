@@ -1,0 +1,5 @@
+name: Sunkern
+chrooked_id: sunkern
+aka: { pokeemerald: SPECIES_SUNKERN }
+abilities:
+  secondary: Solar Power

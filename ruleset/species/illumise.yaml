@@ -1,0 +1,7 @@
+name: Illumise
+chrooked_id: illumise
+aka: { pokeemerald: SPECIES_ILLUMISE }
+types: [Bug, Fairy]
+abilities:
+  secondary: Tinted Lens
+stats: { def: 75, spa: 90, spd: 95, spe: 95 }

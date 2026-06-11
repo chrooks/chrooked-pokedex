@@ -1,0 +1,9 @@
+name: Tectonic Fang
+chrooked_id: tectonicfang
+aka: { pokeemerald: MOVE_TECTONIC_FANG }
+type: Ground
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: May cause flinching or kick dust in the foe.

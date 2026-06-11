@@ -1,0 +1,23 @@
+name: Sandile
+chrooked_id: sandile
+aka: { pokeemerald: SPECIES_SANDILE }
+abilities:
+  hidden: Carnivore
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Power Trip }
+  - { level: 3, move: Sand Attack }
+  - { level: 6, move: Hone Claws }
+  - { level: 9, move: Sand Tomb }
+  - { level: 12, move: Scary Face }
+  - { level: 15, move: Bite }
+  - { level: 18, move: Torment }
+  - { level: 21, move: Dig }
+  - { level: 24, move: Swagger }
+  - { level: 27, move: Crunch }
+  - { level: 30, move: Sandstorm }
+  - { level: 33, move: Foul Play }
+  - { level: 36, move: Earthquake }
+  - { level: 39, move: Thrash }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

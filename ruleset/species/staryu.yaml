@@ -1,0 +1,6 @@
+name: Staryu
+chrooked_id: staryu
+aka: { pokeemerald: SPECIES_STARYU }
+abilities:
+  primary: Mystic Power
+  hidden: Victory Star

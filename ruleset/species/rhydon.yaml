@@ -1,0 +1,23 @@
+name: Rhydon
+chrooked_id: rhydon
+aka: { pokeemerald: SPECIES_RHYDON }
+abilities:
+  primary: Impale
+learnset:
+  - { level: 0, move: Hammer Arm }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Smack Down }
+  - { level: 1, move: Bulldoze }
+  - { level: 15, move: Horn Attack }
+  - { level: 20, move: Scary Face }
+  - { level: 25, move: Stomp }
+  - { level: 30, move: Rock Blast }
+  - { level: 35, move: Drill Run }
+  - { level: 40, move: Take Down }
+  - { level: 47, move: Earthquake }
+  - { level: 54, move: Stone Edge }
+  - { level: 61, move: Megahorn }
+  - { level: 68, move: Horn Drill }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

@@ -1,0 +1,6 @@
+name: Shinx
+chrooked_id: shinx
+aka: { pokeemerald: SPECIES_SHINX }
+abilities:
+  secondary: Carnivore
+stats: { spe: 65 }

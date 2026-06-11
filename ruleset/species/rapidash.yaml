@@ -1,0 +1,28 @@
+name: Rapidash
+chrooked_id: rapidash
+aka: { pokeemerald: SPECIES_RAPIDASH }
+abilities:
+  primary: Reckless
+  secondary: Immolate
+  hidden: Blitz
+stats: { spa: 75, spe: 120 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Smart Strike }
+  - { level: 1, move: Smart Strike }
+  - { level: 1, move: Megahorn }
+  - { level: 1, move: Poison Jab }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Ember }
+  - { level: 15, move: Flame Charge }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Flame Wheel }
+  - { level: 30, move: Stomp }
+  - { level: 35, move: Fire Spin }
+  - { level: 43, move: Take Down }
+  - { level: 49, move: Inferno }
+  - { level: 56, move: Fire Blast }
+  - { level: 63, move: Flare Blitz }

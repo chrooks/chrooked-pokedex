@@ -1,0 +1,7 @@
+name: Leavanny
+chrooked_id: leavanny
+aka: { pokeemerald: SPECIES_LEAVANNY }
+abilities:
+  primary: Sharpness
+  hidden: Forestry
+stats: { atk: 115 }

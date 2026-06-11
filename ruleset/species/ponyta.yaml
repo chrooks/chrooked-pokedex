@@ -1,0 +1,6 @@
+name: Ponyta
+chrooked_id: ponyta
+aka: { pokeemerald: SPECIES_PONYTA }
+abilities:
+  primary: Reckless
+  hidden: Blitz

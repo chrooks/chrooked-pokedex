@@ -1,0 +1,4 @@
+name: Pangoro
+chrooked_id: pangoro
+aka: { pokeemerald: SPECIES_PANGORO }
+stats: { hp: 100, atk: 125, def: 80, spe: 65 }

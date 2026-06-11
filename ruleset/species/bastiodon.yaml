@@ -1,0 +1,6 @@
+name: Bastiodon
+chrooked_id: bastiodon
+aka: { pokeemerald: SPECIES_BASTIODON }
+abilities:
+  secondary: Battle Armor
+stats: { hp: 75, atk: 50, def: 170, spa: 45, spd: 140 }

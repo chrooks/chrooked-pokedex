@@ -1,0 +1,5 @@
+name: Charmander
+chrooked_id: charmander
+aka: { pokeemerald: SPECIES_CHARMANDER }
+abilities:
+  secondary: Flash Fire

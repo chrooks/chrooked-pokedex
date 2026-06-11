@@ -1,0 +1,6 @@
+name: Whimsicott
+chrooked_id: whimsicott
+aka: { pokeemerald: SPECIES_WHIMSICOTT }
+abilities:
+  hidden: Aerodynamic
+stats: { spa: 100 }

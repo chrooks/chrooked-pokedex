@@ -1,0 +1,5 @@
+name: Deoxys Defense
+chrooked_id: deoxysdefense
+aka: { pokeemerald: SPECIES_DEOXYS_DEFENSE }
+abilities:
+  primary: Natural Cure

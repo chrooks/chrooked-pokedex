@@ -1,0 +1,19 @@
+name: Groudon Primal
+chrooked_id: groudonprimal
+aka: { pokeemerald: SPECIES_GROUDON_PRIMAL }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Scary Face }
+  - { level: 1, move: Ancient Power }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Lava Plume }
+  - { level: 1, move: Precipice Blades }
+  - { level: 9, move: Earth Power }
+  - { level: 18, move: Bulk Up }
+  - { level: 27, move: Earthquake }
+  - { level: 36, move: Hammer Arm }
+  - { level: 45, move: Fissure }
+  - { level: 54, move: Rest }
+  - { level: 72, move: Fire Blast }
+  - { level: 81, move: Solar Beam }
+  - { level: 90, move: Eruption }

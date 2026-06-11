@@ -1,0 +1,6 @@
+name: Gigalith
+chrooked_id: gigalith
+aka: { pokeemerald: SPECIES_GIGALITH }
+abilities:
+  secondary: Sand Stream
+stats: { atk: 60, spa: 135 }

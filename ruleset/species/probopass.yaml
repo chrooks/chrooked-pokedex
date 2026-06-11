@@ -1,0 +1,6 @@
+name: Probopass
+chrooked_id: probopass
+aka: { pokeemerald: SPECIES_PROBOPASS }
+abilities:
+  primary: Lightning Rod
+stats: { hp: 75 }

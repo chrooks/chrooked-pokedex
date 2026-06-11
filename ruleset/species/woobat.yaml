@@ -1,0 +1,6 @@
+name: Woobat
+chrooked_id: woobat
+aka: { pokeemerald: SPECIES_WOOBAT }
+abilities:
+  primary: Aerodynamic
+  secondary: Psyonize

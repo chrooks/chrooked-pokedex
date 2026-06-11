@@ -1,0 +1,7 @@
+name: Rock Tomb
+chrooked_id: rocktomb
+aka: { pokeemerald: MOVE_ROCK_TOMB }
+type: Rock
+category: physical
+power: 50
+description: Stops the foe from moving with rocks and cuts Speed.

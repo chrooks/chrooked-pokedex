@@ -1,0 +1,4 @@
+name: Amoonguss
+chrooked_id: amoonguss
+aka: { pokeemerald: SPECIES_AMOONGUSS }
+stats: { hp: 115, atk: 70, def: 85, spd: 100 }

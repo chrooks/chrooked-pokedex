@@ -1,0 +1,6 @@
+name: Lapras
+chrooked_id: lapras
+aka: { pokeemerald: SPECIES_LAPRAS }
+abilities:
+  hidden: Permafrost
+stats: { atk: 75, spa: 105 }

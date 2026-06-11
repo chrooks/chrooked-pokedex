@@ -1,0 +1,20 @@
+name: Kyurem Black
+chrooked_id: kyuremblack
+aka: { pokeemerald: SPECIES_KYUREM_BLACK }
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 1, move: Dragon Breath }
+  - { level: 1, move: Ancient Power }
+  - { level: 1, move: Noble Roar }
+  - { level: 1, move: Freeze-Dry }
+  - { level: 8, move: Slash }
+  - { level: 16, move: Endeavor }
+  - { level: 24, move: Dragon Pulse }
+  - { level: 32, move: Ice Beam }
+  - { level: 40, move: Hyper Voice }
+  - { level: 48, move: Fusion Bolt }
+  - { level: 56, move: Blizzard }
+  - { level: 64, move: Imprison }
+  - { level: 72, move: Outrage }
+  - { level: 80, move: Freeze Shock }
+  - { level: 88, move: Sheer Cold }

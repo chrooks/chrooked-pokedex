@@ -1,0 +1,21 @@
+name: Volbeat
+chrooked_id: volbeat
+aka: { pokeemerald: SPECIES_VOLBEAT }
+types: [Bug, Electric]
+stats: { atk: 90, def: 75, spd: 95, spe: 95 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Double Team }
+  - { level: 8, move: Confuse Ray }
+  - { level: 12, move: Quick Attack }
+  - { level: 15, move: Struggle Bug }
+  - { level: 19, move: Moonlight }
+  - { level: 22, move: Tail Glow }
+  - { level: 26, move: Protect }
+  - { level: 29, move: Zen Headbutt }
+  - { level: 33, move: Helping Hand }
+  - { level: 36, move: Bug Buzz }
+  - { level: 40, move: Play Rough }
+  - { level: 43, move: Double-Edge }
+  - { level: 47, move: Infestation }

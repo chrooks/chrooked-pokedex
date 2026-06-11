@@ -1,0 +1,6 @@
+name: Igglybuff
+chrooked_id: igglybuff
+aka: { pokeemerald: SPECIES_IGGLYBUFF }
+types: [Normal, Fairy]
+abilities:
+  secondary: Competitive

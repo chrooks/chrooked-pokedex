@@ -1,0 +1,6 @@
+name: Moltres
+chrooked_id: moltres
+aka: { pokeemerald: SPECIES_MOLTRES }
+abilities:
+  primary: Flame Body
+stats: { atk: 90, def: 100, spd: 95 }

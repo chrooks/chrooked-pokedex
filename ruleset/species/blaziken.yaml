@@ -1,0 +1,28 @@
+name: Blaziken
+chrooked_id: blaziken
+aka: { pokeemerald: SPECIES_BLAZIKEN }
+abilities:
+  secondary: Striker
+stats: { spe: 90 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Blaze Kick }
+  - { level: 1, move: Fire Punch }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Flamethrower }
+  - { level: 1, move: Feather Dance }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Double Kick }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
+  - { level: 9, move: Flame Charge }
+  - { level: 12, move: Detect }
+  - { level: 15, move: Sand Attack }
+  - { level: 20, move: Aerial Ace }
+  - { level: 25, move: Slash }
+  - { level: 30, move: Bounce }
+  - { level: 35, move: Focus Energy }
+  - { level: 42, move: Bulk Up }
+  - { level: 49, move: Reversal }
+  - { level: 56, move: Flare Blitz }
+  - { level: 63, move: Brave Bird }

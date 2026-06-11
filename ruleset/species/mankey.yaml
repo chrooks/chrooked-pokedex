@@ -1,0 +1,5 @@
+name: Mankey
+chrooked_id: mankey
+aka: { pokeemerald: SPECIES_MANKEY }
+abilities:
+  secondary: Anger Point

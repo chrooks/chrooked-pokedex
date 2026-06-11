@@ -1,0 +1,7 @@
+name: Treecko
+chrooked_id: treecko
+aka: { pokeemerald: SPECIES_TREECKO }
+abilities:
+  secondary: Chloroplast
+  hidden: Forestry
+stats: { atk: 50, def: 30 }

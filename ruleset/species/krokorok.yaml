@@ -1,0 +1,23 @@
+name: Krokorok
+chrooked_id: krokorok
+aka: { pokeemerald: SPECIES_KROKOROK }
+abilities:
+  hidden: Carnivore
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Hone Claws }
+  - { level: 1, move: Power Trip }
+  - { level: 9, move: Sand Tomb }
+  - { level: 12, move: Scary Face }
+  - { level: 15, move: Bite }
+  - { level: 18, move: Torment }
+  - { level: 21, move: Dig }
+  - { level: 24, move: Swagger }
+  - { level: 27, move: Crunch }
+  - { level: 32, move: Sandstorm }
+  - { level: 35, move: Foul Play }
+  - { level: 42, move: Earthquake }
+  - { level: 47, move: Thrash }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

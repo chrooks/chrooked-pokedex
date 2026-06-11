@@ -1,0 +1,5 @@
+name: Snorunt
+chrooked_id: snorunt
+aka: { pokeemerald: SPECIES_SNORUNT }
+abilities:
+  secondary: Ice Body

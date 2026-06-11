@@ -1,0 +1,6 @@
+name: Luxio
+chrooked_id: luxio
+aka: { pokeemerald: SPECIES_LUXIO }
+abilities:
+  secondary: Carnivore
+stats: { spa: 65, spe: 80 }

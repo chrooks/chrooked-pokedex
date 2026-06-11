@@ -1,0 +1,7 @@
+name: Wyrdeer
+chrooked_id: wyrdeer
+aka: { pokeemerald: SPECIES_WYRDEER }
+abilities:
+  secondary: Mystic Power
+  hidden: Impale
+stats: { hp: 100, def: 70 }

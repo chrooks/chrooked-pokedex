@@ -1,0 +1,26 @@
+name: Noivern
+chrooked_id: noivern
+aka: { pokeemerald: SPECIES_NOIVERN }
+abilities:
+  primary: Amplifier
+  secondary: Aerodynamic
+  hidden: Mountaineer
+learnset:
+  - { level: 0, move: Dragon Breath }
+  - { level: 1, move: Tailwind }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Moonlight }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Echoed Voice }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Air Cutter }
+  - { level: 28, move: Snarl }
+  - { level: 32, move: Air Slash }
+  - { level: 40, move: Dragon Pulse }
+  - { level: 44, move: Roost }
+  - { level: 50, move: Hyper Voice }
+  - { level: 56, move: Hurricane }
+  - { level: 62, move: Draco Meteor }
+  - { level: 68, move: Boomburst }

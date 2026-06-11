@@ -1,0 +1,8 @@
+name: Covet
+chrooked_id: covet
+aka: { pokeemerald: MOVE_COVET }
+type: Normal
+category: physical
+power: 40
+accuracy: 100
+description: Cutely begs to obtain an item held by the foe.

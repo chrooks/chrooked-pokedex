@@ -1,0 +1,19 @@
+name: Dratini
+chrooked_id: dratini
+aka: { pokeemerald: SPECIES_DRATINI }
+learnset:
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Twister }
+  - { level: 10, move: Thunder Wave }
+  - { level: 15, move: Dragon Tail }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Slam }
+  - { level: 31, move: Aqua Tail }
+  - { level: 35, move: Dragon Rush }
+  - { level: 40, move: Safeguard }
+  - { level: 45, move: Rain Dance }
+  - { level: 50, move: Dragon Dance }
+  - { level: 55, move: Outrage }
+  - { level: 60, move: Hyper Beam }
+  - { level: 25, move: Draconic Fang }

@@ -1,0 +1,6 @@
+name: Camerupt
+chrooked_id: camerupt
+aka: { pokeemerald: SPECIES_CAMERUPT }
+abilities:
+  secondary: Solid Rock
+stats: { hp: 80, atk: 95, def: 75, spa: 120 }

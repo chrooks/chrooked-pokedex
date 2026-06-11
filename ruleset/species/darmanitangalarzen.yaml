@@ -1,0 +1,21 @@
+name: Darmanitan Galar Zen
+chrooked_id: darmanitangalarzen
+aka: { pokeemerald: SPECIES_DARMANITAN_GALAR_ZEN }
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 0, move: Icicle Crash }
+  - { level: 1, move: Icicle Crash }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Bite }
+  - { level: 12, move: Avalanche }
+  - { level: 16, move: Work Up }
+  - { level: 20, move: Ice Fang }
+  - { level: 24, move: Headbutt }
+  - { level: 28, move: Ice Punch }
+  - { level: 32, move: Uproar }
+  - { level: 38, move: Belly Drum }
+  - { level: 44, move: Blizzard }
+  - { level: 50, move: Thrash }
+  - { level: 56, move: Superpower }

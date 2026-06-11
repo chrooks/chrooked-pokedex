@@ -1,0 +1,6 @@
+name: Alakazam
+chrooked_id: alakazam
+aka: { pokeemerald: SPECIES_ALAKAZAM }
+abilities:
+  primary: Mystic Power
+stats: { spd: 95 }

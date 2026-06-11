@@ -1,0 +1,5 @@
+name: Machop
+chrooked_id: machop
+aka: { pokeemerald: SPECIES_MACHOP }
+abilities:
+  secondary: No Guard

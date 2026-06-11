@@ -1,0 +1,9 @@
+name: Draconic Fang
+chrooked_id: draconicfang
+aka: { pokeemerald: MOVE_DRACONIC_FANG }
+type: Dragon
+category: physical
+power: 80
+accuracy: 95
+pp: 15
+description: May cause flinching or cow the foe's attack.

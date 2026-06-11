@@ -1,0 +1,21 @@
+name: Turtonator
+chrooked_id: turtonator
+aka: { pokeemerald: SPECIES_TURTONATOR }
+stats: { hp: 80, atk: 75, spa: 110, spe: 35 }
+learnset:
+  - { level: 1, move: Smog }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Ember }
+  - { level: 8, move: Protect }
+  - { level: 12, move: Endure }
+  - { level: 16, move: Flail }
+  - { level: 20, move: Incinerate }
+  - { level: 24, move: Iron Defense }
+  - { level: 28, move: Dragon Pulse }
+  - { level: 32, move: Body Slam }
+  - { level: 36, move: Flamethrower }
+  - { level: 40, move: Shell Trap }
+  - { level: 44, move: Shell Smash }
+  - { level: 48, move: Overheat }
+  - { level: 52, move: Explosion }
+  - { level: 25, move: Draconic Fang }

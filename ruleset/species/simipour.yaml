@@ -1,0 +1,6 @@
+name: Simipour
+chrooked_id: simipour
+aka: { pokeemerald: SPECIES_SIMIPOUR }
+abilities:
+  hidden: Sage Power
+stats: { atk: 100, spa: 100 }

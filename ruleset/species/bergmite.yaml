@@ -1,0 +1,6 @@
+name: Bergmite
+chrooked_id: bergmite
+aka: { pokeemerald: SPECIES_BERGMITE }
+abilities:
+  primary: Whiteout
+  secondary: Permafrost

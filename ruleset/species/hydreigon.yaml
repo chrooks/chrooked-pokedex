@@ -1,0 +1,28 @@
+name: Hydreigon
+chrooked_id: hydreigon
+aka: { pokeemerald: SPECIES_HYDREIGON }
+abilities:
+  secondary: Mega Launcher
+  hidden: Carnivore
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Dragon Breath }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Tri Attack }
+  - { level: 1, move: Double Hit }
+  - { level: 12, move: Roar }
+  - { level: 16, move: Assurance }
+  - { level: 20, move: Headbutt }
+  - { level: 24, move: Work Up }
+  - { level: 28, move: Slam }
+  - { level: 32, move: Crunch }
+  - { level: 36, move: Scary Face }
+  - { level: 40, move: Dragon Pulse }
+  - { level: 44, move: Body Slam }
+  - { level: 48, move: Hyper Voice }
+  - { level: 54, move: Dragon Rush }
+  - { level: 60, move: Nasty Plot }
+  - { level: 68, move: Outrage }
+  - { level: 76, move: Hyper Beam }
+  - { level: 30, move: Draconic Fang }

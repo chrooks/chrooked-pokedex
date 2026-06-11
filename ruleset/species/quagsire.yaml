@@ -1,0 +1,6 @@
+name: Quagsire
+chrooked_id: quagsire
+aka: { pokeemerald: SPECIES_QUAGSIRE }
+abilities:
+  primary: Water Absorb
+stats: { hp: 100, def: 95, spa: 80, spd: 95 }

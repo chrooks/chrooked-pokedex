@@ -1,0 +1,5 @@
+name: Shroomish
+chrooked_id: shroomish
+aka: { pokeemerald: SPECIES_SHROOMISH }
+abilities:
+  secondary: Poison Heal

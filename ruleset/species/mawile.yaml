@@ -1,0 +1,4 @@
+name: Mawile
+chrooked_id: mawile
+aka: { pokeemerald: SPECIES_MAWILE }
+stats: { hp: 60, def: 95, spd: 75 }

@@ -1,0 +1,7 @@
+name: Drowzee
+chrooked_id: drowzee
+aka: { pokeemerald: SPECIES_DROWZEE }
+abilities:
+  primary: Bad Dreams
+  secondary: Daunt
+  hidden: Hubris

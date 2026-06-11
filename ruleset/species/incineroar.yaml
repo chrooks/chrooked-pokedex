@@ -1,0 +1,24 @@
+name: Incineroar
+chrooked_id: incineroar
+aka: { pokeemerald: SPECIES_INCINEROAR }
+stats: { def: 100 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Darkest Lariat }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Throat Chop }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Cross Chop }
+  - { level: 1, move: Bulk Up }
+  - { level: 9, move: Roar }
+  - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Bite }
+  - { level: 20, move: Double Kick }
+  - { level: 25, move: Fire Fang }
+  - { level: 30, move: Scary Face }
+  - { level: 32, move: Swagger }
+  - { level: 44, move: Flamethrower }
+  - { level: 51, move: Thrash }
+  - { level: 58, move: Flare Blitz }

@@ -1,0 +1,19 @@
+name: Shelgon
+chrooked_id: shelgon
+aka: { pokeemerald: SPECIES_SHELGON }
+learnset:
+  - { level: 0, move: Protect }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Dragon Breath }
+  - { level: 15, move: Headbutt }
+  - { level: 20, move: Scary Face }
+  - { level: 25, move: Crunch }
+  - { level: 33, move: Dragon Claw }
+  - { level: 39, move: Zen Headbutt }
+  - { level: 46, move: Focus Energy }
+  - { level: 53, move: Flamethrower }
+  - { level: 60, move: Outrage }
+  - { level: 67, move: Double-Edge }
+  - { level: 25, move: Draconic Fang }

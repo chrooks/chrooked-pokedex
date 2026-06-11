@@ -1,0 +1,8 @@
+name: Golduck
+chrooked_id: golduck
+aka: { pokeemerald: SPECIES_GOLDUCK }
+types: [Water, Psychic]
+abilities:
+  primary: Swift Swim
+  hidden: Psyonize
+stats: { atk: 105, spa: 80 }

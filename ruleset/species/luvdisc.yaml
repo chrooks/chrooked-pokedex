@@ -1,0 +1,5 @@
+name: Luvdisc
+chrooked_id: luvdisc
+aka: { pokeemerald: SPECIES_LUVDISC }
+types: [Water, Fairy]
+stats: { hp: 75, def: 60, spa: 75, spd: 75, spe: 120 }

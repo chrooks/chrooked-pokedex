@@ -1,0 +1,8 @@
+name: Crobat
+chrooked_id: crobat
+aka: { pokeemerald: SPECIES_CROBAT }
+abilities:
+  primary: Mountaineer
+  secondary: Infiltrator
+  hidden: Tinted Lens
+stats: { spa: 85 }

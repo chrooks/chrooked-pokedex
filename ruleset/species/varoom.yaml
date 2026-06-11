@@ -1,0 +1,7 @@
+name: Varoom
+chrooked_id: varoom
+aka: { pokeemerald: SPECIES_VAROOM }
+abilities:
+  primary: Filter
+  secondary: Motor Drive
+  hidden: Exhaust

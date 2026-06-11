@@ -1,0 +1,4 @@
+name: Chesnaught
+chrooked_id: chesnaught
+aka: { pokeemerald: SPECIES_CHESNAUGHT }
+stats: { hp: 100, atk: 115, def: 130, spa: 55, spe: 65 }

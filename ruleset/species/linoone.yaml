@@ -1,0 +1,6 @@
+name: Linoone
+chrooked_id: linoone
+aka: { pokeemerald: SPECIES_LINOONE }
+abilities:
+  secondary: Gluttony
+stats: { hp: 80, atk: 80, def: 65, spd: 60, spe: 125 }

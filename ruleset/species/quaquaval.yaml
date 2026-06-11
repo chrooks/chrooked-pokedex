@@ -1,0 +1,6 @@
+name: Quaquaval
+chrooked_id: quaquaval
+aka: { pokeemerald: SPECIES_QUAQUAVAL }
+abilities:
+  secondary: Striker
+stats: { spe: 95 }

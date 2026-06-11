@@ -1,0 +1,7 @@
+name: Magcargo
+chrooked_id: magcargo
+aka: { pokeemerald: SPECIES_MAGCARGO }
+abilities:
+  primary: Gooey
+  hidden: Mountaineer
+stats: { hp: 60, spa: 90, spd: 100 }

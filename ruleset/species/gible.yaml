@@ -1,0 +1,19 @@
+name: Gible
+chrooked_id: gible
+aka: { pokeemerald: SPECIES_GIBLE }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Sand Tomb }
+  - { level: 6, move: Sand Attack }
+  - { level: 12, move: Dragon Breath }
+  - { level: 18, move: Bulldoze }
+  - { level: 25, move: Bite }
+  - { level: 30, move: Slash }
+  - { level: 36, move: Dragon Claw }
+  - { level: 42, move: Dig }
+  - { level: 48, move: Sandstorm }
+  - { level: 54, move: Take Down }
+  - { level: 60, move: Dragon Rush }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
+  - { level: 25, move: Draconic Fang }

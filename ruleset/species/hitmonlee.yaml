@@ -1,0 +1,6 @@
+name: Hitmonlee
+chrooked_id: hitmonlee
+aka: { pokeemerald: SPECIES_HITMONLEE }
+abilities:
+  secondary: Reckless
+stats: { def: 65, spe: 90 }

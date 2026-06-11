@@ -1,0 +1,23 @@
+name: Rampardos
+chrooked_id: rampardos
+aka: { pokeemerald: SPECIES_RAMPARDOS }
+abilities:
+  primary: Rock Head
+  secondary: Mold Breaker
+stats: { hp: 100, spe: 70 }
+learnset:
+  - { level: 0, move: Endeavor }
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Focus Energy }
+  - { level: 10, move: Rock Smash }
+  - { level: 15, move: Take Down }
+  - { level: 19, move: Scary Face }
+  - { level: 24, move: Assurance }
+  - { level: 28, move: Slam }
+  - { level: 36, move: Ancient Power }
+  - { level: 43, move: Zen Headbutt }
+  - { level: 51, move: Screech }
+  - { level: 58, move: Head Smash }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }

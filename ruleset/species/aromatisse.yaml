@@ -1,0 +1,6 @@
+name: Aromatisse
+chrooked_id: aromatisse
+aka: { pokeemerald: SPECIES_AROMATISSE }
+types: [Fairy, Poison]
+abilities:
+  primary: Venomize

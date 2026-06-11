@@ -1,0 +1,7 @@
+name: Trevenant
+chrooked_id: trevenant
+aka: { pokeemerald: SPECIES_TREVENANT }
+abilities:
+  secondary: Sledgehammer
+  hidden: Insidious
+stats: { def: 86 }

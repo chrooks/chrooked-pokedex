@@ -1,0 +1,6 @@
+name: Snover
+chrooked_id: snover
+aka: { pokeemerald: SPECIES_SNOVER }
+abilities:
+  secondary: Ice Scales
+  hidden: Mountaineer

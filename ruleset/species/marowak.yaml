@@ -1,0 +1,20 @@
+name: Marowak
+chrooked_id: marowak
+aka: { pokeemerald: SPECIES_MAROWAK }
+abilities:
+  secondary: Bone Breaker
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Bone Club }
+  - { level: 12, move: Headbutt }
+  - { level: 16, move: Rock Slide }
+  - { level: 20, move: Stomping Tantrum }
+  - { level: 24, move: Knock Off }
+  - { level: 28, move: Bone Rush }
+  - { level: 32, move: Swords Dance }
+  - { level: 38, move: Slam }
+  - { level: 44, move: Bonemerang }
+  - { level: 50, move: Earthquake }
+  - { level: 56, move: Double-Edge }

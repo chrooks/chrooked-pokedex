@@ -1,0 +1,9 @@
+name: Miasma
+chrooked_id: miasma
+aka: { pokeemerald: MOVE_MIASMA }
+type: Poison
+category: special
+power: 80
+accuracy: 100
+pp: 15
+description: Releases a toxic wind. May poison the target.

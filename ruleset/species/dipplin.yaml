@@ -1,0 +1,22 @@
+name: Dipplin
+chrooked_id: dipplin
+aka: { pokeemerald: SPECIES_DIPPLIN }
+learnset:
+  - { level: 0, move: Double Hit }
+  - { level: 1, move: Infestation }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Recycle }
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Dragon Tail }
+  - { level: 8, move: Dragon Breath }
+  - { level: 12, move: Growth }
+  - { level: 16, move: Mega Drain }
+  - { level: 20, move: Bullet Seed }
+  - { level: 24, move: Stockpile }
+  - { level: 28, move: Syrup Bomb }
+  - { level: 32, move: Dragon Pulse }
+  - { level: 34, move: Recover }
+  - { level: 37, move: Dragon Cheer }
+  - { level: 40, move: Leaf Storm }
+  - { level: 44, move: Protect }

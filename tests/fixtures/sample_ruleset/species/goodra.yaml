@@ -1,0 +1,13 @@
+name: Goodra
+chrooked_id: goodra
+aka: { dex: 706, pokeemerald: SPECIES_GOODRA }
+types: [Water, Dragon]
+abilities:
+  primary: Poison Heal
+  hidden: Sap Sipper
+stats: { spe: 80 }              # only overridden stats appear
+learnset:                        # whole list = owned; applier replaces
+  - { level: 1,  move: Dragon Breath }
+  - { level: 30, move: Liquidation }
+  - { level: 45, move: Excalibur }
+evolution: { from: Sliggoo, method: { level: 50, condition: raining } }

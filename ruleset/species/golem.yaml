@@ -1,0 +1,6 @@
+name: Golem
+chrooked_id: golem
+aka: { pokeemerald: SPECIES_GOLEM }
+abilities:
+  hidden: Mineralize
+stats: { hp: 90, atk: 120, spa: 45, spd: 85 }

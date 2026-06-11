@@ -1,0 +1,7 @@
+name: Grimer
+chrooked_id: grimer
+aka: { pokeemerald: SPECIES_GRIMER }
+abilities:
+  primary: Corrosion
+  secondary: Venomous
+  hidden: Regenerator

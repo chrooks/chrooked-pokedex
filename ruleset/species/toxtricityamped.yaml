@@ -1,0 +1,7 @@
+name: Toxtricity Amped
+chrooked_id: toxtricityamped
+aka: { pokeemerald: SPECIES_TOXTRICITY_AMPED }
+abilities:
+  primary: Soundproof
+  secondary: Amplifier
+  hidden: Venomize

@@ -1,0 +1,6 @@
+name: Spinda
+chrooked_id: spinda
+aka: { pokeemerald: SPECIES_SPINDA }
+abilities:
+  secondary: Tangled Feet
+stats: { hp: 70, atk: 70, def: 70, spa: 70, spd: 70, spe: 70 }

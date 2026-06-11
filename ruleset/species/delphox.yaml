@@ -1,0 +1,7 @@
+name: Delphox
+chrooked_id: delphox
+aka: { pokeemerald: SPECIES_DELPHOX }
+abilities:
+  secondary: Mystic Power
+  hidden: Magic Guard
+stats: { atk: 70, def: 70, spa: 120, spe: 105 }

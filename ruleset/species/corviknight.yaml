@@ -1,0 +1,6 @@
+name: Corviknight
+chrooked_id: corviknight
+aka: { pokeemerald: SPECIES_CORVIKNIGHT }
+abilities:
+  secondary: Wingspan
+stats: { def: 110, spd: 95 }

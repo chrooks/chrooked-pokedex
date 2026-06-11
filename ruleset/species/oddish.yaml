@@ -1,0 +1,5 @@
+name: Oddish
+chrooked_id: oddish
+aka: { pokeemerald: SPECIES_ODDISH }
+abilities:
+  primary: Chloroplast

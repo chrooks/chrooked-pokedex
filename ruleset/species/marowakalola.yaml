@@ -1,0 +1,29 @@
+name: Marowak Alola
+chrooked_id: marowakalola
+aka: { pokeemerald: SPECIES_MAROWAK_ALOLA }
+abilities:
+  primary: Pyre
+  secondary: Bone Breaker
+  hidden: Lightning Rod
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Shadow Bone }
+  - { level: 1, move: Shadow Bone }
+  - { level: 1, move: Bone Club }
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Fire Spin }
+  - { level: 12, move: Flame Wheel }
+  - { level: 16, move: Hex }
+  - { level: 20, move: Will-O-Wisp }
+  - { level: 24, move: Stomping Tantrum }
+  - { level: 31, move: Bone Rush }
+  - { level: 36, move: Knock Off }
+  - { level: 42, move: Swords Dance }
+  - { level: 48, move: Bonemerang }
+  - { level: 54, move: Iron Head }
+  - { level: 60, move: Flare Blitz }

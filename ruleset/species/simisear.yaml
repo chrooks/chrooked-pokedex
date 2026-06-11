@@ -1,0 +1,12 @@
+name: Simisear
+chrooked_id: simisear
+aka: { pokeemerald: SPECIES_SIMISEAR }
+abilities:
+  hidden: Sage Power
+stats: { atk: 100, spa: 100 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Fury Swipes }
+  - { level: 1, move: Flame Burst }

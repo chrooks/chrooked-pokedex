@@ -1,0 +1,9 @@
+name: Heel Drop
+chrooked_id: heeldrop
+aka: { pokeemerald: MOVE_HEEL_DROP }
+type: Dark
+category: physical
+power: 90
+accuracy: 100
+pp: 15
+description: A brutal axe kick from above. May cause flinching.

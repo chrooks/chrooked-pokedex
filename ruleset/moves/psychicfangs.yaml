@@ -1,0 +1,9 @@
+name: Psychic Fangs
+chrooked_id: psychicfangs
+aka: { pokeemerald: MOVE_PSYCHIC_FANGS }
+type: Psychic
+category: physical
+power: 80
+accuracy: 100
+pp: 15
+description: Chomps with psychic fangs. Destroys any barriers.

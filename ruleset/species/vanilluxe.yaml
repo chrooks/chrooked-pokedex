@@ -1,0 +1,7 @@
+name: Vanilluxe
+chrooked_id: vanilluxe
+aka: { pokeemerald: SPECIES_VANILLUXE }
+types: [Ice, Fairy]
+abilities:
+  secondary: Snow Warning
+stats: { atk: 75, spa: 130 }

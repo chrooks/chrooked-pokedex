@@ -1,0 +1,6 @@
+name: Clawitzer
+chrooked_id: clawitzer
+aka: { pokeemerald: SPECIES_CLAWITZER }
+abilities:
+  secondary: Hydrate
+stats: { spa: 135 }

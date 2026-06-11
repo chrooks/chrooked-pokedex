@@ -1,0 +1,6 @@
+name: Beldum
+chrooked_id: beldum
+aka: { pokeemerald: SPECIES_BELDUM }
+abilities:
+  secondary: Carnivore
+  hidden: Battle Armor

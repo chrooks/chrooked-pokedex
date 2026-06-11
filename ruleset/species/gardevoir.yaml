@@ -1,0 +1,5 @@
+name: Gardevoir
+chrooked_id: gardevoir
+aka: { pokeemerald: SPECIES_GARDEVOIR }
+types: [Psychic, Fairy]
+stats: { hp: 70, spe: 85 }

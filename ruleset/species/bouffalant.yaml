@@ -1,0 +1,5 @@
+name: Bouffalant
+chrooked_id: bouffalant
+aka: { pokeemerald: SPECIES_BOUFFALANT }
+abilities:
+  hidden: Stampede

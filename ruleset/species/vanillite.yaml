@@ -1,0 +1,6 @@
+name: Vanillite
+chrooked_id: vanillite
+aka: { pokeemerald: SPECIES_VANILLITE }
+types: [Ice, Fairy]
+abilities:
+  secondary: Snow Cloak

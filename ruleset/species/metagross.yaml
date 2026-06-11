@@ -1,0 +1,6 @@
+name: Metagross
+chrooked_id: metagross
+aka: { pokeemerald: SPECIES_METAGROSS }
+abilities:
+  secondary: Carnivore
+  hidden: Battle Armor

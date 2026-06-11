@@ -1,0 +1,8 @@
+name: Dustox
+chrooked_id: dustox
+aka: { pokeemerald: SPECIES_DUSTOX }
+abilities:
+  primary: Compound Eyes
+  secondary: Levitate
+  hidden: Aerodynamic
+stats: { hp: 75, def: 95, spd: 95, spe: 85 }

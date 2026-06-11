@@ -1,0 +1,8 @@
+name: Blastoise
+chrooked_id: blastoise
+aka: { pokeemerald: SPECIES_BLASTOISE }
+types: [Water, Steel]
+abilities:
+  secondary: Mega Launcher
+  hidden: Shell Armor
+stats: { hp: 85, atk: 65, def: 110, spa: 100, spe: 75 }

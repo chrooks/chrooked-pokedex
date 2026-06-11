@@ -1,0 +1,7 @@
+name: Vikavolt
+chrooked_id: vikavolt
+aka: { pokeemerald: SPECIES_VIKAVOLT }
+abilities:
+  secondary: Swarm
+  hidden: Aerodynamic
+stats: { hp: 70, def: 80, spa: 140, spe: 100 }

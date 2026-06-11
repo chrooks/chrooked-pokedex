@@ -1,0 +1,4 @@
+name: Overcharge
+chrooked_id: overcharge
+aka: { pokeemerald: ABILITY_OVERCHARGE }
+description: Electric +50% when\nHP is below 1/3.

@@ -1,0 +1,24 @@
+name: Infernape
+chrooked_id: infernape
+aka: { pokeemerald: SPECIES_INFERNAPE }
+abilities:
+  secondary: Magical Fists
+stats: { hp: 75, atk: 110, def: 70, spa: 105, spd: 70, spe: 110 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Close Combat }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Slack Off }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Mach Punch }
+  - { level: 16, move: Fury Swipes }
+  - { level: 19, move: Flame Wheel }
+  - { level: 26, move: Feint }
+  - { level: 29, move: Torment }
+  - { level: 42, move: Fire Spin }
+  - { level: 47, move: Flare Blitz }
+  - { level: 52, move: Acrobatics }
+  - { level: 58, move: Calm Mind }
+  - { level: 65, move: Raging Fury }

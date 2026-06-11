@@ -1,0 +1,4 @@
+name: Liepard
+chrooked_id: liepard
+aka: { pokeemerald: SPECIES_LIEPARD }
+stats: { hp: 70, atk: 110, def: 60, spa: 90, spd: 60, spe: 120 }

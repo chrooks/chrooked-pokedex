@@ -1,0 +1,25 @@
+name: Tyrantrum
+chrooked_id: tyrantrum
+aka: { pokeemerald: SPECIES_TYRANTRUM }
+abilities:
+  secondary: Carnivore
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Rock Tomb }
+  - { level: 12, move: Stomp }
+  - { level: 16, move: Fire Fang }
+  - { level: 20, move: Dragon Tail }
+  - { level: 24, move: Rock Slide }
+  - { level: 28, move: Crunch }
+  - { level: 32, move: Dragon Claw }
+  - { level: 36, move: Ice Fang }
+  - { level: 42, move: Psychic Fangs }
+  - { level: 48, move: Earthquake }
+  - { level: 54, move: Stone Edge }
+  - { level: 60, move: Head Smash }
+  - { level: 66, move: Outrage }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Draconic Fang }

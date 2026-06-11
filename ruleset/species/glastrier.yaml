@@ -1,0 +1,21 @@
+name: Glastrier
+chrooked_id: glastrier
+aka: { pokeemerald: SPECIES_GLASTRIER }
+abilities:
+  secondary: Permafrost
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 6, move: Double Kick }
+  - { level: 12, move: Avalanche }
+  - { level: 18, move: Stomp }
+  - { level: 24, move: Torment }
+  - { level: 30, move: Mist }
+  - { level: 36, move: Icicle Crash }
+  - { level: 42, move: Take Down }
+  - { level: 48, move: Iron Defense }
+  - { level: 54, move: Thrash }
+  - { level: 60, move: Taunt }
+  - { level: 66, move: Double-Edge }
+  - { level: 72, move: Swords Dance }

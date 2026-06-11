@@ -1,0 +1,9 @@
+name: Belch
+chrooked_id: belch
+aka: { pokeemerald: MOVE_BELCH }
+type: Poison
+category: special
+power: 130
+accuracy: 100
+pp: 10
+description: Lets out a loud belch. Must eat a Berry to use it.

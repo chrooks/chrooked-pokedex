@@ -1,0 +1,9 @@
+name: Poison Fang
+chrooked_id: poisonfang
+aka: { pokeemerald: MOVE_POISON_FANG }
+type: Poison
+category: physical
+power: 80
+accuracy: 100
+pp: 15
+description: A sharp-fanged attack. May badly poison the foe.

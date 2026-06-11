@@ -1,0 +1,8 @@
+name: Farigiraf
+chrooked_id: farigiraf
+aka: { pokeemerald: SPECIES_FARIGIRAF }
+types: [Dark, Psychic]
+abilities:
+  primary: Inner Focus
+  secondary: Early Bird
+stats: { atk: 95, spa: 115 }

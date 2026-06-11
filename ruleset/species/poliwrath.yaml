@@ -1,0 +1,6 @@
+name: Poliwrath
+chrooked_id: poliwrath
+aka: { pokeemerald: SPECIES_POLIWRATH }
+abilities:
+  secondary: Hydrate
+stats: { atk: 95, def: 100, spd: 95 }

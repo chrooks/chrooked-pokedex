@@ -1,0 +1,27 @@
+name: Avalugg Hisui
+chrooked_id: avalugghisui
+aka: { pokeemerald: SPECIES_AVALUGG_HISUI }
+abilities:
+  secondary: Permafrost
+learnset:
+  - { level: 1, move: Glacial Crush }
+  - { level: 0, move: Rock Slide }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Rapid Spin }
+  - { level: 1, move: Wide Guard }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Tackle }
+  - { level: 9, move: Curse }
+  - { level: 12, move: Icy Wind }
+  - { level: 15, move: Protect }
+  - { level: 18, move: Avalanche }
+  - { level: 21, move: Bite }
+  - { level: 24, move: Ice Fang }
+  - { level: 27, move: Iron Defense }
+  - { level: 30, move: Recover }
+  - { level: 33, move: Crunch }
+  - { level: 36, move: Take Down }
+  - { level: 41, move: Blizzard }
+  - { level: 46, move: Double-Edge }
+  - { level: 51, move: Stone Edge }
+  - { level: 61, move: Mountain Gale }

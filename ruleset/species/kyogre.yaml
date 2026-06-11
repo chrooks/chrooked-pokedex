@@ -1,0 +1,6 @@
+name: Kyogre
+chrooked_id: kyogre
+aka: { pokeemerald: SPECIES_KYOGRE }
+abilities:
+  secondary: Swift Swim
+  hidden: Carnivore

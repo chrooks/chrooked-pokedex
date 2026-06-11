@@ -1,0 +1,7 @@
+name: Torkoal
+chrooked_id: torkoal
+aka: { pokeemerald: SPECIES_TORKOAL }
+abilities:
+  primary: Exhaust
+  secondary: Drought
+stats: { atk: 75, spd: 80 }

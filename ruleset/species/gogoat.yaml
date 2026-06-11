@@ -1,0 +1,8 @@
+name: Gogoat
+chrooked_id: gogoat
+aka: { pokeemerald: SPECIES_GOGOAT }
+abilities:
+  primary: Fur Coat
+  secondary: Mountaineer
+  hidden: Foliate
+stats: { atk: 105 }

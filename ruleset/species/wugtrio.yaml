@@ -1,0 +1,22 @@
+name: Wugtrio
+chrooked_id: wugtrio
+aka: { pokeemerald: SPECIES_WUGTRIO }
+abilities:
+  primary: Technician
+  hidden: Swift Swim
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Mud-Slap }
+  - { level: 12, move: Aqua Jet }
+  - { level: 16, move: Slam }
+  - { level: 20, move: Water Pulse }
+  - { level: 24, move: Headbutt }
+  - { level: 30, move: Triple Dive }
+  - { level: 36, move: Dig }
+  - { level: 42, move: Sucker Punch }
+  - { level: 48, move: Throat Chop }
+  - { level: 50, move: Flip Turn }
+  - { level: 52, move: Aerial Ace }
+  - { level: 54, move: Liquidation }

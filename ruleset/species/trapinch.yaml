@@ -1,0 +1,20 @@
+name: Trapinch
+chrooked_id: trapinch
+aka: { pokeemerald: SPECIES_TRAPINCH }
+types: [Bug, Ground]
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Astonish }
+  - { level: 8, move: Bite }
+  - { level: 12, move: Mud-Slap }
+  - { level: 16, move: Sand Tomb }
+  - { level: 20, move: Bulldoze }
+  - { level: 24, move: Dig }
+  - { level: 28, move: Crunch }
+  - { level: 32, move: Sandstorm }
+  - { level: 36, move: Earth Power }
+  - { level: 40, move: Earthquake }
+  - { level: 44, move: Superpower }
+  - { level: 48, move: Fissure }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

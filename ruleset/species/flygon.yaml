@@ -1,0 +1,8 @@
+name: Flygon
+chrooked_id: flygon
+aka: { pokeemerald: SPECIES_FLYGON }
+types: [Bug, Dragon]
+abilities:
+  secondary: Amplifier
+  hidden: Tinted Lens
+stats: { hp: 90, atk: 105, def: 85, spa: 115, spd: 100, spe: 105 }

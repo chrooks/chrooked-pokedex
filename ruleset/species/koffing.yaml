@@ -1,0 +1,6 @@
+name: Koffing
+chrooked_id: koffing
+aka: { pokeemerald: SPECIES_KOFFING }
+abilities:
+  secondary: Neutralizing Gas
+  hidden: Exhaust

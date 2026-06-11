@@ -176,7 +176,7 @@ Acceptance: a file `plans/essentials-applier-plan.md` exists describing the PBS 
 
 - [x] (2026-06-11) Milestone 0 — Scaffold and vendored readers compile. Package installs (`.venv`), `pytest` green at 27 passed, vendored 5 parsers into `readers/pokeemerald/`, ported 4 parser tests + wrote a new move-parser test, real-fork smoke test confirms Dreamstone Goodra parses.
 - [x] (2026-06-11) Milestone 1 — Neutral schema and Ruleset model. Frozen dataclasses in `model/schema.py`; YAML loader with fail-fast unknown-field validation in `model/loader.py`; `Ruleset.load()` + `owned_move`/`owned_ability` in `model/ruleset.py`. Sample `ruleset/` (goodra, excalibur, type-chart, meta) round-trips; 6 model tests green, full suite 33 passed.
-- [ ] Milestone 2 — Seed the Ruleset from Dreamstone against base 1.11.2.
+- [x] (2026-06-11) Milestone 2 — Seed the Ruleset from Dreamstone against base 1.11.2. New `type_chart_parser.py` reader; `seed/neutralize.py` + `seed/extractor.py` + `seed/writer.py`; `cli.py seed` with a base-version guard. Real seed wrote 758 species, 216 learnsets, 45 owned moves, 57 owned abilities, 7 type-chart overrides. Flying→Ice 0.5 and the Ruleset-owned Excalibur both present. Idempotent (identical file hashes on re-run). Base acquired via `git worktree` at tag `expansion/1.11.2` in `../ROMs/_scratch-expansion-1.11.2`.
 - [ ] Milestone 3 — pokeemerald applier: species end-to-end.
 - [ ] Milestone 4 — pokeemerald applier: learnsets, whole-list replace.
 - [ ] Milestone 5 — Ruleset-owned creation in dependency tiers; evolutions; type chart.
@@ -187,6 +187,12 @@ Acceptance: a file `plans/essentials-applier-plan.md` exists describing the PBS 
 
 - Observation: Dreamstone is on pokeemerald-expansion 1.11.2 while the sibling `pokeemerald-expansion` checkout is 1.15.3.
   Evidence: `include/constants/expansion.h` reads 1.11.2 in Dreamstone and 1.15.3 in the sibling. Seeding against the sibling would fabricate phantom overrides; the plan pins the base to 1.11.2.
+
+- Observation: the real seed produces 758 changed species, not the ~300 the purpose section estimated.
+  Evidence: category breakdown showed 509 species with ability changes, 368 with stat changes, 216 learnsets, 109 type changes. Spot-checking confirmed these are real Dreamstone edits — e.g. base Bulbasaur abilities `{OVERGROW, NONE, CHLOROPHYLL}` vs fork `{OVERGROW, CHLOROPLAST, CHLOROPHYLL}`; base Charizard `Fire/Flying` vs fork `Fire/Dragon`. Dreamstone gave hundreds of species a second ability where base had `ABILITY_NONE`. The "~300" was Chris's headline-change recollection; the mechanical fork diff is legitimately larger. No false positives found.
+
+- Observation: the seed had to live in a test fixture separate from the canonical `ruleset/`, or M1's hand-authored sample and M2's real seed would collide on `goodra.yaml`.
+  Evidence: M2 overwrites `ruleset/species/goodra.yaml` with real Dreamstone data (full learnset, no Excalibur in the level-up list). The M1 sample (3-move learnset citing Excalibur) was moved to `tests/fixtures/sample_ruleset/` so its assertions stay stable.
 
 ## Decision Log
 

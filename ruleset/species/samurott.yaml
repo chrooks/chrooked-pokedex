@@ -1,0 +1,7 @@
+name: Samurott
+chrooked_id: samurott
+aka: { pokeemerald: SPECIES_SAMUROTT }
+types: [Water, Fighting]
+abilities:
+  secondary: Mystic Blades
+stats: { atk: 110, spa: 110 }

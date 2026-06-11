@@ -1,0 +1,8 @@
+name: Typhlosion
+chrooked_id: typhlosion
+aka: { pokeemerald: SPECIES_TYPHLOSION }
+types: [Fire, Ground]
+abilities:
+  secondary: Earth Eater
+  hidden: Rapid Combustion
+stats: { hp: 80, atk: 85, def: 75, spa: 120, spd: 80 }

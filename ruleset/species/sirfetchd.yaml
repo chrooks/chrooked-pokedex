@@ -1,0 +1,7 @@
+name: Sirfetchd
+chrooked_id: sirfetchd
+aka: { pokeemerald: SPECIES_SIRFETCHD }
+abilities:
+  primary: Aerodynamic
+  secondary: Sharpness
+stats: { def: 105 }

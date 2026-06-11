@@ -1,0 +1,22 @@
+name: Appletun
+chrooked_id: appletun
+aka: { pokeemerald: SPECIES_APPLETUN }
+learnset:
+  - { level: 0, move: Headbutt }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Recycle }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Sweet Scent }
+  - { level: 4, move: Curse }
+  - { level: 8, move: Stomp }
+  - { level: 12, move: Leech Seed }
+  - { level: 16, move: Protect }
+  - { level: 20, move: Apple Acid }
+  - { level: 24, move: Recover }
+  - { level: 28, move: Bullet Seed }
+  - { level: 32, move: Iron Defense }
+  - { level: 36, move: Giga Drain }
+  - { level: 40, move: Dragon Pulse }
+  - { level: 44, move: Earth Power }
+  - { level: 48, move: Energy Ball }

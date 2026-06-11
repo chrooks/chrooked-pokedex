@@ -1,0 +1,7 @@
+name: Swoobat
+chrooked_id: swoobat
+aka: { pokeemerald: SPECIES_SWOOBAT }
+abilities:
+  primary: Aerodynamic
+  secondary: Psyonize
+stats: { atk: 67, spa: 100, spd: 65, spe: 115 }

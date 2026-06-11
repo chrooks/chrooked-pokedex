@@ -1,0 +1,9 @@
+name: Twister
+chrooked_id: twister
+aka: { pokeemerald: MOVE_TWISTER }
+type: Dragon
+category: special
+power: 60
+accuracy: 100
+pp: 20
+description: Whips up a vicious twister to tear at the foe.

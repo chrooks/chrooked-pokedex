@@ -1,0 +1,6 @@
+name: Kangaskhan
+chrooked_id: kangaskhan
+aka: { pokeemerald: SPECIES_KANGASKHAN }
+abilities:
+  hidden: Blitz
+stats: { atk: 100, def: 85 }

@@ -1,0 +1,7 @@
+name: Litleo
+chrooked_id: litleo
+aka: { pokeemerald: SPECIES_LITLEO }
+abilities:
+  primary: Hubris
+  secondary: Carnivore
+  hidden: Intimidate

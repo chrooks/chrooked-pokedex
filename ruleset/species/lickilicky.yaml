@@ -1,0 +1,4 @@
+name: Lickilicky
+chrooked_id: lickilicky
+aka: { pokeemerald: SPECIES_LICKILICKY }
+stats: { hp: 115, def: 100, spd: 100 }

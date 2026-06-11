@@ -1,0 +1,5 @@
+name: Scyther
+chrooked_id: scyther
+aka: { pokeemerald: SPECIES_SCYTHER }
+abilities:
+  secondary: Sharpness

@@ -1,0 +1,8 @@
+name: Altaria
+chrooked_id: altaria
+aka: { pokeemerald: SPECIES_ALTARIA }
+types: [Fairy, Dragon]
+abilities:
+  primary: Pixilate
+  hidden: Updraft
+stats: { atk: 90, spa: 90 }

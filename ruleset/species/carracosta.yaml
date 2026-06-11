@@ -1,0 +1,6 @@
+name: Carracosta
+chrooked_id: carracosta
+aka: { pokeemerald: SPECIES_CARRACOSTA }
+abilities:
+  secondary: Shell Armor
+stats: { hp: 75, atk: 110, def: 135, spa: 90, spe: 30 }

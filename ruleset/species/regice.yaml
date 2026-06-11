@@ -1,0 +1,6 @@
+name: Regice
+chrooked_id: regice
+aka: { pokeemerald: SPECIES_REGICE }
+abilities:
+  secondary: Permafrost
+  hidden: Inner Focus

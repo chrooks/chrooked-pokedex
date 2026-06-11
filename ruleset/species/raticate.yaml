@@ -1,0 +1,4 @@
+name: Raticate
+chrooked_id: raticate
+aka: { pokeemerald: SPECIES_RATICATE }
+stats: { hp: 75, atk: 100, def: 65, spe: 100 }

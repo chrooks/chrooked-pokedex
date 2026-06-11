@@ -1,0 +1,6 @@
+name: Cradily
+chrooked_id: cradily
+aka: { pokeemerald: SPECIES_CRADILY }
+abilities:
+  primary: Deep-Rooted
+stats: { hp: 90, atk: 80, def: 105, spa: 80, spd: 110, spe: 45 }

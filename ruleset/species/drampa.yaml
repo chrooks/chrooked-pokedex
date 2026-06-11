@@ -1,0 +1,19 @@
+name: Drampa
+chrooked_id: drampa
+aka: { pokeemerald: SPECIES_DRAMPA }
+stats: { hp: 85 }
+learnset:
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Echoed Voice }
+  - { level: 5, move: Twister }
+  - { level: 10, move: Protect }
+  - { level: 15, move: Glare }
+  - { level: 20, move: Safeguard }
+  - { level: 25, move: Dragon Breath }
+  - { level: 30, move: Extrasensory }
+  - { level: 35, move: Dragon Pulse }
+  - { level: 40, move: Light Screen }
+  - { level: 45, move: Fly }
+  - { level: 50, move: Hyper Voice }
+  - { level: 55, move: Outrage }
+  - { level: 25, move: Draconic Fang }

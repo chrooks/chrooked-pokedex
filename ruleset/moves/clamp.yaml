@@ -1,0 +1,7 @@
+name: Clamp
+chrooked_id: clamp
+aka: { pokeemerald: MOVE_CLAMP }
+type: Water
+category: physical
+power: 50
+description: Traps and squeezes the foe for "BINDING_TURNS" turns.

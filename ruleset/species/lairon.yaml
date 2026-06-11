@@ -1,0 +1,22 @@
+name: Lairon
+chrooked_id: lairon
+aka: { pokeemerald: SPECIES_LAIRON }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Rock Tomb }
+  - { level: 12, move: Roar }
+  - { level: 16, move: Headbutt }
+  - { level: 20, move: Protect }
+  - { level: 24, move: Rock Slide }
+  - { level: 28, move: Iron Head }
+  - { level: 35, move: Metal Sound }
+  - { level: 40, move: Take Down }
+  - { level: 46, move: Autotomize }
+  - { level: 52, move: Iron Tail }
+  - { level: 58, move: Iron Defense }
+  - { level: 64, move: Heavy Slam }
+  - { level: 70, move: Double-Edge }
+  - { level: 76, move: Metal Burst }
+  - { level: 25, move: Metallic Fang }

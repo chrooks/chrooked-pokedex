@@ -1,0 +1,7 @@
+name: Starmie
+chrooked_id: starmie
+aka: { pokeemerald: SPECIES_STARMIE }
+abilities:
+  primary: Mystic Power
+  hidden: Victory Star
+stats: { spa: 110 }

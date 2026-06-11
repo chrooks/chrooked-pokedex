@@ -1,0 +1,19 @@
+name: Dracozolt
+chrooked_id: dracozolt
+aka: { pokeemerald: SPECIES_DRACOZOLT }
+stats: { atk: 115 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Thunder Shock }
+  - { level: 7, move: Charge }
+  - { level: 14, move: Aerial Ace }
+  - { level: 21, move: Ancient Power }
+  - { level: 28, move: Pluck }
+  - { level: 35, move: Dragon Tail }
+  - { level: 42, move: Stomp }
+  - { level: 49, move: Slam }
+  - { level: 56, move: Discharge }
+  - { level: 63, move: Bolt Beak }
+  - { level: 70, move: Dragon Pulse }
+  - { level: 77, move: Dragon Rush }

@@ -1,0 +1,7 @@
+name: Parasect
+chrooked_id: parasect
+aka: { pokeemerald: SPECIES_PARASECT }
+types: [Bug, Ghost]
+abilities:
+  secondary: Dry Skin
+stats: { hp: 90 }

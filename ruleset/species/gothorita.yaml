@@ -1,0 +1,21 @@
+name: Gothorita
+chrooked_id: gothorita
+aka: { pokeemerald: SPECIES_GOTHORITA }
+abilities:
+  primary: Starfall
+  secondary: Competitive
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Tickle }
+  - { level: 12, move: Psybeam }
+  - { level: 15, move: Charm }
+  - { level: 18, move: Psyshock }
+  - { level: 22, move: Calm Mind }
+  - { level: 26, move: Fake Tears }
+  - { level: 30, move: Shadow Ball }
+  - { level: 36, move: Psychic }
+  - { level: 42, move: Thunderbolt }
+  - { level: 48, move: Future Sight }
+  - { level: 54, move: Magic Room }

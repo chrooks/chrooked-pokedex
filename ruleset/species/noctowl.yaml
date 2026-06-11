@@ -1,0 +1,8 @@
+name: Noctowl
+chrooked_id: noctowl
+aka: { pokeemerald: SPECIES_NOCTOWL }
+types: [Psychic, Flying]
+abilities:
+  primary: Full Moon
+  secondary: Psyonize
+stats: { def: 60, spa: 90, spd: 100 }

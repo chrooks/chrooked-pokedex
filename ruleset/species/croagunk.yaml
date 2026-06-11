@@ -1,0 +1,6 @@
+name: Croagunk
+chrooked_id: croagunk
+aka: { pokeemerald: SPECIES_CROAGUNK }
+abilities:
+  primary: Venomous
+  hidden: Anticipation

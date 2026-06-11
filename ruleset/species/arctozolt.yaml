@@ -1,0 +1,20 @@
+name: Arctozolt
+chrooked_id: arctozolt
+aka: { pokeemerald: SPECIES_ARCTOZOLT }
+stats: { atk: 115 }
+learnset:
+  - { level: 1, move: Lightning Slam }
+  - { level: 1, move: Glacial Crush }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Thunder Shock }
+  - { level: 7, move: Charge }
+  - { level: 14, move: Echoed Voice }
+  - { level: 21, move: Ancient Power }
+  - { level: 28, move: Pluck }
+  - { level: 35, move: Avalanche }
+  - { level: 42, move: Freeze-Dry }
+  - { level: 49, move: Slam }
+  - { level: 56, move: Discharge }
+  - { level: 63, move: Bolt Beak }
+  - { level: 70, move: Icicle Crash }
+  - { level: 77, move: Blizzard }

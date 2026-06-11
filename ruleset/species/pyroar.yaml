@@ -1,0 +1,8 @@
+name: Pyroar
+chrooked_id: pyroar
+aka: { pokeemerald: SPECIES_PYROAR }
+abilities:
+  primary: Hubris
+  secondary: Carnivore
+  hidden: Amplifier
+stats: { spa: 115 }

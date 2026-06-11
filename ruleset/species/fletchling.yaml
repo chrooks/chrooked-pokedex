@@ -1,0 +1,24 @@
+name: Fletchling
+chrooked_id: fletchling
+aka: { pokeemerald: SPECIES_FLETCHLING }
+types: [Fire, Flying]
+abilities:
+  primary: Reckless
+  secondary: Gale Wings
+  hidden: Rapid Combustion
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 4, move: Ember }
+  - { level: 7, move: Quick Attack }
+  - { level: 10, move: Flame Charge }
+  - { level: 13, move: Wing Attack }
+  - { level: 16, move: Fire Spin }
+  - { level: 19, move: Acrobatics }
+  - { level: 22, move: Agility }
+  - { level: 25, move: Aerial Ace }
+  - { level: 28, move: Take Down }
+  - { level: 31, move: Roost }
+  - { level: 34, move: Tailwind }
+  - { level: 38, move: Steel Wing }
+  - { level: 42, move: Fly }

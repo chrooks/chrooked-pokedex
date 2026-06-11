@@ -1,0 +1,6 @@
+name: Clodsire
+chrooked_id: clodsire
+aka: { pokeemerald: SPECIES_CLODSIRE }
+abilities:
+  primary: Venomous
+stats: { def: 70, spd: 115 }

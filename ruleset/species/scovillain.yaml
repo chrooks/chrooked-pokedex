@@ -1,0 +1,23 @@
+name: Scovillain
+chrooked_id: scovillain
+aka: { pokeemerald: SPECIES_SCOVILLAIN }
+stats: { atk: 115, spa: 115, spe: 95 }
+learnset:
+  - { level: 1, move: Cinder Smash }
+  - { level: 0, move: Spicy Extract }
+  - { level: 0, move: Flamethrower }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Leafage }
+  - { level: 4, move: Bite }
+  - { level: 10, move: Growth }
+  - { level: 13, move: Razor Leaf }
+  - { level: 17, move: Sunny Day }
+  - { level: 21, move: Bullet Seed }
+  - { level: 24, move: Headbutt }
+  - { level: 28, move: Zen Headbutt }
+  - { level: 33, move: Worry Seed }
+  - { level: 38, move: Crunch }
+  - { level: 44, move: Seed Bomb }
+  - { level: 48, move: Solar Beam }
+  - { level: 48, move: Overheat }

@@ -1,0 +1,8 @@
+name: Lopunny
+chrooked_id: lopunny
+aka: { pokeemerald: SPECIES_LOPUNNY }
+types: [Normal, Fighting]
+abilities:
+  secondary: Striker
+  hidden: Scrappy
+stats: { atk: 110, def: 85, spa: 55, spd: 95, spe: 110 }

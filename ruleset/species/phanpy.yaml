@@ -1,0 +1,20 @@
+name: Phanpy
+chrooked_id: phanpy
+aka: { pokeemerald: SPECIES_PHANPY }
+abilities:
+  secondary: Blitz
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Defense Curl }
+  - { level: 6, move: Flail }
+  - { level: 10, move: Rollout }
+  - { level: 15, move: Bulldoze }
+  - { level: 19, move: Endure }
+  - { level: 24, move: Slam }
+  - { level: 28, move: Take Down }
+  - { level: 33, move: Charm }
+  - { level: 37, move: Last Resort }
+  - { level: 42, move: Double-Edge }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }

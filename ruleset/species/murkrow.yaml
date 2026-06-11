@@ -1,0 +1,6 @@
+name: Murkrow
+chrooked_id: murkrow
+aka: { pokeemerald: SPECIES_MURKROW }
+abilities:
+  primary: Moxie
+  secondary: Super Luck

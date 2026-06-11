@@ -1,0 +1,8 @@
+name: Annihilape
+chrooked_id: annihilape
+aka: { pokeemerald: SPECIES_ANNIHILAPE }
+abilities:
+  primary: Blitz
+  secondary: Iron Fist
+  hidden: Anger Point
+stats: { atk: 125 }

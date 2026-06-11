@@ -1,0 +1,6 @@
+name: Gallade
+chrooked_id: gallade
+aka: { pokeemerald: SPECIES_GALLADE }
+abilities:
+  secondary: Sharpness
+stats: { hp: 70, spa: 60, spd: 110, spe: 95 }

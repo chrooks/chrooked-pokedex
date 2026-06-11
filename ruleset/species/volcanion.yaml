@@ -1,0 +1,4 @@
+name: Volcanion
+chrooked_id: volcanion
+aka: { pokeemerald: SPECIES_VOLCANION }
+stats: { hp: 100, atk: 70, spd: 130, spe: 80 }

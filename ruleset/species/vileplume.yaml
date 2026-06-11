@@ -1,0 +1,6 @@
+name: Vileplume
+chrooked_id: vileplume
+aka: { pokeemerald: SPECIES_VILEPLUME }
+abilities:
+  primary: Chloroplast
+stats: { hp: 100, atk: 60, def: 105, spa: 120, spd: 100 }
