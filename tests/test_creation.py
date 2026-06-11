@@ -138,10 +138,12 @@ def test_create_ability_with_newline_description_round_trips(tmp_path: Path) -> 
 
     create_owned_content(target, ruleset, resmap, ApplyReport())
 
-    # No literal newline inside the emitted C string.
+    # The textbox control code is flattened, NOT emitted as a backslash: a literal
+    # backslash would break the GBA charmap preprocessor and fail the build.
     data = (target / "src/data/abilities.h").read_text()
-    assert "+50%,\\nAttack" in data
-    # And the ability now round-trips so a re-resolve finds it.
+    assert "\\" not in data.split("[ABILITY_BLITZ]")[1].split("},")[0]
+    assert "+50%, Attack +30%." in data
+    # And the ability still round-trips so a re-resolve finds it.
     resmap2 = build_resolution_map(target, ruleset)
     assert resmap2.ability("Blitz") == "ABILITY_BLITZ"
 

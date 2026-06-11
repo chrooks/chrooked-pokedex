@@ -21,6 +21,7 @@ from pathlib import Path
 from ...model import Ruleset
 from ...model.schema import AbilityDef, MoveDef
 from ...report import ApplyReport, ReportEntry
+from ...seed.neutralize import normalize_description
 from .resolution import ResolutionMap
 
 _CATEGORY_TO_SYMBOL = {
@@ -161,7 +162,7 @@ def _array_open_brace(text: str, array_var: str):
 
 
 def _ability_entry(symbol: str, ability: AbilityDef) -> str:
-    description = ability.description or ability.name
+    description = normalize_description(ability.description or ability.name)
     return (
         f"    [{symbol}] =\n"
         f"    {{\n"
@@ -180,7 +181,8 @@ def _move_entry(symbol: str, move: MoveDef, resmap: ResolutionMap) -> str:
         f'        .name = COMPOUND_STRING("{move.name}"),',
     ]
     if move.description:
-        lines.append(f'        .description = COMPOUND_STRING("{_escape(move.description)}"),')
+        safe = normalize_description(move.description)
+        lines.append(f'        .description = COMPOUND_STRING("{_escape(safe)}"),')
     lines.append(f"        .type = {type_symbol},")
     lines.append(f"        .category = {category},")
     if move.power is not None:

@@ -191,6 +191,12 @@ Acceptance: a file `plans/essentials-applier-plan.md` exists describing the PBS 
 - Observation: the real seed produces 758 changed species, not the ~300 the purpose section estimated.
   Evidence: category breakdown showed 509 species with ability changes, 368 with stat changes, 216 learnsets, 109 type changes. Spot-checking confirmed these are real Dreamstone edits — e.g. base Bulbasaur abilities `{OVERGROW, NONE, CHLOROPHYLL}` vs fork `{OVERGROW, CHLOROPLAST, CHLOROPHYLL}`; base Charizard `Fire/Flying` vs fork `Fire/Dragon`. Dreamstone gave hundreds of species a second ability where base had `ABILITY_NONE`. The "~300" was Chris's headline-change recollection; the mechanical fork diff is legitimately larger. No false positives found.
 
+- Observation: the compile proof (the last open acceptance) caught a real bug — created descriptions emitted a literal backslash the GBA charmap cannot map.
+  Evidence: building an applied base-1.11.2 copy failed with `src/pokemon.c: error: no mapping exists for backslash`. The cause: Dreamstone ability descriptions use the `\n` textbox control code; the reader captured the raw backslash, the seed stored it, and `creation._escape` doubled it to `\\n`, leaving a literal backslash in the C string. The GBA charmap has no glyph for backslash, so its preprocessor rejected it. Fix: `neutralize.normalize_description` flattens `\n`/`\l`/`\p` to spaces and drops stray backslashes, applied both at seed time (canonical Ruleset is clean) and at creation time (the emitter can never break the charmap). After the fix the applied fork builds a 33 MB `pokeemerald.gba` with `make`, exit 0.
+
+- Observation: the working toolchain is the devkitPro Docker image, not the system devkitARM.
+  Evidence: the system devkitARM (release 66, gcc 15.1) and even `devkitpro/devkitarm:latest` (gcc 16.1) are too new for 1.11.2 — both fail in gcc's own `stddef.h` on the C23 `nullptr` keyword under `-std=c11`, on core engine files the Ruleset never touches. Dreamstone's CI builds in `container: devkitpro/devkitarm`; pinning the dated tag `devkitpro/devkitarm:20240202` (devkitARM r63, gcc 13.2) — the 1.11.2 era — builds cleanly. The compile proof therefore runs inside that pinned image.
+
 - Observation: species_info entries carry the same scalar field more than once, gated by `#if P_UPDATED_ABILITIES/STATS/TYPES >= GEN_x / #else / #endif`; the species applier was editing only the first branch.
   Evidence: post-apply Absol read `{ABILITY_SHARPNESS, ABILITY_SUPER_LUCK, ABILITY_JUSTIFIED}` via the entry editor but `{ABILITY_PRESSURE, ABILITY_NONE, ABILITY_JUSTIFIED}` via the species parser — because the parser keeps the last (`#else`) branch and apply had only rewritten the first. This produced 153 false "drift" proposals when harvesting a freshly-applied fork. Fix: `c_edit` gained `set_field_all` (same value to every branch, for stats/types) and `set_field_per_occurrence` (overlay changed ability slots onto each branch, preserving its other slots). After the fix, apply→harvest round-trip reports zero drift, and a regression test covers a gated entry. This was a real M3 correctness bug that only surfaced because harvest exercised the reverse direction.
 
@@ -254,10 +260,11 @@ What was achieved against the original purpose:
 
 What remains / was deliberately deferred:
 
-- The pokeemerald `make` compile is the one acceptance not machine-verified here
-  (devkitARM was not on PATH); correctness is instead proven by the readers
-  round-tripping every rewritten file plus idempotence. Running `make -j$(nproc)`
-  on an applied fork is the remaining manual confirmation.
+- The pokeemerald `make` compile is now verified: an applied clean base-1.11.2 copy
+  builds a 33 MB `pokeemerald.gba` (`make` exit 0) inside the pinned devkitPro image
+  `devkitpro/devkitarm:20240202` (gcc 13.2). The proof caught and fixed a real
+  charmap/backslash bug in created descriptions. The system devkitARM (gcc 15/16) is
+  too new for this base and cannot build it, applied or pristine.
 - Evolutions are modeled and have a working applier, but the real seed carries no
   evolution data (M2 deferred seeding them); harvest can pull them in later.
 - Other species fields beyond types/abilities/stats/learnset (catch rate, EV

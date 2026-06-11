@@ -35,6 +35,22 @@ def slug(name: str) -> str:
     return re.sub(r"[^a-z0-9]", "", name.lower())
 
 
+# pokeemerald flavor text uses backslash control codes (\n new line, \l scroll,
+# \p new paragraph) for textbox layout. The GBA charmap has no glyph for a literal
+# backslash, so any backslash that survives into an emitted C string breaks the
+# build's charmap preprocessor. Descriptions are flavor text, so we flatten these
+# control codes to a single space when a value enters the Ruleset.
+_CONTROL_ESCAPE = re.compile(r"\\[nlp]")
+_STRAY_BACKSLASH = re.compile(r"\\")
+
+
+def normalize_description(text: str) -> str:
+    """Flatten textbox control codes and drop stray backslashes from flavor text."""
+    text = _CONTROL_ESCAPE.sub(" ", text)
+    text = _STRAY_BACKSLASH.sub("", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def type_name(constant: str) -> str:
     return type_constant_to_name(constant)
 

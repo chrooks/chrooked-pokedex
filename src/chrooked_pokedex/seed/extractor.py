@@ -211,7 +211,7 @@ def _seed_moves(fork: Path, base: Path) -> dict[str, MoveDef]:
             power=info.power,
             accuracy=info.accuracy,
             pp=info.pp,
-            description=info.description,
+            description=nz.normalize_description(info.description),
             aka={"pokeemerald": constant},
         ), "move", constant)
     return result
@@ -229,7 +229,7 @@ def _seed_abilities(fork: Path, base: Path) -> dict[str, AbilityDef]:
         _insert_unique(result, chrooked_id, AbilityDef(
             name=name,
             chrooked_id=chrooked_id,
-            description=desc,
+            description=nz.normalize_description(desc),
             aka={"pokeemerald": constant},
         ), "ability", constant)
     return result
