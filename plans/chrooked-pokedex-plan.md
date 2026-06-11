@@ -181,7 +181,7 @@ Acceptance: a file `plans/essentials-applier-plan.md` exists describing the PBS 
 - [x] (2026-06-11) Milestone 4 — pokeemerald applier: learnsets, whole-list replace. `learnset_apply.py` discards each species' target array body and re-renders it from the Ruleset. Regression test proves a move present in both target and Ruleset appears exactly once (the v1 merge bug retired). Discovery: the same learnset array is defined once per generation behind `#if P_GEN_X`; every definition is replaced so the Ruleset wins regardless of build config. Unresolved moves are omitted and reported partial (owned ones deferred to M5). Real apply onto a clean base copy: 9 files changed, Goodra 17 entries with zero duplicates, 53 applied / 163 partial / 0 blocked; idempotent. 53 passed.
 - [x] (2026-06-11) Milestone 5 — Ruleset-owned creation in dependency tiers; evolutions; type chart. `creation.py` appends owned move/ability constants (bumping the `*_COUNT_GEN9` sentinel) and data entries; `type_chart_apply.py` rewrites matrix cells; `evolution_apply.py` rewrites the pre-evolution's `.evolutions` (minimal EVO_LEVEL/EVO_ITEM; real seed has none). CLI now applies in tiers create→species→learnset→evolution→type-chart, with the Resolution map updated in place so prior partials resolve. Full real apply onto a clean base-1.11.2 copy: 1055 applied, 0 partial, 0 blocked; Excalibur created (MOVE_EXCALIBUR, Steel/120) and cited by a real species; Flying→Ice 0.5 in types_info.h; fully idempotent on re-run. (Type tier is empty by design — the schema models no new type definitions, only chart overrides.) 60 passed.
 - [x] (2026-06-11) Milestone 6 — Harvest, gated reverse sync. `harvest/harvester.py` compares a fork against the Ruleset's recorded overrides (stats, types, abilities) and proposes per-field edits; `cli.py harvest` lists them, gates each behind y/N confirmation, and `--dry-run` writes nothing. Acceptance: editing one fork stat yields exactly one proposal (`goodra: stat.hp 95 -> 99`); declining leaves `ruleset/` untouched; accepting updates only that field. Building harvest surfaced and fixed a latent apply bug (see Surprises): species fields are preprocessor-gated duplicates, and apply was editing only the first branch. After the fix an apply→harvest round-trip reports zero drift. 65 passed.
-- [ ] Milestone 7 — Essentials design note.
+- [x] (2026-06-11) Milestone 7 — Essentials design note. `plans/essentials-applier-plan.md` documents the per-category PBS mapping (pokemon.txt species/types/abilities/BaseStats/Moves, moves.txt, abilities.txt, defender-side types.txt) and the one true boundary: custom move/ability *behavior* is Ruby (FunctionCode), which flat PBS cannot express — to be reported `partial`, never faked. No code, by design.
 
 ## Surprises & Discoveries
 
@@ -231,7 +231,45 @@ Acceptance: a file `plans/essentials-applier-plan.md` exists describing the PBS 
 
 ## Outcomes & Retrospective
 
-To be written at milestone completion.
+All seven milestones are complete. Chris now has `chrooked-pokedex`: an
+engine-neutral Ruleset he owns (`ruleset/`, ~877 hand-readable YAML files seeded
+from Dreamstone), a working pokeemerald applier, a gated harvest path, and a
+design note that unblocks the future Essentials applier.
+
+What was achieved against the original purpose:
+
+- The Ruleset is the single source of truth, in plain names, seeded once from
+  Dreamstone against unmodified pokeemerald-expansion 1.11.2 (758 species, 216
+  learnsets, 45 owned moves, 57 owned abilities, 7 type-chart overrides).
+- One command applies the whole Ruleset onto a fresh pokeemerald fork. A full
+  apply onto a clean base-1.11.2 copy lands 1055 entries with zero blocked and
+  zero partial: Goodra becomes Water/Dragon with Poison Heal, the custom move
+  Excalibur is created and cited by a real species, and Ice resists Flying. Every
+  run is idempotent, and the Apply Report classifies every entry — nothing
+  silently dropped.
+- v1's duplicate-move bug is structurally retired: learnsets are owned whole and
+  replaced outright, proven by a regression test.
+- Harvest pulls in-game tuning back into the Ruleset one confirmed field at a
+  time, keeping the Ruleset canonical.
+
+What remains / was deliberately deferred:
+
+- The pokeemerald `make` compile is the one acceptance not machine-verified here
+  (devkitARM was not on PATH); correctness is instead proven by the readers
+  round-tripping every rewritten file plus idempotence. Running `make -j$(nproc)`
+  on an applied fork is the remaining manual confirmation.
+- Evolutions are modeled and have a working applier, but the real seed carries no
+  evolution data (M2 deferred seeding them); harvest can pull them in later.
+- Other species fields beyond types/abilities/stats/learnset (catch rate, EV
+  yields, …) are outside the neutral schema and not captured — a future schema
+  extension if Chris wants them.
+- The Essentials applier is designed (M7) but not built.
+
+Lessons learned, in short: the two bugs both came from C being less regular than
+it looks — fields and learnset arrays are duplicated across `#if P_GEN/P_UPDATED_*`
+branches, and emitted strings must escape newlines. Both were caught because the
+plan insisted on idempotence and on a reverse (harvest) path that exercised apply
+from the other side. Test count grew from 0 to 65, all green.
 
 ## Code Review Findings
 
