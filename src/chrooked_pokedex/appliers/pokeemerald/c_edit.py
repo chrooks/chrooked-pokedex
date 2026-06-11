@@ -39,30 +39,71 @@ def find_species_entry(text: str, species_const: str) -> Optional[tuple[int, int
 
 
 def get_field(body: str, field: str) -> Optional[str]:
-    """Return the raw expression of `.field` inside an entry body, or None."""
-    span = _field_value_span(body, field)
-    if span is None:
+    """Return the raw expression of the first `.field` in an entry body, or None."""
+    spans = _field_value_spans(body, field)
+    if not spans:
         return None
-    start, end = span
+    start, end = spans[0]
     return body[start:end].strip()
+
+
+def get_field_values(body: str, field: str) -> list[str]:
+    """Return every raw `.field` expression in the body, in order.
+
+    A species entry may carry the same field more than once, each branch of a
+    `#if .../#else/#endif` block holding a different value (pokeemerald gates
+    modern vs legacy stats/types/abilities this way).
+    """
+    return [body[start:end].strip() for start, end in _field_value_spans(body, field)]
 
 
 def set_field(body: str, field: str, value: str) -> str:
     """Return a new entry body with `.field` set to `value`.
 
-    Replaces the existing value in place when present; otherwise inserts a new
-    `.field = value,` line just after the opening of the body.
+    Replaces the first existing value in place when present; otherwise inserts a
+    new `.field = value,` line just after the opening of the body.
     """
-    span = _field_value_span(body, field)
-    if span is not None:
-        start, end = span
+    spans = _field_value_spans(body, field)
+    if spans:
+        start, end = spans[0]
         return body[:start] + value + body[end:]
-    # Insert a new field line at the top of the body.
+    return _insert_field(body, field, value)
+
+
+def set_field_all(body: str, field: str, value: str) -> str:
+    """Set every occurrence of `.field` to the same `value`; insert if none exist.
+
+    Use for fields whose desired value is absolute (stats, types): each
+    preprocessor branch must end up holding the same Override value.
+    """
+    spans = _field_value_spans(body, field)
+    if not spans:
+        return _insert_field(body, field, value)
+    for start, end in reversed(spans):  # right-to-left keeps earlier spans valid
+        body = body[:start] + value + body[end:]
+    return body
+
+
+def set_field_per_occurrence(body: str, field: str, render) -> str:
+    """Replace each `.field` value with `render(current_value)`.
+
+    Use when the new value depends on the branch's own current value — e.g.
+    abilities, where the Override changes only some slots and each branch keeps
+    its own values for the rest.
+    """
+    spans = _field_value_spans(body, field)
+    for start, end in reversed(spans):
+        current = body[start:end].strip()
+        body = body[:start] + render(current) + body[end:]
+    return body
+
+
+def _insert_field(body: str, field: str, value: str) -> str:
     insertion = f"\n{_INDENT}.{field} = {value},"
     newline = body.find("\n")
     if newline == -1:
         return f"{body}{insertion}"
-    return body[: newline] + insertion + body[newline:]
+    return body[:newline] + insertion + body[newline:]
 
 
 def replace_entry_body(text: str, span: tuple[int, int], new_body: str) -> str:
@@ -71,14 +112,14 @@ def replace_entry_body(text: str, span: tuple[int, int], new_body: str) -> str:
     return text[: open_brace + 1] + new_body + text[close_brace:]
 
 
-def _field_value_span(body: str, field: str) -> Optional[tuple[int, int]]:
+def _field_value_spans(body: str, field: str) -> list[tuple[int, int]]:
     pattern = re.compile(r"\.\s*" + re.escape(field) + r"\s*=\s*")
-    match = pattern.search(body)
-    if match is None:
-        return None
-    value_start = match.end()
-    value_end = _find_expression_end(body, value_start)
-    return (value_start, value_end)
+    spans: list[tuple[int, int]] = []
+    for match in pattern.finditer(body):
+        value_start = match.end()
+        value_end = _find_expression_end(body, value_start)
+        spans.append((value_start, value_end))
+    return spans
 
 
 def _find_expression_end(text: str, start: int) -> int:

@@ -19,6 +19,7 @@ from .appliers.pokeemerald.learnset_apply import apply_learnsets
 from .appliers.pokeemerald.resolution import build_resolution_map
 from .appliers.pokeemerald.species_apply import apply_species
 from .appliers.pokeemerald.type_chart_apply import apply_type_chart
+from .harvest.harvester import apply_proposals, propose_changes
 from .model import Ruleset
 from .report import ApplyReport
 from .seed.extractor import seed_from_fork
@@ -59,13 +60,58 @@ def main(argv: list[str] | None = None) -> int:
         "--force", action="store_true", help="Apply even if the target git tree is dirty."
     )
 
+    harvest = sub.add_parser(
+        "harvest", help="Propose Ruleset edits from a fork's in-game tuning."
+    )
+    harvest.add_argument("--fork", required=True, type=Path, help="Path to the fork.")
+    harvest.add_argument(
+        "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder."
+    )
+    harvest.add_argument(
+        "--dry-run", action="store_true", help="List proposals only; write nothing."
+    )
+
     args = parser.parse_args(argv)
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
     if args.command == "apply":
         return _run_apply(args.target, args.category, args.ruleset, args.force)
+    if args.command == "harvest":
+        return _run_harvest(args.fork, args.ruleset, args.dry_run)
     parser.error(f"unknown command {args.command}")
     return 2
+
+
+def _run_harvest(fork: Path, ruleset_dir: Path, dry_run: bool) -> int:
+    ruleset = Ruleset.load(ruleset_dir)
+    resmap = build_resolution_map(fork, ruleset)
+    proposals = propose_changes(fork, ruleset, resmap)
+
+    if not proposals:
+        print("Harvest: no drift found; the Ruleset already matches the fork.")
+        return 0
+
+    print(f"Harvest found {len(proposals)} proposed change(s):")
+    for proposal in proposals:
+        print(f"  {proposal.describe()}")
+
+    if dry_run:
+        print("(dry run — nothing written)")
+        return 0
+
+    accepted = [p for p in proposals if _confirm(p.describe())]
+    if not accepted:
+        print("Nothing accepted; the Ruleset is unchanged.")
+        return 0
+
+    touched = apply_proposals(ruleset_dir, ruleset, accepted)
+    print(f"Updated {len(touched)} species file(s): {', '.join(sorted(touched))}")
+    return 0
+
+
+def _confirm(message: str) -> bool:
+    answer = input(f"Accept {message}? [y/N] ").strip().lower()
+    return answer in ("y", "yes")
 
 
 def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> int:

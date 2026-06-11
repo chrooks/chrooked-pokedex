@@ -130,6 +130,47 @@ def test_apply_blocks_missing_species(tmp_path: Path) -> None:
     assert report.counts()["blocked"] == 1
 
 
+def test_apply_edits_all_preprocessor_gated_field_branches(tmp_path: Path) -> None:
+    """A species entry can carry the same field once per #if/#else branch. Every
+    branch must be edited, or apply silently under-applies and the parser (which
+    reads the last branch) disagrees with what landed."""
+    target = _build_target(tmp_path)
+    # Replace the flat species entry with one that gates abilities + a stat.
+    (target / "src/data/pokemon/species_info.h").write_text(
+        """\
+const struct SpeciesInfo gSpeciesInfo[] =
+{
+    [SPECIES_GOODRA] =
+    {
+    #if P_UPDATED_ABILITIES >= GEN_4
+        .baseSpeed = 80,
+        .types = MON_TYPES(TYPE_DRAGON),
+        .abilities = {ABILITY_SAP_SIPPER, ABILITY_HYDRATION, ABILITY_GOOEY},
+    #else
+        .baseSpeed = 70,
+        .types = MON_TYPES(TYPE_DRAGON),
+        .abilities = {ABILITY_SAP_SIPPER, ABILITY_NONE, ABILITY_GOOEY},
+    #endif
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    ruleset = _ruleset(tmp_path)
+    resmap = build_resolution_map(target, ruleset)
+
+    apply_species(target, ruleset, resmap, ApplyReport())
+
+    text = (target / "src/data/pokemon/species_info.h").read_text()
+    # Both ability branches got the primary overlaid; neither still says Sap Sipper primary.
+    assert text.count("ABILITY_POISON_HEAL") == 2
+    # Each branch kept its own second slot (Hydration vs NONE).
+    assert "{ABILITY_POISON_HEAL, ABILITY_HYDRATION, ABILITY_GOOEY}" in text
+    assert "{ABILITY_POISON_HEAL, ABILITY_NONE, ABILITY_GOOEY}" in text
+    # Both stat branches now hold the override value.
+    assert text.count(".baseSpeed = 90,") == 2
+
+
 def test_apply_partial_when_ability_unresolved(tmp_path: Path) -> None:
     target = _build_target(tmp_path)
     # Remove the ability table so "Poison Heal" cannot resolve.

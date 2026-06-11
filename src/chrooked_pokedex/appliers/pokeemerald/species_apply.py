@@ -114,7 +114,7 @@ def _render_fields(
     if override.types:
         symbols = [resmap.type(name) for name in override.types]
         if all(symbols):
-            body = c_edit.set_field(body, "types", _render_types(symbols))
+            body = c_edit.set_field_all(body, "types", _render_types(symbols))
         else:
             unresolved.append("types")
 
@@ -122,12 +122,11 @@ def _render_fields(
         for key, value in override.stats.items():
             field = _STAT_KEY_TO_FIELD.get(key)
             if field is not None:
-                body = c_edit.set_field(body, field, str(value))
+                # A stat may be gated per generation; every branch gets the value.
+                body = c_edit.set_field_all(body, field, str(value))
 
     if override.abilities:
-        new_value, ability_unresolved = _render_abilities(body, override, resmap)
-        if new_value is not None:
-            body = c_edit.set_field(body, "abilities", new_value)
+        body, ability_unresolved = _apply_abilities(body, override, resmap)
         unresolved.extend(ability_unresolved)
 
     return body, unresolved
@@ -137,12 +136,11 @@ def _render_types(symbols: list[str]) -> str:
     return "MON_TYPES(" + ", ".join(symbols) + ")"
 
 
-def _render_abilities(body: str, override: SpeciesOverride, resmap: ResolutionMap):
-    current = list(extract_ability_constants(c_edit.get_field(body, "abilities")))
-    while len(current) < 3:
-        current.append("ABILITY_NONE")
-
+def _apply_abilities(body: str, override: SpeciesOverride, resmap: ResolutionMap):
+    """Overlay the Override's changed ability slots onto every `.abilities`
+    occurrence, preserving each branch's own values for the unchanged slots."""
     unresolved: list[str] = []
+    resolved_slots: dict[int, str] = {}
     for index, slot in enumerate(_ABILITY_SLOTS):
         name = getattr(override.abilities, slot)
         if name is None:
@@ -151,6 +149,17 @@ def _render_abilities(body: str, override: SpeciesOverride, resmap: ResolutionMa
         if symbol is None:
             unresolved.append(f"ability:{name}")
             continue
-        current[index] = symbol
+        resolved_slots[index] = symbol
 
-    return "{" + ", ".join(current[:3]) + "}", unresolved
+    if not resolved_slots:
+        return body, unresolved
+
+    def render(current_value: str) -> str:
+        current = list(extract_ability_constants(current_value))
+        while len(current) < 3:
+            current.append("ABILITY_NONE")
+        for index, symbol in resolved_slots.items():
+            current[index] = symbol
+        return "{" + ", ".join(current[:3]) + "}"
+
+    return c_edit.set_field_per_occurrence(body, "abilities", render), unresolved
