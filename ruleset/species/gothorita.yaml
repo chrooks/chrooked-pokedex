@@ -19,3 +19,4 @@ learnset:
   - { level: 42, move: Thunderbolt }
   - { level: 48, move: Future Sight }
   - { level: 54, move: Magic Room }
+evolution: { from: Gothita, method: { level: 18 } }

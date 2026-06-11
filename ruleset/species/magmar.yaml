@@ -3,3 +3,4 @@ chrooked_id: magmar
 aka: { pokeemerald: SPECIES_MAGMAR }
 abilities:
   secondary: Flame Body
+evolution: { from: Magby, method: { level: 24 } }

@@ -1,0 +1,4 @@
+name: Golem Alola
+chrooked_id: golemalola
+aka: { pokeemerald: SPECIES_GOLEM_ALOLA }
+evolution: { from: Graveler Alola, method: { level: 35 } }

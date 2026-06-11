@@ -25,3 +25,4 @@ learnset:
   - { level: 58, move: Muddy Water }
   - { level: 67, move: Power Whip }
   - { level: 30, move: Draconic Fang }
+evolution: { from: Sliggoo, method: { level: 45 } }

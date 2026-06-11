@@ -5,3 +5,4 @@ abilities:
   primary: Sharpness
   hidden: Forestry
 stats: { atk: 115 }
+evolution: { from: Swadloon, method: { level: 36 } }

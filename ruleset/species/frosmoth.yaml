@@ -3,3 +3,4 @@ chrooked_id: frosmoth
 aka: { pokeemerald: SPECIES_FROSMOTH }
 abilities:
   secondary: Permafrost
+evolution: { from: Snom, method: { level: 32 } }

@@ -4,3 +4,4 @@ aka: { pokeemerald: SPECIES_TYPHLOSION_HISUI }
 abilities:
   secondary: Spectralize
   hidden: Pyre
+evolution: { from: Quilava, method: { level: 36 } }

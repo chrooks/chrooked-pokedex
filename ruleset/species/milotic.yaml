@@ -5,3 +5,4 @@ types: [Water, Fairy]
 abilities:
   secondary: Competitive
 stats: { hp: 100, def: 85, spe: 80 }
+evolution: { from: Feebas, method: { item: Prism Scale } }

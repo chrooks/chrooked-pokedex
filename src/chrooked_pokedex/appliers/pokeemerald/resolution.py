@@ -59,10 +59,12 @@ def build_resolution_map(target: Path, ruleset: Ruleset) -> ResolutionMap:
         for const, info in move_parser.parse_moves(target).items()
     }
 
-    species_by_id = {
-        chrooked_id: "SPECIES_" + chrooked_id.upper()
-        for chrooked_id in ruleset.species
-    }
+    # Resolve from each species' own aka hint (exact, and correct for forms like
+    # SPECIES_RATTATA_ALOLA); fall back to a constructed symbol only when absent.
+    species_by_id = {}
+    for chrooked_id, override in ruleset.species.items():
+        symbol = (override.aka or {}).get("pokeemerald")
+        species_by_id[chrooked_id] = symbol or ("SPECIES_" + chrooked_id.upper())
 
     return ResolutionMap(
         species_by_id=species_by_id,

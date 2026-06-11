@@ -1,0 +1,4 @@
+name: Weezing Galar
+chrooked_id: weezinggalar
+aka: { pokeemerald: SPECIES_WEEZING_GALAR }
+evolution: { from: Koffing, method: { level: 35 } }

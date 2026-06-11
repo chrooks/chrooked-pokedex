@@ -6,3 +6,4 @@ abilities:
   secondary: Infiltrator
   hidden: Tinted Lens
 stats: { spa: 85 }
+evolution: { from: Golbat, method: { level: 33 } }

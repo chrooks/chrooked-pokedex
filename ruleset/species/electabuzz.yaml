@@ -18,3 +18,4 @@ learnset:
   - { level: 46, move: Thunderbolt }
   - { level: 52, move: Close Combat }
   - { level: 58, move: Thunder }
+evolution: { from: Elekid, method: { level: 24 } }

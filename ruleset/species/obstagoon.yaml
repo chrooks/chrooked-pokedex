@@ -30,3 +30,4 @@ learnset:
   - { level: 49, move: Taunt }
   - { level: 53, move: Triple Hit }
   - { level: 56, move: Double-Edge }
+evolution: { from: Linoone Galar, method: { level: 38 } }

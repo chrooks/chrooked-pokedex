@@ -3,3 +3,4 @@ chrooked_id: braviaryhisui
 aka: { pokeemerald: SPECIES_BRAVIARY_HISUI }
 abilities:
   primary: Wingspan
+evolution: { from: Rufflet, method: { level: 54 } }

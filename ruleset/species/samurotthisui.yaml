@@ -5,3 +5,4 @@ abilities:
   secondary: Sharpness
   hidden: Shell Armor
 stats: { hp: 95, atk: 115 }
+evolution: { from: Dewott, method: { level: 36 } }

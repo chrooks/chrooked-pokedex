@@ -265,8 +265,14 @@ What remains / was deliberately deferred:
   `devkitpro/devkitarm:20240202` (gcc 13.2). The proof caught and fixed a real
   charmap/backslash bug in created descriptions. The system devkitARM (gcc 15/16) is
   too new for this base and cannot build it, applied or pristine.
-- Evolutions are modeled and have a working applier, but the real seed carries no
-  evolution data (M2 deferred seeding them); harvest can pull them in later.
+- Evolutions are now seeded and applied. The seed captures 63 changed evolutions
+  (from 52 changed pre-evolutions, branching counted per target) as backward `from`
+  pointers; the applier groups them by pre-evolution and whole-list-replaces that
+  source's `.evolutions`, so a branching pre-evolution (Cubone -> Marowak and
+  Marowak-Alola) keeps every target. Methods: `level` and `item` are neutral keys,
+  the other ~40 pokeemerald methods are faithful passthrough (`pokeemerald` + `param`).
+  A full apply onto a clean base copy lands 1024 entries, 0 partial, 0 blocked,
+  idempotent (Golbat -> Crobat at 33, Cubone branches intact).
 - Other species fields beyond types/abilities/stats/learnset (catch rate, EV
   yields, …) are outside the neutral schema and not captured — a future schema
   extension if Chris wants them.

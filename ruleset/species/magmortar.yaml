@@ -3,3 +3,4 @@ chrooked_id: magmortar
 aka: { pokeemerald: SPECIES_MAGMORTAR }
 abilities:
   secondary: Vital Spirit
+evolution: { from: Magmar, method: { level: 40 } }

@@ -30,3 +30,4 @@ learnset:
   - { level: 60, move: Stone Edge }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
+evolution: { from: Rockruff Own Tempo, method: { level: 25 } }

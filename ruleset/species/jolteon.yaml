@@ -1,0 +1,4 @@
+name: Jolteon
+chrooked_id: jolteon
+aka: { pokeemerald: SPECIES_JOLTEON }
+evolution: { from: Eevee, method: { item: Thunder Stone } }

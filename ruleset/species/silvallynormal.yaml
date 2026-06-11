@@ -1,0 +1,4 @@
+name: Silvally Normal
+chrooked_id: silvallynormal
+aka: { pokeemerald: SPECIES_SILVALLY_NORMAL }
+evolution: { from: Type Null, method: { level: 36 } }

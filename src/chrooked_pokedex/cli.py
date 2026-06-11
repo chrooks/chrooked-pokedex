@@ -136,7 +136,7 @@ def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> i
         changed = apply_learnsets(target, ruleset, resmap, report)
         print(f"learnset: {len(changed)} file(s) changed")
     if "evolution" in categories:
-        changed = apply_evolutions(target, ruleset, report)
+        changed = apply_evolutions(target, ruleset, resmap, report)
         print(f"evolution: {len(changed)} file(s) changed")
     if "type-chart" in categories:
         changed = apply_type_chart(target, ruleset, report)
@@ -162,6 +162,7 @@ def _run_seed(fork: Path, base: Path, ruleset_dir: Path) -> int:
     print(f"Seeded Ruleset at {ruleset_dir}:")
     print(f"  species changed:       {counts['species_changed']}")
     print(f"  learnsets replaced:    {counts['learnsets_replaced']}")
+    print(f"  evolutions changed:    {counts['evolutions_changed']}")
     print(f"  moves owned:           {counts['moves_owned']}")
     print(f"  abilities owned:       {counts['abilities_owned']}")
     print(f"  type-chart overrides:  {counts['type_chart_overrides']}")

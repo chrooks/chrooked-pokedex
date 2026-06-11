@@ -22,3 +22,4 @@ learnset:
   - { level: 54, move: Superpower }
   - { level: 58, move: One-Inch Punch }
   - { level: 62, move: Focus Punch }
+evolution: { from: Gurdurr, method: { level: 36 } }

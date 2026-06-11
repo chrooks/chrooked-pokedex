@@ -82,7 +82,15 @@ def species_yaml(species: SpeciesOverride) -> str:
         lines.append("learnset:")
         for entry in species.learnset:
             lines.append(f"  - {{ level: {entry.level}, move: {_scalar(entry.move)} }}")
+    if species.evolution is not None and species.evolution.from_species:
+        lines.append(f"evolution: {_evolution_flow(species.evolution)}")
     return "\n".join(lines) + "\n"
+
+
+def _evolution_flow(evolution) -> str:
+    method_parts = [f"{key}: {_scalar(value)}" for key, value in evolution.method.items()]
+    method = "{ " + ", ".join(method_parts) + " }" if method_parts else "{}"
+    return f"{{ from: {_scalar(evolution.from_species)}, method: {method} }}"
 
 
 def _move_yaml(move: MoveDef) -> str:

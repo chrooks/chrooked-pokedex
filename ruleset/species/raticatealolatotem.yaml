@@ -1,0 +1,4 @@
+name: Raticate Alola Totem
+chrooked_id: raticatealolatotem
+aka: { pokeemerald: SPECIES_RATICATE_ALOLA_TOTEM }
+evolution: { from: Rattata Alola, method: { pokeemerald: EVO_NONE, param: 0 } }

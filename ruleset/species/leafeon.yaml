@@ -3,3 +3,4 @@ chrooked_id: leafeon
 aka: { pokeemerald: SPECIES_LEAFEON }
 abilities:
   primary: Chlorophyll
+evolution: { from: Eevee, method: { item: Leaf Stone } }

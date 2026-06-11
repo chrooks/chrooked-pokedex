@@ -102,3 +102,27 @@ def ability_name(constant: str, ability_names: dict[str, str]) -> str:
 def species_display_name(constant: str) -> str:
     """`SPECIES_MR_MIME` -> `Mr Mime`. Deterministic; aka keeps the exact symbol."""
     return constant.removeprefix("SPECIES_").replace("_", " ").title()
+
+
+def item_name(constant: str) -> str:
+    """`ITEM_LEAF_STONE` -> `Leaf Stone`."""
+    return constant.removeprefix("ITEM_").replace("_", " ").title()
+
+
+def item_symbol(name: str) -> str:
+    """`Leaf Stone` -> `ITEM_LEAF_STONE` (round-trips standard items)."""
+    return "ITEM_" + name.strip().upper().replace(" ", "_")
+
+
+def neutralize_evolution_method(method_token: str, param: str) -> dict:
+    """Turn a pokeemerald (EVO_*, param) pair into a neutral method dict.
+
+    The two clean, common methods become plain keys; everything else is kept as a
+    faithful passthrough (`pokeemerald` + `param`) so it round-trips exactly even
+    though there are ~40 engine-specific methods we do not model individually.
+    """
+    if method_token == "EVO_LEVEL" and param.isdigit():
+        return {"level": int(param)}
+    if method_token == "EVO_ITEM" and param.startswith("ITEM_"):
+        return {"item": item_name(param)}
+    return {"pokeemerald": method_token, "param": param}

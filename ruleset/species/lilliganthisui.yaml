@@ -1,0 +1,4 @@
+name: Lilligant Hisui
+chrooked_id: lilliganthisui
+aka: { pokeemerald: SPECIES_LILLIGANT_HISUI }
+evolution: { from: Petilil, method: { item: Sun Stone } }

@@ -57,6 +57,10 @@ def apply_species(
 
     for chrooked_id in sorted(ruleset.species):
         override = ruleset.species[chrooked_id]
+        # Identity / evolution-only entries carry no scalar fields for this tier;
+        # skip them silently — they exist for resolution, not species edits.
+        if not (override.types or override.abilities or override.stats):
+            continue
         symbol = resmap.species(chrooked_id, dict(override.aka))
         if symbol is None:
             report.add(ReportEntry(

@@ -3,3 +3,4 @@ chrooked_id: glaceon
 aka: { pokeemerald: SPECIES_GLACEON }
 abilities:
   secondary: Whiteout
+evolution: { from: Eevee, method: { item: Ice Stone } }

@@ -5,3 +5,4 @@ abilities:
   primary: Aerodynamic
   secondary: Psyonize
 stats: { atk: 67, spa: 100, spd: 65, spe: 115 }
+evolution: { from: Woobat, method: { level: 30 } }

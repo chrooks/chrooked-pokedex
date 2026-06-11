@@ -4,3 +4,4 @@ aka: { pokeemerald: SPECIES_ROSELIA }
 abilities:
   secondary: Corrosion
   hidden: Bloom
+evolution: { from: Budew, method: { level: 16 } }

@@ -2,3 +2,4 @@ name: Pikachu
 chrooked_id: pikachu
 aka: { pokeemerald: SPECIES_PIKACHU }
 stats: { def: 40, spd: 50 }
+evolution: { from: Pichu, method: { level: 16 } }

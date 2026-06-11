@@ -27,3 +27,4 @@ learnset:
   - { level: 70, move: Stomping Tantrum }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
+evolution: { from: Ursaring, method: { item: Peat Block } }

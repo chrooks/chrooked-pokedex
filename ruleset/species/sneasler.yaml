@@ -4,3 +4,4 @@ aka: { pokeemerald: SPECIES_SNEASLER }
 abilities:
   primary: Mountaineer
   hidden: Venomize
+evolution: { from: Sneasel Hisui, method: { item: Razor Claw } }

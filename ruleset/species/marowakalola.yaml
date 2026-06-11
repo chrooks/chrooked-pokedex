@@ -27,3 +27,4 @@ learnset:
   - { level: 48, move: Bonemerang }
   - { level: 54, move: Iron Head }
   - { level: 60, move: Flare Blitz }
+evolution: { from: Cubone, method: { level: 28 } }

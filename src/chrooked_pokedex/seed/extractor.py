@@ -18,7 +18,7 @@ neutral schema and are not captured.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from ..model.schema import (
@@ -29,8 +29,10 @@ from ..model.schema import (
     SpeciesOverride,
     TypeChartOverride,
 )
+from ..model.schema import EvolutionOverride
 from ..readers.pokeemerald import (
     ability_parser,
+    evolution_parser,
     learnset_parser,
     move_parser,
     species_parser,
@@ -48,9 +50,11 @@ class SeedData:
 
     def counts(self) -> dict[str, int]:
         learnsets = sum(1 for s in self.species.values() if s.learnset is not None)
+        evolutions = sum(1 for s in self.species.values() if s.evolution is not None)
         return {
             "species_changed": len(self.species),
             "learnsets_replaced": learnsets,
+            "evolutions_changed": evolutions,
             "moves_owned": len(self.moves),
             "abilities_owned": len(self.abilities),
             "type_chart_overrides": len(self.type_chart),
@@ -77,6 +81,7 @@ def seed_from_fork(fork: Path, base: Path) -> SeedData:
         move_names,
         ability_names,
     )
+    _merge_evolutions(species, fork, base)
     moves = _seed_moves(fork, base)
     abilities = _seed_abilities(fork, base)
     type_chart = _seed_type_chart(fork, base)
@@ -84,6 +89,44 @@ def seed_from_fork(fork: Path, base: Path) -> SeedData:
     return SeedData(
         species=species, moves=moves, abilities=abilities, type_chart=type_chart
     )
+
+
+def _merge_evolutions(species: dict, fork: Path, base: Path) -> None:
+    """Add evolution Overrides (and any source identity stubs) into the species map.
+
+    When a species' forward evolution list differs from base, the Ruleset owns the
+    whole list (the learnset lesson): every target in the fork list is emitted as a
+    backward `from` pointer on that target. Each pre-evolution source is guaranteed
+    a species entry (a stub if it has no other Override) so the applier can resolve
+    its symbol when it reconstructs the source's evolution list.
+    """
+    fork_evos = evolution_parser.parse_evolutions(fork)
+    base_evos = evolution_parser.parse_evolutions(base)
+
+    for source_const in sorted(fork_evos):
+        if fork_evos.get(source_const) == base_evos.get(source_const):
+            continue  # this source's evolutions are unchanged
+        source_name = nz.species_display_name(source_const)
+        _ensure_identity(species, source_const)
+        for entry in fork_evos[source_const]:
+            target_cid = nz.slug(nz.species_display_name(entry.target_species))
+            _ensure_identity(species, entry.target_species)
+            evolution = EvolutionOverride(
+                from_species=source_name,
+                method=nz.neutralize_evolution_method(entry.method, entry.param),
+            )
+            species[target_cid] = replace(species[target_cid], evolution=evolution)
+
+
+def _ensure_identity(species: dict, constant: str) -> None:
+    """Make sure `species` has an entry for this constant (stub if absent)."""
+    cid = nz.slug(nz.species_display_name(constant))
+    if cid not in species:
+        species[cid] = SpeciesOverride(
+            name=nz.species_display_name(constant),
+            chrooked_id=cid,
+            aka={"pokeemerald": constant},
+        )
 
 
 def _insert_unique(result: dict, key: str, value, kind: str, source: str) -> None:

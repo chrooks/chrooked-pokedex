@@ -5,3 +5,4 @@ abilities:
   secondary: Sharpness
   hidden: Death Grip
 stats: { def: 105 }
+evolution: { from: Scyther, method: { item: Metal Coat } }

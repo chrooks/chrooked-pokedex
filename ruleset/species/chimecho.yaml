@@ -5,3 +5,4 @@ types: [Steel, Psychic]
 abilities:
   primary: Sacred Toll
 stats: { hp: 95, def: 90, spa: 105, spd: 90, spe: 80 }
+evolution: { from: Chingling, method: { level: 30 } }

@@ -23,3 +23,4 @@ learnset:
   - { level: 50, move: Flamethrower }
   - { level: 56, move: Crunch }
   - { level: 62, move: Inferno }
+evolution: { from: Houndour, method: { level: 32 } }

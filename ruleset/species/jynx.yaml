@@ -5,3 +5,4 @@ types: [Psychic, Ice]
 abilities:
   secondary: Forewarn
 stats: { spa: 130 }
+evolution: { from: Smoochum, method: { level: 24 } }

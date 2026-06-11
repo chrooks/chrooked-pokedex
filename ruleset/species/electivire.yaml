@@ -22,3 +22,4 @@ learnset:
   - { level: 48, move: Close Combat }
   - { level: 54, move: Thunder }
   - { level: 60, move: Giga Impact }
+evolution: { from: Electabuzz, method: { level: 40 } }

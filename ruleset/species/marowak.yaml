@@ -18,3 +18,4 @@ learnset:
   - { level: 44, move: Bonemerang }
   - { level: 50, move: Earthquake }
   - { level: 56, move: Double-Edge }
+evolution: { from: Cubone, method: { level: 28 } }

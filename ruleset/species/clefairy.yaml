@@ -4,3 +4,4 @@ aka: { pokeemerald: SPECIES_CLEFAIRY }
 types: [Fairy]
 abilities:
   secondary: Magic Guard
+evolution: { from: Cleffa, method: { level: 16 } }

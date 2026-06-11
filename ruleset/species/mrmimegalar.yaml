@@ -1,0 +1,4 @@
+name: Mr Mime Galar
+chrooked_id: mrmimegalar
+aka: { pokeemerald: SPECIES_MR_MIME_GALAR }
+evolution: { from: Mime Jr, method: { pokeemerald: EVO_MOVE, param: MOVE_MIMIC } }

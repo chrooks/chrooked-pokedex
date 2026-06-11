@@ -1,0 +1,4 @@
+name: Goodra Hisui
+chrooked_id: goodrahisui
+aka: { pokeemerald: SPECIES_GOODRA_HISUI }
+evolution: { from: Sliggoo Hisui, method: { level: 45 } }

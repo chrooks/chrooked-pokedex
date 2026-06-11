@@ -6,3 +6,4 @@ abilities:
   secondary: Mountaineer
   hidden: Psyonize
 stats: { atk: 70, spe: 100 }
+evolution: { from: Meditite, method: { level: 34 } }

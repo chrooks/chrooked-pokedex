@@ -26,3 +26,4 @@ learnset:
   - { level: 58, move: Double-Edge }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
+evolution: { from: Greavard, method: { level: 32 } }

@@ -1,0 +1,4 @@
+name: Vaporeon
+chrooked_id: vaporeon
+aka: { pokeemerald: SPECIES_VAPOREON }
+evolution: { from: Eevee, method: { item: Water Stone } }

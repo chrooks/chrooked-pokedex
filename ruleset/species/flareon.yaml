@@ -17,3 +17,4 @@ learnset:
   - { level: 40, move: Lava Plume }
   - { level: 46, move: Double-Edge }
   - { level: 52, move: Flare Blitz }
+evolution: { from: Eevee, method: { item: Fire Stone } }

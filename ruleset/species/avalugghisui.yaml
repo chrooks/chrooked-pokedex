@@ -25,3 +25,4 @@ learnset:
   - { level: 46, move: Double-Edge }
   - { level: 51, move: Stone Edge }
   - { level: 61, move: Mountain Gale }
+evolution: { from: Bergmite, method: { level: 37 } }

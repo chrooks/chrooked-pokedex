@@ -171,6 +171,26 @@ const struct SpeciesInfo gSpeciesInfo[] =
     assert text.count(".baseSpeed = 90,") == 2
 
 
+def test_apply_skips_identity_stub_without_scalar_fields(tmp_path: Path) -> None:
+    """An identity/evolution-only stub (no types/abilities/stats) is not the species
+    tier's concern — it must be skipped silently, not reported blocked."""
+    target = _build_target(tmp_path)
+    root = tmp_path / "ruleset"
+    (root / "species").mkdir(parents=True)
+    (root / "meta.yaml").write_text("base_version: 1.11.2\nschema_version: 1\n")
+    # A stub for a species the target lacks, with no scalar fields.
+    (root / "species" / "missingno.yaml").write_text(
+        "name: Missingno\nchrooked_id: missingno\naka: { pokeemerald: SPECIES_MISSINGNO }\n"
+    )
+    ruleset = Ruleset.load(root)
+    report = ApplyReport()
+
+    apply_species(target, ruleset, build_resolution_map(target, ruleset), report)
+
+    assert report.counts()["blocked"] == 0
+    assert report.counts()["applied"] == 0
+
+
 def test_apply_partial_when_ability_unresolved(tmp_path: Path) -> None:
     target = _build_target(tmp_path)
     # Remove the ability table so "Poison Heal" cannot resolve.

@@ -1,0 +1,4 @@
+name: Persian Alola
+chrooked_id: persianalola
+aka: { pokeemerald: SPECIES_PERSIAN_ALOLA }
+evolution: { from: Meowth Alola, method: { level: 32 } }

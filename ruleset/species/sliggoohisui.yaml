@@ -1,0 +1,4 @@
+name: Sliggoo Hisui
+chrooked_id: sliggoohisui
+aka: { pokeemerald: SPECIES_SLIGGOO_HISUI }
+evolution: { from: Goomy, method: { level: 35 } }

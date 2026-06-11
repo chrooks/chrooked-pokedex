@@ -21,3 +21,4 @@ learnset:
   - { level: 48, move: Future Sight }
   - { level: 56, move: Astral Hand }
   - { level: 64, move: Magic Room }
+evolution: { from: Gothorita, method: { level: 36 } }

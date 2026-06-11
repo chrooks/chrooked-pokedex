@@ -20,3 +20,4 @@ learnset:
   - { level: 42, move: Hammer Arm }
   - { level: 48, move: Stone Edge }
   - { level: 54, move: Superpower }
+evolution: { from: Timburr, method: { level: 18 } }

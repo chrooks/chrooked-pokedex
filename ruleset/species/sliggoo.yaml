@@ -18,3 +18,4 @@ learnset:
   - { level: 49, move: Body Slam }
   - { level: 56, move: Muddy Water }
   - { level: 25, move: Draconic Fang }
+evolution: { from: Goomy, method: { pokeemerald: EVO_LEVEL_FOG, param: 35 } }

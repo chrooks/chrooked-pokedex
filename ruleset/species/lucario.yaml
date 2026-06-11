@@ -5,3 +5,4 @@ abilities:
   primary: Magical Fists
   hidden: Mega Launcher
 stats: { atk: 120, spa: 120, spe: 100 }
+evolution: { from: Riolu, method: { level: 30 } }

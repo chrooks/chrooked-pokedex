@@ -1,0 +1,4 @@
+name: Raticate Alola
+chrooked_id: raticatealola
+aka: { pokeemerald: SPECIES_RATICATE_ALOLA }
+evolution: { from: Rattata Alola, method: { level: 20 } }
