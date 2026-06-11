@@ -79,7 +79,11 @@ class MoveDef:
 
 @dataclass(frozen=True)
 class AbilityDef:
-    """A Ruleset-owned ability definition (new or changed)."""
+    """A Ruleset-owned ability definition (new or changed).
+
+    This is data only. An ability's *mechanic* lives in a separate, human-owned
+    BehaviorSpec under `ruleset/behaviors/`, not here.
+    """
 
     name: str
     chrooked_id: str

@@ -65,9 +65,18 @@ def _create_abilities(target, ruleset, resmap, report) -> set[Path]:
         resmap.ability_by_name[ability.name.lower()] = symbol
         report.add(ReportEntry(
             status="applied", category="ability", chrooked_id=chrooked_id,
-            symbol=symbol, reason="created",
+            symbol=symbol, reason=_creation_reason(ruleset, ability.name),
         ))
     return changed
+
+
+def _creation_reason(ruleset: Ruleset, name: str) -> str:
+    """Created abilities are DATA ONLY: the applier writes the name + description but
+    never the battle mechanic. If the Ruleset carries a behavior spec for this ability,
+    say so loudly so the silent-inert-ability trap stays visible in the Apply Report."""
+    if ruleset.behavior_for(name) is not None:
+        return "created — DATA ONLY: implement mechanic (behavior spec exists)"
+    return "created"
 
 
 def _create_moves(target, ruleset, resmap, report) -> set[Path]:

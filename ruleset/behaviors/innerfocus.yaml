@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Inner Focus
+chrooked_id: innerfocus
+applies_to: ability
+aka: { pokeemerald: ABILITY_INNER_FOCUS }
+effects:
+  - summary: "Prevents flinching."
+    trigger: status-apply
+    effect: "this Pokemon cannot be made to flinch"
+  - summary: "The user's Focus Blast never misses."
+    trigger: accuracy-check
+    when: "the move being used is Focus Blast"
+    effect: "skip the accuracy roll; the move always hits"
+test_cases:
+  - given: "Inner Focus user uses Focus Blast at a foe with +6 evasion"
+    expect: "the move hits"
+  - given: "Inner Focus user uses Hydro Pump"
+    expect: "normal accuracy applies (no always-hit)"
+  - given: "a Pokemon without Inner Focus uses Focus Blast"
+    expect: "normal 70% accuracy applies"
+notes:
+  - "Mold Breaker does not bypass this — it is the user's own ability, not the target's."
+  - "Only Focus Blast is affected; the always-hit does not extend to other moves."
+engine_hints:
+  pokeemerald: "accuracy calc in src/battle_util.c; gate on attacker ability + MOVE_FOCUS_BLAST (ref chrooked-patch-source:10807)"
+  essentials: "Battle::Move#pbAccuracyCheck — return true early when user has Inner Focus and move is Focus Blast"

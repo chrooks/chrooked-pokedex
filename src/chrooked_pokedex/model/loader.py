@@ -13,6 +13,13 @@ from typing import Any, Iterable
 
 import yaml
 
+from .behavior_spec import (
+    APPLIES_TO,
+    TRIGGERS,
+    BehaviorEffect,
+    BehaviorSpec,
+    BehaviorTestCase,
+)
 from .schema import (
     MOVE_CATEGORIES,
     STAT_KEYS,
@@ -55,6 +62,12 @@ _MOVE_KEYS = (
 )
 _ABILITY_KEYS = ("name", "chrooked_id", "aka", "description")
 _TYPE_CHART_ENTRY_KEYS = ("attacker", "defender", "multiplier")
+_BEHAVIOR_KEYS = (
+    "name", "chrooked_id", "applies_to", "aka",
+    "effects", "test_cases", "notes", "engine_hints",
+)
+_EFFECT_KEYS = ("summary", "trigger", "effect", "when")
+_TEST_CASE_KEYS = ("given", "expect")
 
 
 def load_species(path: Path) -> SpeciesOverride:
@@ -138,6 +151,69 @@ def load_ability(path: Path) -> AbilityDef:
         description=data.get("description", ""),
         aka=dict(data.get("aka") or {}),
     )
+
+
+def load_behavior(path: Path) -> BehaviorSpec:
+    """Load one hand-authored behavior spec from `ruleset/behaviors/`."""
+    data = _read_yaml(path)
+    where = path.name
+    _check_keys(data, _BEHAVIOR_KEYS, where)
+
+    for required in ("name", "chrooked_id", "applies_to"):
+        if not data.get(required):
+            raise ValueError(f"{where}: missing required field {required!r}")
+    applies_to = data["applies_to"]
+    if applies_to not in APPLIES_TO:
+        raise ValueError(
+            f"{where}: invalid applies_to {applies_to!r}; "
+            f"expected one of {', '.join(sorted(APPLIES_TO))}"
+        )
+
+    raw_effects = data.get("effects") or []
+    if not raw_effects:
+        raise ValueError(f"{where}: at least one effect is required")
+    effects = tuple(_load_effect(entry, where) for entry in raw_effects)
+
+    test_cases = tuple(
+        _load_test_case(entry, where) for entry in (data.get("test_cases") or [])
+    )
+    return BehaviorSpec(
+        name=data["name"],
+        chrooked_id=data["chrooked_id"],
+        applies_to=applies_to,
+        aka=dict(data.get("aka") or {}),
+        effects=effects,
+        test_cases=test_cases,
+        notes=tuple(data.get("notes") or []),
+        engine_hints=dict(data.get("engine_hints") or {}),
+    )
+
+
+def _load_effect(entry: dict[str, Any], where: str) -> BehaviorEffect:
+    _check_keys(entry, _EFFECT_KEYS, f"{where}:effects")
+    for required in ("summary", "trigger", "effect"):
+        if not entry.get(required):
+            raise ValueError(f"{where}:effects: missing required field {required!r}")
+    trigger = entry["trigger"]
+    if trigger not in TRIGGERS:
+        raise ValueError(
+            f"{where}:effects: unknown trigger {trigger!r}; "
+            f"allowed triggers are {', '.join(sorted(TRIGGERS))}"
+        )
+    return BehaviorEffect(
+        summary=entry["summary"],
+        trigger=trigger,
+        effect=entry["effect"],
+        when=entry.get("when"),
+    )
+
+
+def _load_test_case(entry: dict[str, Any], where: str) -> BehaviorTestCase:
+    _check_keys(entry, _TEST_CASE_KEYS, f"{where}:test_cases")
+    for required in ("given", "expect"):
+        if not entry.get(required):
+            raise ValueError(f"{where}:test_cases: missing required field {required!r}")
+    return BehaviorTestCase(given=entry["given"], expect=entry["expect"])
 
 
 def load_type_chart(path: Path) -> tuple[TypeChartOverride, ...]:

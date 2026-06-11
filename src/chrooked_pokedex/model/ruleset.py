@@ -9,17 +9,23 @@ from typing import Any, Mapping, Optional
 import yaml
 
 from . import loader
+from .behavior_spec import BehaviorSpec
 from .schema import AbilityDef, MoveDef, SpeciesOverride, TypeChartOverride
 
 
 @dataclass(frozen=True)
 class Ruleset:
-    """All Overrides and Ruleset-owned definitions, keyed by `chrooked_id`."""
+    """All Overrides and Ruleset-owned definitions, keyed by `chrooked_id`.
+
+    `behaviors` is the human-owned mechanic layer, kept apart from the machine-owned data
+    the seed regenerates (species/moves/abilities/type_chart).
+    """
 
     species: Mapping[str, SpeciesOverride] = field(default_factory=dict)
     moves: Mapping[str, MoveDef] = field(default_factory=dict)
     abilities: Mapping[str, AbilityDef] = field(default_factory=dict)
     type_chart: tuple[TypeChartOverride, ...] = ()
+    behaviors: Mapping[str, BehaviorSpec] = field(default_factory=dict)
     meta: Mapping[str, Any] = field(default_factory=dict)
 
     @classmethod
@@ -49,11 +55,17 @@ class Ruleset:
         if type_chart_path.exists():
             type_chart = loader.load_type_chart(type_chart_path)
 
+        behaviors = {
+            b.chrooked_id: b
+            for b in (loader.load_behavior(p) for p in _yaml_files(ruleset_dir / "behaviors"))
+        }
+
         return cls(
             species=species,
             moves=moves,
             abilities=abilities,
             type_chart=type_chart,
+            behaviors=behaviors,
             meta=meta,
         )
 
@@ -76,6 +88,14 @@ class Ruleset:
         for ability in self.abilities.values():
             if ability.chrooked_id == key or ability.name.lower() == key:
                 return ability
+        return None
+
+    def behavior_for(self, name_or_id: str) -> Optional[BehaviorSpec]:
+        """Resolve a name or `chrooked_id` to its BehaviorSpec, if one exists."""
+        key = name_or_id.strip().lower()
+        for spec in self.behaviors.values():
+            if spec.chrooked_id == key or spec.name.lower() == key:
+                return spec
         return None
 
 

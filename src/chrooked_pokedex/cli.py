@@ -19,6 +19,7 @@ from .appliers.pokeemerald.learnset_apply import apply_learnsets
 from .appliers.pokeemerald.resolution import build_resolution_map
 from .appliers.pokeemerald.species_apply import apply_species
 from .appliers.pokeemerald.type_chart_apply import apply_type_chart
+from .behavior import render_manifest, render_packet
 from .harvest.harvester import apply_proposals, propose_changes
 from .model import Ruleset
 from .report import ApplyReport
@@ -71,6 +72,22 @@ def main(argv: list[str] | None = None) -> int:
         "--dry-run", action="store_true", help="List proposals only; write nothing."
     )
 
+    behaviors = sub.add_parser(
+        "behaviors",
+        help="List custom mechanics, or print one as an implementation packet.",
+    )
+    behaviors.add_argument(
+        "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder."
+    )
+    behaviors.add_argument(
+        "--mechanic",
+        help="Print the implementation packet for this ability or move (name or chrooked_id).",
+    )
+    behaviors.add_argument(
+        "--engine",
+        help="Engine whose hint to surface in the packet (e.g. pokeemerald, essentials).",
+    )
+
     args = parser.parse_args(argv)
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
@@ -78,8 +95,23 @@ def main(argv: list[str] | None = None) -> int:
         return _run_apply(args.target, args.category, args.ruleset, args.force)
     if args.command == "harvest":
         return _run_harvest(args.fork, args.ruleset, args.dry_run)
+    if args.command == "behaviors":
+        return _run_behaviors(args.ruleset, args.mechanic, args.engine)
     parser.error(f"unknown command {args.command}")
     return 2
+
+
+def _run_behaviors(ruleset_dir: Path, mechanic: str | None, engine: str | None) -> int:
+    ruleset = Ruleset.load(ruleset_dir)
+    if mechanic is None:
+        print(render_manifest(ruleset), end="")
+        return 0
+    spec = ruleset.behavior_for(mechanic)
+    if spec is None:
+        print(f"No behavior spec for {mechanic!r}.", file=sys.stderr)
+        return 1
+    print(render_packet(spec, engine), end="")
+    return 0
 
 
 def _run_harvest(fork: Path, ruleset_dir: Path, dry_run: bool) -> int:
@@ -148,6 +180,17 @@ def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> i
         f"Apply Report: applied={counts['applied']} "
         f"partial={counts['partial']} blocked={counts['blocked']}"
     )
+
+    data_only = [e for e in report.entries if "DATA ONLY" in e.reason]
+    if data_only:
+        print(
+            f"  ⚠ {len(data_only)} created ability/ies are DATA ONLY — their mechanics "
+            "must be implemented in the target engine:"
+        )
+        for entry in data_only:
+            print(f"      {entry.chrooked_id} ({entry.symbol})")
+        print("  Run `chrooked-pokedex behaviors --ability <id> --engine <engine>` for a packet.")
+
     print(f"  {target / 'apply-report.md'}")
     print(f"  {json_path}")
     return 0
