@@ -12,17 +12,22 @@ import argparse
 import sys
 from pathlib import Path
 
+from .appliers.pokeemerald.creation import create_owned_content
+from .appliers.pokeemerald.evolution_apply import apply_evolutions
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
 from .appliers.pokeemerald.learnset_apply import apply_learnsets
 from .appliers.pokeemerald.resolution import build_resolution_map
 from .appliers.pokeemerald.species_apply import apply_species
+from .appliers.pokeemerald.type_chart_apply import apply_type_chart
 from .model import Ruleset
 from .report import ApplyReport
 from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
 _DEFAULT_RULESET = Path(__file__).resolve().parent.parent.parent / "ruleset"
-_APPLY_CATEGORIES = ("species", "learnset")
+# Apply resolves in dependency tiers: owned content is created first, then
+# species scalars, learnsets, evolutions, and finally the type chart.
+_APPLY_CATEGORIES = ("create", "species", "learnset", "evolution", "type-chart")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -43,9 +48,9 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--category",
-        choices=(*_APPLY_CATEGORIES, "all"),
+        choices=("species", "learnset", "all"),
         default="all",
-        help="Which category to apply (default: all).",
+        help="Which category to apply (default: all = create + every tier).",
     )
     apply.add_argument(
         "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder to read."
@@ -75,12 +80,21 @@ def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> i
     report = ApplyReport()
 
     categories = _APPLY_CATEGORIES if category == "all" else (category,)
+    if "create" in categories:
+        changed = create_owned_content(target, ruleset, resmap, report)
+        print(f"create: {len(changed)} file(s) changed")
     if "species" in categories:
         changed = apply_species(target, ruleset, resmap, report)
         print(f"species: {len(changed)} file(s) changed")
     if "learnset" in categories:
         changed = apply_learnsets(target, ruleset, resmap, report)
         print(f"learnset: {len(changed)} file(s) changed")
+    if "evolution" in categories:
+        changed = apply_evolutions(target, ruleset, report)
+        print(f"evolution: {len(changed)} file(s) changed")
+    if "type-chart" in categories:
+        changed = apply_type_chart(target, ruleset, report)
+        print(f"type-chart: {len(changed)} file(s) changed")
 
     json_path = report.write(target / "apply-report.md")
     counts = report.counts()
