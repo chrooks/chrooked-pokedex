@@ -175,7 +175,7 @@ Acceptance: a file `plans/essentials-applier-plan.md` exists describing the PBS 
 ## Progress
 
 - [x] (2026-06-11) Milestone 0 — Scaffold and vendored readers compile. Package installs (`.venv`), `pytest` green at 27 passed, vendored 5 parsers into `readers/pokeemerald/`, ported 4 parser tests + wrote a new move-parser test, real-fork smoke test confirms Dreamstone Goodra parses.
-- [ ] Milestone 1 — Neutral schema and Ruleset model.
+- [x] (2026-06-11) Milestone 1 — Neutral schema and Ruleset model. Frozen dataclasses in `model/schema.py`; YAML loader with fail-fast unknown-field validation in `model/loader.py`; `Ruleset.load()` + `owned_move`/`owned_ability` in `model/ruleset.py`. Sample `ruleset/` (goodra, excalibur, type-chart, meta) round-trips; 6 model tests green, full suite 33 passed.
 - [ ] Milestone 2 — Seed the Ruleset from Dreamstone against base 1.11.2.
 - [ ] Milestone 3 — pokeemerald applier: species end-to-end.
 - [ ] Milestone 4 — pokeemerald applier: learnsets, whole-list replace.
