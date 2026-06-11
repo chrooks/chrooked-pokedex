@@ -125,9 +125,18 @@ def _field_value_spans(body: str, field: str) -> list[tuple[int, int]]:
 def _find_expression_end(text: str, start: int) -> int:
     depth = 0
     pos = start
+    in_string = ""  # '"' or "'" while inside a literal, else ""
     while pos < len(text):
         char = text[pos]
-        if char in "{([":
+        if in_string:
+            if char == "\\":
+                pos += 2  # skip the escaped character
+                continue
+            if char == in_string:
+                in_string = ""
+        elif char in "\"'":
+            in_string = char
+        elif char in "{([":
             depth += 1
         elif char in "})]":
             if depth == 0:
@@ -141,11 +150,23 @@ def _find_expression_end(text: str, start: int) -> int:
 
 def _find_matching_brace(text: str, open_index: int) -> Optional[int]:
     depth = 0
-    for pos in range(open_index, len(text)):
-        if text[pos] == "{":
+    in_string = ""
+    pos = open_index
+    while pos < len(text):
+        char = text[pos]
+        if in_string:
+            if char == "\\":
+                pos += 2
+                continue
+            if char == in_string:
+                in_string = ""
+        elif char in "\"'":
+            in_string = char
+        elif char == "{":
             depth += 1
-        elif text[pos] == "}":
+        elif char == "}":
             depth -= 1
             if depth == 0:
                 return pos
+        pos += 1
     return None

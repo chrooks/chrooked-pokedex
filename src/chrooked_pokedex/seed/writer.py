@@ -16,7 +16,7 @@ from .extractor import SeedData
 
 def write_ruleset(seed: SeedData, ruleset_dir: Path) -> None:
     ruleset_dir = Path(ruleset_dir)
-    _write_dir(ruleset_dir / "species", seed.species, _species_yaml)
+    _write_dir(ruleset_dir / "species", seed.species, species_yaml)
     _write_dir(ruleset_dir / "moves", seed.moves, _move_yaml)
     _write_dir(ruleset_dir / "abilities", seed.abilities, _ability_yaml)
     _write_type_chart(ruleset_dir / "type-chart" / "overrides.yaml", seed.type_chart)
@@ -37,10 +37,23 @@ def _clear_yaml(directory: Path) -> None:
         path.unlink()
 
 
+# YAML indicator characters that change meaning when they lead a plain scalar.
+_YAML_LEADING_SPECIALS = "[]{}*&!|>%@`#?,:-\"'"
+
+
 def _scalar(value: object) -> str:
-    if isinstance(value, str) and (":" in value or value != value.strip()):
-        return '"' + value.replace('"', '\\"') + '"'
+    if isinstance(value, str) and _needs_quoting(value):
+        escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+        return '"' + escaped + '"'
     return str(value)
+
+
+def _needs_quoting(value: str) -> bool:
+    if value == "" or value != value.strip():
+        return True
+    if ":" in value or " #" in value:
+        return True
+    return value[0] in _YAML_LEADING_SPECIALS
 
 
 def _aka_flow(aka: dict) -> str:
@@ -48,7 +61,7 @@ def _aka_flow(aka: dict) -> str:
     return "{ " + ", ".join(parts) + " }"
 
 
-def _species_yaml(species: SpeciesOverride) -> str:
+def species_yaml(species: SpeciesOverride) -> str:
     lines = [
         f"name: {species.name}",
         f"chrooked_id: {species.chrooked_id}",

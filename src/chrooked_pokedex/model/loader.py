@@ -14,6 +14,8 @@ from typing import Any, Iterable
 import yaml
 
 from .schema import (
+    MOVE_CATEGORIES,
+    STAT_KEYS,
     AbilitiesOverride,
     AbilityDef,
     EvolutionOverride,
@@ -87,7 +89,11 @@ def load_species(path: Path) -> SpeciesOverride:
         )
 
     types = tuple(data["types"]) if "types" in data else None
-    stats = dict(data["stats"]) if "stats" in data else None
+
+    stats = None
+    if "stats" in data:
+        stats = dict(data["stats"] or {})
+        _check_keys(stats, STAT_KEYS, f"{path.name}:stats")
 
     return SpeciesOverride(
         name=data["name"],
@@ -104,6 +110,12 @@ def load_species(path: Path) -> SpeciesOverride:
 def load_move(path: Path) -> MoveDef:
     data = _read_yaml(path)
     _check_keys(data, _MOVE_KEYS, path.name)
+    category = data["category"]
+    if category not in MOVE_CATEGORIES:
+        raise ValueError(
+            f"{path.name}: invalid move category {category!r}; "
+            f"expected one of {', '.join(sorted(MOVE_CATEGORIES))}"
+        )
     return MoveDef(
         name=data["name"],
         chrooked_id=data["chrooked_id"],

@@ -20,7 +20,7 @@ from ..model import Ruleset
 from ..model.schema import AbilitiesOverride, SpeciesOverride
 from ..readers.pokeemerald import species_parser
 from ..seed import neutralize as nz
-from ..seed.writer import _species_yaml
+from ..seed.writer import species_yaml
 
 _ABILITY_SLOTS = ("primary", "secondary", "hidden")
 
@@ -112,7 +112,7 @@ def apply_proposals(
         for proposal in proposals:
             override = _apply_one(override, proposal)
         path = Path(ruleset_dir) / "species" / f"{chrooked_id}.yaml"
-        path.write_text(_species_yaml(override), encoding="utf-8")
+        path.write_text(species_yaml(override), encoding="utf-8")
         touched.add(chrooked_id)
     return touched
 

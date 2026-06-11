@@ -86,6 +86,17 @@ def seed_from_fork(fork: Path, base: Path) -> SeedData:
     )
 
 
+def _insert_unique(result: dict, key: str, value, kind: str, source: str) -> None:
+    """Insert into a seed dict, failing fast if two distinct sources collide on the
+    same `chrooked_id`. A silent overwrite would drop one entity from the Ruleset."""
+    if key in result:
+        raise ValueError(
+            f"chrooked_id collision: {kind} {source!r} and an earlier entity both "
+            f"slug to {key!r}; give one an explicit distinct id"
+        )
+    result[key] = value
+
+
 def _seed_species(
     fork_species, base_species, fork_learnsets, base_learnsets, move_names, ability_names
 ):
@@ -109,15 +120,16 @@ def _seed_species(
         if not any((types, abilities, stats, learnset is not None)):
             continue
 
-        result[nz.slug(nz.species_display_name(constant))] = SpeciesOverride(
+        chrooked_id = nz.slug(nz.species_display_name(constant))
+        _insert_unique(result, chrooked_id, SpeciesOverride(
             name=nz.species_display_name(constant),
-            chrooked_id=nz.slug(nz.species_display_name(constant)),
+            chrooked_id=chrooked_id,
             aka=_species_aka(constant, fork_p.fields),
             types=types or None,
             abilities=abilities,
             stats=stats or None,
             learnset=learnset,
-        )
+        ), "species", constant)
     return result
 
 
@@ -190,9 +202,10 @@ def _seed_moves(fork: Path, base: Path) -> dict[str, MoveDef]:
         info = fork_moves[constant]
         if base_moves.get(constant) == info:
             continue
-        result[nz.slug(info.name)] = MoveDef(
+        chrooked_id = nz.slug(info.name)
+        _insert_unique(result, chrooked_id, MoveDef(
             name=info.name,
-            chrooked_id=nz.slug(info.name),
+            chrooked_id=chrooked_id,
             type=nz.type_name(info.type) if info.type else "",
             category=info.category.lower(),
             power=info.power,
@@ -200,7 +213,7 @@ def _seed_moves(fork: Path, base: Path) -> dict[str, MoveDef]:
             pp=info.pp,
             description=info.description,
             aka={"pokeemerald": constant},
-        )
+        ), "move", constant)
     return result
 
 
@@ -212,12 +225,13 @@ def _seed_abilities(fork: Path, base: Path) -> dict[str, AbilityDef]:
         name, desc = fork_text[constant]
         if base_text.get(constant) == (name, desc):
             continue
-        result[nz.slug(name)] = AbilityDef(
+        chrooked_id = nz.slug(name)
+        _insert_unique(result, chrooked_id, AbilityDef(
             name=name,
-            chrooked_id=nz.slug(name),
+            chrooked_id=chrooked_id,
             description=desc,
             aka={"pokeemerald": constant},
-        )
+        ), "ability", constant)
     return result
 
 

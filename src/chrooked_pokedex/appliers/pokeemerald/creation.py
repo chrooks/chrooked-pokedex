@@ -200,6 +200,7 @@ def _escape(text: str) -> str:
     return (
         text.replace("\\", "\\\\")
         .replace('"', '\\"')
+        .replace("\r", "\\r")
         .replace("\n", "\\n")
         .replace("\t", "\\t")
     )

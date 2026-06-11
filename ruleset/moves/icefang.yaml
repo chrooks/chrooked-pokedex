@@ -6,4 +6,4 @@ category: physical
 power: 80
 accuracy: 95
 pp: 15
-description: May cause flinching or " #if B_USE_FROSTBITE == TRUE "leave the foe with frostbite.
+description: "May cause flinching or \" #if B_USE_FROSTBITE == TRUE \"leave the foe with frostbite."

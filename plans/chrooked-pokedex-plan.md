@@ -273,8 +273,40 @@ from the other side. Test count grew from 0 to 65, all green.
 
 ## Code Review Findings
 
-Populated after code review — leave blank until review is complete.
+A two-agent review fan-out ran against the full change set after Milestone 7. The
+established contracts were confirmed intentional and left as-is: an applier reports
+`applied` when the Override is in effect (not only when a byte changed — the CLI
+reports file-change counts separately), and `--category species`/`learnset` are raw
+single-tier runs that deliberately skip the create tier. The actionable findings
+below were fixed via TDD (8 new regression tests; 73 passing total).
 
 ### High Risk
 
+- Fixed: the loader silently dropped typo'd Overrides. A misspelled stat key
+  (`spee`) or move category (`phyiscal`) passed validation and then never landed,
+  violating the project's fail-fast / nothing-silently-dropped invariant. The
+  loader now validates stat keys against `STAT_KEYS` and move category against
+  `MOVE_CATEGORIES`, raising a clear error naming the bad value and file.
+- Fixed: the seed YAML writer left descriptions containing ` #...` unquoted, so
+  YAML parsed the `#` as a comment and silently truncated the value (real example:
+  `ruleset/moves/icefang.yaml`). The writer now quotes any scalar with a YAML
+  indicator lead character, an inline ` #`, or embedded quotes/backslashes, and the
+  re-seeded Ruleset preserves these descriptions in full.
+
 ### Medium Risk
+
+- Fixed: the C entry editor's brace/expression scanners counted `{`/`}`/`,` inside
+  C string literals, which could mis-slice an entry whose name or description holds
+  those characters (e.g. `_("Nidoran{F}")`). `c_edit` is now string-literal aware.
+- Fixed: the seed could silently overwrite one entity when two distinct sources
+  slug to the same `chrooked_id`; the seed now fails fast on a collision. (No
+  collision occurs in the real Dreamstone seed.)
+- Fixed: `creation._escape` now also escapes `\r`; `harvest` now imports a public
+  `species_yaml` instead of a private helper; added git-guard tests (dirty tree
+  blocks, `--force` bypasses, non-git target allowed by design).
+
+### Low Risk
+
+- Noted, not changed: `_diff_abilities` does not record a fork that zeroes an
+  ability slot back to `ABILITY_NONE` (treated as "no override"); acceptable for
+  v0. The `test_smoke_real_fork` path is hardcoded and skips when absent.
