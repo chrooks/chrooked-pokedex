@@ -73,6 +73,36 @@ def test_seed_skips_unchanged_species(tmp_path: Path) -> None:
     assert seed.species == {}
 
 
+def test_seed_excludes_gmax_forms(tmp_path: Path) -> None:
+    """Gigantamax forms are excluded even when the fork tuned them, so a re-seed
+    never resurrects gmax entries Chris has removed from the Ruleset."""
+    base, fork = tmp_path / "base", tmp_path / "fork"
+    _write_species_info(
+        base,
+        """\
+    [SPECIES_CHARIZARD_GMAX] =
+    {
+        .baseSpeed = 100,
+        .abilities = {ABILITY_BLAZE, ABILITY_NONE, ABILITY_SOLAR_POWER},
+    },
+""",
+    )
+    _write_species_info(
+        fork,
+        """\
+    [SPECIES_CHARIZARD_GMAX] =
+    {
+        .baseSpeed = 120,
+        .abilities = {ABILITY_BLAZE, ABILITY_NONE, ABILITY_DROUGHT},
+    },
+""",
+    )
+
+    seed = seed_from_fork(fork, base)
+
+    assert seed.species == {}  # the gmax change is dropped, not captured
+
+
 def test_seed_owns_changed_and_new_moves(tmp_path: Path) -> None:
     base, fork = tmp_path / "base", tmp_path / "fork"
     _write_moves_info(

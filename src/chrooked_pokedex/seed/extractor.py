@@ -140,11 +140,19 @@ def _insert_unique(result: dict, key: str, value, kind: str, source: str) -> Non
     result[key] = value
 
 
+def _is_gmax(constant: str) -> bool:
+    """Gigantamax forms are battle-only cosmetic forms Chris does not rule on.
+    They are excluded from the seed so a re-seed never re-creates their entries."""
+    return constant.endswith("_GMAX")
+
+
 def _seed_species(
     fork_species, base_species, fork_learnsets, base_learnsets, move_names, ability_names
 ):
     result: dict[str, SpeciesOverride] = {}
     for constant in sorted(fork_species):
+        if _is_gmax(constant):
+            continue
         fork_p = fork_species[constant]
         base_p = base_species.get(constant)
         base_fields = base_p.fields if base_p else {}
