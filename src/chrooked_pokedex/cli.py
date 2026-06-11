@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
+from .appliers.pokeemerald.learnset_apply import apply_learnsets
 from .appliers.pokeemerald.resolution import build_resolution_map
 from .appliers.pokeemerald.species_apply import apply_species
 from .model import Ruleset
@@ -21,7 +22,7 @@ from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
 _DEFAULT_RULESET = Path(__file__).resolve().parent.parent.parent / "ruleset"
-_APPLY_CATEGORIES = ("species",)
+_APPLY_CATEGORIES = ("species", "learnset")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -77,6 +78,9 @@ def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> i
     if "species" in categories:
         changed = apply_species(target, ruleset, resmap, report)
         print(f"species: {len(changed)} file(s) changed")
+    if "learnset" in categories:
+        changed = apply_learnsets(target, ruleset, resmap, report)
+        print(f"learnset: {len(changed)} file(s) changed")
 
     json_path = report.write(target / "apply-report.md")
     counts = report.counts()
