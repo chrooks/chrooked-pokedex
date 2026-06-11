@@ -1,0 +1,18 @@
+diff --git a/src/battle_util.c b/src/battle_util.c
+index 2db04cd633..d2630fda3d 100644
+--- a/src/battle_util.c
++++ b/src/battle_util.c
+@@ -10353,6 +10353,13 @@ bool32 CanMoveSkipAccuracyCalc(enum BattlerId battlerAtk, enum BattlerId battler
+         ability = ABILITY_NO_GUARD;
+         abilityBattler = battlerAtk;
+     }
++    // chrooked:innerfocus - The attacker's Inner Focus makes its Focus Blast never miss. Gated on the ATTACKER's own ability and only on Focus Blast, so Mold Breaker (a target-bypass) is irrelevant and no other move is affected.
++    else if (abilityAtk == ABILITY_INNER_FOCUS && move == MOVE_FOCUS_BLAST)
++    {
++        effect = TRUE;
++        ability = ABILITY_INNER_FOCUS;
++        abilityBattler = battlerAtk;
++    }
+     // If the target has the ability No Guard and they aren't involved in a Sky Drop or the current move isn't Sky Drop, move hits.
+     else if (abilityDef == ABILITY_NO_GUARD
+           && (moveEffect != EFFECT_SKY_DROP || gBattleStruct->skyDropTargets[battlerDef] == SKY_DROP_NO_TARGET))

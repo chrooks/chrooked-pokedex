@@ -68,9 +68,13 @@ pure and reproducible; the behavior path is agent-driven and test-gated.
   - loud DATA-ONLY apply warning when an ability with a behavior spec is created on a
     target that lacks its mechanic
   - `behaviors` CLI subcommand
-- **Slice 2 (next)** — drive the loop live: behavior-port agent implements Inner Focus
-  into a clean `pokeemerald-expansion@1.15.3`, compile, verify the three test cases;
-  capture the result as a reference implementation.
+- **Slice 2 (DONE)** — drove the loop live. A behavior-port agent, given only the packet,
+  implemented Inner Focus into a clean `pokeemerald-expansion@1.15.3`. It chose the
+  idiomatic `CanMoveSkipAccuracyCalc` Seam over the sibling fork's older inline `return
+  TRUE` — the spec + engine knowledge produced a *better* port than a blind patch-apply.
+  Static-verified 3/3 acceptance tests; compiled to a 32 MB ROM (`make modern`, exit 0).
+  Captured as `references/innerfocus.pokeemerald-expansion-1.15.3.patch` — the first entry
+  in the growing per-engine reference library (`references/README.md`).
 - **Slice 3 (later)** — reference-implementation library that grows per engine; author the
   remaining ~57 ability specs.
 
