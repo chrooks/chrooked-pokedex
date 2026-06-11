@@ -12,10 +12,16 @@ import argparse
 import sys
 from pathlib import Path
 
+from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
+from .appliers.pokeemerald.resolution import build_resolution_map
+from .appliers.pokeemerald.species_apply import apply_species
+from .model import Ruleset
+from .report import ApplyReport
 from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
 _DEFAULT_RULESET = Path(__file__).resolve().parent.parent.parent / "ruleset"
+_APPLY_CATEGORIES = ("species",)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -32,11 +38,55 @@ def main(argv: list[str] | None = None) -> int:
         help="Ruleset folder to write (default: repo ruleset/).",
     )
 
+    apply = sub.add_parser("apply", help="Write the Ruleset into a target fork.")
+    apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
+    apply.add_argument(
+        "--category",
+        choices=(*_APPLY_CATEGORIES, "all"),
+        default="all",
+        help="Which category to apply (default: all).",
+    )
+    apply.add_argument(
+        "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder to read."
+    )
+    apply.add_argument(
+        "--force", action="store_true", help="Apply even if the target git tree is dirty."
+    )
+
     args = parser.parse_args(argv)
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
+    if args.command == "apply":
+        return _run_apply(args.target, args.category, args.ruleset, args.force)
     parser.error(f"unknown command {args.command}")
     return 2
+
+
+def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> int:
+    try:
+        require_clean_git_status(target, force=force)
+    except DirtyWorkingTree as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+
+    ruleset = Ruleset.load(ruleset_dir)
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    categories = _APPLY_CATEGORIES if category == "all" else (category,)
+    if "species" in categories:
+        changed = apply_species(target, ruleset, resmap, report)
+        print(f"species: {len(changed)} file(s) changed")
+
+    json_path = report.write(target / "apply-report.md")
+    counts = report.counts()
+    print(
+        f"Apply Report: applied={counts['applied']} "
+        f"partial={counts['partial']} blocked={counts['blocked']}"
+    )
+    print(f"  {target / 'apply-report.md'}")
+    print(f"  {json_path}")
+    return 0
 
 
 def _run_seed(fork: Path, base: Path, ruleset_dir: Path) -> int:
