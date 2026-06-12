@@ -19,8 +19,34 @@ the full design and milestones.
 - `src/chrooked_pokedex/appliers/pokeemerald/` — Ruleset → C, plus the resolution map.
 - `src/chrooked_pokedex/report/` — the Apply Report writer.
 - `src/chrooked_pokedex/harvest/` — gated reverse sync (fork → proposed Ruleset edits).
+- `src/chrooked_pokedex/web/` — the local FastAPI app (Canon dex, CRUD, apply); a thin Interface over the core.
+- `frontend/` — the Vite + React single-page app served by `chrooked-pokedex ui`.
 
 ## Develop
 
     pip install -e ".[dev]"
     pytest
+
+## Web app
+
+The local app browses a **Canon dex** (the full national Pokédex with the Ruleset
+merged on top), edits the Ruleset, and applies it to a registered game.
+
+    pip install -e ".[dev,web]"
+
+    # 1. Freeze base 1.11.2 into the committed snapshot the Canon dex merges onto.
+    #    Deterministic — re-running on an unchanged base rewrites byte-identical JSON.
+    chrooked-pokedex snapshot --base ../ROMs/_scratch-expansion-1.11.2
+
+    # 2. Build the SPA (optional in dev — see below), then serve everything.
+    cd frontend && npm install && npm run build && cd ..
+    chrooked-pokedex ui            # http://127.0.0.1:8000  (API under /api)
+
+For frontend dev with hot reload, run the API and the Vite dev server side by side
+(Vite proxies `/api` to the FastAPI server):
+
+    chrooked-pokedex ui &          # serves the API on :8000
+    cd frontend && npm run dev     # serves the SPA on :5173
+
+The committed base snapshot lives at `ruleset/.base/1.11.2.json`; regenerate it
+with the `snapshot` subcommand only when the 1.11.2 base pin moves.
