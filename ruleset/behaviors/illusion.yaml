@@ -1,5 +1,5 @@
 # Behavior spec — human-owned. The seed never touches this folder.
-# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+# Grounded in Dreamstone (dreamstone-mysteries, 1.11.2) C. Do not guess; the C is cited in engine_hints.
 name: Illusion
 chrooked_id: illusion
 applies_to: ability
@@ -7,23 +7,27 @@ aka: { pokeemerald: ABILITY_ILLUSION }
 effects:
   - summary: "On entry, this Pokemon disguises itself as the last conscious Pokemon in its party."
     trigger: switch-in
-    when: "this Pokemon enters battle and a valid (non-self, non-partner) party member exists"
+    when: "this Pokemon enters battle and a valid (non-self, non-partner) last alive non-egg party member exists"
     effect: "display this Pokemon as that party member's species/name until the illusion breaks"
+  - summary: "While disguised, this Pokemon's moves hit 20% harder."
+    trigger: damage-calc
+    when: "this Pokemon's illusion is active (disguise is on and not yet broken)"
+    effect: "multiply this Pokemon's outgoing move damage by 1.2"
   - summary: "The illusion breaks when this Pokemon takes direct damage from an attack."
     trigger: on-hit
-    when: "this Pokemon is damaged by a damaging move (excluding substitute hits)"
-    effect: "reveal the true Pokemon (illusion is cleared)"
+    when: "this Pokemon is damaged by a damaging move this turn"
+    effect: "reveal the true Pokemon (illusion is cleared); the disguise damage boost no longer applies"
 test_cases:
   - given: "an Illusion Pokemon switches in with a different species last in the party"
     expect: "it appears on the field as that other species"
-  - given: "the disguised Illusion Pokemon is hit by a damaging move"
-    expect: "the illusion breaks and its true identity is shown"
-  - given: "the disguised Illusion Pokemon is hit only by an effect that deals no direct attack damage"
-    expect: "the illusion remains intact"
+  - given: "a disguised (illusion-active) Illusion Pokemon attacks"
+    expect: "its move deals ~20% more damage while the disguise is still up"
+  - given: "the disguised Illusion Pokemon is hit by a damaging move, then attacks next turn"
+    expect: "the illusion breaks on the hit, its true identity is shown, and the 1.2x damage boost no longer applies"
 notes:
-  - "FLAG — description mismatch: the prompt says Illusion '...and hits harder', i.e. a damage boost. The fork's C contains ONLY the standard mainline disguise mechanic (SetIllusionMon / TryClearIllusion / IllusionOff). There is NO Illusion case in any attacker damage modifier — no 'hits harder' boost is implemented. Do not add a damage boost unless the fork's C adds one."
-  - "Illusion is ignored if this Pokemon or its partner is the last party member (no other species to mimic)."
-  - "Certain Tera/forme species (Terapagos Stellar, Ogerpon Tera forms) are skipped as disguise targets."
+  - "The 'hits harder' boost is real in Dreamstone and gated strictly on illusion[battler].on && !illusion[battler].broken — once the disguise breaks, the 1.2x is gone."
+  - "Illusion is ignored if this Pokemon (or, in doubles, its partner) is the last alive party member — there is no other species to mimic, so neither disguise nor boost applies."
+  - "Disguise target is the last alive, non-egg, species-bearing party member found scanning from the back of the party."
 engine_hints:
-  pokeemerald: "Disguise setup SetIllusionMon, src/battle_util.c:9336; break on damage in on-hit ability effect, src/battle_util.c:4285 (state == ILLUSION_ON && IsBattlerTurnDamaged → BattleScript_IllusionOff). Overworld follower handling src/event_object_movement.c:5686. No damage-modifier case for ABILITY_ILLUSION exists."
-  essentials: "Use the engine's built-in Illusion (PBS ability flag) — disguise as last party member, clear on damage. Do NOT add a damage boost unless porting a changed C."
+  pokeemerald: "Disguise setup: SetIllusionMon src/battle_util.c:11610 (scans party back-to-front for last alive non-egg, non-self, non-partner mon; sets illusion[battler].on=1, .broken=0). Damage boost: src/battle_util.c:9744-9746 — case ABILITY_ILLUSION applies UQ_4_12(1.2) when illusion[battlerAtk].on && !illusion[battlerAtk].broken. Break on damage: src/battle_util.c:6091-6098 — case ABILITY_ILLUSION runs BattleScript_IllusionOff when illusion[target].on && !.broken && IsBattlerTurnDamaged(target)."
+  essentials: "Use the engine's Illusion (disguise as last party member, clear on damage), AND add a 1.2x outgoing-damage modifier that applies only while the disguise is active and unbroken."

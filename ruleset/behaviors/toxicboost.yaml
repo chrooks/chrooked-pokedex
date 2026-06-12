@@ -1,5 +1,5 @@
 # Behavior spec — human-owned. The seed never touches this folder.
-# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+# Grounded in Dreamstone (dreamstone-mysteries, 1.11.2) C. Do not guess; the C is cited in engine_hints.
 name: Toxic Boost
 chrooked_id: toxicboost
 applies_to: ability
@@ -7,19 +7,24 @@ aka: { pokeemerald: ABILITY_TOXIC_BOOST }
 effects:
   - summary: "Boosts physical move damage by 50% while poisoned."
     trigger: damage-calc
-    when: "this Pokemon is poisoned (regular or bad poison) and uses a physical move"
+    when: "this Pokemon is poisoned (regular or bad/toxic poison) and uses a physical move"
     effect: "multiply the physical move's damage by 1.5"
+  - summary: "Immune to its own poison damage."
+    trigger: turn-end
+    when: "this Pokemon is poisoned (regular or bad/toxic poison) at end of turn"
+    effect: "skip the end-of-turn poison residual damage entirely; this Pokemon takes no chip from its own poison"
 test_cases:
   - given: "a poisoned Toxic Boost Pokemon uses a physical move"
     expect: "the move deals 50% more damage"
-  - given: "a non-poisoned Toxic Boost Pokemon uses a physical move"
-    expect: "no damage boost applies"
   - given: "a poisoned Toxic Boost Pokemon uses a special move"
     expect: "no damage boost applies (physical only)"
+  - given: "a Toxic Boost Pokemon is badly poisoned and the turn ends"
+    expect: "it takes zero poison damage (immune to its own poison residual), while still keeping the Attack boost"
 notes:
-  - "FLAG — description mismatch: the prompt and several reference docs say Toxic Boost is 'immune to poison damage'. The fork's C does NOT implement poison-damage immunity; the in-game data description is only 'Ups Attack if poisoned.' Poison end-of-turn damage still applies. Do not implement the immunity unless the fork's C is changed to add it."
-  - "Triggers on STATUS1_PSN_ANY (regular poison and bad/toxic poison both qualify)."
-  - "Mainline-canonical Toxic Boost normally boosts +50% Attack stat; this fork applies it as a 1.5x physical-damage modifier (same shape as Flare Boost for special)."
+  - "The damage boost triggers on STATUS1_PSN_ANY — regular poison and bad/toxic poison both qualify."
+  - "Mainline-canonical Toxic Boost boosts the +50% Attack stat; this fork applies it as a 1.5x physical-damage modifier (same shape as Flare Boost for special)."
+  - "Poison immunity covers both regular poison (ENDTURN_POISON) and bad/toxic poison (ENDTURN_BAD_POISON), and also the overworld/field poison tick."
+  - "turn-end is the closest neutral trigger for the immunity — the engine simply does not deal the poison residual to a Toxic Boost holder."
 engine_hints:
-  pokeemerald: "Attacker-ability damage modifier, src/battle_util.c:6807 — UQ_4_12(1.5) when (status1 & STATUS1_PSN_ANY) && IsBattleMovePhysical(move). No poison-damage-immunity branch exists in the C."
-  essentials: "1.5x physical damage modifier gated on the user being poisoned. Do NOT add poison-damage immunity unless porting a changed C."
+  pokeemerald: "Damage boost: src/battle_util.c:9565-9568 — UQ_4_12(1.5) when (status1 & STATUS1_PSN_ANY) && IsBattleMovePhysical(move). Poison immunity: src/battle_util.c:2394 (ENDTURN_POISON) and :2423 (ENDTURN_BAD_POISON) both gate residual damage on `ability != ABILITY_TOXIC_BOOST`, so the residual is skipped. Overworld immunity: src/field_poison.c:136 (IsMonImmuneToFieldPoison returns TRUE for ABILITY_TOXIC_BOOST)."
+  essentials: "1.5x physical damage modifier while the user is poisoned, AND skip the end-of-turn poison residual for this Pokemon so it takes no damage from its own poison."
