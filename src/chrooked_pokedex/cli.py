@@ -15,6 +15,7 @@ from pathlib import Path
 from .appliers.essentials import (
     creation as essentials_creation,
     learnset_apply as essentials_learnset,
+    move_apply as essentials_moves,
     resolution as essentials_resolution,
     species_apply as essentials_species,
 )
@@ -22,6 +23,7 @@ from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
 from .appliers.pokeemerald.learnset_apply import apply_learnsets
+from .appliers.pokeemerald.move_apply import apply_moves
 from .appliers.pokeemerald.resolution import build_resolution_map
 from .appliers.pokeemerald.species_apply import apply_species
 from .appliers.pokeemerald.type_chart_apply import apply_type_chart
@@ -33,9 +35,11 @@ from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
 _DEFAULT_RULESET = Path(__file__).resolve().parent.parent.parent / "ruleset"
-# Apply resolves in dependency tiers: owned content is created first, then
-# species scalars, learnsets, evolutions, and finally the type chart.
-_APPLY_CATEGORIES = ("create", "species", "learnset", "evolution", "type-chart")
+# Apply resolves in dependency tiers: existing owned moves are retuned first, then
+# missing owned content is created, then species scalars, learnsets, evolutions, and
+# finally the type chart. Move-retune runs before create so each owned move is
+# handled by exactly one tier (edited when present, created when absent).
+_APPLY_CATEGORIES = ("moves", "create", "species", "learnset", "evolution", "type-chart")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -161,6 +165,9 @@ def _confirm(message: str) -> bool:
 def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport) -> None:
     resmap = build_resolution_map(target, ruleset)
     categories = _APPLY_CATEGORIES if category == "all" else (category,)
+    if "moves" in categories:
+        changed = apply_moves(target, ruleset, resmap, report)
+        print(f"moves: {len(changed)} file(s) changed")
     if "create" in categories:
         changed = create_owned_content(target, ruleset, resmap, report)
         print(f"create: {len(changed)} file(s) changed")
@@ -180,7 +187,7 @@ def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport
 
 # Essentials covers a subset of tiers in this slice; evolution and type-chart live
 # in different PBS files (in-section / types.txt) and are a deliberate follow-on.
-_ESSENTIALS_CATEGORIES = ("create", "species", "learnset")
+_ESSENTIALS_CATEGORIES = ("moves", "create", "species", "learnset")
 
 
 def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport) -> None:
@@ -188,6 +195,9 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
     # type-chart are not yet CLI choices and are a deliberate follow-on slice.
     resmap = essentials_resolution.build_resolution_map(target, ruleset)
     categories = _ESSENTIALS_CATEGORIES if category == "all" else (category,)
+    if "moves" in categories:
+        changed = essentials_moves.apply_moves(target, ruleset, resmap, report)
+        print(f"moves: {len(changed)} file(s) changed")
     if "create" in categories:
         changed = essentials_creation.create_owned_content(target, ruleset, resmap, report)
         print(f"create: {len(changed)} file(s) changed")

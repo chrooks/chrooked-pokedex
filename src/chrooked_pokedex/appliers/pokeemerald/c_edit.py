@@ -38,6 +38,17 @@ def find_species_entry(text: str, species_const: str) -> Optional[tuple[int, int
     return (pos, close)
 
 
+def find_entry(text: str, symbol: str) -> Optional[tuple[int, int]]:
+    """Find any brace-form `[SYMBOL] = { ... }` entry — species OR move.
+
+    The locator is symbol-agnostic; `find_species_entry` is the same logic named for
+    its first caller. The move tier reuses it on `moves_info.h`, which (like
+    `species_info.h`) holds a single designated-initializer array, so the first match
+    for a symbol is the right one. Returns None for an absent or macro-form entry.
+    """
+    return find_species_entry(text, symbol)
+
+
 def get_field(body: str, field: str) -> Optional[str]:
     """Return the raw expression of the first `.field` in an entry body, or None."""
     spans = _field_value_spans(body, field)

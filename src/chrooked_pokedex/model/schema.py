@@ -18,6 +18,10 @@ STAT_KEYS: tuple[str, ...] = ("hp", "atk", "def", "spa", "spd", "spe")
 # Move damage categories allowed in the Ruleset.
 MOVE_CATEGORIES: frozenset[str] = frozenset({"physical", "special", "status"})
 
+# The neutral primary effect of a plain damaging move — `MoveDef.effect` defaults to
+# this. Named so callers can test "is this just damage?" without a magic literal.
+DEFAULT_EFFECT: str = "hit"
+
 # Neutral move flags the Ruleset models. Several abilities key off these (e.g.
 # Infernal Maw boosts `biting` moves), so a dropped flag silently breaks a mechanic —
 # the loader validates against this closed set rather than letting a typo through.
@@ -103,7 +107,7 @@ class MoveDef:
     pp: Optional[int] = None
     description: str = ""
     aka: Mapping[str, object] = field(default_factory=dict)
-    effect: str = "hit"
+    effect: str = DEFAULT_EFFECT
     argument: Optional[Mapping[str, object]] = None
     additional_effects: tuple[AdditionalEffect, ...] = ()
     flags: tuple[str, ...] = ()
