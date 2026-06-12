@@ -51,3 +51,22 @@ _Avoid_: reverse-sync, import, pull.
 A copy of pokeemerald-expansion with changes layered on. `dreamstone-mysteries`
 is a Fork.
 _Avoid_: clone, branch, copy.
+
+**Target**:
+A specific game on disk that an Applier writes the Ruleset into — a Fork
+(pokeemerald engine) or a Pokémon Essentials fangame (essentials engine). Every
+Target carries an engine. The CLI calls this `--target`.
+_Avoid_: game, destination, fork (a Fork is one kind of Target, not a synonym).
+
+**Target registry**:
+The managed list of known Targets the frontend picks from — each a label, a path,
+and an engine, registered once and reused. The frontend's "explorer" is this
+registry, not a raw filesystem browser.
+_Avoid_: explorer, game list, picker.
+
+**Canon dex**:
+The full national Pokédex as the Ruleset sees it: the committed base 1.11.2
+snapshot with the Ruleset's Overrides merged on top. Game-independent; always
+renders. Distinct from a per-Target preview (a Target's own data with the Ruleset
+previewed on top, a no-write dry run of an apply).
+_Avoid_: pokedex, dex view, preview (a preview is the per-Target variant).
