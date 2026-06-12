@@ -61,14 +61,16 @@ def apply_moves(
             continue
 
         body = text[span[0] + 1 : span[1]]
-        new_body, changed_fields = _overlay(body, move, resmap)
-        if not changed_fields:
+        new_body, changed_fields, unresolved = _overlay(body, move, resmap)
+        if not changed_fields and not unresolved:
             continue  # already matches; nothing to do, nothing to report
 
         text = c_edit.replace_entry_body(text, span, new_body)
+        status = "partial" if unresolved else "applied"
         report.add(ReportEntry(
-            status="applied", category="move", chrooked_id=chrooked_id, symbol=symbol,
-            reason="retuned: " + ", ".join(changed_fields),
+            status=status, category="move", chrooked_id=chrooked_id, symbol=symbol,
+            reason="retuned: " + ", ".join(changed_fields) if changed_fields else "behavior review",
+            partial_fields=tuple(unresolved),
         ))
 
     if text != original:
@@ -77,10 +79,10 @@ def apply_moves(
     return set()
 
 
-def _overlay(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str]]:
+def _overlay(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str], list[str]]:
     body, changed = _overlay_scalars(body, move, resmap)
-    body, behavior_changed = _overlay_behavior(body, move, resmap)
-    return body, changed + behavior_changed
+    body, behavior_changed, unresolved = _overlay_behavior(body, move, resmap)
+    return body, changed + behavior_changed, unresolved
 
 
 def _overlay_scalars(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str]]:
@@ -109,13 +111,18 @@ def _overlay_scalars(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[s
     return body, changed
 
 
-def _overlay_behavior(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str]]:
+def _overlay_behavior(
+    body: str, move: MoveDef, resmap: ResolutionMap
+) -> tuple[str, list[str], list[str]]:
     """Overlay effect, target, argument, additional_effects, and the modeled flags.
 
     pokeemerald is the native engine: every modeled effect, target, and flag has a
-    direct C field, so there is nothing unmappable here — the overlay is always clean.
+    direct C field, so adds/updates are always clean. The one gap is removal of a
+    whole field block (argument, additionalEffects) the Ruleset dropped — not cleared
+    yet, so it is reported unresolved rather than left behind silently.
     """
     changed: list[str] = []
+    unresolved: list[str] = []
 
     desired_effect = move_render.effect_symbol(move)
     if c_edit.get_field(body, "effect") != desired_effect:
@@ -130,16 +137,20 @@ def _overlay_behavior(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[
         if _norm(c_edit.get_field(body, "argument")) != _norm(desired_arg):
             body = c_edit.set_field_all(body, "argument", desired_arg)
             changed.append("argument")
+    elif c_edit.get_field(body, "argument") is not None:
+        unresolved.append("argument:target has one the Ruleset dropped (not cleared)")
 
     if move.additional_effects:
         desired_ae = move_render.additional_effects_expr(move.additional_effects)
         if _norm(c_edit.get_field(body, "additionalEffects")) != _norm(desired_ae):
             body = c_edit.set_field_all(body, "additionalEffects", desired_ae)
             changed.append("additionalEffects")
+    elif c_edit.get_field(body, "additionalEffects") is not None:
+        unresolved.append("additionalEffects:target has one the Ruleset dropped (not cleared)")
 
     body, flag_changed = _overlay_flags(body, move)
     changed.extend(flag_changed)
-    return body, changed
+    return body, changed, unresolved
 
 
 def _overlay_target(body: str, move: MoveDef) -> tuple[str, list[str]]:

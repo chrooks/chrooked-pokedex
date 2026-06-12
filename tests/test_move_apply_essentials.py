@@ -155,6 +155,30 @@ def test_all_modeled_flags_removed_does_not_leave_stale(tmp_path):
     assert "Contact" not in flags and "Biting" not in flags  # both modeled, removed
 
 
+def test_stale_effect_chance_reported_after_functioncode_change(tmp_path):
+    # Target Tackle carries a secondary (BurnTarget + EffectChance=10). The Ruleset
+    # changes it to a chance-less effect (OHKO); the lingering EffectChance is stale
+    # and must be REPORTED, not silently left to modulate the new code.
+    target = _target(tmp_path)
+    moves = (target / "PBS" / "moves.txt")
+    moves.write_text(moves.read_text(encoding="utf-8").replace(
+        "[TACKLE]\nName = Tackle\nType = NORMAL\nCategory = Physical\nPower = 40\nAccuracy = 100\nTotalPP = 35\nFlags = Contact,CanProtect",
+        "[TACKLE]\nName = Tackle\nType = NORMAL\nCategory = Physical\nPower = 40\nAccuracy = 100\nTotalPP = 35\nFunctionCode = BurnTarget\nEffectChance = 10\nFlags = Contact,CanProtect",
+    ), encoding="utf-8")
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35, effect="ohko",
+                     flags=("contact",), aka={"essentials": "TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    assert _field(target, "TACKLE", "FunctionCode") == "OHKO"
+    entry = [e for e in report.entries if e.chrooked_id == "tackle"][0]
+    assert entry.status == "partial"
+    assert any("EffectChance" in f for f in entry.partial_fields)
+
+
 def test_unmappable_flag_noted(tmp_path):
     target = _target(tmp_path)
     tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",

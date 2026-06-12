@@ -189,6 +189,40 @@ def test_additional_effects_overlay(tmp_path):
     assert ".moveEffect = MOVE_EFFECT_BURN, .chance = 10" in entry
 
 
+def test_stale_additional_effects_reported_not_silently_kept(tmp_path):
+    # Target Tackle has a secondary; the Ruleset drops it. We can't cleanly clear the
+    # macro yet, so it must be REPORTED (partial), never silently left behind.
+    moves = (
+        "const struct MoveInfo gMovesInfo[] = {\n"
+        "    [MOVE_TACKLE] =\n    {\n"
+        '        .name = COMPOUND_STRING("Tackle"),\n'
+        "        .effect = EFFECT_HIT,\n"
+        "        .type = TYPE_NORMAL,\n        .power = 40,\n"
+        "        .accuracy = 100,\n        .pp = 35,\n"
+        "        .category = DAMAGE_CATEGORY_PHYSICAL,\n"
+        "        .additionalEffects = ADDITIONAL_EFFECTS({ .moveEffect = MOVE_EFFECT_POISON, .chance = 30 }),\n"
+        "    },\n};\n"
+    )
+    target = tmp_path / "fork"
+    d = target / "src" / "data"
+    d.mkdir(parents=True)
+    (d / "moves_info.h").write_text(moves, encoding="utf-8")
+
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     aka={"pokeemerald": "MOVE_TACKLE"})  # no additional_effects
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    entry = [e for e in report.entries if e.chrooked_id == "tackle"][0]
+    assert entry.status == "partial"
+    assert any("additionalEffects" in f for f in entry.partial_fields)
+    # and it is genuinely still in the file (not silently dropped, not corrupted)
+    assert "MOVE_EFFECT_POISON" in _moves_text(target)
+
+
 def test_argument_overlay(tmp_path):
     target = _target(tmp_path)
     tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Steel",

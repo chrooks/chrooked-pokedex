@@ -95,15 +95,26 @@ def _overlay(
     # wipe a legitimate target FunctionCode. An unportable effect is likewise left
     # intact (and noted). Only a specific code (BurnTarget, OHKO, ...) is authoritative.
     code, chance = move_render.function_code(move, unresolved)
+    chanceless_code = False
     if code is not None and code != vocab.NO_FUNCTION_CODE:
         desired["FunctionCode"] = code
         if chance is not None:
             desired["EffectChance"] = str(chance)
+        else:
+            chanceless_code = True
 
     for key, value in desired.items():
         text, did = _set_if_differs(text, symbol, key, value)
         if did:
             changed.append(key)
+
+    # We set a FunctionCode that carries no chance, but the target still has an
+    # EffectChance from its old effect — stale. Clearing a PBS line isn't supported
+    # yet, so report it rather than leave it to modulate the new code silently.
+    if chanceless_code and "EffectChance" not in desired:
+        span = pbs_edit.find_section(text, symbol)
+        if span is not None and pbs_edit.get_field(text[span[0]:span[1]], "EffectChance") is not None:
+            unresolved.append("EffectChance:stale after effect change (not cleared)")
 
     text, target_changed = _overlay_target(text, symbol, move)
     changed.extend(target_changed)
