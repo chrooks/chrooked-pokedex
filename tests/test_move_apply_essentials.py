@@ -31,6 +31,7 @@ Category = Physical
 Power = 40
 Accuracy = 100
 TotalPP = 35
+Flags = Contact,CanProtect
 """
 
 _TYPES = "[FLYING]\nName = Flying\n[NORMAL]\nName = Normal\n[FIGHTING]\nName = Fighting\n"
@@ -54,8 +55,7 @@ def _field(target: Path, header: str, key: str) -> str | None:
 def test_retuned_power_lands_and_reported(tmp_path):
     target = _target(tmp_path)
     fly = MoveDef(name="Fly", chrooked_id="fly", type="Flying", category="physical",
-                  power=95, accuracy=95, pp=15, effect="semi_invulnerable",
-                  aka={"essentials": "FLY"})
+                  power=95, accuracy=95, pp=15, aka={"essentials": "FLY"})  # default 'hit'
     ruleset = Ruleset(moves={"fly": fly})
     resmap = build_resolution_map(target, ruleset)
     report = ApplyReport()
@@ -67,6 +67,105 @@ def test_retuned_power_lands_and_reported(tmp_path):
     entry = [e for e in report.entries if e.chrooked_id == "fly"][0]
     assert entry.status == "applied"
     assert "Power" in entry.reason
+
+
+def test_plain_hit_does_not_clobber_target_functioncode(tmp_path):
+    # The Ruleset's 'hit' (a pokeemerald notion) must NOT wipe a real Essentials code.
+    target = _target(tmp_path)
+    fly = MoveDef(name="Fly", chrooked_id="fly", type="Flying", category="physical",
+                  power=95, accuracy=95, pp=15, aka={"essentials": "FLY"})
+    ruleset = Ruleset(moves={"fly": fly})
+    resmap = build_resolution_map(target, ruleset)
+    apply_moves(target, ruleset, resmap, ApplyReport())
+    assert _field(target, "FLY", "FunctionCode") == "TwoTurnAttackInvulnerableInSky"
+
+
+def test_unportable_effect_left_intact_and_noted(tmp_path):
+    target = _target(tmp_path)
+    fly = MoveDef(name="Fly", chrooked_id="fly", type="Flying", category="physical",
+                  power=95, accuracy=95, pp=15, effect="semi_invulnerable",
+                  aka={"essentials": "FLY"})
+    ruleset = Ruleset(moves={"fly": fly})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    entry = [e for e in report.entries if e.chrooked_id == "fly"][0]
+    assert entry.status == "partial"
+    assert any("effect:semi_invulnerable" in f for f in entry.partial_fields)
+    assert _field(target, "FLY", "Power") == "95"  # the portable part still lands
+    assert _field(target, "FLY", "FunctionCode") == "TwoTurnAttackInvulnerableInSky"
+
+
+def test_mappable_effect_overlays_functioncode(tmp_path):
+    target = _target(tmp_path)
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35, effect="ohko",
+                     flags=("contact",), aka={"essentials": "TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    apply_moves(target, ruleset, resmap, ApplyReport())
+    assert _field(target, "TACKLE", "FunctionCode") == "OHKO"
+
+
+def test_secondary_effect_overlays_functioncode_and_chance(tmp_path):
+    from chrooked_pokedex.model.schema import AdditionalEffect
+    target = _target(tmp_path)
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     flags=("contact",),
+                     additional_effects=(AdditionalEffect(effect="burn", chance=10),),
+                     aka={"essentials": "TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    apply_moves(target, ruleset, resmap, ApplyReport())
+    assert _field(target, "TACKLE", "FunctionCode") == "BurnTarget"
+    assert _field(target, "TACKLE", "EffectChance") == "10"
+
+
+def test_flags_reconcile_preserves_unmodeled(tmp_path):
+    # Tackle has Flags = Contact,CanProtect. Ruleset sets biting (not contact):
+    # Contact (modeled, not wanted) drops, CanProtect (unmodeled) stays, Biting adds.
+    target = _target(tmp_path)
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     flags=("biting",), aka={"essentials": "TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    apply_moves(target, ruleset, resmap, ApplyReport())
+    flags = _field(target, "TACKLE", "Flags").split(",")
+    assert "CanProtect" in flags   # unmodeled preserved
+    assert "Biting" in flags       # added
+    assert "Contact" not in flags  # modeled, no longer set -> removed
+
+
+def test_all_modeled_flags_removed_does_not_leave_stale(tmp_path):
+    # A move whose flags are all modeled, dropped by the Ruleset, must not keep them.
+    target = _target(tmp_path)
+    moves = (target / "PBS" / "moves.txt")
+    moves.write_text(moves.read_text(encoding="utf-8").replace(
+        "Flags = Contact,CanProtect", "Flags = Contact,Biting"), encoding="utf-8")
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35, flags=(),
+                     aka={"essentials": "TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    apply_moves(target, ruleset, resmap, ApplyReport())
+    flags = (_field(target, "TACKLE", "Flags") or "").strip()
+    assert "Contact" not in flags and "Biting" not in flags  # both modeled, removed
+
+
+def test_unmappable_flag_noted(tmp_path):
+    target = _target(tmp_path)
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     flags=("bone",), aka={"essentials": "TACKLE"})  # no Essentials flag
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    apply_moves(target, ruleset, resmap, report)
+    entry = [e for e in report.entries if e.chrooked_id == "tackle"][0]
+    assert any("flag:bone" in f for f in entry.partial_fields)
 
 
 def test_unchanged_move_no_entry_no_churn(tmp_path):

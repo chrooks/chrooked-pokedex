@@ -34,6 +34,11 @@ _FLAG = {
     "wind": "Wind",
 }
 
+# The Essentials flag names the Ruleset models. When move_apply reconciles an
+# existing move's Flags line it touches only these, leaving the engine's own
+# unmodeled flags (CanProtect, CanMirrorMove, HighCriticalHitRate, …) intact.
+MODELED_FLAG_NAMES: frozenset[str] = frozenset(_FLAG.values())
+
 # Neutral PRIMARY effect -> Essentials FunctionCode. These are standard moves whose
 # mechanic exists natively in both engines under different names, so they port as
 # data. Names are taken from Maruno17's PBS. An effect with no native Essentials

@@ -117,6 +117,17 @@ def _insert_field(body: str, field: str, value: str) -> str:
     return body[:newline] + insertion + body[newline:]
 
 
+def remove_field(body: str, field: str) -> str:
+    """Remove a single-line `.field = ...,` line from an entry body (first match).
+
+    Used to clear a boolean flag the Ruleset no longer sets. Intended for single-line
+    fields (`.bitingMove = TRUE,`); the whole line, including its leading newline, is
+    dropped. A no-op when the field is absent.
+    """
+    pattern = re.compile(r"\n[ \t]*\.\s*" + re.escape(field) + r"\s*=\s*[^\n]*")
+    return pattern.sub("", body, count=1)
+
+
 def replace_entry_body(text: str, span: tuple[int, int], new_body: str) -> str:
     """Replace the brace body (exclusive of braces) at the given span."""
     open_brace, close_brace = span

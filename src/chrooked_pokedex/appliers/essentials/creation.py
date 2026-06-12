@@ -22,7 +22,7 @@ from ...model import Ruleset
 from ...model.schema import AbilityDef, MoveDef
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import normalize_description
-from . import pbs_edit, pbs_read, vocab
+from . import move_render, pbs_edit, pbs_read, vocab
 from .resolution import ResolutionMap
 
 
@@ -122,7 +122,10 @@ def _ability_block(internal: str, ability: AbilityDef) -> str:
 
 def _move_block(internal: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str]]:
     unresolved: list[str] = []
-    function_code, effect_chance = _function_code(move, unresolved)
+    # A new move with no portable FunctionCode still needs a valid line, so default
+    # the unmappable case to "None" (the move at least exists and deals damage).
+    code, effect_chance = move_render.function_code(move, unresolved)
+    function_code = code if code is not None else vocab.NO_FUNCTION_CODE
 
     type_internal = resmap.type(move.type)
     if type_internal is None:
@@ -145,7 +148,7 @@ def _move_block(internal: str, move: MoveDef, resmap: ResolutionMap) -> tuple[st
     if move.priority:
         lines.append(f"Priority = {move.priority}")
 
-    flags = _flags(move, unresolved)
+    flags = move_render.flag_names(move, unresolved)
     if flags:
         lines.append(f"Flags = {','.join(flags)}")
     if effect_chance is not None:
@@ -154,44 +157,6 @@ def _move_block(internal: str, move: MoveDef, resmap: ResolutionMap) -> tuple[st
         lines.append(f"Description = {normalize_description(move.description)}")
 
     return "\n".join(lines) + "\n", unresolved
-
-
-def _function_code(move: MoveDef, unresolved: list[str]) -> tuple[str, int | None]:
-    """Resolve a move's effect to an Essentials FunctionCode + EffectChance.
-
-    Essentials carries one FunctionCode per move, so a plain `hit` becomes `None`
-    and a single secondary effect (burn, paralysis, ...) becomes its named code with
-    a chance. A scripted primary effect, or anything beyond one mappable secondary,
-    is noted unresolved and left as `None` rather than mistranslated."""
-    base = vocab.function_code(move.effect)
-    if base is None:
-        unresolved.append(f"effect:{move.effect}")
-        base = vocab.NO_FUNCTION_CODE
-
-    effect_chance: int | None = None
-    if move.additional_effects:
-        first = move.additional_effects[0]
-        code = vocab.additional_function_code(first.effect)
-        if code is not None and base == vocab.NO_FUNCTION_CODE:
-            base = code
-            effect_chance = first.chance
-        else:
-            unresolved.append(f"effect:{first.effect}")
-        for extra in move.additional_effects[1:]:
-            unresolved.append(f"effect:{extra.effect}(extra)")
-
-    return base, effect_chance
-
-
-def _flags(move: MoveDef, unresolved: list[str]) -> list[str]:
-    flags: list[str] = []
-    for flag in move.flags:
-        mapped = vocab.flag(flag)
-        if mapped is None:
-            unresolved.append(f"flag:{flag}")
-        else:
-            flags.append(mapped)
-    return flags
 
 
 def _internal(aka, key: str, name: str) -> str:

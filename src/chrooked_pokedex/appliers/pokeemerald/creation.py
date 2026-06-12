@@ -21,8 +21,8 @@ from pathlib import Path
 from ...model import Ruleset
 from ...model.schema import AbilityDef, MoveDef
 from ...report import ApplyReport, ReportEntry
-from ...seed import neutralize as nz
 from ...seed.neutralize import normalize_description
+from . import move_render
 from .resolution import ResolutionMap
 
 _CATEGORY_TO_SYMBOL = {
@@ -193,7 +193,7 @@ def _move_entry(symbol: str, move: MoveDef, resmap: ResolutionMap) -> str:
     if move.description:
         safe = normalize_description(move.description)
         lines.append(f'        .description = COMPOUND_STRING("{_escape(safe)}"),')
-    lines.append(f"        .effect = {nz.primary_effect_symbol(move.effect)},")
+    lines.append(f"        .effect = {move_render.effect_symbol(move)},")
     lines.append(f"        .type = {type_symbol},")
     lines.append(f"        .category = {category},")
     if move.power is not None:
@@ -204,39 +204,15 @@ def _move_entry(symbol: str, move: MoveDef, resmap: ResolutionMap) -> str:
         lines.append(f"        .pp = {move.pp},")
     if move.priority:
         lines.append(f"        .priority = {move.priority},")
-    lines.append(f"        .target = {nz.move_target_symbol(move.target)},")
+    lines.append(f"        .target = {move_render.target_symbol(move)},")
     if move.argument:
-        lines.append(f"        .argument = {{ {_render_argument(move.argument, resmap)} }},")
-    for flag in move.flags:
-        symbol_flag = nz.move_flag_symbol(flag)
-        if symbol_flag is not None:
-            lines.append(f"        .{symbol_flag} = TRUE,")
+        lines.append(f"        .argument = {move_render.argument_braced(move.argument, resmap)},")
+    for symbol_flag in move_render.flag_fields(move):
+        lines.append(f"        .{symbol_flag} = TRUE,")
     if move.additional_effects:
-        lines.append("        .additionalEffects = ADDITIONAL_EFFECTS(")
-        rendered = [
-            "            { .moveEffect = "
-            + nz.move_effect_symbol(ae.effect)
-            + f", .chance = {ae.chance} }}"
-            for ae in move.additional_effects
-        ]
-        lines.append(",\n".join(rendered))
-        lines.append("        ),")
+        lines.append(f"        .additionalEffects = {move_render.additional_effects_expr(move.additional_effects)},")
     lines.append("    },")
     return "\n".join(lines) + "\n"
-
-
-def _render_argument(argument, resmap: ResolutionMap) -> str:
-    """Render a neutral argument map back to C, e.g. {'type': 'Dragon'} ->
-    `.type = TYPE_DRAGON`; `{'absorb_percentage': 50}` -> `.absorbPercentage = 50`."""
-    parts = []
-    for field, value in argument.items():
-        camel = nz.snake_to_camel(field)
-        if isinstance(value, int):
-            rendered = str(value)
-        else:  # a string argument is a type in practice (e.g. super-effective-on-type)
-            rendered = resmap.type(value) or ("TYPE_" + str(value).upper().replace(" ", "_"))
-        parts.append(f".{camel} = {rendered}")
-    return ", ".join(parts)
 
 
 def _escape(text: str) -> str:

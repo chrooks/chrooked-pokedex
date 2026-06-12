@@ -35,8 +35,16 @@ _MOVES = """\
         .accuracy = 100,
         .pp = 35,
         .category = DAMAGE_CATEGORY_PHYSICAL,
+        .makesContact = TRUE,
     },
 """
+
+
+def _entry(target: Path, symbol: str) -> str:
+    from chrooked_pokedex.appliers.pokeemerald import c_edit
+    text = _moves_text(target)
+    span = c_edit.find_entry(text, symbol)
+    return text[span[0]:span[1]]
 
 
 def _target(tmp_path: Path) -> Path:
@@ -116,17 +124,82 @@ def test_type_and_category_retune_lands(tmp_path):
     assert ".category = DAMAGE_CATEGORY_SPECIAL," in text
 
 
-def test_behavior_fields_noted_when_present(tmp_path):
-    # A retuned move that also carries a non-hit effect is reported, with a note that
-    # behavior fields are not overlaid by this scalar tier (visible, not silent).
+def test_effect_overlay_lands(tmp_path):
     target = _target(tmp_path)
-    fly = MoveDef(name="Fly", chrooked_id="fly", type="Flying", category="physical",
-                  power=100, accuracy=95, pp=15, effect="semi_invulnerable",
-                  aka={"pokeemerald": "MOVE_FLY"})
-    ruleset = Ruleset(moves={"fly": fly})
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     effect="multi_hit", flags=("contact",),
+                     aka={"pokeemerald": "MOVE_TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
     resmap = build_resolution_map(target, ruleset)
     report = ApplyReport()
 
     apply_moves(target, ruleset, resmap, report)
-    entry = [e for e in report.entries if e.chrooked_id == "fly"][0]
-    assert "behavior" in entry.reason.lower()
+    assert ".effect = EFFECT_MULTI_HIT," in _entry(target, "MOVE_TACKLE")
+    assert "effect" in report.entries[0].reason
+
+
+def test_flag_add_keeps_existing_and_adds_new(tmp_path):
+    target = _target(tmp_path)
+    # Tackle already makesContact; add biting, keep contact.
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     flags=("contact", "biting"), aka={"pokeemerald": "MOVE_TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    entry = _entry(target, "MOVE_TACKLE")
+    assert ".bitingMove = TRUE," in entry      # added
+    assert ".makesContact = TRUE," in entry    # preserved
+
+
+def test_flag_remove_when_ruleset_drops_it(tmp_path):
+    target = _target(tmp_path)
+    # Ruleset Tackle sets no flags -> the modeled makesContact flag is removed.
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35, flags=(),
+                     aka={"pokeemerald": "MOVE_TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    entry = _entry(target, "MOVE_TACKLE")
+    assert ".makesContact" not in entry
+    assert any("-makesContact" in f for f in [report.entries[0].reason])
+
+
+def test_additional_effects_overlay(tmp_path):
+    target = _target(tmp_path)
+    from chrooked_pokedex.model.schema import AdditionalEffect
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     flags=("contact",),
+                     additional_effects=(AdditionalEffect(effect="burn", chance=10),),
+                     aka={"pokeemerald": "MOVE_TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    entry = _entry(target, "MOVE_TACKLE")
+    assert ".additionalEffects = ADDITIONAL_EFFECTS(" in entry
+    assert ".moveEffect = MOVE_EFFECT_BURN, .chance = 10" in entry
+
+
+def test_argument_overlay(tmp_path):
+    target = _target(tmp_path)
+    tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Steel",
+                     category="physical", power=40, accuracy=100, pp=35,
+                     effect="super_effective_on_arg", argument={"type": "Dragon"},
+                     flags=("contact",), aka={"pokeemerald": "MOVE_TACKLE"})
+    ruleset = Ruleset(moves={"tackle": tackle})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    apply_moves(target, ruleset, resmap, report)
+    entry = _entry(target, "MOVE_TACKLE")
+    assert ".effect = EFFECT_SUPER_EFFECTIVE_ON_ARG," in entry
+    assert ".argument = { .type = TYPE_DRAGON }," in entry

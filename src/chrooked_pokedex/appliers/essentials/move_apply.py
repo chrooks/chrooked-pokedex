@@ -1,18 +1,22 @@
-"""Apply scalar retunes to moves the target already has (PBS side).
+"""Apply retunes to moves the target already has — scalars AND behavior (PBS side).
 
 The Essentials counterpart of the pokeemerald move tier: a move the fork merely
-retuned is owned but already present, so creation skips it. Without this tier the
-retune would land nowhere and never show in the Apply Report — a silent drop.
+changed is owned but already present, so creation skips it. Without this tier the
+change would land nowhere and never show in the Apply Report — a silent drop.
 
-It overlays the scalar fields — Type, Category, Power, Accuracy, TotalPP, Priority —
+It overlays the scalar fields (Type, Category, Power, Accuracy, TotalPP, Priority)
+and the behavior fields (FunctionCode + EffectChance, Target, and the modeled Flags)
 onto the existing `[INTERNAL]` section, diff-based: only a field that differs is
-rewritten, so an already-matching move makes no change and no report line. An
-unresolvable Type is reported (partial) and the existing value is left intact rather
-than overwritten with a bad token. Behavior fields are not overlaid here; a touched
-move that carries one is noted so the boundary stays visible.
+rewritten.
 
-Runs before creation so each owned move is edited (present) or created (absent),
-never both.
+Honesty over mistranslation: an unresolvable Type or an effect with no Essentials
+FunctionCode is left intact (never overwritten with a bad token or with "None") and
+reported as unresolved. Because some real moves carry permanently-unportable behavior
+(Fly's two-turn effect), such a move shows as partial with that note even when nothing
+else changed — a standing list of moves whose behavior the data layer cannot express,
+not noise. Flags reconcile only the modeled flag names, preserving the engine's own.
+
+Runs before creation so each owned move is edited (present) or created (absent).
 """
 
 from __future__ import annotations
@@ -20,9 +24,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from ...model import Ruleset
-from ...model.schema import DEFAULT_EFFECT, MoveDef
+from ...model.schema import MoveDef
 from ...report import ApplyReport, ReportEntry
-from . import pbs_edit, vocab
+from . import move_render, pbs_edit, vocab
 from .resolution import ResolutionMap
 
 
@@ -66,7 +70,6 @@ def apply_moves(
 def _overlay(
     text: str, symbol: str, move: MoveDef, resmap: ResolutionMap
 ) -> tuple[str, list[str], list[str]]:
-    """Set each scalar field only when it differs; never write an unresolvable Type."""
     changed: list[str] = []
     unresolved: list[str] = []
 
@@ -86,18 +89,78 @@ def _overlay(
         # priority defaults to 0; overlay only a non-zero value (matches creation).
         desired["Priority"] = str(move.priority)
 
+    # FunctionCode: overlay ONLY a concretely-mapped code (a real effect/secondary).
+    # A plain `hit` maps to "None", but the Ruleset's effect is seeded from pokeemerald
+    # — "hit" there does not mean "no Essentials behavior", so writing "None" would
+    # wipe a legitimate target FunctionCode. An unportable effect is likewise left
+    # intact (and noted). Only a specific code (BurnTarget, OHKO, ...) is authoritative.
+    code, chance = move_render.function_code(move, unresolved)
+    if code is not None and code != vocab.NO_FUNCTION_CODE:
+        desired["FunctionCode"] = code
+        if chance is not None:
+            desired["EffectChance"] = str(chance)
+
     for key, value in desired.items():
-        span = pbs_edit.find_section(text, symbol)
-        if span is None:
-            break  # section vanished mid-loop (cannot happen — outer checked); be safe
-        if pbs_edit.get_field(text[span[0]:span[1]], key) != value:
-            text = pbs_edit.set_section_field(text, symbol, key, value)
+        text, did = _set_if_differs(text, symbol, key, value)
+        if did:
             changed.append(key)
+
+    text, target_changed = _overlay_target(text, symbol, move)
+    changed.extend(target_changed)
+    text, flag_changed = _overlay_flags(text, symbol, move, unresolved)
+    changed.extend(flag_changed)
     return text, changed, unresolved
 
 
+def _overlay_target(text: str, symbol: str, move: MoveDef) -> tuple[str, list[str]]:
+    """Set Target, but don't insert NearOther onto a default-target move that omits
+    the field (real Essentials moves carry Target, so this only guards odd inputs)."""
+    span = pbs_edit.find_section(text, symbol)
+    if span is None:
+        return text, []
+    current = pbs_edit.get_field(text[span[0]:span[1]], "Target")
+    desired = vocab.target(move.target)
+    if current is not None:
+        if current != desired:
+            return pbs_edit.set_section_field(text, symbol, "Target", desired), ["Target"]
+    elif move.target != "selected":
+        return pbs_edit.set_section_field(text, symbol, "Target", desired), ["Target"]
+    return text, []
+
+
+def _overlay_flags(
+    text: str, symbol: str, move: MoveDef, unresolved: list[str]
+) -> tuple[str, list[str]]:
+    """Reconcile the modeled Flags only: drop a modeled flag the Ruleset no longer
+    sets, add the ones it does, and keep the engine's own unmodeled flags in place."""
+    desired = move_render.flag_names(move, unresolved)
+    span = pbs_edit.find_section(text, symbol)
+    if span is None:
+        return text, []
+    current_raw = pbs_edit.get_field(text[span[0]:span[1]], "Flags")
+    current = [f.strip() for f in current_raw.split(",")] if current_raw else []
+
+    new = [f for f in current if f not in vocab.MODELED_FLAG_NAMES or f in desired]
+    for f in desired:
+        if f not in new:
+            new.append(f)
+
+    if new != current:
+        # Write even when `new` is empty (every modeled flag was dropped and no
+        # unmodeled flag remains) — otherwise stale flags would silently survive.
+        text = pbs_edit.set_section_field(text, symbol, "Flags", ",".join(new))
+        return text, ["Flags"]
+    return text, []
+
+
+def _set_if_differs(text: str, symbol: str, key: str, value: str) -> tuple[str, bool]:
+    span = pbs_edit.find_section(text, symbol)
+    if span is None:
+        return text, False  # section vanished mid-loop (cannot happen — outer checked)
+    if pbs_edit.get_field(text[span[0]:span[1]], key) == value:
+        return text, False
+    return pbs_edit.set_section_field(text, symbol, key, value), True
+
+
 def _reason(move: MoveDef, changed_fields: list[str]) -> str:
-    reason = "retuned: " + ", ".join(changed_fields) if changed_fields else "no scalar change"
-    if move.effect != DEFAULT_EFFECT or move.flags or move.additional_effects:
-        reason += " (behavior fields effect/flags/secondary not overlaid by this tier)"
-    return reason
+    return "retuned: " + ", ".join(changed_fields) if changed_fields else "behavior not fully portable"
