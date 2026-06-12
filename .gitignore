@@ -8,3 +8,13 @@ dist/
 .venv/
 venv/
 .DS_Store
+
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# Target registry — machine-specific game paths, not canon
+.chrooked/targets.json
