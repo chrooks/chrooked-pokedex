@@ -36,7 +36,10 @@ from .report import ApplyReport
 from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
-_DEFAULT_RULESET = Path(__file__).resolve().parent.parent.parent / "ruleset"
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+_DEFAULT_RULESET = _REPO_ROOT / "ruleset"
+_DEFAULT_SNAPSHOT = _DEFAULT_RULESET / ".base" / "1.11.2.json"
+_DEFAULT_DIST = _REPO_ROOT / "frontend" / "dist"
 # Apply resolves in dependency tiers: existing owned moves are retuned first, then
 # missing owned content is created, then species scalars, learnsets, evolutions, and
 # finally the type chart. Move-retune runs before create so each owned move is
@@ -107,7 +110,37 @@ def main(argv: list[str] | None = None) -> int:
         help="Engine whose hint to surface in the packet (e.g. pokeemerald, essentials).",
     )
 
+    snapshot = sub.add_parser(
+        "snapshot", help="Freeze a base checkout into the committed dex snapshot JSON."
+    )
+    snapshot.add_argument(
+        "--base", required=True, type=Path, help="Path to the base 1.11.2 checkout."
+    )
+    snapshot.add_argument(
+        "--out",
+        type=Path,
+        default=_DEFAULT_SNAPSHOT,
+        help="Snapshot file to write (default: ruleset/.base/1.11.2.json).",
+    )
+
+    ui = sub.add_parser("ui", help="Serve the local web app (FastAPI + built React).")
+    ui.add_argument("--host", default="127.0.0.1", help="Bind host (default: 127.0.0.1).")
+    ui.add_argument("--port", type=int, default=8000, help="Bind port (default: 8000).")
+    ui.add_argument(
+        "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder to serve."
+    )
+    ui.add_argument(
+        "--snapshot",
+        type=Path,
+        default=_DEFAULT_SNAPSHOT,
+        help="Base snapshot JSON to merge against.",
+    )
+
     args = parser.parse_args(argv)
+    if args.command == "snapshot":
+        return _run_snapshot(args.base, args.out)
+    if args.command == "ui":
+        return _run_ui(args.host, args.port, args.ruleset, args.snapshot)
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
     if args.command == "apply":
@@ -294,6 +327,58 @@ def _verify_base_version(base: Path) -> None:
             "Seeding against the wrong base fabricates phantom overrides.",
             file=sys.stderr,
         )
+
+
+def _run_snapshot(base: Path, out: Path) -> int:
+    """Freeze base 1.11.2 into the committed dex snapshot. Deterministic: a re-run
+    on an unchanged base rewrites byte-identical JSON, so `git status` stays clean."""
+    from .web import snapshot as web_snapshot
+
+    _verify_base_version(base)
+    data = web_snapshot.build_snapshot(base)
+    path = web_snapshot.write_snapshot(data, out)
+    print(f"Wrote base snapshot: {path}")
+    print(f"  species: {len(data['species'])}")
+    return 0
+
+
+def _run_ui(host: str, port: int, ruleset_dir: Path, snapshot_path: Path) -> int:
+    """Serve the local web app. Imports of the web extra are deferred so the other
+    subcommands work without `fastapi`/`uvicorn` installed."""
+    try:
+        import uvicorn
+
+        from .web.app import create_app
+    except ModuleNotFoundError as error:
+        print(
+            f"ERROR: the web extra is not installed ({error.name}). "
+            'Run: pip install -e ".[web]"',
+            file=sys.stderr,
+        )
+        return 1
+
+    if not snapshot_path.exists():
+        print(
+            f"ERROR: base snapshot not found at {snapshot_path}. "
+            "Generate it first: chrooked-pokedex snapshot --base <path-to-1.11.2>",
+            file=sys.stderr,
+        )
+        return 1
+
+    if not _DEFAULT_DIST.exists():
+        print(
+            "Note: frontend/dist not found — serving the API only. "
+            "Run the Vite dev server (cd frontend && npm run dev) for the UI."
+        )
+
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snapshot_path,
+        dist_dir=_DEFAULT_DIST,
+    )
+    print(f"Serving chrooked-pokedex on http://{host}:{port}  (API under /api)")
+    uvicorn.run(app, host=host, port=port)
+    return 0
 
 
 if __name__ == "__main__":
