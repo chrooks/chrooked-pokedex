@@ -7,3 +7,5 @@ power: 30
 accuracy: 100
 pp: 20
 description: Raises the user's Attack every time it is hit.
+effect: rage
+flags: [contact]

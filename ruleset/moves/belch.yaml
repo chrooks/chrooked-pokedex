@@ -7,3 +7,4 @@ power: 130
 accuracy: 100
 pp: 10
 description: Lets out a loud belch. Must eat a Berry to use it.
+effect: belch

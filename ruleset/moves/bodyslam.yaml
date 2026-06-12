@@ -1,0 +1,12 @@
+name: Body Slam
+chrooked_id: bodyslam
+aka: { pokeemerald: MOVE_BODY_SLAM }
+type: Normal
+category: physical
+power: 85
+accuracy: 100
+pp: 15
+description: A full-body slam that may cause paralysis.
+additional_effects:
+  - { effect: paralysis, chance: 30 }
+flags: [contact, hammer]

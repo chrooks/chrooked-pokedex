@@ -7,3 +7,6 @@ power: 75
 accuracy: 100
 pp: 15
 description: A cute but firm slap. May cause infatuation.
+additional_effects:
+  - { effect: sp_atk_minus_1, chance: 10 }
+flags: [contact, punching]

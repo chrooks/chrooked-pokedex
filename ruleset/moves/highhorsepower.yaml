@@ -1,0 +1,10 @@
+name: High Horsepower
+chrooked_id: highhorsepower
+aka: { pokeemerald: MOVE_HIGH_HORSEPOWER }
+type: Ground
+category: physical
+power: 95
+accuracy: 95
+pp: 10
+description: Slams hard into the foe with its entire body.
+flags: [contact, kicking]

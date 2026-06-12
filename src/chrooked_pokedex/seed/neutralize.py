@@ -55,6 +55,93 @@ def type_name(constant: str) -> str:
     return type_constant_to_name(constant)
 
 
+# --- Move behavior fields: neutral <-> engine token translation ----------------
+#
+# Primary effects, secondary (additional) effects, and targets neutralize
+# generically by stripping the engine prefix and lowercasing — a clean bijection
+# that covers every value, not just the ones seen so far. Move flags are the one
+# exception: they are camelCase booleans (`makesContact`, `bitingMove`), so they
+# need an explicit map. Keeping these here means the seed (engine -> neutral) and
+# the applier (neutral -> engine) share one source of truth.
+
+# camelCase C flag <-> neutral name.
+MOVE_FLAG_TO_NEUTRAL: dict[str, str] = {
+    "makesContact": "contact",
+    "punchingMove": "punching",
+    "bitingMove": "biting",
+    "soundMove": "sound",
+    "slicingMove": "slicing",
+    "windMove": "wind",
+    "wingMove": "wing",
+    "kickingMove": "kicking",
+    "piercingMove": "piercing",
+    "boneMove": "bone",
+    "hammerMove": "hammer",
+    "ballisticMove": "ballistic",
+}
+NEUTRAL_TO_MOVE_FLAG: dict[str, str] = {v: k for k, v in MOVE_FLAG_TO_NEUTRAL.items()}
+
+
+def primary_effect_name(token: str) -> str:
+    """`EFFECT_SUPER_EFFECTIVE_ON_ARG` -> `super_effective_on_arg`."""
+    return token.removeprefix("EFFECT_").lower()
+
+
+def primary_effect_symbol(name: str) -> str:
+    return "EFFECT_" + name.upper()
+
+
+def move_effect_name(token: str) -> str:
+    """`MOVE_EFFECT_BURN` -> `burn`."""
+    return token.removeprefix("MOVE_EFFECT_").lower()
+
+
+def move_effect_symbol(name: str) -> str:
+    return "MOVE_EFFECT_" + name.upper()
+
+
+def move_target_name(token: str) -> str:
+    """`MOVE_TARGET_BOTH` -> `both`."""
+    return token.removeprefix("MOVE_TARGET_").lower()
+
+
+def move_target_symbol(name: str) -> str:
+    return "MOVE_TARGET_" + name.upper()
+
+
+def move_flag_name(token: str) -> str | None:
+    return MOVE_FLAG_TO_NEUTRAL.get(token)
+
+
+def move_flag_symbol(name: str) -> str | None:
+    return NEUTRAL_TO_MOVE_FLAG.get(name)
+
+
+def _camel_to_snake(text: str) -> str:
+    return re.sub(r"([A-Z])", r"_\1", text).lower()
+
+
+def snake_to_camel(text: str) -> str:
+    head, *tail = text.split("_")
+    return head + "".join(part.capitalize() for part in tail)
+
+
+def neutralize_argument(inner: str) -> dict[str, object]:
+    """`.type = TYPE_DRAGON` -> {'type': 'Dragon'}; `.absorbPercentage = 50` ->
+    {'absorb_percentage': 50}. The inner text is the body between the argument's
+    braces. Type values become plain type names; integers stay integers."""
+    result: dict[str, object] = {}
+    for field, raw in re.findall(r"\.(\w+)\s*=\s*([^,}]+)", inner):
+        value = raw.strip()
+        if _TYPE_TOKEN.fullmatch(value):
+            result[_camel_to_snake(field)] = type_name(value)
+        elif re.fullmatch(r"-?\d+", value):
+            result[_camel_to_snake(field)] = int(value)
+        else:
+            result[_camel_to_snake(field)] = value
+    return result
+
+
 def extract_types(field_value: str | None) -> tuple[str, ...]:
     """`MON_TYPES(TYPE_FIRE, TYPE_FLYING)` -> ('Fire', 'Flying').
 

@@ -6,3 +6,5 @@ category: physical
 accuracy: 100
 pp: 15
 description: Flies up on the first turn, then strikes the next turn.
+effect: semi_invulnerable
+flags: [contact]

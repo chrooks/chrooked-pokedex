@@ -5,3 +5,5 @@ type: Rock
 category: physical
 power: 50
 description: Stops the foe from moving with rocks and cuts Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 100 }

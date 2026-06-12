@@ -1,0 +1,10 @@
+name: Roar
+chrooked_id: roar
+aka: { pokeemerald: MOVE_ROAR }
+type: Normal
+category: status
+power: 0
+pp: 20
+description: Makes the foe flee to end the battle.
+effect: roar
+flags: [sound]

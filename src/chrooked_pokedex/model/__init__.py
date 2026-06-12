@@ -11,6 +11,7 @@ from .ruleset import Ruleset
 from .schema import (
     AbilitiesOverride,
     AbilityDef,
+    AdditionalEffect,
     EvolutionOverride,
     LearnsetMove,
     MoveDef,
@@ -22,6 +23,7 @@ __all__ = [
     "Ruleset",
     "AbilitiesOverride",
     "AbilityDef",
+    "AdditionalEffect",
     "EvolutionOverride",
     "LearnsetMove",
     "MoveDef",

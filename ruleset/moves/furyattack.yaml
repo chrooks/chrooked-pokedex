@@ -1,0 +1,11 @@
+name: Fury Attack
+chrooked_id: furyattack
+aka: { pokeemerald: MOVE_FURY_ATTACK }
+type: Normal
+category: physical
+power: 15
+accuracy: 85
+pp: 20
+description: Jabs the foe 2 to 5 times with sharp horns, etc.
+effect: multi_hit
+flags: [contact, piercing]

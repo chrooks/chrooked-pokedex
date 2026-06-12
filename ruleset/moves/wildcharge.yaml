@@ -7,3 +7,4 @@ power: 120
 accuracy: 100
 pp: 15
 description: An electrical tackle that also hurts the user.
+flags: [contact]

@@ -1,0 +1,10 @@
+name: Esper Wing
+chrooked_id: esperwing
+aka: { pokeemerald: MOVE_ESPER_WING }
+type: Psychic
+category: special
+pp: 10
+description: High critical hit ratio. Ups the user's Speed.
+additional_effects:
+  - { effect: spd_plus_1, chance: 100 }
+flags: [wing]

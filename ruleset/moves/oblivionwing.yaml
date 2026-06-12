@@ -1,0 +1,11 @@
+name: Oblivion Wing
+chrooked_id: oblivionwing
+aka: { pokeemerald: MOVE_OBLIVION_WING }
+type: Flying
+category: special
+power: 80
+accuracy: 100
+pp: 10
+effect: absorb
+argument: { absorb_percentage: 75 }
+flags: [wing]

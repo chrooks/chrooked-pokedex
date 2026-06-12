@@ -1,0 +1,11 @@
+name: Triple Kick
+chrooked_id: triplekick
+aka: { pokeemerald: MOVE_TRIPLE_KICK }
+type: Fighting
+category: physical
+power: 10
+accuracy: 90
+pp: 10
+description: Kicks the foe 3 times in a row with rising intensity.
+effect: triple_kick
+flags: [contact, kicking]

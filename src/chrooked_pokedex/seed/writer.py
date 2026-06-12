@@ -109,6 +109,21 @@ def _move_yaml(move: MoveDef) -> str:
         lines.append(f"pp: {move.pp}")
     if move.description:
         lines.append(f"description: {_scalar(move.description)}")
+    if move.effect and move.effect != "hit":
+        lines.append(f"effect: {move.effect}")
+    if move.argument:
+        arg = ", ".join(f"{k}: {_scalar(v)}" for k, v in move.argument.items())
+        lines.append(f"argument: {{ {arg} }}")
+    if move.additional_effects:
+        lines.append("additional_effects:")
+        for ae in move.additional_effects:
+            lines.append(f"  - {{ effect: {ae.effect}, chance: {ae.chance} }}")
+    if move.flags:
+        lines.append(f"flags: [{', '.join(move.flags)}]")
+    if move.priority:
+        lines.append(f"priority: {move.priority}")
+    if move.target and move.target != "selected":
+        lines.append(f"target: {move.target}")
     return "\n".join(lines) + "\n"
 
 

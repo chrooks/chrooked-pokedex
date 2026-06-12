@@ -7,3 +7,7 @@ power: 80
 accuracy: 95
 pp: 15
 description: May cause flinching or cow the foe's attack.
+additional_effects:
+  - { effect: atk_minus_1, chance: 10 }
+  - { effect: flinch, chance: 10 }
+flags: [contact, biting]

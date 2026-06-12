@@ -7,3 +7,6 @@ power: 60
 accuracy: 100
 pp: 20
 description: Lashes the foe with a whip of water. May cause flinch.
+additional_effects:
+  - { effect: flinch, chance: 20 }
+flags: [contact]

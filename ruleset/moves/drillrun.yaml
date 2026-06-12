@@ -1,0 +1,10 @@
+name: Drill Run
+chrooked_id: drillrun
+aka: { pokeemerald: MOVE_DRILL_RUN }
+type: Ground
+category: physical
+power: 80
+accuracy: 95
+pp: 10
+description: Spins its body like a drill. High critical-hit ratio.
+flags: [contact, piercing]

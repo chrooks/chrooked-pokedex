@@ -1,0 +1,10 @@
+name: Dual Wingbeat
+chrooked_id: dualwingbeat
+aka: { pokeemerald: MOVE_DUAL_WINGBEAT }
+type: Flying
+category: physical
+power: 40
+accuracy: 90
+pp: 10
+description: User slams the target with wings and hits twice in a row.
+flags: [contact, wing]

@@ -1,0 +1,10 @@
+name: Ice Hammer
+chrooked_id: icehammer
+aka: { pokeemerald: MOVE_ICE_HAMMER }
+type: Ice
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: Swings the fist to strike. Lowers the user's Speed.
+flags: [contact, punching, hammer]

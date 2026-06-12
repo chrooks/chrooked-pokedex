@@ -1,0 +1,10 @@
+name: Mega Kick
+chrooked_id: megakick
+aka: { pokeemerald: MOVE_MEGA_KICK }
+type: Normal
+category: physical
+power: 120
+accuracy: 75
+pp: 5
+description: An extremely powerful kick with intense force.
+flags: [contact, kicking]

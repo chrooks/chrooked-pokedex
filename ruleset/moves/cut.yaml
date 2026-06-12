@@ -7,3 +7,4 @@ power: 60
 accuracy: 100
 pp: 20
 description: Cuts the foe with sharp scythes, claws, etc.
+flags: [contact, slicing]

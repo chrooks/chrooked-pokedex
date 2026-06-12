@@ -7,3 +7,6 @@ power: 80
 accuracy: 100
 pp: 15
 description: Releases a toxic wind. May poison the target.
+additional_effects:
+  - { effect: poison, chance: 30 }
+flags: [wind]

@@ -7,3 +7,6 @@ power: 90
 accuracy: 100
 pp: 15
 description: An electrified body slam. May paralyze the target.
+additional_effects:
+  - { effect: paralysis, chance: 10 }
+flags: [contact]

@@ -7,3 +7,6 @@ power: 90
 accuracy: 100
 pp: 15
 description: A blazing body slam. May burn the target.
+additional_effects:
+  - { effect: burn, chance: 10 }
+flags: [contact]

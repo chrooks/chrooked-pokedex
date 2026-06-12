@@ -1,0 +1,10 @@
+name: Hammer Arm
+chrooked_id: hammerarm
+aka: { pokeemerald: MOVE_HAMMER_ARM }
+type: Fighting
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: A swinging fist attack that also lowers Speed.
+flags: [contact, punching, hammer]

@@ -7,3 +7,6 @@ power: 75
 accuracy: 100
 pp: 15
 description: A blazing bone strike. May burn the target.
+additional_effects:
+  - { effect: burn, chance: 10 }
+flags: [contact, bone]

@@ -1,0 +1,10 @@
+name: Slam
+chrooked_id: slam
+aka: { pokeemerald: MOVE_SLAM }
+type: Normal
+category: physical
+power: 80
+accuracy: 75
+pp: 20
+description: Slams the foe with a long tail, vine, etc.
+flags: [contact, hammer]

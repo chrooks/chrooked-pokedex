@@ -7,3 +7,6 @@ power: 90
 accuracy: 100
 pp: 15
 description: A frozen body slam. May freeze the target.
+additional_effects:
+  - { effect: freeze, chance: 10 }
+flags: [contact]

@@ -1,0 +1,10 @@
+name: Horn Attack
+chrooked_id: hornattack
+aka: { pokeemerald: MOVE_HORN_ATTACK }
+type: Normal
+category: physical
+power: 65
+accuracy: 100
+pp: 25
+description: Jabs the foe with sharp horns.
+flags: [contact, piercing]

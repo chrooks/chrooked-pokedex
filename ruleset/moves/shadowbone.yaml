@@ -1,0 +1,12 @@
+name: Shadow Bone
+chrooked_id: shadowbone
+aka: { pokeemerald: MOVE_SHADOW_BONE }
+type: Ghost
+category: physical
+power: 85
+accuracy: 100
+pp: 10
+description: Strikes with a haunted bone. Might drop Defense.
+additional_effects:
+  - { effect: def_minus_1, chance: 20 }
+flags: [bone]

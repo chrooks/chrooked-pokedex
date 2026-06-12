@@ -1,0 +1,10 @@
+name: Wing Attack
+chrooked_id: wingattack
+aka: { pokeemerald: MOVE_WING_ATTACK }
+type: Flying
+category: physical
+power: 60
+accuracy: 100
+pp: 35
+description: Strikes the foe with wings spread wide.
+flags: [contact, wing]

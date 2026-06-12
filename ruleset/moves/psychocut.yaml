@@ -1,0 +1,10 @@
+name: Psycho Cut
+chrooked_id: psychocut
+aka: { pokeemerald: MOVE_PSYCHO_CUT }
+type: Psychic
+category: physical
+power: 70
+accuracy: 100
+pp: 20
+description: Tears with psychic blades. High critical-hit ratio.
+flags: [slicing, piercing]

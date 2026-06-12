@@ -7,3 +7,4 @@ power: 80
 accuracy: 100
 pp: 15
 description: Strikes with a projected fist. Ignores stat changes.
+flags: [contact, punching]

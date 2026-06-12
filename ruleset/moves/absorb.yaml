@@ -6,3 +6,5 @@ category: special
 power: 30
 accuracy: 100
 description: An attack that absorbs half the damage inflicted.
+effect: absorb
+argument: { absorb_percentage: 50 }

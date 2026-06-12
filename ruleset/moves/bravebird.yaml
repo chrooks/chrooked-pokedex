@@ -1,0 +1,10 @@
+name: Brave Bird
+chrooked_id: bravebird
+aka: { pokeemerald: MOVE_BRAVE_BIRD }
+type: Flying
+category: physical
+power: 120
+accuracy: 100
+pp: 15
+description: A low altitude charge that also hurts the user.
+flags: [contact, wing]

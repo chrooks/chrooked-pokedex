@@ -1,0 +1,10 @@
+name: Drill Peck
+chrooked_id: drillpeck
+aka: { pokeemerald: MOVE_DRILL_PECK }
+type: Flying
+category: physical
+power: 80
+accuracy: 100
+pp: 20
+description: A corkscrewing attack with the beak acting as a drill.
+flags: [contact, piercing]

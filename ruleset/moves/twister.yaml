@@ -7,3 +7,7 @@ power: 60
 accuracy: 100
 pp: 20
 description: Whips up a vicious twister to tear at the foe.
+additional_effects:
+  - { effect: flinch, chance: 20 }
+flags: [wind]
+target: both

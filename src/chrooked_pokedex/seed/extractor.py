@@ -24,6 +24,7 @@ from pathlib import Path
 from ..model.schema import (
     AbilitiesOverride,
     AbilityDef,
+    AdditionalEffect,
     LearnsetMove,
     MoveDef,
     SpeciesOverride,
@@ -264,6 +265,18 @@ def _seed_moves(fork: Path, base: Path) -> dict[str, MoveDef]:
             pp=info.pp,
             description=nz.normalize_description(info.description),
             aka={"pokeemerald": constant},
+            effect=nz.primary_effect_name(info.effect),
+            argument=nz.neutralize_argument(info.argument) if info.argument else None,
+            additional_effects=tuple(
+                AdditionalEffect(effect=nz.move_effect_name(token), chance=chance)
+                for token, chance in info.additional_effects
+            ),
+            flags=tuple(
+                name for token in info.flags
+                if (name := nz.move_flag_name(token)) is not None
+            ),
+            priority=info.priority,
+            target=nz.move_target_name(info.target),
         ), "move", constant)
     return result
 

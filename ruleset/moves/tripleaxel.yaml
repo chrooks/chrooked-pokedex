@@ -1,0 +1,11 @@
+name: Triple Axel
+chrooked_id: tripleaxel
+aka: { pokeemerald: MOVE_TRIPLE_AXEL }
+type: Ice
+category: physical
+power: 20
+accuracy: 90
+pp: 10
+description: A 3-kick attack that gets more powerful with each hit.
+effect: triple_kick
+flags: [contact, kicking]

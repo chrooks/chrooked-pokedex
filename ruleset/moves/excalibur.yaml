@@ -7,3 +7,6 @@ power: 120
 accuracy: 80
 pp: 5
 description: A legendary blade strike. Super effective on Dragons.
+effect: super_effective_on_arg
+argument: { type: Dragon }
+flags: [contact, slicing]

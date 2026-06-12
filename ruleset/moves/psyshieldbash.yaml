@@ -1,0 +1,12 @@
+name: Psyshield Bash
+chrooked_id: psyshieldbash
+aka: { pokeemerald: MOVE_PSYSHIELD_BASH }
+type: Psychic
+category: physical
+power: 70
+accuracy: 90
+pp: 10
+description: Hits a foe with psychic energy. May raise Defense.
+additional_effects:
+  - { effect: def_plus_1, chance: 100 }
+flags: [contact, piercing]

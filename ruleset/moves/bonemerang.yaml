@@ -1,0 +1,10 @@
+name: Bonemerang
+chrooked_id: bonemerang
+aka: { pokeemerald: MOVE_BONEMERANG }
+type: Ground
+category: physical
+power: 50
+accuracy: 90
+pp: 10
+description: Throws a bone boomerang that strikes twice.
+flags: [bone]

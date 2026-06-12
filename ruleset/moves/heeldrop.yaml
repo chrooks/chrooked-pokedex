@@ -7,3 +7,6 @@ power: 90
 accuracy: 100
 pp: 15
 description: A brutal axe kick from above. May cause flinching.
+additional_effects:
+  - { effect: flinch, chance: 20 }
+flags: [contact, kicking]

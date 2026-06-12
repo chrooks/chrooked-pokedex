@@ -7,3 +7,5 @@ power: 45
 accuracy: 100
 pp: 25
 description: A weak fire attack that may inflict a burn.
+additional_effects:
+  - { effect: burn, chance: 10 }

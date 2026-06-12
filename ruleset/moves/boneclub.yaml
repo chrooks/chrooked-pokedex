@@ -1,0 +1,12 @@
+name: Bone Club
+chrooked_id: boneclub
+aka: { pokeemerald: MOVE_BONE_CLUB }
+type: Ground
+category: physical
+power: 65
+accuracy: 85
+pp: 20
+description: Clubs the foe with a bone. May cause flinching.
+additional_effects:
+  - { effect: flinch, chance: 10 }
+flags: [bone]

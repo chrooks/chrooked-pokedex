@@ -7,3 +7,6 @@ power: 110
 accuracy: 85
 pp: 5
 description: A spectral burst that may lower the foe's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 10 }
+flags: [ballistic]

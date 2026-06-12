@@ -1,0 +1,10 @@
+name: Peck
+chrooked_id: peck
+aka: { pokeemerald: MOVE_PECK }
+type: Flying
+category: physical
+power: 35
+accuracy: 100
+pp: 35
+description: Attacks the foe with a jabbing beak, etc.
+flags: [contact, piercing]

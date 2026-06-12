@@ -1,0 +1,10 @@
+name: Heavy Slam
+chrooked_id: heavyslam
+aka: { pokeemerald: MOVE_HEAVY_SLAM }
+type: Steel
+category: physical
+power: 1
+accuracy: 100
+pp: 10
+effect: heat_crash
+flags: [contact, hammer]

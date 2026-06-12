@@ -7,3 +7,4 @@ power: 90
 accuracy: 100
 pp: 15
 description: Builds enormous power, then slams the foe.
+flags: [contact]

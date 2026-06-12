@@ -18,6 +18,14 @@ STAT_KEYS: tuple[str, ...] = ("hp", "atk", "def", "spa", "spd", "spe")
 # Move damage categories allowed in the Ruleset.
 MOVE_CATEGORIES: frozenset[str] = frozenset({"physical", "special", "status"})
 
+# Neutral move flags the Ruleset models. Several abilities key off these (e.g.
+# Infernal Maw boosts `biting` moves), so a dropped flag silently breaks a mechanic —
+# the loader validates against this closed set rather than letting a typo through.
+MOVE_FLAGS: frozenset[str] = frozenset({
+    "contact", "punching", "biting", "sound", "slicing", "wind",
+    "wing", "kicking", "piercing", "bone", "hammer", "ballistic",
+})
+
 
 @dataclass(frozen=True)
 class AbilitiesOverride:
@@ -63,8 +71,28 @@ class SpeciesOverride:
 
 
 @dataclass(frozen=True)
+class AdditionalEffect:
+    """One secondary effect a move may apply, with its percent chance.
+
+    `effect` is a neutral name (`burn`, `flinch`, `sp_atk_minus_1`); `chance` is the
+    percent it triggers (100 for a guaranteed effect).
+    """
+
+    effect: str
+    chance: int
+
+
+@dataclass(frozen=True)
 class MoveDef:
-    """A Ruleset-owned move definition (new or changed)."""
+    """A Ruleset-owned move definition (new or changed).
+
+    Beyond the headline numbers, a move carries the data that makes it *behave*:
+    its primary `effect` (usually `hit`), an optional `argument` for parameterized
+    effects (e.g. `super_effective_on_arg` against a type), the `additional_effects`
+    it may apply (burn, flinch, stat drops), engine-neutral `flags` (contact, biting,
+    punching — which abilities key off), `priority`, and `target`. Dropping these
+    creates an inert move: right numbers, no secondary effect, no flags.
+    """
 
     name: str
     chrooked_id: str
@@ -75,6 +103,12 @@ class MoveDef:
     pp: Optional[int] = None
     description: str = ""
     aka: Mapping[str, object] = field(default_factory=dict)
+    effect: str = "hit"
+    argument: Optional[Mapping[str, object]] = None
+    additional_effects: tuple[AdditionalEffect, ...] = ()
+    flags: tuple[str, ...] = ()
+    priority: int = 0
+    target: str = "selected"
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,10 @@
+name: Whirlwind
+chrooked_id: whirlwind
+aka: { pokeemerald: MOVE_WHIRLWIND }
+type: Normal
+category: status
+power: 0
+pp: 20
+description: Blows away the foe with wind and ends the battle.
+effect: roar
+flags: [wind]

@@ -7,3 +7,5 @@ power: 0
 accuracy: 65
 pp: 20
 description: Emits bizarre sound waves that may confuse the foe.
+effect: confuse
+flags: [sound]

@@ -7,3 +7,4 @@ power: 120
 accuracy: 80
 pp: 5
 description: A powerful pincer attack with huge claws.
+flags: [contact]

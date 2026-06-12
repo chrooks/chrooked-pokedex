@@ -7,3 +7,7 @@ power: 80
 accuracy: 95
 pp: 15
 description: May cause flinching or crack the foe's defense.
+additional_effects:
+  - { effect: def_minus_1, chance: 10 }
+  - { effect: flinch, chance: 10 }
+flags: [contact, biting]

@@ -7,3 +7,5 @@ power: 80
 accuracy: 100
 pp: 15
 description: Chomps with psychic fangs. Destroys any barriers.
+effect: brick_break
+flags: [contact, biting]

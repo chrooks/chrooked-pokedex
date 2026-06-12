@@ -22,9 +22,11 @@ from .behavior_spec import (
 )
 from .schema import (
     MOVE_CATEGORIES,
+    MOVE_FLAGS,
     STAT_KEYS,
     AbilitiesOverride,
     AbilityDef,
+    AdditionalEffect,
     EvolutionOverride,
     LearnsetMove,
     MoveDef,
@@ -59,7 +61,9 @@ _EVOLUTION_KEYS = ("from", "method")
 _MOVE_KEYS = (
     "name", "chrooked_id", "aka", "type",
     "category", "power", "accuracy", "pp", "description",
+    "effect", "argument", "additional_effects", "flags", "priority", "target",
 )
+_ADDITIONAL_EFFECT_KEYS = ("effect", "chance")
 _ABILITY_KEYS = ("name", "chrooked_id", "aka", "description")
 _TYPE_CHART_ENTRY_KEYS = ("attacker", "defender", "multiplier")
 _BEHAVIOR_KEYS = (
@@ -129,6 +133,21 @@ def load_move(path: Path) -> MoveDef:
             f"{path.name}: invalid move category {category!r}; "
             f"expected one of {', '.join(sorted(MOVE_CATEGORIES))}"
         )
+    additional_effects: list[AdditionalEffect] = []
+    for entry in data.get("additional_effects") or []:
+        _check_keys(entry, _ADDITIONAL_EFFECT_KEYS, f"{path.name}:additional_effects")
+        additional_effects.append(
+            AdditionalEffect(effect=entry["effect"], chance=int(entry["chance"]))
+        )
+
+    flags = tuple(data.get("flags") or ())
+    unknown_flags = [flag for flag in flags if flag not in MOVE_FLAGS]
+    if unknown_flags:
+        raise ValueError(
+            f"{path.name}:flags: unknown flag(s) {', '.join(sorted(unknown_flags))}; "
+            f"allowed flags are {', '.join(sorted(MOVE_FLAGS))}"
+        )
+
     return MoveDef(
         name=data["name"],
         chrooked_id=data["chrooked_id"],
@@ -139,6 +158,12 @@ def load_move(path: Path) -> MoveDef:
         pp=data.get("pp"),
         description=data.get("description", ""),
         aka=dict(data.get("aka") or {}),
+        effect=data.get("effect", "hit"),
+        argument=dict(data["argument"]) if data.get("argument") else None,
+        additional_effects=tuple(additional_effects),
+        flags=flags,
+        priority=int(data.get("priority", 0)),
+        target=data.get("target", "selected"),
     )
 
 

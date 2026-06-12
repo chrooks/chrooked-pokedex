@@ -1,0 +1,10 @@
+name: Double Kick
+chrooked_id: doublekick
+aka: { pokeemerald: MOVE_DOUBLE_KICK }
+type: Fighting
+category: physical
+power: 30
+accuracy: 100
+pp: 30
+description: A double-kicking attack that strikes the foe twice.
+flags: [contact, kicking]

@@ -1,0 +1,10 @@
+name: Gigaton Hammer
+chrooked_id: gigatonhammer
+aka: { pokeemerald: MOVE_GIGATON_HAMMER }
+type: Steel
+category: physical
+power: 160
+accuracy: 100
+pp: 5
+description: Swings a huge hammer. Can't be used twice in a row.
+flags: [hammer]

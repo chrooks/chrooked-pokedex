@@ -1,0 +1,10 @@
+name: Bone Rush
+chrooked_id: bonerush
+aka: { pokeemerald: MOVE_BONE_RUSH }
+type: Ground
+category: physical
+power: 25
+pp: 10
+description: Strikes the foe with a bone in hand 2 to 5 times.
+effect: multi_hit
+flags: [bone]

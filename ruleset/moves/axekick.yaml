@@ -1,0 +1,13 @@
+name: Axe Kick
+chrooked_id: axekick
+aka: { pokeemerald: MOVE_AXE_KICK }
+type: Fighting
+category: physical
+power: 120
+accuracy: 90
+pp: 10
+description: May miss and hurt the kicker. May cause confusion.
+effect: recoil_if_miss
+additional_effects:
+  - { effect: confusion, chance: 30 }
+flags: [contact, kicking]
