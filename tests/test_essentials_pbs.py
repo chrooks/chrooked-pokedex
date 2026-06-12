@@ -94,3 +94,96 @@ def test_set_comma_index_reports_failure_when_field_absent():
     new2, applied2 = pbs_edit.set_comma_index(_PBS, "BULBASAUR", "Nonexistent", 0, "x")
     assert applied2 is False  # field absent
     assert new2 == _PBS
+
+
+# --- multi-line whole-key writer (Essentials `Evolution =` lives one-per-line) ---
+
+_EVO_PBS = """\
+[EEVEE]
+Name = Eevee
+BaseStats = 55,55,50,55,45,65
+Evolution = VAPOREON,Item,WATERSTONE
+Evolution = JOLTEON,Item,THUNDERSTONE
+Evolution = FLAREON,Item,FIRESTONE
+
+[VAPOREON]
+Name = Vaporeon
+BaseStats = 130,65,60,65,110,95
+"""
+
+
+def test_get_section_values_returns_every_repeated_key():
+    span = pbs_edit.find_section(_EVO_PBS, "EEVEE")
+    block = _EVO_PBS[span[0]:span[1]]
+    values = pbs_edit.get_section_values(block, "Evolution")
+    assert values == [
+        "VAPOREON,Item,WATERSTONE",
+        "JOLTEON,Item,THUNDERSTONE",
+        "FLAREON,Item,FIRESTONE",
+    ]
+
+
+def test_set_section_lines_replaces_all_key_lines():
+    new_text, applied = pbs_edit.set_section_lines(
+        _EVO_PBS, "EEVEE", "Evolution",
+        ["ESPEON,HappinessDay", "UMBREON,HappinessNight"],
+    )
+    assert applied is True
+    span = pbs_edit.find_section(new_text, "EEVEE")
+    block = new_text[span[0]:span[1]]
+    assert pbs_edit.get_section_values(block, "Evolution") == [
+        "ESPEON,HappinessDay", "UMBREON,HappinessNight",
+    ]
+    # The neighbouring section is untouched.
+    assert "[VAPOREON]" in new_text
+    assert pbs_edit.get_field(block, "Name") == "Eevee"  # other keys survive
+
+
+def test_set_section_lines_is_idempotent_for_identical_set():
+    same = [
+        "VAPOREON,Item,WATERSTONE",
+        "JOLTEON,Item,THUNDERSTONE",
+        "FLAREON,Item,FIRESTONE",
+    ]
+    new_text, applied = pbs_edit.set_section_lines(_EVO_PBS, "EEVEE", "Evolution", same)
+    assert applied is False
+    assert new_text == _EVO_PBS  # no churn when the desired set already matches
+
+
+def test_set_section_lines_inserts_when_key_absent():
+    text = "[VAPOREON]\nName = Vaporeon\nBaseStats = 130,65,60,65,110,95\n"
+    new_text, applied = pbs_edit.set_section_lines(text, "VAPOREON", "Evolution", ["FOO,Level,5"])
+    assert applied is True
+    span = pbs_edit.find_section(new_text, "VAPOREON")
+    assert pbs_edit.get_section_values(new_text[span[0]:span[1]], "Evolution") == ["FOO,Level,5"]
+
+
+def test_set_section_lines_missing_section_is_noop():
+    new_text, applied = pbs_edit.set_section_lines(_EVO_PBS, "NOPE", "Evolution", ["X,Level,5"])
+    assert applied is False
+    assert new_text == _EVO_PBS
+
+
+def test_remove_section_field_drops_the_line():
+    text = "[FIRE]\nName = Fire\nWeaknesses = WATER\nResistances = GRASS\n"
+    new_text, removed = pbs_edit.remove_section_field(text, "FIRE", "Weaknesses")
+    assert removed is True
+    span = pbs_edit.find_section(new_text, "FIRE")
+    block = new_text[span[0]:span[1]]
+    assert pbs_edit.get_field(block, "Weaknesses") is None
+    assert pbs_edit.get_field(block, "Resistances") == "GRASS"  # neighbour key intact
+
+
+def test_remove_section_field_absent_key_is_noop():
+    text = "[FIRE]\nName = Fire\n"
+    new_text, removed = pbs_edit.remove_section_field(text, "FIRE", "Weaknesses")
+    assert removed is False
+    assert new_text == text
+
+
+def test_set_section_lines_empty_values_raises_not_wipes():
+    # Emptying every line of a key is data destruction by another name; the writer
+    # must refuse it (remove_section_field is the deliberate path), never wipe silently.
+    import pytest
+    with pytest.raises(ValueError):
+        pbs_edit.set_section_lines(_EVO_PBS, "EEVEE", "Evolution", [])

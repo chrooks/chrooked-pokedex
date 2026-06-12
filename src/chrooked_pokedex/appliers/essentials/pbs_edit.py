@@ -90,9 +90,79 @@ def set_comma_index(
     return text[: span[0]] + new_block + text[span[1]:], True
 
 
+def get_section_values(block: str, key: str) -> list[str]:
+    """Every value for a repeated `key = ...` line in a block, in file order.
+
+    Essentials writes some fields one-per-line rather than as a comma-list — most
+    importantly `Evolution`, where a branching species has one line per branch. This
+    returns them all, where `get_field` would see only the first.
+    """
+    return [m.group(1).strip() for m in _field_pattern(key).finditer(block)]
+
+
+def set_section_lines(
+    text: str, header: str, key: str, values: list[str]
+) -> tuple[str, bool]:
+    """Replace every `key = ...` line inside `[header]` with one line per value.
+
+    The one-per-line counterpart of `set_section_field`: it removes all existing
+    `key` lines in the section and writes the new set just under the header. Idempotent
+    — when the section's current set already equals `values` (same order) nothing is
+    written and `applied` is False, so a faithful Ruleset produces no churn. A missing
+    section is a no-op `(text, False)`.
+
+    `values` must be non-empty. This function writes a set of lines; deleting every
+    line of a key is a different intent — use `remove_section_field` — so an empty
+    `values` raises rather than silently wiping the section's data.
+    """
+    if not values:
+        raise ValueError(
+            f"set_section_lines called with empty values for key={key!r}; "
+            "use remove_section_field to delete a field's lines"
+        )
+    span = find_section(text, header)
+    if span is None:
+        return text, False
+    block = text[span[0]:span[1]]
+    if get_section_values(block, key) == values:
+        return text, False
+    stripped = _line_pattern(key).sub("", block)
+    new_lines = "".join(f"{key} = {value}\n" for value in values)
+    newline = stripped.find("\n")
+    if newline == -1:
+        new_block = stripped.rstrip("\n") + "\n" + new_lines
+    else:
+        new_block = stripped[: newline + 1] + new_lines + stripped[newline + 1:]
+    return text[: span[0]] + new_block + text[span[1]:], True
+
+
+def remove_section_field(text: str, header: str, key: str) -> tuple[str, bool]:
+    """Delete the `key = ...` line from `[header]`. Returns `(new_text, removed)`.
+
+    Removes only the FIRST occurrence — correct for single-line fields like the
+    type-chart buckets. For a repeated key (e.g. `Evolution`) use `set_section_lines`.
+    Used by the type-chart tier when a bucket (Weaknesses/Resistances/Immunities)
+    empties out — an empty `Weaknesses = ` line is cleaner removed than left dangling.
+    A missing section or absent key is a no-op `(text, False)`.
+    """
+    span = find_section(text, header)
+    if span is None:
+        return text, False
+    block = text[span[0]:span[1]]
+    new_block, count = _line_pattern(key).subn("", block, count=1)
+    if count == 0:
+        return text, False
+    return text[: span[0]] + new_block + text[span[1]:], True
+
+
 def _field_pattern(key: str) -> re.Pattern[str]:
     # Capture the value (group 1) up to end of line.
     return re.compile(r"^" + re.escape(key) + r"\s*=\s*(.*)$", re.MULTILINE)
+
+
+def _line_pattern(key: str) -> re.Pattern[str]:
+    # The whole `key = ...` line including its trailing newline, for clean removal.
+    return re.compile(r"^" + re.escape(key) + r"\s*=\s*.*\n?", re.MULTILINE)
 
 
 def _insert_field(block: str, key: str, value: str) -> str:

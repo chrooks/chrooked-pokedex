@@ -14,10 +14,12 @@ from pathlib import Path
 
 from .appliers.essentials import (
     creation as essentials_creation,
+    evolution_apply as essentials_evolution,
     learnset_apply as essentials_learnset,
     move_apply as essentials_moves,
     resolution as essentials_resolution,
     species_apply as essentials_species,
+    type_chart_apply as essentials_type_chart,
 )
 from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
@@ -66,9 +68,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     apply.add_argument(
         "--category",
-        choices=("species", "learnset", "all"),
+        choices=("all", "moves", "create", "species", "learnset", "evolution", "type-chart"),
         default="all",
-        help="Which category to apply (default: all = create + every tier).",
+        help="Which tier to apply (default: all). Not every tier exists on every engine; "
+        "a tier absent from the chosen engine is simply a no-op.",
     )
     apply.add_argument(
         "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder to read."
@@ -185,14 +188,13 @@ def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport
         print(f"type-chart: {len(changed)} file(s) changed")
 
 
-# Essentials covers a subset of tiers in this slice; evolution and type-chart live
-# in different PBS files (in-section / types.txt) and are a deliberate follow-on.
-_ESSENTIALS_CATEGORIES = ("moves", "create", "species", "learnset")
+# Essentials now covers the same tiers as pokeemerald. Evolution writes the
+# pre-evolution's `Evolution` lines in pokemon.txt; type-chart edits the defender
+# buckets in types.txt (a different shape than pokeemerald's matrix).
+_ESSENTIALS_CATEGORIES = ("moves", "create", "species", "learnset", "evolution", "type-chart")
 
 
 def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport) -> None:
-    # --category choices (species/learnset/all) are all supported here; evolution and
-    # type-chart are not yet CLI choices and are a deliberate follow-on slice.
     resmap = essentials_resolution.build_resolution_map(target, ruleset)
     categories = _ESSENTIALS_CATEGORIES if category == "all" else (category,)
     if "moves" in categories:
@@ -207,6 +209,12 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
     if "learnset" in categories:
         changed = essentials_learnset.apply_learnsets(target, ruleset, resmap, report)
         print(f"learnset: {len(changed)} file(s) changed")
+    if "evolution" in categories:
+        changed = essentials_evolution.apply_evolutions(target, ruleset, resmap, report)
+        print(f"evolution: {len(changed)} file(s) changed")
+    if "type-chart" in categories:
+        changed = essentials_type_chart.apply_type_chart(target, ruleset, resmap, report)
+        print(f"type-chart: {len(changed)} file(s) changed")
 
 
 def _run_apply(
