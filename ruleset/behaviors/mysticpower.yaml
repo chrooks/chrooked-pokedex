@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Mystic Power
+chrooked_id: mysticpower
+applies_to: ability
+aka: { pokeemerald: ABILITY_MYSTIC_POWER }
+effects:
+  - summary: "Every move this Pokemon uses gets the Same-Type Attack Bonus, regardless of the Pokemon's own types."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker and the move is a real damaging move (not Struggle, not an empty move slot)"
+    effect: "apply a 1.5x STAB multiplier to the move's damage even when the move's type does not match any of this Pokemon's types"
+test_cases:
+  - given: "a pure Water-type with Mystic Power uses Flamethrower (Fire)"
+    expect: "damage is multiplied by 1.5 (STAB granted despite Fire not matching Water)"
+  - given: "a Water-type with Mystic Power uses Surf (Water)"
+    expect: "1.5x STAB applies, the same as ordinary same-type STAB — there is no extra stacking"
+  - given: "a Mystic Power user is forced to use Struggle"
+    expect: "no STAB bonus; Struggle is excluded"
+notes:
+  - "STAB here is a flat 1.5x. Mystic Power does NOT grant the 2.0x Adaptability-style bonus — the fork returns UQ_4_12(1.5), not 2.0."
+  - "This replaces the normal type-match STAB check: the bonus is granted purely from having the ability, so it does not stack on top of a separate same-type 1.5x."
+  - "Excludes MOVE_STRUGGLE and MOVE_NONE (empty slots)."
+engine_hints:
+  pokeemerald: "GetSameTypeAttackBonusModifier in src/battle_util.c (~line 7753); branch `ctx->abilityAtk == ABILITY_MYSTIC_POWER && move != MOVE_STRUGGLE && move != MOVE_NONE` returns UQ_4_12(1.5)."
+  essentials: "Override pbGetStabBonus / STAB step — return 1.5 when the user's ability is Mystic Power for any non-Struggle move, bypassing the type-match test."

@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Hubris
+chrooked_id: hubris
+applies_to: ability
+aka: { pokeemerald: ABILITY_HUBRIS }
+effects:
+  - summary: "Knocking out a foe raises the user's Sp. Atk by one stage."
+    trigger: faint
+    when: "this Pokemon's move just made a foe faint, this Pokemon is alive, and its Sp. Atk is not already maxed"
+    effect: "raise this Pokemon's Sp. Atk by one stage per foe its move knocked out"
+test_cases:
+  - given: "a Hubris user KOs a single foe"
+    expect: "the user's Sp. Atk rises by +1"
+  - given: "a Hubris user KOs two foes at once (e.g. a spread move in a double battle)"
+    expect: "the user's Sp. Atk rises by +2"
+  - given: "a Hubris user at +6 Sp. Atk lands a KO"
+    expect: "no further boost (already maxed)"
+notes:
+  - "This is the special-attacking sibling of Moxie/Chilling Neigh; it shares the same KO-boost code path but targets STAT_SPATK."
+  - "The boost magnitude equals the number of foes this Pokemon's move knocked out this action (NumFaintedBattlersByAttacker)."
+  - "Does nothing if the KO ends the battle (no alive mons for either party)."
+engine_hints:
+  pokeemerald: "src/battle_util.c case ABILITY_HUBRIS shares the ABILITY_MOXIE/BEAST_BOOST block (ref ~4625): stat forced to STAT_SPATK; SET_STATCHANGER(stat, numMonsFainted, FALSE) then BattleScript_RaiseStatOnFaintingTarget; gated on CompareStat(... MAX_STAT_STAGE, CMP_LESS_THAN)."
+  essentials: "Clone of Moxie's OnEndOfUsingMove KO handler but raise :SPECIAL_ATTACK instead of :ATTACK."

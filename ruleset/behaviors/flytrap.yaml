@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Flytrap
+chrooked_id: flytrap
+applies_to: ability
+aka: { pokeemerald: ABILITY_FLYTRAP }
+effects:
+  - summary: "Immune to Bug moves; takes no damage from them."
+    trigger: damage-calc
+    when: "an incoming move's type is Bug"
+    effect: "the move is absorbed and deals no damage to this Pokemon"
+  - summary: "Absorbing a Bug move raises both Attack and Sp. Atk by one stage each."
+    trigger: on-hit
+    when: "an incoming move's type is Bug and at least one of Attack / Sp. Atk is below max"
+    effect: "raise this Pokemon's Attack by 1 and Sp. Atk by 1 instead of taking damage"
+    # imperfect-fit: immunity + dual stat-up are one atomic absorption in C,
+    # split here into damage-calc + on-hit.
+test_cases:
+  - given: "a Flytrap Pokemon is hit by Bug Buzz (Bug)"
+    expect: "it takes 0 damage and both Attack and Sp. Atk rise by 1 stage"
+  - given: "a Flytrap Pokemon is hit by Tackle (Normal)"
+    expect: "it takes normal damage and no stats change"
+  - given: "a Flytrap Pokemon already at +6 Attack and +6 Sp. Atk is hit by a Bug move"
+    expect: "it still takes 0 damage but no stat change occurs (move simply made useless)"
+notes:
+  - "When both Attack and Sp. Atk are already maxed, the move is absorbed with no stat change (BattleScript_MonMadeMoveUseless)."
+engine_hints:
+  pokeemerald: "TryAbsorbMove switch, src/battle_util.c:2485 — TYPE_BUG branch uses BattleScript_FlytrapBoost (raises ATK and SPATK); falls back to MonMadeMoveUseless when both at MAX_STAT_STAGE."
+  essentials: "Bug-type absorb hook that raises Attack and Special Attack by 1 each; no-op stat change when both already maxed."

@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Psyonize
+chrooked_id: psyonize
+applies_to: ability
+aka: { pokeemerald: ABILITY_PSYONIZE }
+effects:
+  - summary: "Normal-type moves become Psychic-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Psychic, then multiply its power by 1.2"
+test_cases:
+  - given: "Psyonize user uses Tackle (Normal) at a Poison-type foe"
+    expect: "Tackle deals damage as a Psychic-type move (super effective vs Poison) with 1.2x power"
+  - given: "Psyonize user uses Tackle vs a Dark-type foe"
+    expect: "the move has no effect (Psychic does not hit Dark), confirming the type changed from Normal"
+  - given: "Psyonize user uses Psychic (already Psychic) or Ember (Fire)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "Converting Normal to Psychic makes the move unable to hit Dark types (Psychic is immune-blocked by Dark)."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_PSYCHIC (src/battle_main.c:5896); +20% in battle_util.c type-modifier switch, case ABILITY_PSYONIZE, UQ_4_12(1.2) gated on moveType==TYPE_PSYCHIC && ateBoost (src/battle_util.c:6936). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Psyonize and move is Normal, set type to :PSYCHIC and apply a 1.2x base-power multiplier"

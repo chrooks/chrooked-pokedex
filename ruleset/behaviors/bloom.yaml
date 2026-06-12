@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Bloom
+chrooked_id: bloom
+applies_to: ability
+aka: { pokeemerald: ABILITY_BLOOM }
+effects:
+  - summary: "This Pokemon's Grass-type moves deal 50% more damage."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker and the move's type is Grass"
+    effect: "multiply the move's damage by 1.5"
+test_cases:
+  - given: "a Bloom user uses Energy Ball (Grass) at a neutral target"
+    expect: "damage is 1.5x what the same Pokemon would deal without Bloom"
+  - given: "a Bloom user uses Flamethrower (Fire)"
+    expect: "no boost; damage is unmodified"
+  - given: "a Bloom user uses Vine Whip (Grass) at full HP"
+    expect: "1.5x boost still applies — there is no HP threshold"
+notes:
+  - "Unconditional: unlike Overgrow, the boost does not require low HP. It always applies to Grass moves."
+  - "Applies to the attacker's own ability; it is an attack-power modifier, not a defensive one."
+engine_hints:
+  pokeemerald: "type-modifier switch in src/battle_util.c (~line 6871); case ABILITY_BLOOM multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_GRASS. Sits alongside Kindle/Cryomancer."
+  essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Bloom and move.type == :GRASS (mirror the Overgrow hook but without the HP check)."

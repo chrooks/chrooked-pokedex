@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Chloroplast
+chrooked_id: chloroplast
+applies_to: ability
+aka: { pokeemerald: ABILITY_CHLOROPLAST }
+effects:
+  - summary: "This Pokemon's moves act as if the sun is shining, regardless of actual weather."
+    trigger: damage-calc
+    when: "this Pokemon uses a move whose behavior depends on sun"
+    effect: "resolve all sun-dependent move behavior as if Harsh Sunlight were active for this user"
+  - summary: "Weather Ball becomes Fire-type for this Pokemon."
+    trigger: damage-calc
+    when: "this Pokemon uses Weather Ball"
+    effect: "Weather Ball is Fire-type (and gets the sun's 2x base-power treatment via the sun-for-moves rule)"
+test_cases:
+  - given: "a Chloroplast Pokemon uses Solar Beam in clear weather"
+    expect: "Solar Beam fires the same turn with no charge (sun behavior), without real sun being set"
+  - given: "a Chloroplast Pokemon uses Weather Ball in clear weather"
+    expect: "Weather Ball is Fire-type and uses its boosted base power"
+  - given: "a Chloroplast Pokemon uses Fire Blast"
+    expect: "it is treated as sun-boosted for move purposes (per the sun-for-moves rule)"
+notes:
+  - "Scope is move-only: it does NOT trigger passive sun weather effects (Solar Power, Dry Skin burn, etc.) and does NOT apply the Fire-up / Water-down weather damage multipliers. It only makes move logic that checks for sun behave as if sun is up."
+  - "Implemented as a helper IsBattlerSunAffectedForMoves() consulted by Solar Beam/Solar Blade charge skip, Weather Ball, Growth, Synthesis-class healing, and Fire/Water sun gates."
+engine_hints:
+  pokeemerald: "Helper IsBattlerSunAffectedForMoves(battler) returns TRUE for Chloroplast — src/battle_util.c:9858. Consumed at src/battle_script_commands.c:9499/9531/14865, src/battle_move_resolution.c:1498, src/battle_util.c:6530/6749. Weather Ball → Fire via ability check in src/battle_main.c:5947."
+  essentials: "Add a 'sun-for-moves' predicate true when the user has Chloroplast; route Solar Beam charge, Weather Ball type, and sun move gates through it without setting real weather."

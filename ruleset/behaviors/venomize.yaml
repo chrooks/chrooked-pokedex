@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Venomize
+chrooked_id: venomize
+applies_to: ability
+aka: { pokeemerald: ABILITY_VENOMIZE }
+effects:
+  - summary: "Normal-type moves become Poison-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Poison, then multiply its power by 1.2"
+test_cases:
+  - given: "Venomize user uses Tackle (Normal) at a Grass-type foe"
+    expect: "Tackle deals damage as a Poison-type move (super effective vs Grass) with 1.2x power"
+  - given: "Venomize user uses Tackle vs a Steel-type foe"
+    expect: "the move has no effect (Poison does not hit Steel), confirming the type changed from Normal"
+  - given: "Venomize user uses Sludge Bomb (already Poison) or Ember (Fire)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "Converting Normal to Poison makes the move unable to hit Steel types."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_POISON (src/battle_main.c:5884); +20% in battle_util.c type-modifier switch, case ABILITY_VENOMIZE, UQ_4_12(1.2) gated on moveType==TYPE_POISON && ateBoost (src/battle_util.c:6920). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Venomize and move is Normal, set type to :POISON and apply a 1.2x base-power multiplier"

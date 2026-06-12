@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Rapid Combustion
+chrooked_id: rapidcombustion
+applies_to: ability
+aka: { pokeemerald: ABILITY_RAPID_COMBUSTION }
+effects:
+  - summary: "Fire-type moves gain +1 priority while this Pokemon is at full HP."
+    trigger: turn-order
+    when: "this Pokemon is at maximum HP and uses a Fire-type move"
+    effect: "increase the move's priority by 1 (Gale Wings clone for Fire)"
+test_cases:
+  - given: "a full-HP Rapid Combustion Pokemon uses a Fire move against a faster foe"
+    expect: "the Fire move goes first within its priority bracket due to +1 priority"
+  - given: "a Rapid Combustion Pokemon below full HP uses a Fire move"
+    expect: "the move uses its normal priority (no boost)"
+  - given: "a full-HP Rapid Combustion Pokemon uses a Water move"
+    expect: "the move uses its normal priority (Fire only)"
+notes:
+  - "Exact structural clone of Gale Wings (Gen 7 behavior): requires max HP and matches on move type, here Fire instead of Flying."
+engine_hints:
+  pokeemerald: "Priority assignment, src/battle_main.c:4847 — priority++ when ability == RAPID_COMBUSTION && IsBattlerAtMaxHp(battler) && GetMoveType(move) == TYPE_FIRE."
+  essentials: "In the priority calculation, add +1 when the user has Rapid Combustion, is at full HP, and the move is Fire-type."

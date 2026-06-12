@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Demolition
+chrooked_id: demolition
+applies_to: ability
+aka: { pokeemerald: ABILITY_DEMOLITION }
+effects:
+  - summary: "Knocking out a target raises this Pokemon's Attack by one stage."
+    trigger: faint
+    when: "this Pokemon's move just knocked out the target and battlers remain on both sides"
+    effect: "raise this Pokemon's Attack by 1 stage (only while below +6)"
+  - summary: "Knocking out a target also raises this Pokemon's Speed by one stage."
+    trigger: faint
+    when: "this Pokemon's move just knocked out the target and battlers remain on both sides"
+    effect: "raise this Pokemon's Speed by 1 stage (only while below +6)"
+test_cases:
+  - given: "a Demolition user KOs the foe with a damaging move while below +6 in both stats"
+    expect: "its Attack rises by +1 and its Speed rises by +1"
+  - given: "a Demolition user damages but does not KO the foe"
+    expect: "no stat change occurs"
+  - given: "a Demolition user already at +6 Attack and +6 Speed KOs the foe"
+    expect: "no further stat change (already capped)"
+notes:
+  - "DESCRIPTION BUG: the in-game text reads 'Next move gains priority,' but the dreamstone C does NOT grant priority. The real implemented effect is +1 Attack and +1 Speed on KO. A `demolitionPriority` field is declared in include/battle.h (line 755) but is never read or written anywhere — dead code. The Speed boost is the closest real behavior to the 'priority' wording; treat the priority text as inaccurate."
+  - "The Attack boost shares the Moxie KO handler; the Speed boost is a separate KO handler. Each is independently gated on the stat being below +6."
+engine_hints:
+  pokeemerald: "Attack: src/battle_script_commands.c VARIOUS_TRY_ACTIVATE_MOXIE (line ~10626) — Demolition is OR'd into the Moxie/Chilling Neigh path, SET_STATCHANGER(STAT_ATK, 1). Speed: src/battle_script_commands.c VARIOUS_TRY_ACTIVATE_DEMOLITION_SPEED (line ~11827), SET_STATCHANGER(STAT_SPEED, 1). Both gated on HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty() && CompareStat(..., MAX_STAT_STAGE, CMP_LESS_THAN)."
+  essentials: "In the move's faint/KO hook, when the attacker has Demolition, raise its Attack and its Speed each by 1 stage (skip a stat already at +6)."

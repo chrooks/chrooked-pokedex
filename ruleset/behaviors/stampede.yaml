@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Stampede
+chrooked_id: stampede
+applies_to: ability
+aka: { pokeemerald: ABILITY_STAMPEDE }
+effects:
+  - summary: "Knocking out a target arms a one-time priority boost for the next contact move."
+    trigger: faint
+    when: "this Pokemon's move just knocked out the target and battlers remain on both sides"
+    effect: "set a flag marking that this Pokemon's next contact move gets increased priority"
+  - summary: "While armed, this Pokemon's contact move gains +1 priority."
+    trigger: turn-order
+    when: "the flag is set and the move being used makes contact"
+    effect: "add +1 to the move's priority for turn ordering"
+test_cases:
+  - given: "a Stampede user lands a KO, then uses a contact move (e.g. Tackle)"
+    expect: "that contact move gets +1 priority and moves earlier within ordering"
+  - given: "a Stampede user lands a KO, then uses a non-contact move (e.g. Water Gun)"
+    expect: "no priority boost (only contact moves benefit; the flag stays armed)"
+  - given: "a Stampede user uses a contact move without having KOed a foe"
+    expect: "no priority boost (flag was never armed)"
+notes:
+  - "+1 priority exactly. The flag is consumed only when a contact move is actually used (cleared in the attacker move-end handler), so a KO followed by a non-contact move leaves the flag set for a later contact move."
+  - "The priority read and the flag-consume both re-check IsMoveMakingContact, so non-contact moves neither benefit nor clear the arming."
+engine_hints:
+  pokeemerald: "Arm: src/battle_script_commands.c VARIOUS_TRY_ACTIVATE_GRIM_NEIGH (line ~10689) — gBattleStruct->stampedePriority[gBattlerAttacker] = TRUE on HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty(). Priority read: src/battle_main.c GetBattlerMovePriority (line ~4937) — stampedePriority[battler] && IsMoveMakingContact → priority++. Consume: src/battle_util.c ABILITYEFFECT_MOVE_END_ATTACKER (line ~6317) — clear flag after a contact move. Field: include/battle.h line 757."
+  essentials: "On KO, set a 'next contact move first' flag. In the priority hook, if the flag is set and the selected move makes contact, add +1 priority; clear the flag once a contact move is used."

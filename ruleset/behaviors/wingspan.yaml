@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Wingspan
+chrooked_id: wingspan
+applies_to: ability
+aka: { pokeemerald: ABILITY_WINGSPAN }
+effects:
+  - summary: "Wing moves and wind moves deal 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a move flagged as a wing move OR a wind move"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "Wingspan user uses a wing move (e.g. Brave Bird)"
+    expect: "damage is multiplied by 1.3"
+  - given: "Wingspan user uses a wind move (e.g. Gust / Hurricane)"
+    expect: "damage is multiplied by 1.3"
+  - given: "Wingspan user uses Tackle (neither wing nor wind)"
+    expect: "no boost; normal damage applies"
+notes:
+  - "Two independent flags both qualify: wingMove (custom) and windMove (engine-standard)."
+  - "The boost is not stacked when a move is both wing and wind — it is a single 1.3x multiplier."
+engine_hints:
+  pokeemerald: "src/battle_util.c attacker-ability damage modifier switch (~line 6961): case ABILITY_WINGSPAN gates on (IsWingMove(move) || IsWindMove(move)) → UQ_4_12(1.3). Flags = gMovesInfo[].wingMove (custom, include/move.h:138) and .windMove (engine-standard)."
+  essentials: "Battle::Move damage-calc hook — if user ability is Wingspan and move has the wing or wind flag, apply a 1.3x multiplier."

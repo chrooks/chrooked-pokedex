@@ -1,0 +1,32 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Blitz
+chrooked_id: blitz
+applies_to: ability
+aka: { pokeemerald: ABILITY_BLITZ }
+effects:
+  - summary: "On the turn it is sent out, the user's Speed is multiplied by 1.5."
+    trigger: switch-in
+    when: "it is the turn this Pokemon was sent out (first turn on the field)"
+    effect: "multiply this Pokemon's effective Speed by 1.5 (flat multiplier on the computed stat, not a stat stage)"
+  - summary: "On the turn it is sent out, the user's physical moves deal 1.3x damage."
+    trigger: damage-calc
+    when: "it is the turn this Pokemon was sent out AND the move being used is physical"
+    effect: "multiply the damage modifier by 1.3"
+test_cases:
+  - given: "a Blitz user is sent out and acts that same turn"
+    expect: "its effective Speed for turn order is 1.5x its normal value"
+  - given: "a Blitz user uses a physical move on the turn it was sent out"
+    expect: "that move deals 1.3x its normal damage"
+  - given: "a Blitz user acts on its second turn on the field (no switch)"
+    expect: "neither the Speed nor the Attack bonus applies"
+  - given: "a Blitz user uses a special move on the turn it was sent out"
+    expect: "the 1.3x boost does not apply (boost is physical-only)"
+notes:
+  - "Both bonuses are flat stat/damage multipliers, NOT stat-stage changes — they apply only while the 'first turn out' flag holds and vanish afterward."
+  - "'First turn out' = isFirstTurn == 2, which is set to 2 on switch-in (battle start or mid-battle switch) and decremented at each turn end, so the bonus also re-applies on a fresh switch-in later in the battle."
+  - "Despite the description wording ('Speed +50%, Attack +30%'), the C applies x1.5 Speed and x1.3 physical damage as multipliers, not +stages."
+engine_hints:
+  pokeemerald: "Speed: src/battle_main.c ~4775 — ABILITY_BLITZ && isFirstTurn == 2 -> speed = (speed * 150) / 100. Attack/damage: src/battle_util.c case ABILITY_BLITZ ~7349 — IsBattleMovePhysical && isFirstTurn == 2 -> uq4_12_multiply(modifier, UQ_4_12(1.3)). isFirstTurn set to 2 in battle_main.c ~3069/3256/3367, decremented ~5133."
+  essentials: "On the first turn after switch-in: apply a 1.5x Speed multiplier in pbSpeed and a 1.3x physical damage multiplier in pbCalcDamageMultipliers; clear both once the Pokemon has been out for a full turn."

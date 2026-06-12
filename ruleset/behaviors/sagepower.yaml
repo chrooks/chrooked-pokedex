@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Sage Power
+chrooked_id: sagepower
+applies_to: ability
+aka: { pokeemerald: ABILITY_SAGE_POWER }
+effects:
+  - summary: "The user's special moves deal 1.5x damage."
+    trigger: damage-calc
+    when: "the move being used is a special move (and the user is not Dynamaxed)"
+    effect: "multiply the damage modifier by 1.5"
+  - summary: "After its first move, the user is locked into that move until it switches out."
+    # Imperfect trigger fit: this is a move-selection restriction, not a damage/turn-order event.
+    # 'turn-order' is the closest neutral trigger because the lock is enforced at move-choice time.
+    trigger: turn-order
+    when: "the user has already chosen a move since being sent out and tries to select a different one"
+    effect: "disallow selecting any move other than the first one chosen; only that move remains usable"
+test_cases:
+  - given: "a Sage Power user uses a special move"
+    expect: "that move deals 1.5x its normal damage"
+  - given: "a Sage Power user uses a physical move"
+    expect: "no 1.5x boost applies (boost is special-only)"
+  - given: "a Sage Power user uses Flamethrower, then on a later turn tries to select Psychic"
+    expect: "Psychic is locked out; the user is forced to use Flamethrower until it switches out"
+notes:
+  - "This is the special-move counterpart of Gorilla Tactics (which is physical-only x1.5 + move lock); it reuses the same lock code path."
+  - "The move lock resets when the Pokemon switches out and back in."
+  - "The x1.5 damage boost does not apply while Dynamaxed."
+  - "The lock applies regardless of whether the user holds a Choice item; the lock is driven by the same gBattleStruct choicedMove slot."
+engine_hints:
+  pokeemerald: "Damage: src/battle_util.c case ABILITY_SAGE_POWER (ref ~7342) — IsBattleMoveSpecial -> uq4_12_multiply(modifier, UQ_4_12(1.5)). Lock: src/battle_util.c ~1603 and ~1713 treat ABILITY_SAGE_POWER like ABILITY_GORILLA_TACTICS in the move-limitation check; also src/battle_move_resolution.c ~490 and ~3068."
+  essentials: "Combine Gorilla Tactics' move-lock (OnStartChoosingTargets / pbChooseMoves restriction) with a special-move damage multiplier of 1.5x in pbCalcDamageMultipliers."

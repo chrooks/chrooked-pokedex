@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Carnivore
+chrooked_id: carnivore
+applies_to: ability
+aka: { pokeemerald: ABILITY_CARNIVORE }
+effects:
+  - summary: "Knocking out a foe heals the user 1/4 of its max HP."
+    trigger: faint
+    when: "this Pokemon's move just made a foe faint, this Pokemon is alive, it is not at full HP, and it is not under Heal Block"
+    effect: "heal this Pokemon by 1/4 of its (non-Dynamax) max HP"
+test_cases:
+  - given: "a Carnivore user lands a KO on a foe while at half HP"
+    expect: "the user heals by ~1/4 of its max HP"
+  - given: "a Carnivore user damages a foe but does not KO it"
+    expect: "the user does not heal"
+  - given: "a Carnivore user at full HP lands a KO"
+    expect: "no heal occurs (already at max HP)"
+notes:
+  - "Heal amount uses the non-Dynamax max HP, so it is not inflated while Dynamaxed."
+  - "Suppressed by Heal Block on the user."
+  - "Requires the KO to come from this Pokemon's own attack (counted via NumFaintedBattlersByAttacker)."
+  - "Does nothing if the KO ends the battle (no alive mons for either party)."
+engine_hints:
+  pokeemerald: "src/battle_util.c case ABILITY_CARNIVORE (ref ~4656): gated on IsBattlerAlive, !NoAliveMonsForEitherParty, NumFaintedBattlersByAttacker(battler) > 0, !healBlock, hp < maxHP; SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 4) then BattleScript_HospitalityActivates."
+  essentials: "Battle::AbilityEffects::OnEndOfUsingMove or a faint hook — when the user's move KOs a target and user is below full HP, healDamage(user.totalhp/4)."

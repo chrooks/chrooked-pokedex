@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Exhaust
+chrooked_id: exhaust
+applies_to: ability
+aka: { pokeemerald: ABILITY_EXHAUST }
+effects:
+  - summary: "Contact moves lower the target's accuracy by one stage."
+    trigger: stat-change
+    when: "this Pokemon damages a target with a contact move, the target survives, and its accuracy is above -6"
+    effect: "lower the target's accuracy by 1 stage (always, no random roll)"
+test_cases:
+  - given: "an Exhaust Pokemon uses a contact move (e.g. Tackle) and the target survives"
+    expect: "the target's accuracy drops one stage every time (guaranteed, not a chance)"
+  - given: "an Exhaust Pokemon uses a non-contact move (e.g. Water Gun)"
+    expect: "the target's accuracy is unchanged (no contact = no trigger)"
+  - given: "the target's accuracy is already at -6"
+    expect: "the trigger does not fire (gated on accuracy above MIN_STAT_STAGE)"
+notes:
+  - "GUARANTEED, not a chance — unlike the other on-contact effects in this set, Exhaust has NO RandomPercentage roll. Every damaging contact hit drops the target's accuracy by 1 (MOVE_EFFECT_ACC_MINUS_1) as long as the target is above -6."
+  - "Suppressed when the attacker holds Protective Pads, when the hit is confusion self-damage, or when the target took no damage."
+  - "stat-change is the closest neutral trigger; the real shape is 'on a damaging contact hit, apply a -1 accuracy stat change to the target'."
+engine_hints:
+  pokeemerald: "src/battle_util.c ABILITYEFFECT_MOVE_END_ATTACKER, case ABILITY_EXHAUST (line ~6424). Gates: !MOVE_RESULT_NO_EFFECT, IsBattlerAlive(target), !confusionSelfDmg, IsMoveMakingContact, IsBattlerTurnDamaged, holdEffect != PROTECTIVE_PADS, CompareStat(target, STAT_ACC, MIN_STAT_STAGE, CMP_GREATER_THAN). No RNG. Applies gBattleScripting.moveEffect = MOVE_EFFECT_ACC_MINUS_1."
+  essentials: "In the on-dealing-contact hook, unconditionally apply a -1 ACCURACY stat stage to the target when the contact move deals damage and the target is above -6."

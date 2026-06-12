@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Immolate
+chrooked_id: immolate
+applies_to: ability
+aka: { pokeemerald: ABILITY_IMMOLATE }
+effects:
+  - summary: "Normal-type moves become Fire-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Fire, then multiply its power by 1.2"
+test_cases:
+  - given: "Immolate user uses Tackle (Normal) at a Grass-type foe"
+    expect: "Tackle deals damage as a Fire-type move (super effective vs Grass) with 1.2x power"
+  - given: "Immolate user uses Tackle vs a Water-type foe"
+    expect: "the move resolves as Fire-type (not very effective), confirming the type changed from Normal"
+  - given: "Immolate user uses Ember (already Fire) or Water Gun (Water)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "The boost only applies because the conversion fired (ateBoost flag); a move already Fire-type gets neither change nor boost."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_FIRE (src/battle_main.c:5872); +20% in battle_util.c type-modifier switch, case ABILITY_IMMOLATE, UQ_4_12(1.2) gated on moveType==TYPE_FIRE && ateBoost (src/battle_util.c:6904). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Immolate and move is Normal, set type to :FIRE and apply a 1.2x base-power multiplier"

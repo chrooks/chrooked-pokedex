@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Overcharge
+chrooked_id: overcharge
+applies_to: ability
+aka: { pokeemerald: ABILITY_OVERCHARGE }
+effects:
+  - summary: "While at low HP, this Pokemon's Electric-type moves deal 50% more damage."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker, the move's type is Electric, and this Pokemon's current HP is at or below 1/3 of its max HP"
+    effect: "multiply the move's damage by 1.5"
+test_cases:
+  - given: "an Overcharge user at 1/4 max HP uses Thunderbolt (Electric)"
+    expect: "damage is 1.5x what the same Pokemon would deal without Overcharge"
+  - given: "an Overcharge user at full HP uses Thunderbolt (Electric)"
+    expect: "no boost; damage is unmodified (HP is above the 1/3 threshold)"
+  - given: "an Overcharge user at 1/4 max HP uses Ice Beam (Ice)"
+    expect: "no boost; the move is not Electric-type"
+notes:
+  - "This is the Electric counterpart to Blaze/Torrent/Overgrow. The threshold is inclusive: the boost triggers when current HP <= maxHP / 3 (integer division), i.e. at or below one third — not strictly below."
+  - "Uses the same rounding behavior as the pinch abilities (multiply_half_down) in the fork."
+engine_hints:
+  pokeemerald: "type-modifier switch in src/battle_util.c (~line 7284); case ABILITY_OVERCHARGE multiplies modifier by UQ_4_12(1.5) via uq4_12_multiply_half_down when moveType == TYPE_ELECTRIC AND gBattleMons[battlerAtk].hp <= (maxHP / 3). Identical shape to ABILITY_BLAZE/TORRENT/OVERGROW."
+  essentials: "Battle::Move damage calc — 1.5x multiplier when user's ability is Overcharge, move.type == :ELECTRIC, and user.hp <= user.totalhp / 3 (mirror the Blaze implementation)."

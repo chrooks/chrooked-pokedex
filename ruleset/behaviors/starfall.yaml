@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Starfall
+chrooked_id: starfall
+applies_to: ability
+aka: { pokeemerald: ABILITY_STARFALL }
+effects:
+  - summary: "Special moves have a 30% chance to lower the target's Special Defense."
+    trigger: stat-change
+    when: "this Pokemon damages a target with a special move and the target survives"
+    effect: "with a 30% chance, lower the target's Special Defense by 1 stage"
+test_cases:
+  - given: "a Starfall Pokemon uses a special move (e.g. Ember) and the target survives (roll succeeds)"
+    expect: "the target's Special Defense drops one stage"
+  - given: "a Starfall Pokemon uses a physical move (e.g. Tackle)"
+    expect: "the target's Special Defense is unchanged (not a special move = no trigger)"
+  - given: "a Starfall Pokemon uses a special move but the 30% roll fails"
+    expect: "no stat change occurs"
+notes:
+  - "Drop chance is 30% (RandomPercentage(RNG_STARFALL, 30)). Keys off the move being special category (IsBattleMoveSpecial), NOT contact — so it fires on any damaging special hit."
+  - "Suppressed when the attacker holds nothing relevant but is gated on: !MOVE_RESULT_NO_EFFECT, target alive, !confusionSelfDmg, target took damage."
+  - "stat-change is the closest neutral trigger; the real shape is 'on a damaging special hit, roll 30% to apply a -1 Sp. Def stat change to the target'."
+engine_hints:
+  pokeemerald: "src/battle_util.c ABILITYEFFECT_MOVE_END_ATTACKER, case ABILITY_STARFALL (line ~6359). Gates: !MOVE_RESULT_NO_EFFECT, IsBattlerAlive(target), !confusionSelfDmg, IsBattleMoveSpecial(gCurrentMove), IsBattlerTurnDamaged, RandomPercentage(RNG_STARFALL, 30). Applies gBattleScripting.moveEffect = MOVE_EFFECT_SP_DEF_MINUS_1."
+  essentials: "In the on-dealing-damage hook, when the move category is :Special and it dealt damage, roll 30% and apply a -1 SPECIAL_DEFENSE stat stage to the target."

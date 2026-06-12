@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Magical Fists
+chrooked_id: magicalfists
+applies_to: ability
+aka: { pokeemerald: ABILITY_MAGICAL_FISTS }
+effects:
+  - summary: "Punching moves deal 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a move flagged as a punching move"
+    effect: "multiply the move's damage by 1.3"
+  - summary: "Physical punching moves use the user's Sp. Atk instead of Attack."
+    trigger: damage-calc
+    when: "this Pokemon uses a physical move flagged as a punching move"
+    effect: "for the attack-stat term, substitute the user's Sp. Atk stat and its Sp. Atk stat stages in place of Attack"
+test_cases:
+  - given: "Magical Fists user uses Mach Punch (a physical punching move) with high Sp. Atk and low Attack"
+    expect: "damage is computed from Sp. Atk and is multiplied by 1.3"
+  - given: "Magical Fists user uses Tackle (physical, not a punch)"
+    expect: "no boost and no stat override; damage uses Attack as normal"
+  - given: "Magical Fists user has its Attack lowered but Sp. Atk raised, then uses a punching move"
+    expect: "the Sp. Atk stat stages apply (not the Attack stages)"
+notes:
+  - "Two distinct mechanics: a 1.3x power boost AND a category-style attack-stat override. They are independent code paths in the fork (boost in the damage modifier switch; stat override in CalcAttackStat)."
+  - "The stat override only triggers for moves that are physical AND punching; it does not change the move's damage class for type effectiveness or anything else, only which attack stat is read."
+engine_hints:
+  pokeemerald: "Boost: src/battle_util.c (~line 7380) case ABILITY_MAGICAL_FISTS gates on IsPunchingMove(move) → UQ_4_12(1.3). Stat override: CalcAttackStat (~line 7191) — when IsBattleMovePhysical(move) && atkAbility==ABILITY_MAGICAL_FISTS && IsPunchingMove(move), atkStat/atkStage are read from spAttack / STAT_SPATK."
+  essentials: "Battle::Move damage-calc — if user ability is Magical Fists and move has the punch flag: apply 1.3x; and if the move is physical, swap the attack stat read to Special Attack (including its stat stages)."

@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Updraft
+chrooked_id: updraft
+applies_to: ability
+aka: { pokeemerald: ABILITY_UPDRAFT }
+effects:
+  - summary: "Immune to Ground moves; takes no damage from them."
+    trigger: damage-calc
+    when: "an incoming move's type is Ground"
+    effect: "the move is blocked and deals no damage (no stat change, like Soundproof)"
+  - summary: "Boosts wing and wind moves by 30%."
+    trigger: damage-calc
+    when: "this Pokemon uses a wing move or a wind move"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "an Updraft Pokemon is hit by Earthquake (Ground)"
+    expect: "it takes 0 damage and no stat changes"
+  - given: "an Updraft Pokemon uses a wind move (e.g. Hurricane / Gust class) "
+    expect: "the move deals ~30% more damage"
+  - given: "an Updraft Pokemon uses a non-wing/non-wind move"
+    expect: "no damage boost applies"
+notes:
+  - "Ground immunity is a pure block (no heal, no stat gain) — same script as Soundproof."
+  - "The 1.3x boost keys off the engine's IsWingMove / IsWindMove move flags, matching ABILITY_WINGSPAN's identical boost."
+engine_hints:
+  pokeemerald: "Ground block in TryAbsorbMove switch via BattleScript_SoundproofProtected, src/battle_util.c:2451. Damage boost in attacker-ability damage modifier, src/battle_util.c:6965 — UQ_4_12(1.3) when IsWingMove(move) || IsWindMove(move)."
+  essentials: "Ground type-immunity hook (block, no effect) plus a 1.3x damage modifier on moves flagged as wing/wind."

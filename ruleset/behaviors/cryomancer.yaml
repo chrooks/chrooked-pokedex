@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Cryomancer
+chrooked_id: cryomancer
+applies_to: ability
+aka: { pokeemerald: ABILITY_CRYOMANCER }
+effects:
+  - summary: "This Pokemon's Ice-type moves deal 50% more damage."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker and the move's type is Ice"
+    effect: "multiply the move's damage by 1.5"
+test_cases:
+  - given: "a Cryomancer user uses Ice Beam (Ice) at a neutral target"
+    expect: "damage is 1.5x what the same Pokemon would deal without Cryomancer"
+  - given: "a Cryomancer user uses Thunderbolt (Electric)"
+    expect: "no boost; damage is unmodified"
+  - given: "a Cryomancer user uses Powder Snow (Ice) at full HP"
+    expect: "1.5x boost still applies — there is no HP threshold"
+notes:
+  - "Unconditional: the boost does not require low HP or any weather. It always applies to Ice moves."
+  - "Applies to the attacker's own ability; it is an attack-power modifier, not a defensive one."
+engine_hints:
+  pokeemerald: "type-modifier switch in src/battle_util.c (~line 6867); case ABILITY_CRYOMANCER multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_ICE. Sits alongside Kindle/Bloom."
+  essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Cryomancer and move.type == :ICE."

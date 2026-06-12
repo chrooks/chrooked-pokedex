@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Toxic Boost
+chrooked_id: toxicboost
+applies_to: ability
+aka: { pokeemerald: ABILITY_TOXIC_BOOST }
+effects:
+  - summary: "Boosts physical move damage by 50% while poisoned."
+    trigger: damage-calc
+    when: "this Pokemon is poisoned (regular or bad poison) and uses a physical move"
+    effect: "multiply the physical move's damage by 1.5"
+test_cases:
+  - given: "a poisoned Toxic Boost Pokemon uses a physical move"
+    expect: "the move deals 50% more damage"
+  - given: "a non-poisoned Toxic Boost Pokemon uses a physical move"
+    expect: "no damage boost applies"
+  - given: "a poisoned Toxic Boost Pokemon uses a special move"
+    expect: "no damage boost applies (physical only)"
+notes:
+  - "FLAG — description mismatch: the prompt and several reference docs say Toxic Boost is 'immune to poison damage'. The fork's C does NOT implement poison-damage immunity; the in-game data description is only 'Ups Attack if poisoned.' Poison end-of-turn damage still applies. Do not implement the immunity unless the fork's C is changed to add it."
+  - "Triggers on STATUS1_PSN_ANY (regular poison and bad/toxic poison both qualify)."
+  - "Mainline-canonical Toxic Boost normally boosts +50% Attack stat; this fork applies it as a 1.5x physical-damage modifier (same shape as Flare Boost for special)."
+engine_hints:
+  pokeemerald: "Attacker-ability damage modifier, src/battle_util.c:6807 — UQ_4_12(1.5) when (status1 & STATUS1_PSN_ANY) && IsBattleMovePhysical(move). No poison-damage-immunity branch exists in the C."
+  essentials: "1.5x physical damage modifier gated on the user being poisoned. Do NOT add poison-damage immunity unless porting a changed C."

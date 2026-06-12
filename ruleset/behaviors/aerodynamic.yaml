@@ -1,0 +1,34 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Aerodynamic
+chrooked_id: aerodynamic
+applies_to: ability
+aka: { pokeemerald: ABILITY_AERODYNAMIC }
+effects:
+  - summary: "Immune to Flying moves; takes no damage from them."
+    trigger: damage-calc
+    when: "an incoming move's type is Flying"
+    effect: "the move is absorbed and deals no damage to this Pokemon"
+  - summary: "Absorbing a Flying move raises this Pokemon's Speed by one stage."
+    trigger: on-hit
+    when: "an incoming move's type is Flying"
+    effect: "raise this Pokemon's Speed by 1 stage instead of taking damage"
+    # imperfect-fit: the immunity and the stat-up are one atomic absorption in C,
+    # split here into two neutral effects (damage-calc + on-hit).
+  - summary: "In double battles, draws single-target Flying moves toward itself."
+    trigger: turn-order
+    when: "a single-target Flying move is used and this Pokemon is a valid redirect target"
+    effect: "redirect the Flying move to this Pokemon (like Lightning Rod / Storm Drain)"
+test_cases:
+  - given: "an Aerodynamic Pokemon is hit by Air Slash (Flying)"
+    expect: "it takes 0 damage and its Speed rises by 1 stage"
+  - given: "an Aerodynamic Pokemon is hit by Tackle (Normal)"
+    expect: "it takes normal damage and Speed does not change"
+  - given: "in a double battle, a foe targets the Aerodynamic Pokemon's ally with a single-target Flying move"
+    expect: "the move is redirected to the Aerodynamic Pokemon"
+notes:
+  - "Redirection follows the same gating as Lightning Rod / Storm Drain: doubles only, single-target moves, not Snipe Shot / Propeller Tail / Stalwart users."
+  - "Modeled on Motor Drive (immunity + Speed +1)."
+engine_hints:
+  pokeemerald: "Immunity + Speed +1 via AbsorbedByStatIncreaseAbility(..., STAT_SPEED, 1) in TryAbsorbMove switch, src/battle_util.c:2480. Redirection in src/battle_move_resolution.c:811 and :837 (Flying alongside Lightning Rod/Storm Drain)."
+  essentials: "Add a Flying entry to pbCheckMoveImmunity / type-absorb hook that raises Speed; mirror Lightning Rod redirection for doubles."

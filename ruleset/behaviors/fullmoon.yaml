@@ -1,0 +1,31 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Full Moon
+chrooked_id: fullmoon
+applies_to: ability
+aka: { pokeemerald: ABILITY_FULL_MOON }
+effects:
+  - summary: "This Pokemon's Dark- and Fairy-type moves get the Same-Type Attack Bonus, regardless of its own types."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker, the move's type is Dark or Fairy, and the move is a real damaging move (not Struggle, not an empty slot)"
+    effect: "apply a 1.5x STAB multiplier even when the move's type does not match any of this Pokemon's types"
+  - summary: "When this Pokemon uses Moonlight, it recovers 75% of its max HP."
+    trigger: on-hit
+    when: "this Pokemon uses the move Moonlight"
+    effect: "set Moonlight's recovery for this Pokemon to 3/4 (75%) of max HP, overriding the usual weather/time-of-day scaling"
+test_cases:
+  - given: "a pure Normal-type with Full Moon uses Dark Pulse (Dark)"
+    expect: "damage is multiplied by 1.5 (STAB granted despite Dark not matching Normal)"
+  - given: "a Full Moon user uses Flamethrower (Fire)"
+    expect: "no STAB from Full Moon; only Dark and Fairy moves qualify (normal type-match STAB still applies if Fire matches its types)"
+  - given: "a Full Moon user at half HP uses Moonlight"
+    expect: "it heals 75% of its max HP, ignoring weather and time of day"
+notes:
+  - "STAB is a flat 1.5x (not the 2.0x Adaptability bonus). Excludes MOVE_STRUGGLE and MOVE_NONE."
+  - "The Moonlight heal is a modification to the recovery move, not a passive turn-end heal. 'on-hit' is the closest neutral trigger; the imperfect fit is that Moonlight is a self-targeting status move with no foe contact — read it as 'when this Pokemon resolves the Moonlight move'."
+  - "The 75% heal replaces ALL of Moonlight's normal branches (sun = 2/3, no weather = 1/2, bad weather = 1/4, and the Gen-2 time-of-day path). Full Moon's flat 3/4 takes precedence whenever the user has the ability."
+  - "If the user is already at full HP, Moonlight still fails as usual (the recover routine only runs when hp != maxHP)."
+engine_hints:
+  pokeemerald: "STAB: GetSameTypeAttackBonusModifier in src/battle_util.c (~line 7756) returns UQ_4_12(1.5) when abilityAtk == ABILITY_FULL_MOON and moveType is TYPE_DARK or TYPE_FAIRY (non-Struggle). Heal: Cmd_recoverbasedonsunlight in src/battle_script_commands.c (~line 9491) sets recoverAmount = 3 * maxHP / 4 when GetMoveEffect == EFFECT_MOONLIGHT and ability == ABILITY_FULL_MOON, before the weather/time branches."
+  essentials: "STAB: override STAB step to return 1.5 for Dark/Fairy moves when ability is Full Moon. Heal: in the Moonlight effect (PBEffects/EFFECT_MOONLIGHT recover handler), set heal to (user.totalhp * 3 / 4) when the user's ability is Full Moon, bypassing the weather-based amounts."

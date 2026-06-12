@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Petal Barrier
+chrooked_id: petalbarrier
+applies_to: ability
+aka: { pokeemerald: ABILITY_PETAL_BARRIER }
+effects:
+  - summary: "Incoming special moves deal 25% less damage."
+    trigger: damage-calc
+    when: "this Pokemon is the target of a special-category damaging move"
+    effect: "multiply the incoming damage by 0.75"
+  - summary: "May cure its own non-volatile status each turn (Shed Skin mechanic)."
+    trigger: turn-end
+    when: "this Pokemon has a non-volatile status (poison, toxic, burn, paralysis, sleep, freeze/frostbite)"
+    effect: "with a 1-in-3 chance (30% under the Gen 4 trigger-chance config), clear the status"
+test_cases:
+  - given: "a Petal Barrier Pokemon is hit by a special move such as Surf"
+    expect: "it takes 0.75x the damage it would otherwise take"
+  - given: "a Petal Barrier Pokemon is hit by a physical move such as Tackle"
+    expect: "no damage reduction applies — only special moves are reduced"
+  - given: "a Petal Barrier Pokemon is burned and survives several end-of-turn ticks"
+    expect: "the burn is eventually cured at end of turn (about 1-in-3 chance per turn)"
+notes:
+  - "Two distinct effects. The status cure shares the exact Shed Skin code path (same case label and RNG_SHED_SKIN roll), so chance and behavior match Shed Skin precisely."
+  - "The special-damage reduction is a flat 0.75x and does NOT require the hit to be super-effective. Same shape as Ice Scales (0.5x) but milder."
+  - "'Petals' is flavor — there is no petal counter; the heal is a per-turn random roll like Shed Skin. Status cure mapped to turn-end, its exact engine fit."
+engine_hints:
+  pokeemerald: "Two sites in src/battle_util.c. (1) Special-damage reduction: GetDefenderAbilitiesModifier switch (~line 10608) — `case ABILITY_PETAL_BARRIER: if (IsBattleMoveSpecial(move)) return UQ_4_12(0.75);`. (2) End-of-turn status cure: end-of-turn ability switch (~line 5485) shares the Shed Skin case — clears status1 on RandomChance(RNG_SHED_SKIN, 1, 3) (or 30% when B_ABILITY_TRIGGER_CHANCE == GEN_4)."
+  essentials: "Defensive: in the damage modifier hook, if the incoming move is special and the target has Petal Barrier, multiply damage by 0.75. Status cure: in the end-of-turn ability handler, port Shed Skin — 1/3 chance to cure the holder's status."

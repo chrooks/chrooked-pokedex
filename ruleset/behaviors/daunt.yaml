@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Daunt
+chrooked_id: daunt
+applies_to: ability
+aka: { pokeemerald: ABILITY_DAUNT }
+effects:
+  - summary: "On entry, lowers the Sp. Atk of all adjacent foes by one stage."
+    trigger: switch-in
+    when: "this Pokemon switches in and the opposing side is not empty"
+    effect: "lower each opposing battler's Sp. Atk by 1 stage (Intimidate clone for Special Attack)"
+test_cases:
+  - given: "a Daunt Pokemon switches in against a single foe"
+    expect: "the foe's Sp. Atk drops by 1 stage"
+  - given: "a Daunt Pokemon switches in against an empty opposing side"
+    expect: "no stat change occurs"
+  - given: "in a double battle, a Daunt Pokemon switches in against two foes"
+    expect: "both foes' Sp. Atk drop by 1 stage"
+notes:
+  - "Exact structural clone of Intimidate, but targets STAT_SPATK instead of STAT_ATK."
+  - "Subject to the same suppression as Intimidate (e.g. abilities/effects that block lowered stats on entry)."
+engine_hints:
+  pokeemerald: "Switch-in ability effect, src/battle_util.c:3477 — SET_STATCHANGER(STAT_SPATK, 1, TRUE) + BattleScript_IntimidateActivates, gated on shouldAbilityTrigger && !IsOpposingSideEmpty."
+  essentials: "On-switch-in hook that applies a -1 Special Attack to all opposing active battlers, mirroring Intimidate."

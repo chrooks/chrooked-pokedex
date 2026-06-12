@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Insidious
+chrooked_id: insidious
+applies_to: ability
+aka: { pokeemerald: ABILITY_INSIDIOUS }
+effects:
+  - summary: "Using a status move raises the user's Speed by one stage."
+    trigger: stat-change
+    when: "this Pokemon uses a status-category move and its Speed is below +6"
+    effect: "raise this Pokemon's Speed by 1 stage"
+test_cases:
+  - given: "an Insidious Pokemon uses a status move (e.g. Toxic, Thunder Wave, Swords Dance) while Speed is below +6"
+    expect: "the user's Speed rises one stage"
+  - given: "an Insidious Pokemon uses a damaging move (physical or special)"
+    expect: "Speed is unchanged (only status-category moves trigger)"
+  - given: "an Insidious Pokemon at +6 Speed uses a status move"
+    expect: "the trigger does not fire (gated on Speed below MAX_STAT_STAGE)"
+notes:
+  - "Boost is +1 Speed (SET_STATCHANGER(STAT_SPEED, 1, FALSE)). Gated only on the move being status category (IsBattleMoveStatus) and Speed below +6 — there is no success/accuracy check in the C, so it fires whenever a status move is used in the attacker move-end window."
+  - "IMPERFECT TRIGGER FIT: the real trigger is 'the user uses a status move'. The closest neutral trigger is stat-change with a `when` keyed on move category — flagged as an imperfect fit per spec rules."
+engine_hints:
+  pokeemerald: "src/battle_util.c ABILITYEFFECT_MOVE_END_ATTACKER, case ABILITY_INSIDIOUS (line ~6413). Gates: IsBattleMoveStatus(move) && CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN). SET_STATCHANGER(STAT_SPEED, 1, FALSE) via BattleScript_AttackerAbilityStatRaise."
+  essentials: "In the attacker move-end hook, if the move category is :Status and the user has Insidious, apply a +1 SPEED stat stage to the user (skip if already +6)."

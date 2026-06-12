@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Impale
+chrooked_id: impale
+applies_to: ability
+aka: { pokeemerald: ABILITY_IMPALE }
+effects:
+  - summary: "Piercing moves deal 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a move flagged as a piercing move"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "Impale user uses a piercing move (e.g. Horn Attack / Fury Attack)"
+    expect: "damage is multiplied by 1.3"
+  - given: "Impale user uses Tackle (not a piercing move)"
+    expect: "no boost; normal damage applies"
+  - given: "a Pokemon without Impale uses a piercing move"
+    expect: "no boost; normal damage applies"
+notes:
+  - "Keys off the per-move piercingMove flag, not the move's type."
+engine_hints:
+  pokeemerald: "src/battle_util.c attacker-ability damage modifier switch (~line 6953): case ABILITY_IMPALE gates on IsPiercingMove(move) → UQ_4_12(1.3). Flag = gMovesInfo[].piercingMove (custom flag, include/move.h:137)."
+  essentials: "Battle::Move damage-calc hook — if user ability is Impale and move has the piercing flag, apply a 1.3x multiplier."

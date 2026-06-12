@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Martialize
+chrooked_id: martialize
+applies_to: ability
+aka: { pokeemerald: ABILITY_MARTIALIZE }
+effects:
+  - summary: "Normal-type moves become Fighting-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Fighting, then multiply its power by 1.2"
+test_cases:
+  - given: "Martialize user uses Tackle (Normal) at a Normal-type foe"
+    expect: "Tackle deals damage as a Fighting-type move (super effective vs Normal) with 1.2x power"
+  - given: "Martialize user uses Tackle vs a Ghost-type foe"
+    expect: "the move has no effect (Fighting does not hit Ghost), confirming the type changed from Normal"
+  - given: "Martialize user uses Brick Break (already Fighting) or Ember (Fire)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "Converting Normal to Fighting flips the matchup against Ghost from immune-via-Normal to immune-via-Fighting; the move still cannot hit Ghost types."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_FIGHTING (src/battle_main.c:5874); +20% in battle_util.c type-modifier switch, case ABILITY_MARTIALIZE, UQ_4_12(1.2) gated on moveType==TYPE_FIGHTING && ateBoost (src/battle_util.c:6908). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Martialize and move is Normal, set type to :FIGHTING and apply a 1.2x base-power multiplier"

@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Forestry
+chrooked_id: forestry
+applies_to: ability
+aka: { pokeemerald: ABILITY_FORESTRY }
+effects:
+  - summary: "All of this Pokemon's attacks deal 30% more damage while Grassy Terrain is up."
+    trigger: damage-calc
+    when: "Grassy Terrain is active AND this Pokemon is grounded"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "Forestry user (grounded) uses any damaging move while Grassy Terrain is active"
+    expect: "damage is multiplied by 1.3"
+  - given: "Forestry user uses a move with no terrain active"
+    expect: "no boost; normal damage applies"
+  - given: "Forestry user is airborne (Flying-type / Levitate) under Grassy Terrain"
+    expect: "no boost; the user must be grounded"
+notes:
+  - "The boost applies to every move type, not a specific category — it is a blanket attacker boost gated only on terrain + grounding."
+  - "Grounding is required, matching how Grassy Terrain itself only buffs grounded users."
+engine_hints:
+  pokeemerald: "src/battle_util.c attacker-ability damage modifier switch (~line 7370): case ABILITY_FORESTRY gates on (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN && IsBattlerGrounded(...)) → UQ_4_12(1.3)."
+  essentials: "Battle::Move damage-calc hook — if user ability is Forestry and the field is Grassy Terrain and the user is grounded, apply a 1.3x multiplier."

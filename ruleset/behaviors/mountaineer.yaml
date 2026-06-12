@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Mountaineer
+chrooked_id: mountaineer
+applies_to: ability
+aka: { pokeemerald: ABILITY_MOUNTAINEER }
+effects:
+  - summary: "Immune to Rock moves; takes no damage from them."
+    trigger: damage-calc
+    when: "an incoming move's type is Rock"
+    effect: "the move is blocked and deals no damage (no stat change, like Soundproof)"
+  - summary: "Ignores Stealth Rock damage on switch-in."
+    trigger: switch-in
+    when: "this Pokemon switches in and Stealth Rock is on its side"
+    effect: "take no entry damage from Stealth Rock"
+test_cases:
+  - given: "a Mountaineer Pokemon is hit by Rock Slide (Rock)"
+    expect: "it takes 0 damage and no stat changes"
+  - given: "a Mountaineer Pokemon switches into a side with Stealth Rock set"
+    expect: "it takes no Stealth Rock entry damage"
+  - given: "a Mountaineer Pokemon is hit by Earthquake (Ground)"
+    expect: "it takes normal damage (only Rock is blocked)"
+notes:
+  - "Rock immunity is a pure block (no heal, no stat gain) — same script as Soundproof."
+  - "Stealth Rock immunity is alongside Magic Guard in the hazard check; other hazards (Spikes, Toxic Spikes, etc.) are NOT covered."
+engine_hints:
+  pokeemerald: "Rock block in TryAbsorbMove switch via BattleScript_SoundproofProtected, src/battle_util.c:2446. Stealth Rock exemption in src/battle_switch_in.c:368 (ability != MAGIC_GUARD && ability != MOUNTAINEER)."
+  essentials: "Type-immunity hook for Rock (block, no effect) plus a guard in the Stealth Rock entry-hazard routine."

@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Deep-Rooted
+chrooked_id: deeprooted
+applies_to: ability
+aka: { pokeemerald: ABILITY_DEEP_ROOTED }
+effects:
+  - summary: "Increases HP recovered from draining effects by 30%."
+    trigger: damage-calc
+    when: "this Pokemon recovers HP from a draining move or passive drain effect"
+    effect: "multiply the HP recovered by 1.3 (rounded down, minimum 1)"
+test_cases:
+  - given: "a Deep-Rooted Pokemon uses Giga Drain that would normally restore 50 HP"
+    expect: "it restores 65 HP (50 x 1.3)"
+  - given: "a Deep-Rooted Pokemon is the seeder receiving Leech Seed drain of 10 HP"
+    expect: "it restores 13 HP (10 x 1.3)"
+  - given: "a Deep-Rooted Pokemon uses a non-draining move like Tackle"
+    expect: "no bonus recovery applies (the multiplier only touches drain healing)"
+notes:
+  - "Applies to BOTH damage-dealing drain moves (Absorb, Mega Drain, Giga Drain, Drain Punch, Leech Life, Dream Eater) and passive drain effects (Ingrain, Leech Seed receiver, Strength Sap, Aqua Ring) — all route through the same GetDrainedBigRootHp helper."
+  - "Stacks multiplicatively with the Big Root hold item: Big Root x1.3 then Deep-Rooted x1.3 = x1.69 total recovery."
+  - "Recovery is floored, with a minimum of 1 HP."
+  - "Liquid Ooze on the drained target still flips the heal into damage as normal; Deep-Rooted only scales the magnitude that GetDrainedBigRootHp returns."
+engine_hints:
+  pokeemerald: "src/battle_util.c GetDrainedBigRootHp (~line 1822): if attacker has ABILITY_DEEP_ROOTED, hp = (hp * 1300) / 1000, applied after the Big Root x1.3, floored to min 1. Called from SetHealScript in src/battle_move_resolution.c:2181 (damage-drain moves) and from src/battle_end_turn.c (Ingrain/Aqua Ring ~405/424, Leech Seed receiver ~447)."
+  essentials: "In the drain/heal resolution (PBEffects drain moves and Ingrain/Leech Seed/Aqua Ring end-of-turn recovery), if the recovering battler has Deep-Rooted, multiply the heal amount by 1.3 (after Big Root), floor, minimum 1."

@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Kindle
+chrooked_id: kindle
+applies_to: ability
+aka: { pokeemerald: ABILITY_KINDLE }
+effects:
+  - summary: "This Pokemon's Fire-type moves deal 50% more damage."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker and the move's type is Fire"
+    effect: "multiply the move's damage by 1.5"
+test_cases:
+  - given: "a Kindle user uses Flamethrower (Fire) at a neutral target"
+    expect: "damage is 1.5x what the same Pokemon would deal without Kindle"
+  - given: "a Kindle user uses Surf (Water)"
+    expect: "no boost; damage is unmodified"
+  - given: "a Kindle user uses Ember (Fire) at full HP"
+    expect: "1.5x boost still applies — there is no HP threshold"
+notes:
+  - "Unconditional: unlike Blaze, the boost does not require low HP. It always applies to Fire moves."
+  - "Applies to the attacker's own ability; it is an attack-power modifier, not a defensive one."
+engine_hints:
+  pokeemerald: "type-modifier switch in src/battle_util.c (~line 6863); case ABILITY_KINDLE multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_FIRE. Sits alongside Cryomancer/Bloom."
+  essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Kindle and move.type == :FIRE (mirror the Blaze hook but without the HP check)."

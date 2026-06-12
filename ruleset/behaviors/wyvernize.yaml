@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Wyvernize
+chrooked_id: wyvernize
+applies_to: ability
+aka: { pokeemerald: ABILITY_WYVERNIZE }
+effects:
+  - summary: "Normal-type moves become Dragon-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Dragon, then multiply its power by 1.2"
+test_cases:
+  - given: "Wyvernize user uses Tackle (Normal) at a Dragon-type foe"
+    expect: "Tackle deals damage as a Dragon-type move (super effective vs Dragon) with 1.2x power"
+  - given: "Wyvernize user uses Tackle vs a Fairy-type foe"
+    expect: "the move has no effect (Dragon does not hit Fairy), confirming the type changed from Normal"
+  - given: "Wyvernize user uses Dragon Claw (already Dragon) or Ember (Fire)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "Converting Normal to Dragon makes the move unable to hit Fairy types and gives it Steel resistance."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_DRAGON (src/battle_main.c:5892); +20% in battle_util.c type-modifier switch, case ABILITY_WYVERNIZE, UQ_4_12(1.2) gated on moveType==TYPE_DRAGON && ateBoost (src/battle_util.c:6932). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Wyvernize and move is Normal, set type to :DRAGON and apply a 1.2x base-power multiplier"

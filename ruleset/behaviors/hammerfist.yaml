@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Hammerfist
+chrooked_id: hammerfist
+applies_to: ability
+aka: { pokeemerald: ABILITY_HAMMERFIST }
+effects:
+  - summary: "Punch, hammer, and slam moves deal 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a move flagged as a hammer move OR a punching move"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "a Hammerfist user uses a punching move such as Mach Punch"
+    expect: "damage is multiplied by 1.3"
+  - given: "a Hammerfist user uses a hammer/slam move such as Hammer Arm or Body Slam"
+    expect: "damage is multiplied by 1.3"
+  - given: "a Hammerfist user uses Tackle (neither hammer nor punch)"
+    expect: "no boost; normal damage applies"
+notes:
+  - "Multiplier is 1.3x — confirmed in C. Keyed on `IsHammerMove(move) || IsPunchingMove(move)`."
+  - "The hammerMove flag covers both hammers and slams: Slam, Body Slam, Hammer Arm, Iron Head, Wood Hammer, Heavy Slam, Ice Hammer, Gigaton Hammer. The punchingMove flag adds the punch category. Together these are the 'punch, hammer, and slam' set from the description."
+  - "Hammerfist is the superset of Sledgehammer (which boosts hammer/slam only); Hammerfist adds punches on top."
+engine_hints:
+  pokeemerald: "src/battle_util.c CalcAttackerAbilitiesModifier switch (~line 9733) — `case ABILITY_HAMMERFIST: if (IsHammerMove(move) || IsPunchingMove(move)) modifier *= UQ_4_12(1.3);`. Flags: gMovesInfo[].hammerMove (IsHammerMove) and gMovesInfo[].punchingMove (IsPunchingMove), both in include/move.h."
+  essentials: "In the damage-calc, if the user has Hammerfist and the move belongs to the hammer/slam or punch set, apply 1.3x. The hammer set covers hammer- and slam-named moves; reuse Iron Fist's punch grouping for the punch half."

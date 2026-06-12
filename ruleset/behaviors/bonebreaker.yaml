@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Bone Breaker
+chrooked_id: bonebreaker
+applies_to: ability
+aka: { pokeemerald: ABILITY_BONE_BREAKER }
+effects:
+  - summary: "Bone moves ignore type immunities."
+    trigger: damage-calc
+    when: "this Pokemon uses a bone-flagged move against a target that would normally be immune by type"
+    effect: "restore the matchup to at least neutral (the 0x type-immunity becomes 1x) — including Ground-vs-ungrounded/Levitate and type-absorb abilities — so the move connects"
+  - summary: "Bone moves deal 20% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a bone-flagged move"
+    effect: "multiply the move's damage by 1.2"
+test_cases:
+  - given: "a Bone Breaker Pokemon uses Bone Rush against a Flying-type immune to Ground"
+    expect: "the move connects and deals damage (Ground immunity ignored)"
+  - given: "a Bone Breaker Pokemon uses a bone move against a Pokemon with Levitate or a Grass-absorb ability"
+    expect: "the move connects and is not absorbed (immunity bypassed)"
+  - given: "a Bone Breaker Pokemon uses a non-bone move such as Tackle"
+    expect: "no immunity bypass and no 20% boost apply"
+notes:
+  - "The +20% boost is 1.2x, NOT the 1.3x most category-booster abilities use — confirmed in C."
+  - "Bone moves are matched by the dedicated boneMove flag. Flagged moves in this fork: Bone Club, Bonemerang, Bone Rush, Shadow Bone, Bone Torch."
+  - "Immunity-ignore has three C touchpoints (type-absorb bypass, type-immunity → 1.0 like Scrappy, and Ground-vs-ungrounded/Levitate bypass). The neutral trigger list folds all of these into damage-calc."
+engine_hints:
+  pokeemerald: "src/battle_util.c. Power: CalcAttackerAbilitiesModifier switch (~line 9725) — `case ABILITY_BONE_BREAKER: if (IsBoneMove(move)) modifier *= UQ_4_12(1.2);`. Immunity bypass: CanAbilityAbsorbMove early-return (~line 4316, returns FALSE for bone moves), MulByTypeEffectiveness restores immune matchups to 1.0 (~line 10917, like Scrappy), and CalcTypeEffectivenessMultiplierInternal skips the Ground-vs-ungrounded 0x (~line 11016). boneMove flag = gMovesInfo[].boneMove (include/move.h IsBoneMove)."
+  essentials: "In the type-immunity check, if the move is a bone move and the user has Bone Breaker, skip the 0x immunity (including Levitate/absorb abilities). In the base-power modifier hook, multiply bone-move damage by 1.2."

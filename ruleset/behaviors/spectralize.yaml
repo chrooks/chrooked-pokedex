@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Spectralize
+chrooked_id: spectralize
+applies_to: ability
+aka: { pokeemerald: ABILITY_SPECTRALIZE }
+effects:
+  - summary: "Normal-type moves become Ghost-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Ghost, then multiply its power by 1.2"
+test_cases:
+  - given: "Spectralize user uses Tackle (Normal) at a Ghost-type foe"
+    expect: "Tackle deals damage as a Ghost-type move (super effective vs Ghost) with 1.2x power"
+  - given: "Spectralize user uses Tackle vs a Normal-type foe"
+    expect: "the move has no effect (Ghost does not hit Normal), confirming the type changed from Normal — a Normal-type Tackle would have hit"
+  - given: "Spectralize user uses Shadow Ball (already Ghost) or Ember (Fire)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "The matchup inverts versus Normal targets: a Normal move would hit, but the converted Ghost move cannot touch a Normal-type foe."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_GHOST (src/battle_main.c:5866); +20% in battle_util.c type-modifier switch, case ABILITY_SPECTRALIZE, UQ_4_12(1.2) gated on moveType==TYPE_GHOST && ateBoost (src/battle_util.c:6896). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Spectralize and move is Normal, set type to :GHOST and apply a 1.2x base-power multiplier"

@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Sacred Toll
+chrooked_id: sacredtoll
+applies_to: ability
+aka: { pokeemerald: ABILITY_SACRED_TOLL }
+effects:
+  - summary: "This Pokemon's sound moves become Psychic-type and gain a 20% damage boost."
+    trigger: damage-calc
+    when: "this Pokemon uses a sound move"
+    effect: "treat the sound move as Psychic-type, then multiply its damage by 1.2"
+test_cases:
+  - given: "a Sacred Toll Pokemon uses a sound move (e.g. Hyper Voice)"
+    expect: "the move is Psychic-type and deals ~20% more damage"
+  - given: "a Sacred Toll Pokemon uses a non-sound move"
+    expect: "no type change and no 1.2x boost"
+  - given: "a Sacred Toll Pokemon uses a sound move into a Psychic-immune (Dark) target"
+    expect: "the Psychic-typed sound move follows normal Psychic type effectiveness (0x vs Dark)"
+notes:
+  - "FLAG — description mismatch: the in-game data description and the prompt say 'Cures team on entry.' The fork's C does NOT implement any team-cure switch-in effect — there is no ABILITY_SACRED_TOLL case in the switch-in ability handler. Only the sound→Psychic conversion + 1.2x boost exist. Do not implement the team cure unless the fork's C adds it."
+  - "The +20% boost is gated on the same 'ateBoost' flag that the sound→Psychic conversion sets, so it applies exactly to converted sound moves (parallel to Liquid Voice's Water conversion + the -ize ability family)."
+engine_hints:
+  pokeemerald: "Type conversion: src/battle_main.c:6120 — IsSoundMove(move) && ability == SACRED_TOLL returns TYPE_PSYCHIC and sets ateBoost. Damage boost: src/battle_util.c:6940 — UQ_4_12(1.2) when moveType == TYPE_PSYCHIC && ateBoost. No switch-in team-cure case exists."
+  essentials: "Convert sound moves to Psychic for this user and add a 1.2x damage modifier. Do NOT add team-cure-on-entry unless porting a changed C."

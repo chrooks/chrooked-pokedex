@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Illusion
+chrooked_id: illusion
+applies_to: ability
+aka: { pokeemerald: ABILITY_ILLUSION }
+effects:
+  - summary: "On entry, this Pokemon disguises itself as the last conscious Pokemon in its party."
+    trigger: switch-in
+    when: "this Pokemon enters battle and a valid (non-self, non-partner) party member exists"
+    effect: "display this Pokemon as that party member's species/name until the illusion breaks"
+  - summary: "The illusion breaks when this Pokemon takes direct damage from an attack."
+    trigger: on-hit
+    when: "this Pokemon is damaged by a damaging move (excluding substitute hits)"
+    effect: "reveal the true Pokemon (illusion is cleared)"
+test_cases:
+  - given: "an Illusion Pokemon switches in with a different species last in the party"
+    expect: "it appears on the field as that other species"
+  - given: "the disguised Illusion Pokemon is hit by a damaging move"
+    expect: "the illusion breaks and its true identity is shown"
+  - given: "the disguised Illusion Pokemon is hit only by an effect that deals no direct attack damage"
+    expect: "the illusion remains intact"
+notes:
+  - "FLAG — description mismatch: the prompt says Illusion '...and hits harder', i.e. a damage boost. The fork's C contains ONLY the standard mainline disguise mechanic (SetIllusionMon / TryClearIllusion / IllusionOff). There is NO Illusion case in any attacker damage modifier — no 'hits harder' boost is implemented. Do not add a damage boost unless the fork's C adds one."
+  - "Illusion is ignored if this Pokemon or its partner is the last party member (no other species to mimic)."
+  - "Certain Tera/forme species (Terapagos Stellar, Ogerpon Tera forms) are skipped as disguise targets."
+engine_hints:
+  pokeemerald: "Disguise setup SetIllusionMon, src/battle_util.c:9336; break on damage in on-hit ability effect, src/battle_util.c:4285 (state == ILLUSION_ON && IsBattlerTurnDamaged → BattleScript_IllusionOff). Overworld follower handling src/event_object_movement.c:5686. No damage-modifier case for ABILITY_ILLUSION exists."
+  essentials: "Use the engine's built-in Illusion (PBS ability flag) — disguise as last party member, clear on damage. Do NOT add a damage boost unless porting a changed C."

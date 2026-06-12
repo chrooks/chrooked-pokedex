@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Whiteout
+chrooked_id: whiteout
+applies_to: ability
+aka: { pokeemerald: ABILITY_WHITEOUT }
+effects:
+  - summary: "In hail, boosts the damage of moves that use this Pokemon's higher attacking stat by 50%."
+    trigger: damage-calc
+    when: "hail is active and affects this Pokemon"
+    effect: "if Attack >= Sp. Atk, multiply physical-move damage by 1.5; otherwise multiply special-move damage by 1.5"
+test_cases:
+  - given: "in hail, a Whiteout Pokemon with Attack >= Sp. Atk uses a physical move"
+    expect: "the move deals 50% more damage"
+  - given: "in hail, a Whiteout Pokemon with Sp. Atk > Attack uses a special move"
+    expect: "the move deals 50% more damage"
+  - given: "in hail, a Whiteout Pokemon whose higher stat is Attack uses a special move"
+    expect: "no boost (only the move category matching the higher stat is boosted)"
+notes:
+  - "The higher-stat tie (Attack == Sp. Atk) resolves to the physical branch."
+  - "Boost only applies while hail weather affects the user (snow/hail handling per the engine's IsBattlerWeatherAffected for B_WEATHER_HAIL)."
+  - "Uses multiply_half_down rounding in the fork, consistent with other 1.5x stat-class boosts."
+engine_hints:
+  pokeemerald: "Attacker-ability damage modifier, src/battle_util.c:7354 — when IsBattlerWeatherAffected(battlerAtk, B_WEATHER_HAIL): if attack >= spAttack boost physical moves x1.5, else boost special moves x1.5 (uq4_12_multiply_half_down)."
+  essentials: "In hail, apply a 1.5x damage modifier to the move category that matches the user's higher attacking stat."

@@ -1,0 +1,31 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Venomous
+chrooked_id: venomous
+applies_to: ability
+aka: { pokeemerald: ABILITY_VENOMOUS }
+effects:
+  - summary: "When struck by a contact move, may poison the attacker."
+    trigger: status-apply
+    when: "an opposing Pokemon hits this Pokemon with a damaging contact move and this Pokemon survives the hit"
+    effect: "30% chance to poison the attacker (regular poison, not toxic)"
+  - summary: "When this Pokemon lands a contact move, may poison the target."
+    trigger: status-apply
+    when: "this Pokemon hits an opponent with a damaging contact move and the target survives the hit"
+    effect: "30% chance to poison the target (regular poison, not toxic)"
+test_cases:
+  - given: "a Venomous Pokemon is hit by an opponent's Tackle (contact) and survives"
+    expect: "30% of the time, the attacker becomes poisoned"
+  - given: "a Venomous Pokemon uses Tackle (contact) and the target survives"
+    expect: "30% of the time, the target becomes poisoned"
+  - given: "a Venomous Pokemon is hit by Water Gun (non-contact)"
+    expect: "the attacker is never poisoned by Venomous (no contact = no trigger)"
+notes:
+  - "Bidirectional means BOTH directions of contact: poisons attackers who touch it (defensive, like Poison Point) AND targets it touches (offensive, like Poison Touch). Each direction is an independent 30% roll."
+  - "Inflicts regular poison via MOVE_EFFECT_POISON, not Toxic."
+  - "Each direction requires the hit to actually deal damage (substitute does not count) and the receiving battler to be alive and poisonable (e.g. not Steel/Poison, not already statused, not behind immunity)."
+  - "Defensive side shares the Poison Point RNG channel (RNG_POISON_POINT); offensive side shares the Poison Touch RNG channel (RNG_POISON_TOUCH)."
+engine_hints:
+  pokeemerald: "Defensive path: src/battle_util.c ABILITYEFFECT_MOVE_END (case ABILITY_VENOMOUS ~line 4211), RandomPercentage(RNG_POISON_POINT, 30), gated by CanBePoisoned + CanBattlerAvoidContactEffects + IsBattlerTurnDamaged. Offensive path: same file ABILITYEFFECT_MOVE_END_ATTACKER (case ABILITY_VENOMOUS ~line 4409, grouped with ABILITY_POISON_TOUCH), RandomPercentage(RNG_POISON_TOUCH, 30), gated by IsMoveMakingContact + CanBePoisoned + IsBattlerTurnDamaged. Both apply MOVE_EFFECT_POISON via BattleScript_AbilityStatusEffect."
+  essentials: "Combine Poison Point and Poison Touch handlers on one ability: in the on-being-hit contact hook and the on-dealing-contact hook, roll 30% each to apply :POISON to the other battler when the move makes contact and deals damage."

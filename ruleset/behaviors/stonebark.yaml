@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Stonebark
+chrooked_id: stonebark
+applies_to: ability
+aka: { pokeemerald: ABILITY_STONEBARK }
+effects:
+  - summary: "Immune to Grass moves; heals instead of taking damage."
+    trigger: damage-calc
+    when: "an incoming move's type is Grass"
+    effect: "absorb the Grass move (matchup becomes 0x, no damage) and restore 1/4 of max HP (Sap-Sipper-style immunity with a Water-Absorb-style heal)"
+  - summary: "Takes 25% more damage from Water moves."
+    trigger: damage-calc
+    when: "an incoming move's type is Water"
+    effect: "multiply the incoming Water-move damage by 1.25"
+test_cases:
+  - given: "a Stonebark Pokemon at less than full HP is hit by a Grass move"
+    expect: "it takes 0 damage and recovers 1/4 of its max HP"
+  - given: "a Stonebark Pokemon is hit by a Water move"
+    expect: "it takes 1.25x the normal Water-move damage"
+  - given: "a Stonebark Pokemon is hit by a Fire move"
+    expect: "no absorb and no extra weakness — normal damage applies"
+notes:
+  - "Grass absorb heals 1/4 max HP (GetNonDynamaxMaxHP / 4), the standard drain-HP-absorb amount. If already at max HP (or under Heal Block), the move is simply negated with no heal."
+  - "The Water weakness is a flat 1.25x damage-taken multiplier (same mechanic as Dry Skin's Fire weakness), applied on top of normal type effectiveness — it does not change the type chart, it stacks multiplicatively."
+  - "Grass immunity is enforced in two places: the absorb handler (heal) and the type-effectiveness AI/preview path (matchup → 0x)."
+engine_hints:
+  pokeemerald: "src/battle_util.c. Grass absorb: CanAbilityAbsorbMove (~line 4384) — `case ABILITY_STONEBARK: if (moveType == TYPE_GRASS) MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;` heal = GetNonDynamaxMaxHP / 4 (~line 4435). Grass type-immunity in CalcSpeciesTypeEffectiveness (~line 11130, grouped with Sap Sipper → 0.0). Water weakness: GetDefenderAbilitiesModifier (~line 9795) — `case ABILITY_STONEBARK: if (moveType == TYPE_WATER) modifier *= UQ_4_12(1.25);`."
+  essentials: "Grass → immune + heal 1/4 max HP (model on Sap Sipper for immunity, Water Absorb for the heal). Water → multiply damage taken by 1.25 (model on Dry Skin's Fire weakness)."

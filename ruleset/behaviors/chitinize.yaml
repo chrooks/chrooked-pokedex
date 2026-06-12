@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Chitinize
+chrooked_id: chitinize
+applies_to: ability
+aka: { pokeemerald: ABILITY_CHITINIZE }
+effects:
+  - summary: "Normal-type moves become Bug-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Bug, then multiply its power by 1.2"
+test_cases:
+  - given: "Chitinize user uses Tackle (Normal) at a Psychic-type foe"
+    expect: "Tackle deals damage as a Bug-type move (super effective vs Psychic) with 1.2x power"
+  - given: "Chitinize user uses Tackle vs a Fire-type foe"
+    expect: "the move resolves as Bug-type (not very effective), confirming the type changed from Normal"
+  - given: "Chitinize user uses X-Scissor (already Bug) or Surf (Water)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "The boost only applies because the conversion fired (ateBoost flag); a move already Bug-type gets neither change nor boost."
+engine_hints:
+  pokeemerald: "type set in TrySetAteType -> TYPE_BUG (src/battle_main.c:5886); +20% in battle_util.c type-modifier switch, case ABILITY_CHITINIZE, UQ_4_12(1.2) gated on moveType==TYPE_BUG && ateBoost (src/battle_util.c:6924). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
+  essentials: "Battle::Move type/damage calc — when user ability is Chitinize and move is Normal, set type to :BUG and apply a 1.2x base-power multiplier"

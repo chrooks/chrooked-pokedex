@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Sledgehammer
+chrooked_id: sledgehammer
+applies_to: ability
+aka: { pokeemerald: ABILITY_SLEDGEHAMMER }
+effects:
+  - summary: "Hammer and slam moves deal 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a move flagged as a hammer move"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "a Sledgehammer user uses a hammer move such as Hammer Arm or Wood Hammer"
+    expect: "damage is multiplied by 1.3"
+  - given: "a Sledgehammer user uses a slam move such as Slam or Body Slam"
+    expect: "damage is multiplied by 1.3"
+  - given: "a Sledgehammer user uses a punching move such as Mach Punch"
+    expect: "no boost — Sledgehammer covers only the hammer/slam flag, not punches"
+notes:
+  - "Multiplier is 1.3x — confirmed in C. Keyed on `IsHammerMove(move)` only."
+  - "The single hammerMove flag covers both hammer and slam moves: Slam, Body Slam, Hammer Arm, Iron Head, Wood Hammer, Heavy Slam, Ice Hammer, Gigaton Hammer. That one flag is the 'hammer and slam' set from the description."
+  - "Sledgehammer is the hammer/slam subset of Hammerfist; Hammerfist additionally boosts punching moves."
+engine_hints:
+  pokeemerald: "src/battle_util.c CalcAttackerAbilitiesModifier switch (~line 9729) — `case ABILITY_SLEDGEHAMMER: if (IsHammerMove(move)) modifier *= UQ_4_12(1.3);`. Flag: gMovesInfo[].hammerMove (IsHammerMove) in include/move.h."
+  essentials: "In the damage-calc, if the user has Sledgehammer and the move belongs to the hammer/slam set, apply 1.3x. Define the hammer set as the hammer- and slam-named moves listed above."

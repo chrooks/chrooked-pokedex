@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Spiteful Block
+chrooked_id: spitefulblock
+applies_to: ability
+aka: { pokeemerald: ABILITY_SPITEFUL_BLOCK }
+effects:
+  - summary: "Taking a damaging hit arms a one-time Dark-move power boost."
+    trigger: on-hit
+    when: "this Pokemon is hit by a damaging move and survives"
+    effect: "set a flag marking that this Pokemon's next Dark-type move is empowered"
+  - summary: "The armed next Dark move deals 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a Dark-type move while the empowered flag is set"
+    effect: "multiply the damage modifier by 1.3 (UQ_4_12(1.3)), then clear the flag"
+test_cases:
+  - given: "a Spiteful Block Pokemon is hit and survives, then uses a Dark-type move (e.g. Bite)"
+    expect: "that Dark move deals 1.3x damage and the boost is consumed (the next Dark move is not boosted)"
+  - given: "a Spiteful Block Pokemon uses a Dark move without having been hit first"
+    expect: "no boost applies (the flag was never armed)"
+  - given: "a Spiteful Block Pokemon is hit, then uses a non-Dark move"
+    expect: "no boost applies; the flag stays armed until a Dark move consumes it"
+notes:
+  - "Boost is exactly +30% (UQ_4_12(1.3)). Arming is a boolean (spitefulBlockReady) — being hit multiple times does not stack; it just stays TRUE until a Dark move consumes it. The flag is cleared the moment a Dark move uses it in damage-calc."
+  - "Arming requires the hit to actually deal damage (IsBattlerTurnDamaged), not be a no-effect hit, and the holder to be alive."
+  - "Two-effect ability: on-hit arms (battle_util.c ~6268); damage-calc consumes (battle_util.c ~9718)."
+engine_hints:
+  pokeemerald: "Arm: src/battle_util.c ABILITYEFFECT_MOVE_END (target side), case ABILITY_SPITEFUL_BLOCK (line ~6268) — set gBattleStruct->spitefulBlockReady[battler] = TRUE when !MOVE_RESULT_NO_EFFECT && IsBattlerTurnDamaged && IsBattlerAlive. Consume: src/battle_util.c attack-modifier switch (line ~9718) — moveType == TYPE_DARK && spitefulBlockReady → UQ_4_12(1.3) and clear the flag. Field: include/battle.h line 754."
+  essentials: "On taking a damaging hit, set a custom flag. In the Dark-type damage modifier hook, if the flag is set, multiply damage by 1.3 and clear the flag."

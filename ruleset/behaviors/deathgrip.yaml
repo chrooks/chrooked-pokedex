@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Death Grip
+chrooked_id: deathgrip
+applies_to: ability
+aka: { pokeemerald: ABILITY_DEATH_GRIP }
+effects:
+  - summary: "Contact moves have a 30% chance to trap the target."
+    trigger: on-contact
+    when: "this Pokemon damages a target with a contact move, the target survives, and is not already trapped"
+    effect: "with a 30% chance, apply the wrap/bind trap to the target (it takes residual damage and cannot switch out) while this Pokemon stays in"
+test_cases:
+  - given: "a Death Grip Pokemon uses a contact move and the target survives (roll succeeds)"
+    expect: "the target becomes bound — it cannot switch out and takes wrap residual damage"
+  - given: "a Death Grip Pokemon uses a non-contact move (e.g. Water Gun)"
+    expect: "the target is not trapped (no contact = no trigger)"
+  - given: "a Death Grip Pokemon hits a target that is already trapped/wrapped"
+    expect: "no new trap is applied (gated on STATUS2_WRAPPED not already set)"
+notes:
+  - "Trap chance is 30% (RandomPercentage(RNG_DEATH_GRIP, 30)). The applied effect is MOVE_EFFECT_WRAP — the same bind/wrap volatile used by moves like Wrap/Bind, not the permanent escape-prevention of Mean Look."
+  - "Suppressed when the attacker holds Protective Pads, when the hit is confusion self-damage, when the target took no damage, or when the target is already wrapped."
+  - "on-contact is the closest neutral trigger; the effect is applying the wrap volatile to the target on a damaging contact hit."
+engine_hints:
+  pokeemerald: "src/battle_util.c ABILITYEFFECT_MOVE_END_ATTACKER, case ABILITY_DEATH_GRIP (line ~6325). Gates: !MOVE_RESULT_NO_EFFECT, IsBattlerAlive(target), !confusionSelfDmg, holdEffect != PROTECTIVE_PADS, IsMoveMakingContact, IsBattlerTurnDamaged, !(status2 & STATUS2_WRAPPED), RandomPercentage(RNG_DEATH_GRIP, 30). Applies gBattleScripting.moveEffect = MOVE_EFFECT_WRAP via BattleScript_AbilityStatusEffect."
+  essentials: "In the on-dealing-contact hook, roll 30%; on success apply a Wrap/Bind trapping volatile to the target if it isn't already trapped."

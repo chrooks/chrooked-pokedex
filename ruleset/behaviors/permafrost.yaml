@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Permafrost
+chrooked_id: permafrost
+applies_to: ability
+aka: { pokeemerald: ABILITY_PERMAFROST }
+effects:
+  - summary: "Super-effective hits against this Pokemon are reduced to 65% damage."
+    trigger: damage-calc
+    when: "an incoming move is super-effective (type-effectiveness multiplier >= 2.0)"
+    effect: "multiply the incoming damage by 0.65"
+test_cases:
+  - given: "a Permafrost Ice-type is hit by a super-effective Fire move"
+    expect: "the move deals 0.65x its normal damage"
+  - given: "a Permafrost Pokemon is hit by a neutral or not-very-effective move"
+    expect: "no reduction applies — only super-effective hits are reduced"
+  - given: "a Permafrost Pokemon is hit by a 4x super-effective move"
+    expect: "the reduction still applies once (0.65x), since the gate is >= 2.0x effectiveness"
+notes:
+  - "Stronger than the mainline Filter / Solid Rock / Prism Armor family, which reduce super-effective hits to 0.75x. Permafrost reduces to 0.65x — confirmed in C, sits as its own case right after the Filter/Solid Rock case."
+  - "The gate is the same as Filter: type-effectiveness modifier >= UQ_4_12(2.0). The reduction does not scale with 4x effectiveness — it is a flat 0.65x whenever the hit is super-effective."
+engine_hints:
+  pokeemerald: "src/battle_util.c GetDefenderAbilitiesModifier switch (~line 10590) — `case ABILITY_PERMAFROST: if (typeEffectivenessModifier >= UQ_4_12(2.0)) return UQ_4_12(0.65);`. Directly mirrors the ABILITY_FILTER / ABILITY_SOLID_ROCK / ABILITY_PRISM_ARMOR case immediately above it (which returns 0.75)."
+  essentials: "In the defender damage modifier, gate on the hit being super-effective and multiply damage taken by 0.65 (model on Solid Rock/Filter, with the multiplier set to 0.65 instead of 0.75)."
