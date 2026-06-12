@@ -23,11 +23,16 @@ The behavior-port loop:
 3. The edit is static-verified against the spec's acceptance tests and compiled.
 4. The diff is captured here.
 
+A reference patch carries BOTH the mechanic edit AND, for pokeemerald, its battle test —
+the executable form of the spec's acceptance cases. Verification is RED→GREEN: the test
+fails on the clean engine (proving it exercises the mechanic), then passes once the mechanic
+is applied.
+
 ## Inventory
 
 | mechanic | engine | verified |
 | --- | --- | --- |
-| innerfocus | pokeemerald-expansion 1.15.3 | static review (3/3 acceptance tests) + `make modern` |
+| innerfocus | pokeemerald-expansion 1.15.3 | `make check` RED→GREEN (battle test) + compiles |
 
 ### innerfocus.pokeemerald-expansion-1.15.3
 
@@ -39,3 +44,8 @@ The behavior-port loop:
 - Gated on the attacker's own `ABILITY_INNER_FOCUS` and `MOVE_FOCUS_BLAST` only, so it does
   not leak to other moves or to non-Inner-Focus users, and Mold Breaker (a target-bypass)
   cannot suppress it.
+- **Battle test:** `test/battle/ability/inner_focus.c` gains three `SINGLE_BATTLE_TEST`s.
+  The discriminator — *"Inner Focus makes the user's Focus Blast always hit"* — uses
+  `PASSES_RANDOMLY(100, 100, RNG_ACCURACY)` on a 70%-base move. On the clean engine it
+  failed at the true `0.69` hit rate; with the mechanic it passes 100/100. The other two
+  assert the bypass does not leak to other moves or non-Inner-Focus users.

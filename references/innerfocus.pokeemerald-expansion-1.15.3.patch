@@ -16,3 +16,61 @@ index 2db04cd633..d2630fda3d 100644
      // If the target has the ability No Guard and they aren't involved in a Sky Drop or the current move isn't Sky Drop, move hits.
      else if (abilityDef == ABILITY_NO_GUARD
            && (moveEffect != EFFECT_SKY_DROP || gBattleStruct->skyDropTargets[battlerDef] == SKY_DROP_NO_TARGET))
+diff --git a/test/battle/ability/inner_focus.c b/test/battle/ability/inner_focus.c
+index 8b2d92a590..6f19fae232 100644
+--- a/test/battle/ability/inner_focus.c
++++ b/test/battle/ability/inner_focus.c
+@@ -82,3 +82,53 @@ SINGLE_BATTLE_TEST("Mold Breaker ignores Inner Focus")
+         MESSAGE("The opposing Zubat flinched and couldn't move!");
+     }
+ }
++
++// chrooked:innerfocus - The user's Inner Focus makes its Focus Blast bypass the accuracy
++// roll. These tests are the executable form of the behavior spec's acceptance cases.
++SINGLE_BATTLE_TEST("Inner Focus makes the user's Focus Blast always hit")
++{
++    // Focus Blast is 70% base; a 100/100 pass rate proves the accuracy roll is skipped.
++    PASSES_RANDOMLY(100, 100, RNG_ACCURACY);
++    GIVEN {
++        ASSUME(GetMoveAccuracy(MOVE_FOCUS_BLAST) == 70);
++        PLAYER(SPECIES_ZUBAT) { Ability(ABILITY_INNER_FOCUS); Moves(MOVE_FOCUS_BLAST); }
++        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
++    } WHEN {
++        TURN { MOVE(player, MOVE_FOCUS_BLAST); MOVE(opponent, MOVE_CELEBRATE); }
++    } SCENE {
++        ANIMATION(ANIM_TYPE_MOVE, MOVE_FOCUS_BLAST, player);
++        HP_BAR(opponent);
++    }
++}
++
++SINGLE_BATTLE_TEST("Inner Focus does not affect the accuracy of the user's other moves")
++{
++    // Hydro Pump (80%) still rolls normally for an Inner Focus user — no leak.
++    PASSES_RANDOMLY(GetMoveAccuracy(MOVE_HYDRO_PUMP), 100, RNG_ACCURACY);
++    GIVEN {
++        ASSUME(GetMoveAccuracy(MOVE_HYDRO_PUMP) == 80);
++        PLAYER(SPECIES_ZUBAT) { Ability(ABILITY_INNER_FOCUS); Moves(MOVE_HYDRO_PUMP); }
++        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
++    } WHEN {
++        TURN { MOVE(player, MOVE_HYDRO_PUMP); MOVE(opponent, MOVE_CELEBRATE); }
++    } SCENE {
++        ANIMATION(ANIM_TYPE_MOVE, MOVE_HYDRO_PUMP, player);
++        HP_BAR(opponent);
++    }
++}
++
++SINGLE_BATTLE_TEST("Focus Blast without Inner Focus rolls its normal accuracy")
++{
++    // A non-Inner-Focus user's Focus Blast still rolls 70% — the bypass is ability-gated.
++    PASSES_RANDOMLY(GetMoveAccuracy(MOVE_FOCUS_BLAST), 100, RNG_ACCURACY);
++    GIVEN {
++        ASSUME(GetMoveAccuracy(MOVE_FOCUS_BLAST) == 70);
++        PLAYER(SPECIES_ZUBAT) { Ability(ABILITY_INFILTRATOR); Moves(MOVE_FOCUS_BLAST); }
++        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_CELEBRATE); }
++    } WHEN {
++        TURN { MOVE(player, MOVE_FOCUS_BLAST); MOVE(opponent, MOVE_CELEBRATE); }
++    } SCENE {
++        ANIMATION(ANIM_TYPE_MOVE, MOVE_FOCUS_BLAST, player);
++        HP_BAR(opponent);
++    }
++}

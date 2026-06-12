@@ -75,8 +75,18 @@ pure and reproducible; the behavior path is agent-driven and test-gated.
   Static-verified 3/3 acceptance tests; compiled to a 32 MB ROM (`make modern`, exit 0).
   Captured as `references/innerfocus.pokeemerald-expansion-1.15.3.patch` — the first entry
   in the growing per-engine reference library (`references/README.md`).
-- **Slice 3 (later)** — reference-implementation library that grows per engine; author the
-  remaining ~57 ability specs.
+- **Slice 3 (DONE)** — made the acceptance tests executable for pokeemerald. The spec's neutral
+  `test_cases` compile to a `test/battle/ability/inner_focus.c` battle test, run by the engine's
+  own harness (`make check` via `mgba-rom-test`). Proven RED→GREEN: the always-hit test fails on
+  the clean engine (observed `0.69` hit rate) and passes once the mechanic is applied. The
+  reference patch now carries mechanic + test together. `port-behavior` skill updated to author
+  the test and gate on RED→GREEN. Toolchain note: the shipped `mgba-rom-test` is x86-64-only, so
+  on Apple Silicon `make check` must run in a `--platform linux/amd64` container (emulated). Prose
+  `test_cases` confirmed as the right neutral form — Essentials has no automated harness, so its
+  ceiling is a manual playtest checklist.
+
+- **Slice 4 (later)** — reference-implementation library that grows per engine; author the
+  remaining ~57 ability specs; fold battle-test generation into a real agent run end-to-end.
 
 ## Schema (Slice 1)
 

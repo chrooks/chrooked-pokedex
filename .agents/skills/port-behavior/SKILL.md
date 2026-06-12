@@ -52,28 +52,42 @@ stored patch is stale.
 2. **Emit the packet.**
    `chrooked-pokedex behaviors --mechanic <id> --engine <engine>` — this is the self-contained brief.
 3. **Spawn a behavior-port subagent** (Task/Agent tool) with the packet. Use the prompt template
-   below. The subagent gets ONLY the packet — that is the test of spec sufficiency.
+   below. The subagent gets ONLY the packet — that is the test of spec sufficiency. It returns BOTH
+   the mechanic edit AND, for pokeemerald, a battle test compiled from the spec's `test_cases`.
 4. **Static-verify** the returned diff yourself:
    - the gate matches the spec (right condition, right ownership — attacker vs target ability);
    - it does not leak (other moves / other abilities unaffected);
    - it did not duplicate vanilla logic;
    - it touched only the intended file(s) and carries the `// chrooked:<id>` tag.
    - Walk EACH acceptance test in the spec and argue why the edit satisfies it.
-5. **Compile** (best effort). For pokeemerald-expansion, in Docker:
+5. **Verify by running the acceptance tests — RED then GREEN.** This is the real gate.
+
+   **pokeemerald-expansion** ships an executable battle harness (`test/battle/`, run by the
+   prebuilt `tools/mgba/mgba-rom-test`). Each spec `given/expect` case becomes a
+   `SINGLE_BATTLE_TEST` in `test/battle/ability/<id>.c` (or `move/<id>.c`). Use
+   `PASSES_RANDOMLY(passes, trials, RNG_ACCURACY)` to make probabilistic outcomes deterministic —
+   e.g. a 70%-accuracy move asserted at `100, 100` proves an always-hit bypass.
+
+   - **RED:** with the test in place but the mechanic NOT applied, run the test. It MUST fail. A
+     test that passes on the clean engine proves nothing — it is not exercising your change.
+   - **GREEN:** apply the mechanic, re-run. It MUST pass.
    ```bash
    docker run --rm -v "$(cd <target> && pwd)":/project -w /project \
      devkitpro/devkitarm:20240202 \
-     bash -c "apt-get update -qq >/dev/null && apt-get install -y -qq build-essential libpng-dev libelf-dev >/dev/null; make modern -j$(sysctl -n hw.ncpu); echo MAKE_EXIT=\${PIPESTATUS[0]}"
+     bash -c "apt-get update -qq >/dev/null && apt-get install -y -qq build-essential libpng-dev libelf-dev cmake >/dev/null; make check TESTS=\"<test name filter>\" -j$(sysctl -n hw.ncpu) 2>&1 | tail -40; echo CHECK_EXIT=\${PIPESTATUS[0]}"
    ```
-   (gcc 13.2 image — see the project memory `pokeemerald-build-toolchain`. Newer expansions may
-   accept a newer image.) A clean `make` proves it *builds*; it does NOT prove the runtime
-   behavior — say so honestly.
-6. **Capture** the patch BEFORE cleanup:
+   The first test-ROM build is long (~12-15 min); the GREEN re-run is incremental. `make modern`
+   (ROM-only, faster) is a weaker fallback that proves it *builds* but not that the behavior is real.
+
+   **Essentials** has no automated battle harness (RPG Maker XP / Ruby — verification is the in-game
+   Debug menu). Emit the spec's `test_cases` as a numbered manual playtest checklist instead; do not
+   claim runtime verification you did not perform.
+6. **Capture** the patch BEFORE cleanup — it must carry BOTH the mechanic edit AND the battle test:
    `git -C <target> diff > references/<id>.<engine>-<version>.patch`
-   and add/update the row in `references/README.md`.
+   and add/update the row in `references/README.md` (note RED→GREEN result).
 7. **Restore the target** (it is usually a keeper): `git -C <target> checkout -- <edited files>`,
-   remove build artifacts (`pokeemerald.gba`, `pokeemerald.elf`, `pokeemerald.map`, `build/`).
-8. **Surface for review.** Show the diff, the chosen [Seam](~/.claude/CONTEXT.md), the compile
+   remove build/test artifacts (`pokeemerald.gba`, `*.elf`, `*.map`, `build/`).
+8. **Surface for review.** Show the diff, the chosen [Seam](~/.claude/CONTEXT.md), the RED→GREEN
    result, and the per-acceptance-test argument. **Do not commit until the human approves** — this
    is the highest-stakes step (a subtly-wrong mechanic poisons playtesting silently).
 
@@ -88,15 +102,19 @@ stored patch is stale.
 >
 > Tasks: explore the relevant source; verify any vanilla part of the mechanic already exists and do
 > not duplicate it; implement the custom part with a minimal, well-commented edit tagged
-> `// chrooked:<id>`; gate it exactly as the spec says (mind attacker-vs-target ownership). DO NOT
-> compile and DO NOT edit other files. Return: the function/Seam + file:line, the unified diff
+> `// chrooked:<id>`; gate it exactly as the spec says (mind attacker-vs-target ownership). For
+> pokeemerald, ALSO author a battle test in `test/battle/.../<id>.c` — one `SINGLE_BATTLE_TEST` per
+> acceptance case, using `PASSES_RANDOMLY(..., RNG_ACCURACY)` to make probabilistic cases
+> deterministic; at least one test must FAIL without your mechanic (the RED discriminator). DO NOT
+> compile and DO NOT edit unrelated files. Return: the function/Seam + file:line, the unified diff
 > (`git -C <target> diff`), and a short argument for EACH acceptance test (especially that the
 > effect does not leak to other moves or users).
 
 ## Honest limits
 
-- **Runtime acceptance tests are not auto-run.** Compile + static review is the current gate. The
-  spec's `given/expect` cases are verified by reasoning, not execution. Closing that hole (a battle
-  harness or a manual playtest checklist) is separate work.
-- **Essentials path** reuses the same flow with the `essentials` engine hint, but has no Docker
-  compile step — lean harder on review.
+- **Runtime verification is engine-dependent.** pokeemerald runs the acceptance tests for real
+  (`make check`, RNG-controlled). Essentials cannot — it has no automated harness, so its ceiling is
+  a manual playtest checklist. The neutral prose `test_cases` are the portable Contract that feeds
+  both; keep them concrete enough for a human tester.
+- **A passing test on the clean engine is a red flag**, not a green light — it means the test does
+  not exercise the mechanic. Always confirm RED before GREEN.
