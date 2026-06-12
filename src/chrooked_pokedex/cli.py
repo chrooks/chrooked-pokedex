@@ -12,6 +12,12 @@ import argparse
 import sys
 from pathlib import Path
 
+from .appliers.essentials import (
+    creation as essentials_creation,
+    learnset_apply as essentials_learnset,
+    resolution as essentials_resolution,
+    species_apply as essentials_species,
+)
 from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
@@ -48,6 +54,12 @@ def main(argv: list[str] | None = None) -> int:
 
     apply = sub.add_parser("apply", help="Write the Ruleset into a target fork.")
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
+    apply.add_argument(
+        "--engine",
+        choices=("pokeemerald", "essentials"),
+        default="pokeemerald",
+        help="Target engine (default: pokeemerald). 'essentials' writes PBS text.",
+    )
     apply.add_argument(
         "--category",
         choices=("species", "learnset", "all"),
@@ -92,7 +104,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
     if args.command == "apply":
-        return _run_apply(args.target, args.category, args.ruleset, args.force)
+        return _run_apply(args.target, args.engine, args.category, args.ruleset, args.force)
     if args.command == "harvest":
         return _run_harvest(args.fork, args.ruleset, args.dry_run)
     if args.command == "behaviors":
@@ -146,17 +158,8 @@ def _confirm(message: str) -> bool:
     return answer in ("y", "yes")
 
 
-def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> int:
-    try:
-        require_clean_git_status(target, force=force)
-    except DirtyWorkingTree as error:
-        print(f"ERROR: {error}", file=sys.stderr)
-        return 1
-
-    ruleset = Ruleset.load(ruleset_dir)
+def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport) -> None:
     resmap = build_resolution_map(target, ruleset)
-    report = ApplyReport()
-
     categories = _APPLY_CATEGORIES if category == "all" else (category,)
     if "create" in categories:
         changed = create_owned_content(target, ruleset, resmap, report)
@@ -173,6 +176,45 @@ def _run_apply(target: Path, category: str, ruleset_dir: Path, force: bool) -> i
     if "type-chart" in categories:
         changed = apply_type_chart(target, ruleset, report)
         print(f"type-chart: {len(changed)} file(s) changed")
+
+
+# Essentials covers a subset of tiers in this slice; evolution and type-chart live
+# in different PBS files (in-section / types.txt) and are a deliberate follow-on.
+_ESSENTIALS_CATEGORIES = ("create", "species", "learnset")
+
+
+def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    # --category choices (species/learnset/all) are all supported here; evolution and
+    # type-chart are not yet CLI choices and are a deliberate follow-on slice.
+    resmap = essentials_resolution.build_resolution_map(target, ruleset)
+    categories = _ESSENTIALS_CATEGORIES if category == "all" else (category,)
+    if "create" in categories:
+        changed = essentials_creation.create_owned_content(target, ruleset, resmap, report)
+        print(f"create: {len(changed)} file(s) changed")
+    if "species" in categories:
+        changed = essentials_species.apply_species(target, ruleset, resmap, report)
+        print(f"species: {len(changed)} file(s) changed")
+    if "learnset" in categories:
+        changed = essentials_learnset.apply_learnsets(target, ruleset, resmap, report)
+        print(f"learnset: {len(changed)} file(s) changed")
+
+
+def _run_apply(
+    target: Path, engine: str, category: str, ruleset_dir: Path, force: bool
+) -> int:
+    try:
+        require_clean_git_status(target, force=force)
+    except DirtyWorkingTree as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+
+    ruleset = Ruleset.load(ruleset_dir)
+    report = ApplyReport()
+
+    if engine == "essentials":
+        _apply_essentials(target, category, ruleset, report)
+    else:
+        _apply_pokeemerald(target, category, ruleset, report)
 
     json_path = report.write(target / "apply-report.md")
     counts = report.counts()
