@@ -229,6 +229,49 @@ def test_create_owned_move_marks_unmappable_flag_partial(tmp_path):
     assert partial and any("flag" in f for e in partial for f in e.partial_fields)
 
 
+def test_created_move_flags_unresolvable_type(tmp_path):
+    # A move whose type the target lacks must be reported, not written as the literal
+    # "None". A best-effort INTERNAL is still emitted so a standard type stays loadable.
+    target = _make_target(tmp_path)  # types.txt has GRASS, POISON, FIRE, FAIRY
+    move = MoveDef(name="Void Blast", chrooked_id="voidblast", type="Cosmic",
+                   category="special", power=80, aka={"essentials": "VOIDBLAST"})
+    ruleset = _ruleset(moves={"voidblast": move})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    create_owned_content(target, ruleset, resmap, report)
+    assert _field(target, "moves.txt", "VOIDBLAST", "Type") == "COSMIC"  # best-effort, not "None"
+    entry = [e for e in report.entries if e.chrooked_id == "voidblast"][0]
+    assert entry.status == "partial"
+    assert any("type:Cosmic" in f for f in entry.partial_fields)
+
+
+def test_created_move_with_behavior_spec_flags_mechanic(tmp_path):
+    # A move whose effect can't port (e.g. super-effective-on-type) and that has a
+    # behavior spec must say so loudly, like abilities do.
+    from chrooked_pokedex.model.behavior_spec import BehaviorEffect, BehaviorSpec
+    target = _make_target(tmp_path)
+    move = MoveDef(
+        name="Excalibur", chrooked_id="excalibur", type="Steel", category="physical",
+        power=120, accuracy=80, aka={"essentials": "EXCALIBUR"},
+        effect="super_effective_on_arg", argument={"type": "Dragon"}, flags=("contact",),
+    )
+    spec = BehaviorSpec(
+        name="Excalibur", chrooked_id="excalibur", applies_to="move",
+        effects=(BehaviorEffect(summary="se on dragon", trigger="damage-calc",
+                                effect="treat as super effective vs Dragon"),),
+    )
+    ruleset = _ruleset(moves={"excalibur": move}, behaviors={"excalibur": spec})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    create_owned_content(target, ruleset, resmap, report)
+    entry = [e for e in report.entries if e.chrooked_id == "excalibur"][0]
+    assert entry.status == "partial"
+    assert "behavior spec" in entry.reason
+    assert any("effect:super_effective_on_arg" in f for f in entry.partial_fields)
+
+
 def test_created_ability_with_behavior_spec_is_data_only(tmp_path):
     from chrooked_pokedex.model.behavior_spec import (
         BehaviorEffect, BehaviorSpec,

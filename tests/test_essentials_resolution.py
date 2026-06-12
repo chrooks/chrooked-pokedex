@@ -62,6 +62,16 @@ def test_vocab_primary_effect_hit_is_none_functioncode():
     assert vocab.function_code("super_effective_on_arg") is None
 
 
+def test_vocab_primary_effect_maps_standard_effects():
+    # Standard effects with a real Essentials FunctionCode port as data, not a punt.
+    assert vocab.function_code("ohko") == "OHKO"
+    assert vocab.function_code("multi_hit") == "HitTwoToFiveTimes"
+    assert vocab.function_code("triple_kick") == "HitThreeTimesPowersUpWithEachHit"
+    assert vocab.function_code("brick_break") == "RemoveScreens"
+    # something genuinely unknown stays unresolved (honest None).
+    assert vocab.function_code("totally_made_up_effect") is None
+
+
 def test_vocab_additional_effect_functioncode():
     assert vocab.additional_function_code("burn") == "BurnTarget"
     assert vocab.additional_function_code("paralysis") == "ParalyzeTarget"

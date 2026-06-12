@@ -90,7 +90,7 @@ def _create_moves(target, ruleset, resmap, report) -> set[Path]:
         status = "partial" if unresolved else "applied"
         report.add(ReportEntry(
             status=status, category="move", chrooked_id=chrooked_id, symbol=internal,
-            reason="created" if not unresolved else "created; some fields not ported",
+            reason=_move_reason(ruleset, move.name, unresolved),
             partial_fields=tuple(unresolved),
         ))
 
@@ -106,6 +106,15 @@ def _creation_reason(ruleset: Ruleset, name: str) -> str:
     return "created — DATA ONLY"
 
 
+def _move_reason(ruleset: Ruleset, name: str, unresolved: list[str]) -> str:
+    """A created move is data; if its effect could not port AND it has a behavior
+    spec, say so loudly so the mechanic gets implemented instead of shipping inert."""
+    base = "created" if not unresolved else "created; some fields not ported"
+    if ruleset.behavior_for(name) is not None:
+        return base + " — behavior spec exists, implement mechanic"
+    return base
+
+
 def _ability_block(internal: str, ability: AbilityDef) -> str:
     description = normalize_description(ability.description or ability.name)
     return f"[{internal}]\nName = {ability.name}\nDescription = {description}\n"
@@ -115,10 +124,17 @@ def _move_block(internal: str, move: MoveDef, resmap: ResolutionMap) -> tuple[st
     unresolved: list[str] = []
     function_code, effect_chance = _function_code(move, unresolved)
 
+    type_internal = resmap.type(move.type)
+    if type_internal is None:
+        # The target lacks this type; flag it but still emit a best-effort INTERNAL so
+        # a standard type stays loadable, rather than writing the literal "None".
+        unresolved.append(f"type:{move.type}")
+        type_internal = vocab.internal_name(move.type)
+
     lines = [
         f"[{internal}]",
         f"Name = {move.name}",
-        f"Type = {resmap.type(move.type)}",
+        f"Type = {type_internal}",
         f"Category = {vocab.category(move.category)}",
         f"Power = {move.power if move.power is not None else 0}",
         f"Accuracy = {move.accuracy if move.accuracy is not None else 100}",

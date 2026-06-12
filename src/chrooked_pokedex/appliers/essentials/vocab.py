@@ -34,6 +34,23 @@ _FLAG = {
     "wind": "Wind",
 }
 
+# Neutral PRIMARY effect -> Essentials FunctionCode. These are standard moves whose
+# mechanic exists natively in both engines under different names, so they port as
+# data. Names are taken from Maruno17's PBS. An effect with no native Essentials
+# equivalent (e.g. super_effective_on_arg) is deliberately absent -> resolves to None
+# and is carried by a behavior spec instead.
+_PRIMARY_FUNCTION_CODE = {
+    "multi_hit": "HitTwoToFiveTimes",
+    "ohko": "OHKO",
+    "confuse": "ConfuseTarget",
+    "triple_kick": "HitThreeTimesPowersUpWithEachHit",
+    "low_kick": "PowerHigherWithTargetWeight",
+    "heat_crash": "PowerHigherWithUserHeavierThanTarget",
+    "brick_break": "RemoveScreens",
+    "recoil_if_miss": "CrashDamageIfFailsUnusableInGravity",
+    "first_turn_only": "FlinchTargetFailsIfNotUserFirstTurn",
+}
+
 # Neutral secondary effect -> Essentials FunctionCode for a damaging move that
 # also applies that effect. Kept to the confidently-correct status effects; an
 # unknown effect resolves to None.
@@ -42,6 +59,8 @@ _ADDITIONAL_FUNCTION_CODE = {
     "poison": "PoisonTarget",
     "paralysis": "ParalyzeTarget",
     "flinch": "FlinchTarget",
+    "freeze": "FreezeTarget",
+    "confusion": "ConfuseTarget",
 }
 
 # Neutral move target -> Essentials Target. Defaults to NearOther (standard single
@@ -77,11 +96,13 @@ def flag(neutral: str) -> Optional[str]:
 
 
 def function_code(primary_effect: str) -> Optional[str]:
-    """A plain `hit` is `FunctionCode = None`. A parameterized/scripted primary
-    effect has no portable Essentials FunctionCode -> None (caller marks it)."""
+    """A plain `hit` is `FunctionCode = None`; a standard effect maps to its named
+    Essentials FunctionCode; a scripted/parameterized effect with no native
+    equivalent returns None so the caller marks it unresolved (a behavior spec
+    carries it instead)."""
     if primary_effect == "hit":
         return NO_FUNCTION_CODE
-    return None
+    return _PRIMARY_FUNCTION_CODE.get(primary_effect)
 
 
 def additional_function_code(effect: str) -> Optional[str]:

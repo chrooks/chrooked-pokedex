@@ -1,0 +1,38 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the move itself.
+#
+# Excalibur is the first MOVE (not ability) to need a spec: its effect is native in
+# pokeemerald but has no built-in equivalent in Essentials, so it travels as behavior.
+name: Excalibur
+chrooked_id: excalibur
+applies_to: move
+aka: { pokeemerald: MOVE_EXCALIBUR }
+effects:
+  - summary: "Always counts as super effective against Dragon-type targets."
+    trigger: damage-calc
+    when: "this move hits a target whose typing includes Dragon"
+    effect: >-
+      force the move to be super effective (an extra x2) against the Dragon-type
+      target, regardless of the move's normal type effectiveness against Dragon
+test_cases:
+  - given: "Excalibur (a Steel move) hits a pure Dragon-type target"
+    expect: "damage uses a super-effective multiplier (x2), not Steel-vs-Dragon's normal x1"
+  - given: "Excalibur hits a Dragon/Flying target"
+    expect: "the Dragon super-effective multiplier still applies"
+  - given: "Excalibur hits a non-Dragon target (e.g. a Water type)"
+    expect: "normal type effectiveness only; no extra multiplier"
+notes:
+  - "The forced multiplier stacks on top of normal effectiveness; it does not replace the chart for other types."
+  - "Steel is normally x1 into Dragon, so without this the move would not be super effective."
+engine_hints:
+  pokeemerald: >-
+    Native — no code needed. The data layer already emits
+    .effect = EFFECT_SUPER_EFFECTIVE_ON_ARG with .argument = { .type = TYPE_DRAGON };
+    the engine implements the forced super-effective behavior.
+  essentials: >-
+    Needs a custom FunctionCode. Add a Battle::Move subclass (e.g.
+    PBEffects/Move "SuperEffectiveAgainstType") that, in its effectiveness/type-mod
+    hook, multiplies effectiveness by 2 when the target has the Dragon type; register
+    it and set FunctionCode = SuperEffectiveAgainstDragon on the move. The data layer
+    cannot express this, so it is reported unresolved on apply until the code exists.
