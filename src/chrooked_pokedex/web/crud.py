@@ -23,7 +23,14 @@ from pathlib import Path
 from typing import Any, Callable
 
 from ..model import Ruleset
-from ..model.loader import load_ability, load_move, load_species
+from ..model.behavior_spec import BehaviorEffect, BehaviorSpec, BehaviorTestCase
+from ..model.loader import (
+    load_ability,
+    load_behavior,
+    load_move,
+    load_species,
+    load_type_chart,
+)
 from ..model.schema import (
     AbilitiesOverride,
     AbilityDef,
@@ -32,6 +39,7 @@ from ..model.schema import (
     LearnsetMove,
     MoveDef,
     SpeciesOverride,
+    TypeChartOverride,
 )
 from ..seed import writer
 from . import collections as colmod
@@ -370,3 +378,98 @@ def ability_citations(ruleset: Ruleset, ability: AbilityDef) -> list[str]:
         ):
             citing.append(species.name)
     return sorted(set(citing))
+
+
+# --------------------------------------------------------------------------- #
+# Type chart — one whole-list file (type-chart/overrides.yaml), so a write is a
+# full replace of the override list rather than a per-id upsert.
+# --------------------------------------------------------------------------- #
+
+
+def replace_type_chart(ruleset_dir: Path, entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Validate-write the whole type-chart override list; returns it serialized."""
+    where = "overrides.yaml"
+    overrides: list[TypeChartOverride] = []
+    try:
+        for entry in entries:
+            _reject_unknown(entry, _TYPE_CHART_FIELDS, where)
+            overrides.append(
+                TypeChartOverride(
+                    attacker=_require(entry, "attacker", where),
+                    defender=_require(entry, "defender", where),
+                    multiplier=float(entry["multiplier"]),
+                )
+            )
+    except (KeyError, TypeError, ValueError) as error:
+        # _require raises ValidationError (not a ValueError), so it propagates
+        # unwrapped; this catches only entry-shape errors (e.g. a bad multiplier).
+        raise ValidationError(f"{where}: malformed type-chart entry ({error}).") from error
+    yaml_text = writer.type_chart_yaml(overrides)
+    path = Path(ruleset_dir) / "type-chart" / "overrides.yaml"
+    validated = _validated_write(path, yaml_text, load_type_chart)
+    return [colmod.serialize_type_chart_entry(t) for t in validated]
+
+
+_TYPE_CHART_FIELDS = ("attacker", "defender", "multiplier")
+
+
+# --------------------------------------------------------------------------- #
+# Behaviors — human-owned specs; the seed never writes them, so this is their
+# only writer. No citation guard: a behavior attaches by chrooked_id and leaves
+# no dangling data reference when removed.
+# --------------------------------------------------------------------------- #
+
+
+_BEHAVIOR_FIELDS = (
+    "name", "chrooked_id", "applies_to", "aka",
+    "effects", "test_cases", "notes", "engine_hints",
+)
+
+
+def upsert_behavior(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Validate-write one behavior spec; returns it serialized."""
+    _reject_unknown(payload, _BEHAVIOR_FIELDS, f"{chrooked_id}.yaml")
+    try:
+        spec = _behavior_from_payload(payload, chrooked_id)
+        yaml_text = writer.behavior_yaml(spec)
+    except (KeyError, TypeError, ValueError) as error:
+        # _check_id raises ValidationError (not a ValueError) and propagates
+        # unwrapped; this catches only payload-shape errors.
+        raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
+    path = Path(ruleset_dir) / "behaviors" / f"{chrooked_id}.yaml"
+    return colmod.serialize_behavior(_validated_write(path, yaml_text, load_behavior))
+
+
+def delete_behavior(ruleset_dir: Path, chrooked_id: str) -> None:
+    path = Path(ruleset_dir) / "behaviors" / f"{chrooked_id}.yaml"
+    if not path.exists():
+        raise NotFoundError(f"No behavior spec {chrooked_id!r} to delete.")
+    path.unlink()
+
+
+def _behavior_from_payload(payload: dict[str, Any], chrooked_id: str) -> BehaviorSpec:
+    where = f"{chrooked_id}.yaml"
+    _check_id(payload, chrooked_id, where)
+    effects = tuple(
+        BehaviorEffect(
+            summary=entry.get("summary", ""),
+            trigger=entry.get("trigger", ""),
+            effect=entry.get("effect", ""),
+            when=entry.get("when") or None,
+        )
+        for entry in (payload.get("effects") or [])
+    )
+    test_cases = tuple(
+        BehaviorTestCase(given=entry.get("given", ""), expect=entry.get("expect", ""))
+        for entry in (payload.get("test_cases") or [])
+    )
+    return BehaviorSpec(
+        name=payload.get("name", ""),
+        chrooked_id=chrooked_id,
+        applies_to=payload.get("applies_to", ""),
+        aka=dict(payload.get("aka") or {}),
+        effects=effects,
+        test_cases=test_cases,
+        notes=tuple(payload.get("notes") or ()),
+        engine_hints=dict(payload.get("engine_hints") or {}),
+    )

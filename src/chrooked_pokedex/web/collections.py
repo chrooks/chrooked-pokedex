@@ -30,12 +30,13 @@ def build_abilities(ruleset: Ruleset) -> list[dict[str, Any]]:
 
 
 def build_type_chart(ruleset: Ruleset) -> list[dict[str, Any]]:
-    return [_type_chart_entry(t) for t in ruleset.type_chart]
+    return [serialize_type_chart_entry(t) for t in ruleset.type_chart]
 
 
 def build_behaviors(ruleset: Ruleset) -> list[dict[str, Any]]:
     return [
-        _behavior(b) for b in sorted(ruleset.behaviors.values(), key=lambda b: b.name)
+        serialize_behavior(b)
+        for b in sorted(ruleset.behaviors.values(), key=lambda b: b.name)
     ]
 
 
@@ -73,7 +74,7 @@ def serialize_ability(ability: AbilityDef) -> dict[str, Any]:
     }
 
 
-def _type_chart_entry(entry: TypeChartOverride) -> dict[str, Any]:
+def serialize_type_chart_entry(entry: TypeChartOverride) -> dict[str, Any]:
     return {
         "attacker": entry.attacker,
         "defender": entry.defender,
@@ -81,11 +82,13 @@ def _type_chart_entry(entry: TypeChartOverride) -> dict[str, Any]:
     }
 
 
-def _behavior(spec: BehaviorSpec) -> dict[str, Any]:
+def serialize_behavior(spec: BehaviorSpec) -> dict[str, Any]:
     return {
         "name": spec.name,
         "chrooked_id": spec.chrooked_id,
         "applies_to": spec.applies_to,
+        # see serialize_move: aka rides along so an edit doesn't strip it.
+        "aka": dict(spec.aka),
         "effects": [
             {
                 "summary": e.summary,

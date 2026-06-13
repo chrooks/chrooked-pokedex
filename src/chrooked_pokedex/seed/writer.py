@@ -10,7 +10,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..model.schema import AbilityDef, MoveDef, SpeciesOverride, TypeChartOverride
+from ..model.behavior_spec import BehaviorSpec
+from ..model.schema import (
+    AbilityDef,
+    EvolutionOverride,
+    MoveDef,
+    SpeciesOverride,
+    TypeChartOverride,
+)
 from .extractor import SeedData
 
 
@@ -87,7 +94,7 @@ def species_yaml(species: SpeciesOverride) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _evolution_flow(evolution) -> str:
+def _evolution_flow(evolution: EvolutionOverride) -> str:
     method_parts = [f"{key}: {_scalar(value)}" for key, value in evolution.method.items()]
     method = "{ " + ", ".join(method_parts) + " }" if method_parts else "{}"
     return f"{{ from: {_scalar(evolution.from_species)}, method: {method} }}"
@@ -140,6 +147,11 @@ def ability_yaml(ability: AbilityDef) -> str:
 
 def _write_type_chart(path: Path, overrides: list[TypeChartOverride]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(type_chart_yaml(overrides), encoding="utf-8")
+
+
+def type_chart_yaml(overrides: list[TypeChartOverride]) -> str:
+    """Render the whole type-chart override list as the canonical overrides.yaml."""
     lines = [
         "# Attacker/defender multiplier overrides relative to the base type chart.",
         "# multiplier: 0 = immune, 0.5 = not very effective, 1 = neutral, 2 = super effective.",
@@ -150,7 +162,47 @@ def _write_type_chart(path: Path, overrides: list[TypeChartOverride]) -> None:
             f"  - {{ attacker: {entry.attacker}, defender: {entry.defender}, "
             f"multiplier: {_format_multiplier(entry.multiplier)} }}"
         )
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return "\n".join(lines) + "\n"
+
+
+def behavior_yaml(spec: BehaviorSpec) -> str:
+    """Render one human-owned behavior spec as canonical, block-style YAML.
+
+    The seed never writes behaviors, so this is the UI's renderer (slice 2b). It
+    matches the hand-authored format: a header comment, flow-style `aka`, and
+    block-style `effects` / `test_cases` / `notes` / `engine_hints`. String values
+    go through `_scalar` so colons and leading specials in plain-language effect
+    text are quoted and round-trip through the loader unchanged.
+    """
+    lines = [
+        "# Behavior spec — human-owned. The seed never touches this folder.",
+        f"name: {_scalar(spec.name)}",
+        f"chrooked_id: {spec.chrooked_id}",
+        f"applies_to: {spec.applies_to}",
+        f"aka: {_aka_flow(dict(spec.aka))}",
+    ]
+    if spec.effects:
+        lines.append("effects:")
+        for effect in spec.effects:
+            lines.append(f"  - summary: {_scalar(effect.summary)}")
+            lines.append(f"    trigger: {effect.trigger}")
+            if effect.when:
+                lines.append(f"    when: {_scalar(effect.when)}")
+            lines.append(f"    effect: {_scalar(effect.effect)}")
+    if spec.test_cases:
+        lines.append("test_cases:")
+        for case in spec.test_cases:
+            lines.append(f"  - given: {_scalar(case.given)}")
+            lines.append(f"    expect: {_scalar(case.expect)}")
+    if spec.notes:
+        lines.append("notes:")
+        for note in spec.notes:
+            lines.append(f"  - {_scalar(note)}")
+    if spec.engine_hints:
+        lines.append("engine_hints:")
+        for engine, hint in spec.engine_hints.items():
+            lines.append(f"  {engine}: {_scalar(hint)}")
+    return "\n".join(lines) + "\n"
 
 
 def _format_multiplier(value: float) -> str:

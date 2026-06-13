@@ -171,6 +171,29 @@ def create_app(
     def delete_ability(chrooked_id: str, confirm: bool = False) -> dict[str, str]:
         return _delete_owned(crudmod.delete_ability, chrooked_id, confirm)
 
+    @app.put("/api/type-chart")
+    def put_type_chart(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        # The type chart is one whole-list file; a write replaces the override set.
+        try:
+            return crudmod.replace_type_chart(ruleset_dir, entries)
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
+
+    @app.put("/api/behaviors/{chrooked_id}")
+    def put_behavior(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        try:
+            return crudmod.upsert_behavior(ruleset_dir, chrooked_id, payload)
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
+
+    @app.delete("/api/behaviors/{chrooked_id}")
+    def delete_behavior(chrooked_id: str) -> dict[str, str]:
+        try:
+            crudmod.delete_behavior(ruleset_dir, chrooked_id)
+        except crudmod.NotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        return {"deleted": chrooked_id}
+
     def _delete_owned(
         deleter: Callable[..., None], chrooked_id: str, confirm: bool
     ) -> dict[str, str]:

@@ -359,3 +359,135 @@ def test_editing_ability_round_trips_aka(
     assert response.status_code == 200, response.text
     on_disk = _read(ruleset_dir / "abilities" / "poisonheal.yaml")
     assert "ABILITY_POISON_HEAL" in on_disk
+
+
+# --------------------------------------------------------------------------- #
+# Type chart (a single whole-list file: type-chart/overrides.yaml)
+# --------------------------------------------------------------------------- #
+
+
+def test_put_type_chart_replaces_overrides(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    entries = [
+        {"attacker": "Water", "defender": "Fire", "multiplier": 2},
+        {"attacker": "Fire", "defender": "Water", "multiplier": 0.5},
+    ]
+    response = client.put("/api/type-chart", json=entries)
+    assert response.status_code == 200, response.text
+    on_disk = _read(ruleset_dir / "type-chart" / "overrides.yaml")
+    assert "attacker: Water" in on_disk
+    # the original Flying/Ice override is gone (whole-list replace)
+    assert "Flying" not in on_disk
+    assert {"attacker": "Water", "defender": "Fire", "multiplier": 2.0} in (
+        client.get("/api/type-chart").json()
+    )
+
+
+def test_put_type_chart_invalid_multiplier_is_422_writes_nothing(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    before = _read(ruleset_dir / "type-chart" / "overrides.yaml")
+    entries = [{"attacker": "Water", "defender": "Fire", "multiplier": "lots"}]
+    response = client.put("/api/type-chart", json=entries)
+    assert response.status_code == 422, response.text
+    assert _read(ruleset_dir / "type-chart" / "overrides.yaml") == before
+
+
+def test_put_type_chart_unknown_field_is_422(client: TestClient) -> None:
+    entries = [{"attacker": "Water", "defender": "Fire", "multiplier": 2, "x": 1}]
+    response = client.put("/api/type-chart", json=entries)
+    assert response.status_code == 422, response.text
+    assert "x" in response.json()["detail"]
+
+
+def test_put_type_chart_can_clear_to_empty(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    response = client.put("/api/type-chart", json=[])
+    assert response.status_code == 200, response.text
+    assert client.get("/api/type-chart").json() == []
+
+
+# --------------------------------------------------------------------------- #
+# Behaviors (human-owned; need their own YAML renderer)
+# --------------------------------------------------------------------------- #
+
+
+def _behavior_payload() -> dict:
+    return {
+        "name": "Aqua Boost",
+        "chrooked_id": "aquaboost",
+        "applies_to": "ability",
+        "aka": {"pokeemerald": "ABILITY_AQUA_BOOST"},
+        "effects": [
+            {
+                "summary": "Boosts Water moves in rain.",
+                "trigger": "damage-calc",
+                "effect": "multiply Water-move damage by 1.3",
+                "when": "it is raining",
+            }
+        ],
+        "test_cases": [
+            {"given": "a Water move is used in rain", "expect": "1.3x damage"}
+        ],
+        "notes": ["Stacks multiplicatively with other rain boosts."],
+        "engine_hints": {"pokeemerald": "see ABILITY_AQUA_BOOST"},
+    }
+
+
+def test_put_behavior_creates_validated_file(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    response = client.put("/api/behaviors/aquaboost", json=_behavior_payload())
+    assert response.status_code == 200, response.text
+    assert (ruleset_dir / "behaviors" / "aquaboost.yaml").exists()
+    body = response.json()
+    assert body["applies_to"] == "ability"
+    assert body["effects"][0]["trigger"] == "damage-calc"
+
+
+def test_put_behavior_invalid_trigger_is_422_writes_nothing(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    payload = _behavior_payload()
+    payload["effects"][0]["trigger"] = "bogus-trigger"
+    response = client.put("/api/behaviors/aquaboost", json=payload)
+    assert response.status_code == 422, response.text
+    assert "bogus-trigger" in response.json()["detail"]
+    assert not (ruleset_dir / "behaviors" / "aquaboost.yaml").exists()
+
+
+def test_put_behavior_requires_an_effect_422(client: TestClient) -> None:
+    payload = _behavior_payload()
+    payload["effects"] = []
+    response = client.put("/api/behaviors/aquaboost", json=payload)
+    assert response.status_code == 422, response.text
+
+
+def test_editing_behavior_round_trips_aka(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    behavior = next(
+        b for b in client.get("/api/behaviors").json() if b["chrooked_id"] == "excalibur"
+    )
+    behavior["notes"] = ["Edited note."]
+    response = client.put("/api/behaviors/excalibur", json=behavior)
+    assert response.status_code == 200, response.text
+    on_disk = _read(ruleset_dir / "behaviors" / "excalibur.yaml")
+    assert "MOVE_EXCALIBUR" in on_disk
+    assert "Edited note." in on_disk
+
+
+def test_delete_behavior_removes_file(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    assert (ruleset_dir / "behaviors" / "excalibur.yaml").exists()
+    response = client.delete("/api/behaviors/excalibur")
+    assert response.status_code == 200, response.text
+    assert not (ruleset_dir / "behaviors" / "excalibur.yaml").exists()
+
+
+def test_delete_behavior_404_when_absent(client: TestClient) -> None:
+    response = client.delete("/api/behaviors/missing")
+    assert response.status_code == 404
