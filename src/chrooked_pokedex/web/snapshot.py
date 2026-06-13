@@ -32,6 +32,15 @@ _ENUM_MEMBER = re.compile(r"(NATIONAL_DEX_[A-Z0-9_]+)\s*(?:=\s*(\d+))?")
 # fragment — a comment word, an identifier — can't redirect the slice.
 _ENUM_OPEN = re.compile(r"\benum\s*\{")
 
+# A `#define NAME body` line; body keeps everything up to a trailing `// comment`.
+_DEFINE = re.compile(r"#define\s+([A-Z_][A-Z0-9_]*)\s+(.+)")
+# A config-gated ternary stat value, e.g. `(P_UPDATED_STATS >= GEN_8 ? 140 : 150)`.
+_GEN_TERNARY = re.compile(
+    r"\(?\s*([A-Z_][A-Z0-9_]*)\s*>=\s*([A-Z_][A-Z0-9_]*)\s*\?\s*(\d+)\s*:\s*(\d+)\s*\)?\Z"
+)
+# A stat value with an integer offset, e.g. `ALAKAZAM_SP_DEF + 10`, `CORSOLA_HP - 5`.
+_STAT_OFFSET = re.compile(r"(.*\S)\s*([+-])\s*(\d+)\Z")
+
 # Where the committed snapshot lives, relative to the repo root.
 DEFAULT_SNAPSHOT_PATH = (
     Path(__file__).resolve().parent.parent.parent.parent / "ruleset" / ".base" / "1.11.2.json"
@@ -58,6 +67,10 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
     ability_names = nz.build_ability_name_map(base_dir)
     move_names = nz.build_move_name_map(base_dir)
     dex_numbers = _national_dex_map(base_dir)
+    # One symbol table the stat evaluator reads: engine config ints
+    # (P_UPDATED_STATS, the GEN_* ladder) plus the named stat macros.
+    config = _config_int_map(base_dir)
+    symbols = {**config, **_stat_macro_map(base_dir, config)}
 
     species: dict[str, dict[str, Any]] = {}
     for constant in sorted(profiles):
@@ -70,6 +83,7 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
             ability_names,
             move_names,
             dex_numbers,
+            symbols,
         )
         species[entry["chrooked_id"]] = entry
 
@@ -92,6 +106,7 @@ def _base_species_entry(
     ability_names: dict[str, str],
     move_names: dict[str, str],
     dex_numbers: dict[str, int],
+    symbols: dict[str, int],
 ) -> dict[str, Any]:
     fields = profile.fields
     name = nz.species_display_name(constant)
@@ -103,7 +118,7 @@ def _base_species_entry(
         "abilities": _base_abilities(
             nz.extract_ability_constants(fields.get("abilities")), ability_names
         ),
-        "stats": _base_stats(fields),
+        "stats": _base_stats(fields, symbols),
         "learnset": [
             {"level": entry.level, "move": nz.move_name(entry.move, move_names)}
             for entry in (learnset or [])
@@ -111,13 +126,132 @@ def _base_species_entry(
     }
 
 
-def _base_stats(fields: dict[str, str]) -> dict[str, int]:
+def _base_stats(fields: dict[str, str], symbols: dict[str, int]) -> dict[str, int]:
+    """Read the six base stats, resolving symbolic values.
+
+    A stat field can be a digit, a named macro (`= AEGISLASH_MAIN_STAT`), an
+    inline config-gated ternary (`= P_UPDATED_STATS >= GEN_7 ? 95 : 85`), or a
+    macro with an offset (`= ALAKAZAM_SP_DEF + 10`). A digit-only read dropped
+    the symbolic forms; `_eval_expr` resolves them all. An unresolved value is
+    skipped (the stat is absent rather than wrong).
+    """
     stats: dict[str, int] = {}
     for c_field, key in nz.STAT_FIELD_TO_KEY.items():
         value = fields.get(c_field)
-        if value is not None and value.isdigit():
-            stats[key] = int(value)
+        if value is None:
+            continue
+        resolved = _eval_expr(value, symbols)
+        if resolved is not None:
+            stats[key] = resolved
     return stats
+
+
+def _stat_macro_map(base_dir: Path, config: dict[str, int]) -> dict[str, int]:
+    """Resolve `#define` stat macros to integers using the engine's config.
+
+    Form stats reference macros like `AEGISLASH_MAIN_STAT`, defined as a
+    generation-gated ternary `(P_UPDATED_STATS >= GEN_8 ? 140 : 150)`. We walk
+    every `#define` in the species_info headers, keeping those that evaluate to
+    an int. Plain integer defines resolve directly; unknown shapes are skipped.
+    """
+    macros: dict[str, int] = {}
+    info_dir = base_dir / "src" / "data" / "pokemon" / "species_info"
+    if not info_dir.exists():
+        return macros
+    for path in sorted(info_dir.glob("*.h")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            match = _DEFINE.match(line.strip())
+            if match is None:
+                continue
+            value = _eval_define(match.group(2), config)
+            if value is not None:
+                macros[match.group(1)] = value
+    return macros
+
+
+def _config_int_map(base_dir: Path) -> dict[str, int]:
+    """Resolve the engine config `#define`s the stat ternaries depend on.
+
+    Values may be plain ints (`GEN_9 8`) or aliases (`GEN_LATEST GEN_9`,
+    `P_UPDATED_STATS GEN_LATEST`); we resolve aliases transitively to ints.
+    """
+    raw: dict[str, str] = {}
+    for rel in ("include/config/general.h", "include/config/pokemon.h"):
+        path = base_dir / rel
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            match = _DEFINE.match(line.strip())
+            if match is not None:
+                raw[match.group(1)] = match.group(2).split("//")[0].strip()
+
+    resolved: dict[str, int] = {}
+
+    def resolve(name: str, seen: frozenset[str]) -> int | None:
+        if name in resolved:
+            return resolved[name]
+        body = raw.get(name)
+        if body is None or name in seen:
+            return None
+        if body.isdigit():
+            resolved[name] = int(body)
+            return resolved[name]
+        alias = resolve(body, seen | {name})
+        if alias is not None:
+            resolved[name] = alias
+        return alias
+
+    for name in raw:
+        resolve(name, frozenset())
+    return resolved
+
+
+def _eval_define(body: str, config: dict[str, int]) -> int | None:
+    """Evaluate a `#define` body to an int, or None if its shape isn't supported.
+
+    Handles a plain integer and the single config-gated ternary shape the stat
+    macros use (`NAME >= GEN_x ? a : b`). Anything else returns None.
+    """
+    text = body.split("//")[0].strip()
+    if text.isdigit():
+        return int(text)
+    match = _GEN_TERNARY.match(text)
+    if match is None:
+        return None
+    lhs, rhs, when_true, when_false = match.groups()
+    if lhs in config and rhs in config:
+        return int(when_true) if config[lhs] >= config[rhs] else int(when_false)
+    return None
+
+
+def _eval_expr(value: str, symbols: dict[str, int]) -> int | None:
+    """Evaluate a base-stat field value to an int over `symbols`, or None.
+
+    Supports the shapes 1.11.2 actually uses for a stat value, recursively:
+    a digit, a known symbol (`ALAKAZAM_SP_DEF`), a config-gated ternary
+    (`P_UPDATED_STATS >= GEN_7 ? 95 : 85`), and a symbol/ternary with an integer
+    offset (`ALAKAZAM_SP_DEF + 10`, `CORSOLA_HP - 5`). Unknown shapes return None.
+    """
+    text = value.split("//")[0].strip()
+    if text.startswith("(") and text.endswith(")"):
+        text = text[1:-1].strip()
+    if text.isdigit():
+        return int(text)
+    if text in symbols:
+        return symbols[text]
+    ternary = _GEN_TERNARY.match(text)
+    if ternary is not None:
+        lhs, rhs, when_true, when_false = ternary.groups()
+        if lhs in symbols and rhs in symbols:
+            return int(when_true) if symbols[lhs] >= symbols[rhs] else int(when_false)
+        return None
+    offset = _STAT_OFFSET.match(text)
+    if offset is not None:
+        left = _eval_expr(offset.group(1), symbols)
+        if left is not None:
+            delta = int(offset.group(3))
+            return left + delta if offset.group(2) == "+" else left - delta
+    return None
 
 
 def _resolve_dex(raw: str | None, dex_numbers: dict[str, int]) -> int | None:

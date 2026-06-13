@@ -82,6 +82,40 @@ def test_resolve_dex_handles_symbol_and_bare_integer() -> None:
     assert snap._resolve_dex(None, numbers) is None
 
 
+def test_eval_define_reads_plain_integer() -> None:
+    assert snap._eval_define("150", {}) == 150
+    assert snap._eval_define("234  // expyield", {}) == 234
+
+
+def test_eval_define_resolves_config_gated_ternary() -> None:
+    config = {"P_UPDATED_STATS": 8, "GEN_8": 7, "GEN_6": 5}
+    # 8 >= 7 -> the modern (first) value
+    assert (
+        snap._eval_define("(P_UPDATED_STATS >= GEN_8 ? 140 : 150)", config) == 140
+    )
+    # a config below the gate takes the legacy value
+    assert (
+        snap._eval_define("(P_UPDATED_STATS >= GEN_8 ? 140 : 150)", {"P_UPDATED_STATS": 5, "GEN_8": 7})
+        == 150
+    )
+
+
+def test_eval_define_returns_none_for_unsupported_shape() -> None:
+    assert snap._eval_define("SOME_OTHER_MACRO", {}) is None
+    assert snap._eval_define("(a + b)", {}) is None
+
+
+def test_eval_expr_resolves_symbols_ternaries_and_offsets() -> None:
+    symbols = {"P_UPDATED_STATS": 8, "GEN_7": 6, "ALAKAZAM_SP_DEF": 95, "CORSOLA_HP": 65}
+    assert snap._eval_expr("130", symbols) == 130
+    assert snap._eval_expr("ALAKAZAM_SP_DEF", symbols) == 95
+    assert snap._eval_expr("P_UPDATED_STATS >= GEN_7 ? 95 : 85", symbols) == 95
+    # macro with an integer offset, both directions
+    assert snap._eval_expr("ALAKAZAM_SP_DEF + 10", symbols) == 105
+    assert snap._eval_expr("CORSOLA_HP - 5", symbols) == 60
+    assert snap._eval_expr("UNKNOWN_MACRO", symbols) is None
+
+
 @pytest.mark.integration
 @pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
 def test_build_snapshot_from_real_base() -> None:
@@ -94,3 +128,19 @@ def test_build_snapshot_from_real_base() -> None:
     assert goodra["learnset"]  # base Goodra learns moves
     # Pikachu rides along unchanged in the full national dex.
     assert "pikachu" in built["species"]
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_symbolic_form_stats_are_resolved_not_dropped() -> None:
+    # Forms whose stats are named macros (AEGISLASH_MAIN_STAT etc.) must resolve
+    # to their real values, not vanish. P_UPDATED_STATS = GEN_LATEST, so the
+    # modern values apply (Aegislash main stat 140, Alakazam SpDef 95).
+    species = snap.build_snapshot(_BASE)["species"]
+    blade = species["aegislashblade"]["stats"]
+    shield = species["aegislashshield"]["stats"]
+    assert blade["atk"] == 140 and blade["spa"] == 140
+    assert shield["def"] == 140 and shield["spd"] == 140
+    # every form carries the full six stats now
+    assert set(blade) == {"hp", "atk", "def", "spa", "spd", "spe"}
+    assert species["alakazam"]["stats"]["spd"] == 95

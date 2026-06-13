@@ -530,8 +530,10 @@
       ],
       "name": "Aegislash Blade",
       "stats": {
+        "atk": 140,
         "def": 50,
         "hp": 60,
+        "spa": 140,
         "spd": 50,
         "spe": 60
       },
@@ -621,8 +623,10 @@
       "name": "Aegislash Shield",
       "stats": {
         "atk": 50,
+        "def": 140,
         "hp": 60,
         "spa": 50,
+        "spd": 140,
         "spe": 60
       },
       "types": [
@@ -1124,6 +1128,7 @@
         "def": 45,
         "hp": 55,
         "spa": 135,
+        "spd": 95,
         "spe": 120
       },
       "types": [
@@ -1202,6 +1207,7 @@
         "def": 65,
         "hp": 55,
         "spa": 175,
+        "spd": 105,
         "spe": 150
       },
       "types": [
@@ -2626,6 +2632,7 @@
       "name": "Ampharos",
       "stats": {
         "atk": 75,
+        "def": 85,
         "hp": 90,
         "spa": 115,
         "spd": 90,
@@ -2728,6 +2735,7 @@
       "name": "Ampharos Mega",
       "stats": {
         "atk": 95,
+        "def": 105,
         "hp": 90,
         "spa": 165,
         "spd": 110,
@@ -3302,6 +3310,7 @@
       ],
       "name": "Arbok",
       "stats": {
+        "atk": 95,
         "def": 69,
         "hp": 60,
         "spa": 65,
@@ -4575,6 +4584,7 @@
         "def": 70,
         "hp": 70,
         "spa": 60,
+        "spd": 70,
         "spe": 40
       },
       "types": [
@@ -5959,6 +5969,7 @@
         "atk": 50,
         "def": 80,
         "hp": 100,
+        "spa": 60,
         "spd": 80,
         "spe": 50
       },
@@ -7353,6 +7364,7 @@
       ],
       "name": "Beartic",
       "stats": {
+        "atk": 130,
         "def": 80,
         "hp": 95,
         "spa": 70,
@@ -7454,6 +7466,7 @@
         "atk": 70,
         "def": 50,
         "hp": 60,
+        "spa": 100,
         "spd": 50,
         "spe": 65
       },
@@ -7546,6 +7559,7 @@
       ],
       "name": "Beedrill",
       "stats": {
+        "atk": 90,
         "def": 40,
         "hp": 65,
         "spa": 45,
@@ -7641,6 +7655,7 @@
       ],
       "name": "Beedrill Mega",
       "stats": {
+        "atk": 150,
         "def": 40,
         "hp": 65,
         "spa": 15,
@@ -7915,6 +7930,7 @@
       "name": "Bellossom",
       "stats": {
         "atk": 80,
+        "def": 95,
         "hp": 75,
         "spa": 90,
         "spd": 100,
@@ -11147,6 +11163,7 @@
         "atk": 45,
         "def": 50,
         "hp": 60,
+        "spa": 90,
         "spd": 80,
         "spe": 70
       },
@@ -14934,7 +14951,10 @@
       "name": "Chimecho",
       "stats": {
         "atk": 50,
+        "def": 80,
+        "hp": 75,
         "spa": 95,
+        "spd": 90,
         "spe": 65
       },
       "types": [
@@ -15738,6 +15758,7 @@
         "atk": 70,
         "def": 73,
         "hp": 95,
+        "spa": 95,
         "spd": 90,
         "spe": 60
       },
@@ -16932,7 +16953,10 @@
       "name": "Corsola",
       "stats": {
         "atk": 55,
+        "def": 95,
+        "hp": 65,
         "spa": 65,
+        "spd": 95,
         "spe": 35
       },
       "types": [
@@ -17005,7 +17029,10 @@
       "name": "Corsola Galar",
       "stats": {
         "atk": 55,
+        "def": 100,
+        "hp": 60,
         "spa": 65,
+        "spd": 100,
         "spe": 30
       },
       "types": [
@@ -18013,8 +18040,10 @@
       "name": "Cresselia",
       "stats": {
         "atk": 70,
+        "def": 110,
         "hp": 120,
         "spa": 75,
+        "spd": 120,
         "spe": 85
       },
       "types": [
@@ -18423,6 +18452,7 @@
       ],
       "name": "Crustle",
       "stats": {
+        "atk": 105,
         "def": 125,
         "hp": 70,
         "spa": 65,
@@ -18523,6 +18553,8 @@
       "name": "Cryogonal",
       "stats": {
         "atk": 50,
+        "def": 50,
+        "hp": 80,
         "spa": 95,
         "spd": 135,
         "spe": 105
@@ -20560,7 +20592,8 @@
         "def": 65,
         "hp": 70,
         "spa": 55,
-        "spd": 55
+        "spd": 55,
+        "spe": 90
       },
       "types": [
         "Normal"
@@ -22123,7 +22156,8 @@
         "def": 70,
         "hp": 60,
         "spa": 60,
-        "spd": 60
+        "spd": 60,
+        "spe": 110
       },
       "types": [
         "Normal",
@@ -24467,6 +24501,7 @@
       ],
       "name": "Dugtrio",
       "stats": {
+        "atk": 100,
         "def": 50,
         "hp": 35,
         "spa": 50,
@@ -24553,6 +24588,7 @@
       ],
       "name": "Dugtrio Alola",
       "stats": {
+        "atk": 100,
         "def": 60,
         "hp": 35,
         "spa": 50,
@@ -26312,7 +26348,8 @@
         "def": 70,
         "hp": 60,
         "spa": 80,
-        "spd": 80
+        "spd": 80,
+        "spe": 150
       },
       "types": [
         "Electric"
@@ -26406,7 +26443,8 @@
         "def": 70,
         "hp": 60,
         "spa": 80,
-        "spd": 80
+        "spd": 80,
+        "spe": 150
       },
       "types": [
         "Electric",
@@ -27899,6 +27937,7 @@
         "def": 85,
         "hp": 95,
         "spa": 125,
+        "spd": 75,
         "spe": 55
       },
       "types": [
@@ -27998,6 +28037,7 @@
         "def": 85,
         "hp": 95,
         "spa": 125,
+        "spd": 75,
         "spe": 45
       },
       "types": [
@@ -28101,6 +28141,7 @@
         "def": 63,
         "hp": 104,
         "spa": 91,
+        "spd": 73,
         "spe": 68
       },
       "types": [
@@ -28258,6 +28299,7 @@
       ],
       "name": "Farfetchd",
       "stats": {
+        "atk": 90,
         "def": 55,
         "hp": 52,
         "spa": 58,
@@ -28341,6 +28383,7 @@
       ],
       "name": "Farfetchd Galar",
       "stats": {
+        "atk": 95,
         "def": 55,
         "hp": 52,
         "spa": 58,
@@ -33402,6 +33445,7 @@
         "def": 130,
         "hp": 85,
         "spa": 60,
+        "spd": 80,
         "spe": 25
       },
       "types": [
@@ -34994,6 +35038,7 @@
       ],
       "name": "Golem",
       "stats": {
+        "atk": 120,
         "def": 130,
         "hp": 80,
         "spa": 55,
@@ -35081,6 +35126,7 @@
       ],
       "name": "Golem Alola",
       "stats": {
+        "atk": 120,
         "def": 130,
         "hp": 80,
         "spa": 55,
@@ -42355,8 +42401,10 @@
       "name": "Illumise",
       "stats": {
         "atk": 47,
+        "def": 75,
         "hp": 65,
         "spa": 73,
+        "spd": 85,
         "spe": 85
       },
       "types": [
@@ -44585,6 +44633,7 @@
         "def": 70,
         "hp": 75,
         "spa": 55,
+        "spd": 95,
         "spe": 110
       },
       "types": [
@@ -47289,6 +47338,7 @@
       "name": "Krookodile",
       "stats": {
         "atk": 117,
+        "def": 80,
         "hp": 95,
         "spa": 65,
         "spd": 70,
@@ -49035,6 +49085,7 @@
         "def": 80,
         "hp": 75,
         "spa": 70,
+        "spd": 80,
         "spe": 92
       },
       "types": [
@@ -51537,6 +51588,7 @@
       "stats": {
         "atk": 55,
         "def": 65,
+        "hp": 90,
         "spa": 95,
         "spd": 85,
         "spe": 70
@@ -52767,6 +52819,8 @@
       "stats": {
         "atk": 50,
         "def": 120,
+        "hp": 60,
+        "spa": 90,
         "spd": 80,
         "spe": 30
       },
@@ -54205,6 +54259,7 @@
       "stats": {
         "atk": 40,
         "def": 70,
+        "hp": 85,
         "spa": 80,
         "spd": 140,
         "spe": 70
@@ -55264,7 +55319,9 @@
         "atk": 60,
         "def": 62,
         "hp": 70,
-        "spd": 82
+        "spa": 100,
+        "spd": 82,
+        "spe": 80
       },
       "types": [
         "Bug",
@@ -61775,6 +61832,7 @@
       ],
       "name": "Nidoking",
       "stats": {
+        "atk": 102,
         "def": 77,
         "hp": 81,
         "spa": 85,
@@ -61862,6 +61920,7 @@
       ],
       "name": "Nidoqueen",
       "stats": {
+        "atk": 92,
         "def": 87,
         "hp": 90,
         "spa": 75,
@@ -62703,6 +62762,7 @@
         "atk": 50,
         "def": 50,
         "hp": 100,
+        "spa": 86,
         "spd": 96,
         "spe": 70
       },
@@ -66841,6 +66901,7 @@
         "atk": 50,
         "def": 100,
         "hp": 60,
+        "spa": 95,
         "spd": 70,
         "spe": 65
       },
@@ -67693,7 +67754,8 @@
         "def": 75,
         "hp": 83,
         "spa": 70,
-        "spd": 70
+        "spd": 70,
+        "spe": 101
       },
       "types": [
         "Normal",
@@ -67788,7 +67850,8 @@
         "def": 80,
         "hp": 83,
         "spa": 135,
-        "spd": 80
+        "spd": 80,
+        "spe": 121
       },
       "types": [
         "Normal",
@@ -68220,8 +68283,10 @@
       "name": "Pikachu",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68321,8 +68386,10 @@
       "name": "Pikachu Alola",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68422,8 +68489,10 @@
       "name": "Pikachu Belle",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68523,8 +68592,10 @@
       "name": "Pikachu Cosplay",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68624,8 +68695,10 @@
       "name": "Pikachu Hoenn",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68725,8 +68798,10 @@
       "name": "Pikachu Kalos",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68826,8 +68901,10 @@
       "name": "Pikachu Libre",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -68927,8 +69004,10 @@
       "name": "Pikachu Original",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69028,8 +69107,10 @@
       "name": "Pikachu Partner",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69129,8 +69210,10 @@
       "name": "Pikachu Phd",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69230,8 +69313,10 @@
       "name": "Pikachu Pop Star",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69331,8 +69416,10 @@
       "name": "Pikachu Rock Star",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69432,8 +69519,10 @@
       "name": "Pikachu Sinnoh",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69636,8 +69725,10 @@
       "name": "Pikachu Unova",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -69737,8 +69828,10 @@
       "name": "Pikachu World",
       "stats": {
         "atk": 55,
+        "def": 40,
         "hp": 35,
         "spa": 50,
+        "spd": 50,
         "spe": 90
       },
       "types": [
@@ -70768,6 +70861,7 @@
       ],
       "name": "Poliwrath",
       "stats": {
+        "atk": 95,
         "def": 95,
         "hp": 90,
         "spa": 70,
@@ -73425,6 +73519,7 @@
       "name": "Qwilfish",
       "stats": {
         "atk": 95,
+        "def": 85,
         "hp": 65,
         "spa": 55,
         "spd": 55,
@@ -73516,6 +73611,7 @@
       "name": "Qwilfish Hisui",
       "stats": {
         "atk": 95,
+        "def": 85,
         "hp": 65,
         "spa": 55,
         "spd": 55,
@@ -73889,7 +73985,8 @@
         "def": 55,
         "hp": 60,
         "spa": 90,
-        "spd": 80
+        "spd": 80,
+        "spe": 110
       },
       "types": [
         "Electric"
@@ -73995,7 +74092,8 @@
         "def": 50,
         "hp": 60,
         "spa": 95,
-        "spd": 85
+        "spd": 85,
+        "spe": 110
       },
       "types": [
         "Electric",
@@ -77253,6 +77351,7 @@
       "name": "Roserade",
       "stats": {
         "atk": 70,
+        "def": 65,
         "hp": 60,
         "spa": 125,
         "spd": 105,
@@ -80842,6 +80941,7 @@
       ],
       "name": "Scolipede",
       "stats": {
+        "atk": 100,
         "def": 89,
         "hp": 60,
         "spa": 55,
@@ -81832,6 +81932,7 @@
       ],
       "name": "Seismitoad",
       "stats": {
+        "atk": 95,
         "def": 75,
         "hp": 105,
         "spa": 85,
@@ -88225,6 +88326,7 @@
       "stats": {
         "atk": 95,
         "def": 85,
+        "hp": 90,
         "spa": 55,
         "spd": 65,
         "spe": 70
@@ -90175,6 +90277,7 @@
         "def": 70,
         "hp": 85,
         "spa": 50,
+        "spd": 60,
         "spe": 100
       },
       "types": [
@@ -90963,6 +91066,7 @@
       ],
       "name": "Stoutland",
       "stats": {
+        "atk": 110,
         "def": 90,
         "hp": 85,
         "spa": 45,
@@ -92327,6 +92431,7 @@
         "atk": 85,
         "def": 60,
         "hp": 60,
+        "spa": 75,
         "spd": 50,
         "spe": 125
       },
@@ -99291,6 +99396,7 @@
       ],
       "name": "Unfezant",
       "stats": {
+        "atk": 115,
         "def": 80,
         "hp": 80,
         "spa": 65,
@@ -101812,6 +101918,7 @@
         "def": 65,
         "hp": 80,
         "spa": 100,
+        "spd": 70,
         "spe": 70
       },
       "types": [
@@ -102161,6 +102268,7 @@
         "atk": 80,
         "def": 85,
         "hp": 75,
+        "spa": 110,
         "spd": 90,
         "spe": 50
       },
@@ -102322,8 +102430,10 @@
       "name": "Volbeat",
       "stats": {
         "atk": 73,
+        "def": 75,
         "hp": 65,
         "spa": 47,
+        "spd": 85,
         "spe": 85
       },
       "types": [
@@ -104465,6 +104575,7 @@
         "atk": 70,
         "def": 45,
         "hp": 140,
+        "spa": 85,
         "spd": 50,
         "spe": 45
       },
@@ -105040,6 +105151,7 @@
       "stats": {
         "atk": 45,
         "def": 43,
+        "hp": 65,
         "spa": 55,
         "spd": 43,
         "spe": 72
@@ -106855,6 +106967,7 @@
       ],
       "name": "Zacian Crowned",
       "stats": {
+        "atk": 150,
         "def": 115,
         "hp": 92,
         "spa": 80,
@@ -106934,6 +107047,7 @@
       ],
       "name": "Zacian Hero",
       "stats": {
+        "atk": 120,
         "def": 115,
         "hp": 92,
         "spa": 80,
@@ -107008,8 +107122,11 @@
       ],
       "name": "Zamazenta Crowned",
       "stats": {
+        "atk": 120,
+        "def": 140,
         "hp": 92,
         "spa": 80,
+        "spd": 140,
         "spe": 128
       },
       "types": [
@@ -107081,6 +107198,7 @@
       ],
       "name": "Zamazenta Hero",
       "stats": {
+        "atk": 120,
         "def": 115,
         "hp": 92,
         "spa": 80,
