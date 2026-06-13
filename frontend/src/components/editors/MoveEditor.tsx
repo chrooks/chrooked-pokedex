@@ -76,8 +76,13 @@ export function MoveEditor({ move, onClose, onSaved }: Props) {
       <header className="ledger__head">
         <div className="ledger__head-row">
           <span className="ledger__dex mono">MOVE</span>
-          <button type="button" className="ledger__close" onClick={onClose}>
-            Close <kbd className="mono">Esc</kbd>
+          <button
+            type="button"
+            className="ledger__close"
+            aria-label="Close editor"
+            onClick={onClose}
+          >
+            Close <kbd className="mono" aria-hidden="true">Esc</kbd>
           </button>
         </div>
         <h2 className="ledger__name" id={titleId}>

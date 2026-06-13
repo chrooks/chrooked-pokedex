@@ -136,4 +136,17 @@ export const api = {
       "DELETE",
       `/api/abilities/${encodeURIComponent(id)}${confirmQuery(confirm)}`,
     ),
+
+  // Type chart (one whole-list file → a write replaces the override set)
+  putTypeChart: (entries: TypeChartEntry[]) =>
+    sendJson<TypeChartEntry[]>("PUT", "/api/type-chart", entries),
+
+  // Behaviors
+  putBehavior: (id: string, payload: Behavior) =>
+    sendJson<Behavior>("PUT", `/api/behaviors/${encodeURIComponent(id)}`, payload),
+  deleteBehavior: (id: string) =>
+    sendJson<{ deleted: string }>(
+      "DELETE",
+      `/api/behaviors/${encodeURIComponent(id)}`,
+    ),
 } as const;

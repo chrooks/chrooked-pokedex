@@ -113,6 +113,8 @@ export interface Behavior {
   name: string;
   chrooked_id: string;
   applies_to: "ability" | "move";
+  /** Engine symbol(s); carried through edits so apply (M3) keeps resolving. */
+  aka: Record<string, unknown>;
   effects: BehaviorEffect[];
   test_cases: BehaviorTestCase[];
   notes: string[];
