@@ -128,6 +128,43 @@ export function SelectField({ value, onChange, options, ...rest }: SelectProps) 
   );
 }
 
+type ComboProps = BaseProps & {
+  value: string;
+  onChange: (value: string) => void;
+  /** Suggestions shown in the dropdown; any value can still be typed. */
+  options: readonly string[];
+  placeholder?: string;
+};
+
+/** A searchable combobox: a text input backed by a native <datalist>. The
+    options are suggestions, not a closed set — a base-game ability or a custom
+    type that isn't in the list still types through. */
+export function ComboField({ value, onChange, options, placeholder, ...rest }: ComboProps) {
+  const listId = `${rest.id}-list`;
+  return (
+    <FieldShell {...rest}>
+      <input
+        id={rest.id}
+        className="field__input"
+        type="text"
+        list={listId}
+        value={value}
+        placeholder={placeholder}
+        autoComplete="off"
+        data-changed={rest.changed ? "true" : undefined}
+        aria-invalid={rest.error ? "true" : undefined}
+        aria-describedby={rest.error ? `${rest.id}-error` : undefined}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+      />
+      <datalist id={listId}>
+        {options.map((option) => (
+          <option key={option} value={option} />
+        ))}
+      </datalist>
+    </FieldShell>
+  );
+}
+
 type TextAreaProps = BaseProps & {
   value: string;
   onChange: (value: string) => void;

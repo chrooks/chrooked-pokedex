@@ -25,6 +25,22 @@ export default function App() {
   const all = useMemo(() => dex.data ?? [], [dex.data]);
   const editedCount = useMemo(() => all.filter(isEdited).length, [all]);
 
+  // Distinct ability names across the merged dex (base + overrides) — the
+  // suggestion set for the species editor's ability comboboxes.
+  const abilityOptions = useMemo(() => {
+    const names = new Set<string>();
+    for (const entry of all) {
+      for (const slot of [
+        entry.abilities.primary,
+        entry.abilities.secondary,
+        entry.abilities.hidden,
+      ]) {
+        if (slot) names.add(slot);
+      }
+    }
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [all]);
+
   const filtered = useMemo(() => {
     let list = all;
     if (view.editedOnly) {
@@ -96,6 +112,7 @@ export default function App() {
           entry={selectedEntry}
           onClose={handleClose}
           onSaved={dex.reload}
+          abilityOptions={abilityOptions}
         />
       )}
     </DeviceFrame>

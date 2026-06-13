@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "../../api";
-import { STAT_ORDER, STAT_LABEL, isEdited } from "../../lib/format";
+import { STAT_ORDER, STAT_LABEL, TYPES, isEdited } from "../../lib/format";
 import type {
   AbilitySlots,
   DexEntry,
@@ -21,7 +21,7 @@ import type {
 } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
-import { NumberField, TextField } from "./fields";
+import { ComboField, NumberField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import "./editors.css";
 
@@ -29,6 +29,8 @@ type Props = {
   entry: DexEntry;
   onDone: () => void;
   onSaved: () => void;
+  /** Known ability names (base + Ruleset-owned) for the ability comboboxes. */
+  abilityOptions: readonly string[];
 };
 
 const ABILITY_SLOTS = ["primary", "secondary", "hidden"] as const;
@@ -39,7 +41,7 @@ type AbilityForm = Record<AbilitySlot, string>;
 type LearnRow = { _id: number; level: number | ""; move: string };
 type MethodRow = { _id: number; key: string; value: string };
 
-export function SpeciesEditor({ entry, onDone, onSaved }: Props) {
+export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props) {
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
 
@@ -48,7 +50,8 @@ export function SpeciesEditor({ entry, onDone, onSaved }: Props) {
   const [rawLoaded, setRawLoaded] = useState(false);
 
   const [stats, setStats] = useState<StatForm>(() => initialStats(entry));
-  const [types, setTypes] = useState(() => entry.types.join(", "));
+  const [type1, setType1] = useState(() => entry.types[0] ?? "");
+  const [type2, setType2] = useState(() => entry.types[1] ?? "");
   const [abilities, setAbilities] = useState<AbilityForm>(() =>
     initialAbilities(entry.abilities),
   );
@@ -80,7 +83,8 @@ export function SpeciesEditor({ entry, onDone, onSaved }: Props) {
   async function handleSave() {
     const payload = buildOverride(entry, raw, {
       stats,
-      types,
+      type1,
+      type2,
       abilities,
       learnset,
       evoFrom,
@@ -136,15 +140,25 @@ export function SpeciesEditor({ entry, onDone, onSaved }: Props) {
         <h3 className="editor-section__heading" id="species-types-heading">
           Types
         </h3>
-        <TextField
-          id="species-types"
-          label="Types"
-          hint="comma-separated, e.g. Water, Dragon"
-          full
-          value={types}
-          changed={!sameStrings(parseTypes(types), baseTypes(entry))}
-          onChange={setTypes}
-        />
+        <div className="editor-form__grid">
+          <ComboField
+            id="species-type1"
+            label="Type 1"
+            options={TYPES}
+            value={type1}
+            changed={type1.trim() !== (baseTypes(entry)[0] ?? "")}
+            onChange={setType1}
+          />
+          <ComboField
+            id="species-type2"
+            label="Type 2"
+            hint="blank = single-type"
+            options={TYPES}
+            value={type2}
+            changed={type2.trim() !== (baseTypes(entry)[1] ?? "")}
+            onChange={setType2}
+          />
+        </div>
       </section>
 
       <section className="editor-section" aria-labelledby="species-abilities-heading">
@@ -153,11 +167,12 @@ export function SpeciesEditor({ entry, onDone, onSaved }: Props) {
         </h3>
         <div className="editor-form__grid">
           {ABILITY_SLOTS.map((slot) => (
-            <TextField
+            <ComboField
               key={slot}
               id={`species-ability-${slot}`}
               label={slot}
               full={slot === "hidden"}
+              options={abilityOptions}
               value={abilities[slot]}
               changed={
                 abilities[slot].trim() !== "" &&
@@ -373,11 +388,9 @@ function initialMethod(evolution: Evolution | null): MethodRow[] {
 
 // --- parsing / comparison --------------------------------------------------- #
 
-function parseTypes(text: string): string[] {
-  return text
-    .split(",")
-    .map((part) => part.trim())
-    .filter((part) => part.length > 0);
+/** The non-blank type slots as an ordered list (1 or 2 entries). */
+function currentTypes(type1: string, type2: string): string[] {
+  return [type1, type2].map((t) => t.trim()).filter((t) => t.length > 0);
 }
 
 function sameStrings(a: string[], b: string[]): boolean {
@@ -393,7 +406,8 @@ function parseMethodValue(value: string): number | string {
 
 type FormState = {
   stats: StatForm;
-  types: string;
+  type1: string;
+  type2: string;
   abilities: AbilityForm;
   learnset: LearnRow[];
   evoFrom: string;
@@ -415,7 +429,7 @@ function buildOverride(
   }
 
   // types: override only if the whole list differs from base
-  const parsedTypes = parseTypes(form.types);
+  const parsedTypes = currentTypes(form.type1, form.type2);
   const typesChanged = !sameStrings(parsedTypes, baseTypes(entry));
 
   // abilities: only slots that differ from base (a cleared slot is left as-is)

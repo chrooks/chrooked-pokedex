@@ -21,6 +21,46 @@ export function typeSlug(type: string): string {
   return type.trim().toLowerCase();
 }
 
+/** The 18 franchise types, in canonical order, as display names. Suggestion
+    source for the type comboboxes (species editor + type chart). */
+export const TYPES = [
+  "Normal",
+  "Fire",
+  "Water",
+  "Electric",
+  "Grass",
+  "Ice",
+  "Fighting",
+  "Poison",
+  "Ground",
+  "Flying",
+  "Psychic",
+  "Bug",
+  "Rock",
+  "Ghost",
+  "Dragon",
+  "Dark",
+  "Steel",
+  "Fairy",
+] as const;
+
+/** Neutral move flags the Ruleset models (mirrors schema.MOVE_FLAGS). The tag
+    vocabulary the Moves tab filters by. */
+export const MOVE_FLAGS = [
+  "contact",
+  "punching",
+  "biting",
+  "sound",
+  "slicing",
+  "wind",
+  "wing",
+  "kicking",
+  "piercing",
+  "bone",
+  "hammer",
+  "ballistic",
+] as const;
+
 /** A three-letter uppercase code for the dense grid, e.g. "Dragon" -> "DRA". */
 export function typeCode(type: string): string {
   return type.trim().slice(0, 3).toUpperCase();

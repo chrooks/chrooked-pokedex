@@ -18,6 +18,8 @@ type Props = {
   onClose: () => void;
   /** Refetch the dex after a save/delete so the merged view reflects the edit. */
   onSaved: () => void;
+  /** Known ability names (base + owned) for the species editor's comboboxes. */
+  abilityOptions: readonly string[];
 };
 
 /**
@@ -27,7 +29,7 @@ type Props = {
  * the diff one tap away (Progressive Disclosure). "Edit" swaps the read-only
  * ledger for the {@link SpeciesEditor} in place.
  */
-export function DetailLedger({ entry, onClose, onSaved }: Props) {
+export function DetailLedger({ entry, onClose, onSaved, abilityOptions }: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
   const edited = isEdited(entry);
@@ -121,6 +123,7 @@ export function DetailLedger({ entry, onClose, onSaved }: Props) {
             entry={entry}
             onDone={() => setEditing(false)}
             onSaved={onSaved}
+            abilityOptions={abilityOptions}
           />
         ) : (
           <DetailBody entry={entry} showDiff={showDiff} />

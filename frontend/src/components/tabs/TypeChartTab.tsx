@@ -3,6 +3,7 @@ import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
+import { TYPES } from "../../lib/format";
 import type { TypeChartEntry } from "../../types";
 import { ErrorView } from "../StatusView";
 import { FormError } from "../editors/FormFeedback";
@@ -66,6 +67,11 @@ export function TypeChartTab() {
 
   return (
     <div className="tab" id="tab-type-chart">
+      <datalist id="tc-type-options">
+        {TYPES.map((t) => (
+          <option key={t} value={t} />
+        ))}
+      </datalist>
       <div className="tab-toolbar">
         <span className="tab-toolbar__title">{rows.length} matchup overrides</span>
         <button type="button" className="btn btn--new" onClick={addRow}>
@@ -80,10 +86,12 @@ export function TypeChartTab() {
           </p>
         )}
         {rows.map((row, index) => (
-          <div key={index} className="row-list__row row-list__row--inline">
+          <div key={row._id} className="row-list__row row-list__row--inline">
             <div className="tc-row">
               <input
                 className="field__input"
+                list="tc-type-options"
+                autoComplete="off"
                 aria-label={`Attacker type for override ${index + 1}`}
                 placeholder="Attacker"
                 value={row.attacker}
@@ -94,6 +102,8 @@ export function TypeChartTab() {
               </span>
               <input
                 className="field__input"
+                list="tc-type-options"
+                autoComplete="off"
                 aria-label={`Defender type for override ${index + 1}`}
                 placeholder="Defender"
                 value={row.defender}

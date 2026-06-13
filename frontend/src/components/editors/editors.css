@@ -290,6 +290,62 @@ tr:hover .tab-row-edit,
   gap: var(--space-3);
 }
 
+/* --- Moves filter bar + tag chips --- */
+
+.tab-filterbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.tab-search {
+  flex: 1;
+  min-width: 8rem;
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.tab-search:focus {
+  outline: none;
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 25%, transparent);
+}
+
+.move-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.move-tag {
+  padding: 1px var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+button.move-tag:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+.move-tag[data-on="true"] {
+  color: var(--surface-0);
+  background: var(--chrome);
+  border-color: var(--chrome);
+  font-weight: 600;
+}
+
 /* --- Repeatable rows (behavior effects/test-cases/notes, learnset, evolution) --- */
 
 .row-list {
