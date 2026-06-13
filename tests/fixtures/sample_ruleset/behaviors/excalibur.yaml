@@ -1,0 +1,15 @@
+name: Excalibur
+chrooked_id: excalibur
+applies_to: move
+aka: { pokeemerald: MOVE_EXCALIBUR }
+effects:
+  - summary: Always lands against Dragon-type targets.
+    trigger: damage-calc
+    effect: Treats the move as super effective when the target is Dragon.
+    when: the target is a Dragon-type
+test_cases:
+  - given: Excalibur is used on a Dragon-type target
+    expect: damage is multiplied as super effective
+notes:
+  - A holy blade; flavored as anti-Dragon.
+engine_hints: { pokeemerald: see MOVE_EXCALIBUR effect script }

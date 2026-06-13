@@ -73,6 +73,23 @@ def test_overridden_species_merges_ruleset_onto_base() -> None:
     assert goodra["dex"] == 706
 
 
+def test_overridden_species_carries_base_values_for_the_diff() -> None:
+    # The detail ledger's diff toggle shows base -> now, so every overridden
+    # field's pre-override value rides along under `base`.
+    ruleset = Ruleset.load(_SAMPLE)
+    goodra = _entry(dexmod.build_dex(_SNAPSHOT, ruleset), "goodra")
+    assert goodra["base"]["types"] == ["Dragon"]
+    assert goodra["base"]["stats"]["spe"] == 60
+    assert goodra["base"]["abilities"]["primary"] == "Sap Sipper"
+    assert [m["move"] for m in goodra["base"]["learnset"]] == ["Tackle"]
+
+
+def test_untouched_species_has_empty_base() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    pikachu = _entry(dexmod.build_dex(_SNAPSHOT, ruleset), "pikachu")
+    assert pikachu["base"] == {}
+
+
 def test_overridden_fields_lists_every_changed_kind() -> None:
     ruleset = Ruleset.load(_SAMPLE)
     goodra = _entry(dexmod.build_dex(_SNAPSHOT, ruleset), "goodra")

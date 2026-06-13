@@ -32,6 +32,20 @@ def build_dex(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]
     return sorted(entries, key=_dex_sort_key)
 
 
+def build_dex_entry(
+    snapshot: dict[str, Any], ruleset: Ruleset, chrooked_id: str
+) -> dict[str, Any] | None:
+    """Merge one species by `chrooked_id`, or None if the base has no such species.
+
+    Backs `GET /api/dex/{chrooked_id}` (the detail panel) without rebuilding the
+    whole dex. The id is the snapshot's join key, so a miss means a 404.
+    """
+    base = snapshot["species"].get(chrooked_id)
+    if base is None:
+        return None
+    return _merge_species(base, ruleset.species.get(chrooked_id))
+
+
 def _dex_sort_key(entry: dict[str, Any]) -> tuple[int, str]:
     # National dex order; species without a number sort last, then by id for stability.
     dex = entry.get("dex")
@@ -51,35 +65,49 @@ def _merge_species(
         "learnset": list(base.get("learnset", [])),
         "evolution": None,
         "overridden_fields": [],
+        # Pre-override values for whatever the Ruleset changed, so the detail
+        # ledger can show base -> now. Empty for an untouched species.
+        "base": {},
     }
     if override is None:
         return merged
 
     overridden: list[str] = []
+    base_values: dict[str, Any] = {}
 
-    # `name` is always present on an override (schema type `str`, not Optional);
-    # a rename simply replaces the base display name.
-    merged["name"] = override.name
+    # `name` is always present on an override (schema type `str`, not Optional),
+    # but only write it when it actually differs from base — so an override that
+    # only touches stats can't silently clobber the display name. Renames are not
+    # flagged in `overridden_fields` in M1 (the ledger has no name-diff row yet);
+    # surfacing them is deferred to the CRUD slice.
+    if override.name != base["name"]:
+        merged["name"] = override.name
 
     if override.types is not None:
+        base_values["types"] = list(merged["types"])
         merged["types"] = list(override.types)
         overridden.append("types")
 
     if override.abilities is not None:
+        base_values["abilities"] = dict(merged["abilities"])
         merged["abilities"] = _merge_abilities(merged["abilities"], override.abilities)
         overridden.append("abilities")
 
     if override.stats is not None:
+        base_values["stats"] = dict(merged["stats"])
         merged["stats"] = {**merged["stats"], **dict(override.stats)}
         overridden.append("stats")
 
     if override.learnset is not None:
+        base_values["learnset"] = list(merged["learnset"])
         merged["learnset"] = [
             {"level": m.level, "move": m.move} for m in override.learnset
         ]
         overridden.append("learnset")
 
     if override.evolution is not None:
+        # Base 1.11.2 snapshot carries no evolution, so there is no `was` to show;
+        # the ledger renders this as Ruleset-set rather than a diff.
         merged["evolution"] = {
             "from": override.evolution.from_species,
             "method": dict(override.evolution.method),
@@ -87,6 +115,7 @@ def _merge_species(
         overridden.append("evolution")
 
     merged["overridden_fields"] = [f for f in _FLAGGABLE_FIELDS if f in overridden]
+    merged["base"] = {k: base_values[k] for k in _FLAGGABLE_FIELDS if k in base_values}
     return merged
 
 

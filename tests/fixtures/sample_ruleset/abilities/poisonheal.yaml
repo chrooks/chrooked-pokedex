@@ -1,0 +1,4 @@
+name: Poison Heal
+chrooked_id: poisonheal
+aka: { pokeemerald: ABILITY_POISON_HEAL }
+description: Heals each turn instead of taking poison damage.
