@@ -12,7 +12,7 @@ from chrooked_pokedex.appliers.pokeemerald.resolution import ResolutionMap
 from chrooked_pokedex.model import Ruleset
 from chrooked_pokedex.model.loader import load_move
 from chrooked_pokedex.seed.extractor import seed_from_fork
-from chrooked_pokedex.seed.writer import _move_yaml
+from chrooked_pokedex.seed.writer import move_yaml
 
 
 def _write_moves(repo: Path, body: str) -> None:
@@ -87,7 +87,7 @@ def test_move_fields_round_trip_through_yaml(tmp_path: Path) -> None:
 
     for move in (seed.moves["cindersmash"], seed.moves["excalibur"]):
         path = tmp_path / f"{move.chrooked_id}.yaml"
-        path.write_text(_move_yaml(move), encoding="utf-8")
+        path.write_text(move_yaml(move), encoding="utf-8")
         reloaded = load_move(path)
         assert reloaded.effect == move.effect
         assert reloaded.argument == move.argument

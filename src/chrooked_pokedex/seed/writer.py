@@ -17,8 +17,8 @@ from .extractor import SeedData
 def write_ruleset(seed: SeedData, ruleset_dir: Path) -> None:
     ruleset_dir = Path(ruleset_dir)
     _write_dir(ruleset_dir / "species", seed.species, species_yaml)
-    _write_dir(ruleset_dir / "moves", seed.moves, _move_yaml)
-    _write_dir(ruleset_dir / "abilities", seed.abilities, _ability_yaml)
+    _write_dir(ruleset_dir / "moves", seed.moves, move_yaml)
+    _write_dir(ruleset_dir / "abilities", seed.abilities, ability_yaml)
     _write_type_chart(ruleset_dir / "type-chart" / "overrides.yaml", seed.type_chart)
 
 
@@ -93,7 +93,7 @@ def _evolution_flow(evolution) -> str:
     return f"{{ from: {_scalar(evolution.from_species)}, method: {method} }}"
 
 
-def _move_yaml(move: MoveDef) -> str:
+def move_yaml(move: MoveDef) -> str:
     lines = [
         f"name: {move.name}",
         f"chrooked_id: {move.chrooked_id}",
@@ -127,7 +127,7 @@ def _move_yaml(move: MoveDef) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _ability_yaml(ability: AbilityDef) -> str:
+def ability_yaml(ability: AbilityDef) -> str:
     lines = [
         f"name: {ability.name}",
         f"chrooked_id: {ability.chrooked_id}",

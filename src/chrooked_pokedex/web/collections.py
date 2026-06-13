@@ -19,12 +19,13 @@ from ..model.schema import AbilityDef, MoveDef, TypeChartOverride
 
 
 def build_moves(ruleset: Ruleset) -> list[dict[str, Any]]:
-    return [_move(m) for m in sorted(ruleset.moves.values(), key=lambda m: m.name)]
+    return [serialize_move(m) for m in sorted(ruleset.moves.values(), key=lambda m: m.name)]
 
 
 def build_abilities(ruleset: Ruleset) -> list[dict[str, Any]]:
     return [
-        _ability(a) for a in sorted(ruleset.abilities.values(), key=lambda a: a.name)
+        serialize_ability(a)
+        for a in sorted(ruleset.abilities.values(), key=lambda a: a.name)
     ]
 
 
@@ -38,10 +39,13 @@ def build_behaviors(ruleset: Ruleset) -> list[dict[str, Any]]:
     ]
 
 
-def _move(move: MoveDef) -> dict[str, Any]:
+def serialize_move(move: MoveDef) -> dict[str, Any]:
     return {
         "name": move.name,
         "chrooked_id": move.chrooked_id,
+        # aka carries the engine symbol(s); surfaced so the editor round-trips it
+        # on save instead of silently dropping it (it powers apply in M3).
+        "aka": dict(move.aka),
         "type": move.type,
         "category": move.category,
         "power": move.power,
@@ -59,11 +63,13 @@ def _move(move: MoveDef) -> dict[str, Any]:
     }
 
 
-def _ability(ability: AbilityDef) -> dict[str, Any]:
+def serialize_ability(ability: AbilityDef) -> dict[str, Any]:
     return {
         "name": ability.name,
         "chrooked_id": ability.chrooked_id,
         "description": ability.description,
+        # see serialize_move: aka rides along so an edit doesn't strip it.
+        "aka": dict(ability.aka),
     }
 
 

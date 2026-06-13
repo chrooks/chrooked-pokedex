@@ -13,13 +13,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
 from ..model import Ruleset
 from . import collections as colmod
+from . import crud as crudmod
 from . import dex as dexmod
 from . import snapshot as snapmod
 
@@ -110,6 +111,87 @@ def create_app(
     @app.get("/api/behaviors")
     def get_behaviors() -> list[dict[str, Any]]:
         return colmod.build_behaviors(_load_ruleset_or_503())
+
+    # --- Write routes (Milestone 2a): species / moves / abilities ----------- #
+    # Each write validates by reloading through the loader; a rejected edit is a
+    # 422 carrying the loader's own message and nothing is written. The UI never
+    # commits — Chris reviews `git diff` himself.
+
+    def _422(error: crudmod.ValidationError) -> HTTPException:
+        return HTTPException(status_code=422, detail=str(error))
+
+    @app.get("/api/species/{chrooked_id}")
+    def get_species_override(chrooked_id: str) -> dict[str, Any]:
+        # The raw Override (overrides-only), distinct from the merged /api/dex
+        # entry — the species editor needs exactly the changed fields so a save
+        # round-trips them without writing base values back as Overrides.
+        ruleset = _load_ruleset_or_503()
+        override = ruleset.species.get(chrooked_id)
+        if override is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No species Override for {chrooked_id!r}.",
+            )
+        return crudmod.serialize_species(override)
+
+    @app.put("/api/species/{chrooked_id}")
+    def put_species(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        try:
+            return crudmod.upsert_species(ruleset_dir, chrooked_id, payload)
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
+
+    @app.delete("/api/species/{chrooked_id}")
+    def delete_species(chrooked_id: str) -> dict[str, str]:
+        try:
+            crudmod.delete_species(ruleset_dir, chrooked_id)
+        except crudmod.NotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        return {"deleted": chrooked_id}
+
+    @app.put("/api/moves/{chrooked_id}")
+    def put_move(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        try:
+            return crudmod.upsert_move(ruleset_dir, chrooked_id, payload)
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
+
+    @app.delete("/api/moves/{chrooked_id}")
+    def delete_move(chrooked_id: str, confirm: bool = False) -> dict[str, str]:
+        return _delete_owned(crudmod.delete_move, chrooked_id, confirm)
+
+    @app.put("/api/abilities/{chrooked_id}")
+    def put_ability(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        try:
+            return crudmod.upsert_ability(ruleset_dir, chrooked_id, payload)
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
+
+    @app.delete("/api/abilities/{chrooked_id}")
+    def delete_ability(chrooked_id: str, confirm: bool = False) -> dict[str, str]:
+        return _delete_owned(crudmod.delete_ability, chrooked_id, confirm)
+
+    def _delete_owned(
+        deleter: Callable[..., None], chrooked_id: str, confirm: bool
+    ) -> dict[str, str]:
+        """Shared delete path for moves/abilities: load, citation-guard, unlink.
+
+        A still-cited reference is a 409 whose detail names the citing species so
+        the UI can show exactly what would dangle; `confirm=true` overrides it.
+        The citation check runs against the per-request Ruleset load — best-effort
+        in the single-user local app; concurrent edits aren't serialized.
+        """
+        ruleset = _load_ruleset_or_503()
+        try:
+            deleter(ruleset, ruleset_dir, chrooked_id, confirm=confirm)
+        except crudmod.NotFoundError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except crudmod.CitationError as error:
+            raise HTTPException(
+                status_code=409,
+                detail={"message": str(error), "citing": error.citing},
+            ) from error
+        return {"deleted": chrooked_id}
 
     if dist_dir is not None and Path(dist_dir).exists():
         app.mount(
