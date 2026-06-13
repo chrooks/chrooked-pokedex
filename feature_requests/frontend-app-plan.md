@@ -148,9 +148,11 @@ Acceptance: register `dreamstone-mysteries` (pokeemerald) on a clean tree. Previ
 
 - [x] (2026-06-12) Grilling session complete: nine design nodes resolved (app shape, dex meaning, base source, write model, CRUD scope, Target picker, dry-run engine, sprites, sequencing). CONTEXT.md gained Target / Target registry / Canon dex. ADR 0001 written. This plan authored.
 - [x] (2026-06-12) Milestone 0 — Web scaffold + base snapshot. `web` extra (fastapi/uvicorn) added; `web/snapshot.py`, `web/dex.py`, `web/app.py` written; `snapshot` and `ui` CLI subcommands added (web imports deferred so seed/apply/harvest still work without the extra); Vite + React + TS shell scaffolded in `frontend/`; committed base snapshot generated at `ruleset/.base/1.11.2.json` (1451 species). Acceptance met: `/api/health` → `{"status":"ok"}`; `/api/dex` over the real ruleset returns 1451 merged entries with Goodra dex 706, types `[Dragon, Water]`, abilities merged (Sap Sipper base ⊕ Hydrate/Poison Heal override), `overridden_fields` = types/abilities/stats/learnset/evolution; snapshot re-run is byte-identical (idempotent). 194 tests green. Reviews: security clean; one HIGH + three MEDIUM Python findings fixed.
-- [ ] Milestone 1 (Slice 1) — Read-only Canon dex.
+- [x] (2026-06-12) Milestone 1 (Slice 1) — Read-only Canon dex. Backend: `web/collections.py` serializes the four Ruleset-owned kinds; `web/dex.build_dex_entry` + a `base` diff payload added; read-only endpoints `/api/dex/{id}`, `/api/moves`, `/api/abilities`, `/api/type-chart`, `/api/behaviors` (Ruleset-load and snapshot-shape both guarded → 503, never 500). Frontend: a device-framed, virtualized sprite grid (~1451), a detail ledger with a base→now diff toggle, the four read-only kind tabs, 18 dark-tuned franchise type colors, edited-LED, URL-persisted view state, keyboard nav, BST row (folded-in #3). Form sprites resolved via a baked PokéAPI form-id map (`scripts/build_sprite_index.py` → `frontend/src/data/sprite-ids.json`, 194 forms). **Stat-macro data fix**: 151 species had stats silently dropped (symbolic values); the snapshot builder now resolves them. 216 Python tests green; ESLint + tsc + vite build clean. Reviews: react + python + a11y fan-out; all HIGH/CRITICAL + cheap MEDIUMs fixed.
 - [ ] Milestone 2 (Slice 2) — CRUD for all five kinds.
 - [ ] Milestone 3 (Slice 3) — Targets, preview, apply.
+
+Post-M1 feature requests captured as GitHub issues (chrooks/chrooked-pokedex): [#1](https://github.com/chrooks/chrooked-pokedex/issues/1) dex table view, [#2](https://github.com/chrooks/chrooked-pokedex/issues/2) table sort/filter controls, [#3](https://github.com/chrooks/chrooked-pokedex/issues/3) BST row (folded into M1), [#4](https://github.com/chrooks/chrooked-pokedex/issues/4) reverse lookups (move/ability → species), [#5](https://github.com/chrooks/chrooked-pokedex/issues/5) full type-chart matrix.
 
 
 ## Surprises & Discoveries
@@ -166,6 +168,12 @@ Acceptance: register `dreamstone-mysteries` (pokeemerald) on a clean tree. Previ
 
 - Observation (M0): the **real** `ruleset/` overrides Pikachu (stats + evolution), so Pikachu is *edited*, not a clean baseline.
   Impact for M1: the Slice-1 acceptance uses Pikachu as the "unmarked, unchanged" example — pick a genuinely un-overridden species for that assertion (or accept Pikachu shows as edited).
+
+- Observation (M1): a form's sprite cannot be keyed by national dex number — forms share their base species' number (Hisuian Goodra is 706, like Goodra), so PokéAPI-by-dex always returns the base sprite. PokéAPI does carry a distinct sprite per form under a separate numeric id (Hisuian Goodra is 10242), but there's no formula from name to that id.
+  Resolution: `scripts/build_sprite_index.py` matches each form's display name against PokéAPI's `/pokemon` list and bakes `frontend/src/data/sprite-ids.json` (chrooked_id → form id, 194 entries). The frontend uses the form id when present, else the dex number, else a placeholder. Cosmetic combos PokéAPI doesn't model (Alcremie swirls, some Paldean Tauros) fall back to the base sprite — no broken images. Grounding in the live API also corrected a wrong manual guess (it's 10242, not 10243).
+
+- Observation (M1): **151 species had base stats silently dropped from the snapshot.** A stat value in 1.11.2 source isn't always a digit — it can be a named macro (`.baseAttack = AEGISLASH_MAIN_STAT`), an inline config-gated ternary (`= P_UPDATED_STATS >= GEN_7 ? 95 : 85`), or a macro with an offset (`= ALAKAZAM_SP_DEF + 10`). The M0 `_base_stats` accepted only `value.isdigit()`, so every symbolic stat vanished (Aegislash Blade showed ATK/SpAtk 0). This is exactly the M0 "[DEFERRED] non-digit stat" low-risk note coming due — and it was caught by eye in the dex, not by a test.
+  Resolution: the snapshot builder resolves the engine config (`P_UPDATED_STATS = GEN_LATEST = GEN_9`, the `GEN_*` ladder) and evaluates all three shapes via `_eval_expr` over one symbol table, so values match what the game compiles. After the fix: 0 species with partial stats. The only empties left are 63 Alcremie cosmetic decoration combos that carry no stat block in source (they inherit base Alcremie); the ledger renders those as `—`, never `0`. Form→base stat inheritance for those is a noted follow-up.
 
 
 ## Decision Log
@@ -202,10 +210,28 @@ Acceptance: register `dreamstone-mysteries` (pokeemerald) on a clean tree. Previ
   Rationale: per-request load means a YAML edit shows on the next call with no restart, keeping the loader as the single validation Boundary; the 503 turns the realistic "forgot to generate the snapshot" failure into a clear instruction instead of a bare 500 traceback.
   Date/Author: 2026-06-12, Claude (implementation, from review).
 
+- Decision (M1): the merged dex entry carries a `base` payload — the pre-override value of each changed field — so the detail ledger can show base→now.
+  Rationale: the diff toggle ("the edit is the hero") needs both sides; computing the base client-side is impossible from the merged values alone. Captured in `_merge_species` before the override is applied, so it's always the true pre-override value.
+  Date/Author: 2026-06-12, Chris + Claude.
+
+- Decision (M1): form sprites resolve through a *baked* PokéAPI form-id map, not a live name→id lookup or Pokémon Showdown's pixel sprites.
+  Rationale: keeps the smooth PokéAPI look consistent across base and forms; a baked JSON is offline, deterministic at runtime, and small (~5 kB). Showdown's name scheme works but restyles everything to pixel; PokémonDB lacks newer forms. Regenerate only when the 1.11.2 pin moves.
+  Date/Author: 2026-06-12, Chris + Claude.
+
+- Decision (M1): the snapshot builder resolves symbolic stat values (named macros, config-gated ternaries, macro+offset) via the engine's own config flags.
+  Rationale: faithfulness — the dex must show what the game compiles, not drop any stat it can't read as a digit. Resolving `P_UPDATED_STATS`/`GEN_*` from the checkout (rather than hardcoding 140/95/…) keeps it correct if the pin's config changes.
+  Date/Author: 2026-06-12, Claude (implementation, from a Chris-caught bug).
+
+- Decision (M1): read-only M1 keeps a hand-rolled abortable fetch hook (`useResource`) instead of TanStack Query, and a baked focus trap (`inert` on the background) instead of a trap library.
+  Rationale: YAGNI for five read-only GETs with no mutations; the seam to swap in TanStack Query is marked for M2 (CRUD), where caching/optimistic updates actually earn it. `inert` is one line with the best browser support and no dependency.
+  Date/Author: 2026-06-12, Claude (implementation, from review).
+
 
 ## Outcomes & Retrospective
 
 **Milestone 0 (2026-06-12).** Shipped the web scaffold and committed base snapshot. `chrooked-pokedex ui` serves the FastAPI app (and the built React shell when present); `/api/dex` renders the full Canon dex by merging the Ruleset onto `ruleset/.base/1.11.2.json`. The merge — the spine M1 (CRUD) and M3 (preview) both hang off — was built and tested in full here rather than stubbed, so M1 inherits a proven base ⊕ Ruleset merge and only adds the React grid/detail on top. Reused the existing pokeemerald readers and `seed.neutralize` wholesale, so base values land in the Ruleset's neutral vocabulary with no second parsing path to drift. Two things surfaced that reshape M1: the snapshot is 1451 entries (forms included, sprites need form-awareness) and the real Pikachu is overridden (pick a different "unchanged" example). No deviations from the chosen architecture.
+
+**Milestone 1 (2026-06-12).** Shipped the read-only Canon dex as a `craft`-flow build (impeccable: `shape` → discovery → committed `PRODUCT.md`/`DESIGN.md` → build → review → visual iteration with Chris). Direction: a terminal-dense "device" with restrained Pokédex character, dark warm-tinted screen, brick-red chrome, an amber edited-LED, and the 18 franchise type colors as a dark-tuned, AA-legible token set. The dex is a virtualized sprite grid + a detail ledger whose diff toggle reveals base→now on every overridden field; four read-only kind tabs cover moves/abilities/type-chart/behaviors. Backend added the four collection serializers and a single-entry route, all 503-guarded. Two real defects surfaced *only by eye*, not by tests, and both got root-cause fixes: the grid collapsed to one column (an `inert` focus-trap wrapper swallowed flex sizing), and 151 species showed dropped/zero stats (symbolic stat values the digit-only reader couldn't parse — the M0 deferred note coming due). Form sprites required a baked PokéAPI form-id map. The visual gate earned its keep: a fully test-green build still had two user-visible bugs a screenshot caught immediately. BST (#3) folded in; the other four requests parked as issues to hold the milestone line.
 
 
 ## Code Review Findings
@@ -224,6 +250,25 @@ Milestone 0 review fan-out (2026-06-12): `python-reviewer` + `security-reviewer`
 
 ### Low Risk
 
-- **[DEFERRED to M1] A renamed species is not listed in `overridden_fields`.** `"name"` is not in `_FLAGGABLE_FIELDS`; if the dex UI should badge renames, add it then.
-- **[DEFERRED] `_base_stats` drops a stat whose value isn't a bare digit** (e.g. a `90u` suffix). Base 1.11.2 never hits this, and the behavior matches the seed's own `.isdigit()` check, so left consistent for now.
+- **[ADDRESSED in M1] A renamed species is not listed in `overridden_fields`.** M1 guards the name write so it only fires on an actual change (an override touching only stats can't clobber the name); rename *visibility* in the ledger is still deferred to the CRUD slice (no name-diff row yet).
+- **[FIXED in M1] `_base_stats` drops a stat whose value isn't a bare digit.** This came due exactly as predicted: 1.11.2 writes many stats as named macros, config-gated ternaries, and macro+offset expressions, so 151 species lost stats. The snapshot builder now resolves all three shapes via the engine's config (`_eval_expr` / `_config_int_map` / `_stat_macro_map`); 0 species with partial stats afterward. Locked by `test_symbolic_form_stats_are_resolved_not_dropped` and the `_eval_expr`/`_eval_define` unit tests.
+
+---
+
+Milestone 1 review fan-out (2026-06-12): `react-reviewer` + `python-reviewer` + `a11y-architect` on the M1 diff. All CRITICAL/HIGH fixed, cheap MEDIUMs fixed, true nice-to-haves deferred.
+
+### M1 — Fixed
+
+- **[python HIGH] Unguarded 500s.** A corrupt `ruleset/` YAML or a wrong-shape snapshot crashed with a raw 500. Now both load through 503 guards (`_load_ruleset_or_503`, snapshot `"species"`-key check). Locked by new tests.
+- **[python HIGH] Silent rename clobber.** `_merge_species` wrote `name` unconditionally; now only on an actual change.
+- **[react HIGH] `memo(DexCell)` defeated** by an inline `onOpen` arrow at 1451 cells → `useCallback`. ESLint + `eslint-plugin-react-hooks` added (was absent). `useColumnCount` → callback ref; `DetailLedger` effects merged.
+- **[react HIGH] `useSyncExternalStore` snapshot not cached** in `useUrlState` (re-render loop risk) → cached by query string.
+- **[a11y CRITICAL] Detail panel not a dialog / no focus trap.** Now `role="dialog" aria-modal`, labelled, with `inert` on the background. Grid got `role="grid"` + counts; `aria-pressed` → `aria-haspopup`/`aria-expanded` + label; the "edited" state is never color-alone (LED + sr-only/text everywhere); type chips AA-tuned via `color-mix`.
+
+### M1 — Deferred (nice-to-have)
+
+- Full `role="tablist"` with arrow-key roving on the kind tabs (minimal `aria-current` shipped).
+- `aka`/`engine_hints` symmetry across the collection serializers (not displayed in M1).
+- Alcremie form→base **stat inheritance** (63 cosmetic combos show `—`).
+- The dev-only esbuild/vite advisory (pre-existing from the M0 Vite 5 scaffold; not in the production bundle; major-bump to fix).
 - **[ADDED] Unit coverage** for `_national_dex_map` (synthetic header) and `_resolve_dex` (symbol + bare-integer + None), so the dex-number resolution no longer depends solely on the integration test against the real base checkout.
