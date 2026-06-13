@@ -1,0 +1,46 @@
+/* A type chip derives everything from one --chip color (the type's --type-*).
+   Label color is pulled toward --text so contrast holds on the dark surface;
+   background is pulled toward the inset surface so the pill stays dark and the
+   color reads as identity, not a saturated fill. */
+
+.type-chip {
+  --chip-label: color-mix(in oklch, var(--chip) 62%, var(--text));
+  --chip-bg: color-mix(in oklch, var(--chip) 16%, var(--surface-0));
+  --chip-edge: color-mix(in oklch, var(--chip) 45%, var(--surface-2));
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--chip-label);
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-edge);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.type-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--chip);
+  flex: none;
+}
+
+.type-chip--code {
+  padding: 1px var(--space-1);
+  font-size: var(--text-xs);
+}
+
+.type-chip--code::before {
+  width: 5px;
+  height: 5px;
+}
+
+.type-chip--full {
+  padding: 2px var(--space-2);
+  font-size: var(--text-sm);
+}

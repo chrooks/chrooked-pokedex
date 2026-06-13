@@ -1,0 +1,86 @@
+.dex-cell {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2) var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.dex-cell:hover {
+  background: var(--surface-3);
+  border-color: var(--line-strong);
+}
+
+.dex-cell:active {
+  transform: translateY(1px);
+}
+
+.dex-cell[data-selected="true"] {
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 10%, var(--surface-2));
+}
+
+/* Edited cells get a quiet amber keyline — calm by default, not loud. */
+.dex-cell[data-edited="true"] {
+  border-color: color-mix(in oklch, var(--edited) 35%, var(--line));
+}
+
+.dex-cell__corner {
+  position: absolute;
+  top: var(--space-1);
+  left: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-dim); /* on --surface-2; keep AA at 11px */
+  letter-spacing: 0.02em;
+}
+
+.dex-cell .edited-led--dot {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+}
+
+.dex-cell__sprite {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  margin-top: var(--space-2);
+}
+
+.dex-cell__sprite--missing {
+  display: grid;
+  place-items: center;
+  background: var(--surface-0);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font-size: var(--text-sm);
+}
+
+.dex-cell__name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dex-cell__types {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  justify-content: center;
+}

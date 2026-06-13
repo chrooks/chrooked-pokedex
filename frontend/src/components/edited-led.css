@@ -1,0 +1,38 @@
+.edited-led {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.edited-led__lamp {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--edited);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--edited) 40%, transparent),
+    0 0 8px 1px var(--edited-glow);
+  flex: none;
+}
+
+.edited-led--tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--edited);
+}
+
+/* A slow breathing pulse on the lamp; stilled under reduced-motion (global.css). */
+.edited-led__lamp {
+  animation: led-breathe 2.6s var(--ease-out) infinite;
+}
+
+@keyframes led-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}

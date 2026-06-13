@@ -1,0 +1,27 @@
+.dex-grid {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-4);
+  contain: strict;
+}
+
+.dex-grid__sizer {
+  position: relative;
+  width: 100%;
+}
+
+.dex-grid__row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: grid;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+.dex-grid__cell {
+  display: flex;
+  min-width: 0;
+}

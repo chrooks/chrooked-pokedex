@@ -1,0 +1,134 @@
+/* Shared row styles for the detail ledger sub-sections. */
+
+.lrow {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.lrow--stat {
+  grid-template-columns: 3.5rem auto 1fr;
+}
+
+/* BST summary row: set apart from the six stats by a rule and heavier figure. */
+.lrow--bst {
+  margin-top: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+
+.lrow--bst .lrow__label {
+  color: var(--text-dim);
+}
+
+.lrow__value--bst {
+  font-weight: 700;
+  font-size: var(--text-base);
+}
+
+.lrow__label {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+}
+
+.lrow__value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text);
+  justify-self: start;
+}
+
+.lrow--stat .lrow__value {
+  width: 4ch;
+}
+
+.lrow__empty {
+  color: var(--text-faint);
+}
+
+/* The amber dot that marks an overridden field when the diff is off. */
+.lrow__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--edited);
+  box-shadow: 0 0 6px var(--edited-glow);
+}
+
+/* base → now reading when the diff is on */
+.lrow__diff {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.lrow__was {
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
+}
+
+.lrow__arrow {
+  color: var(--edited);
+}
+
+.lrow__now {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.lrow__delta {
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.lrow__delta[data-dir="up"] {
+  color: var(--type-grass);
+}
+
+.lrow__delta[data-dir="down"] {
+  color: var(--type-fire);
+}
+
+/* Stat bar */
+.lrow__bar {
+  height: 6px;
+  background: var(--surface-0);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lrow__bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--line-strong);
+  border-radius: 3px;
+  transition: width var(--dur-mid) var(--ease-out);
+}
+
+.lrow__bar-fill[data-changed="true"] {
+  background: color-mix(in oklch, var(--edited) 60%, var(--line-strong));
+}
+
+/* Types row in the ledger header */
+.lrow__types {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.lrow__types-was {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  opacity: 0.6;
+}
+
+.lrow__types-was .type-chip {
+  text-decoration: line-through;
+}

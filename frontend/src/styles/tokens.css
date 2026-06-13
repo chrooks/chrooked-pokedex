@@ -1,0 +1,83 @@
+/*
+ * Design tokens for chrooked-pokedex. The single source of visual truth; see
+ * DESIGN.md. All color is OKLCH, neutrals tinted warm toward the device hue,
+ * never #000/#fff. Three semantic color jobs that never overlap: type color
+ * means type, --edited means "the Ruleset touched this", --chrome means device
+ * structure.
+ */
+
+:root {
+  /* Surface — the warm-dark "screen" and its steps */
+  --surface-0: oklch(15% 0.012 60); /* inset wells, fields, sprite background */
+  --surface-1: oklch(19% 0.012 60); /* the screen itself */
+  --surface-2: oklch(23% 0.013 60); /* raised cells, panels */
+  --surface-3: oklch(27% 0.014 60); /* hover / active lift */
+  --line: oklch(33% 0.012 60); /* hairlines, dividers, keylines */
+  --line-strong: oklch(42% 0.014 60);
+
+  /* Ink */
+  --text: oklch(93% 0.012 75);
+  --text-dim: oklch(72% 0.011 75);
+  /* Lifted to clear ~4.5:1 on the raised surfaces where small labels sit. */
+  --text-faint: oklch(63% 0.011 75);
+
+  /* Chrome — device structure (frame accents, active rail). Brick-red, sparing. */
+  --chrome: oklch(56% 0.15 28);
+  --chrome-dim: oklch(46% 0.11 28);
+
+  /* Edited — the ONE attention signal: the Ruleset changed this. Amber LED. */
+  --edited: oklch(80% 0.15 80);
+  --edited-glow: oklch(80% 0.15 80 / 0.35);
+
+  /* Typography — system stacks (no external font dependency; fast, offline) */
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+
+  /* Fixed rem scale, ratio ~1.2 (product UI, consistent DPI) */
+  --text-xs: 0.6875rem; /* 11px — type codes, micro-labels */
+  --text-sm: 0.8125rem; /* 13px — data, secondary */
+  --text-base: 0.9375rem; /* 15px — body */
+  --text-md: 1.125rem; /* 18px — species name */
+  --text-lg: 1.5rem; /* 24px — panel heading */
+  --text-xl: 2rem; /* 32px — the segmented dex readout */
+
+  /* Spacing — 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+
+  --dur-fast: 140ms;
+  --dur-mid: 220ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* The 18 type identity colors (OKLCH). Chips derive a bright label and a dark
+     tint from these via color-mix (see type-chip.css), so every type stays
+     AA-legible on --surface without per-type tuning. */
+  --type-normal: oklch(72% 0.03 95);
+  --type-fire: oklch(70% 0.18 45);
+  --type-water: oklch(66% 0.14 248);
+  --type-electric: oklch(84% 0.16 95);
+  --type-grass: oklch(74% 0.16 145);
+  --type-ice: oklch(82% 0.09 195);
+  --type-fighting: oklch(62% 0.19 22);
+  --type-poison: oklch(64% 0.18 320);
+  --type-ground: oklch(70% 0.12 65);
+  --type-flying: oklch(76% 0.1 270);
+  --type-psychic: oklch(70% 0.17 8);
+  --type-bug: oklch(76% 0.17 128);
+  --type-rock: oklch(72% 0.06 90);
+  --type-ghost: oklch(60% 0.13 290);
+  --type-dragon: oklch(60% 0.19 265);
+  --type-dark: oklch(52% 0.05 300);
+  --type-steel: oklch(70% 0.05 220);
+  --type-fairy: oklch(80% 0.12 350);
+}
