@@ -12,6 +12,7 @@ server hosts the SPA separately).
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any, Callable
 
@@ -222,3 +223,20 @@ def create_app(
         )
 
     return app
+
+
+def create_app_from_env() -> FastAPI:
+    """Factory for `uvicorn --reload` (the CLI's `ui --reload`).
+
+    Reload runs the app in a worker subprocess that re-imports this module on
+    every code change, so it can't receive the CLI's parsed paths directly — it
+    reads them from environment variables the CLI sets before launching uvicorn.
+    """
+    ruleset = os.environ.get("CHROOKED_RULESET")
+    snapshot = os.environ.get("CHROOKED_SNAPSHOT")
+    dist = os.environ.get("CHROOKED_DIST")
+    return create_app(
+        ruleset_dir=Path(ruleset) if ruleset else Path("ruleset"),
+        snapshot_path=Path(snapshot) if snapshot else snapmod.DEFAULT_SNAPSHOT_PATH,
+        dist_dir=Path(dist) if dist else None,
+    )

@@ -9,6 +9,7 @@ Subcommands:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -135,12 +136,17 @@ def main(argv: list[str] | None = None) -> int:
         default=_DEFAULT_SNAPSHOT,
         help="Base snapshot JSON to merge against.",
     )
+    ui.add_argument(
+        "--reload",
+        action="store_true",
+        help="Dev mode: auto-restart the server when Python source changes.",
+    )
 
     args = parser.parse_args(argv)
     if args.command == "snapshot":
         return _run_snapshot(args.base, args.out)
     if args.command == "ui":
-        return _run_ui(args.host, args.port, args.ruleset, args.snapshot)
+        return _run_ui(args.host, args.port, args.ruleset, args.snapshot, args.reload)
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
     if args.command == "apply":
@@ -342,7 +348,13 @@ def _run_snapshot(base: Path, out: Path) -> int:
     return 0
 
 
-def _run_ui(host: str, port: int, ruleset_dir: Path, snapshot_path: Path) -> int:
+def _run_ui(
+    host: str,
+    port: int,
+    ruleset_dir: Path,
+    snapshot_path: Path,
+    reload: bool = False,
+) -> int:
     """Serve the local web app. Imports of the web extra are deferred so the other
     subcommands work without `fastapi`/`uvicorn` installed."""
     try:
@@ -371,12 +383,28 @@ def _run_ui(host: str, port: int, ruleset_dir: Path, snapshot_path: Path) -> int
             "Run the Vite dev server (cd frontend && npm run dev) for the UI."
         )
 
+    print(f"Serving chrooked-pokedex on http://{host}:{port}  (API under /api)")
+    if reload:
+        # Reload runs the app in a worker subprocess that re-imports the module
+        # on each change, so config travels via env vars to the factory.
+        os.environ["CHROOKED_RULESET"] = str(ruleset_dir)
+        os.environ["CHROOKED_SNAPSHOT"] = str(snapshot_path)
+        os.environ["CHROOKED_DIST"] = str(_DEFAULT_DIST)
+        uvicorn.run(
+            "chrooked_pokedex.web.app:create_app_from_env",
+            factory=True,
+            host=host,
+            port=port,
+            reload=True,
+            reload_dirs=[str(_REPO_ROOT / "src")],
+        )
+        return 0
+
     app = create_app(
         ruleset_dir=ruleset_dir,
         snapshot_path=snapshot_path,
         dist_dir=_DEFAULT_DIST,
     )
-    print(f"Serving chrooked-pokedex on http://{host}:{port}  (API under /api)")
     uvicorn.run(app, host=host, port=port)
     return 0
 
