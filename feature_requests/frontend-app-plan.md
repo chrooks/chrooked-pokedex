@@ -149,7 +149,7 @@ Acceptance: register `dreamstone-mysteries` (pokeemerald) on a clean tree. Previ
 - [x] (2026-06-12) Grilling session complete: nine design nodes resolved (app shape, dex meaning, base source, write model, CRUD scope, Target picker, dry-run engine, sprites, sequencing). CONTEXT.md gained Target / Target registry / Canon dex. ADR 0001 written. This plan authored.
 - [x] (2026-06-12) Milestone 0 — Web scaffold + base snapshot. `web` extra (fastapi/uvicorn) added; `web/snapshot.py`, `web/dex.py`, `web/app.py` written; `snapshot` and `ui` CLI subcommands added (web imports deferred so seed/apply/harvest still work without the extra); Vite + React + TS shell scaffolded in `frontend/`; committed base snapshot generated at `ruleset/.base/1.11.2.json` (1451 species). Acceptance met: `/api/health` → `{"status":"ok"}`; `/api/dex` over the real ruleset returns 1451 merged entries with Goodra dex 706, types `[Dragon, Water]`, abilities merged (Sap Sipper base ⊕ Hydrate/Poison Heal override), `overridden_fields` = types/abilities/stats/learnset/evolution; snapshot re-run is byte-identical (idempotent). 194 tests green. Reviews: security clean; one HIGH + three MEDIUM Python findings fixed.
 - [x] (2026-06-12) Milestone 1 (Slice 1) — Read-only Canon dex. Backend: `web/collections.py` serializes the four Ruleset-owned kinds; `web/dex.build_dex_entry` + a `base` diff payload added; read-only endpoints `/api/dex/{id}`, `/api/moves`, `/api/abilities`, `/api/type-chart`, `/api/behaviors` (Ruleset-load and snapshot-shape both guarded → 503, never 500). Frontend: a device-framed, virtualized sprite grid (~1451), a detail ledger with a base→now diff toggle, the four read-only kind tabs, 18 dark-tuned franchise type colors, edited-LED, URL-persisted view state, keyboard nav, BST row (folded-in #3). Form sprites resolved via a baked PokéAPI form-id map (`scripts/build_sprite_index.py` → `frontend/src/data/sprite-ids.json`, 194 forms). **Stat-macro data fix**: 151 species had stats silently dropped (symbolic values); the snapshot builder now resolves them. 216 Python tests green; ESLint + tsc + vite build clean. Reviews: react + python + a11y fan-out; all HIGH/CRITICAL + cheap MEDIUMs fixed.
-- [ ] Milestone 2 (Slice 2) — CRUD for all five kinds.
+- [~] Milestone 2 (Slice 2) — CRUD for all five kinds. **Slice 2a done** (2026-06-13): CRUD for the three simple-record kinds — species, owned moves, owned abilities. Backend `web/crud.py`: a validate-then-write pipeline (stage in a temp dir inside the target, reload through the loader, atomic `os.replace`, return the validated object) with `ValidationError`→422 (loader's verbatim message, writes nothing), `CitationError`→409 (delete-guard naming citing species; `?confirm=true` overrides), `NotFoundError`→404; unknown top-level fields rejected on all three kinds; `aka` added to the move/ability serializers so an edit can't strip the engine symbol. Routes: `GET/PUT/DELETE /api/species/{id}` (GET returns the **raw** Override, overrides-only) + `PUT/DELETE` for moves/abilities. Writer `_move_yaml`/`_ability_yaml` promoted public. Frontend: `useResource.reload()`, a `useSubmit` hook, `api.ts` mutations with a 409-aware `ApiError`, a self-trapping `EditorDialog`, typed `fields.tsx`; a `SpeciesEditor` in the detail ledger (edits stats/types/abilities **overrides-only** by diffing against base, round-trips learnset/evolution/aka untouched; "Revert to base" deletes the Override); `MoveEditor`/`AbilityEditor` dialogs in the tabs (create/edit/delete, full-record round-trip, 409 "Delete anyway" confirm); a standing `ReseedNote` in the rail on the machine-owned kinds. 240 Python tests green (24 new); tsc + ESLint + vite build clean; runtime smoke against a copy of the real ruleset confirmed overrides-only writes + the 409 guard. Reviews: python + react + a11y fan-out; all HIGH/CRITICAL fixed. **Deferred to 2b**: type-chart + behaviors CRUD; species learnset/evolution editing.
 - [ ] Milestone 3 (Slice 3) — Targets, preview, apply.
 
 Post-M1 feature requests captured as GitHub issues (chrooks/chrooked-pokedex): [#1](https://github.com/chrooks/chrooked-pokedex/issues/1) dex table view, [#2](https://github.com/chrooks/chrooked-pokedex/issues/2) table sort/filter controls, [#3](https://github.com/chrooks/chrooked-pokedex/issues/3) BST row (folded into M1), [#4](https://github.com/chrooks/chrooked-pokedex/issues/4) reverse lookups (move/ability → species), [#5](https://github.com/chrooks/chrooked-pokedex/issues/5) full type-chart matrix.
@@ -171,6 +171,9 @@ Post-M1 feature requests captured as GitHub issues (chrooks/chrooked-pokedex): [
 
 - Observation (M1): a form's sprite cannot be keyed by national dex number — forms share their base species' number (Hisuian Goodra is 706, like Goodra), so PokéAPI-by-dex always returns the base sprite. PokéAPI does carry a distinct sprite per form under a separate numeric id (Hisuian Goodra is 10242), but there's no formula from name to that id.
   Resolution: `scripts/build_sprite_index.py` matches each form's display name against PokéAPI's `/pokemon` list and bakes `frontend/src/data/sprite-ids.json` (chrooked_id → form id, 194 entries). The frontend uses the form id when present, else the dex number, else a placeholder. Cosmetic combos PokéAPI doesn't model (Alcremie swirls, some Paldean Tauros) fall back to the base sprite — no broken images. Grounding in the live API also corrected a wrong manual guess (it's 10242, not 10243).
+
+- Observation (M2a): the read-only move/ability serializers **omitted `aka`**, so a GET → edit → PUT round-trip would silently strip the engine symbol (`MOVE_EXCALIBUR`, `ABILITY_POISON_HEAL`) — the M1-deferred "aka symmetry" note coming due the moment editing existed. Caught in 2a design, not by eye.
+  Evidence: `web/collections.serialize_move`/`serialize_ability` had no `aka` key; the writer emits whatever `aka` the payload carries (empty → `aka: {  }`). Resolution: both serializers now carry `aka`, the TS `Move`/`Ability` types gained it, and the editors send back the `aka` they received. Locked by `test_editing_move_round_trips_aka` / `test_editing_ability_round_trips_aka`. The same trap for species is avoided structurally: the species editor loads the **raw** Override (`GET /api/species/{id}`), not the merged dex entry, and round-trips its learnset/evolution/aka untouched while writing only changed scalar fields.
 
 - Observation (M1): **151 species had base stats silently dropped from the snapshot.** A stat value in 1.11.2 source isn't always a digit — it can be a named macro (`.baseAttack = AEGISLASH_MAIN_STAT`), an inline config-gated ternary (`= P_UPDATED_STATS >= GEN_7 ? 95 : 85`), or a macro with an offset (`= ALAKAZAM_SP_DEF + 10`). The M0 `_base_stats` accepted only `value.isdigit()`, so every symbolic stat vanished (Aegislash Blade showed ATK/SpAtk 0). This is exactly the M0 "[DEFERRED] non-digit stat" low-risk note coming due — and it was caught by eye in the dex, not by a test.
   Resolution: the snapshot builder resolves the engine config (`P_UPDATED_STATS = GEN_LATEST = GEN_9`, the `GEN_*` ladder) and evaluates all three shapes via `_eval_expr` over one symbol table, so values match what the game compiles. After the fix: 0 species with partial stats. The only empties left are 63 Alcremie cosmetic decoration combos that carry no stat block in source (they inherit base Alcremie); the ledger renders those as `—`, never `0`. Form→base stat inheritance for those is a noted follow-up.
@@ -226,6 +229,22 @@ Post-M1 feature requests captured as GitHub issues (chrooks/chrooked-pokedex): [
   Rationale: YAGNI for five read-only GETs with no mutations; the seam to swap in TanStack Query is marked for M2 (CRUD), where caching/optimistic updates actually earn it. `inert` is one line with the best browser support and no dependency.
   Date/Author: 2026-06-12, Claude (implementation, from review).
 
+- Decision (M2a): writes are **PUT-upsert + DELETE**, not POST/PUT/DELETE. The plan's Data & API section listed all three verbs; an idempotent upsert keyed by `chrooked_id` covers both create and edit with one frontend "save" affordance and fewer edge cases (no create-vs-exists 409 to disambiguate).
+  Rationale: KISS — the dex-detail "override a field" and the tab "new/edit" are the same save; `chrooked_id` is the file identity either way.
+  Date/Author: 2026-06-13, Claude (implementation).
+
+- Decision (M2a): kept the M1 hand-rolled approach rather than adopting TanStack Query, even though M2 was the marked seam. Added `useResource.reload()` and a tiny `useSubmit` hook instead.
+  Rationale: still YAGNI — six write endpoints, single-user, no cache-invalidation graph or optimistic-update pressure yet. Revisit if M3's preview/apply or cross-list invalidation makes it earn its keep. The seam is still clean.
+  Date/Author: 2026-06-13, Claude (implementation).
+
+- Decision (M2a): species editing is **scalar-overrides-only** (stats, types, abilities); learnset and evolution editing defer to 2b alongside type-chart and behaviors.
+  Rationale: a coherent slice line — list-shaped Overrides (learnset/evolution) and the matrix/structured kinds share an editor-complexity tier. Read-only learnset/evolution stay visible and round-trip untouched, so nothing is lost.
+  Date/Author: 2026-06-13, Chris + Claude (2a scoping).
+
+- Decision (M2a): the write pipeline stages in a temp dir **inside the target's parent**, validates the staged file through the loader, then `os.replace` (atomic same-filesystem rename); on failure nothing replaces the real file.
+  Rationale: "write nothing on a bad edit" must be literal, and the loader's error must name the real file (`goodra.yaml`, not a temp path) — staging with the real name in a sibling temp dir gives both, plus atomicity.
+  Date/Author: 2026-06-13, Claude (implementation).
+
 
 ## Outcomes & Retrospective
 
@@ -268,7 +287,27 @@ Milestone 1 review fan-out (2026-06-12): `react-reviewer` + `python-reviewer` + 
 ### M1 — Deferred (nice-to-have)
 
 - Full `role="tablist"` with arrow-key roving on the kind tabs (minimal `aria-current` shipped).
-- `aka`/`engine_hints` symmetry across the collection serializers (not displayed in M1).
+- `aka`/`engine_hints` symmetry across the collection serializers (not displayed in M1). **[DONE in M2a]** — `aka` added to the move/ability serializers because CRUD made the gap load-bearing.
 - Alcremie form→base **stat inheritance** (63 cosmetic combos show `—`).
 - The dev-only esbuild/vite advisory (pre-existing from the M0 Vite 5 scaffold; not in the production bundle; major-bump to fix).
 - **[ADDED] Unit coverage** for `_national_dex_map` (synthetic header) and `_resolve_dex` (symbol + bare-integer + None), so the dex-number resolution no longer depends solely on the integration test against the real base checkout.
+
+---
+
+Milestone 2a review fan-out (2026-06-13): `python-reviewer` + `react-reviewer` + `a11y-architect` on the 2a diff. All HIGH/CRITICAL fixed; lower-value items deferred.
+
+### M2a — Fixed
+
+- **[python] Redundant re-read after the atomic write (small TOCTOU on the response).** `_validated_write` now returns the validated dataclass; the upserts serialize that instead of reading the file a second time.
+- **[python] Unknown top-level fields silently dropped on species/moves.** `upsert_ability` already rejected them; species and moves now do too (`_reject_unknown` against the field set), so the loader-as-Boundary contract holds symmetrically. Locked by `test_put_species_unknown_top_level_field_is_422` / `test_put_move_unknown_field_is_422`.
+- **[python] Untyped `_delete_owned` deleter param** → `Callable[..., None]`; documented the citation check as best-effort under the per-request load (single-user app).
+- **[a11y CRITICAL] Move/ability dialogs didn't trap focus or return it.** The M1 ledger gets its trap from an `inert` background in `App`; these dialogs render inside a tab, so `EditorDialog` now self-traps (Tab/Shift+Tab cycle within the panel) and restores focus to the trigger on close.
+- **[a11y HIGH] Field ARIA gaps.** `SelectField` and `TextAreaField` now wire `aria-invalid`/`aria-describedby` like the others; the "changed from base" state gained a non-visual (`sr-only`) equivalent in the label; `FormError` remounts on message change (keyed) so `role="alert"` re-announces; per-row "Edit" buttons got unique `aria-label`s; the decorative `+` on "New" buttons is `aria-hidden`; the invalid `role="note"` was removed from `ReseedNote`.
+- **[react] `rawLoaded` not reset on species change** in `SpeciesEditor` — now reset at the effect head so a save can't fire before the raw Override loads.
+
+### M2a — Deferred (nice-to-have)
+
+- Adopt `eslint-plugin-jsx-a11y` (would have caught the role/label gaps automatically) — repo-wide tooling change, parked.
+- Touch-target sizing floor (24×24 / 44×44) on the small ledger close/edit chips — consistent with the M1 baseline; revisit in a polish pass.
+- A delete-guard for a species referenced by another species' `evolution.from_species` (species delete currently just reverts to base).
+- `useCallback` on the editors' async submit handlers — low real-world risk (React 18 batches within event handlers); skipped to avoid noise.
