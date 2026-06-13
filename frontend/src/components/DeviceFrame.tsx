@@ -1,5 +1,6 @@
 import type { ReactNode, RefObject } from "react";
 import type { KindKey } from "../types";
+import type { DexLayout } from "../hooks/useUrlState";
 import { ReseedNote } from "./ReseedNote";
 import "./device-frame.css";
 
@@ -18,6 +19,8 @@ type Props = {
   onQuery: (query: string) => void;
   editedOnly: boolean;
   onEditedOnly: (on: boolean) => void;
+  layout: DexLayout;
+  onLayout: (layout: DexLayout) => void;
   readout: ReactNode;
   searchRef: RefObject<HTMLInputElement>;
   children: ReactNode;
@@ -35,6 +38,8 @@ export function DeviceFrame({
   onQuery,
   editedOnly,
   onEditedOnly,
+  layout,
+  onLayout,
   readout,
   searchRef,
   children,
@@ -84,6 +89,33 @@ export function DeviceFrame({
             Edited only
             <kbd className="device__kbd mono">E</kbd>
           </button>
+
+          {isDex && (
+            <div
+              className="device__layout"
+              role="group"
+              aria-label="Dex layout"
+            >
+              <button
+                type="button"
+                className="device__layout-btn"
+                data-active={layout === "grid"}
+                aria-pressed={layout === "grid"}
+                onClick={() => onLayout("grid")}
+              >
+                Grid
+              </button>
+              <button
+                type="button"
+                className="device__layout-btn"
+                data-active={layout === "table"}
+                aria-pressed={layout === "table"}
+                onClick={() => onLayout("table")}
+              >
+                Table
+              </button>
+            </div>
+          )}
 
           <ul className="device__tabs">
             {KIND_TABS.map((tab) => (

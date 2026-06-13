@@ -5,11 +5,14 @@
 import { useCallback, useSyncExternalStore } from "react";
 import type { KindKey } from "../types";
 
+export type DexLayout = "grid" | "table";
+
 export interface ViewState {
   kind: KindKey;
   query: string;
   editedOnly: boolean;
   selected: string | null;
+  layout: DexLayout;
 }
 
 const KINDS: readonly KindKey[] = [
@@ -42,6 +45,7 @@ function readState(): ViewState {
     query: params.get("q") ?? "",
     editedOnly: params.get("edited") === "1",
     selected: params.get("id"),
+    layout: params.get("view") === "table" ? "table" : "grid",
   };
   return cachedState;
 }
@@ -61,6 +65,7 @@ function writeState(next: ViewState): void {
   if (next.query) params.set("q", next.query);
   if (next.editedOnly) params.set("edited", "1");
   if (next.selected) params.set("id", next.selected);
+  if (next.layout === "table") params.set("view", "table");
 
   const search = params.toString();
   const url = search ? `?${search}` : window.location.pathname;

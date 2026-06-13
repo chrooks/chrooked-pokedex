@@ -1,6 +1,8 @@
 import type { DexEntry } from "../types";
 import type { ResourceState } from "../hooks/useResource";
+import type { DexLayout } from "../hooks/useUrlState";
 import { DexGrid } from "./DexGrid";
+import { DexTable } from "./DexTable";
 import { ErrorView, EmptyView, GridSkeleton } from "./StatusView";
 
 type Props = {
@@ -8,12 +10,20 @@ type Props = {
   entries: DexEntry[];
   editedOnly: boolean;
   selected: string | null;
+  layout: DexLayout;
   onOpen: (chrookedId: string) => void;
 };
 
 /** The dex screen: resolves the load/error/empty states, then hands the
-    filtered entries to the virtualized grid. */
-export function DexView({ resource, entries, editedOnly, selected, onOpen }: Props) {
+    filtered entries to the sprite grid or the dense table per the layout. */
+export function DexView({
+  resource,
+  entries,
+  editedOnly,
+  selected,
+  layout,
+  onOpen,
+}: Props) {
   if (resource.error !== null) {
     return <ErrorView message={resource.error} status={resource.status} />;
   }
@@ -31,5 +41,9 @@ export function DexView({ resource, entries, editedOnly, selected, onOpen }: Pro
       />
     );
   }
-  return <DexGrid entries={entries} selected={selected} onOpen={onOpen} />;
+  return layout === "table" ? (
+    <DexTable entries={entries} selected={selected} onOpen={onOpen} />
+  ) : (
+    <DexGrid entries={entries} selected={selected} onOpen={onOpen} />
+  );
 }

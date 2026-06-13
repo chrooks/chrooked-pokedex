@@ -86,6 +86,8 @@ export default function App() {
       onQuery={(query) => update({ query })}
       editedOnly={view.editedOnly}
       onEditedOnly={(editedOnly) => update({ editedOnly })}
+      layout={view.layout}
+      onLayout={(layout) => update({ layout })}
       searchRef={searchRef}
       readout={<Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />}
     >
@@ -104,6 +106,7 @@ export default function App() {
           entries={filtered}
           editedOnly={view.editedOnly}
           selected={view.selected}
+          layout={view.layout}
           onOpen={handleOpen}
         />
       </div>
@@ -125,6 +128,7 @@ type KindScreenProps = {
   entries: DexEntry[];
   editedOnly: boolean;
   selected: string | null;
+  layout: ReturnType<typeof useUrlState>[0]["layout"];
   onOpen: (id: string) => void;
 };
 
@@ -134,6 +138,7 @@ function KindScreen({
   entries,
   editedOnly,
   selected,
+  layout,
   onOpen,
 }: KindScreenProps) {
   switch (kind) {
@@ -152,6 +157,7 @@ function KindScreen({
           entries={entries}
           editedOnly={editedOnly}
           selected={selected}
+          layout={layout}
           onOpen={onOpen}
         />
       );
