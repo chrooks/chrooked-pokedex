@@ -1,5 +1,6 @@
 import type { ReactNode, RefObject } from "react";
 import type { KindKey } from "../types";
+import { ReseedNote } from "./ReseedNote";
 import "./device-frame.css";
 
 const KIND_TABS: { key: KindKey; label: string }[] = [
@@ -99,6 +100,8 @@ export function DeviceFrame({
               </li>
             ))}
           </ul>
+
+          {kind !== "behaviors" && <ReseedNote />}
         </nav>
 
         <main className="device__screen">{children}</main>

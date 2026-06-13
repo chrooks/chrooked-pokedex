@@ -1,0 +1,301 @@
+/* Editor surfaces — the write side of the device. Shares the screen's warm-dark
+   tokens; fields are inset wells, actions read as device buttons. The save
+   action borrows the --chrome brick-red (a deliberate, structural action); the
+   destructive action is muted until hover. No new color jobs introduced. */
+
+/* --- Dialog shell (move / ability editors) — mirrors the ledger overlay --- */
+
+.editor-dialog__panel {
+  position: relative;
+  width: min(460px, 100%);
+  height: 100%;
+  overflow-y: auto;
+  background: var(--surface-1);
+  border-left: 1px solid var(--line-strong);
+  box-shadow: -16px 0 40px -20px color-mix(in oklch, var(--surface-0) 90%, black);
+  padding: var(--space-5);
+  animation: ledger-in var(--dur-mid) var(--ease-out);
+}
+
+.editor-dialog__panel:focus {
+  outline: none;
+}
+
+/* --- Form scaffold (shared by species, move, ability) --- */
+
+.editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.editor-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-4);
+}
+
+.editor-form__grid--stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.field__hint {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-faint);
+}
+
+.field__input,
+.field__select,
+.field__textarea {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.field__input.mono {
+  font-family: var(--font-mono);
+}
+
+.field__textarea {
+  resize: vertical;
+  min-height: 3.5rem;
+}
+
+.field__input:focus,
+.field__select:focus,
+.field__textarea:focus {
+  outline: none;
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 30%, transparent);
+}
+
+.field__input[data-changed="true"] {
+  border-color: color-mix(in oklch, var(--edited) 50%, var(--line));
+  background: color-mix(in oklch, var(--edited) 7%, var(--surface-0));
+}
+
+.field__input[aria-invalid="true"] {
+  border-color: var(--chrome);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 25%, transparent);
+}
+
+.field__error {
+  font-size: var(--text-xs);
+  color: color-mix(in oklch, var(--chrome) 75%, var(--text));
+}
+
+/* --- Section heading reused inside the species editor --- */
+
+.editor-section {
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.editor-section:last-of-type {
+  border-bottom: none;
+}
+
+.editor-section__heading {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* --- Form-level error / status (the loader's verbatim 422 message) --- */
+
+.editor-error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-0));
+  border: 1px solid color-mix(in oklch, var(--chrome) 45%, var(--line));
+  border-radius: var(--radius-sm);
+}
+
+.editor-error__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--chrome) 80%, var(--text));
+}
+
+.editor-error__message {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* --- Actions row --- */
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.editor-actions__spacer {
+  flex: 1;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: var(--surface-3);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--chrome-dim);
+  border-color: var(--chrome);
+  color: var(--text);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--chrome);
+  border-color: var(--chrome);
+}
+
+.btn--danger {
+  color: color-mix(in oklch, var(--chrome) 70%, var(--text-dim));
+}
+
+.btn--danger:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 18%, var(--surface-2));
+}
+
+/* The "Edit" affordance that opens the species editor, sized like ledger close. */
+.ledger__edit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.ledger__edit:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
+
+/* --- Tab toolbar + per-row edit affordance (moves / abilities tabs) --- */
+
+.tab-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.tab-toolbar__title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.btn--new {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.tab-row-edit {
+  padding: 2px var(--space-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+tr:hover .tab-row-edit,
+.tab-deflist__item:hover .tab-row-edit {
+  color: var(--text-dim);
+  border-color: var(--line-strong);
+}
+
+.tab-row-edit:hover {
+  color: var(--text) !important;
+  border-color: var(--chrome) !important;
+}
+
+.tab-deflist__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+@media (max-width: 720px) {
+  .editor-dialog__panel {
+    width: 100%;
+  }
+
+  .editor-form__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

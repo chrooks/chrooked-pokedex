@@ -45,6 +45,20 @@ export interface DexEntry {
   base: DexBaseValues;
 }
 
+/** The raw Ruleset Override for one species (overrides-only), as returned by
+    `GET /api/species/{id}` and sent back on save. Distinct from {@link DexEntry},
+    which is the merged base ⊕ Override view. A null field is "not overridden". */
+export interface SpeciesOverride {
+  name: string;
+  chrooked_id: string;
+  aka: Record<string, unknown>;
+  types: string[] | null;
+  abilities: AbilitySlots | null;
+  stats: Record<string, number> | null;
+  learnset: LearnsetMove[] | null;
+  evolution: Evolution | null;
+}
+
 export interface AdditionalEffect {
   effect: string;
   chance: number;
@@ -53,6 +67,8 @@ export interface AdditionalEffect {
 export interface Move {
   name: string;
   chrooked_id: string;
+  /** Engine symbol(s); carried through edits so apply (M3) keeps resolving. */
+  aka: Record<string, unknown>;
   type: string;
   category: "physical" | "special" | "status";
   power: number | null;
@@ -71,6 +87,8 @@ export interface Ability {
   name: string;
   chrooked_id: string;
   description: string;
+  /** Engine symbol(s); carried through edits so apply (M3) keeps resolving. */
+  aka: Record<string, unknown>;
 }
 
 export interface TypeChartEntry {

@@ -92,7 +92,11 @@ export default function App() {
         />
       </div>
       {selectedEntry !== null && (
-        <DetailLedger entry={selectedEntry} onClose={handleClose} />
+        <DetailLedger
+          entry={selectedEntry}
+          onClose={handleClose}
+          onSaved={dex.reload}
+        />
       )}
     </DeviceFrame>
   );

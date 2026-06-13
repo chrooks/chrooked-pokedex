@@ -9,29 +9,36 @@ import { AbilityRow } from "./ledger/AbilityRow";
 import { LearnsetSection } from "./ledger/LearnsetSection";
 import { EvolutionSection } from "./ledger/EvolutionSection";
 import { TypesRow } from "./ledger/TypesRow";
+import { SpeciesEditor } from "./editors/SpeciesEditor";
 import "./detail-ledger.css";
+import "./editors/editors.css";
 
 type Props = {
   entry: DexEntry;
   onClose: () => void;
+  /** Refetch the dex after a save/delete so the merged view reflects the edit. */
+  onSaved: () => void;
 };
 
 /**
  * The species detail as a mono ledger. The diff toggle (shown only when the
  * Ruleset edited this species) flips every overridden field from its clean
  * merged value to a base → now reading. The toggle defaults off: calm first,
- * the diff one tap away (Progressive Disclosure).
+ * the diff one tap away (Progressive Disclosure). "Edit" swaps the read-only
+ * ledger for the {@link SpeciesEditor} in place.
  */
-export function DetailLedger({ entry, onClose }: Props) {
+export function DetailLedger({ entry, onClose, onSaved }: Props) {
   const [showDiff, setShowDiff] = useState(false);
+  const [editing, setEditing] = useState(false);
   const edited = isEdited(entry);
   const panelRef = useRef<HTMLElement>(null);
   const sprite = spriteUrl(entry.chrooked_id, entry.dex);
 
-  // On a species change (and first open): reset the diff and move focus into
-  // the dialog. One effect, both being "react to the open species".
+  // On a species change (and first open): reset the diff/edit mode and move
+  // focus into the dialog. One effect, all "react to the open species".
   useEffect(() => {
     setShowDiff(false);
+    setEditing(false);
     panelRef.current?.focus();
   }, [entry.chrooked_id]);
 
@@ -58,6 +65,15 @@ export function DetailLedger({ entry, onClose }: Props) {
             <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
             <div className="ledger__head-actions">
               {edited && <EditedLed on variant="tag" />}
+              {!editing && (
+                <button
+                  type="button"
+                  className="ledger__edit"
+                  onClick={() => setEditing(true)}
+                >
+                  Edit
+                </button>
+              )}
               <button type="button" className="ledger__close" onClick={onClose}>
                 Close <kbd className="mono">Esc</kbd>
               </button>
@@ -86,7 +102,7 @@ export function DetailLedger({ entry, onClose }: Props) {
             </div>
           </div>
 
-          {edited && (
+          {edited && !editing && (
             <button
               type="button"
               className="ledger__diff-toggle"
@@ -100,7 +116,26 @@ export function DetailLedger({ entry, onClose }: Props) {
           )}
         </header>
 
-        <section className="ledger__section" aria-label="Base stats">
+        {editing ? (
+          <SpeciesEditor
+            entry={entry}
+            onDone={() => setEditing(false)}
+            onSaved={onSaved}
+          />
+        ) : (
+          <DetailBody entry={entry} showDiff={showDiff} />
+        )}
+      </aside>
+    </div>
+  );
+}
+
+type BodyProps = { entry: DexEntry; showDiff: boolean };
+
+function DetailBody({ entry, showDiff }: BodyProps) {
+  return (
+    <>
+      <section className="ledger__section" aria-label="Base stats">
           <h3 className="ledger__heading">Base stats</h3>
           <div className="ledger__stats">
             {STAT_ORDER.map((key) => (
@@ -142,7 +177,6 @@ export function DetailLedger({ entry, onClose }: Props) {
         />
 
         <EvolutionSection evolution={entry.evolution} />
-      </aside>
-    </div>
+    </>
   );
 }
