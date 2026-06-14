@@ -8,6 +8,7 @@ dist/
 .venv/
 venv/
 .DS_Store
+.playwright-mcp/
 
 # Frontend build artifacts
 frontend/node_modules/
@@ -18,3 +19,5 @@ frontend/vite.config.d.ts
 
 # Target registry — machine-specific game paths, not canon
 .chrooked/targets.json
+
+feature_requests/
