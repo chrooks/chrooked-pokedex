@@ -1,0 +1,638 @@
+/* Targets panel — the apply console. Reuses the device tokens and the .btn
+   family from editors.css; adds the registry list, the preview/apply workspace,
+   the dirty-tree Error State with its Force toggle, the report stat strip, and
+   the dex backdrop banner. Destructive actions escalate in weight on purpose:
+   muted Apply → armed confirm → solid danger button. No new color jobs beyond
+   reusing --chrome (device red) and --edited (the Ruleset-touch amber). */
+
+.tab--targets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* --- Add form --------------------------------------------------------------*/
+
+.target-add {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.target-add__row {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto auto;
+  gap: var(--space-3);
+  align-items: end;
+}
+
+.target-add__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.target-add__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.target-add__input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.target-add__input.mono {
+  font-family: var(--font-mono);
+}
+
+.target-add__input:focus {
+  outline: none;
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 30%, transparent);
+}
+
+.target-add__submit {
+  white-space: nowrap;
+}
+
+.target-add__error {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-0));
+  border: 1px solid color-mix(in oklch, var(--chrome) 45%, var(--line));
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+/* --- Two-column workspace --------------------------------------------------*/
+
+.targets-grid {
+  display: grid;
+  grid-template-columns: minmax(16rem, 22rem) 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* --- Registry list ---------------------------------------------------------*/
+
+.target-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.target-list__item {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+}
+
+.target-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: all var(--dur-fast) var(--ease-out);
+  min-width: 0;
+}
+
+.target-card:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-3);
+}
+
+.target-card[data-selected="true"] {
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 10%, var(--surface-2));
+}
+
+.target-card__lamp {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.target-card[data-selected="true"] .target-card__lamp {
+  background: var(--chrome);
+  box-shadow: 0 0 8px color-mix(in oklch, var(--chrome) 70%, transparent);
+}
+
+.target-card__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.target-card__label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.target-card__path {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.target-card__engine {
+  flex: none;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  padding: 1px var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.target-card__remove {
+  flex: none;
+  padding: 0 var(--space-3);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.target-card__remove:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 16%, transparent);
+}
+
+.target-card__remove:disabled {
+  opacity: 0.5;
+}
+
+/* --- Apply / preview workspace --------------------------------------------*/
+
+.apply-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  min-height: 14rem;
+}
+
+.apply-panel--empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.apply-panel__hint {
+  color: var(--text-faint);
+  font-size: var(--text-sm);
+}
+
+.apply-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.apply-panel__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.apply-panel__path {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  word-break: break-all;
+}
+
+.apply-panel__engine {
+  flex: none;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  padding: 2px var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.apply-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.apply-panel__arm {
+  margin-left: auto;
+}
+
+/* The destructive confirm step — arms after the bare Apply button. */
+.apply-confirm {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: color-mix(in oklch, var(--chrome) 8%, var(--surface-2));
+  border: 1px solid color-mix(in oklch, var(--chrome) 40%, var(--line));
+  border-radius: var(--radius-md);
+}
+
+.apply-confirm__warn {
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.apply-confirm__buttons {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+/* The solid, full-weight destructive button — the real apply trigger. */
+.btn--danger-solid {
+  background: var(--chrome);
+  border-color: var(--chrome);
+  color: var(--surface-0);
+}
+
+.btn--danger-solid:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--chrome) 88%, white);
+  border-color: var(--chrome);
+}
+
+.btn--danger-solid:disabled {
+  background: var(--surface-2);
+  border-color: var(--line);
+  color: var(--text-faint);
+}
+
+.apply-panel__backdrop-btn {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklch, var(--edited) 12%, var(--surface-2));
+  border: 1px solid color-mix(in oklch, var(--edited) 40%, var(--line));
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.apply-panel__backdrop-btn:hover {
+  border-color: var(--edited);
+  background: color-mix(in oklch, var(--edited) 20%, var(--surface-2));
+}
+
+/* --- Error State: dirty tree (409) + Force toggle -------------------------*/
+
+.apply-error {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-0));
+  border: 1px solid color-mix(in oklch, var(--chrome) 50%, var(--line));
+  border-radius: var(--radius-md);
+}
+
+.apply-error__badge {
+  flex: none;
+  align-self: flex-start;
+  padding: 2px var(--space-2);
+  background: var(--chrome);
+  color: var(--surface-0);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.apply-error__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.apply-error__title {
+  margin: 0;
+  font-weight: 700;
+  color: color-mix(in oklch, var(--chrome) 75%, var(--text));
+}
+
+.apply-error__detail {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text);
+  word-break: break-word;
+}
+
+.apply-error__force {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.apply-error__force input {
+  margin-top: 2px;
+  accent-color: var(--chrome);
+}
+
+.apply-error__force-text {
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+
+.apply-error__force-text strong {
+  color: var(--text);
+}
+
+/* --- Apply report ----------------------------------------------------------*/
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.report__heading {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.report__heading-note {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-faint);
+}
+
+.report__counts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.report__count {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.report__count[data-tone="ok"] {
+  border-left-color: var(--type-grass);
+}
+.report__count[data-tone="warn"] {
+  border-left-color: var(--edited);
+}
+.report__count[data-tone="bad"] {
+  border-left-color: var(--chrome);
+}
+.report__count[data-tone="new"] {
+  border-left-color: var(--type-water);
+}
+
+.report__count-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.report__count-value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.report__data-only {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.report__sub {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.report__sub-note {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.report__packets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.packet {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-0);
+  overflow: hidden;
+}
+
+.packet__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.packet__toggle:hover {
+  background: var(--surface-1);
+}
+
+.packet__caret {
+  color: var(--text-faint);
+  width: 1ch;
+}
+
+.packet__name {
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.packet__symbol {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.packet__tag {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--type-water);
+  border: 1px solid color-mix(in oklch, var(--type-water) 45%, var(--line));
+  border-radius: 999px;
+  padding: 0 var(--space-2);
+}
+
+.packet__body {
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.packet__hint,
+.packet__error {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.packet__error {
+  color: color-mix(in oklch, var(--chrome) 75%, var(--text));
+}
+
+.packet__md,
+.report__raw-md {
+  margin: 0;
+  max-height: 18rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.report__raw summary {
+  cursor: pointer;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.report__raw-md {
+  margin-top: var(--space-2);
+}
+
+/* --- Dex backdrop banner (lives on the Dex screen) ------------------------*/
+
+.backdrop-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-3) var(--space-5) 0;
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in oklch, var(--edited) 10%, var(--surface-1));
+  border: 1px solid color-mix(in oklch, var(--edited) 40%, var(--line));
+  border-radius: var(--radius-sm);
+}
+
+.backdrop-banner__lamp {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--edited);
+  box-shadow: 0 0 8px var(--edited-glow);
+}
+
+.backdrop-banner__text {
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.backdrop-banner__note {
+  color: var(--text-faint);
+}
+
+.backdrop-banner__clear {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.backdrop-banner__clear:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+@media (max-width: 860px) {
+  .targets-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .target-add__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .report__counts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

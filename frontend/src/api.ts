@@ -11,10 +11,14 @@
 
 import type {
   Ability,
+  ApplyReportSummary,
   Behavior,
+  BehaviorPacket,
   DexEntry,
+  EngineKey,
   Move,
   SpeciesOverride,
+  Target,
   TypeChartEntry,
 } from "./types";
 
@@ -61,7 +65,7 @@ async function getJson<T>(path: string, signal?: AbortSignal): Promise<T> {
 }
 
 async function sendJson<T>(
-  method: "PUT" | "DELETE",
+  method: "POST" | "PUT" | "DELETE",
   path: string,
   payload?: unknown,
 ): Promise<T> {
@@ -149,4 +153,33 @@ export const api = {
       "DELETE",
       `/api/behaviors/${encodeURIComponent(id)}`,
     ),
+
+  // Targets (M3 — register a fork, preview/apply the Ruleset, read its backdrop)
+  targets: (signal?: AbortSignal) => getJson<Target[]>("/api/targets", signal),
+  addTarget: (payload: { label: string; path: string; engine: EngineKey }) =>
+    sendJson<Target>("POST", "/api/targets", payload),
+  deleteTarget: (id: string) =>
+    sendJson<{ deleted: string }>(
+      "DELETE",
+      `/api/targets/${encodeURIComponent(id)}`,
+    ),
+  /** Safe: runs the real applier on the fork, then reverts it. 409 if dirty. */
+  previewTarget: (id: string) =>
+    sendJson<ApplyReportSummary>(
+      "POST",
+      `/api/targets/${encodeURIComponent(id)}/preview`,
+    ),
+  /** Destructive: writes the fork. 409 if dirty and `force` is not set. */
+  applyTarget: (id: string, force?: boolean) =>
+    sendJson<ApplyReportSummary>(
+      "POST",
+      `/api/targets/${encodeURIComponent(id)}/apply`,
+      { force: force ?? false },
+    ),
+  /** The target's own values ⊕ Ruleset — the dex backdrop for that fork. */
+  targetDex: (id: string) => (signal?: AbortSignal) =>
+    getJson<DexEntry[]>(`/api/targets/${encodeURIComponent(id)}/dex`, signal),
+  /** Fetch one behavior packet by its DATA-ONLY `packet_url`. */
+  packet: (packetUrl: string, signal?: AbortSignal) =>
+    getJson<BehaviorPacket>(packetUrl, signal),
 } as const;

@@ -121,5 +121,52 @@ export interface Behavior {
   engine_hints: Record<string, string>;
 }
 
-/** The five read-only surfaces, used as tab keys and URL state. */
-export type KindKey = "dex" | "moves" | "abilities" | "type-chart" | "behaviors";
+/** The tab keys, also used as URL state. "targets" is the apply panel (M3);
+    the rest are the read-only / Ruleset-edit surfaces. */
+export type KindKey =
+  | "dex"
+  | "moves"
+  | "abilities"
+  | "type-chart"
+  | "behaviors"
+  | "targets";
+
+/** The engines a Target fork can be (only pokeemerald applies end-to-end in M3;
+    essentials is recorded for later). */
+export type EngineKey = "pokeemerald" | "essentials";
+
+/** A registered game fork the Ruleset can be previewed against or applied to. */
+export interface Target {
+  id: string;
+  label: string;
+  /** Absolute path to the fork, resolved on the server when added. */
+  path: string;
+  engine: EngineKey;
+}
+
+/** A DATA-ONLY created ability in an Apply Report: a record whose mechanic lives
+    only in a behavior packet, with a link to that packet's markdown. */
+export interface DataOnlyEntry {
+  chrooked_id: string;
+  symbol: string;
+  /** The packet endpoint URL (GET → {@link BehaviorPacket}). */
+  packet_url: string;
+}
+
+/** The result of a preview or apply: the four headline counts, the DATA-ONLY
+    list, and the full markdown report. Shared by both endpoints. */
+export interface ApplyReportSummary {
+  applied: number;
+  partial: number;
+  blocked: number;
+  created: number;
+  data_only: DataOnlyEntry[];
+  report_md: string;
+}
+
+/** The markdown packet for one behavior, fetched on demand from a DATA-ONLY
+    entry's `packet_url`. */
+export interface BehaviorPacket {
+  chrooked_id: string;
+  markdown: string;
+}

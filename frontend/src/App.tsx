@@ -14,6 +14,8 @@ import { MovesTab } from "./components/tabs/MovesTab";
 import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
 import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
+import { TargetsTab } from "./components/tabs/TargetsTab";
+import { BackdropBanner } from "./components/targets/BackdropBanner";
 
 /**
  * The Canon dex app shell. Owns the dex fetch, the URL-persisted view state, and
@@ -22,7 +24,14 @@ import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
  */
 export default function App() {
   const [view, update] = useUrlState();
-  const dex = useResource<DexEntry[]>(api.dex);
+  // The dex fetch swaps to a Target's backdrop (target ⊕ Ruleset) when one is
+  // set; otherwise it reads the base ⊕ Ruleset canon. Memoized by backdrop id so
+  // useResource sees a stable fetcher and refetches only when the backdrop flips.
+  const dexFetcher = useMemo(
+    () => (view.backdrop ? api.targetDex(view.backdrop) : api.dex),
+    [view.backdrop],
+  );
+  const dex = useResource<DexEntry[]>(dexFetcher);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const all = useMemo(() => dex.data ?? [], [dex.data]);
@@ -88,6 +97,17 @@ export default function App() {
   );
   const handleClose = useCallback(() => update({ selected: null }), [update]);
 
+  // From the Targets panel: show the dex on this fork's backdrop and jump to it.
+  const handleViewBackdrop = useCallback(
+    (targetId: string) =>
+      update({ kind: "dex", backdrop: targetId, selected: null }),
+    [update],
+  );
+  const handleClearBackdrop = useCallback(
+    () => update({ backdrop: null }),
+    [update],
+  );
+
   useGlobalKeys({
     onSearch: () => searchRef.current?.focus(),
     onToggleEdited: () => isDex && update({ editedOnly: !view.editedOnly }),
@@ -118,6 +138,9 @@ export default function App() {
           ? ({ inert: "" } as Record<string, string>)
           : {})}
       >
+        {isDex && view.backdrop !== null && (
+          <BackdropBanner targetId={view.backdrop} onClear={handleClearBackdrop} />
+        )}
         <KindScreen
           kind={view.kind}
           dexResource={dex}
@@ -130,6 +153,7 @@ export default function App() {
           hidden={view.hidden}
           onChange={update}
           onOpen={handleOpen}
+          onViewBackdrop={handleViewBackdrop}
         />
       </div>
       {selectedEntry !== null && (
@@ -158,6 +182,7 @@ type KindScreenProps = {
   hidden: ViewSnapshot["hidden"];
   onChange: (patch: DexViewPatch) => void;
   onOpen: (id: string) => void;
+  onViewBackdrop: (targetId: string) => void;
 };
 
 function KindScreen({
@@ -172,6 +197,7 @@ function KindScreen({
   hidden,
   onChange,
   onOpen,
+  onViewBackdrop,
 }: KindScreenProps) {
   switch (kind) {
     case "moves":
@@ -182,6 +208,8 @@ function KindScreen({
       return <TypeChartTab />;
     case "behaviors":
       return <BehaviorsTab />;
+    case "targets":
+      return <TargetsTab onViewBackdrop={onViewBackdrop} />;
     default:
       return (
         <DexView
@@ -211,6 +239,9 @@ function Readout({
   edited: number;
   shown: number;
 }) {
+  if (kind === "targets") {
+    return <span>targets · preview &amp; apply</span>;
+  }
   if (kind !== "dex") {
     return <span>{kind.replace("-", " ")} · read-only</span>;
   }

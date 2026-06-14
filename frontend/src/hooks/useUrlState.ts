@@ -30,6 +30,9 @@ export interface ViewState {
   sort: SortKey[];
   /** Hidden data columns (table-only effect). */
   hidden: ColumnKey[];
+  /** A Target id whose backdrop the dex is showing (target ⊕ Ruleset), or null
+      for the base ⊕ Ruleset canon. Set from the Targets panel after a preview. */
+  backdrop: string | null;
 }
 
 const KINDS: readonly KindKey[] = [
@@ -38,6 +41,7 @@ const KINDS: readonly KindKey[] = [
   "abilities",
   "type-chart",
   "behaviors",
+  "targets",
 ];
 
 // useSyncExternalStore requires a STABLE snapshot: getSnapshot must return the
@@ -66,6 +70,7 @@ function readState(): ViewState {
     filter: decodeFilter(params.get("filter")),
     sort: decodeSort(params.get("sort")),
     hidden: decodeHidden(params.get("hide")),
+    backdrop: params.get("backdrop"),
   };
   return cachedState;
 }
@@ -89,6 +94,7 @@ function writeState(next: ViewState): void {
   if (next.filter.length) params.set("filter", encodeFilter(next.filter));
   if (next.sort.length) params.set("sort", encodeSort(next.sort));
   if (next.hidden.length) params.set("hide", encodeHidden(next.hidden));
+  if (next.backdrop) params.set("backdrop", next.backdrop);
 
   const search = params.toString();
   const url = search ? `?${search}` : window.location.pathname;
