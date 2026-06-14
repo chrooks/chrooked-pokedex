@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_GREAVARD }
 types: [Ghost, Ground]
 abilities:
   primary: Fluffy
-  secondary: Daunt
+  secondary: Frighten
   hidden: Sand Rush
 learnset:
   - { level: 1, move: Tackle }

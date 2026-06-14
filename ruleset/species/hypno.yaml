@@ -4,6 +4,6 @@ aka: { pokeemerald: SPECIES_HYPNO }
 types: [Psychic, Dark]
 abilities:
   primary: Bad Dreams
-  secondary: Daunt
+  secondary: Frighten
   hidden: Hubris
 stats: { spa: 85 }
