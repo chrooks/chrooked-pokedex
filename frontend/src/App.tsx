@@ -3,6 +3,8 @@ import { api } from "./api";
 import { useResource } from "./hooks/useResource";
 import { useUrlState } from "./hooks/useUrlState";
 import { isEdited } from "./lib/format";
+import { evalEntries } from "./lib/dexFilters";
+import { stableMultiSort } from "./lib/dexSort";
 import type { DexEntry } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
@@ -41,6 +43,10 @@ export default function App() {
     return Array.from(names).sort((a, b) => a.localeCompare(b));
   }, [all]);
 
+  // Row predicates: edited-only, then the rail search, then the boolean filter
+  // builder. All three apply to both grid and table. `view.filter`/`view.sort`
+  // are safe memo deps: useUrlState caches the whole ViewState by the raw query
+  // string, so these arrays keep a stable reference until the URL changes.
   const filtered = useMemo(() => {
     let list = all;
     if (view.editedOnly) {
@@ -54,8 +60,19 @@ export default function App() {
           String(entry.dex ?? "").includes(query),
       );
     }
+    if (view.filter.length) {
+      list = list.filter((entry) => evalEntries(entry, view.filter));
+    }
     return list;
-  }, [all, view.editedOnly, view.query]);
+  }, [all, view.editedOnly, view.query, view.filter]);
+
+  // The table additionally sorts by the multi-key sort spec; the grid stays in
+  // dex order. Only the visible view's list is consumed, so this is cheap.
+  const tableRows = useMemo(
+    () => stableMultiSort(filtered, view.sort),
+    [filtered, view.sort],
+  );
+  const dexEntries = view.layout === "table" ? tableRows : filtered;
 
   const isDex = view.kind === "dex";
   const selectedEntry =
@@ -103,7 +120,7 @@ export default function App() {
         <KindScreen
           kind={view.kind}
           dexResource={dex}
-          entries={filtered}
+          entries={dexEntries}
           editedOnly={view.editedOnly}
           selected={view.selected}
           layout={view.layout}

@@ -4,6 +4,17 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 import type { KindKey } from "../types";
+import type { ColumnKey } from "../lib/dexColumns";
+import type { FilterEntry } from "../lib/dexFilters";
+import type { SortKey } from "../lib/dexSort";
+import {
+  decodeFilter,
+  decodeHidden,
+  decodeSort,
+  encodeFilter,
+  encodeHidden,
+  encodeSort,
+} from "../lib/dexViewCodec";
 
 export type DexLayout = "grid" | "table";
 
@@ -13,6 +24,12 @@ export interface ViewState {
   editedOnly: boolean;
   selected: string | null;
   layout: DexLayout;
+  /** The boolean filter tree (applies to both grid and table). */
+  filter: FilterEntry[];
+  /** Multi-key sort, priority-ordered (table-only effect). */
+  sort: SortKey[];
+  /** Hidden data columns (table-only effect). */
+  hidden: ColumnKey[];
 }
 
 const KINDS: readonly KindKey[] = [
@@ -46,6 +63,9 @@ function readState(): ViewState {
     editedOnly: params.get("edited") === "1",
     selected: params.get("id"),
     layout: params.get("view") === "table" ? "table" : "grid",
+    filter: decodeFilter(params.get("filter")),
+    sort: decodeSort(params.get("sort")),
+    hidden: decodeHidden(params.get("hide")),
   };
   return cachedState;
 }
@@ -66,6 +86,9 @@ function writeState(next: ViewState): void {
   if (next.editedOnly) params.set("edited", "1");
   if (next.selected) params.set("id", next.selected);
   if (next.layout === "table") params.set("view", "table");
+  if (next.filter.length) params.set("filter", encodeFilter(next.filter));
+  if (next.sort.length) params.set("sort", encodeSort(next.sort));
+  if (next.hidden.length) params.set("hide", encodeHidden(next.hidden));
 
   const search = params.toString();
   const url = search ? `?${search}` : window.location.pathname;
