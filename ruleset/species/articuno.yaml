@@ -2,6 +2,6 @@ name: Articuno
 chrooked_id: articuno
 aka: { pokeemerald: SPECIES_ARTICUNO }
 abilities:
-  primary: Water Veil
-  secondary: Permafrost
+  secondary: Snow Warning
+  hidden: Permafrost
 stats: { spa: 105 }

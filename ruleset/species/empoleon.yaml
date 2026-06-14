@@ -2,5 +2,6 @@ name: Empoleon
 chrooked_id: empoleon
 aka: { pokeemerald: SPECIES_EMPOLEON }
 abilities:
-  hidden: Competitive
-stats: { hp: 95, atk: 75, def: 90, spa: 120, spd: 100 }
+  secondary: Tough Claws
+  hidden: Intimidate
+stats: { hp: 85, atk: 105, def: 90, spa: 105, spd: 90, spe: 65 }

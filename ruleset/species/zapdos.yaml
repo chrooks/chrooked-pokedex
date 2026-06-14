@@ -2,5 +2,6 @@ name: Zapdos
 chrooked_id: zapdos
 aka: { pokeemerald: SPECIES_ZAPDOS }
 abilities:
+  secondary: Drizzle
   hidden: Static
 stats: { atk: 85, def: 95, spe: 105 }

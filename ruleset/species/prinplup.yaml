@@ -2,4 +2,5 @@ name: Prinplup
 chrooked_id: prinplup
 aka: { pokeemerald: SPECIES_PRINPLUP }
 abilities:
-  hidden: Competitive
+  hidden: Intimidate
+stats: { hp: 65, atk: 75, def: 70, spa: 75, spd: 75 }
