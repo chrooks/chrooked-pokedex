@@ -3,11 +3,11 @@ devos_version: 1
 project: chrooked-pokedex
 issue: 2
 slug: table-controls
-stage: prove
+stage: close
 grillable: true
 tier: heavy
 effort: high
-next_action: assess 2
+next_action: none — closed
 acceptance_criteria:
   - id: ac1
     statement: Boolean evaluator honors AND/OR precedence (OR looser), parens, per-leaf NOT
@@ -61,8 +61,18 @@ acceptance_criteria:
     statement: Project stays green
     proof_method: "npm run build && npm run lint && npm run test — all exit 0"
     status: pass
-status: in_progress
+status: done
 ---
+
+## Assess & Close — 2026-06-14
+
+Human accepted the Proof Ledger as-is (`/dev close #2`). All 13 acceptance
+criteria PASS: ac1–ac6 + ac13 by Vitest, ac7–ac12 by live Playwright. Shipped
+across three milestones (commits 618114f, 7d58cfd, 8883621) plus data 7734b49.
+Two review fan-outs (incl. an /impeccable critique) caught real defects — a
+filter-bypass on a stray paren, a single-source-of-truth drift in numeric
+fields, header/cell column-alignment drift, pill a11y gaps — all fixed-forward.
+GitHub issue #2 closed.
 
 ## Decision Ledger
 

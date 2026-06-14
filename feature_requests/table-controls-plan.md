@@ -28,9 +28,9 @@ The exact behavior is ported from the `/table html` skill template at `~/.claude
 
 - [x] (2026-06-13) Scope + grill complete; nine decisions resolved and recorded in `feature_requests/table-controls-throughline.md`.
 - [x] (2026-06-13) ExecPlan authored.
-- [ ] Milestone 1 — Pure logic core + Vitest (filter model, sort, columns registry, tags, URL codec) with unit tests green.
-- [ ] Milestone 2 — State + pipeline: extend URL state, wire the filter/sort/hidden pipeline into `App.tsx`, prove via a hand-crafted URL before any new UI exists.
-- [ ] Milestone 3 — Control UI: filter builder, sort row, columns panel, dynamic-column table, rendered above both views; full manual runtime verification.
+- [x] (2026-06-14) Milestone 1 — Pure logic core + Vitest (filter model, sort, columns registry, tags, URL codec). 42 unit tests green. Commit `618114f` (+ data `7734b49`).
+- [x] (2026-06-14) Milestone 2 — State + pipeline: extended URL state, wired the filter/sort/hidden pipeline into `App.tsx`, proven via a hand-crafted URL (Type=Fire AND Atk≥100, sort bst desc) before any UI. Commit `7d58cfd`.
+- [x] (2026-06-14) Milestone 3 — Control UI: filter builder, sort row, columns panel, dynamic-column sortable-header table, rendered above both views. Full Playwright runtime verification (ac7–ac12). Commit `8883621`.
 
 
 ## Surprises & Discoveries
@@ -71,7 +71,28 @@ The exact behavior is ported from the `/table html` skill template at `~/.claude
 
 ## Outcomes & Retrospective
 
-To be written at completion. Compare against Purpose: can a user build the example filter expression, sort by multiple keys, hide columns, and restore it all from a shared URL?
+**Completed 2026-06-14.** Yes to every Purpose question. A user can build
+`Atk ≥ 100 AND NOT Type:"Bug" AND ( Class:"Legendary" OR BST ≥ 600 )` out of
+pills (per-pill AND/OR, NOT, parens, drag + Alt+Arrow reorder), sort by multiple
+column-header keys (click + shift-click, arrows + priority ordinals), hide data
+columns (LED/№/Name locked), and restore the whole view — filters, sort, hidden,
+search — from a shared/reloaded URL. Filters apply to both grid and table; sort
+and columns are table-only; virtualization stayed intact (~23 row nodes for
+1451 species).
+
+**What shaped the build vs. the plan:**
+- Introduced Vitest as planned (42 tests) for the pure logic; UI proven by
+  documented Playwright runtime steps.
+- The static grid template became a `--dexcols` CSS custom property computed from
+  the visible-column set, as anticipated.
+- Two refinements surfaced during review/verification: the URL filter param was
+  double-encoded (codec did `encodeURIComponent` on top of `URLSearchParams`) —
+  fixed to single-encode; and the table header/cells were iterating two
+  different column lists — unified to one `visible` list so they cannot drift.
+
+**Review caught (and fixed) four real defects:** a stray-`)` filter bypass, a
+`NUMERIC_FIELDS`/`COLUMNS` single-source-of-truth drift, header/cell alignment
+drift, and pill accessibility gaps (no accessible name, drag-only reorder).
 
 
 ## Code Review Findings
