@@ -1,0 +1,517 @@
+"""Milestone 3 — Targets, preview, and apply (backend).
+
+One test per acceptance criterion (ac1–ac8). The git-safety criteria (ac2, ac4,
+ac6) drive controlled file changes over a dummy git repo — some via a monkeypatched
+applier so the change is deterministic. The honest-applier criteria (ac3, ac5,
+ac7, ac8) run the REAL pokeemerald applier over a minimal hand-built git fork,
+mirroring the fixture style of `test_creation.py` / `test_tier_integration.py`.
+
+The fork is a real git repo committed clean, so the clean-tree gate holds and
+`git clean -fd` removes exactly the applier-created files (D1).
+"""
+
+from __future__ import annotations
+
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+from fastapi.testclient import TestClient
+
+from chrooked_pokedex.web import targets as targetsmod
+from chrooked_pokedex.web.app import create_app
+
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+
+_SNAPSHOT = {
+    "version": "1.11.2",
+    "species": {
+        "aegislash": {
+            "dex": 681,
+            "chrooked_id": "aegislash",
+            "name": "Aegislash",
+            "types": ["Steel", "Ghost"],
+            "abilities": {
+                "primary": "Stance Change",
+                "secondary": None,
+                "hidden": None,
+            },
+            # Base snapshot HP differs from the fork's own value (60) so the
+            # per-Target backdrop can show the fork value, proving the backdrop
+            # reads the fork, not the committed base.
+            "stats": {"hp": 99, "atk": 50, "def": 50, "spa": 50, "spd": 50, "spe": 50},
+            "learnset": [{"level": 1, "move": "Tackle"}],
+        },
+    },
+    "moves": {},
+    "abilities": {},
+    "type_chart": [],
+}
+
+
+def _git(repo: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(repo), *args], capture_output=True, text=True, check=True
+    )
+
+
+def _init_committed_repo(repo: Path) -> None:
+    repo.mkdir(parents=True, exist_ok=True)
+    _git(repo, "init", "-q")
+    _git(repo, "config", "user.email", "t@t.test")
+    _git(repo, "config", "user.name", "test")
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "fork base")
+
+
+def _write_minimal_fork(target: Path) -> None:
+    """A minimal but real pokeemerald fork the applier can actually apply to.
+
+    Carries one species (Aegislash, HP=60), its learnset, and the move/ability
+    symbol tables the resolution map and creation tier read. The Ruleset below
+    creates a DATA-ONLY ability (Striker) the fork lacks.
+    """
+    pokemon = target / "src" / "data" / "pokemon"
+    (pokemon / "level_up_learnsets").mkdir(parents=True)
+    (target / "include" / "constants").mkdir(parents=True)
+
+    (pokemon / "level_up_learnsets" / "gen_1.h").write_text(
+        "static const struct LevelUpMove sAegislashLevelUpLearnset[] = {\n"
+        "    LEVEL_UP_MOVE(1, MOVE_TACKLE),\n"
+        "    LEVEL_UP_END\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    (pokemon / "species_info.h").write_text(
+        "    [SPECIES_AEGISLASH] =\n"
+        "    {\n"
+        "        .baseHP = 60,\n"
+        "        .baseAttack = 50,\n"
+        "        .levelUpLearnset = sAegislashLevelUpLearnset,\n"
+        "    },\n",
+        encoding="utf-8",
+    )
+    (target / "src" / "data" / "moves_info.h").write_text(
+        "const struct MoveInfo gMovesInfo[MOVES_COUNT] =\n"
+        "{\n"
+        '    [MOVE_TACKLE] = { .name = COMPOUND_STRING("Tackle"), '
+        ".type = TYPE_NORMAL, .category = DAMAGE_CATEGORY_PHYSICAL, },\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    (target / "include" / "constants" / "moves.h").write_text(
+        "#define MOVE_NONE 0\n"
+        "#define MOVE_TACKLE 1\n"
+        "#define MOVES_COUNT_GEN9 2\n"
+        "#define MOVES_COUNT MOVES_COUNT_GEN9\n",
+        encoding="utf-8",
+    )
+    (target / "include" / "constants" / "abilities.h").write_text(
+        "#define ABILITY_NONE 0\n"
+        "#define ABILITY_STENCH 1\n"
+        "#define ABILITIES_COUNT_GEN9 2\n"
+        "#define ABILITIES_COUNT ABILITIES_COUNT_GEN9\n",
+        encoding="utf-8",
+    )
+    (target / "src" / "data" / "abilities.h").write_text(
+        "const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =\n"
+        "{\n"
+        "    [ABILITY_STENCH] =\n"
+        "    {\n"
+        '        .name = _("Stench"),\n'
+        '        .description = COMPOUND_STRING("Repels."),\n'
+        "    },\n"
+        "};\n",
+        encoding="utf-8",
+    )
+
+
+def _write_ruleset(root: Path) -> None:
+    """A Ruleset that changes Aegislash HP and owns a behavior-backed ability.
+
+    The Striker ability is absent from the fork, so the creation tier creates it;
+    because a behavior spec exists for it, the report marks it DATA ONLY (ac8).
+    """
+    (root / "species").mkdir(parents=True)
+    (root / "abilities").mkdir(parents=True)
+    (root / "behaviors").mkdir(parents=True)
+    (root / "meta.yaml").write_text(
+        "base_version: 1.11.2\nschema_version: 1\n", encoding="utf-8"
+    )
+    (root / "species" / "aegislash.yaml").write_text(
+        "name: Aegislash\n"
+        "chrooked_id: aegislash\n"
+        "aka: { pokeemerald: SPECIES_AEGISLASH }\n"
+        "stats: { hp: 140 }\n",
+        encoding="utf-8",
+    )
+    (root / "abilities" / "striker.yaml").write_text(
+        "name: Striker\n"
+        "chrooked_id: striker\n"
+        "aka: { pokeemerald: ABILITY_STRIKER }\n"
+        "description: Boosts kicking moves.\n",
+        encoding="utf-8",
+    )
+    (root / "behaviors" / "striker.yaml").write_text(
+        "name: Striker\n"
+        "chrooked_id: striker\n"
+        "applies_to: ability\n"
+        "effects:\n"
+        "  - summary: Boosts kicking moves by 30%.\n"
+        "    trigger: damage-calc\n"
+        "    effect: Multiplies kicking-move power by 1.3.\n"
+        "    when: the user has Striker\n"
+        "test_cases:\n"
+        "  - given: a kicking move is used\n"
+        "    expect: power is multiplied by 1.3\n",
+        encoding="utf-8",
+    )
+
+
+@pytest.fixture
+def snapshot_path(tmp_path: Path) -> Path:
+    path = tmp_path / "1.11.2.json"
+    path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def ruleset_dir(tmp_path: Path) -> Path:
+    root = tmp_path / "ruleset"
+    _write_ruleset(root)
+    return root
+
+
+@pytest.fixture
+def targets_path(tmp_path: Path) -> Path:
+    return tmp_path / "registry" / "targets.json"
+
+
+@pytest.fixture
+def client(snapshot_path: Path, ruleset_dir: Path, targets_path: Path) -> TestClient:
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snapshot_path,
+        targets_path=targets_path,
+    )
+    return TestClient(app, raise_server_exceptions=False)
+
+
+@pytest.fixture
+def fork(tmp_path: Path) -> Path:
+    """A real, committed-clean minimal pokeemerald git fork."""
+    path = tmp_path / "fork"
+    _write_minimal_fork(path)
+    _init_committed_repo(path)
+    return path
+
+
+def _register(client: TestClient, fork: Path) -> str:
+    response = client.post(
+        "/api/targets",
+        json={"label": "Test Fork", "path": str(fork), "engine": "pokeemerald"},
+    )
+    assert response.status_code == 200, response.text
+    return response.json()["id"]
+
+
+# --- ac1: registry CRUD round-trips to the injected targets.json ----------- #
+
+
+def test_ac1_registry_crud_round_trip(
+    client: TestClient, fork: Path, targets_path: Path
+) -> None:
+    # add
+    add = client.post(
+        "/api/targets",
+        json={"label": "My Fork", "path": str(fork), "engine": "pokeemerald"},
+    )
+    assert add.status_code == 200, add.text
+    body = add.json()
+    target_id = body["id"]
+    assert body["label"] == "My Fork"
+    assert body["engine"] == "pokeemerald"
+    # path stored ABSOLUTE
+    assert Path(body["path"]).is_absolute()
+    assert Path(body["path"]) == fork.resolve()
+
+    # file persisted at the injected path
+    assert targets_path.exists()
+    on_disk = json.loads(targets_path.read_text(encoding="utf-8"))
+    assert any(row["id"] == target_id for row in on_disk)
+    assert Path(on_disk[0]["path"]).is_absolute()
+
+    # list
+    listed = client.get("/api/targets").json()
+    assert [t["id"] for t in listed] == [target_id]
+
+    # delete
+    deleted = client.delete(f"/api/targets/{target_id}")
+    assert deleted.status_code == 200
+    assert deleted.json() == {"deleted": target_id}
+    assert client.get("/api/targets").json() == []
+
+    # delete unknown -> 404
+    assert client.delete("/api/targets/nope").status_code == 404
+
+
+def test_ac1_add_rejects_non_git_path(client: TestClient, tmp_path: Path) -> None:
+    plain = tmp_path / "not_a_repo"
+    plain.mkdir()
+    response = client.post(
+        "/api/targets",
+        json={"label": "x", "path": str(plain), "engine": "pokeemerald"},
+    )
+    assert response.status_code == 422
+
+
+# --- ac2: preview refuses a dirty tree (409); fork untouched --------------- #
+
+
+def test_ac2_preview_dirty_tree_409(client: TestClient, fork: Path) -> None:
+    (fork / "dirt.txt").write_text("uncommitted\n", encoding="utf-8")
+    before = subprocess.run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout
+
+    target_id = _register(client, fork)
+    response = client.post(f"/api/targets/{target_id}/preview")
+    assert response.status_code == 409
+    assert "uncommitted" in response.json()["detail"].lower()
+
+    after = subprocess.run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout
+    assert before == after  # fork left untouched
+
+
+# --- ac3: preview on a clean fork runs the real applier and restores ------- #
+
+
+def test_ac3_preview_clean_runs_real_applier_and_restores(
+    client: TestClient, fork: Path
+) -> None:
+    target_id = _register(client, fork)
+    response = client.post(f"/api/targets/{target_id}/preview")
+    assert response.status_code == 200, response.text
+    body = response.json()
+    # real Apply Report counts present; the applier created the Striker ability.
+    assert body["applied"] >= 1
+    assert {"applied", "partial", "blocked", "created", "data_only"} <= set(body)
+    assert body["created"] >= 1
+
+    # fork restored to clean; applier-created files gone.
+    porcelain = subprocess.run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain == "", f"fork not clean after preview: {porcelain!r}"
+
+
+# --- ac4: restore is crash-safe; failed restore -> loud 500 + recovery ----- #
+
+
+def test_ac4_restore_runs_even_when_applier_raises(
+    client: TestClient, fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target_id = _register(client, fork)
+
+    def boom(target, engine, ruleset):  # noqa: ANN001
+        # Simulate a mid-run crash AFTER touching a file, to prove finally restores.
+        (Path(target) / "half_written.h").write_text("partial\n", encoding="utf-8")
+        raise RuntimeError("applier exploded mid-run")
+
+    monkeypatch.setattr(targetsmod, "_run_applier", boom)
+    response = client.post(f"/api/targets/{target_id}/preview")
+    assert response.status_code == 500  # the crash surfaces
+
+    # finally ran the restore: the half-written file is gone, tree clean.
+    assert not (fork / "half_written.h").exists()
+    porcelain = subprocess.run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain == ""
+
+
+def test_ac4_failed_restore_500_with_recovery_command(
+    client: TestClient, fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target_id = _register(client, fork)
+
+    def bad_restore(target):  # noqa: ANN001
+        raise targetsmod.RestoreError(
+            500,
+            {
+                "message": "Restore failed.",
+                "recovery": (
+                    f"git -C {target} checkout -- . && git -C {target} clean -fd"
+                ),
+            },
+        )
+
+    monkeypatch.setattr(targetsmod, "restore_fork_to_clean", bad_restore)
+    response = client.post(f"/api/targets/{target_id}/preview")
+    assert response.status_code == 500
+    detail = response.json()["detail"]
+    assert "checkout -- ." in detail["recovery"]
+    assert "clean -fd" in detail["recovery"]
+    # The real applier ran but the (patched) restore was skipped, so the fork is
+    # left dirty here — exactly the failure the recovery command addresses. Clean
+    # it up with raw git (the patched restore_fork_to_clean would re-raise).
+    monkeypatch.undo()
+    subprocess.run(["git", "-C", str(fork), "checkout", "--", "."], check=True)
+    subprocess.run(["git", "-C", str(fork), "clean", "-fd"], check=True)
+
+
+# --- restore gates on git return codes (review fix #1) --------------------- #
+
+
+def test_restore_raises_on_nonzero_checkout_even_if_tree_reads_clean(
+    fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A non-zero checkout returncode must raise even if porcelain reads clean.
+
+    The fork is already committed-clean, so ``git status --porcelain`` returns
+    empty — the old final-backstop check alone would pass. We force the checkout
+    subprocess to report a non-zero returncode (leaving the clean and status calls
+    real), proving the new returncode gate fires before the backstop is reached.
+    """
+    real_run = subprocess.run
+
+    def fake_run(args, *a, **kw):  # noqa: ANN001, ANN002, ANN003
+        completed = real_run(args, *a, **kw)
+        # Only sabotage the checkout step; let clean + status run for real.
+        if "checkout" in args:
+            return subprocess.CompletedProcess(
+                args=args,
+                returncode=1,
+                stdout="",
+                stderr="fatal: simulated checkout failure",
+            )
+        return completed
+
+    monkeypatch.setattr(targetsmod.subprocess, "run", fake_run)
+
+    with pytest.raises(targetsmod.RestoreError) as caught:
+        targetsmod.restore_fork_to_clean(fork)
+
+    detail = caught.value.detail
+    assert detail["failed_step"] == "checkout"
+    assert "checkout -- ." in detail["recovery"]
+    assert "simulated checkout failure" in detail["stderr"]
+
+    # the tree itself is genuinely clean (the gate fired on returncode, not dirt).
+    porcelain = real_run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain == ""
+
+
+# --- ac5: apply keeps files; counts match a preceding preview -------------- #
+
+
+def test_ac5_apply_matches_preview_and_changes_files(
+    client: TestClient, fork: Path
+) -> None:
+    target_id = _register(client, fork)
+    preview = client.post(f"/api/targets/{target_id}/preview").json()
+
+    apply = client.post(f"/api/targets/{target_id}/apply", json={})
+    assert apply.status_code == 200, apply.text
+    applied = apply.json()
+    for key in ("applied", "partial", "blocked", "created"):
+        assert applied[key] == preview[key], key
+
+    # files changed on disk and KEPT after apply.
+    porcelain = subprocess.run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain != "", "apply should leave the fork dirty (changes kept)"
+
+    # the Apply Report sidecar is written to disk, not just returned in counts.
+    assert (fork / "apply-report.md").exists()
+
+
+# --- ac6: apply refuses dirty without force; proceeds with force ----------- #
+
+
+def test_ac6_apply_dirty_requires_force(client: TestClient, fork: Path) -> None:
+    (fork / "dirt.txt").write_text("uncommitted\n", encoding="utf-8")
+    target_id = _register(client, fork)
+
+    no_force = client.post(f"/api/targets/{target_id}/apply", json={})
+    assert no_force.status_code == 409
+
+    forced = client.post(f"/api/targets/{target_id}/apply", json={"force": True})
+    assert forced.status_code == 200, forced.text
+    porcelain = subprocess.run(
+        ["git", "-C", str(fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain != ""
+
+
+# --- ac7: per-Target dex backdrop reads the fork; snapshot cached ---------- #
+
+
+def test_ac7_target_dex_backdrop_and_snapshot_cache(
+    client: TestClient, fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target_id = _register(client, fork)
+
+    # spy on build_snapshot to prove it runs once across two dex requests.
+    calls = {"n": 0}
+    real_build = targetsmod.snapmod.build_snapshot
+
+    def counting_build(base_dir):  # noqa: ANN001
+        calls["n"] += 1
+        return real_build(base_dir)
+
+    monkeypatch.setattr(targetsmod.snapmod, "build_snapshot", counting_build)
+
+    first = client.get(f"/api/targets/{target_id}/dex")
+    assert first.status_code == 200, first.text
+    second = client.get(f"/api/targets/{target_id}/dex")
+    assert second.status_code == 200
+
+    assert calls["n"] == 1, "snapshot should be built once and cached"
+
+    # backdrop merges Ruleset (hp:140) onto the FORK's own value, not base (99).
+    entry = next(e for e in first.json() if e["chrooked_id"] == "aegislash")
+    assert entry["stats"]["hp"] == 140  # Ruleset override
+    assert entry["base"]["stats"]["hp"] == 60  # the FORK's own value, not base 99
+
+
+# --- ac8: DATA-ONLY created ability appears with a working packet link ------ #
+
+
+def test_ac8_data_only_ability_has_working_packet(
+    client: TestClient, fork: Path
+) -> None:
+    target_id = _register(client, fork)
+    body = client.post(f"/api/targets/{target_id}/preview").json()
+
+    data_only = body["data_only"]
+    assert any(item["chrooked_id"] == "striker" for item in data_only), data_only
+    striker = next(item for item in data_only if item["chrooked_id"] == "striker")
+    assert striker["packet_url"] == ("/api/behaviors/striker/packet?engine=pokeemerald")
+
+    packet = client.get(striker["packet_url"])
+    assert packet.status_code == 200, packet.text
+    payload = packet.json()
+    assert payload["chrooked_id"] == "striker"
+    assert "Striker" in payload["markdown"]
+    assert len(payload["markdown"]) > 0
