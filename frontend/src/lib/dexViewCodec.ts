@@ -23,8 +23,11 @@ const HIDEABLE_KEYS = new Set<ColumnKey>(
 
 // --- filter -----------------------------------------------------------------
 
+// The filter tree serializes to plain JSON; URLSearchParams owns percent-
+// encoding on write and decoding on read, so the codec must not add its own
+// encodeURIComponent layer (that double-encodes the param in the address bar).
 export function encodeFilter(entries: FilterEntry[]): string {
-  return encodeURIComponent(JSON.stringify(entries));
+  return JSON.stringify(entries);
 }
 
 function isConnector(value: unknown): value is "AND" | "OR" {
@@ -74,7 +77,7 @@ export function decodeFilter(raw: string | null): FilterEntry[] {
   }
   let parsed: unknown;
   try {
-    parsed = JSON.parse(decodeURIComponent(raw));
+    parsed = JSON.parse(raw);
   } catch {
     return [];
   }

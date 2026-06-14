@@ -8,6 +8,7 @@ import { stableMultiSort } from "./lib/dexSort";
 import type { DexEntry } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
+import type { DexViewPatch } from "./components/filters/DexControls";
 import { DetailLedger } from "./components/DetailLedger";
 import { MovesTab } from "./components/tabs/MovesTab";
 import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
@@ -124,6 +125,10 @@ export default function App() {
           editedOnly={view.editedOnly}
           selected={view.selected}
           layout={view.layout}
+          filter={view.filter}
+          sort={view.sort}
+          hidden={view.hidden}
+          onChange={update}
           onOpen={handleOpen}
         />
       </div>
@@ -139,13 +144,19 @@ export default function App() {
   );
 }
 
+type ViewSnapshot = ReturnType<typeof useUrlState>[0];
+
 type KindScreenProps = {
-  kind: ReturnType<typeof useUrlState>[0]["kind"];
+  kind: ViewSnapshot["kind"];
   dexResource: ReturnType<typeof useResource<DexEntry[]>>;
   entries: DexEntry[];
   editedOnly: boolean;
   selected: string | null;
-  layout: ReturnType<typeof useUrlState>[0]["layout"];
+  layout: ViewSnapshot["layout"];
+  filter: ViewSnapshot["filter"];
+  sort: ViewSnapshot["sort"];
+  hidden: ViewSnapshot["hidden"];
+  onChange: (patch: DexViewPatch) => void;
   onOpen: (id: string) => void;
 };
 
@@ -156,6 +167,10 @@ function KindScreen({
   editedOnly,
   selected,
   layout,
+  filter,
+  sort,
+  hidden,
+  onChange,
   onOpen,
 }: KindScreenProps) {
   switch (kind) {
@@ -175,6 +190,10 @@ function KindScreen({
           editedOnly={editedOnly}
           selected={selected}
           layout={layout}
+          filter={filter}
+          sort={sort}
+          hidden={hidden}
+          onChange={onChange}
           onOpen={onOpen}
         />
       );

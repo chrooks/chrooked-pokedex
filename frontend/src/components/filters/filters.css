@@ -1,0 +1,346 @@
+/* The dex control stack: filter builder, sort chips, column toggles. Extends the
+   existing token vocabulary — surface steps + hairlines for separation (never
+   shadow), --chrome for the active/structural signal, --edited left untouched so
+   the amber "edited" signal stays unique. Pills echo the .move-tag idiom. */
+
+/* Screen layout: fixed control stack above a single scrolling view area. */
+.dex-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.dex-screen__view {
+  flex: 1;
+  min-height: 0;
+}
+
+.dex-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.dex-controls__table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.dexc-filter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dexc-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dexc-row--end {
+  justify-content: flex-end;
+}
+
+.dexc-label {
+  min-width: 2.75rem;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.dexc-hint {
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* --- Inputs / selects (match the rail search vocabulary) --- */
+
+.dexc-select,
+.dexc-input {
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-family: inherit;
+}
+
+.dexc-select {
+  cursor: pointer;
+}
+
+.dexc-select--op {
+  font-family: var(--font-mono);
+}
+
+.dexc-input--num {
+  width: 5rem;
+}
+
+.dexc-select:focus-visible,
+.dexc-input:focus-visible {
+  outline: none;
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 25%, transparent);
+}
+
+.dexc-select--add {
+  color: var(--text-dim);
+}
+
+/* --- Connector (AND / OR) --- */
+
+.dexc-conn {
+  padding: 1px var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.dexc-conn:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+/* OR is the looser, structure-changing join: mark it with chrome so the reader
+   sees where the expression branches. AND stays neutral (the common case). */
+.dexc-conn[data-or] {
+  color: var(--chrome);
+  border-color: var(--chrome-dim);
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-0));
+}
+
+/* --- Filter pills --- */
+
+.dexc-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dexc-pillwrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.dexc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  cursor: grab;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.dexc-pill:hover {
+  border-color: var(--line-strong);
+}
+
+.dexc-pill:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.dexc-pill[data-paren] {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-md);
+  line-height: 1;
+  padding: 0 var(--space-2);
+  background: var(--surface-0);
+  color: var(--text-dim);
+}
+
+.dexc-pill[data-negated] .dexc-pill__body {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--chrome);
+}
+
+.dexc-not {
+  padding: 0 4px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.dexc-not[aria-pressed="true"] {
+  color: var(--chrome);
+  border-color: var(--chrome-dim);
+}
+
+.dexc-pill__x,
+.dexc-sortchip__x {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  color: var(--text-faint);
+  font-size: var(--text-md);
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.dexc-pill__x:hover,
+.dexc-sortchip__x:hover {
+  color: var(--chrome);
+}
+
+/* --- Sort chips --- */
+
+.dexc-sortchips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dexc-sortchip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-1) 2px var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.dexc-sortchip__ord {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.dexc-sortchip__dir {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  color: var(--chrome);
+  font-size: 0.625rem;
+  cursor: pointer;
+}
+
+.dexc-sortchip__dir:hover {
+  color: var(--text);
+}
+
+/* --- Clear / reset text buttons --- */
+
+.dexc-clear {
+  background: none;
+  border: none;
+  padding: var(--space-1) var(--space-2);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.dexc-clear:hover {
+  color: var(--text);
+}
+
+/* --- Columns disclosure --- */
+
+.dexc-columns {
+  position: relative;
+}
+
+.dexc-columns__count {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
+.dexc-caret {
+  display: inline-block;
+  font-size: 0.625rem;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.dexc-caret[data-open] {
+  transform: rotate(180deg);
+}
+
+.dexc-columns__panel {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(6rem, 1fr));
+  gap: var(--space-1) var(--space-3);
+  min-width: 14rem;
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+}
+
+.dexc-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.dexc-check input {
+  accent-color: var(--chrome);
+}
+
+.dexc-check:hover {
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dex-controls *,
+  .dex-table__sortbtn {
+    transition: none;
+  }
+}

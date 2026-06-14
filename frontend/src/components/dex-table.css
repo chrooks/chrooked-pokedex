@@ -16,14 +16,13 @@
 .dex-table__head,
 .dex-table__row {
   display: grid;
-  grid-template-columns:
-    1.5rem /* edited LED */
-    3.5rem /* № */
-    minmax(11rem, 1.4fr) /* name */
-    5.5rem /* types */
-    repeat(6, 3rem) /* stats */
-    3.5rem /* BST */
-    minmax(12rem, 1.6fr); /* abilities */
+  /* Driven by --dexcols (set on .dex-table__inner from the visible column set),
+     so hiding a column re-flows the rest. Falls back to the full template. */
+  grid-template-columns: var(
+    --dexcols,
+    1.5rem 3.5rem minmax(11rem, 1.4fr) 5.5rem repeat(6, 3rem) 3.5rem
+      minmax(12rem, 1.6fr)
+  );
   align-items: center;
   gap: var(--space-2);
   padding: 0 var(--space-3);
@@ -44,6 +43,61 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-dim);
+}
+
+/* Right-aligned numeric headers keep their sort button hard against the figures. */
+.dex-table__h.dex-table__stat {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* A sortable column header. Reads as the label until you reach for it, then the
+   chrome keyline + arrow confirm it acts. The active key keeps the arrow lit. */
+.dex-table__sortbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  max-width: 100%;
+  padding: 2px 4px;
+  margin: 0 -4px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.dex-table__sortbtn:hover {
+  color: var(--text);
+  background: var(--surface-3);
+}
+
+.dex-table__sortbtn:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.dex-table__sortbtn[data-active] {
+  color: var(--text);
+}
+
+.dex-table__sortmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  color: var(--chrome);
+  font-size: 0.625rem;
+}
+
+.dex-table__sortord {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+  font-size: 0.5625rem;
 }
 
 .dex-table__body {

@@ -1,7 +1,9 @@
 import { useCallback, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import type { DexEntry } from "../types";
-import { STAT_ORDER, STAT_LABEL, bst, dexLabel, isEdited } from "../lib/format";
+import { bst, dexLabel, isEdited } from "../lib/format";
+import { COLUMNS, type Column, type ColumnKey } from "../lib/dexColumns";
+import type { SortKey } from "../lib/dexSort";
 import { spriteUrl } from "../lib/sprites";
 import { TypeChip } from "./TypeChip";
 import { EditedLed } from "./EditedLed";
@@ -10,19 +12,40 @@ import "./dex-table.css";
 type Props = {
   entries: DexEntry[];
   selected: string | null;
+  sort: SortKey[];
+  hidden: ColumnKey[];
+  onSort: (sort: SortKey[]) => void;
   onOpen: (chrookedId: string) => void;
 };
 
 const ROW_HEIGHT = 38;
+const MAX_SORT_KEYS = 3;
+
+/** Grid track per column, matching the historical static template. The visible
+    set joins these into `--dexcols`, so hiding a column re-flows the rest. */
+const WIDTH: Record<ColumnKey, string> = {
+  led: "1.5rem",
+  dex: "3.5rem",
+  name: "minmax(11rem, 1.4fr)",
+  types: "5.5rem",
+  hp: "3rem",
+  atk: "3rem",
+  def: "3rem",
+  spa: "3rem",
+  spd: "3rem",
+  spe: "3rem",
+  bst: "3.5rem",
+  abilities: "minmax(12rem, 1.6fr)",
+};
 
 /**
- * The dense table view of the Canon dex — the docs.xlsx "Species Profile" sheet,
- * live. Mono data, tabular figures, a column per base stat; an overridden value
- * is keyed amber (the edit stays the hero) and the row carries the edited LED.
- * Rows are windowed (~1451 species); the header stays pinned. Form isn't a
- * separate column because the API folds it into the species name.
+ * The dense table view of the Canon dex. Columns are dynamic (the visible set
+ * comes from COLUMNS minus `hidden`), and data-column headers sort on click
+ * (shift-click appends a secondary key, click again flips direction). Mono data,
+ * an overridden value keyed amber, the row's edited LED carrying the signal.
+ * Rows are windowed; the header stays pinned.
  */
-export function DexTable({ entries, selected, onOpen }: Props) {
+export function DexTable({ entries, selected, sort, hidden, onSort, onOpen }: Props) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const rowVirtualizer = useVirtualizer({
     count: entries.length,
@@ -31,6 +54,29 @@ export function DexTable({ entries, selected, onOpen }: Props) {
     overscan: 8,
   });
 
+  const hiddenSet = new Set(hidden);
+  const visible = COLUMNS.filter((c) => !hiddenSet.has(c.key));
+  const cols = visible.map((c) => WIDTH[c.key]).join(" ");
+
+  const handleSort = useCallback(
+    (field: ColumnKey, append: boolean) => {
+      const existing = sort.find((s) => s.field === field);
+      const flip = (d: "asc" | "desc"): "asc" | "desc" => (d === "asc" ? "desc" : "asc");
+      if (append) {
+        if (existing) {
+          onSort(sort.map((s) => (s.field === field ? { ...s, direction: flip(s.direction) } : s)));
+        } else if (sort.length < MAX_SORT_KEYS) {
+          onSort([...sort, { field, direction: "asc" }]);
+        }
+      } else if (existing && sort.length === 1) {
+        onSort([{ field, direction: flip(existing.direction) }]);
+      } else {
+        onSort([{ field, direction: "asc" }]);
+      }
+    },
+    [sort, onSort],
+  );
+
   return (
     <div className="dex-table" ref={scrollRef} id="dex-table">
       <div
@@ -38,35 +84,19 @@ export function DexTable({ entries, selected, onOpen }: Props) {
         role="table"
         aria-label={`Canon dex — ${entries.length} species`}
         aria-rowcount={entries.length + 1}
+        style={{ ["--dexcols"]: cols } as React.CSSProperties}
       >
         <div className="dex-table__head" role="row" aria-rowindex={1}>
-          <span className="dex-table__h dex-table__led" role="columnheader">
-            <span className="sr-only">Edited</span>
-          </span>
-          <span className="dex-table__h dex-table__num" role="columnheader">
-            №
-          </span>
-          <span className="dex-table__h dex-table__name" role="columnheader">
-            Name
-          </span>
-          <span className="dex-table__h dex-table__types" role="columnheader">
-            Types
-          </span>
-          {STAT_ORDER.map((key) => (
-            <span
-              key={key}
-              className="dex-table__h dex-table__stat mono"
-              role="columnheader"
-            >
-              {STAT_LABEL[key]}
-            </span>
+          {visible.map((col) => (
+            <HeaderCell
+              key={col.key}
+              col={col}
+              sortIndex={sort.findIndex((s) => s.field === col.key)}
+              direction={sort.find((s) => s.field === col.key)?.direction}
+              multi={sort.length > 1}
+              onSort={handleSort}
+            />
           ))}
-          <span className="dex-table__h dex-table__stat mono" role="columnheader">
-            BST
-          </span>
-          <span className="dex-table__h dex-table__abil" role="columnheader">
-            Abilities
-          </span>
         </div>
 
         <div
@@ -81,6 +111,7 @@ export function DexTable({ entries, selected, onOpen }: Props) {
                 entry={entry}
                 rowIndex={vrow.index + 2}
                 isSelected={entry.chrooked_id === selected}
+                columns={visible}
                 top={vrow.start}
                 onOpen={onOpen}
               />
@@ -92,18 +123,77 @@ export function DexTable({ entries, selected, onOpen }: Props) {
   );
 }
 
+const HEADER_CLASS: Record<ColumnKey, string> = {
+  led: "dex-table__led",
+  dex: "dex-table__num",
+  name: "dex-table__name",
+  types: "dex-table__types",
+  hp: "dex-table__stat mono",
+  atk: "dex-table__stat mono",
+  def: "dex-table__stat mono",
+  spa: "dex-table__stat mono",
+  spd: "dex-table__stat mono",
+  spe: "dex-table__stat mono",
+  bst: "dex-table__stat mono",
+  abilities: "dex-table__abil",
+};
+
+type HeaderProps = {
+  col: (typeof COLUMNS)[number];
+  sortIndex: number;
+  direction: "asc" | "desc" | undefined;
+  multi: boolean;
+  onSort: (field: ColumnKey, append: boolean) => void;
+};
+
+function HeaderCell({ col, sortIndex, direction, multi, onSort }: HeaderProps) {
+  const ariaSort = direction === "asc" ? "ascending" : direction === "desc" ? "descending" : undefined;
+  const label = col.key === "led" ? <span className="sr-only">Edited</span> : col.label;
+
+  if (!col.sortable) {
+    return (
+      <span className={`dex-table__h ${HEADER_CLASS[col.key]}`} role="columnheader">
+        {label}
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={`dex-table__h ${HEADER_CLASS[col.key]}`}
+      role="columnheader"
+      aria-sort={ariaSort}
+    >
+      <button
+        type="button"
+        className="dex-table__sortbtn"
+        data-active={direction !== undefined || undefined}
+        onClick={(e) => onSort(col.key, e.shiftKey)}
+        title="Click to sort · Shift-click to add a secondary sort"
+      >
+        {col.label}
+        {direction !== undefined && (
+          <span className="dex-table__sortmark" aria-hidden="true">
+            {direction === "asc" ? "▲" : "▼"}
+            {multi && <span className="dex-table__sortord">{sortIndex + 1}</span>}
+          </span>
+        )}
+      </button>
+    </span>
+  );
+}
+
 type RowProps = {
   entry: DexEntry;
   rowIndex: number;
   isSelected: boolean;
+  columns: Column[];
   top: number;
   onOpen: (id: string) => void;
 };
 
-function DexRow({ entry, rowIndex, isSelected, top, onOpen }: RowProps) {
+function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen }: RowProps) {
   const edited = isEdited(entry);
-  const total = bst(entry.stats);
-  const changedStats = entry.base.stats ?? {};
   const open = useCallback(() => onOpen(entry.chrooked_id), [onOpen, entry.chrooked_id]);
 
   return (
@@ -116,48 +206,85 @@ function DexRow({ entry, rowIndex, isSelected, top, onOpen }: RowProps) {
       style={{ transform: `translateY(${top}px)` }}
       onClick={open}
     >
-      <span className="dex-table__c dex-table__led" role="cell">
-        <EditedLed on={edited} />
-      </span>
-      <span className="dex-table__c dex-table__num mono" role="cell">
-        {dexLabel(entry.dex).replace("№ ", "")}
-      </span>
-      <span className="dex-table__c dex-table__name" role="cell">
-        <Sprite entry={entry} />
-        <button
-          type="button"
-          className="dex-table__namebtn"
-          onClick={(e) => {
-            e.stopPropagation();
-            open();
-          }}
-        >
-          {entry.name}
-        </button>
-      </span>
-      <span className="dex-table__c dex-table__types" role="cell">
-        {entry.types.map((t) => (
-          <TypeChip key={t} type={t} variant="code" />
-        ))}
-      </span>
-      {STAT_ORDER.map((key) => (
-        <span
-          key={key}
-          className="dex-table__c dex-table__stat mono"
-          role="cell"
-          data-changed={key in changedStats || undefined}
-        >
-          {entry.stats[key] ?? "—"}
-        </span>
-      ))}
-      <span className="dex-table__c dex-table__stat dex-table__bst mono" role="cell">
-        {total ?? "—"}
-      </span>
-      <span className="dex-table__c dex-table__abil" role="cell">
-        {abilityList(entry)}
-      </span>
+      {/* Cells iterate the SAME visible-column list the header uses, so header
+          and data can never drift out of alignment. */}
+      {columns.map((col) => renderCell(col, entry, edited, open))}
     </div>
   );
+}
+
+/** One table cell for a column. Bespoke per column kind, but always emitted from
+    the shared visible-column iteration so it lines up with the header. */
+function renderCell(
+  col: Column,
+  entry: DexEntry,
+  edited: boolean,
+  open: () => void,
+) {
+  switch (col.key) {
+    case "led":
+      return (
+        <span key="led" className="dex-table__c dex-table__led" role="cell">
+          <EditedLed on={edited} />
+        </span>
+      );
+    case "dex":
+      return (
+        <span key="dex" className="dex-table__c dex-table__num mono" role="cell">
+          {dexLabel(entry.dex).replace("№ ", "")}
+        </span>
+      );
+    case "name":
+      return (
+        <span key="name" className="dex-table__c dex-table__name" role="cell">
+          <Sprite entry={entry} />
+          <button
+            type="button"
+            className="dex-table__namebtn"
+            onClick={(e) => {
+              e.stopPropagation();
+              open();
+            }}
+          >
+            {entry.name}
+          </button>
+        </span>
+      );
+    case "types":
+      return (
+        <span key="types" className="dex-table__c dex-table__types" role="cell">
+          {entry.types.map((t) => (
+            <TypeChip key={t} type={t} variant="code" />
+          ))}
+        </span>
+      );
+    case "bst":
+      return (
+        <span key="bst" className="dex-table__c dex-table__stat dex-table__bst mono" role="cell">
+          {bst(entry.stats) ?? "—"}
+        </span>
+      );
+    case "abilities":
+      return (
+        <span key="abilities" className="dex-table__c dex-table__abil" role="cell">
+          {abilityList(entry)}
+        </span>
+      );
+    default: {
+      // one of the six stat columns
+      const changed = (entry.base.stats ?? {})[col.key] !== undefined;
+      return (
+        <span
+          key={col.key}
+          className="dex-table__c dex-table__stat mono"
+          role="cell"
+          data-changed={changed || undefined}
+        >
+          {entry.stats[col.key] ?? "—"}
+        </span>
+      );
+    }
+  }
 }
 
 function Sprite({ entry }: { entry: DexEntry }) {

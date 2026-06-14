@@ -23,19 +23,17 @@ describe("filter codec (ac6)", () => {
   });
 
   it("returns [] for a corrupt payload instead of throwing", () => {
-    expect(decodeFilter("%7Bbroken")).toEqual([]);
+    expect(decodeFilter("{broken")).toEqual([]);
     expect(decodeFilter(null)).toEqual([]);
-    expect(decodeFilter(encodeURIComponent('"not-an-array"'))).toEqual([]);
+    expect(decodeFilter(JSON.stringify("not-an-array"))).toEqual([]);
   });
 
   it("drops entries with an unknown field or malformed shape", () => {
-    const dirty = encodeURIComponent(
-      JSON.stringify([
-        { kind: "filter", id: "ok", field: "atk", value: "≥|100", connector: "AND", negated: false },
-        { kind: "filter", id: "bad", field: "nonsense", value: "x", connector: "AND", negated: false },
-        { kind: "filter", id: "shape", field: "atk", connector: "AND" }, // missing value/negated
-      ]),
-    );
+    const dirty = JSON.stringify([
+      { kind: "filter", id: "ok", field: "atk", value: "≥|100", connector: "AND", negated: false },
+      { kind: "filter", id: "bad", field: "nonsense", value: "x", connector: "AND", negated: false },
+      { kind: "filter", id: "shape", field: "atk", connector: "AND" }, // missing value/negated
+    ]);
     const decoded = decodeFilter(dirty);
     expect(decoded).toHaveLength(1);
     expect(decoded[0].id).toBe("ok");
