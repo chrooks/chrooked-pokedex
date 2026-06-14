@@ -3,64 +3,64 @@ devos_version: 1
 project: chrooked-pokedex
 issue: 2
 slug: table-controls
-stage: implement
+stage: prove
 grillable: true
 tier: heavy
 effort: high
-next_action: /implement 2
+next_action: assess 2
 acceptance_criteria:
   - id: ac1
     statement: Boolean evaluator honors AND/OR precedence (OR looser), parens, per-leaf NOT
     proof_method: "vitest dexFilters.test.ts — evalEntries over A OR B AND C, (A OR B) AND C, NOT A"
-    status: pending
+    status: pass
   - id: ac2
     statement: Numeric operators (>= <= = > <) select correct rows on stats/BST/dex
     proof_method: "vitest dexFilters.test.ts — applyFilter numeric def per operator"
-    status: pending
+    status: pass
   - id: ac3
     statement: Type filter is array-contains (Fire matches a Fire/Water species)
     proof_method: "vitest dexFilters.test.ts — type-select on a dual-type fixture"
-    status: pending
+    status: pass
   - id: ac4
     statement: Class filter selects Legendary/Mythical/Starter by national dex number
     proof_method: "vitest dexTags.test.ts + dexFilters.test.ts — classOf(144/151/1/16) and class-select"
-    status: pending
+    status: pass
   - id: ac5
     statement: Multi-key sort is stable, numeric-aware (missing to end), direction-aware
     proof_method: "vitest dexSort.test.ts — stableMultiSort by type asc then bst desc, missing-BST last"
-    status: pending
+    status: pass
   - id: ac6
     statement: URL codec round-trips filter+sort+hidden; malformed payload decodes safe
     proof_method: "vitest dexViewCodec.test.ts — decode(encode(x))==x; corrupt/unknown/locked dropped"
-    status: pending
+    status: pass
   - id: ac7
     statement: Header click sorts + shows arrow; shift-click appends; sort row shows priority
     proof_method: "manual runtime step 1; DOM aria-sort + ordinal labels"
-    status: pending
+    status: pass
   - id: ac8
     statement: Adding a filter pill narrows rows in both grid and table; readout updates
     proof_method: "manual runtime step 2"
-    status: pending
+    status: pass
   - id: ac9
     statement: Per-pill AND/OR, NOT, and parenthesis grouping change the result set
     proof_method: "manual runtime steps 3-4"
-    status: pending
+    status: pass
   - id: ac10
     statement: Column toggles hide/show data columns and drop hidden from sort; LED/№/Name locked
     proof_method: "manual runtime step 5; no checkbox for locked columns"
-    status: pending
+    status: pass
   - id: ac11
     statement: Filters+sort+hidden+search persist in URL and restore exactly on reload
     proof_method: "manual runtime step 7"
-    status: pending
+    status: pass
   - id: ac12
     statement: Full dex stays responsive and virtualized while filtering/sorting
     proof_method: "manual runtime step 9 — only ~30-40 row nodes in DOM"
-    status: pending
+    status: pass
   - id: ac13
     statement: Project stays green
     proof_method: "npm run build && npm run lint && npm run test — all exit 0"
-    status: pending
+    status: pass
 status: in_progress
 ---
 
@@ -225,4 +225,45 @@ chat with bare `/dev`.
 
 ## Proof Ledger
 
-prove-it writes one line per acceptance criterion.
+**M1 prove run — 2026-06-14.** Pure-logic criteria (ac1–ac6) + the green-gate
+(ac13) proven by Vitest.
+
+**M2 + M3 prove run — 2026-06-14.** The UI criteria (ac7–ac12) verified live via
+Playwright over the running app (M2 wired the pipeline; M3 added the controls).
+
+- ac1 boolean precedence/parens/NOT — **PASS** — vitest `dexFilters.test.ts >
+  evalEntries (ac1)`: 6 cases incl. `A OR B AND C == A OR (B AND C)` true,
+  `(A OR B) AND C` false, `NOT Fire` false / `NOT Water` true, stray-`)` regression.
+- ac2 numeric operators ≥ ≤ = > < — **PASS** — vitest `applyFilter (ac2)`:
+  each operator at/around its boundary (atk=100); missing-stat & bad-threshold fail.
+- ac3 Type is array-contains — **PASS** — vitest `applyFilter (ac3)`: Fire/Water
+  fixture matches "Fire" and "Water", rejects "Grass".
+- ac4 Class by national dex — **PASS** — vitest `dexTags.test.ts` +
+  `applyFilter (ac4)`: classOf(144)=Legendary, 151=Mythical, 1=Starter, 16=null,
+  null-dex=null; class-select matches accordingly.
+- ac5 stable, numeric-aware, direction-aware multi-sort — **PASS** — vitest
+  `dexSort.test.ts (ac5)`: type-asc→bst-desc with missing BST last; missing-last
+  also as PRIMARY key in both directions; stability; input not mutated.
+- ac6 codec round-trip + safe malformed decode — **PASS** — vitest
+  `dexViewCodec.test.ts (ac6)`: filter/sort/hidden round-trip; `"%7Bbroken"`→[];
+  unknown field & bad direction dropped; locked `name` dropped; caps (10 / 3).
+- ac7 header-click sort + arrows + shift-append — **PASS** — Playwright: clicked
+  ATK header → `aria-sort=ascending` + ▲, rows ATK-asc; shift-clicked SPE →
+  sort chips `1 ATK ▲` / `2 SPE ▲`, ATK-ties broke by SPE asc.
+- ac8 filter pill narrows both grid + table — **PASS** — Playwright: Type:Fire
+  pill → readout 1451→106, all rows Fire (table); grid view shows 106 with the
+  filter builder present and sort/columns absent (table-only).
+- ac9 per-pill AND/OR, NOT, parens change result set — **PASS** — Playwright:
+  Fire AND BST≥600 = 12; toggling to OR = 242; NOT set `negated:true`; "( )"
+  added two paren tokens.
+- ac10 column toggles hide/show + drop-from-sort — **PASS** — Playwright: hiding
+  SPA (while sorted spa:asc) removed it from the header AND dropped sort →
+  `hide=spa`; panel offers only data columns (no LED/№/Name).
+- ac11 filters+sort+hidden+search persist in URL — **PASS** — Playwright: a fresh
+  load of a full-state URL restored search "char", pill Type:Fire, chips
+  `1 ATK ▼`/`2 BST ▲`, SPA+SPD hidden, 7 shown.
+- ac12 full dex stays virtualized while filtering/sorting — **PASS** —
+  Playwright: 1451 species, only ~23 `.dex-table__row` nodes in the DOM while
+  sorted bst:desc.
+- ac13 project stays green — **PASS (M1 scope)** — `npm run build`, `npm run lint`,
+  `npm run test` all exit 0; 42 tests pass. Re-proven at each milestone boundary.
