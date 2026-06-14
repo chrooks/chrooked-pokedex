@@ -21,6 +21,12 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       "react-hooks/exhaustive-deps": "error",
+      // Honor the leading-underscore convention for intentionally-unused args,
+      // matching tsc's noUnusedParameters so the two tools agree.
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
     },
   },
 );
