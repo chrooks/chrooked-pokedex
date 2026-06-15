@@ -41,6 +41,10 @@ export interface DexEntry {
   stats: Record<string, number>;
   learnset: LearnsetMove[];
   evolution: Evolution | null;
+  /** True when the species has no outgoing evolution (a final form or a
+      single-stage mon). A base fact from the snapshot; drives the Fully Evolved
+      class. */
+  fully_evolved: boolean;
   overridden_fields: OverridableField[];
   base: DexBaseValues;
 }

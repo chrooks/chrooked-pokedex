@@ -18,6 +18,7 @@ function makeEntry(overrides: Partial<DexEntry> = {}): DexEntry {
     stats: { hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100 },
     learnset: [],
     evolution: null,
+    fully_evolved: false,
     overridden_fields: [],
     base: {},
     ...overrides,

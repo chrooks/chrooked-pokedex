@@ -64,6 +64,10 @@ def _merge_species(
         "stats": dict(base.get("stats", {})),
         "learnset": list(base.get("learnset", [])),
         "evolution": None,
+        # A base fact (no outgoing evolution = final form or single-stage); the
+        # Ruleset doesn't recompute it. Defaults False for an older snapshot that
+        # predates the field. Drives the "Fully Evolved" class.
+        "fully_evolved": bool(base.get("fully_evolved", False)),
         "overridden_fields": [],
         # Pre-override values for whatever the Ruleset changed, so the detail
         # ledger can show base -> now. Empty for an untouched species.

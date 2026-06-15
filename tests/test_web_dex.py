@@ -50,6 +50,25 @@ def _entry(entries: list[dict], cid: str) -> dict:
     return next(e for e in entries if e["chrooked_id"] == cid)
 
 
+def test_fully_evolved_carries_from_base_and_defaults_false() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    snapshot = {
+        "version": "1.11.2",
+        "species": {
+            # Carries the flag explicitly (final form).
+            "goodra": {**_SNAPSHOT["species"]["goodra"], "fully_evolved": True},
+            # Omits the flag (older snapshot shape) — must default to False.
+            "pikachu": _SNAPSHOT["species"]["pikachu"],
+        },
+        "moves": {},
+        "abilities": {},
+        "type_chart": [],
+    }
+    entries = dexmod.build_dex(snapshot, ruleset)
+    assert _entry(entries, "goodra")["fully_evolved"] is True
+    assert _entry(entries, "pikachu")["fully_evolved"] is False
+
+
 def test_overridden_species_merges_ruleset_onto_base() -> None:
     ruleset = Ruleset.load(_SAMPLE)
     goodra = _entry(dexmod.build_dex(_SNAPSHOT, ruleset), "goodra")

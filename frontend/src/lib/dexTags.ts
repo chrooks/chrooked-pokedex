@@ -13,6 +13,7 @@ export const CLASS_VALUES = [
   "Eevee Line",
   "Pseudo-Legendary",
   "Mega",
+  "Fully Evolved",
 ] as const;
 
 export type ClassValue = (typeof CLASS_VALUES)[number];
@@ -55,10 +56,14 @@ export function classOf(dex: number | null): ClassValue | null {
   return TAG_TO_CLASS[tags[0]] ?? null;
 }
 
-/** Every class an entry belongs to: its dex-number class (if any) plus Mega when
-    the entry is a Mega form. An entry can hold both — Charizard Mega X is a
-    Starter (dex 6) and a Mega. */
-export function classesOf(entry: { dex: number | null; name: string }): ClassValue[] {
+/** Every class an entry belongs to: its dex-number class (if any), Mega when the
+    entry is a Mega form, and Fully Evolved when it has no outgoing evolution. An
+    entry can hold several — Charizard Mega X is Starter + Mega + Fully Evolved. */
+export function classesOf(entry: {
+  dex: number | null;
+  name: string;
+  fully_evolved?: boolean;
+}): ClassValue[] {
   const classes: ClassValue[] = [];
   const dexClass = classOf(entry.dex);
   if (dexClass !== null) {
@@ -66,6 +71,9 @@ export function classesOf(entry: { dex: number | null; name: string }): ClassVal
   }
   if (isMega(entry.name)) {
     classes.push("Mega");
+  }
+  if (entry.fully_evolved === true) {
+    classes.push("Fully Evolved");
   }
   return classes;
 }

@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from ..readers.pokeemerald import (
+    evolution_parser,
     learnset_parser,
     species_parser,
 )
@@ -69,6 +70,9 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
     ability_names = nz.build_ability_name_map(base_dir)
     move_names = nz.build_move_name_map(base_dir)
     dex_numbers = _national_dex_map(base_dir)
+    # Species that appear as a key here have at least one outgoing evolution, so
+    # their complement is "fully evolved" (a final form or a single-stage mon).
+    evolving = set(evolution_parser.parse_evolutions(base_dir))
     # One symbol table the stat evaluator reads: engine config ints
     # (P_UPDATED_STATS, the GEN_* ladder) plus the named stat macros.
     config = _config_int_map(base_dir)
@@ -87,6 +91,7 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
             dex_numbers,
             symbols,
         )
+        entry["fully_evolved"] = constant not in evolving
         species[entry["chrooked_id"]] = entry
 
     return {

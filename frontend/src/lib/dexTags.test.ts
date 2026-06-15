@@ -55,15 +55,26 @@ describe("isMega", () => {
 });
 
 describe("classesOf", () => {
-  it("returns the dex class and Mega together for a mega of a classed species", () => {
-    expect(classesOf({ dex: 6, name: "Charizard Mega X" })).toEqual([
-      "Starter",
-      "Mega",
-    ]);
+  it("stacks dex class, Mega, and Fully Evolved for a fully-evolved mega", () => {
+    expect(
+      classesOf({ dex: 6, name: "Charizard Mega X", fully_evolved: true }),
+    ).toEqual(["Starter", "Mega", "Fully Evolved"]);
   });
 
   it("returns just Mega for a mega whose base has no dex class", () => {
     expect(classesOf({ dex: 460, name: "Abomasnow Mega" })).toEqual(["Mega"]);
+  });
+
+  it("adds Fully Evolved for a final form", () => {
+    expect(
+      classesOf({ dex: 6, name: "Charizard", fully_evolved: true }),
+    ).toEqual(["Starter", "Fully Evolved"]);
+  });
+
+  it("omits Fully Evolved for a mon that still evolves", () => {
+    expect(
+      classesOf({ dex: 4, name: "Charmander", fully_evolved: false }),
+    ).toEqual(["Starter"]);
   });
 
   it("returns just the dex class for a non-mega", () => {
@@ -85,6 +96,7 @@ describe("CLASS_VALUES", () => {
       "Eevee Line",
       "Pseudo-Legendary",
       "Mega",
+      "Fully Evolved",
     ]);
   });
 });
