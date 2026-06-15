@@ -1,24 +1,50 @@
 import { useMemo, useState } from "react";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
-import { MOVE_FLAGS } from "../../lib/format";
+import { useUrlState } from "../../hooks/useUrlState";
+import {
+  MOVE_FLAGS,
+  isMoveEdited,
+  matchesMoveEditedFilter,
+  type MoveEditedFilter,
+} from "../../lib/format";
 import type { Move } from "../../types";
+import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
 import { ErrorView, EmptyView } from "../StatusView";
 import { MoveEditor } from "../editors/MoveEditor";
 import "./tabs.css";
 import "../editors/editors.css";
 
-/** Ruleset-owned moves: a table with create/edit/delete, a Tags column showing
-    each move's neutral flags, and a filter bar — a name search plus toggleable
-    flag chips (AND-combined) so you can pull up e.g. every kicking move. */
+/** The three Edited-filter segments, mirroring the abilities tab's edited toggle
+    with an explicit base-only option for browsing untouched moves. */
+const EDITED_FILTERS: { key: MoveEditedFilter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "edited", label: "Edited" },
+  { key: "base", label: "Not edited" },
+];
+
+/** The Moves tab at species-dex parity: the FULL merged list (base ⊕ Ruleset)
+    with an edited-LED per row, an Edited filter, the existing flag chips + name
+    search, a base→now diff in the editor, and per-Target backdrop awareness. In
+    backdrop mode the list swaps to the selected fork's moves ⊕ Ruleset. */
 export function MovesTab() {
-  const { data, error, status, isLoading, reload } = useResource<Move[]>(api.moves);
+  const [view] = useUrlState();
+  // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
+  // otherwise read the base ⊕ Ruleset canon. Memoized by backdrop id so
+  // useResource sees a stable fetcher and refetches only when the backdrop flips.
+  const fetcher = useMemo(
+    () => (view.backdrop ? api.targetMoves(view.backdrop) : api.moves),
+    [view.backdrop],
+  );
+  const { data, error, status, isLoading, reload } = useResource<Move[]>(fetcher);
   const [editing, setEditing] = useState<{ move: Move | null } | null>(null);
   const [query, setQuery] = useState("");
   const [activeFlags, setActiveFlags] = useState<string[]>([]);
+  const [editedFilter, setEditedFilter] = useState<MoveEditedFilter>("all");
 
   const moves = useMemo(() => data ?? [], [data]);
+  const editedCount = useMemo(() => moves.filter(isMoveEdited).length, [moves]);
 
   // Flags actually present in the data, in canonical order — the filter chips.
   const presentFlags = useMemo(() => {
@@ -31,9 +57,11 @@ export function MovesTab() {
     return moves.filter((move) => {
       const nameMatch = q === "" || move.name.toLowerCase().includes(q);
       const flagMatch = activeFlags.every((flag) => move.flags.includes(flag));
-      return nameMatch && flagMatch;
+      return (
+        nameMatch && flagMatch && matchesMoveEditedFilter(move, editedFilter)
+      );
     });
-  }, [moves, query, activeFlags]);
+  }, [moves, query, activeFlags, editedFilter]);
 
   function toggleFlag(flag: string) {
     setActiveFlags((flags) =>
@@ -49,11 +77,17 @@ export function MovesTab() {
       <div className="tab-toolbar">
         <span className="tab-toolbar__title">
           {filtered.length === moves.length
-            ? `${moves.length} owned moves`
+            ? `${moves.length} moves`
             : `${filtered.length} of ${moves.length} moves`}
+          <span className="tab-toolbar__edited" style={{ color: "var(--edited)" }}>
+            {" · "}
+            {editedCount} edited
+            <span className="sr-only"> by the Ruleset</span>
+          </span>
         </span>
         <button
           type="button"
+          id="moves-new"
           className="btn btn--primary btn--new"
           onClick={() => setEditing({ move: null })}
         >
@@ -62,7 +96,7 @@ export function MovesTab() {
       </div>
 
       {moves.length === 0 ? (
-        <EmptyView message="The Ruleset owns no moves yet. Create one to get started." />
+        <EmptyView message="No moves yet. Build or regenerate the base snapshot, or create one." />
       ) : (
         <>
           <div className="tab-filterbar">
@@ -74,6 +108,26 @@ export function MovesTab() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
+            <div
+              id="moves-edited-filter"
+              className="tab-segmented"
+              role="group"
+              aria-label="Filter by edited state"
+            >
+              {EDITED_FILTERS.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  id={`moves-edited-filter-${option.key}`}
+                  className="tab-segmented__btn"
+                  data-on={editedFilter === option.key}
+                  aria-pressed={editedFilter === option.key}
+                  onClick={() => setEditedFilter(option.key)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
             {presentFlags.map((flag) => (
               <button
                 key={flag}
@@ -107,8 +161,15 @@ export function MovesTab() {
               </thead>
               <tbody>
                 {filtered.map((move) => (
-                  <tr key={move.chrooked_id}>
-                    <td className="tab-strong">{move.name}</td>
+                  <tr
+                    key={move.chrooked_id}
+                    id={`move-row-${move.chrooked_id}`}
+                    data-edited={isMoveEdited(move)}
+                  >
+                    <td className="tab-strong">
+                      <EditedLed on={isMoveEdited(move)} />
+                      {move.name}
+                    </td>
                     <td>
                       <TypeChip type={move.type} variant="code" />
                     </td>

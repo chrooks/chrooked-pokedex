@@ -18,6 +18,7 @@ import type {
   DexEntry,
   EngineKey,
   Move,
+  MoveWrite,
   SpeciesOverride,
   Target,
   TypeChartEntry,
@@ -125,8 +126,8 @@ export const api = {
     sendJson<{ deleted: string }>("DELETE", `/api/species/${encodeURIComponent(id)}`),
 
   // Moves
-  putMove: (id: string, payload: Move) =>
-    sendJson<Move>("PUT", `/api/moves/${encodeURIComponent(id)}`, payload),
+  putMove: (id: string, payload: MoveWrite) =>
+    sendJson<MoveWrite>("PUT", `/api/moves/${encodeURIComponent(id)}`, payload),
   deleteMove: (id: string, confirm?: boolean) =>
     sendJson<{ deleted: string }>(
       "DELETE",
@@ -186,6 +187,9 @@ export const api = {
       `/api/targets/${encodeURIComponent(id)}/abilities`,
       signal,
     ),
+  /** The target's moves ⊕ Ruleset — the moves backdrop for that fork. */
+  targetMoves: (id: string) => (signal?: AbortSignal) =>
+    getJson<Move[]>(`/api/targets/${encodeURIComponent(id)}/moves`, signal),
   /** Fetch one behavior packet by its DATA-ONLY `packet_url`. */
   packet: (packetUrl: string, signal?: AbortSignal) =>
     getJson<BehaviorPacket>(packetUrl, signal),

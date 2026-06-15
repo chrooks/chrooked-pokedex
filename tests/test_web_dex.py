@@ -213,3 +213,115 @@ def test_created_ability_is_flagged_with_no_base() -> None:
     assert poisonheal["base"] == {}
     assert set(poisonheal["overridden_fields"]) == {"name", "description"}
     assert poisonheal["name"] == "Poison Heal"
+
+
+# --------------------------------------------------------------------------- #
+# Moves merge (slice 2) — `build_moves` brings moves to species parity, exactly
+# like `build_abilities`: full base ⊕ Ruleset, overridden flagged with a base→now
+# diff, base-only unflagged, Ruleset-created surfaced. The synthetic base below
+# makes the sample Ruleset's owned move (`excalibur`) a CREATED move (no base),
+# and adds a second base move (`tackle`) the Ruleset overrides, plus a base-only
+# move (`ember`) the Ruleset never touches.
+
+_MOVE_SNAPSHOT = {
+    "version": "1.11.2",
+    "species": {},
+    "abilities": {},
+    "type_chart": [],
+    "moves": {
+        "ember": {
+            "chrooked_id": "ember",
+            "name": "Ember",
+            "aka": {"pokeemerald": "MOVE_EMBER"},
+            "type": "Fire",
+            "category": "special",
+            "power": 40,
+            "accuracy": 100,
+            "pp": 25,
+            "description": "A weak fire attack.",
+            "effect": "hit",
+            "argument": None,
+            "additional_effects": [{"effect": "burn", "chance": 10}],
+            "flags": [],
+            "priority": 0,
+            "target": "selected",
+        },
+        # The sample Ruleset owns `excalibur` (Steel, power 90). Put a DIFFERENT
+        # base entry under that id so the merge has a real base→now diff.
+        "excalibur": {
+            "chrooked_id": "excalibur",
+            "name": "Excalibur",
+            "aka": {"pokeemerald": "MOVE_EXCALIBUR"},
+            "type": "Normal",
+            "category": "physical",
+            "power": 50,
+            "accuracy": 95,
+            "pp": 15,
+            "description": "A base blade strike.",
+            "effect": "hit",
+            "argument": None,
+            "additional_effects": [],
+            "flags": [],
+            "priority": 0,
+            "target": "selected",
+        },
+    },
+}
+
+
+def test_moves_covers_full_base_not_just_ruleset() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    entries = dexmod.build_moves(_MOVE_SNAPSHOT, ruleset)
+    ids = {e["chrooked_id"] for e in entries}
+    # Both base moves present even though the Ruleset only touches one.
+    assert {"ember", "excalibur"} <= ids
+    # Sorted by display name.
+    names = [e["name"] for e in entries]
+    assert names == sorted(names)
+
+
+def test_base_only_move_is_unflagged_with_empty_base() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    ember = _entry(dexmod.build_moves(_MOVE_SNAPSHOT, ruleset), "ember")
+    assert ember["overridden_fields"] == []
+    assert ember["base"] == {}
+    assert ember["name"] == "Ember"
+    assert ember["type"] == "Fire"
+    # the full MoveEntry contract fields ride through
+    assert ember["additional_effects"] == [{"effect": "burn", "chance": 10}]
+
+
+def test_overridden_move_flags_changed_fields_with_base_diff() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    excalibur = _entry(dexmod.build_moves(_MOVE_SNAPSHOT, ruleset), "excalibur")
+    # The Ruleset def (Steel/90/100) differs from base (Normal/50/95) -> flagged
+    # with base→now per field.
+    assert "type" in excalibur["overridden_fields"]
+    assert "power" in excalibur["overridden_fields"]
+    assert excalibur["type"] == "Steel"
+    assert excalibur["power"] == 90
+    assert excalibur["base"]["type"] == "Normal"
+    assert excalibur["base"]["power"] == 50
+    # name is identical to base -> NOT flagged, no base value
+    assert "name" not in excalibur["overridden_fields"]
+    assert "name" not in excalibur["base"]
+
+
+def test_created_move_is_flagged_with_no_base() -> None:
+    # A Ruleset id with no base match (excalibur absent from base) is a created
+    # move — flagged for the fields it provides, with empty base.
+    ruleset = Ruleset.load(_SAMPLE)
+    base_without_excalibur = {
+        **_MOVE_SNAPSHOT,
+        "moves": {"ember": _MOVE_SNAPSHOT["moves"]["ember"]},
+    }
+    entries = dexmod.build_moves(base_without_excalibur, ruleset)
+    excalibur = _entry(entries, "excalibur")
+    assert excalibur["base"] == {}
+    # required + set fields are provided; defaults (effect=hit, target=selected,
+    # priority=0, no additional effects/flags/argument) are NOT claimed.
+    provided = set(excalibur["overridden_fields"])
+    assert {"name", "type", "category", "power", "accuracy", "pp"} <= provided
+    assert "effect" not in provided  # left at the schema default ('hit')
+    assert "target" not in provided  # left at the schema default ('selected')
+    assert excalibur["name"] == "Excalibur"

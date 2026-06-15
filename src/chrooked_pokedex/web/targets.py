@@ -410,3 +410,17 @@ def target_abilities(
     """
     snapshot = state.snapshot_for(target.path)
     return dexmod.build_abilities(snapshot, ruleset)
+
+
+def target_moves(
+    target: Target, ruleset: Ruleset, state: TargetState
+) -> list[dict[str, Any]]:
+    """Per-Target moves backdrop: ``build_moves(build_snapshot(target), ruleset)``.
+
+    The same shape as ``target_dex`` / ``target_abilities``: the fork's own base
+    moves come from the cached per-Target snapshot (D2, neutralized at build time),
+    then the moves merge overlays the Ruleset — so the backdrop reuses the
+    snapshot population + merge wholesale.
+    """
+    snapshot = state.snapshot_for(target.path)
+    return dexmod.build_moves(snapshot, ruleset)

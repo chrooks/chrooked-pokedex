@@ -287,8 +287,13 @@ def test_delete_move_404_when_absent(client: TestClient) -> None:
 
 def test_editing_move_round_trips_aka(client: TestClient, ruleset_dir: Path) -> None:
     # The engine symbol in aka must survive a GET → edit → PUT cycle; dropping it
-    # would quietly break apply (M3). The editor sends back the aka it received.
-    move = next(m for m in client.get("/api/moves").json() if m["chrooked_id"] == "excalibur")
+    # would quietly break apply (M3). The merged MoveEntry carries display-only
+    # fields (`overridden_fields`, `base`); the editor sends back only the writable
+    # MoveDef fields. Mirror that here so the PUT round-trips like the real client.
+    entry = next(
+        m for m in client.get("/api/moves").json() if m["chrooked_id"] == "excalibur"
+    )
+    move = {k: v for k, v in entry.items() if k not in ("overridden_fields", "base")}
     move["power"] = 120
     response = client.put("/api/moves/excalibur", json=move)
     assert response.status_code == 200, response.text

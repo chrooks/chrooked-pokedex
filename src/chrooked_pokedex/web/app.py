@@ -114,7 +114,10 @@ def create_app(
 
     @app.get("/api/moves")
     def get_moves() -> list[dict[str, Any]]:
-        return colmod.build_moves(_load_ruleset_or_503())
+        # Canon moves reach species parity: the full base snapshot ⊕ Ruleset,
+        # merged like the dex (was the sparse Ruleset-only list before this slice).
+        snapshot = _load_snapshot_or_503()
+        return dexmod.build_moves(snapshot, _load_ruleset_or_503())
 
     @app.get("/api/abilities")
     def get_abilities() -> list[dict[str, Any]]:
@@ -320,6 +323,17 @@ def create_app(
         try:
             target = registry.get(target_id)
             return targetsmod.target_abilities(
+                target, _load_ruleset_or_503(), app.state.targets_state
+            )
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+
+    @app.get("/api/targets/{target_id}/moves")
+    def get_target_moves(target_id: str) -> list[dict[str, Any]]:
+        registry = app.state.targets_registry
+        try:
+            target = registry.get(target_id)
+            return targetsmod.target_moves(
                 target, _load_ruleset_or_503(), app.state.targets_state
             )
         except targetsmod.TargetError as error:

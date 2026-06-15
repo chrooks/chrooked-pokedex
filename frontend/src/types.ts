@@ -68,6 +68,44 @@ export interface AdditionalEffect {
   chance: number;
 }
 
+/** The Move fields the Ruleset can override (the full keyed record, field by
+    field). `overridden_fields` lists the subset the Ruleset actually changed. */
+export type MoveField =
+  | "name"
+  | "type"
+  | "category"
+  | "power"
+  | "accuracy"
+  | "pp"
+  | "description"
+  | "effect"
+  | "argument"
+  | "additional_effects"
+  | "flags"
+  | "priority"
+  | "target";
+
+/** Pre-override base values for whatever the Ruleset changed (base → now diff).
+    Empty (`{}`) for a Ruleset-created move that has no base to diff against. */
+export interface MoveBaseValues {
+  name?: string;
+  type?: string;
+  category?: "physical" | "special" | "status";
+  power?: number | null;
+  accuracy?: number | null;
+  pp?: number | null;
+  description?: string;
+  effect?: string;
+  argument?: Record<string, unknown> | null;
+  additional_effects?: AdditionalEffect[];
+  flags?: string[];
+  priority?: number;
+  target?: string;
+}
+
+/** The merged base ⊕ Ruleset view of one move, mirroring {@link DexEntry} and
+    {@link Ability}. `GET /api/moves` and `GET /api/targets/{id}/moves` return
+    these. */
 export interface Move {
   name: string;
   chrooked_id: string;
@@ -85,7 +123,16 @@ export interface Move {
   flags: string[];
   priority: number;
   target: string;
+  /** The fields the Ruleset changed. `[]` ⇒ base-only (not edited). */
+  overridden_fields: MoveField[];
+  /** Pre-override base values for the changed fields. `{}` for a created entry. */
+  base: MoveBaseValues;
 }
+
+/** The writable shape sent on PUT — the Ruleset owns the move record, but the
+    merge-view flags (`overridden_fields`, `base`) are server-recomputed and the
+    move loader REJECTS them as unknown keys (422), so they must be stripped. */
+export type MoveWrite = Omit<Move, "overridden_fields" | "base">;
 
 /** The Ability fields the Ruleset can override (name, description). */
 export type AbilityField = "name" | "description";

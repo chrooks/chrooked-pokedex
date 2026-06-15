@@ -135,6 +135,7 @@ def _write_ruleset(root: Path) -> None:
     """
     (root / "species").mkdir(parents=True)
     (root / "abilities").mkdir(parents=True)
+    (root / "moves").mkdir(parents=True)
     (root / "behaviors").mkdir(parents=True)
     (root / "meta.yaml").write_text(
         "base_version: 1.11.2\nschema_version: 1\n", encoding="utf-8"
@@ -144,6 +145,19 @@ def _write_ruleset(root: Path) -> None:
         "chrooked_id: aegislash\n"
         "aka: { pokeemerald: SPECIES_AEGISLASH }\n"
         "stats: { hp: 140 }\n",
+        encoding="utf-8",
+    )
+    # An owned move the fork lacks -> surfaced as a created move in the backdrop.
+    (root / "moves" / "excalibur.yaml").write_text(
+        "name: Excalibur\n"
+        "chrooked_id: excalibur\n"
+        "aka: { pokeemerald: MOVE_EXCALIBUR }\n"
+        "type: Steel\n"
+        "category: physical\n"
+        "power: 90\n"
+        "accuracy: 100\n"
+        "pp: 10\n"
+        "description: A holy sword strike.\n",
         encoding="utf-8",
     )
     (root / "abilities" / "striker.yaml").write_text(
@@ -531,6 +545,46 @@ def test_abilities_ac4_target_backdrop_and_snapshot_cache(
     striker = next(a for a in abilities if a["chrooked_id"] == "striker")
     assert striker["base"] == {}
     assert set(striker["overridden_fields"]) == {"name", "description"}
+
+
+# --- moves slice ac4: per-Target moves backdrop; snapshot cached ----------- #
+
+
+def test_moves_ac4_target_backdrop_and_snapshot_cache(
+    client: TestClient, fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target_id = _register(client, fork)
+
+    # spy on build_snapshot to prove it runs once across two moves requests.
+    calls = {"n": 0}
+    real_build = targetsmod.snapmod.build_snapshot
+
+    def counting_build(base_dir):  # noqa: ANN001
+        calls["n"] += 1
+        return real_build(base_dir)
+
+    monkeypatch.setattr(targetsmod.snapmod, "build_snapshot", counting_build)
+
+    first = client.get(f"/api/targets/{target_id}/moves")
+    assert first.status_code == 200, first.text
+    second = client.get(f"/api/targets/{target_id}/moves")
+    assert second.status_code == 200
+
+    assert calls["n"] == 1, "snapshot should be built once and cached"
+
+    moves = first.json()
+    ids = {m["chrooked_id"] for m in moves}
+    # The fork's own move (Tackle) rides along as base-only (unflagged), neutral.
+    assert "tackle" in ids
+    tackle = next(m for m in moves if m["chrooked_id"] == "tackle")
+    assert tackle["overridden_fields"] == []
+    assert tackle["type"] == "Normal"  # neutral, not TYPE_NORMAL
+    assert tackle["category"] == "physical"
+    # The Ruleset owns Excalibur, which the fork lacks -> surfaced as created.
+    assert "excalibur" in ids
+    excalibur = next(m for m in moves if m["chrooked_id"] == "excalibur")
+    assert excalibur["base"] == {}
+    assert "type" in excalibur["overridden_fields"]
 
 
 # --- ac8: DATA-ONLY created ability appears with a working packet link ------ #

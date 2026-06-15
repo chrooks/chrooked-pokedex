@@ -31,7 +31,45 @@ _SNAPSHOT = {
             "learnset": [{"level": 1, "move": "Tackle"}],
         },
     },
-    "moves": {},
+    # Base moves so canon /api/moves is the FULL base ⊕ Ruleset list.
+    # `excalibur` is also owned by the sample Ruleset; the base entry below differs
+    # so the merge flags it (overridden). `ember` is base-only (unflagged).
+    "moves": {
+        "ember": {
+            "chrooked_id": "ember",
+            "name": "Ember",
+            "aka": {"pokeemerald": "MOVE_EMBER"},
+            "type": "Fire",
+            "category": "special",
+            "power": 40,
+            "accuracy": 100,
+            "pp": 25,
+            "description": "A weak fire attack.",
+            "effect": "hit",
+            "argument": None,
+            "additional_effects": [],
+            "flags": [],
+            "priority": 0,
+            "target": "selected",
+        },
+        "excalibur": {
+            "chrooked_id": "excalibur",
+            "name": "Excalibur",
+            "aka": {"pokeemerald": "MOVE_EXCALIBUR"},
+            "type": "Normal",
+            "category": "physical",
+            "power": 50,
+            "accuracy": 95,
+            "pp": 15,
+            "description": "A base blade strike.",
+            "effect": "hit",
+            "argument": None,
+            "additional_effects": [],
+            "flags": [],
+            "priority": 0,
+            "target": "selected",
+        },
+    },
     # Base abilities so canon /api/abilities is the FULL base ⊕ Ruleset list.
     # `poisonheal` is also owned by the sample Ruleset (an overridden ability);
     # `overgrow` is base-only (unflagged).
@@ -99,13 +137,33 @@ def test_single_dex_entry_404_for_unknown_id(client: TestClient) -> None:
     assert response.status_code == 404
 
 
-def test_moves_endpoint_lists_owned_moves(client: TestClient) -> None:
+def test_moves_endpoint_returns_full_base_merged_with_ruleset(
+    client: TestClient,
+) -> None:
+    # ac2: canon moves is the FULL base ⊕ Ruleset list, not the sparse Ruleset-only
+    # list. The base-only move is present and unflagged; the Ruleset-owned one is
+    # flagged (overridden) with a base→now diff.
     response = client.get("/api/moves")
     assert response.status_code == 200
     moves = response.json()
+    ids = {m["chrooked_id"] for m in moves}
+    assert {"ember", "excalibur"} <= ids
+    assert len(moves) >= 2  # exceeds the Ruleset-owned count (1 ruleset move)
+    ember = next(m for m in moves if m["chrooked_id"] == "ember")
+    assert ember["overridden_fields"] == []  # base-only, unflagged
     excalibur = next(m for m in moves if m["chrooked_id"] == "excalibur")
+    # the Ruleset def (Steel) replaces the base (Normal) -> flagged
     assert excalibur["type"] == "Steel"
-    assert excalibur["category"] == "physical"
+    assert "type" in excalibur["overridden_fields"]
+    assert excalibur["base"]["type"] == "Normal"
+
+
+def test_moves_endpoint_503_when_snapshot_missing(tmp_path: Path) -> None:
+    # ac2: moves is now a merge endpoint (like /api/dex), so a missing base
+    # snapshot is a 503 with an actionable message.
+    app = create_app(ruleset_dir=_SAMPLE, snapshot_path=tmp_path / "absent.json")
+    response = TestClient(app, raise_server_exceptions=False).get("/api/moves")
+    assert response.status_code == 503
 
 
 def test_abilities_endpoint_returns_full_base_merged_with_ruleset(
@@ -151,11 +209,11 @@ def test_behaviors_endpoint_lists_specs(client: TestClient) -> None:
 
 def test_collection_endpoints_work_without_snapshot(tmp_path: Path) -> None:
     # The Ruleset-owned collections don't need the base snapshot, so a missing
-    # snapshot must not 503 them (only the base-merging routes — /api/dex* and,
-    # since this slice, /api/abilities — read the snapshot).
+    # snapshot must not 503 them (only the base-merging routes — /api/dex*, and
+    # since these slices /api/abilities and /api/moves — read the snapshot).
     app = create_app(ruleset_dir=_SAMPLE, snapshot_path=tmp_path / "absent.json")
     client = TestClient(app, raise_server_exceptions=False)
-    for path in ("/api/moves", "/api/type-chart", "/api/behaviors"):
+    for path in ("/api/type-chart", "/api/behaviors"):
         assert client.get(path).status_code == 200, path
 
 
@@ -173,11 +231,14 @@ def test_collection_returns_503_when_ruleset_is_corrupt(tmp_path: Path) -> None:
     # A malformed YAML file in the Ruleset folder must surface as an actionable
     # 503, never an unhandled parser error (500).
     bad_ruleset = tmp_path / "ruleset"
-    (bad_ruleset / "moves").mkdir(parents=True)
-    (bad_ruleset / "moves" / "broken.yaml").write_text(
+    (bad_ruleset / "behaviors").mkdir(parents=True)
+    (bad_ruleset / "behaviors" / "broken.yaml").write_text(
         "name: [unterminated", encoding="utf-8"
     )
+    # Use a Ruleset-only route (/api/behaviors) so the assertion isolates the
+    # corrupt-Ruleset path — /api/moves now loads the snapshot first, which would
+    # 503 on the snapshot before ever reaching the Ruleset load.
     app = create_app(ruleset_dir=bad_ruleset, snapshot_path=tmp_path / "absent.json")
-    response = TestClient(app, raise_server_exceptions=False).get("/api/moves")
+    response = TestClient(app, raise_server_exceptions=False).get("/api/behaviors")
     assert response.status_code == 503
     assert "Ruleset" in response.json()["detail"]

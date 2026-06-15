@@ -24,6 +24,7 @@ from ..readers.pokeemerald import (
     ability_parser,
     evolution_parser,
     learnset_parser,
+    move_parser,
     species_parser,
 )
 from ..seed import neutralize as nz
@@ -99,11 +100,56 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
         "version": SNAPSHOT_VERSION,
         "species": species,
         "abilities": _base_abilities_map(base_dir),
-        # Moves and type chart stay empty stubs here; their base population is a
-        # later slice (the readers exist but moves need token-neutralization).
-        "moves": {},
+        "moves": _base_moves_map(base_dir),
+        # The type chart stays an empty stub here; its base population is a later
+        # slice (the matrix shape differs from the keyed move/ability entities).
         "type_chart": [],
     }
+
+
+def _base_moves_map(base_dir: Path) -> dict[str, dict[str, Any]]:
+    """Read every base move into a neutral entry keyed by `chrooked_id`.
+
+    `move_parser.parse_moves` returns engine TOKENS (`TYPE_WATER`, `EFFECT_HIT`,
+    `MOVE_TARGET_BOTH`, camelCase flags). This is the one collection whose reader
+    is *not* already neutral, so we run the exact same neutralization the seed's
+    `_seed_moves` applies (`seed.neutralize`) — type/category/effect/additional
+    effects/flags/target all become plain names, and the description is flattened
+    of textbox control codes — so no raw ALL_CAPS engine token leaks into the
+    snapshot. The shape matches `collections.serialize_move` so the merge produces
+    one consistent MoveEntry. Deterministic: sorted over the parser's symbols.
+    """
+    moves: dict[str, dict[str, Any]] = {}
+    for constant in sorted(parsed := move_parser.parse_moves(base_dir)):
+        info = parsed[constant]
+        chrooked_id = nz.slug(info.name)
+        moves[chrooked_id] = {
+            "chrooked_id": chrooked_id,
+            "name": info.name,
+            "aka": {"pokeemerald": constant},
+            "type": nz.type_name(info.type) if info.type else "",
+            "category": info.category.lower(),
+            "power": info.power,
+            "accuracy": info.accuracy,
+            "pp": info.pp,
+            "description": nz.normalize_description(info.description),
+            "effect": nz.primary_effect_name(info.effect),
+            "argument": (
+                nz.neutralize_argument(info.argument) if info.argument else None
+            ),
+            "additional_effects": [
+                {"effect": nz.move_effect_name(token), "chance": chance}
+                for token, chance in info.additional_effects
+            ],
+            "flags": [
+                name
+                for token in info.flags
+                if (name := nz.move_flag_name(token)) is not None
+            ],
+            "priority": info.priority,
+            "target": nz.move_target_name(info.target),
+        }
+    return moves
 
 
 def _base_abilities_map(base_dir: Path) -> dict[str, dict[str, Any]]:

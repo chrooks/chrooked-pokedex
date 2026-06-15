@@ -10,12 +10,15 @@
 
 import { useState } from "react";
 import { api } from "../../api";
-import type { Move } from "../../types";
+import type { Move, MoveField, MoveWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
+import { isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
+import { EditedLed } from "../EditedLed";
 import { EditorDialog } from "./EditorDialog";
 import { NumberField, SelectField, TextAreaField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import "./editors.css";
+import "../ledger/ledger-rows.css";
 
 type Props = {
   /** null = create a new move; otherwise edit this one. */
@@ -53,6 +56,10 @@ export function MoveEditor({ move, onClose, onSaved }: Props) {
 
   async function handleSave() {
     const id = form.chrooked_id.trim();
+    // The merged view carries server-recomputed flags (overridden_fields, base)
+    // that the move loader rejects as unknown keys (422) — buildMove returns a
+    // MoveWrite so only the Ruleset-owned record is sent. Editing a base-only
+    // move upserts a Ruleset entry (mirrors species "edit base → make override").
     const ok = await run(() => api.putMove(id, buildMove(form, move)));
     if (ok) {
       onSaved();
@@ -71,6 +78,23 @@ export function MoveEditor({ move, onClose, onSaved }: Props) {
 
   const busy = isSaving || del.isSaving;
 
+  // base → now diff rows for an existing move. An overridden field that has a
+  // base value reads `was → now`; a Ruleset-created move (empty base) has the
+  // field flagged with no `was`, so it reads as new.
+  const edited = move !== null && isMoveEdited(move);
+  const currentOf: Partial<Record<MoveField, string>> =
+    move !== null ? displayValues(move) : {};
+  const diffRows = edited
+    ? move.overridden_fields.map((field) => ({
+        field,
+        was:
+          field in move.base
+            ? formatValue(move.base[field as keyof typeof move.base])
+            : undefined,
+        now: currentOf[field] ?? "",
+      }))
+    : [];
+
   return (
     <EditorDialog id="move-editor" titleId={titleId} onClose={onClose}>
       <header className="ledger__head">
@@ -87,8 +111,49 @@ export function MoveEditor({ move, onClose, onSaved }: Props) {
         </div>
         <h2 className="ledger__name" id={titleId}>
           {isNew ? "New move" : move.name}
+          {edited && (
+            <>
+              {" "}
+              <EditedLed on variant="tag" />
+            </>
+          )}
         </h2>
       </header>
+
+      {edited && (
+        <section
+          id="move-diff"
+          className="ability-diff"
+          aria-label="What the Ruleset changed"
+        >
+          {diffRows.map(({ field, was, now }) => (
+            <div key={field} className="lrow lrow--ability" data-changed="true">
+              <span className="lrow__label">{MOVE_FIELD_LABEL[field]}</span>
+              {was !== undefined ? (
+                <span
+                  className="lrow__diff"
+                  aria-label={`was ${was || "none"}, now ${now || "none"}`}
+                >
+                  <span className="lrow__was" aria-hidden="true">
+                    {was || "—"}
+                  </span>
+                  <span className="lrow__arrow" aria-hidden="true">
+                    →
+                  </span>
+                  <span className="lrow__now" aria-hidden="true">
+                    {now || "—"}
+                  </span>
+                </span>
+              ) : (
+                <span className="lrow__value">
+                  {now || <span className="lrow__empty">—</span>}
+                  <span className="ability-diff__new">new</span>
+                </span>
+              )}
+            </div>
+          ))}
+        </section>
+      )}
 
       <form
         className="editor-form"
@@ -228,9 +293,11 @@ function initialForm(move: Move | null): MoveForm {
   };
 }
 
-function buildMove(form: MoveForm, original: Move | null): Move {
+function buildMove(form: MoveForm, original: Move | null): MoveWrite {
   const emptyToNull = (value: number | ""): number | null =>
     value === "" ? null : value;
+  // MoveWrite — the merge-view flags (overridden_fields, base) are deliberately
+  // absent so the move loader accepts the payload (echoing them back is a 422).
   return {
     name: form.name.trim(),
     chrooked_id: form.chrooked_id.trim(),
@@ -249,4 +316,38 @@ function buildMove(form: MoveForm, original: Move | null): Move {
     priority: form.priority === "" ? 0 : form.priority,
     target: form.target.trim() || "selected",
   };
+}
+
+/** The current (now) value of each move field as a display string, for the
+    base→now diff. Behaviour-carrying fields the editor doesn't surface still get
+    a readable rendering so an override on them reads correctly. */
+function displayValues(move: Move): Partial<Record<MoveField, string>> {
+  return {
+    name: move.name,
+    type: move.type,
+    category: move.category,
+    power: formatValue(move.power),
+    accuracy: formatValue(move.accuracy),
+    pp: formatValue(move.pp),
+    description: move.description,
+    effect: move.effect,
+    argument: formatValue(move.argument),
+    additional_effects: formatValue(move.additional_effects),
+    flags: move.flags.join(", "),
+    priority: formatValue(move.priority),
+    target: move.target,
+  };
+}
+
+/** Render any move field value as a short, neutral display string for the diff
+    (numbers verbatim, null/empty as a dash, lists comma-joined, objects JSON). */
+function formatValue(value: unknown): string {
+  if (value === null || value === undefined) return "";
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => (typeof item === "object" ? JSON.stringify(item) : String(item)))
+      .join(", ");
+  }
+  if (typeof value === "object") return JSON.stringify(value);
+  return String(value);
 }

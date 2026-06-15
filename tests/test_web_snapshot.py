@@ -164,6 +164,93 @@ def test_base_abilities_map_reads_neutral_name_and_description(tmp_path: Path) -
     assert entry["aka"] == {"pokeemerald": "ABILITY_OVERGROW"}
 
 
+def test_base_moves_map_neutralizes_engine_tokens(tmp_path: Path) -> None:
+    # ac5: the move reader returns engine TOKENS (TYPE_*, EFFECT_*, MOVE_TARGET_*,
+    # MOVE_EFFECT_*, camelCase flags). _base_moves_map must store them NEUTRAL —
+    # plain names, no raw ALL_CAPS engine token in the diffable fields.
+    data = tmp_path / "src" / "data"
+    data.mkdir(parents=True)
+    (data / "moves_info.h").write_text(
+        "const struct MoveInfo gMovesInfo[MOVES_COUNT] =\n"
+        "{\n"
+        "    [MOVE_THUNDER_PUNCH] =\n"
+        "    {\n"
+        '        .name = COMPOUND_STRING("Thunder Punch"),\n'
+        "        .type = TYPE_ELECTRIC,\n"
+        "        .category = DAMAGE_CATEGORY_PHYSICAL,\n"
+        "        .power = 75,\n"
+        "        .accuracy = 100,\n"
+        "        .pp = 15,\n"
+        '        .description = COMPOUND_STRING("An electrified\\npunch."),\n'
+        "        .effect = EFFECT_HIT,\n"
+        "        .target = MOVE_TARGET_SELECTED,\n"
+        "        .priority = 0,\n"
+        "        .makesContact = TRUE,\n"
+        "        .punchingMove = TRUE,\n"
+        "        .additionalEffects = ADDITIONAL_EFFECTS({\n"
+        "            .moveEffect = MOVE_EFFECT_PARALYSIS,\n"
+        "            .chance = 10,\n"
+        "        }),\n"
+        "    },\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    moves = snap._base_moves_map(tmp_path)
+    assert "thunderpunch" in moves
+    entry = moves["thunderpunch"]
+    assert entry["chrooked_id"] == "thunderpunch"
+    assert entry["name"] == "Thunder Punch"
+    assert entry["aka"] == {"pokeemerald": "MOVE_THUNDER_PUNCH"}
+    # Neutral values — no engine tokens.
+    assert entry["type"] == "Electric"
+    assert entry["category"] == "physical"
+    assert entry["effect"] == "hit"
+    assert entry["target"] == "selected"
+    assert sorted(entry["flags"]) == ["contact", "punching"]
+    assert entry["additional_effects"] == [{"effect": "paralysis", "chance": 10}]
+    # Control code \n flattened to a single space (charmap safety).
+    assert entry["description"] == "An electrified punch."
+    # Hard guard: no raw ALL_CAPS engine token leaks into the diffable fields.
+    import re as _re
+
+    diffable = {k: v for k, v in entry.items() if k != "aka"}
+    assert not _re.search(
+        r"TYPE_|EFFECT_|MOVE_TARGET_|MOVE_EFFECT_|DAMAGE_CATEGORY_|FLAG_|\bTRUE\b",
+        str(diffable),
+    ), diffable
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_build_snapshot_populates_base_moves() -> None:
+    # ac1: build_snapshot fills the moves map from the fork, keyed by chrooked_id,
+    # with a known move's neutral fields.
+    moves = snap.build_snapshot(_BASE)["moves"]
+    assert moves  # non-empty
+    assert "tackle" in moves
+    tackle = moves["tackle"]
+    assert tackle["name"] == "Tackle"
+    assert tackle["type"] == "Normal"
+    assert tackle["category"] == "physical"
+    assert tackle["aka"] == {"pokeemerald": "MOVE_TACKLE"}
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_build_snapshot_base_moves_are_neutral_no_token_leak() -> None:
+    # ac5: across the WHOLE base move set, the contract's diffable fields carry no
+    # raw engine tokens (aka legitimately keeps the MOVE_* symbol, so it's excluded).
+    import re as _re
+
+    moves = snap.build_snapshot(_BASE)["moves"]
+    token = _re.compile(
+        r"TYPE_[A-Z]|EFFECT_[A-Z]|MOVE_TARGET_|DAMAGE_CATEGORY_|FLAG_[A-Z]"
+    )
+    for cid, entry in moves.items():
+        for field in ("type", "category", "effect", "target", "flags"):
+            assert not token.search(str(entry[field])), (cid, field, entry[field])
+
+
 @pytest.mark.integration
 @pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
 def test_build_snapshot_from_real_base() -> None:

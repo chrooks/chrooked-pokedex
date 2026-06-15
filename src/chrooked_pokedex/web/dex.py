@@ -17,7 +17,7 @@ from __future__ import annotations
 from typing import Any
 
 from ..model import Ruleset
-from ..model.schema import AbilitiesOverride, AbilityDef, SpeciesOverride
+from ..model.schema import AbilitiesOverride, AbilityDef, MoveDef, SpeciesOverride
 
 # Top-level species fields the dex flags as overridden, in display order.
 _FLAGGABLE_FIELDS = ("types", "abilities", "stats", "learnset", "evolution")
@@ -25,6 +25,25 @@ _FLAGGABLE_FIELDS = ("types", "abilities", "stats", "learnset", "evolution")
 # Ability fields the merge diffs, in display order. `aka` rides along but is not
 # a user-facing diff row, so it is not flagged.
 _ABILITY_DIFF_FIELDS = ("name", "description")
+
+# Move fields the merge diffs, in display order. These are exactly the Ruleset-
+# owned MoveDef fields (the writable set); `aka` rides along like abilities and
+# is not a user-facing diff row, so it is not flagged.
+_MOVE_DIFF_FIELDS = (
+    "name",
+    "type",
+    "category",
+    "power",
+    "accuracy",
+    "pp",
+    "description",
+    "effect",
+    "argument",
+    "additional_effects",
+    "flags",
+    "priority",
+    "target",
+)
 
 
 def build_dex(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
@@ -216,4 +235,143 @@ def _merge_ability(
         "aka": dict(override.aka),
         "overridden_fields": overridden,
         "base": base_values,
+    }
+
+
+def build_moves(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
+    """Merge the Ruleset's MoveDefs onto the full base moves, sorted by name.
+
+    The moves tab reaches species parity here, exactly like `build_abilities`:
+    every base move shows through (unflagged unless the Ruleset touches it), each
+    Ruleset MoveDef replaces the matching base entry and flags the changed fields
+    with a base→now diff, and a Ruleset id with no base match surfaces as a
+    created move. The base values were neutralized in `build_snapshot`, so the
+    merged entry is neutral end to end.
+    """
+    base_moves: dict[str, dict[str, Any]] = snapshot.get("moves", {})
+    entries = [
+        _merge_move(base, ruleset.moves.get(chrooked_id))
+        for chrooked_id, base in base_moves.items()
+    ]
+    # Ruleset ids with no base match are created moves (new content).
+    created_ids = set(ruleset.moves) - set(base_moves)
+    entries.extend(
+        _merge_move(None, ruleset.moves[chrooked_id]) for chrooked_id in created_ids
+    )
+    return sorted(entries, key=lambda e: e["name"])
+
+
+def _move_override_values(override: MoveDef) -> dict[str, Any]:
+    """The Ruleset MoveDef as the same JSON shapes the base snapshot stores.
+
+    `argument` is a dict-or-None, `additional_effects` is a list of
+    `{effect, chance}`, `flags` is a list — so a field-by-field comparison against
+    the base entry is apples-to-apples (no dataclass-vs-dict false diffs).
+    """
+    return {
+        "name": override.name,
+        "type": override.type,
+        "category": override.category,
+        "power": override.power,
+        "accuracy": override.accuracy,
+        "pp": override.pp,
+        "description": override.description,
+        "effect": override.effect,
+        "argument": dict(override.argument) if override.argument is not None else None,
+        "additional_effects": [
+            {"effect": ae.effect, "chance": ae.chance}
+            for ae in override.additional_effects
+        ],
+        "flags": list(override.flags),
+        "priority": override.priority,
+        "target": override.target,
+    }
+
+
+def _move_entry_fields(values: dict[str, Any], chrooked_id: str, aka: dict) -> dict[str, Any]:
+    """Assemble the contract MoveEntry body (sans merge fields) from field values."""
+    return {
+        "chrooked_id": chrooked_id,
+        "aka": aka,
+        **{field: values.get(field) for field in _MOVE_DIFF_FIELDS},
+    }
+
+
+def _merge_move(
+    base: dict[str, Any] | None, override: MoveDef | None
+) -> dict[str, Any]:
+    """One merged MoveEntry: base ⊕ Ruleset def, with overridden_fields + base diff.
+
+    Mirrors `_merge_ability`, three cases:
+    - base-only (override is None): pass the base through unflagged.
+    - created (base is None): the Ruleset def provides every field; nothing to
+      diff against, so `base` stays empty and `overridden_fields` lists the fields
+      the def actually sets (differing from the schema default).
+    - overridden: the Ruleset def replaces the base entry; flag every field whose
+      value differs, carrying the pre-override base value for the diff.
+    """
+    if override is None:
+        # base is guaranteed present here (called over snapshot keys).
+        assert base is not None
+        return {
+            **_move_entry_fields(base, base["chrooked_id"], dict(base.get("aka", {}))),
+            "overridden_fields": [],
+            "base": {},
+        }
+
+    override_values = _move_override_values(override)
+    aka = dict(override.aka)
+
+    if base is None:
+        # Created: no base to diff against. Flag the fields the def sets to a
+        # non-default value, so an inert created move (numbers only) isn't claimed
+        # to override behavior fields it left at the schema default.
+        defaults = _move_schema_defaults()
+        provided = [
+            field
+            for field in _MOVE_DIFF_FIELDS
+            if override_values[field] != defaults[field]
+        ]
+        return {
+            **_move_entry_fields(override_values, override.chrooked_id, aka),
+            "overridden_fields": provided,
+            "base": {},
+        }
+
+    overridden: list[str] = []
+    base_values: dict[str, Any] = {}
+    for field in _MOVE_DIFF_FIELDS:
+        base_value = base.get(field)
+        if override_values[field] != base_value:
+            overridden.append(field)
+            base_values[field] = base_value
+
+    return {
+        **_move_entry_fields(override_values, override.chrooked_id, aka),
+        "overridden_fields": overridden,
+        "base": base_values,
+    }
+
+
+def _move_schema_defaults() -> dict[str, Any]:
+    """The MoveDef field defaults, in the base snapshot's JSON shapes.
+
+    A created move with no base carries these as its "unset" baseline; only
+    fields the Ruleset set away from a default count as provided/overridden. Name,
+    type, and category are required (no default), so they always count when set.
+    """
+    return {
+        "name": None,
+        "type": None,
+        "category": None,
+        "power": None,
+        "accuracy": None,
+        "pp": None,
+        "description": "",
+        "effect": "hit",
+        "argument": None,
+        "additional_effects": [],
+        "flags": [],
+        "priority": 0,
+        "target": "selected",
     }

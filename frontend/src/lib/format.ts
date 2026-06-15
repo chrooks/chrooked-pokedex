@@ -1,7 +1,7 @@
 /* Display helpers: stat labels/order, type slugs, dex-number formatting, and
    the base→now diff for overridden stats. Pure functions, no React. */
 
-import type { Ability, DexEntry } from "../types";
+import type { Ability, DexEntry, Move } from "../types";
 
 /** The six base stats in canonical display order, with short uppercase labels. */
 export const STAT_ORDER = ["hp", "atk", "def", "spa", "spd", "spe"] as const;
@@ -104,6 +104,44 @@ export function matchesAbilityEditedFilter(
 ): boolean {
   if (filter === "edited") return isAbilityEdited(ability);
   if (filter === "base") return !isAbilityEdited(ability);
+  return true;
+}
+
+/** True when the Ruleset has touched this move (overridden a base field or
+    created it outright). Same rule as {@link isEdited}/{@link isAbilityEdited} —
+    a single edited ⇔ overridden_fields-nonempty contract across all surfaces. */
+export function isMoveEdited(move: Move): boolean {
+  return move.overridden_fields.length > 0;
+}
+
+/** Short labels for the move diff annotations, keyed by {@link MoveField}. */
+export const MOVE_FIELD_LABEL: Record<string, string> = {
+  name: "Name",
+  type: "Type",
+  category: "Category",
+  power: "Power",
+  accuracy: "Accuracy",
+  pp: "PP",
+  description: "Description",
+  effect: "Effect",
+  argument: "Argument",
+  additional_effects: "Added effects",
+  flags: "Flags",
+  priority: "Priority",
+  target: "Target",
+};
+
+/** The Moves tab's three-way edited filter, mirroring the abilities tab's. */
+export type MoveEditedFilter = "all" | "edited" | "base";
+
+/** Whether a move passes the current edited filter. Pure so the tab can
+    `list.filter(...)` and the predicate is unit-tested independently. */
+export function matchesMoveEditedFilter(
+  move: Move,
+  filter: MoveEditedFilter,
+): boolean {
+  if (filter === "edited") return isMoveEdited(move);
+  if (filter === "base") return !isMoveEdited(move);
   return true;
 }
 
