@@ -115,6 +115,19 @@
   color: var(--text-faint);
 }
 
+/* Enter-to-promote hint: appears while typing; pressing Enter turns the search
+   term into a composable Name filter pill. */
+.device__search-enter {
+  flex: none;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
 /* Edited-only filter */
 .device__filter {
   display: flex;

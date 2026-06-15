@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { DexEntry } from "../types";
 import {
+  appendNameFilter,
   applyFilter,
   buildFilterDefs,
   evalEntries,
@@ -110,6 +111,49 @@ describe("applyFilter — Class by national dex (ac4)", () => {
   it("rejects an unclassed species", () => {
     const pidgey = makeEntry({ dex: 16 });
     expect(applyFilter(cls, pidgey, "Legendary")).toBe(false);
+  });
+});
+
+describe("appendNameFilter — promote search to a Name pill", () => {
+  it("appends a Name pill carrying the trimmed query", () => {
+    const next = appendNameFilter([], "  char  ", "id1");
+    expect(next).toHaveLength(1);
+    expect(next[0]).toMatchObject({
+      kind: "filter",
+      field: "name",
+      value: "char",
+      negated: false,
+    });
+  });
+  it("no-ops (same reference) on a blank query", () => {
+    const tree = [filter("atk", "≥|100")];
+    expect(appendNameFilter(tree, "   ", "id1")).toBe(tree);
+  });
+  it("no-ops on a duplicate Name pill, case-insensitively", () => {
+    const tree = [filter("name", "Char")];
+    expect(appendNameFilter(tree, "char", "id1")).toBe(tree);
+  });
+  it("no-ops at the 10-pill cap", () => {
+    const full = Array.from({ length: 10 }, (_, i) => filter("name", `n${i}`));
+    expect(appendNameFilter(full, "more", "id1")).toBe(full);
+  });
+});
+
+describe("applyFilter — Edited by the Ruleset", () => {
+  const ed = defFor("edited");
+  it("is a select field with Edited / Not edited", () => {
+    expect(ed.method).toBe("select");
+    expect(ed.values).toEqual(["Edited", "Not edited"]);
+  });
+  it("matches an entry that the Ruleset changed", () => {
+    const edited = makeEntry({ overridden_fields: ["stats"] });
+    expect(applyFilter(ed, edited, "Edited")).toBe(true);
+    expect(applyFilter(ed, edited, "Not edited")).toBe(false);
+  });
+  it("matches an untouched entry as Not edited", () => {
+    const untouched = makeEntry({ overridden_fields: [] });
+    expect(applyFilter(ed, untouched, "Not edited")).toBe(true);
+    expect(applyFilter(ed, untouched, "Edited")).toBe(false);
   });
 });
 

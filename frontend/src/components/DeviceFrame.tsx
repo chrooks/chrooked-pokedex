@@ -20,6 +20,8 @@ type Props = {
   onQuery: (query: string) => void;
   editedOnly: boolean;
   onEditedOnly: (on: boolean) => void;
+  /** Promote the current search term to a Name filter pill (Enter in search). */
+  onSearchEnter: () => void;
   layout: DexLayout;
   onLayout: (layout: DexLayout) => void;
   readout: ReactNode;
@@ -39,6 +41,7 @@ export function DeviceFrame({
   onQuery,
   editedOnly,
   onEditedOnly,
+  onSearchEnter,
   layout,
   onLayout,
   readout,
@@ -73,9 +76,24 @@ export function DeviceFrame({
               placeholder="Search dex"
               value={query}
               onChange={(event) => onQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  onSearchEnter();
+                }
+              }}
               disabled={!isDex}
-              aria-label="Search the dex by name"
+              aria-label="Search the dex by name. Press Enter to add it as a Name filter."
             />
+            {isDex && query.trim() !== "" && (
+              <kbd
+                className="device__search-enter mono"
+                title="Press Enter to add as a Name filter"
+                aria-hidden="true"
+              >
+                ↵
+              </kbd>
+            )}
           </div>
 
           <button

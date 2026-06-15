@@ -3,7 +3,7 @@ import { api } from "./api";
 import { useResource } from "./hooks/useResource";
 import { useUrlState } from "./hooks/useUrlState";
 import { isEdited } from "./lib/format";
-import { evalEntries } from "./lib/dexFilters";
+import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import type { DexEntry } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
@@ -108,6 +108,16 @@ export default function App() {
     [update],
   );
 
+  // Enter in the rail search promotes the term to a composable Name filter pill,
+  // then clears the box. No-op (search kept) when blank, at the pill cap, or a
+  // duplicate — appendNameFilter returns the same array reference in those cases.
+  const handleSearchEnter = useCallback(() => {
+    const next = appendNameFilter(view.filter, view.query, crypto.randomUUID());
+    if (next !== view.filter) {
+      update({ filter: next, query: "" });
+    }
+  }, [view.filter, view.query, update]);
+
   useGlobalKeys({
     onSearch: () => searchRef.current?.focus(),
     onToggleEdited: () => isDex && update({ editedOnly: !view.editedOnly }),
@@ -124,6 +134,7 @@ export default function App() {
       onQuery={(query) => update({ query })}
       editedOnly={view.editedOnly}
       onEditedOnly={(editedOnly) => update({ editedOnly })}
+      onSearchEnter={handleSearchEnter}
       layout={view.layout}
       onLayout={(layout) => update({ layout })}
       searchRef={searchRef}

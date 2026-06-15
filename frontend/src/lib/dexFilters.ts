@@ -4,7 +4,7 @@
    grouping. OR binds looser than AND. Pure, no React. */
 
 import type { DexEntry } from "../types";
-import { STAT_ORDER, TYPES, bst } from "./format";
+import { STAT_ORDER, TYPES, bst, isEdited } from "./format";
 import { COLUMNS } from "./dexColumns";
 import { CLASS_VALUES, classesOf } from "./dexTags";
 import type { ClassValue } from "./dexTags";
@@ -41,6 +41,36 @@ export interface FilterDef {
 export const NUMERIC_OPERATORS = ["≥", "≤", "=", ">", "<"] as const;
 export type NumericOperator = (typeof NUMERIC_OPERATORS)[number];
 
+/** The builder caps at 10 filter pills (matches the codec). */
+const MAX_FILTERS = 10;
+
+/** Promote a search term to a Name filter pill: append a `Name: <query>` pill to
+    the filter tree. Returns the SAME array reference (no change) when the query is
+    blank, the pill cap is reached, or an identical Name pill already exists — the
+    caller uses that to decide whether to clear the search box. Pure; `id` is
+    passed in so the function stays deterministic and testable. */
+export function appendNameFilter(
+  filter: FilterEntry[],
+  query: string,
+  id: string,
+): FilterEntry[] {
+  const trimmed = query.trim();
+  if (trimmed === "") return filter;
+  const filterCount = filter.filter((e) => e.kind === "filter").length;
+  if (filterCount >= MAX_FILTERS) return filter;
+  const duplicate = filter.some(
+    (e) =>
+      e.kind === "filter" &&
+      e.field === "name" &&
+      e.value.toLowerCase() === trimmed.toLowerCase(),
+  );
+  if (duplicate) return filter;
+  return [
+    ...filter,
+    { kind: "filter", id, field: "name", value: trimmed, connector: "AND", negated: false },
+  ];
+}
+
 /** The filterable fields, derived once. Numeric fields are derived straight from
     the column registry (every number column is filterable) so they can't drift
     from COLUMNS; Type and Class are derived (virtual) select fields. The
@@ -58,6 +88,12 @@ export function buildFilterDefs(_entries: DexEntry[]): FilterDef[] {
     ...numericDefs,
     { field: "type", label: "Type", method: "select", values: [...TYPES] },
     { field: "class", label: "Class", method: "select", values: [...CLASS_VALUES] },
+    {
+      field: "edited",
+      label: "Edited",
+      method: "select",
+      values: ["Edited", "Not edited"],
+    },
     { field: "name", label: "Name", method: "text" },
     { field: "abilities", label: "Abilities", method: "text" },
   ];
@@ -136,6 +172,9 @@ export function applyFilter(
     }
     if (def.field === "class") {
       return classesOf(entry).includes(value as ClassValue);
+    }
+    if (def.field === "edited") {
+      return value === "Edited" ? isEdited(entry) : !isEdited(entry);
     }
     return false;
   }
