@@ -28,9 +28,11 @@ from ..seed import neutralize as nz
 
 _NATIONAL_DEX_TOKEN = re.compile(r"NATIONAL_DEX_[A-Z0-9_]+")
 _ENUM_MEMBER = re.compile(r"(NATIONAL_DEX_[A-Z0-9_]+)\s*(?:=\s*(\d+))?")
-# Anchor on the `enum {` opener (keyword + brace) so a stray lowercase "enum"
-# fragment — a comment word, an identifier — can't redirect the slice.
-_ENUM_OPEN = re.compile(r"\benum\s*\{")
+# Anchor on the enum opener (keyword + brace) so a stray lowercase "enum"
+# fragment — a comment word, an identifier — can't redirect the slice. The enum
+# may be anonymous (`enum {`, base 1.11.2) or tagged (`enum NationalDexOrder {`,
+# as some forks write it), so allow one optional tag name before the brace.
+_ENUM_OPEN = re.compile(r"\benum\b\s*(?:[A-Za-z_]\w*\s*)?\{")
 
 # A `#define NAME body` line; body keeps everything up to a trailing `// comment`.
 _DEFINE = re.compile(r"#define\s+([A-Z_][A-Z0-9_]*)\s+(.+)")

@@ -75,6 +75,27 @@ def test_national_dex_map_is_positional_and_ignores_trailing_defines(tmp_path: P
     assert numbers["NATIONAL_DEX_IVYSAUR"] == 2
 
 
+def test_national_dex_map_handles_a_tagged_enum(tmp_path: Path) -> None:
+    # Some forks write a named enum (`enum NationalDexOrder {`) rather than the
+    # anonymous `enum {` base 1.11.2 uses. Both must parse, or every species'
+    # dex number resolves to None (the "---" backdrop bug).
+    header = tmp_path / "include" / "constants" / "pokedex.h"
+    header.parent.mkdir(parents=True)
+    header.write_text(
+        "enum NationalDexOrder\n"
+        "{\n"
+        "    NATIONAL_DEX_NONE,\n"
+        "    NATIONAL_DEX_BULBASAUR,\n"
+        "    NATIONAL_DEX_IVYSAUR,\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    numbers = snap._national_dex_map(tmp_path)
+    assert numbers["NATIONAL_DEX_NONE"] == 0
+    assert numbers["NATIONAL_DEX_BULBASAUR"] == 1
+    assert numbers["NATIONAL_DEX_IVYSAUR"] == 2
+
+
 def test_resolve_dex_handles_symbol_and_bare_integer() -> None:
     numbers = {"NATIONAL_DEX_GOODRA": 706}
     assert snap._resolve_dex("NATIONAL_DEX_GOODRA", numbers) == 706
