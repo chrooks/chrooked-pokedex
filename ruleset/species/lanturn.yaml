@@ -3,4 +3,5 @@ chrooked_id: lanturn
 aka: { pokeemerald: SPECIES_LANTURN }
 abilities:
   secondary: Water Absorb
-stats: { spa: 90, spd: 86 }
+  hidden: Static
+stats: { atk: 60, def: 60, spa: 95, spd: 90, spe: 70 }

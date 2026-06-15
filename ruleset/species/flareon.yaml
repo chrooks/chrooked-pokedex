@@ -1,6 +1,9 @@
 name: Flareon
 chrooked_id: flareon
 aka: { pokeemerald: SPECIES_FLAREON }
+abilities:
+  secondary: Kindle
+  hidden: Immolate
 learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Tackle }

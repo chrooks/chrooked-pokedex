@@ -1,0 +1,7 @@
+name: Espeon
+chrooked_id: espeon
+aka: { dex: 196 }
+abilities:
+  primary: High Noon
+  secondary: Magic Bounce
+  hidden: Psyonize

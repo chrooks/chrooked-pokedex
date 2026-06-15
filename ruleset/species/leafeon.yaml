@@ -2,5 +2,7 @@ name: Leafeon
 chrooked_id: leafeon
 aka: { pokeemerald: SPECIES_LEAFEON }
 abilities:
-  primary: Chlorophyll
+  primary: Bloom
+  secondary: Chloroplast
+  hidden: Foliate
 evolution: { from: Eevee, method: { item: Leaf Stone } }

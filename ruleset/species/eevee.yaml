@@ -1,3 +1,6 @@
 name: Eevee
 chrooked_id: eevee
 aka: { pokeemerald: SPECIES_EEVEE }
+abilities:
+  secondary: Adaptability
+  hidden: Normalize

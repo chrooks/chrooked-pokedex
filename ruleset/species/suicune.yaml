@@ -2,4 +2,5 @@ name: Suicune
 chrooked_id: suicune
 aka: { pokeemerald: SPECIES_SUICUNE }
 abilities:
+  secondary: Deluge
   hidden: Inner Focus

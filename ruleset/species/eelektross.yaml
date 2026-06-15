@@ -6,7 +6,7 @@ stats: { def: 90, spa: 110, spd: 90 }
 learnset:
   - { level: 1, move: Lightning Slam }
   - { level: 1, move: Headbutt }
-  - { level: 1, move: Thrash }
+  - { level: 1, move: Aqua Tail }
   - { level: 1, move: Acid }
   - { level: 1, move: Zap Cannon }
   - { level: 1, move: Crunch }

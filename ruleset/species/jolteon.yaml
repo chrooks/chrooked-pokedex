@@ -1,4 +1,7 @@
 name: Jolteon
 chrooked_id: jolteon
 aka: { pokeemerald: SPECIES_JOLTEON }
+abilities:
+  secondary: Transistor
+  hidden: Galvanize
 evolution: { from: Eevee, method: { item: Thunder Stone } }

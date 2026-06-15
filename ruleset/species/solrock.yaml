@@ -3,8 +3,8 @@ chrooked_id: solrock
 aka: { pokeemerald: SPECIES_SOLROCK }
 types: [Rock, Fire]
 abilities:
-  secondary: Chloroplast
-stats: { hp: 90, atk: 120, def: 115 }
+  secondary: High Noon
+stats: { atk: 120, def: 115 }
 learnset:
   - { level: 1, move: Cinder Smash }
   - { level: 1, move: Flare Blitz }
