@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Obfuscate
+chrooked_id: obfuscate
+applies_to: ability
+aka: { pokeemerald: ABILITY_OBFUSCATE }
+effects:
+  - summary: "Normal-type moves become Dark-type and gain +20% power."
+    trigger: damage-calc
+    when: "the move's type is Normal (and not Dynamaxed/Z-Move; excludes Weather Ball, Natural Gift, Change-Type-on-Item, Revelation Dance, Terrain Pulse, Struggle)"
+    effect: "convert the move's type from Normal to Dark, then multiply its power by 1.2"
+test_cases:
+  - given: "Obfuscate user uses Tackle (Normal) at a Psychic-type foe"
+    expect: "Tackle deals damage as a Dark-type move (super effective vs Psychic) with 1.2x power"
+  - given: "Obfuscate user uses Tackle vs a Fighting-type foe"
+    expect: "the move resolves as Dark-type (not very effective vs Fighting), confirming the type changed from Normal"
+  - given: "Obfuscate user uses Crunch (already Dark) or Ember (Fire)"
+    expect: "no conversion and no +20% boost — only Normal-type moves are affected"
+notes:
+  - "The +20% is flat 1.2x in this fork — matches the sibling -ate ability Foliate, not the gen-dependent 1.3/1.2 of stock -ate abilities."
+  - "The boost only applies because the conversion fired (ateBoost flag); a move already Dark-type gets neither change nor boost."
+  - "Dark is super effective vs Psychic and Ghost; not very effective vs Fighting, Dark, and Fairy — so this turns a STAB-less Normal attacker into a Dark attacker."
+engine_hints:
+  pokeemerald: "Mirror ABILITY_FOLIATE exactly, swapping TYPE_GRASS for TYPE_DARK: add case ABILITY_OBFUSCATE in TrySetAteType (src/battle_main.c) setting the move type to TYPE_DARK; add case ABILITY_OBFUSCATE in the battle_util.c type-modifier switch with UQ_4_12(1.2) gated on moveType==TYPE_DARK && ateBoost. Conversion is gated by GetDynamicMoveType as with the other -ate abilities."
+  essentials: "Battle::Move type/damage calc — when the user's ability is Obfuscate and the move is Normal, set the type to :DARK and apply a 1.2x base-power multiplier"

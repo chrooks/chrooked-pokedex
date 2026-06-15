@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+# High Noon is the solar counterpart to Full Moon (Dark+Fairy / Moonlight).
+name: High Noon
+chrooked_id: highnoon
+applies_to: ability
+aka: { pokeemerald: ABILITY_HIGH_NOON }
+effects:
+  - summary: "This Pokemon's Fire- and Psychic-type moves get the Same-Type Attack Bonus, regardless of its own types."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker, the move's type is Fire or Psychic, and the move is a real damaging move (not Struggle, not an empty slot)"
+    effect: "apply a 1.5x STAB multiplier even when the move's type does not match any of this Pokemon's types"
+  - summary: "When this Pokemon uses Morning Sun, it recovers 75% of its max HP."
+    trigger: on-hit
+    when: "this Pokemon uses the move Morning Sun"
+    effect: "set Morning Sun's recovery for this Pokemon to 3/4 (75%) of max HP, overriding the usual weather/time-of-day scaling"
+test_cases:
+  - given: "a pure Normal-type with High Noon uses Flamethrower (Fire)"
+    expect: "damage is multiplied by 1.5 (STAB granted despite Fire not matching Normal)"
+  - given: "a High Noon user uses Dark Pulse (Dark)"
+    expect: "no STAB from High Noon; only Fire and Psychic moves qualify (normal type-match STAB still applies if Dark matches its types)"
+  - given: "a High Noon user at half HP uses Morning Sun"
+    expect: "it heals 75% of its max HP, ignoring weather and time of day"
+notes:
+  - "STAB is a flat 1.5x (not the 2.0x Adaptability bonus). Excludes MOVE_STRUGGLE and MOVE_NONE."
+  - "The Morning Sun heal is a modification to the recovery move, not a passive turn-end heal. 'on-hit' is the closest neutral trigger; read it as 'when this Pokemon resolves the Morning Sun move'."
+  - "The 75% heal replaces ALL of Morning Sun's normal branches (sun = 2/3, no weather = 1/2, bad weather = 1/4, and the Gen-2 time-of-day path). High Noon's flat 3/4 takes precedence whenever the user has the ability."
+  - "If the user is already at full HP, Morning Sun still fails as usual (the recover routine only runs when hp != maxHP)."
+  - "Mirror of Full Moon: same flat-STAB and 75%-recover mechanics, with Fire+Psychic and Morning Sun in place of Dark+Fairy and Moonlight."
+engine_hints:
+  pokeemerald: "STAB: GetSameTypeAttackBonusModifier in src/battle_util.c (alongside the ABILITY_FULL_MOON case) returns UQ_4_12(1.5) when abilityAtk == ABILITY_HIGH_NOON and moveType is TYPE_FIRE or TYPE_PSYCHIC (non-Struggle). Heal: Cmd_recoverbasedonsunlight in src/battle_script_commands.c — the same routine Full Moon patches — sets recoverAmount = 3 * maxHP / 4 when the move is Morning Sun (its EFFECT_* case) and ability == ABILITY_HIGH_NOON, before the weather/time branches."
+  essentials: "STAB: override the STAB step to return 1.5 for Fire/Psychic moves when ability is High Noon. Heal: in the Morning Sun recover handler (shared with Moonlight/Synthesis), set heal to (user.totalhp * 3 / 4) when the user's ability is High Noon, bypassing the weather-based amounts."

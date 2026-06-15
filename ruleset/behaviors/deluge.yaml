@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+# Deluge is the Water sibling of Bloom (Grass) and Kindle (Fire).
+name: Deluge
+chrooked_id: deluge
+applies_to: ability
+aka: { pokeemerald: ABILITY_DELUGE }
+effects:
+  - summary: "This Pokemon's Water-type moves deal 50% more damage."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker and the move's type is Water"
+    effect: "multiply the move's damage by 1.5"
+test_cases:
+  - given: "a Deluge user uses Surf (Water) at a neutral target"
+    expect: "damage is 1.5x what the same Pokemon would deal without Deluge"
+  - given: "a Deluge user uses Flamethrower (Fire)"
+    expect: "no boost; damage is unmodified"
+  - given: "a Deluge user uses Water Gun (Water) at full HP"
+    expect: "1.5x boost still applies — there is no HP threshold"
+notes:
+  - "Unconditional: unlike Torrent, the boost does not require low HP. It always applies to Water moves."
+  - "Applies to the attacker's own ability; it is an attack-power modifier, not a defensive one."
+engine_hints:
+  pokeemerald: "type-modifier switch in src/battle_util.c; case ABILITY_DELUGE multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_WATER. Sits alongside Kindle/Bloom/Cryomancer."
+  essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Deluge and move.type == :WATER (mirror the Torrent hook but without the HP check)."
