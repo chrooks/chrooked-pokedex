@@ -137,6 +137,33 @@ def test_eval_expr_resolves_symbols_ternaries_and_offsets() -> None:
     assert snap._eval_expr("UNKNOWN_MACRO", symbols) is None
 
 
+def test_base_abilities_map_reads_neutral_name_and_description(tmp_path: Path) -> None:
+    # A minimal struct-format pokeemerald fork: the ability reader returns
+    # (name, description) already neutral of engine tokens; build keys it by the
+    # slug of the name and flattens textbox control codes out of the description.
+    data = tmp_path / "src" / "data"
+    data.mkdir(parents=True)
+    (data / "abilities.h").write_text(
+        "const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =\n"
+        "{\n"
+        "    [ABILITY_OVERGROW] =\n"
+        "    {\n"
+        '        .name = _("Overgrow"),\n'
+        '        .description = COMPOUND_STRING("Ups Grass moves\\nin a pinch."),\n'
+        "    },\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    abilities = snap._base_abilities_map(tmp_path)
+    assert "overgrow" in abilities
+    entry = abilities["overgrow"]
+    assert entry["chrooked_id"] == "overgrow"
+    assert entry["name"] == "Overgrow"
+    # Control code \n flattened to a single space (charmap safety).
+    assert entry["description"] == "Ups Grass moves in a pinch."
+    assert entry["aka"] == {"pokeemerald": "ABILITY_OVERGROW"}
+
+
 @pytest.mark.integration
 @pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
 def test_build_snapshot_from_real_base() -> None:
@@ -149,6 +176,20 @@ def test_build_snapshot_from_real_base() -> None:
     assert goodra["learnset"]  # base Goodra learns moves
     # Pikachu rides along unchanged in the full national dex.
     assert "pikachu" in built["species"]
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_build_snapshot_populates_base_abilities() -> None:
+    # ac1: build_snapshot fills the abilities map from the fork, keyed by
+    # chrooked_id, with a known ability's neutral name + description.
+    abilities = snap.build_snapshot(_BASE)["abilities"]
+    assert abilities  # non-empty
+    assert "overgrow" in abilities
+    overgrow = abilities["overgrow"]
+    assert overgrow["name"] == "Overgrow"
+    assert overgrow["description"]  # has a neutral description
+    assert overgrow["aka"] == {"pokeemerald": "ABILITY_OVERGROW"}
 
 
 @pytest.mark.integration

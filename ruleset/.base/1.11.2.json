@@ -1,5 +1,2454 @@
 {
-  "abilities": {},
+  "abilities": {
+    "adaptability": {
+      "aka": {
+        "pokeemerald": "ABILITY_ADAPTABILITY"
+      },
+      "chrooked_id": "adaptability",
+      "description": "Boosts same type attacks.",
+      "name": "Adaptability"
+    },
+    "aerilate": {
+      "aka": {
+        "pokeemerald": "ABILITY_AERILATE"
+      },
+      "chrooked_id": "aerilate",
+      "description": "Normal moves become Flying.",
+      "name": "Aerilate"
+    },
+    "aftermath": {
+      "aka": {
+        "pokeemerald": "ABILITY_AFTERMATH"
+      },
+      "chrooked_id": "aftermath",
+      "description": "Fainting damages the foe.",
+      "name": "Aftermath"
+    },
+    "airlock": {
+      "aka": {
+        "pokeemerald": "ABILITY_AIR_LOCK"
+      },
+      "chrooked_id": "airlock",
+      "description": "Negates weather effects.",
+      "name": "Air Lock"
+    },
+    "analytic": {
+      "aka": {
+        "pokeemerald": "ABILITY_ANALYTIC"
+      },
+      "chrooked_id": "analytic",
+      "description": "Moving last boosts power.",
+      "name": "Analytic"
+    },
+    "angerpoint": {
+      "aka": {
+        "pokeemerald": "ABILITY_ANGER_POINT"
+      },
+      "chrooked_id": "angerpoint",
+      "description": "Critical hits raise Attack.",
+      "name": "Anger Point"
+    },
+    "angershell": {
+      "aka": {
+        "pokeemerald": "ABILITY_ANGER_SHELL"
+      },
+      "chrooked_id": "angershell",
+      "description": "Gets angry at half HP.",
+      "name": "Anger Shell"
+    },
+    "anticipation": {
+      "aka": {
+        "pokeemerald": "ABILITY_ANTICIPATION"
+      },
+      "chrooked_id": "anticipation",
+      "description": "Senses dangerous moves.",
+      "name": "Anticipation"
+    },
+    "arenatrap": {
+      "aka": {
+        "pokeemerald": "ABILITY_ARENA_TRAP"
+      },
+      "chrooked_id": "arenatrap",
+      "description": "Prevents fleeing.",
+      "name": "Arena Trap"
+    },
+    "armortail": {
+      "aka": {
+        "pokeemerald": "ABILITY_ARMOR_TAIL"
+      },
+      "chrooked_id": "armortail",
+      "description": "Protects from priority.",
+      "name": "Armor Tail"
+    },
+    "aromaveil": {
+      "aka": {
+        "pokeemerald": "ABILITY_AROMA_VEIL"
+      },
+      "chrooked_id": "aromaveil",
+      "description": "Prevents limiting of moves.",
+      "name": "Aroma Veil"
+    },
+    "asone": {
+      "aka": {
+        "pokeemerald": "ABILITY_AS_ONE_SHADOW_RIDER"
+      },
+      "chrooked_id": "asone",
+      "description": "Unnerve and Grim Neigh.",
+      "name": "As One"
+    },
+    "aurabreak": {
+      "aka": {
+        "pokeemerald": "ABILITY_AURA_BREAK"
+      },
+      "chrooked_id": "aurabreak",
+      "description": "Reverse aura abilities.",
+      "name": "Aura Break"
+    },
+    "baddreams": {
+      "aka": {
+        "pokeemerald": "ABILITY_BAD_DREAMS"
+      },
+      "chrooked_id": "baddreams",
+      "description": "Damages sleeping Pokémon.",
+      "name": "Bad Dreams"
+    },
+    "ballfetch": {
+      "aka": {
+        "pokeemerald": "ABILITY_BALL_FETCH"
+      },
+      "chrooked_id": "ballfetch",
+      "description": "Fetches failed Poké Ball.",
+      "name": "Ball Fetch"
+    },
+    "battery": {
+      "aka": {
+        "pokeemerald": "ABILITY_BATTERY"
+      },
+      "chrooked_id": "battery",
+      "description": "Boosts ally's Sp. Atk.",
+      "name": "Battery"
+    },
+    "battlearmor": {
+      "aka": {
+        "pokeemerald": "ABILITY_BATTLE_ARMOR"
+      },
+      "chrooked_id": "battlearmor",
+      "description": "Blocks critical hits.",
+      "name": "Battle Armor"
+    },
+    "battlebond": {
+      "aka": {
+        "pokeemerald": "ABILITY_BATTLE_BOND"
+      },
+      "chrooked_id": "battlebond",
+      "description": "Changes form after a KO.",
+      "name": "Battle Bond"
+    },
+    "beadsofruin": {
+      "aka": {
+        "pokeemerald": "ABILITY_BEADS_OF_RUIN"
+      },
+      "chrooked_id": "beadsofruin",
+      "description": "Lowers foes' Sp. Defense.",
+      "name": "Beads of Ruin"
+    },
+    "beastboost": {
+      "aka": {
+        "pokeemerald": "ABILITY_BEAST_BOOST"
+      },
+      "chrooked_id": "beastboost",
+      "description": "KOs boost best stat.",
+      "name": "Beast Boost"
+    },
+    "berserk": {
+      "aka": {
+        "pokeemerald": "ABILITY_BERSERK"
+      },
+      "chrooked_id": "berserk",
+      "description": "Boosts Sp. Atk at low HP.",
+      "name": "Berserk"
+    },
+    "bigpecks": {
+      "aka": {
+        "pokeemerald": "ABILITY_BIG_PECKS"
+      },
+      "chrooked_id": "bigpecks",
+      "description": "Prevents Defense loss.",
+      "name": "Big Pecks"
+    },
+    "blaze": {
+      "aka": {
+        "pokeemerald": "ABILITY_BLAZE"
+      },
+      "chrooked_id": "blaze",
+      "description": "Ups Fire moves in a pinch.",
+      "name": "Blaze"
+    },
+    "bulletproof": {
+      "aka": {
+        "pokeemerald": "ABILITY_BULLETPROOF"
+      },
+      "chrooked_id": "bulletproof",
+      "description": "Avoids some projectiles.",
+      "name": "Bulletproof"
+    },
+    "cheekpouch": {
+      "aka": {
+        "pokeemerald": "ABILITY_CHEEK_POUCH"
+      },
+      "chrooked_id": "cheekpouch",
+      "description": "Eating Berries restores HP.",
+      "name": "Cheek Pouch"
+    },
+    "chillingneigh": {
+      "aka": {
+        "pokeemerald": "ABILITY_CHILLING_NEIGH"
+      },
+      "chrooked_id": "chillingneigh",
+      "description": "KOs boost Attack stat.",
+      "name": "Chilling Neigh"
+    },
+    "chlorophyll": {
+      "aka": {
+        "pokeemerald": "ABILITY_CHLOROPHYLL"
+      },
+      "chrooked_id": "chlorophyll",
+      "description": "Raises Speed in sunshine.",
+      "name": "Chlorophyll"
+    },
+    "clearbody": {
+      "aka": {
+        "pokeemerald": "ABILITY_CLEAR_BODY"
+      },
+      "chrooked_id": "clearbody",
+      "description": "Prevents ability reduction.",
+      "name": "Clear Body"
+    },
+    "cloudnine": {
+      "aka": {
+        "pokeemerald": "ABILITY_CLOUD_NINE"
+      },
+      "chrooked_id": "cloudnine",
+      "description": "Negates weather effects.",
+      "name": "Cloud Nine"
+    },
+    "colorchange": {
+      "aka": {
+        "pokeemerald": "ABILITY_COLOR_CHANGE"
+      },
+      "chrooked_id": "colorchange",
+      "description": "Changes type to foe's move.",
+      "name": "Color Change"
+    },
+    "comatose": {
+      "aka": {
+        "pokeemerald": "ABILITY_COMATOSE"
+      },
+      "chrooked_id": "comatose",
+      "description": "Always drowsing.",
+      "name": "Comatose"
+    },
+    "commander": {
+      "aka": {
+        "pokeemerald": "ABILITY_COMMANDER"
+      },
+      "chrooked_id": "commander",
+      "description": "Commands from Dondozo.",
+      "name": "Commander"
+    },
+    "competitive": {
+      "aka": {
+        "pokeemerald": "ABILITY_COMPETITIVE"
+      },
+      "chrooked_id": "competitive",
+      "description": "Lowered stats up Sp. Atk.",
+      "name": "Competitive"
+    },
+    "compoundeyes": {
+      "aka": {
+        "pokeemerald": "ABILITY_COMPOUND_EYES"
+      },
+      "chrooked_id": "compoundeyes",
+      "description": "Raises accuracy.",
+      "name": "Compound Eyes"
+    },
+    "contrary": {
+      "aka": {
+        "pokeemerald": "ABILITY_CONTRARY"
+      },
+      "chrooked_id": "contrary",
+      "description": "Inverts stat changes.",
+      "name": "Contrary"
+    },
+    "corrosion": {
+      "aka": {
+        "pokeemerald": "ABILITY_CORROSION"
+      },
+      "chrooked_id": "corrosion",
+      "description": "Poisons any type.",
+      "name": "Corrosion"
+    },
+    "costar": {
+      "aka": {
+        "pokeemerald": "ABILITY_COSTAR"
+      },
+      "chrooked_id": "costar",
+      "description": "Copies ally's stat changes.",
+      "name": "Costar"
+    },
+    "cottondown": {
+      "aka": {
+        "pokeemerald": "ABILITY_COTTON_DOWN"
+      },
+      "chrooked_id": "cottondown",
+      "description": "Lower Speed of all when hit.",
+      "name": "Cotton Down"
+    },
+    "cudchew": {
+      "aka": {
+        "pokeemerald": "ABILITY_CUD_CHEW"
+      },
+      "chrooked_id": "cudchew",
+      "description": "Eats a used berry again.",
+      "name": "Cud Chew"
+    },
+    "curiousmedicine": {
+      "aka": {
+        "pokeemerald": "ABILITY_CURIOUS_MEDICINE"
+      },
+      "chrooked_id": "curiousmedicine",
+      "description": "Remove ally's stat changes.",
+      "name": "Curious Medicine"
+    },
+    "cursedbody": {
+      "aka": {
+        "pokeemerald": "ABILITY_CURSED_BODY"
+      },
+      "chrooked_id": "cursedbody",
+      "description": "Disables moves on contact.",
+      "name": "Cursed Body"
+    },
+    "cutecharm": {
+      "aka": {
+        "pokeemerald": "ABILITY_CUTE_CHARM"
+      },
+      "chrooked_id": "cutecharm",
+      "description": "Infatuates on contact.",
+      "name": "Cute Charm"
+    },
+    "damp": {
+      "aka": {
+        "pokeemerald": "ABILITY_DAMP"
+      },
+      "chrooked_id": "damp",
+      "description": "Prevents self-destruction.",
+      "name": "Damp"
+    },
+    "dancer": {
+      "aka": {
+        "pokeemerald": "ABILITY_DANCER"
+      },
+      "chrooked_id": "dancer",
+      "description": "Dances along with others.",
+      "name": "Dancer"
+    },
+    "darkaura": {
+      "aka": {
+        "pokeemerald": "ABILITY_DARK_AURA"
+      },
+      "chrooked_id": "darkaura",
+      "description": "Boosts Dark moves.",
+      "name": "Dark Aura"
+    },
+    "dauntlessshield": {
+      "aka": {
+        "pokeemerald": "ABILITY_DAUNTLESS_SHIELD"
+      },
+      "chrooked_id": "dauntlessshield",
+      "description": "Ups Defense on entry.",
+      "name": "Dauntless Shield"
+    },
+    "dazzling": {
+      "aka": {
+        "pokeemerald": "ABILITY_DAZZLING"
+      },
+      "chrooked_id": "dazzling",
+      "description": "Protects from priority.",
+      "name": "Dazzling"
+    },
+    "defeatist": {
+      "aka": {
+        "pokeemerald": "ABILITY_DEFEATIST"
+      },
+      "chrooked_id": "defeatist",
+      "description": "Gives up at half HP.",
+      "name": "Defeatist"
+    },
+    "defiant": {
+      "aka": {
+        "pokeemerald": "ABILITY_DEFIANT"
+      },
+      "chrooked_id": "defiant",
+      "description": "Lowered stats up Attack.",
+      "name": "Defiant"
+    },
+    "deltastream": {
+      "aka": {
+        "pokeemerald": "ABILITY_DELTA_STREAM"
+      },
+      "chrooked_id": "deltastream",
+      "description": "Summons strong winds.",
+      "name": "Delta Stream"
+    },
+    "desolateland": {
+      "aka": {
+        "pokeemerald": "ABILITY_DESOLATE_LAND"
+      },
+      "chrooked_id": "desolateland",
+      "description": "Summons intense sunlight.",
+      "name": "Desolate Land"
+    },
+    "disguise": {
+      "aka": {
+        "pokeemerald": "ABILITY_DISGUISE"
+      },
+      "chrooked_id": "disguise",
+      "description": "Decoy protects it once.",
+      "name": "Disguise"
+    },
+    "download": {
+      "aka": {
+        "pokeemerald": "ABILITY_DOWNLOAD"
+      },
+      "chrooked_id": "download",
+      "description": "Adjusts power favorably.",
+      "name": "Download"
+    },
+    "dragonsmaw": {
+      "aka": {
+        "pokeemerald": "ABILITY_DRAGONS_MAW"
+      },
+      "chrooked_id": "dragonsmaw",
+      "description": "Ups Dragon-type moves.",
+      "name": "Dragon's Maw"
+    },
+    "drizzle": {
+      "aka": {
+        "pokeemerald": "ABILITY_DRIZZLE"
+      },
+      "chrooked_id": "drizzle",
+      "description": "Summons rain in battle.",
+      "name": "Drizzle"
+    },
+    "drought": {
+      "aka": {
+        "pokeemerald": "ABILITY_DROUGHT"
+      },
+      "chrooked_id": "drought",
+      "description": "Summons sunlight in battle.",
+      "name": "Drought"
+    },
+    "dryskin": {
+      "aka": {
+        "pokeemerald": "ABILITY_DRY_SKIN"
+      },
+      "chrooked_id": "dryskin",
+      "description": "Prefers moisture to heat.",
+      "name": "Dry Skin"
+    },
+    "earlybird": {
+      "aka": {
+        "pokeemerald": "ABILITY_EARLY_BIRD"
+      },
+      "chrooked_id": "earlybird",
+      "description": "Awakens quickly from sleep.",
+      "name": "Early Bird"
+    },
+    "eartheater": {
+      "aka": {
+        "pokeemerald": "ABILITY_EARTH_EATER"
+      },
+      "chrooked_id": "eartheater",
+      "description": "Eats ground to heal HP.",
+      "name": "Earth Eater"
+    },
+    "effectspore": {
+      "aka": {
+        "pokeemerald": "ABILITY_EFFECT_SPORE"
+      },
+      "chrooked_id": "effectspore",
+      "description": "Leaves spores on contact.",
+      "name": "Effect Spore"
+    },
+    "electricsurge": {
+      "aka": {
+        "pokeemerald": "ABILITY_ELECTRIC_SURGE"
+      },
+      "chrooked_id": "electricsurge",
+      "description": "Field becomes Electric.",
+      "name": "Electric Surge"
+    },
+    "electromorphosis": {
+      "aka": {
+        "pokeemerald": "ABILITY_ELECTROMORPHOSIS"
+      },
+      "chrooked_id": "electromorphosis",
+      "description": "Gets Charged when hit.",
+      "name": "Electromorphosis"
+    },
+    "embodyaspect": {
+      "aka": {
+        "pokeemerald": "ABILITY_EMBODY_ASPECT_WELLSPRING_MASK"
+      },
+      "chrooked_id": "embodyaspect",
+      "description": "Raises Sp. Def.",
+      "name": "Embody Aspect"
+    },
+    "emergencyexit": {
+      "aka": {
+        "pokeemerald": "ABILITY_EMERGENCY_EXIT"
+      },
+      "chrooked_id": "emergencyexit",
+      "description": "Flees at half HP.",
+      "name": "Emergency Exit"
+    },
+    "fairyaura": {
+      "aka": {
+        "pokeemerald": "ABILITY_FAIRY_AURA"
+      },
+      "chrooked_id": "fairyaura",
+      "description": "Boosts Fairy moves.",
+      "name": "Fairy Aura"
+    },
+    "filter": {
+      "aka": {
+        "pokeemerald": "ABILITY_FILTER"
+      },
+      "chrooked_id": "filter",
+      "description": "Weakens “supereffective”.",
+      "name": "Filter"
+    },
+    "flamebody": {
+      "aka": {
+        "pokeemerald": "ABILITY_FLAME_BODY"
+      },
+      "chrooked_id": "flamebody",
+      "description": "Burns the foe on contact.",
+      "name": "Flame Body"
+    },
+    "flareboost": {
+      "aka": {
+        "pokeemerald": "ABILITY_FLARE_BOOST"
+      },
+      "chrooked_id": "flareboost",
+      "description": "Ups Sp. Atk if burned.",
+      "name": "Flare Boost"
+    },
+    "flashfire": {
+      "aka": {
+        "pokeemerald": "ABILITY_FLASH_FIRE"
+      },
+      "chrooked_id": "flashfire",
+      "description": "Powers up if hit by fire.",
+      "name": "Flash Fire"
+    },
+    "flowergift": {
+      "aka": {
+        "pokeemerald": "ABILITY_FLOWER_GIFT"
+      },
+      "chrooked_id": "flowergift",
+      "description": "Allies power up in sunshine.",
+      "name": "Flower Gift"
+    },
+    "flowerveil": {
+      "aka": {
+        "pokeemerald": "ABILITY_FLOWER_VEIL"
+      },
+      "chrooked_id": "flowerveil",
+      "description": "Protects Grass-types.",
+      "name": "Flower Veil"
+    },
+    "fluffy": {
+      "aka": {
+        "pokeemerald": "ABILITY_FLUFFY"
+      },
+      "chrooked_id": "fluffy",
+      "description": "Tougher but flammable.",
+      "name": "Fluffy"
+    },
+    "forecast": {
+      "aka": {
+        "pokeemerald": "ABILITY_FORECAST"
+      },
+      "chrooked_id": "forecast",
+      "description": "Changes with the weather.",
+      "name": "Forecast"
+    },
+    "forewarn": {
+      "aka": {
+        "pokeemerald": "ABILITY_FOREWARN"
+      },
+      "chrooked_id": "forewarn",
+      "description": "Determines a foe's move.",
+      "name": "Forewarn"
+    },
+    "friendguard": {
+      "aka": {
+        "pokeemerald": "ABILITY_FRIEND_GUARD"
+      },
+      "chrooked_id": "friendguard",
+      "description": "Lowers damage to partner.",
+      "name": "Friend Guard"
+    },
+    "frisk": {
+      "aka": {
+        "pokeemerald": "ABILITY_FRISK"
+      },
+      "chrooked_id": "frisk",
+      "description": "Checks a foe's item.",
+      "name": "Frisk"
+    },
+    "fullmetalbody": {
+      "aka": {
+        "pokeemerald": "ABILITY_FULL_METAL_BODY"
+      },
+      "chrooked_id": "fullmetalbody",
+      "description": "Prevents stat reduction.",
+      "name": "Full Metal Body"
+    },
+    "furcoat": {
+      "aka": {
+        "pokeemerald": "ABILITY_FUR_COAT"
+      },
+      "chrooked_id": "furcoat",
+      "description": "Raises Defense.",
+      "name": "Fur Coat"
+    },
+    "galewings": {
+      "aka": {
+        "pokeemerald": "ABILITY_GALE_WINGS"
+      },
+      "chrooked_id": "galewings",
+      "description": "Flying moves go first.",
+      "name": "Gale Wings"
+    },
+    "galvanize": {
+      "aka": {
+        "pokeemerald": "ABILITY_GALVANIZE"
+      },
+      "chrooked_id": "galvanize",
+      "description": "Normal moves turn Electric.",
+      "name": "Galvanize"
+    },
+    "gluttony": {
+      "aka": {
+        "pokeemerald": "ABILITY_GLUTTONY"
+      },
+      "chrooked_id": "gluttony",
+      "description": "Eats Berries early.",
+      "name": "Gluttony"
+    },
+    "goodasgold": {
+      "aka": {
+        "pokeemerald": "ABILITY_GOOD_AS_GOLD"
+      },
+      "chrooked_id": "goodasgold",
+      "description": "Avoids status problems.",
+      "name": "Good as Gold"
+    },
+    "gooey": {
+      "aka": {
+        "pokeemerald": "ABILITY_GOOEY"
+      },
+      "chrooked_id": "gooey",
+      "description": "Lowers Speed on contact.",
+      "name": "Gooey"
+    },
+    "gorillatactics": {
+      "aka": {
+        "pokeemerald": "ABILITY_GORILLA_TACTICS"
+      },
+      "chrooked_id": "gorillatactics",
+      "description": "Ups Attack and locks move.",
+      "name": "Gorilla Tactics"
+    },
+    "grasspelt": {
+      "aka": {
+        "pokeemerald": "ABILITY_GRASS_PELT"
+      },
+      "chrooked_id": "grasspelt",
+      "description": "Ups Defense in grass.",
+      "name": "Grass Pelt"
+    },
+    "grassysurge": {
+      "aka": {
+        "pokeemerald": "ABILITY_GRASSY_SURGE"
+      },
+      "chrooked_id": "grassysurge",
+      "description": "Field becomes grassy.",
+      "name": "Grassy Surge"
+    },
+    "grimneigh": {
+      "aka": {
+        "pokeemerald": "ABILITY_GRIM_NEIGH"
+      },
+      "chrooked_id": "grimneigh",
+      "description": "KOs boost Sp. Atk stat.",
+      "name": "Grim Neigh"
+    },
+    "guarddog": {
+      "aka": {
+        "pokeemerald": "ABILITY_GUARD_DOG"
+      },
+      "chrooked_id": "guarddog",
+      "description": "Cannot be intimidated.",
+      "name": "Guard Dog"
+    },
+    "gulpmissile": {
+      "aka": {
+        "pokeemerald": "ABILITY_GULP_MISSILE"
+      },
+      "chrooked_id": "gulpmissile",
+      "description": "If hit, spits prey from sea.",
+      "name": "Gulp Missile"
+    },
+    "guts": {
+      "aka": {
+        "pokeemerald": "ABILITY_GUTS"
+      },
+      "chrooked_id": "guts",
+      "description": "Ups Attack if suffering.",
+      "name": "Guts"
+    },
+    "hadronengine": {
+      "aka": {
+        "pokeemerald": "ABILITY_HADRON_ENGINE"
+      },
+      "chrooked_id": "hadronengine",
+      "description": "Field becomes Electric.",
+      "name": "Hadron Engine"
+    },
+    "harvest": {
+      "aka": {
+        "pokeemerald": "ABILITY_HARVEST"
+      },
+      "chrooked_id": "harvest",
+      "description": "May recycle a used Berry.",
+      "name": "Harvest"
+    },
+    "healer": {
+      "aka": {
+        "pokeemerald": "ABILITY_HEALER"
+      },
+      "chrooked_id": "healer",
+      "description": "Heals partner Pokémon.",
+      "name": "Healer"
+    },
+    "heatproof": {
+      "aka": {
+        "pokeemerald": "ABILITY_HEATPROOF"
+      },
+      "chrooked_id": "heatproof",
+      "description": "Heat and burn protection.",
+      "name": "Heatproof"
+    },
+    "heavymetal": {
+      "aka": {
+        "pokeemerald": "ABILITY_HEAVY_METAL"
+      },
+      "chrooked_id": "heavymetal",
+      "description": "Doubles weight.",
+      "name": "Heavy Metal"
+    },
+    "honeygather": {
+      "aka": {
+        "pokeemerald": "ABILITY_HONEY_GATHER"
+      },
+      "chrooked_id": "honeygather",
+      "description": "May gather Honey.",
+      "name": "Honey Gather"
+    },
+    "hospitality": {
+      "aka": {
+        "pokeemerald": "ABILITY_HOSPITALITY"
+      },
+      "chrooked_id": "hospitality",
+      "description": "Restores ally's HP.",
+      "name": "Hospitality"
+    },
+    "hugepower": {
+      "aka": {
+        "pokeemerald": "ABILITY_HUGE_POWER"
+      },
+      "chrooked_id": "hugepower",
+      "description": "Raises Attack.",
+      "name": "Huge Power"
+    },
+    "hungerswitch": {
+      "aka": {
+        "pokeemerald": "ABILITY_HUNGER_SWITCH"
+      },
+      "chrooked_id": "hungerswitch",
+      "description": "Changes form each turn.",
+      "name": "Hunger Switch"
+    },
+    "hustle": {
+      "aka": {
+        "pokeemerald": "ABILITY_HUSTLE"
+      },
+      "chrooked_id": "hustle",
+      "description": "Trades accuracy for power.",
+      "name": "Hustle"
+    },
+    "hydration": {
+      "aka": {
+        "pokeemerald": "ABILITY_HYDRATION"
+      },
+      "chrooked_id": "hydration",
+      "description": "Cures status in rain.",
+      "name": "Hydration"
+    },
+    "hypercutter": {
+      "aka": {
+        "pokeemerald": "ABILITY_HYPER_CUTTER"
+      },
+      "chrooked_id": "hypercutter",
+      "description": "Prevents Attack reduction.",
+      "name": "Hyper Cutter"
+    },
+    "icebody": {
+      "aka": {
+        "pokeemerald": "ABILITY_ICE_BODY"
+      },
+      "chrooked_id": "icebody",
+      "description": "HP recovery in Hail or Snow.",
+      "name": "Ice Body"
+    },
+    "iceface": {
+      "aka": {
+        "pokeemerald": "ABILITY_ICE_FACE"
+      },
+      "chrooked_id": "iceface",
+      "description": "Hail or Snow renew free hit.",
+      "name": "Ice Face"
+    },
+    "icescales": {
+      "aka": {
+        "pokeemerald": "ABILITY_ICE_SCALES"
+      },
+      "chrooked_id": "icescales",
+      "description": "Halves special damage.",
+      "name": "Ice Scales"
+    },
+    "illuminate": {
+      "aka": {
+        "pokeemerald": "ABILITY_ILLUMINATE"
+      },
+      "chrooked_id": "illuminate",
+      "description": "Encounter rate increases.",
+      "name": "Illuminate"
+    },
+    "illusion": {
+      "aka": {
+        "pokeemerald": "ABILITY_ILLUSION"
+      },
+      "chrooked_id": "illusion",
+      "description": "Appears as a partner.",
+      "name": "Illusion"
+    },
+    "immunity": {
+      "aka": {
+        "pokeemerald": "ABILITY_IMMUNITY"
+      },
+      "chrooked_id": "immunity",
+      "description": "Prevents poisoning.",
+      "name": "Immunity"
+    },
+    "imposter": {
+      "aka": {
+        "pokeemerald": "ABILITY_IMPOSTER"
+      },
+      "chrooked_id": "imposter",
+      "description": "Transforms into the foe.",
+      "name": "Imposter"
+    },
+    "infiltrator": {
+      "aka": {
+        "pokeemerald": "ABILITY_INFILTRATOR"
+      },
+      "chrooked_id": "infiltrator",
+      "description": "Passes through barriers.",
+      "name": "Infiltrator"
+    },
+    "innardsout": {
+      "aka": {
+        "pokeemerald": "ABILITY_INNARDS_OUT"
+      },
+      "chrooked_id": "innardsout",
+      "description": "Hurts foe when defeated.",
+      "name": "Innards Out"
+    },
+    "innerfocus": {
+      "aka": {
+        "pokeemerald": "ABILITY_INNER_FOCUS"
+      },
+      "chrooked_id": "innerfocus",
+      "description": "Prevents flinching.",
+      "name": "Inner Focus"
+    },
+    "insomnia": {
+      "aka": {
+        "pokeemerald": "ABILITY_INSOMNIA"
+      },
+      "chrooked_id": "insomnia",
+      "description": "Prevents sleep.",
+      "name": "Insomnia"
+    },
+    "intimidate": {
+      "aka": {
+        "pokeemerald": "ABILITY_INTIMIDATE"
+      },
+      "chrooked_id": "intimidate",
+      "description": "Lowers the foe's Attack.",
+      "name": "Intimidate"
+    },
+    "intrepidsword": {
+      "aka": {
+        "pokeemerald": "ABILITY_INTREPID_SWORD"
+      },
+      "chrooked_id": "intrepidsword",
+      "description": "Ups Attack on entry.",
+      "name": "Intrepid Sword"
+    },
+    "ironbarbs": {
+      "aka": {
+        "pokeemerald": "ABILITY_IRON_BARBS"
+      },
+      "chrooked_id": "ironbarbs",
+      "description": "Hurts to touch.",
+      "name": "Iron Barbs"
+    },
+    "ironfist": {
+      "aka": {
+        "pokeemerald": "ABILITY_IRON_FIST"
+      },
+      "chrooked_id": "ironfist",
+      "description": "Boosts punching moves.",
+      "name": "Iron Fist"
+    },
+    "justified": {
+      "aka": {
+        "pokeemerald": "ABILITY_JUSTIFIED"
+      },
+      "chrooked_id": "justified",
+      "description": "Dark hits raise Attack.",
+      "name": "Justified"
+    },
+    "keeneye": {
+      "aka": {
+        "pokeemerald": "ABILITY_KEEN_EYE"
+      },
+      "chrooked_id": "keeneye",
+      "description": "Prevents loss of accuracy.",
+      "name": "Keen Eye"
+    },
+    "klutz": {
+      "aka": {
+        "pokeemerald": "ABILITY_KLUTZ"
+      },
+      "chrooked_id": "klutz",
+      "description": "Can't use hold items.",
+      "name": "Klutz"
+    },
+    "leafguard": {
+      "aka": {
+        "pokeemerald": "ABILITY_LEAF_GUARD"
+      },
+      "chrooked_id": "leafguard",
+      "description": "Blocks status in sunshine.",
+      "name": "Leaf Guard"
+    },
+    "levitate": {
+      "aka": {
+        "pokeemerald": "ABILITY_LEVITATE"
+      },
+      "chrooked_id": "levitate",
+      "description": "Not hit by Ground attacks.",
+      "name": "Levitate"
+    },
+    "libero": {
+      "aka": {
+        "pokeemerald": "ABILITY_LIBERO"
+      },
+      "chrooked_id": "libero",
+      "description": "Changes type to move's.",
+      "name": "Libero"
+    },
+    "lightmetal": {
+      "aka": {
+        "pokeemerald": "ABILITY_LIGHT_METAL"
+      },
+      "chrooked_id": "lightmetal",
+      "description": "Halves weight.",
+      "name": "Light Metal"
+    },
+    "lightningrod": {
+      "aka": {
+        "pokeemerald": "ABILITY_LIGHTNING_ROD"
+      },
+      "chrooked_id": "lightningrod",
+      "description": "Draws electrical moves.",
+      "name": "Lightning Rod"
+    },
+    "limber": {
+      "aka": {
+        "pokeemerald": "ABILITY_LIMBER"
+      },
+      "chrooked_id": "limber",
+      "description": "Prevents paralysis.",
+      "name": "Limber"
+    },
+    "lingeringaroma": {
+      "aka": {
+        "pokeemerald": "ABILITY_LINGERING_AROMA"
+      },
+      "chrooked_id": "lingeringaroma",
+      "description": "Spreads with contact.",
+      "name": "Lingering Aroma"
+    },
+    "liquidooze": {
+      "aka": {
+        "pokeemerald": "ABILITY_LIQUID_OOZE"
+      },
+      "chrooked_id": "liquidooze",
+      "description": "Draining causes injury.",
+      "name": "Liquid Ooze"
+    },
+    "liquidvoice": {
+      "aka": {
+        "pokeemerald": "ABILITY_LIQUID_VOICE"
+      },
+      "chrooked_id": "liquidvoice",
+      "description": "Makes sound moves Water.",
+      "name": "Liquid Voice"
+    },
+    "longreach": {
+      "aka": {
+        "pokeemerald": "ABILITY_LONG_REACH"
+      },
+      "chrooked_id": "longreach",
+      "description": "Never makes contact.",
+      "name": "Long Reach"
+    },
+    "magicbounce": {
+      "aka": {
+        "pokeemerald": "ABILITY_MAGIC_BOUNCE"
+      },
+      "chrooked_id": "magicbounce",
+      "description": "Reflects status moves.",
+      "name": "Magic Bounce"
+    },
+    "magicguard": {
+      "aka": {
+        "pokeemerald": "ABILITY_MAGIC_GUARD"
+      },
+      "chrooked_id": "magicguard",
+      "description": "Only damaged by attacks.",
+      "name": "Magic Guard"
+    },
+    "magician": {
+      "aka": {
+        "pokeemerald": "ABILITY_MAGICIAN"
+      },
+      "chrooked_id": "magician",
+      "description": "Steals the foe's held item.",
+      "name": "Magician"
+    },
+    "magmaarmor": {
+      "aka": {
+        "pokeemerald": "ABILITY_MAGMA_ARMOR"
+      },
+      "chrooked_id": "magmaarmor",
+      "description": "Prevents freezing.",
+      "name": "Magma Armor"
+    },
+    "magnetpull": {
+      "aka": {
+        "pokeemerald": "ABILITY_MAGNET_PULL"
+      },
+      "chrooked_id": "magnetpull",
+      "description": "Traps Steel-type Pokémon.",
+      "name": "Magnet Pull"
+    },
+    "marvelscale": {
+      "aka": {
+        "pokeemerald": "ABILITY_MARVEL_SCALE"
+      },
+      "chrooked_id": "marvelscale",
+      "description": "Ups Defense if suffering.",
+      "name": "Marvel Scale"
+    },
+    "megalauncher": {
+      "aka": {
+        "pokeemerald": "ABILITY_MEGA_LAUNCHER"
+      },
+      "chrooked_id": "megalauncher",
+      "description": "Boosts pulse moves.",
+      "name": "Mega Launcher"
+    },
+    "merciless": {
+      "aka": {
+        "pokeemerald": "ABILITY_MERCILESS"
+      },
+      "chrooked_id": "merciless",
+      "description": "Criticals poisoned foes.",
+      "name": "Merciless"
+    },
+    "mimicry": {
+      "aka": {
+        "pokeemerald": "ABILITY_MIMICRY"
+      },
+      "chrooked_id": "mimicry",
+      "description": "Changes type on terrain.",
+      "name": "Mimicry"
+    },
+    "mindseye": {
+      "aka": {
+        "pokeemerald": "ABILITY_MINDS_EYE"
+      },
+      "chrooked_id": "mindseye",
+      "description": "Keen Eye and Scrappy.",
+      "name": "Mind's Eye"
+    },
+    "minus": {
+      "aka": {
+        "pokeemerald": "ABILITY_MINUS"
+      },
+      "chrooked_id": "minus",
+      "description": "Powers up with Plus.",
+      "name": "Minus"
+    },
+    "mirrorarmor": {
+      "aka": {
+        "pokeemerald": "ABILITY_MIRROR_ARMOR"
+      },
+      "chrooked_id": "mirrorarmor",
+      "description": "Reflect stat decreases.",
+      "name": "Mirror Armor"
+    },
+    "mistysurge": {
+      "aka": {
+        "pokeemerald": "ABILITY_MISTY_SURGE"
+      },
+      "chrooked_id": "mistysurge",
+      "description": "Field becomes misty.",
+      "name": "Misty Surge"
+    },
+    "moldbreaker": {
+      "aka": {
+        "pokeemerald": "ABILITY_MOLD_BREAKER"
+      },
+      "chrooked_id": "moldbreaker",
+      "description": "Moves hit through abilities.",
+      "name": "Mold Breaker"
+    },
+    "moody": {
+      "aka": {
+        "pokeemerald": "ABILITY_MOODY"
+      },
+      "chrooked_id": "moody",
+      "description": "Stats change gradually.",
+      "name": "Moody"
+    },
+    "motordrive": {
+      "aka": {
+        "pokeemerald": "ABILITY_MOTOR_DRIVE"
+      },
+      "chrooked_id": "motordrive",
+      "description": "Electricity raises Speed.",
+      "name": "Motor Drive"
+    },
+    "moxie": {
+      "aka": {
+        "pokeemerald": "ABILITY_MOXIE"
+      },
+      "chrooked_id": "moxie",
+      "description": "KOs raise Attack.",
+      "name": "Moxie"
+    },
+    "multiscale": {
+      "aka": {
+        "pokeemerald": "ABILITY_MULTISCALE"
+      },
+      "chrooked_id": "multiscale",
+      "description": "Halves damage at full HP.",
+      "name": "Multiscale"
+    },
+    "multitype": {
+      "aka": {
+        "pokeemerald": "ABILITY_MULTITYPE"
+      },
+      "chrooked_id": "multitype",
+      "description": "Changes type to its Plate.",
+      "name": "Multitype"
+    },
+    "mummy": {
+      "aka": {
+        "pokeemerald": "ABILITY_MUMMY"
+      },
+      "chrooked_id": "mummy",
+      "description": "Spreads with contact.",
+      "name": "Mummy"
+    },
+    "myceliummight": {
+      "aka": {
+        "pokeemerald": "ABILITY_MYCELIUM_MIGHT"
+      },
+      "chrooked_id": "myceliummight",
+      "description": "Status moves never fail.",
+      "name": "Mycelium Might"
+    },
+    "naturalcure": {
+      "aka": {
+        "pokeemerald": "ABILITY_NATURAL_CURE"
+      },
+      "chrooked_id": "naturalcure",
+      "description": "Heals upon switching out.",
+      "name": "Natural Cure"
+    },
+    "neuroforce": {
+      "aka": {
+        "pokeemerald": "ABILITY_NEUROFORCE"
+      },
+      "chrooked_id": "neuroforce",
+      "description": "Ups “supereffective”.",
+      "name": "Neuroforce"
+    },
+    "neutralizinggas": {
+      "aka": {
+        "pokeemerald": "ABILITY_NEUTRALIZING_GAS"
+      },
+      "chrooked_id": "neutralizinggas",
+      "description": "All Abilities are nullified.",
+      "name": "Neutralizing Gas"
+    },
+    "noguard": {
+      "aka": {
+        "pokeemerald": "ABILITY_NO_GUARD"
+      },
+      "chrooked_id": "noguard",
+      "description": "Ensures that all moves hit.",
+      "name": "No Guard"
+    },
+    "normalize": {
+      "aka": {
+        "pokeemerald": "ABILITY_NORMALIZE"
+      },
+      "chrooked_id": "normalize",
+      "description": "Moves become Normal-type.",
+      "name": "Normalize"
+    },
+    "oblivious": {
+      "aka": {
+        "pokeemerald": "ABILITY_OBLIVIOUS"
+      },
+      "chrooked_id": "oblivious",
+      "description": "Prevents attraction.",
+      "name": "Oblivious"
+    },
+    "opportunist": {
+      "aka": {
+        "pokeemerald": "ABILITY_OPPORTUNIST"
+      },
+      "chrooked_id": "opportunist",
+      "description": "Copies foe's stat change.",
+      "name": "Opportunist"
+    },
+    "orichalcumpulse": {
+      "aka": {
+        "pokeemerald": "ABILITY_ORICHALCUM_PULSE"
+      },
+      "chrooked_id": "orichalcumpulse",
+      "description": "Summons sunlight in battle.",
+      "name": "Orichalcum Pulse"
+    },
+    "overcoat": {
+      "aka": {
+        "pokeemerald": "ABILITY_OVERCOAT"
+      },
+      "chrooked_id": "overcoat",
+      "description": "Blocks weather and powder.",
+      "name": "Overcoat"
+    },
+    "overgrow": {
+      "aka": {
+        "pokeemerald": "ABILITY_OVERGROW"
+      },
+      "chrooked_id": "overgrow",
+      "description": "Ups Grass moves in a pinch.",
+      "name": "Overgrow"
+    },
+    "owntempo": {
+      "aka": {
+        "pokeemerald": "ABILITY_OWN_TEMPO"
+      },
+      "chrooked_id": "owntempo",
+      "description": "Prevents confusion.",
+      "name": "Own Tempo"
+    },
+    "parentalbond": {
+      "aka": {
+        "pokeemerald": "ABILITY_PARENTAL_BOND"
+      },
+      "chrooked_id": "parentalbond",
+      "description": "Moves hit twice.",
+      "name": "Parental Bond"
+    },
+    "pastelveil": {
+      "aka": {
+        "pokeemerald": "ABILITY_PASTEL_VEIL"
+      },
+      "chrooked_id": "pastelveil",
+      "description": "Protects team from poison.",
+      "name": "Pastel Veil"
+    },
+    "perishbody": {
+      "aka": {
+        "pokeemerald": "ABILITY_PERISH_BODY"
+      },
+      "chrooked_id": "perishbody",
+      "description": "Foe faints in 3 turns if hit.",
+      "name": "Perish Body"
+    },
+    "pickpocket": {
+      "aka": {
+        "pokeemerald": "ABILITY_PICKPOCKET"
+      },
+      "chrooked_id": "pickpocket",
+      "description": "Steals the foe's held item.",
+      "name": "Pickpocket"
+    },
+    "pickup": {
+      "aka": {
+        "pokeemerald": "ABILITY_PICKUP"
+      },
+      "chrooked_id": "pickup",
+      "description": "May pick up items.",
+      "name": "Pickup"
+    },
+    "pixilate": {
+      "aka": {
+        "pokeemerald": "ABILITY_PIXILATE"
+      },
+      "chrooked_id": "pixilate",
+      "description": "Normal moves become Fairy.",
+      "name": "Pixilate"
+    },
+    "plus": {
+      "aka": {
+        "pokeemerald": "ABILITY_PLUS"
+      },
+      "chrooked_id": "plus",
+      "description": "Powers up with Minus.",
+      "name": "Plus"
+    },
+    "poisonheal": {
+      "aka": {
+        "pokeemerald": "ABILITY_POISON_HEAL"
+      },
+      "chrooked_id": "poisonheal",
+      "description": "Restores HP if poisoned.",
+      "name": "Poison Heal"
+    },
+    "poisonpoint": {
+      "aka": {
+        "pokeemerald": "ABILITY_POISON_POINT"
+      },
+      "chrooked_id": "poisonpoint",
+      "description": "Poisons foe on contact.",
+      "name": "Poison Point"
+    },
+    "poisonpuppeteer": {
+      "aka": {
+        "pokeemerald": "ABILITY_POISON_PUPPETEER"
+      },
+      "chrooked_id": "poisonpuppeteer",
+      "description": "Confuses poisoned foes.",
+      "name": "Poison Puppeteer"
+    },
+    "poisontouch": {
+      "aka": {
+        "pokeemerald": "ABILITY_POISON_TOUCH"
+      },
+      "chrooked_id": "poisontouch",
+      "description": "Poisons foe on contact.",
+      "name": "Poison Touch"
+    },
+    "powerconstruct": {
+      "aka": {
+        "pokeemerald": "ABILITY_POWER_CONSTRUCT"
+      },
+      "chrooked_id": "powerconstruct",
+      "description": "Cells aid it when weakened.",
+      "name": "Power Construct"
+    },
+    "powerofalchemy": {
+      "aka": {
+        "pokeemerald": "ABILITY_POWER_OF_ALCHEMY"
+      },
+      "chrooked_id": "powerofalchemy",
+      "description": "Copies ally's ability.",
+      "name": "Power Of Alchemy"
+    },
+    "powerspot": {
+      "aka": {
+        "pokeemerald": "ABILITY_POWER_SPOT"
+      },
+      "chrooked_id": "powerspot",
+      "description": "Powers up ally moves.",
+      "name": "Power Spot"
+    },
+    "prankster": {
+      "aka": {
+        "pokeemerald": "ABILITY_PRANKSTER"
+      },
+      "chrooked_id": "prankster",
+      "description": "Status moves go first.",
+      "name": "Prankster"
+    },
+    "pressure": {
+      "aka": {
+        "pokeemerald": "ABILITY_PRESSURE"
+      },
+      "chrooked_id": "pressure",
+      "description": "Raises foe's PP usage.",
+      "name": "Pressure"
+    },
+    "primordialsea": {
+      "aka": {
+        "pokeemerald": "ABILITY_PRIMORDIAL_SEA"
+      },
+      "chrooked_id": "primordialsea",
+      "description": "Summons heavy rain.",
+      "name": "Primordial Sea"
+    },
+    "prismarmor": {
+      "aka": {
+        "pokeemerald": "ABILITY_PRISM_ARMOR"
+      },
+      "chrooked_id": "prismarmor",
+      "description": "Weakens “supereffective”.",
+      "name": "Prism Armor"
+    },
+    "propellertail": {
+      "aka": {
+        "pokeemerald": "ABILITY_PROPELLER_TAIL"
+      },
+      "chrooked_id": "propellertail",
+      "description": "Ignores foe's redirection.",
+      "name": "Propeller Tail"
+    },
+    "protean": {
+      "aka": {
+        "pokeemerald": "ABILITY_PROTEAN"
+      },
+      "chrooked_id": "protean",
+      "description": "Changes type to used move.",
+      "name": "Protean"
+    },
+    "protosynthesis": {
+      "aka": {
+        "pokeemerald": "ABILITY_PROTOSYNTHESIS"
+      },
+      "chrooked_id": "protosynthesis",
+      "description": "Sun boosts best stat.",
+      "name": "Protosynthesis"
+    },
+    "psychicsurge": {
+      "aka": {
+        "pokeemerald": "ABILITY_PSYCHIC_SURGE"
+      },
+      "chrooked_id": "psychicsurge",
+      "description": "Field becomes weird.",
+      "name": "Psychic Surge"
+    },
+    "punkrock": {
+      "aka": {
+        "pokeemerald": "ABILITY_PUNK_ROCK"
+      },
+      "chrooked_id": "punkrock",
+      "description": "Ups and resists sound.",
+      "name": "Punk Rock"
+    },
+    "purepower": {
+      "aka": {
+        "pokeemerald": "ABILITY_PURE_POWER"
+      },
+      "chrooked_id": "purepower",
+      "description": "Raises Attack.",
+      "name": "Pure Power"
+    },
+    "purifyingsalt": {
+      "aka": {
+        "pokeemerald": "ABILITY_PURIFYING_SALT"
+      },
+      "chrooked_id": "purifyingsalt",
+      "description": "Protected by pure salts.",
+      "name": "Purifying Salt"
+    },
+    "quarkdrive": {
+      "aka": {
+        "pokeemerald": "ABILITY_QUARK_DRIVE"
+      },
+      "chrooked_id": "quarkdrive",
+      "description": "Elec. field ups best stat.",
+      "name": "Quark Drive"
+    },
+    "queenlymajesty": {
+      "aka": {
+        "pokeemerald": "ABILITY_QUEENLY_MAJESTY"
+      },
+      "chrooked_id": "queenlymajesty",
+      "description": "Protects from priority.",
+      "name": "Queenly Majesty"
+    },
+    "quickdraw": {
+      "aka": {
+        "pokeemerald": "ABILITY_QUICK_DRAW"
+      },
+      "chrooked_id": "quickdraw",
+      "description": "Moves first occasionally.",
+      "name": "Quick Draw"
+    },
+    "quickfeet": {
+      "aka": {
+        "pokeemerald": "ABILITY_QUICK_FEET"
+      },
+      "chrooked_id": "quickfeet",
+      "description": "Ups Speed if suffering.",
+      "name": "Quick Feet"
+    },
+    "raindish": {
+      "aka": {
+        "pokeemerald": "ABILITY_RAIN_DISH"
+      },
+      "chrooked_id": "raindish",
+      "description": "Slight HP recovery in rain.",
+      "name": "Rain Dish"
+    },
+    "rattled": {
+      "aka": {
+        "pokeemerald": "ABILITY_RATTLED"
+      },
+      "chrooked_id": "rattled",
+      "description": "Raises Speed when scared.",
+      "name": "Rattled"
+    },
+    "receiver": {
+      "aka": {
+        "pokeemerald": "ABILITY_RECEIVER"
+      },
+      "chrooked_id": "receiver",
+      "description": "Copies ally's ability.",
+      "name": "Receiver"
+    },
+    "reckless": {
+      "aka": {
+        "pokeemerald": "ABILITY_RECKLESS"
+      },
+      "chrooked_id": "reckless",
+      "description": "Boosts moves with recoil.",
+      "name": "Reckless"
+    },
+    "refrigerate": {
+      "aka": {
+        "pokeemerald": "ABILITY_REFRIGERATE"
+      },
+      "chrooked_id": "refrigerate",
+      "description": "Normal moves become Ice.",
+      "name": "Refrigerate"
+    },
+    "regenerator": {
+      "aka": {
+        "pokeemerald": "ABILITY_REGENERATOR"
+      },
+      "chrooked_id": "regenerator",
+      "description": "Heals upon switching out.",
+      "name": "Regenerator"
+    },
+    "ripen": {
+      "aka": {
+        "pokeemerald": "ABILITY_RIPEN"
+      },
+      "chrooked_id": "ripen",
+      "description": "Doubles effect of Berries.",
+      "name": "Ripen"
+    },
+    "rivalry": {
+      "aka": {
+        "pokeemerald": "ABILITY_RIVALRY"
+      },
+      "chrooked_id": "rivalry",
+      "description": "Powers up against rivals.",
+      "name": "Rivalry"
+    },
+    "rkssystem": {
+      "aka": {
+        "pokeemerald": "ABILITY_RKS_SYSTEM"
+      },
+      "chrooked_id": "rkssystem",
+      "description": "Memories change its type.",
+      "name": "RKS System"
+    },
+    "rockhead": {
+      "aka": {
+        "pokeemerald": "ABILITY_ROCK_HEAD"
+      },
+      "chrooked_id": "rockhead",
+      "description": "Prevents recoil damage.",
+      "name": "Rock Head"
+    },
+    "rockypayload": {
+      "aka": {
+        "pokeemerald": "ABILITY_ROCKY_PAYLOAD"
+      },
+      "chrooked_id": "rockypayload",
+      "description": "Powers up Rock moves.",
+      "name": "Rocky Payload"
+    },
+    "roughskin": {
+      "aka": {
+        "pokeemerald": "ABILITY_ROUGH_SKIN"
+      },
+      "chrooked_id": "roughskin",
+      "description": "Hurts to touch.",
+      "name": "Rough Skin"
+    },
+    "runaway": {
+      "aka": {
+        "pokeemerald": "ABILITY_RUN_AWAY"
+      },
+      "chrooked_id": "runaway",
+      "description": "Makes escaping easier.",
+      "name": "Run Away"
+    },
+    "sandforce": {
+      "aka": {
+        "pokeemerald": "ABILITY_SAND_FORCE"
+      },
+      "chrooked_id": "sandforce",
+      "description": "Powers up in a sandstorm.",
+      "name": "Sand Force"
+    },
+    "sandrush": {
+      "aka": {
+        "pokeemerald": "ABILITY_SAND_RUSH"
+      },
+      "chrooked_id": "sandrush",
+      "description": "Ups Speed in a sandstorm.",
+      "name": "Sand Rush"
+    },
+    "sandspit": {
+      "aka": {
+        "pokeemerald": "ABILITY_SAND_SPIT"
+      },
+      "chrooked_id": "sandspit",
+      "description": "Creates a sandstorm if hit.",
+      "name": "Sand Spit"
+    },
+    "sandstream": {
+      "aka": {
+        "pokeemerald": "ABILITY_SAND_STREAM"
+      },
+      "chrooked_id": "sandstream",
+      "description": "Summons a sandstorm.",
+      "name": "Sand Stream"
+    },
+    "sandveil": {
+      "aka": {
+        "pokeemerald": "ABILITY_SAND_VEIL"
+      },
+      "chrooked_id": "sandveil",
+      "description": "Ups evasion in a sandstorm.",
+      "name": "Sand Veil"
+    },
+    "sapsipper": {
+      "aka": {
+        "pokeemerald": "ABILITY_SAP_SIPPER"
+      },
+      "chrooked_id": "sapsipper",
+      "description": "Grass increases Attack.",
+      "name": "Sap Sipper"
+    },
+    "schooling": {
+      "aka": {
+        "pokeemerald": "ABILITY_SCHOOLING"
+      },
+      "chrooked_id": "schooling",
+      "description": "Forms a school when strong.",
+      "name": "Schooling"
+    },
+    "scrappy": {
+      "aka": {
+        "pokeemerald": "ABILITY_SCRAPPY"
+      },
+      "chrooked_id": "scrappy",
+      "description": "Hits Ghost-type Pokémon.",
+      "name": "Scrappy"
+    },
+    "screencleaner": {
+      "aka": {
+        "pokeemerald": "ABILITY_SCREEN_CLEANER"
+      },
+      "chrooked_id": "screencleaner",
+      "description": "Removes walls of light.",
+      "name": "Screen Cleaner"
+    },
+    "seedsower": {
+      "aka": {
+        "pokeemerald": "ABILITY_SEED_SOWER"
+      },
+      "chrooked_id": "seedsower",
+      "description": "Affects terrain when hit.",
+      "name": "Seed Sower"
+    },
+    "serenegrace": {
+      "aka": {
+        "pokeemerald": "ABILITY_SERENE_GRACE"
+      },
+      "chrooked_id": "serenegrace",
+      "description": "Promotes added effects.",
+      "name": "Serene Grace"
+    },
+    "shadowshield": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHADOW_SHIELD"
+      },
+      "chrooked_id": "shadowshield",
+      "description": "Halves damage at full HP.",
+      "name": "Shadow Shield"
+    },
+    "shadowtag": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHADOW_TAG"
+      },
+      "chrooked_id": "shadowtag",
+      "description": "Prevents the foe's escape.",
+      "name": "Shadow Tag"
+    },
+    "sharpness": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHARPNESS"
+      },
+      "chrooked_id": "sharpness",
+      "description": "Strengthens slicing moves.",
+      "name": "Sharpness"
+    },
+    "shedskin": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHED_SKIN"
+      },
+      "chrooked_id": "shedskin",
+      "description": "Heals the body by shedding.",
+      "name": "Shed Skin"
+    },
+    "sheerforce": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHEER_FORCE"
+      },
+      "chrooked_id": "sheerforce",
+      "description": "Trades effects for power.",
+      "name": "Sheer Force"
+    },
+    "shellarmor": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHELL_ARMOR"
+      },
+      "chrooked_id": "shellarmor",
+      "description": "Blocks critical hits.",
+      "name": "Shell Armor"
+    },
+    "shielddust": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHIELD_DUST"
+      },
+      "chrooked_id": "shielddust",
+      "description": "Prevents added effects.",
+      "name": "Shield Dust"
+    },
+    "shieldsdown": {
+      "aka": {
+        "pokeemerald": "ABILITY_SHIELDS_DOWN"
+      },
+      "chrooked_id": "shieldsdown",
+      "description": "Shell breaks at half HP.",
+      "name": "Shields Down"
+    },
+    "simple": {
+      "aka": {
+        "pokeemerald": "ABILITY_SIMPLE"
+      },
+      "chrooked_id": "simple",
+      "description": "Prone to wild stat changes.",
+      "name": "Simple"
+    },
+    "skilllink": {
+      "aka": {
+        "pokeemerald": "ABILITY_SKILL_LINK"
+      },
+      "chrooked_id": "skilllink",
+      "description": "Multi-hit moves hit 5 times.",
+      "name": "Skill Link"
+    },
+    "slowstart": {
+      "aka": {
+        "pokeemerald": "ABILITY_SLOW_START"
+      },
+      "chrooked_id": "slowstart",
+      "description": "Takes a while to get going.",
+      "name": "Slow Start"
+    },
+    "slushrush": {
+      "aka": {
+        "pokeemerald": "ABILITY_SLUSH_RUSH"
+      },
+      "chrooked_id": "slushrush",
+      "description": "Raises Speed in Hail/Snow.",
+      "name": "Slush Rush"
+    },
+    "sniper": {
+      "aka": {
+        "pokeemerald": "ABILITY_SNIPER"
+      },
+      "chrooked_id": "sniper",
+      "description": "Boosts critical hits.",
+      "name": "Sniper"
+    },
+    "snowcloak": {
+      "aka": {
+        "pokeemerald": "ABILITY_SNOW_CLOAK"
+      },
+      "chrooked_id": "snowcloak",
+      "description": "Ups evasion in Hail or Snow.",
+      "name": "Snow Cloak"
+    },
+    "snowwarning": {
+      "aka": {
+        "pokeemerald": "ABILITY_SNOW_WARNING"
+      },
+      "chrooked_id": "snowwarning",
+      "description": "Summons hail in battle.",
+      "name": "Snow Warning"
+    },
+    "solarpower": {
+      "aka": {
+        "pokeemerald": "ABILITY_SOLAR_POWER"
+      },
+      "chrooked_id": "solarpower",
+      "description": "Powers up in sunshine.",
+      "name": "Solar Power"
+    },
+    "solidrock": {
+      "aka": {
+        "pokeemerald": "ABILITY_SOLID_ROCK"
+      },
+      "chrooked_id": "solidrock",
+      "description": "Weakens “supereffective”.",
+      "name": "Solid Rock"
+    },
+    "soulheart": {
+      "aka": {
+        "pokeemerald": "ABILITY_SOUL_HEART"
+      },
+      "chrooked_id": "soulheart",
+      "description": "KOs raise Sp. Atk.",
+      "name": "Soul-Heart"
+    },
+    "soundproof": {
+      "aka": {
+        "pokeemerald": "ABILITY_SOUNDPROOF"
+      },
+      "chrooked_id": "soundproof",
+      "description": "Avoids sound-based moves.",
+      "name": "Soundproof"
+    },
+    "speedboost": {
+      "aka": {
+        "pokeemerald": "ABILITY_SPEED_BOOST"
+      },
+      "chrooked_id": "speedboost",
+      "description": "Gradually boosts Speed.",
+      "name": "Speed Boost"
+    },
+    "stakeout": {
+      "aka": {
+        "pokeemerald": "ABILITY_STAKEOUT"
+      },
+      "chrooked_id": "stakeout",
+      "description": "Stronger as foes switch in.",
+      "name": "Stakeout"
+    },
+    "stall": {
+      "aka": {
+        "pokeemerald": "ABILITY_STALL"
+      },
+      "chrooked_id": "stall",
+      "description": "Always moves last.",
+      "name": "Stall"
+    },
+    "stalwart": {
+      "aka": {
+        "pokeemerald": "ABILITY_STALWART"
+      },
+      "chrooked_id": "stalwart",
+      "description": "Ignores foe's redirection.",
+      "name": "Stalwart"
+    },
+    "stamina": {
+      "aka": {
+        "pokeemerald": "ABILITY_STAMINA"
+      },
+      "chrooked_id": "stamina",
+      "description": "Boosts Defense when hit.",
+      "name": "Stamina"
+    },
+    "stancechange": {
+      "aka": {
+        "pokeemerald": "ABILITY_STANCE_CHANGE"
+      },
+      "chrooked_id": "stancechange",
+      "description": "Transforms as it battles.",
+      "name": "Stance Change"
+    },
+    "static": {
+      "aka": {
+        "pokeemerald": "ABILITY_STATIC"
+      },
+      "chrooked_id": "static",
+      "description": "Paralyzes on contact.",
+      "name": "Static"
+    },
+    "steadfast": {
+      "aka": {
+        "pokeemerald": "ABILITY_STEADFAST"
+      },
+      "chrooked_id": "steadfast",
+      "description": "Flinching raises Speed.",
+      "name": "Steadfast"
+    },
+    "steamengine": {
+      "aka": {
+        "pokeemerald": "ABILITY_STEAM_ENGINE"
+      },
+      "chrooked_id": "steamengine",
+      "description": "Fire or Water hits up Speed.",
+      "name": "Steam Engine"
+    },
+    "steelworker": {
+      "aka": {
+        "pokeemerald": "ABILITY_STEELWORKER"
+      },
+      "chrooked_id": "steelworker",
+      "description": "Powers up Steel moves.",
+      "name": "Steelworker"
+    },
+    "steelyspirit": {
+      "aka": {
+        "pokeemerald": "ABILITY_STEELY_SPIRIT"
+      },
+      "chrooked_id": "steelyspirit",
+      "description": "Boosts ally's Steel moves.",
+      "name": "Steely Spirit"
+    },
+    "stench": {
+      "aka": {
+        "pokeemerald": "ABILITY_STENCH"
+      },
+      "chrooked_id": "stench",
+      "description": "May cause a foe to flinch.",
+      "name": "Stench"
+    },
+    "stickyhold": {
+      "aka": {
+        "pokeemerald": "ABILITY_STICKY_HOLD"
+      },
+      "chrooked_id": "stickyhold",
+      "description": "Prevents item theft.",
+      "name": "Sticky Hold"
+    },
+    "stormdrain": {
+      "aka": {
+        "pokeemerald": "ABILITY_STORM_DRAIN"
+      },
+      "chrooked_id": "stormdrain",
+      "description": "Draws in Water moves.",
+      "name": "Storm Drain"
+    },
+    "strongjaw": {
+      "aka": {
+        "pokeemerald": "ABILITY_STRONG_JAW"
+      },
+      "chrooked_id": "strongjaw",
+      "description": "Boosts biting moves.",
+      "name": "Strong Jaw"
+    },
+    "sturdy": {
+      "aka": {
+        "pokeemerald": "ABILITY_STURDY"
+      },
+      "chrooked_id": "sturdy",
+      "description": "Negates 1-hit KO attacks.",
+      "name": "Sturdy"
+    },
+    "suctioncups": {
+      "aka": {
+        "pokeemerald": "ABILITY_SUCTION_CUPS"
+      },
+      "chrooked_id": "suctioncups",
+      "description": "Firmly anchors the body.",
+      "name": "Suction Cups"
+    },
+    "superluck": {
+      "aka": {
+        "pokeemerald": "ABILITY_SUPER_LUCK"
+      },
+      "chrooked_id": "superluck",
+      "description": "Critical hits land often.",
+      "name": "Super Luck"
+    },
+    "supersweetsyrup": {
+      "aka": {
+        "pokeemerald": "ABILITY_SUPERSWEET_SYRUP"
+      },
+      "chrooked_id": "supersweetsyrup",
+      "description": "Lowers the foe's Evasion.",
+      "name": "Supersweet Syrup"
+    },
+    "supremeoverlord": {
+      "aka": {
+        "pokeemerald": "ABILITY_SUPREME_OVERLORD"
+      },
+      "chrooked_id": "supremeoverlord",
+      "description": "Inherits fallen's strength.",
+      "name": "Supreme Overlord"
+    },
+    "surgesurfer": {
+      "aka": {
+        "pokeemerald": "ABILITY_SURGE_SURFER"
+      },
+      "chrooked_id": "surgesurfer",
+      "description": "Faster on electricity.",
+      "name": "Surge Surfer"
+    },
+    "swarm": {
+      "aka": {
+        "pokeemerald": "ABILITY_SWARM"
+      },
+      "chrooked_id": "swarm",
+      "description": "Ups Bug moves in a pinch.",
+      "name": "Swarm"
+    },
+    "sweetveil": {
+      "aka": {
+        "pokeemerald": "ABILITY_SWEET_VEIL"
+      },
+      "chrooked_id": "sweetveil",
+      "description": "Prevents party from sleep.",
+      "name": "Sweet Veil"
+    },
+    "swiftswim": {
+      "aka": {
+        "pokeemerald": "ABILITY_SWIFT_SWIM"
+      },
+      "chrooked_id": "swiftswim",
+      "description": "Raises Speed in rain.",
+      "name": "Swift Swim"
+    },
+    "swordofruin": {
+      "aka": {
+        "pokeemerald": "ABILITY_SWORD_OF_RUIN"
+      },
+      "chrooked_id": "swordofruin",
+      "description": "Lowers foes' Defense.",
+      "name": "Sword of Ruin"
+    },
+    "symbiosis": {
+      "aka": {
+        "pokeemerald": "ABILITY_SYMBIOSIS"
+      },
+      "chrooked_id": "symbiosis",
+      "description": "Passes its item to an ally.",
+      "name": "Symbiosis"
+    },
+    "synchronize": {
+      "aka": {
+        "pokeemerald": "ABILITY_SYNCHRONIZE"
+      },
+      "chrooked_id": "synchronize",
+      "description": "Passes on status problems.",
+      "name": "Synchronize"
+    },
+    "tabletsofruin": {
+      "aka": {
+        "pokeemerald": "ABILITY_TABLETS_OF_RUIN"
+      },
+      "chrooked_id": "tabletsofruin",
+      "description": "Lowers foes' damage.",
+      "name": "Tablets of Ruin"
+    },
+    "tangledfeet": {
+      "aka": {
+        "pokeemerald": "ABILITY_TANGLED_FEET"
+      },
+      "chrooked_id": "tangledfeet",
+      "description": "Ups evasion if confused.",
+      "name": "Tangled Feet"
+    },
+    "tanglinghair": {
+      "aka": {
+        "pokeemerald": "ABILITY_TANGLING_HAIR"
+      },
+      "chrooked_id": "tanglinghair",
+      "description": "Lowers Speed on contact.",
+      "name": "Tangling Hair"
+    },
+    "technician": {
+      "aka": {
+        "pokeemerald": "ABILITY_TECHNICIAN"
+      },
+      "chrooked_id": "technician",
+      "description": "Boosts weaker moves.",
+      "name": "Technician"
+    },
+    "telepathy": {
+      "aka": {
+        "pokeemerald": "ABILITY_TELEPATHY"
+      },
+      "chrooked_id": "telepathy",
+      "description": "Can't be damaged by an ally.",
+      "name": "Telepathy"
+    },
+    "teraformzero": {
+      "aka": {
+        "pokeemerald": "ABILITY_TERAFORM_ZERO"
+      },
+      "chrooked_id": "teraformzero",
+      "description": "Zeroes weather and terrain.",
+      "name": "Teraform Zero"
+    },
+    "terashell": {
+      "aka": {
+        "pokeemerald": "ABILITY_TERA_SHELL"
+      },
+      "chrooked_id": "terashell",
+      "description": "Resists all at full HP.",
+      "name": "Tera Shell"
+    },
+    "terashift": {
+      "aka": {
+        "pokeemerald": "ABILITY_TERA_SHIFT"
+      },
+      "chrooked_id": "terashift",
+      "description": "Terastallizes upon entry.",
+      "name": "Tera Shift"
+    },
+    "teravolt": {
+      "aka": {
+        "pokeemerald": "ABILITY_TERAVOLT"
+      },
+      "chrooked_id": "teravolt",
+      "description": "Moves hit through abilities.",
+      "name": "Teravolt"
+    },
+    "thermalexchange": {
+      "aka": {
+        "pokeemerald": "ABILITY_THERMAL_EXCHANGE"
+      },
+      "chrooked_id": "thermalexchange",
+      "description": "Fire hits up Attack.",
+      "name": "Thermal Exchange"
+    },
+    "thickfat": {
+      "aka": {
+        "pokeemerald": "ABILITY_THICK_FAT"
+      },
+      "chrooked_id": "thickfat",
+      "description": "Heat-and-cold protection.",
+      "name": "Thick Fat"
+    },
+    "tintedlens": {
+      "aka": {
+        "pokeemerald": "ABILITY_TINTED_LENS"
+      },
+      "chrooked_id": "tintedlens",
+      "description": "Ups “not very effective”.",
+      "name": "Tinted Lens"
+    },
+    "torrent": {
+      "aka": {
+        "pokeemerald": "ABILITY_TORRENT"
+      },
+      "chrooked_id": "torrent",
+      "description": "Ups Water moves in a pinch.",
+      "name": "Torrent"
+    },
+    "toughclaws": {
+      "aka": {
+        "pokeemerald": "ABILITY_TOUGH_CLAWS"
+      },
+      "chrooked_id": "toughclaws",
+      "description": "Boosts contact moves.",
+      "name": "Tough Claws"
+    },
+    "toxicboost": {
+      "aka": {
+        "pokeemerald": "ABILITY_TOXIC_BOOST"
+      },
+      "chrooked_id": "toxicboost",
+      "description": "Ups Attack if poisoned.",
+      "name": "Toxic Boost"
+    },
+    "toxicchain": {
+      "aka": {
+        "pokeemerald": "ABILITY_TOXIC_CHAIN"
+      },
+      "chrooked_id": "toxicchain",
+      "description": "Moves can poison.",
+      "name": "Toxic Chain"
+    },
+    "toxicdebris": {
+      "aka": {
+        "pokeemerald": "ABILITY_TOXIC_DEBRIS"
+      },
+      "chrooked_id": "toxicdebris",
+      "description": "Throws poison spikes if hit.",
+      "name": "Toxic Debris"
+    },
+    "trace": {
+      "aka": {
+        "pokeemerald": "ABILITY_TRACE"
+      },
+      "chrooked_id": "trace",
+      "description": "Copies special ability.",
+      "name": "Trace"
+    },
+    "transistor": {
+      "aka": {
+        "pokeemerald": "ABILITY_TRANSISTOR"
+      },
+      "chrooked_id": "transistor",
+      "description": "Ups Electric-type moves.",
+      "name": "Transistor"
+    },
+    "triage": {
+      "aka": {
+        "pokeemerald": "ABILITY_TRIAGE"
+      },
+      "chrooked_id": "triage",
+      "description": "Healing moves go first.",
+      "name": "Triage"
+    },
+    "truant": {
+      "aka": {
+        "pokeemerald": "ABILITY_TRUANT"
+      },
+      "chrooked_id": "truant",
+      "description": "Moves only every two turns.",
+      "name": "Truant"
+    },
+    "turboblaze": {
+      "aka": {
+        "pokeemerald": "ABILITY_TURBOBLAZE"
+      },
+      "chrooked_id": "turboblaze",
+      "description": "Moves hit through abilities.",
+      "name": "Turboblaze"
+    },
+    "unaware": {
+      "aka": {
+        "pokeemerald": "ABILITY_UNAWARE"
+      },
+      "chrooked_id": "unaware",
+      "description": "Ignores stat changes.",
+      "name": "Unaware"
+    },
+    "unburden": {
+      "aka": {
+        "pokeemerald": "ABILITY_UNBURDEN"
+      },
+      "chrooked_id": "unburden",
+      "description": "Using a hold item ups Speed.",
+      "name": "Unburden"
+    },
+    "unnerve": {
+      "aka": {
+        "pokeemerald": "ABILITY_UNNERVE"
+      },
+      "chrooked_id": "unnerve",
+      "description": "Foes can't eat Berries.",
+      "name": "Unnerve"
+    },
+    "unseenfist": {
+      "aka": {
+        "pokeemerald": "ABILITY_UNSEEN_FIST"
+      },
+      "chrooked_id": "unseenfist",
+      "description": "Contact evades protection.",
+      "name": "Unseen Fist"
+    },
+    "vesselofruin": {
+      "aka": {
+        "pokeemerald": "ABILITY_VESSEL_OF_RUIN"
+      },
+      "chrooked_id": "vesselofruin",
+      "description": "Lowers foes' sp. damage.",
+      "name": "Vessel of Ruin"
+    },
+    "victorystar": {
+      "aka": {
+        "pokeemerald": "ABILITY_VICTORY_STAR"
+      },
+      "chrooked_id": "victorystar",
+      "description": "Raises party accuracy.",
+      "name": "Victory Star"
+    },
+    "vitalspirit": {
+      "aka": {
+        "pokeemerald": "ABILITY_VITAL_SPIRIT"
+      },
+      "chrooked_id": "vitalspirit",
+      "description": "Prevents sleep.",
+      "name": "Vital Spirit"
+    },
+    "voltabsorb": {
+      "aka": {
+        "pokeemerald": "ABILITY_VOLT_ABSORB"
+      },
+      "chrooked_id": "voltabsorb",
+      "description": "Turns electricity into HP.",
+      "name": "Volt Absorb"
+    },
+    "wanderingspirit": {
+      "aka": {
+        "pokeemerald": "ABILITY_WANDERING_SPIRIT"
+      },
+      "chrooked_id": "wanderingspirit",
+      "description": "Trade abilities on contact.",
+      "name": "Wandering Spirit"
+    },
+    "waterabsorb": {
+      "aka": {
+        "pokeemerald": "ABILITY_WATER_ABSORB"
+      },
+      "chrooked_id": "waterabsorb",
+      "description": "Changes water into HP.",
+      "name": "Water Absorb"
+    },
+    "waterbubble": {
+      "aka": {
+        "pokeemerald": "ABILITY_WATER_BUBBLE"
+      },
+      "chrooked_id": "waterbubble",
+      "description": "Guards from fire and burns.",
+      "name": "Water Bubble"
+    },
+    "watercompaction": {
+      "aka": {
+        "pokeemerald": "ABILITY_WATER_COMPACTION"
+      },
+      "chrooked_id": "watercompaction",
+      "description": "Water boosts Defense.",
+      "name": "Water Compaction"
+    },
+    "waterveil": {
+      "aka": {
+        "pokeemerald": "ABILITY_WATER_VEIL"
+      },
+      "chrooked_id": "waterveil",
+      "description": "Prevents burns.",
+      "name": "Water Veil"
+    },
+    "weakarmor": {
+      "aka": {
+        "pokeemerald": "ABILITY_WEAK_ARMOR"
+      },
+      "chrooked_id": "weakarmor",
+      "description": "Its stats change when hit.",
+      "name": "Weak Armor"
+    },
+    "wellbakedbody": {
+      "aka": {
+        "pokeemerald": "ABILITY_WELL_BAKED_BODY"
+      },
+      "chrooked_id": "wellbakedbody",
+      "description": "Strengthened by Fire.",
+      "name": "Well-Baked Body"
+    },
+    "whitesmoke": {
+      "aka": {
+        "pokeemerald": "ABILITY_WHITE_SMOKE"
+      },
+      "chrooked_id": "whitesmoke",
+      "description": "Prevents ability reduction.",
+      "name": "White Smoke"
+    },
+    "wimpout": {
+      "aka": {
+        "pokeemerald": "ABILITY_WIMP_OUT"
+      },
+      "chrooked_id": "wimpout",
+      "description": "Flees at half HP.",
+      "name": "Wimp Out"
+    },
+    "windpower": {
+      "aka": {
+        "pokeemerald": "ABILITY_WIND_POWER"
+      },
+      "chrooked_id": "windpower",
+      "description": "Gets charged by wind.",
+      "name": "Wind Power"
+    },
+    "windrider": {
+      "aka": {
+        "pokeemerald": "ABILITY_WIND_RIDER"
+      },
+      "chrooked_id": "windrider",
+      "description": "Ups Attack if hit by wind.",
+      "name": "Wind Rider"
+    },
+    "wonderguard": {
+      "aka": {
+        "pokeemerald": "ABILITY_WONDER_GUARD"
+      },
+      "chrooked_id": "wonderguard",
+      "description": "“Supereffective” hits.",
+      "name": "Wonder Guard"
+    },
+    "wonderskin": {
+      "aka": {
+        "pokeemerald": "ABILITY_WONDER_SKIN"
+      },
+      "chrooked_id": "wonderskin",
+      "description": "May avoid status problems.",
+      "name": "Wonder Skin"
+    },
+    "zenmode": {
+      "aka": {
+        "pokeemerald": "ABILITY_ZEN_MODE"
+      },
+      "chrooked_id": "zenmode",
+      "description": "Transforms at half HP.",
+      "name": "Zen Mode"
+    },
+    "zerotohero": {
+      "aka": {
+        "pokeemerald": "ABILITY_ZERO_TO_HERO"
+      },
+      "chrooked_id": "zerotohero",
+      "description": "Changes form on switch out.",
+      "name": "Zero to Hero"
+    }
+  },
   "moves": {},
   "species": {
     "abomasnow": {

@@ -11,6 +11,7 @@
 
 import type {
   Ability,
+  AbilityWrite,
   ApplyReportSummary,
   Behavior,
   BehaviorPacket,
@@ -133,8 +134,8 @@ export const api = {
     ),
 
   // Abilities
-  putAbility: (id: string, payload: Ability) =>
-    sendJson<Ability>("PUT", `/api/abilities/${encodeURIComponent(id)}`, payload),
+  putAbility: (id: string, payload: AbilityWrite) =>
+    sendJson<AbilityWrite>("PUT", `/api/abilities/${encodeURIComponent(id)}`, payload),
   deleteAbility: (id: string, confirm?: boolean) =>
     sendJson<{ deleted: string }>(
       "DELETE",
@@ -179,6 +180,12 @@ export const api = {
   /** The target's own values ⊕ Ruleset — the dex backdrop for that fork. */
   targetDex: (id: string) => (signal?: AbortSignal) =>
     getJson<DexEntry[]>(`/api/targets/${encodeURIComponent(id)}/dex`, signal),
+  /** The target's abilities ⊕ Ruleset — the abilities backdrop for that fork. */
+  targetAbilities: (id: string) => (signal?: AbortSignal) =>
+    getJson<Ability[]>(
+      `/api/targets/${encodeURIComponent(id)}/abilities`,
+      signal,
+    ),
   /** Fetch one behavior packet by its DATA-ONLY `packet_url`. */
   packet: (packetUrl: string, signal?: AbortSignal) =>
     getJson<BehaviorPacket>(packetUrl, signal),

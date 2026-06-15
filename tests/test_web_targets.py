@@ -495,6 +495,44 @@ def test_ac7_target_dex_backdrop_and_snapshot_cache(
     assert entry["base"]["stats"]["hp"] == 60  # the FORK's own value, not base 99
 
 
+# --- abilities slice ac4: per-Target abilities backdrop; snapshot cached --- #
+
+
+def test_abilities_ac4_target_backdrop_and_snapshot_cache(
+    client: TestClient, fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target_id = _register(client, fork)
+
+    # spy on build_snapshot to prove it runs once across two abilities requests.
+    calls = {"n": 0}
+    real_build = targetsmod.snapmod.build_snapshot
+
+    def counting_build(base_dir):  # noqa: ANN001
+        calls["n"] += 1
+        return real_build(base_dir)
+
+    monkeypatch.setattr(targetsmod.snapmod, "build_snapshot", counting_build)
+
+    first = client.get(f"/api/targets/{target_id}/abilities")
+    assert first.status_code == 200, first.text
+    second = client.get(f"/api/targets/{target_id}/abilities")
+    assert second.status_code == 200
+
+    assert calls["n"] == 1, "snapshot should be built once and cached"
+
+    abilities = first.json()
+    ids = {a["chrooked_id"] for a in abilities}
+    # The fork's own ability (Stench) rides along as base-only (unflagged).
+    assert "stench" in ids
+    stench = next(a for a in abilities if a["chrooked_id"] == "stench")
+    assert stench["overridden_fields"] == []
+    # The Ruleset owns Striker, which the fork lacks -> surfaced as created.
+    assert "striker" in ids
+    striker = next(a for a in abilities if a["chrooked_id"] == "striker")
+    assert striker["base"] == {}
+    assert set(striker["overridden_fields"]) == {"name", "description"}
+
+
 # --- ac8: DATA-ONLY created ability appears with a working packet link ------ #
 
 

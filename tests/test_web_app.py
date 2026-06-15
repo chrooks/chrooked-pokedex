@@ -32,7 +32,23 @@ _SNAPSHOT = {
         },
     },
     "moves": {},
-    "abilities": {},
+    # Base abilities so canon /api/abilities is the FULL base ⊕ Ruleset list.
+    # `poisonheal` is also owned by the sample Ruleset (an overridden ability);
+    # `overgrow` is base-only (unflagged).
+    "abilities": {
+        "overgrow": {
+            "chrooked_id": "overgrow",
+            "name": "Overgrow",
+            "description": "Ups Grass moves in a pinch.",
+            "aka": {"pokeemerald": "ABILITY_OVERGROW"},
+        },
+        "poisonheal": {
+            "chrooked_id": "poisonheal",
+            "name": "Poison Heal",
+            "description": "A base description the Ruleset replaces.",
+            "aka": {"pokeemerald": "ABILITY_POISON_HEAL"},
+        },
+    },
     "type_chart": [],
 }
 
@@ -92,10 +108,32 @@ def test_moves_endpoint_lists_owned_moves(client: TestClient) -> None:
     assert excalibur["category"] == "physical"
 
 
-def test_abilities_endpoint_lists_owned_abilities(client: TestClient) -> None:
+def test_abilities_endpoint_returns_full_base_merged_with_ruleset(
+    client: TestClient,
+) -> None:
+    # ac2: canon abilities is the FULL base ⊕ Ruleset list, not the sparse
+    # Ruleset-only list. The base-only ability is present and unflagged; the
+    # Ruleset-owned one is flagged (overridden).
     response = client.get("/api/abilities")
     assert response.status_code == 200
-    assert any(a["chrooked_id"] == "poisonheal" for a in response.json())
+    abilities = response.json()
+    ids = {a["chrooked_id"] for a in abilities}
+    # Both the base-only and the Ruleset-touched ability are present.
+    assert {"overgrow", "poisonheal"} <= ids
+    # Count exceeds the Ruleset-owned count (here 2 base >= 1 ruleset ability).
+    assert len(abilities) >= 2
+    overgrow = next(a for a in abilities if a["chrooked_id"] == "overgrow")
+    assert overgrow["overridden_fields"] == []  # base-only, unflagged
+    poisonheal = next(a for a in abilities if a["chrooked_id"] == "poisonheal")
+    assert "description" in poisonheal["overridden_fields"]  # Ruleset edited it
+
+
+def test_abilities_endpoint_503_when_snapshot_missing(tmp_path: Path) -> None:
+    # ac2: abilities is now a merge endpoint (like /api/dex), so a missing base
+    # snapshot is a 503 with an actionable message.
+    app = create_app(ruleset_dir=_SAMPLE, snapshot_path=tmp_path / "absent.json")
+    response = TestClient(app, raise_server_exceptions=False).get("/api/abilities")
+    assert response.status_code == 503
 
 
 def test_type_chart_endpoint_lists_overrides(client: TestClient) -> None:
@@ -113,10 +151,11 @@ def test_behaviors_endpoint_lists_specs(client: TestClient) -> None:
 
 def test_collection_endpoints_work_without_snapshot(tmp_path: Path) -> None:
     # The Ruleset-owned collections don't need the base snapshot, so a missing
-    # snapshot must not 503 them (only /api/dex* merges onto the base).
+    # snapshot must not 503 them (only the base-merging routes — /api/dex* and,
+    # since this slice, /api/abilities — read the snapshot).
     app = create_app(ruleset_dir=_SAMPLE, snapshot_path=tmp_path / "absent.json")
     client = TestClient(app, raise_server_exceptions=False)
-    for path in ("/api/moves", "/api/abilities", "/api/type-chart", "/api/behaviors"):
+    for path in ("/api/moves", "/api/type-chart", "/api/behaviors"):
         assert client.get(path).status_code == 200, path
 
 

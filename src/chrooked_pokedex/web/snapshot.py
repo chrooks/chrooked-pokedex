@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from ..readers.pokeemerald import (
+    ability_parser,
     evolution_parser,
     learnset_parser,
     species_parser,
@@ -97,13 +98,35 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
     return {
         "version": SNAPSHOT_VERSION,
         "species": species,
-        # The other kinds the dex surfaces are Ruleset-owned (moves/abilities are
-        # only present when changed) so they merge from the Ruleset, not the base.
-        # Reserved here for shape stability; populated in a later slice if needed.
+        "abilities": _base_abilities_map(base_dir),
+        # Moves and type chart stay empty stubs here; their base population is a
+        # later slice (the readers exist but moves need token-neutralization).
         "moves": {},
-        "abilities": {},
         "type_chart": [],
     }
+
+
+def _base_abilities_map(base_dir: Path) -> dict[str, dict[str, Any]]:
+    """Read every base ability into a neutral entry keyed by `chrooked_id`.
+
+    Mirrors how species are built: `ability_parser.parse_ability_text` returns
+    `{ABILITY_X: (name, description)}` already neutral of engine tokens; we slug
+    the name into the join key the Ruleset's AbilityDefs use and flatten textbox
+    control codes out of the description (`normalize_description`) so the value is
+    neutral end to end. Deterministic: sorted over the parser's symbols.
+    """
+    abilities: dict[str, dict[str, Any]] = {}
+    parsed = ability_parser.parse_ability_text(base_dir)
+    for constant in sorted(parsed):
+        name, description = parsed[constant]
+        chrooked_id = nz.slug(name)
+        abilities[chrooked_id] = {
+            "chrooked_id": chrooked_id,
+            "name": name,
+            "description": nz.normalize_description(description),
+            "aka": {"pokeemerald": constant},
+        }
+    return abilities
 
 
 def _base_species_entry(

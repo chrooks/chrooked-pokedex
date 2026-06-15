@@ -1,7 +1,7 @@
 /* Display helpers: stat labels/order, type slugs, dex-number formatting, and
    the base→now diff for overridden stats. Pure functions, no React. */
 
-import type { DexEntry } from "../types";
+import type { Ability, DexEntry } from "../types";
 
 /** The six base stats in canonical display order, with short uppercase labels. */
 export const STAT_ORDER = ["hp", "atk", "def", "spa", "spd", "spe"] as const;
@@ -76,6 +76,35 @@ export function dexLabel(dex: number | null): string {
 
 export function isEdited(entry: DexEntry): boolean {
   return entry.overridden_fields.length > 0;
+}
+
+/** True when the Ruleset has touched this ability (overridden a base field or
+    created it outright). Same rule as {@link isEdited} for the dex — a single
+    edited ⇔ overridden_fields-nonempty contract across both surfaces. */
+export function isAbilityEdited(ability: Ability): boolean {
+  return ability.overridden_fields.length > 0;
+}
+
+/** Short labels for the ability diff annotations. */
+export const ABILITY_FIELD_LABEL: Record<string, string> = {
+  name: "Name",
+  description: "Description",
+};
+
+/** The Abilities tab's three-way edited filter, mirroring the dex's edited
+    toggle but with an explicit "not edited" option for browsing base-only
+    abilities. */
+export type AbilityEditedFilter = "all" | "edited" | "base";
+
+/** Whether an ability passes the current edited filter. Pure so the tab can
+    `list.filter(...)` and the predicate is unit-tested independently. */
+export function matchesAbilityEditedFilter(
+  ability: Ability,
+  filter: AbilityEditedFilter,
+): boolean {
+  if (filter === "edited") return isAbilityEdited(ability);
+  if (filter === "base") return !isAbilityEdited(ability);
+  return true;
 }
 
 /** Base stat total: the sum of the six stats, or undefined if any is missing

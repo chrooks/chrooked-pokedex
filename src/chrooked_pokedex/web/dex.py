@@ -17,10 +17,14 @@ from __future__ import annotations
 from typing import Any
 
 from ..model import Ruleset
-from ..model.schema import AbilitiesOverride, SpeciesOverride
+from ..model.schema import AbilitiesOverride, AbilityDef, SpeciesOverride
 
 # Top-level species fields the dex flags as overridden, in display order.
 _FLAGGABLE_FIELDS = ("types", "abilities", "stats", "learnset", "evolution")
+
+# Ability fields the merge diffs, in display order. `aka` rides along but is not
+# a user-facing diff row, so it is not flagged.
+_ABILITY_DIFF_FIELDS = ("name", "description")
 
 
 def build_dex(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
@@ -133,3 +137,83 @@ def _merge_abilities(
         if value is not None:
             merged[slot] = value
     return merged
+
+
+def build_abilities(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
+    """Merge the Ruleset's AbilityDefs onto the full base abilities, sorted by name.
+
+    The abilities tab reaches species parity here: every base ability shows
+    through (unflagged unless the Ruleset touches it), each Ruleset AbilityDef
+    replaces the matching base entry and flags the changed fields with a base→now
+    diff, and a Ruleset id with no base match surfaces as a created ability.
+    Mirrors `build_dex` for species.
+    """
+    base_abilities: dict[str, dict[str, Any]] = snapshot.get("abilities", {})
+    entries = [
+        _merge_ability(base, ruleset.abilities.get(chrooked_id))
+        for chrooked_id, base in base_abilities.items()
+    ]
+    # Ruleset ids with no base match are created abilities (new content).
+    created_ids = set(ruleset.abilities) - set(base_abilities)
+    entries.extend(
+        _merge_ability(None, ruleset.abilities[chrooked_id])
+        for chrooked_id in created_ids
+    )
+    return sorted(entries, key=lambda e: e["name"])
+
+
+def _merge_ability(
+    base: dict[str, Any] | None, override: AbilityDef | None
+) -> dict[str, Any]:
+    """One merged AbilityEntry: base ⊕ Ruleset def, with overridden_fields + base diff.
+
+    Three cases:
+    - base-only (override is None): pass the base through unflagged.
+    - created (base is None): the Ruleset def's fields are all "provided"; there
+      is nothing to diff against, so `base` stays empty.
+    - overridden: the Ruleset def replaces the base entry; flag every field whose
+      value actually differs, carrying the pre-override base value for the diff.
+    """
+    if override is None:
+        # base is guaranteed present here (called over snapshot keys).
+        assert base is not None
+        return {
+            "chrooked_id": base["chrooked_id"],
+            "name": base["name"],
+            "description": base.get("description", ""),
+            "aka": dict(base.get("aka", {})),
+            "overridden_fields": [],
+            "base": {},
+        }
+
+    override_values = {"name": override.name, "description": override.description}
+
+    if base is None:
+        # Created: no base to diff against; the def provides every non-empty field.
+        provided = [f for f in _ABILITY_DIFF_FIELDS if override_values[f] != ""]
+        return {
+            "chrooked_id": override.chrooked_id,
+            "name": override.name,
+            "description": override.description,
+            "aka": dict(override.aka),
+            "overridden_fields": provided,
+            "base": {},
+        }
+
+    overridden: list[str] = []
+    base_values: dict[str, Any] = {}
+    for field_name in _ABILITY_DIFF_FIELDS:
+        base_value = base.get(field_name, "")
+        if override_values[field_name] != base_value:
+            overridden.append(field_name)
+            base_values[field_name] = base_value
+
+    return {
+        "chrooked_id": override.chrooked_id,
+        "name": override.name,
+        "description": override.description,
+        # aka follows the Ruleset def when overridden so an edit round-trips it.
+        "aka": dict(override.aka),
+        "overridden_fields": overridden,
+        "base": base_values,
+    }

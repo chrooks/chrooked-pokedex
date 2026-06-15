@@ -351,10 +351,18 @@ def test_delete_ability_with_confirm_succeeds(
 def test_editing_ability_round_trips_aka(
     client: TestClient, ruleset_dir: Path
 ) -> None:
-    ability = next(
+    entry = next(
         a for a in client.get("/api/abilities").json() if a["chrooked_id"] == "poisonheal"
     )
-    ability["description"] = "Now heals more."
+    # The merged AbilityEntry carries display-only fields (`overridden_fields`,
+    # `base`); the editor sends back only the writable AbilityDef fields. Mirror
+    # that here so the PUT round-trips like the real client.
+    ability = {
+        "name": entry["name"],
+        "chrooked_id": entry["chrooked_id"],
+        "description": "Now heals more.",
+        "aka": entry["aka"],
+    }
     response = client.put("/api/abilities/poisonheal", json=ability)
     assert response.status_code == 200, response.text
     on_disk = _read(ruleset_dir / "abilities" / "poisonheal.yaml")

@@ -87,13 +87,34 @@ export interface Move {
   target: string;
 }
 
+/** The Ability fields the Ruleset can override (name, description). */
+export type AbilityField = "name" | "description";
+
+/** Pre-override base values for whatever the Ruleset changed (base → now diff).
+    Empty (`{}`) for a Ruleset-created ability that has no base to diff against. */
+export interface AbilityBaseValues {
+  name?: string;
+  description?: string;
+}
+
+/** The merged base ⊕ Ruleset view of one ability, mirroring {@link DexEntry}.
+    `GET /api/abilities` and `GET /api/targets/{id}/abilities` return these. */
 export interface Ability {
   name: string;
   chrooked_id: string;
   description: string;
   /** Engine symbol(s); carried through edits so apply (M3) keeps resolving. */
   aka: Record<string, unknown>;
+  /** The fields the Ruleset changed. `[]` ⇒ base-only (not edited). */
+  overridden_fields: AbilityField[];
+  /** Pre-override base values for the changed fields. `{}` for a created entry. */
+  base: AbilityBaseValues;
 }
+
+/** The writable shape sent on PUT — the Ruleset owns only these fields. The
+    merge-view flags (`overridden_fields`, `base`) are server-recomputed and the
+    ability loader REJECTS them as unknown keys (422), so they must be stripped. */
+export type AbilityWrite = Omit<Ability, "overridden_fields" | "base">;
 
 export interface TypeChartEntry {
   attacker: string;
