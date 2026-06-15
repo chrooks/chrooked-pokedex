@@ -45,6 +45,9 @@
 }
 
 .device__readout {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
   font-size: var(--text-sm);
   color: var(--text-dim);
   letter-spacing: 0.04em;

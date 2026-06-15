@@ -578,50 +578,8 @@
 
 /* --- Dex backdrop banner (lives on the Dex screen) ------------------------*/
 
-.backdrop-banner {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin: var(--space-3) var(--space-5) 0;
-  padding: var(--space-2) var(--space-3);
-  background: color-mix(in oklch, var(--edited) 10%, var(--surface-1));
-  border: 1px solid color-mix(in oklch, var(--edited) 40%, var(--line));
-  border-radius: var(--radius-sm);
-}
-
-.backdrop-banner__lamp {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--edited);
-  box-shadow: 0 0 8px var(--edited-glow);
-}
-
-.backdrop-banner__text {
-  font-size: var(--text-sm);
-  color: var(--text);
-}
-
-.backdrop-banner__note {
-  color: var(--text-faint);
-}
-
-.backdrop-banner__clear {
-  margin-left: auto;
-  padding: var(--space-1) var(--space-3);
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  color: var(--text-dim);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  transition: all var(--dur-fast) var(--ease-out);
-}
-
-.backdrop-banner__clear:hover {
-  color: var(--text);
-  border-color: var(--line-strong);
-}
+/* The dex-backdrop indicator moved to the device header as `.backdrop-chip`
+   (see components/targets/backdrop-chip.css). */
 
 @media (max-width: 860px) {
   .targets-grid {

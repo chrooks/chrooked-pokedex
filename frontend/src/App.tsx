@@ -15,7 +15,7 @@ import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
 import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
-import { BackdropBanner } from "./components/targets/BackdropBanner";
+import { BackdropChip } from "./components/targets/BackdropChip";
 
 /**
  * The Canon dex app shell. Owns the dex fetch, the URL-persisted view state, and
@@ -127,7 +127,14 @@ export default function App() {
       layout={view.layout}
       onLayout={(layout) => update({ layout })}
       searchRef={searchRef}
-      readout={<Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />}
+      readout={
+        <>
+          <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
+          {isDex && view.backdrop !== null && (
+            <BackdropChip targetId={view.backdrop} onClear={handleClearBackdrop} />
+          )}
+        </>
+      }
     >
       {/* Background is inert while the detail dialog is open: it can't be
           tabbed into and is hidden from assistive tech (focus trap). `inert`
@@ -138,9 +145,6 @@ export default function App() {
           ? ({ inert: "" } as Record<string, string>)
           : {})}
       >
-        {isDex && view.backdrop !== null && (
-          <BackdropBanner targetId={view.backdrop} onClear={handleClearBackdrop} />
-        )}
         <KindScreen
           kind={view.kind}
           dexResource={dex}

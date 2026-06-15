@@ -1,0 +1,47 @@
+/* The dex-backdrop chip — compact, lives in the device header readout. */
+
+.backdrop-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 2px 6px 2px var(--space-2);
+  background: color-mix(in oklch, var(--edited) 12%, var(--surface-2));
+  border: 1px solid color-mix(in oklch, var(--edited) 40%, var(--line));
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--text);
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.backdrop-chip__lamp {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--edited);
+  box-shadow: 0 0 6px var(--edited-glow);
+  flex: none;
+}
+
+.backdrop-chip__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.backdrop-chip__clear:hover {
+  color: var(--text);
+  background: color-mix(in oklch, var(--edited) 20%, transparent);
+}
