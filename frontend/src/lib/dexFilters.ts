@@ -6,7 +6,8 @@
 import type { DexEntry } from "../types";
 import { STAT_ORDER, TYPES, bst } from "./format";
 import { COLUMNS } from "./dexColumns";
-import { CLASS_VALUES, classOf } from "./dexTags";
+import { CLASS_VALUES, classesOf } from "./dexTags";
+import type { ClassValue } from "./dexTags";
 
 /** One pill in the builder: a leaf predicate or a parenthesis token. Each
     non-first entry carries the connector that joins it to the entry before. */
@@ -134,7 +135,7 @@ export function applyFilter(
       return entry.types.includes(value); // array-contains: Fire matches Fire/Water
     }
     if (def.field === "class") {
-      return classOf(entry.dex) === value;
+      return classesOf(entry).includes(value as ClassValue);
     }
     return false;
   }

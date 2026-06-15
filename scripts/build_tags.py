@@ -48,10 +48,47 @@ _STARTER_LINE_STARTS = [
 ]
 STARTER: set[int] = {n for start in _STARTER_LINE_STARTS for n in (start, start + 1, start + 2)}
 
+# Fossil Pokémon revived from fossils, plus their evolutions (whole lines).
+FOSSIL: set[int] = {
+    138, 139, 140, 141, 142,  # Kanto: Omanyte/Omastar, Kabuto/Kabutops, Aerodactyl
+    345, 346, 347, 348,  # Hoenn: Lileep/Cradily, Anorith/Armaldo
+    408, 409, 410, 411,  # Sinnoh: Cranidos/Rampardos, Shieldon/Bastiodon
+    564, 565, 566, 567,  # Unova: Tirtouga/Carracosta, Archen/Archeops
+    696, 697, 698, 699,  # Kalos: Tyrunt/Tyrantrum, Amaura/Aurorus
+    880, 881, 882, 883,  # Galar: Dracozolt/Arctozolt, Dracovish/Arctovish
+}
+
+# Eevee and all of its evolutions.
+EEVEE: set[int] = {
+    133,  # Eevee
+    134, 135, 136,  # Vaporeon, Jolteon, Flareon
+    196, 197,  # Espeon, Umbreon
+    470, 471,  # Leafeon, Glaceon
+    700,  # Sylveon
+}
+
+# Pseudo-legendary lines (600-BST finals), tagged whole-line like the starters.
+_PSEUDO_LINE_STARTS = [
+    147,  # Dratini -> Dragonair -> Dragonite
+    246,  # Larvitar -> Pupitar -> Tyranitar
+    371,  # Bagon -> Shelgon -> Salamence
+    374,  # Beldum -> Metang -> Metagross
+    443,  # Gible -> Gabite -> Garchomp
+    633,  # Deino -> Zweilous -> Hydreigon
+    704,  # Goomy -> Sliggoo -> Goodra
+    782,  # Jangmo-o -> Hakamo-o -> Kommo-o
+    885,  # Dreepy -> Drakloak -> Dragapult
+    996,  # Frigibax -> Arctibax -> Baxcalibur
+]
+PSEUDO_LEGENDARY: set[int] = {
+    n for start in _PSEUDO_LINE_STARTS for n in (start, start + 1, start + 2)
+}
+
 
 def build_tags() -> dict[str, list[str]]:
     tags: dict[str, list[str]] = {}
-    for dex in sorted(LEGENDARY | MYTHICAL | STARTER):
+    all_dex = LEGENDARY | MYTHICAL | STARTER | FOSSIL | EEVEE | PSEUDO_LEGENDARY
+    for dex in sorted(all_dex):
         labels: list[str] = []
         if dex in LEGENDARY:
             labels.append("legendary")
@@ -59,6 +96,12 @@ def build_tags() -> dict[str, list[str]]:
             labels.append("mythical")
         if dex in STARTER:
             labels.append("starter")
+        if dex in FOSSIL:
+            labels.append("fossil")
+        if dex in EEVEE:
+            labels.append("eevee")
+        if dex in PSEUDO_LEGENDARY:
+            labels.append("pseudo")
         tags[str(dex)] = labels
     return tags
 
@@ -71,6 +114,9 @@ def main() -> None:
         "legendary": len(LEGENDARY),
         "mythical": len(MYTHICAL),
         "starter": len(STARTER),
+        "fossil": len(FOSSIL),
+        "eevee": len(EEVEE),
+        "pseudo": len(PSEUDO_LEGENDARY),
     }
     print(f"Wrote {OUT} with {len(tags)} tagged dex numbers. {counts}")
 
