@@ -107,6 +107,24 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
 
   const busy = isSaving || del.isSaving || !rawLoaded;
 
+  // Live BST: sum the six stat fields (a blank field counts as its base value,
+  // matching the overrides-only save semantics), and the delta vs the base total.
+  // Hidden when the base stat block is incomplete (some cosmetic forms carry none),
+  // mirroring the read-only ledger's BST rule.
+  const baseStatValues = STAT_ORDER.map((key) => baseStat(entry, key));
+  const hasFullStats = baseStatValues.every((value) => value !== undefined);
+  const baseBst = hasFullStats
+    ? baseStatValues.reduce((sum, value) => sum + (value as number), 0)
+    : undefined;
+  const liveBst = hasFullStats
+    ? STAT_ORDER.reduce((sum, key) => {
+        const value = stats[key];
+        return sum + (value === "" ? (baseStat(entry, key) as number) : value);
+      }, 0)
+    : undefined;
+  const bstDelta =
+    baseBst !== undefined && liveBst !== undefined ? liveBst - baseBst : 0;
+
   return (
     <form
       className="editor-form"
@@ -134,6 +152,23 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
             />
           ))}
         </div>
+        {liveBst !== undefined && (
+          <div className="editor-bst" id="species-bst" aria-live="polite">
+            <span className="editor-bst__label">BST</span>
+            <span className="editor-bst__total">{liveBst}</span>
+            {bstDelta !== 0 ? (
+              <span
+                className="editor-bst__delta"
+                data-dir={bstDelta > 0 ? "up" : "down"}
+              >
+                {bstDelta > 0 ? `+${bstDelta}` : bstDelta}
+                <span className="editor-bst__base"> from {baseBst}</span>
+              </span>
+            ) : (
+              <span className="editor-bst__unchanged">unchanged from base</span>
+            )}
+          </div>
+        )}
       </section>
 
       <section className="editor-section" aria-labelledby="species-types-heading">

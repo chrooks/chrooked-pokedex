@@ -448,3 +448,53 @@ button.move-tag:hover {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Live BST readout under the base-stat inputs: running total + delta vs base. */
+.editor-bst {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.editor-bst__label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.editor-bst__total {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.editor-bst__delta {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.editor-bst__delta[data-dir="up"] {
+  color: var(--type-grass);
+}
+
+.editor-bst__delta[data-dir="down"] {
+  color: var(--type-fire);
+}
+
+.editor-bst__base {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.editor-bst__unchanged {
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
