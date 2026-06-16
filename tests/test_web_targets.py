@@ -667,3 +667,75 @@ def test_ac8_data_only_ability_has_working_packet(
     assert payload["chrooked_id"] == "striker"
     assert "Striker" in payload["markdown"]
     assert len(payload["markdown"]) > 0
+
+
+# --- dialect endpoint -------------------------------------------------------- #
+
+_FIXTURES = Path(__file__).parent / "fixtures" / "essentials_dialect"
+
+
+def _register_essentials(client: TestClient, path: Path) -> str:
+    """Register an Essentials target (engine='essentials')."""
+    # Essentials targets need to be a git repo for the registry add() validation
+    import subprocess
+
+    subprocess.run(["git", "init", "-q", str(path)], check=True)
+    subprocess.run(["git", "-C", str(path), "config", "user.email", "t@t.test"], check=True)
+    subprocess.run(["git", "-C", str(path), "config", "user.name", "test"], check=True)
+    (path / ".gitkeep").write_text("")
+    subprocess.run(["git", "-C", str(path), "add", "-A"], check=True)
+    subprocess.run(["git", "-C", str(path), "commit", "-q", "-m", "init"], check=True)
+
+    response = client.post(
+        "/api/targets",
+        json={"label": "Essentials Fork", "path": str(path), "engine": "essentials"},
+    )
+    assert response.status_code == 200, response.text
+    return response.json()["id"]
+
+
+def test_dialect_endpoint_modern_v21(client: TestClient, tmp_path: Path) -> None:
+    """GET /api/targets/{id}/dialect on a modern v21 PBS returns essentials21."""
+    import shutil
+
+    target = tmp_path / "modern_target"
+    shutil.copytree(_FIXTURES / "modern_v21", target)
+    target_id = _register_essentials(client, target)
+
+    resp = client.get(f"/api/targets/{target_id}/dialect")
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["dialect"] == "essentials21"
+    assert body["label"] == "v19+ (modern)"
+
+
+def test_dialect_endpoint_english_162(client: TestClient, tmp_path: Path) -> None:
+    """GET /api/targets/{id}/dialect on a 16.2-shape PBS returns essentials16."""
+    import shutil
+
+    target = tmp_path / "162_target"
+    shutil.copytree(_FIXTURES / "english_162", target)
+    target_id = _register_essentials(client, target)
+
+    resp = client.get(f"/api/targets/{target_id}/dialect")
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["dialect"] == "essentials16"
+    assert body["label"] == "16.2"
+
+
+def test_dialect_endpoint_pokeemerald_returns_null(client: TestClient, fork: Path) -> None:
+    """GET /api/targets/{id}/dialect on a pokeemerald target returns null dialect."""
+    target_id = _register(client, fork)
+
+    resp = client.get(f"/api/targets/{target_id}/dialect")
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["dialect"] is None
+    assert body["label"] is None
+
+
+def test_dialect_endpoint_unknown_target_returns_404(client: TestClient) -> None:
+    """GET /api/targets/nonexistent/dialect returns 404."""
+    resp = client.get("/api/targets/doesnotexist/dialect")
+    assert resp.status_code == 404
