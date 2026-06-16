@@ -172,6 +172,45 @@ describe("applyFilter — text is accent-insensitive substring", () => {
   });
 });
 
+describe("applyFilter — moves text filter (ac7)", () => {
+  const moves = defFor("moves");
+
+  it("passes when the move is in the learnset", () => {
+    const entry = makeEntry({
+      learnset: [
+        { level: 1, move: "Tackle" },
+        { level: 5, move: "Growl" },
+      ],
+    });
+    expect(applyFilter(moves, entry, "Tackle")).toBe(true);
+  });
+
+  it("fails when the move is absent from the learnset", () => {
+    const entry = makeEntry({
+      learnset: [{ level: 1, move: "Tackle" }],
+    });
+    expect(applyFilter(moves, entry, "Flamethrower")).toBe(false);
+  });
+
+  it("is accent-insensitive and case-insensitive", () => {
+    const entry = makeEntry({
+      learnset: [{ level: 1, move: "Flabébé's Move" }],
+    });
+    expect(applyFilter(moves, entry, "flabebe")).toBe(true);
+  });
+
+  it("an empty value matches everything", () => {
+    expect(applyFilter(moves, makeEntry(), "")).toBe(true);
+  });
+});
+
+describe("buildFilterDefs — moves field is registered (ac7)", () => {
+  it("includes a text def for moves", () => {
+    expect(defFor("moves").method).toBe("text");
+    expect(defFor("moves").label).toBe("Moves");
+  });
+});
+
 describe("evalEntries — boolean structure (ac1)", () => {
   // A = Type:Fire (true), B = Type:Water (false), C = Atk ≥ 999 (false)
   const entry = makeEntry(); // Fire/Flying, atk 84

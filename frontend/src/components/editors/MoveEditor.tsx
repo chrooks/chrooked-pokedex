@@ -10,9 +10,8 @@
 
 import { useState } from "react";
 import { api } from "../../api";
-import type { DexEntry, Move, MoveField, MoveWrite } from "../../types";
+import type { Move, MoveField, MoveWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
-import { useUrlState } from "../../hooks/useUrlState";
 import { isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
 import { EditorDialog } from "./EditorDialog";
@@ -24,8 +23,6 @@ import "../ledger/ledger-rows.css";
 type Props = {
   /** null = create a new move; otherwise edit this one. */
   move: Move | null;
-  /** Species whose merged learnsets include this move. Empty for a new move. */
-  learnedBy: DexEntry[];
   onClose: () => void;
   onSaved: () => void;
   /** When true the editor renders without the overlay/header chrome — it is
@@ -48,19 +45,11 @@ type MoveForm = {
   description: string;
 };
 
-export function MoveEditor({ move, learnedBy, onClose, onSaved, embedded = false }: Props) {
+export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) {
   const isNew = move === null;
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
-  const [, updateView] = useUrlState();
   const [form, setForm] = useState<MoveForm>(() => initialForm(move));
-
-  /** Navigate to the dex screen with the given species selected so the
-      DetailLedger opens. Single source of truth: uses existing useUrlState. */
-  function goToSpecies(species: DexEntry) {
-    updateView({ kind: "dex", selected: species.chrooked_id });
-    onClose();
-  }
 
   const titleId = "move-editor-title";
 
@@ -168,39 +157,6 @@ export function MoveEditor({ move, learnedBy, onClose, onSaved, embedded = false
               )}
             </div>
           ))}
-        </section>
-      )}
-
-      {!isNew && (
-        <section
-          id="move-learned-by"
-          className="editor-section"
-          aria-label="Species that learn this move"
-        >
-          <h3 className="editor-section__heading">
-            Learned by
-            {learnedBy.length > 0 && (
-              <span className="reverse-lookup__count"> ({learnedBy.length})</span>
-            )}
-          </h3>
-          {learnedBy.length === 0 ? (
-            <p className="reverse-lookup__empty">No species learn this move.</p>
-          ) : (
-            <ul id="move-learned-by-list" className="reverse-lookup__list">
-              {learnedBy.map((species) => (
-                <li key={species.chrooked_id}>
-                  <button
-                    type="button"
-                    id={`move-learner-${species.chrooked_id}`}
-                    className="reverse-lookup__species-btn"
-                    onClick={() => goToSpecies(species)}
-                  >
-                    {species.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
         </section>
       )}
 

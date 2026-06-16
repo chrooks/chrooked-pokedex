@@ -17,6 +17,7 @@ import { ErrorView, EmptyView } from "../StatusView";
 import { MoveEditor } from "../editors/MoveEditor";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { MoveDetail } from "../sidebar/MoveDetail";
+import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
 
@@ -80,9 +81,14 @@ export function MovesTab() {
     if (!dexData) return new Map();
     const index = new Map<string, DexEntry[]>();
     for (const species of dexData) {
+      // Track which move keys we have already counted for this species so a mon
+      // that learns the same move at multiple levels only appears once per move.
+      const seenForSpecies = new Set<string>();
       for (const entry of species.learnset) {
         // Learnset stores display names; normalize to chrooked_id via the moves list.
         const key = moveNameToId.get(entry.move) ?? entry.move;
+        if (seenForSpecies.has(key)) continue;
+        seenForSpecies.add(key);
         const existing = index.get(key);
         if (existing) {
           existing.push(species);
@@ -286,11 +292,23 @@ export function MovesTab() {
               label: "Detail",
               render: () => <MoveDetail move={selected} />,
             },
+            {
+              id: "learned-by",
+              label: `Learned by (${(learnedByIndex.get(selected.chrooked_id) ?? []).length})`,
+              render: () => (
+                <ReverseLookupTab
+                  species={learnedByIndex.get(selected.chrooked_id) ?? []}
+                  rowIdPrefix="move-learner"
+                  filterField="moves"
+                  filterValue={selected.name}
+                  onClose={() => setSelected(null)}
+                />
+              ),
+            },
           ]}
           editView={
             <MoveEditor
               move={selected}
-              learnedBy={learnedByIndex.get(selected.chrooked_id) ?? []}
               onClose={() => setSelected(null)}
               onSaved={() => {
                 reload();
@@ -307,7 +325,6 @@ export function MovesTab() {
       {editingNew && (
         <MoveEditor
           move={null}
-          learnedBy={[]}
           onClose={() => setEditingNew(false)}
           onSaved={() => {
             reload();
@@ -320,7 +337,6 @@ export function MovesTab() {
       {editDirect !== null && (
         <MoveEditor
           move={editDirect}
-          learnedBy={learnedByIndex.get(editDirect.chrooked_id) ?? []}
           onClose={() => setEditDirect(null)}
           onSaved={() => {
             setEditDirect(null);

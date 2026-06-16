@@ -96,6 +96,7 @@ export function buildFilterDefs(_entries: DexEntry[]): FilterDef[] {
     },
     { field: "name", label: "Name", method: "text" },
     { field: "abilities", label: "Abilities", method: "text" },
+    { field: "moves", label: "Moves", method: "text" },
   ];
 }
 
@@ -149,6 +150,10 @@ function abilityText(entry: DexEntry): string {
   return [primary, secondary, hidden].filter(Boolean).join(" ");
 }
 
+function learnsetText(entry: DexEntry): string {
+  return entry.learnset.map((e) => e.move).join(" ");
+}
+
 /** Evaluate a single predicate against one entry. A missing/invalid value or an
     unparseable numeric threshold fails the predicate (never throws). */
 export function applyFilter(
@@ -183,7 +188,14 @@ export function applyFilter(
   if (value === "") {
     return true;
   }
-  const haystack = def.field === "name" ? entry.name : abilityText(entry);
+  let haystack: string;
+  if (def.field === "name") {
+    haystack = entry.name;
+  } else if (def.field === "moves") {
+    haystack = learnsetText(entry);
+  } else {
+    haystack = abilityText(entry);
+  }
   return normalize(haystack).includes(normalize(value));
 }
 

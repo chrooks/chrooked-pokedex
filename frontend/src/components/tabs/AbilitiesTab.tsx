@@ -15,6 +15,7 @@ import { ErrorView, EmptyView } from "../StatusView";
 import { AbilityEditor } from "../editors/AbilityEditor";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { AbilityDetail } from "../sidebar/AbilityDetail";
+import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
 
@@ -232,11 +233,23 @@ export function AbilitiesTab() {
               label: "Detail",
               render: () => <AbilityDetail ability={selected} />,
             },
+            {
+              id: "used-by",
+              label: `Used by (${(usedByIndex.get(selected.chrooked_id) ?? []).length})`,
+              render: () => (
+                <ReverseLookupTab
+                  species={usedByIndex.get(selected.chrooked_id) ?? []}
+                  rowIdPrefix="ability-user"
+                  filterField="abilities"
+                  filterValue={selected.name}
+                  onClose={() => setSelected(null)}
+                />
+              ),
+            },
           ]}
           editView={
             <AbilityEditor
               ability={selected}
-              usedBy={usedByIndex.get(selected.chrooked_id) ?? []}
               onClose={() => setSelected(null)}
               onSaved={() => {
                 reload();
@@ -253,7 +266,6 @@ export function AbilitiesTab() {
       {editingNew && (
         <AbilityEditor
           ability={null}
-          usedBy={[]}
           onClose={() => setEditingNew(false)}
           onSaved={() => {
             reload();
@@ -266,7 +278,6 @@ export function AbilitiesTab() {
       {editDirect !== null && (
         <AbilityEditor
           ability={editDirect}
-          usedBy={usedByIndex.get(editDirect.chrooked_id) ?? []}
           onClose={() => setEditDirect(null)}
           onSaved={() => {
             setEditDirect(null);

@@ -6,9 +6,8 @@
 
 import { useState } from "react";
 import { api } from "../../api";
-import type { Ability, AbilityField, AbilityWrite, DexEntry } from "../../types";
+import type { Ability, AbilityField, AbilityWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
-import { useUrlState } from "../../hooks/useUrlState";
 import { isAbilityEdited, ABILITY_FIELD_LABEL } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
 import { EditorDialog } from "./EditorDialog";
@@ -20,9 +19,6 @@ import "../ledger/ledger-rows.css";
 type Props = {
   /** null = create a new ability; otherwise edit this one. */
   ability: Ability | null;
-  /** Species that have this ability in any slot (primary, secondary, hidden).
-      Empty for a new ability. */
-  usedBy: DexEntry[];
   onClose: () => void;
   onSaved: () => void;
   /** When true the editor renders without the overlay/header chrome — it is
@@ -32,11 +28,10 @@ type Props = {
 
 type AbilityForm = { name: string; chrooked_id: string; description: string };
 
-export function AbilityEditor({ ability, usedBy, onClose, onSaved, embedded = false }: Props) {
+export function AbilityEditor({ ability, onClose, onSaved, embedded = false }: Props) {
   const isNew = ability === null;
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
-  const [, updateView] = useUrlState();
   const [form, setForm] = useState<AbilityForm>(() => ({
     name: ability?.name ?? "",
     chrooked_id: ability?.chrooked_id ?? "",
@@ -94,13 +89,6 @@ export function AbilityEditor({ ability, usedBy, onClose, onSaved, embedded = fa
         now: currentOf[field],
       }))
     : [];
-
-  /** Navigate to the dex screen with the given species selected so the
-      DetailLedger opens. Single source of truth: uses existing useUrlState. */
-  function goToSpecies(species: DexEntry) {
-    updateView({ kind: "dex", selected: species.chrooked_id });
-    onClose();
-  }
 
   const formBody = (
     <>
@@ -161,39 +149,6 @@ export function AbilityEditor({ ability, usedBy, onClose, onSaved, embedded = fa
               )}
             </div>
           ))}
-        </section>
-      )}
-
-      {!isNew && (
-        <section
-          id="ability-used-by"
-          className="editor-section"
-          aria-label="Species that have this ability"
-        >
-          <h3 className="editor-section__heading">
-            Used by
-            {usedBy.length > 0 && (
-              <span className="reverse-lookup__count"> ({usedBy.length})</span>
-            )}
-          </h3>
-          {usedBy.length === 0 ? (
-            <p className="reverse-lookup__empty">No species have this ability.</p>
-          ) : (
-            <ul id="ability-used-by-list" className="reverse-lookup__list">
-              {usedBy.map((species) => (
-                <li key={species.chrooked_id}>
-                  <button
-                    type="button"
-                    id={`ability-user-${species.chrooked_id}`}
-                    className="reverse-lookup__species-btn"
-                    onClick={() => goToSpecies(species)}
-                  >
-                    {species.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
         </section>
       )}
 
