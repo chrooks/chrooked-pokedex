@@ -83,6 +83,10 @@ def set_column(text: str, internal: str, index: int, value: str) -> tuple[str, b
     Returns `(new_text, applied)`. Untouched columns and rows stay byte-identical; the
     line's CRLF is preserved. `applied` is False (text unchanged) when the row is
     missing or the column index is out of range, so the caller can report it unresolved.
+
+    A `value` containing a comma is auto-quoted on write (unless the caller already
+    quoted it), so the comma stays inside one field instead of shifting later columns
+    and silently corrupting the row.
     """
     span = find_row(text, internal)
     if span is None:
@@ -91,9 +95,22 @@ def set_column(text: str, internal: str, index: int, value: str) -> tuple[str, b
     columns = split_columns(line)
     if not 0 <= index < len(columns):
         return text, False
-    columns[index] = value
+    columns[index] = _quote_if_needed(value)
     new_line = join_columns(columns)
     return text[: span[0]] + new_line + text[span[1]:], True
+
+
+def _quote_if_needed(value: str) -> str:
+    """Wrap `value` in double quotes when it contains a comma and isn't already quoted.
+
+    An already-quoted value (`"..."`) is passed through verbatim — the caller is
+    responsible for its own internal `""` escaping. A bare comma-bearing value is
+    quoted so a `split_columns` round-trip preserves the column count.
+    """
+    already_quoted = value.startswith('"') and value.endswith('"') and len(value) >= 2
+    if "," in value and not already_quoted:
+        return '"' + value + '"'
+    return value
 
 
 def max_index(text: str) -> int:
