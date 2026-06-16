@@ -68,11 +68,11 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--engine",
-        choices=("pokeemerald", "essentials", "essentials162"),
+        choices=("pokeemerald", "essentials"),
         default="pokeemerald",
-        help="Target engine (default: pokeemerald). 'essentials' writes v21 PBS text; "
-        "'essentials162' is the 16.2 (Africanvs-era) PBS dialect — foundation only "
-        "(I/O + resolution); tier appliers arrive in #21/#22/#23.",
+        help="Target engine (default: pokeemerald). 'essentials' writes Pokémon "
+        "Essentials PBS text; the dialect (16.2 vs modern v21) is auto-detected from "
+        "the target's file shape — override with --dialect.",
     )
     apply.add_argument(
         "--category",
