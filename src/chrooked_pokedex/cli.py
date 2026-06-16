@@ -22,6 +22,7 @@ from .appliers.essentials import (
     species_apply as essentials_species,
     type_chart_apply as essentials_type_chart,
 )
+from .appliers.essentials162 import resolution as essentials162_resolution
 from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
@@ -66,9 +67,11 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--engine",
-        choices=("pokeemerald", "essentials"),
+        choices=("pokeemerald", "essentials", "essentials162"),
         default="pokeemerald",
-        help="Target engine (default: pokeemerald). 'essentials' writes PBS text.",
+        help="Target engine (default: pokeemerald). 'essentials' writes v21 PBS text; "
+        "'essentials162' is the 16.2 (Africanvs-era) PBS dialect — foundation only "
+        "(I/O + resolution); tier appliers arrive in #21/#22/#23.",
     )
     apply.add_argument(
         "--category",
@@ -256,6 +259,18 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
         print(f"type-chart: {len(changed)} file(s) changed")
 
 
+def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    """Foundation entry for the 16.2 dialect (#20).
+
+    Builds the 16.2 ResolutionMap from the target's PBS so the I/O + resolution layers
+    are exercised end-to-end. The tier appliers (species/moves/type-chart) land in
+    #21/#22/#23, so there is nothing to write yet — this is a deliberate no-op that
+    proves the dialect wires in.
+    """
+    essentials162_resolution.build_resolution_map(target, ruleset)
+    print("essentials162: foundation only — tier appliers arrive in #21/#22/#23")
+
+
 def _run_apply(
     target: Path, engine: str, category: str, ruleset_dir: Path, force: bool
 ) -> int:
@@ -270,6 +285,8 @@ def _run_apply(
 
     if engine == "essentials":
         _apply_essentials(target, category, ruleset, report)
+    elif engine == "essentials162":
+        _apply_essentials162(target, category, ruleset, report)
     else:
         _apply_pokeemerald(target, category, ruleset, report)
 
