@@ -23,6 +23,7 @@ from .appliers.essentials import (
     type_chart_apply as essentials_type_chart,
 )
 from .appliers.essentials162 import resolution as essentials162_resolution
+from .appliers.essentials.dialect import detect_dialect
 from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
@@ -34,7 +35,7 @@ from .appliers.pokeemerald.type_chart_apply import apply_type_chart
 from .behavior import render_manifest, render_packet
 from .harvest.harvester import apply_proposals, propose_changes
 from .model import Ruleset
-from .report import ApplyReport
+from .report import ApplyReport, ReportEntry
 from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
@@ -82,6 +83,16 @@ def main(argv: list[str] | None = None) -> int:
     )
     apply.add_argument(
         "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder to read."
+    )
+    apply.add_argument(
+        "--dialect",
+        choices=("auto", "essentials16", "essentials21"),
+        default="auto",
+        help=(
+            "Essentials dialect to use (default: auto — detect from PBS file shape). "
+            "'essentials16' forces 16.x flat-CSV PBS; 'essentials21' forces modern "
+            "section-based PBS. Ignored when engine=pokeemerald."
+        ),
     )
     apply.add_argument(
         "--force", action="store_true", help="Apply even if the target git tree is dirty."
@@ -153,7 +164,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "seed":
         return _run_seed(args.fork, args.base, args.ruleset)
     if args.command == "apply":
-        return _run_apply(args.target, args.engine, args.category, args.ruleset, args.force)
+        return _run_apply(
+            args.target, args.engine, args.category, args.ruleset, args.force, args.dialect
+        )
     if args.command == "harvest":
         return _run_harvest(args.fork, args.ruleset, args.dry_run)
     if args.command == "behaviors":
@@ -260,7 +273,7 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
 
 
 def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
-    """Foundation entry for the 16.2 dialect (#20).
+    """Foundation entry for the 16.2 dialect (#20), routing target for ``--dialect essentials16``.
 
     Builds the 16.2 ResolutionMap from the target's PBS so the I/O + resolution layers
     are exercised end-to-end. The tier appliers (species/moves/type-chart) land in
@@ -272,8 +285,20 @@ def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyRepo
 
 
 def _run_apply(
-    target: Path, engine: str, category: str, ruleset_dir: Path, force: bool
+    target: Path,
+    engine: str,
+    category: str,
+    ruleset_dir: Path,
+    force: bool,
+    dialect: str = "auto",
 ) -> int:
+    """Apply the Ruleset to a target fork.
+
+    When engine is 'essentials' and dialect is 'auto', the PBS file shape is
+    inspected to pick the right applier. A non-auto dialect forces the choice
+    without reading any PBS files. An unrecognised format blocks with a clear
+    message in the Apply Report and writes nothing to the target.
+    """
     try:
         require_clean_git_status(target, force=force)
     except DirtyWorkingTree as error:
@@ -284,9 +309,42 @@ def _run_apply(
     report = ApplyReport()
 
     if engine == "essentials":
-        _apply_essentials(target, category, ruleset, report)
-    elif engine == "essentials162":
-        _apply_essentials162(target, category, ruleset, report)
+        resolved_dialect = dialect
+        if dialect == "auto":
+            resolved_dialect = detect_dialect(target)
+            if resolved_dialect is None:
+                # Block — cannot determine the format; write nothing to target files.
+                report.add(
+                    ReportEntry(
+                        status="blocked",
+                        category="(all)",
+                        chrooked_id="(all)",
+                        reason=(
+                            "blocked: unrecognized Essentials format — "
+                            "PBS/moves.txt and PBS/pokemon.txt do not match a known "
+                            "dialect (essentials16 or essentials21). "
+                            "Use --dialect to force one explicitly."
+                        ),
+                    )
+                )
+                print(
+                    "blocked: unrecognized Essentials format. "
+                    "Use --dialect essentials16 or --dialect essentials21 to override."
+                )
+                json_path = report.write(target / "apply-report.md")
+                counts = report.counts()
+                print(
+                    f"Apply Report: applied={counts['applied']} "
+                    f"partial={counts['partial']} blocked={counts['blocked']}"
+                )
+                print(f"  {target / 'apply-report.md'}")
+                print(f"  {json_path}")
+                return 1
+
+        if resolved_dialect == "essentials16":
+            _apply_essentials162(target, category, ruleset, report)
+        else:
+            _apply_essentials(target, category, ruleset, report)
     else:
         _apply_pokeemerald(target, category, ruleset, report)
 
