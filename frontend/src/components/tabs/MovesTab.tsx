@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
@@ -13,6 +15,8 @@ import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
 import { ErrorView, EmptyView } from "../StatusView";
 import { MoveEditor } from "../editors/MoveEditor";
+import { DetailSidebar } from "../sidebar/DetailSidebar";
+import { MoveDetail } from "../sidebar/MoveDetail";
 import "./tabs.css";
 import "../editors/editors.css";
 
@@ -45,7 +49,12 @@ export function MovesTab() {
   );
   const { data, error, status, isLoading, reload } = useResource<Move[]>(fetcher);
   const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
-  const [editing, setEditing] = useState<{ move: Move | null } | null>(null);
+  /** Row click → read-only sidebar. */
+  const [selected, setSelected] = useState<Move | null>(null);
+  /** "New move" → editor directly (no read-only step for a record not yet created). */
+  const [editingNew, setEditingNew] = useState(false);
+  /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
+  const [editDirect, setEditDirect] = useState<Move | null>(null);
   const [query, setQuery] = useState("");
   const [activeFlags, setActiveFlags] = useState<string[]>([]);
   const [editedFilter, setEditedFilter] = useState<MoveEditedFilter>("all");
@@ -128,7 +137,7 @@ export function MovesTab() {
           type="button"
           id="moves-new"
           className="btn btn--primary btn--new"
-          onClick={() => setEditing({ move: null })}
+          onClick={() => setEditingNew(true)}
         >
           <span aria-hidden="true">+ </span>New move
         </button>
@@ -204,6 +213,8 @@ export function MovesTab() {
                     key={move.chrooked_id}
                     id={`move-row-${move.chrooked_id}`}
                     data-edited={isMoveEdited(move)}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSelected(move)}
                   >
                     <td className="tab-strong">
                       <EditedLed on={isMoveEdited(move)} />
@@ -229,7 +240,10 @@ export function MovesTab() {
                               data-on={activeFlags.includes(flag)}
                               aria-pressed={activeFlags.includes(flag)}
                               aria-label={`Filter by ${flag}`}
-                              onClick={() => toggleFlag(flag)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFlag(flag);
+                              }}
                             >
                               {flag}
                             </button>
@@ -237,14 +251,18 @@ export function MovesTab() {
                         </span>
                       )}
                     </td>
-                    <td className="tab-num">
+                    <td>
                       <button
                         type="button"
+                        id={`move-row-edit-${move.chrooked_id}`}
                         className="tab-row-edit"
                         aria-label={`Edit ${move.name}`}
-                        onClick={() => setEditing({ move })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditDirect(move);
+                        }}
                       >
-                        Edit
+                        <FontAwesomeIcon icon={faPencil} aria-hidden="true" />
                       </button>
                     </td>
                   </tr>
@@ -255,16 +273,59 @@ export function MovesTab() {
         </>
       )}
 
-      {editing !== null && (
-        <MoveEditor
-          move={editing.move}
-          learnedBy={
-            editing.move !== null
-              ? (learnedByIndex.get(editing.move.chrooked_id) ?? [])
-              : []
+      {/* Read-only detail sidebar — opens when a row is clicked. */}
+      {selected !== null && (
+        <DetailSidebar
+          entityKey={selected.chrooked_id}
+          title={selected.name}
+          edited={isMoveEdited(selected)}
+          kindLabel="MOVE"
+          tabs={[
+            {
+              id: "detail",
+              label: "Detail",
+              render: () => <MoveDetail move={selected} />,
+            },
+          ]}
+          editView={
+            <MoveEditor
+              move={selected}
+              learnedBy={learnedByIndex.get(selected.chrooked_id) ?? []}
+              onClose={() => setSelected(null)}
+              onSaved={() => {
+                reload();
+                setSelected(null);
+              }}
+              embedded
+            />
           }
-          onClose={() => setEditing(null)}
-          onSaved={reload}
+          onClose={() => setSelected(null)}
+        />
+      )}
+
+      {/* New move editor — opened directly without the read-only step. */}
+      {editingNew && (
+        <MoveEditor
+          move={null}
+          learnedBy={[]}
+          onClose={() => setEditingNew(false)}
+          onSaved={() => {
+            reload();
+            setEditingNew(false);
+          }}
+        />
+      )}
+
+      {/* Per-row pencil → editor directly (skips the read-only sidebar). */}
+      {editDirect !== null && (
+        <MoveEditor
+          move={editDirect}
+          learnedBy={learnedByIndex.get(editDirect.chrooked_id) ?? []}
+          onClose={() => setEditDirect(null)}
+          onSaved={() => {
+            setEditDirect(null);
+            reload();
+          }}
         />
       )}
     </div>

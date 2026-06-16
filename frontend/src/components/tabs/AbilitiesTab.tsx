@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
@@ -11,6 +13,8 @@ import type { Ability, DexEntry } from "../../types";
 import { EditedLed } from "../EditedLed";
 import { ErrorView, EmptyView } from "../StatusView";
 import { AbilityEditor } from "../editors/AbilityEditor";
+import { DetailSidebar } from "../sidebar/DetailSidebar";
+import { AbilityDetail } from "../sidebar/AbilityDetail";
 import "./tabs.css";
 import "../editors/editors.css";
 
@@ -44,9 +48,12 @@ export function AbilitiesTab() {
   const { data, error, status, isLoading, reload } =
     useResource<Ability[]>(fetcher);
   const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
-  const [editing, setEditing] = useState<{ ability: Ability | null } | null>(
-    null,
-  );
+  /** Row click → read-only sidebar. */
+  const [selected, setSelected] = useState<Ability | null>(null);
+  /** "New ability" → editor directly (no read-only step for a new record). */
+  const [editingNew, setEditingNew] = useState(false);
+  /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
+  const [editDirect, setEditDirect] = useState<Ability | null>(null);
 
   const abilities = useMemo(() => data ?? [], [data]);
   const editedCount = useMemo(
@@ -128,7 +135,7 @@ export function AbilitiesTab() {
           type="button"
           id="abilities-new"
           className="btn btn--primary btn--new"
-          onClick={() => setEditing({ ability: null })}
+          onClick={() => setEditingNew(true)}
         >
           <span aria-hidden="true">+ </span>New ability
         </button>
@@ -179,6 +186,8 @@ export function AbilitiesTab() {
                   id={`ability-row-${ability.chrooked_id}`}
                   className="tab-deflist__item"
                   data-edited={isAbilityEdited(ability)}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setSelected(ability)}
                 >
                   <div className="tab-deflist__head">
                     <dt className="tab-strong">
@@ -187,11 +196,15 @@ export function AbilitiesTab() {
                     </dt>
                     <button
                       type="button"
+                      id={`ability-row-edit-${ability.chrooked_id}`}
                       className="tab-row-edit"
                       aria-label={`Edit ${ability.name}`}
-                      onClick={() => setEditing({ ability })}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditDirect(ability);
+                      }}
                     >
-                      Edit
+                      <FontAwesomeIcon icon={faPencil} aria-hidden="true" />
                     </button>
                   </div>
                   <dd className="tab-dim">
@@ -206,16 +219,59 @@ export function AbilitiesTab() {
         </>
       )}
 
-      {editing !== null && (
-        <AbilityEditor
-          ability={editing.ability}
-          usedBy={
-            editing.ability !== null
-              ? (usedByIndex.get(editing.ability.chrooked_id) ?? [])
-              : []
+      {/* Read-only detail sidebar — opens when a row is clicked. */}
+      {selected !== null && (
+        <DetailSidebar
+          entityKey={selected.chrooked_id}
+          title={selected.name}
+          edited={isAbilityEdited(selected)}
+          kindLabel="ABILITY"
+          tabs={[
+            {
+              id: "detail",
+              label: "Detail",
+              render: () => <AbilityDetail ability={selected} />,
+            },
+          ]}
+          editView={
+            <AbilityEditor
+              ability={selected}
+              usedBy={usedByIndex.get(selected.chrooked_id) ?? []}
+              onClose={() => setSelected(null)}
+              onSaved={() => {
+                reload();
+                setSelected(null);
+              }}
+              embedded
+            />
           }
-          onClose={() => setEditing(null)}
-          onSaved={reload}
+          onClose={() => setSelected(null)}
+        />
+      )}
+
+      {/* New ability editor — opened directly without the read-only step. */}
+      {editingNew && (
+        <AbilityEditor
+          ability={null}
+          usedBy={[]}
+          onClose={() => setEditingNew(false)}
+          onSaved={() => {
+            reload();
+            setEditingNew(false);
+          }}
+        />
+      )}
+
+      {/* Per-row pencil → editor directly (skips the read-only sidebar). */}
+      {editDirect !== null && (
+        <AbilityEditor
+          ability={editDirect}
+          usedBy={usedByIndex.get(editDirect.chrooked_id) ?? []}
+          onClose={() => setEditDirect(null)}
+          onSaved={() => {
+            setEditDirect(null);
+            reload();
+          }}
         />
       )}
     </div>

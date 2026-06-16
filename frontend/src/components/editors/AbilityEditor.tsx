@@ -25,11 +25,14 @@ type Props = {
   usedBy: DexEntry[];
   onClose: () => void;
   onSaved: () => void;
+  /** When true the editor renders without the overlay/header chrome — it is
+      already hosted inside a DetailSidebar shell. */
+  embedded?: boolean;
 };
 
 type AbilityForm = { name: string; chrooked_id: string; description: string };
 
-export function AbilityEditor({ ability, usedBy, onClose, onSaved }: Props) {
+export function AbilityEditor({ ability, usedBy, onClose, onSaved, embedded = false }: Props) {
   const isNew = ability === null;
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
@@ -99,30 +102,32 @@ export function AbilityEditor({ ability, usedBy, onClose, onSaved }: Props) {
     onClose();
   }
 
-  return (
-    <EditorDialog id="ability-editor" titleId={titleId} onClose={onClose}>
-      <header className="ledger__head">
-        <div className="ledger__head-row">
-          <span className="ledger__dex mono">ABILITY</span>
-          <button
-            type="button"
-            className="ledger__close"
-            aria-label="Close editor"
-            onClick={onClose}
-          >
-            Close <kbd className="mono" aria-hidden="true">Esc</kbd>
-          </button>
-        </div>
-        <h2 className="ledger__name" id={titleId}>
-          {isNew ? "New ability" : ability.name}
-          {edited && (
-            <>
-              {" "}
-              <EditedLed on variant="tag" />
-            </>
-          )}
-        </h2>
-      </header>
+  const formBody = (
+    <>
+      {!embedded && (
+        <header className="ledger__head">
+          <div className="ledger__head-row">
+            <span className="ledger__dex mono">ABILITY</span>
+            <button
+              type="button"
+              className="ledger__close"
+              aria-label="Close editor"
+              onClick={onClose}
+            >
+              Close <kbd className="mono" aria-hidden="true">Esc</kbd>
+            </button>
+          </div>
+          <h2 className="ledger__name" id={titleId}>
+            {isNew ? "New ability" : ability.name}
+            {edited && (
+              <>
+                {" "}
+                <EditedLed on variant="tag" />
+              </>
+            )}
+          </h2>
+        </header>
+      )}
 
       {edited && (
         <section
@@ -262,6 +267,16 @@ export function AbilityEditor({ ability, usedBy, onClose, onSaved }: Props) {
           </button>
         </div>
       </form>
+    </>
+  );
+
+  if (embedded) {
+    return formBody;
+  }
+
+  return (
+    <EditorDialog id="ability-editor" titleId={titleId} onClose={onClose}>
+      {formBody}
     </EditorDialog>
   );
 }
