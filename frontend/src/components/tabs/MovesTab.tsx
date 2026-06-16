@@ -8,7 +8,7 @@ import {
   matchesMoveEditedFilter,
   type MoveEditedFilter,
 } from "../../lib/format";
-import type { Move } from "../../types";
+import type { DexEntry, Move } from "../../types";
 import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
 import { ErrorView, EmptyView } from "../StatusView";
@@ -37,7 +37,14 @@ export function MovesTab() {
     () => (view.backdrop ? api.targetMoves(view.backdrop) : api.moves),
     [view.backdrop],
   );
+  // Dex fetcher mirrors the moves fetcher swap: backdrop → target dex, else canon.
+  // The merged dex carries per-species learnsets used to build the reverse index.
+  const dexFetcher = useMemo(
+    () => (view.backdrop ? api.targetDex(view.backdrop) : api.dex),
+    [view.backdrop],
+  );
   const { data, error, status, isLoading, reload } = useResource<Move[]>(fetcher);
+  const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
   const [editing, setEditing] = useState<{ move: Move | null } | null>(null);
   const [query, setQuery] = useState("");
   const [activeFlags, setActiveFlags] = useState<string[]>([]);
@@ -45,6 +52,38 @@ export function MovesTab() {
 
   const moves = useMemo(() => data ?? [], [data]);
   const editedCount = useMemo(() => moves.filter(isMoveEdited).length, [moves]);
+
+  // name→chrooked_id map built from the loaded moves list so we can normalize
+  // learnset entries (which store the display name, e.g. "Ice Punch") to the
+  // stable chrooked_id key ("icepunch") the MoveEditor lookup uses.
+  const moveNameToId = useMemo((): Map<string, string> => {
+    const map = new Map<string, string>();
+    for (const m of moves) {
+      map.set(m.name, m.chrooked_id);
+    }
+    return map;
+  }, [moves]);
+
+  // Reverse index: chrooked_id → species that have it in their learnset.
+  // Built from the merged dex so Ruleset overrides are already applied (ac3).
+  // Keyed by chrooked_id (not display name) to match the MoveEditor lookup.
+  const learnedByIndex = useMemo((): Map<string, DexEntry[]> => {
+    if (!dexData) return new Map();
+    const index = new Map<string, DexEntry[]>();
+    for (const species of dexData) {
+      for (const entry of species.learnset) {
+        // Learnset stores display names; normalize to chrooked_id via the moves list.
+        const key = moveNameToId.get(entry.move) ?? entry.move;
+        const existing = index.get(key);
+        if (existing) {
+          existing.push(species);
+        } else {
+          index.set(key, [species]);
+        }
+      }
+    }
+    return index;
+  }, [dexData, moveNameToId]);
 
   // Flags actually present in the data, in canonical order — the filter chips.
   const presentFlags = useMemo(() => {
@@ -219,6 +258,11 @@ export function MovesTab() {
       {editing !== null && (
         <MoveEditor
           move={editing.move}
+          learnedBy={
+            editing.move !== null
+              ? (learnedByIndex.get(editing.move.chrooked_id) ?? [])
+              : []
+          }
           onClose={() => setEditing(null)}
           onSaved={reload}
         />

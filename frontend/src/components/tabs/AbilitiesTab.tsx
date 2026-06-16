@@ -7,7 +7,7 @@ import {
   matchesAbilityEditedFilter,
   type AbilityEditedFilter,
 } from "../../lib/format";
-import type { Ability } from "../../types";
+import type { Ability, DexEntry } from "../../types";
 import { EditedLed } from "../EditedLed";
 import { ErrorView, EmptyView } from "../StatusView";
 import { AbilityEditor } from "../editors/AbilityEditor";
@@ -35,19 +35,70 @@ export function AbilitiesTab() {
     () => (view.backdrop ? api.targetAbilities(view.backdrop) : api.abilities),
     [view.backdrop],
   );
+  // Dex fetcher mirrors the abilities fetcher swap: backdrop → target dex, else
+  // canon. The merged dex carries per-species ability slots for the reverse index.
+  const dexFetcher = useMemo(
+    () => (view.backdrop ? api.targetDex(view.backdrop) : api.dex),
+    [view.backdrop],
+  );
   const { data, error, status, isLoading, reload } =
     useResource<Ability[]>(fetcher);
+  const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
   const [editing, setEditing] = useState<{ ability: Ability | null } | null>(
     null,
   );
-  const [query, setQuery] = useState("");
-  const [editedFilter, setEditedFilter] = useState<AbilityEditedFilter>("all");
 
   const abilities = useMemo(() => data ?? [], [data]);
   const editedCount = useMemo(
     () => abilities.filter(isAbilityEdited).length,
     [abilities],
   );
+
+  // name→chrooked_id map built from the loaded abilities list so we can normalize
+  // ability slot values (which store display names, e.g. "Snow Warning") to the
+  // stable chrooked_id key ("snowwarning") the AbilityEditor lookup uses.
+  const abilityNameToId = useMemo((): Map<string, string> => {
+    const map = new Map<string, string>();
+    for (const a of abilities) {
+      map.set(a.name, a.chrooked_id);
+    }
+    return map;
+  }, [abilities]);
+
+  // Reverse index: chrooked_id → species that have it in ANY slot (primary,
+  // secondary, hidden). Built from the merged dex so overrides are applied (ac3).
+  // Keyed by chrooked_id (not display name) to match the AbilityEditor lookup.
+  const usedByIndex = useMemo((): Map<string, DexEntry[]> => {
+    if (!dexData) return new Map();
+    const index = new Map<string, DexEntry[]>();
+    for (const species of dexData) {
+      const slots = [
+        species.abilities.primary,
+        species.abilities.secondary,
+        species.abilities.hidden,
+      ];
+      const seen = new Set<string>();
+      for (const slot of slots) {
+        if (slot !== null) {
+          // Ability slots store display names; normalize to chrooked_id via the abilities list.
+          const key = abilityNameToId.get(slot) ?? slot;
+          if (!seen.has(key)) {
+            seen.add(key);
+            const existing = index.get(key);
+            if (existing) {
+              existing.push(species);
+            } else {
+              index.set(key, [species]);
+            }
+          }
+        }
+      }
+    }
+    return index;
+  }, [dexData, abilityNameToId]);
+
+  const [query, setQuery] = useState("");
+  const [editedFilter, setEditedFilter] = useState<AbilityEditedFilter>("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -158,6 +209,11 @@ export function AbilitiesTab() {
       {editing !== null && (
         <AbilityEditor
           ability={editing.ability}
+          usedBy={
+            editing.ability !== null
+              ? (usedByIndex.get(editing.ability.chrooked_id) ?? [])
+              : []
+          }
           onClose={() => setEditing(null)}
           onSaved={reload}
         />
