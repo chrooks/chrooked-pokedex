@@ -5,6 +5,7 @@ import { useUrlState } from "./hooks/useUrlState";
 import { isEdited } from "./lib/format";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
+import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
 import type { DexEntry } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
@@ -108,21 +109,51 @@ export default function App() {
     [update],
   );
 
-  // Enter in the rail search promotes the term to a composable Name filter pill,
-  // then clears the box. No-op (search kept) when blank, at the pill cap, or a
-  // duplicate — appendNameFilter returns the same array reference in those cases.
+  // Enter in the rail search promotes the term to a composable Name filter pill
+  // on the ACTIVE entity, then clears the box (ac9). The dex writes its own
+  // `filter` param via useUrlState; moves/abilities write their namespaced filter
+  // param via the search dispatch. No-op (search kept) when blank, at the pill
+  // cap, or a duplicate — appendNameFilter signals that by returning the same
+  // array reference.
   const handleSearchEnter = useCallback(() => {
-    const next = appendNameFilter(view.filter, view.query, crypto.randomUUID());
-    if (next !== view.filter) {
-      update({ filter: next, query: "" });
+    // Type Chart has no filter pills — its "search target" is selecting a type,
+    // which TypeChartTab does by reacting to view.query live. Enter is a no-op at
+    // the App level there (the match is already open); we leave the box as-is.
+    if (view.kind === "type-chart") {
+      return;
     }
-  }, [view.filter, view.query, update]);
+    const target = searchTargetFor(view.kind);
+    if (target === null) {
+      const next = appendNameFilter(view.filter, view.query, crypto.randomUUID());
+      if (next !== view.filter) {
+        update({ filter: next, query: "" });
+      }
+      return;
+    }
+    if (promoteSearchToPill(target, view.query, crypto.randomUUID())) {
+      update({ query: "" });
+    }
+  }, [view.kind, view.filter, view.query, update]);
+
+  // The rail search is the single search for the dex, Moves, Abilities (ac9), and
+  // the Type Chart (ac10): live name-filtering / type-selection lives in each tab,
+  // Enter promotes a Name pill (dex/moves/abilities) or is a no-op (type-chart,
+  // which selects live). The `/` shortcut focuses it on every page. The same four
+  // pages honor the shared `view.editedOnly` flag (ac12) — the rail "Edited only"
+  // button and the `E` shortcut both drive it.
+  const isSearchable =
+    isDex ||
+    view.kind === "moves" ||
+    view.kind === "abilities" ||
+    view.kind === "type-chart";
+  const isEditedFilterable = isSearchable;
 
   useGlobalKeys({
     onSearch: () => searchRef.current?.focus(),
-    onToggleEdited: () => isDex && update({ editedOnly: !view.editedOnly }),
+    onToggleEdited: () =>
+      isEditedFilterable && update({ editedOnly: !view.editedOnly }),
     onEscape: () => selectedEntry !== null && update({ selected: null }),
-    enabled: isDex,
+    enabled: isEditedFilterable,
     hasSelection: selectedEntry !== null,
   });
 
@@ -132,6 +163,7 @@ export default function App() {
       onKind={(kind) => update({ kind, selected: null })}
       query={view.query}
       onQuery={(query) => update({ query })}
+      searchable={isSearchable}
       editedOnly={view.editedOnly}
       onEditedOnly={(editedOnly) => update({ editedOnly })}
       onSearchEnter={handleSearchEnter}

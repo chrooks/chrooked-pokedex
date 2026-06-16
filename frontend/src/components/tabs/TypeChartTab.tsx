@@ -50,7 +50,10 @@ export function TypeChartTab() {
   // own multiplier. Cleared on Discard and after a successful Save (reload re-
   // reads the canonical merged grid). Read-only in backdrop mode.
   const [working, setWorking] = useState<Map<string, number>>(new Map());
-  const [editedOnly, setEditedOnly] = useState(false);
+  // The "Edited only" emphasis is driven by the shared rail flag (ac12), so the
+  // left-rail toggle and the `E` shortcut dim untouched cells/chips here too.
+  // Single source of truth — no local toggle state.
+  const editedOnly = view.editedOnly;
 
   // The type whose matchup breakdown panel is open (row + column highlighted).
   // null ⇒ no panel. Selecting either axis for a type sets it; clicking the same
@@ -85,6 +88,19 @@ export function TypeChartTab() {
       setSelectedType(null);
     }
   }, [axis, selectedType]);
+
+  // The rail search opens a type's breakdown panel by name (ac10): as the user
+  // types, a matching type on the axis becomes the selected type. Exact (case-
+  // insensitive) match wins; otherwise a UNIQUE prefix match, else a UNIQUE
+  // substring match. A blank or ambiguous query leaves the current selection
+  // alone, so clicking a header and Escape keep working. The single dispatch is
+  // the URL query, shared with the rail input.
+  useEffect(() => {
+    const match = matchType(axis, view.query);
+    if (match !== null) {
+      setSelectedType(match);
+    }
+  }, [axis, view.query]);
 
   // The breakdown lists for the open type, recomputed whenever the type, the
   // cells, or the working edits change. Built off the SAME valueOf the grid
@@ -167,16 +183,6 @@ export function TypeChartTab() {
           )}
         </span>
         <div className="tc-actions">
-          <button
-            type="button"
-            id="type-chart-edited-only"
-            className="tab-segmented__btn tc-edited-toggle"
-            data-on={editedOnly}
-            aria-pressed={editedOnly}
-            onClick={() => setEditedOnly((on) => !on)}
-          >
-            Edited only
-          </button>
           {!readOnly && (
             <>
               <button
@@ -278,6 +284,22 @@ function spoken(multiplier: number): string {
   if (multiplier === 1) return "neutral";
   if (multiplier === 2) return "super effective";
   return `×${multiplier}`;
+}
+
+/** Resolve a rail-search query to a type on the axis (ac10). Exact match (case-
+    insensitive) wins; otherwise a UNIQUE prefix match, then a UNIQUE substring
+    match. Returns null for a blank or ambiguous query so the current selection is
+    left untouched — typing keeps narrowing without clobbering a click. */
+function matchType(axis: readonly string[], query: string): string | null {
+  const q = query.trim().toLowerCase();
+  if (q === "") return null;
+  const exact = axis.find((type) => type.toLowerCase() === q);
+  if (exact) return exact;
+  const prefix = axis.filter((type) => type.toLowerCase().startsWith(q));
+  if (prefix.length === 1) return prefix[0];
+  const substr = axis.filter((type) => type.toLowerCase().includes(q));
+  if (substr.length === 1) return substr[0];
+  return null;
 }
 
 type GridProps = {
@@ -611,20 +633,33 @@ function GridCell({
     and an edited count rides beside the total. An empty bucket still renders
     (label + "0" + an em-dash) so the four-way structure stays legible. The
     neutral bucket carries `tone="quiet"` so the boring majority recedes. */
+/** The color accent a bucket carries (ac11). Maps to a `--tc-hue-*` token in
+    type-chart.css applied to the label + accent border — red/green/blue for the
+    effectiveness extremes, grey for neutral, ink for the offensive no-effect. */
+type BucketHue = "red" | "green" | "blue" | "grey" | "ink";
+
 function MatchupBucket({
   id,
   label,
   members,
+  hue,
   tone = "loud",
 }: {
   id: string;
   label: string;
   members: MatchupMember[];
+  hue: BucketHue;
   tone?: "loud" | "quiet";
 }) {
   const editedCount = members.filter((m) => m.edited).length;
   return (
-    <div className="tc-bucket" id={id} data-tone={tone} data-empty={members.length === 0}>
+    <div
+      className="tc-bucket"
+      id={id}
+      data-tone={tone}
+      data-hue={hue}
+      data-empty={members.length === 0}
+    >
       <div className="tc-bucket__head">
         <span className="tc-bucket__label">{label}</span>
         {editedCount > 0 && (
@@ -715,21 +750,25 @@ function BreakdownPanel({
           id="tc-bucket-weak"
           label="Weak to ×2"
           members={defense.weak}
+          hue="red"
         />
         <MatchupBucket
           id="tc-bucket-resist"
           label="Resists ×½"
           members={defense.resist}
+          hue="green"
         />
         <MatchupBucket
           id="tc-bucket-immune"
           label="Immune to ×0"
           members={defense.immune}
+          hue="blue"
         />
         <MatchupBucket
           id="tc-bucket-def-neutral"
           label="Neutral ×1"
           members={defense.neutral}
+          hue="grey"
           tone="quiet"
         />
       </section>
@@ -746,21 +785,25 @@ function BreakdownPanel({
           id="tc-bucket-strong"
           label="Strong against ×2"
           members={offense.strong}
+          hue="green"
         />
         <MatchupBucket
           id="tc-bucket-resisted"
           label="Resisted by ×½"
           members={offense.resisted}
+          hue="red"
         />
         <MatchupBucket
           id="tc-bucket-noeffect"
           label="No effect ×0"
           members={offense.noEffect}
+          hue="ink"
         />
         <MatchupBucket
           id="tc-bucket-off-neutral"
           label="Neutral ×1"
           members={offense.neutral}
+          hue="grey"
           tone="quiet"
         />
       </section>

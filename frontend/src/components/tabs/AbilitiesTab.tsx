@@ -4,14 +4,20 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
+import { useEntityView, type EntityParamKeys } from "../../hooks/useEntityView";
+import { isAbilityEdited } from "../../lib/format";
+import { evalEntries } from "../../lib/filterEngine";
 import {
-  isAbilityEdited,
-  matchesAbilityEditedFilter,
-  type AbilityEditedFilter,
-} from "../../lib/format";
+  ABILITY_REGISTRY,
+  ABILITY_SORTABLE,
+  ABILITY_SORT_COLUMNS,
+} from "../../lib/abilityRegistry";
+import { abilityCodec } from "../../lib/abilityViewCodec";
+import { stableMultiSort } from "../../lib/sortEngine";
 import type { Ability, DexEntry } from "../../types";
 import { EditedLed } from "../EditedLed";
 import { ErrorView, EmptyView } from "../StatusView";
+import { EntityControls } from "../filters/EntityControls";
 import { AbilityEditor } from "../editors/AbilityEditor";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { AbilityDetail } from "../sidebar/AbilityDetail";
@@ -19,20 +25,20 @@ import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
 
-/** The three Edited-filter segments, mirroring the dex's edited toggle but with
-    an explicit base-only option for browsing untouched abilities. */
-const EDITED_FILTERS: { key: AbilityEditedFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "edited", label: "Edited" },
-  { key: "base", label: "Not edited" },
-];
+/** The Abilities entity owns its own namespaced URL params (D3). */
+const ABILITY_PARAM_KEYS: EntityParamKeys = {
+  filter: "afilter",
+  sort: "asort",
+  hide: "ahide",
+};
 
 /** The Abilities tab at species-dex parity: the FULL merged list (base ⊕
-    Ruleset) with an edited-LED per row and an Edited filter, a base→now diff in
-    the editor, and per-Target backdrop awareness. In backdrop mode the list
-    swaps to the selected fork's abilities ⊕ Ruleset. */
+    Ruleset) as a def-list with an edited-LED per row, the shared control stack
+    (boolean filter builder + sort row + Reset all) driven by the ability
+    registry — no columns control, since the list is a def-list (D5). */
 export function AbilitiesTab() {
   const [view] = useUrlState();
+  const [controls, setControls] = useEntityView(abilityCodec, ABILITY_PARAM_KEYS);
   // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
   // otherwise read the base ⊕ Ruleset canon. Memoized by backdrop id so
   // useResource sees a stable fetcher and refetches only when the backdrop flips.
@@ -105,16 +111,25 @@ export function AbilitiesTab() {
     return index;
   }, [dexData, abilityNameToId]);
 
-  const [query, setQuery] = useState("");
-  const [editedFilter, setEditedFilter] = useState<AbilityEditedFilter>("all");
-
+  // Live name-filter from the single rail search (ac9): `view.query` is the
+  // shared search text, applied by name before the boolean filter. Enter in the
+  // rail promotes the term to a Name pill on `afilter` (handled in App).
+  const railQuery = view.query.trim().toLowerCase();
+  // The shared rail "Edited only" flag (ac12) ANDs with the query + builder
+  // filter, exactly like the dex.
+  const editedOnly = view.editedOnly;
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return abilities.filter((ability) => {
-      const nameMatch = q === "" || ability.name.toLowerCase().includes(q);
-      return nameMatch && matchesAbilityEditedFilter(ability, editedFilter);
-    });
-  }, [abilities, query, editedFilter]);
+    let list = abilities.filter((a) =>
+      evalEntries(ABILITY_REGISTRY, a, controls.filter),
+    );
+    if (editedOnly) list = list.filter(isAbilityEdited);
+    if (railQuery === "") return list;
+    return list.filter((a) => a.name.toLowerCase().includes(railQuery));
+  }, [abilities, controls.filter, railQuery, editedOnly]);
+  const rows = useMemo(
+    () => stableMultiSort(filtered, controls.sort, ABILITY_SORT_COLUMNS),
+    [filtered, controls.sort],
+  );
 
   if (error !== null) return <ErrorView message={error} status={status} />;
   if (isLoading) return <p className="tab-loading">Loading abilities…</p>;
@@ -123,9 +138,9 @@ export function AbilitiesTab() {
     <div className="tab" id="tab-abilities">
       <div className="tab-toolbar">
         <span className="tab-toolbar__title">
-          {filtered.length === abilities.length
+          {rows.length === abilities.length
             ? `${abilities.length} abilities`
-            : `${filtered.length} of ${abilities.length} abilities`}
+            : `${rows.length} of ${abilities.length} abilities`}
           <span className="tab-toolbar__edited" style={{ color: "var(--edited)" }}>
             {" · "}
             {editedCount} edited
@@ -146,42 +161,23 @@ export function AbilitiesTab() {
         <EmptyView message="No abilities yet. Build or regenerate the base snapshot, or create one." />
       ) : (
         <>
-          <div className="tab-filterbar">
-            <input
-              type="search"
-              className="tab-search"
-              placeholder="Search abilities by name"
-              aria-label="Search abilities by name"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <div
-              id="abilities-edited-filter"
-              className="tab-segmented"
-              role="group"
-              aria-label="Filter by edited state"
-            >
-              {EDITED_FILTERS.map((option) => (
-                <button
-                  key={option.key}
-                  type="button"
-                  id={`abilities-edited-filter-${option.key}`}
-                  className="tab-segmented__btn"
-                  data-on={editedFilter === option.key}
-                  aria-pressed={editedFilter === option.key}
-                  onClick={() => setEditedFilter(option.key)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <EntityControls
+            idPrefix="abilc"
+            ariaLabel="Abilities view controls"
+            defs={ABILITY_REGISTRY.defs}
+            sortable={ABILITY_SORTABLE}
+            columns={[]}
+            filter={controls.filter}
+            sort={controls.sort}
+            hidden={controls.hidden}
+            onChange={setControls}
+          />
 
-          {filtered.length === 0 ? (
+          {rows.length === 0 ? (
             <EmptyView message="No abilities match the current filter." />
           ) : (
             <dl className="tab-deflist">
-              {filtered.map((ability) => (
+              {rows.map((ability) => (
                 <div
                   key={ability.chrooked_id}
                   id={`ability-row-${ability.chrooked_id}`}

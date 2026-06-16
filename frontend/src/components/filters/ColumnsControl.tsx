@@ -1,26 +1,29 @@
 import { useId, useState } from "react";
-import { COLUMNS, type ColumnKey } from "../../lib/dexColumns";
+
+/** A toggleable column offered by the panel: a stable key + a human label. */
+export type ToggleableColumn = { key: string; label: string };
 
 type Props = {
-  hidden: ColumnKey[];
-  onChange: (hidden: ColumnKey[]) => void;
+  /** The non-locked columns this entity can hide, in display order. */
+  columns: ToggleableColumn[];
+  /** A DOM-id stem so each surface's columns toggle carries distinct ids. */
+  idPrefix?: string;
+  hidden: string[];
+  onChange: (hidden: string[]) => void;
 };
-
-// led/dex/name are the locked identity anchor; only data columns toggle.
-const TOGGLEABLE = COLUMNS.filter((c) => !c.locked);
 
 /**
  * Column show/hide as a disclosure: a "Columns" button reveals a checkbox panel
- * of the data columns (the LED/№/Name identity anchor stays locked, never
- * offered). Hiding a column also drops it from the sort, handled by the parent.
+ * of the data columns (the locked identity anchor stays locked, never offered).
+ * Hiding a column also drops it from the sort, handled by the parent.
  */
-export function ColumnsControl({ hidden, onChange }: Props) {
+export function ColumnsControl({ columns, idPrefix = "dexc", hidden, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const hiddenSet = new Set(hidden);
   const hiddenCount = hidden.length;
 
-  function toggle(key: ColumnKey) {
+  function toggle(key: string) {
     onChange(
       hiddenSet.has(key) ? hidden.filter((k) => k !== key) : [...hidden, key],
     );
@@ -31,7 +34,7 @@ export function ColumnsControl({ hidden, onChange }: Props) {
       <button
         type="button"
         className="btn btn--new"
-        id="dexc-columns-toggle"
+        id={`${idPrefix}-columns-toggle`}
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
         onClick={() => setOpen((o) => !o)}
@@ -44,7 +47,7 @@ export function ColumnsControl({ hidden, onChange }: Props) {
       </button>
       {open && (
         <div className="dexc-columns__panel" id={panelId} role="group" aria-label="Toggle columns">
-          {TOGGLEABLE.map((c) => (
+          {columns.map((c) => (
             <label key={c.key} className="dexc-check">
               <input
                 type="checkbox"

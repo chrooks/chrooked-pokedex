@@ -584,8 +584,43 @@ button.tc-cell:active {
   border-radius: var(--radius-sm);
 }
 
+/* Bucket color accents (ac11). Each bucket carries a hue token that tints its
+   accent border (left keyline) and its label, so the effectiveness verdict reads
+   from color, not just the text. Tuned in OKLCH for the warm-dark panel so every
+   hue clears legible contrast against --surface-0; "ink" is the No-effect "dead"
+   tone — a dim, near-background dark accent that reads as black/inert by design
+   (intentionally low contrast: this bucket means "nothing happens"). */
+.tc-bucket[data-hue] {
+  border-left-width: 3px;
+}
+.tc-bucket[data-hue="red"] {
+  --tc-hue: oklch(64% 0.2 25);
+}
+.tc-bucket[data-hue="green"] {
+  --tc-hue: oklch(72% 0.17 150);
+}
+.tc-bucket[data-hue="blue"] {
+  --tc-hue: oklch(68% 0.15 248);
+}
+.tc-bucket[data-hue="grey"] {
+  --tc-hue: var(--text-dim);
+}
+.tc-bucket[data-hue="ink"] {
+  /* "Dead" tone — a dim accent just above the panel background so No-effect
+     reads as black/inert rather than the brightest text (user's literal intent
+     on the dark panel; low contrast on purpose). */
+  --tc-hue: color-mix(in oklch, var(--text) 30%, var(--surface-1));
+}
+.tc-bucket[data-hue] {
+  border-left-color: var(--tc-hue);
+}
+.tc-bucket[data-hue] .tc-bucket__label {
+  color: var(--tc-hue);
+}
+
 /* The neutral bucket is the boring majority — quieted so it never competes with
-   the off-neutral buckets, but still present (the user wants it listed). */
+   the off-neutral buckets, but still present (the user wants it listed). The
+   grey hue already matches the quiet treatment, so the two reinforce. */
 .tc-bucket[data-tone="quiet"] {
   background: transparent;
   border-style: dashed;

@@ -290,31 +290,45 @@ tr:hover .tab-row-edit,
   gap: var(--space-3);
 }
 
-/* --- Moves filter bar + tag chips --- */
 
-.tab-filterbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
+/* --- Segmented control (Edited All/Edited/Not-edited) ---
+   Mirrors .move-tag's on/off treatment so the active segment is never
+   white-on-white. Off reads as a quiet inset chip; on fills with --chrome and
+   flips the text to --surface-0 for a legible contrast delta. */
 
-.tab-search {
-  flex: 1;
-  min-width: 8rem;
-  padding: var(--space-1) var(--space-3);
-  background: var(--surface-0);
+.tab-segmented {
+  display: inline-flex;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: var(--text-sm);
+  overflow: hidden;
 }
 
-.tab-search:focus {
-  outline: none;
-  border-color: var(--line-strong);
-  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 25%, transparent);
+.tab-segmented__btn {
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface-0);
+  border: none;
+  border-left: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.tab-segmented__btn:first-child {
+  border-left: none;
+}
+
+button.tab-segmented__btn:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.tab-segmented__btn[data-on="true"] {
+  color: var(--surface-0);
+  background: var(--chrome);
+  border-color: var(--chrome);
+  font-weight: 700;
 }
 
 .move-tags {

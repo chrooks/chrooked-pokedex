@@ -4,16 +4,22 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
+import { useEntityView, type EntityParamKeys } from "../../hooks/useEntityView";
+import { isMoveEdited } from "../../lib/format";
+import { evalEntries } from "../../lib/filterEngine";
+import { MOVE_REGISTRY } from "../../lib/moveRegistry";
 import {
-  MOVE_FLAGS,
-  isMoveEdited,
-  matchesMoveEditedFilter,
-  type MoveEditedFilter,
-} from "../../lib/format";
+  MOVE_COLUMNS,
+  MOVE_SORT_COLUMNS,
+  type MoveColumnKey,
+} from "../../lib/moveColumns";
+import { moveCodec } from "../../lib/moveViewCodec";
+import { stableMultiSort, type SortKey } from "../../lib/sortEngine";
 import type { DexEntry, Move } from "../../types";
 import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
 import { ErrorView, EmptyView } from "../StatusView";
+import { EntityControls } from "../filters/EntityControls";
 import { MoveEditor } from "../editors/MoveEditor";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { MoveDetail } from "../sidebar/MoveDetail";
@@ -21,20 +27,30 @@ import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
 
-/** The three Edited-filter segments, mirroring the abilities tab's edited toggle
-    with an explicit base-only option for browsing untouched moves. */
-const EDITED_FILTERS: { key: MoveEditedFilter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "edited", label: "Edited" },
-  { key: "base", label: "Not edited" },
-];
+/** The Moves entity owns its own namespaced URL params (D3) so its control state
+    never bleeds into the dex or Abilities. */
+const MOVE_PARAM_KEYS: EntityParamKeys = {
+  filter: "mfilter",
+  sort: "msort",
+  hide: "mhide",
+};
+
+const SORTABLE = MOVE_COLUMNS.filter((c) => c.sortable).map((c) => ({
+  key: c.key,
+  label: c.label,
+}));
+const TOGGLEABLE = MOVE_COLUMNS.filter((c) => !c.locked).map((c) => ({
+  key: c.key,
+  label: c.label,
+}));
 
 /** The Moves tab at species-dex parity: the FULL merged list (base ⊕ Ruleset)
-    with an edited-LED per row, an Edited filter, the existing flag chips + name
-    search, a base→now diff in the editor, and per-Target backdrop awareness. In
-    backdrop mode the list swaps to the selected fork's moves ⊕ Ruleset. */
+    with an edited-LED per row, the shared dex-parity control stack (boolean
+    filter builder, sort row, columns toggle, Reset all) driven by the move
+    registry, and per-Target backdrop awareness. */
 export function MovesTab() {
   const [view] = useUrlState();
+  const [controls, setControls] = useEntityView(moveCodec, MOVE_PARAM_KEYS);
   // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
   // otherwise read the base ⊕ Ruleset canon. Memoized by backdrop id so
   // useResource sees a stable fetcher and refetches only when the backdrop flips.
@@ -56,9 +72,6 @@ export function MovesTab() {
   const [editingNew, setEditingNew] = useState(false);
   /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
   const [editDirect, setEditDirect] = useState<Move | null>(null);
-  const [query, setQuery] = useState("");
-  const [activeFlags, setActiveFlags] = useState<string[]>([]);
-  const [editedFilter, setEditedFilter] = useState<MoveEditedFilter>("all");
 
   const moves = useMemo(() => data ?? [], [data]);
   const editedCount = useMemo(() => moves.filter(isMoveEdited).length, [moves]);
@@ -100,27 +113,55 @@ export function MovesTab() {
     return index;
   }, [dexData, moveNameToId]);
 
-  // Flags actually present in the data, in canonical order — the filter chips.
-  const presentFlags = useMemo(() => {
-    const present = new Set(moves.flatMap((m) => m.flags));
-    return MOVE_FLAGS.filter((flag) => present.has(flag));
-  }, [moves]);
+  const hiddenSet = useMemo(
+    () => new Set(controls.hidden as MoveColumnKey[]),
+    [controls.hidden],
+  );
 
+  // Live name-filter from the single rail search (ac9): `view.query` is the
+  // shared search text, applied by name before the boolean filter. Enter in the
+  // rail promotes the term to a Name pill on `mfilter` (handled in App).
+  const railQuery = view.query.trim().toLowerCase();
+  // The shared rail "Edited only" flag (ac12) ANDs with the query + builder
+  // filter, exactly like the dex.
+  const editedOnly = view.editedOnly;
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return moves.filter((move) => {
-      const nameMatch = q === "" || move.name.toLowerCase().includes(q);
-      const flagMatch = activeFlags.every((flag) => move.flags.includes(flag));
-      return (
-        nameMatch && flagMatch && matchesMoveEditedFilter(move, editedFilter)
-      );
-    });
-  }, [moves, query, activeFlags, editedFilter]);
-
-  function toggleFlag(flag: string) {
-    setActiveFlags((flags) =>
-      flags.includes(flag) ? flags.filter((f) => f !== flag) : [...flags, flag],
+    let list = moves.filter((move) =>
+      evalEntries(MOVE_REGISTRY, move, controls.filter),
     );
+    if (editedOnly) list = list.filter(isMoveEdited);
+    if (railQuery === "") return list;
+    return list.filter((move) => move.name.toLowerCase().includes(railQuery));
+  }, [moves, controls.filter, railQuery, editedOnly]);
+  const rows = useMemo(
+    () => stableMultiSort(filtered, controls.sort, MOVE_SORT_COLUMNS),
+    [filtered, controls.sort],
+  );
+
+  // Clicking a sortable header drives the same multi-key sort state: a fresh
+  // click sets that column asc; clicking the active primary flips direction;
+  // shift-click appends a secondary key (dex-parity behavior).
+  function onHeaderSort(field: MoveColumnKey, append: boolean) {
+    const existing = controls.sort.find((s) => s.field === field);
+    if (append) {
+      if (existing) {
+        setControls({
+          sort: controls.sort.map((s) =>
+            s.field === field
+              ? { ...s, direction: s.direction === "asc" ? "desc" : "asc" }
+              : s,
+          ),
+        });
+      } else if (controls.sort.length < 3) {
+        setControls({ sort: [...controls.sort, { field, direction: "asc" }] });
+      }
+      return;
+    }
+    const next: SortKey =
+      existing && existing.direction === "asc"
+        ? { field, direction: "desc" }
+        : { field, direction: "asc" };
+    setControls({ sort: [next] });
   }
 
   if (error !== null) return <ErrorView message={error} status={status} />;
@@ -130,9 +171,9 @@ export function MovesTab() {
     <div className="tab" id="tab-moves">
       <div className="tab-toolbar">
         <span className="tab-toolbar__title">
-          {filtered.length === moves.length
+          {rows.length === moves.length
             ? `${moves.length} moves`
-            : `${filtered.length} of ${moves.length} moves`}
+            : `${rows.length} of ${moves.length} moves`}
           <span className="tab-toolbar__edited" style={{ color: "var(--edited)" }}>
             {" · "}
             {editedCount} edited
@@ -153,68 +194,36 @@ export function MovesTab() {
         <EmptyView message="No moves yet. Build or regenerate the base snapshot, or create one." />
       ) : (
         <>
-          <div className="tab-filterbar">
-            <input
-              type="search"
-              className="tab-search"
-              placeholder="Search moves by name"
-              aria-label="Search moves by name"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <div
-              id="moves-edited-filter"
-              className="tab-segmented"
-              role="group"
-              aria-label="Filter by edited state"
-            >
-              {EDITED_FILTERS.map((option) => (
-                <button
-                  key={option.key}
-                  type="button"
-                  id={`moves-edited-filter-${option.key}`}
-                  className="tab-segmented__btn"
-                  data-on={editedFilter === option.key}
-                  aria-pressed={editedFilter === option.key}
-                  onClick={() => setEditedFilter(option.key)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-            {presentFlags.map((flag) => (
-              <button
-                key={flag}
-                type="button"
-                className="move-tag"
-                data-on={activeFlags.includes(flag)}
-                aria-pressed={activeFlags.includes(flag)}
-                aria-label={`Toggle ${flag} filter`}
-                onClick={() => toggleFlag(flag)}
-              >
-                {flag}
-              </button>
-            ))}
-          </div>
+          <EntityControls
+            idPrefix="movesc"
+            ariaLabel="Moves view controls"
+            defs={MOVE_REGISTRY.defs}
+            sortable={SORTABLE}
+            columns={TOGGLEABLE}
+            filter={controls.filter}
+            sort={controls.sort}
+            hidden={controls.hidden}
+            onChange={setControls}
+          />
 
-          {filtered.length === 0 ? (
+          {rows.length === 0 ? (
             <EmptyView message="No moves match the current filter." />
           ) : (
             <table className="tab-table">
               <thead>
                 <tr>
                   <th>Move</th>
-                  <th>Type</th>
-                  <th>Cat</th>
-                  <th className="tab-num">Pow</th>
-                  <th className="tab-num">Acc</th>
-                  <th className="tab-num">PP</th>
-                  <th>Tags</th>
+                  {!hiddenSet.has("type") && <SortHeader col="type" sort={controls.sort} onSort={onHeaderSort} />}
+                  {!hiddenSet.has("category") && <SortHeader col="category" sort={controls.sort} onSort={onHeaderSort} />}
+                  {!hiddenSet.has("power") && <SortHeader col="power" numeric sort={controls.sort} onSort={onHeaderSort} />}
+                  {!hiddenSet.has("accuracy") && <SortHeader col="accuracy" numeric sort={controls.sort} onSort={onHeaderSort} />}
+                  {!hiddenSet.has("pp") && <SortHeader col="pp" numeric sort={controls.sort} onSort={onHeaderSort} />}
+                  {!hiddenSet.has("flags") && <th>Tags</th>}
                   <th aria-label="Edit" />
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((move) => (
+                {rows.map((move) => (
                   <tr
                     key={move.chrooked_id}
                     id={`move-row-${move.chrooked_id}`}
@@ -226,37 +235,30 @@ export function MovesTab() {
                       <EditedLed on={isMoveEdited(move)} />
                       {move.name}
                     </td>
-                    <td>
-                      <TypeChip type={move.type} variant="code" />
-                    </td>
-                    <td className="tab-dim">{move.category}</td>
-                    <td className="tab-num mono">{move.power ?? "—"}</td>
-                    <td className="tab-num mono">{move.accuracy ?? "—"}</td>
-                    <td className="tab-num mono">{move.pp ?? "—"}</td>
-                    <td>
-                      {move.flags.length === 0 ? (
-                        <span className="tab-faint">—</span>
-                      ) : (
-                        <span className="move-tags">
-                          {move.flags.map((flag) => (
-                            <button
-                              key={flag}
-                              type="button"
-                              className="move-tag"
-                              data-on={activeFlags.includes(flag)}
-                              aria-pressed={activeFlags.includes(flag)}
-                              aria-label={`Filter by ${flag}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFlag(flag);
-                              }}
-                            >
-                              {flag}
-                            </button>
-                          ))}
-                        </span>
-                      )}
-                    </td>
+                    {!hiddenSet.has("type") && (
+                      <td>
+                        <TypeChip type={move.type} variant="code" />
+                      </td>
+                    )}
+                    {!hiddenSet.has("category") && <td className="tab-dim">{move.category}</td>}
+                    {!hiddenSet.has("power") && <td className="tab-num mono">{move.power ?? "—"}</td>}
+                    {!hiddenSet.has("accuracy") && <td className="tab-num mono">{move.accuracy ?? "—"}</td>}
+                    {!hiddenSet.has("pp") && <td className="tab-num mono">{move.pp ?? "—"}</td>}
+                    {!hiddenSet.has("flags") && (
+                      <td>
+                        {move.flags.length === 0 ? (
+                          <span className="tab-faint">—</span>
+                        ) : (
+                          <span className="move-tags">
+                            {move.flags.map((flag) => (
+                              <span key={flag} className="move-tag">
+                                {flag}
+                              </span>
+                            ))}
+                          </span>
+                        )}
+                      </td>
+                    )}
                     <td>
                       <button
                         type="button"
@@ -345,5 +347,44 @@ export function MovesTab() {
         />
       )}
     </div>
+  );
+}
+
+const HEADER_LABEL: Record<MoveColumnKey, string> = {
+  led: "",
+  name: "Move",
+  type: "Type",
+  category: "Cat",
+  power: "Pow",
+  accuracy: "Acc",
+  pp: "PP",
+  flags: "Tags",
+};
+
+type SortHeaderProps = {
+  col: MoveColumnKey;
+  numeric?: boolean;
+  sort: SortKey[];
+  onSort: (field: MoveColumnKey, append: boolean) => void;
+};
+
+/** A clickable, sort-aware column header. Click sorts (or flips); shift-click
+    appends a secondary key. Shows the active direction arrow. */
+function SortHeader({ col, numeric, sort, onSort }: SortHeaderProps) {
+  const active = sort.find((s) => s.field === col);
+  const arrow = active ? (active.direction === "asc" ? " ▲" : " ▼") : "";
+  return (
+    <th className={numeric ? "tab-num" : undefined}>
+      <button
+        type="button"
+        id={`moves-th-${col}`}
+        className="tab-th-sort"
+        aria-label={`Sort by ${HEADER_LABEL[col]}${active ? `, ${active.direction}ending` : ""}`}
+        onClick={(e) => onSort(col, e.shiftKey)}
+      >
+        {HEADER_LABEL[col]}
+        <span aria-hidden="true">{arrow}</span>
+      </button>
+    </th>
   );
 }

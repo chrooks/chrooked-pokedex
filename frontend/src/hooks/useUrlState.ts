@@ -84,8 +84,25 @@ function subscribe(callback: () => void): () => void {
   };
 }
 
+/** The params useUrlState owns; everything else (the moves/abilities entity
+    params: mfilter/msort/mhide, afilter/asort/ahide) is preserved untouched so
+    each tab keeps its own control state with no cross-bleed (D3). */
+const OWNED_PARAMS = [
+  "kind",
+  "q",
+  "edited",
+  "id",
+  "view",
+  "filter",
+  "sort",
+  "hide",
+  "backdrop",
+] as const;
+
 function writeState(next: ViewState): void {
-  const params = new URLSearchParams();
+  // Start from the live params so foreign keys survive, then rewrite only ours.
+  const params = new URLSearchParams(window.location.search);
+  for (const key of OWNED_PARAMS) params.delete(key);
   if (next.kind !== "dex") params.set("kind", next.kind);
   if (next.query) params.set("q", next.query);
   if (next.editedOnly) params.set("edited", "1");

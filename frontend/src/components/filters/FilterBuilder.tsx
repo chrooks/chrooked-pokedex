@@ -1,20 +1,21 @@
 import { useState } from "react";
 import {
-  buildFilterDefs,
   NUMERIC_OPERATORS,
   type FilterDef,
   type FilterEntry,
   type NumericOperator,
-} from "../../lib/dexFilters";
+} from "../../lib/filterEngine";
 
 type Props = {
+  /** The active entity's filterable fields (dex / move / ability). */
+  defs: FilterDef[];
+  /** A DOM-id stem so the dex, moves, and abilities builders carry distinct ids. */
+  idPrefix?: string;
   filter: FilterEntry[];
   onChange: (filter: FilterEntry[]) => void;
 };
 
 const MAX_FILTERS = 10;
-// Static (buildFilterDefs ignores its arg); built once at module load.
-const DEFS = buildFilterDefs([]);
 
 function uid(): string {
   return crypto.randomUUID();
@@ -36,9 +37,12 @@ function describe(def: FilterDef | undefined, value: string): string {
  * negation, and parenthesis grouping; they reorder by drag (mouse) or Alt+Arrow
  * (keyboard), honoring the keyboard-first principle. Applies to both views.
  */
-export function FilterBuilder({ filter, onChange }: Props) {
-  const defs = DEFS;
-  const [field, setField] = useState(defs[0].field);
+export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Props) {
+  // Default the compose-row field to Name on every entity (dex / moves /
+  // abilities) — name search is the most common first filter — falling back to
+  // the first registry field if a registry has no name field.
+  const defaultField = defs.find((d) => d.field === "name")?.field ?? defs[0].field;
+  const [field, setField] = useState(defaultField);
   const [op, setOp] = useState<NumericOperator>("≥");
   const [value, setValue] = useState("");
   const [connector, setConnector] = useState<"AND" | "OR">("AND");
@@ -105,11 +109,11 @@ export function FilterBuilder({ filter, onChange }: Props) {
   }
 
   return (
-    <div className="dexc-filter" id="dex-filter-builder">
+    <div className="dexc-filter" id={`${idPrefix}-filter-builder`}>
       <div className="dexc-row">
         <span className="dexc-label">Filter</span>
         <select
-          id="dexc-field"
+          id={`${idPrefix}-field`}
           className="dexc-select"
           aria-label="Filter field"
           value={field}
@@ -125,7 +129,7 @@ export function FilterBuilder({ filter, onChange }: Props) {
         {def?.method === "numeric" && (
           <>
             <select
-              id="dexc-op"
+              id={`${idPrefix}-op`}
               className="dexc-select dexc-select--op"
               aria-label="Operator"
               value={op}
@@ -138,7 +142,7 @@ export function FilterBuilder({ filter, onChange }: Props) {
               ))}
             </select>
             <input
-              id="dexc-value-num"
+              id={`${idPrefix}-value-num`}
               className="dexc-input dexc-input--num"
               type="number"
               inputMode="numeric"
@@ -152,7 +156,7 @@ export function FilterBuilder({ filter, onChange }: Props) {
         )}
         {def?.method === "select" && (
           <select
-            id="dexc-value-select"
+            id={`${idPrefix}-value-select`}
             className="dexc-select"
             aria-label={`${def.label} value`}
             value={value || def.values?.[0] || ""}
@@ -167,7 +171,7 @@ export function FilterBuilder({ filter, onChange }: Props) {
         )}
         {def?.method === "text" && (
           <input
-            id="dexc-value-text"
+            id={`${idPrefix}-value-text`}
             className="dexc-input"
             type="text"
             placeholder="contains…"
@@ -192,7 +196,7 @@ export function FilterBuilder({ filter, onChange }: Props) {
         <button
           type="button"
           className="btn btn--new"
-          id="dexc-add"
+          id={`${idPrefix}-add`}
           onClick={addFilter}
           disabled={atCap}
           title={atCap ? `Filter cap of ${MAX_FILTERS} reached` : undefined}
@@ -202,7 +206,7 @@ export function FilterBuilder({ filter, onChange }: Props) {
         <button
           type="button"
           className="btn btn--new dexc-paren-add"
-          id="dexc-add-parens"
+          id={`${idPrefix}-add-parens`}
           onClick={addParens}
           aria-label="Add a parenthesis group"
         >

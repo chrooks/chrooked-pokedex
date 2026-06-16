@@ -1,42 +1,47 @@
-import { COLUMNS, type ColumnKey } from "../../lib/dexColumns";
-import type { SortKey } from "../../lib/dexSort";
+import type { SortKey } from "../../lib/sortEngine";
+
+/** A sortable field offered by the sort row: a stable key + a human label. The
+    dex/move column registries and the ability sort list all reduce to this. */
+export type SortableField = { key: string; label: string };
 
 type Props = {
+  /** The fields this entity can sort by, in menu order. */
+  sortable: SortableField[];
+  /** A DOM-id stem so each surface's sort row carries distinct ids. */
+  idPrefix?: string;
   sort: SortKey[];
   onChange: (sort: SortKey[]) => void;
 };
 
 const MAX_SORT_KEYS = 3;
-const SORTABLE = COLUMNS.filter((c) => c.sortable);
-const LABEL = new Map<ColumnKey, string>(SORTABLE.map((c) => [c.key, c.label]));
 
 /**
  * The active multi-key sort, shown as priority-ordered chips (1, 2, 3) with a
  * direction arrow you click to flip and an × to drop. "+ Add sort" appends an
  * unused column; column-header clicks in the table drive the same state.
- * Table-only — the grid is dex-ordered.
  */
-export function SortRow({ sort, onChange }: Props) {
-  const unused = SORTABLE.filter((c) => !sort.some((s) => s.field === c.key));
+export function SortRow({ sortable, idPrefix = "dexc", sort, onChange }: Props) {
+  const label = new Map(sortable.map((c) => [c.key, c.label]));
+  const unused = sortable.filter((c) => !sort.some((s) => s.field === c.key));
   const atCap = sort.length >= MAX_SORT_KEYS;
 
-  function flip(field: ColumnKey) {
+  function flip(field: string) {
     onChange(
       sort.map((s) =>
         s.field === field ? { ...s, direction: s.direction === "asc" ? "desc" : "asc" } : s,
       ),
     );
   }
-  function drop(field: ColumnKey) {
+  function drop(field: string) {
     onChange(sort.filter((s) => s.field !== field));
   }
-  function add(field: ColumnKey) {
+  function add(field: string) {
     if (atCap || !field) return;
     onChange([...sort, { field, direction: "asc" }]);
   }
 
   return (
-    <div className="dexc-row" id="dex-sort-row">
+    <div className="dexc-row" id={`${idPrefix}-sort-row`}>
       <span className="dexc-label">Sort</span>
       {sort.length === 0 ? (
         <span className="dexc-hint">none — click a column header</span>
@@ -47,11 +52,11 @@ export function SortRow({ sort, onChange }: Props) {
               <span className="dexc-sortchip__ord" aria-hidden="true">
                 {index + 1}
               </span>
-              <span className="dexc-sortchip__label">{LABEL.get(key.field) ?? key.field}</span>
+              <span className="dexc-sortchip__label">{label.get(key.field) ?? key.field}</span>
               <button
                 type="button"
                 className="dexc-sortchip__dir"
-                aria-label={`${LABEL.get(key.field)} ${
+                aria-label={`${label.get(key.field)} ${
                   key.direction === "asc" ? "ascending" : "descending"
                 }; click to flip`}
                 onClick={() => flip(key.field)}
@@ -61,7 +66,7 @@ export function SortRow({ sort, onChange }: Props) {
               <button
                 type="button"
                 className="dexc-sortchip__x"
-                aria-label={`Remove ${LABEL.get(key.field)} from sort`}
+                aria-label={`Remove ${label.get(key.field)} from sort`}
                 onClick={() => drop(key.field)}
               >
                 <span aria-hidden="true">×</span>
@@ -73,11 +78,11 @@ export function SortRow({ sort, onChange }: Props) {
 
       {unused.length > 0 && !atCap && (
         <select
-          id="dexc-add-sort"
+          id={`${idPrefix}-add-sort`}
           className="dexc-select dexc-select--add"
           aria-label="Add a sort key"
           value=""
-          onChange={(e) => add(e.target.value as ColumnKey)}
+          onChange={(e) => add(e.target.value)}
         >
           <option value="" disabled>
             + Add sort
@@ -93,7 +98,7 @@ export function SortRow({ sort, onChange }: Props) {
         <button
           type="button"
           className="dexc-clear"
-          id="dexc-clear-sort"
+          id={`${idPrefix}-clear-sort`}
           aria-label="Clear all sort keys"
           onClick={() => onChange([])}
         >

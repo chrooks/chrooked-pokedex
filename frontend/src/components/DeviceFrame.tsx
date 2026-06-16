@@ -18,6 +18,8 @@ type Props = {
   onKind: (kind: KindKey) => void;
   query: string;
   onQuery: (query: string) => void;
+  /** Whether the rail search is active for this kind (dex / moves / abilities). */
+  searchable: boolean;
   editedOnly: boolean;
   onEditedOnly: (on: boolean) => void;
   /** Promote the current search term to a Name filter pill (Enter in search). */
@@ -31,14 +33,17 @@ type Props = {
 
 /**
  * The handheld-style chrome: a device header with a segmented readout, a left
- * rail (search, the edited filter, the kind tabs), and the main screen. Search
- * and the filter only apply to the Dex; on the other kinds they recede.
+ * rail (search, the edited filter, the kind tabs), and the main screen. The
+ * search applies wherever `searchable` is set; the "Edited only" filter applies
+ * on the dex, moves, abilities, and type-chart (the layout toggle stays
+ * dex-only).
  */
 export function DeviceFrame({
   kind,
   onKind,
   query,
   onQuery,
+  searchable,
   editedOnly,
   onEditedOnly,
   onSearchEnter,
@@ -49,6 +54,14 @@ export function DeviceFrame({
   children,
 }: Props) {
   const isDex = kind === "dex";
+  const searchPlaceholder =
+    kind === "moves"
+      ? "Search moves"
+      : kind === "abilities"
+        ? "Search abilities"
+        : kind === "type-chart"
+          ? "Search types"
+          : "Search dex";
   return (
     <div className="device" id="app-shell">
       <header className="device__header">
@@ -65,7 +78,7 @@ export function DeviceFrame({
 
       <div className="device__body">
         <nav className="device__rail" aria-label="Sections">
-          <div className="device__search" data-disabled={!isDex}>
+          <div className="device__search" data-disabled={!searchable}>
             <span className="device__search-key mono" aria-hidden="true">
               /
             </span>
@@ -73,7 +86,7 @@ export function DeviceFrame({
               ref={searchRef}
               type="search"
               className="device__search-input"
-              placeholder="Search dex"
+              placeholder={searchPlaceholder}
               value={query}
               onChange={(event) => onQuery(event.target.value)}
               onKeyDown={(event) => {
@@ -82,10 +95,10 @@ export function DeviceFrame({
                   onSearchEnter();
                 }
               }}
-              disabled={!isDex}
-              aria-label="Search the dex by name. Press Enter to add it as a Name filter."
+              disabled={!searchable}
+              aria-label={`${searchPlaceholder} by name. Press Enter to add it as a Name filter.`}
             />
-            {isDex && query.trim() !== "" && (
+            {searchable && query.trim() !== "" && (
               <kbd
                 className="device__search-enter mono"
                 title="Press Enter to add as a Name filter"
@@ -101,7 +114,6 @@ export function DeviceFrame({
             className="device__filter"
             data-on={editedOnly}
             aria-pressed={editedOnly}
-            disabled={!isDex}
             onClick={() => onEditedOnly(!editedOnly)}
           >
             <span className="device__filter-lamp" aria-hidden="true" />

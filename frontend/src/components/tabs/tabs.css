@@ -46,6 +46,32 @@
   text-align: right;
 }
 
+/* Sortable column header: the whole label is a button that drives the shared
+   multi-key sort (click to sort/flip, shift-click to append). Reads as plain
+   header text until hover so the table stays calm. */
+.tab-th-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.tab-th-sort:hover {
+  color: var(--text);
+}
+
+.tab-th-sort:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
 .tab-strong {
   font-weight: 600;
   color: var(--text);
