@@ -1,0 +1,4 @@
+﻿1,STENCH,Hedor,"Debido al mal olor que emana, al atacar al rival puede hacerlo retroceder."
+2,DRIZZLE,Llovizna,"Hace que llueva cuando entra en combate."
+3,SPEEDBOOST,Impulso,"Aumenta la Velocidad en cada turno."
+4,BATTLEARMOR,Armadura Batalla,"La robusta coraza que lo protege bloquea los golpes críticos."

@@ -1,0 +1,4 @@
+﻿1,MEGAHORN,Megacuerno,000,120,BUG,Physical,85,10,0,00,0,abef,"Violenta embestida con cuernos imponentes."
+2,ATTACKORDER,Al Ataque,000,90,BUG,Physical,100,15,0,00,0,befh,"El usuario llama a sus amigos para que ataquen al rival. Suele ser crítico."
+3,BUGBUZZ,Zumbido,046,90,BUG,Special,100,10,10,00,0,befk,"El movimiento de las alas crea una onda sónica dañina. También puede disminuir la Defensa Especial del objetivo."
+4,XSCISSOR,Tijera X,000,80,BUG,Physical,100,15,0,00,0,abef,"Cruza las guadañas o las garras para atacar al rival como si fueran unas tijeras."
