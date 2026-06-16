@@ -325,3 +325,101 @@ def test_created_move_is_flagged_with_no_base() -> None:
     assert "effect" not in provided  # left at the schema default ('hit')
     assert "target" not in provided  # left at the schema default ('selected')
     assert excalibur["name"] == "Excalibur"
+
+
+# --------------------------------------------------------------------------- #
+# Type-chart merge (slice 3) — `build_type_chart` brings the type chart to canon
+# parity per CELL: the FULL base matrix ⊕ Ruleset overrides. A cell the Ruleset
+# touches is flagged overridden with the pre-override base_multiplier; a base-only
+# cell is unflagged with base_multiplier=None. The sample Ruleset owns one cell
+# (Flying→Ice 0.5); the synthetic base below makes it a real override (base 2.0)
+# and leaves Fire→Grass as a base-only cell.
+
+def _cell(cells: list[dict], attacker: str, defender: str) -> dict:
+    return next(
+        c for c in cells if c["attacker"] == attacker and c["defender"] == defender
+    )
+
+
+_TYPE_CHART_SNAPSHOT = {
+    "version": "1.11.2",
+    "species": {},
+    "abilities": {},
+    "moves": {},
+    "type_chart": [
+        {"attacker": "Flying", "defender": "Ice", "multiplier": 2.0},
+        {"attacker": "Fire", "defender": "Grass", "multiplier": 2.0},
+        {"attacker": "Water", "defender": "Fire", "multiplier": 2.0},
+    ],
+}
+
+
+def test_type_chart_emits_full_grid_sorted_by_pair() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    cells = dexmod.build_type_chart(_TYPE_CHART_SNAPSHOT, ruleset)
+    # every base cell shows through (3 here), none dropped, none invented.
+    assert len(cells) == 3
+    pairs = [(c["attacker"], c["defender"]) for c in cells]
+    assert pairs == sorted(pairs)  # deterministic order by (attacker, defender)
+
+
+def test_base_only_type_cell_is_unflagged_with_null_base_multiplier() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    cells = dexmod.build_type_chart(_TYPE_CHART_SNAPSHOT, ruleset)
+    fire_grass = _cell(cells, "Fire", "Grass")
+    assert fire_grass["overridden"] is False
+    assert fire_grass["multiplier"] == 2.0  # the base value passes through
+    assert fire_grass["base_multiplier"] is None
+
+
+def test_overridden_type_cell_carries_base_multiplier() -> None:
+    ruleset = Ruleset.load(_SAMPLE)
+    cells = dexmod.build_type_chart(_TYPE_CHART_SNAPSHOT, ruleset)
+    flying_ice = _cell(cells, "Flying", "Ice")
+    assert flying_ice["overridden"] is True
+    assert flying_ice["multiplier"] == 0.5  # the Ruleset override wins
+    assert flying_ice["base_multiplier"] == 2.0  # the base it replaced
+
+
+def test_type_chart_override_with_no_base_cell_is_created() -> None:
+    # A Ruleset override referencing a pair absent from the base matrix surfaces as
+    # a created cell: overridden=True, base_multiplier=None. (Shouldn't occur with
+    # a full base matrix, but the merge must not drop it.)
+    ruleset = Ruleset.load(_SAMPLE)
+    base_without_flying_ice = {
+        **_TYPE_CHART_SNAPSHOT,
+        "type_chart": [
+            c
+            for c in _TYPE_CHART_SNAPSHOT["type_chart"]
+            if not (c["attacker"] == "Flying" and c["defender"] == "Ice")
+        ],
+    }
+    cells = dexmod.build_type_chart(base_without_flying_ice, ruleset)
+    flying_ice = _cell(cells, "Flying", "Ice")
+    assert flying_ice["overridden"] is True
+    assert flying_ice["multiplier"] == 0.5
+    assert flying_ice["base_multiplier"] is None
+
+
+def test_type_chart_multipliers_are_always_floats() -> None:
+    # fix2: a base cell stored as an int (or an override loaded as int from YAML)
+    # must surface as a float so multiplier/base_multiplier are JSON-consistent.
+    ruleset = Ruleset.load(_SAMPLE)
+    # Flying→Ice base stored as int 2 here; the Ruleset override is 0.5.
+    int_base_snapshot = {
+        **_TYPE_CHART_SNAPSHOT,
+        "type_chart": [
+            {"attacker": "Flying", "defender": "Ice", "multiplier": 2},  # int base
+            {"attacker": "Fire", "defender": "Grass", "multiplier": 2},  # int base
+        ],
+    }
+    cells = dexmod.build_type_chart(int_base_snapshot, ruleset)
+    # base-only cell: multiplier coerced to float, base_multiplier stays None.
+    fire_grass = _cell(cells, "Fire", "Grass")
+    assert isinstance(fire_grass["multiplier"], float)
+    assert fire_grass["base_multiplier"] is None
+    # overridden cell: both multiplier and base_multiplier are floats.
+    flying_ice = _cell(cells, "Flying", "Ice")
+    assert isinstance(flying_ice["multiplier"], float)
+    assert isinstance(flying_ice["base_multiplier"], float)
+    assert flying_ice["base_multiplier"] == 2.0

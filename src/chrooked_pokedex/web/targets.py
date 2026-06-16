@@ -424,3 +424,17 @@ def target_moves(
     """
     snapshot = state.snapshot_for(target.path)
     return dexmod.build_moves(snapshot, ruleset)
+
+
+def target_type_chart(
+    target: Target, ruleset: Ruleset, state: TargetState
+) -> list[dict[str, Any]]:
+    """Per-Target type-chart backdrop: ``build_type_chart(build_snapshot(target), ruleset)``.
+
+    The same shape as ``target_dex`` / ``target_abilities`` / ``target_moves``:
+    the fork's own base type matrix comes from the cached per-Target snapshot (D2),
+    then the type-chart merge overlays the Ruleset per cell — so the backdrop
+    reuses the snapshot population + merge wholesale.
+    """
+    snapshot = state.snapshot_for(target.path)
+    return dexmod.build_type_chart(snapshot, ruleset)

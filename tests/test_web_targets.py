@@ -125,6 +125,17 @@ def _write_minimal_fork(target: Path) -> None:
         "};\n",
         encoding="utf-8",
     )
+    # A tiny 2x2 type matrix so the per-Target type-chart backdrop has a real fork
+    # grid to merge the Ruleset onto (Fire super-effective on Grass = 2.0 here).
+    (target / "src" / "data" / "types_info.h").write_text(
+        "const uq4_12_t gTypeEffectivenessTable"
+        "[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =\n"
+        "{//                 Fire    Grass\n"
+        "    [TYPE_FIRE]  = {______, X(2.0)},\n"
+        "    [TYPE_GRASS] = {X(0.5), ______},\n"
+        "};\n",
+        encoding="utf-8",
+    )
 
 
 def _write_ruleset(root: Path) -> None:
@@ -137,6 +148,13 @@ def _write_ruleset(root: Path) -> None:
     (root / "abilities").mkdir(parents=True)
     (root / "moves").mkdir(parents=True)
     (root / "behaviors").mkdir(parents=True)
+    (root / "type-chart").mkdir(parents=True)
+    # One type-chart override the fork's 2x2 grid has a base cell for, so the
+    # backdrop merge flags it overridden with the fork's own base_multiplier.
+    (root / "type-chart" / "overrides.yaml").write_text(
+        "overrides:\n  - { attacker: Fire, defender: Grass, multiplier: 0.5 }\n",
+        encoding="utf-8",
+    )
     (root / "meta.yaml").write_text(
         "base_version: 1.11.2\nschema_version: 1\n", encoding="utf-8"
     )
@@ -585,6 +603,48 @@ def test_moves_ac4_target_backdrop_and_snapshot_cache(
     excalibur = next(m for m in moves if m["chrooked_id"] == "excalibur")
     assert excalibur["base"] == {}
     assert "type" in excalibur["overridden_fields"]
+
+
+# --- type-chart slice ac4: per-Target type-chart backdrop; snapshot cached -- #
+
+
+def test_type_chart_ac4_target_backdrop_and_snapshot_cache(
+    client: TestClient, fork: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target_id = _register(client, fork)
+
+    # spy on build_snapshot to prove it runs once across two type-chart requests.
+    calls = {"n": 0}
+    real_build = targetsmod.snapmod.build_snapshot
+
+    def counting_build(base_dir):  # noqa: ANN001
+        calls["n"] += 1
+        return real_build(base_dir)
+
+    monkeypatch.setattr(targetsmod.snapmod, "build_snapshot", counting_build)
+
+    first = client.get(f"/api/targets/{target_id}/type-chart")
+    assert first.status_code == 200, first.text
+    second = client.get(f"/api/targets/{target_id}/type-chart")
+    assert second.status_code == 200
+
+    assert calls["n"] == 1, "snapshot should be built once and cached"
+
+    cells = first.json()
+    # the fork's full 2x2 grid shows through (4 cells), keyed by neutral names.
+    assert len(cells) == 4
+    by_pair = {(c["attacker"], c["defender"]): c for c in cells}
+    # base-only fork cell (Grass->Fire 0.5) is unflagged with null base_multiplier.
+    grass_fire = by_pair[("Grass", "Fire")]
+    assert grass_fire["overridden"] is False
+    assert grass_fire["multiplier"] == 0.5
+    assert grass_fire["base_multiplier"] is None
+    # the Ruleset override (Fire->Grass 0.5) merges onto the FORK's own cell (2.0),
+    # not the committed base — proving the backdrop reads the fork.
+    fire_grass = by_pair[("Fire", "Grass")]
+    assert fire_grass["overridden"] is True
+    assert fire_grass["multiplier"] == 0.5
+    assert fire_grass["base_multiplier"] == 2.0
 
 
 # --- ac8: DATA-ONLY created ability appears with a working packet link ------ #

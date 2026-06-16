@@ -43,7 +43,9 @@ _SNAPSHOT = {
     },
     "moves": {},
     "abilities": {},
-    "type_chart": [],
+    # A base cell so a PUT override merges onto it (canon /api/type-chart is now
+    # the full base ⊕ Ruleset grid, merged per cell).
+    "type_chart": [{"attacker": "Water", "defender": "Fire", "multiplier": 1.0}],
 }
 
 
@@ -392,9 +394,16 @@ def test_put_type_chart_replaces_overrides(
     assert "attacker: Water" in on_disk
     # the original Flying/Ice override is gone (whole-list replace)
     assert "Flying" not in on_disk
-    assert {"attacker": "Water", "defender": "Fire", "multiplier": 2.0} in (
-        client.get("/api/type-chart").json()
+    # GET is now the merged grid: the PUT override shows as an overridden cell
+    # carrying the base multiplier it replaced (1.0 from the snapshot).
+    water_fire = next(
+        c
+        for c in client.get("/api/type-chart").json()
+        if c["attacker"] == "Water" and c["defender"] == "Fire"
     )
+    assert water_fire["multiplier"] == 2.0
+    assert water_fire["overridden"] is True
+    assert water_fire["base_multiplier"] == 1.0
 
 
 def test_put_type_chart_invalid_multiplier_is_422_writes_nothing(
@@ -419,7 +428,13 @@ def test_put_type_chart_can_clear_to_empty(
 ) -> None:
     response = client.put("/api/type-chart", json=[])
     assert response.status_code == 200, response.text
-    assert client.get("/api/type-chart").json() == []
+    # The PUT (whole-list override replace) returns the now-empty override set.
+    assert response.json() == []
+    # Canon GET is the merged grid: with no overrides, every base cell shows
+    # through unflagged (the snapshot's one base cell here).
+    cells = client.get("/api/type-chart").json()
+    assert all(c["overridden"] is False for c in cells)
+    assert all(c["base_multiplier"] is None for c in cells)
 
 
 # --------------------------------------------------------------------------- #

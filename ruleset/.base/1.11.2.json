@@ -132889,6 +132889,1627 @@
       ]
     }
   },
-  "type_chart": [],
+  "type_chart": [
+    {
+      "attacker": "Bug",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Dark",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Fairy",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Fighting",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Fire",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Flying",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Ghost",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Grass",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Poison",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Psychic",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Bug",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Dark",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Fairy",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Fighting",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Ghost",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Psychic",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Steel",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dark",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Dragon",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Fairy",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Dragon",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Dragon",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Electric",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Flying",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Grass",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Ground",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Steel",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Electric",
+      "defender": "Water",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Dark",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Dragon",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Fighting",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Fire",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Poison",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fairy",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Bug",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Dark",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Fairy",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Flying",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Ghost",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Ice",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Normal",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Poison",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Psychic",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Rock",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Steel",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fighting",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Bug",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Dragon",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Fire",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Grass",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Ice",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Rock",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Steel",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Fire",
+      "defender": "Water",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Bug",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Electric",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Fighting",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Grass",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Rock",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Flying",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Dark",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Ghost",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Normal",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Psychic",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Steel",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ghost",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Bug",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Dragon",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Fire",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Flying",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Grass",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Ground",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Poison",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Rock",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Grass",
+      "defender": "Water",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Bug",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Electric",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Fire",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Flying",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Grass",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Poison",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Rock",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Steel",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ground",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Dragon",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Fire",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Flying",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Grass",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Ground",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Ice",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Ice",
+      "defender": "Water",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Ghost",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Rock",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Normal",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Fairy",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Ghost",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Grass",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Ground",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Poison",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Rock",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Steel",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Poison",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Dark",
+      "multiplier": 0.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Fighting",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Fire",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Poison",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Psychic",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Psychic",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Bug",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Fighting",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Fire",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Flying",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Ground",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Ice",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Rock",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Rock",
+      "defender": "Water",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Dragon",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Electric",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Fairy",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Fire",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Grass",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Ground",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Ice",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Rock",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Steel",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Steel",
+      "defender": "Water",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Water",
+      "defender": "Bug",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Dark",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Dragon",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Water",
+      "defender": "Electric",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Fairy",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Fighting",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Fire",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Flying",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Ghost",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Grass",
+      "multiplier": 0.5
+    },
+    {
+      "attacker": "Water",
+      "defender": "Ground",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Ice",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Normal",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Poison",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Psychic",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Rock",
+      "multiplier": 2.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Steel",
+      "multiplier": 1.0
+    },
+    {
+      "attacker": "Water",
+      "defender": "Water",
+      "multiplier": 0.5
+    }
+  ],
   "version": "1.11.2"
 }

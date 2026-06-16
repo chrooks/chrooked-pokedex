@@ -1,0 +1,382 @@
+/* The editable N×N type-chart matrix. It is BOTH the canon browse view and the
+   editor, so the same grid carries the read (effectiveness color) and the write
+   (edited tint + base→now). Three jobs kept separate, per the token contract:
+   type color = identity (headers only), --edited = "the Ruleset touched this"
+   (the one attention signal), surface steps = effectiveness weight.
+
+   The ×1 neutral majority is quieted to a faint dot so the off-neutral cells —
+   immune / resisted / super, and any override — are what the eye lands on. */
+
+.tab--type-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tc-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tc-edited-toggle {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-dim);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.tc-edited-toggle[data-on="true"] {
+  color: var(--edited);
+  border-color: color-mix(in oklch, var(--edited) 45%, var(--line));
+  background: color-mix(in oklch, var(--edited) 12%, var(--surface-1));
+}
+
+/* D7 — the "N overridden" toolbar chip. Fronted by the app's edited LED lamp so
+   it reads as lit overrides; the count text pulls toward --edited. No inline
+   style on the element — the rule lives here. */
+.tc-toolbar__edited {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: var(--space-2);
+  color: var(--edited);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── The grid ───────────────────────────────────────────────────────────── */
+
+.tc-grid {
+  --tc-cell: clamp(1.5rem, 2.4vw, 2.25rem);
+  --tc-head: clamp(2rem, 3vw, 2.75rem);
+  display: inline-grid;
+  /* One sticky header track + N matchup tracks. */
+  grid-template-columns: var(--tc-head) repeat(var(--tc-n), var(--tc-cell));
+  width: max-content;
+  max-width: 100%;
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: auto;
+  /* contain the sticky headers to the grid's own scroll box */
+  position: relative;
+}
+
+/* role=row is a layout no-op; the grid template owns placement. */
+.tc-grid > .tc-row {
+  display: contents;
+}
+
+/* ── Headers ────────────────────────────────────────────────────────────── */
+
+.tc-head,
+.tc-corner {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+
+/* D4 — sticky stacking seam. The corner outranks both header axes; column
+   headers outrank row headers so the top band always wins where they cross; and
+   both outrank a hovered/scaled cell (which lifts to z-index 1) so a magnified
+   cell never bleeds over the sticky chrome. */
+.tc-corner {
+  top: 0;
+  left: 0;
+  z-index: 3;
+  flex-direction: column;
+  gap: 1px;
+  color: var(--text-faint);
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 0.5625rem;
+  line-height: 1;
+}
+
+.tc-corner__atk {
+  align-self: flex-start;
+  padding-left: 3px;
+}
+
+.tc-corner__def {
+  align-self: flex-end;
+  padding-right: 3px;
+  color: var(--text-dim);
+}
+
+/* Column headers (defenders) stick to the top; row headers (attackers) to the
+   left. Each pulls its label toward --text and a tint toward the surface from
+   its single --type token, mirroring the type-chip contrast strategy. */
+.tc-head--col {
+  top: 0;
+  z-index: 2;
+  height: var(--tc-head);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.tc-head--row {
+  left: 0;
+  z-index: 1;
+  border-right: 1px solid var(--line-strong);
+}
+
+.tc-head__label {
+  color: color-mix(in oklch, var(--type) 64%, var(--text));
+}
+
+.tc-head::after {
+  /* a slim type-colored keyline so the axis reads as a band of identity */
+  content: "";
+  position: absolute;
+  background: var(--type);
+  opacity: 0.85;
+}
+
+.tc-head--col::after {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+}
+
+.tc-head--row::after {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 2px;
+}
+
+/* ── Cells ──────────────────────────────────────────────────────────────── */
+
+.tc-cell {
+  position: relative;
+  width: var(--tc-cell);
+  height: var(--tc-cell);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: 0;
+  margin: 0;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+button.tc-cell {
+  cursor: pointer;
+  border-top: 0;
+  border-left: 0;
+}
+
+/* Effectiveness weight via surface steps + a cool/warm wash. ×1 is the quiet
+   floor; 0 / ½ read "defensive" (cool), ×2 reads "offensive" (warm).
+
+   D1 — glyphs are pulled toward --text (ink), not toward the wash hue, so the
+   most important cells (×2 warm, 0 cool) keep AA contrast instead of going
+   warm-on-warm / cool-on-cool.
+   D2 — multiplier is NOT hue-only encoded. Each tier carries a non-hue channel
+   so 0 / ½ / 2 differ by border weight + glyph weight, surviving grayscale and
+   color-blindness: immune = heavy inset ring, resisted = light dashed ring,
+   super = solid edge; glyph weight steps ½ (medium) → 2 (extra-bold). */
+.tc-cell[data-neutral="true"] {
+  color: var(--text-faint);
+}
+
+.tc-cell[data-neutral="true"] .tc-cell__glyph {
+  opacity: 0.4;
+}
+
+/* 0 — immune: deepest cool wash + heavy inset ring, glyph near ink. */
+.tc-cell[data-mult="0"] {
+  background: color-mix(in oklch, var(--type-water) 20%, var(--surface-0));
+  color: color-mix(in oklch, var(--type-water) 30%, var(--text));
+  box-shadow: inset 0 0 0 2px
+    color-mix(in oklch, var(--type-water) 45%, transparent);
+}
+
+.tc-cell[data-mult="0"] .tc-cell__glyph {
+  font-weight: 800;
+}
+
+/* ½ — resisted: faint cool wash + light dashed ring, glyph medium weight. */
+.tc-cell[data-mult="0.5"] {
+  background: color-mix(in oklch, var(--type-water) 10%, var(--surface-0));
+  color: color-mix(in oklch, var(--type-water) 22%, var(--text));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklch, var(--type-water) 28%, transparent);
+}
+
+.tc-cell[data-mult="0.5"] .tc-cell__glyph {
+  font-weight: 500;
+}
+
+/* 2 — super: warm wash + solid warm edge, glyph extra-bold and near ink. */
+.tc-cell[data-mult="2"] {
+  background: color-mix(in oklch, var(--type-fire) 16%, var(--surface-0));
+  color: color-mix(in oklch, var(--type-fire) 28%, var(--text));
+  box-shadow: inset 0 0 0 1.5px
+    color-mix(in oklch, var(--type-fire) 55%, transparent);
+}
+
+.tc-cell[data-mult="2"] .tc-cell__glyph {
+  font-weight: 800;
+}
+
+.tc-cell--missing {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--surface-0),
+    var(--surface-0) 4px,
+    var(--surface-1) 4px,
+    var(--surface-1) 8px
+  );
+}
+
+/* Hover / focus / active — compositor-friendly only. The cell lifts and a ring
+   draws via box-shadow (no layout shift). */
+button.tc-cell:hover {
+  background: var(--surface-3);
+  transform: scale(1.08);
+  z-index: 1;
+}
+
+/* D5 — keyboard focus must win unambiguously, even on an edited ×2 cell whose
+   own box-shadow is loud. A double ring (surface gap + chrome) on its own layer,
+   lifted above hovered/edited cells (but still below the sticky headers, which
+   sit at z 1–3 on a separate sticky context). Applies to read-only div cells
+   too, since roving tabindex makes them focusable. */
+.tc-cell:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--surface-0),
+    0 0 0 4px var(--chrome),
+    0 0 0 6px color-mix(in oklch, var(--chrome) 35%, transparent);
+  /* Above other cells (default + hover/edited at z 0–1) but below the sticky
+     header band (z 1–3 in its own context) per D4. */
+  z-index: 1;
+}
+
+button.tc-cell:active {
+  transform: scale(0.96);
+}
+
+/* D3 — Edited is the THIRD color job (the Ruleset touched this) and must NOT eat
+   the SECOND (effectiveness wash). So the effectiveness background stays put and
+   "edited" reads as an amber RING + corner LED instead of an amber wash — you
+   can still see what the cell was changed TO from its color. The amber ring is
+   drawn on top of the tier's own inset ring via layered box-shadows; the glyph
+   is pulled toward ink (not the amber hue) and never dims, so an override stands
+   out even on a ×1. */
+.tc-cell[data-edited="true"] {
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklch, var(--edited) 75%, transparent),
+    inset 0 0 0 4px color-mix(in oklch, var(--edited) 22%, transparent);
+}
+
+.tc-cell[data-edited="true"] .tc-cell__glyph {
+  opacity: 1;
+  color: color-mix(in oklch, var(--edited) 30%, var(--text));
+}
+
+/* Corner LED — matches the app's edited-led treatment: amber lamp with a ~8px
+   glow and a hairline ring, so the cell carries the same "lit override" signal
+   as the EditedLed component elsewhere. */
+.tc-cell__dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--edited);
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--edited) 40%, transparent),
+    0 0 8px 1px var(--edited-glow);
+}
+
+/* D6 — read-only posture. On a backdrop the grid is for reading, not editing:
+   a faint desaturation tells the eye it is frozen, and a not-allowed cursor
+   reports that clicking does nothing. Cells stay focusable for value reading. */
+.tc-grid[data-readonly="true"] .tc-cell {
+  filter: saturate(0.72);
+  cursor: not-allowed;
+}
+
+/* TODO (deferred, out of scope this pass): skeleton loading shimmer while the
+   chart fetches; gridline banding every N rows for long-axis scanning; larger
+   touch targets on coarse pointers. */
+
+/* "Edited only" dims the untouched cells so the override set is the figure. */
+.tc-grid[data-edited-only="true"] .tc-cell:not([data-edited="true"]) {
+  opacity: 0.22;
+}
+
+.tc-grid[data-edited-only="true"] .tc-cell[data-edited="true"] {
+  transform: scale(1.02);
+  z-index: 1;
+}
+
+/* ── Legend ─────────────────────────────────────────────────────────────── */
+
+.tc-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+}
+
+.tc-legend__item {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.tc-legend__hint {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* D6 — the read-only note reuses the legend hint slot, pulled toward --edited
+   so the "frozen backdrop" posture reads as a deliberate state, not a defect. */
+.tc-legend__hint--readonly {
+  color: color-mix(in oklch, var(--edited) 50%, var(--text-dim));
+  font-style: normal;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tc-cell,
+  .tc-edited-toggle {
+    transition: none;
+  }
+  button.tc-cell:hover,
+  button.tc-cell:active,
+  .tc-grid[data-edited-only="true"] .tc-cell[data-edited="true"] {
+    transform: none;
+  }
+}

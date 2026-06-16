@@ -21,6 +21,7 @@ import type {
   MoveWrite,
   SpeciesOverride,
   Target,
+  TypeChartCell,
   TypeChartEntry,
 } from "./types";
 
@@ -110,7 +111,7 @@ export const api = {
   moves: (signal?: AbortSignal) => getJson<Move[]>("/api/moves", signal),
   abilities: (signal?: AbortSignal) => getJson<Ability[]>("/api/abilities", signal),
   typeChart: (signal?: AbortSignal) =>
-    getJson<TypeChartEntry[]>("/api/type-chart", signal),
+    getJson<TypeChartCell[]>("/api/type-chart", signal),
   behaviors: (signal?: AbortSignal) => getJson<Behavior[]>("/api/behaviors", signal),
 
   // Species (raw Override read + write)
@@ -190,6 +191,12 @@ export const api = {
   /** The target's moves ⊕ Ruleset — the moves backdrop for that fork. */
   targetMoves: (id: string) => (signal?: AbortSignal) =>
     getJson<Move[]>(`/api/targets/${encodeURIComponent(id)}/moves`, signal),
+  /** The target's type chart ⊕ Ruleset — the type-chart backdrop for that fork. */
+  targetTypeChart: (id: string) => (signal?: AbortSignal) =>
+    getJson<TypeChartCell[]>(
+      `/api/targets/${encodeURIComponent(id)}/type-chart`,
+      signal,
+    ),
   /** Fetch one behavior packet by its DATA-ONLY `packet_url`. */
   packet: (packetUrl: string, signal?: AbortSignal) =>
     getJson<BehaviorPacket>(packetUrl, signal),

@@ -141,11 +141,13 @@ export default function App() {
       readout={
         <>
           <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
-          {/* The backdrop chip rides along on the dex, abilities, and moves tabs
-              — each swaps its fetcher to the Target's fork ⊕ Ruleset when set. */}
+          {/* The backdrop chip rides along on the dex, abilities, moves, and
+              type-chart tabs — each swaps its fetcher to the Target's fork ⊕
+              Ruleset when set. */}
           {(isDex ||
             view.kind === "abilities" ||
-            view.kind === "moves") &&
+            view.kind === "moves" ||
+            view.kind === "type-chart") &&
             view.backdrop !== null && (
               <BackdropChip
                 targetId={view.backdrop}

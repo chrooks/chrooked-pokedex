@@ -128,7 +128,10 @@ def create_app(
 
     @app.get("/api/type-chart")
     def get_type_chart() -> list[dict[str, Any]]:
-        return colmod.build_type_chart(_load_ruleset_or_503())
+        # Canon type chart reaches parity: the full base matrix ⊕ Ruleset, merged
+        # per-cell like the dex (was the sparse Ruleset-only list before this slice).
+        snapshot = _load_snapshot_or_503()
+        return dexmod.build_type_chart(snapshot, _load_ruleset_or_503())
 
     @app.get("/api/behaviors")
     def get_behaviors() -> list[dict[str, Any]]:
@@ -334,6 +337,17 @@ def create_app(
         try:
             target = registry.get(target_id)
             return targetsmod.target_moves(
+                target, _load_ruleset_or_503(), app.state.targets_state
+            )
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+
+    @app.get("/api/targets/{target_id}/type-chart")
+    def get_target_type_chart(target_id: str) -> list[dict[str, Any]]:
+        registry = app.state.targets_registry
+        try:
+            target = registry.get(target_id)
+            return targetsmod.target_type_chart(
                 target, _load_ruleset_or_503(), app.state.targets_state
             )
         except targetsmod.TargetError as error:

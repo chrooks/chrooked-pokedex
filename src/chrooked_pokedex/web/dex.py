@@ -17,7 +17,13 @@ from __future__ import annotations
 from typing import Any
 
 from ..model import Ruleset
-from ..model.schema import AbilitiesOverride, AbilityDef, MoveDef, SpeciesOverride
+from ..model.schema import (
+    AbilitiesOverride,
+    AbilityDef,
+    MoveDef,
+    SpeciesOverride,
+    TypeChartOverride,
+)
 
 # Top-level species fields the dex flags as overridden, in display order.
 _FLAGGABLE_FIELDS = ("types", "abilities", "stats", "learnset", "evolution")
@@ -350,6 +356,80 @@ def _merge_move(
         **_move_entry_fields(override_values, override.chrooked_id, aka),
         "overridden_fields": overridden,
         "base": base_values,
+    }
+
+
+def build_type_chart(
+    snapshot: dict[str, Any], ruleset: Ruleset
+) -> list[dict[str, Any]]:
+    """Merge the Ruleset's type-chart overrides onto the full base matrix.
+
+    The type chart reaches canon parity here exactly like `build_abilities` /
+    `build_moves`, but the merge unit is a single matrix CELL rather than a keyed
+    entity. The base snapshot carries the FULL attacker×defender grid (every cell
+    a concrete multiplier); each `TypeChartOverride` replaces the matching cell's
+    multiplier and flags it `overridden` with the pre-override `base_multiplier`.
+
+    Contract per cell:
+    - non-overridden: `overridden=False`, `multiplier=<base>`, `base_multiplier=None`.
+    - overridden:     `overridden=True`,  `multiplier=<ruleset>`,
+                      `base_multiplier=<base>`.
+
+    A Ruleset override that references a pair with no base cell ("created") emits
+    a cell with `base_multiplier=None`; with the full base matrix this should not
+    occur. The type universe + ordering derive from the base cells (sorted by
+    `(attacker, defender)`) for a stable, deterministic grid.
+    """
+    base_cells: list[dict[str, Any]] = snapshot.get("type_chart", [])
+    overrides: dict[tuple[str, str], TypeChartOverride] = {
+        (entry.attacker, entry.defender): entry for entry in ruleset.type_chart
+    }
+
+    entries = [
+        _merge_type_cell(cell, overrides.get((cell["attacker"], cell["defender"])))
+        for cell in base_cells
+    ]
+
+    # Overrides referencing a pair absent from the base matrix are "created" cells.
+    base_pairs = {(cell["attacker"], cell["defender"]) for cell in base_cells}
+    created_pairs = sorted(set(overrides) - base_pairs)
+    entries.extend(_merge_type_cell(None, overrides[pair]) for pair in created_pairs)
+
+    return sorted(entries, key=lambda e: (e["attacker"], e["defender"]))
+
+
+def _merge_type_cell(
+    base: dict[str, Any] | None, override: TypeChartOverride | None
+) -> dict[str, Any]:
+    """One merged type-chart cell: base ⊕ Ruleset override.
+
+    Three cases, mirroring `_merge_ability` / `_merge_move`:
+    - base-only (override is None): pass the base multiplier through, unflagged.
+    - created (base is None): no base cell to diff against, so `base_multiplier`
+      stays None and the override's multiplier shows as overridden.
+    - overridden: the override's multiplier replaces base; carry the pre-override
+      base multiplier for the diff.
+    """
+    if override is None:
+        # base is guaranteed present here (called over base cells).
+        assert base is not None
+        return {
+            "attacker": base["attacker"],
+            "defender": base["defender"],
+            "multiplier": float(base["multiplier"]),
+            "overridden": False,
+            "base_multiplier": None,
+        }
+
+    # A YAML override `multiplier: 2` loads as int; coerce so every cell's
+    # multiplier and base_multiplier are floats per the contract.
+    base_multiplier = float(base["multiplier"]) if base is not None else None
+    return {
+        "attacker": override.attacker,
+        "defender": override.defender,
+        "multiplier": float(override.multiplier),
+        "overridden": True,
+        "base_multiplier": base_multiplier,
     }
 
 

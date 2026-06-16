@@ -163,10 +163,25 @@ export interface Ability {
     ability loader REJECTS them as unknown keys (422), so they must be stripped. */
 export type AbilityWrite = Omit<Ability, "overridden_fields" | "base">;
 
+/** The write shape for the type-chart PUT: only the override set (cells whose
+    multiplier differs from base). One whole-list file → a write replaces it. */
 export interface TypeChartEntry {
   attacker: string;
   defender: string;
   multiplier: number;
+}
+
+/** One attacker×defender cell of the FULL merged grid (base ⊕ Ruleset), as
+    returned by `GET /api/type-chart` and `GET /api/targets/{id}/type-chart`.
+    `overridden` ⇒ the Ruleset changed this pair; `base_multiplier` is the
+    pre-override value when overridden, null otherwise. Mirrors {@link Move}'s
+    base→now diff contract, but per-cell across the N×N matrix. */
+export interface TypeChartCell {
+  attacker: string;
+  defender: string;
+  multiplier: number;
+  overridden: boolean;
+  base_multiplier: number | null;
 }
 
 export interface BehaviorEffect {

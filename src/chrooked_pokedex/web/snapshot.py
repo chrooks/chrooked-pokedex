@@ -26,6 +26,7 @@ from ..readers.pokeemerald import (
     learnset_parser,
     move_parser,
     species_parser,
+    type_chart_parser,
 )
 from ..seed import neutralize as nz
 
@@ -52,6 +53,13 @@ DEFAULT_SNAPSHOT_PATH = (
 )
 
 SNAPSHOT_VERSION = "1.11.2"
+
+# Engine placeholder types that aren't real battle types: NONE/MYSTERY pad the
+# enum, STELLAR is a Terastal-only cosmetic. The dex rules on the 18 real battle
+# types only, so we drop these at the snapshot boundary — the API and frontend
+# then share one 18×18 type universe. Promoting one of these to a real future
+# type (e.g. Stellar) is a deliberate allowlist change: remove it from this set.
+_NON_BATTLE_TYPES = frozenset({"None", "Mystery", "Stellar"})
 
 # Gigantamax entries are cosmetic battle-only forms the Ruleset never rules on
 # (mirrors the seed's exclusion), so the dex skips them too.
@@ -101,10 +109,35 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
         "species": species,
         "abilities": _base_abilities_map(base_dir),
         "moves": _base_moves_map(base_dir),
-        # The type chart stays an empty stub here; its base population is a later
-        # slice (the matrix shape differs from the keyed move/ability entities).
-        "type_chart": [],
+        "type_chart": _base_type_chart(base_dir),
     }
+
+
+def _base_type_chart(base_dir: Path) -> list[dict[str, Any]]:
+    """Read the full base type-effectiveness matrix into a neutral cell list.
+
+    `type_chart_parser.parse_type_chart` already yields a FULL attacker×defender
+    grid keyed by neutral type names (`Water`, `Fire`, …) — no neutralization or
+    enum mapping needed here (unlike moves). Each `TypeChartCell.value` is the
+    resolved float multiplier, or None for a token the parser couldn't resolve;
+    we treat that as 1.0 (regular effectiveness) so every cell carries a concrete
+    multiplier the merge can overlay onto. The shape matches the Ruleset's
+    `TypeChartOverride` join key (`attacker`, `defender`), so `build_type_chart`
+    can merge by `(attacker, defender)`. Deterministic: sorted by the pair.
+    """
+    cells = type_chart_parser.parse_type_chart(base_dir)
+    return [
+        {
+            "attacker": cell.attacker,
+            "defender": cell.defender,
+            # An unresolved token (None) means regular effectiveness for this pair.
+            "multiplier": float(cell.value) if cell.value is not None else 1.0,
+        }
+        for (attacker, defender), cell in sorted(cells.items())
+        # Skip engine placeholders so the snapshot carries only the 18 real
+        # battle types (18×18 = 324 cells), one type universe for API + frontend.
+        if attacker not in _NON_BATTLE_TYPES and defender not in _NON_BATTLE_TYPES
+    ]
 
 
 def _base_moves_map(base_dir: Path) -> dict[str, dict[str, Any]]:

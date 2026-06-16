@@ -87,7 +87,14 @@ _SNAPSHOT = {
             "aka": {"pokeemerald": "ABILITY_POISON_HEAL"},
         },
     },
-    "type_chart": [],
+    # Base type chart so canon /api/type-chart is the FULL base ⊕ Ruleset grid.
+    # The sample Ruleset overrides (Flying→Ice 0.5) match a base cell here (base
+    # 2.0) so the merge flags it overridden with base_multiplier=2.0; (Fire→Grass)
+    # is a base-only cell the Ruleset never touches (unflagged).
+    "type_chart": [
+        {"attacker": "Flying", "defender": "Ice", "multiplier": 2.0},
+        {"attacker": "Fire", "defender": "Grass", "multiplier": 2.0},
+    ],
 }
 
 
@@ -194,10 +201,42 @@ def test_abilities_endpoint_503_when_snapshot_missing(tmp_path: Path) -> None:
     assert response.status_code == 503
 
 
-def test_type_chart_endpoint_lists_overrides(client: TestClient) -> None:
+def test_type_chart_endpoint_returns_full_grid_merged_with_ruleset(
+    client: TestClient,
+) -> None:
+    # ac2/ac3: canon type chart is the FULL base matrix ⊕ Ruleset, merged per cell.
+    # The base-only cell is present and unflagged with base_multiplier=None; the
+    # Ruleset-overridden cell carries overridden=True + base_multiplier=<base>.
     response = client.get("/api/type-chart")
     assert response.status_code == 200
-    assert {"attacker": "Flying", "defender": "Ice", "multiplier": 0.5} in response.json()
+    cells = response.json()
+    assert len(cells) >= 2  # the full base grid, not the sparse Ruleset overrides
+
+    # fix1: engine placeholder types never reach the API — one battle-type universe.
+    types = {c["attacker"] for c in cells} | {c["defender"] for c in cells}
+    assert {"None", "Mystery", "Stellar"}.isdisjoint(types)
+
+    fire_grass = next(
+        c for c in cells if c["attacker"] == "Fire" and c["defender"] == "Grass"
+    )
+    assert fire_grass["overridden"] is False
+    assert fire_grass["multiplier"] == 2.0
+    assert fire_grass["base_multiplier"] is None
+
+    flying_ice = next(
+        c for c in cells if c["attacker"] == "Flying" and c["defender"] == "Ice"
+    )
+    assert flying_ice["overridden"] is True
+    assert flying_ice["multiplier"] == 0.5  # the Ruleset override
+    assert flying_ice["base_multiplier"] == 2.0  # the base it replaced
+
+
+def test_type_chart_endpoint_503_when_snapshot_missing(tmp_path: Path) -> None:
+    # ac2: type chart is now a merge endpoint (like /api/dex), so a missing base
+    # snapshot is a 503 with an actionable message.
+    app = create_app(ruleset_dir=_SAMPLE, snapshot_path=tmp_path / "absent.json")
+    response = TestClient(app, raise_server_exceptions=False).get("/api/type-chart")
+    assert response.status_code == 503
 
 
 def test_behaviors_endpoint_lists_specs(client: TestClient) -> None:
@@ -209,11 +248,12 @@ def test_behaviors_endpoint_lists_specs(client: TestClient) -> None:
 
 def test_collection_endpoints_work_without_snapshot(tmp_path: Path) -> None:
     # The Ruleset-owned collections don't need the base snapshot, so a missing
-    # snapshot must not 503 them (only the base-merging routes — /api/dex*, and
-    # since these slices /api/abilities and /api/moves — read the snapshot).
+    # snapshot must not 503 them (the base-merging routes — /api/dex*, and since
+    # these slices /api/abilities, /api/moves, and /api/type-chart — read the
+    # snapshot, so only /api/behaviors stays Ruleset-only here).
     app = create_app(ruleset_dir=_SAMPLE, snapshot_path=tmp_path / "absent.json")
     client = TestClient(app, raise_server_exceptions=False)
-    for path in ("/api/type-chart", "/api/behaviors"):
+    for path in ("/api/behaviors",):
         assert client.get(path).status_code == 200, path
 
 

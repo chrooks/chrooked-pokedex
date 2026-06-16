@@ -251,6 +251,82 @@ def test_build_snapshot_base_moves_are_neutral_no_token_leak() -> None:
             assert not token.search(str(entry[field])), (cid, field, entry[field])
 
 
+def test_base_type_chart_reads_full_grid_neutral_floats(tmp_path: Path) -> None:
+    # ac1: parse_type_chart already yields neutral type names + resolved floats;
+    # _base_type_chart emits one {attacker, defender, multiplier} per cell, sorted
+    # by (attacker, defender), turning an unresolved (None) token into 1.0.
+    data = tmp_path / "src" / "data"
+    data.mkdir(parents=True)
+    # Positional rows (column order = row order), as the real engine writes it.
+    (data / "types_info.h").write_text(
+        "const uq4_12_t gTypeEffectivenessTable"
+        "[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =\n"
+        "{//                  Normal  Rock\n"
+        "    [TYPE_NORMAL] = {______, X(0.5)},\n"
+        "    [TYPE_ROCK]   = {X(2.0), ______},\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    chart = snap._base_type_chart(tmp_path)
+    # sorted by (attacker, defender): Normal/Normal, Normal/Rock, Rock/Normal, Rock/Rock
+    assert chart == [
+        {"attacker": "Normal", "defender": "Normal", "multiplier": 1.0},
+        {"attacker": "Normal", "defender": "Rock", "multiplier": 0.5},
+        {"attacker": "Rock", "defender": "Normal", "multiplier": 2.0},
+        {"attacker": "Rock", "defender": "Rock", "multiplier": 1.0},
+    ]
+    # every multiplier is a float, every type name neutral (no TYPE_ token)
+    assert all(isinstance(c["multiplier"], float) for c in chart)
+    assert not any("TYPE_" in c["attacker"] or "TYPE_" in c["defender"] for c in chart)
+
+
+def test_base_type_chart_drops_engine_placeholder_types(tmp_path: Path) -> None:
+    # fix1: None/Mystery/Stellar are engine placeholders, not real battle types.
+    # Any cell whose attacker OR defender is one of them is skipped, so the
+    # snapshot carries one 18×18 type universe shared by API + frontend.
+    data = tmp_path / "src" / "data"
+    data.mkdir(parents=True)
+    (data / "types_info.h").write_text(
+        "const uq4_12_t gTypeEffectivenessTable"
+        "[NUMBER_OF_MON_TYPES][NUMBER_OF_MON_TYPES] =\n"
+        "{//                    Normal  Mystery  Stellar\n"
+        "    [TYPE_NORMAL]  = {______, ______,  ______},\n"
+        "    [TYPE_MYSTERY] = {______, ______,  ______},\n"
+        "    [TYPE_STELLAR] = {______, ______,  ______},\n"
+        "};\n",
+        encoding="utf-8",
+    )
+    chart = snap._base_type_chart(tmp_path)
+    types = {c["attacker"] for c in chart} | {c["defender"] for c in chart}
+    assert snap._NON_BATTLE_TYPES.isdisjoint(types)
+    # only the Normal/Normal cell survives the placeholder rows + columns.
+    assert chart == [{"attacker": "Normal", "defender": "Normal", "multiplier": 1.0}]
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_build_snapshot_populates_base_type_chart() -> None:
+    # ac1: build_snapshot fills the type_chart from the fork as a full grid of
+    # neutral-named cells with float multipliers — the 18 real battle types only
+    # (engine placeholders None/Mystery/Stellar are dropped at this boundary).
+    chart = snap.build_snapshot(_BASE)["type_chart"]
+    assert chart  # non-empty
+    types = {c["attacker"] for c in chart} | {c["defender"] for c in chart}
+    assert "Water" in types and "Fire" in types
+    # exactly the 18 real battle types, no engine placeholders
+    assert len(types) == 18
+    assert snap._NON_BATTLE_TYPES.isdisjoint(types)
+    # full square grid over the 18 real types: 18 × 18 = 324 cells
+    assert len(chart) == 324
+    assert len(chart) == len(types) ** 2
+    # a canon pair resolves to its known multiplier (Water super-effective on Fire)
+    water_fire = next(
+        c for c in chart if c["attacker"] == "Water" and c["defender"] == "Fire"
+    )
+    assert water_fire["multiplier"] == 2.0
+    assert isinstance(water_fire["multiplier"], float)
+
+
 @pytest.mark.integration
 @pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
 def test_build_snapshot_from_real_base() -> None:
