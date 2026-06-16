@@ -1,0 +1,26 @@
+# PBS/moves.txt — modern v21 shape (section headers)
+[TACKLE]
+Name = Tackle
+Type = NORMAL
+Category = Physical
+Power = 40
+Accuracy = 100
+TotalPP = 35
+Target = SingleNonUser
+Priority = 0
+FunctionCode = None
+Flags = Contact,CanProtect,CanMirrorMove
+Description = A physical attack in which the user charges and slams into the target.
+
+[SCRATCH]
+Name = Scratch
+Type = NORMAL
+Category = Physical
+Power = 40
+Accuracy = 100
+TotalPP = 35
+Target = SingleNonUser
+Priority = 0
+FunctionCode = None
+Flags = Contact,CanProtect,CanMirrorMove
+Description = Hard, pointed, sharp claws rake the target to inflict damage.

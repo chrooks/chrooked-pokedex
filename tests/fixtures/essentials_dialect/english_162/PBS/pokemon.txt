@@ -1,0 +1,34 @@
+#-------------------------------
+# Essentials 16.2-shape pokemon.txt (numeric [N] headers)
+#-------------------------------
+[1]
+InternalName = BULBASAUR
+Name = Bulbasaur
+Type1 = GRASS
+Type2 = POISON
+BaseStats = 45,49,49,45,65,65
+GenderRate = FemaleOneEighth
+GrowthRate = Medium
+BaseEXP = 64
+EffortPoints = 0,0,0,0,1,0
+Rareness = 45
+Happiness = 70
+Abilities = OVERGROW
+HiddenAbility = CHLOROPHYLL
+Moves = 1,TACKLE,1,GROWL
+
+[2]
+InternalName = IVYSAUR
+Name = Ivysaur
+Type1 = GRASS
+Type2 = POISON
+BaseStats = 60,62,63,60,80,80
+GenderRate = FemaleOneEighth
+GrowthRate = Medium
+BaseEXP = 142
+EffortPoints = 0,0,0,0,2,0
+Rareness = 45
+Happiness = 70
+Abilities = OVERGROW
+HiddenAbility = CHLOROPHYLL
+Moves = 1,TACKLE,1,GROWL

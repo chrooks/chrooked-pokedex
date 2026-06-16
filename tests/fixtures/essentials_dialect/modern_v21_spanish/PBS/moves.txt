@@ -1,0 +1,26 @@
+# PBS/moves.txt — modern v21 shape, Spanish display names
+[PLACAJE]
+Name = Placaje
+Type = NORMAL
+Category = Physical
+Power = 40
+Accuracy = 100
+TotalPP = 35
+Target = SingleNonUser
+Priority = 0
+FunctionCode = None
+Flags = Contact,CanProtect,CanMirrorMove
+Description = El usuario embiste al objetivo con toda su fuerza.
+
+[ARANAZO]
+Name = Ararazo
+Type = NORMAL
+Category = Physical
+Power = 40
+Accuracy = 100
+TotalPP = 35
+Target = SingleNonUser
+Priority = 0
+FunctionCode = None
+Flags = Contact,CanProtect,CanMirrorMove
+Description = El usuario aranazo al objetivo con sus garras afiladas.

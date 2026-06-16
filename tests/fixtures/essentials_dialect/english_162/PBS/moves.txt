@@ -1,0 +1,6 @@
+#-------------------------------
+# Essentials 16.2-shape moves.txt (flat CSV rows)
+#-------------------------------
+001,TACKLE,Tackle,NORMAL,Physical,40,100,35,SingleNonUser,0,00,Contact,CanProtect,CanMirrorMove,
+002,SCRATCH,Scratch,NORMAL,Physical,40,100,35,SingleNonUser,0,00,Contact,CanProtect,CanMirrorMove,
+003,GROWL,Growl,NORMAL,Status,0,100,40,AllFoes,0,00,CanProtect,CanMirrorMove,
