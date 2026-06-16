@@ -1,0 +1,4 @@
+# Essentials 16.2 PBS fixtures are byte-faithful real excerpts: per-file BOM and CRLF
+# line endings are load-bearing for the byte-identity tests. Mark them binary so git
+# never normalizes line endings (no CRLF<->LF translation) on add/checkout.
+tests/fixtures/essentials162/* -text

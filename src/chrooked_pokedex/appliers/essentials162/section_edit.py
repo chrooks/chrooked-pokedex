@@ -17,7 +17,11 @@ import re
 from typing import Optional
 
 # A `[N]` numeric header line, shared so edits and parses agree on section boundaries.
-_HEADER_LINE = re.compile(r"^\[\d+\]\r?$", re.MULTILINE)
+# Accepts the same headers `section_read._HEADER` finds (optional inner spaces around
+# the index, optional trailing horizontal whitespace) so a section one module locates
+# the other can also locate. Horizontal-only `[ \t]*` before the CRLF keeps `$` on the
+# header line and never lets the match swallow following blank lines.
+_HEADER_LINE = re.compile(r"^\[[ \t]*\d+[ \t]*\][ \t]*\r?$", re.MULTILINE)
 
 
 def find_section_by_internalname(text: str, internal: str) -> Optional[tuple[int, int]]:
@@ -95,15 +99,16 @@ def set_comma_index(
 def append_section(text: str, header_index: int, block_body: str) -> str:
     """Append a new `[header_index]` section, emitting CRLF line endings.
 
-    `block_body` is the section's field lines (without the header). The header and a
-    separating blank line are added; everything emitted ends in CRLF to match 16.2.
+    `block_body` is the section's field lines (without the header). The header is
+    separated from the prior content by exactly ONE CRLF — real 16.2 files have no
+    blank line between sections. Everything emitted ends in CRLF to match 16.2.
     """
     base = text.rstrip("\r\n")
     body = block_body.strip("\r\n")
     lines = [f"[{header_index}]"] + body.split("\n")
     section = "\r\n".join(line.rstrip("\r") for line in lines) + "\r\n"
     separator = "\r\n" if base else ""
-    return base + ("\r\n" if base else "") + separator + section
+    return base + separator + section
 
 
 def _internalname_of(block: str) -> Optional[str]:
@@ -111,8 +116,14 @@ def _internalname_of(block: str) -> Optional[str]:
 
 
 def _field_pattern(key: str) -> re.Pattern[str]:
-    # Capture the value (group 1) up to end of line, not crossing the trailing \r.
-    return re.compile(r"^" + re.escape(key) + r"\s*=\s*([^\r\n]*)", re.MULTILINE)
+    # Deliberate sibling of appliers/essentials/pbs_edit.py's field pattern; the two
+    # have intentionally diverged — 16.2 captures `[^\r\n]*` (no-space `Key=value`,
+    # CRLF lines), while v21 captures `(.*)$`.
+    # Horizontal-only whitespace around `=` ([ \t]*): a `\s*` here would let an
+    # empty-value field (`Type2=\r\n`) consume the newline and capture the NEXT line.
+    return re.compile(
+        r"^" + re.escape(key) + r"[ \t]*=[ \t]*([^\r\n]*)", re.MULTILINE
+    )
 
 
 def _insert_field(block: str, key: str, value: str) -> str:

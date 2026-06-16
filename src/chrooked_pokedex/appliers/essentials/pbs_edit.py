@@ -156,6 +156,9 @@ def remove_section_field(text: str, header: str, key: str) -> tuple[str, bool]:
 
 
 def _field_pattern(key: str) -> re.Pattern[str]:
+    # Deliberate sibling of appliers/essentials162/section_edit.py's field pattern; the
+    # two have intentionally diverged — v21 captures `(.*)$` (anchored at end of line),
+    # while 16.2 captures `[^\r\n]*`.
     # Capture the value (group 1) up to end of line.
     return re.compile(r"^" + re.escape(key) + r"\s*=\s*(.*)$", re.MULTILINE)
 

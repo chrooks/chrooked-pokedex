@@ -14,7 +14,10 @@ from __future__ import annotations
 
 import re
 
-_HEADER = re.compile(r"^\[\s*(\d+)\s*\]\s*$")
+# A `[N]` numeric header line. Sibling of `section_edit._HEADER_LINE` — kept in the
+# same shape (optional inner/trailing horizontal whitespace) so a header one module
+# finds the other also finds. This matches on already-CR-stripped single lines.
+_HEADER = re.compile(r"^\[[ \t]*(\d+)[ \t]*\][ \t]*$")
 
 
 def parse_sections(text: str) -> list[tuple[str, list[tuple[str, str]]]]:
