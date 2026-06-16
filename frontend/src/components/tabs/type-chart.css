@@ -51,12 +51,44 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Body: grid + breakdown panel ─────────────────────────────────────────
+   The tab body is a flex row so the breakdown panel docks to the RIGHT of the
+   grid. The grid's fit wrapper flexes to fill the room that's left; when the
+   panel opens it claims its track and the wrapper shrinks, which the grid's
+   ResizeObserver picks up to re-fit the cells (no scroll appears). */
+
+.tc-body {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-3);
+  min-height: 0;
+  /* A floor so the height-binding fit math always has real room to solve. */
+  min-height: clamp(20rem, 56vh, 40rem);
+}
+
 /* ── The grid ───────────────────────────────────────────────────────────── */
 
+/* The fit wrapper is the measured box: it fills the available width/height, and
+   the grid sizes its cells to fit inside it. Normally it hides overflow (the
+   grid is fitted to never exceed it); at tiny sizes the grid can't shrink below
+   the min cell, so we allow scroll only then via [data-overflow]. */
+.tc-fit {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tc-fit[data-overflow="true"] {
+  overflow: auto;
+}
+
 .tc-grid {
-  --tc-cell: clamp(1.5rem, 2.4vw, 2.25rem);
-  --tc-head: clamp(2rem, 3vw, 2.75rem);
-  display: inline-grid;
+  /* Fitted by the ResizeObserver; these are the fallbacks before first measure. */
+  --tc-cell: 2rem;
+  --tc-head: 2.4rem;
+  --tc-glyph: var(--text-sm);
+  display: grid;
   /* One sticky header track + N matchup tracks. */
   grid-template-columns: var(--tc-head) repeat(var(--tc-n), var(--tc-cell));
   width: max-content;
@@ -64,8 +96,7 @@
   background: var(--surface-0);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  overflow: auto;
-  /* contain the sticky headers to the grid's own scroll box */
+  /* contain the sticky headers to the grid's own box */
   position: relative;
 }
 
@@ -88,6 +119,47 @@
   font-weight: 700;
   letter-spacing: 0.03em;
   user-select: none;
+}
+
+/* Headers are buttons (keyboard-selectable → open the breakdown panel). Reset
+   the native chrome but keep them as a clickable affordance: a quiet lift on
+   hover, the type color brightening to signify "this opens its matchups". */
+button.tc-head {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: inherit;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+button.tc-head:hover {
+  background: color-mix(in oklch, var(--type) 14%, var(--surface-2));
+}
+
+button.tc-head:hover .tc-head__label {
+  color: color-mix(in oklch, var(--type) 78%, var(--text));
+}
+
+button.tc-head:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 0 0 2px var(--surface-1),
+    inset 0 0 0 4px var(--chrome);
+  z-index: 4;
+}
+
+/* Selected header — the panel's anchor. The type color washes in so the eye
+   ties the lit header to the highlighted band and the panel title. */
+button.tc-head[data-selected="true"] {
+  background: color-mix(in oklch, var(--type) 26%, var(--surface-1));
+}
+
+button.tc-head[data-selected="true"] .tc-head__label {
+  color: color-mix(in oklch, var(--type) 82%, var(--text));
 }
 
 /* D4 — sticky stacking seam. The corner outranks both header axes; column
@@ -174,7 +246,8 @@
   background: var(--surface-0);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  /* Glyph scales with the fitted cell so it stays legible as the grid shrinks. */
+  font-size: var(--tc-glyph);
   font-weight: 600;
   padding: 0;
   margin: 0;
@@ -327,6 +400,35 @@ button.tc-cell:active {
    chart fetches; gridline banding every N rows for long-axis scanning; larger
    touch targets on coarse pointers. */
 
+/* ── Selected-type highlight band ────────────────────────────────────────
+   When a type is selected, its ROW and COLUMN light up so the grid and the
+   breakdown panel read as one linked object. The band is drawn with an inset
+   box-shadow keyline + a faint surface lift (compositor-friendly, no layout
+   shift); off-band cells quiet down so the cross reads as the figure. The
+   crossing cell (type vs itself) is the pivot and gets a stronger ring. */
+.tc-grid[data-has-selection="true"] .tc-cell:not([data-band="true"]) {
+  opacity: 0.32;
+}
+
+.tc-cell[data-band="true"] {
+  background: color-mix(in oklch, var(--chrome) 10%, var(--surface-1));
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--chrome) 45%, transparent);
+  z-index: 1;
+}
+
+.tc-cell[data-pivot="true"] {
+  background: color-mix(in oklch, var(--chrome) 22%, var(--surface-2));
+  box-shadow: inset 0 0 0 2px color-mix(in oklch, var(--chrome) 70%, transparent);
+  z-index: 2;
+}
+
+/* The selected band must not fight the edited ring or focus ring — those win. */
+.tc-cell[data-band="true"][data-edited="true"] {
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklch, var(--edited) 75%, transparent),
+    inset 0 0 0 4px color-mix(in oklch, var(--edited) 22%, transparent);
+}
+
 /* "Edited only" dims the untouched cells so the override set is the figure. */
 .tc-grid[data-edited-only="true"] .tc-cell:not([data-edited="true"]) {
   opacity: 0.22;
@@ -369,14 +471,235 @@ button.tc-cell:active {
   font-weight: 600;
 }
 
+/* ── Breakdown panel ──────────────────────────────────────────────────────
+   Docked right of the grid. It draws all identity from one --type token (set
+   inline), mirroring the type-chip strategy: a colored title + dot, a quiet
+   surface body. Hierarchy: section titles set the two halves, bucket counts are
+   the loud number the eye lands on, the neutral bucket is quieted. */
+.tc-breakdown {
+  flex: 0 0 clamp(17.5rem, 24vw, 21.25rem); /* ~280–340px */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-top: 2px solid color-mix(in oklch, var(--type) 60%, var(--line));
+  border-radius: var(--radius-md);
+  overflow-y: auto;
+  animation: tc-panel-in var(--dur-fast) var(--ease-out);
+}
+
+@keyframes tc-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tc-breakdown__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.tc-breakdown__title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: color-mix(in oklch, var(--type) 70%, var(--text));
+}
+
+.tc-breakdown__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--type);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--type) 22%, transparent);
+}
+
+.tc-breakdown__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-0);
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.tc-breakdown__close:hover {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+
+.tc-breakdown__close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--surface-1), 0 0 0 4px var(--chrome);
+}
+
+.tc-breakdown__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tc-breakdown__section-title {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* One bucket row: a label + a prominent count on the head line, chips below. */
+.tc-bucket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+/* The neutral bucket is the boring majority — quieted so it never competes with
+   the off-neutral buckets, but still present (the user wants it listed). */
+.tc-bucket[data-tone="quiet"] {
+  background: transparent;
+  border-style: dashed;
+  border-color: color-mix(in oklch, var(--line) 70%, transparent);
+  opacity: 0.78;
+}
+
+.tc-bucket[data-empty="true"] {
+  opacity: 0.55;
+}
+
+.tc-bucket__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.tc-bucket__label {
+  /* push the edited-count + total to the right edge */
+  margin-right: auto;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* The count of Ruleset-overridden members in this bucket, fronted by the app's
+   edited LED — the same "lit override" signal as the toolbar chip and the grid. */
+.tc-bucket__edited {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--edited);
+}
+
+.tc-bucket[data-tone="quiet"] .tc-bucket__label {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+/* The count is the loud number — tabular so columns of counts align. */
+.tc-bucket__count {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text);
+}
+
+.tc-bucket[data-empty="true"] .tc-bucket__count {
+  color: var(--text-faint);
+}
+
+.tc-bucket__empty {
+  margin: 0;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+.tc-bucket__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tc-bucket__chips li {
+  position: relative;
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+}
+
+/* A chip whose matchup the Ruleset overrides carries the grid's corner LED, so
+   an edited matchup reads the same in the panel as it does in the cell. */
+.tc-chip-led {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--edited);
+  box-shadow:
+    0 0 0 1px var(--surface-1),
+    0 0 6px 1px var(--edited-glow);
+}
+
+/* Edited-only mode: dim the untouched chips so the Ruleset-overridden matchups
+   are the figure in the panel too, mirroring the grid's edited-only dimming. */
+.tc-breakdown[data-edited-only="true"] .tc-bucket__chips li:not([data-edited="true"]) {
+  opacity: 0.28;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tc-cell,
-  .tc-edited-toggle {
+  .tc-edited-toggle,
+  button.tc-head {
     transition: none;
   }
   button.tc-cell:hover,
   button.tc-cell:active,
+  button.tc-head:hover,
   .tc-grid[data-edited-only="true"] .tc-cell[data-edited="true"] {
     transform: none;
+  }
+  .tc-breakdown {
+    animation: none;
   }
 }

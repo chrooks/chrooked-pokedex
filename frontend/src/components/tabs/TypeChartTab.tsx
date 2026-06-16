@@ -5,15 +5,20 @@ import { useResource } from "../../hooks/useResource";
 import { useSubmit } from "../../hooks/useSubmit";
 import { useUrlState } from "../../hooks/useUrlState";
 import { typeSlug } from "../../lib/format";
+import { TypeChip } from "../TypeChip";
 import {
   axisOrder,
   baseOf,
   cellKey,
   cellMap,
   cycle,
+  fitCellSize,
   isCellEdited,
+  matchups,
   toOverrides,
 } from "../../lib/typeChartGrid";
+import type { Matchups, MatchupMember } from "../../lib/typeChartGrid";
+import { useFitBox } from "../../lib/useFitBox";
 import type { TypeChartCell } from "../../types";
 import { ErrorView, EmptyView } from "../StatusView";
 import { FormError } from "../editors/FormFeedback";
@@ -47,6 +52,11 @@ export function TypeChartTab() {
   const [working, setWorking] = useState<Map<string, number>>(new Map());
   const [editedOnly, setEditedOnly] = useState(false);
 
+  // The type whose matchup breakdown panel is open (row + column highlighted).
+  // null ⇒ no panel. Selecting either axis for a type sets it; clicking the same
+  // header, the panel's close button, or Escape clears it.
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+
   const readOnly = view.backdrop !== null;
 
   // Belt-and-suspenders: a read-only backdrop must never carry working edits, so
@@ -60,13 +70,6 @@ export function TypeChartTab() {
   const axis = useMemo(() => axisOrder(cells), [cells]);
   const byKey = useMemo(() => cellMap(cells), [cells]);
 
-  const overrides = useMemo(
-    () => toOverrides(working, cells),
-    [working, cells],
-  );
-  const dirty = working.size > 0;
-  const editedCount = overrides.length;
-
   function valueOf(cell: TypeChartCell): number {
     // On a read-only backdrop the working map must never bleed through — the
     // grid shows the fork's chart as-is. (Belt-and-suspenders to the cleared
@@ -74,6 +77,56 @@ export function TypeChartTab() {
     if (readOnly) return cell.multiplier;
     return working.get(cellKey(cell.attacker, cell.defender)) ?? cell.multiplier;
   }
+
+  // If the selected type leaves the axis (e.g. a backdrop swap to a chart that
+  // lacks it), drop the selection so the panel never references a missing type.
+  useEffect(() => {
+    if (selectedType !== null && !axis.includes(selectedType)) {
+      setSelectedType(null);
+    }
+  }, [axis, selectedType]);
+
+  // The breakdown lists for the open type, recomputed whenever the type, the
+  // cells, or the working edits change. Built off the SAME valueOf the grid
+  // shows, so it reflects edits in canon and the fork's chart in backdrop.
+  const breakdown: Matchups | null = useMemo(
+    () =>
+      selectedType !== null
+        ? matchups(selectedType, cells, valueOf)
+        : null,
+    // valueOf closes over `working` + `readOnly`; both are deps via `working`
+    // and `view.backdrop`. eslint-disable to keep the dep list honest below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedType, cells, working, readOnly],
+  );
+
+  function toggleType(type: string) {
+    setSelectedType((prev) => (prev === type ? null : type));
+  }
+
+  // Escape closes the breakdown panel — a LOCAL listener so it does not collide
+  // with the app's detail-dialog Escape (which only fires when a detail is open).
+  // We swallow the event only while a type is selected, so the global handler
+  // keeps working for the dialog the rest of the time.
+  useEffect(() => {
+    if (selectedType === null) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        setSelectedType(null);
+      }
+    }
+    // Capture phase so we run before the app's window-level handler.
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [selectedType]);
+
+  const overrides = useMemo(
+    () => toOverrides(working, cells),
+    [working, cells],
+  );
+  const dirty = working.size > 0;
+  const editedCount = overrides.length;
 
   function cycleCell(cell: TypeChartCell) {
     if (readOnly) return;
@@ -156,14 +209,26 @@ export function TypeChartTab() {
       {axis.length === 0 ? (
         <EmptyView message="No type chart yet. Build or regenerate the base snapshot." />
       ) : (
-        <TypeChartGrid
-          axis={axis}
-          byKey={byKey}
-          valueOf={valueOf}
-          onCell={cycleCell}
-          readOnly={readOnly}
-          editedOnly={editedOnly}
-        />
+        <div className="tc-body" id="type-chart-body" data-paneled={selectedType !== null}>
+          <TypeChartGrid
+            axis={axis}
+            byKey={byKey}
+            valueOf={valueOf}
+            onCell={cycleCell}
+            onSelectType={toggleType}
+            selectedType={selectedType}
+            readOnly={readOnly}
+            editedOnly={editedOnly}
+          />
+          {selectedType !== null && breakdown !== null && (
+            <BreakdownPanel
+              type={selectedType}
+              breakdown={breakdown}
+              editedOnly={editedOnly}
+              onClose={() => setSelectedType(null)}
+            />
+          )}
+        </div>
       )}
 
       <p className="tc-legend" aria-hidden="true">
@@ -220,6 +285,8 @@ type GridProps = {
   byKey: Map<string, TypeChartCell>;
   valueOf: (cell: TypeChartCell) => number;
   onCell: (cell: TypeChartCell) => void;
+  onSelectType: (type: string) => void;
+  selectedType: string | null;
   readOnly: boolean;
   editedOnly: boolean;
 };
@@ -238,6 +305,8 @@ function TypeChartGrid({
   byKey,
   valueOf,
   onCell,
+  onSelectType,
+  selectedType,
   readOnly,
   editedOnly,
 }: GridProps) {
@@ -249,6 +318,13 @@ function TypeChartGrid({
   });
   const gridRef = useRef<HTMLDivElement>(null);
   const n = axis.length;
+
+  // Fit-to-viewport: measure the scroll wrapper and size each cell so the whole
+  // matrix + a header track fits BOTH axes with no scrollbar. Re-runs on resize
+  // AND when the panel opens (the wrapper shrinks), so the grid re-fits beside
+  // the panel. The clamped cell + proportional head feed CSS vars on the grid.
+  const { box, measureRef } = useFitBox();
+  const fit = fitCellSize(box, n);
 
   // Keep the active coordinate in range if the axis shrinks (e.g. backdrop swap).
   useEffect(() => {
@@ -316,7 +392,23 @@ function TypeChartGrid({
     }
   }
 
+  // CSS vars: the fitted cell + head sizes, the axis length, and the index of
+  // the selected type so the highlight band can be drawn purely in CSS.
+  const selectedIndex = selectedType !== null ? axis.indexOf(selectedType) : -1;
+  const gridStyle = {
+    "--tc-n": n,
+    "--tc-cell": `${fit.cell}px`,
+    "--tc-head": `${fit.head}px`,
+    "--tc-glyph": `${Math.max(0.6, fit.cell / 36).toFixed(3)}rem`,
+  } as React.CSSProperties;
+
   return (
+    <div
+      className="tc-fit"
+      id="type-chart-fit"
+      ref={measureRef}
+      data-overflow={fit.overflow}
+    >
     <div
       id="type-chart-grid"
       className="tc-grid"
@@ -329,9 +421,10 @@ function TypeChartGrid({
       aria-readonly={readOnly}
       data-edited-only={editedOnly}
       data-readonly={readOnly}
+      data-has-selection={selectedType !== null}
       ref={gridRef}
       onKeyDown={onGridKeyDown}
-      style={{ "--tc-n": axis.length } as React.CSSProperties}
+      style={gridStyle}
     >
       <div className="tc-row" role="row">
         <div className="tc-corner" role="presentation">
@@ -339,14 +432,30 @@ function TypeChartGrid({
           <span className="tc-corner__def">DEF</span>
         </div>
         {axis.map((def) => (
-          <TypeHeader key={`col-${def}`} type={def} axis="col" />
+          <TypeHeader
+            key={`col-${def}`}
+            type={def}
+            axis="col"
+            selected={def === selectedType}
+            onSelect={onSelectType}
+          />
         ))}
       </div>
 
       {axis.map((atk, rowIndex) => (
         <div className="tc-row" role="row" key={`row-${atk}`}>
-          <TypeHeader type={atk} axis="row" />
+          <TypeHeader
+            type={atk}
+            axis="row"
+            selected={atk === selectedType}
+            onSelect={onSelectType}
+          />
           {axis.map((def, colIndex) => {
+            const inSelectedBand =
+              selectedIndex !== -1 &&
+              (rowIndex === selectedIndex || colIndex === selectedIndex);
+            const isPivot =
+              rowIndex === selectedIndex && colIndex === selectedIndex;
             const isActive =
               active.row === rowIndex && active.col === colIndex;
             const cell = byKey.get(cellKey(atk, def));
@@ -357,6 +466,8 @@ function TypeChartGrid({
                   className="tc-cell tc-cell--missing"
                   role="gridcell"
                   tabIndex={isActive ? 0 : -1}
+                  data-band={inSelectedBand}
+                  data-pivot={isPivot}
                   aria-label={`${atk} vs ${def}, no data`}
                   onFocus={() =>
                     setActive({ row: rowIndex, col: colIndex })
@@ -372,6 +483,8 @@ function TypeChartGrid({
                 onCell={onCell}
                 readOnly={readOnly}
                 isActive={isActive}
+                inSelectedBand={inSelectedBand}
+                isPivot={isPivot}
                 onFocus={() =>
                   setActive({ row: rowIndex, col: colIndex })
                 }
@@ -381,28 +494,43 @@ function TypeChartGrid({
         </div>
       ))}
     </div>
+    </div>
   );
 }
 
-function TypeHeader({ type, axis }: { type: string; axis: "row" | "col" }) {
+type HeaderProps = {
+  type: string;
+  axis: "row" | "col";
+  selected: boolean;
+  onSelect: (type: string) => void;
+};
+
+function TypeHeader({ type, axis, selected, onSelect }: HeaderProps) {
   const slug = typeSlug(type);
   const style = { "--type": `var(--type-${slug}, var(--text-dim))` } as React.CSSProperties;
   // Attacker headers run down the LEFT edge — they are ROW headers; defender
-  // headers run across the top — COLUMN headers. aria-label carries the full
-  // name so AT reads "Fighting", not the truncated "FIG".
+  // headers run across the top — COLUMN headers. The header is a BUTTON so it is
+  // keyboard-reachable and toggles the matchup breakdown panel; aria-pressed
+  // reports the selected state and aria-label carries the full name (not "FIG").
+  // Ids are stable + human-communicatable: #tc-head-row-<Type> / #tc-head-col-<Type>.
   return (
-    <div
+    <button
+      type="button"
+      id={`tc-head-${axis}-${type}`}
       className={`tc-head tc-head--${axis}`}
       role={axis === "row" ? "rowheader" : "columnheader"}
       data-type={slug}
+      data-selected={selected}
+      aria-pressed={selected}
       style={style}
-      title={type}
-      aria-label={type}
+      title={`${type} — show matchups`}
+      aria-label={`${type}, show matchups`}
+      onClick={() => onSelect(type)}
     >
       <span className="tc-head__label" aria-hidden="true">
         {type.slice(0, 3).toUpperCase()}
       </span>
-    </div>
+    </button>
   );
 }
 
@@ -412,6 +540,8 @@ type CellProps = {
   onCell: (cell: TypeChartCell) => void;
   readOnly: boolean;
   isActive: boolean;
+  inSelectedBand: boolean;
+  isPivot: boolean;
   onFocus: () => void;
 };
 
@@ -421,6 +551,8 @@ function GridCell({
   onCell,
   readOnly,
   isActive,
+  inSelectedBand,
+  isPivot,
   onFocus,
 }: CellProps) {
   const base = baseOf(cell);
@@ -435,6 +567,8 @@ function GridCell({
     "data-mult": `${value}`,
     "data-edited": edited,
     "data-neutral": value === 1,
+    "data-band": inSelectedBand,
+    "data-pivot": isPivot,
     "aria-label": label,
     title: edited ? `${cell.attacker} → ${cell.defender}: was ${spoken(base)}, now ${spoken(value)}` : label,
     children: (
@@ -468,5 +602,168 @@ function GridCell({
       onClick={() => onCell(cell)}
       {...common}
     />
+  );
+}
+
+/** One labelled matchup bucket: a heading, a prominent count, and the member
+    types as type-colored chips. A member whose matchup the Ruleset overrides
+    carries the same edited LED the grid cell shows (data-edited on the chip li),
+    and an edited count rides beside the total. An empty bucket still renders
+    (label + "0" + an em-dash) so the four-way structure stays legible. The
+    neutral bucket carries `tone="quiet"` so the boring majority recedes. */
+function MatchupBucket({
+  id,
+  label,
+  members,
+  tone = "loud",
+}: {
+  id: string;
+  label: string;
+  members: MatchupMember[];
+  tone?: "loud" | "quiet";
+}) {
+  const editedCount = members.filter((m) => m.edited).length;
+  return (
+    <div className="tc-bucket" id={id} data-tone={tone} data-empty={members.length === 0}>
+      <div className="tc-bucket__head">
+        <span className="tc-bucket__label">{label}</span>
+        {editedCount > 0 && (
+          <span className="tc-bucket__edited" title={`${editedCount} edited by the Ruleset`}>
+            <EditedLed on variant="dot" />
+            {editedCount}
+            <span className="sr-only"> edited by the Ruleset</span>
+          </span>
+        )}
+        <span className="tc-bucket__count" aria-label={`${members.length} types`}>
+          {members.length}
+        </span>
+      </div>
+      {members.length === 0 ? (
+        <p className="tc-bucket__empty" aria-hidden="true">
+          —
+        </p>
+      ) : (
+        <ul className="tc-bucket__chips">
+          {members.map((member) => (
+            <li key={member.type} data-edited={member.edited}>
+              <TypeChip type={member.type} variant="code" />
+              {member.edited && (
+                <span className="tc-chip-led" aria-hidden="true" />
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** The matchup breakdown for the selected type, docked to the RIGHT of the grid.
+    Two sections — Defending (the type's column) and Attacking (its row) — each
+    with the four effectiveness buckets in weight order. Read-only info: it looks
+    identical in canon and backdrop, only the underlying numbers differ. */
+function BreakdownPanel({
+  type,
+  breakdown,
+  editedOnly,
+  onClose,
+}: {
+  type: string;
+  breakdown: Matchups;
+  /** Mirrors the grid's Edited-only mode: dims the untouched chips so the
+      Ruleset-overridden matchups are the figure in the panel too. */
+  editedOnly: boolean;
+  onClose: () => void;
+}) {
+  const slug = typeSlug(type);
+  const style = { "--type": `var(--type-${slug}, var(--text-dim))` } as React.CSSProperties;
+  const { defense, offense } = breakdown;
+  return (
+    <aside
+      id="type-chart-breakdown"
+      className="tc-breakdown"
+      role="region"
+      aria-labelledby="tc-breakdown-title"
+      data-edited-only={editedOnly}
+      style={style}
+    >
+      <header className="tc-breakdown__bar">
+        <h3 className="tc-breakdown__title" id="tc-breakdown-title">
+          <span className="tc-breakdown__dot" aria-hidden="true" />
+          {type}
+        </h3>
+        <button
+          type="button"
+          id="tc-breakdown-close"
+          className="tc-breakdown__close"
+          aria-label="Close breakdown"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+      </header>
+
+      <section
+        className="tc-breakdown__section"
+        id="tc-breakdown-defense"
+        aria-labelledby="tc-breakdown-defense-title"
+      >
+        <h4 className="tc-breakdown__section-title" id="tc-breakdown-defense-title">
+          Defending
+        </h4>
+        <MatchupBucket
+          id="tc-bucket-weak"
+          label="Weak to ×2"
+          members={defense.weak}
+        />
+        <MatchupBucket
+          id="tc-bucket-resist"
+          label="Resists ×½"
+          members={defense.resist}
+        />
+        <MatchupBucket
+          id="tc-bucket-immune"
+          label="Immune to ×0"
+          members={defense.immune}
+        />
+        <MatchupBucket
+          id="tc-bucket-def-neutral"
+          label="Neutral ×1"
+          members={defense.neutral}
+          tone="quiet"
+        />
+      </section>
+
+      <section
+        className="tc-breakdown__section"
+        id="tc-breakdown-offense"
+        aria-labelledby="tc-breakdown-offense-title"
+      >
+        <h4 className="tc-breakdown__section-title" id="tc-breakdown-offense-title">
+          Attacking
+        </h4>
+        <MatchupBucket
+          id="tc-bucket-strong"
+          label="Strong against ×2"
+          members={offense.strong}
+        />
+        <MatchupBucket
+          id="tc-bucket-resisted"
+          label="Resisted by ×½"
+          members={offense.resisted}
+        />
+        <MatchupBucket
+          id="tc-bucket-noeffect"
+          label="No effect ×0"
+          members={offense.noEffect}
+        />
+        <MatchupBucket
+          id="tc-bucket-off-neutral"
+          label="Neutral ×1"
+          members={offense.neutral}
+          tone="quiet"
+        />
+      </section>
+    </aside>
   );
 }
