@@ -75,6 +75,37 @@ def test_append_section_uses_next_index_and_crlf():
     assert section_read.max_index(new) == next_index
 
 
+def test_append_section_has_no_blank_line_before_header():
+    # Real 16.2 sections have EXACTLY one CRLF between the last line and the next
+    # [N] header — never a blank line. Assert the exact bytes around the boundary.
+    text, _ = pbs_io.read(_FIXTURES / "pokemon.txt")
+    last_line = text.rstrip("\r\n").rsplit("\r\n", 1)[-1]
+    next_index = section_read.max_index(text) + 1
+    new = section_edit.append_section(
+        text, next_index, "Name=Faketron\nInternalName=FAKETRON\nType1=NORMAL"
+    )
+    boundary = f"{last_line}\r\n[{next_index}]\r\n"
+    assert boundary in new
+    assert f"{last_line}\r\n\r\n[{next_index}]" not in new  # no doubled separator
+
+
+# --- empty-value fields must not cross newlines -----------------------------------
+
+def test_get_field_empty_value_does_not_read_next_line():
+    # An empty-value field (`Type2=` with nothing after) must capture the empty value,
+    # NOT consume the newline and read the following line's text.
+    block = "[1]\r\nType2=\r\nType1=FIRE\r\n"
+    assert section_edit.get_field(block, "Type2") == ""
+
+
+def test_set_field_empty_value_does_not_clobber_next_line():
+    # Setting an empty-value field must replace only its own value, leaving the
+    # following line byte-identical.
+    block = "[1]\r\nType2=\r\nType1=FIRE\r\n"
+    new = section_edit.set_field(block, "Type2", "POISON")
+    assert new == "[1]\r\nType2=POISON\r\nType1=FIRE\r\n"
+
+
 # --- CSV edits (moves.txt / abilities.txt) ----------------------------------------
 
 def test_set_column_changes_exactly_one_line_with_bom_and_crlf():
@@ -106,6 +137,36 @@ def test_set_column_missing_row_is_noop():
     new, applied = csv_io.set_column(text, "NOTAMOVE", 4, "130")
     assert applied is False
     assert new == text
+
+
+def test_set_column_comma_value_preserves_column_count():
+    # A value containing a comma must NOT shift later columns: it round-trips back to
+    # the same value and keeps the row's column count intact (auto-quoted on write).
+    text, _ = pbs_io.read(_FIXTURES / "moves.txt")
+    before_cols = len(csv_io.split_columns(_row(text, "MEGAHORN")))
+    new, applied = csv_io.set_column(text, "MEGAHORN", 13, "Embiste, con fuerza.")
+    assert applied is True
+    after_cols = len(csv_io.split_columns(_row(new, "MEGAHORN")))
+    assert after_cols == before_cols  # comma did not create a phantom column
+    assert csv_io.get_column(new, "MEGAHORN", 13) == '"Embiste, con fuerza."'
+
+
+def test_set_column_round_trips_embedded_escaped_quote():
+    # A description with a `""` escaped quote must survive a round-trip read of the
+    # same column unchanged (no column shift, no quote mangling).
+    text, _ = pbs_io.read(_FIXTURES / "moves.txt")
+    value = '"Dice ""hola"", y ataca."'
+    new, applied = csv_io.set_column(text, "MEGAHORN", 13, value)
+    assert applied is True
+    assert csv_io.get_column(new, "MEGAHORN", 13) == value
+    # the row still splits into the same number of columns
+    assert len(csv_io.split_columns(_row(new, "MEGAHORN"))) == 14
+
+
+def _row(text: str, internal: str) -> str:
+    span = csv_io.find_row(text, internal)
+    assert span is not None
+    return text[span[0]:span[1]]
 
 
 def test_append_row_uses_next_index_and_crlf():
