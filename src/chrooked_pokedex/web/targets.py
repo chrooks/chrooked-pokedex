@@ -28,6 +28,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Dict, List
 
+from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
 from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
 from ..cli import _apply_pokeemerald
 from ..model import Ruleset
@@ -424,6 +425,30 @@ def target_moves(
     """
     snapshot = state.snapshot_for(target.path)
     return dexmod.build_moves(snapshot, ruleset)
+
+
+_DIALECT_LABELS: dict[str, str] = {
+    "essentials16": "16.2",
+    "essentials21": "v19+ (modern)",
+}
+
+
+def target_dialect(target: Target) -> dict[str, str | None]:
+    """Detect the Essentials PBS dialect of a registered Target.
+
+    Calls ``detect_dialect`` fresh on each request so the badge reflects the
+    current on-disk state of the target (never stale). Only meaningful for
+    engine='essentials'; pokeemerald targets return ``None`` for both fields.
+
+    Returns a dict with keys:
+      ``dialect`` — ``"essentials16"``, ``"essentials21"``, or ``None``
+      ``label``   — display label ("16.2", "v19+ (modern)"), or ``None``
+    """
+    if target.engine != "essentials":
+        return {"dialect": None, "label": None}
+    dialect = _detect_dialect(Path(target.path))
+    label = _DIALECT_LABELS.get(dialect) if dialect is not None else None
+    return {"dialect": dialect, "label": label}
 
 
 def target_type_chart(

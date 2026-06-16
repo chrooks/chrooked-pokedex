@@ -353,6 +353,21 @@ def create_app(
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
 
+    @app.get("/api/targets/{target_id}/dialect")
+    def get_target_dialect(target_id: str) -> dict[str, str | None]:
+        """Return the detected Essentials PBS dialect for a registered Target.
+
+        Calls ``detect_dialect`` fresh on each request so the result reflects
+        the current on-disk state of the target. pokeemerald Targets return
+        ``{dialect: null, label: null}``.
+        """
+        registry = app.state.targets_registry
+        try:
+            target = registry.get(target_id)
+            return targetsmod.target_dialect(target)
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+
     @app.get("/api/behaviors/{chrooked_id}/packet")
     def get_behavior_packet(
         chrooked_id: str, engine: str = "pokeemerald"

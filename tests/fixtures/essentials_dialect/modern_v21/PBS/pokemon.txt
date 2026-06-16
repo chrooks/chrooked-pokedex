@@ -1,0 +1,28 @@
+# PBS/pokemon.txt — modern v21 shape ([INTERNALNAME] headers)
+[BULBASAUR]
+Name = Bulbasaur
+Types = GRASS,POISON
+BaseStats = 45,49,49,45,65,65
+GenderRate = FemaleOneEighth
+GrowthRate = Medium
+BaseExp = 64
+EVs = 1,0,0,0,1,0
+CatchRate = 45
+Happiness = 70
+Abilities = OVERGROW
+HiddenAbility = CHLOROPHYLL
+Moves = 1,TACKLE,1,GROWL
+
+[IVYSAUR]
+Name = Ivysaur
+Types = GRASS,POISON
+BaseStats = 60,62,63,60,80,80
+GenderRate = FemaleOneEighth
+GrowthRate = Medium
+BaseExp = 142
+EVs = 0,0,0,0,2,0
+CatchRate = 45
+Happiness = 70
+Abilities = OVERGROW
+HiddenAbility = CHLOROPHYLL
+Moves = 1,TACKLE,1,GROWL
