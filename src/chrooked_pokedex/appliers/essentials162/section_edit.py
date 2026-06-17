@@ -96,6 +96,28 @@ def set_comma_index(
     return text[: span[0]] + new_block + text[span[1]:], True
 
 
+def remove_section_field(text: str, internal: str, key: str) -> tuple[str, bool]:
+    """Delete the `key=...` line from the `[internal]` section. Returns `(new_text, removed)`.
+
+    A mono-type 16.2 species drops `Type2` entirely (it is absent, not blank), so the
+    applier needs to remove a field, not just blank it. A missing section or a missing
+    field is a no-op `(text, False)`. The line's trailing CRLF is removed with it so no
+    empty line is left behind; every other line stays byte-identical.
+    """
+    span = find_section_by_internalname(text, internal)
+    if span is None:
+        return text, False
+    block = text[span[0]:span[1]]
+    line = re.compile(
+        r"^" + re.escape(key) + r"[ \t]*=[^\r\n]*\r?\n?", re.MULTILINE
+    )
+    match = line.search(block)
+    if match is None:
+        return text, False
+    new_block = block[: match.start()] + block[match.end():]
+    return text[: span[0]] + new_block + text[span[1]:], True
+
+
 def append_section(text: str, header_index: int, block_body: str) -> str:
     """Append a new `[header_index]` section, emitting CRLF line endings.
 
