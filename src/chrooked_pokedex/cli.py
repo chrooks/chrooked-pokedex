@@ -22,7 +22,14 @@ from .appliers.essentials import (
     species_apply as essentials_species,
     type_chart_apply as essentials_type_chart,
 )
-from .appliers.essentials162 import resolution as essentials162_resolution
+from .appliers.essentials162 import (
+    evolution_apply as essentials162_evolution,
+    learnset_apply as essentials162_learnset,
+    move_apply as essentials162_moves,
+    resolution as essentials162_resolution,
+    species_apply as essentials162_species,
+    type_chart_apply as essentials162_type_chart,
+)
 from .appliers.essentials.dialect import detect_dialect
 from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
@@ -272,16 +279,38 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
         print(f"type-chart: {len(changed)} file(s) changed")
 
 
-def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
-    """Foundation entry for the 16.2 dialect (#20), routing target for ``--dialect essentials16``.
+# The 16.2 dialect runs the same data tiers as v21 Essentials. Move scalars are edited
+# (or a missing move is created) first, then species scalars, then learnsets, evolutions,
+# and finally the defender-bucket type chart. (Move effects → HEX functioncodes are #22;
+# abilities.txt data rows are #23 — out of scope for #21.)
+_ESSENTIALS162_CATEGORIES = ("moves", "species", "learnset", "evolution", "type-chart")
 
-    Builds the 16.2 ResolutionMap from the target's PBS so the I/O + resolution layers
-    are exercised end-to-end. The tier appliers (species/moves/type-chart) land in
-    #21/#22/#23, so there is nothing to write yet — this is a deliberate no-op that
-    proves the dialect wires in.
+
+def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    """Apply the Ruleset's data tiers into a target's Essentials 16.2 PBS.
+
+    Mirrors `_apply_essentials` but builds on the 16.2 I/O + format rules: per-stat
+    BaseStats (Speed at index 3), `Type1`/`Type2` with mono-type Type2 drop, singular
+    `HiddenAbility`, flat moves.txt CSV scalars, and the defender-bucket type chart.
+    Honors `--category`; anything that cannot resolve is recorded in the Apply Report.
     """
-    essentials162_resolution.build_resolution_map(target, ruleset)
-    print("essentials162: foundation only — tier appliers arrive in #21/#22/#23")
+    resmap = essentials162_resolution.build_resolution_map(target, ruleset)
+    categories = _ESSENTIALS162_CATEGORIES if category == "all" else (category,)
+    if "moves" in categories:
+        changed = essentials162_moves.apply_moves(target, ruleset, resmap, report)
+        print(f"moves: {len(changed)} file(s) changed")
+    if "species" in categories:
+        changed = essentials162_species.apply_species(target, ruleset, resmap, report)
+        print(f"species: {len(changed)} file(s) changed")
+    if "learnset" in categories:
+        changed = essentials162_learnset.apply_learnsets(target, ruleset, resmap, report)
+        print(f"learnset: {len(changed)} file(s) changed")
+    if "evolution" in categories:
+        changed = essentials162_evolution.apply_evolutions(target, ruleset, resmap, report)
+        print(f"evolution: {len(changed)} file(s) changed")
+    if "type-chart" in categories:
+        changed = essentials162_type_chart.apply_type_chart(target, ruleset, resmap, report)
+        print(f"type-chart: {len(changed)} file(s) changed")
 
 
 def _run_apply(
