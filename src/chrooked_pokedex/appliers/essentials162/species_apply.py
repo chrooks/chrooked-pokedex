@@ -208,23 +208,33 @@ def _apply_abilities(
 
     current = section_edit.get_field(block, "Abilities") or ""
     slots = [a.strip() for a in current.split(",") if a.strip()]
+    wrote_slot = False
     for index, slot in enumerate(_ABILITY_SLOTS):
         name = getattr(override.abilities, slot)
         if name is None:
             continue
-        resolved = resmap.ability(name) or vocab.internal_name(name)
+        resolved = resmap.ability(name)
+        if resolved is None:
+            # Ability not defined in the target's abilities.txt (e.g. a custom
+            # ability like CHLOROPLAST). Do NOT fabricate and write an undefined
+            # reference — Essentials refuses to compile it. Report and skip; #23
+            # will define custom abilities so they resolve here.
+            unresolved.append(f"ability:{name}")
+            continue
         while len(slots) <= index:
             slots.append("")
         slots[index] = resolved
+        wrote_slot = True
     slots = [s for s in slots if s]
-    if slots:
+    if wrote_slot and slots:
         text, _ = section_edit.set_section_field(text, symbol, "Abilities", ",".join(slots))
 
     if override.abilities.hidden is not None:
         # HiddenAbility is SINGULAR in 16.2 — one value, never a comma list.
-        resolved = resmap.ability(override.abilities.hidden) or vocab.internal_name(
-            override.abilities.hidden
-        )
-        text, _ = section_edit.set_section_field(text, symbol, "HiddenAbility", resolved)
+        resolved = resmap.ability(override.abilities.hidden)
+        if resolved is None:
+            unresolved.append(f"hidden-ability:{override.abilities.hidden}")
+        else:
+            text, _ = section_edit.set_section_field(text, symbol, "HiddenAbility", resolved)
 
     return text, unresolved

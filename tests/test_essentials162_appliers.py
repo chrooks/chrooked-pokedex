@@ -110,7 +110,7 @@ def test_species_writes_types_stats_abilities(tmp_path):
             aka={"essentials": "BULBASAUR"},
             types=("Fire", "Flying"),
             stats={"spe": 99, "atk": 88},
-            abilities=AbilitiesOverride(primary="Blaze", hidden="SolarPower"),
+            abilities=AbilitiesOverride(primary="Stench", hidden="Drizzle"),
         )
     })
     resmap = resolution.build_resolution_map(target, ruleset)
@@ -122,8 +122,8 @@ def test_species_writes_types_stats_abilities(tmp_path):
     assert _field(target, "BULBASAUR", "Type2") == "FLYING"
     # BaseStats parity: HP,Atk,Def,Spe,SpA,SpD -> spe@3, atk@1
     assert _field(target, "BULBASAUR", "BaseStats") == "45,88,49,99,65,65"
-    assert _field(target, "BULBASAUR", "Abilities") == "BLAZE"
-    assert _field(target, "BULBASAUR", "HiddenAbility") == "SOLARPOWER"
+    assert _field(target, "BULBASAUR", "Abilities") == "STENCH"
+    assert _field(target, "BULBASAUR", "HiddenAbility") == "DRIZZLE"
 
 
 # --- ac2: BaseStats Speed-is-index-3 parity ---------------------------------------
@@ -397,7 +397,7 @@ def test_apply_routes_through_essentials162(tmp_path):
                 aka={"essentials": "BULBASAUR"},
                 types=("Fire",),
                 stats={"spe": 120},
-                abilities=AbilitiesOverride(primary="Blaze", hidden="SolarPower"),
+                abilities=AbilitiesOverride(primary="Stench", hidden="Drizzle"),
             )
         },
         moves={
@@ -418,7 +418,7 @@ def test_apply_routes_through_essentials162(tmp_path):
     assert _field(target, "BULBASAUR", "Type1") == "FIRE"
     assert _field(target, "BULBASAUR", "Type2") is None  # mono-type Type2 dropped
     assert _field(target, "BULBASAUR", "BaseStats").split(",")[3] == "120"
-    assert _field(target, "BULBASAUR", "HiddenAbility") == "SOLARPOWER"
+    assert _field(target, "BULBASAUR", "HiddenAbility") == "DRIZZLE"
     # move scalars
     assert _move_col(target, "MEGAHORN", 4) == "130"
     assert _move_col(target, "MEGAHORN", 5) == "STEEL"
@@ -538,3 +538,26 @@ def test_type_chart_noop_is_reported(tmp_path):
     entries = [e for e in report.entries if e.category == "type-chart"]
     assert entries and entries[0].status == "applied"
     assert "already" in (entries[0].reason or "")
+
+
+def test_unresolved_custom_ability_is_not_written(tmp_path):
+    """An ability not defined in the target's abilities.txt (a custom ability like
+    Chloroplast) must NOT be written as an undefined reference — Essentials would
+    refuse to compile it. It is skipped and reported partial; #23 will define it."""
+    target = _target(tmp_path)
+    before = _field(target, "BULBASAUR", "Abilities")
+    ruleset = _Ruleset(species={
+        "bulbasaur": SpeciesOverride(
+            name="Bulbasaur", chrooked_id="bulbasaur", aka={"essentials": "BULBASAUR"},
+            abilities=AbilitiesOverride(primary="Chloroplast", hidden="Chloroplast"),
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    species_apply.apply_species(target, ruleset, resmap, report)
+
+    assert "CHLOROPLAST" not in (_field(target, "BULBASAUR", "Abilities") or "")
+    assert "CHLOROPLAST" not in (_field(target, "BULBASAUR", "HiddenAbility") or "")
+    assert (_field(target, "BULBASAUR", "Abilities") or "") == (before or "")  # untouched
+    species_entries = [e for e in report.entries if e.category == "species"]
+    assert any(e.status == "partial" for e in species_entries)
