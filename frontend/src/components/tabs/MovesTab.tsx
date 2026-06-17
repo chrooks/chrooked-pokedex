@@ -49,7 +49,7 @@ const TOGGLEABLE = MOVE_COLUMNS.filter((c) => !c.locked).map((c) => ({
     filter builder, sort row, columns toggle, Reset all) driven by the move
     registry, and per-Target backdrop awareness. */
 export function MovesTab() {
-  const [view] = useUrlState();
+  const [view, update] = useUrlState();
   const [controls, setControls] = useEntityView(moveCodec, MOVE_PARAM_KEYS);
   // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
   // otherwise read the base ⊕ Ruleset canon. Memoized by backdrop id so
@@ -66,14 +66,30 @@ export function MovesTab() {
   );
   const { data, error, status, isLoading, reload } = useResource<Move[]>(fetcher);
   const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
-  /** Row click → read-only sidebar. */
-  const [selected, setSelected] = useState<Move | null>(null);
   /** "New move" → editor directly (no read-only step for a record not yet created). */
   const [editingNew, setEditingNew] = useState(false);
   /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
   const [editDirect, setEditDirect] = useState<Move | null>(null);
 
   const moves = useMemo(() => data ?? [], [data]);
+
+  // The open read-only sidebar is URL-addressable (#28): `view.selected` (the
+  // shared `id=` param) names the move. Species cross-links carry the DISPLAY
+  // name; a row click writes the chrooked_id — so resolve against BOTH, case-
+  // insensitively, and either form opens the right record (and survives reload).
+  const selected = useMemo((): Move | null => {
+    if (view.selected === null) return null;
+    const key = view.selected.toLowerCase();
+    return (
+      moves.find(
+        (m) =>
+          m.chrooked_id.toLowerCase() === key ||
+          m.name.toLowerCase() === key,
+      ) ?? null
+    );
+  }, [view.selected, moves]);
+  const openMove = (move: Move) => update({ selected: move.chrooked_id });
+  const closeMove = () => update({ selected: null });
   const editedCount = useMemo(() => moves.filter(isMoveEdited).length, [moves]);
 
   // name→chrooked_id map built from the loaded moves list so we can normalize
@@ -229,7 +245,7 @@ export function MovesTab() {
                     id={`move-row-${move.chrooked_id}`}
                     data-edited={isMoveEdited(move)}
                     style={{ cursor: "pointer" }}
-                    onClick={() => setSelected(move)}
+                    onClick={() => openMove(move)}
                   >
                     <td className="tab-strong">
                       <EditedLed on={isMoveEdited(move)} />
@@ -303,7 +319,7 @@ export function MovesTab() {
                   rowIdPrefix="move-learner"
                   filterField="moves"
                   filterValue={selected.name}
-                  onClose={() => setSelected(null)}
+                  onClose={() => closeMove()}
                 />
               ),
             },
@@ -311,15 +327,15 @@ export function MovesTab() {
           editView={
             <MoveEditor
               move={selected}
-              onClose={() => setSelected(null)}
+              onClose={() => closeMove()}
               onSaved={() => {
                 reload();
-                setSelected(null);
+                closeMove();
               }}
               embedded
             />
           }
-          onClose={() => setSelected(null)}
+          onClose={() => closeMove()}
         />
       )}
 

@@ -1,16 +1,19 @@
 import type { LearnsetMove } from "../../types";
+import type { NavHandler } from "../DetailLedger";
 import "./ledger-rows.css";
 
 type Props = {
   now: LearnsetMove[];
   was?: LearnsetMove[];
   showDiff: boolean;
+  /** When present (read-only mode), each move name links to its detail (#28). */
+  onNavigate?: NavHandler;
 };
 
 /** The level-up learnset. It is a whole-list override, so the diff can't read
     field-by-field; instead it states plainly that the Ruleset replaced the base
     list, with the before/after counts. New moves (absent from base) are marked. */
-export function LearnsetSection({ now, was, showDiff }: Props) {
+export function LearnsetSection({ now, was, showDiff, onNavigate }: Props) {
   const replaced = was !== undefined;
   const baseMoves = new Set((was ?? []).map((m) => m.move.toLowerCase()));
 
@@ -39,7 +42,19 @@ export function LearnsetSection({ now, was, showDiff }: Props) {
                 <span className="ledger__move-lv mono">
                   {entry.level === 0 ? "—" : `L${entry.level}`}
                 </span>
-                <span className="ledger__move-name">{entry.move}</span>
+                {onNavigate ? (
+                  <button
+                    type="button"
+                    id={`ledger-move-link-${index}`}
+                    className="lrow__link ledger__move-name"
+                    aria-label={`Open ${entry.move}`}
+                    onClick={() => onNavigate("moves", entry.move)}
+                  >
+                    {entry.move}
+                  </button>
+                ) : (
+                  <span className="ledger__move-name">{entry.move}</span>
+                )}
                 {showDiff && isNew && (
                   <span className="ledger__move-new mono">new</span>
                 )}

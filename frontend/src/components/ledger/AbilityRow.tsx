@@ -1,3 +1,4 @@
+import type { NavHandler } from "../DetailLedger";
 import "./ledger-rows.css";
 
 type Props = {
@@ -5,6 +6,9 @@ type Props = {
   now: string | null;
   was?: string | null;
   showDiff: boolean;
+  /** When present (read-only mode), a filled slot is a link to that ability's
+      detail (#28). */
+  onNavigate?: NavHandler;
 };
 
 const SLOT_LABEL: Record<Props["slot"], string> = {
@@ -14,8 +18,9 @@ const SLOT_LABEL: Record<Props["slot"], string> = {
 };
 
 /** One ability slot. Empty slots render an em dash; a changed slot can read
-    base → now under the diff. */
-export function AbilityRow({ slot, now, was, showDiff }: Props) {
+    base → now under the diff. In read-only mode a filled ability name links to
+    its detail sidebar. */
+export function AbilityRow({ slot, now, was, showDiff, onNavigate }: Props) {
   const changed = was !== undefined && was !== now;
   return (
     <div className="lrow lrow--ability" data-changed={changed}>
@@ -29,12 +34,12 @@ export function AbilityRow({ slot, now, was, showDiff }: Props) {
             →
           </span>
           <span className="lrow__now" aria-hidden="true">
-            {now ?? "—"}
+            <AbilityValue slot={slot} name={now} onNavigate={onNavigate} />
           </span>
         </span>
       ) : (
         <span className="lrow__value">
-          {now ?? <span className="lrow__empty">—</span>}
+          <AbilityValue slot={slot} name={now} onNavigate={onNavigate} />
           {changed && !showDiff && (
             <>
               <span className="lrow__dot" aria-hidden="true" />
@@ -44,5 +49,29 @@ export function AbilityRow({ slot, now, was, showDiff }: Props) {
         </span>
       )}
     </div>
+  );
+}
+
+type ValueProps = {
+  slot: Props["slot"];
+  name: string | null;
+  onNavigate?: NavHandler;
+};
+
+/** The ability name itself: a link to its detail in read-only mode, plain text
+    while editing, an em dash when the slot is empty. */
+function AbilityValue({ slot, name, onNavigate }: ValueProps) {
+  if (name === null) return <span className="lrow__empty">—</span>;
+  if (!onNavigate) return <>{name}</>;
+  return (
+    <button
+      type="button"
+      id={`ledger-ability-link-${slot}`}
+      className="lrow__link"
+      aria-label={`Open ${name} ability`}
+      onClick={() => onNavigate("abilities", name)}
+    >
+      {name}
+    </button>
   );
 }

@@ -6,7 +6,7 @@ import { isEdited } from "./lib/format";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { DexEntry } from "./types";
+import type { DexEntry, KindKey } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
 import type { DexViewPatch } from "./components/filters/DexControls";
@@ -97,6 +97,23 @@ export default function App() {
     [update],
   );
   const handleClose = useCallback(() => update({ selected: null }), [update]);
+
+  // From a species profile cross-link (#28): jump to the entity's page and open
+  // its read-only detail. Types route to the Type Chart and open the breakdown
+  // via the shared `q` (the #18 ac10 selection path); moves/abilities route to
+  // their tab and open the DetailSidebar via `id` (the tab resolves the key
+  // against both chrooked_id and display name). The dex detail closes on the way
+  // out (selected: null) so the destination tab is unobstructed.
+  const handleNavigate = useCallback(
+    (kind: KindKey, key: string) => {
+      if (kind === "type-chart") {
+        update({ kind, query: key, selected: null });
+        return;
+      }
+      update({ kind, selected: key, query: "" });
+    },
+    [update],
+  );
 
   // From the Targets panel: show the dex on this fork's backdrop and jump to it.
   const handleViewBackdrop = useCallback(
@@ -218,6 +235,7 @@ export default function App() {
           entry={selectedEntry}
           onClose={handleClose}
           onSaved={dex.reload}
+          onNavigate={handleNavigate}
           abilityOptions={abilityOptions}
         />
       )}

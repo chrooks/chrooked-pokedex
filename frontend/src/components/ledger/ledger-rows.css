@@ -114,6 +114,48 @@
   background: color-mix(in oklch, var(--edited) 60%, var(--line-strong));
 }
 
+/* Cross-link out of the read-only profile to a type / move / ability (#28). A
+   reset button that reads as inline text: it inherits its surrounding type and
+   color, underlines on hover/focus, and shows a clear focus ring for keyboard
+   use. The chip variant carries no text affordance — the chip itself is the
+   signifier — so it only gets the focus ring + a subtle lift. */
+.lrow__link {
+  appearance: none;
+  border: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+.lrow__link:not(.lrow__link--chip) {
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 2px;
+}
+
+.lrow__link:not(.lrow__link--chip):hover {
+  text-decoration-color: currentColor;
+}
+
+.lrow__link--chip {
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+}
+
+.lrow__link--chip:hover .type-chip {
+  filter: brightness(1.12);
+}
+
+.lrow__link:focus-visible {
+  outline: 2px solid var(--focus, var(--edited));
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 /* Types row in the ledger header */
 .lrow__types {
   display: flex;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { DexEntry } from "../types";
+import type { DexEntry, KindKey } from "../types";
 import { STAT_ORDER, STAT_LABEL, bst, dexLabel, isEdited } from "../lib/format";
 import { spriteUrl } from "../lib/sprites";
 import { EditedLed } from "./EditedLed";
@@ -13,11 +13,18 @@ import { SpeciesEditor } from "./editors/SpeciesEditor";
 import "./detail-ledger.css";
 import "./editors/editors.css";
 
+/** Jump to a cross-linked entity's page and open its read-only detail (#28).
+    `kind` picks the destination tab; `key` is the type name (type-chart) or the
+    move/ability display name (the tab resolves it to its record). */
+export type NavHandler = (kind: KindKey, key: string) => void;
+
 type Props = {
   entry: DexEntry;
   onClose: () => void;
   /** Refetch the dex after a save/delete so the merged view reflects the edit. */
   onSaved: () => void;
+  /** Cross-link out of the profile to a type / move / ability (#28). */
+  onNavigate: NavHandler;
   /** Known ability names (base + owned) for the species editor's comboboxes. */
   abilityOptions: readonly string[];
 };
@@ -29,7 +36,13 @@ type Props = {
  * the diff one tap away (Progressive Disclosure). "Edit" swaps the read-only
  * ledger for the {@link SpeciesEditor} in place.
  */
-export function DetailLedger({ entry, onClose, onSaved, abilityOptions }: Props) {
+export function DetailLedger({
+  entry,
+  onClose,
+  onSaved,
+  onNavigate,
+  abilityOptions,
+}: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
   const edited = isEdited(entry);
@@ -100,6 +113,7 @@ export function DetailLedger({ entry, onClose, onSaved, abilityOptions }: Props)
                 now={entry.types}
                 was={entry.base.types}
                 showDiff={showDiff}
+                onNavigate={editing ? undefined : onNavigate}
               />
             </div>
           </div>
@@ -126,16 +140,25 @@ export function DetailLedger({ entry, onClose, onSaved, abilityOptions }: Props)
             abilityOptions={abilityOptions}
           />
         ) : (
-          <DetailBody entry={entry} showDiff={showDiff} />
+          <DetailBody
+            entry={entry}
+            showDiff={showDiff}
+            onNavigate={onNavigate}
+          />
         )}
       </aside>
     </div>
   );
 }
 
-type BodyProps = { entry: DexEntry; showDiff: boolean };
+type BodyProps = {
+  entry: DexEntry;
+  showDiff: boolean;
+  /** Read-only-only cross-links out to types / moves / abilities (#28). */
+  onNavigate: NavHandler;
+};
 
-function DetailBody({ entry, showDiff }: BodyProps) {
+function DetailBody({ entry, showDiff, onNavigate }: BodyProps) {
   return (
     <>
       <section className="ledger__section" aria-label="Base stats">
@@ -168,6 +191,7 @@ function DetailBody({ entry, showDiff }: BodyProps) {
                 now={entry.abilities[slot]}
                 was={entry.base.abilities?.[slot]}
                 showDiff={showDiff}
+                onNavigate={onNavigate}
               />
             ))}
           </div>
@@ -177,6 +201,7 @@ function DetailBody({ entry, showDiff }: BodyProps) {
           now={entry.learnset}
           was={entry.base.learnset}
           showDiff={showDiff}
+          onNavigate={onNavigate}
         />
 
         <EvolutionSection evolution={entry.evolution} />

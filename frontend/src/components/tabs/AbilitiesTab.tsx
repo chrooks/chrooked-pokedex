@@ -37,7 +37,7 @@ const ABILITY_PARAM_KEYS: EntityParamKeys = {
     (boolean filter builder + sort row + Reset all) driven by the ability
     registry — no columns control, since the list is a def-list (D5). */
 export function AbilitiesTab() {
-  const [view] = useUrlState();
+  const [view, update] = useUrlState();
   const [controls, setControls] = useEntityView(abilityCodec, ABILITY_PARAM_KEYS);
   // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
   // otherwise read the base ⊕ Ruleset canon. Memoized by backdrop id so
@@ -55,14 +55,31 @@ export function AbilitiesTab() {
   const { data, error, status, isLoading, reload } =
     useResource<Ability[]>(fetcher);
   const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
-  /** Row click → read-only sidebar. */
-  const [selected, setSelected] = useState<Ability | null>(null);
   /** "New ability" → editor directly (no read-only step for a new record). */
   const [editingNew, setEditingNew] = useState(false);
   /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
   const [editDirect, setEditDirect] = useState<Ability | null>(null);
 
   const abilities = useMemo(() => data ?? [], [data]);
+
+  // The open read-only sidebar is URL-addressable (#28): `view.selected` (the
+  // shared `id=` param) names the ability. Species cross-links carry the DISPLAY
+  // name; a row click writes the chrooked_id — resolve against BOTH, case-
+  // insensitively, so either form opens the right record (and survives reload).
+  const selected = useMemo((): Ability | null => {
+    if (view.selected === null) return null;
+    const key = view.selected.toLowerCase();
+    return (
+      abilities.find(
+        (a) =>
+          a.chrooked_id.toLowerCase() === key ||
+          a.name.toLowerCase() === key,
+      ) ?? null
+    );
+  }, [view.selected, abilities]);
+  const openAbility = (ability: Ability) =>
+    update({ selected: ability.chrooked_id });
+  const closeAbility = () => update({ selected: null });
   const editedCount = useMemo(
     () => abilities.filter(isAbilityEdited).length,
     [abilities],
@@ -184,7 +201,7 @@ export function AbilitiesTab() {
                   className="tab-deflist__item"
                   data-edited={isAbilityEdited(ability)}
                   style={{ cursor: "pointer" }}
-                  onClick={() => setSelected(ability)}
+                  onClick={() => openAbility(ability)}
                 >
                   <div className="tab-deflist__head">
                     <dt className="tab-strong">
@@ -238,7 +255,7 @@ export function AbilitiesTab() {
                   rowIdPrefix="ability-user"
                   filterField="abilities"
                   filterValue={selected.name}
-                  onClose={() => setSelected(null)}
+                  onClose={() => closeAbility()}
                 />
               ),
             },
@@ -246,15 +263,15 @@ export function AbilitiesTab() {
           editView={
             <AbilityEditor
               ability={selected}
-              onClose={() => setSelected(null)}
+              onClose={() => closeAbility()}
               onSaved={() => {
                 reload();
-                setSelected(null);
+                closeAbility();
               }}
               embedded
             />
           }
-          onClose={() => setSelected(null)}
+          onClose={() => closeAbility()}
         />
       )}
 
