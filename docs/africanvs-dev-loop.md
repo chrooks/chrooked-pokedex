@@ -52,19 +52,24 @@ PBS file is newer than its `.dat`. You see a compile screen for a few seconds.
   `attacksRS.dat`, `dexdata.dat`, `items.dat`, `metadata.dat`.
 - Or **hold Ctrl at the title** for a full PBS recompile.
 
-## Tier 3 — external scripts without repacking Scripts.rxdata (opt-in)
+## Tier 3 — iterating battle scripts (repack fallback)
 
-To iterate battle scripts without re-marshalling `Scripts.rxdata`:
+**`load_order` / external scripts are NOT available on the runtime that runs this
+game.** There are two mkxp-z binaries here:
 
-1. `mv "<copy>/mkxp.json.loadorder" "<copy>/mkxp.json"` (this enables the
-   `load_order` shim; it preloads only `Scripts/load_order_shim.rb` — no Win32
-   wrapper needed under Wine).
-2. Add your `.rb` file(s) to `<copy>/Scripts/load_order.txt` (one relative path per
-   line; `#` comments allowed). They load **before** `Scripts.rxdata`, so they can
-   monkey-patch it.
-3. Launch — look for `[LOAD_ORDER_SHIM] active` and `loaded N script(s)`.
-4. Return to the clean default with `rm "<copy>/mkxp.json"` (removing the root
-   `mkxp.json` keeps the keyboard-good baseline).
+- Native `Z-universal` — supports `preloadScript`/`load_order`, but runs modern Ruby
+  and crashes on the 16.2 scripts (`AudioUtilities` `when 0:`). Unusable for this game.
+- Wine `Game.exe` — runs the 16.2 scripts (Ruby 1.8), but is an older mkxp-z that
+  predates `preloadScript`, so it silently ignores `mkxp.json`'s `load_order`.
+
+Confirmed 2026-06-17: with the load_order shim + a probe script wired in, the Wine
+boot never printed `[LOAD_ORDER_SHIM] active` — the Wine build doesn't honor it.
+
+**So for Tier-3 (battle-mechanic) iteration, edit the scripts and repack
+`Scripts.rxdata`** (the standard Essentials flow), or use the in-game script editor.
+The `mkxp.json.loadorder` + `Scripts/load_order_shim.rb` files are left in the copy
+in case a newer Wine mkxp-z build later adds `preloadScript` support. (Tier-3 is the
+#12 behavior-porting work — not needed for the data-apply loop above.)
 
 ## Testing in-game (Debug menu)
 
