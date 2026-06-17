@@ -387,7 +387,15 @@ function baseTypes(entry: DexEntry): string[] {
 }
 
 function baseSlot(entry: DexEntry, slot: AbilitySlot): string | null {
-  return entry.base.abilities?.[slot] ?? entry.abilities[slot];
+  // When the abilities field was overridden, `base.abilities` is the full base
+  // snapshot — trust each slot EXACTLY, including a legit `null` ("no ability at
+  // base"). The old `?? entry.abilities[slot]` collapsed a null base slot to the
+  // MERGED (overridden) value, so buildOverride thought an override-only slot
+  // matched base and dropped it on the next save — silently losing it (e.g.
+  // editing Floatzel's types wiped its override-added secondary ability).
+  // Only when abilities was never overridden does the merged value equal base.
+  if (entry.base.abilities) return entry.base.abilities[slot];
+  return entry.abilities[slot];
 }
 
 function baseLearnset(entry: DexEntry): LearnsetMove[] {
