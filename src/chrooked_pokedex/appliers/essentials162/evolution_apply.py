@@ -25,7 +25,7 @@ from ...model import Ruleset
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import slug
 from ..essentials import vocab
-from . import pbs_io, section_edit
+from . import pbs_io, section_edit, section_read
 from .resolution import ResolutionMap
 
 
@@ -38,7 +38,8 @@ def apply_evolutions(
     text, had_bom = pbs_io.read(path)
     original = text
 
-    groups = _group_by_source(ruleset, resmap, report)
+    existing = section_read.internal_names(text)
+    groups = _group_by_source(ruleset, resmap, report, existing)
     for source_symbol in sorted(groups):
         triples, partial = groups[source_symbol]
         if section_edit.find_section_by_internalname(text, source_symbol) is None:
@@ -72,7 +73,7 @@ def apply_evolutions(
 
 
 def _group_by_source(
-    ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
+    ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport, existing: set[str]
 ) -> dict[str, tuple[list[str], list[str]]]:
     """Build `{source_symbol: (triple_tokens, unresolved_notes)}` from every backward
     `evolution.from` pointer. Each branch contributes a flat `SPECIES,Method,Param`
@@ -100,6 +101,17 @@ def _group_by_source(
                 reason="unresolved evolved species symbol",
             ))
             partials.setdefault(source_symbol, []).append(f"{chrooked_id}:unresolved_target")
+            continue
+        if target_symbol not in existing:
+            # Target species absent from THIS game (e.g. a Galarian form like
+            # WEEZINGGALAR that Africanus lacks). Writing the evolution would
+            # reference an undefined PBSpecies and break compilation — drop the
+            # branch and report it instead.
+            report.add(ReportEntry(
+                status="partial", category="evolution", chrooked_id=chrooked_id,
+                symbol=target_symbol, reason="evolution target species not in target",
+            ))
+            partials.setdefault(source_symbol, []).append(f"{chrooked_id}:target_absent")
             continue
 
         triple = _render_triple(evo.method, target_symbol)

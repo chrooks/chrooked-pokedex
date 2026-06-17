@@ -454,13 +454,11 @@ def test_evolution_paramless_method_emits_aligned_triple(tmp_path):
     3-token-aligned triples (empty param), not a 2-token branch that misaligns the
     whole Evolutions= line. Matches the real 16.2 shape `BRAMBLEGHAST,Happiness,`."""
     target = _target(tmp_path)
+    # IVYSAUR exists in the fixture, so the branch is kept; a param-less essentials
+    # method must still produce a 3-token triple with an empty param token.
     ruleset = _Ruleset(species={
         "ivysaur": SpeciesOverride(
             name="Ivysaur", chrooked_id="ivysaur", aka={"essentials": "IVYSAUR"},
-            evolution=EvolutionOverride(from_species="Bulbasaur", method={"level": 16}),
-        ),
-        "happymon": SpeciesOverride(
-            name="Happymon", chrooked_id="happymon", aka={"essentials": "HAPPYMON"},
             evolution=EvolutionOverride(
                 from_species="Bulbasaur", method={"essentials": "Happiness"}
             ),
@@ -469,10 +467,8 @@ def test_evolution_paramless_method_emits_aligned_triple(tmp_path):
     resmap = resolution.build_resolution_map(target, ruleset)
     evolution_apply.apply_evolutions(target, ruleset, resmap, ApplyReport())
     tokens = _field(target, "BULBASAUR", "Evolutions").split(",")
-    assert len(tokens) % 3 == 0, tokens  # every branch is an aligned triple
-    triples = [tokens[i:i + 3] for i in range(0, len(tokens), 3)]
-    assert ["HAPPYMON", "Happiness", ""] in triples  # param-less -> empty param token
-    assert ["IVYSAUR", "Level", "16"] in triples
+    assert len(tokens) % 3 == 0, tokens  # aligned triple, not a 2-token branch
+    assert tokens[:3] == ["IVYSAUR", "Happiness", ""]  # param-less -> empty param token
 
 
 def test_new_species_blocked_when_a_type_is_unresolved(tmp_path):
@@ -561,3 +557,23 @@ def test_unresolved_custom_ability_is_not_written(tmp_path):
     assert (_field(target, "BULBASAUR", "Abilities") or "") == (before or "")  # untouched
     species_entries = [e for e in report.entries if e.category == "species"]
     assert any(e.status == "partial" for e in species_entries)
+
+
+def test_evolution_to_absent_species_is_dropped(tmp_path):
+    """An evolution whose TARGET species is not in the target game (e.g. a Galarian
+    form like WEEZINGGALAR) must NOT be written — it would reference an undefined
+    PBSpecies and break compilation. The branch is dropped and reported."""
+    target = _target(tmp_path)
+    ruleset = _Ruleset(species={
+        "galarmon": SpeciesOverride(
+            name="Galarmon", chrooked_id="galarmon", aka={"essentials": "WEEZINGGALAR"},
+            evolution=EvolutionOverride(from_species="Bulbasaur", method={"level": 30}),
+        ),
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    evolution_apply.apply_evolutions(target, ruleset, resmap, report)
+
+    evo_line = _field(target, "BULBASAUR", "Evolutions") or ""
+    assert "WEEZINGGALAR" not in evo_line  # absent target species not written
+    assert any(e.category == "evolution" and e.status == "partial" for e in report.entries)
