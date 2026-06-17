@@ -24,6 +24,7 @@ import type {
   TypeChartCell,
   TypeChartEntry,
 } from "./types";
+import { emitDataChange } from "./lib/dataChange";
 
 /** The structured body of a blocked delete (HTTP 409). */
 export interface CitationDetail {
@@ -122,9 +123,20 @@ export const api = {
       "PUT",
       `/api/species/${encodeURIComponent(id)}`,
       payload,
-    ),
+    ).then((result) => {
+      // Species data changed → let the always-mounted dex resource refetch, so a
+      // distribution/species edit made from any screen shows on the dex page.
+      emitDataChange();
+      return result;
+    }),
   deleteSpecies: (id: string) =>
-    sendJson<{ deleted: string }>("DELETE", `/api/species/${encodeURIComponent(id)}`),
+    sendJson<{ deleted: string }>(
+      "DELETE",
+      `/api/species/${encodeURIComponent(id)}`,
+    ).then((result) => {
+      emitDataChange();
+      return result;
+    }),
 
   // Moves
   putMove: (id: string, payload: MoveWrite) =>

@@ -54,11 +54,14 @@ export function AbilitiesTab() {
   );
   const { data, error, status, isLoading, reload } =
     useResource<Ability[]>(fetcher);
-  const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
+  const { data: dexData, reload: reloadDex } =
+    useResource<DexEntry[]>(dexFetcher);
   /** "New ability" → editor directly (no read-only step for a new record). */
   const [editingNew, setEditingNew] = useState(false);
-  /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
-  const [editDirect, setEditDirect] = useState<Ability | null>(null);
+  /** Whether the open sidebar should land in edit mode — set true by the per-row
+      pencil so it opens on the [Fields | Distribution] tabs, false by a row click
+      (read-only first). */
+  const [openInEdit, setOpenInEdit] = useState(false);
 
   const abilities = useMemo(() => data ?? [], [data]);
 
@@ -201,7 +204,10 @@ export function AbilitiesTab() {
                   className="tab-deflist__item"
                   data-edited={isAbilityEdited(ability)}
                   style={{ cursor: "pointer" }}
-                  onClick={() => openAbility(ability)}
+                  onClick={() => {
+                    openAbility(ability);
+                    setOpenInEdit(false);
+                  }}
                 >
                   <div className="tab-deflist__head">
                     <dt className="tab-strong">
@@ -215,7 +221,8 @@ export function AbilitiesTab() {
                       aria-label={`Edit ${ability.name}`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setEditDirect(ability);
+                        openAbility(ability);
+                        setOpenInEdit(true);
                       }}
                     >
                       <FontAwesomeIcon icon={faPencil} aria-hidden="true" />
@@ -249,28 +256,67 @@ export function AbilitiesTab() {
             {
               id: "used-by",
               label: `Used by (${(usedByIndex.get(selected.chrooked_id) ?? []).length})`,
+              // Read-mode reverse tab is navigate-only (D7) — readOnly forces the
+              // browse list with no edit affordances; editing lives behind the
+              // pencil's Distribution edit tab below.
               render: () => (
                 <ReverseLookupTab
                   species={usedByIndex.get(selected.chrooked_id) ?? []}
+                  dexData={dexData ?? []}
                   rowIdPrefix="ability-user"
+                  entityKind="ability"
                   filterField="abilities"
-                  filterValue={selected.name}
+                  entityName={selected.name}
+                  readOnly
+                  onSaved={() => {
+                    reloadDex();
+                    reload();
+                  }}
                   onClose={() => closeAbility()}
                 />
               ),
             },
           ]}
-          editView={
-            <AbilityEditor
-              ability={selected}
-              onClose={() => closeAbility()}
-              onSaved={() => {
-                reload();
-                closeAbility();
-              }}
-              embedded
-            />
-          }
+          editTabs={[
+            {
+              id: "fields",
+              label: "Fields",
+              render: () => (
+                <AbilityEditor
+                  ability={selected}
+                  onClose={() => closeAbility()}
+                  onSaved={() => {
+                    reload();
+                    closeAbility();
+                  }}
+                  embedded
+                />
+              ),
+            },
+            {
+              id: "distribution",
+              label: "Distribution",
+              // Distribution edit tab: the staged used-by editor. Backdrop
+              // (read-only fork preview) disables editing per ac5/D5.
+              render: () => (
+                <ReverseLookupTab
+                  species={usedByIndex.get(selected.chrooked_id) ?? []}
+                  dexData={dexData ?? []}
+                  rowIdPrefix="ability-user"
+                  entityKind="ability"
+                  filterField="abilities"
+                  entityName={selected.name}
+                  readOnly={view.backdrop !== null}
+                  onSaved={() => {
+                    reloadDex();
+                    reload();
+                  }}
+                  onClose={() => closeAbility()}
+                />
+              ),
+            },
+          ]}
+          initialEditing={openInEdit}
           onClose={() => closeAbility()}
         />
       )}
@@ -283,18 +329,6 @@ export function AbilitiesTab() {
           onSaved={() => {
             reload();
             setEditingNew(false);
-          }}
-        />
-      )}
-
-      {/* Per-row pencil → editor directly (skips the read-only sidebar). */}
-      {editDirect !== null && (
-        <AbilityEditor
-          ability={editDirect}
-          onClose={() => setEditDirect(null)}
-          onSaved={() => {
-            setEditDirect(null);
-            reload();
           }}
         />
       )}

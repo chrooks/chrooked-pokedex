@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import type { DexEntry, KindKey } from "../types";
+import { useUrlState } from "../hooks/useUrlState";
+import { appendNameFilter } from "../lib/dexFilters";
 import { STAT_ORDER, STAT_LABEL, bst, dexLabel, isEdited } from "../lib/format";
 import { spriteUrl } from "../lib/sprites";
 import { EditedLed } from "./EditedLed";
@@ -48,6 +52,15 @@ export function DetailLedger({
   const edited = isEdited(entry);
   const panelRef = useRef<HTMLElement>(null);
   const sprite = spriteUrl(entry.chrooked_id, entry.dex);
+  const [view, update] = useUrlState();
+
+  // "Add to filter": append a Name pill for this species to the dex filter and
+  // drop back to the (now filtered) dex list. Dedup-safe via appendNameFilter, so
+  // re-adding the same species is a no-op. Closes the profile so the list shows.
+  function handleAddToFilter() {
+    const next = appendNameFilter(view.filter, entry.name, crypto.randomUUID());
+    update({ kind: "dex", filter: next, selected: null });
+  }
 
   // On a species change (and first open): reset the diff/edit mode and move
   // focus into the dialog. One effect, all "react to the open species".
@@ -80,6 +93,19 @@ export function DetailLedger({
             <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
             <div className="ledger__head-actions">
               {edited && <EditedLed on variant="tag" />}
+              {!editing && (
+                <button
+                  type="button"
+                  id="ledger-add-to-filter"
+                  className="ledger__edit"
+                  onClick={handleAddToFilter}
+                  title={`Filter the dex to ${entry.name}`}
+                  aria-label={`Add ${entry.name} to the dex filter`}
+                >
+                  <FontAwesomeIcon icon={faFilter} aria-hidden="true" />
+                  {" Add to filter"}
+                </button>
+              )}
               {!editing && (
                 <button
                   type="button"

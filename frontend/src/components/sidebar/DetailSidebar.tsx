@@ -31,8 +31,12 @@ type Props = {
   kindLabel: string;
   /** Tab config. The first tab is the Detail tab; #4 appends more. */
   tabs: SidebarTab[];
-  /** The existing editor rendered when the user clicks the pencil. */
-  editView: ReactNode;
+  /** Edit-mode tab config rendered when the user clicks the pencil. The first
+      tab is the default (e.g. Fields); #30 appends a Distribution tab. */
+  editTabs: SidebarTab[];
+  /** Open already in edit mode (the per-row list pencil routes here so it lands
+      on the [Fields | Distribution] tabs instead of a bare editor). */
+  initialEditing?: boolean;
   onClose: () => void;
 };
 
@@ -52,24 +56,34 @@ export function DetailSidebar({
   edited,
   kindLabel,
   tabs,
-  editView,
+  editTabs,
+  initialEditing = false,
   onClose,
 }: Props) {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(initialEditing);
   const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? "");
+  const [activeEditTab, setActiveEditTab] = useState(editTabs[0]?.id ?? "");
   const panelRef = useRef<HTMLElement>(null);
 
   // Reset editing/tab/scroll when the open entity changes, and move focus into
-  // the dialog — mirrors DetailLedger.tsx:41-45.
+  // the dialog — mirrors DetailLedger.tsx:41-45. `editing` re-seeds from
+  // initialEditing so opening via the row pencil lands directly in edit mode.
   useEffect(() => {
-    setEditing(false);
+    setEditing(initialEditing);
     setActiveTab(tabs[0]?.id ?? "");
+    setActiveEditTab(editTabs[0]?.id ?? "");
     if (panelRef.current) {
       panelRef.current.scrollTop = 0;
       panelRef.current.focus();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entityKey]);
+
+  // Entering edit mode always starts on the first edit tab (Fields).
+  function startEditing() {
+    setActiveEditTab(editTabs[0]?.id ?? "");
+    setEditing(true);
+  }
 
   // Escape closes; Tab/Shift+Tab cycle within the panel.
   useEffect(() => {
@@ -100,6 +114,7 @@ export function DetailSidebar({
   }, [onClose]);
 
   const activeTabConfig = tabs.find((t) => t.id === activeTab);
+  const activeEditTabConfig = editTabs.find((t) => t.id === activeEditTab);
 
   return (
     <div className="ledger-overlay">
@@ -132,7 +147,7 @@ export function DetailSidebar({
                   id="detail-sidebar-edit"
                   className="ledger__edit detail-sidebar__pencil"
                   aria-label={`Edit ${title}`}
-                  onClick={() => setEditing(true)}
+                  onClick={startEditing}
                 >
                   <FontAwesomeIcon icon={faPencil} aria-hidden="true" />
                 </button>
@@ -195,10 +210,41 @@ export function DetailSidebar({
               </button>
             </div>
           )}
+
+          {editing && editTabs.length > 1 && (
+            <div
+              id="detail-sidebar-edit-tabs"
+              className="detail-sidebar__tablist"
+              role="tablist"
+              aria-label="Edit sections"
+            >
+              {editTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  id={`detail-sidebar-edit-tab-${tab.id}`}
+                  role="tab"
+                  aria-selected={activeEditTab === tab.id}
+                  className="detail-sidebar__tab"
+                  data-active={activeEditTab === tab.id}
+                  onClick={() => setActiveEditTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          )}
         </header>
 
         {editing ? (
-          <div className="detail-sidebar__edit-view">{editView}</div>
+          <div
+            id={`detail-sidebar-edit-panel-${activeEditTab}`}
+            className="detail-sidebar__edit-view"
+            role="tabpanel"
+            aria-labelledby={`detail-sidebar-edit-tab-${activeEditTab}`}
+          >
+            {activeEditTabConfig?.render()}
+          </div>
         ) : (
           <div
             id={`detail-sidebar-panel-${activeTab}`}

@@ -65,11 +65,13 @@ export function MovesTab() {
     [view.backdrop],
   );
   const { data, error, status, isLoading, reload } = useResource<Move[]>(fetcher);
-  const { data: dexData } = useResource<DexEntry[]>(dexFetcher);
+  const { data: dexData, reload: reloadDex } =
+    useResource<DexEntry[]>(dexFetcher);
   /** "New move" → editor directly (no read-only step for a record not yet created). */
   const [editingNew, setEditingNew] = useState(false);
-  /** Per-row pencil click → editor directly, skipping the read-only sidebar. */
-  const [editDirect, setEditDirect] = useState<Move | null>(null);
+  /** Whether the open sidebar should land in edit mode — set true by the per-row
+      pencil so it opens on the [Fields | Distribution] tabs, false by a row click. */
+  const [openInEdit, setOpenInEdit] = useState(false);
 
   const moves = useMemo(() => data ?? [], [data]);
 
@@ -245,7 +247,10 @@ export function MovesTab() {
                     id={`move-row-${move.chrooked_id}`}
                     data-edited={isMoveEdited(move)}
                     style={{ cursor: "pointer" }}
-                    onClick={() => openMove(move)}
+                    onClick={() => {
+                      openMove(move);
+                      setOpenInEdit(false);
+                    }}
                   >
                     <td className="tab-strong">
                       <EditedLed on={isMoveEdited(move)} />
@@ -283,7 +288,8 @@ export function MovesTab() {
                         aria-label={`Edit ${move.name}`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setEditDirect(move);
+                          openMove(move);
+                          setOpenInEdit(true);
                         }}
                       >
                         <FontAwesomeIcon icon={faPencil} aria-hidden="true" />
@@ -313,28 +319,67 @@ export function MovesTab() {
             {
               id: "learned-by",
               label: `Learned by (${(learnedByIndex.get(selected.chrooked_id) ?? []).length})`,
+              // Read-mode reverse tab is navigate-only (D7) — readOnly forces the
+              // browse list with no edit affordances; editing lives behind the
+              // pencil's Distribution edit tab below.
               render: () => (
                 <ReverseLookupTab
                   species={learnedByIndex.get(selected.chrooked_id) ?? []}
+                  dexData={dexData ?? []}
                   rowIdPrefix="move-learner"
+                  entityKind="move"
                   filterField="moves"
-                  filterValue={selected.name}
+                  entityName={selected.name}
+                  readOnly
+                  onSaved={() => {
+                    reloadDex();
+                    reload();
+                  }}
                   onClose={() => closeMove()}
                 />
               ),
             },
           ]}
-          editView={
-            <MoveEditor
-              move={selected}
-              onClose={() => closeMove()}
-              onSaved={() => {
-                reload();
-                closeMove();
-              }}
-              embedded
-            />
-          }
+          editTabs={[
+            {
+              id: "fields",
+              label: "Fields",
+              render: () => (
+                <MoveEditor
+                  move={selected}
+                  onClose={() => closeMove()}
+                  onSaved={() => {
+                    reload();
+                    closeMove();
+                  }}
+                  embedded
+                />
+              ),
+            },
+            {
+              id: "distribution",
+              label: "Distribution",
+              // Distribution edit tab: the staged learned-by editor. Backdrop
+              // (read-only fork preview) disables editing per ac5/D5.
+              render: () => (
+                <ReverseLookupTab
+                  species={learnedByIndex.get(selected.chrooked_id) ?? []}
+                  dexData={dexData ?? []}
+                  rowIdPrefix="move-learner"
+                  entityKind="move"
+                  filterField="moves"
+                  entityName={selected.name}
+                  readOnly={view.backdrop !== null}
+                  onSaved={() => {
+                    reloadDex();
+                    reload();
+                  }}
+                  onClose={() => closeMove()}
+                />
+              ),
+            },
+          ]}
+          initialEditing={openInEdit}
           onClose={() => closeMove()}
         />
       )}
@@ -347,18 +392,6 @@ export function MovesTab() {
           onSaved={() => {
             reload();
             setEditingNew(false);
-          }}
-        />
-      )}
-
-      {/* Per-row pencil → editor directly (skips the read-only sidebar). */}
-      {editDirect !== null && (
-        <MoveEditor
-          move={editDirect}
-          onClose={() => setEditDirect(null)}
-          onSaved={() => {
-            setEditDirect(null);
-            reload();
           }}
         />
       )}
