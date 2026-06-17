@@ -23,6 +23,7 @@ from .appliers.essentials import (
     type_chart_apply as essentials_type_chart,
 )
 from .appliers.essentials162 import (
+    ability_apply as essentials162_abilities,
     evolution_apply as essentials162_evolution,
     learnset_apply as essentials162_learnset,
     move_apply as essentials162_moves,
@@ -83,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     apply.add_argument(
         "--category",
-        choices=("all", "moves", "create", "species", "learnset", "evolution", "type-chart"),
+        choices=("all", "abilities", "moves", "create", "species", "learnset", "evolution", "type-chart"),
         default="all",
         help="Which tier to apply (default: all). Not every tier exists on every engine; "
         "a tier absent from the chosen engine is simply a no-op.",
@@ -279,11 +280,13 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
         print(f"type-chart: {len(changed)} file(s) changed")
 
 
-# The 16.2 dialect runs the same data tiers as v21 Essentials. Move scalars are edited
-# (or a missing move is created) first, then species scalars, then learnsets, evolutions,
-# and finally the defender-bucket type chart. (Move effects → HEX functioncodes are #22;
-# abilities.txt data rows are #23 — out of scope for #21.)
-_ESSENTIALS162_CATEGORIES = ("moves", "species", "learnset", "evolution", "type-chart")
+# The 16.2 dialect runs the same data tiers as v21 Essentials. Abilities are written
+# FIRST so freshly-written ability rows register into the in-memory ResolutionMap before
+# species_apply runs — ensuring a species that cites a brand-new Ruleset ability resolves
+# its slot (not a partial). Move scalars follow, then species scalars, learnsets,
+# evolutions, and finally the defender-bucket type chart. (Move effects → HEX functioncodes
+# are #22.)
+_ESSENTIALS162_CATEGORIES = ("abilities", "moves", "species", "learnset", "evolution", "type-chart")
 
 
 def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
@@ -296,6 +299,9 @@ def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyRepo
     """
     resmap = essentials162_resolution.build_resolution_map(target, ruleset)
     categories = _ESSENTIALS162_CATEGORIES if category == "all" else (category,)
+    if "abilities" in categories:
+        changed = essentials162_abilities.apply_abilities(target, ruleset, resmap, report)
+        print(f"abilities: {len(changed)} file(s) changed")
     if "moves" in categories:
         changed = essentials162_moves.apply_moves(target, ruleset, resmap, report)
         print(f"moves: {len(changed)} file(s) changed")

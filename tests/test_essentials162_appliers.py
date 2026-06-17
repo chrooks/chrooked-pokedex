@@ -21,6 +21,7 @@ import shutil
 from pathlib import Path
 
 from chrooked_pokedex.appliers.essentials162 import (
+    ability_apply,
     csv_io,
     evolution_apply,
     learnset_apply,
@@ -34,6 +35,7 @@ from chrooked_pokedex.appliers.essentials162 import (
 )
 from chrooked_pokedex.model.schema import (
     AbilitiesOverride,
+    AbilityDef,
     EvolutionOverride,
     LearnsetMove,
     MoveDef,
@@ -56,10 +58,11 @@ class _Ruleset:
     `owned_move`, `owned_species`.
     """
 
-    def __init__(self, species=None, moves=None, type_chart=None):
+    def __init__(self, species=None, moves=None, type_chart=None, abilities=None):
         self.species = species or {}
         self.moves = moves or {}
         self.type_chart = type_chart or []
+        self.abilities = abilities or {}
 
     def owned_move(self, name):
         for move in self.moves.values():
@@ -577,3 +580,197 @@ def test_evolution_to_absent_species_is_dropped(tmp_path):
     evo_line = _field(target, "BULBASAUR", "Evolutions") or ""
     assert "WEEZINGGALAR" not in evo_line  # absent target species not written
     assert any(e.category == "evolution" and e.status == "partial" for e in report.entries)
+
+
+# --- helpers for ability tests ----------------------------------------------------
+
+
+def _ability_col(target: Path, internal: str, index: int) -> str | None:
+    text, _ = pbs_io.read(target / "PBS" / "abilities.txt")
+    return csv_io.get_column(text, internal, index)
+
+
+def _ability_row_count(target: Path, internal: str) -> int:
+    """Count how many rows exist for a given internal name (should always be 0 or 1)."""
+    text, _ = pbs_io.read(target / "PBS" / "abilities.txt")
+    count = 0
+    import re
+    for match in re.finditer(r"^[^\r\n]*", text, re.MULTILINE):
+        line = match.group(0)
+        if not line:
+            continue
+        cols = csv_io.split_columns(line)
+        if len(cols) > 1 and cols[1].strip() == internal:
+            count += 1
+    return count
+
+
+def _ability_ruleset(abilities: dict) -> "_Ruleset":
+    """Build a _Ruleset stand-in that also exposes `.abilities`."""
+    rs = _Ruleset()
+    rs.abilities = abilities
+    return rs
+
+
+# --- ac1: a new ability is written as a correct 16.2 row --------------------------
+
+
+def test_new_ability_appends_correct_row(tmp_path):
+    """A Ruleset ability absent from the fixture is appended with the next index,
+    INTERNAL in col 1, display Name in col 2, quoted description in col 3. BOM/CRLF
+    are preserved."""
+    target = _target(tmp_path)
+    text_before, had_bom = pbs_io.read(target / "PBS" / "abilities.txt")
+    before_max = csv_io.max_index(text_before)
+
+    ruleset = _ability_ruleset({
+        "chloroplast": AbilityDef(
+            name="Chloroplast",
+            chrooked_id="chloroplast",
+            description="Doubles Speed in sunlight.",
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    changed = ability_apply.apply_abilities(target, ruleset, resmap, report)
+
+    assert changed  # file was written
+
+    raw = (target / "PBS" / "abilities.txt").read_bytes()
+    assert raw[:3] == b"\xef\xbb\xbf"  # BOM preserved
+    assert b"\r\n" in raw              # CRLF preserved
+
+    text, _ = pbs_io.read(target / "PBS" / "abilities.txt")
+    span = csv_io.find_row(text, "CHLOROPLAST")
+    assert span is not None, "row for CHLOROPLAST not found"
+
+    assert csv_io.max_index(text) == before_max + 1          # next index
+    assert _ability_col(target, "CHLOROPLAST", 0) == str(before_max + 1)  # col 0: idx
+    assert _ability_col(target, "CHLOROPLAST", 1) == "CHLOROPLAST"         # col 1: INTERNAL
+    assert _ability_col(target, "CHLOROPLAST", 2) == "Chloroplast"         # col 2: name
+    assert _ability_col(target, "CHLOROPLAST", 3) == '"Doubles Speed in sunlight."'  # col 3: quoted desc
+
+    entries = [e for e in report.entries if e.category == "ability"]
+    assert entries and entries[0].status == "applied"
+
+
+def test_new_ability_aka_hint_used_as_internal(tmp_path):
+    """When an ability has an `aka.essentials` hint, that hint is used as the INTERNAL
+    name rather than the vocab-derived one."""
+    target = _target(tmp_path)
+    ruleset = _ability_ruleset({
+        "ice_scales": AbilityDef(
+            name="Ice Scales",
+            chrooked_id="ice_scales",
+            description="Halves special damage.",
+            aka={"essentials": "ICESCALES"},
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    ability_apply.apply_abilities(target, ruleset, resmap, ApplyReport())
+
+    assert _ability_col(target, "ICESCALES", 1) == "ICESCALES"
+
+
+# --- ac3: edit-vs-create dedupe and no-op -----------------------------------------
+
+
+def test_existing_ability_edited_not_duplicated(tmp_path):
+    """Applying an ability already in the fixture (STENCH) with a changed description
+    edits col 3 in place — one row, no duplicate appended."""
+    target = _target(tmp_path)
+    text_before, _ = pbs_io.read(target / "PBS" / "abilities.txt")
+    before_max = csv_io.max_index(text_before)
+
+    ruleset = _ability_ruleset({
+        "stench": AbilityDef(
+            name="Stench",
+            chrooked_id="stench",
+            description="Updated stench description.",
+            aka={"essentials": "STENCH"},
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    changed = ability_apply.apply_abilities(target, ruleset, resmap, report)
+
+    assert changed  # description was updated
+
+    text, _ = pbs_io.read(target / "PBS" / "abilities.txt")
+    assert csv_io.max_index(text) == before_max          # no new row appended
+    assert _ability_row_count(target, "STENCH") == 1     # still exactly one row
+
+    new_desc = _ability_col(target, "STENCH", 3)
+    assert new_desc == '"Updated stench description."'
+
+    entries = [e for e in report.entries if e.category == "ability"]
+    assert entries and entries[0].status == "applied"
+    assert "description" in entries[0].reason
+
+
+def test_identical_apply_is_noop(tmp_path):
+    """A second identical apply (same name, same description) makes no change and emits
+    no report lines — pure idempotence."""
+    target = _target(tmp_path)
+    # Read what the fixture already has for STENCH
+    orig_desc = _ability_col(target, "STENCH", 3)   # e.g. '"Debido al mal olor..."'
+    orig_name = _ability_col(target, "STENCH", 2)   # e.g. "Hedor"
+
+    ruleset = _ability_ruleset({
+        "stench": AbilityDef(
+            name=orig_name,
+            chrooked_id="stench",
+            description=orig_desc.strip('"'),   # strip the existing quotes for the model field
+            aka={"essentials": "STENCH"},
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    changed = ability_apply.apply_abilities(target, ruleset, resmap, report)
+
+    assert not changed  # file unchanged
+    ability_entries = [e for e in report.entries if e.category == "ability"]
+    assert ability_entries == []  # no churn, no report line
+
+
+# --- ac2: ability registers so species slot resolves --------------------------------
+
+
+def test_brand_new_ability_resolves_species_slot(tmp_path):
+    """Full apply: a species cites a brand-new Ruleset ability. The abilities tier runs
+    first, writes the row, registers it in resmap, and the species tier then resolves
+    the slot. Report shows applied, not partial with 'ability:NAME'."""
+    from chrooked_pokedex.cli import _apply_essentials162
+    from chrooked_pokedex.model import Ruleset
+
+    target = _target(tmp_path)
+    ruleset = Ruleset(
+        abilities={
+            "chloroplast": AbilityDef(
+                name="Chloroplast",
+                chrooked_id="chloroplast",
+                description="Doubles Speed in sunlight.",
+            )
+        },
+        species={
+            "bulbasaur": SpeciesOverride(
+                name="Bulbasaur", chrooked_id="bulbasaur",
+                aka={"essentials": "BULBASAUR"},
+                abilities=AbilitiesOverride(primary="Chloroplast"),
+            )
+        },
+    )
+    report = ApplyReport()
+    _apply_essentials162(target, "all", ruleset, report)
+
+    # The Abilities= field must have CHLOROPLAST (not empty / not the old value).
+    abilities_field = _field(target, "BULBASAUR", "Abilities")
+    assert abilities_field is not None
+    assert "CHLOROPLAST" in abilities_field.split(",")
+
+    # The species entry must be applied, not partial with 'ability:Chloroplast'.
+    species_entries = [e for e in report.entries if e.category == "species"]
+    assert species_entries, "no species report entries found"
+    assert all(e.status == "applied" for e in species_entries), (
+        f"expected all applied, got: {[(e.status, e.partial_fields) for e in species_entries]}"
+    )
