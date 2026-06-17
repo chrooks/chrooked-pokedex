@@ -497,3 +497,44 @@ def test_new_species_blocked_when_a_type_is_unresolved(tmp_path):
     assert section_edit.find_section_by_internalname(text, "FAKETRON") is None
     statuses = [(e.category, e.status) for e in report.entries]
     assert ("species", "blocked") in statuses
+
+
+# --- review-fanout regression: 2 MED findings (issue #21) -------------------------
+
+
+def test_move_present_under_unindexed_name_is_edited_not_duplicated(tmp_path):
+    """A move present in the file but cited by a display name the ResolutionMap does
+    not index (resolved instead via aka/name-derived internal) must be EDITED in
+    place, never appended as a duplicate row."""
+    target = _target(tmp_path)
+    text, _ = pbs_io.read(target / "PBS" / "moves.txt")
+    before_max = csv_io.max_index(text)
+    ruleset = _Ruleset(moves={
+        "bugbuzz": MoveDef(
+            name="Bug Buzz", chrooked_id="bugbuzz", aka={"essentials": "BUGBUZZ"},
+            type="Bug", category="special", power=99, accuracy=100, pp=10,
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    move_apply.apply_moves(target, ruleset, resmap, ApplyReport())
+
+    text, _ = pbs_io.read(target / "PBS" / "moves.txt")
+    assert csv_io.max_index(text) == before_max  # edited in place — no new/duplicate row
+    assert _move_col(target, "BUGBUZZ", 4) == "99"  # power column was edited
+
+
+def test_type_chart_noop_is_reported(tmp_path):
+    """An already-correct type-chart override is reported (status applied, 'already in
+    desired state'), not silently dropped."""
+    target = _target(tmp_path)
+    # FLYING already resists FIGHTING in the fixture, so a 0.5x override is a no-op.
+    ruleset = _Ruleset(type_chart=[
+        TypeChartOverride(attacker="Fighting", defender="Flying", multiplier=0.5),
+    ])
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    type_chart_apply.apply_type_chart(target, ruleset, resmap, report)
+
+    entries = [e for e in report.entries if e.category == "type-chart"]
+    assert entries and entries[0].status == "applied"
+    assert "already" in (entries[0].reason or "")

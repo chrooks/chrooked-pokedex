@@ -51,8 +51,11 @@ def apply_moves(
 
     for chrooked_id in sorted(ruleset.moves):
         move = ruleset.moves[chrooked_id]
-        symbol = resmap.move(move.name)
-        if symbol is not None and csv_io.find_row(text, symbol) is not None:
+        # Edit when a row already exists under EITHER the resolved symbol or the
+        # name-derived internal — so a move present but not indexed by the
+        # ResolutionMap is edited in place, never appended as a duplicate row.
+        symbol = resmap.move(move.name) or _internal_of(move)
+        if csv_io.find_row(text, symbol) is not None:
             text = _edit_existing(text, symbol, move, resmap, report, chrooked_id)
         else:
             text = _create_row(text, move, resmap, report, chrooked_id)

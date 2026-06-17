@@ -71,11 +71,13 @@ def apply_type_chart(
             continue
 
         text, changed = _set_effectiveness(text, defender, attacker, target_bucket)
-        if changed:
-            report.add(ReportEntry(
-                status="applied", category="type-chart", chrooked_id=chrooked_id,
-                symbol=defender,
-            ))
+        # Always report — an already-correct chart entry is "applied" (the desired
+        # state is in effect), so a no-op is visible rather than silently dropped.
+        report.add(ReportEntry(
+            status="applied", category="type-chart", chrooked_id=chrooked_id,
+            symbol=defender,
+            reason="retuned" if changed else "already in desired state",
+        ))
 
     if text != original:
         pbs_io.write(path, text, had_bom)
