@@ -444,3 +444,56 @@ def test_missing_species_reported_blocked(tmp_path):
     # No aka match and not creating (it has only a stat override on absent species)
     statuses = [(e.category, e.status) for e in report.entries]
     assert ("species", "blocked") in statuses
+
+
+# --- review-fanout regression: 2 HIGH findings (issue #21) ------------------------
+
+
+def test_evolution_paramless_method_emits_aligned_triple(tmp_path):
+    """A multi-branch source with one param-less `essentials` method must still emit
+    3-token-aligned triples (empty param), not a 2-token branch that misaligns the
+    whole Evolutions= line. Matches the real 16.2 shape `BRAMBLEGHAST,Happiness,`."""
+    target = _target(tmp_path)
+    ruleset = _Ruleset(species={
+        "ivysaur": SpeciesOverride(
+            name="Ivysaur", chrooked_id="ivysaur", aka={"essentials": "IVYSAUR"},
+            evolution=EvolutionOverride(from_species="Bulbasaur", method={"level": 16}),
+        ),
+        "happymon": SpeciesOverride(
+            name="Happymon", chrooked_id="happymon", aka={"essentials": "HAPPYMON"},
+            evolution=EvolutionOverride(
+                from_species="Bulbasaur", method={"essentials": "Happiness"}
+            ),
+        ),
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    evolution_apply.apply_evolutions(target, ruleset, resmap, ApplyReport())
+    tokens = _field(target, "BULBASAUR", "Evolutions").split(",")
+    assert len(tokens) % 3 == 0, tokens  # every branch is an aligned triple
+    triples = [tokens[i:i + 3] for i in range(0, len(tokens), 3)]
+    assert ["HAPPYMON", "Happiness", ""] in triples  # param-less -> empty param token
+    assert ["IVYSAUR", "Level", "16"] in triples
+
+
+def test_new_species_blocked_when_a_type_is_unresolved(tmp_path):
+    """A brand-new dual-type species whose 2nd type does not exist in the target must
+    be BLOCKED — never created mono-typed (which would silently mis-type it)."""
+    target = _target(tmp_path)
+    text, _ = pbs_io.read(target / "PBS" / "pokemon.txt")
+    before_max = section_read.max_index(text)
+    ruleset = _Ruleset(species={
+        "faketron": SpeciesOverride(
+            name="Faketron", chrooked_id="faketron",
+            types=("Normal", "Galaxy"),  # Galaxy is not a type in the fixture
+            stats={"hp": 50, "atk": 50, "def": 50, "spe": 50, "spa": 50, "spd": 50},
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    species_apply.apply_species(target, ruleset, resmap, report)
+
+    text, _ = pbs_io.read(target / "PBS" / "pokemon.txt")
+    assert section_read.max_index(text) == before_max  # NOT created
+    assert section_edit.find_section_by_internalname(text, "FAKETRON") is None
+    statuses = [(e.category, e.status) for e in report.entries]
+    assert ("species", "blocked") in statuses

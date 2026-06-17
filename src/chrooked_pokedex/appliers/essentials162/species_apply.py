@@ -90,17 +90,27 @@ def _create_or_block(
 
     A creatable Override carries types AND a full six-stat block — enough to emit a
     valid 16.2 section. Anything less (e.g. a lone stat tweak aimed at a species the
-    target lacks) is reported blocked, never written as a broken section.
+    target lacks) is reported blocked, never written as a broken section. Every
+    referenced type must also resolve: creating a section with a silently-dropped
+    type would give the new species the WRONG typing, so an unresolved type blocks
+    creation rather than fabricating a mono-type section.
     """
-    creatable = (
-        override.types
-        and override.stats
-        and all(key in override.stats for key in _STAT_ORDER)
+    type_symbols = [resmap.type(name) for name in (override.types or ())]
+    types_resolve = bool(override.types) and all(type_symbols)
+    has_full_stats = bool(override.stats) and all(
+        key in override.stats for key in _STAT_ORDER
     )
-    if not creatable:
+    if not (types_resolve and has_full_stats):
+        reason = "species section not found and Override insufficient to create"
+        if override.types and not types_resolve:
+            missing = [n for n, s in zip(override.types, type_symbols) if not s]
+            reason = (
+                "species section not found; cannot create with an unresolved "
+                f"type {missing!r} (would mis-type the new species)"
+            )
         report.add(ReportEntry(
             status="blocked", category="species", chrooked_id=chrooked_id,
-            reason="species section not found and Override insufficient to create",
+            reason=reason,
         ))
         return text
 

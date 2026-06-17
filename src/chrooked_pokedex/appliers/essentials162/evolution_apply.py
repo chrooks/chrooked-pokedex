@@ -144,7 +144,8 @@ def _render_triple(method: Mapping[str, object], target_internal: str) -> Option
     if "essentials" in method:
         name = str(method["essentials"])
         param = method.get("param")
-        if param is not None:
-            return [target_internal, name, str(param)]
-        return [target_internal, name]
+        # Always emit a 3-token triple to keep the comma-grouped Evolutions= line
+        # aligned. A param-less method writes an EMPTY param (trailing comma) —
+        # matching the real 16.2 format, e.g. `BRAMBLEGHAST,Happiness,`.
+        return [target_internal, name, "" if param is None else str(param)]
     return None
