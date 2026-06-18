@@ -92,7 +92,12 @@ def _merge_species(
         "abilities": dict(base.get("abilities", {})),
         "stats": dict(base.get("stats", {})),
         "learnset": list(base.get("learnset", [])),
-        "evolution": None,
+        # The base evolution graph flows through unchanged: backward `evolution`
+        # (pre-evo + method) and forward `evolves_into` (branching targets). An
+        # override can still replace `evolution` below; `evolves_into` is base-
+        # derived only (overrides don't author forward edges today).
+        "evolution": _copy_evolution(base.get("evolution")),
+        "evolves_into": [dict(edge) for edge in base.get("evolves_into", [])],
         # A base fact (no outgoing evolution = final form or single-stage); the
         # Ruleset doesn't recompute it. Defaults False for an older snapshot that
         # predates the field. Drives the "Fully Evolved" class.
@@ -139,8 +144,10 @@ def _merge_species(
         overridden.append("learnset")
 
     if override.evolution is not None:
-        # Base 1.11.2 snapshot carries no evolution, so there is no `was` to show;
-        # the ledger renders this as Ruleset-set rather than a diff.
+        # Override precedence: the Ruleset's pre-evo replaces the base `from`. The
+        # base value (if any) rides along under `base` for the diff toggle.
+        if merged["evolution"] is not None:
+            base_values["evolution"] = _copy_evolution(merged["evolution"])
         merged["evolution"] = {
             "from": override.evolution.from_species,
             "method": dict(override.evolution.method),
@@ -150,6 +157,15 @@ def _merge_species(
     merged["overridden_fields"] = [f for f in _FLAGGABLE_FIELDS if f in overridden]
     merged["base"] = {k: base_values[k] for k in _FLAGGABLE_FIELDS if k in base_values}
     return merged
+
+
+def _copy_evolution(evolution: dict[str, Any] | None) -> dict[str, Any] | None:
+    """A shallow copy of a base/merged `evolution` dict (or None passthrough).
+
+    Keeps the merge immutable: the dex entry never aliases the snapshot's dict,
+    so a later override that replaces `evolution` can't mutate the shared base.
+    """
+    return dict(evolution) if evolution is not None else None
 
 
 def _merge_abilities(

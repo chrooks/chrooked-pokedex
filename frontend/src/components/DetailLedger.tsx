@@ -230,7 +230,11 @@ function DetailBody({ entry, showDiff, onNavigate }: BodyProps) {
           onNavigate={onNavigate}
         />
 
-        <EvolutionSection evolution={entry.evolution} />
+        <EvolutionSection
+          evolution={entry.evolution}
+          evolvesInto={entry.evolves_into}
+          onNavigate={onNavigate}
+        />
     </>
   );
 }

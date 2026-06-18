@@ -103,6 +103,83 @@ def test_overridden_species_carries_base_values_for_the_diff() -> None:
     assert [m["move"] for m in goodra["base"]["learnset"]] == ["Tackle"]
 
 
+def test_base_evolution_graph_flows_through_untouched_species() -> None:
+    # ac2: a species the Ruleset doesn't touch still carries the base evolution
+    # graph (both directions) from the snapshot — not a hardcoded null.
+    ruleset = Ruleset.load(_SAMPLE)
+    snapshot = {
+        "version": "1.11.2",
+        "species": {
+            "buizel": {
+                **_SNAPSHOT["species"]["pikachu"],
+                "chrooked_id": "buizel",
+                "name": "Buizel",
+                "evolves_into": [
+                    {"to": "floatzel", "to_name": "Floatzel", "method": "Level 26"}
+                ],
+                "evolution": None,
+            },
+            "floatzel": {
+                **_SNAPSHOT["species"]["pikachu"],
+                "chrooked_id": "floatzel",
+                "name": "Floatzel",
+                "evolves_into": [],
+                "evolution": {
+                    "from": "buizel",
+                    "from_name": "Buizel",
+                    "method": "Level 26",
+                },
+            },
+        },
+        "moves": {},
+        "abilities": {},
+        "type_chart": [],
+    }
+    entries = dexmod.build_dex(snapshot, ruleset)
+    buizel = _entry(entries, "buizel")
+    floatzel = _entry(entries, "floatzel")
+    assert buizel["evolves_into"] == [
+        {"to": "floatzel", "to_name": "Floatzel", "method": "Level 26"}
+    ]
+    assert buizel["evolution"] is None
+    assert floatzel["evolution"]["from"] == "buizel"
+    assert floatzel["evolution"]["from_name"] == "Buizel"
+    assert floatzel["evolves_into"] == []
+    # Untouched by the Ruleset: no evolution flag.
+    assert "evolution" not in buizel["overridden_fields"]
+
+
+def test_override_evolution_wins_over_base_from() -> None:
+    # ac2: when both a base pre-evo and a Ruleset evolution override exist, the
+    # override replaces `from`; the base value rides along under `base` for the
+    # diff, and `evolves_into` (base-derived) is untouched.
+    ruleset = Ruleset.load(_SAMPLE)
+    snapshot = {
+        "version": "1.11.2",
+        "species": {
+            # Goodra is the species the sample Ruleset sets an evolution on.
+            "goodra": {
+                **_SNAPSHOT["species"]["goodra"],
+                "evolution": {
+                    "from": "sliggoo-base",
+                    "from_name": "Sliggoo Base",
+                    "method": "Level 50",
+                },
+                "evolves_into": [],
+            },
+        },
+        "moves": {},
+        "abilities": {},
+        "type_chart": [],
+    }
+    goodra = _entry(dexmod.build_dex(snapshot, ruleset), "goodra")
+    # Override precedence: the Ruleset's `from` (Sliggoo) replaces the base one.
+    assert goodra["evolution"]["from"] == "Sliggoo"
+    assert "evolution" in goodra["overridden_fields"]
+    # The pre-override base evolution rides along for the diff toggle.
+    assert goodra["base"]["evolution"]["from"] == "sliggoo-base"
+
+
 def test_untouched_species_has_empty_base() -> None:
     ruleset = Ruleset.load(_SAMPLE)
     pikachu = _entry(dexmod.build_dex(_SNAPSHOT, ruleset), "pikachu")

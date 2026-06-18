@@ -16,6 +16,7 @@ function makeEntry(
     stats,
     learnset: [],
     evolution: null,
+    evolves_into: [],
     fully_evolved: false,
     overridden_fields: [],
     base: {},

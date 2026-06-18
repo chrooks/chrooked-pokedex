@@ -343,6 +343,50 @@ def test_build_snapshot_from_real_base() -> None:
 
 @pytest.mark.integration
 @pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_build_snapshot_populates_evolution_both_directions() -> None:
+    # ac1: the snapshot carries the full evolution graph. Buizel evolves into
+    # Floatzel at Level 26 (forward), and Floatzel inverts that into its pre-evo.
+    species = snap.build_snapshot(_BASE)["species"]
+
+    buizel = species["buizel"]
+    [edge] = buizel["evolves_into"]
+    assert edge["to"] == "floatzel"
+    assert edge["to_name"] == "Floatzel"
+    assert edge["method"] == "Level 26"
+    assert edge["method_detail"] == {"kind": "EVO_LEVEL", "param": "26"}
+    assert edge["to_dex"] == species["floatzel"]["dex"]
+    assert buizel["evolution"] is None  # Buizel has no pre-evo
+    assert buizel["fully_evolved"] is False
+
+    floatzel = species["floatzel"]
+    assert floatzel["evolution"]["from"] == "buizel"
+    assert floatzel["evolution"]["from_name"] == "Buizel"
+    assert floatzel["evolution"]["method"] == "Level 26"
+    assert floatzel["evolution"]["from_dex"] == buizel["dex"]
+    assert floatzel["evolves_into"] == []
+    assert floatzel["fully_evolved"] is True
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
+def test_build_snapshot_evolution_handles_branching() -> None:
+    # ac1: a branching evolver (Eevee) lists every forward target, and each
+    # target inverts Eevee as its single pre-evo.
+    species = snap.build_snapshot(_BASE)["species"]
+    eevee = species["eevee"]
+    targets = {e["to"] for e in eevee["evolves_into"]}
+    # The classic three stones are all present among Eevee's many branches.
+    assert {"vaporeon", "jolteon", "flareon"} <= targets
+    assert len(eevee["evolves_into"]) >= 3
+    # No raw EVO_* token leaks into the readable method label.
+    assert all(not e["method"].startswith("EVO_") for e in eevee["evolves_into"])
+    # The inverse: each branch names Eevee as its pre-evo.
+    assert species["vaporeon"]["evolution"]["from"] == "eevee"
+    assert species["jolteon"]["evolution"]["from_name"] == "Eevee"
+
+
+@pytest.mark.integration
+@pytest.mark.skipif(not _BASE.exists(), reason="base 1.11.2 checkout not present")
 def test_build_snapshot_populates_base_abilities() -> None:
     # ac1: build_snapshot fills the abilities map from the fork, keyed by
     # chrooked_id, with a known ability's neutral name + description.

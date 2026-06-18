@@ -25,6 +25,7 @@ function makeEntry(over: Partial<DexEntry> = {}): DexEntry {
       { level: 0, move: "Thunder Shock" },
     ],
     evolution: null,
+    evolves_into: [],
     fully_evolved: false,
     overridden_fields: [],
     base: {},

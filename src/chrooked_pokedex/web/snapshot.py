@@ -29,6 +29,7 @@ from ..readers.pokeemerald import (
     type_chart_parser,
 )
 from ..seed import neutralize as nz
+from . import evolution as evo
 
 _NATIONAL_DEX_TOKEN = re.compile(r"NATIONAL_DEX_[A-Z0-9_]+")
 _ENUM_MEMBER = re.compile(r"(NATIONAL_DEX_[A-Z0-9_]+)\s*(?:=\s*(\d+))?")
@@ -80,9 +81,18 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
     ability_names = nz.build_ability_name_map(base_dir)
     move_names = nz.build_move_name_map(base_dir)
     dex_numbers = _national_dex_map(base_dir)
-    # Species that appear as a key here have at least one outgoing evolution, so
-    # their complement is "fully evolved" (a final form or a single-stage mon).
-    evolving = set(evolution_parser.parse_evolutions(base_dir))
+    # The full forward evolution graph (486 source species). Its keys are the
+    # species with at least one outgoing evolution, so their complement is "fully
+    # evolved" (a final form or a single-stage mon).
+    forward_evolutions = evolution_parser.parse_evolutions(base_dir)
+    evolving = set(forward_evolutions)
+    # Invert + resolve the forward graph into per-species evolution fields
+    # (backward `evolution.from` + forward `evolves_into`), keyed by chrooked_id.
+    # A SPECIES_* constant resolves only when it's a real (non-gmax) profile, so
+    # the dropped forms above never feed a half-edge.
+    evolution_graph = evo.build_evolution_graph(
+        forward_evolutions, _species_resolver(profiles, dex_numbers)
+    )
     # One symbol table the stat evaluator reads: engine config ints
     # (P_UPDATED_STATS, the GEN_* ladder) plus the named stat macros.
     config = _config_int_map(base_dir)
@@ -102,6 +112,10 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
             symbols,
         )
         entry["fully_evolved"] = constant not in evolving
+        # Both evolution directions, default-empty for a standalone species.
+        edges = evolution_graph.get(entry["chrooked_id"])
+        entry["evolution"] = edges["evolution"] if edges else None
+        entry["evolves_into"] = edges["evolves_into"] if edges else []
         species[entry["chrooked_id"]] = entry
 
     return {
@@ -111,6 +125,28 @@ def build_snapshot(base_dir: Path) -> dict[str, Any]:
         "moves": _base_moves_map(base_dir),
         "type_chart": _base_type_chart(base_dir),
     }
+
+
+def _species_resolver(
+    profiles: dict[str, species_parser.SpeciesProfile],
+    dex_numbers: dict[str, int],
+) -> evo.SpeciesResolver:
+    """A `SPECIES_* -> (chrooked_id, display_name, dex)` lookup over real profiles.
+
+    Built once from the same profile set `build_snapshot` walks, so a constant
+    resolves exactly when it becomes a snapshot species — Gigantamax forms
+    (dropped above) and any unknown symbol resolve to None, and the evolution
+    transform skips their edges rather than emitting a dangling target. The dex
+    number rides along so a cross-link can resolve a sprite for base species.
+    """
+    table: dict[str, tuple[str, str, int | None]] = {}
+    for constant, profile in profiles.items():
+        if _is_gmax(constant):
+            continue
+        name = nz.species_display_name(constant)
+        dex = _resolve_dex(profile.fields.get("natDexNum"), dex_numbers)
+        table[constant] = (nz.slug(name), name, dex)
+    return table.get
 
 
 def _base_type_chart(base_dir: Path) -> list[dict[str, Any]]:

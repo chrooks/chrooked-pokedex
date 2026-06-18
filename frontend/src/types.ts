@@ -19,9 +19,29 @@ export interface LearnsetMove {
   move: string;
 }
 
+/** One forward evolution edge: this species evolves INTO `to` by `method`.
+    `to` is the target's chrooked_id (the dex navigation key); `to_name` is its
+    display name. Base-derived; a species can have several (branching evolvers
+    like Eevee). */
+export interface EvolvesInto {
+  to: string;
+  to_name: string;
+  /** Target national dex number — lets the cross-link resolve a sprite for base
+      species (the sprite-id form map keys only forms). Null for a numberless form. */
+  to_dex: number | null;
+  method: string;
+}
+
+/** A species' pre-evolution (the backward edge). Base-derived `evolution` carries
+    `from` as a chrooked_id, a `from_name` display name, and a readable string
+    `method` ("Level 26"). A Ruleset *override* sets only `from` + a structured
+    `method` dict (no `from_name`); the section renders either shape. */
 export interface Evolution {
   from: string | null;
-  method: Record<string, unknown>;
+  from_name?: string;
+  /** Pre-evo national dex number (base-derived), for the cross-link sprite. */
+  from_dex?: number | null;
+  method: string | Record<string, unknown>;
 }
 
 /** Pre-override values for whatever the Ruleset changed (base → now diff). */
@@ -41,6 +61,8 @@ export interface DexEntry {
   stats: Record<string, number>;
   learnset: LearnsetMove[];
   evolution: Evolution | null;
+  /** Forward evolution edges (base-derived). Empty for a final form. */
+  evolves_into: EvolvesInto[];
   /** True when the species has no outgoing evolution (a final form or a
       single-stage mon). A base fact from the snapshot; drives the Fully Evolved
       class. */
