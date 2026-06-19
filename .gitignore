@@ -23,6 +23,9 @@ targets.json
 
 feature_requests/
 
+# Dispatched-agent git worktrees (transient, isolated checkouts)
+.claude/worktrees/
+
 # Local secrets/config (keep .env.example committed)
 .env
 !.env.example
