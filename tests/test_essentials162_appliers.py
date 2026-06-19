@@ -36,6 +36,7 @@ from chrooked_pokedex.appliers.essentials162 import (
 from chrooked_pokedex.model.schema import (
     AbilitiesOverride,
     AbilityDef,
+    AdditionalEffect,
     EvolutionOverride,
     LearnsetMove,
     MoveDef,
@@ -774,3 +775,215 @@ def test_brand_new_ability_resolves_species_slot(tmp_path):
     assert all(e.status == "applied" for e in species_entries), (
         f"expected all applied, got: {[(e.status, e.partial_fields) for e in species_entries]}"
     )
+
+
+# --- issue #22: effect-resolution tables ------------------------------------------
+#
+# ac1  representative effect/secondary -> funccode mappings (cribbed from the game).
+# ac2  flag-letter + target-hex legends render to the right columns.
+# ac3  standard-pattern moves write all four behavior columns (not placeholders).
+# ac4  an unmappable effect -> unresolved/partial, funccode stays 000 (nothing faked).
+
+
+def _new_move_ruleset(move: MoveDef) -> "_Ruleset":
+    return _Ruleset(moves={move.chrooked_id: move})
+
+
+# --- ac1: the cribbed funccode tables ---------------------------------------------
+
+
+def test_effect_to_funccode_representative_mappings():
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    assert et.EFFECT_TO_FUNCCODE["multi_hit"] == "0C0"
+    assert et.EFFECT_TO_FUNCCODE["ohko"] == "070"
+    assert et.EFFECT_TO_FUNCCODE["absorb"] == "0DD"
+    assert et.EFFECT_TO_FUNCCODE["roar"] == "0EB"
+    assert et.EFFECT_TO_FUNCCODE["triple_kick"] == "0BF"
+
+
+def test_secondary_to_funccode_representative_mappings():
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    assert et.SECONDARY_TO_FUNCCODE["burn"] == "00A"
+    assert et.SECONDARY_TO_FUNCCODE["paralysis"] == "007"
+    assert et.SECONDARY_TO_FUNCCODE["flinch"] == "00F"
+    assert et.SECONDARY_TO_FUNCCODE["spd_minus_1"] == "044"  # Speed, not SpAtk
+    assert et.SECONDARY_TO_FUNCCODE["sp_atk_minus_1"] == "045"  # distinct from SpDef 046
+    assert et.SECONDARY_TO_FUNCCODE["sp_def_minus_1"] == "046"
+
+
+# --- ac2: flag-letter + target-hex legends ----------------------------------------
+
+
+def test_flag_and_target_legends_render():
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    # contact -> a, but slicing has no 16.2 letter in this engine -> dropped + noted.
+    move = MoveDef(
+        name="Pixie Slash", chrooked_id="pixieslash", type="Fairy",
+        category="physical", power=80, flags=("contact", "slicing"), target="selected",
+    )
+    behavior = et.resolve_behavior(move)
+    assert behavior is not None
+    assert behavior.flags == "a"               # contact -> a; slicing dropped
+    assert behavior.target == "00"             # selected -> 00
+    assert et.dropped_flags(move) == ["slicing"]
+
+    # A non-default target renders its hex.
+    both = MoveDef(
+        name="Overdrive", chrooked_id="overdrive", type="Electric",
+        category="special", power=100, flags=("sound",), target="both",
+    )
+    both_behavior = et.resolve_behavior(both)
+    assert both_behavior is not None
+    assert both_behavior.target == "04"        # both -> 04 (all foes)
+    assert both_behavior.flags == "k"          # sound -> k
+
+
+# --- ac3: standard-pattern moves write all four behavior columns ------------------
+
+
+def test_burn_on_hit_writes_all_behavior_columns(tmp_path):
+    """Ember (hit + 10% burn) -> funccode 00A, chance 10, target 00 — a created row."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Ember", chrooked_id="ember", type="Fire", category="special",
+        power=45, accuracy=100, pp=25, aka={"essentials": "EMBER"},
+        additional_effects=(AdditionalEffect(effect="burn", chance=10),),
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "EMBER", 3) == "00A"   # funccode (not 000)
+    assert _move_col(target, "EMBER", 9) == "10"    # effectchance
+    assert _move_col(target, "EMBER", 10) == "00"   # target
+
+
+def test_stat_drop_on_hit_writes_funccode_and_chance(tmp_path):
+    """A SpDef-drop secondary -> funccode 046 + its chance."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Bug Buzz", chrooked_id="bugbuzz", type="Bug", category="special",
+        power=90, accuracy=100, pp=10, aka={"essentials": "BUGBUZZ"},
+        additional_effects=(AdditionalEffect(effect="sp_def_minus_1", chance=10),),
+    )
+    # BUGBUZZ exists in the fixture (func 046, chance 10) — this edits in place.
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "BUGBUZZ", 3) == "046"
+    assert _move_col(target, "BUGBUZZ", 9) == "10"
+
+
+def test_flinch_with_both_target_writes_columns(tmp_path):
+    """Twister (hit + 20% flinch, target both) -> 00F / 20 / 04 + wind dropped."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Twister", chrooked_id="twister", type="Dragon", category="special",
+        power=60, accuracy=100, pp=20, aka={"essentials": "TWISTER"},
+        additional_effects=(AdditionalEffect(effect="flinch", chance=20),),
+        flags=("wind",), target="both",
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "TWISTER", 3) == "00F"
+    assert _move_col(target, "TWISTER", 9) == "20"
+    assert _move_col(target, "TWISTER", 10) == "04"
+    assert _move_col(target, "TWISTER", 12) == ""   # wind has no 16.2 letter -> dropped
+
+
+def test_ohko_primary_writes_funccode(tmp_path):
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Fissure", chrooked_id="fissure", type="Ground", category="physical",
+        power=1, accuracy=30, pp=5, aka={"essentials": "FISSURE"}, effect="ohko",
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "FISSURE", 3) == "070"
+
+
+def test_multi_hit_primary_writes_funccode(tmp_path):
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Triple Hit", chrooked_id="triplehit", type="Normal", category="physical",
+        power=20, accuracy=90, pp=10, aka={"essentials": "TRIPLEHIT"}, effect="multi_hit",
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "TRIPLEHIT", 3) == "0C0"
+
+
+def test_semi_invulnerable_disambiguated_by_internal(tmp_path):
+    """Fly resolves to its own per-move code 0C9 via the engine internal name."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Fly", chrooked_id="fly", type="Flying", category="physical",
+        accuracy=100, pp=15, aka={"essentials": "FLY"}, effect="semi_invulnerable",
+        flags=("contact",),
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "FLY", 3) == "0C9"
+    assert _move_col(target, "FLY", 12) == "a"  # contact -> a
+
+
+# --- ac4: unmappable effect -> unresolved/partial, funccode stays 000 -------------
+
+
+def test_super_effective_on_arg_is_unresolved(tmp_path):
+    """Excalibur (super_effective_on_arg{Dragon}) has no generic 16.2 funccode — it is
+    reported partial and the created row keeps funccode 000 (nothing fabricated)."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Excalibur", chrooked_id="excalibur", type="Steel", category="physical",
+        power=120, accuracy=80, pp=5, effect="super_effective_on_arg",
+        argument={"type": "Dragon"}, flags=("contact", "slicing"),
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    report = ApplyReport()
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, report)
+
+    assert _move_col(target, "EXCALIBUR", 3) == "000"  # plain-hit default kept
+    entries = [e for e in report.entries if e.category == "move"]
+    assert entries and entries[0].status == "partial"
+    assert any("funccode" in (f or "") for f in entries[0].partial_fields)
+
+
+def test_two_secondary_combo_is_unresolved(tmp_path):
+    """A move with TWO secondaries can't collapse to one 16.2 funccode — unresolved,
+    funccode stays 000, no approximation by dropping one secondary."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Fire Fang", chrooked_id="firefang", type="Fire", category="physical",
+        power=65, accuracy=95, pp=15, aka={"essentials": "FIREFANGCUSTOM"},
+        additional_effects=(
+            AdditionalEffect(effect="burn", chance=10),
+            AdditionalEffect(effect="flinch", chance=10),
+        ),
+        flags=("contact", "biting"),
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    report = ApplyReport()
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, report)
+
+    assert _move_col(target, "FIREFANGCUSTOM", 3) == "000"  # nothing fabricated
+    entries = [e for e in report.entries if e.category == "move"]
+    assert entries and entries[0].status == "partial"
+
+
+def test_unmapped_secondary_is_unresolved(tmp_path):
+    """freeze_or_frostbite has no 16.2 funccode in this engine -> unresolved (not faked
+    as plain freeze, which would silently drop the frostbite half)."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Glacial Crush", chrooked_id="glacialcrush", type="Ice", category="physical",
+        power=80, accuracy=95, pp=10, aka={"essentials": "GLACIALCRUSHX"},
+        additional_effects=(AdditionalEffect(effect="freeze_or_frostbite", chance=10),),
+    )
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    report = ApplyReport()
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, report)
+
+    assert _move_col(target, "GLACIALCRUSHX", 3) == "000"
+    entries = [e for e in report.entries if e.category == "move"]
+    assert entries and entries[0].status == "partial"
