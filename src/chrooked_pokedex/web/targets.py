@@ -4,24 +4,33 @@ A *Target* is a registered game fork the Ruleset can be applied to. This module
 owns four concerns, kept deliberately small:
 
   * the registry — a gitignored ``targets.json`` (label, absolute path, engine);
-  * the apply-then-revert *preview* — runs the real pokeemerald applier on the
-    fork, captures the Apply Report, then restores the fork to clean (D1);
+  * the apply-then-revert *preview* — runs the real applier on the target,
+    captures the Apply Report, then restores the target to its prior state (D1);
   * the real *apply* — same applier path, but the changes are kept;
   * a per-fork-path in-process lock + per-Target snapshot cache (D2/D4).
 
-Restore safety (D1) is load-bearing: preview gates on a clean tree, runs the
-applier, then ``git checkout -- . && git clean -fd`` (no ``-x``) inside a
-``try/finally`` and verifies the tree is clean again. A clean-tree gate
-guarantees every untracked file after apply was applier-created, so ``clean -fd``
-removes exactly those and nothing the user owns. A failed restore is a loud
-500-class error carrying the exact recovery command — never a silent botch.
+Restore safety (D1) is load-bearing for preview.  Two paths exist:
+
+**Git target** (the ``.git`` directory is present): preview gates on a clean
+tree, runs the applier, then ``git checkout -- . && git clean -fd`` (no
+``-x``) inside a ``try/finally`` and verifies the tree is clean again.
+
+**Non-git target** (plain directory, e.g. Essentials games that are not git
+repos): preview snapshots the PBS ``*.txt`` files into a temp directory before
+running the applier, then restores them byte-for-byte from the snapshot in the
+``finally`` block.  On restore failure, a ``RestoreError`` is raised with an
+honest, vcs-neutral recovery message (not a git command).
+
+A failed restore is always a loud 500-class error — never a silent botch.
 """
 
 from __future__ import annotations
 
 import json
 import logging
+import shutil
 import subprocess
+import tempfile
 import threading
 import uuid
 from dataclasses import asdict, dataclass
@@ -105,10 +114,12 @@ class TargetRegistry:
         resolved = Path(path).expanduser().resolve()
         if not resolved.exists() or not resolved.is_dir():
             raise TargetError(422, f"Target path does not exist: {resolved}")
-        if not (resolved / ".git").exists():
-            raise TargetError(422, f"Target path is not a git repo: {resolved}")
         if engine not in ("pokeemerald", "essentials"):
             raise TargetError(422, f"Unknown engine {engine!r}.")
+        # pokeemerald targets must be git repos (preview-restore is git-based).
+        # essentials targets may be plain directories (non-git Essentials games).
+        if engine == "pokeemerald" and not (resolved / ".git").exists():
+            raise TargetError(422, f"Target path is not a git repo: {resolved}")
         target = Target(
             id=uuid.uuid4().hex[:12],
             label=label,
@@ -270,6 +281,86 @@ def restore_fork_to_clean(target: Path) -> None:
         )
 
 
+# --- VCS-neutral restore helpers ------------------------------------------ #
+
+
+def _is_git_repo(target: Path) -> bool:
+    """Return True when ``target`` lives inside a git repository."""
+    result = subprocess.run(
+        ["git", "-C", str(target), "rev-parse", "--git-dir"],
+        capture_output=True,
+    )
+    return result.returncode == 0
+
+
+def _snapshot_pbs_files(target: Path) -> str:
+    """Copy all ``*.txt`` files from ``target/PBS/`` into a fresh temp dir.
+
+    Returns the path to the temp dir as a string (caller owns cleanup).
+    Raises ``TargetError(500, ...)`` when the PBS directory does not exist.
+    """
+    pbs_dir = target / "PBS"
+    if not pbs_dir.is_dir():
+        raise TargetError(
+            500,
+            f"Cannot snapshot {target}: PBS/ directory not found. "
+            "The target may not be a valid Essentials game.",
+        )
+    tmp = tempfile.mkdtemp(prefix="chrooked_preview_")
+    for txt_file in pbs_dir.glob("*.txt"):
+        shutil.copy2(txt_file, Path(tmp) / txt_file.name)
+    return tmp
+
+
+def _restore_from_snapshot(target: Path, snapshot_dir: str) -> None:
+    """Restore ``target/PBS/*.txt`` from a previously taken snapshot.
+
+    Over-writes each snapshotted file in-place, then removes any ``*.txt``
+    files the applier created that were NOT in the snapshot.  Raises
+    ``RestoreError(500, ...)`` with a vcs-neutral recovery message if any
+    file-system operation fails.
+    """
+    pbs_dir = target / "PBS"
+    snap = Path(snapshot_dir)
+    snapshotted = {f.name for f in snap.glob("*.txt")}
+    recovery = (
+        f"Manually copy the PBS/*.txt files from '{snapshot_dir}' back into "
+        f"'{pbs_dir}'."
+    )
+    try:
+        # Restore every snapshotted file.
+        for name in snapshotted:
+            shutil.copy2(snap / name, pbs_dir / name)
+        # Remove any applier-created *.txt files not in the snapshot.
+        for txt_file in pbs_dir.glob("*.txt"):
+            if txt_file.name not in snapshotted:
+                txt_file.unlink()
+    except OSError as exc:
+        raise RestoreError(
+            500,
+            {
+                "message": (
+                    f"Snapshot-restore of {target} failed: {exc}. "
+                    f"The target may be left dirty. Recovery: {recovery}"
+                ),
+                "recovery": recovery,
+            },
+        ) from exc
+
+
+def _preview_restore(target: Path, is_git: bool, snapshot_dir: str | None) -> None:
+    """Route preview restore to the right strategy based on target type.
+
+    *Git targets*: delegate to ``restore_fork_to_clean`` (proven path).
+    *Non-git targets*: delegate to ``_restore_from_snapshot``.
+    """
+    if is_git:
+        restore_fork_to_clean(target)
+    else:
+        assert snapshot_dir is not None  # set before applier runs for non-git
+        _restore_from_snapshot(target, snapshot_dir)
+
+
 # --- Apply Report → API payload ------------------------------------------- #
 
 
@@ -321,20 +412,35 @@ def _run_applier(target: Path, engine: str, ruleset: Ruleset) -> ApplyReport:
 def preview_target(
     target: Target, ruleset: Ruleset, state: TargetState
 ) -> dict[str, Any]:
-    """Apply-then-revert preview: real applier, then restore the fork to clean.
+    """Apply-then-revert preview: real applier, then restore the target to prior state.
 
-    409 if the tree is dirty (the fork is left untouched). Otherwise runs the
-    applier, captures the report, then restores inside a ``try/finally`` and
-    verifies clean — a failed restore raises ``RestoreError`` (500-class). No
-    ``force`` here (D1: force is for real apply only).
+    Two restore strategies, chosen by whether the target is a git repo:
+
+    * **Git target**: gate on clean tree (409 if dirty), run applier, then
+      ``git checkout -- . && git clean -fd`` in a ``try/finally``.
+    * **Non-git target**: snapshot PBS ``*.txt`` files into a temp dir, run
+      applier, then restore from snapshot in a ``try/finally``.  The temp dir
+      is cleaned up in a ``finally`` regardless of outcome.
+
+    A failed restore raises ``RestoreError`` (500-class).  No ``force`` option
+    here — D1: force is for real apply only.
     """
     fork = Path(target.path)
     lock = state.lock_for(target.path)
     with lock:
-        try:
-            require_clean_git_status(fork, force=False)
-        except DirtyWorkingTree as error:
-            raise TargetError(409, str(error)) from error
+        is_git = _is_git_repo(fork)
+
+        if is_git:
+            # Git path: gate on clean tree first.
+            try:
+                require_clean_git_status(fork, force=False)
+            except DirtyWorkingTree as error:
+                raise TargetError(409, str(error)) from error
+
+        # Take snapshot BEFORE running the applier (non-git only).
+        snapshot_dir: str | None = None
+        if not is_git:
+            snapshot_dir = _snapshot_pbs_files(fork)
 
         applier_error: BaseException | None = None
         try:
@@ -344,12 +450,9 @@ def preview_target(
             applier_error = error
             raise
         finally:
-            # Always restore — even if the applier raised mid-run. A RestoreError
-            # raised here propagates (the route maps it to a loud 500); a normal
-            # return still runs this first. If the applier ALSO raised, the restore
-            # failure would otherwise mask it, so log the applier cause first.
+            # Always restore — even if the applier raised mid-run.
             try:
-                restore_fork_to_clean(fork)
+                _preview_restore(fork, is_git, snapshot_dir)
             except RestoreError:
                 if applier_error is not None:
                     _logger.error(
@@ -359,6 +462,10 @@ def preview_target(
                         exc_info=applier_error,
                     )
                 raise
+            finally:
+                # Clean up the temp snapshot dir regardless of restore outcome.
+                if snapshot_dir is not None:
+                    shutil.rmtree(snapshot_dir, ignore_errors=True)
 
 
 def apply_target(
@@ -366,17 +473,22 @@ def apply_target(
 ) -> dict[str, Any]:
     """Real apply: run the applier and KEEP the changes.
 
-    409 if the tree is dirty and not ``force``; proceeds when ``force=True``.
-    Invalidates the cached snapshot for this fork so a later dex backdrop reflects
-    the freshly applied values.
+    For git targets: 409 if the tree is dirty and not ``force``; proceeds when
+    ``force=True``.  For non-git targets (e.g. a plain Essentials game
+    directory): the clean-tree gate is skipped entirely — there is no git tree
+    to protect, and apply always keeps changes.
+
+    Invalidates the cached snapshot for this fork so a later dex backdrop
+    reflects the freshly applied values.
     """
     fork = Path(target.path)
     lock = state.lock_for(target.path)
     with lock:
-        try:
-            require_clean_git_status(fork, force=force)
-        except DirtyWorkingTree as error:
-            raise TargetError(409, str(error)) from error
+        if _is_git_repo(fork):
+            try:
+                require_clean_git_status(fork, force=force)
+            except DirtyWorkingTree as error:
+                raise TargetError(409, str(error)) from error
         report = _run_applier(fork, target.engine, ruleset)
         report.write(fork / "apply-report.md")
         state.invalidate_snapshot(target.path)

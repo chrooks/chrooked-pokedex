@@ -950,3 +950,106 @@ def test_dispatch_unrecognized_essentials_writes_nothing(
     # No files should have been written to tmp_path
     written = list(tmp_path.rglob("*"))
     assert written == [], f"must write nothing on unrecognized format, got: {written}"
+
+
+# ---------------------------------------------------------------------------
+# #27 ac4 — NON-GIT Essentials target: snapshot-restore preview safety
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def essentials162_nongit_fork(tmp_path: Path) -> Path:
+    """A plain directory (NOT a git repo) containing a minimal Essentials 16.2 PBS set.
+
+    This mirrors the real Africanvs source layout: an Essentials game folder that
+    was never git-init'd.  The fixture is a copy of english_162 so dialect detection
+    returns 'essentials16' and the applier can run.
+    """
+    path = tmp_path / "essentials162_plain"
+    _write_essentials162_fork(path)
+    # Explicitly verify no .git present — this is the invariant the test is built on.
+    assert not (path / ".git").exists(), "fixture must NOT be a git repo"
+    return path
+
+
+def test_ac1_add_accepts_non_git_essentials_dir(
+    essentials162_client: TestClient, essentials162_nongit_fork: Path
+) -> None:
+    """POST /api/targets with engine=essentials and a plain (non-git) dir → 200.
+
+    After the fix, the registry must allow non-git Essentials directories.
+    """
+    response = essentials162_client.post(
+        "/api/targets",
+        json={
+            "label": "Non-git Essentials",
+            "path": str(essentials162_nongit_fork),
+            "engine": "essentials",
+        },
+    )
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["engine"] == "essentials"
+    assert Path(body["path"]) == essentials162_nongit_fork.resolve()
+
+
+def test_ac4_nongit_essentials_preview_snapshot_restores_and_apply_keeps(
+    essentials162_client: TestClient, essentials162_nongit_fork: Path
+) -> None:
+    """Preview on a NON-GIT Essentials target: snapshot-restore leaves files byte-identical.
+
+    Then apply keeps the changes.
+
+    Proof:
+    (a) POST .../preview → ApplyReportSummary keys present.
+    (b) After preview, PBS/*.txt files are byte-identical to before (snapshot-restore worked).
+    (c) POST .../apply → report returned, PBS files differ from pre-preview state.
+    """
+    import hashlib
+
+    pbs_dir = essentials162_nongit_fork / "PBS"
+
+    def _hashes() -> dict[str, str]:
+        """SHA-256 fingerprint of every *.txt in PBS/."""
+        result = {}
+        for f in sorted(pbs_dir.glob("*.txt")):
+            result[f.name] = hashlib.sha256(f.read_bytes()).hexdigest()
+        return result
+
+    # Snapshot hashes BEFORE preview.
+    before_hashes = _hashes()
+    assert before_hashes, "fixture must have PBS/*.txt files"
+
+    # Register the non-git target.
+    add = essentials162_client.post(
+        "/api/targets",
+        json={
+            "label": "Non-git Essentials",
+            "path": str(essentials162_nongit_fork),
+            "engine": "essentials",
+        },
+    )
+    assert add.status_code == 200, add.text
+    target_id = add.json()["id"]
+
+    # (a) Preview returns an ApplyReportSummary.
+    preview = essentials162_client.post(f"/api/targets/{target_id}/preview")
+    assert preview.status_code == 200, preview.text
+    body = preview.json()
+    assert {"applied", "partial", "blocked", "created", "data_only"} <= set(body)
+
+    # (b) PBS files are byte-identical after preview (snapshot-restore worked).
+    after_preview_hashes = _hashes()
+    assert after_preview_hashes == before_hashes, (
+        "Preview must leave PBS files byte-identical via snapshot-restore. "
+        f"Changed: {set(after_preview_hashes) ^ set(before_hashes)}"
+    )
+
+    # (c) Apply keeps changes: PBS files must differ from before.
+    apply_resp = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert apply_resp.status_code == 200, apply_resp.text
+    after_apply_hashes = _hashes()
+    # At least one PBS file must have been modified by the applier.
+    assert after_apply_hashes != before_hashes, (
+        "Apply must write changes to PBS files and keep them."
+    )
