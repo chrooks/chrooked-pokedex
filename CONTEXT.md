@@ -70,3 +70,12 @@ snapshot with the Ruleset's Overrides merged on top. Game-independent; always
 renders. Distinct from a per-Target preview (a Target's own data with the Ruleset
 previewed on top, a no-write dry run of an apply).
 _Avoid_: pokedex, dex view, preview (a preview is the per-Target variant).
+
+**In-Game Proof**:
+Confirming an applied Ruleset change actually manifests or behaves in the running
+game: apply → recompile under Wine → boot Africanvs → observe the change on real
+hardware (Eelektross showing Water/Electric, Beautifly with Aerodynamic, a move's
+secondary effect firing in a debug battle). The real-hardware acceptance step of the
+apply pipeline, distinct from unit tests. The sampling technique used inside it is a
+[[Spot-check]].
+_Avoid_: smoke test, manual test, playtest.
