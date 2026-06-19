@@ -1,5 +1,8 @@
 name: Snorlax
 chrooked_id: snorlax
 aka: { pokeemerald: SPECIES_SNORLAX }
+abilities:
+  primary: Unaware
+  hidden: Hammerfist
 stats: { def: 75 }
 evolution: { from: Munchlax, method: { level: 32 } }
