@@ -21,6 +21,7 @@ import type {
   MoveWrite,
   SpeciesOverride,
   Target,
+  TargetDialect,
   TypeChartCell,
   TypeChartEntry,
 } from "./types";
@@ -212,4 +213,12 @@ export const api = {
   /** Fetch one behavior packet by its DATA-ONLY `packet_url`. */
   packet: (packetUrl: string, signal?: AbortSignal) =>
     getJson<BehaviorPacket>(packetUrl, signal),
+  /** Detect the PBS dialect of an Essentials Target.
+      pokeemerald Targets return { dialect: null, label: null }.
+      Uses a fresh detect on each call so the badge never goes stale. */
+  targetDialect: (id: string, signal?: AbortSignal) =>
+    getJson<TargetDialect>(
+      `/api/targets/${encodeURIComponent(id)}/dialect`,
+      signal,
+    ),
 } as const;

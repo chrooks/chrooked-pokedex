@@ -15,6 +15,7 @@ import { api, ApiError } from "../../api";
 import type { ApplyReportSummary, Target } from "../../types";
 import { isDirtyTreeStatus } from "../../lib/targets";
 import { ApplyReportView } from "./ApplyReportView";
+import { EngineVersionReadout } from "./EngineVersionReadout";
 
 type Props = {
   target: Target;
@@ -68,7 +69,12 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
           <h2 className="apply-panel__title">{target.label}</h2>
           <p className="apply-panel__path mono">{target.path}</p>
         </div>
-        <span className="apply-panel__engine mono">{target.engine}</span>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "var(--space-1)" }}>
+          <span className="apply-panel__engine mono">{target.engine}</span>
+          <span id="target-version-badge">
+            <EngineVersionReadout id={target.id} engine={target.engine} />
+          </span>
+        </div>
       </div>
 
       <div className="apply-panel__actions">
@@ -90,7 +96,7 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
             disabled={busy}
             onClick={() => setConfirming(true)}
           >
-            Apply to fork…
+            Apply…
           </button>
         ) : (
           <div className="apply-confirm" id="apply-confirm" role="group" aria-label="Confirm apply">

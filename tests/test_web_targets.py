@@ -739,3 +739,214 @@ def test_dialect_endpoint_unknown_target_returns_404(client: TestClient) -> None
     """GET /api/targets/nonexistent/dialect returns 404."""
     resp = client.get("/api/targets/doesnotexist/dialect")
     assert resp.status_code == 404
+
+
+# ---------------------------------------------------------------------------
+# #27 acceptance criteria (Essentials Target apply support)
+# ---------------------------------------------------------------------------
+
+_E162_FIXTURES = Path(__file__).parent / "fixtures" / "essentials162"
+_E162_DIALECT_FIXTURES = Path(__file__).parent / "fixtures" / "essentials_dialect" / "english_162"
+
+
+def _write_essentials162_fork(target: Path) -> None:
+    """A minimal but real Essentials 16.2 fork the applier can apply to.
+
+    Combines the dialect-detection fixtures (PBS/moves.txt, PBS/pokemon.txt) with
+    the applier fixtures (abilities.txt, types.txt) so both detection and apply work
+    on the same path.
+    """
+    import shutil
+
+    pbs = target / "PBS"
+    pbs.mkdir(parents=True)
+    # Dialect-detection files (flat-CSV moves + numeric-section pokemon)
+    shutil.copy(_E162_DIALECT_FIXTURES / "PBS" / "moves.txt", pbs / "moves.txt")
+    shutil.copy(_E162_DIALECT_FIXTURES / "PBS" / "pokemon.txt", pbs / "pokemon.txt")
+    # Applier-required files from the essentials162 fixture set
+    shutil.copy(_E162_FIXTURES / "abilities.txt", pbs / "abilities.txt")
+    shutil.copy(_E162_FIXTURES / "types.txt", pbs / "types.txt")
+
+
+def _write_essentials162_ruleset(root: Path) -> None:
+    """A minimal Ruleset that exercises the Essentials 16.2 applier.
+
+    Uses Bulbasaur (present in pokemon.txt as BULBASAUR) with a stat override.
+    No owned moves/abilities that would trigger creation (keeps the fixture
+    simple and the test deterministic).
+    """
+    (root / "species").mkdir(parents=True)
+    (root / "abilities").mkdir(parents=True)
+    (root / "moves").mkdir(parents=True)
+    (root / "behaviors").mkdir(parents=True)
+    (root / "type-chart").mkdir(parents=True)
+    (root / "type-chart" / "overrides.yaml").write_text(
+        "overrides: []\n", encoding="utf-8"
+    )
+    (root / "meta.yaml").write_text(
+        "base_version: 1.11.2\nschema_version: 1\n", encoding="utf-8"
+    )
+    (root / "species" / "bulbasaur.yaml").write_text(
+        "name: Bulbasaur\n"
+        "chrooked_id: bulbasaur\n"
+        "aka: { essentials: BULBASAUR }\n"
+        "stats: { hp: 55 }\n",
+        encoding="utf-8",
+    )
+
+
+@pytest.fixture
+def essentials162_ruleset_dir(tmp_path: Path) -> Path:
+    root = tmp_path / "ruleset162"
+    _write_essentials162_ruleset(root)
+    return root
+
+
+@pytest.fixture
+def essentials162_client(
+    snapshot_path: Path,
+    essentials162_ruleset_dir: Path,
+    targets_path: Path,
+) -> TestClient:
+    app = create_app(
+        ruleset_dir=essentials162_ruleset_dir,
+        snapshot_path=snapshot_path,
+        targets_path=targets_path,
+    )
+    return TestClient(app, raise_server_exceptions=False)
+
+
+@pytest.fixture
+def essentials162_fork(tmp_path: Path) -> Path:
+    """A committed-clean essentials 16.2 git fork the applier can apply to."""
+    path = tmp_path / "essentials162_fork"
+    _write_essentials162_fork(path)
+    _init_committed_repo(path)
+    return path
+
+
+# ac1: registering an Essentials Target works and appears in GET /api/targets
+def test_ac1_essentials_target_registers(
+    essentials162_client: TestClient, essentials162_fork: Path
+) -> None:
+    """POST /api/targets engine=essentials → 200; GET /api/targets includes it."""
+    add = essentials162_client.post(
+        "/api/targets",
+        json={
+            "label": "Essentials 16.2 Fork",
+            "path": str(essentials162_fork),
+            "engine": "essentials",
+        },
+    )
+    assert add.status_code == 200, add.text
+    body = add.json()
+    assert body["engine"] == "essentials"
+    target_id = body["id"]
+
+    listed = essentials162_client.get("/api/targets").json()
+    assert any(t["id"] == target_id for t in listed)
+
+
+# ac4: preview on english_162 returns ApplyReportSummary; fork is clean after;
+# apply keeps the changes.
+def test_ac4_essentials162_preview_clean_and_apply_keeps(
+    essentials162_client: TestClient, essentials162_fork: Path
+) -> None:
+    """Essentials 16.2 preview produces a report and leaves the fork git-clean.
+
+    Then apply keeps the changes (fork is dirty after apply).
+    """
+    # Register
+    add = essentials162_client.post(
+        "/api/targets",
+        json={
+            "label": "Essentials 16.2 Fork",
+            "path": str(essentials162_fork),
+            "engine": "essentials",
+        },
+    )
+    assert add.status_code == 200, add.text
+    target_id = add.json()["id"]
+
+    # Preview
+    preview = essentials162_client.post(f"/api/targets/{target_id}/preview")
+    assert preview.status_code == 200, preview.text
+    body = preview.json()
+    # The ApplyReportSummary keys must be present
+    assert {"applied", "partial", "blocked", "created", "data_only"} <= set(body)
+
+    # D1 revert: fork must be git-clean after preview
+    porcelain = subprocess.run(
+        ["git", "-C", str(essentials162_fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain == "", f"fork not clean after preview: {porcelain!r}"
+
+    # Apply: changes must be kept
+    apply_resp = essentials162_client.post(
+        f"/api/targets/{target_id}/apply", json={}
+    )
+    assert apply_resp.status_code == 200, apply_resp.text
+    porcelain_after = subprocess.run(
+        ["git", "-C", str(essentials162_fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain_after != "", "apply should leave the fork dirty (changes kept)"
+
+
+# ---------------------------------------------------------------------------
+# dispatch.py unit tests
+# ---------------------------------------------------------------------------
+
+
+def test_dispatch_essentials16_routes_to_essentials162(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """route_apply: engine=essentials + dialect=essentials16 → _apply_essentials162."""
+    import chrooked_pokedex.appliers.dispatch as dispatch_mod
+    import chrooked_pokedex.cli as cli_mod
+
+    called_as: list[str] = []
+
+    def fake_162(target, category, ruleset, report):  # noqa: ANN001
+        called_as.append("essentials162")
+
+    monkeypatch.setattr(cli_mod, "_apply_essentials162", fake_162)
+
+    from chrooked_pokedex.report import ApplyReport
+
+    class _FakeRuleset:
+        pass
+
+    report = ApplyReport()
+    target = tmp_path
+    dispatch_mod.route_apply(
+        target, "essentials", _FakeRuleset(), report, dialect="essentials16"
+    )
+    assert called_as == ["essentials162"], "essentials16 dialect must route to _apply_essentials162"
+
+
+def test_dispatch_unrecognized_essentials_writes_nothing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """route_apply: essentials + undetectable dialect → blocked entry, no file writes."""
+    import chrooked_pokedex.appliers.dispatch as dispatch_mod
+    from chrooked_pokedex.report import ApplyReport
+
+    # Force detect_dialect to return None (unrecognized format).
+    monkeypatch.setattr(dispatch_mod, "detect_dialect", lambda _target: None)
+
+    class _FakeRuleset:
+        pass
+
+    report = ApplyReport()
+    dispatch_mod.route_apply(tmp_path, "essentials", _FakeRuleset(), report)
+
+    counts = report.counts()
+    assert counts["blocked"] == 1, "must record one blocked entry"
+    assert counts["applied"] == 0, "must not apply anything"
+    # No files should have been written to tmp_path
+    written = list(tmp_path.rglob("*"))
+    assert written == [], f"must write nothing on unrecognized format, got: {written}"

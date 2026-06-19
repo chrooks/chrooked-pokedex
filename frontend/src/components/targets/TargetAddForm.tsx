@@ -72,7 +72,7 @@ export function TargetAddForm({ onAdded }: Props) {
           />
         </label>
         <label className="target-add__field target-add__field--path">
-          <span className="target-add__label">Absolute path to the fork</span>
+          <span className="target-add__label">Absolute path to the game directory</span>
           <input
             id="target-add-path"
             className="target-add__input mono"

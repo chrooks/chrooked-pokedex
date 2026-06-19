@@ -147,12 +147,15 @@ def test_cli_blocks_on_unknown_format(tmp_path: Path):
 
 
 def test_cli_dialect_override_skips_detection(tmp_path: Path):
-    """--dialect essentials21 forces v21 applier without calling detect_dialect."""
+    """--dialect essentials21 forces v21 applier without calling detect_dialect.
+
+    After D-DRY, detect_dialect lives in dispatch.py, so that is the patch target.
+    """
     from chrooked_pokedex.cli import _run_apply
 
     # We just need to confirm detect_dialect is NOT called when dialect != "auto"
     with patch(
-        "chrooked_pokedex.cli.detect_dialect"
+        "chrooked_pokedex.appliers.dispatch.detect_dialect"
     ) as mock_detect:
         # Use a minimal no-op by patching _apply_essentials too so we don't need a real target
         with patch("chrooked_pokedex.cli._apply_essentials"):
@@ -163,10 +166,13 @@ def test_cli_dialect_override_skips_detection(tmp_path: Path):
 
 
 def test_cli_dialect_override_16_skips_detection(tmp_path: Path):
-    """--dialect essentials16 forces v16 applier without calling detect_dialect."""
+    """--dialect essentials16 forces v16 applier without calling detect_dialect.
+
+    After D-DRY, detect_dialect lives in dispatch.py, so that is the patch target.
+    """
     from chrooked_pokedex.cli import _run_apply
 
-    with patch("chrooked_pokedex.cli.detect_dialect") as mock_detect:
+    with patch("chrooked_pokedex.appliers.dispatch.detect_dialect") as mock_detect:
         with patch("chrooked_pokedex.cli._apply_essentials162"):
             with patch("chrooked_pokedex.cli.require_clean_git_status"):
                 with patch("chrooked_pokedex.report.ApplyReport.write", return_value=tmp_path / "r.json"):

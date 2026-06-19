@@ -253,6 +253,16 @@ export interface Target {
   engine: EngineKey;
 }
 
+/** The detected PBS dialect of a registered Target.
+    ``dialect`` is ``"essentials16"`` or ``"essentials21"`` for Essentials targets,
+    ``null`` for pokeemerald (engine does not have a dialect) or when detection
+    fails (unrecognized format).  ``label`` is the display string ("16.2",
+    "v19+ (modern)"), or ``null`` when ``dialect`` is ``null``. */
+export interface TargetDialect {
+  dialect: string | null;
+  label: string | null;
+}
+
 /** A DATA-ONLY created ability in an Apply Report: a record whose mechanic lives
     only in a behavior packet, with a link to that packet's markdown. */
 export interface DataOnlyEntry {

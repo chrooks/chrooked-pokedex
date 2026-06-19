@@ -69,7 +69,7 @@ export function TargetsTab({ onViewBackdrop }: Props) {
       )}
 
       {targets.length === 0 ? (
-        <EmptyView message="No game forks registered yet. Add one above to preview and apply the Ruleset." />
+        <EmptyView message="No targets registered yet. Add one above to preview and apply the Ruleset." />
       ) : (
         <div className="targets-grid">
           <TargetList

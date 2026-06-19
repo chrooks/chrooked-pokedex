@@ -4,6 +4,7 @@
 
 import type { Target } from "../../types";
 import { engineLabel } from "../../lib/targets";
+import { EngineVersionReadout } from "./EngineVersionReadout";
 
 type Props = {
   targets: Target[];
@@ -38,6 +39,7 @@ export function TargetList({
               <span className="target-card__main">
                 <span className="target-card__label">{target.label}</span>
                 <span className="target-card__path mono">{target.path}</span>
+                <EngineVersionReadout id={target.id} engine={target.engine} />
               </span>
               <span className="target-card__engine mono">
                 {engineLabel(target.engine)}

@@ -31,7 +31,6 @@ from .appliers.essentials162 import (
     species_apply as essentials162_species,
     type_chart_apply as essentials162_type_chart,
 )
-from .appliers.essentials.dialect import detect_dialect
 from .appliers.pokeemerald.creation import create_owned_content
 from .appliers.pokeemerald.evolution_apply import apply_evolutions
 from .appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
@@ -43,7 +42,7 @@ from .appliers.pokeemerald.type_chart_apply import apply_type_chart
 from .behavior import render_manifest, render_packet
 from .harvest.harvester import apply_proposals, propose_changes
 from .model import Ruleset
-from .report import ApplyReport, ReportEntry
+from .report import ApplyReport
 from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
 
@@ -343,48 +342,32 @@ def _run_apply(
     ruleset = Ruleset.load(ruleset_dir)
     report = ApplyReport()
 
-    if engine == "essentials":
-        resolved_dialect = dialect
-        if dialect == "auto":
-            resolved_dialect = detect_dialect(target)
-            if resolved_dialect is None:
-                # Block — cannot determine the format; write nothing to target files.
-                report.add(
-                    ReportEntry(
-                        status="blocked",
-                        category="(all)",
-                        chrooked_id="(all)",
-                        reason=(
-                            "blocked: unrecognized Essentials format — "
-                            "PBS/moves.txt and PBS/pokemon.txt do not match a known "
-                            "dialect (essentials16 or essentials21). "
-                            "Use --dialect to force one explicitly."
-                        ),
-                    )
-                )
-                print(
-                    "blocked: unrecognized Essentials format. "
-                    "Use --dialect essentials16 or --dialect essentials21 to override."
-                )
-                json_path = report.write(target / "apply-report.md")
-                counts = report.counts()
-                print(
-                    f"Apply Report: applied={counts['applied']} "
-                    f"partial={counts['partial']} blocked={counts['blocked']}"
-                )
-                print(f"  {target / 'apply-report.md'}")
-                print(f"  {json_path}")
-                return 1
+    from .appliers.dispatch import route_apply
 
-        if resolved_dialect == "essentials16":
-            _apply_essentials162(target, category, ruleset, report)
-        else:
-            _apply_essentials(target, category, ruleset, report)
-    else:
-        _apply_pokeemerald(target, category, ruleset, report)
+    route_apply(target, engine, ruleset, report, category=category, dialect=dialect)
+
+    # When the format was unrecognized, route_apply writes a blocked entry and
+    # returns without touching any files.  Surface the block to the console and
+    # write the report so the user has a record, then exit non-zero.
+    counts = report.counts()
+    if counts["blocked"] > 0 and counts["applied"] == 0 and counts["partial"] == 0:
+        # All entries are blocked — the format was unrecognized (essentials) or
+        # some other total-block scenario.  Print the CLI-specific block message.
+        if engine == "essentials":
+            print(
+                "blocked: unrecognized Essentials format. "
+                "Use --dialect essentials16 or --dialect essentials21 to override."
+            )
+        json_path = report.write(target / "apply-report.md")
+        print(
+            f"Apply Report: applied={counts['applied']} "
+            f"partial={counts['partial']} blocked={counts['blocked']}"
+        )
+        print(f"  {target / 'apply-report.md'}")
+        print(f"  {json_path}")
+        return 1
 
     json_path = report.write(target / "apply-report.md")
-    counts = report.counts()
     print(
         f"Apply Report: applied={counts['applied']} "
         f"partial={counts['partial']} blocked={counts['blocked']}"

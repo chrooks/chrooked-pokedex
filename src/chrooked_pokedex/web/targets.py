@@ -28,9 +28,9 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Dict, List
 
+from ..appliers.dispatch import route_apply as _route_apply
 from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
 from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
-from ..cli import _apply_pokeemerald
 from ..model import Ruleset
 from ..report import ApplyReport
 from . import dex as dexmod
@@ -304,18 +304,14 @@ def _report_payload(report: ApplyReport) -> dict[str, Any]:
 def _run_applier(target: Path, engine: str, ruleset: Ruleset) -> ApplyReport:
     """Run the real applier for ``engine`` over ``target`` and return its report.
 
-    Reuses ``cli._apply_pokeemerald`` — the same code path the CLI ``apply`` uses
-    — so preview and apply are honest. Essentials is deferred (D3); the registry
-    records engine so it slots in later, but the applier is pokeemerald-only here.
+    Delegates to ``appliers/dispatch.py::route_apply`` so the web path and the
+    CLI dispatch identically (D-DRY).  An unrecognized Essentials format writes
+    nothing and records a ``blocked`` entry — the existing honest Error State.
+    Preview's git revert (D1) is engine-agnostic and runs in the caller's
+    ``finally`` block regardless of which applier ran.
     """
-    if engine != "pokeemerald":
-        raise TargetError(
-            422,
-            f"Engine {engine!r} is not supported for preview/apply yet "
-            "(pokeemerald only; essentials deferred).",
-        )
     report = ApplyReport()
-    _apply_pokeemerald(target, "all", ruleset, report)
+    _route_apply(target, engine, ruleset, report)
     return report
 
 
