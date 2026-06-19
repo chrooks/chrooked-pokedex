@@ -5,13 +5,13 @@
 
 import type { EngineKey } from "../types";
 
-/** The engines a Target can register as, in display order. Only pokeemerald
-    applies end-to-end in M3; essentials is recorded for a later slice. */
+/** The engines a Target can register as, in display order. Both apply
+    end-to-end; the detected version shows in the ENGINE · VERSION readout. */
 export const ENGINES: readonly EngineKey[] = ["pokeemerald", "essentials"];
 
 const ENGINE_LABELS: Record<EngineKey, string> = {
   pokeemerald: "pokeemerald",
-  essentials: "Essentials (apply later)",
+  essentials: "Essentials",
 };
 
 export function engineLabel(engine: EngineKey): string {

@@ -138,7 +138,7 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
         >
           <div className="apply-error__badge mono">409</div>
           <div className="apply-error__body">
-            <p className="apply-error__title">The fork's git tree is dirty</p>
+            <p className="apply-error__title">The target's git tree is dirty</p>
             <p className="apply-error__detail">{run.message}</p>
             <label className="apply-error__force" htmlFor="apply-force-toggle">
               <input

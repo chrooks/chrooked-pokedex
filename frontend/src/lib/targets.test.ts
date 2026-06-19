@@ -12,9 +12,9 @@ describe("engine options (ac9)", () => {
     expect(ENGINES).toEqual(["pokeemerald", "essentials"]);
   });
 
-  it("labels essentials as apply-later and pokeemerald plainly", () => {
+  it("labels both engines plainly (version shows in the readout, not the label)", () => {
     expect(engineLabel("pokeemerald")).toBe("pokeemerald");
-    expect(engineLabel("essentials")).toContain("later");
+    expect(engineLabel("essentials")).toBe("Essentials");
   });
 });
 
