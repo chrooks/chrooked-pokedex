@@ -228,6 +228,77 @@ def create_app(
             app.state.llm_provider = llmmod.build_provider()
         return app.state.llm_provider
 
+    @app.post("/api/species/{chrooked_id}/suggest/typing")
+    def suggest_species_typing(
+        chrooked_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Propose a best-fit typing (1-2 types) for a species — never writes.
+
+        Assembles context server-side (the merged dex entry + the real type pool),
+        runs ONE bounded Port call, and returns the reusable
+        ``{draft, rationale, alternatives}`` contract. The accept path is the
+        existing ``PUT /api/species/{id}`` (the loader Boundary), not this route.
+
+        Honest errors: a missing key / upstream failure (`LlmError`) → 503; an
+        unknown species or a hallucinated type (`SuggestError`) → 422 — never a
+        raw 500 traceback, and the provider key never reaches the client.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
+        if entry is None:
+            raise HTTPException(
+                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
+            )
+        type_pool = dexmod.build_type_pool(snapshot, ruleset)
+        direction = (payload or {}).get("direction")
+        try:
+            return suggestmod.suggest_typing(
+                provider=_llm_provider(),
+                entry=entry,
+                type_pool=type_pool,
+                direction=direction,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
+    @app.post("/api/species/{chrooked_id}/suggest/stats")
+    def suggest_species_stats(
+        chrooked_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Propose a six-stat spread for a species — never writes.
+
+        Assembles context server-side (the merged dex entry including current stats
+        and BST), runs ONE bounded Port call, and returns the reusable
+        ``{draft, rationale, alternatives}`` contract. Honors a freeform direction
+        or audits the current spread when none is given. The accept path is the
+        existing ``PUT /api/species/{id}`` (the loader Boundary), not this route.
+
+        Honest errors: a missing key / upstream failure (`LlmError`) → 503; an
+        unknown species or an out-of-range stat (`SuggestError`) → 422 — never a
+        raw 500 traceback, and the provider key never reaches the client.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
+        if entry is None:
+            raise HTTPException(
+                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
+            )
+        direction = (payload or {}).get("direction")
+        try:
+            return suggestmod.suggest_stats(
+                provider=_llm_provider(),
+                entry=entry,
+                direction=direction,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
     @app.delete("/api/species/{chrooked_id}")
     def delete_species(chrooked_id: str) -> dict[str, str]:
         try:

@@ -449,6 +449,23 @@ def _merge_type_cell(
     }
 
 
+def build_type_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[str]:
+    """The distinct type universe from the merged type chart, sorted deterministically.
+
+    Collects every type name that appears as an attacker or defender in the merged
+    type chart and returns a sorted, deduplicated list. This is the real, current
+    type universe (base ⊕ Ruleset), exactly like `build_abilities` is for abilities.
+    The suggest capability picks only from this list; a hallucinated type is a
+    `SuggestError`. Sorting makes the list cache-stable across equal Rulesets.
+    """
+    cells = build_type_chart(snapshot, ruleset)
+    names: set[str] = set()
+    for cell in cells:
+        names.add(cell["attacker"])
+        names.add(cell["defender"])
+    return sorted(names)
+
+
 def _move_schema_defaults() -> dict[str, Any]:
     """The MoveDef field defaults, in the base snapshot's JSON shapes.
 
