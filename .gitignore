@@ -22,3 +22,7 @@ targets.json
 .chrooked/targets.json
 
 feature_requests/
+
+# Local secrets/config (keep .env.example committed)
+.env
+!.env.example

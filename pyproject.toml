@@ -21,6 +21,11 @@ dev = [
 web = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
+    # Provider-agnostic LLM client behind the LlmProvider Port (D-D): one
+    # interface over Claude/OpenAI/Bedrock/Ollama/HF, model selected by config.
+    "litellm>=1.40",
+    # Load provider keys/config from a repo-root `.env` (bring-your-own-key DX).
+    "python-dotenv>=1.0",
 ]
 
 [project.scripts]

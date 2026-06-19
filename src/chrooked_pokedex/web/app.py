@@ -20,11 +20,14 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
 from ..behavior import render_packet
+from ..env import load_env_file
 from ..model import Ruleset
 from . import collections as colmod
 from . import crud as crudmod
 from . import dex as dexmod
+from . import llm as llmmod
 from . import snapshot as snapmod
+from . import suggest as suggestmod
 from . import targets as targetsmod
 
 # The Target registry lives at the project root by default (D4): a gitignored
@@ -39,10 +42,21 @@ def create_app(
     snapshot_path: Path = snapmod.DEFAULT_SNAPSHOT_PATH,
     dist_dir: Path | None = None,
     targets_path: Path | None = None,
+    llm_provider: llmmod.LlmProvider | None = None,
 ) -> FastAPI:
+    # Load a repo-root `.env` so provider keys/config are available to the LLM
+    # adapter (read lazily at request time). Covers the non-reload `ui` path that
+    # builds the app directly; idempotent with create_app_from_env. Real env wins.
+    load_env_file()
+
     app = FastAPI(title="chrooked-pokedex", version="0.1.0")
     ruleset_dir = Path(ruleset_dir)
     snapshot_path = Path(snapshot_path)
+
+    # The LLM Port hangs off app.state so tests inject a mock (no real API call,
+    # no key) and the real Adapter is built lazily only when a suggest fires.
+    # `None` means "build the configured LiteLLM Adapter on first use".
+    app.state.llm_provider = llm_provider
 
     # Per-app Target state on app.state for clean test isolation: the registry
     # path, a per-fork lock registry, and the per-Target snapshot cache (D2/D4).
@@ -165,6 +179,54 @@ def create_app(
             return crudmod.upsert_species(ruleset_dir, chrooked_id, payload)
         except crudmod.ValidationError as error:
             raise _422(error) from error
+
+    @app.post("/api/species/{chrooked_id}/suggest/ability")
+    def suggest_species_ability(
+        chrooked_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Propose a best-fit EXISTING ability for a species — never writes.
+
+        Assembles context server-side (the merged dex entry + the full ability
+        pool), runs ONE bounded Port call, and returns the reusable
+        ``{draft, rationale, alternatives}`` contract. The accept path is the
+        existing ``PUT /api/species/{id}`` (the loader Boundary), not this route.
+
+        Honest errors: a missing key / upstream failure (`LlmError`) → 503; an
+        unknown species or a hallucinated ability (`SuggestError`) → 422 — never
+        a raw 500 traceback, and the provider key never reaches the client.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
+        if entry is None:
+            raise HTTPException(
+                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
+            )
+        abilities = dexmod.build_abilities(snapshot, ruleset)
+        direction = (payload or {}).get("direction")
+        try:
+            return suggestmod.suggest_ability(
+                provider=_llm_provider(),
+                entry=entry,
+                abilities=abilities,
+                direction=direction,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            # A recoverable transport/config failure: surface the honest message
+            # (which never carries the key) as a 503, not an unhandled 500.
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
+    def _llm_provider() -> llmmod.LlmProvider:
+        """The injected mock, or the configured LiteLLM Adapter built on demand.
+
+        Lazy so importing the app never needs `litellm` or a key; the Adapter is
+        constructed only when a real suggest runs with no mock injected.
+        """
+        if app.state.llm_provider is None:
+            app.state.llm_provider = llmmod.build_provider()
+        return app.state.llm_provider
 
     @app.delete("/api/species/{chrooked_id}")
     def delete_species(chrooked_id: str) -> dict[str, str]:
@@ -394,6 +456,11 @@ def create_app_from_env() -> FastAPI:
     every code change, so it can't receive the CLI's parsed paths directly — it
     reads them from environment variables the CLI sets before launching uvicorn.
     """
+    # Load a repo-root `.env` first so provider keys/config (ANTHROPIC_API_KEY,
+    # LLM_MODEL, …) reach this worker's process env. A real env var always wins;
+    # a missing .env / python-dotenv is a no-op.
+    load_env_file()
+
     ruleset = os.environ.get("CHROOKED_RULESET")
     snapshot = os.environ.get("CHROOKED_SNAPSHOT")
     dist = os.environ.get("CHROOKED_DIST")
