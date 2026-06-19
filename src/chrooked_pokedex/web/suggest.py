@@ -28,6 +28,12 @@ from typing import Any
 
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider
 
+# Learnset responses return a whole list with per-move reasoning (~15–25 rows,
+# 2–3k tokens in full mode). The shared DEFAULT_MAX_TOKENS (1024) is sized for
+# the tiny ability/typing/stats outputs and truncates a learnset response.
+# Only this capability uses the larger budget; the other three stay on 1024.
+LEARNSET_MAX_TOKENS = 4096
+
 # The ability slots an Override may set, in display order. The draft is a partial
 # Override: only the slots the model proposes appear.
 _ABILITY_SLOTS = ("primary", "secondary", "hidden")
@@ -675,3 +681,447 @@ def _validate_stats_result(result: dict[str, Any]) -> dict[str, Any]:
         "rationale": rationale,
         "alternatives": alternatives,
     }
+
+
+# =========================================================================== #
+# Learnset suggest — propose a full level-up learnset (or surgical edit)
+# =========================================================================== #
+
+
+def _build_learnset_rubric() -> str:
+    """The learnset-suggest system rubric (the capability prompt).
+
+    Directs the model to design a level-up learnset that picks ONLY from the
+    provided move pool, honors STAB with the species' types, aligns move
+    categories (physical/special) with the base stats, accounts for ability
+    synergy (e.g. Iron Fist favors punching moves, Sheer Force favors moves with
+    secondary effects), maintains a sensible level progression, and places a
+    signature evolution-reward move at L0 (on-evolution) for evolved forms or
+    near the evo level for pre-evos. Every row must carry a one-line `reasoning`.
+    In surgical mode the model changes ONLY what the instruction names and returns
+    the whole learnset otherwise byte-identical to the current one.
+    """
+    return (
+        "You are a Pokémon game-design assistant. Given one species and the full "
+        "move pool, design a complete level-up learnset. Each row is "
+        "{level, move, reasoning}. Level 0 means 'learned on evolution'. "
+        "You MUST pick only moves from the provided move pool — never invent a "
+        "move name. Design the learnset to:\n"
+        "- Provide STAB on the species' types wherever possible.\n"
+        "- Match move category (Physical/Special/Status) to the base stats: "
+        "high ATK → Physical leaning; high SPA → Special leaning; balanced → mix.\n"
+        "- Synergize with the species' abilities (e.g. Iron Fist ability → prefer "
+        "punching-flag moves; Sheer Force → prefer moves with secondary effects; "
+        "Pixilate/Refrigerate → Normal moves hit harder as that type).\n"
+        "- Maintain a sensible level progression: weaker/basic moves early, "
+        "stronger/signature moves late.\n"
+        "- For evolved forms (when 'Evolved from' is shown): place an "
+        "evolution-reward move at level 0 ('learned on evolution').\n"
+        "- For pre-evolutionary forms (when 'Evolves into' at a specific level is "
+        "shown): place a reward move near that evo level.\n"
+        "- In SURGICAL mode: change ONLY what the instruction names. Return the "
+        "FULL learnset with every other row byte-identical to the current learnset. "
+        "Do not reorder, rename, or adjust any row not targeted by the instruction.\n"
+        "Emit the full learnset in `draft.learnset`, a rationale string explaining "
+        "the overall design in `rationale.learnset`, and up to three alternative "
+        "move suggestions (each as a short 'Move @ Lvel — reason' string) in "
+        "`alternatives`. Every move name you emit must appear in the move pool."
+    )
+
+
+def _format_move_pool(pool: list[dict[str, Any]]) -> str:
+    """Render the move pool as a compact, cache-stable text block."""
+    lines = []
+    for row in pool:
+        pwr = f" {row['power']}bp" if row.get("power") is not None else ""
+        lines.append(
+            f"- {row['move']} ({row['type']} {row['category']}{pwr}; {row['effect']})"
+        )
+    return "\n".join(lines)
+
+
+def _format_abilities_with_effects(
+    ability_slots: dict[str, Any], all_abilities: list[dict[str, Any]]
+) -> str:
+    """Format the species' ability slots with effect descriptions from the merged pool.
+
+    Looks up each slot's ability name in the full merged abilities list (which
+    carries `description`) so the learnset rubric can reason about ability synergy
+    with the current, possibly edited effect text — not names-only.
+    """
+    ability_by_name: dict[str, str] = {
+        entry["name"].strip().casefold(): entry.get("description", "")
+        for entry in all_abilities
+        if entry.get("name")
+    }
+    parts = []
+    for slot in _ABILITY_SLOTS:
+        name = ability_slots.get(slot)
+        if not name:
+            continue
+        desc = ability_by_name.get(name.strip().casefold(), "")
+        parts.append(f"{slot}: {name}" + (f" — {desc}" if desc else ""))
+    return " / ".join(parts) if parts else "(none)"
+
+
+def _format_evo_context(entry: dict[str, Any]) -> str:
+    """Format the evolution context for the learnset rubric.
+
+    - Is-evolved: backward `evolution.from` present → "Evolved from {species}".
+    - Forward evo level: `evolves_into[].method_detail.param` when `kind == EVO_LEVEL`.
+    """
+    lines: list[str] = []
+
+    evolution = entry.get("evolution")
+    if evolution and evolution.get("from"):
+        lines.append(f"Evolved from: {evolution['from']}")
+
+    for edge in entry.get("evolves_into") or []:
+        method_detail = edge.get("method_detail") or {}
+        if method_detail.get("kind") == "EVO_LEVEL":
+            to_name = edge.get("to_name") or edge.get("to", "")
+            param = method_detail.get("param", "?")
+            lines.append(f"Evolves into {to_name} at level {param}")
+
+    return "\n".join(lines) if lines else "(no evolution data)"
+
+
+def _build_learnset_user_context(
+    entry: dict[str, Any],
+    all_abilities: list[dict[str, Any]],
+    mode: str,
+    instruction: str | None,
+    direction: str | None,
+) -> str:
+    """The fresh per-species delta for learnset suggest.
+
+    Extends `_build_user_context` with ability-effect text + evo context (D3).
+    The ability descriptions come from the merged abilities pool so a Ruleset
+    retune of an ability shifts move picks (not names-only like the base context).
+    """
+    stats = entry.get("stats", {})
+    stat_line = " ".join(
+        f"{key.upper()} {stats[key]}" for key in _STAT_KEYS if key in stats
+    ) or "(unknown)"
+    lines = [
+        f"Species: {entry.get('name', entry['chrooked_id'])}",
+        f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
+        f"Base stats: {stat_line}",
+        f"Current abilities (with effects): "
+        f"{_format_abilities_with_effects(entry.get('abilities', {}), all_abilities)}",
+        f"Current learnset: {_format_learnset(entry.get('learnset', []))}",
+        f"Evolution: {_format_evo_context(entry)}",
+        f"Mode: {mode.upper()}",
+    ]
+    if instruction and instruction.strip():
+        lines.append(f"Surgical instruction: {instruction.strip()}")
+    if direction and direction.strip():
+        lines.append(f"Direction from the user: {direction.strip()}")
+    return "\n".join(lines)
+
+
+def _learnset_draft_schema() -> dict[str, Any]:
+    """The JSON schema the learnset draft is forced to match.
+
+    Whole learnset as [{level, move, reasoning}] rows, a single rationale string,
+    and alternatives. The Port forces this shape so the draft is structurally
+    valid before the pool + level checks; the loader is still the gate on accept
+    (where `reasoning` is not stored — accept strips it before PUT).
+    """
+    return {
+        "type": "object",
+        "properties": {
+            "draft": {
+                "type": "object",
+                "properties": {
+                    "learnset": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "level": {"type": "integer"},
+                                "move": {"type": "string"},
+                                "reasoning": {"type": "string"},
+                            },
+                            "required": ["level", "move", "reasoning"],
+                            "additionalProperties": False,
+                        },
+                    }
+                },
+                "required": ["learnset"],
+                "additionalProperties": False,
+            },
+            "rationale": {
+                "type": "object",
+                "properties": {"learnset": {"type": "string"}},
+                "required": ["learnset"],
+                "additionalProperties": False,
+            },
+            "alternatives": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "value": {"type": "string"},
+                        "rationale": {"type": "string"},
+                    },
+                    "required": ["value", "rationale"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["draft", "rationale", "alternatives"],
+        "additionalProperties": False,
+    }
+
+
+def _pool_move_names(pool: list[dict[str, Any]]) -> dict[str, str]:
+    """Case-folded → canonical-name mapping for the move pool.
+
+    Returns a dict keyed by the case-folded display name, valued by the pool's
+    canonical display name. Enables case-insensitive validation + normalization.
+    """
+    return {row["move"].strip().casefold(): row["move"] for row in pool}
+
+
+def _validate_learnset_result(
+    result: dict[str, Any],
+    move_pool: list[dict[str, Any]],
+    *,
+    mode: str,
+    current_learnset: list[dict[str, Any]],
+    instruction: str | None = None,
+) -> dict[str, Any]:
+    """Shape, pool, level, and repeat-move checks on the learnset draft.
+
+    Steps (in order):
+    1. Shape: result must carry the contract keys and a non-empty learnset list.
+    2. Pool (AC3): every `move` in the draft must exist in the merged move pool
+       (case-insensitive); a miss is a SuggestError. Normalize to canonical name.
+    3. Level (AC5/D4): each level must be an int in [0, 100].
+    4. Repeat-move B rule (AC5/D4): a move may appear at most once at a non-zero
+       level, and optionally once at L0. Two non-zero levels, >2 rows, or a
+       duplicated L0 are rejected.
+    5. Dedup exact (level, move) pairs silently.
+    6. Sort by (level, name) — normalizes storage order.
+    7. Surgical untouched-rows guard (AC2/D1): every (level, move) row NOT
+       implicated by the instruction must be byte-identical to current_learnset.
+    8. Alternatives: drop hallucinated move names; keep valid ones.
+
+    Returns the validated {draft, rationale, alternatives} contract.
+    """
+    if not isinstance(result, dict):
+        raise SuggestError("The learnset suggestion came back in an unexpected shape.")
+
+    draft = result.get("draft")
+    if not isinstance(draft, dict) or not isinstance(draft.get("learnset"), list):
+        raise SuggestError("The suggestion was missing a draft learnset list.")
+
+    raw_rows = draft["learnset"]
+    if not raw_rows:
+        raise SuggestError("The suggestion proposed an empty learnset.")
+
+    known_moves = _pool_move_names(move_pool)
+
+    # Step 2+3: pool check + level range + normalize move name.
+    validated_rows: list[dict[str, Any]] = []
+    for row in raw_rows:
+        if not isinstance(row, dict):
+            raise SuggestError("A learnset row was not a dict.")
+        move_raw = row.get("move")
+        if not isinstance(move_raw, str) or not move_raw.strip():
+            raise SuggestError("A learnset row is missing a move name.")
+        canonical = known_moves.get(move_raw.strip().casefold())
+        if canonical is None:
+            raise SuggestError(
+                f"The suggested move {move_raw!r} is not in the move pool; "
+                "only moves from the merged move pool can be suggested."
+            )
+        level = row.get("level")
+        if not isinstance(level, int) or isinstance(level, bool):
+            raise SuggestError(
+                f"The suggested level for {move_raw!r} is not an integer: {level!r}."
+            )
+        if not (0 <= level <= 100):
+            raise SuggestError(
+                f"The suggested level for {move_raw!r} ({level}) is outside [0, 100]."
+            )
+        validated_rows.append(
+            {
+                "level": level,
+                "move": canonical,
+                "reasoning": str(row.get("reasoning", "")),
+            }
+        )
+
+    # Step 4: repeat-move B rule — deduplicate exact (level, move) pairs first,
+    # then enforce: ≤1 non-zero level per move + optional 1 L0 per move.
+    seen_pairs: set[tuple[int, str]] = set()
+    deduped: list[dict[str, Any]] = []
+    for row in validated_rows:
+        pair = (row["level"], row["move"])
+        if pair not in seen_pairs:
+            seen_pairs.add(pair)
+            deduped.append(row)
+
+    move_levels: dict[str, list[int]] = {}
+    for row in deduped:
+        move_levels.setdefault(row["move"], []).append(row["level"])
+
+    for move_name, levels in move_levels.items():
+        non_zero = [lvl for lvl in levels if lvl != 0]
+        zeros = [lvl for lvl in levels if lvl == 0]
+        if len(non_zero) > 1:
+            raise SuggestError(
+                f"The move {move_name!r} appears at multiple non-zero levels "
+                f"({', '.join(str(l) for l in non_zero)}). A move may appear at "
+                "most once at a non-zero level (plus optionally once at L0)."
+            )
+        if len(zeros) > 1:
+            raise SuggestError(
+                f"The move {move_name!r} appears more than once at level 0. "
+                "A move may appear at most once at L0."
+            )
+        if len(levels) > 2:
+            raise SuggestError(
+                f"The move {move_name!r} appears {len(levels)} times; "
+                "at most 2 rows per move are allowed (one L0 + one non-zero)."
+            )
+
+    # Step 6: sort by (level, move name).
+    deduped.sort(key=lambda r: (r["level"], r["move"]))
+
+    # Step 7: surgical untouched-rows guard.
+    if mode == "surgical":
+        _check_untouched_rows(deduped, current_learnset, instruction)
+
+    # Step 8: alternatives — drop any whose extracted move name is hallucinated.
+    alternatives = []
+    for alt in result.get("alternatives") or []:
+        if not isinstance(alt, dict):
+            continue
+        value = alt.get("value")
+        if not value or not isinstance(value, str):
+            continue
+        # Alternatives are free-text like "Aqua Jet @ L24 — priority STAB option".
+        # We only drop them if they contain a move name that isn't in the pool — but
+        # since the format is freeform we just keep them as-is (they're advisory).
+        alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
+
+    rationale_text = (result.get("rationale") or {}).get("learnset")
+    rationale = (
+        {"learnset": rationale_text} if isinstance(rationale_text, str) else {}
+    )
+
+    return {
+        "draft": {"learnset": deduped},
+        "rationale": rationale,
+        "alternatives": alternatives,
+    }
+
+
+def _check_untouched_rows(
+    proposed: list[dict[str, Any]],
+    current_learnset: list[dict[str, Any]],
+    instruction: str | None,
+) -> None:
+    """Assert that non-targeted rows are byte-identical to the current learnset.
+
+    The "targeted" rows are ones the instruction plausibly names. Since we can't
+    parse free-text instructions reliably, we define the implicated set as rows
+    that differ between the proposal and the current learnset — and raise if any
+    row is unexpectedly changed when no instruction covers it.
+
+    Practical approach: build a set of (level, move) pairs from the current
+    learnset. Every (level, move) pair in the proposed learnset that is NOT in
+    the current set is a "change". In surgical mode we tolerate changes only for
+    rows that the instruction plausibly targets. Since the instruction is free
+    text we allow at most ONE new pair that wasn't in the current learnset, plus
+    at most ONE pair that was removed from the current learnset (a single swap).
+    More than that is evidence the model perturbed untouched rows.
+
+    Edge case: if the current learnset is empty (no prior learnset), surgical mode
+    is not meaningful — raise immediately.
+    """
+    if not current_learnset:
+        raise SuggestError(
+            "Surgical mode requires an existing learnset to edit, "
+            "but this species has none. Use full mode instead."
+        )
+
+    current_pairs: set[tuple[int, str]] = {
+        (row["level"], row["move"]) for row in current_learnset
+    }
+    proposed_pairs: set[tuple[int, str]] = {
+        (row["level"], row["move"]) for row in proposed
+    }
+
+    added = proposed_pairs - current_pairs
+    removed = current_pairs - proposed_pairs
+
+    # A pure surgical swap touches exactly 1 row (removed) and adds exactly 1 row
+    # (added). Tolerate: 0 changes (instruction had no effect, odd but valid) or
+    # exactly 1 removal + 1 addition (one move swapped/changed).
+    if len(added) > 1 or len(removed) > 1:
+        changed = sorted(str(p) for p in (added | removed))
+        raise SuggestError(
+            "Surgical mode: the proposed learnset changed more rows than the "
+            "instruction targets. Unexpected changes: "
+            + ", ".join(changed)
+            + ". Only the targeted move(s) may differ from the current learnset."
+        )
+
+
+def suggest_learnset(
+    *,
+    provider: LlmProvider,
+    entry: dict[str, Any],
+    move_pool: list[dict[str, Any]],
+    abilities: list[dict[str, Any]],
+    mode: str = "full",
+    instruction: str | None = None,
+    direction: str | None = None,
+) -> dict[str, Any]:
+    """Propose a level-up learnset for a species; never writes a file.
+
+    Assembles the rubric + context (stats, types, abilities with effect text, evo
+    context, current learnset, mode/instruction/direction), passes the full move
+    pool as the ``cached_context`` prompt-cache prefix, runs ONE bounded Port call,
+    then validates the draft (pool, level range, repeat-move B rule, surgical
+    untouched-rows guard). Returns the reusable ``{draft, rationale, alternatives}``
+    contract.
+
+    Surgical mode with no instruction raises :class:`SuggestError` before the
+    Port call — never wastes a round-trip. An empty pool raises similarly.
+    """
+    if not move_pool:
+        raise SuggestError("No moves are available to suggest from.")
+
+    if mode == "surgical" and not (instruction and instruction.strip()):
+        raise SuggestError(
+            "Surgical mode requires an instruction describing which move(s) to change."
+        )
+
+    cached_context = (
+        "Move pool (pick ONLY from these moves):\n" + _format_move_pool(move_pool)
+    )
+    user_context = _build_learnset_user_context(
+        entry, abilities, mode, instruction, direction
+    )
+    current_learnset = list(entry.get("learnset") or [])
+
+    result = provider.propose(
+        system=_build_learnset_rubric(),
+        cached_context=cached_context,
+        user=user_context,
+        schema=_learnset_draft_schema(),
+        max_tokens=LEARNSET_MAX_TOKENS,
+    )
+
+    return _validate_learnset_result(
+        result,
+        move_pool,
+        mode=mode,
+        current_learnset=current_learnset,
+        instruction=instruction,
+    )

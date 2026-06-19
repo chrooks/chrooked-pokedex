@@ -264,6 +264,56 @@ def create_app(
         except llmmod.LlmError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
 
+    @app.post("/api/species/{chrooked_id}/suggest/learnset")
+    def suggest_species_learnset(
+        chrooked_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Propose a full level-up learnset (or surgical edit) for a species — never writes.
+
+        Assembles context server-side (the merged dex entry, the full merged move
+        pool, and the merged abilities with effect text), runs ONE bounded Port call,
+        and returns the reusable ``{draft, rationale, alternatives}`` contract. The
+        accept path is the existing ``PUT /api/species/{id}`` (the loader Boundary);
+        the `reasoning` field in each learnset row is proposal-only — strip it before
+        PUT (the loader stores only `level` + `move`).
+
+        Modes:
+        - ``full`` (default): propose a whole learnset from scratch.
+        - ``surgical``: change only the targeted move(s); requires `instruction`.
+
+        Honest errors: a missing key / upstream failure (`LlmError`) → 503; an
+        unknown species, a hallucinated move, an invalid level, a repeat-move
+        violation, a surgical untouched-rows guard failure, or a missing instruction
+        in surgical mode (`SuggestError`) → 422 — never a raw 500 traceback.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
+        if entry is None:
+            raise HTTPException(
+                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
+            )
+        move_pool = dexmod.build_move_pool(snapshot, ruleset)
+        abilities = dexmod.build_abilities(snapshot, ruleset)
+        body = payload or {}
+        mode = body.get("mode", "full")
+        instruction = body.get("instruction")
+        direction = body.get("direction")
+        try:
+            return suggestmod.suggest_learnset(
+                provider=_llm_provider(),
+                entry=entry,
+                move_pool=move_pool,
+                abilities=abilities,
+                mode=mode,
+                instruction=instruction,
+                direction=direction,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
     @app.post("/api/species/{chrooked_id}/suggest/stats")
     def suggest_species_stats(
         chrooked_id: str, payload: dict[str, Any] | None = None

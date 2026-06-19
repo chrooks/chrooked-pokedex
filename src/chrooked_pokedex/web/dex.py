@@ -466,6 +466,30 @@ def build_type_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[str]:
     return sorted(names)
 
 
+def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
+    """The compact move pool the model picks learnset moves from.
+
+    Built from the merged moves collection (``build_moves``) so it is the real,
+    current set (base ⊕ Ruleset): an edited move shows its new type/power, and a
+    created move is present. Each row carries only the fields the learnset rubric
+    needs — name, type, category, power, and a short effect string. Sorted by name
+    for a deterministic, cache-stable prefix. Rows without a name are dropped.
+    """
+    all_moves = build_moves(snapshot, ruleset)
+    pool = [
+        {
+            "move": entry["name"],
+            "type": entry.get("type") or "",
+            "category": entry.get("category") or "",
+            "power": entry.get("power"),
+            "effect": entry.get("effect") or "",
+        }
+        for entry in all_moves
+        if entry.get("name")
+    ]
+    return sorted(pool, key=lambda row: row["move"])
+
+
 def _move_schema_defaults() -> dict[str, Any]:
     """The MoveDef field defaults, in the base snapshot's JSON shapes.
 

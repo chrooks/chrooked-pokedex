@@ -179,6 +179,21 @@ class LiteLlmProvider:
                 f"The LLM provider call failed: {type(error).__name__}."
             ) from error
 
+        # Detect an output truncated at the token cap before attempting to
+        # parse the tool-call arguments. A truncated response surfaces as a
+        # misleading parse error (bad JSON / no tool-call) without this guard.
+        # Only raise when finish_reason is explicitly "length" — absent or None
+        # means the model stopped normally, not that it was cut off.
+        try:
+            finish_reason = response.choices[0].finish_reason
+        except (AttributeError, IndexError, TypeError):
+            finish_reason = None
+        if finish_reason == "length":
+            raise LlmError(
+                "The LLM response was truncated at the token limit; "
+                "try again or reduce scope."
+            )
+
         return self._parse_tool_arguments(response)
 
     @staticmethod
