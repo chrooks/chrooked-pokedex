@@ -1,6 +1,6 @@
 name: Buizel
 chrooked_id: buizel
 aka: { pokeemerald: SPECIES_BUIZEL }
+types: [Water, Normal]
 abilities:
-  secondary: Water Veil
   hidden: Hydrate

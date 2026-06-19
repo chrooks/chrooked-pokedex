@@ -1,6 +1,7 @@
 name: Floatzel
 chrooked_id: floatzel
 aka: { pokeemerald: SPECIES_FLOATZEL }
+types: [Water, Normal]
 abilities:
   secondary: Water Veil
   hidden: Hydrate
