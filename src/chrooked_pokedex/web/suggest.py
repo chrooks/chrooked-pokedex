@@ -24,6 +24,7 @@ this ``{draft, rationale, alternatives}`` contract, and the accept-through-CRUD 
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider
@@ -1125,3 +1126,485 @@ def suggest_learnset(
         current_learnset=current_learnset,
         instruction=instruction,
     )
+
+
+# =========================================================================== #
+# Ability creation — DRAFT a new owned ability + an engine-neutral behavior
+# stub + a species-distribution plan (#8). The FIRST capability that *creates*
+# owned content rather than picking from a pool, so it does NOT validate against
+# an ability pool — instead it slugifies a new id, REFUSES to clobber an existing
+# id (collision → SuggestError, D4 — a HARD fail), forces the behavior stub's
+# engine_hints empty (D1 — a HARD fail), and validates each distribution row
+# against the dex. A row naming an out-of-dex species or an invalid slot is
+# DROPPED with a warning (bounce-1 amendment to D4) — the model knows ~1000
+# species but this dex carries a subset, so an out-of-dex pick must not fail the
+# whole proposal; valid rows are kept and `replaces` is enriched from the real
+# current slot. The model is fed the in-dex species roster so its picks land.
+# =========================================================================== #
+
+# The "STUB" note the draft must carry on its behavior so the human's grounding
+# pass is unmistakable. Asserted in validation so a draft that drops it still
+# lands a clear marker on disk (D1).
+_BEHAVIOR_STUB_NOTE = (
+    "STUB — engine_hints ungrounded, needs human grounding pass"
+)
+
+
+def slugify_ability_id(name: str) -> str:
+    """Derive a new ability's chrooked_id from its display name (D4).
+
+    The owned-ability id style is lowercase with NO separators (matches
+    ``aerodynamic``/``bonebreaker``): lowercase the name and strip everything
+    outside ``[a-z0-9]``. ``"Tidal Force" -> "tidalforce"``.
+    """
+    return re.sub(r"[^a-z0-9]", "", name.casefold())
+
+
+def _build_ability_creation_rubric() -> str:
+    """The ability-creation system rubric (the capability prompt).
+
+    Directs the model to DESIGN one brand-new ability from a freeform direction:
+    a name, a one-paragraph mechanic description, an advisory AI rating, an
+    engine-neutral behavior spec stub (effects + test_cases + design notes), and
+    a distribution plan (species BY NAME, slot, brief reasoning). Two hard rules
+    fence off the core hazard and keep create honest:
+    - MUST NOT write ``engine_hints`` — engine grounding is a human pass (D1).
+    - MUST NOT reuse an existing ability name/id — create means new (D4).
+    """
+    triggers = ", ".join(sorted(_NEUTRAL_TRIGGERS))
+    return (
+        "You are a Pokémon game-design assistant. From a freeform direction, "
+        "DESIGN ONE brand-new ability. Produce:\n"
+        "- `ability`: a `name` (Title Case) and a one-paragraph `description` of "
+        "the mechanic.\n"
+        "- `behavior`: an engine-neutral behavior spec for the ability. Each "
+        "effect is {summary, trigger, when, effect}; the `trigger` MUST be one of: "
+        f"{triggers}. `when` is an optional plain-language condition (use '' if "
+        "always-on). Include 2-3 `test_cases` ({given, expect}) and design `notes`.\n"
+        "- `distribution`: a list of species the ability fits — each {species "
+        "(real Pokémon NAME), slot (one of primary/secondary/hidden), reasoning}. "
+        "Choose distribution species ONLY from the provided roster; do NOT name any "
+        "species not listed (this dex is a subset of all Pokémon). It is fine to "
+        "propose ZERO species (author now, distribute later).\n"
+        "- `ai_rating`: a short advisory competitive-power rating (e.g. 'A- — "
+        "strong pivot, not broken'). Advisory only; not stored as data.\n"
+        "HARD RULES:\n"
+        "1. You MUST NOT write any `engine_hints` — leave it empty. Engine "
+        "grounding (C citations / Essentials translation) is a human pass; a "
+        "fabricated citation is the one thing you must never invent.\n"
+        "2. You MUST NOT reuse the name of any existing ability in the pool; this "
+        "is a NEW ability.\n"
+        "Put the ability + behavior + distribution in `draft`, the reasoning in "
+        "`rationale` (with `ability`, `ai_rating`, and `distribution` strings), "
+        "and up to three alternative ability ideas in `alternatives`."
+    )
+
+
+# The neutral battle triggers an effect may attach to. Mirrors
+# ``collections.TRIGGERS`` (the behavior-spec source of truth) so the rubric and
+# the schema stay aligned with the loader's accepted set.
+_NEUTRAL_TRIGGERS = frozenset(
+    {
+        "switch-in",
+        "turn-order",
+        "accuracy-check",
+        "damage-calc",
+        "on-hit",
+        "on-contact",
+        "status-apply",
+        "stat-change",
+        "turn-end",
+        "faint",
+    }
+)
+
+
+def _ability_creation_draft_schema() -> dict[str, Any]:
+    """The JSON schema the ability-creation draft is forced to match.
+
+    Forces the {ability, behavior, distribution} draft shape so it is
+    structurally valid before the create-flow validation (id slugify + collision,
+    empty engine_hints, distribution species/slot checks). ``engine_hints`` is
+    typed as an empty-only object so the model is steered away from filling it;
+    the validator is still the hard gate (D1).
+    """
+    return {
+        "type": "object",
+        "properties": {
+            "draft": {
+                "type": "object",
+                "properties": {
+                    "ability": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string"},
+                            "description": {"type": "string"},
+                        },
+                        "required": ["name", "description"],
+                        "additionalProperties": False,
+                    },
+                    "behavior": {
+                        "type": "object",
+                        "properties": {
+                            "effects": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "summary": {"type": "string"},
+                                        "trigger": {"type": "string"},
+                                        "when": {"type": "string"},
+                                        "effect": {"type": "string"},
+                                    },
+                                    "required": ["summary", "trigger", "effect"],
+                                    "additionalProperties": False,
+                                },
+                            },
+                            "test_cases": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "given": {"type": "string"},
+                                        "expect": {"type": "string"},
+                                    },
+                                    "required": ["given", "expect"],
+                                    "additionalProperties": False,
+                                },
+                            },
+                            "notes": {"type": "array", "items": {"type": "string"}},
+                            "engine_hints": {
+                                "type": "object",
+                                "additionalProperties": False,
+                            },
+                        },
+                        "required": ["effects"],
+                        "additionalProperties": False,
+                    },
+                    "distribution": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "species": {"type": "string"},
+                                "slot": {"type": "string"},
+                                "reasoning": {"type": "string"},
+                            },
+                            "required": ["species", "slot"],
+                            "additionalProperties": False,
+                        },
+                    },
+                },
+                "required": ["ability", "behavior", "distribution"],
+                "additionalProperties": False,
+            },
+            "rationale": {
+                "type": "object",
+                "properties": {
+                    "ability": {"type": "string"},
+                    "ai_rating": {"type": "string"},
+                    "distribution": {"type": "string"},
+                },
+                "additionalProperties": False,
+            },
+            "alternatives": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "value": {"type": "string"},
+                        "rationale": {"type": "string"},
+                    },
+                    "required": ["value", "rationale"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["draft", "rationale", "alternatives"],
+        "additionalProperties": False,
+    }
+
+
+def _format_roster(roster: list[str]) -> str:
+    """Render the species roster as a compact, cache-stable bullet list."""
+    return "\n".join(f"- {name}" for name in roster)
+
+
+def suggest_ability_creation(
+    *,
+    provider: LlmProvider,
+    direction: str,
+    ability_pool: list[dict[str, str]],
+    ability_ids: set[str],
+    behavior_ids: set[str],
+    dex_lookup: dict[str, dict[str, Any]],
+    roster: list[str],
+) -> dict[str, Any]:
+    """Draft a brand-new ability + behavior stub + distribution; never writes.
+
+    Assembles the rubric + the existing ability pool AND the species roster (both
+    as ``cached_context``, so the model neither duplicates an existing ability nor
+    names a species this dex doesn't carry), runs ONE bounded Port call, then
+    validates the draft:
+
+    - the new ability id is ``slugify_ability_id(name)`` and must NOT collide
+      with an existing owned-ability OR behavior id (collision → a
+      :class:`SuggestError` — create refuses to clobber, D4 — UNCHANGED hard fail);
+    - the behavior stub's ``engine_hints`` MUST be empty (else SuggestError, D1);
+    - each distribution row's species must exist in ``dex_lookup`` and its slot
+      must be one of primary/secondary/hidden, and ``replaces`` is enriched from
+      that species' real current slot occupant (D2/D4). A row naming an unknown
+      species or an invalid slot is DROPPED with a ``warnings`` entry rather than
+      failing the whole proposal (bounce-1 amendment to D4).
+
+    ``direction`` is required (the freeform brief). ``dex_lookup`` is keyed by
+    case-folded species NAME → merged dex entry. ``roster`` is the sorted list of
+    in-dex species display names fed to the model. Returns the reusable
+    ``{draft, rationale, alternatives}`` contract, plus a ``warnings`` list (empty
+    when every row was valid).
+    """
+    if not direction or not direction.strip():
+        raise SuggestError(
+            "An ability-creation direction is required (describe the ability)."
+        )
+
+    cached_context = (
+        "Existing abilities (do NOT reuse a name; this is a NEW ability):\n"
+        + (_format_pool(ability_pool) or "(none)")
+        + "\n\nSpecies roster (choose distribution species ONLY from these — this "
+        "dex is a subset of all Pokémon; do NOT name any species not listed):\n"
+        + (_format_roster(roster) or "(none)")
+    )
+    result = provider.propose(
+        system=_build_ability_creation_rubric(),
+        cached_context=cached_context,
+        user=f"Direction from the user: {direction.strip()}",
+        schema=_ability_creation_draft_schema(),
+        max_tokens=LEARNSET_MAX_TOKENS,
+    )
+
+    return _validate_ability_creation_result(
+        result,
+        ability_ids=ability_ids,
+        behavior_ids=behavior_ids,
+        dex_lookup=dex_lookup,
+    )
+
+
+def _validate_ability_creation_result(
+    result: dict[str, Any],
+    *,
+    ability_ids: set[str],
+    behavior_ids: set[str],
+    dex_lookup: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """Shape + create-safety check on the ability-creation draft.
+
+    Steps (in order):
+    1. Shape: contract keys, a draft with `ability`/`behavior`/`distribution`.
+    2. Ability name non-empty; ``chrooked_id = slugify_ability_id(name)``.
+    3. Collision (D4): the id must not match any existing owned-ability OR
+       behavior id → a SuggestError (create never clobbers — HARD fail, unchanged).
+    4. Behavior stub (D1): engine_hints MUST be empty; at least one effect; each
+       effect's trigger must be a neutral trigger. The stub is forced to carry
+       empty engine_hints + aka and the "needs grounding" note. Filling
+       engine_hints is a HARD SuggestError (unchanged).
+    5. Distribution (D2/D4, softened at bounce 1): each species must exist in the
+       dex (by name) and each slot ∈ {primary, secondary, hidden}; `replaces` is
+       enriched from the species' real current slot occupant. A row that fails
+       either check is DROPPED with a `warnings` entry (not a request failure);
+       zero surviving rows is valid.
+
+    A shape/name/collision/engine_hints miss is a :class:`SuggestError` — nothing
+    is written and the endpoint surfaces an honest message. A bad distribution row
+    is dropped-with-warning, mirroring how a hallucinated alternative is dropped.
+    """
+    if not isinstance(result, dict):
+        raise SuggestError("The suggestion came back in an unexpected shape.")
+
+    draft = result.get("draft")
+    if not isinstance(draft, dict):
+        raise SuggestError("The suggestion was missing a draft object.")
+
+    ability = draft.get("ability")
+    if not isinstance(ability, dict):
+        raise SuggestError("The suggestion was missing a draft ability object.")
+    name = ability.get("name")
+    if not isinstance(name, str) or not name.strip():
+        raise SuggestError("The drafted ability has no name.")
+    name = name.strip()
+    chrooked_id = slugify_ability_id(name)
+    if not chrooked_id:
+        raise SuggestError(
+            f"The drafted ability name {name!r} has no usable characters for an id."
+        )
+
+    # Collision (D4): create refuses to clobber an existing id. We surface the
+    # collision in `warnings` AND raise so the route can both inform and refuse.
+    if chrooked_id in ability_ids or chrooked_id in behavior_ids:
+        raise SuggestError(
+            f"id {chrooked_id!r} (from name {name!r}) already exists as an "
+            "ability or behavior — rename before creating (create never clobbers)."
+        )
+
+    behavior = _validate_behavior_stub(draft.get("behavior"), name, chrooked_id)
+    distribution, warnings = _validate_distribution(
+        draft.get("distribution"), dex_lookup
+    )
+
+    rationale_raw = result.get("rationale") or {}
+    rationale = {
+        key: rationale_raw[key]
+        for key in ("ability", "ai_rating", "distribution")
+        if isinstance(rationale_raw.get(key), str)
+    }
+
+    alternatives = []
+    for alt in result.get("alternatives") or []:
+        if not isinstance(alt, dict):
+            continue
+        value = alt.get("value")
+        if not value or not isinstance(value, str):
+            continue
+        alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
+
+    return {
+        "draft": {
+            "ability": {
+                "chrooked_id": chrooked_id,
+                "name": name,
+                "description": str(ability.get("description", "")),
+            },
+            "behavior": behavior,
+            "distribution": distribution,
+        },
+        "rationale": rationale,
+        "alternatives": alternatives,
+        "warnings": warnings,
+    }
+
+
+def _validate_behavior_stub(
+    behavior: Any, name: str, chrooked_id: str
+) -> dict[str, Any]:
+    """Validate + normalize the engine-neutral behavior stub (D1).
+
+    Enforces: at least one effect, every effect's trigger is a neutral trigger,
+    and ``engine_hints`` is empty. Forces the stub's ``engine_hints``/``aka``
+    empty and guarantees the "needs grounding" note is present so the on-disk
+    write is unambiguously an ungrounded scaffold.
+    """
+    if not isinstance(behavior, dict):
+        raise SuggestError("The suggestion was missing a draft behavior object.")
+
+    # D1: the model must not fabricate engine grounding.
+    engine_hints = behavior.get("engine_hints")
+    if engine_hints:
+        raise SuggestError(
+            "The drafted behavior set engine_hints; engine grounding is a human "
+            "pass and must be left empty (the LLM must not fabricate it)."
+        )
+
+    raw_effects = behavior.get("effects")
+    if not isinstance(raw_effects, list) or not raw_effects:
+        raise SuggestError("The drafted behavior has no effects.")
+
+    effects = []
+    for effect in raw_effects:
+        if not isinstance(effect, dict):
+            raise SuggestError("A behavior effect was not an object.")
+        trigger = effect.get("trigger", "")
+        if trigger not in _NEUTRAL_TRIGGERS:
+            raise SuggestError(
+                f"The behavior effect trigger {trigger!r} is not a neutral "
+                f"trigger; allowed: {', '.join(sorted(_NEUTRAL_TRIGGERS))}."
+            )
+        when = effect.get("when")
+        effects.append(
+            {
+                "summary": str(effect.get("summary", "")),
+                "trigger": trigger,
+                "when": when if (isinstance(when, str) and when.strip()) else None,
+                "effect": str(effect.get("effect", "")),
+            }
+        )
+
+    test_cases = [
+        {"given": str(tc.get("given", "")), "expect": str(tc.get("expect", ""))}
+        for tc in (behavior.get("test_cases") or [])
+        if isinstance(tc, dict)
+    ]
+
+    notes = [str(note) for note in (behavior.get("notes") or []) if str(note).strip()]
+    if _BEHAVIOR_STUB_NOTE not in notes:
+        notes.append(_BEHAVIOR_STUB_NOTE)
+
+    return {
+        "name": name,
+        "chrooked_id": chrooked_id,
+        "applies_to": "ability",
+        "aka": {},
+        "effects": effects,
+        "test_cases": test_cases,
+        "notes": notes,
+        "engine_hints": {},
+    }
+
+
+def _validate_distribution(
+    distribution: Any, dex_lookup: dict[str, dict[str, Any]]
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Validate + enrich the distribution plan (D2/D4, softened at bounce 1).
+
+    Each row's ``species`` (proposed by NAME) must resolve in ``dex_lookup``
+    (case-folded name → merged entry); the ``slot`` must be one of
+    primary/secondary/hidden; ``replaces`` is enriched from that species' real
+    current slot occupant ('(none)' for an empty slot).
+
+    A row that names a species not in the dex, or an invalid slot, is DROPPED and
+    recorded in the returned ``warnings`` list — not a request failure. This
+    mirrors how a hallucinated alternative is dropped: the model knows ~1000
+    species but this dex carries a subset, so an out-of-dex pick is expected and
+    must not fail the whole proposal. An all-dropped distribution → an empty list
+    (allowed) with warnings explaining why.
+
+    Returns ``(rows, warnings)``.
+    """
+    warnings: list[str] = []
+    if distribution is None:
+        return [], warnings
+    if not isinstance(distribution, list):
+        warnings.append("Dropped the distribution — it was not a list.")
+        return [], warnings
+
+    rows: list[dict[str, Any]] = []
+    for row in distribution:
+        if not isinstance(row, dict):
+            warnings.append("Dropped a distribution row — it was not an object.")
+            continue
+        species_name = row.get("species")
+        if not isinstance(species_name, str) or not species_name.strip():
+            warnings.append("Dropped a distribution row — missing a species name.")
+            continue
+        species_name = species_name.strip()
+        entry = dex_lookup.get(species_name.casefold())
+        if entry is None:
+            warnings.append(f"Dropped {species_name!r} — not in the dex.")
+            continue
+        slot = row.get("slot")
+        if slot not in _ABILITY_SLOTS:
+            warnings.append(
+                f"Dropped {species_name}/{slot!r} — invalid slot "
+                f"(must be one of {', '.join(_ABILITY_SLOTS)})."
+            )
+            continue
+        current = (entry.get("abilities") or {}).get(slot)
+        rows.append(
+            {
+                "species": entry.get("chrooked_id", species_name),
+                "slot": slot,
+                "replaces": current if current else "(none)",
+                "reasoning": str(row.get("reasoning", "")),
+            }
+        )
+    return rows, warnings

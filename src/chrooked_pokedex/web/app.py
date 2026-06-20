@@ -375,6 +375,62 @@ def create_app(
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
+    @app.post("/api/abilities/suggest")
+    def suggest_ability_creation(
+        payload: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Draft a brand-new ability + behavior stub + distribution — never writes.
+
+        The FIRST capability that *creates* owned content rather than picking from
+        a pool. Assembles context server-side (the existing ability pool as the
+        cache prefix, the owned-ability ∪ behavior id sets for the collision check,
+        and a name→entry dex lookup so each distribution row is validated and its
+        `replaces` enriched from the real current slot), runs ONE bounded Port call,
+        and returns the reusable ``{draft, rationale, alternatives}`` contract.
+
+        The accept path is the existing CRUD routes, client-orchestrated in order
+        (``PUT /api/abilities/{id}`` → ``PUT /api/behaviors/{id}`` →
+        ``PUT /api/species/{id}`` ×N) — there is NO new write route here.
+
+        Honest errors: a bad shape, an empty name, an id collision, a non-empty
+        engine_hints, a hallucinated species, or an invalid slot (`SuggestError`)
+        → 422; a missing key / upstream failure (`LlmError`) → 503 — never a raw
+        500 traceback, and the provider key never reaches the client.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        abilities = dexmod.build_abilities(snapshot, ruleset)
+        ability_pool = suggestmod.build_ability_pool(abilities)
+        # The collision set spans BOTH owned abilities and behaviors (D4): a new
+        # ability id must not shadow either. Both are keyed by chrooked_id.
+        ability_ids = set(ruleset.abilities)
+        behavior_ids = set(ruleset.behaviors)
+        # Name → merged dex entry: the model proposes species BY NAME, so the
+        # distribution validation resolves + enriches by case-folded name.
+        dex = dexmod.build_dex(snapshot, ruleset)
+        dex_lookup = {entry["name"].strip().casefold(): entry for entry in dex}
+        # The in-dex species roster (sorted, deterministic) is fed to the model
+        # so its distribution picks land in-dex — the model knows ~1000 species
+        # but this dex carries a subset (bounce-1 fix).
+        roster = sorted(
+            entry["name"] for entry in dex if entry.get("name")
+        )
+        direction = (payload or {}).get("direction", "")
+        try:
+            return suggestmod.suggest_ability_creation(
+                provider=_llm_provider(),
+                direction=direction,
+                ability_pool=ability_pool,
+                ability_ids=ability_ids,
+                behavior_ids=behavior_ids,
+                dex_lookup=dex_lookup,
+                roster=roster,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
     @app.delete("/api/abilities/{chrooked_id}")
     def delete_ability(chrooked_id: str, confirm: bool = False) -> dict[str, str]:
         return _delete_owned(crudmod.delete_ability, chrooked_id, confirm)
