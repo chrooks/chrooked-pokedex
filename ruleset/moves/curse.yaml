@@ -1,0 +1,10 @@
+name: Curse
+chrooked_id: curse
+aka: { pokeemerald: MOVE_CURSE }
+type: Ghost
+category: status
+power: 0
+accuracy: 0
+pp: 10
+description: A move that functions differently for GHOSTS.
+effect: curse

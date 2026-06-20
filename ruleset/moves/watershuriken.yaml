@@ -1,0 +1,11 @@
+name: Water Shuriken
+chrooked_id: watershuriken
+aka: { pokeemerald: MOVE_WATER_SHURIKEN }
+type: Water
+category: special
+power: 15
+accuracy: 100
+pp: 20
+description: Throws 2 to 5 stars that are sure to strike first.
+effect: multi_hit
+priority: 1

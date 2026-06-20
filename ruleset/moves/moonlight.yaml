@@ -1,0 +1,11 @@
+name: Moonlight
+chrooked_id: moonlight
+aka: { pokeemerald: MOVE_MOONLIGHT }
+type: Fairy
+category: status
+power: 0
+accuracy: 0
+pp: 5
+description: Restores HP. The amount varies with the weather.
+effect: moonlight
+target: user

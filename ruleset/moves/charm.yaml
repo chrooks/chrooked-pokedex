@@ -1,0 +1,10 @@
+name: Charm
+chrooked_id: charm
+aka: { pokeemerald: MOVE_CHARM }
+type: Fairy
+category: status
+power: 0
+accuracy: 100
+pp: 20
+description: Charms the foe and sharply reduces its Attack.
+effect: attack_down_2

@@ -1,0 +1,10 @@
+name: Sweet Kiss
+chrooked_id: sweetkiss
+aka: { pokeemerald: MOVE_SWEET_KISS }
+type: Fairy
+category: status
+power: 0
+accuracy: 75
+pp: 10
+description: Demands a kiss with a cute look. May cause confusion.
+effect: confuse
