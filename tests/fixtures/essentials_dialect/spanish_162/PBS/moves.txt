@@ -8,3 +8,5 @@
 1,MEGAHORN,Megacuerno,000,120,BUG,Physical,85,10,0,00,0,abef,"Violenta embestida con cuernos imponentes."
 2,TACKLE,Placaje,000,40,NORMAL,Physical,100,35,0,00,0,abef,"El usuario embiste al objetivo con toda su fuerza."
 3,GROWL,Gruñido,002,0,NORMAL,Status,100,40,0,00,0,bef,"El usuario ruge para bajar la fuerza del rival."
+4,EARTHQUAKE,Terremoto,000,100,GROUND,Physical,100,10,0,00,0,abef,"Un poderoso seísmo que sacude la zona entera."
+5,AFRICANVSORIGINAL,Golpe Especial Africano,000,80,FIGHTING,Physical,90,15,0,00,0,abef,"Un golpe exclusivo del juego."

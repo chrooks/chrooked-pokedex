@@ -554,7 +554,10 @@ def create_app(
         try:
             target = registry.get(target_id)
             return targetsmod.target_dex(
-                target, _load_ruleset_or_503(), app.state.targets_state
+                target,
+                _load_ruleset_or_503(),
+                app.state.targets_state,
+                base_snapshot=_load_snapshot_or_503(),
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
@@ -565,7 +568,10 @@ def create_app(
         try:
             target = registry.get(target_id)
             return targetsmod.target_abilities(
-                target, _load_ruleset_or_503(), app.state.targets_state
+                target,
+                _load_ruleset_or_503(),
+                app.state.targets_state,
+                base_snapshot=_load_snapshot_or_503(),
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
@@ -576,7 +582,10 @@ def create_app(
         try:
             target = registry.get(target_id)
             return targetsmod.target_moves(
-                target, _load_ruleset_or_503(), app.state.targets_state
+                target,
+                _load_ruleset_or_503(),
+                app.state.targets_state,
+                base_snapshot=_load_snapshot_or_503(),
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error

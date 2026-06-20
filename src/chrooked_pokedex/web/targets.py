@@ -505,44 +505,133 @@ def apply_target(
         return _report_payload(report)
 
 
+def _prettify_internal_name(internal: str) -> str:
+    """Turn an InternalName into a human-readable display label.
+
+    Handles ALL_CAPS names (EARTHQUAKE → Earthquake) and simple CamelCase
+    (FireSlash → Fire Slash) as a best-effort prettify. Used only when the
+    canonical English name map has no entry for this chrooked_id.
+    """
+    import re
+
+    # If the name is all-uppercase (or digits/underscores only), title-case it.
+    name = internal.replace("_", " ").strip()
+    if name == name.upper():
+        return name.title()
+    # CamelCase: insert a space before each uppercase letter that follows a
+    # lowercase letter or digit.
+    spaced = re.sub(r"(?<=[a-z0-9])([A-Z])", r" \1", name)
+    return spaced.title()
+
+
+def _english_moves_map(
+    base_snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, str]:
+    """chrooked_id → English name, built from base snapshot ⊕ Ruleset moves."""
+    merged = dexmod.build_moves(base_snapshot, ruleset)
+    return {entry["chrooked_id"]: entry["name"] for entry in merged if entry.get("name")}
+
+
+def _english_abilities_map(
+    base_snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, str]:
+    """chrooked_id → English name, built from base snapshot ⊕ Ruleset abilities."""
+    merged = dexmod.build_abilities(base_snapshot, ruleset)
+    return {entry["chrooked_id"]: entry["name"] for entry in merged if entry.get("name")}
+
+
+def _english_species_map(
+    base_snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, str]:
+    """chrooked_id → English name, built from base snapshot ⊕ Ruleset species."""
+    merged = dexmod.build_dex(base_snapshot, ruleset)
+    return {entry["chrooked_id"]: entry["name"] for entry in merged if entry.get("name")}
+
+
+def _relabel_names(
+    entries: list[dict[str, Any]],
+    english_map: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Return a new list with each entry's 'name' replaced by its English canonical.
+
+    Priority:
+    1. Canonical English from base ⊕ Ruleset (by chrooked_id).
+    2. Prettified InternalName — the entry's existing ``internal`` field if
+       present, else derived from the chrooked_id as a best-effort fallback.
+
+    All other fields are left unchanged; only the display ``name`` changes.
+    """
+    result = []
+    for entry in entries:
+        chrooked_id = entry.get("chrooked_id", "")
+        english_name = english_map.get(chrooked_id)
+        if english_name is None:
+            # Fallback: prettify the InternalName (or derive from chrooked_id).
+            raw_internal = entry.get("internal") or chrooked_id
+            english_name = _prettify_internal_name(raw_internal)
+        result.append({**entry, "name": english_name})
+    return result
+
+
 def target_dex(
-    target: Target, ruleset: Ruleset, state: TargetState
+    target: Target,
+    ruleset: Ruleset,
+    state: TargetState,
+    base_snapshot: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Per-Target dex backdrop: ``build_dex(build_snapshot(target), ruleset)``.
 
-    The fork's own values come from re-running the M0 snapshot reader on it
-    (cached per path, D2), then the existing M1 merge overlays the Ruleset — so
-    the backdrop reuses M0 + M1 wholesale with no new merge path.
+    For Essentials targets, species display names are relabeled to canonical
+    English using the base snapshot ⊕ Ruleset name map (keyed by chrooked_id).
+    Pass ``base_snapshot`` to enable the relabeling; omitting it skips the
+    relabel (pokeemerald targets and tests that don't inject the base).
     """
     snapshot = state.snapshot_for(target)
-    return dexmod.build_dex(snapshot, ruleset)
+    entries = dexmod.build_dex(snapshot, ruleset)
+    if target.engine == "essentials" and base_snapshot is not None:
+        english_map = _english_species_map(base_snapshot, ruleset)
+        entries = _relabel_names(entries, english_map)
+    return entries
 
 
 def target_abilities(
-    target: Target, ruleset: Ruleset, state: TargetState
+    target: Target,
+    ruleset: Ruleset,
+    state: TargetState,
+    base_snapshot: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Per-Target abilities backdrop: ``build_abilities(build_snapshot(target), ruleset)``.
 
-    The same shape as ``target_dex``: the fork's own base abilities come from the
-    cached per-Target snapshot (D2), then the abilities merge overlays the Ruleset
-    — so the backdrop reuses the snapshot population + merge wholesale.
+    For Essentials targets, ability display names are relabeled to canonical
+    English using the base snapshot ⊕ Ruleset name map (keyed by chrooked_id).
+    Pass ``base_snapshot`` to enable the relabeling.
     """
     snapshot = state.snapshot_for(target)
-    return dexmod.build_abilities(snapshot, ruleset)
+    entries = dexmod.build_abilities(snapshot, ruleset)
+    if target.engine == "essentials" and base_snapshot is not None:
+        english_map = _english_abilities_map(base_snapshot, ruleset)
+        entries = _relabel_names(entries, english_map)
+    return entries
 
 
 def target_moves(
-    target: Target, ruleset: Ruleset, state: TargetState
+    target: Target,
+    ruleset: Ruleset,
+    state: TargetState,
+    base_snapshot: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """Per-Target moves backdrop: ``build_moves(build_snapshot(target), ruleset)``.
 
-    The same shape as ``target_dex`` / ``target_abilities``: the fork's own base
-    moves come from the cached per-Target snapshot (D2, neutralized at build time),
-    then the moves merge overlays the Ruleset — so the backdrop reuses the
-    snapshot population + merge wholesale.
+    For Essentials targets, move display names are relabeled to canonical
+    English using the base snapshot ⊕ Ruleset name map (keyed by chrooked_id).
+    Pass ``base_snapshot`` to enable the relabeling.
     """
     snapshot = state.snapshot_for(target)
-    return dexmod.build_moves(snapshot, ruleset)
+    entries = dexmod.build_moves(snapshot, ruleset)
+    if target.engine == "essentials" and base_snapshot is not None:
+        english_map = _english_moves_map(base_snapshot, ruleset)
+        entries = _relabel_names(entries, english_map)
+    return entries
 
 
 _DIALECT_LABELS: dict[str, str] = {

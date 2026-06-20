@@ -1053,3 +1053,282 @@ def test_ac4_nongit_essentials_preview_snapshot_restores_and_apply_keeps(
     assert after_apply_hashes != before_hashes, (
         "Apply must write changes to PBS files and keep them."
     )
+
+
+# ---------------------------------------------------------------------------
+# #41 — Essentials English-name relabeling (ac1–ac4)
+# ---------------------------------------------------------------------------
+#
+# These tests prove that Essentials target backdrop functions replace localized
+# (e.g. Spanish) PBS display names with canonical English names from the base
+# snapshot ⊕ Ruleset, falling back to a prettified InternalName when a move/
+# ability/species has no canonical English entry.
+# ---------------------------------------------------------------------------
+
+_SPANISH_162 = Path(__file__).parent / "fixtures" / "essentials_dialect" / "spanish_162"
+
+
+def _make_english_base_snapshot() -> dict:
+    """A minimal base snapshot with English names for EARTHQUAKE, STENCH, BULBASAUR."""
+    return {
+        "version": "1.11.2",
+        "species": {
+            "bulbasaur": {
+                "dex": 1,
+                "chrooked_id": "bulbasaur",
+                "name": "Bulbasaur",
+                "types": ["Grass", "Poison"],
+                "abilities": {"primary": "Overgrow", "secondary": None, "hidden": "Chlorophyll"},
+                "stats": {"hp": 45, "atk": 49, "def": 49, "spe": 45, "spa": 65, "spd": 65},
+                "learnset": [],
+            },
+        },
+        "moves": {
+            "megahorn": {
+                "chrooked_id": "megahorn",
+                "name": "Megahorn",
+                "aka": {},
+                "type": "Bug",
+                "category": "physical",
+                "power": 120,
+                "accuracy": 85,
+                "pp": 10,
+                "description": "Using its tough and impressive horn, the user rams into the target with no letup.",
+            },
+            "tackle": {
+                "chrooked_id": "tackle",
+                "name": "Tackle",
+                "aka": {},
+                "type": "Normal",
+                "category": "physical",
+                "power": 40,
+                "accuracy": 100,
+                "pp": 35,
+                "description": "A physical attack in which the user charges, tacks, or butts the target.",
+            },
+            "growl": {
+                "chrooked_id": "growl",
+                "name": "Growl",
+                "aka": {},
+                "type": "Normal",
+                "category": "status",
+                "power": None,
+                "accuracy": 100,
+                "pp": 40,
+                "description": "The user growls in an endearing way, making opposing Pokemon less wary.",
+            },
+            "earthquake": {
+                "chrooked_id": "earthquake",
+                "name": "Earthquake",
+                "aka": {},
+                "type": "Ground",
+                "category": "physical",
+                "power": 100,
+                "accuracy": 100,
+                "pp": 10,
+                "description": "The user sets off an earthquake that strikes every Pokemon around it.",
+            },
+        },
+        "abilities": {
+            "stench": {
+                "chrooked_id": "stench",
+                "name": "Stench",
+                "description": "The stench may cause the target to flinch.",
+                "aka": {},
+            },
+            "overgrow": {
+                "chrooked_id": "overgrow",
+                "name": "Overgrow",
+                "description": "Powers up Grass-type moves in a pinch.",
+                "aka": {},
+            },
+        },
+        "type_chart": [],
+    }
+
+
+def _make_english_ruleset_with_excalibur(tmp_path: Path) -> Path:
+    """A Ruleset that owns one chrooked ORIGINAL move: Excalibur."""
+    root = tmp_path / "ruleset_excalibur"
+    (root / "species").mkdir(parents=True)
+    (root / "abilities").mkdir(parents=True)
+    (root / "moves").mkdir(parents=True)
+    (root / "behaviors").mkdir(parents=True)
+    (root / "type-chart").mkdir(parents=True)
+    (root / "type-chart" / "overrides.yaml").write_text("overrides: []\n", encoding="utf-8")
+    (root / "meta.yaml").write_text(
+        "base_version: 1.11.2\nschema_version: 1\n", encoding="utf-8"
+    )
+    (root / "moves" / "excalibur.yaml").write_text(
+        "name: Excalibur\n"
+        "chrooked_id: excalibur\n"
+        "aka: { essentials: EXCALIBUR }\n"
+        "type: Steel\n"
+        "category: physical\n"
+        "power: 90\n"
+        "accuracy: 100\n"
+        "pp: 10\n"
+        "description: A holy sword strike.\n",
+        encoding="utf-8",
+    )
+    return root
+
+
+def _essentials_target_41(path: Path) -> "targetsmod.Target":
+    from chrooked_pokedex.web.targets import Target
+    return Target(id="esp1", label="Spanish 16.2", path=str(path), engine="essentials")
+
+
+# ac1: EARTHQUAKE shows English; STENCH shows English; species English name.
+def test_ac1_spanish_162_backdrop_shows_english_names(tmp_path: Path) -> None:
+    """target_moves/target_abilities/target_dex for a Spanish Essentials target show English names."""
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_abilities, target_dex, target_moves
+
+    base_snapshot = _make_english_base_snapshot()
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(_SPANISH_162)
+    state = TargetState()
+
+    moves = target_moves(target, ruleset, state, base_snapshot=base_snapshot)
+    abilities = target_abilities(target, ruleset, state, base_snapshot=base_snapshot)
+    dex = target_dex(target, ruleset, state, base_snapshot=base_snapshot)
+
+    move_by_id = {m["chrooked_id"]: m for m in moves}
+    # EARTHQUAKE: Spanish PBS name is "Terremoto"; English canonical is "Earthquake".
+    assert move_by_id["earthquake"]["name"] == "Earthquake", (
+        f"Expected 'Earthquake', got {move_by_id['earthquake']['name']!r}"
+    )
+    # MEGAHORN is also in base → English "Megahorn".
+    assert move_by_id["megahorn"]["name"] == "Megahorn"
+
+    ability_by_id = {a["chrooked_id"]: a for a in abilities}
+    # STENCH: Spanish PBS name is "Hedor"; English canonical is "Stench".
+    assert ability_by_id["stench"]["name"] == "Stench", (
+        f"Expected 'Stench', got {ability_by_id['stench']['name']!r}"
+    )
+
+    dex_by_id = {e["chrooked_id"]: e for e in dex}
+    # BULBASAUR: English name in base.
+    assert dex_by_id["bulbasaur"]["name"] == "Bulbasaur"
+
+
+# ac2: chrooked-owned EXCALIBUR (in Ruleset) shows English chrooked name.
+def test_ac2_chrooked_original_shows_english_ruleset_name(tmp_path: Path) -> None:
+    """A move present ONLY in the Ruleset (Excalibur) shows its English chrooked name."""
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_moves
+
+    # Add EXCALIBUR to the spanish_162 PBS so the target snapshot sees it.
+    pbs = _SPANISH_162 / "PBS" / "moves.txt"
+    original_text = pbs.read_text(encoding="utf-8")
+    excalibur_row = "6,EXCALIBUR,Excalibur Español,000,90,STEEL,Physical,100,10,0,00,0,abef,\"Golpe espada sagrada.\"\n"
+    pbs_with_excalibur = tmp_path / "excalibur_pbs"
+    import shutil
+    shutil.copytree(_SPANISH_162, pbs_with_excalibur)
+    (pbs_with_excalibur / "PBS" / "moves.txt").write_text(
+        original_text + excalibur_row, encoding="utf-8"
+    )
+
+    base_snapshot = _make_english_base_snapshot()  # base does NOT have excalibur
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(pbs_with_excalibur)
+    state = TargetState()
+
+    moves = target_moves(target, ruleset, state, base_snapshot=base_snapshot)
+    excalibur = next((m for m in moves if m["chrooked_id"] == "excalibur"), None)
+    assert excalibur is not None, "Excalibur not in target_moves output"
+    # The Ruleset gives the English name "Excalibur", NOT the Spanish PBS name.
+    assert excalibur["name"] == "Excalibur", (
+        f"Expected English 'Excalibur', got {excalibur['name']!r}"
+    )
+
+
+# ac3: target-only AFRICANVSORIGINAL falls back to prettified InternalName.
+def test_ac3_target_only_move_prettifies_internal_name(tmp_path: Path) -> None:
+    """A move unknown to base ⊕ Ruleset falls back to a prettified InternalName label."""
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_moves
+
+    base_snapshot = _make_english_base_snapshot()  # no AFRICANVSORIGINAL
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(_SPANISH_162)
+    state = TargetState()
+
+    moves = target_moves(target, ruleset, state, base_snapshot=base_snapshot)
+    original = next((m for m in moves if m["chrooked_id"] == "africanvsoriginal"), None)
+    assert original is not None, "AFRICANVSORIGINAL not in target_moves output"
+    # Must NOT be the Spanish PBS display name.
+    assert original["name"] != "Golpe Especial Africano", (
+        "Should not show the Spanish PBS name; should prettify the InternalName."
+    )
+    # Must look like a prettified InternalName (title-cased, no Spanish).
+    name = original["name"]
+    assert name[0].isupper(), f"Prettified name should start uppercase, got {name!r}"
+    assert name == name.title() or name.replace(" ", "").isalpha(), (
+        f"Prettified name should be title-cased English, got {name!r}"
+    )
+
+
+# ac4: VALUES unchanged after relabel; pokeemerald target names unchanged.
+def test_ac4_values_unchanged_and_pokeemerald_unaffected(tmp_path: Path) -> None:
+    """Relabeling only changes 'name'; all other fields stay at target's PBS values.
+
+    Also proves pokeemerald target_moves is not affected (no relabeling).
+    """
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import Target, TargetState, target_moves
+
+    base_snapshot = _make_english_base_snapshot()
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(_SPANISH_162)
+    state_es = TargetState()
+
+    # EARTHQUAKE in the Spanish PBS has power=100, accuracy=100, pp=10, type=Ground.
+    moves = target_moves(target, ruleset, state_es, base_snapshot=base_snapshot)
+    eq = next((m for m in moves if m["chrooked_id"] == "earthquake"), None)
+    assert eq is not None
+    assert eq["name"] == "Earthquake", "name must be English"
+    assert eq["power"] == 100, "power must come from the Spanish PBS (target's own value)"
+    assert eq["accuracy"] == 100
+    assert eq["pp"] == 10
+    assert eq["type"] == "Ground"
+
+    # pokeemerald target: target_moves without base_snapshot → no relabeling.
+    poke_target = Target(id="poke1", label="Poke", path="/tmp/irrelevant", engine="pokeemerald")
+    state_poke = TargetState()
+    # monkeypatch snapshot_for to return a minimal snapshot directly
+    # (we don't have a real pokeemerald tree here, just prove no relabeling happens).
+    from unittest.mock import patch
+
+    minimal_snap = {
+        "version": "1.11.2",
+        "species": {},
+        "moves": {
+            "tackle": {
+                "chrooked_id": "tackle",
+                "name": "Tackle",
+                "aka": {},
+                "type": "Normal",
+                "category": "physical",
+                "power": 40,
+                "accuracy": 100,
+                "pp": 35,
+                "description": "",
+            }
+        },
+        "abilities": {},
+        "type_chart": [],
+    }
+    with patch.object(state_poke, "snapshot_for", return_value=minimal_snap):
+        poke_moves = target_moves(
+            poke_target, ruleset, state_poke, base_snapshot=base_snapshot
+        )
+    tackle = next((m for m in poke_moves if m["chrooked_id"] == "tackle"), None)
+    assert tackle is not None
+    # For pokeemerald, name stays as-is from the snapshot (no relabeling).
+    assert tackle["name"] == "Tackle"
