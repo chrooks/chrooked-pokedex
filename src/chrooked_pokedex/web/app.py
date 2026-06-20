@@ -368,6 +368,79 @@ def create_app(
     def delete_move(chrooked_id: str, confirm: bool = False) -> dict[str, str]:
         return _delete_owned(crudmod.delete_move, chrooked_id, confirm)
 
+    @app.post("/api/moves/suggest")
+    def suggest_move_design(
+        payload: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Draft a new owned move (create) or propose edits to an existing one (edit).
+
+        Accepts a freeform ``direction`` (specifics / comparative / vibe) and
+        an optional ``mode`` (``"create"`` or ``"edit"``; defaults to
+        ``"create"``). In ``"edit"`` mode a ``move_id`` (chrooked_id of the
+        existing move) is also required.
+
+        Context assembled server-side: the merged type pool (so the model picks
+        only real types), and the owned move ids (for the CREATE collision check).
+        In edit mode the existing move's current field values are included so the
+        model can produce a targeted delta and the before/after is built here.
+
+        Returns the reusable ``{draft, rationale, alternatives}`` contract, plus:
+        - ``chrooked_id``: the resolved id for the accept PUT path.
+        - ``warnings``: any non-fatal validation notes (e.g. dropped unknown flags).
+        - ``before``: (edit mode only) original values for the changed fields.
+
+        The accept path is the existing ``PUT /api/moves/{id}`` (and optionally
+        ``PUT /api/behaviors/{id}`` if the draft includes a custom behavior stub)
+        — there is NO new write route here.
+
+        Honest errors: a bad shape, an empty name, an id collision, a non-empty
+        engine_hints, an unrecognized type, or an invalid numeric range
+        (``SuggestError``) → 422; a missing key / upstream failure (``LlmError``)
+        → 503 — never a raw 500 traceback, and the provider key never reaches
+        the client.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        type_pool = dexmod.build_type_pool(snapshot, ruleset)
+        move_ids = set(ruleset.moves)
+        body = payload or {}
+        direction = body.get("direction", "")
+        mode = body.get("mode", "create")
+        move_id = body.get("move_id")
+
+        existing_move: dict[str, Any] | None = None
+        if mode == "edit":
+            if not move_id:
+                raise HTTPException(
+                    status_code=422,
+                    detail="Edit mode requires a move_id (the chrooked_id of the move to edit).",
+                )
+            # Resolve existing move from the merged move pool.
+            move_pool = dexmod.build_move_pool(snapshot, ruleset)
+            all_moves = dexmod.build_moves(snapshot, ruleset)
+            existing_move = next(
+                (m for m in all_moves if m.get("chrooked_id") == move_id), None
+            )
+            if existing_move is None:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"No move with chrooked_id {move_id!r} found.",
+                )
+
+        try:
+            return suggestmod.suggest_move(
+                provider=_llm_provider(),
+                direction=direction,
+                type_pool=type_pool,
+                move_ids=move_ids,
+                mode=mode,
+                existing_move=existing_move,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
     @app.put("/api/abilities/{chrooked_id}")
     def put_ability(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
         try:

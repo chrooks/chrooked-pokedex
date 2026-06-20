@@ -1608,3 +1608,540 @@ def _validate_distribution(
             }
         )
     return rows, warnings
+
+
+# =========================================================================== #
+# Move design / edit — DRAFT a new owned move OR an edit to an existing move
+# (#9). Two modes:
+#
+# CREATE: the move name is new → slug the id, refuse collision (D4 hard),
+#         produce a full field set (all move fields), produce an engine-neutral
+#         behavior stub when the move has a custom mechanic.
+# EDIT:   the caller supplies an existing move's chrooked_id → produce only the
+#         fields that change (a delta), apply on top of the existing record, and
+#         produce a before/after. Comparative input ("Thunderbolt but Dark")
+#         resolves by cloning the source move's fields first.
+#
+# Behavior stub: if the draft includes a `behavior` key the same D1 rule applies
+# (engine_hints forced empty, at least one effect, neutral triggers only). The
+# LLM is instructed to include a behavior only when the move has a custom
+# mechanic that cannot be expressed as a combination of existing effect/flags.
+#
+# Token budget: uses LEARNSET_MAX_TOKENS (a full move draft is a large
+# structured output).
+# =========================================================================== #
+
+# The valid move categories per the loader (schema.py).
+_MOVE_CATEGORIES: frozenset[str] = frozenset({"physical", "special", "status"})
+
+
+def slugify_move_id(name: str) -> str:
+    """Derive a new move's chrooked_id from its display name (D4).
+
+    Mirrors ``slugify_ability_id``: lowercase, strip everything outside
+    ``[a-z0-9]``. ``"Shadow Claw" -> "shadowclaw"``.
+    """
+    return re.sub(r"[^a-z0-9]", "", name.casefold())
+
+
+def _build_move_design_rubric(*, mode: str) -> str:
+    """The move-design system rubric.
+
+    CREATE mode: design one brand-new move from a freeform direction.
+    EDIT mode:   propose only the fields to change and why.
+    Both modes: include a behavior stub ONLY if the move needs a truly custom
+    mechanic that cannot be expressed using standard effect/flags combinations;
+    leave behavior absent otherwise. If present, the behavior stub MUST NOT set
+    engine_hints.
+    """
+    triggers = ", ".join(sorted(_NEUTRAL_TRIGGERS))
+    flags_list = (
+        "contact, punching, biting, sound, slicing, wind, wing, "
+        "kicking, piercing, bone, hammer, ballistic"
+    )
+    categories = "physical, special, status"
+    if mode == "create":
+        action = (
+            "DESIGN ONE brand-new Pokémon move. Return ALL of these fields in `draft.move`:\n"
+            "- `name` (Title Case display name)\n"
+            "- `type` (one of the provided type pool)\n"
+            f"- `category` (one of: {categories})\n"
+            "- `power` (integer 1–250, or null for status moves)\n"
+            "- `accuracy` (integer 1–100, or null for always-hit)\n"
+            "- `pp` (integer 1–64)\n"
+            "- `priority` (integer, usually 0; +1 for priority moves, -1 for last)\n"
+            "- `target` (usually 'selected'; others: 'all-foes', 'all-allies', 'all', "
+            "'self', 'random-foe', 'all-except-self')\n"
+            f"- `flags` (array from: {flags_list}; use [] if none apply)\n"
+            "- `effect` (plain effect name; use 'hit' for plain damage; "
+            "examples: 'recoil', 'absorb', 'two-hit')\n"
+            "- `additional_effects` (array of {effect, chance} for secondary "
+            "effects e.g. burn 30%; use [] if none)\n"
+            "- `description` (one sentence, plain English, concise)\n"
+        )
+    else:
+        action = (
+            "PROPOSE CHANGES to an existing Pokémon move. Return ONLY the fields "
+            "that should change in `draft.move` (plus `name` always). Do NOT return "
+            "unchanged fields. Explain what is changing and why in `rationale.edit`."
+        )
+    behavior_rule = (
+        "\nBEHAVIOR STUB (OPTIONAL): include `draft.behavior` ONLY if this move "
+        "needs a truly custom mechanic that cannot be expressed using standard "
+        "effect/flags combinations. If included:\n"
+        "- effects[]: each {summary, trigger, when, effect}; trigger MUST be one "
+        f"of: {triggers}\n"
+        "- test_cases[]: each {given, expect}\n"
+        "- notes[]: design context\n"
+        "HARD RULE: you MUST NOT set engine_hints — leave it empty or absent. "
+        "Engine grounding (C citations / Essentials translation) is a human pass; "
+        "a fabricated citation is the one thing you must never invent.\n"
+        "If the move is a standard damaging move with no unusual mechanic, "
+        "OMIT the behavior field entirely."
+    )
+    return (
+        "You are a Pokémon game-design assistant. "
+        + action
+        + behavior_rule
+        + "\n\nPut the move (and optionally behavior) in `draft`, the design "
+        "reasoning in `rationale` (with `move` string and `edit` string for edits), "
+        "and up to three alternative design ideas in `alternatives`."
+    )
+
+
+def _move_design_draft_schema() -> dict[str, Any]:
+    """JSON schema for the move-design draft.
+
+    `draft.move` is the proposed field set (all fields for create, partial for edit).
+    `draft.behavior` is optional (only when a custom mechanic is needed).
+    """
+    behavior_schema: dict[str, Any] = {
+        "type": "object",
+        "properties": {
+            "effects": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "summary": {"type": "string"},
+                        "trigger": {"type": "string"},
+                        "when": {"type": "string"},
+                        "effect": {"type": "string"},
+                    },
+                    "required": ["summary", "trigger", "effect"],
+                    "additionalProperties": False,
+                },
+            },
+            "test_cases": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "given": {"type": "string"},
+                        "expect": {"type": "string"},
+                    },
+                    "required": ["given", "expect"],
+                    "additionalProperties": False,
+                },
+            },
+            "notes": {"type": "array", "items": {"type": "string"}},
+            "engine_hints": {
+                "type": "object",
+                "additionalProperties": False,
+            },
+        },
+        "required": ["effects"],
+        "additionalProperties": False,
+    }
+
+    move_schema: dict[str, Any] = {
+        "type": "object",
+        "properties": {
+            "name": {"type": "string"},
+            "type": {"type": "string"},
+            "category": {"type": "string"},
+            "power": {"type": ["integer", "null"]},
+            "accuracy": {"type": ["integer", "null"]},
+            "pp": {"type": "integer"},
+            "priority": {"type": "integer"},
+            "target": {"type": "string"},
+            "flags": {"type": "array", "items": {"type": "string"}},
+            "effect": {"type": "string"},
+            "additional_effects": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "effect": {"type": "string"},
+                        "chance": {"type": "integer"},
+                    },
+                    "required": ["effect", "chance"],
+                    "additionalProperties": False,
+                },
+            },
+            "description": {"type": "string"},
+        },
+        "required": ["name"],
+        "additionalProperties": False,
+    }
+
+    return {
+        "type": "object",
+        "properties": {
+            "draft": {
+                "type": "object",
+                "properties": {
+                    "move": move_schema,
+                    "behavior": behavior_schema,
+                },
+                "required": ["move"],
+                "additionalProperties": False,
+            },
+            "rationale": {
+                "type": "object",
+                "properties": {
+                    "move": {"type": "string"},
+                    "edit": {"type": "string"},
+                },
+                "additionalProperties": False,
+            },
+            "alternatives": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "value": {"type": "string"},
+                        "rationale": {"type": "string"},
+                    },
+                    "required": ["value", "rationale"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["draft", "rationale", "alternatives"],
+        "additionalProperties": False,
+    }
+
+
+def suggest_move(
+    *,
+    provider: LlmProvider,
+    direction: str,
+    type_pool: list[str],
+    move_ids: set[str],
+    mode: str = "create",
+    existing_move: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Draft a brand-new move (create) or propose edits to an existing one (edit).
+
+    CREATE mode (``mode="create"``):
+    - ``direction`` is required — a freeform design brief.
+    - ``existing_move`` must be None.
+    - The draft covers all move fields; the id is slugified from the name.
+    - A name colliding with an existing owned move id → SuggestError (D4, hard fail).
+    - If the move needs a custom mechanic the LLM includes a behavior stub; the
+      stub's ``engine_hints`` MUST be empty (D1, hard fail if filled).
+
+    EDIT mode (``mode="edit"``):
+    - ``existing_move`` is required — the current move record (chrooked_id, all fields).
+    - ``direction`` describes what to change.
+    - The draft carries only the changed fields (plus ``name`` always); the existing
+      move fields are the baseline. A before/after delta is included in the response.
+    - The existing move's id is reused — collision is expected (it is an overwrite);
+      no collision check for the EXISTING id.
+    - Comparative input ("Thunderbolt but Dark") is handled by the LLM: it clones
+      the source move's type and applies the delta (the caller passes the direction
+      unchanged; the rubric is what resolves it).
+
+    ``type_pool`` is the merged type universe; a hallucinated type is a SuggestError.
+    ``move_ids`` is the set of existing owned move chrooked_ids (for create collision).
+    Returns the reusable ``{draft, rationale, alternatives}`` contract plus:
+    - ``warnings``: validation warnings (empty list when all clean).
+    - ``before``: for edit mode, the original field values for changed fields.
+    - ``chrooked_id``: the resolved id for the move (for the accept PUT path).
+    """
+    if not direction or not direction.strip():
+        raise SuggestError("A move design direction is required.")
+
+    if mode not in ("create", "edit"):
+        raise SuggestError(f"Unknown mode {mode!r}; expected 'create' or 'edit'.")
+
+    if mode == "edit" and existing_move is None:
+        raise SuggestError("Edit mode requires an existing_move to be provided.")
+
+    type_pool_str = "\n".join(f"- {t}" for t in sorted(type_pool))
+
+    if mode == "create":
+        cached_context = (
+            "Type pool (use ONLY types from this list):\n"
+            + (type_pool_str or "(none)")
+            + "\n\nExisting owned move ids (the new move's id must NOT collide with "
+            "any of these):\n"
+            + ("\n".join(f"- {mid}" for mid in sorted(move_ids)) or "(none)")
+        )
+        user_msg = f"Direction: {direction.strip()}"
+    else:
+        assert existing_move is not None
+        move_summary = _format_existing_move(existing_move)
+        cached_context = (
+            "Type pool (use ONLY types from this list):\n"
+            + (type_pool_str or "(none)")
+        )
+        user_msg = (
+            f"Existing move:\n{move_summary}\n\n"
+            f"Edit direction: {direction.strip()}"
+        )
+
+    result = provider.propose(
+        system=_build_move_design_rubric(mode=mode),
+        cached_context=cached_context,
+        user=user_msg,
+        schema=_move_design_draft_schema(),
+        max_tokens=LEARNSET_MAX_TOKENS,
+    )
+
+    return _validate_move_result(
+        result,
+        type_pool=type_pool,
+        move_ids=move_ids,
+        mode=mode,
+        existing_move=existing_move,
+    )
+
+
+def _format_existing_move(move: dict[str, Any]) -> str:
+    """Render a move entry as compact text for the edit-mode user message."""
+    lines = [
+        f"name: {move.get('name', '?')}",
+        f"chrooked_id: {move.get('chrooked_id', '?')}",
+        f"type: {move.get('type', '?')}",
+        f"category: {move.get('category', '?')}",
+        f"power: {move.get('power', 'null')}",
+        f"accuracy: {move.get('accuracy', 'null')}",
+        f"pp: {move.get('pp', '?')}",
+        f"priority: {move.get('priority', 0)}",
+        f"target: {move.get('target', 'selected')}",
+        f"flags: {move.get('flags', [])}",
+        f"effect: {move.get('effect', 'hit')}",
+        f"additional_effects: {move.get('additional_effects', [])}",
+        f"description: {move.get('description', '')}",
+    ]
+    return "\n".join(lines)
+
+
+def _validate_move_result(
+    result: dict[str, Any],
+    *,
+    type_pool: list[str],
+    move_ids: set[str],
+    mode: str,
+    existing_move: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Validate and normalize the move-design draft.
+
+    Steps:
+    1. Shape: contract keys, a draft with `move`.
+    2. Name non-empty; ``chrooked_id = slugify_move_id(name)``.
+    3. For CREATE: collision check (D4, hard fail if id in move_ids).
+    4. Field validation: category ∈ MOVE_CATEGORIES, type ∈ type_pool,
+       power/accuracy/pp sane ranges, flags from MOVE_FLAGS.
+    5. Behavior stub (if present, D1): engine_hints MUST be empty.
+    6. For EDIT: build before/after delta from existing_move.
+    """
+    from chrooked_pokedex.model.schema import MOVE_FLAGS
+
+    if not isinstance(result, dict):
+        raise SuggestError("The suggestion came back in an unexpected shape.")
+
+    draft = result.get("draft")
+    if not isinstance(draft, dict):
+        raise SuggestError("The suggestion was missing a draft object.")
+
+    move_draft = draft.get("move")
+    if not isinstance(move_draft, dict):
+        raise SuggestError("The suggestion was missing a draft move object.")
+
+    # --- Name ---
+    name = move_draft.get("name")
+    if not isinstance(name, str) or not name.strip():
+        raise SuggestError("The drafted move has no name.")
+    name = name.strip()
+    chrooked_id = slugify_move_id(name)
+    if not chrooked_id:
+        raise SuggestError(
+            f"The drafted move name {name!r} has no usable characters for an id."
+        )
+
+    # --- Collision (CREATE only, D4) ---
+    if mode == "create" and chrooked_id in move_ids:
+        raise SuggestError(
+            f"id {chrooked_id!r} (from name {name!r}) already exists as an owned "
+            "move — rename before creating (create never clobbers)."
+        )
+
+    type_pool_set = {t.casefold() for t in type_pool}
+
+    # --- Field validation ---
+    warnings: list[str] = []
+    validated: dict[str, Any] = {"name": name}
+
+    # type
+    move_type = move_draft.get("type")
+    if move_type is not None:
+        if not isinstance(move_type, str) or move_type.casefold() not in type_pool_set:
+            raise SuggestError(
+                f"The drafted move has an unrecognized type {move_type!r}; "
+                f"must be one of the type pool."
+            )
+        # Normalize to the pool's canonical casing.
+        canonical_type = next(
+            t for t in type_pool if t.casefold() == move_type.casefold()
+        )
+        validated["type"] = canonical_type
+    elif mode == "create":
+        raise SuggestError("The drafted move is missing a type.")
+
+    # category
+    category = move_draft.get("category")
+    if category is not None:
+        if not isinstance(category, str) or category.lower() not in _MOVE_CATEGORIES:
+            raise SuggestError(
+                f"The drafted move has an invalid category {category!r}; "
+                f"must be one of: {', '.join(sorted(_MOVE_CATEGORIES))}."
+            )
+        validated["category"] = category.lower()
+    elif mode == "create":
+        raise SuggestError("The drafted move is missing a category.")
+
+    # power
+    power = move_draft.get("power")
+    if "power" in move_draft:
+        if power is not None:
+            if not isinstance(power, int) or not (1 <= power <= 250):
+                raise SuggestError(
+                    f"The drafted move has an invalid power {power!r}; "
+                    "must be an integer 1–250 or null."
+                )
+        validated["power"] = power
+
+    # accuracy
+    accuracy = move_draft.get("accuracy")
+    if "accuracy" in move_draft:
+        if accuracy is not None:
+            if not isinstance(accuracy, int) or not (1 <= accuracy <= 100):
+                raise SuggestError(
+                    f"The drafted move has an invalid accuracy {accuracy!r}; "
+                    "must be an integer 1–100 or null."
+                )
+        validated["accuracy"] = accuracy
+
+    # pp
+    pp = move_draft.get("pp")
+    if "pp" in move_draft:
+        if not isinstance(pp, int) or not (1 <= pp <= 64):
+            raise SuggestError(
+                f"The drafted move has an invalid pp {pp!r}; "
+                "must be an integer 1–64."
+            )
+        validated["pp"] = pp
+    elif mode == "create":
+        raise SuggestError("The drafted move is missing pp.")
+
+    # priority
+    if "priority" in move_draft:
+        priority = move_draft["priority"]
+        if not isinstance(priority, int):
+            raise SuggestError(
+                f"The drafted move has an invalid priority {priority!r}; must be an integer."
+            )
+        validated["priority"] = priority
+
+    # target
+    if "target" in move_draft:
+        validated["target"] = str(move_draft["target"])
+
+    # flags
+    if "flags" in move_draft:
+        raw_flags = move_draft["flags"]
+        if not isinstance(raw_flags, list):
+            raise SuggestError("The drafted move flags field is not a list.")
+        bad_flags = [f for f in raw_flags if f not in MOVE_FLAGS]
+        if bad_flags:
+            warnings.append(
+                f"Dropped unknown flags {bad_flags!r}; "
+                f"allowed: {', '.join(sorted(MOVE_FLAGS))}."
+            )
+            raw_flags = [f for f in raw_flags if f in MOVE_FLAGS]
+        validated["flags"] = raw_flags
+
+    # effect
+    if "effect" in move_draft:
+        validated["effect"] = str(move_draft["effect"])
+
+    # additional_effects
+    if "additional_effects" in move_draft:
+        raw_ae = move_draft["additional_effects"]
+        if not isinstance(raw_ae, list):
+            raise SuggestError("The drafted move additional_effects is not a list.")
+        ae_list = []
+        for entry in raw_ae:
+            if not isinstance(entry, dict):
+                continue
+            effect_name = entry.get("effect")
+            chance = entry.get("chance")
+            if isinstance(effect_name, str) and isinstance(chance, int):
+                ae_list.append({"effect": effect_name, "chance": chance})
+        validated["additional_effects"] = ae_list
+
+    # description
+    if "description" in move_draft:
+        validated["description"] = str(move_draft["description"])
+
+    # --- Behavior stub (D1) ---
+    behavior: dict[str, Any] | None = None
+    if "behavior" in draft and draft["behavior"] is not None:
+        behavior = _validate_behavior_stub(
+            draft["behavior"], name=name, chrooked_id=chrooked_id
+        )
+
+    # --- Build before/after for edit mode ---
+    before: dict[str, Any] | None = None
+    if mode == "edit" and existing_move is not None:
+        before = {
+            field: existing_move.get(field)
+            for field in validated
+            if field != "name"
+        }
+
+    # --- Rationale + alternatives ---
+    rationale_raw = result.get("rationale") or {}
+    rationale: dict[str, str] = {}
+    for key in ("move", "edit"):
+        val = rationale_raw.get(key)
+        if isinstance(val, str) and val.strip():
+            rationale[key] = val
+
+    alternatives = []
+    for alt in result.get("alternatives") or []:
+        if not isinstance(alt, dict):
+            continue
+        value = alt.get("value")
+        if not value or not isinstance(value, str):
+            continue
+        alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
+
+    out: dict[str, Any] = {
+        "draft": {
+            "move": {"chrooked_id": chrooked_id, **validated},
+        },
+        "rationale": rationale,
+        "alternatives": alternatives,
+        "warnings": warnings,
+        "chrooked_id": chrooked_id,
+    }
+    if behavior is not None:
+        out["draft"]["behavior"] = behavior
+    if before is not None:
+        out["before"] = before
+
+    return out
