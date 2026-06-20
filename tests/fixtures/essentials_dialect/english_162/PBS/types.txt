@@ -1,0 +1,117 @@
+#-------------------------------
+# Essentials 16.2-shape types.txt (numeric [N] headers).
+# Each defender lists the OTHER types it is weak to / resists / is immune to.
+#-------------------------------
+[0]
+Name = Normal
+InternalName = NORMAL
+Weaknesses = FIGHTING
+Immunities = GHOST
+
+[1]
+Name = Fighting
+InternalName = FIGHTING
+Weaknesses = FLYING,PSYCHIC,FAIRY
+Resistances = ROCK,BUG,DARK
+
+[2]
+Name = Flying
+InternalName = FLYING
+Weaknesses = ROCK,ELECTRIC,ICE
+Resistances = FIGHTING,BUG,GRASS
+Immunities = GROUND
+
+[3]
+Name = Poison
+InternalName = POISON
+Weaknesses = GROUND,PSYCHIC
+Resistances = FIGHTING,POISON,BUG,GRASS,FAIRY
+
+[4]
+Name = Ground
+InternalName = GROUND
+Weaknesses = WATER,GRASS,ICE
+Resistances = POISON,ROCK
+Immunities = ELECTRIC
+
+[5]
+Name = Rock
+InternalName = ROCK
+Weaknesses = FIGHTING,GROUND,STEEL,WATER,GRASS
+Resistances = NORMAL,FLYING,POISON,FIRE
+
+[6]
+Name = Bug
+InternalName = BUG
+Weaknesses = FLYING,ROCK,FIRE
+Resistances = FIGHTING,GROUND,GRASS
+
+[7]
+Name = Ghost
+InternalName = GHOST
+Weaknesses = GHOST,DARK
+Resistances = POISON,BUG
+Immunities = NORMAL,FIGHTING
+
+[8]
+Name = Steel
+InternalName = STEEL
+Weaknesses = FIGHTING,GROUND,FIRE
+Resistances = NORMAL,FLYING,ROCK,BUG,STEEL,GRASS,PSYCHIC,ICE,DRAGON,FAIRY
+Immunities = POISON
+
+[9]
+Name = Fire
+InternalName = FIRE
+Weaknesses = GROUND,ROCK,WATER
+Resistances = BUG,STEEL,FIRE,GRASS,ICE,FAIRY
+
+[10]
+Name = Water
+InternalName = WATER
+Weaknesses = GRASS,ELECTRIC
+Resistances = STEEL,FIRE,WATER,ICE
+
+[11]
+Name = Grass
+InternalName = GRASS
+Weaknesses = FLYING,POISON,BUG,FIRE,ICE
+Resistances = GROUND,WATER,GRASS,ELECTRIC
+
+[12]
+Name = Electric
+InternalName = ELECTRIC
+Weaknesses = GROUND
+Resistances = FLYING,STEEL,ELECTRIC
+
+[13]
+Name = Psychic
+InternalName = PSYCHIC
+Weaknesses = BUG,GHOST,DARK
+Resistances = FIGHTING,PSYCHIC
+
+[14]
+Name = Ice
+InternalName = ICE
+Weaknesses = FIGHTING,ROCK,STEEL,FIRE
+Resistances = ICE
+
+[15]
+Name = Dragon
+InternalName = DRAGON
+Weaknesses = ICE,DRAGON,FAIRY
+Resistances = FIRE,WATER,GRASS,ELECTRIC
+
+[16]
+Name = Dark
+InternalName = DARK
+Weaknesses = FIGHTING,BUG,FAIRY
+Resistances = GHOST,DARK
+Immunities = PSYCHIC
+
+[17]
+Name = Fairy
+InternalName = FAIRY
+Weaknesses = POISON,STEEL
+Resistances = FIGHTING,BUG,DARK
+Immunities = DRAGON

@@ -44,6 +44,7 @@ from ..model import Ruleset
 from ..report import ApplyReport
 from . import dex as dexmod
 from . import snapshot as snapmod
+from . import snapshot_essentials as snapmod_essentials
 
 # The marker the applier writes into a created DATA-ONLY ability's reason.
 _DATA_ONLY_MARKER = "DATA ONLY"
@@ -184,19 +185,28 @@ class TargetState:
                 self._locks[fork_path] = lock
             return lock
 
-    def snapshot_for(self, fork_path: str) -> dict[str, Any]:
-        """Return the fork's snapshot, building (and caching) it once per path.
+    def snapshot_for(self, target: Target) -> dict[str, Any]:
+        """Return the Target's snapshot, building (and caching) it once per path.
+
+        Routes on ``target.engine`` (D1): ``pokeemerald`` reads the C source tree
+        with ``build_snapshot``; ``essentials`` reads the ``PBS/`` tree with the
+        dialect-routed ``build_snapshot_essentials``. The cache key stays
+        ``target.path``, so both engines share the per-path lock + cache.
 
         Serialized on the per-fork lock so two concurrent requests for the same
         fork can't both build (a TOCTOU race when the cache is checked outside any
         lock). The per-fork lock keeps other forks unblocked. After acquiring it we
         re-check the cache, build only on a miss, store, and return.
         """
+        fork_path = target.path
         with self.lock_for(fork_path):
             cached = self._snapshots.get(fork_path)
             if cached is not None:
                 return cached
-            snapshot = snapmod.build_snapshot(Path(fork_path))
+            if target.engine == "essentials":
+                snapshot = snapmod_essentials.build_snapshot_essentials(Path(fork_path))
+            else:
+                snapshot = snapmod.build_snapshot(Path(fork_path))
             self._snapshots[fork_path] = snapshot
             return snapshot
 
@@ -504,7 +514,7 @@ def target_dex(
     (cached per path, D2), then the existing M1 merge overlays the Ruleset — so
     the backdrop reuses M0 + M1 wholesale with no new merge path.
     """
-    snapshot = state.snapshot_for(target.path)
+    snapshot = state.snapshot_for(target)
     return dexmod.build_dex(snapshot, ruleset)
 
 
@@ -517,7 +527,7 @@ def target_abilities(
     cached per-Target snapshot (D2), then the abilities merge overlays the Ruleset
     — so the backdrop reuses the snapshot population + merge wholesale.
     """
-    snapshot = state.snapshot_for(target.path)
+    snapshot = state.snapshot_for(target)
     return dexmod.build_abilities(snapshot, ruleset)
 
 
@@ -531,7 +541,7 @@ def target_moves(
     then the moves merge overlays the Ruleset — so the backdrop reuses the
     snapshot population + merge wholesale.
     """
-    snapshot = state.snapshot_for(target.path)
+    snapshot = state.snapshot_for(target)
     return dexmod.build_moves(snapshot, ruleset)
 
 
@@ -569,5 +579,5 @@ def target_type_chart(
     then the type-chart merge overlays the Ruleset per cell — so the backdrop
     reuses the snapshot population + merge wholesale.
     """
-    snapshot = state.snapshot_for(target.path)
+    snapshot = state.snapshot_for(target)
     return dexmod.build_type_chart(snapshot, ruleset)

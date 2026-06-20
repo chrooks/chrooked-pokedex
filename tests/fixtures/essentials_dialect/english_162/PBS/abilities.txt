@@ -1,0 +1,8 @@
+#-------------------------------
+# Essentials 16.2-shape abilities.txt (flat CSV rows)
+# idx,INTERNALNAME,DisplayName,"Description"
+#-------------------------------
+1,OVERGROW,Overgrow,"Powers up Grass-type moves in a pinch."
+2,CHLOROPHYLL,Chlorophyll,"Boosts the Pokemon's Speed in sunshine."
+3,BLAZE,Blaze,"Powers up Fire-type moves in a pinch."
+4,TORRENT,Torrent,"Powers up Water-type moves in a pinch."
