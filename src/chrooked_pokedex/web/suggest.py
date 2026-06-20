@@ -1634,6 +1634,17 @@ def _validate_distribution(
 # The valid move categories per the loader (schema.py).
 _MOVE_CATEGORIES: frozenset[str] = frozenset({"physical", "special", "status"})
 
+# The fields the move loader (crud._MOVE_FIELDS) accepts on a PUT.  Used in
+# edit mode to strip presentation-only fields (overridden_fields, base, etc.)
+# that `build_moves` / the merged pool attaches but the loader rejects.
+_MOVE_PAYLOAD_FIELDS: frozenset[str] = frozenset(
+    {
+        "name", "chrooked_id", "aka", "type",
+        "category", "power", "accuracy", "pp", "description",
+        "effect", "argument", "additional_effects", "flags", "priority", "target",
+    }
+)
+
 
 def slugify_move_id(name: str) -> str:
     """Derive a new move's chrooked_id from its display name (D4).
@@ -2104,14 +2115,32 @@ def _validate_move_result(
             draft["behavior"], name=name, chrooked_id=chrooked_id
         )
 
-    # --- Build before/after for edit mode ---
+    # --- Build before/after and full merged move for edit mode ---
+    # In EDIT mode `validated` contains only the delta (fields the LLM proposed).
+    # `draft.move` must carry the FULL merged record so the skill can PUT it
+    # as-is without read-merging on the client side.  The `before` keeps only the
+    # pre-change values of the changed fields (for the before/after display table).
     before: dict[str, Any] | None = None
     if mode == "edit" and existing_move is not None:
+        # Capture the pre-change values for only the changed fields (minus `name`,
+        # which the caller already knows from the existing move).
         before = {
             field: existing_move.get(field)
             for field in validated
             if field != "name"
         }
+        # Merge: start from the full existing move, overlay the proposed delta.
+        # Strip presentation-only fields (overridden_fields, base, …) that the
+        # merged pool attaches but the loader's _MOVE_FIELDS rejects on PUT.
+        # Also exclude chrooked_id here — it is re-injected as the dict key below.
+        full_move: dict[str, Any] = {
+            k: v
+            for k, v in existing_move.items()
+            if k in _MOVE_PAYLOAD_FIELDS and k != "chrooked_id"
+        }
+        full_move.update(validated)
+    else:
+        full_move = dict(validated)
 
     # --- Rationale + alternatives ---
     rationale_raw = result.get("rationale") or {}
@@ -2132,7 +2161,7 @@ def _validate_move_result(
 
     out: dict[str, Any] = {
         "draft": {
-            "move": {"chrooked_id": chrooked_id, **validated},
+            "move": {"chrooked_id": chrooked_id, **full_move},
         },
         "rationale": rationale,
         "alternatives": alternatives,

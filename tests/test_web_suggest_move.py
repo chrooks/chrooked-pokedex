@@ -703,6 +703,103 @@ def test_suggest_put_with_invalid_category_is_rejected(ruleset_dir: Path, tmp_pa
 
 
 # ===========================================================================
+# ac5 (bounce-1 regression) — edit propose returns a FULL merged draft.move
+# so a type-only edit does not wipe power/pp/accuracy/etc. on PUT.
+# ===========================================================================
+
+
+def _good_type_only_edit_result(*, new_type: str = "Fairy") -> dict[str, Any]:
+    """LLM response that changes only `type` — no power/pp/accuracy in the delta."""
+    return {
+        "draft": {
+            "move": {
+                "name": "Excalibur",
+                "type": new_type,
+            },
+        },
+        "rationale": {
+            "move": "Retyping to Fairy for thematic reasons.",
+            "edit": f"Changed type from Steel to {new_type}.",
+        },
+        "alternatives": [],
+    }
+
+
+def test_edit_type_only_draft_move_carries_original_power_pp_accuracy() -> None:
+    """Regression (bounce 1): a type-only edit returns a FULL draft.move.
+
+    The partial LLM delta (only `type`) must be merged onto the existing move so
+    that `draft.move` carries the original power/pp/accuracy — not None — making
+    it safe to PUT without a client-side read step.
+    """
+    existing = dict(_SNAPSHOT["moves"]["excalibur"])  # power=90, pp=10, accuracy=100
+    result = _good_type_only_edit_result(new_type="Fairy")
+    out = _validate_edit(result, existing_move=existing)
+
+    move = out["draft"]["move"]
+    # Changed field is updated.
+    assert move["type"] == "Fairy"
+    # Unchanged fields are preserved — NOT None (the bug was they'd be absent/None).
+    assert move["power"] == existing["power"]
+    assert move["pp"] == existing["pp"]
+    assert move["accuracy"] == existing["accuracy"]
+    assert move["effect"] == existing["effect"]
+    assert move["flags"] == existing["flags"]
+    assert move["target"] == existing["target"]
+
+
+def test_edit_type_only_before_carries_only_changed_fields() -> None:
+    """The `before` dict must contain only the changed fields (for the diff display)."""
+    existing = dict(_SNAPSHOT["moves"]["excalibur"])
+    result = _good_type_only_edit_result(new_type="Fairy")
+    out = _validate_edit(result, existing_move=existing)
+
+    # `before` has the pre-change type value.
+    assert "type" in out["before"]
+    assert out["before"]["type"] == "Steel"
+    # `before` must NOT include fields the LLM didn't touch.
+    assert "power" not in out["before"]
+    assert "pp" not in out["before"]
+    assert "accuracy" not in out["before"]
+
+
+def test_edit_accept_preserves_unchanged_fields_via_put(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """Full accept round-trip: PUT the edit draft.move → the file preserves power=90.
+
+    This is the end-to-end regression: a type-only propose must produce a payload
+    that writes Excalibur's power correctly (90), not None.
+    """
+    provider = _FakeProvider(_good_type_only_edit_result(new_type="Fairy"))
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    resp = client.post(
+        "/api/moves/suggest",
+        json={"mode": "edit", "move_id": "excalibur", "direction": "retype to Fairy"},
+    )
+    assert resp.status_code == 200
+    draft_move = resp.json()["draft"]["move"]
+    chrooked_id = draft_move["chrooked_id"]
+
+    # The draft.move should already carry power/pp/accuracy from the merge.
+    assert draft_move["power"] == 90
+    assert draft_move["pp"] == 10
+    assert draft_move["accuracy"] == 100
+
+    # PUT it — the loader must accept it and write the file.
+    put_resp = client.put(f"/api/moves/{chrooked_id}", json=draft_move)
+    assert put_resp.status_code == 200
+
+    # Verify the written file preserves power=90 and landed type=Fairy.
+    saved = put_resp.json()
+    assert saved["power"] == 90, (
+        f"Power was wiped to {saved['power']!r} — partial PUT bug regressed."
+    )
+    assert saved["type"] == "Fairy"  # The edit landed.
+
+
+# ===========================================================================
 # ac6 — missing key → 503; provider.propose called exactly once; no write
 # ===========================================================================
 
