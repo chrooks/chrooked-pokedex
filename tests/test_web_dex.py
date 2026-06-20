@@ -368,6 +368,39 @@ def test_base_only_move_is_unflagged_with_empty_base() -> None:
     assert ember["additional_effects"] == [{"effect": "burn", "chance": 10}]
 
 
+def test_base_move_with_null_list_fields_is_coerced_to_empty() -> None:
+    # A per-Target snapshot reader (e.g. the Essentials reader) can emit a base
+    # move with `flags`/`additional_effects` as None. The MoveEntry contract types
+    # them as non-null lists (the frontend does `move.flags.length`), so the merge
+    # must coerce them to [] — for canon AND every Target backdrop.
+    ruleset = Ruleset.load(_SAMPLE)
+    snapshot = {
+        **_MOVE_SNAPSHOT,
+        "moves": {
+            "nullmove": {
+                "chrooked_id": "nullmove",
+                "name": "Null Move",
+                "aka": {},
+                "type": "Normal",
+                "category": "status",
+                "power": None,
+                "accuracy": None,
+                "pp": 5,
+                "description": "",
+                "effect": "hit",
+                "argument": None,
+                "additional_effects": None,
+                "flags": None,
+                "priority": 0,
+                "target": "selected",
+            }
+        },
+    }
+    entry = _entry(dexmod.build_moves(snapshot, ruleset), "nullmove")
+    assert entry["flags"] == []
+    assert entry["additional_effects"] == []
+
+
 def test_overridden_move_flags_changed_fields_with_base_diff() -> None:
     ruleset = Ruleset.load(_SAMPLE)
     excalibur = _entry(dexmod.build_moves(_MOVE_SNAPSHOT, ruleset), "excalibur")

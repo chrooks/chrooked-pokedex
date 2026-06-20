@@ -310,12 +310,24 @@ def _move_override_values(override: MoveDef) -> dict[str, Any]:
     }
 
 
+# The MoveEntry contract types these as non-null lists. A per-Target snapshot
+# reader (e.g. the Essentials reader) may leave them None; coerce here — the one
+# chokepoint every move-merge path flows through — so canon /api/moves AND every
+# Target backdrop honor the contract instead of shipping `flags: null` (which
+# crashes the frontend's `move.flags.length`).
+_MOVE_LIST_FIELDS = ("flags", "additional_effects")
+
+
 def _move_entry_fields(values: dict[str, Any], chrooked_id: str, aka: dict) -> dict[str, Any]:
     """Assemble the contract MoveEntry body (sans merge fields) from field values."""
+    body = {field: values.get(field) for field in _MOVE_DIFF_FIELDS}
+    for field in _MOVE_LIST_FIELDS:
+        if body.get(field) is None:
+            body[field] = []
     return {
         "chrooked_id": chrooked_id,
         "aka": aka,
-        **{field: values.get(field) for field in _MOVE_DIFF_FIELDS},
+        **body,
     }
 
 

@@ -267,11 +267,11 @@ export function MovesTab() {
                     {!hiddenSet.has("pp") && <td className="tab-num mono">{move.pp ?? "—"}</td>}
                     {!hiddenSet.has("flags") && (
                       <td>
-                        {move.flags.length === 0 ? (
+                        {(move.flags ?? []).length === 0 ? (
                           <span className="tab-faint">—</span>
                         ) : (
                           <span className="move-tags">
-                            {move.flags.map((flag) => (
+                            {(move.flags ?? []).map((flag) => (
                               <span key={flag} className="move-tag">
                                 {flag}
                               </span>
