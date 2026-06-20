@@ -1,6 +1,8 @@
 #-------------------------------
-# Essentials 16.2-shape moves.txt (flat CSV rows)
+# Essentials 16.2-shape moves.txt (flat CSV rows), REAL column layout (#40):
+# idx,InternalName,Display,FunctionCode,BaseDamage/Power,Type,Category,
+# Accuracy,TotalPP,EffectChance,Target,Priority,Flags,"Description"
 #-------------------------------
-001,TACKLE,Tackle,NORMAL,Physical,40,100,35,SingleNonUser,0,00,Contact,CanProtect,CanMirrorMove,
-002,SCRATCH,Scratch,NORMAL,Physical,40,100,35,SingleNonUser,0,00,Contact,CanProtect,CanMirrorMove,
-003,GROWL,Growl,NORMAL,Status,0,100,40,AllFoes,0,00,CanProtect,CanMirrorMove,
+1,MEGAHORN,Megahorn,000,120,BUG,Physical,85,10,0,00,0,abef,"Using its tough and impressive horn, the user rams into the target with no letup."
+2,TACKLE,Tackle,000,40,NORMAL,Physical,100,35,0,00,0,abef,"A physical attack in which the user charges and slams into the target."
+3,GROWL,Growl,002,0,NORMAL,Status,100,40,0,00,0,bef,"The user growls in an endearing way, lowering the target's Attack stat."

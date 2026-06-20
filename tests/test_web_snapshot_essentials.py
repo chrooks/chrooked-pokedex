@@ -1,11 +1,17 @@
-"""Issue #38 — the engine-aware per-Target backdrop snapshot for Essentials.
+"""Issue #38 + #40 — the engine-aware per-Target backdrop snapshot for Essentials.
 
 `web/snapshot_essentials.py` reads an Essentials `PBS/` tree into the same
 neutral snapshot dict the backdrop merge consumes, dialect-routed (16.2 vs
 modern v21). `TargetState.snapshot_for` routes essentials targets to it and
 leaves the pokeemerald path untouched.
 
-One test per acceptance criterion (ac1–ac4).
+#40 corrects two defects shipped by #38:
+
+* the 16.2 moves reader read the FunctionCode column as the type (junk ``000``
+  badge) and shifted every later column — fixed to the REAL Africanvs layout;
+* the join key was ``slug(display Name)`` — localized, so a Spanish target
+  produced foreign duplicates instead of overlaying the English base. The key
+  is now ``slug(InternalName)``, the language-neutral symbol.
 """
 
 from __future__ import annotations
@@ -15,6 +21,7 @@ from pathlib import Path
 import pytest
 
 from chrooked_pokedex.model import Ruleset
+from chrooked_pokedex.seed import neutralize as nz
 from chrooked_pokedex.web import snapshot as snapmod
 from chrooked_pokedex.web import snapshot_essentials as snapesmod
 from chrooked_pokedex.web import targets as targetsmod
@@ -23,6 +30,7 @@ from chrooked_pokedex.web.targets import Target, TargetState
 
 _FIXTURES = Path(__file__).resolve().parent / "fixtures" / "essentials_dialect"
 _ENGLISH_162 = _FIXTURES / "english_162"
+_SPANISH_162 = _FIXTURES / "spanish_162"
 _MODERN_V21 = _FIXTURES / "modern_v21"
 
 
@@ -34,48 +42,58 @@ def _empty_ruleset() -> Ruleset:
     return Ruleset()
 
 
-# --- ac1 -------------------------------------------------------------------- #
+# --- ac1: real 16.2 move columns; no junk '000' type ------------------------ #
 
 
-def test_ac1_both_dialects_read_species_and_routing_dispatches(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """16.2 and modern v21 both populate species; snapshot_for routes essentials."""
-    snap_162 = build_snapshot_essentials(_ENGLISH_162)
-    snap_v21 = build_snapshot_essentials(_MODERN_V21)
-    assert snap_162["species"], "16.2 fixture produced no species"
-    assert snap_v21["species"], "modern v21 fixture produced no species"
-
-    # snapshot_for(essentials_target) must dispatch to build_snapshot_essentials,
-    # NOT build_snapshot.
-    called: dict[str, bool] = {"essentials": False, "pokeemerald": False}
-
-    def _spy_essentials(pbs_dir: Path) -> dict:
-        called["essentials"] = True
-        return {"version": "essentials", "species": {}, "abilities": {},
-                "moves": {}, "type_chart": []}
-
-    def _spy_pokeemerald(base_dir: Path) -> dict:
-        called["pokeemerald"] = True
-        return {"version": "1.11.2", "species": {}, "abilities": {},
-                "moves": {}, "type_chart": []}
-
-    monkeypatch.setattr(
-        targetsmod.snapmod_essentials, "build_snapshot_essentials", _spy_essentials
-    )
-    monkeypatch.setattr(targetsmod.snapmod, "build_snapshot", _spy_pokeemerald)
-
-    state = TargetState()
-    state.snapshot_for(_essentials_target(_ENGLISH_162))
-    assert called["essentials"] is True
-    assert called["pokeemerald"] is False
+def test_ac1_spanish_megahorn_reads_real_16_2_move_columns() -> None:
+    """A Spanish-named move reads Type/Category/Power/Accuracy/PP from the REAL layout."""
+    snap = build_snapshot_essentials(_SPANISH_162)
+    megahorn = snap["moves"]["megahorn"]
+    assert megahorn["type"] == "Bug"
+    assert megahorn["category"] == "physical"
+    assert megahorn["power"] == 120
+    assert megahorn["accuracy"] == 85
+    assert megahorn["pp"] == 10
+    # The display label stays localized while the join key is language-neutral.
+    assert megahorn["name"] == "Megacuerno"
 
 
-# --- ac2 -------------------------------------------------------------------- #
+def test_ac1_no_move_reads_function_code_as_type() -> None:
+    """No move's type is the FunctionCode junk ('000') or empty — the #38 defect."""
+    for fixture in (_ENGLISH_162, _SPANISH_162):
+        snap = build_snapshot_essentials(fixture)
+        assert snap["moves"], f"{fixture.name} produced no moves"
+        for move in snap["moves"].values():
+            assert move["type"] not in ("000", ""), (
+                f"{fixture.name} move {move['chrooked_id']} has junk type {move['type']!r}"
+            )
+
+
+# --- ac2: InternalName join — overlay, not foreign duplicate ---------------- #
+
+
+def test_ac2_internal_name_join_keys_equal_base_keys() -> None:
+    """Spanish entries key on slug(InternalName), equal to the English base key."""
+    snap = build_snapshot_essentials(_SPANISH_162)
+
+    # MEGAHORN -> 'megahorn', STENCH -> 'stench', BULBASAUR -> 'bulbasaur'.
+    assert "megahorn" in snap["moves"]
+    assert "stench" in snap["abilities"]
+    assert "bulbasaur" in snap["species"]
+
+    # Each Essentials key equals slug(InternalName) — the exact chrooked_id the
+    # pokeemerald base produces — so a localized target overlays, not duplicates.
+    assert snap["moves"]["megahorn"]["chrooked_id"] == nz.slug("MEGAHORN")
+    assert snap["abilities"]["stench"]["chrooked_id"] == nz.slug("STENCH")
+    assert snap["species"]["bulbasaur"]["chrooked_id"] == nz.slug("BULBASAUR")
+
+    # And NOT keyed on the localized display name (the #38 foreign-duplicate bug).
+    assert "megacuerno" not in snap["moves"]
+    assert "hedor" not in snap["abilities"]
 
 
 def test_ac2_target_dex_renders_bulbasaur_correctly() -> None:
-    """Backdrop dex contains Bulbasaur with its real types and HP (not just non-empty)."""
+    """Backdrop dex contains Bulbasaur with its real types and stats."""
     state = TargetState()
     target = _essentials_target(_ENGLISH_162)
     dex = targetsmod.target_dex(target, _empty_ruleset(), state)
@@ -89,7 +107,16 @@ def test_ac2_target_dex_renders_bulbasaur_correctly() -> None:
     assert bulba["stats"]["spa"] == 65
 
 
-# --- ac3 -------------------------------------------------------------------- #
+# --- ac3: rebuilt english_162 + new spanish fixture render ------------------ #
+
+
+def test_ac3_english_162_real_schema_resolves_type() -> None:
+    """The rebuilt english_162 (real columns) resolves MEGAHORN's Bug type."""
+    snap = build_snapshot_essentials(_ENGLISH_162)
+    megahorn = snap["moves"]["megahorn"]
+    assert megahorn["type"] == "Bug"
+    assert megahorn["power"] == 120
+    assert megahorn["name"] == "Megahorn"
 
 
 def test_ac3_abilities_moves_typechart_render() -> None:
@@ -114,7 +141,47 @@ def test_ac3_abilities_moves_typechart_render() -> None:
     assert fire_v_grass["multiplier"] == 2.0
 
 
-# --- ac4 -------------------------------------------------------------------- #
+def test_ac3_both_dialects_read_species_and_routing_dispatches(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """16.2 and modern v21 both populate species; snapshot_for routes essentials."""
+    snap_162 = build_snapshot_essentials(_ENGLISH_162)
+    snap_v21 = build_snapshot_essentials(_MODERN_V21)
+    assert snap_162["species"], "16.2 fixture produced no species"
+    assert snap_v21["species"], "modern v21 fixture produced no species"
+
+    called: dict[str, bool] = {"essentials": False, "pokeemerald": False}
+
+    def _spy_essentials(pbs_dir: Path) -> dict:
+        called["essentials"] = True
+        return {"version": "essentials", "species": {}, "abilities": {},
+                "moves": {}, "type_chart": []}
+
+    def _spy_pokeemerald(base_dir: Path) -> dict:
+        called["pokeemerald"] = True
+        return {"version": "1.11.2", "species": {}, "abilities": {},
+                "moves": {}, "type_chart": []}
+
+    monkeypatch.setattr(
+        targetsmod.snapmod_essentials, "build_snapshot_essentials", _spy_essentials
+    )
+    monkeypatch.setattr(targetsmod.snapmod, "build_snapshot", _spy_pokeemerald)
+
+    state = TargetState()
+    state.snapshot_for(_essentials_target(_ENGLISH_162))
+    assert called["essentials"] is True
+    assert called["pokeemerald"] is False
+
+
+def test_ac3_v21_internal_name_is_the_join_key() -> None:
+    """For v21 the section header IS the internal name — it must become the key."""
+    snap = build_snapshot_essentials(_MODERN_V21)
+    assert "bulbasaur" in snap["species"]
+    assert "tackle" in snap["moves"]
+    assert snap["moves"]["tackle"]["type"] == "Normal"
+
+
+# --- ac4: pokeemerald path untouched ---------------------------------------- #
 
 
 def test_ac4_pokeemerald_path_unchanged(monkeypatch: pytest.MonkeyPatch) -> None:

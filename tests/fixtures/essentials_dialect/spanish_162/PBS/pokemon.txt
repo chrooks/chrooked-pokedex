@@ -1,0 +1,35 @@
+#-------------------------------
+# Spanish Africanvs 16.2-shape pokemon.txt (numeric [N] headers).
+# Real Africanvs keeps English species Names but localizes Kind/Pokedex; the
+# InternalName is the language-neutral join key either way (#40).
+#-------------------------------
+[1]
+Name=Bulbasaur
+InternalName=BULBASAUR
+Type1=GRASS
+Type2=POISON
+BaseStats=45,49,49,45,65,65
+GrowthRate=Parabolic
+BaseEXP=64
+EffortPoints=0,0,0,0,1,0
+Rareness=45
+Happiness=70
+Abilities=OVERGROW
+HiddenAbility=CHLOROPHYLL
+Moves=1,TACKLE,1,GROWL
+Kind=Semilla
+
+[4]
+Name=Charmander
+InternalName=CHARMANDER
+Type1=FIRE
+BaseStats=39,52,43,65,60,50
+GrowthRate=Parabolic
+BaseEXP=62
+EffortPoints=0,0,0,1,0,0
+Rareness=45
+Happiness=70
+Abilities=BLAZE
+HiddenAbility=SOLARPOWER
+Moves=1,SCRATCH,1,GROWL
+Kind=Lagartija

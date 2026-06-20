@@ -15,8 +15,10 @@ The read is dialect-routed (``appliers/essentials/dialect.detect_dialect``):
 
 A thin per-dialect adapter normalizes each record to ``(internal_name, fields)``
 before a single shared mapping turns it into the neutral shape. The join key is
-``nz.slug(display Name)`` (D3) — the exact key the Ruleset overrides use — so the
-overlay joins correctly by construction.
+``nz.slug(InternalName)`` (#40 D3-REVISED) — language-independent, so it equals
+the English base's ``chrooked_id`` and a localized (e.g. Spanish) target overlays
+the base instead of producing foreign duplicates. The display ``Name`` is kept as
+the human label.
 
 Scope (D4): species (dex #, name, types, ability slots, six stats), abilities
 map, moves map, and the full 18×18 type-chart grid. Evolution edges and the
@@ -188,13 +190,19 @@ def _species_abilities(mapping: dict[str, str]) -> dict[str, str | None]:
 
 
 def _build_species(records: list[_Record]) -> dict[str, dict[str, Any]]:
-    """Map species records to the neutral ``{chrooked_id: entry}`` dict (D3)."""
+    """Map species records to the neutral ``{chrooked_id: entry}`` dict.
+
+    The join key is ``nz.slug(InternalName)`` (#40 D3-REVISED) — language-
+    independent, so it equals the English base's ``chrooked_id`` and a localized
+    target overlays the base instead of producing foreign duplicates. The
+    display ``Name`` is kept as the human label.
+    """
     species: dict[str, dict[str, Any]] = {}
-    for index, (_internal, mapping) in enumerate(records, start=1):
+    for index, (internal, mapping) in enumerate(records, start=1):
         name = mapping.get("Name", "").strip()
-        if not name:
+        if not name or not internal:
             continue
-        chrooked_id = nz.slug(name)
+        chrooked_id = nz.slug(internal)
         species[chrooked_id] = {
             "dex": index,
             "chrooked_id": chrooked_id,
@@ -210,11 +218,11 @@ def _build_species(records: list[_Record]) -> dict[str, dict[str, Any]]:
 def _build_abilities_v21(text: str) -> dict[str, dict[str, Any]]:
     """Modern v21 abilities: ``[INTERNALNAME]`` sections with ``Name=``/``Description=``."""
     abilities: dict[str, dict[str, Any]] = {}
-    for _internal, fields in _records_v21(text):
+    for internal, fields in _records_v21(text):
         name = fields.get("Name", "").strip()
-        if not name:
+        if not name or not internal:
             continue
-        chrooked_id = nz.slug(name)
+        chrooked_id = nz.slug(internal)
         abilities[chrooked_id] = {
             "chrooked_id": chrooked_id,
             "name": name,
@@ -225,15 +233,20 @@ def _build_abilities_v21(text: str) -> dict[str, dict[str, Any]]:
 
 
 def _build_abilities_162(text: str) -> dict[str, dict[str, Any]]:
-    """16.2 abilities: flat CSV ``idx,INTERNAL,Display,"Description"``."""
+    """16.2 abilities: flat CSV ``idx,INTERNAL,Display,"Description"``.
+
+    Keyed on ``slug(InternalName)`` (row 1) so a localized target overlays the
+    base; the display ``Name`` (row 2) stays the human label.
+    """
     abilities: dict[str, dict[str, Any]] = {}
     for row in _csv_rows(text):
         if len(row) < 3:
             continue
+        internal = row[1].strip()
         name = row[2].strip()
-        if not name:
+        if not name or not internal:
             continue
-        chrooked_id = nz.slug(name)
+        chrooked_id = nz.slug(internal)
         description = row[3].strip() if len(row) > 3 else ""
         abilities[chrooked_id] = {
             "chrooked_id": chrooked_id,
@@ -244,11 +257,15 @@ def _build_abilities_162(text: str) -> dict[str, dict[str, Any]]:
     return abilities
 
 
-def _move_entry(name: str, type_internal: str, category: str,
+def _move_entry(internal: str, name: str, type_internal: str, category: str,
                 power: str, accuracy: str, pp: str,
                 description: str) -> dict[str, Any]:
-    """Build one neutral move entry from already-extracted raw fields."""
-    chrooked_id = nz.slug(name)
+    """Build one neutral move entry from already-extracted raw fields.
+
+    The join key is ``slug(InternalName)`` (#40), not the localized display
+    ``name`` — so a Spanish move overlays the English base by internal symbol.
+    """
+    chrooked_id = nz.slug(internal)
 
     def _int_or_none(raw: str) -> int | None:
         raw = raw.strip()
@@ -270,11 +287,12 @@ def _move_entry(name: str, type_internal: str, category: str,
 def _build_moves_v21(text: str) -> dict[str, dict[str, Any]]:
     """Modern v21 moves: ``[INTERNALNAME]`` sections with named fields."""
     moves: dict[str, dict[str, Any]] = {}
-    for _internal, fields in _records_v21(text):
+    for internal, fields in _records_v21(text):
         name = fields.get("Name", "").strip()
-        if not name:
+        if not name or not internal:
             continue
         entry = _move_entry(
+            internal=internal,
             name=name,
             type_internal=fields.get("Type", "").strip(),
             category=fields.get("Category", ""),
@@ -288,22 +306,30 @@ def _build_moves_v21(text: str) -> dict[str, dict[str, Any]]:
 
 
 def _build_moves_162(text: str) -> dict[str, dict[str, Any]]:
-    """16.2 moves: flat CSV ``idx,INTERNAL,Display,Type,Cat,Pow,Acc,PP,...``.
+    """16.2 moves: flat CSV, the REAL Essentials 16.2 column layout (#40).
 
-    The 16.2 dialect carries no per-move description column, so description is "".
+    Proven against the real Africanvs PBS::
+
+        idx(0), InternalName(1), Display(2), FunctionCode(3), BaseDamage/Power(4),
+        Type(5), Category(6), Accuracy(7), TotalPP(8), EffectChance(9), Target(10),
+        Priority(11), Flags(12), Description(13)
+
+    The #38 reader wrongly read FunctionCode(3) as the type (the junk ``000``
+    badge) and shifted every later column. Description lives at col 13.
     """
     moves: dict[str, dict[str, Any]] = {}
     for row in _csv_rows(text):
-        if len(row) < 8:
+        if len(row) < 9:
             continue
         entry = _move_entry(
+            internal=row[1],
             name=row[2],
-            type_internal=row[3],
-            category=row[4],
-            power=row[5],
-            accuracy=row[6],
-            pp=row[7],
-            description="",
+            type_internal=row[5],
+            category=row[6],
+            power=row[4],
+            accuracy=row[7],
+            pp=row[8],
+            description=row[13] if len(row) > 13 else "",
         )
         moves[entry["chrooked_id"]] = entry
     return moves

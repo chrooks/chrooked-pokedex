@@ -1,0 +1,7 @@
+#-------------------------------
+# Spanish Africanvs 16.2-shape abilities.txt — real layout (#40):
+# idx,InternalName,Display,"Description". Display is localized (Hedor); the
+# InternalName (STENCH) is the language-neutral join key.
+#-------------------------------
+1,STENCH,Hedor,"Debido al mal olor que emana, al atacar al rival puede hacerlo retroceder."
+2,OVERGROW,Espesura,"Potencia los movimientos de tipo Planta en un apuro."
