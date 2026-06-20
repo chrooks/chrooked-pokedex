@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PokeballSpinner } from "../PokeballSpinner";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
@@ -152,7 +153,12 @@ export function AbilitiesTab() {
   );
 
   if (error !== null) return <ErrorView message={error} status={status} />;
-  if (isLoading) return <p className="tab-loading">Loading abilities…</p>;
+  if (isLoading)
+    return (
+      <div className="tab-loading">
+        <PokeballSpinner label="Loading abilities…" />
+      </div>
+    );
 
   return (
     <div className="tab" id="tab-abilities">

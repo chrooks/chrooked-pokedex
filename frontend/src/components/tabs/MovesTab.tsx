@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { PokeballSpinner } from "../PokeballSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
@@ -183,7 +184,12 @@ export function MovesTab() {
   }
 
   if (error !== null) return <ErrorView message={error} status={status} />;
-  if (isLoading) return <p className="tab-loading">Loading moves…</p>;
+  if (isLoading)
+    return (
+      <div className="tab-loading">
+        <PokeballSpinner label="Loading moves…" />
+      </div>
+    );
 
   return (
     <div className="tab" id="tab-moves">

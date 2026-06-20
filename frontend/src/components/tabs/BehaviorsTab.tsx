@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../../api";
+import { PokeballSpinner } from "../PokeballSpinner";
 import { useResource } from "../../hooks/useResource";
 import type { Behavior } from "../../types";
 import { ErrorView, EmptyView } from "../StatusView";
@@ -16,7 +17,12 @@ export function BehaviorsTab() {
   const [editing, setEditing] = useState<{ behavior: Behavior | null } | null>(null);
 
   if (error !== null) return <ErrorView message={error} status={status} />;
-  if (isLoading) return <p className="tab-loading">Loading behaviors…</p>;
+  if (isLoading)
+    return (
+      <div className="tab-loading">
+        <PokeballSpinner label="Loading behaviors…" />
+      </div>
+    );
 
   const behaviors = data ?? [];
 

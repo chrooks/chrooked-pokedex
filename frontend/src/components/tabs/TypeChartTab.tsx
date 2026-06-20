@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../../api";
+import { PokeballSpinner } from "../PokeballSpinner";
 import { EditedLed } from "../EditedLed";
 import { useResource } from "../../hooks/useResource";
 import { useSubmit } from "../../hooks/useSubmit";
@@ -167,7 +168,12 @@ export function TypeChartTab() {
   }
 
   if (error !== null) return <ErrorView message={error} status={status} />;
-  if (isLoading) return <p className="tab-loading">Loading type chart…</p>;
+  if (isLoading)
+    return (
+      <div className="tab-loading">
+        <PokeballSpinner label="Loading type chart…" />
+      </div>
+    );
 
   return (
     <div className="tab tab--type-chart" id="tab-type-chart">

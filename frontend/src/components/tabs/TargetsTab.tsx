@@ -7,6 +7,7 @@
 
 import { useMemo, useState } from "react";
 import { api, ApiError } from "../../api";
+import { PokeballSpinner } from "../PokeballSpinner";
 import { useResource } from "../../hooks/useResource";
 import type { Target } from "../../types";
 import { ErrorView, EmptyView } from "../StatusView";
@@ -50,7 +51,12 @@ export function TargetsTab({ onViewBackdrop }: Props) {
   }
 
   if (error !== null) return <ErrorView message={error} status={status} />;
-  if (isLoading) return <p className="tab-loading">Loading targets…</p>;
+  if (isLoading)
+    return (
+      <div className="tab-loading">
+        <PokeballSpinner label="Loading targets…" />
+      </div>
+    );
 
   return (
     <div className="tab tab--targets" id="tab-targets">
