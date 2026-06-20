@@ -2,3 +2,22 @@ name: Dugtrio
 chrooked_id: dugtrio
 aka: { pokeemerald: SPECIES_DUGTRIO }
 stats: { atk: 100 }
+learnset:
+  - { level: 0, move: Tri Attack }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Scratch }
+  - { level: 12, move: Bulldoze }
+  - { level: 16, move: Sucker Punch }
+  - { level: 20, move: Slash }
+  - { level: 24, move: Sandstorm }
+  - { level: 28, move: Sand Tomb }
+  - { level: 30, move: Stomping Tantrum }
+  - { level: 34, move: Dig }
+  - { level: 38, move: Scorching Sands }
+  - { level: 42, move: Earth Power }
+  - { level: 48, move: Earthquake }
+  - { level: 54, move: Fissure }
