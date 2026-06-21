@@ -116,4 +116,24 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "Wyvernize user uses Tackle (Normal) at a foe that resists DRAGON.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "DRAGON", "boosted": "true"}},
         {"stage": "Wyvernize user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
     ],
+    "bloom": [
+        {"stage": "c1", "select": {"move": "ENERGYBALL", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "c2", "select": {"move": "FLAMETHROWER", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "c3", "select": {"move": "VINEWHIP", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+    ],
+    "cryomancer": [
+        {"stage": "c1", "select": {"move": "ICEBEAM", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "c2", "select": {"move": "THUNDERBOLT", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "c3", "select": {"move": "POWDERSNOW", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+    ],
+    "deluge": [
+        {"stage": "c1", "select": {"move": "SURF", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "c2", "select": {"move": "FLAMETHROWER", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "c3", "select": {"move": "WATERGUN", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+    ],
+    "overcharge": [
+        {"stage": "c1", "select": {"move": "THUNDERBOLT", "ability": "true", "hp_low": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "c2", "select": {"move": "THUNDERBOLT", "ability": "true", "hp_low": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "c3", "select": {"move": "ICEBEAM", "ability": "true", "hp_low": "true"}, "expect": {"result": "NORMAL"}},
+    ],
 }
