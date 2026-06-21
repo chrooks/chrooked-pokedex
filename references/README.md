@@ -1,39 +1,44 @@
 # Reference implementations
 
-Per-engine, per-version implementations of Ruleset **behaviors**. The Ruleset itself stays
-engine-neutral; these `.patch` files are the engine-specific output of porting a
-[behavior spec](../ruleset/behaviors/) into a real target.
+Per-engine, per-version implementations of Ruleset **behaviors** — the engine-specific output
+of porting a [behavior spec](../ruleset/behaviors/) into a real target. The Ruleset itself
+stays engine-neutral.
 
-They are a **growing library**: the first time a mechanic is implemented for an engine, the
-diff is captured here. The next time that engine is targeted, the port is near-mechanical
+They are a **growing library**: the first time a mechanic is implemented for an engine, its
+port is captured here. The next time that engine is targeted, the port is near-mechanical
 reuse instead of a fresh derivation.
+
+Two storage models, because the engines differ:
+
+- **pokeemerald** edits existing C in place, so a port is a **`.patch`** applied with `git apply`.
+- **Essentials 16.2** adds a standalone Ruby plugin file, so a port is a **plugin** living under
+  `essentials-harness/chrooked_<id>.rb`. `chrooked-pokedex apply --engine essentials` **installs**
+  it (copies it into the target's `Scripts/`) and flips that mechanic's `DATA ONLY` report line to
+  "mechanic installed" (issue #16). No `.patch` for Essentials — the plugin is additive, not a diff.
 
 ## Naming
 
-`<chrooked_id>.<engine>-<version>.patch` — e.g. `innerfocus.pokeemerald-expansion-1.15.3.patch`.
-
-Apply with `git apply <file>` from the target fork's root (the path is relative to repo root).
+- pokeemerald: `<chrooked_id>.pokeemerald-expansion-<version>.patch` (`git apply` from the fork root).
+- essentials 16.2: `essentials-harness/chrooked_<chrooked_id>.rb` (installed on `apply --engine essentials`).
 
 ## How each was produced
 
-The behavior-port loop:
+The behavior-port loop (see `.claude/skills/port-behavior/SKILL.md`):
 
 1. `chrooked-pokedex behaviors --mechanic <id> --engine <engine>` emits a self-contained packet.
 2. A behavior-port agent implements it into a clean target **from the packet only**.
-3. The edit is static-verified against the spec's acceptance tests and compiled.
-4. The diff is captured here.
-
-A reference patch carries BOTH the mechanic edit AND, for pokeemerald, its battle test —
-the executable form of the spec's acceptance cases. Verification is RED→GREEN: the test
-fails on the clean engine (proving it exercises the mechanic), then passes once the mechanic
-is applied.
+3. It is verified against the spec's acceptance tests: pokeemerald runs its battle test RED→GREEN;
+   Essentials runs the log-oracle harness (`harness stage|verify <id>`, one human-played battle).
+4. The port is captured here (a `.patch` for pokeemerald; a plugin under `essentials-harness/` for
+   Essentials).
 
 ## Inventory
 
-| mechanic | engine | verified |
-| --- | --- | --- |
-| innerfocus | pokeemerald-expansion 1.15.3 | `make check` RED→GREEN (battle test) + compiles |
-| innerfocus | essentials 16.2 (Africanvs) | in-game (Wine debug) — logfile gate-decision oracle; loads + fires correctly |
+| mechanic | engine | storage | verified |
+| --- | --- | --- | --- |
+| innerfocus | pokeemerald-expansion 1.15.3 | `.patch` | `make check` RED→GREEN (battle test) + compiles |
+| innerfocus | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify innerfocus` 3/3 (log oracle) |
+| kindle | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify kindle` 3/3 (log oracle); Seam `pbModifyDamage` |
 
 ### innerfocus.pokeemerald-expansion-1.15.3
 
@@ -51,11 +56,13 @@ is applied.
   failed at the true `0.69` hit rate; with the mechanic it passes 100/100. The other two
   assert the bypass does not leak to other moves or non-Inner-Focus users.
 
-### innerfocus.essentials-16.2
+### innerfocus.essentials-16.2 (+ kindle)
 
-- **Code home:** a loose external Ruby plugin, `Scripts/chrooked_innerfocus.rb`, loaded by the
-  Africanvs copy's `load_order_shim.rb` (preloaded via `mkxp.json` → `preloadScript`). NOT a
-  `Scripts.rxdata` repack — the patch is plain text, mirroring the pokeemerald cache model.
+- **Code home:** standalone Ruby plugins `essentials-harness/chrooked_innerfocus.rb` and
+  `essentials-harness/chrooked_kindle.rb`, installed into the target's `Scripts/` by
+  `apply --engine essentials` (issue #16), and auto-loaded by `load_order_shim.rb` (preloaded via
+  `mkxp.json` → `preloadScript`; the shim globs `chrooked_*.rb`). NOT a `Scripts.rxdata` repack.
+  kindle's Seam is `PokeBattle_Move#pbModifyDamage` (1.5× Fire, Blaze sans HP check).
 - **Seam:** `PokeBattle_Move#pbAccuracyCheck(attacker, opponent)` in 16.2's
   `084_PokeBattle_Move`. NOTE: the spec's engine hint named `Battle::Move` — that is the
   modern (v19+/v21) class; 16.2 is `PokeBattle_Move`. Verified against the extracted scripts,

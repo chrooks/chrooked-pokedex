@@ -103,10 +103,22 @@ stored patch is stale.
    loose external Ruby plugin `Scripts/chrooked_<chrooked_id>.rb` in the game copy, tagged
    `# chrooked:<id>`, auto-loaded by the copy's `load_order_shim.rb` (preloaded via `mkxp.json` →
    `preloadScript`; the shim globs `Scripts/chrooked_*.rb`, so NO `load_order.txt` editing is needed).
-   The reusable loader assets live in `references/essentials-harness/` (`mkxp.json`,
-   `load_order_shim.rb`, the per-mechanic plugins). Never repack the binary `Scripts.rxdata`. The
-   version string is the dialect label `essentials-16.2`, so the reference is
-   `references/<id>.essentials-16.2.patch` — a `git apply`-able diff that recreates the plugin.
+   The canonical port AND the loader assets live in `references/essentials-harness/`
+   (`mkxp.json`, `load_order_shim.rb`, and one `chrooked_<id>.rb` per mechanic). Never repack the
+   binary `Scripts.rxdata`. **There is no per-id `.patch` for Essentials** (issue #16, Q9): an
+   Essentials port is an additive standalone file, so the captured artifact IS the plugin in
+   `references/essentials-harness/`, and `chrooked-pokedex apply --engine essentials` **installs** it —
+   copies it into the target's `Scripts/` (and ensures the loader assets), then the 16.2 ability-create
+   report line flips from `DATA ONLY` to "mechanic installed". An unported spec (no plugin file) still
+   reports `DATA ONLY`, honestly. The honesty Invariant: the warning disappears only when the plugin is
+   genuinely installed.
+
+   **The full Essentials loop** (what "end-to-end" means here — a documented sequence, no new command):
+   (1) `behaviors --mechanic <id> --engine essentials` emits the packet; (2) port it — cache hit if
+   `references/essentials-harness/chrooked_<id>.rb` already exists, else derive a new plugin from the
+   packet; (3) `apply --engine essentials --target <copy>` installs the plugin + flips the boundary;
+   (4) `harness stage <id>` → play one debug battle → `harness verify <id>` → PASS per test_case;
+   (5) surface for review. A human plays the battle (the engine can't run battles headlessly).
    Gotchas proven on the innerfocus tracer: (1) the 16.2 battle class is `PokeBattle_Move`
    (modern Essentials is `Battle::Move`), so verify the Seam against the **extracted** scripts
    (`ruby -e` Marshal-load + Zlib-inflate `Data/Scripts.rxdata`), not the spec hint; (2) this engine
@@ -118,9 +130,11 @@ stored patch is stale.
    guarded logfile (`Scripts/chrooked_load.log`). That logfile is also the verification oracle: make
    the plugin log the gate decision per cast, since in-game evasion setup is impractical and a 70%
    move's raw hit-counts are an unreliable oracle.
-6. **Capture** the patch BEFORE cleanup — it must carry BOTH the mechanic edit AND the battle test:
-   `git -C <target> diff > references/<id>.<engine>-<version>.patch`
-   and add/update the row in `references/README.md` (note RED→GREEN result).
+6. **Capture** BEFORE cleanup, and update the `references/README.md` row.
+   - pokeemerald: `git -C <target> diff > references/<id>.<engine>-<version>.patch` — the patch must
+     carry BOTH the mechanic edit AND the battle test (RED→GREEN).
+   - essentials: copy the working plugin to `references/essentials-harness/chrooked_<id>.rb` (this is
+     the install source `apply` reads). No `.patch`.
 7. **Restore the target** (it is usually a keeper): `git -C <target> checkout -- <edited files>`,
    remove build/test artifacts (`pokeemerald.gba`, `*.elf`, `*.map`, `build/`).
 8. **Surface for review.** Show the diff, the chosen [Seam](~/.claude/CONTEXT.md), the RED→GREEN

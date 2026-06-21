@@ -39,6 +39,7 @@ from ...model import Ruleset
 from ...model.schema import AbilityDef
 from ...report import ApplyReport, ReportEntry
 from ..essentials import vocab
+from . import behavior_install
 from . import csv_io, pbs_io
 from .resolution import ResolutionMap
 
@@ -148,9 +149,15 @@ def _create_row(
     columns[_DESC_COL] = _quote_desc(ability.description)
 
     text = csv_io.append_row(text, csv_io.join_columns(columns))
+    # Plugin-aware boundary (#16): if a port exists it will be INSTALLED by the
+    # behaviors tier, so this is not DATA-ONLY; otherwise keep the honest warning.
+    if behavior_install.has_plugin(chrooked_id):
+        reason = f"created new ability; mechanic installed via Scripts/chrooked_{chrooked_id}.rb"
+    else:
+        reason = "created new ability — DATA ONLY; mechanic must be implemented in the target engine"
     report.add(ReportEntry(
         status="applied", category="ability", chrooked_id=chrooked_id, symbol=internal,
-        reason="created new ability — DATA ONLY; mechanic must be implemented in the target engine",
+        reason=reason,
     ))
     return text
 

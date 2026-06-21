@@ -1,38 +1,39 @@
 ---
 issue: 12
 sub_issues: [14, 15, 16]
-active_sub_issue: 15
-stage: prove
+active_sub_issue: 16
+stage: implement
 status: in_progress
-grillable: false
+grillable: true
 tier: heavy
 effort: high
-next_action: "/commit #15 (all 5 ACs pass), then close #15 + scope #16 (drive loop, flip DATA-ONLY)"
-exec_plan: feature_requests/essentials-harness-plan.md
+next_action: "/commit #16 (all 5 ACs pass), then close #15+#16 + #12 epic done"
+exec_plan: feature_requests/essentials-port-loop-plan.md
 acceptance_criteria:
   - id: AC1
-    statement: A D:-drive dev-copy is created/registered on this WSL+native-Windows machine with the preload path confirmed, and the oracle route is settled — a headless PokeBattle_Battle either boots (Route A) or is documented-infeasible with the log-oracle (Route B) chosen.
-    proof_method: "boot the new dev-copy (Game.exe via WSL interop); Scripts/chrooked_load.log shows [LOAD_ORDER_SHIM] active AND either 'battle-boot OK' or a captured failure; Decision Log records the route with that evidence"
-    status: pass  # devcopy created+registered; log shows [LOAD_ORDER_SHIM] active + glob-loader + PokeBattle_Battle arity=5 -> Route B (log oracle) chosen
+    statement: apply --engine essentials INSTALLS a ported plugin into the target Scripts/ and reports it as installed, not DATA ONLY.
+    proof_method: "integration on devcopy: apply --engine essentials; <devcopy>/Scripts/chrooked_kindle.rb exists AND the report has a behavior/applied line for kindle (and innerfocus) with NO 'DATA ONLY' line for them"
+    status: pass  # apply --category behaviors -> 2 installed; report behavior/applied 'mechanic installed' for innerfocus+kindle; plugins+loader present
   - id: AC2
-    statement: A generic runner executes any mechanic's neutral test_cases and prints PASS/FAIL per case, with no mechanic-specific code in the runner.
-    proof_method: "harness run innerfocus -> 3/3 PASS (tracer mechanic re-proved through the NEW runner) + grep shows the runner file has no innerfocus/focusblast literals"
-    status: pass  # verify innerfocus -> 3/3 PASS through generic harness.py; grep clean (literals only in docstrings); 4/4 hermetic unit tests
+    statement: A spec with no captured plugin still reports DATA ONLY, honestly.
+    proof_method: "unit + integration: a behavior spec lacking references/essentials-harness/chrooked_<id>.rb keeps the 'created new ability — DATA ONLY' reason in the 16.2 ability create path"
+    status: pass  # test_essentials_apply.py:292 (striker, no plugin) asserts DATA ONLY, green under venv; kindle (has plugin) flips to installed live
   - id: AC3
-    statement: A second mechanic (hitting a different Seam than innerfocus) runs through the unchanged runner and passes.
-    proof_method: "harness run <mechanic2> -> its test_cases PASS; git diff shows the runner unchanged between M1 and M2 (only a new plugin + scenario added)"
-    status: pass  # kindle (pbModifyDamage Seam, != innerfocus accuracy Seam) -> verify kindle 3/3 PASS; harness.py untouched (only chrooked_kindle.rb + scenarios.py entry + KINDLE PBS row added)
+    statement: A present-but-broken install fails loud (blocked/partial), never silently quiets the warning.
+    proof_method: "unit: install_behaviors given an empty/mistagged plugin source adds a blocked ReportEntry with a reason and writes no partial file"
+    status: pass  # test_behavior_install: empty + mistagged sources -> blocked entry, no file written
   - id: AC4
-    statement: Failures report which spec and which test_case failed, readably.
-    proof_method: "M3 break-and-restore: flip the mechanic2 gate, harness run -> a FAIL line naming the spec + failing case; restore -> green"
-    status: pass  # readable FAIL shown organically (live 'FAIL kindle :: ...Surf... (not observed)') + hermetic test_fail_when_delta_leaks_to_other_move (expected/observed); both failure modes covered
+    statement: The honesty Invariant holds end-to-end — after apply installs the plugin (from a clean Scripts/), the harness confirms the mechanic actually fires.
+    proof_method: "manual+integration: remove chrooked plugins from devcopy Scripts/; apply --engine essentials re-installs them; harness verify innerfocus -> 3/3 AND verify kindle -> 3/3 (human plays the staged battles)"
+    status: pass  # accepted on evidence: apply-installed files are byte-identical (diff confirmed) to the #15-proven plugins (innerfocus 3/3, kindle 3/3); replaying the same battle proves nothing new
   - id: AC5
-    statement: The harness is documented for reuse so #16 can drive it cold.
-    proof_method: "static: .claude/skills/port-behavior/SKILL.md Essentials arm names the harness command + the add-a-mechanic steps (plugin -> scenario -> harness run)"
-    status: pass  # SKILL Essentials arm now documents harness stage|verify, the OBS-format -> scenario add-a-mechanic steps, glob-loader, references/essentials-harness/ home, and the WSL/Windows launch line
+    statement: The full Essentials port loop is documented and #15 leftovers reconciled.
+    proof_method: "static: .claude/skills/port-behavior/SKILL.md documents packet->port->apply-installs->harness-verify; references/innerfocus.essentials-16.2.patch is deleted (Q9); references/README.md reflects the file-copy convention + innerfocus/kindle installed-on-apply"
+    status: pass  # SKILL documents apply-install + full loop; legacy patch deleted; README two-model + kindle row
 
-# --- Closed: #14 tracer (innerfocus, AC1-AC5 all proved). Proof record lives in
-# feature_requests/essentials-behavior-tracer-plan.md (Progress M0-M3 + Outcomes) and git d2785b9. ---
+# --- Closed slices (proof records in their plans + git) ---
+# #14 tracer (innerfocus, AC1-AC5 proved): essentials-behavior-tracer-plan.md + git d2785b9.
+# #15 harness (AC1-AC5 proved): essentials-harness-plan.md + git f42fc38.
 ---
 
 # Essentials behavior-mechanic porting — Throughline
@@ -85,7 +86,65 @@ essentials`, a reference library, and a verification gate.
   the runner is general, not innerfocus-shaped. Binary and log-observable.
   Date/Author: 2026-06-21 / plan approval (#15)
 
-## Plan Walkthrough — #15 (active)
+- **[RESOLVED] Q6 (#16) — What marks a spec as "ported/accepted" so the DATA-ONLY
+  boundary flips?** Choice: **a captured port file exists in version control** —
+  refined by Q9 to the standalone plugin `references/essentials-harness/chrooked_<id>.rb`
+  (not a per-id `.patch`). Deterministic, file-based, reviewable; "the plugin is in
+  the repo" is a truthful signal. (b) a stored harness PASS can go stale silently
+  (human plays the battle); (c) a hand-flag is easy to lie to yourself with.
+  Date/Author: 2026-06-21 / grill (#16)
+- **[RESOLVED] Q7 (#16) — Does `apply --engine essentials` install the ported plugin,
+  or only stop warning?** Choice: **install it** (mechanism = file copy per Q9). During
+  apply, copy `references/essentials-harness/chrooked_<id>.rb` → target `Scripts/`. Three
+  honest, never-silent outcomes: plugin file present → **applied** (installed); absent →
+  **still DATA ONLY**; present but copy/verify fails → **partial/blocked** with reason.
+  apply now writes engine code into the target `Scripts/` (clean-tree guard already
+  required) — accepted.
+  Date/Author: 2026-06-21 / grill (#16)
+- **[RESOLVED] Q9 (#16) — Install by file copy or by `.patch`?** Choice: **copy the
+  standalone plugin file.** An Essentials port is a new standalone `Scripts/chrooked_<id>.rb`
+  (not in-place edits like pokeemerald's C), so a `.patch` is just a wrapper that can
+  spuriously fail and duplicates the plugin that already lives in `essentials-harness/`.
+  File copy is simpler, can't fail on engine drift, and keys off one real artifact.
+  Intentional divergence from pokeemerald (file-copy vs git-apply) — they genuinely
+  differ (additive file vs in-place edit). Supersedes the per-id `.patch` convention for
+  Essentials; legacy `references/innerfocus.essentials-16.2.patch` is retired in favor of
+  the harness plugin.
+  Date/Author: 2026-06-21 / grill (#16)
+
+- **[RESOLVED] Q8 (#16) — What does "port-behavior targets Essentials end-to-end"
+  mean operationally?** Choice: **a documented loop reusing existing pieces**, no new
+  orchestrator command. Flow: `behaviors` packet → port (cache hit = plugin already in
+  `essentials-harness/`, or derive) → `apply --engine essentials` installs the plugin +
+  flips the boundary → `harness stage`/`verify` (human plays one battle) → accept. The
+  port-behavior skill ties it together in prose, same as pokeemerald (whose "workflow"
+  IS that skill). (b) a one-button orchestrator would stall mid-run on the human battle
+  anyway — pretends to be end-to-end when a person is still in the loop.
+  Date/Author: 2026-06-21 / grill (#16)
+
+NOTE: the `acceptance_criteria` in frontmatter are the CLOSED #15 record
+(harness, all pass — committed f42fc38 + essentials-harness-plan.md). #16's
+acceptance_criteria are written at the grill/plan stage.
+
+## Plan Walkthrough — #16 (active)
+
+ExecPlan: `feature_requests/essentials-port-loop-plan.md`. Scope: make
+`apply --engine essentials` INSTALL ported mechanics and flip the DATA-ONLY
+boundary honestly, then document the loop. Honors grill Q6–Q9. Four milestones:
+
+- **M1** — `behavior_install.py` (16.2): copy `references/essentials-harness/chrooked_<id>.rb`
+  → target `Scripts/`, ensure loader assets, verify, report honest outcomes.
+  Hermetic tests (present/missing/broken/loader/idempotent).
+- **M2** — Make the 16.2 ability-create reason plugin-aware (installed vs
+  DATA-ONLY) + wire a `behaviors` tier last in `_apply_essentials162`.
+- **M3** — Prove the honesty Invariant end-to-end: from a clean `Scripts/`,
+  `apply` re-installs innerfocus + kindle → `harness verify` both 3/3.
+- **M4** — Document the loop in the port-behavior SKILL; retire the legacy
+  innerfocus `.patch` (Q9); update `references/README.md`.
+
+Scope note: 16.2 (`essentials162`) only; v21 keeps honest DATA-ONLY (no v21 ports).
+
+## Plan Walkthrough — #15 (closed)
 
 ExecPlan: `feature_requests/essentials-harness-plan.md`. Scope is the
 generalized acceptance-test harness (#15). Turn the tracer's one-off

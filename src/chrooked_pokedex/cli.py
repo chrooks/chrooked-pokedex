@@ -24,6 +24,7 @@ from .appliers.essentials import (
 )
 from .appliers.essentials162 import (
     ability_apply as essentials162_abilities,
+    behavior_install as essentials162_behaviors,
     evolution_apply as essentials162_evolution,
     learnset_apply as essentials162_learnset,
     move_apply as essentials162_moves,
@@ -83,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     apply.add_argument(
         "--category",
-        choices=("all", "abilities", "moves", "create", "species", "learnset", "evolution", "type-chart"),
+        choices=("all", "abilities", "moves", "create", "species", "learnset", "evolution", "type-chart", "behaviors"),
         default="all",
         help="Which tier to apply (default: all). Not every tier exists on every engine; "
         "a tier absent from the chosen engine is simply a no-op.",
@@ -285,7 +286,7 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
 # its slot (not a partial). Move scalars follow, then species scalars, learnsets,
 # evolutions, and finally the defender-bucket type chart. (Move effects → HEX functioncodes
 # are #22.)
-_ESSENTIALS162_CATEGORIES = ("abilities", "moves", "species", "learnset", "evolution", "type-chart")
+_ESSENTIALS162_CATEGORIES = ("abilities", "moves", "species", "learnset", "evolution", "type-chart", "behaviors")
 
 
 def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
@@ -316,6 +317,11 @@ def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyRepo
     if "type-chart" in categories:
         changed = essentials162_type_chart.apply_type_chart(target, ruleset, resmap, report)
         print(f"type-chart: {len(changed)} file(s) changed")
+    if "behaviors" in categories:
+        # Install ported mechanics LAST — the ability data rows exist by now, and a
+        # standalone plugin copy needs no earlier ordering. Flips DATA-ONLY honestly.
+        changed = essentials162_behaviors.install_behaviors(target, ruleset, report)
+        print(f"behaviors: {len(changed)} file(s) changed")
 
 
 def _run_apply(
