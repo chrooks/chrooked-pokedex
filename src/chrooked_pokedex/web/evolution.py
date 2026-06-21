@@ -111,6 +111,7 @@ def _humanize_fallback(method: str, param: str) -> str:
 def build_evolution_graph(
     forward: dict[str, list[EvolutionEntry]],
     resolver: SpeciesResolver,
+    labeler: Callable[[str, str], str] = method_label,
 ) -> dict[str, dict[str, Any]]:
     """Build per-species `evolution` (backward) + `evolves_into` (forward).
 
@@ -119,6 +120,11 @@ def build_evolution_graph(
     Only species that participate in some edge appear — `build_snapshot` reads
     these back onto the matching species entries and leaves the rest untouched.
     Targets the resolver can't place are dropped (a half-edge is never emitted).
+
+    `labeler` turns each `(method, param)` pair into a human-readable label. It
+    defaults to the pokeemerald `method_label`, so existing callers are
+    unchanged; the Essentials path injects `essentials_method_label` because its
+    method vocabulary (`Level`/`Item`/…) is not the pokeemerald `EVO_*` one.
     """
     graph: dict[str, dict[str, Any]] = {}
 
@@ -138,7 +144,7 @@ def build_evolution_graph(
             if target is None:
                 continue
             target_id, target_name, target_dex = target
-            label = method_label(entry.method, entry.param)
+            label = labeler(entry.method, entry.param)
             detail = {"kind": entry.method, "param": entry.param}
 
             slot(source_id)["evolves_into"].append(

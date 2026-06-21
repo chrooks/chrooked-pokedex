@@ -213,3 +213,43 @@ def test_ac4_pokeemerald_path_unchanged(monkeypatch: pytest.MonkeyPatch) -> None
     state.snapshot_for(poke_target)
     assert called["pokeemerald"] is True
     assert called["essentials"] is False
+
+
+# --- #39: evolution edges + level-up learnset on the Essentials snapshot ----- #
+
+
+@pytest.mark.parametrize("root", [_ENGLISH_162, _MODERN_V21], ids=["essentials16", "essentials21"])
+def test_evolution_both_directions_and_fully_evolved(root: Path) -> None:
+    """Bulbasaur -> Ivysaur -> Venusaur resolves both ways in both dialects."""
+    snap = build_snapshot_essentials(root)
+    species = snap["species"]
+
+    bulba = species["bulbasaur"]
+    assert bulba["fully_evolved"] is False
+    into = {edge["to"]: edge for edge in bulba["evolves_into"]}
+    assert "ivysaur" in into
+    assert into["ivysaur"]["method"] == "Level 16"
+
+    # Backward edge: Ivysaur points back at Bulbasaur.
+    ivy = species["ivysaur"]
+    assert ivy["evolution"]["from"] == "bulbasaur"
+    assert ivy["evolution"]["method"] == "Level 16"
+    assert ivy["fully_evolved"] is False
+
+    # Venusaur is final — no forward edges, fully evolved.
+    venu = species["venusaur"]
+    assert venu["fully_evolved"] is True
+    assert venu["evolves_into"] == []
+    assert venu["evolution"]["from"] == "ivysaur"
+    assert venu["evolution"]["method"] == "Level 32"
+
+
+@pytest.mark.parametrize("root", [_ENGLISH_162, _MODERN_V21], ids=["essentials16", "essentials21"])
+def test_learnset_resolves_move_display_names(root: Path) -> None:
+    """The PBS `Moves =` line becomes {level, move display name} entries."""
+    snap = build_snapshot_essentials(root)
+    learnset = snap["species"]["bulbasaur"]["learnset"]
+    assert learnset == [
+        {"level": 1, "move": "Tackle", "move_id": "tackle"},
+        {"level": 1, "move": "Growl", "move_id": "growl"},
+    ]

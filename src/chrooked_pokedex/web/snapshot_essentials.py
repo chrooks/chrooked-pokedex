@@ -28,9 +28,12 @@ them so omission renders cleanly.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .essentials_evolution import essentials_method_label
+from .evolution import build_evolution_graph
 from ..appliers.essentials.dialect import detect_dialect
 from ..appliers.essentials.pbs_read import parse_sections as parse_sections_v21
 from ..appliers.essentials162.section_read import (
@@ -373,6 +376,88 @@ def _build_type_chart(records: list[_Record]) -> list[dict[str, Any]]:
     return sorted(chart, key=lambda c: (c["attacker"], c["defender"]))
 
 
+# --- Evolution + learnset: parse PBS lines, feed the shared graph ----------- #
+
+
+@dataclass(frozen=True)
+class _EssentialsEvolution:
+    """One outgoing edge, duck-typed to what ``build_evolution_graph`` reads.
+
+    Exposes ``.target_species`` / ``.method`` / ``.param`` — the same three
+    attributes the pokeemerald ``EvolutionEntry`` carries — so the shared
+    invert+resolve transform consumes it without importing a pokeemerald type
+    across the engine boundary (plan D3 / Decision Log).
+    """
+
+    target_species: str
+    method: str
+    param: str
+
+
+def _parse_learnset(moves_value: str, moves: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    """Parse a ``Moves = LEVEL,MOVE,LEVEL,MOVE`` value into learnset entries.
+
+    Each (level, move-internal) pair becomes
+    ``{"level": int, "move": <name>, "move_id": <chrooked_id>}``, resolving the
+    move-internal to its display ``name`` via the already-built ``moves`` dict
+    (keyed on ``slug(InternalName)``). A move absent from the target's moves.txt
+    falls back to a humanized form of its token, so an entry never leaks a raw
+    internal symbol. ``move_id`` is the language-neutral join key, so a backdrop
+    relabel can overlay the canonical English move name without re-parsing.
+    """
+    tokens = [t.strip() for t in moves_value.split(",") if t.strip()]
+    entries: list[dict[str, Any]] = []
+    for index in range(0, len(tokens) - 1, 2):
+        level_raw, move_internal = tokens[index], tokens[index + 1]
+        if not level_raw.lstrip("-").isdigit():
+            continue
+        chrooked_id = nz.slug(move_internal)
+        entry = moves.get(chrooked_id)
+        name = entry["name"] if entry else move_internal.replace("_", " ").title()
+        entries.append({"level": int(level_raw), "move": name, "move_id": chrooked_id})
+    return entries
+
+
+def _build_forward_evolutions(
+    records: list[_Record],
+) -> dict[str, list[_EssentialsEvolution]]:
+    """Map each species' ``Evolutions =`` line into outgoing edges by InternalName.
+
+    The value is one or more ``TARGET,METHOD,PARAM`` triplets. A species with no
+    (or malformed) ``Evolutions =`` line is simply absent from the map, so the
+    complement of the map's keys is exactly the fully-evolved set.
+    """
+    forward: dict[str, list[_EssentialsEvolution]] = {}
+    for internal, mapping in records:
+        tokens = [t.strip() for t in mapping.get("Evolutions", "").split(",") if t.strip()]
+        edges = [
+            _EssentialsEvolution(tokens[i], tokens[i + 1], tokens[i + 2])
+            for i in range(0, len(tokens) - 2, 3)
+        ]
+        if edges:
+            forward[internal] = edges
+    return forward
+
+
+def _evolution_resolver(
+    records: list[_Record],
+    species: dict[str, dict[str, Any]],
+):
+    """An ``InternalName -> (chrooked_id, name, dex)`` lookup over the species dict.
+
+    Mirrors the pokeemerald resolver shape (``web/snapshot._species_resolver``),
+    reusing each entry's existing ``dex`` (file-enumeration index, plan D2). An
+    unknown InternalName resolves to None and the transform drops its edge.
+    """
+    table: dict[str, tuple[str, str, int | None]] = {}
+    for internal, _mapping in records:
+        chrooked_id = nz.slug(internal)
+        entry = species.get(chrooked_id)
+        if entry is not None:
+            table[internal] = (chrooked_id, entry["name"], entry["dex"])
+    return table.get
+
+
 # --- Public entrypoint ------------------------------------------------------ #
 
 
@@ -416,9 +501,33 @@ def build_snapshot_essentials(pbs_dir: Path) -> dict[str, Any]:
     else:
         type_records = []
 
+    species = _build_species(species_records)
+
+    # Evolution: invert+resolve the forward edges with the shared transform,
+    # injecting the Essentials-local labeler (its method vocabulary is not the
+    # pokeemerald `EVO_*` one). `evolving` is the set of source InternalNames, so
+    # its complement is the fully-evolved set.
+    forward = _build_forward_evolutions(species_records)
+    evolving = set(forward)
+    resolver = _evolution_resolver(species_records, species)
+    graph = build_evolution_graph(forward, resolver, labeler=essentials_method_label)
+
+    # Learnset + evolution fields written back onto each species entry, keyed by
+    # InternalName so a localized target lines up on the language-neutral symbol.
+    for internal, mapping in species_records:
+        chrooked_id = nz.slug(internal)
+        entry = species.get(chrooked_id)
+        if entry is None:
+            continue
+        entry["learnset"] = _parse_learnset(mapping.get("Moves", ""), moves)
+        edges = graph.get(chrooked_id)
+        entry["evolution"] = edges["evolution"] if edges else None
+        entry["evolves_into"] = edges["evolves_into"] if edges else []
+        entry["fully_evolved"] = internal not in evolving
+
     return {
         "version": SNAPSHOT_VERSION,
-        "species": _build_species(species_records),
+        "species": species,
         "abilities": abilities,
         "moves": moves,
         "type_chart": _build_type_chart(type_records) if type_records else [],

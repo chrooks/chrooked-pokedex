@@ -16,6 +16,7 @@ Happiness = 70
 Abilities = OVERGROW
 HiddenAbility = CHLOROPHYLL
 Moves = 1,TACKLE,1,GROWL
+Evolutions = IVYSAUR,Level,16
 
 [2]
 InternalName = IVYSAUR
@@ -27,6 +28,23 @@ GenderRate = FemaleOneEighth
 GrowthRate = Medium
 BaseEXP = 142
 EffortPoints = 0,0,0,0,2,0
+Rareness = 45
+Happiness = 70
+Abilities = OVERGROW
+HiddenAbility = CHLOROPHYLL
+Moves = 1,TACKLE,1,GROWL
+Evolutions = VENUSAUR,Level,32
+
+[3]
+InternalName = VENUSAUR
+Name = Venusaur
+Type1 = GRASS
+Type2 = POISON
+BaseStats = 80,82,83,80,100,100
+GenderRate = FemaleOneEighth
+GrowthRate = Medium
+BaseEXP = 236
+EffortPoints = 0,0,0,0,3,0
 Rareness = 45
 Happiness = 70
 Abilities = OVERGROW
