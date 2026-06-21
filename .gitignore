@@ -21,7 +21,11 @@ frontend/vite.config.d.ts
 targets.json
 .chrooked/targets.json
 
-feature_requests/
+# Plans/throughlines are local-only by default, except the Essentials
+# behavior-porting track docs, which travel with that work.
+feature_requests/*
+!feature_requests/essentials-behavior-port-throughline.md
+!feature_requests/essentials-behavior-tracer-plan.md
 
 # Dispatched-agent git worktrees (transient, isolated checkouts)
 .claude/worktrees/
