@@ -7,7 +7,7 @@ import { onDataChange } from "./lib/dataChange";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { DexEntry, KindKey } from "./types";
+import type { DexEntry, KindKey, Move } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
 import type { DexViewPatch } from "./components/filters/DexControls";
@@ -34,6 +34,7 @@ export default function App() {
     [view.backdrop],
   );
   const dex = useResource<DexEntry[]>(dexFetcher);
+  const moves = useResource<Move[]>(api.moves);
   const reloadDex = dex.reload;
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -44,6 +45,17 @@ export default function App() {
 
   const all = useMemo(() => dex.data ?? [], [dex.data]);
   const editedCount = useMemo(() => all.filter(isEdited).length, [all]);
+
+  const moveOptions = useMemo(() => {
+    const names = new Set<string>();
+    for (const m of moves.data ?? []) names.add(m.name);
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [moves.data]);
+
+  const speciesOptions = useMemo(
+    () => all.map((e) => e.name).sort((a, b) => a.localeCompare(b)),
+    [all],
+  );
 
   // Distinct ability names across the merged dex (base + overrides) — the
   // suggestion set for the species editor's ability comboboxes.
@@ -244,6 +256,8 @@ export default function App() {
           onSaved={dex.reload}
           onNavigate={handleNavigate}
           abilityOptions={abilityOptions}
+          moveOptions={moveOptions}
+          speciesOptions={speciesOptions}
         />
       )}
     </DeviceFrame>

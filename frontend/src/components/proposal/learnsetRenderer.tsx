@@ -8,6 +8,7 @@
    section-agnostic; all the learnset knowledge lives here. */
 
 import { useState } from "react";
+import { isKnown } from "../../lib/entityValidation";
 import type { LearnsetDraft } from "../../types";
 import type { CellRenderArgs, SectionRenderer } from "./renderer";
 import {
@@ -19,14 +20,14 @@ import {
   removedRows,
 } from "./learnsetDraft";
 
-/** Build the learnset renderer. No external pool needed (free-text moves). */
-export function learnsetRenderer(): SectionRenderer<LearnsetDraft> {
+/** Build the learnset renderer. Accepts move options for datalist suggestions and validation. */
+export function learnsetRenderer(moveOptions: readonly string[] = []): SectionRenderer<LearnsetDraft> {
   return {
     id: "learnset",
     title: "Learnset",
     suggestLabel: "Suggest a learnset with the LLM",
     placeholder: "how would you like to change the learnset?",
-    renderCells: (args) => <LearnsetCells {...args} />,
+    renderCells: (args) => <LearnsetCells {...args} moveOptions={moveOptions} />,
     applyAlternative,
     mergeDraft,
   };
@@ -37,7 +38,8 @@ function LearnsetCells({
   draft,
   rationale,
   onEdit,
-}: CellRenderArgs<LearnsetDraft>) {
+  moveOptions,
+}: CellRenderArgs<LearnsetDraft> & { moveOptions: readonly string[] }) {
   const current = currentLearnset(entry);
   const proposed = draft?.learnset ?? [];
   const classified = classifyProposed(current, proposed);
@@ -123,6 +125,7 @@ function LearnsetCells({
                     <ProposedRowEditor
                       level={row.level}
                       move={row.move}
+                      moveOptions={moveOptions}
                       onCommit={(patch) => {
                         if (draftIndex >= 0)
                           onEdit(editRow(draft, draftIndex, patch));
@@ -187,16 +190,25 @@ function LearnsetCells({
 interface EditorProps {
   level: number;
   move: string;
+  moveOptions: readonly string[];
   onCommit: (patch: { level: number; move: string }) => void;
   onCancel: () => void;
 }
 
 /** Inline (level, move) editor for one proposed row. Commit autosorts the list. */
-function ProposedRowEditor({ level, move, onCommit, onCancel }: EditorProps) {
+function ProposedRowEditor({ level, move, moveOptions, onCommit, onCancel }: EditorProps) {
   const [lv, setLv] = useState(String(level));
   const [mv, setMv] = useState(move);
+  const [moveError, setMoveError] = useState<string | null>(null);
+
+  const moveListId = `proposal-learnset-move-list`;
 
   function commit() {
+    if (mv.trim() !== "" && !isKnown(mv, moveOptions)) {
+      setMoveError("Unknown move");
+      return;
+    }
+    setMoveError(null);
     const parsed = Number(lv);
     onCommit({
       level: Number.isFinite(parsed) ? parsed : level,
@@ -223,14 +235,25 @@ function ProposedRowEditor({ level, move, onCommit, onCancel }: EditorProps) {
       <input
         className="proposal__row-move mono"
         type="text"
+        list={moveListId}
         aria-label="Move"
+        aria-invalid={moveError ? "true" : undefined}
         value={mv}
-        onChange={(e) => setMv(e.target.value)}
+        onChange={(e) => {
+          setMv(e.target.value);
+          setMoveError(null);
+        }}
         onKeyDown={(e) => {
           if (e.key === "Enter") commit();
           if (e.key === "Escape") onCancel();
         }}
       />
+      <datalist id={moveListId}>
+        {moveOptions.map((opt) => <option key={opt} value={opt} />)}
+      </datalist>
+      {moveError && (
+        <span className="field__error" role="alert">{moveError}</span>
+      )}
       <button
         type="button"
         className="proposal__row-commit"

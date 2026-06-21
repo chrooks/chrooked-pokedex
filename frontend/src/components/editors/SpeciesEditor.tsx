@@ -9,7 +9,7 @@
    snapshot carries no evolution, so any set evolution is always an Override. The
    raw Override is fetched first so its `aka` survives the round-trip. */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { api } from "../../api";
 import { STAT_ORDER, STAT_LABEL, TYPES, isEdited } from "../../lib/format";
 import type {
@@ -21,6 +21,7 @@ import type {
 } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
+import { collectInvalidFields } from "../../lib/entityValidation";
 import { ComboField, NumberField, SelectField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import {
@@ -39,6 +40,10 @@ type Props = {
   onSaved: () => void;
   /** Known ability names (base + Ruleset-owned) for the ability comboboxes. */
   abilityOptions: readonly string[];
+  /** Known move names for the learnset comboboxes. */
+  moveOptions: readonly string[];
+  /** Known species names for the evo-from combobox. */
+  speciesOptions: readonly string[];
 };
 
 const ABILITY_SLOTS = ["primary", "secondary", "hidden"] as const;
@@ -48,7 +53,7 @@ type StatForm = Record<string, number | "">;
 type AbilityForm = Record<AbilitySlot, string>;
 type LearnRow = { _id: number; level: number | ""; move: string };
 
-export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props) {
+export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOptions, speciesOptions }: Props) {
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
 
@@ -111,6 +116,20 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
       onDone();
     }
   }
+
+  const invalidFields = useMemo(() => collectInvalidFields([
+    ...ABILITY_SLOTS.map((slot) => ({
+      id: `species-ability-${slot}`,
+      value: abilities[slot],
+      options: abilityOptions,
+    })),
+    ...learnset.map((row) => ({
+      id: `learn-${row._id}-move`,
+      value: row.move,
+      options: moveOptions,
+    })),
+    { id: "species-evo-from", value: evoFrom, options: speciesOptions },
+  ]), [abilities, learnset, evoFrom, abilityOptions, moveOptions, speciesOptions]);
 
   const busy = isSaving || del.isSaving || !rawLoaded;
 
@@ -252,10 +271,12 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
                 <span className="tc-row__vs" aria-hidden="true">
                   ·
                 </span>
-                <TextField
+                <ComboField
                   id={`learn-${row._id}-move`}
                   label="Move"
+                  options={moveOptions}
                   value={row.move}
+                  error={invalidFields.has(`learn-${row._id}-move`) ? "Unknown move" : null}
                   onChange={(v) =>
                     setLearnset((ls) =>
                       ls.map((r, j) => (j === i ? { ...r, move: v } : r)),
@@ -290,12 +311,14 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
         <h3 className="editor-section__heading" id="species-evolution-heading">
           Evolution
         </h3>
-        <TextField
+        <ComboField
           id="species-evo-from"
           label="Evolves from"
           hint="pre-evolution name; blank = no evolution Override"
+          options={speciesOptions}
           full
           value={evoFrom}
+          error={invalidFields.has("species-evo-from") ? "Unknown species" : null}
           onChange={setEvoFrom}
         />
         <div className="tc-row" style={{ marginTop: "var(--space-2)" }}>
@@ -321,6 +344,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
             />
           )}
           {evoMethod.kind === "item" && (
+            // TODO: itemOptions once #24 lands
             <TextField
               id="species-evo-item"
               label="Item"
@@ -380,7 +404,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
         <button type="button" className="btn" disabled={busy} onClick={onDone}>
           Cancel
         </button>
-        <button type="submit" className="btn btn--primary" disabled={busy}>
+        <button type="submit" className="btn btn--primary" disabled={busy || invalidFields.size > 0}>
           {isSaving ? "Saving…" : "Save Override"}
         </button>
       </div>

@@ -40,6 +40,10 @@ type Props = {
   onNavigate: NavHandler;
   /** Known ability names (base + owned) for the species editor's comboboxes. */
   abilityOptions: readonly string[];
+  /** Known move names for the learnset comboboxes. */
+  moveOptions: readonly string[];
+  /** Known species names for the evo-from combobox. */
+  speciesOptions: readonly string[];
 };
 
 /**
@@ -55,6 +59,8 @@ export function DetailLedger({
   onSaved,
   onNavigate,
   abilityOptions,
+  moveOptions,
+  speciesOptions,
 }: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -209,6 +215,8 @@ export function DetailLedger({
             onDone={() => setEditing(false)}
             onSaved={onSaved}
             abilityOptions={abilityOptions}
+            moveOptions={moveOptions}
+            speciesOptions={speciesOptions}
           />
         ) : (
           <DetailBody
@@ -217,6 +225,7 @@ export function DetailLedger({
             onNavigate={onNavigate}
             onSaved={onSaved}
             abilityOptions={abilityOptions}
+            moveOptions={moveOptions}
             onProposalActive={handleProposalActive}
           />
         )}
@@ -234,6 +243,8 @@ type BodyProps = {
   onSaved: () => void;
   /** Known ability names for the proposed-abilities slot selects. */
   abilityOptions: readonly string[];
+  /** Known move names for the learnset proposal editor. */
+  moveOptions: readonly string[];
   /** Report a section's active/idle proposal state up to the ledger (ac8). */
   onProposalActive: (sectionId: string, isActive: boolean) => void;
 };
@@ -266,6 +277,7 @@ function DetailBody({
   onNavigate,
   onSaved,
   abilityOptions,
+  moveOptions,
   onProposalActive,
 }: BodyProps) {
   return (
@@ -326,7 +338,7 @@ function DetailBody({
         >
           <ProposedColumn
             entry={entry}
-            renderer={learnsetRenderer()}
+            renderer={learnsetRenderer(moveOptions)}
             suggest={suggestLearnsetCall}
             onApplied={onSaved}
             onActiveChange={onProposalActive}
