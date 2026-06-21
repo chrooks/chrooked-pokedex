@@ -1456,3 +1456,27 @@ def test_issue44_known_base_description_overlaid_custom_keeps_own(tmp_path: Path
     assert custom["description"] == "Descripción propia del fork.", (
         "custom ability must keep its own description, never blank/overlaid"
     )
+
+
+@pytest.mark.unit
+def test_relabel_names_keeps_fakemon_pbs_name() -> None:
+    """A target-only fakemon keeps its PBS Name, not a prettified InternalName.
+
+    Regression: the relabel fallback used to prettify the chrooked_id/InternalName
+    (`aquilatus` -> "Aquilatus"), clobbering the author's real `Name=Harregg`.
+    Canon species still relabel to English; a nameless entry still prettifies.
+    """
+    from chrooked_pokedex.web.targets import _relabel_names
+
+    english_map = {"pikachu": "Pikachu"}
+    entries = [
+        {"chrooked_id": "pikachu", "name": "Pikachu (es)"},  # canon -> English
+        {"chrooked_id": "aquilatus", "name": "Harregg"},      # fakemon -> keep PBS
+        {"chrooked_id": "intuitus", "name": ""},               # no name -> prettify
+    ]
+
+    by_id = {e["chrooked_id"]: e["name"] for e in _relabel_names(entries, english_map)}
+
+    assert by_id["pikachu"] == "Pikachu"
+    assert by_id["aquilatus"] == "Harregg"
+    assert by_id["intuitus"] == "Intuitus"

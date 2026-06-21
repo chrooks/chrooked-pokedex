@@ -673,8 +673,10 @@ def _relabel_names(
 
     Priority:
     1. Canonical English from base ⊕ Ruleset (by chrooked_id).
-    2. Prettified InternalName — the entry's existing ``internal`` field if
-       present, else derived from the chrooked_id as a best-effort fallback.
+    2. The target's own PBS ``Name`` — a target-only fakemon (e.g. Harregg) has
+       no canonical English, and its PBS name is the author's real display name,
+       which beats a prettified code-name (InternalName ``AQUILATUS``).
+    3. Prettified InternalName / chrooked_id, only if the entry has no name.
 
     All other fields are left unchanged; only the display ``name`` changes.
     """
@@ -683,9 +685,11 @@ def _relabel_names(
         chrooked_id = entry.get("chrooked_id", "")
         english_name = english_map.get(chrooked_id)
         if english_name is None:
-            # Fallback: prettify the InternalName (or derive from chrooked_id).
-            raw_internal = entry.get("internal") or chrooked_id
-            english_name = _prettify_internal_name(raw_internal)
+            # No canon (target-only fakemon): keep the PBS Name; prettify the
+            # InternalName only as a last resort when no name is present.
+            english_name = entry.get("name") or _prettify_internal_name(
+                entry.get("internal") or chrooked_id
+            )
         result.append({**entry, "name": english_name})
     return result
 
