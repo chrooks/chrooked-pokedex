@@ -49,7 +49,11 @@ const TOGGLEABLE = MOVE_COLUMNS.filter((c) => !c.locked).map((c) => ({
     with an edited-LED per row, the shared dex-parity control stack (boolean
     filter builder, sort row, columns toggle, Reset all) driven by the move
     registry, and per-Target backdrop awareness. */
-export function MovesTab() {
+type MovesTabProps = {
+  backdropTargetId?: string | null;
+};
+
+export function MovesTab({ backdropTargetId }: MovesTabProps) {
   const [view, update] = useUrlState();
   const [controls, setControls] = useEntityView(moveCodec, MOVE_PARAM_KEYS);
   // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
@@ -337,6 +341,7 @@ export function MovesTab() {
                   filterField="moves"
                   entityName={selected.name}
                   readOnly
+                  backdropTargetId={backdropTargetId}
                   onSaved={() => {
                     reloadDex();
                     reload();
@@ -376,6 +381,7 @@ export function MovesTab() {
                   filterField="moves"
                   entityName={selected.name}
                   readOnly={view.backdrop !== null}
+                  backdropTargetId={backdropTargetId}
                   onSaved={() => {
                     reloadDex();
                     reload();

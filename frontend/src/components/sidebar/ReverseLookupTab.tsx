@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { useUrlState } from "../../hooks/useUrlState";
-import { spriteUrl } from "../../lib/sprites";
+import { DexSprite } from "../DexSprite";
 import {
   ABILITY_SLOTS,
   abilityOverridePayload,
@@ -46,6 +46,8 @@ type Props = {
   entityName: string;
   /** Backdrop / read-only mode disables every edit affordance (D5). */
   readOnly: boolean;
+  /** When a backdrop target is active, DexSprite uses the target's own art. */
+  backdropTargetId?: string | null;
   /** Called after a successful Save so the parent reloads + rebuilds the index. */
   onSaved: () => void;
   /** Called after navigating to a species so the sidebar can close. */
@@ -69,6 +71,7 @@ export function ReverseLookupTab({
   filterField,
   entityName,
   readOnly,
+  backdropTargetId,
   onSaved,
   onClose,
 }: Props) {
@@ -287,6 +290,7 @@ export function ReverseLookupTab({
         <ReadOnlyList
           species={rows}
           rowIdPrefix={rowIdPrefix}
+          backdropTargetId={backdropTargetId}
           onPick={handleClick}
         />
       ) : (
@@ -304,6 +308,7 @@ export function ReverseLookupTab({
               rowIdPrefix={rowIdPrefix}
               pending={pending.get(entry.chrooked_id) ?? null}
               isAdded={!presentIds.has(entry.chrooked_id)}
+              backdropTargetId={backdropTargetId}
               onNavigate={() => handleClick(entry)}
               onChange={(change) => setPendingFor(entry.chrooked_id, change)}
             />
@@ -354,45 +359,36 @@ export function ReverseLookupTab({
 type ReadOnlyListProps = {
   species: DexEntry[];
   rowIdPrefix: string;
+  backdropTargetId?: string | null;
   onPick: (entry: DexEntry) => void;
 };
 
-function ReadOnlyList({ species, rowIdPrefix, onPick }: ReadOnlyListProps) {
+function ReadOnlyList({ species, rowIdPrefix, backdropTargetId, onPick }: ReadOnlyListProps) {
   return (
     <ul
       id="reverse-lookup-list"
       className="reverse-lookup__list"
       style={{ maxHeight: "none" }}
     >
-      {species.map((entry) => {
-        const src = spriteUrl(entry.chrooked_id, entry.dex);
-        return (
-          <li key={entry.chrooked_id}>
-            <button
-              type="button"
-              id={`${rowIdPrefix}-${entry.chrooked_id}`}
-              className="reverse-lookup__species-btn"
-              onClick={() => onPick(entry)}
-            >
-              {src !== null && src !== undefined && (
-                <img
-                  src={src}
-                  alt={entry.name}
-                  width={32}
-                  height={32}
-                  decoding="async"
-                  loading="lazy"
-                  style={{
-                    verticalAlign: "middle",
-                    marginRight: "var(--space-1)",
-                  }}
-                />
-              )}
-              {entry.name}
-            </button>
-          </li>
-        );
-      })}
+      {species.map((entry) => (
+        <li key={entry.chrooked_id}>
+          <button
+            type="button"
+            id={`${rowIdPrefix}-${entry.chrooked_id}`}
+            className="reverse-lookup__species-btn"
+            onClick={() => onPick(entry)}
+          >
+            <DexSprite
+              chrookedId={entry.chrooked_id}
+              dex={entry.dex}
+              name={entry.name}
+              backdropTargetId={backdropTargetId}
+              size={32}
+            />
+            {entry.name}
+          </button>
+        </li>
+      ))}
     </ul>
   );
 }
@@ -406,6 +402,7 @@ type EditableRowProps = {
   rowIdPrefix: string;
   pending: Pending | null;
   isAdded: boolean;
+  backdropTargetId?: string | null;
   onNavigate: () => void;
   onChange: (change: Pending | null) => void;
 };
@@ -417,10 +414,10 @@ function EditableRow({
   rowIdPrefix,
   pending,
   isAdded,
+  backdropTargetId,
   onNavigate,
   onChange,
 }: EditableRowProps) {
-  const src = spriteUrl(entry.chrooked_id, entry.dex);
   const isRemoved =
     pending !== null &&
     (("move" in pending && pending.move.type === "remove") ||
@@ -441,16 +438,13 @@ function EditableRow({
         onClick={onNavigate}
         title={`Open ${entry.name}`}
       >
-        {src !== null && src !== undefined && (
-          <img
-            src={src}
-            alt=""
-            width={28}
-            height={28}
-            decoding="async"
-            loading="lazy"
-          />
-        )}
+        <DexSprite
+          chrookedId={entry.chrooked_id}
+          dex={entry.dex}
+          name={entry.name}
+          backdropTargetId={backdropTargetId}
+          size={28}
+        />
         <span className="dist-row__name-text">{entry.name}</span>
         {isAdded && <span className="dist-row__badge">new</span>}
       </button>

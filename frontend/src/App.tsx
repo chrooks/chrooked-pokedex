@@ -301,9 +301,9 @@ function KindScreen({
 }: KindScreenProps) {
   switch (kind) {
     case "moves":
-      return <MovesTab />;
+      return <MovesTab backdropTargetId={backdropTargetId} />;
     case "abilities":
-      return <AbilitiesTab />;
+      return <AbilitiesTab backdropTargetId={backdropTargetId} />;
     case "type-chart":
       return <TypeChartTab />;
     case "behaviors":

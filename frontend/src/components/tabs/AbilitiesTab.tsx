@@ -37,7 +37,11 @@ const ABILITY_PARAM_KEYS: EntityParamKeys = {
     Ruleset) as a def-list with an edited-LED per row, the shared control stack
     (boolean filter builder + sort row + Reset all) driven by the ability
     registry — no columns control, since the list is a def-list (D5). */
-export function AbilitiesTab() {
+type AbilitiesTabProps = {
+  backdropTargetId?: string | null;
+};
+
+export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
   const [view, update] = useUrlState();
   const [controls, setControls] = useEntityView(abilityCodec, ABILITY_PARAM_KEYS);
   // Swap the fetcher to the Target's backdrop (fork ⊕ Ruleset) when one is set;
@@ -274,6 +278,7 @@ export function AbilitiesTab() {
                   filterField="abilities"
                   entityName={selected.name}
                   readOnly
+                  backdropTargetId={backdropTargetId}
                   onSaved={() => {
                     reloadDex();
                     reload();
@@ -313,6 +318,7 @@ export function AbilitiesTab() {
                   filterField="abilities"
                   entityName={selected.name}
                   readOnly={view.backdrop !== null}
+                  backdropTargetId={backdropTargetId}
                   onSaved={() => {
                     reloadDex();
                     reload();

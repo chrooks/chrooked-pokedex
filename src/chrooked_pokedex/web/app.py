@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from ..behavior import render_packet
@@ -688,6 +689,31 @@ def create_app(
             return targetsmod.target_dialect(target)
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
+
+    @app.get("/api/targets/{target_id}/sprite/{dex}")
+    def get_target_sprite(target_id: str, dex: int) -> FileResponse:
+        """Serve a target game's own front-battle sprite for a given dex №.
+
+        ``dex`` is an ``int`` path param — FastAPI rejects non-int inputs with 422,
+        which closes the path-traversal vector. The resolved path is asserted to stay
+        under the ``Graphics/Battlers/Front`` directory (defense in depth). A missing
+        file or an unknown/non-essentials target yields 404.
+        """
+        registry = app.state.targets_registry
+        try:
+            target = registry.get(target_id)
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+        if target.engine != "essentials":
+            raise HTTPException(status_code=404, detail="Sprite endpoint requires an Essentials target.")
+        front_dir = (Path(target.path) / "Graphics" / "Battlers" / "Front").resolve()
+        sprite_path = (front_dir / f"{dex:03d}.png").resolve()
+        # Assert the resolved path stays under the Front directory.
+        if not str(sprite_path).startswith(str(front_dir) + "/") and sprite_path != front_dir:
+            raise HTTPException(status_code=404, detail="Sprite not found.")
+        if not sprite_path.is_file():
+            raise HTTPException(status_code=404, detail=f"No sprite for dex {dex}.")
+        return FileResponse(str(sprite_path), media_type="image/png")
 
     @app.get("/api/behaviors/{chrooked_id}/packet")
     def get_behavior_packet(
