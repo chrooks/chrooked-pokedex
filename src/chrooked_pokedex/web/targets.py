@@ -548,6 +548,123 @@ def _english_species_map(
     return {entry["chrooked_id"]: entry["name"] for entry in merged if entry.get("name")}
 
 
+def _english_ability_descriptions(
+    base_snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, str]:
+    """chrooked_id → English description, from base snapshot ⊕ Ruleset abilities."""
+    merged = dexmod.build_abilities(base_snapshot, ruleset)
+    return {
+        entry["chrooked_id"]: entry["description"]
+        for entry in merged
+        if entry.get("description")
+    }
+
+
+def _english_move_descriptions(
+    base_snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, str]:
+    """chrooked_id → English description, from base snapshot ⊕ Ruleset moves."""
+    merged = dexmod.build_moves(base_snapshot, ruleset)
+    return {
+        entry["chrooked_id"]: entry["description"]
+        for entry in merged
+        if entry.get("description")
+    }
+
+
+def _english_name_for(chrooked_id: str, english_map: dict[str, str]) -> str:
+    """Canonical English name by chrooked_id, prettified InternalName as fallback."""
+    english_name = english_map.get(chrooked_id)
+    if english_name is None:
+        english_name = _prettify_internal_name(chrooked_id)
+    return english_name
+
+
+def _relabel_descriptions(
+    entries: list[dict[str, Any]],
+    description_map: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Return a new list overlaying the English ``description`` by chrooked_id.
+
+    When the base has no English description for an entry (e.g. a custom/LLM-
+    authored ability or move), the entry keeps its own (localized) description —
+    honest, never blank. Only the ``description`` field changes.
+    """
+    result = []
+    for entry in entries:
+        chrooked_id = entry.get("chrooked_id", "")
+        english_description = description_map.get(chrooked_id)
+        if english_description is None:
+            result.append(entry)
+            continue
+        result.append({**entry, "description": english_description})
+    return result
+
+
+def _relabel_species_learnsets(
+    entries: list[dict[str, Any]],
+    moves_map: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Return a new list relabeling each species' ``learnset[].move`` to English.
+
+    Each learnset entry's ``move`` is rewritten to the canonical English name
+    keyed by its ``move_id`` (the language-neutral chrooked_id), falling back to
+    a prettified InternalName when the base has no entry. New dicts/lists only.
+
+    A learnset slot with no ``move_id`` came from a chrooked Ruleset override
+    (``build_dex`` rebuilds those as ``{level, move}``), whose ``move`` is
+    already an English display name — keep it as-is rather than blanking it.
+    """
+    result = []
+    for entry in entries:
+        learnset = entry.get("learnset")
+        if not learnset:
+            result.append(entry)
+            continue
+        relabeled = []
+        for slot in learnset:
+            move_id = slot.get("move_id")
+            if move_id:
+                relabeled.append(
+                    {**slot, "move": _english_name_for(move_id, moves_map)}
+                )
+            else:
+                relabeled.append(slot)
+        result.append({**entry, "learnset": relabeled})
+    return result
+
+
+def _relabel_species_abilities(
+    entries: list[dict[str, Any]],
+    abilities_map: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Return a new list relabeling each species' nested ``abilities`` slots.
+
+    Each non-``None`` slot value (a raw internal token like ``OVERGROW``) is
+    rewritten to its canonical English name keyed by ``nz.slug(<slot value>)``,
+    with a prettified InternalName fallback. ``None`` slots stay ``None``. New
+    dicts only.
+    """
+    from ..seed import neutralize as nz
+
+    result = []
+    for entry in entries:
+        slots = entry.get("abilities")
+        if not isinstance(slots, dict):
+            result.append(entry)
+            continue
+        relabeled = {
+            slot: (
+                None
+                if value is None
+                else _english_name_for(nz.slug(value), abilities_map)
+            )
+            for slot, value in slots.items()
+        }
+        result.append({**entry, "abilities": relabeled})
+    return result
+
+
 def _relabel_names(
     entries: list[dict[str, Any]],
     english_map: dict[str, str],
@@ -591,6 +708,12 @@ def target_dex(
     if target.engine == "essentials" and base_snapshot is not None:
         english_map = _english_species_map(base_snapshot, ruleset)
         entries = _relabel_names(entries, english_map)
+        # #39: nested learnset moves render canonical English by move_id.
+        moves_map = _english_moves_map(base_snapshot, ruleset)
+        entries = _relabel_species_learnsets(entries, moves_map)
+        # #43: nested ability slots render canonical English by chrooked_id.
+        abilities_map = _english_abilities_map(base_snapshot, ruleset)
+        entries = _relabel_species_abilities(entries, abilities_map)
     return entries
 
 
@@ -611,6 +734,9 @@ def target_abilities(
     if target.engine == "essentials" and base_snapshot is not None:
         english_map = _english_abilities_map(base_snapshot, ruleset)
         entries = _relabel_names(entries, english_map)
+        # #44: overlay the canonical English description by chrooked_id.
+        description_map = _english_ability_descriptions(base_snapshot, ruleset)
+        entries = _relabel_descriptions(entries, description_map)
     return entries
 
 
@@ -631,6 +757,9 @@ def target_moves(
     if target.engine == "essentials" and base_snapshot is not None:
         english_map = _english_moves_map(base_snapshot, ruleset)
         entries = _relabel_names(entries, english_map)
+        # #44: overlay the canonical English description by chrooked_id.
+        description_map = _english_move_descriptions(base_snapshot, ruleset)
+        entries = _relabel_descriptions(entries, description_map)
     return entries
 
 

@@ -1332,3 +1332,127 @@ def test_ac4_values_unchanged_and_pokeemerald_unaffected(tmp_path: Path) -> None
     assert tackle is not None
     # For pokeemerald, name stays as-is from the snapshot (no relabeling).
     assert tackle["name"] == "Tackle"
+
+
+# --- #39: nested species learnset moves render canonical English ------------ #
+def test_issue39_spanish_learnset_moves_render_english(tmp_path: Path) -> None:
+    """target_dex relabels each species' learnset[].move to canonical English."""
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_dex
+
+    base_snapshot = _make_english_base_snapshot()
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(_SPANISH_162)
+    state = TargetState()
+
+    dex = target_dex(target, ruleset, state, base_snapshot=base_snapshot)
+    dex_by_id = {e["chrooked_id"]: e for e in dex}
+    learnset = dex_by_id["bulbasaur"]["learnset"]
+    # The Spanish PBS Moves line is 1,TACKLE,1,GROWL — base gives English names.
+    assert learnset == [
+        {"level": 1, "move": "Tackle", "move_id": "tackle"},
+        {"level": 1, "move": "Growl", "move_id": "growl"},
+    ]
+
+
+def test_issue39_ruleset_learnset_override_keeps_english_names(tmp_path: Path) -> None:
+    """A Ruleset learnset override (no move_id) must keep its English names, not blank them.
+
+    Regression: build_dex rebuilds an overridden learnset as {level, move} with no
+    move_id, so the English relabel used to map the missing move_id to an empty
+    string. The override's move names are already English and must survive — and a
+    level-0 entry (a valid Ruleset shape) must be preserved.
+    """
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_dex
+
+    base_snapshot = _make_english_base_snapshot()
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    # Add a Bulbasaur learnset override with English display names and a level-0 move.
+    (ruleset_dir / "species" / "bulbasaur.yaml").write_text(
+        "name: Bulbasaur\n"
+        "chrooked_id: bulbasaur\n"
+        "learnset:\n"
+        "  - { level: 1, move: Cinder Smash }\n"
+        "  - { level: 0, move: Air Slash }\n"
+        "  - { level: 1, move: Growl }\n",
+        encoding="utf-8",
+    )
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(_SPANISH_162)
+    state = TargetState()
+
+    dex = target_dex(target, ruleset, state, base_snapshot=base_snapshot)
+    dex_by_id = {e["chrooked_id"]: e for e in dex}
+    learnset = dex_by_id["bulbasaur"]["learnset"]
+
+    # No move blanked to "" by the relabel; the override's English names survive.
+    assert all(slot["move"] for slot in learnset), learnset
+    assert [(s["level"], s["move"]) for s in learnset] == [
+        (1, "Cinder Smash"),
+        (0, "Air Slash"),
+        (1, "Growl"),
+    ]
+
+
+# --- #43: nested species ability slots render canonical English ------------- #
+def test_issue43_spanish_species_ability_slots_render_english(tmp_path: Path) -> None:
+    """target_dex relabels nested ability slots; unknown tokens prettify."""
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_dex
+
+    base_snapshot = _make_english_base_snapshot()
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(_SPANISH_162)
+    state = TargetState()
+
+    dex = target_dex(target, ruleset, state, base_snapshot=base_snapshot)
+    dex_by_id = {e["chrooked_id"]: e for e in dex}
+    slots = dex_by_id["bulbasaur"]["abilities"]
+    # OVERGROW is in the base → canonical English "Overgrow".
+    assert slots["primary"] == "Overgrow", f"got {slots['primary']!r}"
+    # An empty slot stays None.
+    assert slots["secondary"] is None
+    # CHLOROPHYLL is NOT in the base → prettified InternalName, never all-caps.
+    assert slots["hidden"] == "Chlorophyll", f"got {slots['hidden']!r}"
+
+
+# --- #44: ability/move descriptions render canonical English ---------------- #
+def test_issue44_known_base_description_overlaid_custom_keeps_own(tmp_path: Path) -> None:
+    """A known base ability gets the English description; a custom ability keeps its own."""
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_abilities
+
+    # Add a target-only ability (no base, no Ruleset entry) to a PBS copy.
+    import shutil
+
+    pbs_copy = tmp_path / "desc_pbs"
+    shutil.copytree(_SPANISH_162, pbs_copy)
+    abilities_txt = pbs_copy / "PBS" / "abilities.txt"
+    custom_row = '3,AFRICANVSCUSTOM,Habilidad Custom,"Descripción propia del fork."\n'
+    abilities_txt.write_text(
+        abilities_txt.read_text(encoding="utf-8") + custom_row, encoding="utf-8"
+    )
+
+    base_snapshot = _make_english_base_snapshot()
+    ruleset_dir = _make_english_ruleset_with_excalibur(tmp_path)
+    ruleset = Ruleset.load(ruleset_dir)
+    target = _essentials_target_41(pbs_copy)
+    state = TargetState()
+
+    abilities = target_abilities(target, ruleset, state, base_snapshot=base_snapshot)
+    by_id = {a["chrooked_id"]: a for a in abilities}
+
+    # STENCH is in the base → English description overlaid over the Spanish one.
+    assert by_id["stench"]["description"] == (
+        "The stench may cause the target to flinch."
+    ), f"got {by_id['stench']['description']!r}"
+
+    # AFRICANVSCUSTOM is NOT in base ⊕ Ruleset → keeps its own (Spanish) description.
+    custom = by_id.get("africanvscustom")
+    assert custom is not None, "custom ability missing from target_abilities"
+    assert custom["description"] == "Descripción propia del fork.", (
+        "custom ability must keep its own description, never blank/overlaid"
+    )
