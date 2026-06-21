@@ -2,6 +2,6 @@ name: Venusaur
 chrooked_id: venusaur
 aka: { pokeemerald: SPECIES_VENUSAUR }
 abilities:
-  primary: Thick Fat
   secondary: Chloroplast
 stats: { hp: 90, spa: 105 }
+evolution: { from: Ivysaur, method: { level: 32 } }

@@ -3,7 +3,7 @@ chrooked_id: sceptile
 aka: { pokeemerald: SPECIES_SCEPTILE }
 types: [Grass, Dragon]
 abilities:
-  primary: Forestry
-  secondary: Chloroplast
+  secondary: Forestry
   hidden: Sharpness
 stats: { atk: 105, def: 60, spd: 80 }
+evolution: { from: Grovyle, method: { level: 36 } }

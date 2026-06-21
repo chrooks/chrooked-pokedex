@@ -1,5 +1,5 @@
 name: Inteleon
 chrooked_id: inteleon
 aka: { pokeemerald: SPECIES_INTELEON }
-types: [Water, Dark]
 stats: { spa: 135 }
+evolution: { from: Drizzile, method: { level: 35 } }
