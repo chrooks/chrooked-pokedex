@@ -20,6 +20,7 @@ type Props = {
   hidden: ColumnKey[];
   onChange: (patch: DexViewPatch) => void;
   onOpen: (chrookedId: string) => void;
+  backdropTargetId?: string | null;
 };
 
 /** The dex screen: resolves load/error, renders the control stack above a
@@ -37,6 +38,7 @@ export function DexView({
   hidden,
   onChange,
   onOpen,
+  backdropTargetId,
 }: Props) {
   if (resource.error !== null) {
     return <ErrorView message={resource.error} status={resource.status} />;
@@ -74,9 +76,15 @@ export function DexView({
             hidden={hidden}
             onSort={(next) => onChange({ sort: next })}
             onOpen={onOpen}
+            backdropTargetId={backdropTargetId}
           />
         ) : (
-          <DexGrid entries={entries} selected={selected} onOpen={onOpen} />
+          <DexGrid
+            entries={entries}
+            selected={selected}
+            onOpen={onOpen}
+            backdropTargetId={backdropTargetId}
+          />
         )}
       </div>
     </div>

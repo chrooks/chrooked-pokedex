@@ -8,6 +8,7 @@ type Props = {
   entries: DexEntry[];
   selected: string | null;
   onOpen: (chrookedId: string) => void;
+  backdropTargetId?: string | null;
 };
 
 const MIN_CELL = 138; // px; matches the grid template below
@@ -19,7 +20,7 @@ const ROW_HEIGHT = 168; // cell height + gap
  * to the container width; rows are virtualized so only the visible band mounts.
  * ARIA grid semantics carry the total set size, which windowing otherwise hides.
  */
-export function DexGrid({ entries, selected, onOpen }: Props) {
+export function DexGrid({ entries, selected, onOpen, backdropTargetId }: Props) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const { width, measureRef } = useElementWidth();
   const columns = width === 0 ? 1 : Math.max(1, Math.floor((width + GAP) / (MIN_CELL + GAP)));
@@ -74,6 +75,7 @@ export function DexGrid({ entries, selected, onOpen }: Props) {
                     entry={entry}
                     isSelected={entry.chrooked_id === selected}
                     onOpen={onOpen}
+                    backdropTargetId={backdropTargetId}
                   />
                 </div>
               ))}

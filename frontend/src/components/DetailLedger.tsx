@@ -6,8 +6,8 @@ import type { DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
 import { appendNameFilter } from "../lib/dexFilters";
 import { STAT_ORDER, STAT_LABEL, bst, dexLabel, isEdited } from "../lib/format";
-import { spriteUrl } from "../lib/sprites";
 import { EditedLed } from "./EditedLed";
+import { DexSprite } from "./DexSprite";
 import { StatRow } from "./ledger/StatRow";
 import { BstRow } from "./ledger/BstRow";
 import { AbilityRow } from "./ledger/AbilityRow";
@@ -44,6 +44,8 @@ type Props = {
   moveOptions: readonly string[];
   /** Known species names for the evo-from combobox. */
   speciesOptions: readonly string[];
+  /** Active backdrop target id — passed to DexSprite for the target-sprite fallback. */
+  backdropTargetId?: string | null;
 };
 
 /**
@@ -61,6 +63,7 @@ export function DetailLedger({
   abilityOptions,
   moveOptions,
   speciesOptions,
+  backdropTargetId,
 }: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -73,7 +76,6 @@ export function DetailLedger({
   const [manuallyCollapsed, setManuallyCollapsed] = useState(false);
   const edited = isEdited(entry);
   const panelRef = useRef<HTMLElement>(null);
-  const sprite = spriteUrl(entry.chrooked_id, entry.dex);
   const [view, update] = useUrlState();
 
   const handleProposalActive = useCallback(
@@ -172,16 +174,13 @@ export function DetailLedger({
             </div>
           </div>
           <div className="ledger__title-row">
-            {sprite !== null && (
-              <img
-                className="ledger__sprite"
-                src={sprite}
-                alt={entry.name}
-                width={88}
-                height={88}
-                decoding="async"
-              />
-            )}
+            <DexSprite
+              chrookedId={entry.chrooked_id}
+              dex={entry.dex}
+              name={entry.name}
+              backdropTargetId={backdropTargetId}
+              size={88}
+            />
             <div>
               <h2 className="ledger__name" id="ledger-title">
                 {entry.name}
@@ -227,6 +226,7 @@ export function DetailLedger({
             abilityOptions={abilityOptions}
             moveOptions={moveOptions}
             onProposalActive={handleProposalActive}
+            backdropTargetId={backdropTargetId}
           />
         )}
       </aside>
@@ -247,6 +247,7 @@ type BodyProps = {
   moveOptions: readonly string[];
   /** Report a section's active/idle proposal state up to the ledger (ac8). */
   onProposalActive: (sectionId: string, isActive: boolean) => void;
+  backdropTargetId?: string | null;
 };
 
 /** Press `s` on a focused proposal section to open its `✦ suggest` input —
@@ -279,6 +280,7 @@ function DetailBody({
   abilityOptions,
   moveOptions,
   onProposalActive,
+  backdropTargetId,
 }: BodyProps) {
   return (
     <>
@@ -357,6 +359,7 @@ function DetailBody({
           evolution={entry.evolution}
           evolvesInto={entry.evolves_into}
           onNavigate={onNavigate}
+          backdropTargetId={backdropTargetId}
         />
     </>
   );

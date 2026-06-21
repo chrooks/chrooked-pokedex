@@ -1,6 +1,6 @@
 import type { Evolution, EvolvesInto } from "../../types";
 import type { NavHandler } from "../DetailLedger";
-import { spriteUrl } from "../../lib/sprites";
+import { DexSprite } from "../DexSprite";
 import "./ledger-rows.css";
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
   /** Read-only cross-link out to another species' profile (#28). When absent
       (editing), the links render as plain text. */
   onNavigate?: NavHandler;
+  backdropTargetId?: string | null;
 };
 
 /** Both evolution directions as clickable species cross-links: "Evolves from"
@@ -19,7 +20,7 @@ type Props = {
     standalone species (no pre-evo, no forward edge) renders a subtle em dash. A
     Ruleset evolution override has no `from_name`/method string, so its pre-evo
     falls back to the raw `from` id plus the structured method pairs. */
-export function EvolutionSection({ evolution, evolvesInto, onNavigate }: Props) {
+export function EvolutionSection({ evolution, evolvesInto, onNavigate, backdropTargetId }: Props) {
   const hasFrom = evolution !== null && evolution.from !== null;
   const hasInto = evolvesInto.length > 0;
 
@@ -32,7 +33,13 @@ export function EvolutionSection({ evolution, evolvesInto, onNavigate }: Props) 
         </p>
       ) : (
         <div className="ledger__evo">
-          {hasFrom && <EvolvesFrom evolution={evolution} onNavigate={onNavigate} />}
+          {hasFrom && (
+            <EvolvesFrom
+              evolution={evolution}
+              onNavigate={onNavigate}
+              backdropTargetId={backdropTargetId}
+            />
+          )}
           {hasInto && (
             <div className="ledger__evo-group">
               <span className="ledger__evo-dir">Evolves into</span>
@@ -46,6 +53,7 @@ export function EvolutionSection({ evolution, evolvesInto, onNavigate }: Props) 
                       dex={edge.to_dex}
                       method={edge.method}
                       onNavigate={onNavigate}
+                      backdropTargetId={backdropTargetId}
                     />
                   </li>
                 ))}
@@ -61,12 +69,13 @@ export function EvolutionSection({ evolution, evolvesInto, onNavigate }: Props) 
 type FromProps = {
   evolution: Evolution;
   onNavigate?: NavHandler;
+  backdropTargetId?: string | null;
 };
 
 /** The "Evolves from" row. With a base-derived `from_name` it renders a species
     cross-link; a Ruleset override (no `from_name`) falls back to the raw id and
     a structured method readout, preserving the pre-#31 behavior. */
-function EvolvesFrom({ evolution, onNavigate }: FromProps) {
+function EvolvesFrom({ evolution, onNavigate, backdropTargetId }: FromProps) {
   const fromId = evolution.from as string;
   const readableMethod =
     typeof evolution.method === "string" ? evolution.method : null;
@@ -84,6 +93,7 @@ function EvolvesFrom({ evolution, onNavigate }: FromProps) {
               dex={evolution.from_dex ?? null}
               method={readableMethod}
               onNavigate={onNavigate}
+              backdropTargetId={backdropTargetId}
             />
           </li>
         </ul>
@@ -123,26 +133,22 @@ type LinkProps = {
   dex: number | null;
   method: string | null;
   onNavigate?: NavHandler;
+  backdropTargetId?: string | null;
 };
 
 /** One evolution cross-link: sprite + species name + method. The name is a
     button that navigates to that species' dex profile (#28) in read-only mode,
     or plain text while editing. */
-function EvoLink({ id, chrookedId, name, dex, method, onNavigate }: LinkProps) {
-  const sprite = spriteUrl(chrookedId, dex);
+function EvoLink({ id, chrookedId, name, dex, method, onNavigate, backdropTargetId }: LinkProps) {
   const label = (
     <span className="ledger__evo-mon">
-      {sprite !== null && (
-        <img
-          className="ledger__evo-sprite"
-          src={sprite}
-          alt=""
-          width={40}
-          height={40}
-          loading="lazy"
-          decoding="async"
-        />
-      )}
+      <DexSprite
+        chrookedId={chrookedId}
+        dex={dex}
+        name=""
+        backdropTargetId={backdropTargetId}
+        size={40}
+      />
       <span className="ledger__evo-mon-name">{name}</span>
       {method !== null && (
         <span className="ledger__evo-mon-method mono">{method}</span>

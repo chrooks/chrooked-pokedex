@@ -51,11 +51,26 @@
 }
 
 .dex-cell__sprite {
-  width: 72px;
-  height: 72px;
   object-fit: contain;
   image-rendering: pixelated;
   margin-top: var(--space-2);
+}
+
+/* Clip box for sprite-sheet battlers: shows the leftmost (frame 0) square.
+   Width/height are supplied by inline style so DexSprite can be sized freely. */
+.dex-cell__sprite-box {
+  margin-top: var(--space-2);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.dex-cell__sprite-img {
+  width: auto;
+  max-width: none;
+  image-rendering: pixelated;
+  display: block;
 }
 
 .dex-cell__sprite--missing {

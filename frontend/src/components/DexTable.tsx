@@ -4,9 +4,9 @@ import type { DexEntry } from "../types";
 import { bst, dexLabel, isEdited } from "../lib/format";
 import { COLUMNS, type Column, type ColumnKey } from "../lib/dexColumns";
 import type { SortKey } from "../lib/dexSort";
-import { spriteUrl } from "../lib/sprites";
 import { TypeChip } from "./TypeChip";
 import { EditedLed } from "./EditedLed";
+import { DexSprite } from "./DexSprite";
 import "./dex-table.css";
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
   hidden: ColumnKey[];
   onSort: (sort: SortKey[]) => void;
   onOpen: (chrookedId: string) => void;
+  backdropTargetId?: string | null;
 };
 
 const ROW_HEIGHT = 38;
@@ -45,7 +46,7 @@ const WIDTH: Record<ColumnKey, string> = {
  * an overridden value keyed amber, the row's edited LED carrying the signal.
  * Rows are windowed; the header stays pinned.
  */
-export function DexTable({ entries, selected, sort, hidden, onSort, onOpen }: Props) {
+export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, backdropTargetId }: Props) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const rowVirtualizer = useVirtualizer({
     count: entries.length,
@@ -114,6 +115,7 @@ export function DexTable({ entries, selected, sort, hidden, onSort, onOpen }: Pr
                 columns={visible}
                 top={vrow.start}
                 onOpen={onOpen}
+                backdropTargetId={backdropTargetId}
               />
             );
           })}
@@ -190,9 +192,10 @@ type RowProps = {
   columns: Column[];
   top: number;
   onOpen: (id: string) => void;
+  backdropTargetId?: string | null;
 };
 
-function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen }: RowProps) {
+function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, backdropTargetId }: RowProps) {
   const edited = isEdited(entry);
   const open = useCallback(() => onOpen(entry.chrooked_id), [onOpen, entry.chrooked_id]);
 
@@ -208,7 +211,7 @@ function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen }: RowProps)
     >
       {/* Cells iterate the SAME visible-column list the header uses, so header
           and data can never drift out of alignment. */}
-      {columns.map((col) => renderCell(col, entry, edited, open))}
+      {columns.map((col) => renderCell(col, entry, edited, open, backdropTargetId))}
     </div>
   );
 }
@@ -220,6 +223,7 @@ function renderCell(
   entry: DexEntry,
   edited: boolean,
   open: () => void,
+  backdropTargetId?: string | null,
 ) {
   switch (col.key) {
     case "led":
@@ -237,7 +241,13 @@ function renderCell(
     case "name":
       return (
         <span key="name" className="dex-table__c dex-table__name" role="cell">
-          <Sprite entry={entry} />
+          <DexSprite
+            chrookedId={entry.chrooked_id}
+            dex={entry.dex}
+            name=""
+            backdropTargetId={backdropTargetId}
+            size={28}
+          />
           <button
             type="button"
             className="dex-table__namebtn"
@@ -285,24 +295,6 @@ function renderCell(
       );
     }
   }
-}
-
-function Sprite({ entry }: { entry: DexEntry }) {
-  const src = spriteUrl(entry.chrooked_id, entry.dex);
-  if (src === null) {
-    return <span className="dex-table__sprite dex-table__sprite--empty" aria-hidden="true" />;
-  }
-  return (
-    <img
-      className="dex-table__sprite"
-      src={src}
-      alt=""
-      width={28}
-      height={28}
-      loading="lazy"
-      decoding="async"
-    />
-  );
 }
 
 /** Abilities as "primary · secondary · hidden", dim, with the hidden one marked. */

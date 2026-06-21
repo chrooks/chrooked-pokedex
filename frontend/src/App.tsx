@@ -247,6 +247,7 @@ export default function App() {
           onChange={update}
           onOpen={handleOpen}
           onViewBackdrop={handleViewBackdrop}
+          backdropTargetId={view.backdrop}
         />
       </div>
       {selectedEntry !== null && (
@@ -258,6 +259,7 @@ export default function App() {
           abilityOptions={abilityOptions}
           moveOptions={moveOptions}
           speciesOptions={speciesOptions}
+          backdropTargetId={view.backdrop}
         />
       )}
     </DeviceFrame>
@@ -279,6 +281,7 @@ type KindScreenProps = {
   onChange: (patch: DexViewPatch) => void;
   onOpen: (id: string) => void;
   onViewBackdrop: (targetId: string) => void;
+  backdropTargetId?: string | null;
 };
 
 function KindScreen({
@@ -294,6 +297,7 @@ function KindScreen({
   onChange,
   onOpen,
   onViewBackdrop,
+  backdropTargetId,
 }: KindScreenProps) {
   switch (kind) {
     case "moves":
@@ -319,6 +323,7 @@ function KindScreen({
           hidden={hidden}
           onChange={onChange}
           onOpen={onOpen}
+          backdropTargetId={backdropTargetId}
         />
       );
   }
