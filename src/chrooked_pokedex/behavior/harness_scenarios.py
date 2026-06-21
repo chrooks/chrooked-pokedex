@@ -56,4 +56,64 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
             "expect": {"result": "BOOSTED"},
         },
     ],
+    "chitinize": [
+        {"stage": "Chitinize user uses Tackle (Normal) at a foe weak to BUG.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "BUG", "boosted": "true"}},
+        {"stage": "Chitinize user uses Tackle (Normal) at a foe that resists BUG.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "BUG", "boosted": "true"}},
+        {"stage": "Chitinize user uses XSCISSOR (already non-Normal).", "select": {"move": "XSCISSOR", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "foliate": [
+        {"stage": "Foliate user uses Tackle (Normal) at a foe weak to GRASS.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "GRASS", "boosted": "true"}},
+        {"stage": "Foliate user uses Tackle (Normal) at a foe that resists GRASS.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "GRASS", "boosted": "true"}},
+        {"stage": "Foliate user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "hydrate": [
+        {"stage": "Hydrate user uses Tackle (Normal) at a foe weak to WATER.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "WATER", "boosted": "true"}},
+        {"stage": "Hydrate user uses Tackle (Normal) at a foe that resists WATER.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "WATER", "boosted": "true"}},
+        {"stage": "Hydrate user uses SURF (already non-Normal).", "select": {"move": "SURF", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "immolate": [
+        {"stage": "Immolate user uses Tackle (Normal) at a foe weak to FIRE.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "FIRE", "boosted": "true"}},
+        {"stage": "Immolate user uses Tackle (Normal) at a foe that resists FIRE.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "FIRE", "boosted": "true"}},
+        {"stage": "Immolate user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "martialize": [
+        {"stage": "Martialize user uses Tackle (Normal) at a foe weak to FIGHTING.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "FIGHTING", "boosted": "true"}},
+        {"stage": "Martialize user uses Tackle (Normal) at a foe that resists FIGHTING.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "FIGHTING", "boosted": "true"}},
+        {"stage": "Martialize user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "mineralize": [
+        {"stage": "Mineralize user uses Tackle (Normal) at a foe weak to ROCK.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "ROCK", "boosted": "true"}},
+        {"stage": "Mineralize user uses Tackle (Normal) at a foe that resists ROCK.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "ROCK", "boosted": "true"}},
+        {"stage": "Mineralize user uses WATERGUN (already non-Normal).", "select": {"move": "WATERGUN", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "obfuscate": [
+        {"stage": "Obfuscate user uses Tackle (Normal) at a foe weak to DARK.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "DARK", "boosted": "true"}},
+        {"stage": "Obfuscate user uses Tackle (Normal) at a foe that resists DARK.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "DARK", "boosted": "true"}},
+        {"stage": "Obfuscate user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "psyonize": [
+        {"stage": "Psyonize user uses Tackle (Normal) at a foe weak to PSYCHIC.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "PSYCHIC", "boosted": "true"}},
+        {"stage": "Psyonize user uses Tackle (Normal) at a foe that resists PSYCHIC.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "PSYCHIC", "boosted": "true"}},
+        {"stage": "Psyonize user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "spectralize": [
+        {"stage": "Spectralize user uses Tackle (Normal) at a foe weak to GHOST.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "GHOST", "boosted": "true"}},
+        {"stage": "Spectralize user uses Tackle (Normal) at a foe that resists GHOST.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "GHOST", "boosted": "true"}},
+        {"stage": "Spectralize user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "tectonize": [
+        {"stage": "Tectonize user uses Tackle (Normal) at a foe weak to GROUND.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "GROUND", "boosted": "true"}},
+        {"stage": "Tectonize user uses Tackle (Normal) at a foe that resists GROUND.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "GROUND", "boosted": "true"}},
+        {"stage": "Tectonize user uses EARTHQUAKE (already non-Normal).", "select": {"move": "EARTHQUAKE", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "venomize": [
+        {"stage": "Venomize user uses Tackle (Normal) at a foe weak to POISON.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "POISON", "boosted": "true"}},
+        {"stage": "Venomize user uses Tackle (Normal) at a foe that resists POISON.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "POISON", "boosted": "true"}},
+        {"stage": "Venomize user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
+    "wyvernize": [
+        {"stage": "Wyvernize user uses Tackle (Normal) at a foe weak to DRAGON.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "DRAGON", "boosted": "true"}},
+        {"stage": "Wyvernize user uses Tackle (Normal) at a foe that resists DRAGON.", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"converted": "DRAGON", "boosted": "true"}},
+        {"stage": "Wyvernize user uses EMBER (already non-Normal).", "select": {"move": "EMBER", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
+    ],
 }
