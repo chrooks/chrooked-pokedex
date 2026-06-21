@@ -79,15 +79,33 @@ stored patch is stale.
    The first test-ROM build is long (~12-15 min); the GREEN re-run is incremental. `make modern`
    (ROM-only, faster) is a weaker fallback that proves it *builds* but not that the behavior is real.
 
-   **Essentials** has no automated battle harness (RPG Maker XP / Ruby — verification is the in-game
-   Debug menu). Emit the spec's `test_cases` as a numbered manual playtest checklist instead; do not
-   claim runtime verification you did not perform.
+   **Essentials** cannot run battles headlessly (the 16.2 `PokeBattle_Battle` constructor needs a
+   full on-screen scene + parties — `#initialize` arity is 5; confirmed in M0 of issue #15), so
+   verification is a **log-oracle harness with a one-battle human step**, not a fully automated run.
+   Do not claim runtime verification you did not perform — a human still plays the battle.
+
+   The harness (`src/chrooked_pokedex/behavior/harness.py`, issue #15):
+
+       PYTHONPATH=src python -m chrooked_pokedex.behavior.harness stage  <id>   # clears the log, prints the in-game actions
+       # boot the game (debug), run the printed actions in one battle, quit
+       PYTHONPATH=src python -m chrooked_pokedex.behavior.harness verify <id>   # reads the log -> PASS/FAIL per spec test_case
+
+   **To add a mechanic to the harness** (the runner never changes): (1) write the plugin
+   `Scripts/chrooked_<id>.rb` so it logs ONE uniform line per gated battle event —
+   `[chrooked:<id>] OBS key=value ...` (e.g. `move=FLAMETHROWER kindle=true result=BOOSTED`); (2) add
+   an entry under `<id>` in `src/chrooked_pokedex/behavior/harness_scenarios.py` — one check per spec
+   `test_case`, in order, each with a `stage` instruction, a `select` (key/values picking the relevant
+   OBS line) and an `expect` (key/values that must hold). The driver matches them and reports PASS/FAIL
+   using the spec's own `test_case` wording. A `select` that matches no OBS line reports a readable
+   `not observed` FAIL (the staged action was skipped) — it never false-passes.
 
    **Essentials code home & version string (16.2 dialect, e.g. Africanvs).** A ported mechanic is a
-   loose external Ruby plugin `Scripts/<chrooked_id>.rb` in the game copy, tagged `# chrooked:<id>`,
-   loaded by the copy's `load_order_shim.rb` (preloaded via `mkxp.json` → `preloadScript`; add the
-   filename to `Scripts/load_order.txt`). Never repack the binary `Scripts.rxdata`. The version
-   string is the dialect label `essentials-16.2`, so the reference is
+   loose external Ruby plugin `Scripts/chrooked_<chrooked_id>.rb` in the game copy, tagged
+   `# chrooked:<id>`, auto-loaded by the copy's `load_order_shim.rb` (preloaded via `mkxp.json` →
+   `preloadScript`; the shim globs `Scripts/chrooked_*.rb`, so NO `load_order.txt` editing is needed).
+   The reusable loader assets live in `references/essentials-harness/` (`mkxp.json`,
+   `load_order_shim.rb`, the per-mechanic plugins). Never repack the binary `Scripts.rxdata`. The
+   version string is the dialect label `essentials-16.2`, so the reference is
    `references/<id>.essentials-16.2.patch` — a `git apply`-able diff that recreates the plugin.
    Gotchas proven on the innerfocus tracer: (1) the 16.2 battle class is `PokeBattle_Move`
    (modern Essentials is `Battle::Move`), so verify the Seam against the **extracted** scripts
@@ -131,8 +149,13 @@ stored patch is stale.
 ## Honest limits
 
 - **Runtime verification is engine-dependent.** pokeemerald runs the acceptance tests for real
-  (`make check`, RNG-controlled). Essentials cannot — it has no automated harness, so its ceiling is
-  a manual playtest checklist. The neutral prose `test_cases` are the portable Contract that feeds
-  both; keep them concrete enough for a human tester.
+  (`make check`, RNG-controlled). Essentials cannot run battles headlessly, so its ceiling is the
+  log-oracle harness (`harness stage|verify <id>`): the verdict is automated and uniform, but a human
+  still plays one debug battle to produce the log. The neutral prose `test_cases` are the portable
+  Contract that feeds both; keep them concrete enough for a human tester.
+- **On this machine** (WSL host, native Windows `Game.exe`): launch with
+  `powershell.exe Start-Process -FilePath Game.exe -WorkingDirectory '<D: devcopy>' -ArgumentList debug`
+  (or double-click `Play (Debug).bat` in the copy). NOT macOS `open`/`.command`, NOT `cmd /c start`
+  (UNC-cwd error). The devcopy lives on the D: drive; see the `africanvs-target-env` memory.
 - **A passing test on the clean engine is a red flag**, not a green light — it means the test does
   not exercise the mechanic. Always confirm RED before GREEN.

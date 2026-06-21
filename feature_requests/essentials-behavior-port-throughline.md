@@ -1,34 +1,38 @@
 ---
 issue: 12
 sub_issues: [14, 15, 16]
+active_sub_issue: 15
 stage: prove
 status: in_progress
 grillable: false
 tier: heavy
 effort: high
-next_action: /commit (mechanic proven in-game)
-exec_plan: feature_requests/essentials-behavior-tracer-plan.md
+next_action: "/commit #15 (all 5 ACs pass), then close #15 + scope #16 (drive loop, flip DATA-ONLY)"
+exec_plan: feature_requests/essentials-harness-plan.md
 acceptance_criteria:
   - id: AC1
-    statement: A loose external Ruby plugin loads and executes in the Africanvs Wine debug build (autoload caveat settled, or documented fallback in force).
-    proof_method: "manual: boot debug via scripts/africanvs_devloop.sh --no-apply; observe [LOAD_ORDER_SHIM] active (or a # chrooked debug print on the fallback route) in the mkxp-z console"
-    status: pass  # log shows [LOAD_ORDER_SHIM] active + installed on PokeBattle_Move
+    statement: A D:-drive dev-copy is created/registered on this WSL+native-Windows machine with the preload path confirmed, and the oracle route is settled — a headless PokeBattle_Battle either boots (Route A) or is documented-infeasible with the log-oracle (Route B) chosen.
+    proof_method: "boot the new dev-copy (Game.exe via WSL interop); Scripts/chrooked_load.log shows [LOAD_ORDER_SHIM] active AND either 'battle-boot OK' or a captured failure; Decision Log records the route with that evidence"
+    status: pass  # devcopy created+registered; log shows [LOAD_ORDER_SHIM] active + glob-loader + PokeBattle_Battle arity=5 -> Route B (log oracle) chosen
   - id: AC2
-    statement: The custom innerfocus delta works — an Inner Focus user's Focus Blast always hits a +6-evasion foe.
-    proof_method: "manual debug battle: Focus Blast hits 5/5 vs a +6-evasion foe (misses without the plugin) + static review that the override gates on the user's ability AND move==Focus Blast"
-    status: pass  # log oracle: Lucario(InnerFocus) Focus Blast x3 -> ALWAYS-HIT
+    statement: A generic runner executes any mechanic's neutral test_cases and prints PASS/FAIL per case, with no mechanic-specific code in the runner.
+    proof_method: "harness run innerfocus -> 3/3 PASS (tracer mechanic re-proved through the NEW runner) + grep shows the runner file has no innerfocus/focusblast literals"
+    status: pass  # verify innerfocus -> 3/3 PASS through generic harness.py; grep clean (literals only in docstrings); 4/4 hermetic unit tests
   - id: AC3
-    statement: The effect does not leak and vanilla survives — user's other moves use normal accuracy, a non-Inner-Focus user's Focus Blast uses normal accuracy, vanilla no-flinch untouched.
-    proof_method: "manual debug battle: (a) Inner Focus user's Hydro Pump can miss at +6 evasion; (b) non-Inner-Focus Focus Blast ~70% accuracy + static review that chrooked_innerfocus.rb adds no no-flinch code"
-    status: pass  # log oracle: Pidgeotto(no InnerFocus) Focus Blast x3 -> normal accuracy; move-id gate structurally excludes other moves; plugin touches only pbAccuracyCheck
+    statement: A second mechanic (hitting a different Seam than innerfocus) runs through the unchanged runner and passes.
+    proof_method: "harness run <mechanic2> -> its test_cases PASS; git diff shows the runner unchanged between M1 and M2 (only a new plugin + scenario added)"
+    status: pass  # kindle (pbModifyDamage Seam, != innerfocus accuracy Seam) -> verify kindle 3/3 PASS; harness.py untouched (only chrooked_kindle.rb + scenarios.py entry + KINDLE PBS row added)
   - id: AC4
-    statement: The port is captured as a reusable, deterministically re-appliable reference.
-    proof_method: "references/innerfocus.essentials-16.2.patch exists and git apply --check succeeds on a clean copy; references/README.md has the inventory row"
-    status: pass  # patch authored, git apply --check OK on clean dir, README row added
+    statement: Failures report which spec and which test_case failed, readably.
+    proof_method: "M3 break-and-restore: flip the mechanic2 gate, harness run -> a FAIL line naming the spec + failing case; restore -> green"
+    status: pass  # readable FAIL shown organically (live 'FAIL kindle :: ...Surf... (not observed)') + hermetic test_fail_when_delta_leaks_to_other_move (expected/observed); both failure modes covered
   - id: AC5
-    statement: The next Essentials port is mechanical — the skill documents the code home and version string.
-    proof_method: "static: .claude/skills/port-behavior/SKILL.md contains the external-Scripts/ code-home convention and the essentials-16.2 version-string source"
-    status: pass  # SKILL Essentials arm extended with code-home + version-string + 16.2 gotchas
+    statement: The harness is documented for reuse so #16 can drive it cold.
+    proof_method: "static: .claude/skills/port-behavior/SKILL.md Essentials arm names the harness command + the add-a-mechanic steps (plugin -> scenario -> harness run)"
+    status: pass  # SKILL Essentials arm now documents harness stage|verify, the OBS-format -> scenario add-a-mechanic steps, glob-loader, references/essentials-harness/ home, and the WSL/Windows launch line
+
+# --- Closed: #14 tracer (innerfocus, AC1-AC5 all proved). Proof record lives in
+# feature_requests/essentials-behavior-tracer-plan.md (Progress M0-M3 + Outcomes) and git d2785b9. ---
 ---
 
 # Essentials behavior-mechanic porting — Throughline
@@ -75,7 +79,38 @@ essentials`, a reference library, and a verification gate.
   manual-checklist verify branch (Q2, already in SKILL). Mirrors how packet
   rendering already serves both engines from one path.
 
-## Plan Walkthrough
+- **[RESOLVED] Q5 (#15) — Which second mechanic proves harness generality?**
+  Choice: **`kindle`** (1.5x Fire damage when ability is Kindle). Hits a
+  *different* Seam than innerfocus — damage calc, not accuracy — so a pass proves
+  the runner is general, not innerfocus-shaped. Binary and log-observable.
+  Date/Author: 2026-06-21 / plan approval (#15)
+
+## Plan Walkthrough — #15 (active)
+
+ExecPlan: `feature_requests/essentials-harness-plan.md`. Scope is the
+generalized acceptance-test harness (#15). Turn the tracer's one-off
+human-read log line into a reusable runner: `harness run <mechanic-id>` prints
+PASS/FAIL per neutral `test_case`, proven on innerfocus **and** a second
+mechanic. Four milestones, dependency-ordered:
+
+- **M0** — Create + register a D:-drive dev-copy on this WSL/native-Windows
+  machine (no dev-copy exists yet; `Game.exe` launches via WSL interop, not
+  Wine) and confirm the preload/autoload path holds. Then spike whether a
+  headless `PokeBattle_Battle` boots (Route A); fallback is the proven
+  generalized log oracle (Route B). The harness Surface is identical either way,
+  so nothing downstream branches.
+- **M1** — Generic runner + Python driver (`src/chrooked_pokedex/behavior/harness.py`);
+  re-prove innerfocus 3/3 *through the new runner*; runner free of innerfocus
+  literals.
+- **M2** — Second mechanic (proposed `kindle`, a damage-calc Seam) through the
+  unchanged runner → PASS. Proves generality.
+- **M3** — Break-and-restore proves readable FAIL lines; extend the
+  `port-behavior` SKILL Essentials arm with the harness command + add-a-mechanic
+  steps.
+
+Open decision carried to approval: the second mechanic (Q5 below).
+
+## Plan Walkthrough — #14 tracer (closed)
 
 ExecPlan: `feature_requests/essentials-behavior-tracer-plan.md`. Scope is the
 tracer (#14) only. Four milestones, dependency-ordered:
