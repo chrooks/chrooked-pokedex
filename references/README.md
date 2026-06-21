@@ -33,6 +33,7 @@ is applied.
 | mechanic | engine | verified |
 | --- | --- | --- |
 | innerfocus | pokeemerald-expansion 1.15.3 | `make check` RED→GREEN (battle test) + compiles |
+| innerfocus | essentials 16.2 (Africanvs) | in-game (Wine debug) — logfile gate-decision oracle; loads + fires correctly |
 
 ### innerfocus.pokeemerald-expansion-1.15.3
 
@@ -49,3 +50,28 @@ is applied.
   `PASSES_RANDOMLY(100, 100, RNG_ACCURACY)` on a 70%-base move. On the clean engine it
   failed at the true `0.69` hit rate; with the mechanic it passes 100/100. The other two
   assert the bypass does not leak to other moves or non-Inner-Focus users.
+
+### innerfocus.essentials-16.2
+
+- **Code home:** a loose external Ruby plugin, `Scripts/chrooked_innerfocus.rb`, loaded by the
+  Africanvs copy's `load_order_shim.rb` (preloaded via `mkxp.json` → `preloadScript`). NOT a
+  `Scripts.rxdata` repack — the patch is plain text, mirroring the pokeemerald cache model.
+- **Seam:** `PokeBattle_Move#pbAccuracyCheck(attacker, opponent)` in 16.2's
+  `084_PokeBattle_Move`. NOTE: the spec's engine hint named `Battle::Move` — that is the
+  modern (v19+/v21) class; 16.2 is `PokeBattle_Move`. Verified against the extracted scripts,
+  not the hint.
+- The plugin overrides `pbAccuracyCheck` to `return true` (always-hit, the engine's `:NOGUARD`
+  convention) only when `attacker.hasWorkingAbility(:INNERFOCUS)` AND
+  `isConst?(@id, PBMoves, :FOCUSBLAST)`, else it calls the original. It does NOT touch vanilla
+  Inner Focus no-flinch, which lives in `PokeBattle_Battler#pbFlinch` (083) and already works.
+- **Ruby 1.8 (no `prepend`, no `TracePoint`):** the override uses `alias_method` chaining, and the
+  install is deferred via a one-shot hung on the native `Graphics.update` (the shim preloads BEFORE
+  `Scripts.rxdata` defines the class; `Graphics` exists at preload and runs every frame, so the
+  installer fires once the class appears, then flags itself done).
+- **`STDERR` is a bad file descriptor** under the console-suppressed Wine build — all logging goes to
+  a guarded `Scripts/chrooked_load.log`.
+- **Verification (logfile oracle):** boot `scripts/africanvs_devloop.sh --no-apply`, confirm
+  `[LOAD_ORDER_SHIM] active` + `installed on PokeBattle_Move` in the log. In-game evasion setup is
+  impractical, so the plugin logs the gate decision per Focus Blast cast. Proven: Lucario (Inner
+  Focus) ×3 → `ALWAYS-HIT`; Pidgeotto (no Inner Focus) ×3 → `normal accuracy`. The move-id gate
+  structurally excludes the user's other moves.

@@ -82,6 +82,24 @@ stored patch is stale.
    **Essentials** has no automated battle harness (RPG Maker XP / Ruby — verification is the in-game
    Debug menu). Emit the spec's `test_cases` as a numbered manual playtest checklist instead; do not
    claim runtime verification you did not perform.
+
+   **Essentials code home & version string (16.2 dialect, e.g. Africanvs).** A ported mechanic is a
+   loose external Ruby plugin `Scripts/<chrooked_id>.rb` in the game copy, tagged `# chrooked:<id>`,
+   loaded by the copy's `load_order_shim.rb` (preloaded via `mkxp.json` → `preloadScript`; add the
+   filename to `Scripts/load_order.txt`). Never repack the binary `Scripts.rxdata`. The version
+   string is the dialect label `essentials-16.2`, so the reference is
+   `references/<id>.essentials-16.2.patch` — a `git apply`-able diff that recreates the plugin.
+   Gotchas proven on the innerfocus tracer: (1) the 16.2 battle class is `PokeBattle_Move`
+   (modern Essentials is `Battle::Move`), so verify the Seam against the **extracted** scripts
+   (`ruby -e` Marshal-load + Zlib-inflate `Data/Scripts.rxdata`), not the spec hint; (2) this engine
+   runs **Ruby 1.8** — `Module#prepend` AND `TracePoint` are both 2.0+ and do NOT exist, so override
+   via `alias_method` chaining (not `prepend`) and defer the install via a one-shot hung on the
+   native `Graphics.update` (defined at preload, called every frame; Essentials' own `Graphics.update`
+   aliases chain so the hook survives) — not `TracePoint`; (3) under the console-suppressed Wine build
+   `STDERR` is a bad file descriptor (writing raises `Errno::EBADF`), so route all logging to a
+   guarded logfile (`Scripts/chrooked_load.log`). That logfile is also the verification oracle: make
+   the plugin log the gate decision per cast, since in-game evasion setup is impractical and a 70%
+   move's raw hit-counts are an unreliable oracle.
 6. **Capture** the patch BEFORE cleanup — it must carry BOTH the mechanic edit AND the battle test:
    `git -C <target> diff > references/<id>.<engine>-<version>.patch`
    and add/update the row in `references/README.md` (note RED→GREEN result).

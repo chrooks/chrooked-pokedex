@@ -1,0 +1,88 @@
+diff --git a/dev/null b/Scripts/chrooked_innerfocus.rb
+new file mode 100644
+--- /dev/null
++++ b/Scripts/chrooked_innerfocus.rb
+@@ -0,0 +1,83 @@
++# chrooked:innerfocus
++# ---------------------------------------------------------------------------
++# Custom mechanic delta for the Ruleset behavior "innerfocus".
++#
++# Vanilla Inner Focus (no-flinch) ALREADY exists in this engine — see
++# PokeBattle_Battler#pbFlinch in Scripts.rxdata (083_PokeBattle_BattlerEffects),
++# which returns false when the target hasWorkingAbility(:INNERFOCUS). This file
++# does NOT touch that; it adds ONLY the custom delta:
++#
++#   "The user's Focus Blast never misses."
++#
++# It overrides PokeBattle_Move#pbAccuracyCheck to return true (always-hit, the
++# engine's :NOGUARD convention) when the attacker has Inner Focus AND the move
++# is Focus Blast, otherwise calling the original accuracy logic.
++#
++# RUBY 1.8 NOTES (this engine runs bundled Ruby 1.8 under Wine):
++#   * No Module#prepend (2.0+) — the override uses alias_method chaining.
++#   * No TracePoint (2.0+) — the deferral hangs a one-shot installer on
++#     Graphics.update, a native mkxp module that IS defined at preload time and
++#     is called every frame. The shim loads this file BEFORE Scripts.rxdata
++#     defines PokeBattle_Move, so we wait until the class exists, install once,
++#     then flag ourselves done. Essentials also aliases Graphics.update, and the
++#     aliases chain, so our preload-time hook stays in the per-frame call chain.
++# ---------------------------------------------------------------------------
++
++# Safe logger: reuse the shim's global $chrooked_log if present (logs to
++# Scripts/chrooked_load.log; STDERR is a bad file descriptor under the
++# console-suppressed Wine build, so never write to it unguarded).
++unless defined?($chrooked_log) && $chrooked_log
++  $chrooked_log = lambda do |msg|
++    begin
++      File.open(File.join(File.expand_path(File.dirname(__FILE__)), "chrooked_load.log"), "a") { |f| f.puts(msg) }
++    rescue Exception
++    end
++  end
++end
++
++# Install the override onto PokeBattle_Move. Idempotent and Ruby-1.8-safe.
++def chrooked_install_innerfocus
++  return if $chrooked_innerfocus_installed
++  return unless defined?(PokeBattle_Move)
++  # pbAccuracyCheck is defined on the base class (084_PokeBattle_Move); wait for it.
++  return unless PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbAccuracyCheck")
++  PokeBattle_Move.class_eval do
++    unless instance_methods(false).map { |m| m.to_s }.include?("pbAccuracyCheck_chrooked_orig")
++      alias_method :pbAccuracyCheck_chrooked_orig, :pbAccuracyCheck
++      def pbAccuracyCheck(attacker, opponent)
++        # chrooked:innerfocus — custom delta only: the user's Focus Blast never
++        # misses. The move-id gate ensures the user's OTHER moves are untouched;
++        # the ability gate ensures non-Inner-Focus users get normal accuracy.
++        if isConst?(@id, PBMoves, :FOCUSBLAST) && (attacker.hasWorkingAbility(:INNERFOCUS) rescue false)
++          ($chrooked_log.call("[chrooked:innerfocus] Focus Blast always-hit (user has Inner Focus)") rescue nil)
++          return true
++        end
++        pbAccuracyCheck_chrooked_orig(attacker, opponent)
++      end
++    end
++  end
++  $chrooked_innerfocus_installed = true
++  ($chrooked_log.call("[chrooked:innerfocus] installed on PokeBattle_Move") rescue nil)
++end
++
++if defined?(PokeBattle_Move) && PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbAccuracyCheck")
++  # Loaded AFTER the battle class exists — install immediately.
++  chrooked_install_innerfocus
++elsif defined?(Graphics)
++  # Loaded at preload — defer. Hang a one-shot installer on the per-frame
++  # Graphics.update; it fires once PokeBattle_Move is defined, then stops trying.
++  class << Graphics
++    unless method_defined?(:update_chrooked_orig)
++      alias_method :update_chrooked_orig, :update
++      def update
++        if !$chrooked_innerfocus_installed && defined?(PokeBattle_Move)
++          chrooked_install_innerfocus
++        end
++        update_chrooked_orig
++      end
++    end
++  end
++  ($chrooked_log.call("[chrooked:innerfocus] deferred install armed on Graphics.update") rescue nil)
++else
++  ($chrooked_log.call("[chrooked:innerfocus] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
++end
