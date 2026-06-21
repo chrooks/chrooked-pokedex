@@ -1,0 +1,541 @@
+/* The proposed-column UI (#37). Lives inside the detail ledger's abilities and
+   learnset sections.
+
+   The one new visual idea: PROVISIONAL amber (D-UI-1). A proposed change is a
+   DRAFT, not committed, so it reads in a dashed, lower-chroma amber — distinct
+   from the solid `--edited` that means "the Ruleset committed this". On Apply
+   the column flips `data-applied="true"` and the provisional treatment resolves
+   to solid `--edited`: the proposal literally becomes an edit. Keeps "one color,
+   one job" honest — same hue, two saturations for draft vs committed. */
+
+:root {
+  /* Provisional amber = the committed amber, pulled toward the surface so it
+     reads as a lighter, not-yet-real draft. Derived from --edited so it tracks
+     any future retune of the single attention color. */
+  --provisional: color-mix(in oklch, var(--edited) 55%, var(--surface-2));
+  --provisional-line: color-mix(in oklch, var(--edited) 45%, var(--line));
+}
+
+.proposal {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--line);
+}
+
+/* When the proposal shell IS the whole section (it owns the single heading +
+   inline affordance + the read-only body), drop the sub-region top rule — the
+   parent .ledger__section already draws the divider. */
+.proposal--section {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.proposal__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 1.5rem;
+}
+
+/* Inherits the ledger heading look from .ledger__heading; the proposal head
+   row owns its own bottom spacing, so zero the heading's. */
+.proposal__heading.ledger__heading {
+  margin-bottom: 0;
+}
+
+/* Space the read-only body (or any proposal content) below the head row, matching
+   the heading's old bottom gap so idle layout is unchanged. */
+.proposal--section > .proposal__head {
+  margin-bottom: var(--space-3);
+}
+
+/* The honest "this calls an LLM" affordance: quiet by default, a chrome keyline
+   on hover/focus (an action, not a toggle). */
+.proposal__suggest {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font: inherit;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.proposal__suggest:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
+
+.proposal__suggest:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+/* Direction input — one mono line in the section's margin. */
+.proposal__direction {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  animation: proposal-slide var(--dur-mid) var(--ease-out);
+}
+
+.proposal__direction-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  flex: none;
+}
+
+.proposal__direction-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.proposal__direction-input:focus-visible {
+  outline: none;
+  border-color: var(--chrome);
+}
+
+.proposal__direction-submit,
+.proposal__apply,
+.proposal__dismiss {
+  appearance: none;
+  flex: none;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.proposal__direction-submit {
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text-dim);
+}
+
+.proposal__direction-submit:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
+
+/* Current │ proposed grid. The renderer fills it; the shell only owns the frame
+   + the provisional→solid flip. */
+.proposal__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.proposal__col-head {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--space-2);
+}
+
+/* PROVISIONAL amber — a changed proposed cell, before Apply. */
+.proposal-cell--changed {
+  color: var(--provisional);
+  border: 1px dashed var(--provisional-line);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklch, var(--edited) 8%, transparent);
+}
+
+/* The `→ changed` marker so the diff is never color-alone (accessibility). */
+.proposal-cell__marker {
+  margin-left: var(--space-2);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--provisional);
+}
+
+/* On Apply, the whole grid flips: provisional resolves to solid committed amber. */
+.proposal__columns[data-applied="true"] .proposal-cell--changed {
+  color: var(--edited);
+  border-style: solid;
+  border-color: var(--edited);
+}
+
+.proposal__columns[data-applied="true"] .proposal-cell__marker {
+  color: var(--edited);
+}
+
+/* Proposed slot select (abilities). */
+.proposal__slot-select {
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: 1px var(--space-1);
+}
+
+.proposal__slot-select:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+/* Learnset proposed rows: focusable for Enter-to-edit. */
+.proposal__learnset {
+  max-height: 240px;
+}
+
+.proposal__prow {
+  cursor: pointer;
+}
+
+.proposal__prow:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: -2px;
+}
+
+/* A current row the proposal drops — struck, dimmed (still readable). */
+.ledger__move[data-removed="true"] .ledger__move-name {
+  text-decoration: line-through;
+  color: var(--text-faint);
+}
+
+/* Inline (level, move) editor. */
+.proposal__row-editor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.proposal__row-level {
+  width: 4ch;
+}
+
+.proposal__row-level,
+.proposal__row-move {
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+  padding: 1px var(--space-1);
+}
+
+.proposal__row-move {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.proposal__row-level:focus-visible,
+.proposal__row-move:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.proposal__row-commit {
+  appearance: none;
+  flex: none;
+  padding: 0 var(--space-2);
+  background: color-mix(in oklch, var(--edited) 14%, var(--surface-0));
+  border: 1px solid var(--edited);
+  border-radius: var(--radius-sm);
+  color: var(--edited);
+  cursor: pointer;
+}
+
+/* Rationale — the model's reasoning, the teaching layer. PROSE → sans (no .mono),
+   inherited from the document body. Capped measure so long reasoning stays
+   readable (DESIGN.md 65–75ch). */
+.proposal-cell__rationale {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  line-height: 1.5;
+  max-width: 70ch;
+  margin-top: var(--space-1);
+}
+
+/* P2 — per-cell reasoning is PROGRESSIVE DISCLOSURE. Rows stay ONE line so
+   current↔proposed align and the diff is scannable; the "why" reveals the
+   reasoning on demand (and on row hover via CSS). Keyboard-reachable button. */
+.proposal__prow-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.proposal__why {
+  appearance: none;
+  flex: none;
+  margin-left: auto;
+  padding: 0 var(--space-1);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font: inherit;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.proposal__why::before {
+  content: "→ ";
+}
+
+/* Surface the affordance on hover/focus of the row or the button itself
+   (it stays keyboard-reachable; hover is a bonus, not the only path). */
+.proposal__prow:hover .proposal__why,
+.proposal__prow-wrap:hover .proposal__why,
+.lrow--ability:hover .proposal__why,
+.proposal__why:hover,
+.proposal__why:focus-visible {
+  opacity: 1;
+  color: var(--text-dim);
+}
+
+.proposal__why:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
+
+.proposal__why:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.proposal__why[aria-expanded="true"] {
+  opacity: 1;
+  color: var(--edited);
+}
+
+/* The revealed reasoning line — indented under its row, sans, calm. In the
+   abilities grid it spans both columns; in the learnset flex wrap it just flows. */
+.proposal__prow-why {
+  grid-column: 1 / -1;
+  padding-left: calc(3ch + var(--space-3));
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+/* P4 — the overall section rationale collapses behind "Why this design"
+   (Progressive Disclosure); expanded on demand, never always-on. */
+.proposal__why-design {
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+
+.proposal__why-design-summary {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.proposal__why-design-summary:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+.proposal__why-design-body {
+  margin-top: var(--space-2);
+}
+
+/* Alternatives — revealed on demand, swappable. */
+.proposal__alts {
+  margin-top: var(--space-3);
+}
+
+.proposal__alts-summary {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.proposal__alts-summary:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+/* P4 — alternatives are LIGHTER surface-step cards (not heavy bordered mono
+   boxes): a raised surface, a hairline, generous rhythm. The value reads mono
+   (data); the rationale reads sans (prose). */
+.proposal__alts-list {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.proposal__alt-swap {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.proposal__alt-swap:hover {
+  border-color: var(--provisional-line);
+  background: var(--surface-3);
+}
+
+.proposal__alt-swap:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+.proposal__alt-value {
+  font-size: var(--text-sm);
+}
+
+.proposal__alt-rationale {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+/* Actions — the whole-section Apply (D-UI-2). P4: Apply is the HERO action;
+   Discard is secondary. A generous top rule sets the footer apart. */
+.proposal__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+/* HERO Apply — a filled committed-amber button (the single attention color
+   doing its one job: "commit this edit"). Darker ink on the amber fill so the
+   label passes AA on the bright LED color. More weight + padding than the
+   secondary Discard. */
+.proposal__apply {
+  flex: 1 1 auto;
+  padding: var(--space-2) var(--space-4);
+  background: var(--edited);
+  border: 1px solid var(--edited);
+  color: var(--surface-0);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 12px -2px var(--edited-glow);
+}
+
+.proposal__apply:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--edited) 88%, white);
+  box-shadow: 0 0 16px -2px var(--edited-glow);
+}
+
+.proposal__apply:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.proposal__dismiss {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+}
+
+.proposal__dismiss:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+.proposal__apply:focus-visible,
+.proposal__dismiss:focus-visible,
+.proposal__direction-submit:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+.proposal__applied {
+  font-size: var(--text-sm);
+  color: var(--edited);
+}
+
+.proposal__error {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--chrome);
+  line-height: 1.4;
+}
+
+.proposal__error-tag {
+  display: inline-block;
+  margin-right: var(--space-2);
+  padding: 0 var(--space-1);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--chrome);
+  border: 1px solid var(--chrome-dim);
+  border-radius: var(--radius-sm);
+}
+
+@keyframes proposal-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* D-UI-3 — stack the proposed column UNDER current below ~900px (the ledger is
+   already narrow; two columns would crush the data). */
+@media (max-width: 900px) {
+  .proposal__columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proposal__direction {
+    animation: none;
+  }
+}

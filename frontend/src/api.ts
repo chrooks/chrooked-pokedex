@@ -11,12 +11,14 @@
 
 import type {
   Ability,
+  AbilityProposal,
   AbilityWrite,
   ApplyReportSummary,
   Behavior,
   BehaviorPacket,
   DexEntry,
   EngineKey,
+  LearnsetProposal,
   Move,
   MoveWrite,
   SpeciesOverride,
@@ -130,6 +132,27 @@ export const api = {
       emitDataChange();
       return result;
     }),
+  /** Ask the LLM to propose an abilities block for this species (#6). A read-only
+      action — proposes only, never writes. The `direction` is the author's
+      freeform steer ("make it a special attacker"). Errors carry the server's
+      own message (503 missing key / upstream, 422 invalid). */
+  suggestAbility: (id: string, opts?: { direction?: string }) =>
+    sendJson<AbilityProposal>(
+      "POST",
+      `/api/species/${encodeURIComponent(id)}/suggest/ability`,
+      { direction: opts?.direction },
+    ),
+  /** Ask the LLM to propose a whole learnset for this species (#7). Read-only —
+      proposes only, never writes. `mode` defaults to a full-list proposal. */
+  suggestLearnset: (
+    id: string,
+    opts?: { direction?: string; mode?: "full" },
+  ) =>
+    sendJson<LearnsetProposal>(
+      "POST",
+      `/api/species/${encodeURIComponent(id)}/suggest/learnset`,
+      { direction: opts?.direction, mode: opts?.mode ?? "full" },
+    ),
   deleteSpecies: (id: string) =>
     sendJson<{ deleted: string }>(
       "DELETE",

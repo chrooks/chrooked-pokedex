@@ -31,6 +31,15 @@
   box-shadow: -16px 0 40px -20px color-mix(in oklch, var(--surface-0) 90%, black);
   padding: var(--space-5);
   animation: ledger-in var(--dur-mid) var(--ease-out);
+  transition: width var(--dur-mid) var(--ease-out);
+}
+
+/* ac8 / P1 — the ledger AUTO-EXPANDS to a roomy layout while a proposal is
+   active so current │ proposed + reasoning have room (the root crowding fix).
+   Manually collapsible (#ledger-width-toggle drops this class); restores the
+   narrow width on discard / apply / species change. */
+.ledger--wide {
+  width: min(760px, 100%);
 }
 
 .ledger:focus {
@@ -85,6 +94,34 @@
 .ledger__close kbd {
   font-size: var(--text-xs);
   color: var(--text-faint);
+}
+
+/* Manual collapse/expand for the auto-expanded proposal panel (ac8). Quiet,
+   chrome keyline on hover — an action, sans label text. */
+.ledger__width-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.ledger__width-toggle:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
+
+.ledger__width-toggle:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
 }
 
 .ledger__close:hover {
@@ -157,6 +194,18 @@
 
 .ledger__section:last-child {
   border-bottom: none;
+}
+
+/* A focusable section (the proposal sections) shows a quiet focus ring so the
+   keyboard `s` shortcut has a visible target. */
+.ledger__section:focus {
+  outline: none;
+}
+
+.ledger__section:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .ledger__heading-row {
@@ -358,7 +407,15 @@
 }
 
 @media (max-width: 720px) {
-  .ledger {
+  .ledger,
+  .ledger--wide {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger {
+    animation: none;
+    transition: none;
   }
 }

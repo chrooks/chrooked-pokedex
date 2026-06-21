@@ -42,6 +42,11 @@ export interface Evolution {
   /** Pre-evo national dex number (base-derived), for the cross-link sprite. */
   from_dex?: number | null;
   method: string | Record<string, unknown>;
+  /** Structured form of a backdrop display-string `method` ("Level 36"). The API
+      ships this alongside the string: `kind` is "Level"/"Item"/… (or the raw
+      pokeemerald token like "EVO_LEVEL"), `param` the value ("36"). Absent on the
+      Override shape, where `method` is already a structured dict. */
+  method_detail?: { kind: string; param: string };
 }
 
 /** Pre-override values for whatever the Ruleset changed (base → now diff). */
@@ -84,6 +89,50 @@ export interface SpeciesOverride {
   learnset: LearnsetMove[] | null;
   evolution: Evolution | null;
 }
+
+/** One alternative the model offered alongside the primary draft (#6/#7). The
+    `value` shape is section-specific — an ability name for an ability slot, a
+    `(level, move)` pair for a learnset — so it is left untyped at this layer and
+    narrowed by each section's renderer. */
+export interface ProposalAlternative {
+  value: unknown;
+  rationale: string;
+}
+
+/** The shared envelope every `/suggest/*` endpoint returns: a `draft` (the
+    proposed values), per-key `rationale`, and a list of swappable
+    `alternatives`. `Draft` and the `rationale` keys are section-specific. */
+export interface SuggestResponse<Draft> {
+  draft: Draft;
+  rationale: Record<string, string>;
+  alternatives: ProposalAlternative[];
+}
+
+/** `POST /api/species/{id}/suggest/ability` — a proposed abilities block. Each
+    slot is optional; an absent slot means "keep the current value". */
+export interface AbilityDraft {
+  abilities: {
+    primary?: string;
+    secondary?: string;
+    hidden?: string;
+  };
+}
+
+export type AbilityProposal = SuggestResponse<AbilityDraft>;
+
+/** One proposed learnset row, carrying the model's per-row `reasoning`. */
+export interface LearnsetDraftMove {
+  level: number;
+  move: string;
+  reasoning?: string;
+}
+
+/** `POST /api/species/{id}/suggest/learnset` — a whole proposed learnset. */
+export interface LearnsetDraft {
+  learnset: LearnsetDraftMove[];
+}
+
+export type LearnsetProposal = SuggestResponse<LearnsetDraft>;
 
 export interface AdditionalEffect {
   effect: string;

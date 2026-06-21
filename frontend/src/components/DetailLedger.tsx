@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import type { DexEntry, KindKey } from "../types";
@@ -14,6 +15,14 @@ import { LearnsetSection } from "./ledger/LearnsetSection";
 import { EvolutionSection } from "./ledger/EvolutionSection";
 import { TypesRow } from "./ledger/TypesRow";
 import { SpeciesEditor } from "./editors/SpeciesEditor";
+import { ProposedColumn } from "./proposal/ProposedColumn";
+import { abilitiesRenderer } from "./proposal/abilitiesRenderer";
+import { learnsetRenderer } from "./proposal/learnsetRenderer";
+import { suggestAbilityCall, suggestLearnsetCall } from "./proposal/suggestCalls";
+import {
+  shouldExpandLedger,
+  updateActiveSet,
+} from "./proposal/activeProposals";
 import "./detail-ledger.css";
 import "./editors/editors.css";
 
@@ -49,10 +58,27 @@ export function DetailLedger({
 }: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
+  // Which proposal sections are mid-flow + whether the author manually collapsed
+  // the panel — together decide the auto-expand (ac8 / P1). Logic in
+  // activeProposals.ts (pure, unit-guarded).
+  const [activeProposals, setActiveProposals] = useState<ReadonlySet<string>>(
+    new Set(),
+  );
+  const [manuallyCollapsed, setManuallyCollapsed] = useState(false);
   const edited = isEdited(entry);
   const panelRef = useRef<HTMLElement>(null);
   const sprite = spriteUrl(entry.chrooked_id, entry.dex);
   const [view, update] = useUrlState();
+
+  const handleProposalActive = useCallback(
+    (sectionId: string, isActive: boolean) => {
+      setActiveProposals((prev) => updateActiveSet(prev, sectionId, isActive));
+    },
+    [],
+  );
+
+  const hasActiveProposal = activeProposals.size > 0;
+  const expanded = shouldExpandLedger(activeProposals, manuallyCollapsed);
 
   // "Add to filter": append a Name pill for this species to the dex filter and
   // drop back to the (now filtered) dex list. Dedup-safe via appendNameFilter, so
@@ -67,6 +93,8 @@ export function DetailLedger({
   useEffect(() => {
     setShowDiff(false);
     setEditing(false);
+    setActiveProposals(new Set());
+    setManuallyCollapsed(false);
     panelRef.current?.focus();
   }, [entry.chrooked_id]);
 
@@ -80,8 +108,9 @@ export function DetailLedger({
         onClick={onClose}
       />
       <aside
-        className="ledger"
+        className={`ledger${expanded ? " ledger--wide" : ""}`}
         id="dex-detail"
+        data-expanded={expanded}
         ref={panelRef}
         tabIndex={-1}
         role="dialog"
@@ -93,6 +122,22 @@ export function DetailLedger({
             <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
             <div className="ledger__head-actions">
               {edited && <EditedLed on variant="tag" />}
+              {hasActiveProposal && !editing && (
+                <button
+                  type="button"
+                  id="ledger-width-toggle"
+                  className="ledger__width-toggle"
+                  aria-pressed={expanded}
+                  onClick={() => setManuallyCollapsed((v) => !v)}
+                  title={
+                    expanded
+                      ? "Collapse the proposal panel"
+                      : "Expand the proposal panel"
+                  }
+                >
+                  {expanded ? "⇥ Collapse" : "⇤ Expand"}
+                </button>
+              )}
               {!editing && (
                 <button
                   type="button"
@@ -170,6 +215,9 @@ export function DetailLedger({
             entry={entry}
             showDiff={showDiff}
             onNavigate={onNavigate}
+            onSaved={onSaved}
+            abilityOptions={abilityOptions}
+            onProposalActive={handleProposalActive}
           />
         )}
       </aside>
@@ -182,9 +230,44 @@ type BodyProps = {
   showDiff: boolean;
   /** Read-only-only cross-links out to types / moves / abilities (#28). */
   onNavigate: NavHandler;
+  /** Refetch the dex after an Apply so the merged view reflects the change. */
+  onSaved: () => void;
+  /** Known ability names for the proposed-abilities slot selects. */
+  abilityOptions: readonly string[];
+  /** Report a section's active/idle proposal state up to the ledger (ac8). */
+  onProposalActive: (sectionId: string, isActive: boolean) => void;
 };
 
-function DetailBody({ entry, showDiff, onNavigate }: BodyProps) {
+/** Press `s` on a focused proposal section to open its `✦ suggest` input —
+    keyboard-first (PRODUCT.md). Ignores `s` typed into a field. */
+function handleSectionKey(
+  event: KeyboardEvent<HTMLElement>,
+  suggestButtonId: string,
+) {
+  if (event.key !== "s") return;
+  const target = event.target as HTMLElement;
+  if (
+    target.tagName === "INPUT" ||
+    target.tagName === "SELECT" ||
+    target.tagName === "TEXTAREA"
+  ) {
+    return;
+  }
+  const button = document.getElementById(suggestButtonId);
+  if (button) {
+    event.preventDefault();
+    (button as HTMLButtonElement).click();
+  }
+}
+
+function DetailBody({
+  entry,
+  showDiff,
+  onNavigate,
+  onSaved,
+  abilityOptions,
+  onProposalActive,
+}: BodyProps) {
   return (
     <>
       <section className="ledger__section" aria-label="Base stats">
@@ -207,28 +290,56 @@ function DetailBody({ entry, showDiff, onNavigate }: BodyProps) {
           </div>
         </section>
 
-        <section className="ledger__section" aria-label="Abilities">
-          <h3 className="ledger__heading">Abilities</h3>
-          <div className="ledger__abilities">
-            {(["primary", "secondary", "hidden"] as const).map((slot) => (
-              <AbilityRow
-                key={slot}
-                slot={slot}
-                now={entry.abilities[slot]}
-                was={entry.base.abilities?.[slot]}
-                showDiff={showDiff}
-                onNavigate={onNavigate}
-              />
-            ))}
-          </div>
+        <section
+          className="ledger__section"
+          aria-label="Abilities"
+          tabIndex={0}
+          onKeyDown={(e) => handleSectionKey(e, "proposal-abilities-suggest")}
+        >
+          <ProposedColumn
+            entry={entry}
+            renderer={abilitiesRenderer(abilityOptions, entry)}
+            suggest={suggestAbilityCall}
+            onApplied={onSaved}
+            onActiveChange={onProposalActive}
+          >
+            <div className="ledger__abilities">
+              {(["primary", "secondary", "hidden"] as const).map((slot) => (
+                <AbilityRow
+                  key={slot}
+                  slot={slot}
+                  now={entry.abilities[slot]}
+                  was={entry.base.abilities?.[slot]}
+                  showDiff={showDiff}
+                  onNavigate={onNavigate}
+                />
+              ))}
+            </div>
+          </ProposedColumn>
         </section>
 
-        <LearnsetSection
-          now={entry.learnset}
-          was={entry.base.learnset}
-          showDiff={showDiff}
-          onNavigate={onNavigate}
-        />
+        <section
+          className="ledger__section"
+          aria-label="Learnset"
+          tabIndex={0}
+          onKeyDown={(e) => handleSectionKey(e, "proposal-learnset-suggest")}
+        >
+          <ProposedColumn
+            entry={entry}
+            renderer={learnsetRenderer()}
+            suggest={suggestLearnsetCall}
+            onApplied={onSaved}
+            onActiveChange={onProposalActive}
+          >
+            <LearnsetSection
+              now={entry.learnset}
+              was={entry.base.learnset}
+              showDiff={showDiff}
+              onNavigate={onNavigate}
+              bare
+            />
+          </ProposedColumn>
+        </section>
 
         <EvolutionSection
           evolution={entry.evolution}
