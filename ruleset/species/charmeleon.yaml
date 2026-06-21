@@ -1,5 +1,25 @@
 name: Charmeleon
 chrooked_id: charmeleon
 aka: { pokeemerald: SPECIES_CHARMELEON }
+types: [Fire, Dragon]
 abilities:
   secondary: Flash Fire
+learnset:
+  - { level: 0, move: Dragon Breath }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Smokescreen }
+  - { level: 7, move: Fire Spin }
+  - { level: 12, move: Bite }
+  - { level: 17, move: Fire Fang }
+  - { level: 20, move: Slash }
+  - { level: 24, move: flame burst }
+  - { level: 28, move: Flamethrower }
+  - { level: 34, move: Dragon Claw }
+  - { level: 36, move: Inferno }
+  - { level: 42, move: Crunch }
+  - { level: 48, move: Heat Wave }
+  - { level: 54, move: Flare Blitz }
+  - { level: 60, move: Overheat }
+evolution: { from: charmander, method: { level: 16 } }
