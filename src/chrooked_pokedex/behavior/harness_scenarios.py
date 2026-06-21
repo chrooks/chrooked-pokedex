@@ -171,4 +171,19 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "matching wing move boosted", "select": {"move": "BRAVEBIRD", "ability": "true"}, "expect": {"result": "BOOSTED"}},
         {"stage": "non-matching move normal", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
     ],
+    "infernalmaw": [
+        {"stage": "biting move + ability", "select": {"move": "CRUNCH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-biting move + ability", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "biting move, no ability", "select": {"move": "CRUNCH", "ability": "false"}, "expect": {"result": "NORMAL"}},
+    ],
+    "magicalfists": [
+        {"stage": "matching punching move with ability -> BOOSTED", "select": {"move": "MACHPUNCH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-punching move with ability -> NORMAL", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "punching move without ability -> NORMAL", "select": {"move": "MACHPUNCH", "ability": "false"}, "expect": {"result": "NORMAL"}},
+    ],
+    "mysticblades": [
+        {"stage": "matching-slicing-move", "select": {"move": "NIGHTSLASH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "matching-special-slicing-move", "select": {"move": "AIRSLASH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-matching-move", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+    ],
 }
