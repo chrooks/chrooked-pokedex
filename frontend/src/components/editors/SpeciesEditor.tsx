@@ -21,7 +21,7 @@ import type {
 } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
-import { collectInvalidFields } from "../../lib/entityValidation";
+import { canonicalize, collectInvalidFields } from "../../lib/entityValidation";
 import { ComboField, NumberField, SelectField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import {
@@ -70,7 +70,16 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
   const [learnset, setLearnset] = useState<LearnRow[]>(() =>
     entry.learnset.map((m) => ({ _id: rowId(), level: m.level, move: m.move })),
   );
-  const [evoFrom, setEvoFrom] = useState(() => entry.evolution?.from ?? "");
+  // The dex carries the pre-evo as a slug ("bulbasaur") for base evolutions and
+  // the display name ("Bulbasaur") in from_name; an Override stores whatever was
+  // authored (possibly stray-cased). Seed the display name and snap it to the
+  // canonical species option so the field reads right and validates on load.
+  const [evoFrom, setEvoFrom] = useState(() =>
+    canonicalize(
+      entry.evolution?.from_name ?? entry.evolution?.from ?? "",
+      speciesOptions,
+    ),
+  );
   const [evoMethod, setEvoMethod] = useState<MethodForm>(() =>
     seedMethodForm(entry.evolution),
   );

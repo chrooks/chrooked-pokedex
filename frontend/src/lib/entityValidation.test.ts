@@ -1,5 +1,33 @@
 import { describe, expect, it } from "vitest";
-import { collectInvalidFields, isKnown } from "./entityValidation";
+import { canonicalize, collectInvalidFields, isKnown } from "./entityValidation";
+
+describe("canonicalize", () => {
+  const species = ["Bulbasaur", "Charmander", "Drizzile"];
+
+  it("resolves a slug to the canonical display option", () => {
+    expect(canonicalize("bulbasaur", species)).toBe("Bulbasaur");
+  });
+
+  it("resolves a stray-cased value to the canonical option", () => {
+    expect(canonicalize("charmander", species)).toBe("Charmander");
+  });
+
+  it("passes an already-canonical value through unchanged", () => {
+    expect(canonicalize("Drizzile", species)).toBe("Drizzile");
+  });
+
+  it("returns the original when no option matches", () => {
+    expect(canonicalize("Mewthree", species)).toBe("Mewthree");
+  });
+
+  it("leaves an empty value empty", () => {
+    expect(canonicalize("", species)).toBe("");
+  });
+
+  it("makes a canonicalized seed pass isKnown", () => {
+    expect(isKnown(canonicalize("bulbasaur", species), species)).toBe(true);
+  });
+});
 
 describe("isKnown", () => {
   it("returns true for empty string", () => {

@@ -22,4 +22,4 @@ learnset:
   - { level: 48, move: Heat Wave }
   - { level: 54, move: Flare Blitz }
   - { level: 60, move: Overheat }
-evolution: { from: charmander, method: { level: 16 } }
+evolution: { from: Charmander, method: { level: 16 } }
