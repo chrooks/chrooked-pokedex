@@ -21,9 +21,17 @@ import type {
 } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
-import { ComboField, NumberField, TextField } from "./fields";
+import { ComboField, NumberField, SelectField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
+import {
+  seedMethodForm,
+  serializeMethod,
+  type MethodForm,
+  type MethodKind,
+} from "./evolutionMethod";
 import "./editors.css";
+
+const METHOD_KINDS: readonly MethodKind[] = ["level", "item", "other"];
 
 type Props = {
   entry: DexEntry;
@@ -39,7 +47,6 @@ type AbilitySlot = (typeof ABILITY_SLOTS)[number];
 type StatForm = Record<string, number | "">;
 type AbilityForm = Record<AbilitySlot, string>;
 type LearnRow = { _id: number; level: number | ""; move: string };
-type MethodRow = { _id: number; key: string; value: string };
 
 export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props) {
   const { isSaving, error, run } = useSubmit();
@@ -59,8 +66,8 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
     entry.learnset.map((m) => ({ _id: rowId(), level: m.level, move: m.move })),
   );
   const [evoFrom, setEvoFrom] = useState(() => entry.evolution?.from ?? "");
-  const [evoMethod, setEvoMethod] = useState<MethodRow[]>(() =>
-    initialMethod(entry.evolution),
+  const [evoMethod, setEvoMethod] = useState<MethodForm>(() =>
+    seedMethodForm(entry.evolution),
   );
 
   useEffect(() => {
@@ -291,55 +298,61 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions }: Props)
           value={evoFrom}
           onChange={setEvoFrom}
         />
-        <div className="row-list" style={{ marginTop: "var(--space-2)" }}>
-          {evoMethod.map((row, i) => (
-            <div key={row._id} className="row-list__row row-list__row--inline">
-              <div className="tc-row">
-                <TextField
-                  id={`evo-${row._id}-key`}
-                  label="Method key"
-                  hint="e.g. level"
-                  value={row.key}
-                  onChange={(v) =>
-                    setEvoMethod((m) =>
-                      m.map((r, j) => (j === i ? { ...r, key: v } : r)),
-                    )
-                  }
-                />
-                <span className="tc-row__vs" aria-hidden="true">
-                  =
-                </span>
-                <TextField
-                  id={`evo-${row._id}-value`}
-                  label="Value"
-                  value={row.value}
-                  onChange={(v) =>
-                    setEvoMethod((m) =>
-                      m.map((r, j) => (j === i ? { ...r, value: v } : r)),
-                    )
-                  }
-                />
-                <button
-                  type="button"
-                  className="row-list__remove"
-                  aria-label={`Remove evolution method ${i + 1}`}
-                  onClick={() => setEvoMethod((m) => m.filter((_, j) => j !== i))}
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          ))}
-          <button
-            type="button"
-            className="row-list__add"
-            aria-label="Add evolution method condition"
-            onClick={() =>
-              setEvoMethod((m) => [...m, { _id: rowId(), key: "", value: "" }])
+        <div className="tc-row" style={{ marginTop: "var(--space-2)" }}>
+          <SelectField
+            id="species-evo-kind"
+            label="Method"
+            value={evoMethod.kind}
+            options={METHOD_KINDS as readonly string[]}
+            onChange={(v) =>
+              setEvoMethod((m) => ({ ...m, kind: v as MethodKind }))
             }
-          >
-            + Add method condition
-          </button>
+          />
+          {evoMethod.kind === "level" && (
+            <NumberField
+              id="species-evo-level"
+              label="Level"
+              min={1}
+              max={100}
+              value={evoMethod.param === "" ? "" : Number(evoMethod.param)}
+              onChange={(v) =>
+                setEvoMethod((m) => ({ ...m, param: v === "" ? "" : String(v) }))
+              }
+            />
+          )}
+          {evoMethod.kind === "item" && (
+            <TextField
+              id="species-evo-item"
+              label="Item"
+              hint="internal name, e.g. FIRESTONE"
+              value={evoMethod.param}
+              onChange={(v) => setEvoMethod((m) => ({ ...m, param: v }))}
+            />
+          )}
+          {evoMethod.kind === "other" && (
+            <>
+              <TextField
+                id="species-evo-other-key"
+                label="Key"
+                hint="engine token, e.g. essentials"
+                value={evoMethod.rows[0]?.key ?? ""}
+                onChange={(v) =>
+                  setEvoMethod((m) => ({ ...m, rows: setRow0(m, { key: v }) }))
+                }
+              />
+              <span className="tc-row__vs" aria-hidden="true">
+                =
+              </span>
+              <TextField
+                id="species-evo-other-value"
+                label="Value"
+                value={evoMethod.rows[0]?.value ?? ""}
+                onChange={(v) =>
+                  setEvoMethod((m) => ({ ...m, rows: setRow0(m, { value: v }) }))
+                }
+              />
+            </>
+          )}
         </div>
       </section>
 
@@ -420,13 +433,15 @@ function initialAbilities(slots: AbilitySlots): AbilityForm {
   };
 }
 
-function initialMethod(evolution: Evolution | null): MethodRow[] {
-  if (evolution === null) return [];
-  return Object.entries(evolution.method).map(([key, value]) => ({
-    _id: rowId(),
-    key,
-    value: String(value),
-  }));
+/** Immutably patch the first Other-method row (the dense single key/value row).
+    Seeds a fresh row if the form somehow has none. */
+function setRow0(
+  form: MethodForm,
+  patch: Partial<{ key: string; value: string }>,
+): MethodForm["rows"] {
+  const [first, ...rest] = form.rows;
+  const base = first ?? { _id: rowId(), key: "", value: "" };
+  return [{ ...base, ...patch }, ...rest];
 }
 
 // --- parsing / comparison --------------------------------------------------- #
@@ -440,11 +455,6 @@ function sameStrings(a: string[], b: string[]): boolean {
   return a.length === b.length && a.every((value, i) => value === b[i]);
 }
 
-function parseMethodValue(value: string): number | string {
-  const trimmed = value.trim();
-  return /^-?\d+$/.test(trimmed) ? Number(trimmed) : trimmed;
-}
-
 // --- the overrides-only payload builder ------------------------------------- #
 
 type FormState = {
@@ -454,7 +464,7 @@ type FormState = {
   abilities: AbilityForm;
   learnset: LearnRow[];
   evoFrom: string;
-  evoMethod: MethodRow[];
+  evoMethod: MethodForm;
 };
 
 function buildOverride(
@@ -495,12 +505,10 @@ function buildOverride(
     JSON.stringify(editedLearnset) !== JSON.stringify(baseLearnset(entry));
 
   // evolution: the snapshot carries none, so any set evolution is an Override.
+  // The method always serializes to a clean Override dict (never the backdrop
+  // display string), via the discriminated-union form state.
   const evoFrom = form.evoFrom.trim();
-  const method: Record<string, number | string> = {};
-  for (const row of form.evoMethod) {
-    const key = row.key.trim();
-    if (key !== "") method[key] = parseMethodValue(row.value);
-  }
+  const method = serializeMethod(form.evoMethod);
   const evolution: Evolution | null =
     evoFrom !== "" ? { from: evoFrom, method } : null;
 
