@@ -136,4 +136,39 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "c2", "select": {"move": "THUNDERBOLT", "ability": "true", "hp_low": "false"}, "expect": {"result": "NORMAL"}},
         {"stage": "c3", "select": {"move": "ICEBEAM", "ability": "true", "hp_low": "true"}, "expect": {"result": "NORMAL"}},
     ],
+    "amplifier": [
+        {"stage": "matching sound move with Amplifier user is boosted", "select": {"move": "HYPERVOICE", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-sound move with Amplifier user is unchanged", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "another non-sound physical move stays normal", "select": {"move": "EARTHQUAKE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+    ],
+    "hammerfist": [
+        {"stage": "punch move matches isPunchingMove? gate with the ability", "select": {"move": "MACHPUNCH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "hammer/slam-named move matches the curated constant set with the ability", "select": {"move": "BODYSLAM", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "neither punch nor hammer/slam named, even with the ability", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+    ],
+    "impale": [
+        {"stage": "piercing move + Impale boosts damage", "select": {"move": "MEGAHORN", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-piercing move with Impale is unchanged", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "piercing move without Impale is unchanged", "select": {"move": "DRILLPECK", "ability": "false"}, "expect": {"result": "NORMAL"}},
+    ],
+    "martialartist": [
+        {"stage": "punch move with ability -> BOOSTED", "select": {"move": "MACHPUNCH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "curated kick move with ability -> BOOSTED", "select": {"move": "HIJUMPKICK", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "neither punch nor kick with ability -> NORMAL", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+    ],
+    "sledgehammer": [
+        {"stage": "hammer/slam move + ability -> boosted", "select": {"move": "WOODHAMMER", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "another hammer/slam move + ability -> boosted", "select": {"move": "BODYSLAM", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "punching move + ability -> unchanged (punch half excluded)", "select": {"move": "MACHPUNCH", "ability": "true"}, "expect": {"result": "NORMAL"}},
+    ],
+    "striker": [
+        {"stage": "kicking move + Striker user", "select": {"move": "HIGHJUMPKICK", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-kicking move + Striker user", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "kicking move + non-Striker user", "select": {"move": "BLAZEKICK", "ability": "false"}, "expect": {"result": "NORMAL"}},
+    ],
+    "wingspan": [
+        {"stage": "matching wing move boosted", "select": {"move": "HURRICANE", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "matching wing move boosted", "select": {"move": "BRAVEBIRD", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "non-matching move normal", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+    ],
 }
