@@ -52,6 +52,27 @@ def test_ability_resolves_by_internalname_not_spanish(tmp_path):
     assert resmap.ability("Hedor") is None  # Spanish display Name does not match
 
 
+def test_multiword_display_name_resolves_to_internal(tmp_path):
+    """A multi-word ENGLISH display name normalizes to the spaceless InternalName.
+
+    Regression: the resolver keyed on `name.lower()` ("attack order") never matched
+    the spaceless InternalName ("attackorder"), so every multi-word move/ability
+    silently dropped even though it exists in the target. Normalize both sides.
+    """
+    resmap = build_resolution_map(_target(tmp_path), _ruleset(tmp_path))
+    # Moves (spaces + hyphen).
+    assert resmap.move("Attack Order") == "ATTACKORDER"
+    assert resmap.move("Bug Buzz") == "BUGBUZZ"
+    assert resmap.move("X-Scissor") == "XSCISSOR"
+    # Abilities.
+    assert resmap.ability("Speed Boost") == "SPEEDBOOST"
+    assert resmap.ability("Battle Armor") == "BATTLEARMOR"
+    # Single-word still resolves; a genuinely-absent name still stays None.
+    assert resmap.move("Megahorn") == "MEGAHORN"
+    assert resmap.ability("Stench") == "STENCH"
+    assert resmap.move("Take Down") is None  # not in this fixture's moves.txt
+
+
 def test_type_resolves_by_internalname_not_spanish(tmp_path):
     resmap = build_resolution_map(_target(tmp_path), _ruleset(tmp_path))
     assert resmap.type("NORMAL") == "NORMAL"

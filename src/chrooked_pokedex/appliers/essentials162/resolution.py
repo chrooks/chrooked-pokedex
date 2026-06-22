@@ -18,11 +18,19 @@ from pathlib import Path
 from typing import Optional
 
 from ...model import Ruleset
+from ...seed.neutralize import slug as _norm
 from ..essentials import vocab
 from . import csv_io, pbs_io, section_read
 
 # Names that map a row to its INTERNAL via CSV column 1.
 _CSV_INTERNAL_COL = 1
+
+# Lookups normalize both the map keys and the query with the same slug
+# (strip non-alphanumerics, lowercase) so a multi-word DISPLAY name the Ruleset
+# cites ("Take Down", "Dry Skin", "X-Scissor") matches the spaceless target
+# InternalName ("TAKEDOWN", "DRYSKIN", "XSCISSOR"). Keying only by `.lower()`
+# left every multi-word name unmatched. A Spanish display Name still resolves to
+# None — it slugs to something that is not any InternalName.
 
 
 @dataclass
@@ -41,13 +49,13 @@ class ResolutionMap:
         return self.species_by_id.get(chrooked_id)
 
     def type(self, name: str) -> Optional[str]:
-        return self.type_by_name.get(name.lower())
+        return self.type_by_name.get(_norm(name))
 
     def ability(self, name: str) -> Optional[str]:
-        return self.ability_by_name.get(name.lower())
+        return self.ability_by_name.get(_norm(name))
 
     def move(self, name: str) -> Optional[str]:
-        return self.move_by_name.get(name.lower())
+        return self.move_by_name.get(_norm(name))
 
 
 # The 18 standard types, used only as a fallback when types.txt could not be read.
@@ -67,8 +75,8 @@ def _read(target: Path, rel: str) -> str:
 
 
 def _internal_to_self(internals: list[str]) -> dict[str, str]:
-    """Map each INTERNAL name (lowercased) to itself, for the resolver's `.lower()` keys."""
-    return {internal.lower(): internal for internal in internals}
+    """Map each INTERNAL name (slug-normalized) to itself, matching the resolver's keys."""
+    return {_norm(internal): internal for internal in internals}
 
 
 def _csv_internals(text: str) -> list[str]:
@@ -88,7 +96,7 @@ def build_resolution_map(target: Path, ruleset: Ruleset) -> ResolutionMap:
     type_internals = list(section_read.internalname_to_index(_read(target, "types.txt")))
     type_by_name = _internal_to_self(type_internals)
     if not type_by_name:
-        type_by_name = {name.lower(): vocab.type_internal(name) for name in _STANDARD_TYPES}
+        type_by_name = {_norm(name): vocab.type_internal(name) for name in _STANDARD_TYPES}
 
     ability_by_name = _internal_to_self(_csv_internals(_read(target, "abilities.txt")))
     move_by_name = _internal_to_self(_csv_internals(_read(target, "moves.txt")))

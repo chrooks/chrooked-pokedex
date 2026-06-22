@@ -86,8 +86,11 @@ def apply_abilities(
             text = _create_row(text, ability, internal, report, chrooked_id)
 
         # Register into the in-memory map so species_apply resolves this ability
-        # in the same run, even before this file is written to disk.
-        resmap.ability_by_name[internal.lower()] = internal
+        # in the same run, even before this file is written to disk. Key with the
+        # same slug normalization the resolver uses (see resolution.ResolutionMap).
+        from .resolution import _norm as _norm_key
+
+        resmap.ability_by_name[_norm_key(internal)] = internal
 
     if text != original:
         pbs_io.write(path, text, had_bom)
