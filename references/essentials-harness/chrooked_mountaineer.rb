@@ -20,15 +20,14 @@
 #   3. Otherwise return the _orig result (false / whatever it was).
 # Type match uses isConst?(type, PBTypes, :ROCK) (verified 16.2 helper).
 #
-# SECOND HOOK (Stealth Rock entry-hazard guard) — *** NOT PORTED ***
-# The Ruleset also wants Stealth Rock entry damage waived on switch-in (alongside
-# Magic Guard). That is a SEPARATE Seam in the entry-hazard routine, and no
-# verified 16.2 method name/signature for that routine was supplied. Porting it
-# would mean guessing the hazard method — which the harness forbids ("do not
-# guess; cite the C/Seam"). So this file ports ONLY the Rock-move immunity. The
-# Stealth Rock exemption is left UNPORTED and noted here for a follow-up once the
-# hazard Seam is verified in Data/Scripts.rxdata. (If/when added, alias that
-# method too — separate _orig name + separate installed-flag, both deferred.)
+# SECOND HOOK (Stealth Rock entry-hazard guard) — now ported. The Stealth Rock
+# entry damage lives mid-method in PokeBattle_Battle#pbOnActiveOne(pkmn,...) (line
+# ~2388, verified in Data/Scripts.rxdata), gated `if !pkmn.hasWorkingAbility
+# (:MAGICGUARD)` — not alias-injectable in place. So we wrap pbOnActiveOne: for a
+# MOUNTAINEER entrant whose side has Stealth Rock, stash and CLEAR that side's
+# StealthRock flag around _orig, then restore it. The SR damage block sees no
+# rock for this Pokemon and skips; the flag is restored so teammates still take
+# SR, and Spikes/Toxic Spikes (separate blocks) are untouched.
 #
 # HARNESS (Route B log oracle): every pbTypeImmunityByAbility call logs one line:
 #     [chrooked:mountaineer] OBS type=<TYPE> ability=<true|false> result=<ABSORBED|PASS>
@@ -76,19 +75,61 @@ def chrooked_install_mountaineer
   ($chrooked_log.call("[chrooked:mountaineer] installed on PokeBattle_Move") rescue nil)
 end
 
-if defined?(PokeBattle_Move) && PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbTypeImmunityByAbility")
-  chrooked_install_mountaineer
-elsif defined?(Graphics)
-  class << Graphics
-    unless method_defined?(:update_chrooked_mountaineer_orig)
-      alias_method :update_chrooked_mountaineer_orig, :update
-      def update
-        chrooked_install_mountaineer if !$chrooked_mountaineer_installed && defined?(PokeBattle_Move)
-        update_chrooked_mountaineer_orig
+# --- Stealth Rock entry exemption (Battle#pbOnActiveOne) ----------------------
+def chrooked_install_mountaineer_sr
+  return if $chrooked_mountaineer_sr_installed
+  return unless defined?(PokeBattle_Battle)
+  return unless PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbOnActiveOne")
+  PokeBattle_Battle.class_eval do
+    unless instance_methods(false).map { |m| m.to_s }.include?("pbOnActiveOne_chrooked_mountaineer_orig")
+      alias_method :pbOnActiveOne_chrooked_mountaineer_orig, :pbOnActiveOne
+      def pbOnActiveOne(pkmn, onlyabilities = false, moldbreaker = false)
+        cleared = false
+        begin
+          if pkmn && (pkmn.hasWorkingAbility(:MOUNTAINEER) rescue false) &&
+             (pkmn.pbOwnSide.effects[PBEffects::StealthRock] rescue false)
+            pkmn.pbOwnSide.effects[PBEffects::StealthRock] = false
+            cleared = true
+            ($chrooked_log.call("[chrooked:mountaineer] OBS event=entry ability=true effect=stealthrock_waived") rescue nil)
+          end
+        rescue Exception
+        end
+        begin
+          ret = pbOnActiveOne_chrooked_mountaineer_orig(pkmn, onlyabilities, moldbreaker)
+        ensure
+          (pkmn.pbOwnSide.effects[PBEffects::StealthRock] = true if cleared) rescue nil
+        end
+        ret
       end
     end
   end
-  ($chrooked_log.call("[chrooked:mountaineer] deferred install armed on Graphics.update") rescue nil)
-else
-  ($chrooked_log.call("[chrooked:mountaineer] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
+  $chrooked_mountaineer_sr_installed = true
+  ($chrooked_log.call("[chrooked:mountaineer] SR exemption installed on PokeBattle_Battle") rescue nil)
+end
+
+def chrooked_mountaineer_done?
+  $chrooked_mountaineer_installed && $chrooked_mountaineer_sr_installed
+end
+
+chrooked_install_mountaineer if defined?(PokeBattle_Move) &&
+  PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbTypeImmunityByAbility")
+chrooked_install_mountaineer_sr if defined?(PokeBattle_Battle) &&
+  PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbOnActiveOne")
+
+unless chrooked_mountaineer_done?
+  if defined?(Graphics)
+    class << Graphics
+      unless method_defined?(:update_chrooked_mountaineer_orig)
+        alias_method :update_chrooked_mountaineer_orig, :update
+        def update
+          chrooked_install_mountaineer if !$chrooked_mountaineer_installed && defined?(PokeBattle_Move)
+          chrooked_install_mountaineer_sr if !$chrooked_mountaineer_sr_installed && defined?(PokeBattle_Battle)
+          update_chrooked_mountaineer_orig
+        end
+      end
+    end
+    ($chrooked_log.call("[chrooked:mountaineer] deferred install armed on Graphics.update") rescue nil)
+  else
+    ($chrooked_log.call("[chrooked:mountaineer] ERROR: neither PokeBattle classes nor Graphics defined at load") rescue nil)
+  end
 end

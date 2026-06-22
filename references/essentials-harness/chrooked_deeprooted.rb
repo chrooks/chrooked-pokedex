@@ -18,17 +18,17 @@
 # after the site's Big Root ×1.3, so the two stack to ×1.69 as specced.
 #
 # The PASSIVE drains — Leech Seed receiver, Ingrain, Aqua Ring — live inside
-# PokeBattle_Battle#pbEndOfRoundPhase (lines 3537/3548/3567), mid-method, alongside
-# non-drain end-of-round heals (Leftovers/Rain Dish). They are not alias-injectable
-# per-site, so we wrap the whole pbEndOfRoundPhase to raise an end-round flag, and
-# in pbRecoverHP scale a DEEPROOTED heal during that window ONLY when the recoverer
-# currently has an active drain source: effects[AquaRing], effects[Ingrain], or it
-# is some battler's Leech Seed recipient. That gate excludes Leftovers/Rain Dish.
-#
-# ponytail: ceiling — if a DEEPROOTED mon holds Leftovers AND simultaneously has
-# Aqua Ring / Ingrain / is seeded, its Leftovers tick is also scaled ×1.3 (the
-# effect-gate can't tell two same-window heals apart). Niche; the drain portion is
-# correct. Upgrade path: only a per-site edit to pbEndOfRoundPhase would split them.
+# PokeBattle_Battle#pbEndOfRoundPhase (lines 3537/3548/3567), mid-method. Rather
+# than intercept their pbRecoverHP (which can't be told apart from a co-occurring
+# Leftovers / Black Sludge / Grassy Terrain tick — same amount, same window), we
+# post-wrap pbEndOfRoundPhase and add the +0.3 as a SEPARATE top-up heal computed
+# from the holder's active drain sources (Aqua Ring/Ingrain totalhp/16, Leech Seed
+# seeder.totalhp/8, each ×1.3 if Big Root). Heal-Block-gated; Leech Seed skipped if
+# the seeder has Liquid Ooze (no heal happened). Because the bonus is computed
+# outside, no other end-of-round heal is ever scaled — the old Leftovers ceiling
+# is gone. Approximation: the Leech Seed base uses seeder.totalhp/8 (the engine's
+# nominal amount), which can slightly over-credit when the seeder is near death;
+# pbRecoverHP still caps at the holder's max HP.
 #
 # RUBY 1.8: alias_method chaining; deferred install on Graphics.update.
 # ---------------------------------------------------------------------------
@@ -53,31 +53,16 @@ def chrooked_install_deeprooted_recover
       alias_method :pbRecoverHP_chrooked_deeprooted_orig, :pbRecoverHP
       def pbRecoverHP(amt, anim = false)
         begin
-          if (self.hasWorkingAbility(:DEEPROOTED) rescue false)
-            is_move_drain = (@chrooked_draining rescue false)
-            in_endround = (@battle.instance_variable_get(:@chrooked_dr_endround) rescue false)
-            passive_drain = false
-            if in_endround
-              passive_drain = (self.effects[PBEffects::AquaRing] rescue false) ||
-                              (self.effects[PBEffects::Ingrain] rescue false)
-              if !passive_drain
-                others = (@battle.battlers rescue [])
-                others.each do |b|
-                  next unless b
-                  if (b.effects[PBEffects::LeechSeed] rescue -1) == self.index
-                    passive_drain = true
-                    break
-                  end
-                end
-              end
-            end
-            if is_move_drain || passive_drain
-              scaled = (amt * 1.3).floor
-              scaled = 1 if scaled < 1
-              src = is_move_drain ? "move" : "passive"
-              ($chrooked_log.call("[chrooked:deeprooted] OBS event=drain src=#{src} ability=true before=#{amt} after=#{scaled}") rescue nil)
-              amt = scaled
-            end
+          # Only the in-move drain path scales here, gated on the transient flag
+          # set around the drain-move subclasses' pbEffect (precise — a drain move
+          # heals ONLY via drain). Passive end-of-round drains are handled by the
+          # replay-bonus below, NOT here, so a co-occurring Leftovers/Grassy-Terrain
+          # tick is never scaled.
+          if (@chrooked_draining rescue false) && (self.hasWorkingAbility(:DEEPROOTED) rescue false)
+            scaled = (amt * 1.3).floor
+            scaled = 1 if scaled < 1
+            ($chrooked_log.call("[chrooked:deeprooted] OBS event=drain src=move ability=true before=#{amt} after=#{scaled}") rescue nil)
+            amt = scaled
           end
         rescue Exception
         end
@@ -128,19 +113,50 @@ def chrooked_install_deeprooted_endround
   PokeBattle_Battle.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbEndOfRoundPhase_chrooked_deeprooted_orig")
       alias_method :pbEndOfRoundPhase_chrooked_deeprooted_orig, :pbEndOfRoundPhase
+
+      # The deeprooted bonus for the +0.3 on a bigroot-adjusted base amount.
+      def chrooked_deeprooted_bonus(base, bigroot)
+        g = base
+        g = (g * 1.3).floor if bigroot
+        ((g * 1.3).floor - g)   # what deeprooted adds on top of what the engine gave
+      end
+
+      # PASSIVE-drain ×1.3 is applied here as a separate top-up heal AFTER the
+      # round, computed from the holder's drain sources — NOT by intercepting
+      # pbRecoverHP (which can't tell a drain tick from a co-occurring Leftovers /
+      # Grassy Terrain / Black Sludge tick: same amount, same window). Computing it
+      # outside means those other heals are never touched.
       def pbEndOfRoundPhase(*args)
-        @chrooked_dr_endround = true
+        ret = pbEndOfRoundPhase_chrooked_deeprooted_orig(*args)
         begin
-          ret = pbEndOfRoundPhase_chrooked_deeprooted_orig(*args)
-        ensure
-          @chrooked_dr_endround = false
+          @battlers.each do |b|
+            next if b.nil? || (b.isFainted? rescue true)
+            next unless (b.hasWorkingAbility(:DEEPROOTED) rescue false)
+            next unless (b.effects[PBEffects::HealBlock] rescue 0) == 0
+            bigroot = (b.hasWorkingItem(:BIGROOT) rescue false)
+            bonus = 0
+            bonus += chrooked_deeprooted_bonus((b.totalhp / 16).floor, bigroot) if (b.effects[PBEffects::AquaRing] rescue false)
+            bonus += chrooked_deeprooted_bonus((b.totalhp / 16).floor, bigroot) if (b.effects[PBEffects::Ingrain] rescue false)
+            @battlers.each do |seeder|
+              next if seeder.nil?
+              next unless (seeder.effects[PBEffects::LeechSeed] rescue -1) == b.index
+              next if (seeder.isFainted? rescue true)
+              next if (seeder.hasWorkingAbility(:LIQUIDOOZE) rescue false)  # heal flipped to damage
+              bonus += chrooked_deeprooted_bonus((seeder.totalhp / 8).floor, bigroot)
+            end
+            if bonus > 0
+              b.pbRecoverHP(bonus, true)
+              ($chrooked_log.call("[chrooked:deeprooted] OBS event=drain src=passive ability=true bonus=#{bonus}") rescue nil)
+            end
+          end
+        rescue Exception
         end
         ret
       end
     end
   end
   $chrooked_deeprooted_endround_installed = true
-  ($chrooked_log.call("[chrooked:deeprooted] endround flag installed on PokeBattle_Battle") rescue nil)
+  ($chrooked_log.call("[chrooked:deeprooted] passive replay-bonus installed on PokeBattle_Battle") rescue nil)
 end
 
 chrooked_install_deeprooted_recover if defined?(PokeBattle_Battler) &&

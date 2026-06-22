@@ -16,18 +16,18 @@
 #       - the move's resolved type is physical: movetype = pbType(@type, attacker,
 #         opponent); pbIsPhysical?(movetype).
 #
-# RESIDUAL IMMUNITY (now ported) — PokeBattle_Battler#pbReduceHP(amt,anim,registerDamage).
-#   The end-of-turn poison chip is applied in PokeBattle_Battle#pbEndOfRoundPhase
-#   (verified line ~3599) via i.pbReduceHP, gated only on !MAGICGUARD. We override
-#   pbReduceHP and return 0 (no damage) when the holder has TOXICBOOST, is poisoned,
-#   AND the call originates from pbEndOfRoundPhase (checked via `caller`). The caller
-#   scope is what makes this safe: a normal move/recoil hit does NOT match, so only
-#   the poison residual is skipped. Fail-safe: if `caller` lacks method names on a
-#   given build, the guard never fires and normal poison chip resumes (status quo),
-#   never wrongly skipping other damage.
-#
-# No stateful per-battler ivar is used (live reads + caller scope), so no
-# pbAbilitiesOnSwitchIn reset is needed.
+# RESIDUAL IMMUNITY (precise) — PokeBattle_Battle#pbEndOfRoundPhase poison MASK.
+#   The end-of-turn poison chip block is gated on `i.status==PBStatuses::POISON`.
+#   So instead of skipping pbReduceHP (which can't tell the poison chip apart from
+#   same-window sandstorm/Leech-Seed damage by amount), we MASK: before _orig, for
+#   each TOXICBOOST holder that is poisoned, stash [status,statusCount] and set 0;
+#   after _orig, restore. The poison block sees no poison and skips it, while
+#   sandstorm (type-gated) and Leech Seed (effect-gated) STILL hit normally — the
+#   earlier "skips other end-of-round self-damage" ceiling is gone. Same clear/
+#   restore round-trip the overworld field hook below already uses.
+#   Ceiling (narrow, intended): a TOXICBOOST + Hydration mon in rain won't have its
+#   poison cured end-of-round (the cure also reads status) — consistent with the
+#   ability wanting to KEEP poison for its boost.
 #
 # HARNESS (Route B log oracle): each gate firing logs one OBS line:
 #     [chrooked:toxicboost] OBS move=<NAME> toxicboost=<bool> poison=<bool> phys=<bool> result=<BOOSTED|NORMAL>
@@ -73,58 +73,48 @@ def chrooked_install_toxicboost_damage
   ($chrooked_log.call("[chrooked:toxicboost] installed pbModifyDamage on PokeBattle_Move") rescue nil)
 end
 
-# --- Hook 2: skip the end-of-turn poison residual --------------------------
+# --- Hook 2: mask poison across end-of-round so only the poison chip is skipped
 
-def chrooked_install_toxicboost_residual
-  return if $chrooked_toxicboost_residual_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbReduceHP")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbReduceHP_chrooked_toxicboost_orig")
-      alias_method :pbReduceHP_chrooked_toxicboost_orig, :pbReduceHP
-      def pbReduceHP(amt, anim = false, registerDamage = true)
-        begin
-          # ponytail: skip self-poison chip during end-of-round (flag set by the
-          # pbEndOfRoundPhase wrapper, since mkxp Ruby 1.8 `caller` has no method
-          # names). Ceiling: this also skips any OTHER end-of-round self-damage on a
-          # poisoned TOXICBOOST holder (sandstorm/leech) in the rare overlap — fine.
-          if $chrooked_toxicboost_in_eor &&
-             (self.hasWorkingAbility(:TOXICBOOST) rescue false) &&
-             (self.status == PBStatuses::POISON rescue false)
-            ($chrooked_log.call("[chrooked:toxicboost] OBS event=residual ability=true effect=poison_chip SKIPPED") rescue nil)
-            return 0
-          end
-        rescue Exception
-        end
-        pbReduceHP_chrooked_toxicboost_orig(amt, anim, registerDamage)
-      end
-    end
-  end
-  $chrooked_toxicboost_residual_installed = true
-  ($chrooked_log.call("[chrooked:toxicboost] installed pbReduceHP on PokeBattle_Battler") rescue nil)
-end
-
-# --- Hook 3: mark the end-of-round window so Hook 2 knows the context --------
-
-def chrooked_install_toxicboost_eorflag
-  return if $chrooked_toxicboost_eorflag_installed
+def chrooked_install_toxicboost_eormask
+  return if $chrooked_toxicboost_eormask_installed
   return unless defined?(PokeBattle_Battle)
   return unless PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbEndOfRoundPhase")
   PokeBattle_Battle.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbEndOfRoundPhase_chrooked_toxicboost_orig")
       alias_method :pbEndOfRoundPhase_chrooked_toxicboost_orig, :pbEndOfRoundPhase
       def pbEndOfRoundPhase(*args)
-        $chrooked_toxicboost_in_eor = true
+        masked = []
         begin
-          pbEndOfRoundPhase_chrooked_toxicboost_orig(*args)
-        ensure
-          $chrooked_toxicboost_in_eor = false
+          @battlers.each do |b|
+            next if b.nil?
+            if (b.hasWorkingAbility(:TOXICBOOST) rescue false) &&
+               (b.status == PBStatuses::POISON rescue false)
+              masked.push([b, b.status, b.statusCount])
+              b.status = 0
+              b.statusCount = 0
+              ($chrooked_log.call("[chrooked:toxicboost] OBS event=eor_mask ability=true effect=poison_chip SKIPPED") rescue nil)
+            end
+          end
+        rescue Exception
         end
+        begin
+          ret = pbEndOfRoundPhase_chrooked_toxicboost_orig(*args)
+        ensure
+          masked.each do |b, st, sc|
+            begin
+              next if b.isFainted?   # fainted in EOR (e.g. sandstorm); leave reset
+              b.status = st
+              b.statusCount = sc
+            rescue Exception
+            end
+          end
+        end
+        ret
       end
     end
   end
-  $chrooked_toxicboost_eorflag_installed = true
-  ($chrooked_log.call("[chrooked:toxicboost] installed pbEndOfRoundPhase flag on PokeBattle_Battle") rescue nil)
+  $chrooked_toxicboost_eormask_installed = true
+  ($chrooked_log.call("[chrooked:toxicboost] installed pbEndOfRoundPhase poison-mask on PokeBattle_Battle") rescue nil)
 end
 
 # --- Hook 4 (out-of-canon extra): PREVENT overworld walking poison ----------
@@ -183,15 +173,12 @@ end
 
 chrooked_install_toxicboost_damage if defined?(PokeBattle_Move) &&
   PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
-chrooked_install_toxicboost_residual if defined?(PokeBattle_Battler) &&
-  PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbReduceHP")
-chrooked_install_toxicboost_eorflag if defined?(PokeBattle_Battle) &&
+chrooked_install_toxicboost_eormask if defined?(PokeBattle_Battle) &&
   PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbEndOfRoundPhase")
 chrooked_install_toxicboost_field if defined?(Events) && Events.respond_to?(:onStepTakenTransferPossible)
 
 if (defined?($chrooked_toxicboost_damage_installed) && $chrooked_toxicboost_damage_installed) &&
-   (defined?($chrooked_toxicboost_residual_installed) && $chrooked_toxicboost_residual_installed) &&
-   (defined?($chrooked_toxicboost_eorflag_installed) && $chrooked_toxicboost_eorflag_installed) &&
+   (defined?($chrooked_toxicboost_eormask_installed) && $chrooked_toxicboost_eormask_installed) &&
    (defined?($chrooked_toxicboost_field_installed) && $chrooked_toxicboost_field_installed)
   # all installed eagerly
 elsif defined?(Graphics)
@@ -200,8 +187,7 @@ elsif defined?(Graphics)
       alias_method :update_chrooked_toxicboost_orig, :update
       def update
         chrooked_install_toxicboost_damage if !$chrooked_toxicboost_damage_installed && defined?(PokeBattle_Move)
-        chrooked_install_toxicboost_residual if !$chrooked_toxicboost_residual_installed && defined?(PokeBattle_Battler)
-        chrooked_install_toxicboost_eorflag if !$chrooked_toxicboost_eorflag_installed && defined?(PokeBattle_Battle)
+        chrooked_install_toxicboost_eormask if !$chrooked_toxicboost_eormask_installed && defined?(PokeBattle_Battle)
         chrooked_install_toxicboost_field if !$chrooked_toxicboost_field_installed && defined?(Events) && Events.respond_to?(:onStepTakenTransferPossible)
         update_chrooked_toxicboost_orig
       end

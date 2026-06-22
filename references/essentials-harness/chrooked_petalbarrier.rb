@@ -10,15 +10,16 @@
 #   0x1000 units; we round after scaling. The reduction is flat — it does NOT
 #   require a super-effective hit. Vanilla aliased _orig runs first.
 #
-# NOT-PORTED — Shed Skin status cure (1/3 end-of-turn status cure):
-#   The behavior spec's second effect (Shed Skin-style 1-in-3 end-of-turn cure of
-#   the holder's non-volatile status) has NO verified end-of-round Seam in the
-#   16.2 FACTS. We do NOT guess an unverified method. Only the damage half is
-#   implemented here; the cure must be wired by hand once a verified end-of-round
-#   Seam exists. needs_ingame.
+# HOOK 2 (Shed-Skin-style 1/3 end-of-turn status cure) — now ported.
+#   Native Shed Skin lives mid-method in PokeBattle_Battle#pbEndOfRoundPhase
+#   (line ~3475: `if hasWorkingAbility(:SHEDSKIN) && pbRandom(10)<3 ... pbCureStatus`),
+#   not alias-injectable in place. So we POST-WRAP pbEndOfRoundPhase: after _orig,
+#   each living PETALBARRIER holder with a non-volatile status rolls pbRandom(10)<3
+#   and, on success, pbCureStatus — exactly Shed Skin's odds, landing at end of round.
 #
 # HARNESS (Route B log oracle):
 #   damage:  [chrooked:petalbarrier] OBS move=<NAME> special=<BOOL> result=REDUCED|NORMAL
+#   cure:    [chrooked:petalbarrier] OBS event=eor_cure ability=true rolled=<bool> cured=<bool>
 #
 # RUBY 1.8: alias_method chaining; deferred install on Graphics.update.
 # ---------------------------------------------------------------------------
@@ -62,28 +63,62 @@ def chrooked_install_petalbarrier_reduction
   ($chrooked_log.call("[chrooked:petalbarrier] reduction installed on PokeBattle_Move") rescue nil)
 end
 
-def chrooked_install_petalbarrier_all
-  chrooked_install_petalbarrier_reduction
-end
-
-def chrooked_petalbarrier_all_installed?
-  $chrooked_petalbarrier_reduction_installed
-end
-
-if defined?(PokeBattle_Move) &&
-   PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
-  chrooked_install_petalbarrier_all
-elsif defined?(Graphics)
-  class << Graphics
-    unless method_defined?(:update_chrooked_petalbarrier_orig)
-      alias_method :update_chrooked_petalbarrier_orig, :update
-      def update
-        chrooked_install_petalbarrier_all if !chrooked_petalbarrier_all_installed? && defined?(PokeBattle_Move)
-        update_chrooked_petalbarrier_orig
+# --- HOOK 2: 1/3 end-of-round status cure via pbEndOfRoundPhase post-wrap -----
+def chrooked_install_petalbarrier_cure
+  return if $chrooked_petalbarrier_cure_installed
+  return unless defined?(PokeBattle_Battle)
+  return unless PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbEndOfRoundPhase")
+  PokeBattle_Battle.class_eval do
+    unless instance_methods(false).map { |m| m.to_s }.include?("pbEndOfRoundPhase_chrooked_petalbarrier_orig")
+      alias_method :pbEndOfRoundPhase_chrooked_petalbarrier_orig, :pbEndOfRoundPhase
+      def pbEndOfRoundPhase(*args)
+        ret = pbEndOfRoundPhase_chrooked_petalbarrier_orig(*args)
+        begin
+          @battlers.each do |b|
+            next unless b && !(b.isFainted? rescue true)
+            next unless (b.hasWorkingAbility(:PETALBARRIER) rescue false)
+            next unless (b.status rescue 0) > 0
+            rolled = (pbRandom(10) < 3)
+            if rolled
+              b.pbCureStatus(false)
+              @scene.pbRefresh rescue nil
+            end
+            ($chrooked_log.call("[chrooked:petalbarrier] OBS event=eor_cure ability=true rolled=#{rolled} cured=#{rolled}") rescue nil)
+          end
+        rescue Exception
+        end
+        ret
       end
     end
   end
-  ($chrooked_log.call("[chrooked:petalbarrier] deferred install armed on Graphics.update") rescue nil)
-else
-  ($chrooked_log.call("[chrooked:petalbarrier] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
+  $chrooked_petalbarrier_cure_installed = true
+  ($chrooked_log.call("[chrooked:petalbarrier] cure installed on PokeBattle_Battle") rescue nil)
+end
+
+def chrooked_install_petalbarrier_all
+  chrooked_install_petalbarrier_reduction
+  chrooked_install_petalbarrier_cure
+end
+
+def chrooked_petalbarrier_all_installed?
+  $chrooked_petalbarrier_reduction_installed && $chrooked_petalbarrier_cure_installed
+end
+
+chrooked_install_petalbarrier_all
+
+unless chrooked_petalbarrier_all_installed?
+  if defined?(Graphics)
+    class << Graphics
+      unless method_defined?(:update_chrooked_petalbarrier_orig)
+        alias_method :update_chrooked_petalbarrier_orig, :update
+        def update
+          chrooked_install_petalbarrier_all unless chrooked_petalbarrier_all_installed?
+          update_chrooked_petalbarrier_orig
+        end
+      end
+    end
+    ($chrooked_log.call("[chrooked:petalbarrier] deferred install armed on Graphics.update") rescue nil)
+  else
+    ($chrooked_log.call("[chrooked:petalbarrier] ERROR: neither PokeBattle classes nor Graphics defined at load") rescue nil)
+  end
 end

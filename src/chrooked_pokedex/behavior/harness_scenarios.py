@@ -229,4 +229,20 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "Use Growth — Attack and Sp.Atk rise by 2 each (the sun amount), not 1.",
          "select": {"move": "GROWTH"}, "expect": {"increment": "2"}},
     ],
+    "petalbarrier": [
+        {"stage": "Let a Petal Barrier user be hit by a SPECIAL move (e.g. Surf) — ~0.75x damage.",
+         "select": {"move": "SURF", "special": "true"}, "expect": {"result": "REDUCED"}},
+        {"stage": "Let it be hit by a PHYSICAL move (e.g. Tackle) — no reduction.",
+         "select": {"move": "TACKLE", "special": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Burn the Petal Barrier user, then pass several turns — it should cure the burn at end of turn (~1-in-3/turn; keep ending turns until it cures).",
+         "select": {"event": "eor_cure", "cured": "true"}, "expect": {"cured": "true"}},
+    ],
+    "mountaineer": [
+        {"stage": "Hit the Mountaineer user with a ROCK move (e.g. Rock Slide) — fully absorbed, 0 damage.",
+         "select": {"type": "ROCK", "ability": "true"}, "expect": {"result": "ABSORBED"}},
+        {"stage": "Set Stealth Rock on the Mountaineer user's side, then switch it in — no entry damage.",
+         "select": {"event": "entry", "ability": "true"}, "expect": {"effect": "stealthrock_waived"}},
+        {"stage": "Hit the Mountaineer user with a GROUND move (e.g. Earthquake) — normal damage (only Rock is blocked).",
+         "select": {"type": "GROUND", "ability": "true"}, "expect": {"result": "PASS"}},
+    ],
 }
