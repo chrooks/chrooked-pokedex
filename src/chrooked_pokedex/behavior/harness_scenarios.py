@@ -230,11 +230,11 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
          "select": {"move": "GROWTH"}, "expect": {"increment": "2"}},
     ],
     "petalbarrier": [
-        {"stage": "Let a Petal Barrier user be hit by a SPECIAL move (e.g. Surf) — ~0.75x damage.",
-         "select": {"move": "SURF", "special": "true"}, "expect": {"result": "REDUCED"}},
-        {"stage": "Let it be hit by a PHYSICAL move (e.g. Tackle) — no reduction.",
-         "select": {"move": "TACKLE", "special": "false"}, "expect": {"result": "NORMAL"}},
-        {"stage": "Burn the Petal Barrier user, then pass several turns — it should cure the burn at end of turn (~1-in-3/turn; keep ending turns until it cures).",
+        {"stage": "Let a Petal Barrier user be hit by any SPECIAL move (Surf, Hex, ...) — ~0.75x damage.",
+         "select": {"ability": "true", "special": "true"}, "expect": {"result": "REDUCED"}},
+        {"stage": "Let it be hit by any PHYSICAL move (Tackle, Shadow Punch, ...) — no reduction.",
+         "select": {"ability": "true", "special": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Burn the Petal Barrier user, then pass several turns — it cures the burn at end of turn (~1-in-3/turn; keep ending turns until it cures).",
          "select": {"event": "eor_cure", "cured": "true"}, "expect": {"cured": "true"}},
     ],
     "mountaineer": [

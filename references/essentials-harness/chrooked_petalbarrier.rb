@@ -51,9 +51,9 @@ def chrooked_install_petalbarrier_reduction
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if has_petalbarrier && is_special
           mult = (mult * 0.75).round
-          ($chrooked_log.call("[chrooked:petalbarrier] OBS move=#{movename} special=true result=REDUCED") rescue nil)
+          ($chrooked_log.call("[chrooked:petalbarrier] OBS move=#{movename} ability=true special=true result=REDUCED") rescue nil)
         else
-          ($chrooked_log.call("[chrooked:petalbarrier] OBS move=#{movename} special=#{is_special} result=NORMAL") rescue nil)
+          ($chrooked_log.call("[chrooked:petalbarrier] OBS move=#{movename} ability=#{has_petalbarrier} special=#{is_special} result=NORMAL") rescue nil)
         end
         mult
       end
