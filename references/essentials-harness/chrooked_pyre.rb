@@ -123,8 +123,10 @@ def chrooked_install_pyre_reset
     unless instance_methods(false).map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn_chrooked_pyre_orig")
       alias_method :pbAbilitiesOnSwitchIn_chrooked_pyre_orig, :pbAbilitiesOnSwitchIn
       def pbAbilitiesOnSwitchIn(onactive)
-        @chrooked_pyre_until = -1
-        ($chrooked_log.call("[chrooked:pyre] OBS event=switchin reset=until") rescue nil)
+        if onactive   # only a REAL switch-in; this method also fires with onactive=false
+          @chrooked_pyre_until = -1
+          ($chrooked_log.call("[chrooked:pyre] OBS event=switchin reset=until") rescue nil)
+        end
         pbAbilitiesOnSwitchIn_chrooked_pyre_orig(onactive)
       end
     end

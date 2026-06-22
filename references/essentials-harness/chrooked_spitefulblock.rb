@@ -116,8 +116,10 @@ def chrooked_install_spitefulblock_reset
       def pbAbilitiesOnSwitchIn(onactive)
         pbAbilitiesOnSwitchIn_chrooked_spitefulblock_orig(onactive)
         begin
-          self.instance_variable_set(:@chrooked_spitefulblock_flag, false)
-          ($chrooked_log.call("[chrooked:spitefulblock] OBS event=switchin effect=flag reset to default(false)") rescue nil)
+          if onactive   # only a REAL switch-in; this method also fires with onactive=false
+            self.instance_variable_set(:@chrooked_spitefulblock_flag, false)
+            ($chrooked_log.call("[chrooked:spitefulblock] OBS event=switchin effect=flag reset to default(false)") rescue nil)
+          end
         rescue Exception
         end
       end
