@@ -20,8 +20,14 @@ test_cases:
     expect: "Weather Ball is Fire-type and uses its boosted base power"
   - given: "a Chloroplast Pokemon uses Fire Blast"
     expect: "it is treated as sun-boosted for move purposes (per the sun-for-moves rule)"
+  - given: "a Chloroplast Pokemon uses a Fire move while it is RAINING"
+    expect: "the move is still sun-boosted (x1.5) — the sun-for-moves rule overrides the active weather for this Pokemon, instead of rain's x0.5"
+  - given: "a Chloroplast Pokemon uses Synthesis / Morning Sun / Moonlight in clear weather"
+    expect: "it restores 2/3 of max HP (the sun amount), not the 1/2 it would restore in clear weather"
+  - given: "a Chloroplast Pokemon uses Growth"
+    expect: "Attack and Special Attack rise by 2 stages each (the sun amount), not 1"
 notes:
-  - "Scope is move-only: it does NOT trigger passive sun weather effects (Solar Power, Dry Skin burn, etc.) and does NOT apply the Fire-up / Water-down weather damage multipliers. It only makes move logic that checks for sun behave as if sun is up."
+  - "Scope is move-only: it makes the USER'S OWN move logic that checks for sun behave as if sun were up — including the sun Fire x1.5 / Water x0.5 multiplier on this Pokemon's moves (the 'Fire/Water sun gate', see test case 3 and the IsBattlerSunAffectedForMoves consumers below). It does NOT set real weather and does NOT trigger passive sun weather effects (Solar Power, Dry Skin burn, Leaf Guard, the generic actual-weather damage path, etc.). [Reconciled 2026-06-22: an earlier draft of this note wrongly said the Fire/Water multiplier was excluded, contradicting test case 3 and the cited C; the C consumes the helper AT the Fire/Water sun gates, so it IS applied to the user's moves.]"
   - "Implemented as a helper IsBattlerSunAffectedForMoves() consulted by Solar Beam/Solar Blade charge skip, Weather Ball, Growth, Synthesis-class healing, and Fire/Water sun gates."
 engine_hints:
   pokeemerald: "Helper IsBattlerSunAffectedForMoves(battler) returns TRUE for Chloroplast — src/battle_util.c:9858. Consumed at src/battle_script_commands.c:9499/9531/14865, src/battle_move_resolution.c:1498, src/battle_util.c:6530/6749. Weather Ball → Fire via ability check in src/battle_main.c:5947."

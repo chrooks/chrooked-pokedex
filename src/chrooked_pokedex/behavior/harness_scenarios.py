@@ -206,4 +206,27 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "Without having KO'd anything (start of battle / fresh switch-in), use a contact move (Tackle) — no boost.",
          "select": {"move": "TACKLE", "armed": "false", "contact": "true"}, "expect": {"result": "NORMAL"}},
     ],
+    "sacredtoll": [
+        {"stage": "With your Sacred Toll user, use a sound move (e.g. Hyper Voice) on the foe — it becomes Psychic and hits ~20% harder.",
+         "select": {"move": "HYPERVOICE", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "With the SAME user, use a NON-sound move (e.g. Tackle) — no type change, no boost.",
+         "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
+        {"stage": "With the SAME user, use a sound move (Hyper Voice) into a DARK-type foe — Psychic typing means it does 0 (the OBS confirms the Psychic conversion that drives the 0x).",
+         "select": {"move": "HYPERVOICE", "converted": "PSYCHIC"}, "expect": {"result": "BOOSTED"}},
+    ],
+    # chloroplast logs a hook-specific OBS per sun-gated move it touches.
+    "chloroplast": [
+        {"stage": "In CLEAR weather, use Solar Beam — it should fire the same turn (no charge), no real sun set.",
+         "select": {"move": "SOLARBEAM"}, "expect": {"effect": "nocharge"}},
+        {"stage": "In CLEAR weather, use Weather Ball — it should be Fire-type (and double power).",
+         "select": {"move": "WEATHERBALL"}, "expect": {"type": "FIRE"}},
+        {"stage": "In CLEAR weather, use Fire Blast — it should be sun-boosted (x1.5) per the sun-for-moves rule.",
+         "select": {"move": "FIREBLAST", "weather": "clear"}, "expect": {"result": "SUN_BOOSTED"}},
+        {"stage": "Make it RAIN (foe Rain Dance, or a Drizzle lead), then use a Fire move (Fire Blast/Ember) — still sun-boosted, overriding the rain.",
+         "select": {"type": "FIRE", "weather": "rain"}, "expect": {"result": "SUN_BOOSTED"}},
+        {"stage": "Below full HP, in clear weather, use Synthesis (or Morning Sun / Moonlight) — restores the sun 2/3, not 1/2.",
+         "select": {"move": "SYNTHESIS"}, "expect": {"heal": "sun_2_3"}},
+        {"stage": "Use Growth — Attack and Sp.Atk rise by 2 each (the sun amount), not 1.",
+         "select": {"move": "GROWTH"}, "expect": {"increment": "2"}},
+    ],
 }
