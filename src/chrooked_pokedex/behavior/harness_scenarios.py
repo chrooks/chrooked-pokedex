@@ -186,4 +186,24 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "matching-special-slicing-move", "select": {"move": "AIRSLASH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
         {"stage": "non-matching-move", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
     ],
+    # Priority abilities log at turn-order time (PokeBattle_Battle#pbPriority), one
+    # OBS line per move the ability-holder selects. result=BOOSTED means the +1 was
+    # applied; NORMAL means the gate failed. Eyeball the actual turn order too — the
+    # OBS confirms the bump, the battle confirms it reordered the turn.
+    "rapidcombustion": [
+        {"stage": "At FULL HP, use a Fire move (e.g. Flamethrower) against a faster foe — your Fire move should move first.",
+         "select": {"move": "FLAMETHROWER", "fullhp": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "Take damage so you are BELOW full HP, then use any Fire move (Flamethrower/Ember) — normal speed order.",
+         "select": {"type": "FIRE", "fullhp": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Back at FULL HP, use a NON-Fire move (e.g. Water Gun) — normal speed order.",
+         "select": {"move": "WATERGUN", "type": "other"}, "expect": {"result": "NORMAL"}},
+    ],
+    "stampede": [
+        {"stage": "KO a foe, then next turn use a CONTACT move (e.g. Tackle) — it should move first within its bracket.",
+         "select": {"move": "TACKLE", "armed": "true", "contact": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "KO a foe, then use a NON-contact move (e.g. Water Gun) — no boost, the arming stays for later.",
+         "select": {"move": "WATERGUN", "armed": "true", "contact": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Without having KO'd anything (start of battle / fresh switch-in), use a contact move (Tackle) — no boost.",
+         "select": {"move": "TACKLE", "armed": "false", "contact": "true"}, "expect": {"result": "NORMAL"}},
+    ],
 }
