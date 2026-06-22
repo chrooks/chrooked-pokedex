@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # High Noon: the solar counterpart to Full Moon. This Pokemon's FIRE- and
 # PSYCHIC-type moves get pseudo-STAB (a flat 1.5x), regardless of the user's
-# own types. (The Morning Sun 75%-heal branch is NOT-PORTED — see note below.)
+# own types. The Morning Sun 75%-heal branch is now ported too (see below).
 #
 # Seam: PokeBattle_Move#pbModifyDamage(damagemult, attacker, opponent) — 16.2's
 # purpose-built final-damage multiplier hook (base impl just returns damagemult).
@@ -20,15 +20,14 @@
 # Cases distinguished by move: Fire/Psychic move + highnoon + no own-type-match
 # -> BOOSTED; otherwise -> NORMAL.
 #
-# RUBY 1.8: alias_method chaining; deferred install on Graphics.update.
-# ---------------------------------------------------------------------------
+# SECOND EFFECT — Morning Sun heals 3/4 max HP (now ported). The recover handler
+# is PokeBattle_Move_0D8#pbEffect (Moonlight/Morning Sun/Synthesis share this
+# class; verified in Data/Scripts.rxdata). We wrap it: when the user has HIGHNOON
+# and the move is Morning Sun and it is below full HP, heal (totalhp*3/4).floor and
+# skip the original (weather branches never run). Full HP falls through to _orig.
+# Mirror of chrooked_fullmoon's Moonlight heal.
 #
-# NOT-PORTED: "When this Pokemon uses Morning Sun, it recovers 75% of max HP."
-# No verified Seam for the Morning Sun recover routine was supplied in FACTS
-# (the Cmd_recoverbasedonsunlight equivalent / Essentials Morning Sun recover
-# handler method name is unverified). Per instructions, do NOT guess unverified
-# method names — leaving this branch unimplemented. The pseudo-STAB half is fully
-# ported above.
+# RUBY 1.8: alias_method chaining; deferred install on Graphics.update.
 # ---------------------------------------------------------------------------
 
 unless defined?($chrooked_log) && $chrooked_log
@@ -73,19 +72,55 @@ def chrooked_install_highnoon
   ($chrooked_log.call("[chrooked:highnoon] installed on PokeBattle_Move") rescue nil)
 end
 
-if defined?(PokeBattle_Move) && PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
-  chrooked_install_highnoon
-elsif defined?(Graphics)
-  class << Graphics
-    unless method_defined?(:update_chrooked_highnoon_orig)
-      alias_method :update_chrooked_highnoon_orig, :update
-      def update
-        chrooked_install_highnoon if !$chrooked_highnoon_installed && defined?(PokeBattle_Move)
-        update_chrooked_highnoon_orig
+# --- Morning Sun heal: 3/4 max HP for a HIGHNOON user (Move_0D8) --------------
+def chrooked_install_highnoon_heal
+  return if $chrooked_highnoon_heal_installed
+  klass = (Object.const_get("PokeBattle_Move_0D8") rescue nil)
+  return if klass.nil?
+  klass.class_eval do
+    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffect_chrooked_highnoon_orig")
+      alias_method :pbEffect_chrooked_highnoon_orig, :pbEffect
+      def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+        if (attacker.hasWorkingAbility(:HIGHNOON) rescue false) &&
+           (isConst?(@id, PBMoves, :MORNINGSUN) rescue false) &&
+           attacker.hp != attacker.totalhp
+          hpgain = (attacker.totalhp * 3 / 4).floor
+          pbShowAnimation(@id, attacker, nil, hitnum, alltargets, showanimation)
+          attacker.pbRecoverHP(hpgain, true)
+          @battle.pbDisplay(_INTL("{1} recuperó salud.", attacker.pbThis))
+          ($chrooked_log.call("[chrooked:highnoon] OBS move=MORNINGSUN highnoon=true heal=three_quarters") rescue nil)
+          return 0
+        end
+        pbEffect_chrooked_highnoon_orig(attacker, opponent, hitnum, alltargets, showanimation)
       end
     end
   end
-  ($chrooked_log.call("[chrooked:highnoon] deferred install armed on Graphics.update") rescue nil)
-else
-  ($chrooked_log.call("[chrooked:highnoon] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
+  $chrooked_highnoon_heal_installed = true
+  ($chrooked_log.call("[chrooked:highnoon] heal hook installed on PokeBattle_Move_0D8") rescue nil)
+end
+
+def chrooked_highnoon_done?
+  $chrooked_highnoon_installed && $chrooked_highnoon_heal_installed
+end
+
+chrooked_install_highnoon if defined?(PokeBattle_Move) &&
+  PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
+chrooked_install_highnoon_heal
+
+unless chrooked_highnoon_done?
+  if defined?(Graphics)
+    class << Graphics
+      unless method_defined?(:update_chrooked_highnoon_orig)
+        alias_method :update_chrooked_highnoon_orig, :update
+        def update
+          chrooked_install_highnoon if !$chrooked_highnoon_installed && defined?(PokeBattle_Move)
+          chrooked_install_highnoon_heal unless $chrooked_highnoon_heal_installed
+          update_chrooked_highnoon_orig
+        end
+      end
+    end
+    ($chrooked_log.call("[chrooked:highnoon] deferred install armed on Graphics.update") rescue nil)
+  else
+    ($chrooked_log.call("[chrooked:highnoon] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
+  end
 end

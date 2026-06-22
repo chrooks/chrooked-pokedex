@@ -17,12 +17,15 @@
 #     [chrooked:fullmoon] OBS move=<NAME> fullmoon=<true|false> type=<NAME> result=<BOOSTED|NORMAL>
 # Dark/Fairy move + fullmoon + type-not-already-owned -> BOOSTED; else NORMAL.
 #
-# RUBY 1.8: alias_method chaining; deferred install on Graphics.update.
+# SECOND EFFECT — Moonlight heals 3/4 max HP (now ported). The recover handler is
+# PokeBattle_Move_0D8#pbEffect (Moonlight/Morning Sun/Synthesis share this class;
+# verified in Data/Scripts.rxdata — it branches the heal on weather: sun 2/3, clear
+# 1/2, other 1/4). We wrap it: when the user has FULLMOON and the move is Moonlight
+# and it is below full HP, heal (totalhp*3/4).floor and skip the original (so the
+# weather branches never run). Full HP falls through to _orig (Moonlight fails as
+# usual). Same Seam chrooked_chloroplast uses for its Synthesis heal.
 #
-# NOT-PORTED: the second Full Moon effect (Moonlight heals 3/4 maxHP) is keyed on
-# the Moonlight move's function-code recover handler, which has NO clean ability
-# Seam to alias in this fork. Implementing it would require guessing an unverified
-# move-effect method name. Left unported; needs in-game wiring. See partial.
+# RUBY 1.8: alias_method chaining; deferred install on Graphics.update.
 # ---------------------------------------------------------------------------
 
 unless defined?($chrooked_log) && $chrooked_log
@@ -65,19 +68,55 @@ def chrooked_install_fullmoon
   ($chrooked_log.call("[chrooked:fullmoon] installed on PokeBattle_Move") rescue nil)
 end
 
-if defined?(PokeBattle_Move) && PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
-  chrooked_install_fullmoon
-elsif defined?(Graphics)
-  class << Graphics
-    unless method_defined?(:update_chrooked_fullmoon_orig)
-      alias_method :update_chrooked_fullmoon_orig, :update
-      def update
-        chrooked_install_fullmoon if !$chrooked_fullmoon_installed && defined?(PokeBattle_Move)
-        update_chrooked_fullmoon_orig
+# --- Moonlight heal: 3/4 max HP for a FULLMOON user (Move_0D8) ----------------
+def chrooked_install_fullmoon_heal
+  return if $chrooked_fullmoon_heal_installed
+  klass = (Object.const_get("PokeBattle_Move_0D8") rescue nil)
+  return if klass.nil?
+  klass.class_eval do
+    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffect_chrooked_fullmoon_orig")
+      alias_method :pbEffect_chrooked_fullmoon_orig, :pbEffect
+      def pbEffect(attacker, opponent, hitnum = 0, alltargets = nil, showanimation = true)
+        if (attacker.hasWorkingAbility(:FULLMOON) rescue false) &&
+           (isConst?(@id, PBMoves, :MOONLIGHT) rescue false) &&
+           attacker.hp != attacker.totalhp
+          hpgain = (attacker.totalhp * 3 / 4).floor
+          pbShowAnimation(@id, attacker, nil, hitnum, alltargets, showanimation)
+          attacker.pbRecoverHP(hpgain, true)
+          @battle.pbDisplay(_INTL("{1} recuperó salud.", attacker.pbThis))
+          ($chrooked_log.call("[chrooked:fullmoon] OBS move=MOONLIGHT fullmoon=true heal=three_quarters") rescue nil)
+          return 0
+        end
+        pbEffect_chrooked_fullmoon_orig(attacker, opponent, hitnum, alltargets, showanimation)
       end
     end
   end
-  ($chrooked_log.call("[chrooked:fullmoon] deferred install armed on Graphics.update") rescue nil)
-else
-  ($chrooked_log.call("[chrooked:fullmoon] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
+  $chrooked_fullmoon_heal_installed = true
+  ($chrooked_log.call("[chrooked:fullmoon] heal hook installed on PokeBattle_Move_0D8") rescue nil)
+end
+
+def chrooked_fullmoon_done?
+  $chrooked_fullmoon_installed && $chrooked_fullmoon_heal_installed
+end
+
+chrooked_install_fullmoon if defined?(PokeBattle_Move) &&
+  PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
+chrooked_install_fullmoon_heal
+
+unless chrooked_fullmoon_done?
+  if defined?(Graphics)
+    class << Graphics
+      unless method_defined?(:update_chrooked_fullmoon_orig)
+        alias_method :update_chrooked_fullmoon_orig, :update
+        def update
+          chrooked_install_fullmoon if !$chrooked_fullmoon_installed && defined?(PokeBattle_Move)
+          chrooked_install_fullmoon_heal unless $chrooked_fullmoon_heal_installed
+          update_chrooked_fullmoon_orig
+        end
+      end
+    end
+    ($chrooked_log.call("[chrooked:fullmoon] deferred install armed on Graphics.update") rescue nil)
+  else
+    ($chrooked_log.call("[chrooked:fullmoon] ERROR: neither PokeBattle_Move nor Graphics defined at load") rescue nil)
+  end
 end
