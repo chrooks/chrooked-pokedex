@@ -668,6 +668,7 @@ def _relabel_species_abilities(
 def _relabel_names(
     entries: list[dict[str, Any]],
     english_map: dict[str, str],
+    prefer_internal: bool = False,
 ) -> list[dict[str, Any]]:
     """Return a new list with each entry's 'name' replaced by its English canonical.
 
@@ -678,6 +679,12 @@ def _relabel_names(
        which beats a prettified code-name (InternalName ``AQUILATUS``).
     3. Prettified InternalName / chrooked_id, only if the entry has no name.
 
+    ``prefer_internal=True`` skips step 2 and prettifies the InternalName directly
+    when there is no canon. Used for moves: a target-only move's PBS ``Name`` is a
+    LOCALIZED string (e.g. Spanish "Golpe Especial Africano"), so the language-
+    neutral InternalName ("Africanvsoriginal") is the honest fallback — unlike a
+    fakemon species whose PBS name is the author's intended display name.
+
     All other fields are left unchanged; only the display ``name`` changes.
     """
     result = []
@@ -685,11 +692,14 @@ def _relabel_names(
         chrooked_id = entry.get("chrooked_id", "")
         english_name = english_map.get(chrooked_id)
         if english_name is None:
-            # No canon (target-only fakemon): keep the PBS Name; prettify the
-            # InternalName only as a last resort when no name is present.
-            english_name = entry.get("name") or _prettify_internal_name(
+            internal_label = _prettify_internal_name(
                 entry.get("internal") or chrooked_id
             )
+            if prefer_internal:
+                english_name = internal_label
+            else:
+                # Keep the PBS Name; prettify only as a last resort with no name.
+                english_name = entry.get("name") or internal_label
         result.append({**entry, "name": english_name})
     return result
 
@@ -760,7 +770,7 @@ def target_moves(
     entries = dexmod.build_moves(snapshot, ruleset)
     if target.engine == "essentials" and base_snapshot is not None:
         english_map = _english_moves_map(base_snapshot, ruleset)
-        entries = _relabel_names(entries, english_map)
+        entries = _relabel_names(entries, english_map, prefer_internal=True)
         # #44: overlay the canonical English description by chrooked_id.
         description_map = _english_move_descriptions(base_snapshot, ruleset)
         entries = _relabel_descriptions(entries, description_map)
