@@ -3,33 +3,26 @@
 # Sage Power: the special-move counterpart of Gorilla Tactics.
 #   (1) The user's SPECIAL moves deal 1.5x damage (flat boost, not pseudo-STAB).
 #   (2) After its first move since being sent out, the user is locked into that
-#       move until it switches out (same code path as a Choice item).
+#       move until it switches out.
 #
-# Hook 1 (damage) — Seam (verified 16.2, Data/Scripts.rxdata):
-#   PokeBattle_Move#pbModifyDamage(damagemult, attacker, opponent) — the
-#   purpose-built final-damage multiplier hook (base impl returns damagemult;
-#   damagemult is in 0x1000 units). movetype = pbType(@type,attacker,opponent);
-#   category via pbIsSpecial?(movetype). We multiply by 1.5 ONLY when the move is
-#   special AND the attacker has SAGEPOWER. This is a flat special-only boost
-#   (Gorilla Tactics analogue), NOT a granted pseudo-STAB, so we deliberately do
-#   NOT gate on pbHasType? — the boost stacks on top of any real STAB, matching
-#   the spec ("special moves x1.5").
+# Hook 1 (damage) — Seam (verified 16.2): PokeBattle_Move#pbModifyDamage(damagemult,
+#   attacker, opponent). x1.5 when the move is special AND attacker has SAGEPOWER.
 #
-# Hook 2 (move-lock) — Seam (verified 16.2, Data/Scripts.rxdata):
-#   PokeBattle_Battler#pbUseMove(choice, specialusage=false) — move-execution
-#   entry; `self` is the user. We reuse the engine Choice-lock effect
-#   PBEffects::ChoiceBand (==7): when currently <0 (unlocked) and the user has
-#   already recorded a move this send-out (self.lastMoveUsed >= 0), set
-#   self.effects[PBEffects::ChoiceBand] = self.lastMoveUsed. The engine then
-#   enforces the lock exactly like a Choice item, and clears it on switch-out.
+# Hook 2 (move-lock) — Seam (verified 16.2): PokeBattle_Battle#pbCanChooseMove?(
+#   idxPokemon,idxMove,showMessages,sleeptalk=false) (line 883), the move-selection
+#   gate. NOTE: the engine's ChoiceBand lock there ONLY fires for Choice-ITEM holders
+#   (line 904 requires hasWorkingItem(:CHOICEBAND...)), so setting effects[ChoiceBand]
+#   from an ability does NOT lock — that was the v1 bug (re-locked to each new move).
+#   Correct approach: disallow choosing any move whose id != the holder's lastMoveUsed
+#   once it has acted this stint. lastMoveUsed is -1 on switch-in (so the first choice
+#   is free) and resets on switch-out, giving exactly the Gorilla-Tactics lock.
 #
-# HARNESS (Route B log oracle):
-#   damage hook: [chrooked:sagepower] OBS move=<NAME> sagepower=<bool> special=<bool> result=BOOSTED|NORMAL
-#   lock hook:   [chrooked:sagepower] OBS event=movelock ability=true locked=<MOVEID>
+# HARNESS log:
+#   damage: [chrooked:sagepower] OBS move=<NAME> sagepower=<bool> special=<bool> result=BOOSTED|NORMAL
+#   lock:   [chrooked:sagepower] OBS event=movelock blocked=<MOVEID> locked=<MOVEID>
 #
-# RUBY 1.8: alias_method chaining (NO prepend/TracePoint); each method aliased
-# separately with its own installed-flag; deferred install on Graphics.update;
-# unique _chrooked_sagepower names; call _orig first.
+# RUBY 1.8: alias_method chaining; each hook its own flag; deferred install on
+# Graphics.update; unique _chrooked_sagepower names; call _orig first.
 # ---------------------------------------------------------------------------
 
 unless defined?($chrooked_log) && $chrooked_log
@@ -70,49 +63,52 @@ def chrooked_install_sagepower_damage
   ($chrooked_log.call("[chrooked:sagepower] damage hook installed on PokeBattle_Move") rescue nil)
 end
 
-# --- Hook 2: Gorilla-Tactics-style move-lock --------------------------------
+# --- Hook 2: Gorilla-Tactics move-lock via pbCanChooseMove? -----------------
 def chrooked_install_sagepower_lock
   return if $chrooked_sagepower_lock_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbUseMove")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbUseMove_chrooked_sagepower_orig")
-      alias_method :pbUseMove_chrooked_sagepower_orig, :pbUseMove
-      def pbUseMove(choice, specialusage = false)
-        ret = pbUseMove_chrooked_sagepower_orig(choice, specialusage)
+  return unless defined?(PokeBattle_Battle)
+  return unless PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbCanChooseMove?")
+  PokeBattle_Battle.class_eval do
+    unless instance_methods(false).map { |m| m.to_s }.include?("pbCanChooseMove_chrooked_sagepower_orig")
+      alias_method :pbCanChooseMove_chrooked_sagepower_orig, :pbCanChooseMove?
+      def pbCanChooseMove?(idxPokemon, idxMove, showMessages, sleeptalk = false)
         begin
-          if (self.hasWorkingAbility(:SAGEPOWER) rescue false) &&
-             self.effects[PBEffects::ChoiceBand] < 0 &&
-             self.lastMoveUsed && self.lastMoveUsed >= 0
-            self.effects[PBEffects::ChoiceBand] = self.lastMoveUsed
-            ($chrooked_log.call("[chrooked:sagepower] OBS event=movelock ability=true locked=#{self.lastMoveUsed}") rescue nil)
+          pkmn = @battlers[idxPokemon]
+          mv = pkmn.moves[idxMove]
+          last = (pkmn.lastMoveUsed rescue -1)
+          if mv && (pkmn.hasWorkingAbility(:SAGEPOWER) rescue false) && last && last >= 0 && mv.id != last
+            if showMessages
+              (pbDisplayPaused(_INTL("¡{1} solo puede usar su primer movimiento!", pkmn.pbThis)) rescue nil)
+            end
+            ($chrooked_log.call("[chrooked:sagepower] OBS event=movelock blocked=#{mv.id} locked=#{last}") rescue nil)
+            return false
           end
         rescue Exception
         end
-        ret
+        pbCanChooseMove_chrooked_sagepower_orig(idxPokemon, idxMove, showMessages, sleeptalk)
       end
     end
   end
   $chrooked_sagepower_lock_installed = true
-  ($chrooked_log.call("[chrooked:sagepower] lock hook installed on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:sagepower] lock hook installed on PokeBattle_Battle") rescue nil)
 end
 
 # --- Deferred install arming (each hook tracked by its own flag) -------------
 chrooked_install_sagepower_damage if defined?(PokeBattle_Move) &&
   PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
-chrooked_install_sagepower_lock if defined?(PokeBattle_Battler) &&
-  PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbUseMove")
+chrooked_install_sagepower_lock if defined?(PokeBattle_Battle) &&
+  PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbCanChooseMove?")
 
 if (defined?($chrooked_sagepower_damage_installed) && $chrooked_sagepower_damage_installed) &&
    (defined?($chrooked_sagepower_lock_installed) && $chrooked_sagepower_lock_installed)
-  # both installed eagerly; nothing deferred needed
+  # both installed eagerly
 elsif defined?(Graphics)
   class << Graphics
     unless method_defined?(:update_chrooked_sagepower_orig)
       alias_method :update_chrooked_sagepower_orig, :update
       def update
         chrooked_install_sagepower_damage if !$chrooked_sagepower_damage_installed && defined?(PokeBattle_Move)
-        chrooked_install_sagepower_lock if !$chrooked_sagepower_lock_installed && defined?(PokeBattle_Battler)
+        chrooked_install_sagepower_lock if !$chrooked_sagepower_lock_installed && defined?(PokeBattle_Battle)
         update_chrooked_sagepower_orig
       end
     end
