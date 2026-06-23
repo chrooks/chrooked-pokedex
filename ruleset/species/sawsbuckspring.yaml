@@ -1,6 +1,6 @@
 name: Sawsbuck Spring
 chrooked_id: sawsbuckspring
-aka: { pokeemerald: SPECIES_SAWSBUCK_SPRING }
+aka: { pokeemerald: SPECIES_SAWSBUCK_SPRING, essentials: SAWSBUCK }
 abilities:
   primary: Impale
   hidden: Forestry

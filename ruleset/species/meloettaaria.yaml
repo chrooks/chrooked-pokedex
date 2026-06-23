@@ -1,5 +1,5 @@
 name: Meloetta Aria
 chrooked_id: meloettaaria
-aka: { pokeemerald: SPECIES_MELOETTA_ARIA }
+aka: { pokeemerald: SPECIES_MELOETTA_ARIA, essentials: MELOETTA }
 abilities:
   secondary: Amplifier

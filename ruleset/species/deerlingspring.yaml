@@ -1,5 +1,5 @@
 name: Deerling Spring
 chrooked_id: deerlingspring
-aka: { pokeemerald: SPECIES_DEERLING_SPRING }
+aka: { pokeemerald: SPECIES_DEERLING_SPRING, essentials: DEERLING }
 abilities:
   hidden: Forestry

@@ -1,6 +1,6 @@
 name: Shaymin Land
 chrooked_id: shayminland
-aka: { pokeemerald: SPECIES_SHAYMIN_LAND }
+aka: { pokeemerald: SPECIES_SHAYMIN_LAND, essentials: SHAYMIN }
 abilities:
   primary: Serene Grace
   secondary: Bloom

@@ -1,5 +1,5 @@
 name: Keldeo Ordinary
 chrooked_id: keldeoordinary
-aka: { pokeemerald: SPECIES_KELDEO_ORDINARY }
+aka: { pokeemerald: SPECIES_KELDEO_ORDINARY, essentials: KELDEO }
 abilities:
   hidden: Mystic Blades
