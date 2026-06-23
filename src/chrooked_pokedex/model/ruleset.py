@@ -76,6 +76,22 @@ class Ruleset:
             base_species=_load_base_species(ruleset_dir),
         )
 
+    @classmethod
+    def load_namespace(cls, ruleset_dir: Path, slug: str) -> "Optional[Ruleset]":
+        """Load a Target Override set from `ruleset/targets/<slug>/`, or None if absent.
+
+        The namespace folder mirrors the base layout exactly (species/, moves/,
+        abilities/, type-chart/, behaviors/), so the regular `load` reads it with no
+        special parsing. Its `meta.yaml` carries `slug`/`engine`/`label` instead of a
+        base version; that lands in the returned Ruleset's `meta`. A namespace has no
+        `.base/` snapshot, so `base_species` comes back empty — that is fine, the
+        overlay is composed onto a base Ruleset that already has one.
+        """
+        namespace_dir = Path(ruleset_dir) / "targets" / slug
+        if not namespace_dir.exists():
+            return None
+        return cls.load(namespace_dir)
+
     def owned_move(self, name_or_id: str) -> Optional[MoveDef]:
         """Resolve a move name or `chrooked_id` to a Ruleset-owned MoveDef.
 

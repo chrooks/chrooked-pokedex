@@ -1,0 +1,18 @@
+# A per-Target Override layer, not regional-form entities
+
+A Target can re-theme an entry the base Ruleset already owns: Chrooked Africanvs ships one `KRICKETUNE` slot wearing Gaul flavor — different types, stats, and Pokédex text — not a second creature alongside normal Kricketune. We need a way to author "Africanvs's Kricketune" so the edit lands only when applying to Africanvs and never touches the canonical Kricketune that applies everywhere else. We introduce a **Target Override**: an Override scoped to one Target, layered on top of the base Ruleset's Override for the same `chrooked_id`. It lives in a committed namespace `ruleset/targets/<slug>/` mirroring the base layout, and a registered Target binds to its namespace by an explicit `namespace:` field. Read order becomes `base snapshot → base Override → Target Override`, last wins per field. The backdrop dex and apply both merge base ⊕ Target Override into one effective Ruleset before doing their existing work, so the merge is the only new step.
+
+## Considered Options
+
+- **Per-Target Override layer** (chosen) — one `chrooked_id`, a thin per-Target override of changed fields only. Matches what is actually on disk (a single re-themed slot, not a coexisting pair). Reuses the existing Override schema and YAML shape verbatim, just rooted under a Target folder. The base Ruleset stays canonical and engine-neutral.
+- **Regional-form entity** — mint a distinct `chrooked_id` (e.g. `kricketune-africanvs`) and author it like any species. Rejected: Africanvs has no second Kricketune slot for it to land in — `pokemonforms.txt` has no Kricketune form section, and the alt-form Applier can only field-edit form sections that already exist, not carve new ones. It would also leave Africanvs with two Kricketunes after apply, which is not the domain truth. A distinct entity also carries no structured link back to its base, so the two would silently drift on every field.
+- **`targets:` block inside each base species file** — store per-Target overrides nested in `ruleset/species/kricketune.yaml`. Rejected: bloats every base file, mixes canon with Target-specific noise, and breaks the clean "one file = one entity's base truth" model that the loader and `seed` rely on.
+
+## Consequences
+
+- A future reader will see `ruleset/targets/africanvs/species/kricketune.yaml` duplicating an entry that already exists at `ruleset/species/kricketune.yaml` and wonder why it is not a regional form — this ADR is the answer: the Target re-themes one slot, it does not add a creature.
+- The dex read and apply both gain a pre-merge step (`base Override ⊕ Target Override`). The merge must reuse the same field-wise override semantics as the base merge so the two cannot drift.
+- Target Overrides are **committed canon**, but the Target registry (`targets.json`) is gitignored and machine-specific. The `<slug>` (e.g. `africanvs`) is the stable join key between a machine's registered Target and its committed override set; the per-namespace `meta.yaml` makes the namespace self-describing in git.
+- Apply to a Target with no namespace behaves exactly as today (base Ruleset only). Apply to a Target with a namespace must ignore every *other* namespace — an Africanvs override must never leak into a different Target.
+- The edit scope is now a deliberate choice at author time. The editor must make the destination an Honest Signifier (the save action names base vs Target) so a Target-specific tweak cannot quietly leak into canon.
+- Modeling a genuinely Target-exclusive new species (no base entry at all) is out of scope here; this layer overrides entries that already exist in the base. That capability, if ever needed, is a later additive change.

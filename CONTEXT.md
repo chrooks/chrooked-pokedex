@@ -64,6 +64,27 @@ and an engine, registered once and reused. The frontend's "explorer" is this
 registry, not a raw filesystem browser.
 _Avoid_: explorer, game list, picker.
 
+**Target Override**:
+An Override that applies to one Target only, layered on top of the base Ruleset's
+Override for the same `chrooked_id`. It exists because a Target can re-theme an
+existing entry — Africanvs's Kricketune is the one KRICKETUNE slot wearing Gaul
+flavor (different types, stats, Pokédex text), not a separate creature. The base
+Ruleset stays canonical and applies everywhere; the Target Override only changes
+how that entry lands when applying to that one Target. Read order is base
+snapshot → base [[Override]] → Target Override, last wins per field.
+_Avoid_: per-game patch, target diff, local override, regional form (it is not a
+distinct entity — it shares the base entry's `chrooked_id`).
+
+**Change Ledger**:
+An append-only record of every mutation, one entry per change, so any edit can be
+reviewed later (and, in a follow-up, reversed). It watches every writer: authoring
+edits and [[Harvest]] record a field-level `from → to` diff; an apply records an
+event with its [[Apply Report]] counts; a bulk seed records one summary line, not
+per-entity spam. Each entry carries its `scope` (base or `target:<slug>`) and a
+`source` (web-edit, harvest, apply, seed). Distinct from git history, which is
+coarse and cannot name the scope of a change.
+_Avoid_: log, audit trail, history, changelog.
+
 **Canon dex**:
 The full national Pokédex as the Ruleset sees it: the committed base 1.11.2
 snapshot with the Ruleset's Overrides merged on top. Game-independent; always
