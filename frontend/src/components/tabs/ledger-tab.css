@@ -59,17 +59,20 @@
 }
 
 .ledger-tab__row {
-  border: 1px solid var(--border, #333);
-  border-left: 3px solid var(--border, #333);
-  border-radius: var(--radius, 8px);
+  min-width: 0;
+  border: 1px solid var(--line, #333);
+  border-radius: var(--radius-md, 6px);
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
   background: var(--surface-2, rgba(255, 255, 255, 0.02));
+  overflow: hidden;
 }
 
-.ledger-tab__row[data-source="apply"] { border-left-color: #4a90d9; }
-.ledger-tab__row[data-source="harvest"] { border-left-color: #d9a64a; }
-.ledger-tab__row[data-source="seed"] { border-left-color: #777; }
-.ledger-tab__row[data-source="web-edit"] { border-left-color: var(--accent, #c0573e); }
+/* Source is read from the chip, not a side stripe: tint the source chip per
+   source so it still scans at a glance. */
+.ledger-tab__row[data-source="apply"] .ledger-tab__chip--source { color: oklch(72% 0.1 250); }
+.ledger-tab__row[data-source="harvest"] .ledger-tab__chip--source { color: oklch(78% 0.12 80); }
+.ledger-tab__row[data-source="seed"] .ledger-tab__chip--source { color: var(--text-dim, #999); }
+.ledger-tab__row[data-source="web-edit"] .ledger-tab__chip--source { color: var(--chrome, #c0573e); }
 
 .ledger-tab__row-head {
   display: flex;
@@ -134,17 +137,30 @@
 
 .ledger-tab__field {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-2, 0.5rem);
   font-size: 0.78rem;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .ledger-tab__field-name {
+  flex: none;
   min-width: 5rem;
   color: var(--text-dim, #999);
 }
 
-.ledger-tab__from { color: #b06a5a; }
-.ledger-tab__to { color: #6ab07a; }
+/* Values must wrap and break inside the card — a whole-list learnset diff can be
+   long, and unbroken mono tokens would otherwise overflow the row. */
+.ledger-tab__from,
+.ledger-tab__to {
+  min-width: 0;
+  flex: 1 1 12rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.ledger-tab__from { color: oklch(62% 0.09 30); }
+.ledger-tab__to { color: oklch(70% 0.1 150); }
+.ledger-tab__arrow { flex: none; }
 .ledger-tab__arrow { color: var(--text-dim, #777); }

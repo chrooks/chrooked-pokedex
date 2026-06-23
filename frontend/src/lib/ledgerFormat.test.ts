@@ -6,11 +6,30 @@ describe("renderLedgerValue", () => {
     expect(renderLedgerValue(null)).toBe("∅");
     expect(renderLedgerValue(undefined)).toBe("∅");
   });
-  test("joins arrays", () => {
+  test("joins scalar arrays", () => {
     expect(renderLedgerValue(["Bug", "Fighting"])).toBe("Bug, Fighting");
   });
-  test("stringifies objects and scalars", () => {
-    expect(renderLedgerValue({ hp: 200 })).toBe('{"hp":200}');
+  test("renders a learnset (array of move objects) readably, not [object Object]", () => {
+    const learnset = [
+      { level: 1, move: "Pound" },
+      { level: 5, move: "Ice Beam" },
+    ];
+    expect(renderLedgerValue(learnset)).toBe("L1 Pound, L5 Ice Beam");
+  });
+  test("renders ability slots as key: value pairs, skipping nulls", () => {
+    expect(
+      renderLedgerValue({ primary: "Thick Fat", secondary: "Hydration", hidden: null }),
+    ).toBe("primary: Thick Fat, secondary: Hydration");
+  });
+  test("renders a type-chart cell readably", () => {
+    expect(renderLedgerValue({ attacker: "Ice", defender: "Dragon", multiplier: 2 })).toBe(
+      "Ice→Dragon ×2",
+    );
+  });
+  test("renders an empty array as the empty mark", () => {
+    expect(renderLedgerValue([])).toBe("∅");
+  });
+  test("renders scalars", () => {
     expect(renderLedgerValue(140)).toBe("140");
   });
 });
