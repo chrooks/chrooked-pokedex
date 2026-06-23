@@ -216,6 +216,7 @@ export function DetailLedger({
             abilityOptions={abilityOptions}
             moveOptions={moveOptions}
             speciesOptions={speciesOptions}
+            backdropTargetId={backdropTargetId}
           />
         ) : (
           <DetailBody

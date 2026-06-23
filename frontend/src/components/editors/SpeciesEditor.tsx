@@ -17,8 +17,11 @@ import type {
   DexEntry,
   Evolution,
   LearnsetMove,
+  OverridableField,
   SpeciesOverride,
+  TargetNamespace,
 } from "../../types";
+import { ScopeToggle } from "./ScopeToggle";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
 import { canonicalize, collectInvalidFields } from "../../lib/entityValidation";
@@ -44,6 +47,8 @@ type Props = {
   moveOptions: readonly string[];
   /** Known species names for the evo-from combobox. */
   speciesOptions: readonly string[];
+  /** Active backdrop target id — enables the base-vs-target scope toggle. */
+  backdropTargetId?: string | null;
 };
 
 const ABILITY_SLOTS = ["primary", "secondary", "hidden"] as const;
@@ -53,9 +58,33 @@ type StatForm = Record<string, number | "">;
 type AbilityForm = Record<AbilitySlot, string>;
 type LearnRow = { _id: number; level: number | ""; move: string };
 
-export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOptions, speciesOptions }: Props) {
+export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOptions, speciesOptions, backdropTargetId }: Props) {
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
+
+  // When editing on a Target's backdrop, the author can scope the edit to that
+  // game's Override namespace instead of the base Ruleset. The namespace resolves
+  // from the backdrop target; absent (unbound target or Canon dex) → base only.
+  const [namespace, setNamespace] = useState<TargetNamespace | null>(null);
+  const [scopeToTarget, setScopeToTarget] = useState(true);
+  useEffect(() => {
+    if (!backdropTargetId) {
+      setNamespace(null);
+      return;
+    }
+    const controller = new AbortController();
+    api
+      .targetNamespace(backdropTargetId, controller.signal)
+      .then((ns) => !controller.signal.aborted && setNamespace(ns))
+      .catch(() => !controller.signal.aborted && setNamespace(null));
+    return () => controller.abort();
+  }, [backdropTargetId]);
+  // Default to scoping to the target whenever a namespace is available — the
+  // author opened this game's backdrop on purpose. The effective scope string is
+  // what the write routes to.
+  const canScope = namespace !== null;
+  const scope = canScope && scopeToTarget ? `target:${namespace.slug}` : "base";
+  const targetFields = new Set<OverridableField>(entry.target_overridden_fields ?? []);
 
   // The raw Override carries `aka` we don't edit but must keep on save.
   const [raw, setRaw] = useState<SpeciesOverride | null>(null);
@@ -111,7 +140,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
       evoFrom,
       evoMethod,
     });
-    const ok = await run(() => api.putSpecies(entry.chrooked_id, payload));
+    const ok = await run(() => api.putSpecies(entry.chrooked_id, payload, scope));
     if (ok) {
       onSaved();
       onDone();
@@ -119,7 +148,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
   }
 
   async function handleRevert() {
-    const ok = await del.run(() => api.deleteSpecies(entry.chrooked_id));
+    const ok = await del.run(() => api.deleteSpecies(entry.chrooked_id, scope));
     if (ok) {
       onSaved();
       onDone();
@@ -169,9 +198,18 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
         void handleSave();
       }}
     >
+      {canScope && (
+        <ScopeToggle
+          targetLabel={namespace.label}
+          scopeToTarget={scopeToTarget}
+          onChange={setScopeToTarget}
+        />
+      )}
+
       <section className="editor-section" aria-labelledby="species-stats-heading">
         <h3 className="editor-section__heading" id="species-stats-heading">
           Base stats
+          {targetFields.has("stats") && <TargetFieldBadge label={namespace?.label} />}
         </h3>
         <div className="editor-form__grid editor-form__grid--stats">
           {STAT_ORDER.map((key) => (
@@ -209,6 +247,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
       <section className="editor-section" aria-labelledby="species-types-heading">
         <h3 className="editor-section__heading" id="species-types-heading">
           Types
+          {targetFields.has("types") && <TargetFieldBadge label={namespace?.label} />}
         </h3>
         <div className="editor-form__grid">
           <ComboField
@@ -234,6 +273,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
       <section className="editor-section" aria-labelledby="species-abilities-heading">
         <h3 className="editor-section__heading" id="species-abilities-heading">
           Abilities
+          {targetFields.has("abilities") && <TargetFieldBadge label={namespace?.label} />}
         </h3>
         <div className="editor-form__grid">
           {ABILITY_SLOTS.map((slot) => (
@@ -257,6 +297,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
       <section className="editor-section" aria-labelledby="species-learnset-heading">
         <h3 className="editor-section__heading" id="species-learnset-heading">
           Learnset
+          {targetFields.has("learnset") && <TargetFieldBadge label={namespace?.label} />}
         </h3>
         <div className="row-list">
           {learnset.length === 0 && (
@@ -319,6 +360,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
       <section className="editor-section" aria-labelledby="species-evolution-heading">
         <h3 className="editor-section__heading" id="species-evolution-heading">
           Evolution
+          {targetFields.has("evolution") && <TargetFieldBadge label={namespace?.label} />}
         </h3>
         <ComboField
           id="species-evo-from"
@@ -413,11 +455,34 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
         <button type="button" className="btn" disabled={busy} onClick={onDone}>
           Cancel
         </button>
-        <button type="submit" className="btn btn--primary" disabled={busy || invalidFields.size > 0}>
-          {isSaving ? "Saving…" : "Save Override"}
+        <button
+          type="submit"
+          id="editor-save-button"
+          className="btn btn--primary"
+          disabled={busy || invalidFields.size > 0}
+        >
+          {isSaving
+            ? "Saving…"
+            : scope === "base"
+              ? "Save to Base Ruleset"
+              : `Save to ${namespace?.label ?? "target"}`}
         </button>
       </div>
     </form>
+  );
+}
+
+/** A small "this field is scoped to <Target> only" badge, shown beside a section
+    heading when the active backdrop's Override namespace authored that field. */
+function TargetFieldBadge({ label }: { label?: string }) {
+  return (
+    <span
+      className="editor-target-badge"
+      id={`field-target-badge-${(label ?? "target").toLowerCase()}`}
+      title={`Scoped to ${label ?? "this target"} only`}
+    >
+      {label ?? "target"} only
+    </span>
   );
 }
 

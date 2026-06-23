@@ -19,11 +19,13 @@ import type {
   DexEntry,
   EngineKey,
   LearnsetProposal,
+  LedgerEntry,
   Move,
   MoveWrite,
   SpeciesOverride,
   Target,
   TargetDialect,
+  TargetNamespace,
   TypeChartCell,
   TypeChartEntry,
 } from "./types";
@@ -109,6 +111,11 @@ function confirmQuery(confirm?: boolean): string {
   return confirm ? "?confirm=true" : "";
 }
 
+/** The edit-scope query: base (omitted) or a Target Override namespace. */
+function scopeQuery(scope?: string): string {
+  return scope && scope !== "base" ? `?scope=${encodeURIComponent(scope)}` : "";
+}
+
 export const api = {
   // Reads
   dex: (signal?: AbortSignal) => getJson<DexEntry[]>("/api/dex", signal),
@@ -121,10 +128,10 @@ export const api = {
   // Species (raw Override read + write)
   speciesOverride: (id: string, signal?: AbortSignal) =>
     getJson<SpeciesOverride>(`/api/species/${encodeURIComponent(id)}`, signal),
-  putSpecies: (id: string, payload: SpeciesOverride) =>
+  putSpecies: (id: string, payload: SpeciesOverride, scope?: string) =>
     sendJson<SpeciesOverride>(
       "PUT",
-      `/api/species/${encodeURIComponent(id)}`,
+      `/api/species/${encodeURIComponent(id)}${scopeQuery(scope)}`,
       payload,
     ).then((result) => {
       // Species data changed → let the always-mounted dex resource refetch, so a
@@ -153,18 +160,22 @@ export const api = {
       `/api/species/${encodeURIComponent(id)}/suggest/learnset`,
       { direction: opts?.direction, mode: opts?.mode ?? "full" },
     ),
-  deleteSpecies: (id: string) =>
+  deleteSpecies: (id: string, scope?: string) =>
     sendJson<{ deleted: string }>(
       "DELETE",
-      `/api/species/${encodeURIComponent(id)}`,
+      `/api/species/${encodeURIComponent(id)}${scopeQuery(scope)}`,
     ).then((result) => {
       emitDataChange();
       return result;
     }),
 
   // Moves
-  putMove: (id: string, payload: MoveWrite) =>
-    sendJson<MoveWrite>("PUT", `/api/moves/${encodeURIComponent(id)}`, payload),
+  putMove: (id: string, payload: MoveWrite, scope?: string) =>
+    sendJson<MoveWrite>(
+      "PUT",
+      `/api/moves/${encodeURIComponent(id)}${scopeQuery(scope)}`,
+      payload,
+    ),
   deleteMove: (id: string, confirm?: boolean) =>
     sendJson<{ deleted: string }>(
       "DELETE",
@@ -172,8 +183,12 @@ export const api = {
     ),
 
   // Abilities
-  putAbility: (id: string, payload: AbilityWrite) =>
-    sendJson<AbilityWrite>("PUT", `/api/abilities/${encodeURIComponent(id)}`, payload),
+  putAbility: (id: string, payload: AbilityWrite, scope?: string) =>
+    sendJson<AbilityWrite>(
+      "PUT",
+      `/api/abilities/${encodeURIComponent(id)}${scopeQuery(scope)}`,
+      payload,
+    ),
   deleteAbility: (id: string, confirm?: boolean) =>
     sendJson<{ deleted: string }>(
       "DELETE",
@@ -181,12 +196,16 @@ export const api = {
     ),
 
   // Type chart (one whole-list file → a write replaces the override set)
-  putTypeChart: (entries: TypeChartEntry[]) =>
-    sendJson<TypeChartEntry[]>("PUT", "/api/type-chart", entries),
+  putTypeChart: (entries: TypeChartEntry[], scope?: string) =>
+    sendJson<TypeChartEntry[]>("PUT", `/api/type-chart${scopeQuery(scope)}`, entries),
 
   // Behaviors
-  putBehavior: (id: string, payload: Behavior) =>
-    sendJson<Behavior>("PUT", `/api/behaviors/${encodeURIComponent(id)}`, payload),
+  putBehavior: (id: string, payload: Behavior, scope?: string) =>
+    sendJson<Behavior>(
+      "PUT",
+      `/api/behaviors/${encodeURIComponent(id)}${scopeQuery(scope)}`,
+      payload,
+    ),
   deleteBehavior: (id: string) =>
     sendJson<{ deleted: string }>(
       "DELETE",
@@ -244,4 +263,34 @@ export const api = {
       `/api/targets/${encodeURIComponent(id)}/dialect`,
       signal,
     ),
+  /** The Target's bound Override namespace ({slug, engine, label}), or 404. */
+  targetNamespace: (id: string, signal?: AbortSignal) =>
+    getJson<TargetNamespace>(
+      `/api/targets/${encodeURIComponent(id)}/namespace`,
+      signal,
+    ),
+  /** Bind (or clear) a Target's Override namespace slug. */
+  setTargetNamespace: (id: string, slug: string | null) =>
+    sendJson<Target>(
+      "PUT",
+      `/api/targets/${encodeURIComponent(id)}/namespace`,
+      { slug },
+    ),
+
+  // Change Ledger (append-only history of every mutation)
+  ledger: (
+    opts?: { scope?: string; kind?: string; chrooked_id?: string; limit?: number },
+    signal?: AbortSignal,
+  ) => {
+    const params = new URLSearchParams();
+    if (opts?.scope) params.set("scope", opts.scope);
+    if (opts?.kind) params.set("kind", opts.kind);
+    if (opts?.chrooked_id) params.set("chrooked_id", opts.chrooked_id);
+    if (opts?.limit != null) params.set("limit", String(opts.limit));
+    const query = params.toString();
+    return getJson<{ entries: LedgerEntry[] }>(
+      `/api/ledger${query ? `?${query}` : ""}`,
+      signal,
+    );
+  },
 } as const;

@@ -766,3 +766,64 @@ button.move-tag:hover {
   font-size: var(--text-sm);
   color: var(--text-faint);
 }
+
+/* --- Edit-scope toggle + target-field badge (Target Override layer) -------- */
+
+.editor-scope {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  flex-wrap: wrap;
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  margin-bottom: var(--space-3, 0.75rem);
+  border: 1px solid var(--border, #333);
+  border-radius: var(--radius, 8px);
+  background: var(--surface-2, rgba(255, 255, 255, 0.03));
+}
+
+.editor-scope__label {
+  font-size: 0.8rem;
+  color: var(--text-dim, #999);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.editor-scope__options {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius, 8px);
+  background: var(--surface-1, rgba(0, 0, 0, 0.25));
+}
+
+.editor-scope__option {
+  border: none;
+  background: transparent;
+  color: var(--text-dim, #999);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: calc(var(--radius, 8px) - 2px);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.editor-scope__option[data-on="true"] {
+  background: var(--accent, #c0573e);
+  color: #fff;
+  font-weight: 600;
+}
+
+.editor-target-badge {
+  display: inline-block;
+  margin-left: var(--space-2, 0.5rem);
+  padding: 0.05rem 0.45rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent, #c0573e);
+  border: 1px solid var(--accent, #c0573e);
+  border-radius: 999px;
+  vertical-align: middle;
+}

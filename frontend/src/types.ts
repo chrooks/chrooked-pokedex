@@ -74,6 +74,10 @@ export interface DexEntry {
   fully_evolved: boolean;
   overridden_fields: OverridableField[];
   base: DexBaseValues;
+  /** Fields scoped to the active backdrop Target (present only on a backdrop dex
+      that has a bound Override namespace). Drives the per-field "this target only"
+      badge. Absent on the Canon dex and on targets with no namespace. */
+  target_overridden_fields?: OverridableField[];
 }
 
 /** The raw Ruleset Override for one species (overrides-only), as returned by
@@ -300,6 +304,32 @@ export interface Target {
   /** Absolute path to the fork, resolved on the server when added. */
   path: string;
   engine: EngineKey;
+  /** The committed Target Override namespace slug this fork is bound to, or null.
+      Scoped edits land under `ruleset/targets/<namespace>/`. */
+  namespace: string | null;
+}
+
+/** A Target's bound Override namespace, from `GET /api/targets/{id}/namespace`. */
+export interface TargetNamespace {
+  slug: string;
+  engine: EngineKey;
+  label: string;
+}
+
+/** One Change Ledger entry. `fields` is a per-field `from → to` diff (edits and
+    harvest); `report` carries Apply Report counts (apply events); `summary` holds
+    bulk seed counts. `scope` is "base" or "target:<slug>". */
+export interface LedgerEntry {
+  ts: string;
+  scope: string;
+  kind: string;
+  chrooked_id: string | null;
+  source: "web-edit" | "harvest" | "apply" | "seed";
+  fields?: Record<string, { from: unknown; to: unknown }>;
+  report?: { applied: number; partial: number; blocked: number };
+  blocked_entries?: { chrooked_id: string; reason: string }[];
+  summary?: Record<string, number>;
+  fork?: string;
 }
 
 /** The detected PBS dialect of a registered Target.
