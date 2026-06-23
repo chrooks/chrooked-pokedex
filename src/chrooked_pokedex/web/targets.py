@@ -35,7 +35,7 @@ import threading
 import uuid
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from ..appliers.dispatch import route_apply as _route_apply
 from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
@@ -76,14 +76,22 @@ class RestoreError(TargetError):
 
 @dataclass(frozen=True)
 class Target:
-    """A registered fork: stable id, human label, absolute path, engine."""
+    """A registered fork: stable id, human label, absolute path, engine.
+
+    ``namespace`` binds this Target to a committed Target Override set under
+    ``ruleset/targets/<namespace>/``. None means the Target has no overrides and
+    applies the base Ruleset unchanged. The binding is explicit (set by the user),
+    never guessed from the label, because ``targets.json`` is machine-specific
+    while the namespace slug is committed canon.
+    """
 
     id: str
     label: str
     path: str
     engine: str
+    namespace: Optional[str] = None
 
-    def as_dict(self) -> dict[str, str]:
+    def as_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
@@ -111,7 +119,9 @@ class TargetRegistry:
                 return target
         raise TargetError(404, f"No target with id {target_id!r}.")
 
-    def add(self, label: str, path: str, engine: str) -> Target:
+    def add(
+        self, label: str, path: str, engine: str, namespace: Optional[str] = None
+    ) -> Target:
         resolved = Path(path).expanduser().resolve()
         if not resolved.exists() or not resolved.is_dir():
             raise TargetError(422, f"Target path does not exist: {resolved}")
@@ -126,11 +136,30 @@ class TargetRegistry:
             label=label,
             path=str(resolved),
             engine=engine,
+            namespace=namespace or None,
         )
         rows = self._read()
         rows.append(target.as_dict())
         self._save(rows)
         return target
+
+    def set_namespace(self, target_id: str, namespace: Optional[str]) -> Target:
+        """Bind (or clear) a Target's override namespace, returning the updated row.
+
+        ``namespace`` is the committed slug under ``ruleset/targets/<slug>/``. An
+        empty/None value clears the binding (the Target reverts to base-only).
+        """
+        slug = (namespace or "").strip() or None
+        rows = self._read()
+        updated: Optional[Target] = None
+        for row in rows:
+            if row.get("id") == target_id:
+                row["namespace"] = slug
+                updated = Target(**row)
+        if updated is None:
+            raise TargetError(404, f"No target with id {target_id!r}.")
+        self._save(rows)
+        return updated
 
     def remove(self, target_id: str) -> None:
         rows = self._read()

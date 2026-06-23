@@ -160,6 +160,22 @@ def create_app(
     def _422(error: crudmod.ValidationError) -> HTTPException:
         return HTTPException(status_code=422, detail=str(error))
 
+    def _scope_dir(scope: str):
+        """Resolve an edit scope to its write directory (base or a Target namespace).
+
+        For a ``target:<slug>`` scope, look up the bound Target so the namespace's
+        ``meta.yaml`` records the engine/label. A malformed scope raises
+        ``ValidationError`` (caller maps to 422).
+        """
+        engine = label = None
+        if scope and scope.startswith("target:"):
+            slug = scope.split(":", 1)[1].strip()
+            for target in app.state.targets_registry.list():
+                if target.namespace == slug:
+                    engine, label = target.engine, target.label
+                    break
+        return crudmod.resolve_scope_dir(ruleset_dir, scope, engine=engine, label=label)
+
     @app.get("/api/species/{chrooked_id}")
     def get_species_override(chrooked_id: str) -> dict[str, Any]:
         # The raw Override (overrides-only), distinct from the merged /api/dex
@@ -175,9 +191,11 @@ def create_app(
         return crudmod.serialize_species(override)
 
     @app.put("/api/species/{chrooked_id}")
-    def put_species(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    def put_species(
+        chrooked_id: str, payload: dict[str, Any], scope: str = "base"
+    ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_species(ruleset_dir, chrooked_id, payload)
+            return crudmod.upsert_species(_scope_dir(scope), chrooked_id, payload)
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -359,9 +377,11 @@ def create_app(
         return {"deleted": chrooked_id}
 
     @app.put("/api/moves/{chrooked_id}")
-    def put_move(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    def put_move(
+        chrooked_id: str, payload: dict[str, Any], scope: str = "base"
+    ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_move(ruleset_dir, chrooked_id, payload)
+            return crudmod.upsert_move(_scope_dir(scope), chrooked_id, payload)
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -443,9 +463,11 @@ def create_app(
             raise HTTPException(status_code=503, detail=str(error)) from error
 
     @app.put("/api/abilities/{chrooked_id}")
-    def put_ability(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    def put_ability(
+        chrooked_id: str, payload: dict[str, Any], scope: str = "base"
+    ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_ability(ruleset_dir, chrooked_id, payload)
+            return crudmod.upsert_ability(_scope_dir(scope), chrooked_id, payload)
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -510,17 +532,21 @@ def create_app(
         return _delete_owned(crudmod.delete_ability, chrooked_id, confirm)
 
     @app.put("/api/type-chart")
-    def put_type_chart(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def put_type_chart(
+        entries: list[dict[str, Any]], scope: str = "base"
+    ) -> list[dict[str, Any]]:
         # The type chart is one whole-list file; a write replaces the override set.
         try:
-            return crudmod.replace_type_chart(ruleset_dir, entries)
+            return crudmod.replace_type_chart(_scope_dir(scope), entries)
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
     @app.put("/api/behaviors/{chrooked_id}")
-    def put_behavior(chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    def put_behavior(
+        chrooked_id: str, payload: dict[str, Any], scope: str = "base"
+    ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_behavior(ruleset_dir, chrooked_id, payload)
+            return crudmod.upsert_behavior(_scope_dir(scope), chrooked_id, payload)
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -563,11 +589,11 @@ def create_app(
         return HTTPException(status_code=error.status, detail=error.detail)
 
     @app.get("/api/targets")
-    def list_targets() -> list[dict[str, str]]:
+    def list_targets() -> list[dict[str, Any]]:
         return [t.as_dict() for t in app.state.targets_registry.list()]
 
     @app.post("/api/targets")
-    def add_target(payload: dict[str, Any]) -> dict[str, str]:
+    def add_target(payload: dict[str, Any]) -> dict[str, Any]:
         # Boundary guard: `path`/`label` must be non-empty strings. A null/missing
         # path would otherwise reach `Path(None)` and 500; reject it as a 422 with
         # a clear message before touching the registry.
@@ -584,10 +610,36 @@ def create_app(
                 label=label,
                 path=path,
                 engine=payload.get("engine", "pokeemerald"),
+                namespace=payload.get("namespace"),
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
         return target.as_dict()
+
+    @app.put("/api/targets/{target_id}/namespace")
+    def set_target_namespace(
+        target_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Bind (or clear) a Target's override namespace. Body: ``{"slug": "africanvs"}``."""
+        slug = (payload or {}).get("slug")
+        try:
+            return app.state.targets_registry.set_namespace(target_id, slug).as_dict()
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+
+    @app.get("/api/targets/{target_id}/namespace")
+    def get_target_namespace(target_id: str) -> dict[str, Any]:
+        """The active namespace for a Target: ``{slug, engine, label}`` or 404."""
+        registry = app.state.targets_registry
+        try:
+            target = registry.get(target_id)
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+        if not target.namespace:
+            raise HTTPException(
+                status_code=404, detail=f"Target {target_id!r} has no override namespace."
+            )
+        return {"slug": target.namespace, "engine": target.engine, "label": target.label}
 
     @app.delete("/api/targets/{target_id}")
     def delete_target(target_id: str) -> dict[str, str]:

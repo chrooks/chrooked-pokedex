@@ -17,10 +17,13 @@ Deleting a species Override just removes its file (the dex reverts to base).
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Optional
+
+import yaml
 
 from ..model import Ruleset
 from ..model.behavior_spec import BehaviorEffect, BehaviorSpec, BehaviorTestCase
@@ -59,6 +62,55 @@ class CitationError(Exception):
     def __init__(self, message: str, citing: list[str]) -> None:
         super().__init__(message)
         self.citing = citing
+
+
+# --------------------------------------------------------------------------- #
+# Edit scope: base Ruleset vs a per-Target override namespace
+# --------------------------------------------------------------------------- #
+
+
+_SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+
+
+def resolve_scope_dir(
+    ruleset_dir: Path,
+    scope: Optional[str],
+    *,
+    engine: Optional[str] = None,
+    label: Optional[str] = None,
+) -> Path:
+    """Map an edit scope to the directory writes should land in.
+
+    ``"base"`` (or empty/None) → the base ``ruleset_dir`` itself, exactly as
+    today. ``"target:<slug>"`` → ``ruleset_dir/targets/<slug>``, the committed
+    Target Override namespace; the namespace's ``meta.yaml`` is created on first
+    write (carrying ``slug`` plus ``engine``/``label`` when known) so the folder
+    is self-describing in git. A malformed scope or slug raises
+    ``ValidationError`` (→ 422), never writes.
+    """
+    ruleset_dir = Path(ruleset_dir)
+    if scope in (None, "", "base"):
+        return ruleset_dir
+    if not scope.startswith("target:"):
+        raise ValidationError(
+            f"Unknown edit scope {scope!r}; expected 'base' or 'target:<slug>'."
+        )
+    slug = scope.split(":", 1)[1].strip()
+    if not _SLUG_RE.match(slug):
+        raise ValidationError(
+            f"Invalid target slug {slug!r}; use lowercase letters, digits, and hyphens."
+        )
+    namespace_dir = ruleset_dir / "targets" / slug
+    meta_path = namespace_dir / "meta.yaml"
+    if not meta_path.exists():
+        namespace_dir.mkdir(parents=True, exist_ok=True)
+        meta: dict[str, str] = {"slug": slug}
+        if engine:
+            meta["engine"] = engine
+        if label:
+            meta["label"] = label
+        meta_path.write_text(yaml.safe_dump(meta, sort_keys=True), encoding="utf-8")
+    return namespace_dir
 
 
 # --------------------------------------------------------------------------- #
