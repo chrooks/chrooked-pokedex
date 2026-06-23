@@ -26,6 +26,7 @@ from .appliers.essentials162 import (
     ability_apply as essentials162_abilities,
     behavior_install as essentials162_behaviors,
     evolution_apply as essentials162_evolution,
+    forms_apply as essentials162_forms,
     learnset_apply as essentials162_learnset,
     move_apply as essentials162_moves,
     resolution as essentials162_resolution,
@@ -306,7 +307,15 @@ def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyRepo
         changed = essentials162_moves.apply_moves(target, ruleset, resmap, report)
         print(f"moves: {len(changed)} file(s) changed")
     if "species" in categories:
-        changed = essentials162_species.apply_species(target, ruleset, resmap, report)
+        # Alt-forms live in pokemonforms.txt and are claimed FIRST, so species_apply
+        # skips them instead of (wrongly) blocking them as missing from pokemon.txt.
+        forms_changed, handled = essentials162_forms.apply_forms(
+            target, ruleset, resmap, report
+        )
+        species_changed = essentials162_species.apply_species(
+            target, ruleset, resmap, report, skip=handled
+        )
+        changed = forms_changed | species_changed
         print(f"species: {len(changed)} file(s) changed")
     if "learnset" in categories:
         changed = essentials162_learnset.apply_learnsets(target, ruleset, resmap, report)

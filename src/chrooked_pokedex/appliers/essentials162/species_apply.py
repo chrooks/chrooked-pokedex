@@ -36,8 +36,16 @@ _STAT_ORDER = ("hp", "atk", "def", "spe", "spa", "spd")
 
 
 def apply_species(
-    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
+    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
+    skip: set[str] | None = None,
 ) -> set[Path]:
+    """Apply species scalar Overrides into `pokemon.txt`.
+
+    `skip` names chrooked_ids already claimed by `forms_apply` (alt-forms that live in
+    `pokemonforms.txt`); they are passed over here so a form is never double-reported
+    as both applied-in-forms and blocked-in-species.
+    """
+    skip = skip or set()
     path = target / "PBS" / "pokemon.txt"
     if not path.exists():
         return set()
@@ -45,6 +53,8 @@ def apply_species(
     original = text
 
     for chrooked_id in sorted(ruleset.species):
+        if chrooked_id in skip:
+            continue
         override = ruleset.species[chrooked_id]
         if not (override.types or override.abilities or override.stats):
             continue

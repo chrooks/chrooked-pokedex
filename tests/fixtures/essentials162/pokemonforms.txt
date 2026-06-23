@@ -1,0 +1,46 @@
+[KANGASKHAN-1]
+FormName=Mega Kangaskhan
+Type1=NORMAL
+BaseStats=105,125,100,100,60,100
+Abilities=PARENTALBOND
+MegaStone=KANGASKHANITE
+#-------------------------------
+[DEOXYS-1]
+FormName=Attack Forme
+Type1=PSYCHIC
+BaseStats=50,180,20,150,180,20
+Abilities=PRESSURE
+#-------------------------------
+[DEOXYS-2]
+FormName=Defense Forme
+Type1=PSYCHIC
+BaseStats=50,70,160,90,70,160
+Abilities=PRESSURE
+#-------------------------------
+[DEOXYS-3]
+FormName=Speed Forme
+Type1=PSYCHIC
+BaseStats=50,95,90,180,95,90
+Abilities=PRESSURE
+#-------------------------------
+[DEERLING-1]
+FormName=Summer Form
+Type1=NORMAL
+Type2=GRASS
+BaseStats=60,60,50,75,40,50
+Abilities=CHLOROPHYLL
+#-------------------------------
+[ROTOM-1]
+FormName=Twin Heat
+Type1=ELECTRIC
+Type2=FIRE
+BaseStats=50,65,107,86,105,107
+Abilities=LEVITATE
+#-------------------------------
+[ROTOM-2]
+FormName=Twin Wash
+Type1=ELECTRIC
+Type2=WATER
+BaseStats=50,65,107,86,105,107
+Abilities=LEVITATE
+#-------------------------------
