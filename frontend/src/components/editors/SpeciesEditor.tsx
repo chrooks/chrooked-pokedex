@@ -10,6 +10,11 @@
    raw Override is fetched first so its `aka` survives the round-trip. */
 
 import { useEffect, useMemo, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faRotateLeft,
+  faFloppyDisk,
+} from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
 import { STAT_ORDER, STAT_LABEL, TYPES, isEdited } from "../../lib/format";
 import type {
@@ -448,25 +453,28 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
             disabled={busy}
             onClick={() => void handleRevert()}
           >
+            <FontAwesomeIcon icon={faRotateLeft} aria-hidden="true" />
             Revert to base
           </button>
         )}
-        <span className="editor-actions__spacer" />
-        <button type="button" className="btn" disabled={busy} onClick={onDone}>
-          Cancel
-        </button>
-        <button
-          type="submit"
-          id="editor-save-button"
-          className="btn btn--primary"
-          disabled={busy || invalidFields.size > 0}
-        >
-          {isSaving
-            ? "Saving…"
-            : scope === "base"
-              ? "Save to Base Ruleset"
-              : `Save to ${namespace?.label ?? "target"}`}
-        </button>
+        <div className="editor-actions__commit">
+          <button type="button" className="btn" disabled={busy} onClick={onDone}>
+            Cancel
+          </button>
+          <button
+            type="submit"
+            id="editor-save-button"
+            className="btn btn--primary"
+            disabled={busy || invalidFields.size > 0}
+          >
+            <FontAwesomeIcon icon={faFloppyDisk} aria-hidden="true" />
+            {isSaving
+              ? "Saving…"
+              : scope === "base"
+                ? "Save to base"
+                : `Save to ${namespace?.label ?? "target"}`}
+          </button>
+        </div>
       </div>
     </form>
   );

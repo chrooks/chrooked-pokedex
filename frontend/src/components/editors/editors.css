@@ -163,15 +163,36 @@
 
 /* --- Actions row --- */
 
+/* One-row footer: a quiet ghost Revert on the leading edge (rare, recoverable),
+   the Cancel + Save commit cluster on the trailing edge with Save the clear
+   primary. Wraps gracefully only if a long target label forces it, and the
+   commit cluster stays right-aligned when it does. */
 .editor-actions {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding-top: var(--space-2);
+  padding-top: var(--space-4);
+  margin-top: var(--space-2);
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
 }
 
-.editor-actions__spacer {
-  flex: 1;
+/* Revert is a quiet, borderless text+icon action so it never competes with the
+   commit cluster; it gains its chrome wash only on hover. */
+.editor-actions > .btn--danger {
+  margin-right: auto;
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+  background: transparent;
+  border-color: transparent;
+}
+
+.editor-actions__commit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-left: auto;
 }
 
 .btn {
@@ -185,6 +206,7 @@
   color: var(--text-dim);
   font-size: var(--text-sm);
   font-weight: 600;
+  white-space: nowrap;
   transition: all var(--dur-fast) var(--ease-out);
 }
 

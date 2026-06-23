@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFilter,
+  faClockRotateLeft,
+  faPen,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import type { DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
 import { appendNameFilter } from "../lib/dexFilters";
@@ -127,62 +132,74 @@ export function DetailLedger({
       >
         <header className="ledger__head">
           <div className="ledger__head-row">
-            <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
-            <div className="ledger__head-actions">
+            <div className="ledger__head-id">
+              <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
               {edited && <EditedLed on variant="tag" />}
-              {hasActiveProposal && !editing && (
-                <button
-                  type="button"
-                  id="ledger-width-toggle"
-                  className="ledger__width-toggle"
-                  aria-pressed={expanded}
-                  onClick={() => setManuallyCollapsed((v) => !v)}
-                  title={
-                    expanded
-                      ? "Collapse the proposal panel"
-                      : "Expand the proposal panel"
-                  }
-                >
-                  {expanded ? "⇥ Collapse" : "⇤ Expand"}
-                </button>
-              )}
+            </div>
+            <div className="ledger__head-actions">
               {!editing && (
-                <button
-                  type="button"
-                  id="ledger-add-to-filter"
-                  className="ledger__edit"
-                  onClick={handleAddToFilter}
-                  title={`Filter the dex to ${entry.name}`}
-                  aria-label={`Add ${entry.name} to the dex filter`}
-                >
-                  <FontAwesomeIcon icon={faFilter} aria-hidden="true" />
-                  {" Add to filter"}
-                </button>
+                <div className="ledger__tools" role="group" aria-label="Species actions">
+                  {hasActiveProposal && (
+                    <button
+                      type="button"
+                      id="ledger-width-toggle"
+                      className="ledger__tool"
+                      aria-pressed={expanded}
+                      title={
+                        expanded
+                          ? "Collapse the proposal panel"
+                          : "Expand the proposal panel"
+                      }
+                      onClick={() => setManuallyCollapsed((v) => !v)}
+                    >
+                      <span aria-hidden="true">{expanded ? "⇥" : "⇤"}</span>
+                      <span className="ledger__tool-label">
+                        {expanded ? "Collapse" : "Expand"}
+                      </span>
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    id="ledger-add-to-filter"
+                    className="ledger__tool"
+                    onClick={handleAddToFilter}
+                    title={`Filter the dex to ${entry.name}`}
+                    aria-label={`Add ${entry.name} to the dex filter`}
+                  >
+                    <FontAwesomeIcon icon={faFilter} aria-hidden="true" />
+                    <span className="ledger__tool-label">Filter</span>
+                  </button>
+                  <button
+                    type="button"
+                    id="entity-history-button"
+                    className="ledger__tool"
+                    onClick={() =>
+                      update({ kind: "ledger", query: entry.chrooked_id, selected: null })
+                    }
+                    title={`Change history for ${entry.name}`}
+                  >
+                    <FontAwesomeIcon icon={faClockRotateLeft} aria-hidden="true" />
+                    <span className="ledger__tool-label">History</span>
+                  </button>
+                  <button
+                    type="button"
+                    id="ledger-edit"
+                    className="ledger__tool ledger__tool--accent"
+                    onClick={() => setEditing(true)}
+                  >
+                    <FontAwesomeIcon icon={faPen} aria-hidden="true" />
+                    <span className="ledger__tool-label">Edit</span>
+                  </button>
+                </div>
               )}
-              {!editing && (
-                <button
-                  type="button"
-                  id="entity-history-button"
-                  className="ledger__edit"
-                  onClick={() =>
-                    update({ kind: "ledger", query: entry.chrooked_id, selected: null })
-                  }
-                  title={`Change history for ${entry.name}`}
-                >
-                  History
-                </button>
-              )}
-              {!editing && (
-                <button
-                  type="button"
-                  className="ledger__edit"
-                  onClick={() => setEditing(true)}
-                >
-                  Edit
-                </button>
-              )}
-              <button type="button" className="ledger__close" onClick={onClose}>
-                Close <kbd className="mono">Esc</kbd>
+              <button
+                type="button"
+                className="ledger__close"
+                onClick={onClose}
+                aria-label="Close detail"
+                title="Close (Esc)"
+              >
+                <FontAwesomeIcon icon={faXmark} aria-hidden="true" />
               </button>
             </div>
           </div>
