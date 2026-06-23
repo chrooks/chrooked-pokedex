@@ -20,10 +20,12 @@ and reports the species partial.
 
 from __future__ import annotations
 
+import dataclasses
 from pathlib import Path
+from typing import Any, Mapping, Optional
 
 from ...model import Ruleset
-from ...model.schema import SpeciesOverride
+from ...model.schema import AbilitiesOverride, SpeciesOverride
 from ...report import ApplyReport, ReportEntry
 from ..essentials import vocab
 from . import pbs_io, section_edit, section_read
@@ -31,6 +33,8 @@ from .resolution import ResolutionMap
 
 # 16.2 BaseStats order is HP, Attack, Defense, Speed, Sp.Atk, Sp.Def — Speed at index 3.
 _STAT_KEY_TO_INDEX = {"hp": 0, "atk": 1, "def": 2, "spe": 3, "spa": 4, "spd": 5}
+# The two slots written to the comma `Abilities=` line. `hidden` is deliberately NOT
+# here — it is written separately as the singular `HiddenAbility=`.
 _ABILITY_SLOTS = ("primary", "secondary")
 _STAT_ORDER = ("hp", "atk", "def", "spe", "spa", "spd")
 
@@ -56,17 +60,22 @@ def apply_species(
         if chrooked_id in skip:
             continue
         override = ruleset.species[chrooked_id]
-        if not (override.types or override.abilities or override.stats):
-            continue
+        has_override = bool(override.types or override.abilities or override.stats)
         symbol = resmap.species(chrooked_id, dict(override.aka))
         present = symbol is not None and (
             section_edit.find_section_by_internalname(text, symbol) is not None
         )
 
         if present:
+            if not has_override:
+                continue  # section exists and there is nothing to change
             text = _apply_existing(text, symbol, override, resmap, report, chrooked_id)
         else:
-            text = _create_or_block(text, override, resmap, report, chrooked_id)
+            base = (getattr(ruleset, "base_species", None) or {}).get(chrooked_id)
+            if not (has_override or base):
+                continue  # absent, and no data to create a section from
+            effective = _merge_base(override, base) if base else override
+            text = _create_or_block(text, effective, resmap, report, chrooked_id)
 
     if text != original:
         pbs_io.write(path, text, had_bom)
@@ -111,12 +120,24 @@ def _create_or_block(
         key in override.stats for key in _STAT_ORDER
     )
     if not (types_resolve and has_full_stats):
-        reason = "species section not found and Override insufficient to create"
+        # Name what is missing so a thin Override AND an incomplete base snapshot are
+        # both diagnosable — not a generic "insufficient to create".
         if override.types and not types_resolve:
             missing = [n for n, s in zip(override.types, type_symbols) if not s]
             reason = (
                 "species section not found; cannot create with an unresolved "
                 f"type {missing!r} (would mis-type the new species)"
+            )
+        else:
+            gaps = []
+            if not override.types:
+                gaps.append("types")
+            missing_stats = [k for k in _STAT_ORDER if not (override.stats and k in override.stats)]
+            if missing_stats:
+                gaps.append("stats:" + ",".join(missing_stats))
+            reason = (
+                "species section not found and data insufficient to create "
+                f"(missing {'; '.join(gaps)})"
             )
         report.add(ReportEntry(
             status="blocked", category="species", chrooked_id=chrooked_id,
@@ -158,7 +179,80 @@ def _render_new_block(
     if len(type_symbols) > 1:
         lines.append(f"Type2={type_symbols[1]}")
     lines.append(f"BaseStats={stats}")
+
+    if override.abilities:
+        ability_lines, ability_unresolved = _render_abilities(override.abilities, resmap)
+        lines.extend(ability_lines)
+        unresolved.extend(ability_unresolved)
+
     return "\n".join(lines), unresolved
+
+
+def _render_abilities(
+    abilities: AbilitiesOverride, resmap: ResolutionMap
+) -> tuple[list[str], list[str]]:
+    """Render `Abilities=`/`HiddenAbility=` lines for a fresh section.
+
+    An ability the target's abilities.txt lacks is OMITTED (not written as a dangling
+    reference Essentials would refuse to compile) and reported unresolved.
+    """
+    lines: list[str] = []
+    unresolved: list[str] = []
+    slots: list[str] = []
+    for slot in _ABILITY_SLOTS:
+        name = getattr(abilities, slot)
+        if name is None:
+            continue
+        resolved = resmap.ability(name)
+        if resolved is None:
+            unresolved.append(f"ability:{name}")
+            continue
+        slots.append(resolved)
+    if slots:
+        lines.append(f"Abilities={','.join(slots)}")
+    if abilities.hidden is not None:
+        resolved = resmap.ability(abilities.hidden)
+        if resolved is None:
+            unresolved.append(f"hidden-ability:{abilities.hidden}")
+        else:
+            lines.append(f"HiddenAbility={resolved}")
+    return lines, unresolved
+
+
+def _merge_base(override: SpeciesOverride, base: Mapping[str, Any]) -> SpeciesOverride:
+    """Layer an Override (a diff) onto full base snapshot data → a creatable Override.
+
+    Types and stats fall back to the base when the Override omits them; a single
+    Override stat tweak layers over the base six-stat block. Ability slots prefer the
+    Override's value, else the base's. Name/aka/chrooked_id stay the Override's.
+    """
+    base_types = tuple(base.get("types") or ())
+    types = override.types or (base_types or None)
+
+    base_stats = base.get("stats") or {}
+    if base_stats or override.stats:
+        stats: Optional[Mapping[str, int]] = {**base_stats, **(override.stats or {})}
+    else:
+        stats = None
+
+    abilities = _merge_abilities(override.abilities, base.get("abilities") or {})
+
+    return dataclasses.replace(override, types=types, stats=stats, abilities=abilities)
+
+
+def _merge_abilities(
+    override: Optional[AbilitiesOverride], base: Mapping[str, Any]
+) -> Optional[AbilitiesOverride]:
+    def slot(name: str) -> Optional[str]:
+        if override is not None and getattr(override, name) is not None:
+            return getattr(override, name)
+        value = base.get(name)
+        return value if value else None
+
+    primary, secondary, hidden = slot("primary"), slot("secondary"), slot("hidden")
+    if primary is None and secondary is None and hidden is None:
+        return None
+    return AbilitiesOverride(primary=primary, secondary=secondary, hidden=hidden)
 
 
 def _internal_of(override: SpeciesOverride, resmap: ResolutionMap) -> str:

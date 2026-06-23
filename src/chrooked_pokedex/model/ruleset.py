@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping, Optional
@@ -27,6 +28,11 @@ class Ruleset:
     type_chart: tuple[TypeChartOverride, ...] = ()
     behaviors: Mapping[str, BehaviorSpec] = field(default_factory=dict)
     meta: Mapping[str, Any] = field(default_factory=dict)
+    # Full base species data (stats/types/abilities/...) from the `.base/<version>.json`
+    # seed snapshot, keyed by chrooked_id. Overrides are diffs against this; an applier
+    # that must CREATE a species the target lacks merges base + override to get a full
+    # row. Empty when no snapshot is present.
+    base_species: Mapping[str, Mapping[str, Any]] = field(default_factory=dict)
 
     @classmethod
     def load(cls, ruleset_dir: Path) -> "Ruleset":
@@ -67,6 +73,7 @@ class Ruleset:
             type_chart=type_chart,
             behaviors=behaviors,
             meta=meta,
+            base_species=_load_base_species(ruleset_dir),
         )
 
     def owned_move(self, name_or_id: str) -> Optional[MoveDef]:
@@ -103,3 +110,19 @@ def _yaml_files(directory: Path) -> list[Path]:
     if not directory.exists():
         return []
     return sorted(directory.glob("*.yaml"))
+
+
+def _load_base_species(ruleset_dir: Path) -> Mapping[str, Mapping[str, Any]]:
+    """Read the `.base/<version>.json` seed snapshot's `species` map, or {} if absent.
+
+    The snapshot is the full base data the Ruleset was seeded from; its `species` is
+    keyed by `chrooked_id`, the same key the Overrides use. When more than one snapshot
+    is present, the lexicographically last filename wins (highest version).
+    """
+    base_dir = ruleset_dir / ".base"
+    snapshots = sorted(base_dir.glob("*.json")) if base_dir.exists() else []
+    if not snapshots:
+        return {}
+    data = json.loads(snapshots[-1].read_text(encoding="utf-8"))
+    species = data.get("species") if isinstance(data, dict) else None
+    return species if isinstance(species, dict) else {}
