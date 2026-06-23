@@ -1,8 +1,13 @@
 /* The preview / apply workspace for one selected Target.
 
    Preview (safe): runs the real applier on the fork and reverts it. On success
-   it shows the report counts and unlocks the "view this target's dex backdrop"
-   affordance (ac10).
+   it shows the report counts.
+
+   The "view this target's dex backdrop" affordance is always available for the
+   selected target — the backdrop read path (target ⊕ Ruleset) has no clean-tree
+   requirement, so it must not be gated behind a successful Preview. Gating it on
+   Preview trapped the user after a real Apply: the Apply dirties the tree, which
+   then 409s Preview (which has no Force), leaving no door to the backdrop.
 
    Apply (destructive, ac11): a deliberate two-step. The bare Apply button arms a
    confirm step; only the explicit confirm fires the write. A dirty tree comes
@@ -98,7 +103,19 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
           >
             Apply…
           </button>
-        ) : (
+        ) : null}
+
+        <button
+          type="button"
+          id="target-backdrop-button"
+          className="btn apply-panel__backdrop-btn"
+          disabled={busy}
+          onClick={() => onViewBackdrop(target.id)}
+        >
+          View dex backdrop →
+        </button>
+
+        {confirming ? (
           <div className="apply-confirm" id="apply-confirm" role="group" aria-label="Confirm apply">
             <span className="apply-confirm__warn">
               This writes <strong>{target.label}</strong> on disk. This cannot be undone.
@@ -127,7 +144,7 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
               </button>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
       {dirty && (
@@ -167,19 +184,7 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
       )}
 
       {run.kind === "report" && (
-        <>
-          {run.mode === "preview" && (
-            <button
-              type="button"
-              id="target-backdrop-button"
-              className="apply-panel__backdrop-btn"
-              onClick={() => onViewBackdrop(target.id)}
-            >
-              View this target&rsquo;s dex backdrop →
-            </button>
-          )}
-          <ApplyReportView report={run.report} mode={run.mode} />
-        </>
+        <ApplyReportView report={run.report} mode={run.mode} />
       )}
     </div>
   );
