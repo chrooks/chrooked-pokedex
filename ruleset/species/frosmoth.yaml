@@ -2,5 +2,27 @@ name: Frosmoth
 chrooked_id: frosmoth
 aka: { pokeemerald: SPECIES_FROSMOTH }
 abilities:
+  primary: Shield Dust
   secondary: Permafrost
-evolution: { from: Snom, method: { level: 32 } }
+  hidden: Ice Body
+stats: { hp: 80, def: 70, spd: 95 }
+learnset:
+  - { level: 1, move: Icy Wind }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Struggle Bug }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Attract }
+  - { level: 4, move: Stun Spore }
+  - { level: 8, move: Infestation }
+  - { level: 12, move: Mist }
+  - { level: 16, move: Defog }
+  - { level: 21, move: Feather Dance }
+  - { level: 24, move: Aurora Beam }
+  - { level: 28, move: Hail }
+  - { level: 32, move: Bug Buzz }
+  - { level: 36, move: Aurora Veil }
+  - { level: 40, move: Blizzard }
+  - { level: 44, move: Tailwind }
+  - { level: 48, move: Wide Guard }
+  - { level: 52, move: Quiver Dance }
+evolution: { from: Snom, method: { level: 24 } }

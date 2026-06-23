@@ -2,4 +2,24 @@ name: Seel
 chrooked_id: seel
 aka: { pokeemerald: SPECIES_SEEL }
 abilities:
+  primary: Thick Fat
   secondary: Hydration
+  hidden: Ice Body
+learnset:
+  - { level: 1, move: Headbutt }
+  - { level: 3, move: Growl }
+  - { level: 7, move: Water Gun }
+  - { level: 11, move: Icy Wind }
+  - { level: 13, move: Encore }
+  - { level: 17, move: Ice Shard }
+  - { level: 21, move: Water Pulse }
+  - { level: 23, move: Rest }
+  - { level: 27, move: Aurora Beam }
+  - { level: 31, move: Aqua Jet }
+  - { level: 33, move: Brine }
+  - { level: 37, move: Take Down }
+  - { level: 41, move: Dive }
+  - { level: 43, move: Aqua Tail }
+  - { level: 47, move: Ice Beam }
+  - { level: 51, move: Safeguard }
+  - { level: 53, move: Hail }

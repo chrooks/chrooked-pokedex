@@ -7,7 +7,7 @@ learnset:
   - { level: 3, move: Rock Throw }
   - { level: 6, move: Payback }
   - { level: 9, move: Bite }
-  - { level: 12, move: Scary Face }
+  - { level: 12, move: Rock Tomb }
   - { level: 15, move: Rock Slide }
   - { level: 18, move: Stomping Tantrum }
   - { level: 21, move: Screech }

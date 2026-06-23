@@ -1,9 +1,28 @@
 name: Kricketune
 chrooked_id: kricketune
 aka: { pokeemerald: SPECIES_KRICKETUNE }
-types: [Bug, Normal]
+types: [Bug, Fighting]
 abilities:
   primary: Chitinize
   secondary: Technician
   hidden: Sharpness
-stats: { atk: 105, def: 61, spd: 86 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Bide }
+  - { level: 1, move: Aerial Ace }
+  - { level: 10, move: Double Kick }
+  - { level: 14, move: Leech Life }
+  - { level: 18, move: Karate Chop }
+  - { level: 20, move: Force Palm }
+  - { level: 22, move: Reversal }
+  - { level: 25, move: Cut }
+  - { level: 26, move: Slash }
+  - { level: 30, move: X-Scissor }
+  - { level: 32, move: Bug Bite }
+  - { level: 33, move: Dragon Dance }
+  - { level: 34, move: Arm Thrust }
+  - { level: 38, move: Swords Dance }
+  - { level: 42, move: Night Slash }
+  - { level: 46, move: Bug Buzz }
+  - { level: 50, move: Cross Chop }
+evolution: { from: Kricketot, method: { level: 10 } }
