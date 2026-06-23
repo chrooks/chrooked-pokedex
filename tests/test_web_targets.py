@@ -1480,3 +1480,57 @@ def test_relabel_names_keeps_fakemon_pbs_name() -> None:
     assert by_id["pikachu"] == "Pikachu"
     assert by_id["aquilatus"] == "Harregg"
     assert by_id["intuitus"] == "Intuitus"
+
+
+# --- M3: Target Override layer flows through the backdrop dex + apply -------- #
+
+
+def test_target_override_backdrop_reflects_overlay_canon_unaffected(
+    client: TestClient, fork: Path
+) -> None:
+    """A scoped edit shows on this target's backdrop but never on the Canon dex."""
+    target_id = _register(client, fork)
+
+    # Bind the target to a committed override namespace.
+    bind = client.put(f"/api/targets/{target_id}/namespace", json={"slug": "africanvs"})
+    assert bind.status_code == 200, bind.text
+    assert bind.json()["namespace"] == "africanvs"
+
+    # Scoped edit: Aegislash becomes mono-Ghost with hp 200, Africanvs only.
+    put = client.put(
+        "/api/species/aegislash?scope=target:africanvs",
+        json={
+            "name": "Aegislash",
+            "chrooked_id": "aegislash",
+            "types": ["Ghost"],
+            "stats": {"hp": 200},
+        },
+    )
+    assert put.status_code == 200, put.text
+
+    # Backdrop dex reflects the overlay and badges the scoped fields.
+    dex = client.get(f"/api/targets/{target_id}/dex")
+    assert dex.status_code == 200, dex.text
+    entry = next(e for e in dex.json() if e["chrooked_id"] == "aegislash")
+    assert entry["types"] == ["Ghost"]
+    assert entry["stats"]["hp"] == 200  # overlay wins over base ruleset 140
+    assert set(entry["target_overridden_fields"]) == {"types", "stats"}
+
+    # Canon dex is untouched by the namespace edit.
+    canon = client.get("/api/dex")
+    assert canon.status_code == 200, canon.text
+    canon_entry = next(e for e in canon.json() if e["chrooked_id"] == "aegislash")
+    assert canon_entry["stats"]["hp"] == 140  # base ruleset, not 200
+    assert canon_entry["types"] != ["Ghost"]
+    assert "target_overridden_fields" not in canon_entry
+
+
+def test_target_without_namespace_has_no_badge_fields(
+    client: TestClient, fork: Path
+) -> None:
+    """An unbound target behaves exactly as before — no overlay, no badge."""
+    target_id = _register(client, fork)
+    dex = client.get(f"/api/targets/{target_id}/dex")
+    assert dex.status_code == 200, dex.text
+    entry = next(e for e in dex.json() if e["chrooked_id"] == "aegislash")
+    assert "target_overridden_fields" not in entry

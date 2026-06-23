@@ -176,6 +176,16 @@ def create_app(
                     break
         return crudmod.resolve_scope_dir(ruleset_dir, scope, engine=engine, label=label)
 
+    def _effective(target):
+        """The effective Ruleset for a Target (base ⊕ its Override namespace).
+
+        Returns ``(effective_ruleset, overlay)`` — the composed Ruleset the dex
+        read and apply both consume, plus the raw overlay (or None) for badge data.
+        """
+        base = _load_ruleset_or_503()
+        overlay = targetsmod.load_target_overlay(ruleset_dir, target)
+        return targetsmod.effective_ruleset(base, overlay), overlay
+
     @app.get("/api/species/{chrooked_id}")
     def get_species_override(chrooked_id: str) -> dict[str, Any]:
         # The raw Override (overrides-only), distinct from the merged /api/dex
@@ -654,8 +664,9 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
+            effective, _ = _effective(target)
             return targetsmod.preview_target(
-                target, _load_ruleset_or_503(), app.state.targets_state
+                target, effective, app.state.targets_state
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
@@ -668,8 +679,9 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
+            effective, _ = _effective(target)
             return targetsmod.apply_target(
-                target, _load_ruleset_or_503(), app.state.targets_state, force=force
+                target, effective, app.state.targets_state, force=force
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
@@ -679,11 +691,13 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
+            effective, overlay = _effective(target)
             return targetsmod.target_dex(
                 target,
-                _load_ruleset_or_503(),
+                effective,
                 app.state.targets_state,
                 base_snapshot=_load_snapshot_or_503(),
+                overlay=overlay,
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
@@ -693,9 +707,10 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
+            effective, _ = _effective(target)
             return targetsmod.target_abilities(
                 target,
-                _load_ruleset_or_503(),
+                effective,
                 app.state.targets_state,
                 base_snapshot=_load_snapshot_or_503(),
             )
@@ -707,9 +722,10 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
+            effective, _ = _effective(target)
             return targetsmod.target_moves(
                 target,
-                _load_ruleset_or_503(),
+                effective,
                 app.state.targets_state,
                 base_snapshot=_load_snapshot_or_503(),
             )
@@ -721,8 +737,9 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
+            effective, _ = _effective(target)
             return targetsmod.target_type_chart(
-                target, _load_ruleset_or_503(), app.state.targets_state
+                target, effective, app.state.targets_state
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error

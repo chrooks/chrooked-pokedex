@@ -41,6 +41,7 @@ from ..appliers.dispatch import route_apply as _route_apply
 from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
 from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
 from ..model import Ruleset
+from ..model.compose import compose_ruleset, overlay_touched_fields
 from ..report import ApplyReport
 from . import dex as dexmod
 from . import snapshot as snapmod
@@ -733,13 +734,59 @@ def _relabel_names(
     return result
 
 
+def load_target_overlay(ruleset_dir: Path, target: Target) -> Optional[Ruleset]:
+    """Load the Target's committed Override namespace, or None when unbound.
+
+    The overlay lives at ``ruleset/targets/<namespace>/``. A Target with no
+    ``namespace`` (or whose folder is absent) returns None — it applies the base
+    Ruleset unchanged, exactly as before this feature existed.
+    """
+    if not target.namespace:
+        return None
+    return Ruleset.load_namespace(Path(ruleset_dir), target.namespace)
+
+
+def effective_ruleset(base_ruleset: Ruleset, overlay: Optional[Ruleset]) -> Ruleset:
+    """Compose the base Ruleset with a Target Override overlay (last wins per field)."""
+    return compose_ruleset(base_ruleset, overlay)
+
+
+def _annotate_target_fields(
+    entries: list[dict[str, Any]], overlay: Optional[Ruleset]
+) -> list[dict[str, Any]]:
+    """Mark each species entry with the fields scoped to this Target (the badge data).
+
+    ``target_overridden_fields`` is the set of fields the overlay authored for that
+    ``chrooked_id`` — what the UI badges as "this target only". Empty list when the
+    overlay does not touch that species (or there is no overlay).
+    """
+    if overlay is None:
+        return entries
+    return [
+        {
+            **entry,
+            "target_overridden_fields": sorted(
+                overlay_touched_fields(overlay.species[entry["chrooked_id"]])
+            )
+            if entry["chrooked_id"] in overlay.species
+            else [],
+        }
+        for entry in entries
+    ]
+
+
 def target_dex(
     target: Target,
     ruleset: Ruleset,
     state: TargetState,
     base_snapshot: dict[str, Any] | None = None,
+    overlay: Optional[Ruleset] = None,
 ) -> list[dict[str, Any]]:
     """Per-Target dex backdrop: ``build_dex(build_snapshot(target), ruleset)``.
+
+    ``ruleset`` is the effective Ruleset (base ⊕ Target Override) — compose it via
+    ``effective_ruleset`` before calling. Pass ``overlay`` (the raw Target Override
+    set) to annotate each species with ``target_overridden_fields`` for the UI badge.
 
     For Essentials targets, species display names are relabeled to canonical
     English using the base snapshot ⊕ Ruleset name map (keyed by chrooked_id).
@@ -757,7 +804,7 @@ def target_dex(
         # #43: nested ability slots render canonical English by chrooked_id.
         abilities_map = _english_abilities_map(base_snapshot, ruleset)
         entries = _relabel_species_abilities(entries, abilities_map)
-    return entries
+    return _annotate_target_fields(entries, overlay)
 
 
 def target_abilities(
