@@ -578,37 +578,80 @@ function buildOverride(
   raw: SpeciesOverride | null,
   form: FormState,
 ): SpeciesOverride {
-  // stats: only those differing from base
-  const statOverride: Record<string, number> = {};
-  for (const key of STAT_ORDER) {
-    const value = form.stats[key];
-    if (value !== "" && value !== baseStat(entry, key)) {
-      statOverride[key] = value;
+  // stats: same preserve-untouched discipline as abilities. If no stat input
+  // changed from its seeded value, keep the raw Override's stats verbatim;
+  // otherwise rebuild, emitting only stats that differ from base.
+  const statsTouched = STAT_ORDER.some(
+    (key) => String(form.stats[key]) !== String(entry.stats[key] ?? ""),
+  );
+  let statsField: Record<string, number> | null;
+  if (!statsTouched) {
+    statsField = raw?.stats ?? null;
+  } else {
+    const statOverride: Record<string, number> = {};
+    for (const key of STAT_ORDER) {
+      const value = form.stats[key];
+      if (value !== "" && value !== baseStat(entry, key)) {
+        statOverride[key] = value;
+      }
     }
+    statsField = Object.keys(statOverride).length > 0 ? statOverride : null;
   }
 
   // types: override only if the whole list differs from base
   const parsedTypes = currentTypes(form.type1, form.type2);
   const typesChanged = !sameStrings(parsedTypes, baseTypes(entry));
 
-  // abilities: only slots that differ from base (a cleared slot is left as-is)
-  const abilityOverride: Partial<AbilitySlots> = {};
-  for (const slot of ABILITY_SLOTS) {
-    const value = form.abilities[slot].trim();
-    if (value !== "" && value !== (baseSlot(entry, slot) ?? "")) {
-      abilityOverride[slot] = value;
+  // abilities: if the author didn't touch any slot (every input still equals the
+  // value the form was seeded with), preserve the raw Override verbatim — editing
+  // another field must never materialize base ability values into the Override
+  // (the Seel bug: a learnset edit fattened {secondary} into all three slots).
+  // Only when a slot actually changed do we rebuild, emitting slots that differ
+  // from base.
+  const abilitiesTouched = ABILITY_SLOTS.some(
+    (slot) => form.abilities[slot].trim() !== (entry.abilities[slot] ?? "").trim(),
+  );
+  let abilitiesField: AbilitySlots | null;
+  if (!abilitiesTouched) {
+    abilitiesField = raw?.abilities ?? null;
+  } else {
+    const abilityOverride: Partial<AbilitySlots> = {};
+    for (const slot of ABILITY_SLOTS) {
+      const value = form.abilities[slot].trim();
+      if (value !== "" && value !== (baseSlot(entry, slot) ?? "")) {
+        abilityOverride[slot] = value;
+      }
     }
+    abilitiesField = Object.keys(abilityOverride).length
+      ? {
+          primary: abilityOverride.primary ?? null,
+          secondary: abilityOverride.secondary ?? null,
+          hidden: abilityOverride.hidden ?? null,
+        }
+      : null;
   }
-  const hasAbilityOverride = Object.keys(abilityOverride).length > 0;
 
-  // learnset: a whole-list Override. Emit only a non-empty list that differs
-  // from base; an empty edit reverts to base rather than writing an empty list.
+  // learnset: a whole-list Override. Preserve-untouched first: if the edited list
+  // still equals the seeded (merged) list, keep the raw Override verbatim so
+  // editing another field never materializes the base learnset into the Override.
+  // Otherwise emit a non-empty list that differs from base (an empty edit reverts
+  // to base rather than writing an empty list).
   const editedLearnset: LearnsetMove[] = form.learnset
     .filter((r) => r.move.trim() !== "" && r.level !== "")
     .map((r) => ({ level: Number(r.level), move: r.move.trim() }));
-  const learnsetChanged =
-    editedLearnset.length > 0 &&
-    JSON.stringify(editedLearnset) !== JSON.stringify(baseLearnset(entry));
+  const seededLearnset = entry.learnset.map((m) => ({ level: m.level, move: m.move }));
+  const learnsetTouched =
+    JSON.stringify(editedLearnset) !== JSON.stringify(seededLearnset);
+  let learnsetField: LearnsetMove[] | null;
+  if (!learnsetTouched) {
+    learnsetField = raw?.learnset ?? null;
+  } else {
+    learnsetField =
+      editedLearnset.length > 0 &&
+      JSON.stringify(editedLearnset) !== JSON.stringify(baseLearnset(entry))
+        ? editedLearnset
+        : null;
+  }
 
   // evolution: the snapshot carries none, so any set evolution is an Override.
   // The method always serializes to a clean Override dict (never the backdrop
@@ -623,15 +666,9 @@ function buildOverride(
     chrooked_id: entry.chrooked_id,
     aka: raw?.aka ?? (entry.dex !== null ? { dex: entry.dex } : {}),
     types: typesChanged ? parsedTypes : null,
-    abilities: hasAbilityOverride
-      ? {
-          primary: abilityOverride.primary ?? null,
-          secondary: abilityOverride.secondary ?? null,
-          hidden: abilityOverride.hidden ?? null,
-        }
-      : null,
-    stats: Object.keys(statOverride).length > 0 ? statOverride : null,
-    learnset: learnsetChanged ? editedLearnset : null,
+    abilities: abilitiesField,
+    stats: statsField,
+    learnset: learnsetField,
     evolution,
   };
 }
