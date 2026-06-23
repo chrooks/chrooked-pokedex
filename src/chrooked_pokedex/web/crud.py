@@ -72,6 +72,35 @@ class CitationError(Exception):
 _SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 
+def _log_write(
+    ledger_dir: Optional[Path],
+    scope: Optional[str],
+    kind: str,
+    chrooked_id: str,
+    before: Optional[dict[str, Any]],
+    after: Optional[dict[str, Any]],
+) -> None:
+    """Append one web-edit ledger entry (no-op when ``ledger_dir`` is None).
+
+    ``ledger_dir`` is always the BASE ruleset directory — the ledger lives at the
+    root, never inside a Target namespace. A None ``after`` records a delete.
+    """
+    if ledger_dir is None:
+        return
+    from .. import ledger as ledgermod
+
+    ledgermod.append(
+        ledger_dir,
+        {
+            "scope": scope or "base",
+            "kind": kind,
+            "chrooked_id": chrooked_id,
+            "source": "web-edit",
+            "fields": ledgermod.diff_fields(before, after),
+        },
+    )
+
+
 def resolve_scope_dir(
     ruleset_dir: Path,
     scope: Optional[str],
@@ -217,7 +246,14 @@ _SPECIES_FIELDS = (
 )
 
 
-def upsert_species(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+def upsert_species(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    payload: dict[str, Any],
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> dict[str, Any]:
     """Validate-write a species Override; returns the raw Override as JSON."""
     _reject_unknown(payload, _SPECIES_FIELDS, f"{chrooked_id}.yaml")
     try:
@@ -226,14 +262,25 @@ def upsert_species(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any])
     except (KeyError, TypeError) as error:
         raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
     path = Path(ruleset_dir) / "species" / f"{chrooked_id}.yaml"
-    return serialize_species(_validated_write(path, yaml_text, load_species))
+    before = serialize_species(load_species(path)) if (ledger_dir and path.exists()) else None
+    after = serialize_species(_validated_write(path, yaml_text, load_species))
+    _log_write(ledger_dir, scope, "species", chrooked_id, before, after)
+    return after
 
 
-def delete_species(ruleset_dir: Path, chrooked_id: str) -> None:
+def delete_species(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> None:
     path = Path(ruleset_dir) / "species" / f"{chrooked_id}.yaml"
     if not path.exists():
         raise NotFoundError(f"No species Override {chrooked_id!r} to delete.")
+    before = serialize_species(load_species(path)) if ledger_dir else None
     path.unlink()
+    _log_write(ledger_dir, scope, "species", chrooked_id, before, None)
 
 
 def serialize_species(species: SpeciesOverride) -> dict[str, Any]:
@@ -313,7 +360,14 @@ _MOVE_FIELDS = (
 )
 
 
-def upsert_move(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+def upsert_move(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    payload: dict[str, Any],
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> dict[str, Any]:
     """Validate-write an owned move; returns the move as JSON."""
     _reject_unknown(payload, _MOVE_FIELDS, f"{chrooked_id}.yaml")
     try:
@@ -324,11 +378,20 @@ def upsert_move(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]) ->
         # propagate unwrapped; this catches only payload-shape errors.
         raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
     path = Path(ruleset_dir) / "moves" / f"{chrooked_id}.yaml"
-    return colmod.serialize_move(_validated_write(path, yaml_text, load_move))
+    before = colmod.serialize_move(load_move(path)) if (ledger_dir and path.exists()) else None
+    after = colmod.serialize_move(_validated_write(path, yaml_text, load_move))
+    _log_write(ledger_dir, scope, "move", chrooked_id, before, after)
+    return after
 
 
 def delete_move(
-    ruleset: Ruleset, ruleset_dir: Path, chrooked_id: str, *, confirm: bool = False
+    ruleset: Ruleset,
+    ruleset_dir: Path,
+    chrooked_id: str,
+    *,
+    confirm: bool = False,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
 ) -> None:
     move = ruleset.moves.get(chrooked_id)
     if move is None:
@@ -340,7 +403,10 @@ def delete_move(
             "confirm to delete and leave those references dangling.",
             citing,
         )
-    (Path(ruleset_dir) / "moves" / f"{chrooked_id}.yaml").unlink()
+    path = Path(ruleset_dir) / "moves" / f"{chrooked_id}.yaml"
+    before = colmod.serialize_move(load_move(path)) if (ledger_dir and path.exists()) else None
+    path.unlink()
+    _log_write(ledger_dir, scope, "move", chrooked_id, before, None)
 
 
 def move_citations(ruleset: Ruleset, move: MoveDef) -> list[str]:
@@ -372,7 +438,14 @@ def _ability_from_payload(payload: dict[str, Any], chrooked_id: str) -> AbilityD
     )
 
 
-def upsert_ability(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+def upsert_ability(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    payload: dict[str, Any],
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> dict[str, Any]:
     """Build, render, and validate-write an owned ability.
 
     The payload is rendered as-is so the loader catches unknown fields — but the
@@ -385,7 +458,10 @@ def upsert_ability(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any])
     ability = _ability_from_payload(payload, chrooked_id)
     yaml_text = writer.ability_yaml(ability)
     path = Path(ruleset_dir) / "abilities" / f"{chrooked_id}.yaml"
-    return colmod.serialize_ability(_validated_write(path, yaml_text, load_ability))
+    before = colmod.serialize_ability(load_ability(path)) if (ledger_dir and path.exists()) else None
+    after = colmod.serialize_ability(_validated_write(path, yaml_text, load_ability))
+    _log_write(ledger_dir, scope, "ability", chrooked_id, before, after)
+    return after
 
 
 _ABILITY_FIELDS = ("name", "chrooked_id", "aka", "description")
@@ -401,7 +477,13 @@ def _reject_unknown(payload: dict[str, Any], allowed: tuple[str, ...], where: st
 
 
 def delete_ability(
-    ruleset: Ruleset, ruleset_dir: Path, chrooked_id: str, *, confirm: bool = False
+    ruleset: Ruleset,
+    ruleset_dir: Path,
+    chrooked_id: str,
+    *,
+    confirm: bool = False,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
 ) -> None:
     ability = ruleset.abilities.get(chrooked_id)
     if ability is None:
@@ -413,7 +495,10 @@ def delete_ability(
             "confirm to delete and leave those slots pointing at a missing ability.",
             citing,
         )
-    (Path(ruleset_dir) / "abilities" / f"{chrooked_id}.yaml").unlink()
+    path = Path(ruleset_dir) / "abilities" / f"{chrooked_id}.yaml"
+    before = colmod.serialize_ability(load_ability(path)) if (ledger_dir and path.exists()) else None
+    path.unlink()
+    _log_write(ledger_dir, scope, "ability", chrooked_id, before, None)
 
 
 def ability_citations(ruleset: Ruleset, ability: AbilityDef) -> list[str]:
@@ -438,7 +523,13 @@ def ability_citations(ruleset: Ruleset, ability: AbilityDef) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 
-def replace_type_chart(ruleset_dir: Path, entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def replace_type_chart(
+    ruleset_dir: Path,
+    entries: list[dict[str, Any]],
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> list[dict[str, Any]]:
     """Validate-write the whole type-chart override list; returns it serialized."""
     where = "overrides.yaml"
     overrides: list[TypeChartOverride] = []
@@ -456,10 +547,30 @@ def replace_type_chart(ruleset_dir: Path, entries: list[dict[str, Any]]) -> list
         # _require raises ValidationError (not a ValueError), so it propagates
         # unwrapped; this catches only entry-shape errors (e.g. a bad multiplier).
         raise ValidationError(f"{where}: malformed type-chart entry ({error}).") from error
-    yaml_text = writer.type_chart_yaml(overrides)
     path = Path(ruleset_dir) / "type-chart" / "overrides.yaml"
+    before = (
+        [colmod.serialize_type_chart_entry(t) for t in load_type_chart(path)]
+        if (ledger_dir and path.exists())
+        else None
+    )
+    yaml_text = writer.type_chart_yaml(overrides)
     validated = _validated_write(path, yaml_text, load_type_chart)
-    return [colmod.serialize_type_chart_entry(t) for t in validated]
+    after = [colmod.serialize_type_chart_entry(t) for t in validated]
+    # The type chart is one whole-list file; log the list as a single field diff.
+    if ledger_dir is not None and before != after:
+        from .. import ledger as ledgermod
+
+        ledgermod.append(
+            ledger_dir,
+            {
+                "scope": scope or "base",
+                "kind": "type-chart",
+                "chrooked_id": "type-chart",
+                "source": "web-edit",
+                "fields": {"overrides": {"from": before, "to": after}},
+            },
+        )
+    return after
 
 
 _TYPE_CHART_FIELDS = ("attacker", "defender", "multiplier")
@@ -478,7 +589,14 @@ _BEHAVIOR_FIELDS = (
 )
 
 
-def upsert_behavior(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+def upsert_behavior(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    payload: dict[str, Any],
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> dict[str, Any]:
     """Validate-write one behavior spec; returns it serialized."""
     _reject_unknown(payload, _BEHAVIOR_FIELDS, f"{chrooked_id}.yaml")
     try:
@@ -489,14 +607,25 @@ def upsert_behavior(ruleset_dir: Path, chrooked_id: str, payload: dict[str, Any]
         # unwrapped; this catches only payload-shape errors.
         raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
     path = Path(ruleset_dir) / "behaviors" / f"{chrooked_id}.yaml"
-    return colmod.serialize_behavior(_validated_write(path, yaml_text, load_behavior))
+    before = colmod.serialize_behavior(load_behavior(path)) if (ledger_dir and path.exists()) else None
+    after = colmod.serialize_behavior(_validated_write(path, yaml_text, load_behavior))
+    _log_write(ledger_dir, scope, "behavior", chrooked_id, before, after)
+    return after
 
 
-def delete_behavior(ruleset_dir: Path, chrooked_id: str) -> None:
+def delete_behavior(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> None:
     path = Path(ruleset_dir) / "behaviors" / f"{chrooked_id}.yaml"
     if not path.exists():
         raise NotFoundError(f"No behavior spec {chrooked_id!r} to delete.")
+    before = colmod.serialize_behavior(load_behavior(path)) if ledger_dir else None
     path.unlink()
+    _log_write(ledger_dir, scope, "behavior", chrooked_id, before, None)
 
 
 def _behavior_from_payload(payload: dict[str, Any], chrooked_id: str) -> BehaviorSpec:

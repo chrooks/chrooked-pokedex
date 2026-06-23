@@ -108,13 +108,36 @@ def apply_proposals(
 
     touched: set[str] = set()
     for chrooked_id, proposals in by_species.items():
-        override = ruleset.species[chrooked_id]
+        original = ruleset.species[chrooked_id]
+        override = original
         for proposal in proposals:
             override = _apply_one(override, proposal)
         path = Path(ruleset_dir) / "species" / f"{chrooked_id}.yaml"
         path.write_text(species_yaml(override), encoding="utf-8")
+        _log_harvest(ruleset_dir, chrooked_id, original, override)
         touched.add(chrooked_id)
     return touched
+
+
+def _log_harvest(
+    ruleset_dir: Path, chrooked_id: str, before: SpeciesOverride, after: SpeciesOverride
+) -> None:
+    """Record a harvest edit in the Change Ledger (base scope, field-level diff)."""
+    from .. import ledger as ledgermod
+    from ..web.crud import serialize_species
+
+    ledgermod.append(
+        ruleset_dir,
+        {
+            "scope": "base",
+            "kind": "species",
+            "chrooked_id": chrooked_id,
+            "source": "harvest",
+            "fields": ledgermod.diff_fields(
+                serialize_species(before), serialize_species(after)
+            ),
+        },
+    )
 
 
 def _apply_one(override: SpeciesOverride, proposal: Proposal) -> SpeciesOverride:

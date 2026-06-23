@@ -1534,3 +1534,42 @@ def test_target_without_namespace_has_no_badge_fields(
     assert dex.status_code == 200, dex.text
     entry = next(e for e in dex.json() if e["chrooked_id"] == "aegislash")
     assert "target_overridden_fields" not in entry
+
+
+# --- M4: the Change Ledger records scoped edits and applies ------------------ #
+
+
+def test_ledger_records_scoped_edit_and_apply(
+    client: TestClient, fork: Path, ruleset_dir: Path
+) -> None:
+    target_id = _register(client, fork)
+    client.put(f"/api/targets/{target_id}/namespace", json={"slug": "africanvs"})
+
+    edit = client.put(
+        "/api/species/aegislash?scope=target:africanvs",
+        json={"name": "Aegislash", "chrooked_id": "aegislash", "types": ["Ghost"]},
+    )
+    assert edit.status_code == 200, edit.text
+
+    led = client.get("/api/ledger").json()["entries"]
+    web_edits = [e for e in led if e["source"] == "web-edit"]
+    assert len(web_edits) == 1
+    entry = web_edits[0]
+    assert entry["scope"] == "target:africanvs"
+    assert entry["kind"] == "species"
+    assert entry["chrooked_id"] == "aegislash"
+    assert "types" in entry["fields"]
+    assert entry["fields"]["types"]["to"] == ["Ghost"]
+
+    # An apply against a clean fork records an event entry.
+    applied = client.post(f"/api/targets/{target_id}/apply")
+    assert applied.status_code == 200, applied.text
+    apply_entries = client.get("/api/ledger?kind=apply").json()["entries"]
+    assert len(apply_entries) == 1
+    assert apply_entries[0]["source"] == "apply"
+    assert apply_entries[0]["scope"] == "target:africanvs"
+    assert "report" in apply_entries[0]
+
+    # Ledger lives at the BASE ruleset dir, not inside the namespace.
+    assert (ruleset_dir / "ledger.ndjson").exists()
+    assert not (ruleset_dir / "targets" / "africanvs" / "ledger.ndjson").exists()

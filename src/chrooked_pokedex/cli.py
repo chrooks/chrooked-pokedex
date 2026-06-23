@@ -409,6 +409,7 @@ def _run_seed(fork: Path, base: Path, ruleset_dir: Path) -> int:
     write_ruleset(data, ruleset_dir)
 
     counts = data.counts()
+    _log_seed(ruleset_dir, fork, counts)
     print(f"Seeded Ruleset at {ruleset_dir}:")
     print(f"  species changed:       {counts['species_changed']}")
     print(f"  learnsets replaced:    {counts['learnsets_replaced']}")
@@ -417,6 +418,23 @@ def _run_seed(fork: Path, base: Path, ruleset_dir: Path) -> int:
     print(f"  abilities owned:       {counts['abilities_owned']}")
     print(f"  type-chart overrides:  {counts['type_chart_overrides']}")
     return 0
+
+
+def _log_seed(ruleset_dir: Path, fork: Path, counts: dict) -> None:
+    """Record one summary entry for a bulk seed (not per-entity spam)."""
+    from . import ledger as ledgermod
+
+    ledgermod.append(
+        ruleset_dir,
+        {
+            "scope": "base",
+            "kind": "seed",
+            "chrooked_id": None,
+            "source": "seed",
+            "summary": dict(counts),
+            "fork": str(fork),
+        },
+    )
 
 
 def _verify_base_version(base: Path) -> None:

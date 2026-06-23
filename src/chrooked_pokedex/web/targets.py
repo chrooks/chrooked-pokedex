@@ -40,6 +40,7 @@ from typing import Any, Dict, List, Optional
 from ..appliers.dispatch import route_apply as _route_apply
 from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
 from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
+from .. import ledger as ledgermod
 from ..model import Ruleset
 from ..model.compose import compose_ruleset, overlay_touched_fields
 from ..report import ApplyReport
@@ -509,7 +510,11 @@ def preview_target(
 
 
 def apply_target(
-    target: Target, ruleset: Ruleset, state: TargetState, force: bool
+    target: Target,
+    ruleset: Ruleset,
+    state: TargetState,
+    force: bool,
+    ledger_dir: Optional[Path] = None,
 ) -> dict[str, Any]:
     """Real apply: run the applier and KEEP the changes.
 
@@ -532,6 +537,24 @@ def apply_target(
         report = _run_applier(fork, target.engine, ruleset)
         report.write(fork / "apply-report.md")
         state.invalidate_snapshot(target.path)
+        if ledger_dir is not None:
+            scope = f"target:{target.namespace}" if target.namespace else "base"
+            blocked = [
+                {"chrooked_id": entry.chrooked_id, "reason": entry.reason}
+                for entry in report.entries
+                if entry.status == "blocked"
+            ]
+            ledgermod.append(
+                ledger_dir,
+                {
+                    "scope": scope,
+                    "kind": "apply",
+                    "chrooked_id": None,
+                    "source": "apply",
+                    "report": report.counts(),
+                    "blocked_entries": blocked,
+                },
+            )
         return _report_payload(report)
 
 

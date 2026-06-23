@@ -20,6 +20,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .. import ledger as ledgermod
 from ..behavior import render_packet
 from ..env import load_env_file
 from ..model import Ruleset
@@ -152,6 +153,19 @@ def create_app(
     def get_behaviors() -> list[dict[str, Any]]:
         return colmod.build_behaviors(_load_ruleset_or_503())
 
+    @app.get("/api/ledger")
+    def get_ledger(
+        scope: str | None = None,
+        kind: str | None = None,
+        chrooked_id: str | None = None,
+        limit: int | None = None,
+    ) -> dict[str, Any]:
+        """The Change Ledger, newest-first, filterable by scope/kind/chrooked_id."""
+        entries = ledgermod.read(
+            ruleset_dir, scope=scope, kind=kind, chrooked_id=chrooked_id, limit=limit
+        )
+        return {"entries": entries}
+
     # --- Write routes (Milestone 2a): species / moves / abilities ----------- #
     # Each write validates by reloading through the loader; a rejected edit is a
     # 422 carrying the loader's own message and nothing is written. The UI never
@@ -205,7 +219,9 @@ def create_app(
         chrooked_id: str, payload: dict[str, Any], scope: str = "base"
     ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_species(_scope_dir(scope), chrooked_id, payload)
+            return crudmod.upsert_species(
+                _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
+            )
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -379,9 +395,13 @@ def create_app(
             raise HTTPException(status_code=503, detail=str(error)) from error
 
     @app.delete("/api/species/{chrooked_id}")
-    def delete_species(chrooked_id: str) -> dict[str, str]:
+    def delete_species(chrooked_id: str, scope: str = "base") -> dict[str, str]:
         try:
-            crudmod.delete_species(ruleset_dir, chrooked_id)
+            crudmod.delete_species(
+                _scope_dir(scope), chrooked_id, ledger_dir=ruleset_dir, scope=scope
+            )
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
         except crudmod.NotFoundError as error:
             raise HTTPException(status_code=404, detail=str(error)) from error
         return {"deleted": chrooked_id}
@@ -391,7 +411,9 @@ def create_app(
         chrooked_id: str, payload: dict[str, Any], scope: str = "base"
     ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_move(_scope_dir(scope), chrooked_id, payload)
+            return crudmod.upsert_move(
+                _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
+            )
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -477,7 +499,9 @@ def create_app(
         chrooked_id: str, payload: dict[str, Any], scope: str = "base"
     ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_ability(_scope_dir(scope), chrooked_id, payload)
+            return crudmod.upsert_ability(
+                _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
+            )
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -547,7 +571,9 @@ def create_app(
     ) -> list[dict[str, Any]]:
         # The type chart is one whole-list file; a write replaces the override set.
         try:
-            return crudmod.replace_type_chart(_scope_dir(scope), entries)
+            return crudmod.replace_type_chart(
+                _scope_dir(scope), entries, ledger_dir=ruleset_dir, scope=scope
+            )
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
@@ -556,14 +582,16 @@ def create_app(
         chrooked_id: str, payload: dict[str, Any], scope: str = "base"
     ) -> dict[str, Any]:
         try:
-            return crudmod.upsert_behavior(_scope_dir(scope), chrooked_id, payload)
+            return crudmod.upsert_behavior(
+                _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
+            )
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
     @app.delete("/api/behaviors/{chrooked_id}")
     def delete_behavior(chrooked_id: str) -> dict[str, str]:
         try:
-            crudmod.delete_behavior(ruleset_dir, chrooked_id)
+            crudmod.delete_behavior(ruleset_dir, chrooked_id, ledger_dir=ruleset_dir)
         except crudmod.NotFoundError as error:
             raise HTTPException(status_code=404, detail=str(error)) from error
         return {"deleted": chrooked_id}
@@ -580,7 +608,7 @@ def create_app(
         """
         ruleset = _load_ruleset_or_503()
         try:
-            deleter(ruleset, ruleset_dir, chrooked_id, confirm=confirm)
+            deleter(ruleset, ruleset_dir, chrooked_id, confirm=confirm, ledger_dir=ruleset_dir)
         except crudmod.NotFoundError as error:
             raise HTTPException(status_code=404, detail=str(error)) from error
         except crudmod.CitationError as error:
@@ -681,7 +709,11 @@ def create_app(
             target = registry.get(target_id)
             effective, _ = _effective(target)
             return targetsmod.apply_target(
-                target, effective, app.state.targets_state, force=force
+                target,
+                effective,
+                app.state.targets_state,
+                force=force,
+                ledger_dir=ruleset_dir,
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
