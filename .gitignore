@@ -24,10 +24,6 @@ targets.json
 # Plans/throughlines are local-only by default, except the Essentials
 # behavior-porting track docs, which travel with that work.
 feature_requests/*
-!feature_requests/essentials-behavior-port-throughline.md
-!feature_requests/essentials-behavior-tracer-plan.md
-!feature_requests/essentials-harness-plan.md
-!feature_requests/essentials-port-loop-plan.md
 
 # Dispatched-agent git worktrees (transient, isolated checkouts)
 .claude/worktrees/
