@@ -42,6 +42,7 @@ const KINDS: readonly KindKey[] = [
   "type-chart",
   "behaviors",
   "targets",
+  "ledger",
 ];
 
 // useSyncExternalStore requires a STABLE snapshot: getSnapshot must return the

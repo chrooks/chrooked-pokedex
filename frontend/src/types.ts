@@ -291,7 +291,8 @@ export type KindKey =
   | "abilities"
   | "type-chart"
   | "behaviors"
-  | "targets";
+  | "targets"
+  | "ledger";
 
 /** The engines a Target fork can be (only pokeemerald applies end-to-end in M3;
     essentials is recorded for later). */

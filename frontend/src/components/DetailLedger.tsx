@@ -162,6 +162,19 @@ export function DetailLedger({
               {!editing && (
                 <button
                   type="button"
+                  id="entity-history-button"
+                  className="ledger__edit"
+                  onClick={() =>
+                    update({ kind: "ledger", query: entry.chrooked_id, selected: null })
+                  }
+                  title={`Change history for ${entry.name}`}
+                >
+                  History
+                </button>
+              )}
+              {!editing && (
+                <button
+                  type="button"
                   className="ledger__edit"
                   onClick={() => setEditing(true)}
                 >

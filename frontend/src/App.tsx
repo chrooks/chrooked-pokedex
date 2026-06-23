@@ -17,6 +17,7 @@ import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
 import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
+import { LedgerTab } from "./components/tabs/LedgerTab";
 import { BackdropChip } from "./components/targets/BackdropChip";
 
 /**
@@ -310,6 +311,8 @@ function KindScreen({
       return <BehaviorsTab />;
     case "targets":
       return <TargetsTab onViewBackdrop={onViewBackdrop} />;
+    case "ledger":
+      return <LedgerTab />;
     default:
       return (
         <DexView

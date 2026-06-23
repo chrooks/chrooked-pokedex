@@ -11,6 +11,7 @@ const KIND_TABS: { key: KindKey; label: string }[] = [
   { key: "type-chart", label: "Type Chart" },
   { key: "behaviors", label: "Behaviors" },
   { key: "targets", label: "Targets" },
+  { key: "ledger", label: "Ledger" },
 ];
 
 type Props = {

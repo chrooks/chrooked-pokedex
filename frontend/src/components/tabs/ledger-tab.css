@@ -1,0 +1,150 @@
+/* Change Ledger tab — an append-only history list. */
+
+.tab--ledger {
+  padding: var(--space-3, 0.75rem);
+}
+
+.ledger-tab__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3, 0.75rem);
+}
+
+.ledger-tab__count {
+  font-size: 0.85rem;
+  color: var(--text-dim, #999);
+}
+
+.ledger-tab__clear {
+  border: none;
+  background: none;
+  color: var(--accent, #c0573e);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+}
+
+.ledger-tab__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  font-size: 0.8rem;
+  color: var(--text-dim, #999);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ledger-tab__filter select {
+  font: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius, 6px);
+  border: 1px solid var(--border, #333);
+  background: var(--surface-1, rgba(0, 0, 0, 0.2));
+  color: var(--text, #ddd);
+}
+
+.ledger-tab__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.ledger-tab__row {
+  border: 1px solid var(--border, #333);
+  border-left: 3px solid var(--border, #333);
+  border-radius: var(--radius, 8px);
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  background: var(--surface-2, rgba(255, 255, 255, 0.02));
+}
+
+.ledger-tab__row[data-source="apply"] { border-left-color: #4a90d9; }
+.ledger-tab__row[data-source="harvest"] { border-left-color: #d9a64a; }
+.ledger-tab__row[data-source="seed"] { border-left-color: #777; }
+.ledger-tab__row[data-source="web-edit"] { border-left-color: var(--accent, #c0573e); }
+
+.ledger-tab__row-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  flex-wrap: wrap;
+}
+
+.ledger-tab__ts {
+  font-size: 0.75rem;
+  color: var(--text-dim, #999);
+}
+
+.ledger-tab__chip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+
+.ledger-tab__chip--target {
+  color: var(--accent, #c0573e);
+  border: 1px solid var(--accent, #c0573e);
+}
+
+.ledger-tab__chip--base {
+  color: var(--text-dim, #999);
+  border: 1px solid var(--border, #444);
+}
+
+.ledger-tab__chip--source {
+  background: var(--surface-1, rgba(0, 0, 0, 0.25));
+  color: var(--text, #ccc);
+}
+
+.ledger-tab__kind {
+  font-size: 0.8rem;
+  color: var(--text-dim, #999);
+}
+
+.ledger-tab__entity {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text, #ddd);
+}
+
+.ledger-tab__report {
+  margin-top: var(--space-1, 0.25rem);
+  font-size: 0.8rem;
+  color: var(--text-dim, #aaa);
+}
+
+.ledger-tab__fields {
+  list-style: none;
+  margin: var(--space-1, 0.25rem) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ledger-tab__field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  font-size: 0.78rem;
+  flex-wrap: wrap;
+}
+
+.ledger-tab__field-name {
+  min-width: 5rem;
+  color: var(--text-dim, #999);
+}
+
+.ledger-tab__from { color: #b06a5a; }
+.ledger-tab__to { color: #6ab07a; }
+.ledger-tab__arrow { color: var(--text-dim, #777); }
