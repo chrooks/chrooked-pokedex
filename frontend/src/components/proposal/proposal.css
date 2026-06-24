@@ -161,6 +161,66 @@
   margin-bottom: var(--space-2);
 }
 
+/* Bulk-edit toolbar above the proposed learnset: select-all + mass remove /
+   level nudge. Action buttons disable until at least one move is checked. */
+.proposal__bulk {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.proposal__bulk-all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.proposal__bulk-count {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.proposal__bulk-spacer {
+  flex: 1;
+}
+
+.proposal__bulk-btn {
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.proposal__bulk-btn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--line-strong, var(--chrome));
+}
+
+.proposal__bulk-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.proposal__bulk-remove:hover:not(:disabled) {
+  color: var(--error, oklch(62% 0.2 25));
+  border-color: var(--error, oklch(62% 0.2 25));
+}
+
+.proposal__prow-check {
+  cursor: pointer;
+  margin: 0 var(--space-1) 0 0;
+  flex: none;
+}
+
 /* PROVISIONAL amber — a changed proposed cell, before Apply. */
 .proposal-cell--changed {
   color: var(--provisional);

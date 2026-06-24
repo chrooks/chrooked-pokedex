@@ -12,12 +12,14 @@ import { isKnown } from "../../lib/entityValidation";
 import type { LearnsetDraft } from "../../types";
 import type { CellRenderArgs, SectionRenderer } from "./renderer";
 import {
+  adjustSelectedLevels,
   applyAlternative,
   classifyProposed,
   currentLearnset,
   editRow,
   mergeDraft,
   removedRows,
+  removeSelectedMoves,
 } from "./learnsetDraft";
 
 /** Build the learnset renderer. Accepts move options for datalist suggestions and validation. */
@@ -52,6 +54,35 @@ function LearnsetCells({
   // line so current↔proposed align and the diff is scannable; the reasoning is
   // on demand, keyboard-reachable, and also revealed on hover via CSS).
   const [openReason, setOpenReason] = useState<string | null>(null);
+  // Bulk-edit selection, keyed by move name so it survives the autosort that
+  // follows a level nudge (mirrors the distribution editor's multi-select).
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const proposedMoves = proposed.map((m) => m.move);
+  const allSelected =
+    proposedMoves.length > 0 && proposedMoves.every((m) => selected.has(m));
+
+  function toggleSelected(move: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(move)) next.delete(move);
+      else next.add(move);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    setSelected(allSelected ? new Set() : new Set(proposedMoves));
+  }
+
+  function bulkRemove() {
+    onEdit(removeSelectedMoves(draft, selected));
+    setSelected(new Set());
+  }
+
+  function bulkAdjust(delta: number) {
+    onEdit(adjustSelectedLevels(draft, selected, delta));
+  }
 
   // Find a row's index in the draft's (unsorted) array by identity so an edit
   // patches the right element even after autosort reorders the display.
@@ -94,6 +125,49 @@ function LearnsetCells({
 
       <div className="proposal__col">
         <p className="proposal__col-head">Proposed</p>
+        {proposed.length > 0 && (
+          <div className="proposal__bulk" id="proposal-learnset-bulk">
+            <label className="proposal__bulk-all">
+              <input
+                type="checkbox"
+                checked={allSelected}
+                aria-label="Select all proposed moves"
+                onChange={toggleSelectAll}
+              />
+              <span className="proposal__bulk-count" aria-live="polite">
+                {selected.size > 0 ? `${selected.size} selected` : "Select"}
+              </span>
+            </label>
+            <span className="proposal__bulk-spacer" />
+            <button
+              type="button"
+              className="proposal__bulk-btn"
+              disabled={selected.size === 0}
+              title="Lower the level of selected moves by 1"
+              onClick={() => bulkAdjust(-1)}
+            >
+              −1 lv
+            </button>
+            <button
+              type="button"
+              className="proposal__bulk-btn"
+              disabled={selected.size === 0}
+              title="Raise the level of selected moves by 1"
+              onClick={() => bulkAdjust(1)}
+            >
+              +1 lv
+            </button>
+            <button
+              type="button"
+              className="proposal__bulk-btn proposal__bulk-remove"
+              disabled={selected.size === 0}
+              title="Remove selected moves from the proposal"
+              onClick={bulkRemove}
+            >
+              Remove
+            </button>
+          </div>
+        )}
         <ol className="ledger__learnset proposal__learnset">
           {classified.length === 0 && (
             <li className="lrow__empty">No proposed moves.</li>
@@ -135,6 +209,14 @@ function LearnsetCells({
                     />
                   ) : (
                     <>
+                      <input
+                        type="checkbox"
+                        className="proposal__prow-check"
+                        checked={selected.has(row.move)}
+                        aria-label={`Select ${row.move}`}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={() => toggleSelected(row.move)}
+                      />
                       <span className="ledger__move-lv mono">
                         {row.level === 0 ? "—" : `L${row.level}`}
                       </span>

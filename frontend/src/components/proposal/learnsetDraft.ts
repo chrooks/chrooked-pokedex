@@ -35,6 +35,42 @@ export function editRow(
   return { learnset: sortMoves(next) };
 }
 
+const LEARNSET_LEVEL_MIN = 0;
+const LEARNSET_LEVEL_MAX = 100;
+
+/** Drop every proposed row whose move is in `moves`, then autosort. Used by the
+    proposed-learnset bulk "Remove" action (selection is keyed by move name). */
+export function removeSelectedMoves(
+  draft: LearnsetDraft | null,
+  moves: ReadonlySet<string>,
+): LearnsetDraft {
+  const rows = draft?.learnset ?? [];
+  return { learnset: sortMoves(rows.filter((r) => !moves.has(r.move))) };
+}
+
+/** Nudge the level of every proposed row whose move is in `moves` by `delta`,
+    clamped to [0, 100], then autosort. Keying on the move name (not level) lets a
+    selection survive repeated ±1 nudges. */
+export function adjustSelectedLevels(
+  draft: LearnsetDraft | null,
+  moves: ReadonlySet<string>,
+  delta: number,
+): LearnsetDraft {
+  const rows = draft?.learnset ?? [];
+  const next = rows.map((r) =>
+    moves.has(r.move)
+      ? {
+          ...r,
+          level: Math.min(
+            LEARNSET_LEVEL_MAX,
+            Math.max(LEARNSET_LEVEL_MIN, r.level + delta),
+          ),
+        }
+      : r,
+  );
+  return { learnset: sortMoves(next) };
+}
+
 /** The cross-product diff status of one proposed row against the current list,
     matched by (level, move) — "added" = not in current, "kept" = present in
     both. ("changed"/"removed" are derived at render: a current row absent from

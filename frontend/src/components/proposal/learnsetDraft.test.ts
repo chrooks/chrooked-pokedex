@@ -6,14 +6,50 @@
 import { describe, it, expect } from "vitest";
 import type { LearnsetMove, SpeciesOverride } from "../../types";
 import {
+  adjustSelectedLevels,
   applyAlternative,
   classifyProposed,
   editRow,
   learnsetChanged,
   mergeDraft,
   removedRows,
+  removeSelectedMoves,
   sortMoves,
 } from "./learnsetDraft";
+
+describe("learnset draft — bulk edits", () => {
+  const draft = {
+    learnset: [
+      { level: 5, move: "Tackle" },
+      { level: 10, move: "Ember" },
+      { level: 15, move: "Bite" },
+    ],
+  };
+
+  it("removes selected moves and keeps the list sorted", () => {
+    const next = removeSelectedMoves(draft, new Set(["Tackle", "Bite"]));
+    expect(next.learnset).toEqual([{ level: 10, move: "Ember" }]);
+  });
+
+  it("nudges selected levels by delta, re-sorting", () => {
+    const next = adjustSelectedLevels(draft, new Set(["Bite"]), -12);
+    expect(next.learnset).toEqual([
+      { level: 3, move: "Bite" },
+      { level: 5, move: "Tackle" },
+      { level: 10, move: "Ember" },
+    ]);
+  });
+
+  it("clamps nudged levels to [0, 100]", () => {
+    const low = adjustSelectedLevels(draft, new Set(["Tackle"]), -50);
+    expect(low.learnset[0]).toEqual({ level: 0, move: "Tackle" });
+    const high = adjustSelectedLevels(draft, new Set(["Bite"]), 200);
+    expect(high.learnset[high.learnset.length - 1]).toEqual({
+      level: 100,
+      move: "Bite",
+    });
+  });
+});
 
 describe("learnset draft — autosort (ac4)", () => {
   it("sorts level-ascending, ties by move name", () => {
