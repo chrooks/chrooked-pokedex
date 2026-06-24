@@ -1,0 +1,18 @@
+name: Wooper
+chrooked_id: wooper
+aka: {  }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Water Gun }
+  - { level: 4, move: Rain Dance }
+  - { level: 6, move: Clod Toss }
+  - { level: 8, move: Mud Shot }
+  - { level: 12, move: Mist }
+  - { level: 12, move: Haze }
+  - { level: 16, move: Slam }
+  - { level: 21, move: Yawn }
+  - { level: 24, move: Aqua Tail }
+  - { level: 28, move: Muddy Water }
+  - { level: 32, move: Amnesia }
+  - { level: 36, move: Toxic }
+  - { level: 40, move: Earthquake }

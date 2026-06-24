@@ -13,6 +13,7 @@ learnset:
   - { level: 1, move: Bubble Beam }
   - { level: 1, move: Mud Shot }
   - { level: 1, move: Mud Bomb }
+  - { level: 1, move: Clod Toss }
   - { level: 23, move: Echoed Voice }
   - { level: 26, move: Rain Dance }
   - { level: 30, move: Sludge Wave }

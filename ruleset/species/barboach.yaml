@@ -3,3 +3,16 @@ chrooked_id: barboach
 aka: { pokeemerald: SPECIES_BARBOACH }
 abilities:
   secondary: Anticipation
+learnset:
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Mud-Slap }
+  - { level: 6, move: Rest }
+  - { level: 6, move: Snore }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Water Pulse }
+  - { level: 18, move: Amnesia }
+  - { level: 24, move: Aqua Tail }
+  - { level: 31, move: Muddy Water }
+  - { level: 36, move: Earthquake }
+  - { level: 42, move: Future Sight }
+  - { level: 48, move: Fissure }

@@ -4,3 +4,24 @@ aka: { pokeemerald: SPECIES_SWAMPERT }
 abilities:
   secondary: Regenerator
 stats: { hp: 105, def: 95, spa: 80 }
+learnset:
+  - { level: 1, move: Surf }
+  - { level: 1, move: Earthquake }
+  - { level: 1, move: Rock Smash }
+  - { level: 1, move: Hammer Arm }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Clod Toss }
+  - { level: 9, move: Rock Throw }
+  - { level: 12, move: Protect }
+  - { level: 15, move: Supersonic }
+  - { level: 20, move: Water Pulse }
+  - { level: 25, move: Rock Slide }
+  - { level: 30, move: Take Down }
+  - { level: 35, move: Amnesia }
+  - { level: 42, move: Muddy Water }
+  - { level: 49, move: Screech }
+  - { level: 56, move: Endeavor }
+  - { level: 63, move: Hydro Pump }

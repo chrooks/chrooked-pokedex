@@ -6,13 +6,14 @@ learnset:
   - { level: 1, move: Wrap }
   - { level: 1, move: Minimize }
   - { level: 1, move: Brutal Swing }
+  - { level: 1, move: Clod Toss }
   - { level: 15, move: Bulldoze }
   - { level: 20, move: Headbutt }
   - { level: 25, move: Glare }
   - { level: 30, move: Dig }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 35, move: Sandstorm }
   - { level: 42, move: Slam }
   - { level: 49, move: Coil }
   - { level: 51, move: Sand Tomb }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }

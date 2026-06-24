@@ -10,12 +10,15 @@ learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Covet }
   - { level: 1, move: Fake Tears }
+  - { level: 1, move: Clod Toss }
   - { level: 8, move: Fury Swipes }
   - { level: 13, move: Mud-Slap }
   - { level: 17, move: Bulldoze }
   - { level: 22, move: Slash }
   - { level: 25, move: Payback }
   - { level: 30, move: Facade }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 34, move: Bulk Up }
   - { level: 38, move: Crunch }
   - { level: 42, move: Rest }
@@ -25,6 +28,4 @@ learnset:
   - { level: 60, move: Hammer Arm }
   - { level: 65, move: Double-Edge }
   - { level: 70, move: Stomping Tantrum }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
 evolution: { from: Ursaring, method: { item: Peat Block } }

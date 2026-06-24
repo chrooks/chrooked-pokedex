@@ -3,3 +3,17 @@ chrooked_id: wooperpaldea
 aka: { pokeemerald: SPECIES_WOOPER_PALDEA }
 abilities:
   primary: Venomous
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Mud Shot }
+  - { level: 4, move: Tackle }
+  - { level: 6, move: Clod Toss }
+  - { level: 8, move: Poison Tail }
+  - { level: 12, move: Toxic Spikes }
+  - { level: 16, move: Slam }
+  - { level: 21, move: Yawn }
+  - { level: 24, move: Poison Jab }
+  - { level: 28, move: Sludge Wave }
+  - { level: 32, move: Amnesia }
+  - { level: 36, move: Toxic }
+  - { level: 40, move: Earthquake }

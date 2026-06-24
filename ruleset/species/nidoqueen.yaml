@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_NIDOQUEEN }
 abilities:
   secondary: Rivalry
 stats: { hp: 95, atk: 95, def: 95, spd: 105, spe: 75 }
+learnset:
+  - { level: 0, move: Superpower }
+  - { level: 1, move: Sludge Wave }
+  - { level: 1, move: Superpower }
+  - { level: 1, move: Fury Swipes }
+  - { level: 1, move: Toxic Spikes }
+  - { level: 1, move: Double Kick }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Toxic }
+  - { level: 1, move: Flatter }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Earth Power }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Clod Toss }

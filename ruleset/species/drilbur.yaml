@@ -1,0 +1,19 @@
+name: Drilbur
+chrooked_id: drilbur
+aka: {  }
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Rapid Spin }
+  - { level: 4, move: Scratch }
+  - { level: 6, move: Clod Toss }
+  - { level: 8, move: Hone Claws }
+  - { level: 12, move: Fury Swipes }
+  - { level: 16, move: Metal Claw }
+  - { level: 20, move: Sandstorm }
+  - { level: 24, move: Crush Claw }
+  - { level: 28, move: Rock Slide }
+  - { level: 32, move: Dig }
+  - { level: 36, move: Swords Dance }
+  - { level: 40, move: Drill Run }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Fissure }

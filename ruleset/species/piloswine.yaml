@@ -10,14 +10,15 @@ learnset:
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Ancient Power }
+  - { level: 1, move: Clod Toss }
   - { level: 15, move: Ice Shard }
   - { level: 20, move: Mist }
   - { level: 25, move: Endure }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 30, move: Icy Wind }
   - { level: 37, move: Amnesia }
   - { level: 44, move: Take Down }
   - { level: 51, move: Earthquake }
   - { level: 58, move: Blizzard }
   - { level: 65, move: Thrash }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }

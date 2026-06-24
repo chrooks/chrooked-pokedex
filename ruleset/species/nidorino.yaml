@@ -3,3 +3,18 @@ chrooked_id: nidorino
 aka: { pokeemerald: SPECIES_NIDORINO }
 abilities:
   secondary: Rivalry
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Clod Toss }
+  - { level: 15, move: Fury Attack }
+  - { level: 22, move: Toxic Spikes }
+  - { level: 29, move: Double Kick }
+  - { level: 36, move: Horn Attack }
+  - { level: 43, move: Helping Hand }
+  - { level: 50, move: Toxic }
+  - { level: 57, move: Flatter }
+  - { level: 64, move: Poison Jab }
+  - { level: 71, move: Earth Power }

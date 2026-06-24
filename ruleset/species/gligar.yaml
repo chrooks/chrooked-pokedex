@@ -4,17 +4,18 @@ aka: { pokeemerald: SPECIES_GLIGAR }
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 4, move: Sand Attack }
+  - { level: 5, move: Clod Toss }
   - { level: 7, move: Harden }
   - { level: 10, move: Knock Off }
   - { level: 13, move: Quick Attack }
   - { level: 16, move: Fury Cutter }
   - { level: 19, move: Poison Tail }
   - { level: 22, move: Acrobatics }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 27, move: Slash }
   - { level: 30, move: U-turn }
   - { level: 35, move: Screech }
   - { level: 40, move: X-Scissor }
   - { level: 45, move: Crabhammer }
   - { level: 50, move: Swords Dance }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }

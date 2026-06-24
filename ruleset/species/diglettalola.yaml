@@ -1,0 +1,18 @@
+name: Diglett Alola
+chrooked_id: diglettalola
+aka: {  }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Metal Claw }
+  - { level: 4, move: Growl }
+  - { level: 6, move: Clod Toss }
+  - { level: 8, move: Astonish }
+  - { level: 12, move: Mud-Slap }
+  - { level: 16, move: Bulldoze }
+  - { level: 20, move: Sucker Punch }
+  - { level: 24, move: Iron Head }
+  - { level: 28, move: Sandstorm }
+  - { level: 32, move: Dig }
+  - { level: 36, move: Earth Power }
+  - { level: 40, move: Earthquake }
+  - { level: 44, move: Fissure }

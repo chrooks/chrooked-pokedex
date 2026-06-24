@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_QUAGSIRE }
 abilities:
   primary: Water Absorb
 stats: { hp: 100, def: 95, spa: 80, spd: 95 }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Rain Dance }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Clod Toss }
+  - { level: 12, move: Mist }
+  - { level: 12, move: Haze }
+  - { level: 16, move: Slam }
+  - { level: 23, move: Yawn }
+  - { level: 28, move: Aqua Tail }
+  - { level: 34, move: Muddy Water }
+  - { level: 40, move: Amnesia }
+  - { level: 46, move: Toxic }
+  - { level: 52, move: Earthquake }

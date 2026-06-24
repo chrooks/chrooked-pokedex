@@ -3,3 +3,18 @@ chrooked_id: nidorina
 aka: { pokeemerald: SPECIES_NIDORINA }
 abilities:
   secondary: Rivalry
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Clod Toss }
+  - { level: 15, move: Fury Swipes }
+  - { level: 22, move: Toxic Spikes }
+  - { level: 29, move: Double Kick }
+  - { level: 36, move: Bite }
+  - { level: 43, move: Helping Hand }
+  - { level: 50, move: Toxic }
+  - { level: 57, move: Flatter }
+  - { level: 64, move: Crunch }
+  - { level: 71, move: Earth Power }

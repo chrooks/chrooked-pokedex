@@ -4,3 +4,25 @@ aka: { pokeemerald: SPECIES_CLAYDOL }
 abilities:
   hidden: Mystic Power
 stats: { spe: 85 }
+learnset:
+  - { level: 0, move: Hyper Beam }
+  - { level: 1, move: Hyper Beam }
+  - { level: 1, move: Teleport }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Rapid Spin }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Clod Toss }
+  - { level: 9, move: Rock Tomb }
+  - { level: 12, move: Power Trick }
+  - { level: 15, move: Psybeam }
+  - { level: 18, move: Ancient Power }
+  - { level: 21, move: Imprison }
+  - { level: 24, move: Cosmic Power }
+  - { level: 27, move: Extrasensory }
+  - { level: 30, move: Earth Power }
+  - { level: 33, move: Self-Destruct }
+  - { level: 38, move: Guard Split }
+  - { level: 38, move: Power Split }
+  - { level: 43, move: Sandstorm }
+  - { level: 48, move: Explosion }

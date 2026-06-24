@@ -12,14 +12,15 @@ learnset:
   - { level: 1, move: Razor Leaf }
   - { level: 1, move: Withdraw }
   - { level: 1, move: Wood Hammer }
+  - { level: 1, move: Clod Toss }
   - { level: 17, move: Curse }
   - { level: 22, move: Bite }
   - { level: 27, move: Mega Drain }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 33, move: Leech Seed }
   - { level: 39, move: Synthesis }
   - { level: 45, move: Crunch }
   - { level: 51, move: Giga Drain }
   - { level: 57, move: Leaf Storm }
   - { level: 63, move: Headlong Rush }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }

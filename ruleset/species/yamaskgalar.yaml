@@ -1,0 +1,21 @@
+name: Yamask Galar
+chrooked_id: yamaskgalar
+aka: {  }
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Protect }
+  - { level: 4, move: Haze }
+  - { level: 6, move: Clod Toss }
+  - { level: 8, move: Night Shade }
+  - { level: 12, move: Disable }
+  - { level: 16, move: Brutal Swing }
+  - { level: 20, move: Crafty Shield }
+  - { level: 24, move: Hex }
+  - { level: 28, move: Mean Look }
+  - { level: 32, move: Slam }
+  - { level: 36, move: Curse }
+  - { level: 40, move: Shadow Ball }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Power Split }
+  - { level: 48, move: Guard Split }
+  - { level: 52, move: Destiny Bond }

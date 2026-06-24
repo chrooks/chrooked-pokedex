@@ -3,3 +3,22 @@ chrooked_id: baltoy
 aka: { pokeemerald: SPECIES_BALTOY }
 abilities:
   hidden: Mystic Power
+learnset:
+  - { level: 1, move: Harden }
+  - { level: 1, move: Mud-Slap }
+  - { level: 3, move: Rapid Spin }
+  - { level: 4, move: Clod Toss }
+  - { level: 6, move: Confusion }
+  - { level: 9, move: Rock Tomb }
+  - { level: 12, move: Power Trick }
+  - { level: 15, move: Psybeam }
+  - { level: 18, move: Ancient Power }
+  - { level: 21, move: Imprison }
+  - { level: 24, move: Cosmic Power }
+  - { level: 27, move: Extrasensory }
+  - { level: 30, move: Earth Power }
+  - { level: 33, move: Self-Destruct }
+  - { level: 36, move: Guard Split }
+  - { level: 36, move: Power Split }
+  - { level: 39, move: Sandstorm }
+  - { level: 42, move: Explosion }

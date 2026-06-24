@@ -3,3 +3,19 @@ chrooked_id: geodude
 aka: { pokeemerald: SPECIES_GEODUDE }
 abilities:
   hidden: Mineralize
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Defense Curl }
+  - { level: 4, move: Clod Toss }
+  - { level: 6, move: Rock Polish }
+  - { level: 10, move: Rollout }
+  - { level: 12, move: Bulldoze }
+  - { level: 16, move: Rock Throw }
+  - { level: 18, move: Smack Down }
+  - { level: 24, move: Self-Destruct }
+  - { level: 28, move: Stealth Rock }
+  - { level: 30, move: Rock Blast }
+  - { level: 34, move: Earthquake }
+  - { level: 36, move: Explosion }
+  - { level: 40, move: Double-Edge }
+  - { level: 42, move: Stone Edge }

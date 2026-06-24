@@ -1,0 +1,22 @@
+name: Sandshrew
+chrooked_id: sandshrew
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Defense Curl }
+  - { level: 3, move: Poison Sting }
+  - { level: 4, move: Clod Toss }
+  - { level: 6, move: Sand Attack }
+  - { level: 9, move: Rollout }
+  - { level: 12, move: Fury Cutter }
+  - { level: 15, move: Rapid Spin }
+  - { level: 18, move: Bulldoze }
+  - { level: 21, move: Swift }
+  - { level: 24, move: Fury Swipes }
+  - { level: 27, move: Agility }
+  - { level: 30, move: Slash }
+  - { level: 33, move: Dig }
+  - { level: 36, move: Gyro Ball }
+  - { level: 39, move: Swords Dance }
+  - { level: 42, move: Sandstorm }
+  - { level: 45, move: Earthquake }

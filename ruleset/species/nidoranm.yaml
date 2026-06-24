@@ -3,3 +3,18 @@ chrooked_id: nidoranm
 aka: { pokeemerald: SPECIES_NIDORAN_M, essentials: NIDORANmA }
 abilities:
   secondary: Rivalry
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Poison Sting }
+  - { level: 5, move: Peck }
+  - { level: 7, move: Clod Toss }
+  - { level: 10, move: Focus Energy }
+  - { level: 15, move: Fury Attack }
+  - { level: 20, move: Toxic Spikes }
+  - { level: 25, move: Double Kick }
+  - { level: 30, move: Horn Attack }
+  - { level: 35, move: Helping Hand }
+  - { level: 40, move: Toxic }
+  - { level: 45, move: Flatter }
+  - { level: 50, move: Poison Jab }
+  - { level: 55, move: Earth Power }

@@ -1,0 +1,24 @@
+name: Wormadam Sandy
+chrooked_id: wormadamsandy
+aka: {  }
+learnset:
+  - { level: 0, move: Quiver Dance }
+  - { level: 1, move: Quiver Dance }
+  - { level: 1, move: Sucker Punch }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Bug Bite }
+  - { level: 1, move: Clod Toss }
+  - { level: 10, move: Protect }
+  - { level: 15, move: Bug Bite }
+  - { level: 20, move: String Shot }
+  - { level: 23, move: Confusion }
+  - { level: 26, move: Rock Blast }
+  - { level: 29, move: Harden }
+  - { level: 32, move: Psybeam }
+  - { level: 35, move: Infestation }
+  - { level: 38, move: Flail }
+  - { level: 41, move: Attract }
+  - { level: 44, move: Psychic }
+  - { level: 47, move: Fissure }
+  - { level: 50, move: Bug Buzz }

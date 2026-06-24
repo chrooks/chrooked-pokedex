@@ -1,0 +1,21 @@
+name: Diggersby
+chrooked_id: diggersby
+aka: {  }
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Laser Focus }
+  - { level: 1, move: Clod Toss }
+  - { level: 9, move: Quick Attack }
+  - { level: 12, move: Mud Shot }
+  - { level: 15, move: Flail }
+  - { level: 18, move: Double Kick }
+  - { level: 23, move: Bulldoze }
+  - { level: 28, move: Dig }
+  - { level: 33, move: Bounce }
+  - { level: 38, move: Take Down }
+  - { level: 43, move: Swords Dance }
+  - { level: 48, move: Earthquake }
+  - { level: 53, move: Super Fang }
+  - { level: 58, move: Hammer Arm }

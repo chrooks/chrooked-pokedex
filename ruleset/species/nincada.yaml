@@ -1,0 +1,15 @@
+name: Nincada
+chrooked_id: nincada
+aka: {  }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Harden }
+  - { level: 7, move: Clod Toss }
+  - { level: 10, move: False Swipe }
+  - { level: 15, move: Mud-Slap }
+  - { level: 21, move: Absorb }
+  - { level: 25, move: Metal Claw }
+  - { level: 30, move: Fury Swipes }
+  - { level: 35, move: Mind Reader }
+  - { level: 40, move: Dig }

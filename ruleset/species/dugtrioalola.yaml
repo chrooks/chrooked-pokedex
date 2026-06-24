@@ -1,0 +1,21 @@
+name: Dugtrio Alola
+chrooked_id: dugtrioalola
+aka: {  }
+learnset:
+  - { level: 0, move: Sand Tomb }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tri Attack }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Clod Toss }
+  - { level: 12, move: Mud-Slap }
+  - { level: 16, move: Bulldoze }
+  - { level: 20, move: Sucker Punch }
+  - { level: 24, move: Iron Head }
+  - { level: 30, move: Sandstorm }
+  - { level: 36, move: Dig }
+  - { level: 42, move: Earth Power }
+  - { level: 48, move: Earthquake }
+  - { level: 54, move: Fissure }

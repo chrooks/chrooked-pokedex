@@ -7,14 +7,15 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Dragon Breath }
   - { level: 1, move: Sand Tomb }
+  - { level: 1, move: Clod Toss }
   - { level: 18, move: Bulldoze }
   - { level: 27, move: Bite }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Draconic Fang }
   - { level: 34, move: Slash }
   - { level: 42, move: Dragon Claw }
   - { level: 52, move: Dig }
   - { level: 62, move: Sandstorm }
   - { level: 72, move: Take Down }
   - { level: 82, move: Dragon Rush }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Draconic Fang }

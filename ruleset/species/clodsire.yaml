@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_CLODSIRE }
 abilities:
   primary: Venomous
 stats: { def: 70, spd: 115 }
+learnset:
+  - { level: 0, move: Amnesia }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Clod Toss }
+  - { level: 4, move: Toxic Spikes }
+  - { level: 8, move: Mud Shot }
+  - { level: 12, move: Poison Tail }
+  - { level: 16, move: Slam }
+  - { level: 21, move: Yawn }
+  - { level: 24, move: Poison Jab }
+  - { level: 30, move: Sludge Wave }
+  - { level: 36, move: Megahorn }
+  - { level: 40, move: Toxic }
+  - { level: 48, move: Earthquake }

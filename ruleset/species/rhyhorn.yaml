@@ -5,10 +5,13 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 5, move: Smack Down }
+  - { level: 7, move: Clod Toss }
   - { level: 10, move: Bulldoze }
   - { level: 15, move: Horn Attack }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Stomp }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 30, move: Rock Blast }
   - { level: 35, move: Drill Run }
   - { level: 40, move: Take Down }
@@ -16,5 +19,3 @@ learnset:
   - { level: 50, move: Stone Edge }
   - { level: 55, move: Megahorn }
   - { level: 60, move: Horn Drill }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }

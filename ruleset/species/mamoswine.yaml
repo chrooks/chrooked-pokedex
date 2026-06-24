@@ -5,22 +5,23 @@ abilities:
   secondary: Thick Fat
   hidden: Stampede
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Double Hit }
+  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Tackle }
   - { level: 1, move: Flail }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Ancient Power }
   - { level: 1, move: Ice Fang }
+  - { level: 1, move: Clod Toss }
   - { level: 15, move: Ice Shard }
   - { level: 20, move: Mist }
   - { level: 25, move: Endure }
   - { level: 30, move: Icy Wind }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 37, move: Amnesia }
   - { level: 44, move: Take Down }
   - { level: 51, move: Earthquake }
   - { level: 58, move: Blizzard }
   - { level: 65, move: Thrash }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
