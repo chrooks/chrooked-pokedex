@@ -112,6 +112,16 @@ export function normalize(text: string): string {
     .toLowerCase();
 }
 
+/** A leaf that constrains nothing: an unknown field, or a text pill with an
+    empty value. Such leaves pass every item AND every item's negation, so the
+    evaluator treats them as no-ops rather than letting `negated` invert them. */
+export function isInert(def: FilterDef | undefined, value: string): boolean {
+  if (!def) {
+    return true;
+  }
+  return def.method === "text" && value === "";
+}
+
 /** Evaluate a single predicate against one item via the registry. A missing/
     invalid value or an unparseable numeric threshold fails the predicate (never
     throws). */
@@ -216,6 +226,12 @@ export function evalEntries<T>(
       nodes.push({
         connector: leaf.connector,
         evaluate: () => {
+          // An inert leaf (e.g. an empty text value) filters nothing — it must
+          // stay a no-op even when negated. Otherwise `NOT <empty>` flips the
+          // "matches everything" pass into "matches nothing".
+          if (isInert(def, leaf.value)) {
+            return true;
+          }
           const passes = def ? applyFilter(registry, def, item, leaf.value) : true;
           return leaf.negated ? !passes : passes;
         },

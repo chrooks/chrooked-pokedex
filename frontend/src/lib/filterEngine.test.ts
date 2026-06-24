@@ -137,6 +137,12 @@ describe("move registry — boolean structure through evalEntries", () => {
   it("passes on an empty filter list", () => {
     expect(evalEntries(MOVE_REGISTRY, move, [])).toBe(true);
   });
+  it("treats an empty text pill as a no-op even when negated", () => {
+    // Regression: `NOT <empty text>` must not invert the "matches everything"
+    // pass into "matches nothing" — an inert leaf stays inert.
+    expect(evalEntries(MOVE_REGISTRY, move, [filter("name", "")])).toBe(true);
+    expect(evalEntries(MOVE_REGISTRY, move, [filter("name", "", "AND", true)])).toBe(true);
+  });
 });
 
 // --- ability registry through the SAME evaluator (ac2) ----------------------
