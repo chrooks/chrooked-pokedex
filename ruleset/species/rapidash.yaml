@@ -21,8 +21,8 @@ learnset:
   - { level: 25, move: Flame Wheel }
   - { level: 30, move: Stomp }
   - { level: 35, move: Fire Spin }
+  - { level: 39, move: Cinder Smash }
   - { level: 43, move: Take Down }
   - { level: 49, move: Inferno }
   - { level: 56, move: Fire Blast }
   - { level: 63, move: Flare Blitz }
-  - { level: 39, move: Cinder Smash }

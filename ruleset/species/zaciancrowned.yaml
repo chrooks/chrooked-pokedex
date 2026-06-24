@@ -11,9 +11,10 @@ learnset:
   - { level: 11, move: Slash }
   - { level: 22, move: Swords Dance }
   - { level: 33, move: Iron Head }
+  - { level: 39, move: Pixie Slash }
   - { level: 44, move: Noble Roar }
+  - { level: 49, move: Secret Sword }
   - { level: 55, move: Crunch }
   - { level: 66, move: Moonblast }
   - { level: 77, move: Close Combat }
   - { level: 88, move: Giga Impact }
-  - { level: 39, move: Pixie Slash }

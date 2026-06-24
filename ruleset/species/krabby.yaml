@@ -7,6 +7,7 @@ learnset:
   - { level: 4, move: Harden }
   - { level: 8, move: Metal Claw }
   - { level: 12, move: Mud Shot }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Protect }
   - { level: 20, move: Bubble Beam }
   - { level: 24, move: Stomp }
@@ -16,4 +17,3 @@ learnset:
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Crabhammer }
   - { level: 48, move: Guillotine }
-  - { level: 14, move: Water Whip }

@@ -16,9 +16,9 @@ learnset:
   - { level: 25, move: Arm Thrust }
   - { level: 29, move: Thunder Wave }
   - { level: 33, move: Slam }
+  - { level: 36, move: Lightning Slam }
   - { level: 39, move: Entrainment }
   - { level: 44, move: Close Combat }
   - { level: 49, move: Discharge }
   - { level: 54, move: Agility }
   - { level: 60, move: Double Shock }
-  - { level: 36, move: Lightning Slam }

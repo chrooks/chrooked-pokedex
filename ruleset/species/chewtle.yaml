@@ -8,11 +8,11 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 7, move: Bite }
   - { level: 14, move: Protect }
+  - { level: 17, move: Water Whip }
   - { level: 21, move: Headbutt }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 28, move: Counter }
   - { level: 35, move: Jaw Lock }
   - { level: 42, move: Liquidation }
   - { level: 49, move: Body Slam }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
-  - { level: 17, move: Water Whip }

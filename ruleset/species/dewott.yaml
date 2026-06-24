@@ -9,15 +9,17 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Soak }
   - { level: 13, move: Focus Energy }
+  - { level: 15, move: Water Whip }
   - { level: 18, move: Razor Shell }
   - { level: 21, move: Fury Cutter }
   - { level: 26, move: Water Pulse }
   - { level: 29, move: Aerial Ace }
   - { level: 34, move: Aqua Jet }
   - { level: 37, move: Encore }
+  - { level: 40, move: Pixie Slash }
   - { level: 42, move: Aqua Tail }
   - { level: 45, move: Retaliate }
+  - { level: 47, move: Aura Sphere }
   - { level: 50, move: Swords Dance }
   - { level: 53, move: Hydro Pump }
-  - { level: 15, move: Water Whip }
-  - { level: 40, move: Pixie Slash }
+  - { level: 60, move: Secret Sword }

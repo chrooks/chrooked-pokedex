@@ -6,7 +6,7 @@ abilities:
   secondary: Slush Rush
 stats: { spe: 70 }
 learnset:
-  - { level: 0, move: Icicle Crash }
+  - { level: 0, move: Hammer Arm }
   - { level: 1, move: Endure }
   - { level: 1, move: Growl }
   - { level: 1, move: Fury Swipes }
@@ -22,8 +22,9 @@ learnset:
   - { level: 27, move: Swagger }
   - { level: 30, move: Snowscape }
   - { level: 33, move: Thrash }
-  - { level: 36, move: Rest }
+  - { level: 36, move: Brick Break }
+  - { level: 38, move: Glacial Crush }
   - { level: 41, move: Blizzard }
   - { level: 46, move: Sheer Cold }
   - { level: 51, move: Superpower }
-  - { level: 38, move: Glacial Crush }
+evolution: { from: Cubchoo, method: { level: 37 } }

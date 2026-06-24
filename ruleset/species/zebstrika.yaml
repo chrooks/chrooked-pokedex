@@ -12,7 +12,7 @@ learnset:
   - { level: 25, move: Spark }
   - { level: 31, move: Stomp }
   - { level: 36, move: Discharge }
+  - { level: 39, move: Lightning Slam }
   - { level: 42, move: Agility }
   - { level: 47, move: Wild Charge }
   - { level: 53, move: Thrash }
-  - { level: 39, move: Lightning Slam }

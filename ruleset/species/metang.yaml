@@ -14,10 +14,10 @@ learnset:
   - { level: 12, move: Magnet Rise }
   - { level: 18, move: Flash Cannon }
   - { level: 26, move: Take Down }
+  - { level: 30, move: Astral Hand }
   - { level: 34, move: Psychic }
   - { level: 42, move: Scary Face }
   - { level: 50, move: Meteor Mash }
   - { level: 58, move: Iron Defense }
   - { level: 66, move: Agility }
   - { level: 74, move: Hyper Beam }
-  - { level: 30, move: Astral Hand }

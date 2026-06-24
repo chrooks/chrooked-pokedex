@@ -14,9 +14,9 @@ learnset:
   - { level: 25, move: Icy Wind }
   - { level: 30, move: Frost Breath }
   - { level: 35, move: Bite }
+  - { level: 37, move: Glacial Crush }
   - { level: 40, move: Ice Fang }
   - { level: 45, move: Snowscape }
   - { level: 50, move: Weather Ball }
   - { level: 55, move: Crunch }
   - { level: 60, move: Blizzard }
-  - { level: 37, move: Glacial Crush }

@@ -3,3 +3,20 @@ chrooked_id: lileep
 aka: { pokeemerald: SPECIES_LILEEP }
 abilities:
   primary: Deep-Rooted
+learnset:
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Acid }
+  - { level: 8, move: Confuse Ray }
+  - { level: 12, move: Ingrain }
+  - { level: 16, move: Ancient Power }
+  - { level: 20, move: Mega Drain }
+  - { level: 24, move: Brine }
+  - { level: 28, move: Amnesia }
+  - { level: 32, move: Gastro Acid }
+  - { level: 36, move: Giga Drain }
+  - { level: 41, move: Stockpile }
+  - { level: 41, move: Spit Up }
+  - { level: 41, move: Swallow }
+  - { level: 44, move: Energy Ball }
+  - { level: 48, move: Power Gem }

@@ -16,11 +16,11 @@ learnset:
   - { level: 23, move: Rollout }
   - { level: 28, move: Take Down }
   - { level: 31, move: Heat Crash }
+  - { level: 34, move: One-Inch Punch }
+  - { level: 36, move: Cinder Smash }
   - { level: 38, move: Assurance }
   - { level: 43, move: Flamethrower }
+  - { level: 46, move: Heel Drop }
   - { level: 50, move: Head Smash }
   - { level: 55, move: Roar }
   - { level: 62, move: Flare Blitz }
-  - { level: 46, move: Heel Drop }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Cinder Smash }

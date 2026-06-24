@@ -1,4 +1,8 @@
 name: Audino
 chrooked_id: audino
 aka: { pokeemerald: SPECIES_AUDINO }
+abilities:
+  primary: Healer
+  secondary: Regenerator
+  hidden: Self Sufficient
 stats: { hp: 80, spa: 90 }

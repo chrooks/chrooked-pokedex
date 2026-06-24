@@ -9,5 +9,5 @@ learnset:
   - { level: 1, move: Belch }
   - { level: 1, move: Nuzzle }
   - { level: 1, move: Tearful Look }
-  - { level: 48, move: Miasma }
   - { level: 36, move: Lightning Slam }
+  - { level: 48, move: Miasma }

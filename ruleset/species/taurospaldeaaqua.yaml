@@ -7,6 +7,7 @@ learnset:
   - { level: 5, move: Work Up }
   - { level: 10, move: Double Kick }
   - { level: 15, move: Aqua Jet }
+  - { level: 17, move: Water Whip }
   - { level: 20, move: Headbutt }
   - { level: 25, move: Scary Face }
   - { level: 30, move: Zen Headbutt }
@@ -16,4 +17,3 @@ learnset:
   - { level: 50, move: Thrash }
   - { level: 55, move: Wave Crash }
   - { level: 60, move: Close Combat }
-  - { level: 17, move: Water Whip }

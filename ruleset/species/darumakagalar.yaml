@@ -13,7 +13,7 @@ learnset:
   - { level: 28, move: Ice Punch }
   - { level: 32, move: Uproar }
   - { level: 36, move: Belly Drum }
+  - { level: 38, move: Glacial Crush }
   - { level: 40, move: Blizzard }
   - { level: 44, move: Thrash }
   - { level: 48, move: Superpower }
-  - { level: 38, move: Glacial Crush }

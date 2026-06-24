@@ -15,7 +15,7 @@ learnset:
   - { level: 29, move: Zen Headbutt }
   - { level: 33, move: Helping Hand }
   - { level: 36, move: Bug Buzz }
+  - { level: 38, move: Lightning Slam }
   - { level: 40, move: Play Rough }
   - { level: 43, move: Double-Edge }
   - { level: 47, move: Infestation }
-  - { level: 38, move: Lightning Slam }

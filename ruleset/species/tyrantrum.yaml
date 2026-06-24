@@ -13,6 +13,9 @@ learnset:
   - { level: 20, move: Dragon Tail }
   - { level: 24, move: Rock Slide }
   - { level: 28, move: Crunch }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Draconic Fang }
   - { level: 32, move: Dragon Claw }
   - { level: 36, move: Ice Fang }
   - { level: 42, move: Psychic Fangs }
@@ -20,6 +23,3 @@ learnset:
   - { level: 54, move: Stone Edge }
   - { level: 60, move: Head Smash }
   - { level: 66, move: Outrage }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Draconic Fang }

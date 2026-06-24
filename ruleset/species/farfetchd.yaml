@@ -6,3 +6,20 @@ abilities:
   primary: Sharpness
   hidden: Martialize
 stats: { atk: 90, spe: 100 }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Sand Attack }
+  - { level: 5, move: Leer }
+  - { level: 10, move: Fury Cutter }
+  - { level: 15, move: Cut }
+  - { level: 20, move: Aerial Ace }
+  - { level: 25, move: Air Cutter }
+  - { level: 30, move: Knock Off }
+  - { level: 35, move: False Swipe }
+  - { level: 37, move: Dive Bomb }
+  - { level: 40, move: Slash }
+  - { level: 45, move: Swords Dance }
+  - { level: 50, move: Air Slash }
+  - { level: 55, move: Leaf Blade }
+  - { level: 60, move: Agility }
+  - { level: 65, move: Brave Bird }

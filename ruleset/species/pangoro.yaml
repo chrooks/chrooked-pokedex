@@ -16,9 +16,9 @@ learnset:
   - { level: 24, move: Slash }
   - { level: 28, move: Vital Throw }
   - { level: 35, move: Crunch }
+  - { level: 37, move: One-Inch Punch }
   - { level: 40, move: Body Slam }
+  - { level: 43, move: Heel Drop }
   - { level: 46, move: Parting Shot }
   - { level: 52, move: Entrainment }
   - { level: 58, move: Hammer Arm }
-  - { level: 43, move: Heel Drop }
-  - { level: 37, move: One-Inch Punch }

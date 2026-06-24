@@ -17,11 +17,11 @@ learnset:
   - { level: 20, move: Toxic Spikes }
   - { level: 25, move: Sweet Scent }
   - { level: 30, move: Giga Drain }
+  - { level: 32, move: Miasma }
   - { level: 35, move: Synthesis }
   - { level: 40, move: Toxic }
   - { level: 45, move: Petal Blizzard }
   - { level: 50, move: Aromatherapy }
   - { level: 55, move: Ingrain }
   - { level: 60, move: Petal Dance }
-  - { level: 32, move: Miasma }
 evolution: { from: Budew, method: { level: 16 } }

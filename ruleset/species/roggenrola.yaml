@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_ROGGENROLA }
 abilities:
   secondary: Weak Armor
 stats: { atk: 25, spa: 75 }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Harden }
+  - { level: 8, move: Stealth Rock }
+  - { level: 12, move: Mud-Slap }
+  - { level: 16, move: Smack Down }
+  - { level: 20, move: Iron Defense }
+  - { level: 24, move: Headbutt }
+  - { level: 28, move: Rock Slide }
+  - { level: 32, move: Rock Blast }
+  - { level: 36, move: Sandstorm }
+  - { level: 40, move: Stone Edge }
+  - { level: 44, move: Explosion }
+  - { level: 48, move: Power Gem }

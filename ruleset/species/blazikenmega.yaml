@@ -18,8 +18,8 @@ learnset:
   - { level: 25, move: Slash }
   - { level: 30, move: Bounce }
   - { level: 35, move: Focus Energy }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Bulk Up }
   - { level: 49, move: Reversal }
   - { level: 56, move: Flare Blitz }
   - { level: 63, move: Brave Bird }
-  - { level: 38, move: One-Inch Punch }

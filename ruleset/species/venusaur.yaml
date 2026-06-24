@@ -18,9 +18,9 @@ learnset:
   - { level: 20, move: Seed Bomb }
   - { level: 25, move: Take Down }
   - { level: 30, move: Sweet Scent }
+  - { level: 33, move: Miasma }
   - { level: 37, move: Synthesis }
   - { level: 44, move: Worry Seed }
   - { level: 51, move: Power Whip }
   - { level: 58, move: Solar Beam }
-  - { level: 33, move: Miasma }
 evolution: { from: Ivysaur, method: { level: 32 } }

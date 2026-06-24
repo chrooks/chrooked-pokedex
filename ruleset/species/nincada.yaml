@@ -13,3 +13,4 @@ learnset:
   - { level: 30, move: Fury Swipes }
   - { level: 35, move: Mind Reader }
   - { level: 40, move: Dig }
+  - { level: 48, move: Dive Bomb }

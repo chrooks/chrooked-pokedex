@@ -5,3 +5,22 @@ abilities:
   primary: Carnivore
   hidden: Rock Head
 stats: { atk: 125, spa: 110 }
+learnset:
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Rock Throw }
+  - { level: 1, move: Wing Attack }
+  - { level: 9, move: Dragon Breath }
+  - { level: 12, move: Ancient Power }
+  - { level: 15, move: Pluck }
+  - { level: 18, move: Quick Guard }
+  - { level: 21, move: U-turn }
+  - { level: 24, move: Rock Slide }
+  - { level: 27, move: Scary Face }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Agility }
+  - { level: 36, move: Tailwind }
+  - { level: 38, move: Dive Bomb }
+  - { level: 41, move: Dragon Claw }
+  - { level: 46, move: Thrash }
+  - { level: 51, move: Endeavor }

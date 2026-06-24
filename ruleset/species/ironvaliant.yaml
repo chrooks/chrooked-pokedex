@@ -12,7 +12,9 @@ learnset:
   - { level: 21, move: Future Sight }
   - { level: 28, move: Dazzling Gleam }
   - { level: 35, move: Psycho Cut }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Night Slash }
+  - { level: 45, move: Pixie Slash }
   - { level: 49, move: Leaf Blade }
   - { level: 56, move: Moonblast }
   - { level: 63, move: Close Combat }
@@ -21,5 +23,3 @@ learnset:
   - { level: 84, move: Wide Guard }
   - { level: 84, move: Quick Guard }
   - { level: 91, move: Spirit Break }
-  - { level: 45, move: Pixie Slash }
-  - { level: 38, move: One-Inch Punch }

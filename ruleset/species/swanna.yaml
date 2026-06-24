@@ -2,3 +2,19 @@ name: Swanna
 chrooked_id: swanna
 aka: { pokeemerald: SPECIES_SWANNA }
 stats: { spa: 110 }
+learnset:
+  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Defog }
+  - { level: 13, move: Water Pulse }
+  - { level: 15, move: Aerial Ace }
+  - { level: 19, move: Bubble Beam }
+  - { level: 21, move: Feather Dance }
+  - { level: 24, move: Aqua Ring }
+  - { level: 27, move: Air Slash }
+  - { level: 30, move: Roost }
+  - { level: 34, move: Rain Dance }
+  - { level: 40, move: Tailwind }
+  - { level: 47, move: Brave Bird }
+  - { level: 55, move: Hurricane }
+  - { level: 64, move: Oblivion Wing }

@@ -15,9 +15,9 @@ learnset:
   - { level: 24, move: Bite }
   - { level: 29, move: Ice Fang }
   - { level: 35, move: Dragon Claw }
+  - { level: 38, move: Glacial Crush }
   - { level: 42, move: Take Down }
+  - { level: 45, move: Pixie Slash }
   - { level: 48, move: Ice Beam }
   - { level: 55, move: Crunch }
   - { level: 62, move: Icicle Crash }
-  - { level: 45, move: Pixie Slash }
-  - { level: 38, move: Glacial Crush }

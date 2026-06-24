@@ -12,6 +12,7 @@ learnset:
   - { level: 30, move: Psych Up }
   - { level: 35, move: Horn Leech }
   - { level: 40, move: Misty Terrain }
+  - { level: 42, move: Pixie Slash }
   - { level: 45, move: Ingrain }
   - { level: 50, move: Take Down }
   - { level: 55, move: Geomancy }
@@ -21,4 +22,3 @@ learnset:
   - { level: 75, move: Close Combat }
   - { level: 80, move: Outrage }
   - { level: 85, move: Giga Impact }
-  - { level: 42, move: Pixie Slash }

@@ -19,11 +19,11 @@ learnset:
   - { level: 24, move: Charm }
   - { level: 28, move: Baton Pass }
   - { level: 32, move: Headbutt }
+  - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Agility }
   - { level: 40, move: Entrainment }
   - { level: 44, move: Flatter }
   - { level: 48, move: Bounce }
   - { level: 52, move: Healing Wish }
   - { level: 56, move: High Jump Kick }
-  - { level: 34, move: One-Inch Punch }
 evolution: { from: Buneary, method: { level: 34 } }

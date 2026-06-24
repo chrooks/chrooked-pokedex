@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Smokescreen }
   - { level: 1, move: Twister }
   - { level: 15, move: Focus Energy }
+  - { level: 17, move: Water Whip }
   - { level: 20, move: Dragon Breath }
   - { level: 25, move: Bubble Beam }
   - { level: 30, move: Agility }
@@ -17,4 +18,3 @@ learnset:
   - { level: 51, move: Hydro Pump }
   - { level: 58, move: Dragon Dance }
   - { level: 65, move: Rain Dance }
-  - { level: 17, move: Water Whip }

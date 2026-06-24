@@ -12,13 +12,14 @@ learnset:
   - { level: 16, move: Round }
   - { level: 20, move: Mist }
   - { level: 24, move: Aurora Beam }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 28, move: Thunder Wave }
   - { level: 32, move: Nature Power }
   - { level: 36, move: Freeze-Dry }
   - { level: 40, move: Ice Beam }
+  - { level: 42, move: Power Gem }
   - { level: 44, move: Light Screen }
   - { level: 48, move: Hail }
   - { level: 52, move: Blizzard }
   - { level: 56, move: Hyper Beam }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }

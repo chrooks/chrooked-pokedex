@@ -17,8 +17,8 @@ learnset:
   - { level: 23, move: Spark }
   - { level: 29, move: Sticky Web }
   - { level: 36, move: Bug Buzz }
+  - { level: 39, move: Lightning Slam }
   - { level: 43, move: Guillotine }
   - { level: 50, move: Fly }
   - { level: 57, move: Agility }
   - { level: 64, move: Zap Cannon }
-  - { level: 39, move: Lightning Slam }

@@ -18,6 +18,7 @@ learnset:
   - { level: 14, move: Water Pulse }
   - { level: 16, move: Ice Fang }
   - { level: 19, move: Brine }
+  - { level: 21, move: Water Whip }
   - { level: 23, move: Sucker Punch }
   - { level: 26, move: Dive }
   - { level: 29, move: Baton Pass }
@@ -25,4 +26,3 @@ learnset:
   - { level: 39, move: Aqua Tail }
   - { level: 45, move: Coil }
   - { level: 50, move: Hydro Pump }
-  - { level: 21, move: Water Whip }

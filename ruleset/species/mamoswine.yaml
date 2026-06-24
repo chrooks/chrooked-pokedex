@@ -20,8 +20,8 @@ learnset:
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 37, move: Amnesia }
+  - { level: 40, move: Glacial Crush }
   - { level: 44, move: Take Down }
   - { level: 51, move: Earthquake }
   - { level: 58, move: Blizzard }
   - { level: 65, move: Thrash }
-  - { level: 40, move: Glacial Crush }

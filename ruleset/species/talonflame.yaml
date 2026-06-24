@@ -21,10 +21,11 @@ learnset:
   - { level: 29, move: Swords Dance }
   - { level: 33, move: Take Down }
   - { level: 35, move: Flare Blitz }
+  - { level: 36, move: Dive Bomb }
   - { level: 38, move: Tailwind }
   - { level: 41, move: Steel Wing }
   - { level: 44, move: Heat Wave }
+  - { level: 46, move: Cinder Smash }
   - { level: 48, move: U-turn }
   - { level: 52, move: Double-Edge }
   - { level: 56, move: Brave Bird }
-  - { level: 46, move: Cinder Smash }

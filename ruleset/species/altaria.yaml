@@ -6,3 +6,21 @@ abilities:
   primary: Pixilate
   hidden: Updraft
 stats: { atk: 90, spa: 90 }
+learnset:
+  - { level: 0, move: Dragon Pulse }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Mist }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Pluck }
+  - { level: 1, move: Disarming Voice }
+  - { level: 12, move: Fury Attack }
+  - { level: 16, move: Round }
+  - { level: 20, move: Dragon Breath }
+  - { level: 24, move: Safeguard }
+  - { level: 28, move: Sing }
+  - { level: 32, move: Cotton Guard }
+  - { level: 38, move: Take Down }
+  - { level: 41, move: Dive Bomb }
+  - { level: 44, move: Moonblast }
+  - { level: 50, move: Perish Song }
+  - { level: 56, move: Sky Attack }

@@ -14,6 +14,7 @@ learnset:
   - { level: 1, move: Mud Shot }
   - { level: 1, move: Mud Bomb }
   - { level: 1, move: Clod Toss }
+  - { level: 14, move: Water Whip }
   - { level: 23, move: Echoed Voice }
   - { level: 26, move: Rain Dance }
   - { level: 30, move: Sludge Wave }
@@ -21,4 +22,3 @@ learnset:
   - { level: 36, move: Earth Power }
   - { level: 42, move: Drain Punch }
   - { level: 48, move: Hydro Pump }
-  - { level: 14, move: Water Whip }

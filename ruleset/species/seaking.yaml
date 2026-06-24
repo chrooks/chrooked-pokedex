@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Supersonic }
   - { level: 1, move: Water Pulse }
   - { level: 15, move: Horn Attack }
+  - { level: 17, move: Water Whip }
   - { level: 20, move: Agility }
   - { level: 25, move: Aqua Ring }
   - { level: 30, move: Flail }
@@ -18,4 +19,3 @@ learnset:
   - { level: 44, move: Soak }
   - { level: 51, move: Megahorn }
   - { level: 58, move: Horn Drill }
-  - { level: 17, move: Water Whip }

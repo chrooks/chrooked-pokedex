@@ -9,14 +9,14 @@ learnset:
   - { level: 4, move: Withdraw }
   - { level: 8, move: Ice Shard }
   - { level: 12, move: Leer }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Whirlpool }
   - { level: 20, move: Supersonic }
   - { level: 24, move: Aurora Beam }
   - { level: 28, move: Protect }
   - { level: 32, move: Razor Shell }
   - { level: 36, move: Iron Defense }
+  - { level: 38, move: Glacial Crush }
   - { level: 40, move: Ice Beam }
   - { level: 44, move: Shell Smash }
   - { level: 48, move: Hydro Pump }
-  - { level: 14, move: Water Whip }
-  - { level: 38, move: Glacial Crush }

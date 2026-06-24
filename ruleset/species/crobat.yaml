@@ -6,4 +6,24 @@ abilities:
   secondary: Infiltrator
   hidden: Tinted Lens
 stats: { spa: 85 }
+learnset:
+  - { level: 0, move: Cross Poison }
+  - { level: 1, move: Cross Poison }
+  - { level: 1, move: Tailwind }
+  - { level: 1, move: Toxic }
+  - { level: 1, move: Screech }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Mean Look }
+  - { level: 15, move: Poison Fang }
+  - { level: 20, move: Quick Guard }
+  - { level: 27, move: Air Cutter }
+  - { level: 34, move: Bite }
+  - { level: 37, move: Dive Bomb }
+  - { level: 41, move: Haze }
+  - { level: 48, move: Venoshock }
+  - { level: 55, move: Confuse Ray }
+  - { level: 62, move: Air Slash }
+  - { level: 69, move: Leech Life }
 evolution: { from: Golbat, method: { level: 33 } }

@@ -4,3 +4,27 @@ aka: { pokeemerald: SPECIES_TOGEKISS }
 abilities:
   primary: Aerodynamic
   hidden: Regenerator
+learnset:
+  - { level: 0, move: Air Slash }
+  - { level: 1, move: Air Slash }
+  - { level: 1, move: Fairy Wind }
+  - { level: 1, move: Sky Attack }
+  - { level: 1, move: Aura Sphere }
+  - { level: 1, move: Extreme Speed }
+  - { level: 1, move: Tri Attack }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Ancient Power }
+  - { level: 1, move: Yawn }
+  - { level: 1, move: Metronome }
+  - { level: 1, move: After You }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Safeguard }
+  - { level: 1, move: Follow Me }
+  - { level: 1, move: Baton Pass }
+  - { level: 1, move: Last Resort }
+  - { level: 1, move: Wish }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Life Dew }
+  - { level: 64, move: Oblivion Wing }

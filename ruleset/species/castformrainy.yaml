@@ -7,6 +7,7 @@ learnset:
   - { level: 10, move: Ember }
   - { level: 10, move: Powder Snow }
   - { level: 15, move: Headbutt }
+  - { level: 17, move: Water Whip }
   - { level: 20, move: Rain Dance }
   - { level: 20, move: Sunny Day }
   - { level: 20, move: Hail }
@@ -15,4 +16,3 @@ learnset:
   - { level: 35, move: Fire Blast }
   - { level: 35, move: Blizzard }
   - { level: 45, move: Hurricane }
-  - { level: 17, move: Water Whip }

@@ -7,6 +7,7 @@ learnset:
   - { level: 4, move: Astonish }
   - { level: 9, move: Confusion }
   - { level: 12, move: Bite }
+  - { level: 14, move: Water Whip }
   - { level: 17, move: Aqua Jet }
   - { level: 20, move: Disable }
   - { level: 25, move: Psyshock }
@@ -15,4 +16,3 @@ learnset:
   - { level: 36, move: Screech }
   - { level: 41, move: Psychic Fangs }
   - { level: 44, move: Wave Crash }
-  - { level: 14, move: Water Whip }

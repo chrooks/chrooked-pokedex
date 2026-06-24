@@ -15,11 +15,12 @@ learnset:
   - { level: 15, move: Dragon Tail }
   - { level: 20, move: Agility }
   - { level: 25, move: Slam }
+  - { level: 30, move: Draconic Fang }
   - { level: 33, move: Aqua Tail }
+  - { level: 36, move: Dive Bomb }
   - { level: 39, move: Dragon Rush }
   - { level: 41, move: Outrage }
   - { level: 46, move: Safeguard }
   - { level: 53, move: Rain Dance }
   - { level: 62, move: Dragon Dance }
   - { level: 80, move: Hyper Beam }
-  - { level: 30, move: Draconic Fang }

@@ -11,9 +11,9 @@ learnset:
   - { level: 20, move: Screech }
   - { level: 24, move: Bubble Beam }
   - { level: 28, move: Hex }
+  - { level: 30, move: Miasma }
   - { level: 32, move: Acid Armor }
   - { level: 36, move: Poison Jab }
   - { level: 40, move: Surf }
   - { level: 44, move: Sludge Wave }
   - { level: 48, move: Hydro Pump }
-  - { level: 30, move: Miasma }

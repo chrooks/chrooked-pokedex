@@ -10,9 +10,9 @@ learnset:
   - { level: 16, move: Poison Fang }
   - { level: 24, move: Force Palm }
   - { level: 32, move: Counter }
+  - { level: 36, move: One-Inch Punch }
   - { level: 40, move: Poison Jab }
   - { level: 48, move: Brutal Swing }
   - { level: 56, move: Crunch }
   - { level: 64, move: Superpower }
   - { level: 72, move: Giga Impact }
-  - { level: 36, move: One-Inch Punch }

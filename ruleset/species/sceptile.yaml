@@ -24,8 +24,8 @@ learnset:
   - { level: 25, move: Giga Drain }
   - { level: 30, move: Slam }
   - { level: 35, move: Double Team }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Screech }
   - { level: 49, move: Endeavor }
   - { level: 56, move: Leaf Storm }
-  - { level: 38, move: One-Inch Punch }
 evolution: { from: Grovyle, method: { level: 36 } }

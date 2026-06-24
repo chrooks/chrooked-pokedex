@@ -17,11 +17,11 @@ learnset:
   - { level: 24, move: Crunch }
   - { level: 27, move: Dragon Dance }
   - { level: 30, move: Breaking Swipe }
+  - { level: 30, move: Draconic Fang }
   - { level: 33, move: Focus Energy }
   - { level: 36, move: Dragon Pulse }
   - { level: 41, move: Swords Dance }
   - { level: 46, move: Outrage }
+  - { level: 49, move: Pixie Slash }
   - { level: 53, move: Guillotine }
   - { level: 60, move: Giga Impact }
-  - { level: 30, move: Draconic Fang }
-  - { level: 49, move: Pixie Slash }

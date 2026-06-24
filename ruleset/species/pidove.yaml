@@ -2,3 +2,19 @@ name: Pidove
 chrooked_id: pidove
 aka: { pokeemerald: SPECIES_PIDOVE }
 stats: { atk: 36, spa: 55 }
+learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Leer }
+  - { level: 8, move: Quick Attack }
+  - { level: 12, move: Taunt }
+  - { level: 16, move: Air Cutter }
+  - { level: 20, move: Swagger }
+  - { level: 24, move: Feather Dance }
+  - { level: 28, move: Detect }
+  - { level: 32, move: Air Slash }
+  - { level: 36, move: Roost }
+  - { level: 40, move: Tailwind }
+  - { level: 44, move: Sky Attack }
+  - { level: 48, move: Dive Bomb }
+  - { level: 64, move: Oblivion Wing }

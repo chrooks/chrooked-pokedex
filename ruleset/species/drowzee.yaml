@@ -15,9 +15,9 @@ learnset:
   - { level: 21, move: Psybeam }
   - { level: 25, move: Psych Up }
   - { level: 29, move: Zen Headbutt }
+  - { level: 31, move: Astral Hand }
   - { level: 33, move: Swagger }
   - { level: 37, move: Psychic }
   - { level: 41, move: Nasty Plot }
   - { level: 45, move: Psyshock }
   - { level: 49, move: Future Sight }
-  - { level: 31, move: Astral Hand }

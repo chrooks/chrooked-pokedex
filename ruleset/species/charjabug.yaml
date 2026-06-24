@@ -11,8 +11,8 @@ learnset:
   - { level: 23, move: Spark }
   - { level: 29, move: Sticky Web }
   - { level: 36, move: X-Scissor }
+  - { level: 39, move: Lightning Slam }
   - { level: 43, move: Crunch }
   - { level: 50, move: Dig }
   - { level: 57, move: Iron Defense }
   - { level: 64, move: Discharge }
-  - { level: 39, move: Lightning Slam }

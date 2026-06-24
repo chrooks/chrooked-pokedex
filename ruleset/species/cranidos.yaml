@@ -12,10 +12,10 @@ learnset:
   - { level: 15, move: Take Down }
   - { level: 19, move: Scary Face }
   - { level: 24, move: Assurance }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 28, move: Slam }
   - { level: 33, move: Ancient Power }
   - { level: 37, move: Zen Headbutt }
   - { level: 42, move: Screech }
   - { level: 46, move: Head Smash }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }

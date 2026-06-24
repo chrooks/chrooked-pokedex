@@ -4,3 +4,23 @@ aka: { pokeemerald: SPECIES_JUMPLUFF }
 abilities:
   secondary: Leaf Guard
 stats: { spd: 95, spe: 115 }
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Synthesis }
+  - { level: 8, move: Tackle }
+  - { level: 10, move: Fairy Wind }
+  - { level: 12, move: Poison Powder }
+  - { level: 12, move: Stun Spore }
+  - { level: 12, move: Sleep Powder }
+  - { level: 15, move: Bullet Seed }
+  - { level: 20, move: Leech Seed }
+  - { level: 24, move: Mega Drain }
+  - { level: 30, move: Acrobatics }
+  - { level: 35, move: Cotton Spore }
+  - { level: 39, move: U-turn }
+  - { level: 43, move: Giga Drain }
+  - { level: 46, move: Dive Bomb }
+  - { level: 49, move: Bounce }
+  - { level: 55, move: Memento }

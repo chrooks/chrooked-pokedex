@@ -18,7 +18,7 @@ learnset:
   - { level: 31, move: Psych Up }
   - { level: 33, move: Acupressure }
   - { level: 36, move: Power Trick }
+  - { level: 41, move: One-Inch Punch }
   - { level: 47, move: Recover }
   - { level: 53, move: Counter }
   - { level: 53, move: Axe Kick }
-  - { level: 41, move: One-Inch Punch }

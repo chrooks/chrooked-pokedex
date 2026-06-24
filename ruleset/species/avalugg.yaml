@@ -22,7 +22,7 @@ learnset:
   - { level: 30, move: Recover }
   - { level: 33, move: Crunch }
   - { level: 36, move: Take Down }
+  - { level: 38, move: Glacial Crush }
   - { level: 41, move: Blizzard }
   - { level: 46, move: Double-Edge }
   - { level: 51, move: Icicle Crash }
-  - { level: 38, move: Glacial Crush }

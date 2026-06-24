@@ -3,3 +3,16 @@ chrooked_id: rookidee
 aka: { pokeemerald: SPECIES_ROOKIDEE }
 abilities:
   secondary: Wingspan
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Peck }
+  - { level: 4, move: Power Trip }
+  - { level: 8, move: Hone Claws }
+  - { level: 12, move: Fury Attack }
+  - { level: 16, move: Pluck }
+  - { level: 20, move: Taunt }
+  - { level: 24, move: Scary Face }
+  - { level: 28, move: Drill Peck }
+  - { level: 32, move: Swagger }
+  - { level: 36, move: Brave Bird }
+  - { level: 48, move: Dive Bomb }

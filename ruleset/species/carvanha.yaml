@@ -10,6 +10,7 @@ learnset:
   - { level: 4, move: Poison Fang }
   - { level: 8, move: Focus Energy }
   - { level: 12, move: Scary Face }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Bite }
   - { level: 20, move: Ice Fang }
   - { level: 24, move: Screech }
@@ -18,4 +19,3 @@ learnset:
   - { level: 36, move: Agility }
   - { level: 40, move: Liquidation }
   - { level: 44, move: Take Down }
-  - { level: 14, move: Water Whip }

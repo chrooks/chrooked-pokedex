@@ -3,3 +3,20 @@ chrooked_id: phantump
 aka: { pokeemerald: SPECIES_PHANTUMP }
 abilities:
   hidden: Insidious
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Branch Poke }
+  - { level: 8, move: Leech Seed }
+  - { level: 12, move: Confuse Ray }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 20, move: Hex }
+  - { level: 24, move: Growth }
+  - { level: 28, move: Horn Leech }
+  - { level: 32, move: Curse }
+  - { level: 36, move: Phantom Force }
+  - { level: 40, move: Ingrain }
+  - { level: 42, move: Wraithstrike }
+  - { level: 44, move: Wood Hammer }
+  - { level: 48, move: Destiny Bond }
+  - { level: 52, move: Forest's Curse }

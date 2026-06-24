@@ -15,8 +15,8 @@ learnset:
   - { level: 23, move: Stun Spore }
   - { level: 25, move: Bug Buzz }
   - { level: 29, move: Sleep Powder }
+  - { level: 33, move: Miasma }
   - { level: 37, move: Leech Life }
   - { level: 41, move: Zen Headbutt }
   - { level: 47, move: Poison Fang }
   - { level: 55, move: Psychic }
-  - { level: 33, move: Miasma }

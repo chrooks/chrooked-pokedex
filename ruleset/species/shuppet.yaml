@@ -6,3 +6,18 @@ abilities:
   primary: Guts
   secondary: Infiltrator
   hidden: Insidious
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Screech }
+  - { level: 7, move: Night Shade }
+  - { level: 10, move: Spite }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 19, move: Shadow Sneak }
+  - { level: 22, move: Hex }
+  - { level: 26, move: Curse }
+  - { level: 30, move: Shadow Ball }
+  - { level: 34, move: Role Play }
+  - { level: 38, move: Sucker Punch }
+  - { level: 42, move: Trick }
+  - { level: 45, move: Wraithstrike }
+  - { level: 48, move: Phantom Force }

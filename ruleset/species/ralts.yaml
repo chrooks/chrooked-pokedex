@@ -18,6 +18,6 @@ learnset:
   - { level: 33, move: Heal Pulse }
   - { level: 36, move: Dream Eater }
   - { level: 39, move: Future Sight }
-  - { level: 55, move: Pixie Slash }
   - { level: 42, move: Astral Hand }
   - { level: 48, move: One-Inch Punch }
+  - { level: 55, move: Pixie Slash }

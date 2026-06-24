@@ -15,8 +15,8 @@ learnset:
   - { level: 21, move: Slash }
   - { level: 24, move: Night Slash }
   - { level: 27, move: Psycho Cut }
+  - { level: 30, move: Astral Hand }
   - { level: 33, move: Switcheroo }
   - { level: 37, move: Foul Play }
   - { level: 42, move: Topsy-Turvy }
   - { level: 47, move: Superpower }
-  - { level: 30, move: Astral Hand }

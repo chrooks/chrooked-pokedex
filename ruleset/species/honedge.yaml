@@ -14,4 +14,6 @@ learnset:
   - { level: 33, move: Iron Head }
   - { level: 37, move: Swords Dance }
   - { level: 41, move: Sacred Sword }
+  - { level: 44, move: Wraithstrike }
+  - { level: 48, move: Secret Sword }
   - { level: 55, move: Pixie Slash }

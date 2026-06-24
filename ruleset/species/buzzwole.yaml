@@ -11,6 +11,7 @@ learnset:
   - { level: 25, move: Endure }
   - { level: 30, move: Reversal }
   - { level: 35, move: Mega Punch }
+  - { level: 37, move: One-Inch Punch }
   - { level: 40, move: Lunge }
   - { level: 45, move: Focus Energy }
   - { level: 50, move: Dynamic Punch }
@@ -18,4 +19,3 @@ learnset:
   - { level: 60, move: Hammer Arm }
   - { level: 65, move: Superpower }
   - { level: 70, move: Focus Punch }
-  - { level: 37, move: One-Inch Punch }

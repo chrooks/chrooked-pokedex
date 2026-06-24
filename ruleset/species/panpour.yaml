@@ -9,6 +9,7 @@ learnset:
   - { level: 7, move: Lick }
   - { level: 10, move: Water Gun }
   - { level: 13, move: Fury Swipes }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Water Sport }
   - { level: 19, move: Bite }
   - { level: 22, move: Scald }
@@ -19,4 +20,3 @@ learnset:
   - { level: 37, move: Recycle }
   - { level: 40, move: Natural Gift }
   - { level: 43, move: Crunch }
-  - { level: 14, move: Water Whip }

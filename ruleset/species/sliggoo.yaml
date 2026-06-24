@@ -12,10 +12,10 @@ learnset:
   - { level: 15, move: Protect }
   - { level: 20, move: Flail }
   - { level: 25, move: Water Pulse }
+  - { level: 25, move: Draconic Fang }
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
   - { level: 43, move: Curse }
   - { level: 49, move: Body Slam }
   - { level: 56, move: Muddy Water }
-  - { level: 25, move: Draconic Fang }
 evolution: { from: Goomy, method: { pokeemerald: EVO_LEVEL_FOG, param: 35 } }

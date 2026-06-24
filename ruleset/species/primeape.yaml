@@ -16,9 +16,10 @@ learnset:
   - { level: 26, move: Assurance }
   - { level: 30, move: Thrash }
   - { level: 35, move: Rage Fist }
+  - { level: 37, move: One-Inch Punch }
   - { level: 39, move: Close Combat }
+  - { level: 41, move: Wraithstrike }
   - { level: 44, move: Screech }
   - { level: 48, move: Stomping Tantrum }
   - { level: 53, move: Outrage }
   - { level: 57, move: Final Gambit }
-  - { level: 37, move: One-Inch Punch }

@@ -21,12 +21,12 @@ learnset:
   - { level: 21, move: Screech }
   - { level: 24, move: Smack Down }
   - { level: 27, move: Crunch }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 33, move: Earthquake }
   - { level: 37, move: Stone Edge }
+  - { level: 39, move: Heel Drop }
   - { level: 42, move: Thrash }
   - { level: 47, move: Sandstorm }
   - { level: 52, move: Hyper Beam }
   - { level: 59, move: Giga Impact }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 39, move: Heel Drop }

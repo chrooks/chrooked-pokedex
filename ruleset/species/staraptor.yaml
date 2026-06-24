@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_STARAPTOR }
 types: [Fighting, Flying]
 abilities:
   secondary: Blitz
+learnset:
+  - { level: 0, move: Close Combat }
+  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
+  - { level: 13, move: Double Team }
+  - { level: 18, move: Endeavor }
+  - { level: 23, move: Whirlwind }
+  - { level: 28, move: Aerial Ace }
+  - { level: 33, move: Take Down }
+  - { level: 37, move: Dive Bomb }
+  - { level: 41, move: Agility }
+  - { level: 49, move: Brave Bird }
+  - { level: 57, move: Final Gambit }

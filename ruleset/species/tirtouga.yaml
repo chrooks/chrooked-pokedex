@@ -10,6 +10,7 @@ learnset:
   - { level: 6, move: Aqua Jet }
   - { level: 9, move: Smack Down }
   - { level: 12, move: Ancient Power }
+  - { level: 14, move: Water Whip }
   - { level: 15, move: Bite }
   - { level: 18, move: Wide Guard }
   - { level: 21, move: Brine }
@@ -21,4 +22,3 @@ learnset:
   - { level: 39, move: Rain Dance }
   - { level: 42, move: Hydro Pump }
   - { level: 45, move: Shell Smash }
-  - { level: 14, move: Water Whip }

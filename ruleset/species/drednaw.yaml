@@ -12,12 +12,12 @@ learnset:
   - { level: 1, move: Crunch }
   - { level: 1, move: Rock Polish }
   - { level: 1, move: Razor Shell }
+  - { level: 14, move: Water Whip }
   - { level: 21, move: Headbutt }
   - { level: 30, move: Counter }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 39, move: Jaw Lock }
   - { level: 48, move: Liquidation }
   - { level: 57, move: Body Slam }
   - { level: 66, move: Head Smash }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 14, move: Water Whip }

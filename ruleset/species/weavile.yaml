@@ -20,11 +20,11 @@ learnset:
   - { level: 24, move: Icy Wind }
   - { level: 30, move: Fury Swipes }
   - { level: 36, move: Hone Claws }
+  - { level: 37, move: Heel Drop }
+  - { level: 39, move: Glacial Crush }
   - { level: 42, move: Fling }
+  - { level: 45, move: Pixie Slash }
   - { level: 48, move: Nasty Plot }
   - { level: 54, move: Screech }
   - { level: 60, move: Night Slash }
   - { level: 66, move: Dark Pulse }
-  - { level: 45, move: Pixie Slash }
-  - { level: 39, move: Glacial Crush }
-  - { level: 37, move: Heel Drop }

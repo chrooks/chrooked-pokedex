@@ -5,3 +5,19 @@ abilities:
   primary: Mountaineer
   secondary: Infiltrator
   hidden: Tinted Lens
+learnset:
+  - { level: 1, move: Screech }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Mean Look }
+  - { level: 15, move: Poison Fang }
+  - { level: 20, move: Quick Guard }
+  - { level: 27, move: Air Cutter }
+  - { level: 34, move: Bite }
+  - { level: 37, move: Dive Bomb }
+  - { level: 41, move: Haze }
+  - { level: 48, move: Venoshock }
+  - { level: 55, move: Confuse Ray }
+  - { level: 62, move: Air Slash }
+  - { level: 69, move: Leech Life }

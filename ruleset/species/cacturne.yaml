@@ -18,7 +18,7 @@ learnset:
   - { level: 30, move: Spikes }
   - { level: 35, move: Sucker Punch }
   - { level: 38, move: Pin Missile }
+  - { level: 41, move: Heel Drop }
   - { level: 44, move: Energy Ball }
   - { level: 49, move: Cotton Spore }
   - { level: 54, move: Sandstorm }
-  - { level: 41, move: Heel Drop }

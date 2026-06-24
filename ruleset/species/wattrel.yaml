@@ -14,3 +14,4 @@ learnset:
   - { level: 27, move: Agility }
   - { level: 31, move: Volt Switch }
   - { level: 36, move: Discharge }
+  - { level: 64, move: Oblivion Wing }

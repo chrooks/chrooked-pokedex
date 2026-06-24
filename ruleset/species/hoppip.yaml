@@ -3,3 +3,23 @@ chrooked_id: hoppip
 aka: { pokeemerald: SPECIES_HOPPIP }
 abilities:
   secondary: Leaf Guard
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Tail Whip }
+  - { level: 6, move: Absorb }
+  - { level: 8, move: Fairy Wind }
+  - { level: 10, move: Poison Powder }
+  - { level: 10, move: Stun Spore }
+  - { level: 10, move: Sleep Powder }
+  - { level: 12, move: Bullet Seed }
+  - { level: 15, move: Synthesis }
+  - { level: 19, move: Leech Seed }
+  - { level: 22, move: Mega Drain }
+  - { level: 24, move: Acrobatics }
+  - { level: 27, move: Cotton Spore }
+  - { level: 29, move: U-turn }
+  - { level: 32, move: Giga Drain }
+  - { level: 35, move: Bounce }
+  - { level: 38, move: Memento }
+  - { level: 48, move: Dive Bomb }

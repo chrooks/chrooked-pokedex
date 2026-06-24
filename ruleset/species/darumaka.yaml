@@ -13,7 +13,7 @@ learnset:
   - { level: 28, move: Fire Punch }
   - { level: 32, move: Uproar }
   - { level: 36, move: Belly Drum }
+  - { level: 38, move: Cinder Smash }
   - { level: 40, move: Flare Blitz }
   - { level: 44, move: Thrash }
   - { level: 48, move: Superpower }
-  - { level: 38, move: Cinder Smash }

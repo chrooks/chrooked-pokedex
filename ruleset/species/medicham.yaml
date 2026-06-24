@@ -23,9 +23,10 @@ learnset:
   - { level: 31, move: Psych Up }
   - { level: 33, move: Acupressure }
   - { level: 36, move: Power Trick }
+  - { level: 38, move: Aura Sphere }
+  - { level: 41, move: Astral Hand }
+  - { level: 44, move: One-Inch Punch }
   - { level: 47, move: Recover }
   - { level: 53, move: Counter }
   - { level: 53, move: Axe Kick }
-  - { level: 41, move: Astral Hand }
-  - { level: 44, move: One-Inch Punch }
 evolution: { from: Meditite, method: { level: 34 } }

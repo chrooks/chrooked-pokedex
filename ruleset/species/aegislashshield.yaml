@@ -17,4 +17,6 @@ learnset:
   - { level: 1, move: Metal Sound }
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Tackle }
+  - { level: 36, move: Secret Sword }
+  - { level: 45, move: Wraithstrike }
   - { level: 55, move: Pixie Slash }

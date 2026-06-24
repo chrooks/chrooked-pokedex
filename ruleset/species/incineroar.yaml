@@ -18,9 +18,9 @@ learnset:
   - { level: 25, move: Fire Fang }
   - { level: 30, move: Scary Face }
   - { level: 32, move: Swagger }
+  - { level: 35, move: One-Inch Punch }
+  - { level: 38, move: Heel Drop }
+  - { level: 41, move: Cinder Smash }
   - { level: 44, move: Flamethrower }
   - { level: 51, move: Thrash }
   - { level: 58, move: Flare Blitz }
-  - { level: 38, move: Heel Drop }
-  - { level: 35, move: One-Inch Punch }
-  - { level: 41, move: Cinder Smash }

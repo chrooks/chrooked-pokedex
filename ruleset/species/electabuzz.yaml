@@ -14,10 +14,11 @@ learnset:
   - { level: 24, move: Brick Break }
   - { level: 28, move: Ice Punch }
   - { level: 32, move: Discharge }
+  - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Bulk Up }
+  - { level: 38, move: Aura Sphere }
+  - { level: 41, move: Lightning Slam }
   - { level: 46, move: Thunderbolt }
   - { level: 52, move: Close Combat }
   - { level: 58, move: Thunder }
-  - { level: 41, move: Lightning Slam }
-  - { level: 34, move: One-Inch Punch }
 evolution: { from: Elekid, method: { level: 24 } }

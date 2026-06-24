@@ -2,8 +2,9 @@ name: Torterra
 chrooked_id: torterra
 aka: { pokeemerald: SPECIES_TORTERRA }
 abilities:
-  secondary: Chloroplast
-  hidden: Rock Head
+  primary: Overgrow
+  secondary: Self Sufficient
+  hidden: Shell Armor
 stats: { atk: 120, def: 125, spd: 70, spe: 55 }
 learnset:
   - { level: 0, move: Earthquake }
@@ -21,6 +22,9 @@ learnset:
   - { level: 33, move: Leech Seed }
   - { level: 39, move: Synthesis }
   - { level: 45, move: Crunch }
-  - { level: 51, move: Giga Drain }
-  - { level: 57, move: Leaf Storm }
-  - { level: 63, move: Headlong Rush }
+  - { level: 48, move: Grav Apple }
+  - { level: 51, move: Headlong Rush }
+  - { level: 57, move: Wood Hammer }
+  - { level: 63, move: Head Smash }
+  - { level: 68, move: Solar Blade }
+evolution: { from: Grotle, method: { level: 32 } }

@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_DODUO }
 abilities:
   secondary: Technician
   hidden: Striker
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 5, move: Quick Attack }
+  - { level: 9, move: Fury Attack }
+  - { level: 14, move: Pluck }
+  - { level: 19, move: Double Hit }
+  - { level: 23, move: Agility }
+  - { level: 27, move: Uproar }
+  - { level: 30, move: Acupressure }
+  - { level: 33, move: Swords Dance }
+  - { level: 36, move: Drill Peck }
+  - { level: 39, move: Endeavor }
+  - { level: 43, move: Thrash }
+  - { level: 48, move: Dive Bomb }

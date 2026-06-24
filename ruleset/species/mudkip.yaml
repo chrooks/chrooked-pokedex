@@ -8,6 +8,7 @@ learnset:
   - { level: 6, move: Rock Smash }
   - { level: 9, move: Rock Throw }
   - { level: 12, move: Protect }
+  - { level: 14, move: Water Whip }
   - { level: 15, move: Supersonic }
   - { level: 18, move: Water Pulse }
   - { level: 21, move: Rock Slide }
@@ -17,4 +18,3 @@ learnset:
   - { level: 33, move: Screech }
   - { level: 36, move: Endeavor }
   - { level: 39, move: Hydro Pump }
-  - { level: 14, move: Water Whip }

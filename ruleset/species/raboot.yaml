@@ -13,6 +13,6 @@ learnset:
   - { level: 24, move: Agility }
   - { level: 30, move: Headbutt }
   - { level: 36, move: Counter }
+  - { level: 39, move: Cinder Smash }
   - { level: 42, move: Bounce }
   - { level: 48, move: Double-Edge }
-  - { level: 39, move: Cinder Smash }

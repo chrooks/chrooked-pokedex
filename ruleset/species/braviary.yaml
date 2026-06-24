@@ -5,3 +5,21 @@ abilities:
   primary: Wingspan
   hidden: Hustle
 stats: { atk: 130 }
+learnset:
+  - { level: 0, move: Superpower }
+  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Sky Attack }
+  - { level: 1, move: Hone Claws }
+  - { level: 18, move: Tailwind }
+  - { level: 24, move: Scary Face }
+  - { level: 30, move: Aerial Ace }
+  - { level: 36, move: Slash }
+  - { level: 39, move: Dive Bomb }
+  - { level: 42, move: Whirlwind }
+  - { level: 48, move: Crush Claw }
+  - { level: 53, move: Oblivion Wing }
+  - { level: 57, move: Air Slash }
+  - { level: 64, move: Defog }
+  - { level: 72, move: Thrash }

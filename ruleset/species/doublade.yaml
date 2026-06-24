@@ -12,7 +12,9 @@ learnset:
   - { level: 25, move: Shadow Claw }
   - { level: 29, move: Night Slash }
   - { level: 35, move: Iron Head }
+  - { level: 38, move: Wraithstrike }
   - { level: 41, move: Swords Dance }
+  - { level: 44, move: Pixie Slash }
   - { level: 47, move: Sacred Sword }
   - { level: 53, move: Excalibur }
-  - { level: 44, move: Pixie Slash }
+  - { level: 60, move: Secret Sword }

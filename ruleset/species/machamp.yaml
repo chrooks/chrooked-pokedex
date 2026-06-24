@@ -16,9 +16,9 @@ learnset:
   - { level: 24, move: Vital Throw }
   - { level: 31, move: Strength }
   - { level: 36, move: Dual Chop }
+  - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Bulk Up }
   - { level: 48, move: Seismic Toss }
   - { level: 54, move: Dynamic Punch }
   - { level: 60, move: Cross Chop }
   - { level: 66, move: Double-Edge }
-  - { level: 39, move: One-Inch Punch }

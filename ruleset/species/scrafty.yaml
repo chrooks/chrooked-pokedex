@@ -16,9 +16,9 @@ learnset:
   - { level: 28, move: Scary Face }
   - { level: 32, move: Brick Break }
   - { level: 36, move: Swagger }
+  - { level: 39, move: Heel Drop }
   - { level: 42, move: Crunch }
+  - { level: 45, move: One-Inch Punch }
   - { level: 48, move: High Jump Kick }
   - { level: 54, move: Focus Punch }
   - { level: 60, move: Head Smash }
-  - { level: 39, move: Heel Drop }
-  - { level: 45, move: One-Inch Punch }

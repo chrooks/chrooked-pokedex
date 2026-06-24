@@ -5,3 +5,19 @@ abilities:
   primary: Venomous
   hidden: Anticipation
 stats: { spe: 100 }
+learnset:
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Astonish }
+  - { level: 12, move: Flatter }
+  - { level: 16, move: Low Kick }
+  - { level: 20, move: Venoshock }
+  - { level: 24, move: Sucker Punch }
+  - { level: 28, move: Swagger }
+  - { level: 32, move: Poison Jab }
+  - { level: 36, move: Toxic }
+  - { level: 39, move: Aura Sphere }
+  - { level: 42, move: Nasty Plot }
+  - { level: 48, move: Sludge Bomb }
+  - { level: 54, move: Belch }

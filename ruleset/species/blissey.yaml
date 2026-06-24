@@ -1,4 +1,8 @@
 name: Blissey
 chrooked_id: blissey
 aka: { pokeemerald: SPECIES_BLISSEY }
+abilities:
+  primary: Natural Cure
+  secondary: Self Sufficient
+  hidden: Healer
 evolution: { from: Chansey, method: { level: 36 } }

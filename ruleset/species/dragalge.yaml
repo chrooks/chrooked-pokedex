@@ -11,14 +11,14 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Smokescreen }
   - { level: 15, move: Tail Whip }
+  - { level: 17, move: Water Whip }
   - { level: 20, move: Double Team }
   - { level: 25, move: Poison Tail }
   - { level: 30, move: Water Pulse }
   - { level: 35, move: Toxic }
   - { level: 40, move: Dragon Pulse }
   - { level: 45, move: Aqua Tail }
+  - { level: 48, move: Miasma }
   - { level: 52, move: Sludge Bomb }
   - { level: 59, move: Hydro Pump }
   - { level: 66, move: Outrage }
-  - { level: 17, move: Water Whip }
-  - { level: 48, move: Miasma }

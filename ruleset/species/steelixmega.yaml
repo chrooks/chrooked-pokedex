@@ -18,6 +18,9 @@ learnset:
   - { level: 20, move: Rock Slide }
   - { level: 24, move: Screech }
   - { level: 28, move: Sand Tomb }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Metallic Fang }
   - { level: 32, move: Stealth Rock }
   - { level: 36, move: Slam }
   - { level: 40, move: Sandstorm }
@@ -26,6 +29,3 @@ learnset:
   - { level: 52, move: Stone Edge }
   - { level: 56, move: Double-Edge }
   - { level: 60, move: Magnet Rise }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Metallic Fang }

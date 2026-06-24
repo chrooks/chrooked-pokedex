@@ -7,6 +7,7 @@ learnset:
   - { level: 4, move: Helping Hand }
   - { level: 8, move: Beat Up }
   - { level: 12, move: Brine }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Tearful Look }
   - { level: 20, move: Dive }
   - { level: 24, move: Soak }
@@ -16,4 +17,3 @@ learnset:
   - { level: 40, move: Endeavor }
   - { level: 44, move: Hydro Pump }
   - { level: 48, move: Double-Edge }
-  - { level: 14, move: Water Whip }

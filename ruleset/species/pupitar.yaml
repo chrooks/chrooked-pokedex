@@ -19,7 +19,7 @@ learnset:
   - { level: 27, move: Crunch }
   - { level: 33, move: Earthquake }
   - { level: 37, move: Stone Edge }
+  - { level: 39, move: Heel Drop }
   - { level: 42, move: Thrash }
   - { level: 47, move: Sandstorm }
   - { level: 52, move: Hyper Beam }
-  - { level: 39, move: Heel Drop }

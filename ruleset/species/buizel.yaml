@@ -9,6 +9,7 @@ learnset:
   - { level: 4, move: Growl }
   - { level: 7, move: Soak }
   - { level: 11, move: Quick Attack }
+  - { level: 14, move: Water Whip }
   - { level: 15, move: Water Gun }
   - { level: 18, move: Bite }
   - { level: 21, move: Swift }
@@ -20,4 +21,3 @@ learnset:
   - { level: 41, move: Agility }
   - { level: 45, move: Hydro Pump }
   - { level: 49, move: Wave Crash }
-  - { level: 14, move: Water Whip }

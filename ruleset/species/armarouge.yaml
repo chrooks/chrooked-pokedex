@@ -19,8 +19,9 @@ learnset:
   - { level: 28, move: Incinerate }
   - { level: 32, move: Lava Plume }
   - { level: 37, move: Calm Mind }
+  - { level: 40, move: Wraithstrike }
   - { level: 42, move: Ally Switch }
+  - { level: 45, move: Cinder Smash }
   - { level: 48, move: Flamethrower }
   - { level: 56, move: Expanding Force }
   - { level: 62, move: Armor Cannon }
-  - { level: 45, move: Cinder Smash }

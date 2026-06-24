@@ -15,8 +15,8 @@ learnset:
   - { level: 24, move: Take Down }
   - { level: 30, move: Flail }
   - { level: 36, move: Hammer Arm }
+  - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Thrash }
   - { level: 48, move: Pain Split }
   - { level: 54, move: Double-Edge }
   - { level: 60, move: Superpower }
-  - { level: 39, move: One-Inch Punch }

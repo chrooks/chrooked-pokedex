@@ -3,3 +3,16 @@ chrooked_id: corvisquire
 aka: { pokeemerald: SPECIES_CORVISQUIRE }
 abilities:
   secondary: Wingspan
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Hone Claws }
+  - { level: 1, move: Power Trip }
+  - { level: 12, move: Fury Attack }
+  - { level: 16, move: Pluck }
+  - { level: 22, move: Taunt }
+  - { level: 28, move: Scary Face }
+  - { level: 34, move: Drill Peck }
+  - { level: 37, move: Dive Bomb }
+  - { level: 40, move: Swagger }
+  - { level: 46, move: Brave Bird }

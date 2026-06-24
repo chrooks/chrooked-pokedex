@@ -2,3 +2,20 @@ name: Skarmory
 chrooked_id: skarmory
 aka: { pokeemerald: SPECIES_SKARMORY }
 stats: { hp: 80, spe: 80 }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Peck }
+  - { level: 4, move: Sand Attack }
+  - { level: 8, move: Fury Attack }
+  - { level: 12, move: Metal Claw }
+  - { level: 16, move: Agility }
+  - { level: 20, move: Wing Attack }
+  - { level: 24, move: Slash }
+  - { level: 28, move: Steel Wing }
+  - { level: 32, move: Payback }
+  - { level: 36, move: Drill Peck }
+  - { level: 38, move: Dive Bomb }
+  - { level: 40, move: Metal Sound }
+  - { level: 44, move: Spikes }
+  - { level: 48, move: Iron Defense }
+  - { level: 52, move: Brave Bird }

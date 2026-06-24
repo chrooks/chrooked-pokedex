@@ -15,10 +15,10 @@ learnset:
   - { level: 19, move: Pin Missile }
   - { level: 29, move: Take Down }
   - { level: 35, move: Seed Bomb }
+  - { level: 38, move: One-Inch Punch }
   - { level: 41, move: Mud Shot }
   - { level: 48, move: Bulk Up }
   - { level: 54, move: Body Slam }
   - { level: 60, move: Pain Split }
   - { level: 66, move: Wood Hammer }
   - { level: 78, move: Giga Impact }
-  - { level: 38, move: One-Inch Punch }

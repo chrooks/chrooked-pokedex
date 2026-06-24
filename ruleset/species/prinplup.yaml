@@ -1,6 +1,7 @@
 name: Prinplup
 chrooked_id: prinplup
 aka: { pokeemerald: SPECIES_PRINPLUP }
+types: [Water, Steel]
 abilities:
   hidden: Intimidate
 stats: { hp: 65, atk: 75, def: 70, spa: 75, spd: 75 }
@@ -10,6 +11,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
   - { level: 15, move: Peck }
+  - { level: 17, move: Water Whip }
   - { level: 19, move: Bubble Beam }
   - { level: 24, move: Swagger }
   - { level: 28, move: Fury Attack }
@@ -18,4 +20,4 @@ learnset:
   - { level: 42, move: Mist }
   - { level: 46, move: Drill Peck }
   - { level: 50, move: Hydro Pump }
-  - { level: 17, move: Water Whip }
+evolution: { from: Piplup, method: { level: 16 } }

@@ -12,6 +12,7 @@ learnset:
   - { level: 1, move: Agility }
   - { level: 13, move: Bite }
   - { level: 15, move: Scary Face }
+  - { level: 18, move: Water Whip }
   - { level: 21, move: Ice Fang }
   - { level: 24, move: Flail }
   - { level: 32, move: Crunch }
@@ -21,4 +22,3 @@ learnset:
   - { level: 59, move: Aqua Tail }
   - { level: 65, move: Superpower }
   - { level: 70, move: Hydro Pump }
-  - { level: 18, move: Water Whip }

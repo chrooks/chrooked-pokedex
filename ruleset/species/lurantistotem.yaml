@@ -16,5 +16,5 @@ learnset:
   - { level: 37, move: Synthesis }
   - { level: 44, move: Leaf Blade }
   - { level: 51, move: Sunny Day }
-  - { level: 63, move: Solar Blade }
   - { level: 55, move: Pixie Slash }
+  - { level: 63, move: Solar Blade }

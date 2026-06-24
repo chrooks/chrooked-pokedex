@@ -11,9 +11,9 @@ learnset:
   - { level: 20, move: Curse }
   - { level: 24, move: Hex }
   - { level: 28, move: Night Shade }
+  - { level: 30, move: Miasma }
   - { level: 32, move: Sucker Punch }
   - { level: 36, move: Dark Pulse }
   - { level: 40, move: Shadow Ball }
   - { level: 44, move: Destiny Bond }
   - { level: 48, move: Dream Eater }
-  - { level: 30, move: Miasma }

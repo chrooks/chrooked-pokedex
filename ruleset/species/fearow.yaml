@@ -2,3 +2,21 @@ name: Fearow
 chrooked_id: fearow
 aka: { pokeemerald: SPECIES_FEAROW }
 types: [Dark, Flying]
+learnset:
+  - { level: 1, move: Drill Run }
+  - { level: 1, move: Pluck }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Leer }
+  - { level: 8, move: Assurance }
+  - { level: 11, move: Fury Attack }
+  - { level: 15, move: Aerial Ace }
+  - { level: 18, move: Wing Attack }
+  - { level: 23, move: Take Down }
+  - { level: 27, move: Agility }
+  - { level: 32, move: Focus Energy }
+  - { level: 36, move: Roost }
+  - { level: 41, move: Drill Peck }
+  - { level: 45, move: Drill Run }
+  - { level: 48, move: Dive Bomb }

@@ -10,13 +10,13 @@ learnset:
   - { level: 16, move: Rock Slide }
   - { level: 20, move: Fire Fang }
   - { level: 24, move: Slam }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 28, move: Crunch }
   - { level: 32, move: Flamethrower }
   - { level: 36, move: Morning Sun }
+  - { level: 38, move: Cinder Smash }
   - { level: 40, move: Stone Edge }
   - { level: 44, move: Wild Charge }
   - { level: 48, move: Flare Blitz }
   - { level: 52, move: Head Smash }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
-  - { level: 38, move: Cinder Smash }

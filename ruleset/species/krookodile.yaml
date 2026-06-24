@@ -21,7 +21,7 @@ learnset:
   - { level: 30, move: Tectonic Fang }
   - { level: 32, move: Sandstorm }
   - { level: 35, move: Foul Play }
+  - { level: 39, move: Heel Drop }
   - { level: 44, move: Earthquake }
   - { level: 51, move: Thrash }
   - { level: 58, move: Outrage }
-  - { level: 39, move: Heel Drop }

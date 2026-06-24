@@ -6,5 +6,5 @@ abilities:
 learnset:
   - { level: 1, move: Splash }
   - { level: 15, move: Tackle }
-  - { level: 25, move: Flail }
   - { level: 20, move: Water Whip }
+  - { level: 25, move: Flail }

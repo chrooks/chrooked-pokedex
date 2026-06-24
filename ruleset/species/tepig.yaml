@@ -14,9 +14,9 @@ learnset:
   - { level: 27, move: Heat Crash }
   - { level: 31, move: Assurance }
   - { level: 33, move: Flamethrower }
+  - { level: 35, move: One-Inch Punch }
   - { level: 37, move: Head Smash }
   - { level: 39, move: Roar }
+  - { level: 41, move: Cinder Smash }
   - { level: 43, move: Flare Blitz }
   - { level: 48, move: Heel Drop }
-  - { level: 35, move: One-Inch Punch }
-  - { level: 41, move: Cinder Smash }

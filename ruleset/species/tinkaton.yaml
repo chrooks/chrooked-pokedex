@@ -21,5 +21,5 @@ learnset:
   - { level: 38, move: Heavy Slam }
   - { level: 42, move: Swords Dance }
   - { level: 46, move: Hammer Arm }
-  - { level: 52, move: Stomping Tantrum }
   - { level: 49, move: Pixie Slash }
+  - { level: 52, move: Stomping Tantrum }

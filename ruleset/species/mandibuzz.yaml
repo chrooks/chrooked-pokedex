@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_MANDIBUZZ }
 abilities:
   primary: Carnivore
   hidden: Stamina
+learnset:
+  - { level: 0, move: Bone Rush }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Toxic }
+  - { level: 1, move: Sky Attack }
+  - { level: 1, move: Pluck }
+  - { level: 1, move: Flatter }
+  - { level: 18, move: Tailwind }
+  - { level: 24, move: Knock Off }
+  - { level: 30, move: Iron Defense }
+  - { level: 36, move: Whirlwind }
+  - { level: 39, move: Dive Bomb }
+  - { level: 42, move: Air Slash }
+  - { level: 48, move: Dark Pulse }
+  - { level: 57, move: Nasty Plot }
+  - { level: 64, move: Defog }
+  - { level: 72, move: Attract }
+  - { level: 80, move: Brave Bird }

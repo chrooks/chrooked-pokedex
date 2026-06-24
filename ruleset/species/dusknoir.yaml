@@ -23,7 +23,8 @@ learnset:
   - { level: 28, move: Mean Look }
   - { level: 32, move: Hex }
   - { level: 36, move: Curse }
+  - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Shadow Ball }
+  - { level: 45, move: Wraithstrike }
   - { level: 48, move: Future Sight }
   - { level: 54, move: Destiny Bond }
-  - { level: 39, move: One-Inch Punch }

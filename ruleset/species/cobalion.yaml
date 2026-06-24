@@ -12,8 +12,8 @@ learnset:
   - { level: 28, move: Retaliate }
   - { level: 35, move: Metal Burst }
   - { level: 42, move: Take Down }
+  - { level: 45, move: Pixie Slash }
   - { level: 49, move: Sacred Sword }
   - { level: 56, move: Swords Dance }
   - { level: 63, move: Iron Head }
   - { level: 70, move: Close Combat }
-  - { level: 45, move: Pixie Slash }

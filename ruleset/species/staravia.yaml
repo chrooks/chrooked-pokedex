@@ -3,3 +3,17 @@ chrooked_id: staravia
 aka: { pokeemerald: SPECIES_STARAVIA }
 abilities:
   secondary: Blitz
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
+  - { level: 9, move: Wing Attack }
+  - { level: 13, move: Double Team }
+  - { level: 18, move: Endeavor }
+  - { level: 23, move: Whirlwind }
+  - { level: 28, move: Aerial Ace }
+  - { level: 33, move: Take Down }
+  - { level: 36, move: Dive Bomb }
+  - { level: 38, move: Agility }
+  - { level: 43, move: Brave Bird }
+  - { level: 48, move: Final Gambit }

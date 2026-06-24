@@ -7,14 +7,15 @@ learnset:
   - { level: 5, move: Scratch }
   - { level: 10, move: Sand Attack }
   - { level: 15, move: Aqua Jet }
+  - { level: 17, move: Water Whip }
   - { level: 20, move: Leer }
   - { level: 25, move: Mud Shot }
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
+  - { level: 38, move: Pixie Slash }
   - { level: 41, move: Protect }
+  - { level: 43, move: Secret Sword }
   - { level: 45, move: Leech Life }
   - { level: 50, move: Liquidation }
   - { level: 55, move: Metal Sound }
   - { level: 60, move: Stone Edge }
-  - { level: 17, move: Water Whip }
-  - { level: 38, move: Pixie Slash }

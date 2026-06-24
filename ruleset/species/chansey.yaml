@@ -1,3 +1,7 @@
 name: Chansey
 chrooked_id: chansey
 aka: { pokeemerald: SPECIES_CHANSEY }
+abilities:
+  primary: Natural Cure
+  secondary: Self Sufficient
+  hidden: Healer

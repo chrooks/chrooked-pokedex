@@ -15,8 +15,8 @@ learnset:
   - { level: 30, move: Draconic Fang }
   - { level: 34, move: Slash }
   - { level: 42, move: Dragon Claw }
+  - { level: 47, move: Pixie Slash }
   - { level: 52, move: Dig }
   - { level: 62, move: Sandstorm }
   - { level: 72, move: Take Down }
   - { level: 82, move: Dragon Rush }
-  - { level: 47, move: Pixie Slash }

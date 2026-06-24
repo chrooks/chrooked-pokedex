@@ -17,5 +17,6 @@ learnset:
   - { level: 32, move: Swords Dance }
   - { level: 36, move: Slam }
   - { level: 40, move: Bonemerang }
+  - { level: 42, move: Wraithstrike }
   - { level: 44, move: Earthquake }
   - { level: 48, move: Double-Edge }

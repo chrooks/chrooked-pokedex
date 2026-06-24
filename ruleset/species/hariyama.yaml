@@ -16,10 +16,10 @@ learnset:
   - { level: 26, move: Belly Drum }
   - { level: 30, move: Detect }
   - { level: 34, move: Seismic Toss }
+  - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Focus Punch }
   - { level: 42, move: Endure }
   - { level: 46, move: Close Combat }
   - { level: 50, move: Reversal }
   - { level: 54, move: Heavy Slam }
   - { level: 60, move: Headlong Rush }
-  - { level: 36, move: One-Inch Punch }

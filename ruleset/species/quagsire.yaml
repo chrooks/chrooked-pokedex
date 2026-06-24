@@ -13,10 +13,10 @@ learnset:
   - { level: 12, move: Mist }
   - { level: 12, move: Haze }
   - { level: 16, move: Slam }
+  - { level: 19, move: Water Whip }
   - { level: 23, move: Yawn }
   - { level: 28, move: Aqua Tail }
   - { level: 34, move: Muddy Water }
   - { level: 40, move: Amnesia }
   - { level: 46, move: Toxic }
   - { level: 52, move: Earthquake }
-  - { level: 19, move: Water Whip }

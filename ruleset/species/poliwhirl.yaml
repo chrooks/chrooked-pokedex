@@ -8,12 +8,12 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Mud Shot }
+  - { level: 14, move: Water Whip }
   - { level: 18, move: Bubble Beam }
   - { level: 24, move: Rain Dance }
   - { level: 32, move: Body Slam }
+  - { level: 36, move: One-Inch Punch }
   - { level: 40, move: Earth Power }
   - { level: 48, move: Hydro Pump }
   - { level: 56, move: Belly Drum }
   - { level: 66, move: Double-Edge }
-  - { level: 14, move: Water Whip }
-  - { level: 36, move: One-Inch Punch }

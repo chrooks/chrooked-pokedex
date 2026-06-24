@@ -10,8 +10,8 @@ learnset:
   - { level: 24, move: Headbutt }
   - { level: 30, move: Amnesia }
   - { level: 36, move: Freeze-Dry }
+  - { level: 39, move: Glacial Crush }
   - { level: 42, move: Snowscape }
   - { level: 48, move: Aurora Veil }
   - { level: 54, move: Surf }
   - { level: 60, move: Blizzard }
-  - { level: 39, move: Glacial Crush }

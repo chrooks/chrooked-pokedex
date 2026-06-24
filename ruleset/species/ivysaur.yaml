@@ -15,8 +15,8 @@ learnset:
   - { level: 20, move: Seed Bomb }
   - { level: 25, move: Take Down }
   - { level: 30, move: Sweet Scent }
+  - { level: 32, move: Miasma }
   - { level: 35, move: Synthesis }
   - { level: 40, move: Worry Seed }
   - { level: 45, move: Power Whip }
   - { level: 50, move: Solar Beam }
-  - { level: 32, move: Miasma }

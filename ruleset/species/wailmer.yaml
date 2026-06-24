@@ -6,6 +6,7 @@ learnset:
   - { level: 3, move: Growl }
   - { level: 6, move: Astonish }
   - { level: 12, move: Water Gun }
+  - { level: 14, move: Water Whip }
   - { level: 15, move: Mist }
   - { level: 18, move: Water Pulse }
   - { level: 21, move: Heavy Slam }
@@ -18,4 +19,3 @@ learnset:
   - { level: 42, move: Amnesia }
   - { level: 45, move: Hydro Pump }
   - { level: 48, move: Water Spout }
-  - { level: 14, move: Water Whip }

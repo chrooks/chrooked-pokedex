@@ -5,3 +5,21 @@ abilities:
   primary: Rocky Payload
   hidden: Mountaineer
 stats: { atk: 115, def: 95 }
+learnset:
+  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Memento }
+  - { level: 1, move: Hone Claws }
+  - { level: 7, move: Thief }
+  - { level: 11, move: Rock Throw }
+  - { level: 16, move: Whirlwind }
+  - { level: 20, move: Pluck }
+  - { level: 24, move: Torment }
+  - { level: 29, move: Rock Tomb }
+  - { level: 36, move: Payback }
+  - { level: 39, move: Dive Bomb }
+  - { level: 42, move: Dual Wingbeat }
+  - { level: 47, move: Rock Slide }
+  - { level: 53, move: Knock Off }
+  - { level: 60, move: Parting Shot }

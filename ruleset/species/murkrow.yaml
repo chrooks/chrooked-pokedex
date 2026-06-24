@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_MURKROW }
 abilities:
   primary: Moxie
   secondary: Super Luck
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Gust }
+  - { level: 11, move: Haze }
+  - { level: 15, move: Wing Attack }
+  - { level: 21, move: Night Shade }
+  - { level: 25, move: Assurance }
+  - { level: 31, move: Taunt }
+  - { level: 35, move: Mean Look }
+  - { level: 40, move: Foul Play }
+  - { level: 45, move: Dive Bomb }
+  - { level: 50, move: Sucker Punch }
+  - { level: 55, move: Torment }
+  - { level: 60, move: Quash }

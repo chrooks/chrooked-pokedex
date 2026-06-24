@@ -16,5 +16,5 @@ learnset:
   - { level: 35, move: Swagger }
   - { level: 39, move: Reversal }
   - { level: 43, move: Jaw Lock }
-  - { level: 49, move: Double-Edge }
   - { level: 46, move: Heel Drop }
+  - { level: 49, move: Double-Edge }

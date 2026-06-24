@@ -14,7 +14,7 @@ learnset:
   - { level: 28, move: Giga Drain }
   - { level: 32, move: Ingrain }
   - { level: 36, move: Toxic }
+  - { level: 39, move: Miasma }
   - { level: 42, move: Rage Powder }
   - { level: 48, move: Solar Beam }
   - { level: 54, move: Spore }
-  - { level: 39, move: Miasma }

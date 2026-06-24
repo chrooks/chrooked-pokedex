@@ -20,12 +20,12 @@ learnset:
   - { level: 18, move: Psybeam }
   - { level: 23, move: Life Dew }
   - { level: 28, move: Wish }
+  - { level: 31, move: Astral Hand }
   - { level: 35, move: Calm Mind }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Psychic }
+  - { level: 45, move: Pixie Slash }
   - { level: 49, move: Moonblast }
   - { level: 56, move: Dream Eater }
   - { level: 63, move: Future Sight }
-  - { level: 45, move: Pixie Slash }
-  - { level: 31, move: Astral Hand }
-  - { level: 38, move: One-Inch Punch }
 evolution: { from: Kirlia, method: { level: 30 } }

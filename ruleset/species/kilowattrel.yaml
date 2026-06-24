@@ -18,3 +18,4 @@ learnset:
   - { level: 46, move: Agility }
   - { level: 52, move: Thunderbolt }
   - { level: 58, move: Hurricane }
+  - { level: 64, move: Oblivion Wing }

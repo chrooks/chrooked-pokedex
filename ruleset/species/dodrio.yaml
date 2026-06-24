@@ -6,3 +6,19 @@ abilities:
   secondary: Technician
   hidden: Striker
 stats: { spe: 110 }
+learnset:
+  - { level: 0, move: Tri Attack }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Quick Attack }
+  - { level: 12, move: Fury Attack }
+  - { level: 15, move: Pluck }
+  - { level: 19, move: Double Hit }
+  - { level: 23, move: Agility }
+  - { level: 26, move: Uproar }
+  - { level: 30, move: Acupressure }
+  - { level: 34, move: Swords Dance }
+  - { level: 38, move: Drill Peck }
+  - { level: 43, move: Endeavor }
+  - { level: 46, move: Dive Bomb }
+  - { level: 50, move: Thrash }

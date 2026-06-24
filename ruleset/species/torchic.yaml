@@ -17,5 +17,6 @@ learnset:
   - { level: 33, move: Feather Dance }
   - { level: 36, move: Reversal }
   - { level: 39, move: Flare Blitz }
-  - { level: 48, move: One-Inch Punch }
+  - { level: 41, move: Aura Sphere }
   - { level: 43, move: Cinder Smash }
+  - { level: 48, move: One-Inch Punch }

@@ -11,11 +11,11 @@ learnset:
   - { level: 25, move: Assurance }
   - { level: 30, move: Metal Sound }
   - { level: 35, move: Slash }
+  - { level: 37, move: Heel Drop }
   - { level: 40, move: Night Slash }
+  - { level: 42, move: Pixie Slash }
   - { level: 45, move: Iron Defense }
   - { level: 50, move: Retaliate }
   - { level: 55, move: Iron Head }
   - { level: 60, move: Swords Dance }
   - { level: 65, move: Guillotine }
-  - { level: 42, move: Pixie Slash }
-  - { level: 37, move: Heel Drop }

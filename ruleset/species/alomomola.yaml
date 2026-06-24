@@ -9,6 +9,7 @@ learnset:
   - { level: 9, move: Aqua Jet }
   - { level: 13, move: Helping Hand }
   - { level: 13, move: Wide Guard }
+  - { level: 17, move: Water Whip }
   - { level: 21, move: Protect }
   - { level: 25, move: Water Pulse }
   - { level: 29, move: Healing Wish }
@@ -18,4 +19,3 @@ learnset:
   - { level: 45, move: Safeguard }
   - { level: 49, move: Whirlpool }
   - { level: 55, move: Hydro Pump }
-  - { level: 17, move: Water Whip }

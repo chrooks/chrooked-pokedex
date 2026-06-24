@@ -12,8 +12,9 @@ learnset:
   - { level: 25, move: Torment }
   - { level: 31, move: Facade }
   - { level: 33, move: Fire Spin }
+  - { level: 36, move: One-Inch Punch }
+  - { level: 37, move: Aura Sphere }
   - { level: 39, move: Acrobatics }
   - { level: 41, move: Slack Off }
-  - { level: 47, move: Flamethrower }
-  - { level: 36, move: One-Inch Punch }
   - { level: 44, move: Cinder Smash }
+  - { level: 47, move: Flamethrower }

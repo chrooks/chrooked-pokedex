@@ -11,6 +11,7 @@ learnset:
   - { level: 20, move: Protect }
   - { level: 24, move: Rock Slide }
   - { level: 28, move: Iron Head }
+  - { level: 30, move: Metallic Fang }
   - { level: 35, move: Metal Sound }
   - { level: 40, move: Take Down }
   - { level: 48, move: Autotomize }
@@ -19,4 +20,3 @@ learnset:
   - { level: 72, move: Heavy Slam }
   - { level: 80, move: Double-Edge }
   - { level: 88, move: Metal Burst }
-  - { level: 30, move: Metallic Fang }

@@ -5,8 +5,6 @@ learnset:
   - { level: 1, move: Electric Terrain }
   - { level: 1, move: Mirror Coat }
   - { level: 1, move: Magnetic Flux }
-  - { level: 30, move: Flamethrower }
-  - { level: 32, move: Ice Beam }
   - { level: 1, move: Tri Attack }
   - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Wave }
@@ -17,6 +15,8 @@ learnset:
   - { level: 20, move: Spark }
   - { level: 24, move: Screech }
   - { level: 28, move: Magnet Rise }
+  - { level: 30, move: Flamethrower }
+  - { level: 32, move: Ice Beam }
   - { level: 34, move: Flash Cannon }
   - { level: 40, move: Discharge }
   - { level: 46, move: Metal Sound }

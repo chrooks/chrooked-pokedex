@@ -3,3 +3,9 @@ chrooked_id: combee
 aka: { pokeemerald: SPECIES_COMBEE }
 abilities:
   hidden: Aerodynamic
+learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Bug Bite }
+  - { level: 1, move: Struggle Bug }
+  - { level: 48, move: Dive Bomb }

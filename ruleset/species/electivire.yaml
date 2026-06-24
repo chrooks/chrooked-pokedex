@@ -17,10 +17,11 @@ learnset:
   - { level: 24, move: Thunder Wave }
   - { level: 30, move: Discharge }
   - { level: 36, move: Bulk Up }
+  - { level: 37, move: Aura Sphere }
+  - { level: 39, move: Lightning Slam }
   - { level: 42, move: Thunderbolt }
+  - { level: 45, move: One-Inch Punch }
   - { level: 48, move: Close Combat }
   - { level: 54, move: Thunder }
   - { level: 60, move: Giga Impact }
-  - { level: 39, move: Lightning Slam }
-  - { level: 45, move: One-Inch Punch }
 evolution: { from: Electabuzz, method: { level: 40 } }

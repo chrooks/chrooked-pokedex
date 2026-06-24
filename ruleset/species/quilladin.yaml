@@ -12,8 +12,8 @@ learnset:
   - { level: 24, move: Pin Missile }
   - { level: 29, move: Take Down }
   - { level: 34, move: Mud Shot }
+  - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Bulk Up }
   - { level: 43, move: Body Slam }
   - { level: 47, move: Pain Split }
   - { level: 53, move: Wood Hammer }
-  - { level: 36, move: One-Inch Punch }

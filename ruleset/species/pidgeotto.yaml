@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_PIDGEOTTO }
 abilities:
   secondary: Tangled Feet
 stats: { atk: 50, spa: 65 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Gust }
+  - { level: 5, move: Sand Attack }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Quick Attack }
+  - { level: 17, move: Whirlwind }
+  - { level: 22, move: Twister }
+  - { level: 27, move: Feather Dance }
+  - { level: 32, move: Agility }
+  - { level: 37, move: Wing Attack }
+  - { level: 39, move: Dive Bomb }
+  - { level: 42, move: Roost }
+  - { level: 47, move: Tailwind }
+  - { level: 52, move: Aerial Ace }
+  - { level: 57, move: Air Slash }
+  - { level: 62, move: Hurricane }
+  - { level: 64, move: Oblivion Wing }

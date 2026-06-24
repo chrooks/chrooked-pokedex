@@ -16,8 +16,8 @@ learnset:
   - { level: 24, move: Safeguard }
   - { level: 28, move: Extrasensory }
   - { level: 32, move: Heavy Slam }
+  - { level: 35, move: Astral Hand }
   - { level: 38, move: Iron Defense }
   - { level: 44, move: Metal Sound }
   - { level: 50, move: Future Sight }
   - { level: 56, move: Rain Dance }
-  - { level: 35, move: Astral Hand }

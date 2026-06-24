@@ -10,10 +10,10 @@ learnset:
   - { level: 6, move: Snore }
   - { level: 9, move: Clod Toss }
   - { level: 12, move: Water Pulse }
+  - { level: 15, move: Water Whip }
   - { level: 18, move: Amnesia }
   - { level: 24, move: Aqua Tail }
   - { level: 31, move: Muddy Water }
   - { level: 36, move: Earthquake }
   - { level: 42, move: Future Sight }
   - { level: 48, move: Fissure }
-  - { level: 15, move: Water Whip }

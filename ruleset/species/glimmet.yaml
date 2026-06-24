@@ -12,8 +12,8 @@ learnset:
   - { level: 22, move: Venoshock }
   - { level: 26, move: Sandstorm }
   - { level: 29, move: Self-Destruct }
+  - { level: 31, move: Miasma }
   - { level: 33, move: Rock Slide }
   - { level: 37, move: Power Gem }
   - { level: 41, move: Acid Armor }
   - { level: 46, move: Sludge Wave }
-  - { level: 31, move: Miasma }

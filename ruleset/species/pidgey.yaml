@@ -3,3 +3,20 @@ chrooked_id: pidgey
 aka: { pokeemerald: SPECIES_PIDGEY }
 abilities:
   secondary: Tangled Feet
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Sand Attack }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Quick Attack }
+  - { level: 17, move: Whirlwind }
+  - { level: 21, move: Twister }
+  - { level: 25, move: Feather Dance }
+  - { level: 29, move: Agility }
+  - { level: 33, move: Wing Attack }
+  - { level: 37, move: Roost }
+  - { level: 39, move: Dive Bomb }
+  - { level: 41, move: Tailwind }
+  - { level: 45, move: Aerial Ace }
+  - { level: 49, move: Air Slash }
+  - { level: 53, move: Hurricane }
+  - { level: 64, move: Oblivion Wing }

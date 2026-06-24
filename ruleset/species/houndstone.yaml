@@ -19,11 +19,12 @@ learnset:
   - { level: 16, move: Dig }
   - { level: 24, move: Rest }
   - { level: 28, move: Crunch }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 36, move: Play Rough }
+  - { level: 39, move: Wraithstrike }
   - { level: 41, move: Helping Hand }
   - { level: 46, move: Phantom Force }
   - { level: 51, move: Charm }
   - { level: 58, move: Double-Edge }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
 evolution: { from: Greavard, method: { level: 32 } }

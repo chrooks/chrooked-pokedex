@@ -12,9 +12,9 @@ learnset:
   - { level: 24, move: Brick Break }
   - { level: 28, move: Detect }
   - { level: 32, move: Bulk Up }
+  - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Iron Head }
   - { level: 40, move: Dynamic Punch }
   - { level: 44, move: Counter }
   - { level: 48, move: Close Combat }
   - { level: 52, move: Focus Punch }
-  - { level: 34, move: One-Inch Punch }

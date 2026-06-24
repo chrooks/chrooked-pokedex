@@ -14,11 +14,11 @@ learnset:
   - { level: 24, move: Scary Face }
   - { level: 28, move: Fire Punch }
   - { level: 34, move: Lava Plume }
+  - { level: 37, move: One-Inch Punch }
   - { level: 40, move: Low Kick }
+  - { level: 43, move: Cinder Smash }
   - { level: 46, move: Flamethrower }
   - { level: 52, move: Sunny Day }
   - { level: 58, move: Fire Blast }
   - { level: 64, move: Hyper Beam }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 43, move: Cinder Smash }
 evolution: { from: Magby, method: { level: 24 } }

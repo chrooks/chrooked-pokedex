@@ -23,11 +23,11 @@ learnset:
   - { level: 16, move: Taunt }
   - { level: 24, move: Screech }
   - { level: 28, move: Swagger }
+  - { level: 30, move: Miasma }
   - { level: 32, move: Toxic }
   - { level: 36, move: Discharge }
+  - { level: 38, move: Lightning Slam }
   - { level: 40, move: Poison Jab }
   - { level: 44, move: Overdrive }
   - { level: 48, move: Boomburst }
   - { level: 52, move: Shift Gear }
-  - { level: 30, move: Miasma }
-  - { level: 38, move: Lightning Slam }

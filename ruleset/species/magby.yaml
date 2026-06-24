@@ -14,9 +14,9 @@ learnset:
   - { level: 24, move: Scary Face }
   - { level: 28, move: Fire Punch }
   - { level: 32, move: Lava Plume }
+  - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Low Kick }
+  - { level: 38, move: Cinder Smash }
   - { level: 40, move: Flamethrower }
   - { level: 44, move: Sunny Day }
   - { level: 48, move: Fire Blast }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 38, move: Cinder Smash }

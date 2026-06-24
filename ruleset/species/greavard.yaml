@@ -16,11 +16,12 @@ learnset:
   - { level: 12, move: Headbutt }
   - { level: 16, move: Dig }
   - { level: 24, move: Rest }
+  - { level: 25, move: Lithic Fang }
+  - { level: 25, move: Tectonic Fang }
   - { level: 28, move: Crunch }
   - { level: 32, move: Play Rough }
   - { level: 37, move: Helping Hand }
+  - { level: 39, move: Wraithstrike }
   - { level: 41, move: Phantom Force }
   - { level: 46, move: Charm }
   - { level: 52, move: Double-Edge }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }

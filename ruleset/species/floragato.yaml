@@ -13,8 +13,8 @@ learnset:
   - { level: 24, move: U-turn }
   - { level: 28, move: Worry Seed }
   - { level: 33, move: Slash }
+  - { level: 36, move: Heel Drop }
   - { level: 38, move: Energy Ball }
   - { level: 42, move: Play Rough }
   - { level: 46, move: Leaf Storm }
   - { level: 55, move: Pixie Slash }
-  - { level: 36, move: Heel Drop }

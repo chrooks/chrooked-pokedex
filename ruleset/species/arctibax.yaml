@@ -10,9 +10,9 @@ learnset:
   - { level: 18, move: Focus Energy }
   - { level: 24, move: Bite }
   - { level: 29, move: Ice Fang }
+  - { level: 36, move: Pixie Slash }
+  - { level: 38, move: Glacial Crush }
   - { level: 40, move: Take Down }
   - { level: 45, move: Ice Beam }
   - { level: 50, move: Crunch }
   - { level: 55, move: Icicle Crash }
-  - { level: 36, move: Pixie Slash }
-  - { level: 38, move: Glacial Crush }

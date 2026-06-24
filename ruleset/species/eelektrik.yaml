@@ -9,8 +9,10 @@ learnset:
   - { level: 1, move: Spark }
   - { level: 1, move: Charge Beam }
   - { level: 9, move: Bind }
+  - { level: 14, move: Water Whip }
   - { level: 19, move: Acid }
   - { level: 29, move: Discharge }
+  - { level: 36, move: Lightning Slam }
   - { level: 44, move: Thunderbolt }
   - { level: 49, move: Acid Spray }
   - { level: 54, move: Coil }
@@ -18,5 +20,3 @@ learnset:
   - { level: 64, move: Gastro Acid }
   - { level: 69, move: Zap Cannon }
   - { level: 74, move: Thrash }
-  - { level: 14, move: Water Whip }
-  - { level: 36, move: Lightning Slam }

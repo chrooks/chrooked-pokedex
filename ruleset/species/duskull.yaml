@@ -16,5 +16,6 @@ learnset:
   - { level: 32, move: Hex }
   - { level: 36, move: Curse }
   - { level: 40, move: Shadow Ball }
+  - { level: 42, move: Wraithstrike }
   - { level: 44, move: Future Sight }
   - { level: 48, move: One-Inch Punch }

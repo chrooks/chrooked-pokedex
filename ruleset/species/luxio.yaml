@@ -14,9 +14,9 @@ learnset:
   - { level: 24, move: Roar }
   - { level: 31, move: Volt Switch }
   - { level: 36, move: Scary Face }
+  - { level: 39, move: Lightning Slam }
   - { level: 42, move: Thunder Wave }
   - { level: 48, move: Crunch }
   - { level: 54, move: Discharge }
   - { level: 60, move: Swagger }
   - { level: 68, move: Wild Charge }
-  - { level: 39, move: Lightning Slam }

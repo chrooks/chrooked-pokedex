@@ -7,6 +7,7 @@ learnset:
   - { level: 4, move: Leer }
   - { level: 8, move: Taunt }
   - { level: 12, move: Bubble Beam }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Knock Off }
   - { level: 20, move: Double Hit }
   - { level: 24, move: Protect }
@@ -17,5 +18,4 @@ learnset:
   - { level: 44, move: Crabhammer }
   - { level: 48, move: Endeavor }
   - { level: 52, move: Guillotine }
-  - { level: 14, move: Water Whip }
   - { level: 55, move: Pixie Slash }

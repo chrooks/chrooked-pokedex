@@ -20,6 +20,6 @@ learnset:
   - { level: 27, move: Crunch }
   - { level: 32, move: Sandstorm }
   - { level: 35, move: Foul Play }
+  - { level: 38, move: Heel Drop }
   - { level: 42, move: Earthquake }
   - { level: 47, move: Thrash }
-  - { level: 38, move: Heel Drop }

@@ -14,6 +14,7 @@ learnset:
   - { level: 9, move: Charm }
   - { level: 12, move: Slam }
   - { level: 15, move: Bounce }
+  - { level: 17, move: Water Whip }
   - { level: 19, move: Aqua Tail }
   - { level: 21, move: Play Rough }
   - { level: 24, move: Aqua Ring }
@@ -21,5 +22,4 @@ learnset:
   - { level: 30, move: Hydro Pump }
   - { level: 33, move: Double-Edge }
   - { level: 36, move: Superpower }
-  - { level: 17, move: Water Whip }
 evolution: { from: Azurill, method: { level: 16 } }

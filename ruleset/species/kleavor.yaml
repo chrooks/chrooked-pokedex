@@ -20,5 +20,6 @@ learnset:
   - { level: 36, move: Rock Slide }
   - { level: 40, move: X-Scissor }
   - { level: 44, move: Swords Dance }
+  - { level: 48, move: Dive Bomb }
   - { level: 55, move: Pixie Slash }
 evolution: { from: Scyther, method: { item: Black Augurite } }

@@ -9,6 +9,7 @@ learnset:
   - { level: 21, move: Drain Punch }
   - { level: 28, move: Brick Break }
   - { level: 35, move: Agility }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Dragon Claw }
   - { level: 49, move: Flamethrower }
   - { level: 56, move: Collision Course }
@@ -18,4 +19,3 @@ learnset:
   - { level: 84, move: Close Combat }
   - { level: 91, move: Flare Blitz }
   - { level: 98, move: Giga Impact }
-  - { level: 38, move: One-Inch Punch }

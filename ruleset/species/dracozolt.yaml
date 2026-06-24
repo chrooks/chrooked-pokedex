@@ -10,10 +10,10 @@ learnset:
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Pluck }
   - { level: 35, move: Dragon Tail }
+  - { level: 38, move: Lightning Slam }
   - { level: 42, move: Stomp }
   - { level: 49, move: Slam }
   - { level: 56, move: Discharge }
   - { level: 63, move: Bolt Beak }
   - { level: 70, move: Dragon Pulse }
   - { level: 77, move: Dragon Rush }
-  - { level: 38, move: Lightning Slam }

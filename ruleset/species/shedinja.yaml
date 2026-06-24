@@ -2,3 +2,22 @@ name: Shedinja
 chrooked_id: shedinja
 aka: { pokeemerald: SPECIES_SHEDINJA }
 stats: { atk: 95 }
+learnset:
+  - { level: 1, move: Shadow Claw }
+  - { level: 1, move: Grudge }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Dig }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Harden }
+  - { level: 1, move: False Swipe }
+  - { level: 15, move: Confuse Ray }
+  - { level: 23, move: Absorb }
+  - { level: 29, move: Shadow Sneak }
+  - { level: 36, move: Fury Swipes }
+  - { level: 39, move: Dive Bomb }
+  - { level: 43, move: Mind Reader }
+  - { level: 50, move: Shadow Ball }
+  - { level: 57, move: Spite }
+  - { level: 64, move: Phantom Force }

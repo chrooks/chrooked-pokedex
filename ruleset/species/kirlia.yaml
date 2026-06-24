@@ -13,11 +13,11 @@ learnset:
   - { level: 18, move: Psybeam }
   - { level: 23, move: Life Dew }
   - { level: 28, move: Charm }
+  - { level: 30, move: Astral Hand }
   - { level: 33, move: Calm Mind }
+  - { level: 35, move: One-Inch Punch }
   - { level: 38, move: Psychic }
+  - { level: 41, move: Pixie Slash }
   - { level: 43, move: Heal Pulse }
   - { level: 48, move: Dream Eater }
   - { level: 53, move: Future Sight }
-  - { level: 41, move: Pixie Slash }
-  - { level: 30, move: Astral Hand }
-  - { level: 35, move: One-Inch Punch }

@@ -10,11 +10,11 @@ learnset:
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Pluck }
   - { level: 35, move: Avalanche }
+  - { level: 38, move: Glacial Crush }
   - { level: 42, move: Freeze-Dry }
+  - { level: 45, move: Lightning Slam }
   - { level: 49, move: Slam }
   - { level: 56, move: Discharge }
   - { level: 63, move: Bolt Beak }
   - { level: 70, move: Icicle Crash }
   - { level: 77, move: Blizzard }
-  - { level: 38, move: Glacial Crush }
-  - { level: 45, move: Lightning Slam }

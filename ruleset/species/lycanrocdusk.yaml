@@ -23,12 +23,12 @@ learnset:
   - { level: 20, move: Bite }
   - { level: 24, move: Rock Tomb }
   - { level: 30, move: Roar }
+  - { level: 30, move: Lithic Fang }
+  - { level: 30, move: Tectonic Fang }
   - { level: 36, move: Rock Slide }
+  - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Crunch }
   - { level: 48, move: Scary Face }
   - { level: 54, move: Stealth Rock }
   - { level: 60, move: Stone Edge }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 39, move: One-Inch Punch }
 evolution: { from: Rockruff Own Tempo, method: { level: 25 } }

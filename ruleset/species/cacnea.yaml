@@ -14,9 +14,9 @@ learnset:
   - { level: 26, move: Payback }
   - { level: 30, move: Spikes }
   - { level: 34, move: Sucker Punch }
+  - { level: 36, move: Heel Drop }
   - { level: 38, move: Pin Missile }
   - { level: 42, move: Energy Ball }
   - { level: 46, move: Cotton Spore }
   - { level: 50, move: Sandstorm }
   - { level: 54, move: Destiny Bond }
-  - { level: 36, move: Heel Drop }

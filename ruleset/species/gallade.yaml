@@ -32,12 +32,13 @@ learnset:
   - { level: 18, move: Aerial Ace }
   - { level: 23, move: False Swipe }
   - { level: 28, move: Protect }
+  - { level: 31, move: Astral Hand }
   - { level: 35, move: Swords Dance }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Psycho Cut }
+  - { level: 45, move: Pixie Slash }
   - { level: 49, move: Heal Pulse }
+  - { level: 52, move: Secret Sword }
   - { level: 56, move: Wide Guard }
   - { level: 56, move: Quick Guard }
   - { level: 63, move: Close Combat }
-  - { level: 45, move: Pixie Slash }
-  - { level: 31, move: Astral Hand }
-  - { level: 38, move: One-Inch Punch }

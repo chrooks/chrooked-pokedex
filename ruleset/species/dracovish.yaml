@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 7, move: Protect }
   - { level: 14, move: Brutal Swing }
+  - { level: 17, move: Water Whip }
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Bite }
   - { level: 35, move: Dragon Breath }
@@ -16,4 +17,3 @@ learnset:
   - { level: 63, move: Fishious Rend }
   - { level: 70, move: Dragon Pulse }
   - { level: 77, move: Dragon Rush }
-  - { level: 17, move: Water Whip }

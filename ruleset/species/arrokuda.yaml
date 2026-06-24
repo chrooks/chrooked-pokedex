@@ -6,10 +6,10 @@ learnset:
   - { level: 1, move: Aqua Jet }
   - { level: 6, move: Fury Attack }
   - { level: 12, move: Bite }
+  - { level: 15, move: Water Whip }
   - { level: 18, move: Agility }
   - { level: 24, move: Dive }
   - { level: 30, move: Focus Energy }
   - { level: 36, move: Crunch }
   - { level: 42, move: Liquidation }
   - { level: 48, move: Double-Edge }
-  - { level: 15, move: Water Whip }

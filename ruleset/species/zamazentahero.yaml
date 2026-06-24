@@ -10,9 +10,9 @@ learnset:
   - { level: 11, move: Slash }
   - { level: 22, move: Iron Defense }
   - { level: 33, move: Iron Head }
+  - { level: 38, move: One-Inch Punch }
   - { level: 44, move: Metal Burst }
   - { level: 55, move: Crunch }
   - { level: 66, move: Moonblast }
   - { level: 77, move: Close Combat }
   - { level: 88, move: Giga Impact }
-  - { level: 38, move: One-Inch Punch }

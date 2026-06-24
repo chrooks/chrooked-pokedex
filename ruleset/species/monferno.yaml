@@ -12,9 +12,10 @@ learnset:
   - { level: 26, move: Feint }
   - { level: 29, move: Torment }
   - { level: 36, move: Close Combat }
+  - { level: 37, move: Aura Sphere }
   - { level: 39, move: Fire Spin }
+  - { level: 42, move: One-Inch Punch }
+  - { level: 44, move: Cinder Smash }
   - { level: 46, move: Acrobatics }
   - { level: 49, move: Slack Off }
   - { level: 56, move: Flare Blitz }
-  - { level: 42, move: One-Inch Punch }
-  - { level: 44, move: Cinder Smash }

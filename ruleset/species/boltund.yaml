@@ -12,8 +12,8 @@ learnset:
   - { level: 20, move: Spark }
   - { level: 28, move: Charm }
   - { level: 34, move: Crunch }
+  - { level: 37, move: Lightning Slam }
   - { level: 41, move: Charge }
   - { level: 48, move: Wild Charge }
   - { level: 55, move: Play Rough }
   - { level: 62, move: Electric Terrain }
-  - { level: 37, move: Lightning Slam }

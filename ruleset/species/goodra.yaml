@@ -20,9 +20,9 @@ learnset:
   - { level: 20, move: Flail }
   - { level: 25, move: Water Pulse }
   - { level: 30, move: Rain Dance }
+  - { level: 30, move: Draconic Fang }
   - { level: 43, move: Curse }
   - { level: 49, move: Body Slam }
   - { level: 58, move: Muddy Water }
   - { level: 67, move: Power Whip }
-  - { level: 30, move: Draconic Fang }
 evolution: { from: Sliggoo, method: { level: 45 } }

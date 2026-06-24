@@ -2,3 +2,19 @@ name: Tranquill
 chrooked_id: tranquill
 aka: { pokeemerald: SPECIES_TRANQUILL }
 stats: { atk: 50, spa: 77 }
+learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 12, move: Taunt }
+  - { level: 16, move: Air Cutter }
+  - { level: 20, move: Swagger }
+  - { level: 26, move: Feather Dance }
+  - { level: 34, move: Detect }
+  - { level: 38, move: Air Slash }
+  - { level: 41, move: Dive Bomb }
+  - { level: 44, move: Roost }
+  - { level: 50, move: Tailwind }
+  - { level: 56, move: Sky Attack }
+  - { level: 64, move: Oblivion Wing }

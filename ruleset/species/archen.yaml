@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_ARCHEN }
 abilities:
   primary: Carnivore
   hidden: Rock Head
+learnset:
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Leer }
+  - { level: 3, move: Rock Throw }
+  - { level: 6, move: Wing Attack }
+  - { level: 9, move: Dragon Breath }
+  - { level: 12, move: Ancient Power }
+  - { level: 15, move: Pluck }
+  - { level: 18, move: Quick Guard }
+  - { level: 21, move: U-turn }
+  - { level: 24, move: Rock Slide }
+  - { level: 27, move: Scary Face }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Agility }
+  - { level: 36, move: Tailwind }
+  - { level: 39, move: Dragon Claw }
+  - { level: 42, move: Thrash }
+  - { level: 45, move: Endeavor }
+  - { level: 48, move: Dive Bomb }

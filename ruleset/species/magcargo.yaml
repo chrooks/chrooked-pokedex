@@ -5,3 +5,21 @@ abilities:
   primary: Gooey
   hidden: Mountaineer
 stats: { hp: 60, spa: 90, spd: 100 }
+learnset:
+  - { level: 0, move: Shell Smash }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Rock Throw }
+  - { level: 1, move: Smog }
+  - { level: 1, move: Yawn }
+  - { level: 1, move: Earth Power }
+  - { level: 13, move: Harden }
+  - { level: 20, move: Clear Smog }
+  - { level: 22, move: Ancient Power }
+  - { level: 27, move: Incinerate }
+  - { level: 29, move: Rock Slide }
+  - { level: 34, move: Lava Plume }
+  - { level: 36, move: Amnesia }
+  - { level: 40, move: Power Gem }
+  - { level: 43, move: Body Slam }
+  - { level: 47, move: Recover }
+  - { level: 54, move: Flamethrower }
