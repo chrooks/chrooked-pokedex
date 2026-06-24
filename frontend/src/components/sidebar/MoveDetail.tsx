@@ -6,6 +6,7 @@
 import type { Move, MoveField } from "../../types";
 import { isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
 import { TypeChip } from "../TypeChip";
+import { CategoryChip } from "../CategoryChip";
 import "../editors/editors.css";
 import "../ledger/ledger-rows.css";
 
@@ -96,7 +97,9 @@ export function MoveDetail({ move }: Props) {
           </div>
           <div className="lrow">
             <dt className="lrow__label">Category</dt>
-            <dd className="lrow__value">{move.category}</dd>
+            <dd className="lrow__value">
+              {move.category ? <CategoryChip category={move.category} variant="full" /> : "—"}
+            </dd>
           </div>
           <div className="lrow">
             <dt className="lrow__label">Power</dt>

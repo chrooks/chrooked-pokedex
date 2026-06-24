@@ -19,6 +19,7 @@ import { stableMultiSort, type SortKey } from "../../lib/sortEngine";
 import type { DexEntry, Move } from "../../types";
 import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
+import { CategoryChip } from "../CategoryChip";
 import { ErrorView, EmptyView } from "../StatusView";
 import { EntityControls } from "../filters/EntityControls";
 import { MoveEditor } from "../editors/MoveEditor";
@@ -272,7 +273,11 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
                         <TypeChip type={move.type} variant="code" />
                       </td>
                     )}
-                    {!hiddenSet.has("category") && <td className="tab-dim">{move.category}</td>}
+                    {!hiddenSet.has("category") && (
+                      <td>
+                        {move.category ? <CategoryChip category={move.category} variant="icon" /> : "—"}
+                      </td>
+                    )}
                     {!hiddenSet.has("power") && <td className="tab-num mono">{move.power ?? "—"}</td>}
                     {!hiddenSet.has("accuracy") && <td className="tab-num mono">{move.accuracy ?? "—"}</td>}
                     {!hiddenSet.has("pp") && <td className="tab-num mono">{move.pp ?? "—"}</td>}

@@ -1,0 +1,54 @@
+/* A category chip derives its color from one --cat hue, tinted the same way as
+   the type chip: a bright label/glyph pulled toward --text, a dark fill pulled
+   toward the inset surface. The glyph shape carries identity in grayscale. */
+
+.cat-chip {
+  --cat: var(--text-dim);
+  --cat-fg: color-mix(in oklch, var(--cat) 68%, var(--text));
+  --cat-bg: color-mix(in oklch, var(--cat) 16%, var(--surface-0));
+  --cat-edge: color-mix(in oklch, var(--cat) 45%, var(--surface-2));
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--cat-fg);
+  background: var(--cat-bg);
+  border: 1px solid var(--cat-edge);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.cat-chip[data-category="physical"] {
+  --cat: oklch(64% 0.19 35); /* impact orange */
+}
+
+.cat-chip[data-category="special"] {
+  --cat: oklch(62% 0.17 265); /* energy blue */
+}
+
+.cat-chip[data-category="status"] {
+  --cat: oklch(60% 0.03 250); /* neutral slate */
+}
+
+.cat-chip__glyph {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: var(--cat);
+}
+
+.cat-chip__label {
+  text-transform: capitalize;
+}
+
+.cat-chip--icon {
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.cat-chip--full {
+  padding: 2px var(--space-2);
+  font-size: var(--text-sm);
+}
