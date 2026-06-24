@@ -1,0 +1,25 @@
+name: Pikachu Pop Star
+chrooked_id: pikachupopstar
+aka: { dex: 25 }
+learnset:
+  - { level: 1, move: Nuzzle }
+  - { level: 1, move: Nasty Plot }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Thunder Wave }
+  - { level: 8, move: Double Team }
+  - { level: 12, move: Electro Ball }
+  - { level: 16, move: Feint }
+  - { level: 20, move: Spark }
+  - { level: 24, move: Agility }
+  - { level: 28, move: Iron Tail }
+  - { level: 32, move: Discharge }
+  - { level: 36, move: Thunderbolt }
+  - { level: 40, move: Light Screen }
+  - { level: 44, move: Thunder }
+  - { level: 48, move: Lightning Slam }

@@ -1,0 +1,17 @@
+name: Quaxly
+chrooked_id: quaxly
+aka: { dex: 912 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 7, move: Work Up }
+  - { level: 10, move: Wing Attack }
+  - { level: 13, move: Aqua Jet }
+  - { level: 17, move: Double Hit }
+  - { level: 21, move: Aqua Cutter }
+  - { level: 24, move: Air Slash }
+  - { level: 28, move: Focus Energy }
+  - { level: 31, move: Acrobatics }
+  - { level: 35, move: Liquidation }
+  - { level: 15, move: Water Whip }

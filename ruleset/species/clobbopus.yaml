@@ -1,0 +1,16 @@
+name: Clobbopus
+chrooked_id: clobbopus
+aka: { dex: 852 }
+learnset:
+  - { level: 1, move: Rock Smash }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Feint }
+  - { level: 10, move: Bind }
+  - { level: 15, move: Detect }
+  - { level: 20, move: Brick Break }
+  - { level: 25, move: Bulk Up }
+  - { level: 30, move: Submission }
+  - { level: 35, move: Taunt }
+  - { level: 40, move: Reversal }
+  - { level: 45, move: Superpower }
+  - { level: 48, move: One-Inch Punch }

@@ -20,3 +20,4 @@ learnset:
   - { level: 70, move: Double-Edge }
   - { level: 76, move: Metal Burst }
   - { level: 25, move: Metallic Fang }
+evolution: { from: Aron, method: { level: 26 } }

@@ -1,0 +1,18 @@
+name: Salandit
+chrooked_id: salandit
+aka: { dex: 757 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Poison Gas }
+  - { level: 5, move: Smog }
+  - { level: 10, move: Ember }
+  - { level: 15, move: Poison Fang }
+  - { level: 20, move: Sweet Scent }
+  - { level: 25, move: Nasty Plot }
+  - { level: 30, move: Incinerate }
+  - { level: 35, move: Venoshock }
+  - { level: 40, move: Dragon Pulse }
+  - { level: 45, move: Flamethrower }
+  - { level: 50, move: Toxic }
+  - { level: 55, move: Endeavor }
+  - { level: 32, move: Miasma }

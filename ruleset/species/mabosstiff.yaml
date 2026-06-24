@@ -1,0 +1,22 @@
+name: Mabosstiff
+chrooked_id: mabosstiff
+aka: { dex: 943 }
+learnset:
+  - { level: 0, move: Comeuppance }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scary Face }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Lick }
+  - { level: 7, move: Snarl }
+  - { level: 10, move: Hone Claws }
+  - { level: 14, move: Bite }
+  - { level: 18, move: Roar }
+  - { level: 22, move: Headbutt }
+  - { level: 26, move: Payback }
+  - { level: 34, move: Crunch }
+  - { level: 39, move: Swagger }
+  - { level: 43, move: Reversal }
+  - { level: 48, move: Jaw Lock }
+  - { level: 55, move: Double-Edge }
+  - { level: 60, move: Outrage }
+  - { level: 36, move: Heel Drop }

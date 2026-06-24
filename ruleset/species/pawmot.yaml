@@ -1,0 +1,24 @@
+name: Pawmot
+chrooked_id: pawmot
+aka: { dex: 923 }
+learnset:
+  - { level: 0, move: Revival Blessing }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Wild Charge }
+  - { level: 3, move: Thunder Shock }
+  - { level: 6, move: Quick Attack }
+  - { level: 8, move: Charge }
+  - { level: 12, move: Nuzzle }
+  - { level: 15, move: Dig }
+  - { level: 19, move: Bite }
+  - { level: 23, move: Spark }
+  - { level: 25, move: Arm Thrust }
+  - { level: 29, move: Thunder Wave }
+  - { level: 33, move: Slam }
+  - { level: 39, move: Entrainment }
+  - { level: 44, move: Close Combat }
+  - { level: 49, move: Discharge }
+  - { level: 54, move: Agility }
+  - { level: 60, move: Double Shock }
+  - { level: 36, move: Lightning Slam }

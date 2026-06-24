@@ -2,7 +2,6 @@ name: Darmanitan Zen
 chrooked_id: darmanitanzen
 aka: { pokeemerald: SPECIES_DARMANITAN_ZEN }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Hammer Arm }
   - { level: 1, move: Hammer Arm }
   - { level: 1, move: Ember }

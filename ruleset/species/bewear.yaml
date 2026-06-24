@@ -2,3 +2,21 @@ name: Bewear
 chrooked_id: bewear
 aka: { pokeemerald: SPECIES_BEWEAR }
 stats: { def: 90 }
+learnset:
+  - { level: 0, move: Bind }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Payback }
+  - { level: 12, move: Brutal Swing }
+  - { level: 16, move: Endure }
+  - { level: 20, move: Strength }
+  - { level: 24, move: Take Down }
+  - { level: 30, move: Flail }
+  - { level: 36, move: Hammer Arm }
+  - { level: 42, move: Thrash }
+  - { level: 48, move: Pain Split }
+  - { level: 54, move: Double-Edge }
+  - { level: 60, move: Superpower }
+  - { level: 39, move: One-Inch Punch }

@@ -2,3 +2,23 @@ name: Pangoro
 chrooked_id: pangoro
 aka: { pokeemerald: SPECIES_PANGORO }
 stats: { hp: 100, atk: 125, def: 80, spe: 65 }
+learnset:
+  - { level: 0, move: Night Slash }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Bullet Punch }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Arm Thrust }
+  - { level: 1, move: Taunt }
+  - { level: 12, move: Circle Throw }
+  - { level: 16, move: Low Sweep }
+  - { level: 20, move: Work Up }
+  - { level: 24, move: Slash }
+  - { level: 28, move: Vital Throw }
+  - { level: 35, move: Crunch }
+  - { level: 40, move: Body Slam }
+  - { level: 46, move: Parting Shot }
+  - { level: 52, move: Entrainment }
+  - { level: 58, move: Hammer Arm }
+  - { level: 43, move: Heel Drop }
+  - { level: 37, move: One-Inch Punch }

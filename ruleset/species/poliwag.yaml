@@ -3,3 +3,17 @@ chrooked_id: poliwag
 aka: { pokeemerald: SPECIES_POLIWAG }
 abilities:
   secondary: Hydrate
+learnset:
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Hypnosis }
+  - { level: 6, move: Pound }
+  - { level: 12, move: Mud Shot }
+  - { level: 18, move: Bubble Beam }
+  - { level: 24, move: Rain Dance }
+  - { level: 30, move: Body Slam }
+  - { level: 36, move: Earth Power }
+  - { level: 42, move: Hydro Pump }
+  - { level: 48, move: Belly Drum }
+  - { level: 54, move: Double-Edge }
+  - { level: 15, move: Water Whip }
+  - { level: 39, move: One-Inch Punch }

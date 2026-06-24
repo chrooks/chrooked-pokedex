@@ -5,3 +5,24 @@ abilities:
   secondary: Corrosion
   hidden: Bloom
 stats: { hp: 65, atk: 85, def: 65, spe: 95 }
+learnset:
+  - { level: 1, move: Grassy Terrain }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Venom Drench }
+  - { level: 1, move: Mega Drain }
+  - { level: 1, move: Leech Seed }
+  - { level: 1, move: Magical Leaf }
+  - { level: 1, move: Toxic Spikes }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Giga Drain }
+  - { level: 1, move: Synthesis }
+  - { level: 1, move: Toxic }
+  - { level: 1, move: Petal Blizzard }
+  - { level: 1, move: Aromatherapy }
+  - { level: 1, move: Ingrain }
+  - { level: 1, move: Petal Dance }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Worry Seed }
+  - { level: 48, move: Miasma }

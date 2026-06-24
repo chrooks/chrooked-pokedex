@@ -23,6 +23,5 @@ learnset:
   - { level: 46, move: Heat Wave }
   - { level: 50, move: Hurricane }
   - { level: 54, move: Inferno }
-  - { level: 58, move: Cinder Smash }
   - { level: 62, move: Bleakwind Storm }
   - { level: 68, move: Flare Blitz }

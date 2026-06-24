@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_CRABOMINABLE }
 abilities:
   primary: Sledgehammer
   hidden: Permafrost
+learnset:
+  - { level: 0, move: Ice Punch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Rock Smash }
+  - { level: 17, move: Bubble Beam }
+  - { level: 22, move: Brick Break }
+  - { level: 25, move: Slam }
+  - { level: 29, move: Avalanche }
+  - { level: 33, move: Reversal }
+  - { level: 37, move: Ice Hammer }
+  - { level: 42, move: Iron Defense }
+  - { level: 45, move: Dynamic Punch }
+  - { level: 49, move: Close Combat }
+  - { level: 39, move: Glacial Crush }
+  - { level: 35, move: One-Inch Punch }

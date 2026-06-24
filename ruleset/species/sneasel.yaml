@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_SNEASEL }
 abilities:
   primary: Carnivore
   hidden: Refrigerate
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 6, move: Taunt }
+  - { level: 12, move: Quick Attack }
+  - { level: 18, move: Metal Claw }
+  - { level: 24, move: Icy Wind }
+  - { level: 30, move: Fury Swipes }
+  - { level: 36, move: Hone Claws }
+  - { level: 42, move: Beat Up }
+  - { level: 48, move: Agility }
+  - { level: 54, move: Screech }
+  - { level: 60, move: Slash }
+  - { level: 45, move: Pixie Slash }
+  - { level: 39, move: Glacial Crush }
+  - { level: 37, move: Heel Drop }

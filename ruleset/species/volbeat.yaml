@@ -4,7 +4,6 @@ aka: { pokeemerald: SPECIES_VOLBEAT }
 types: [Bug, Electric]
 stats: { atk: 90, def: 75, spd: 95, spe: 95 }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Tackle }
   - { level: 5, move: Double Team }
   - { level: 8, move: Confuse Ray }
@@ -19,3 +18,4 @@ learnset:
   - { level: 40, move: Play Rough }
   - { level: 43, move: Double-Edge }
   - { level: 47, move: Infestation }
+  - { level: 38, move: Lightning Slam }

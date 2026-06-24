@@ -23,3 +23,4 @@ learnset:
   - { level: 47, move: Ice Beam }
   - { level: 51, move: Safeguard }
   - { level: 53, move: Hail }
+  - { level: 15, move: Water Whip }

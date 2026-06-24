@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_GRANBULL }
 abilities:
   secondary: Quick Feet
 stats: { atk: 135, def: 80, spe: 75 }
+learnset:
+  - { level: 1, move: Outrage }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Scary Face }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Thunder Fang }
+  - { level: 7, move: Bite }
+  - { level: 13, move: Lick }
+  - { level: 19, move: Headbutt }
+  - { level: 27, move: Roar }
+  - { level: 35, move: Last Resort }
+  - { level: 43, move: Play Rough }
+  - { level: 51, move: Payback }
+  - { level: 59, move: Crunch }
+  - { level: 39, move: Pixie Slash }

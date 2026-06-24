@@ -2,7 +2,6 @@ name: Tauros Paldea Blaze
 chrooked_id: taurospaldeablaze
 aka: { pokeemerald: SPECIES_TAUROS_PALDEA_BLAZE }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 5, move: Work Up }
@@ -17,3 +16,4 @@ learnset:
   - { level: 50, move: Thrash }
   - { level: 55, move: Flare Blitz }
   - { level: 60, move: Close Combat }
+  - { level: 37, move: Cinder Smash }

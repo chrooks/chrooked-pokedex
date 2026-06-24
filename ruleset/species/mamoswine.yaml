@@ -6,7 +6,6 @@ abilities:
   hidden: Stampede
 learnset:
   - { level: 0, move: Double Hit }
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Tackle }
   - { level: 1, move: Flail }
   - { level: 1, move: Powder Snow }
@@ -25,3 +24,4 @@ learnset:
   - { level: 51, move: Earthquake }
   - { level: 58, move: Blizzard }
   - { level: 65, move: Thrash }
+  - { level: 40, move: Glacial Crush }

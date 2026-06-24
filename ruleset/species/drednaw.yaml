@@ -20,3 +20,4 @@ learnset:
   - { level: 66, move: Head Smash }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
+  - { level: 14, move: Water Whip }

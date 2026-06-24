@@ -1,0 +1,25 @@
+name: Iron Valiant
+chrooked_id: ironvaliant
+aka: { dex: 1006 }
+learnset:
+  - { level: 1, move: Electric Terrain }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Shadow Sneak }
+  - { level: 1, move: Fury Cutter }
+  - { level: 7, move: Hypnosis }
+  - { level: 14, move: Feint }
+  - { level: 21, move: Future Sight }
+  - { level: 28, move: Dazzling Gleam }
+  - { level: 35, move: Psycho Cut }
+  - { level: 42, move: Night Slash }
+  - { level: 49, move: Leaf Blade }
+  - { level: 56, move: Moonblast }
+  - { level: 63, move: Close Combat }
+  - { level: 70, move: Knock Off }
+  - { level: 77, move: Destiny Bond }
+  - { level: 84, move: Wide Guard }
+  - { level: 84, move: Quick Guard }
+  - { level: 91, move: Spirit Break }
+  - { level: 45, move: Pixie Slash }
+  - { level: 38, move: One-Inch Punch }

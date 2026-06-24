@@ -7,7 +7,6 @@ abilities:
   hidden: Refrigerate
 stats: { spe: 130 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
   - { level: 1, move: Agility }
@@ -26,3 +25,6 @@ learnset:
   - { level: 54, move: Screech }
   - { level: 60, move: Night Slash }
   - { level: 66, move: Dark Pulse }
+  - { level: 45, move: Pixie Slash }
+  - { level: 39, move: Glacial Crush }
+  - { level: 37, move: Heel Drop }

@@ -2,7 +2,6 @@ name: Chien Pao
 chrooked_id: chienpao
 aka: { pokeemerald: SPECIES_CHIEN_PAO }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Spite }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Mean Look }

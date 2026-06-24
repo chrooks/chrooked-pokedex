@@ -1,0 +1,22 @@
+name: Tepig
+chrooked_id: tepig
+aka: { dex: 498 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 3, move: Tail Whip }
+  - { level: 7, move: Ember }
+  - { level: 9, move: Endure }
+  - { level: 13, move: Defense Curl }
+  - { level: 15, move: Flame Charge }
+  - { level: 19, move: Smog }
+  - { level: 21, move: Rollout }
+  - { level: 25, move: Take Down }
+  - { level: 27, move: Heat Crash }
+  - { level: 31, move: Assurance }
+  - { level: 33, move: Flamethrower }
+  - { level: 37, move: Head Smash }
+  - { level: 39, move: Roar }
+  - { level: 43, move: Flare Blitz }
+  - { level: 48, move: Heel Drop }
+  - { level: 35, move: One-Inch Punch }
+  - { level: 41, move: Cinder Smash }

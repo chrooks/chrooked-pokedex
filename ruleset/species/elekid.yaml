@@ -14,3 +14,5 @@ learnset:
   - { level: 24, move: Discharge }
   - { level: 30, move: Thunderbolt }
   - { level: 36, move: Thunder }
+  - { level: 48, move: Lightning Slam }
+  - { level: 42, move: One-Inch Punch }

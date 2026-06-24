@@ -5,7 +5,6 @@ abilities:
   secondary: Magical Fists
 stats: { hp: 75, atk: 110, def: 70, spa: 105, spd: 70, spe: 110 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Close Combat }
   - { level: 1, move: Taunt }
   - { level: 1, move: Slack Off }
@@ -22,3 +21,5 @@ learnset:
   - { level: 52, move: Acrobatics }
   - { level: 58, move: Calm Mind }
   - { level: 65, move: Raging Fury }
+  - { level: 35, move: One-Inch Punch }
+  - { level: 38, move: Cinder Smash }

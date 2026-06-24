@@ -6,7 +6,6 @@ abilities:
   secondary: Slush Rush
 stats: { spe: 70 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Icicle Crash }
   - { level: 1, move: Endure }
   - { level: 1, move: Growl }
@@ -27,3 +26,4 @@ learnset:
   - { level: 41, move: Blizzard }
   - { level: 46, move: Sheer Cold }
   - { level: 51, move: Superpower }
+  - { level: 38, move: Glacial Crush }

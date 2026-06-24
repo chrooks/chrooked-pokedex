@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_MIENSHAO }
 abilities:
   primary: Reckless
   hidden: Martial Artist
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Reversal }
+  - { level: 1, move: Detect }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Quick Guard }
+  - { level: 15, move: Fury Swipes }
+  - { level: 20, move: Wide Guard }
+  - { level: 25, move: Force Palm }
+  - { level: 30, move: U-turn }
+  - { level: 35, move: Drain Punch }
+  - { level: 40, move: Hone Claws }
+  - { level: 45, move: Aura Sphere }
+  - { level: 53, move: Bounce }
+  - { level: 59, move: Calm Mind }
+  - { level: 66, move: High Jump Kick }
+  - { level: 48, move: One-Inch Punch }

@@ -5,3 +5,22 @@ abilities:
   primary: Venomous
   secondary: Toxic Debris
 stats: { def: 115 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Poison Sting }
+  - { level: 4, move: Harden }
+  - { level: 8, move: Water Gun }
+  - { level: 12, move: Fell Stinger }
+  - { level: 16, move: Minimize }
+  - { level: 20, move: Spikes }
+  - { level: 24, move: Brine }
+  - { level: 28, move: Poison Jab }
+  - { level: 32, move: Pin Missile }
+  - { level: 36, move: Toxic Spikes }
+  - { level: 40, move: Stockpile }
+  - { level: 40, move: Spit Up }
+  - { level: 44, move: Toxic }
+  - { level: 48, move: Aqua Tail }
+  - { level: 52, move: Acupressure }
+  - { level: 56, move: Destiny Bond }
+  - { level: 14, move: Water Whip }

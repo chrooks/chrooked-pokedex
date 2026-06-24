@@ -1,0 +1,20 @@
+name: Grapploct
+chrooked_id: grapploct
+aka: { dex: 853 }
+learnset:
+  - { level: 0, move: Octolock }
+  - { level: 1, move: Octolock }
+  - { level: 1, move: Octazooka }
+  - { level: 1, move: Rock Smash }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Feint }
+  - { level: 1, move: Bind }
+  - { level: 15, move: Detect }
+  - { level: 20, move: Brick Break }
+  - { level: 25, move: Bulk Up }
+  - { level: 30, move: Submission }
+  - { level: 35, move: Taunt }
+  - { level: 40, move: Reversal }
+  - { level: 45, move: Superpower }
+  - { level: 50, move: Topsy-Turvy }
+  - { level: 37, move: One-Inch Punch }

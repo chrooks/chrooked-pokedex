@@ -1,0 +1,20 @@
+name: Araquanid Totem
+chrooked_id: araquanidtotem
+aka: { dex: 752 }
+learnset:
+  - { level: 1, move: Bite }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Bug Bite }
+  - { level: 1, move: Wide Guard }
+  - { level: 1, move: Infestation }
+  - { level: 12, move: Bubble Beam }
+  - { level: 16, move: Aqua Ring }
+  - { level: 20, move: Headbutt }
+  - { level: 26, move: Crunch }
+  - { level: 32, move: Soak }
+  - { level: 38, move: Entrainment }
+  - { level: 44, move: Lunge }
+  - { level: 50, move: Liquidation }
+  - { level: 56, move: Leech Life }
+  - { level: 62, move: Mirror Coat }
+  - { level: 23, move: Water Whip }

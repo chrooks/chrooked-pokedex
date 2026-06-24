@@ -1,0 +1,20 @@
+name: Dartrix
+chrooked_id: dartrix
+aka: { dex: 723 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Leafage }
+  - { level: 9, move: Peck }
+  - { level: 12, move: Shadow Sneak }
+  - { level: 15, move: Razor Leaf }
+  - { level: 20, move: Synthesis }
+  - { level: 25, move: Pluck }
+  - { level: 30, move: Nasty Plot }
+  - { level: 35, move: Sucker Punch }
+  - { level: 40, move: Leaf Blade }
+  - { level: 45, move: Feather Dance }
+  - { level: 50, move: Brave Bird }
+  - { level: 55, move: Pixie Slash }
+  - { level: 37, move: One-Inch Punch }

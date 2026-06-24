@@ -4,3 +4,24 @@ aka: { pokeemerald: SPECIES_BRELOOM }
 abilities:
   secondary: Poison Heal
 stats: { hp: 80 }
+learnset:
+  - { level: 0, move: Mach Punch }
+  - { level: 1, move: Spore }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Leech Seed }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Poison Powder }
+  - { level: 1, move: Toxic }
+  - { level: 12, move: Mega Drain }
+  - { level: 15, move: Headbutt }
+  - { level: 19, move: Feint }
+  - { level: 22, move: Counter }
+  - { level: 28, move: Force Palm }
+  - { level: 33, move: Worry Seed }
+  - { level: 39, move: Brick Break }
+  - { level: 44, move: Seed Bomb }
+  - { level: 50, move: Dynamic Punch }
+  - { level: 55, move: Focus Punch }
+  - { level: 36, move: One-Inch Punch }

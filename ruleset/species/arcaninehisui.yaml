@@ -2,7 +2,6 @@ name: Arcanine Hisui
 chrooked_id: arcaninehisui
 aka: { pokeemerald: SPECIES_ARCANINE_HISUI }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Extreme Speed }
   - { level: 1, move: Extreme Speed }
   - { level: 1, move: Flame Wheel }
@@ -24,3 +23,4 @@ learnset:
   - { level: 64, move: Raging Fury }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
+  - { level: 37, move: Cinder Smash }

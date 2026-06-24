@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_KINGDRA }
 abilities:
   secondary: Sniper
 stats: { atk: 110, def: 75, spa: 110, spd: 75, spe: 95 }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Smokescreen }
+  - { level: 1, move: Twister }
+  - { level: 1, move: Whirlpool }
+  - { level: 1, move: Yawn }
+  - { level: 15, move: Focus Energy }
+  - { level: 20, move: Dragon Breath }
+  - { level: 25, move: Bubble Beam }
+  - { level: 30, move: Agility }
+  - { level: 37, move: Water Pulse }
+  - { level: 44, move: Dragon Pulse }
+  - { level: 51, move: Hydro Pump }
+  - { level: 58, move: Dragon Dance }
+  - { level: 65, move: Rain Dance }
+  - { level: 72, move: Wave Crash }
+  - { level: 17, move: Water Whip }

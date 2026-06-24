@@ -19,3 +19,4 @@ learnset:
   - { level: 45, move: Screech }
   - { level: 50, move: Endeavor }
   - { level: 55, move: Hydro Pump }
+  - { level: 17, move: Water Whip }

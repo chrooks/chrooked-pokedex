@@ -1,0 +1,20 @@
+name: Lurantis Totem
+chrooked_id: lurantistotem
+aka: { dex: 754 }
+learnset:
+  - { level: 0, move: Petal Blizzard }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Solar Beam }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Ingrain }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Leafage }
+  - { level: 15, move: Razor Leaf }
+  - { level: 20, move: Sweet Scent }
+  - { level: 25, move: Slash }
+  - { level: 30, move: X-Scissor }
+  - { level: 37, move: Synthesis }
+  - { level: 44, move: Leaf Blade }
+  - { level: 51, move: Sunny Day }
+  - { level: 63, move: Solar Blade }
+  - { level: 55, move: Pixie Slash }

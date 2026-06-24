@@ -1,0 +1,14 @@
+name: Sewaddle
+chrooked_id: sewaddle
+aka: { dex: 540 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: String Shot }
+  - { level: 8, move: Bug Bite }
+  - { level: 15, move: Razor Leaf }
+  - { level: 22, move: Struggle Bug }
+  - { level: 29, move: Endure }
+  - { level: 31, move: Sticky Web }
+  - { level: 36, move: Bug Buzz }
+  - { level: 43, move: Flail }
+  - { level: 55, move: Pixie Slash }

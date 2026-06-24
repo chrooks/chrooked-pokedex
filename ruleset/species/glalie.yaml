@@ -6,7 +6,6 @@ abilities:
   secondary: Ice Body
 stats: { atk: 100 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Freeze-Dry }
   - { level: 1, move: Headbutt }
   - { level: 1, move: Leer }
@@ -24,3 +23,4 @@ learnset:
   - { level: 54, move: Weather Ball }
   - { level: 61, move: Crunch }
   - { level: 68, move: Blizzard }
+  - { level: 43, move: Glacial Crush }

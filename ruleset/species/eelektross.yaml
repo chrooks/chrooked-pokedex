@@ -4,7 +4,6 @@ aka: { pokeemerald: SPECIES_EELEKTROSS }
 types: [Water, Electric]
 stats: { def: 90, spa: 110, spd: 90 }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Headbutt }
   - { level: 1, move: Aqua Tail }
   - { level: 1, move: Acid }
@@ -15,3 +14,5 @@ learnset:
   - { level: 1, move: Discharge }
   - { level: 1, move: Coil }
   - { level: 5, move: Wild Charge }
+  - { level: 26, move: Water Whip }
+  - { level: 48, move: Lightning Slam }

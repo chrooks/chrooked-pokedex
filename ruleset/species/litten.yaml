@@ -1,0 +1,21 @@
+name: Litten
+chrooked_id: litten
+aka: { dex: 725 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Ember }
+  - { level: 6, move: Lick }
+  - { level: 9, move: Roar }
+  - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Bite }
+  - { level: 18, move: Double Kick }
+  - { level: 21, move: Fire Fang }
+  - { level: 24, move: Scary Face }
+  - { level: 27, move: Swagger }
+  - { level: 30, move: Flamethrower }
+  - { level: 33, move: Thrash }
+  - { level: 36, move: Flare Blitz }
+  - { level: 48, move: Heel Drop }
+  - { level: 42, move: One-Inch Punch }
+  - { level: 39, move: Cinder Smash }

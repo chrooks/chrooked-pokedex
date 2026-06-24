@@ -1,0 +1,27 @@
+name: Raichu Alola
+chrooked_id: raichualola
+aka: { dex: 26 }
+learnset:
+  - { level: 0, move: Psychic }
+  - { level: 1, move: Nuzzle }
+  - { level: 1, move: Electro Ball }
+  - { level: 1, move: Discharge }
+  - { level: 1, move: Nasty Plot }
+  - { level: 1, move: Feint }
+  - { level: 1, move: Iron Tail }
+  - { level: 1, move: Spark }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Light Screen }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Agility }
+  - { level: 1, move: Thunder }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Thunderbolt }
+  - { level: 35, move: Cutsie Slap }
+  - { level: 48, move: Lightning Slam }

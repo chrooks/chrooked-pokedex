@@ -1,0 +1,25 @@
+name: Sceptile Mega
+chrooked_id: sceptilemega
+aka: { dex: 254 }
+learnset:
+  - { level: 0, move: Leaf Blade }
+  - { level: 1, move: False Swipe }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: X-Scissor }
+  - { level: 1, move: Energy Ball }
+  - { level: 1, move: Shed Tail }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Leafage }
+  - { level: 5, move: Mega Drain }
+  - { level: 12, move: Detect }
+  - { level: 15, move: Quick Guard }
+  - { level: 20, move: Assurance }
+  - { level: 25, move: Giga Drain }
+  - { level: 30, move: Slam }
+  - { level: 35, move: Double Team }
+  - { level: 42, move: Screech }
+  - { level: 49, move: Endeavor }
+  - { level: 56, move: Leaf Storm }
+  - { level: 38, move: One-Inch Punch }

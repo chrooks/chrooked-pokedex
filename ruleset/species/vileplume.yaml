@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_VILEPLUME }
 abilities:
   primary: Chloroplast
 stats: { hp: 100, atk: 60, def: 105, spa: 120, spd: 100 }
+learnset:
+  - { level: 0, move: Petal Blizzard }
+  - { level: 1, move: Acid }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Mega Drain }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Poison Powder }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Sleep Powder }
+  - { level: 1, move: Petal Dance }
+  - { level: 1, move: Toxic }
+  - { level: 1, move: Giga Drain }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Moonlight }
+  - { level: 1, move: Grassy Terrain }
+  - { level: 1, move: Moonblast }
+  - { level: 48, move: Miasma }

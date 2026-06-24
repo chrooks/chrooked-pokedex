@@ -1,0 +1,20 @@
+name: Mimikyu Busted
+chrooked_id: mimikyubusted
+aka: { dex: 778 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Wood Hammer }
+  - { level: 6, move: Shadow Sneak }
+  - { level: 12, move: Double Team }
+  - { level: 18, move: Baby-Doll Eyes }
+  - { level: 24, move: Mimic }
+  - { level: 30, move: Hone Claws }
+  - { level: 36, move: Slash }
+  - { level: 42, move: Shadow Claw }
+  - { level: 48, move: Charm }
+  - { level: 54, move: Play Rough }
+  - { level: 60, move: Pain Split }
+  - { level: 27, move: Cutsie Slap }

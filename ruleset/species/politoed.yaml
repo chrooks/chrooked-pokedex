@@ -3,3 +3,20 @@ chrooked_id: politoed
 aka: { pokeemerald: SPECIES_POLITOED }
 types: [Water, Normal]
 stats: { hp: 110, def: 80, spa: 100 }
+learnset:
+  - { level: 0, move: Bounce }
+  - { level: 1, move: Body Slam }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Bubble Beam }
+  - { level: 1, move: Hypnosis }
+  - { level: 1, move: Perish Song }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Hyper Voice }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Earth Power }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Hydro Pump }
+  - { level: 1, move: Belly Drum }
+  - { level: 1, move: Rain Dance }
+  - { level: 26, move: Water Whip }

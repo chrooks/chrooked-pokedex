@@ -1,0 +1,19 @@
+name: Krabby
+chrooked_id: krabby
+aka: { dex: 98 }
+learnset:
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Harden }
+  - { level: 8, move: Metal Claw }
+  - { level: 12, move: Mud Shot }
+  - { level: 16, move: Protect }
+  - { level: 20, move: Bubble Beam }
+  - { level: 24, move: Stomp }
+  - { level: 29, move: Flail }
+  - { level: 32, move: Razor Shell }
+  - { level: 36, move: Slam }
+  - { level: 40, move: Swords Dance }
+  - { level: 44, move: Crabhammer }
+  - { level: 48, move: Guillotine }
+  - { level: 14, move: Water Whip }

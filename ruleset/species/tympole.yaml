@@ -17,3 +17,4 @@ learnset:
   - { level: 30, move: Round }
   - { level: 34, move: Muddy Water }
   - { level: 40, move: Hydro Pump }
+  - { level: 15, move: Water Whip }

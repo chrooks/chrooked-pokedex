@@ -6,7 +6,6 @@ abilities:
   secondary: High Noon
 stats: { atk: 120, def: 115 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Flare Blitz }
   - { level: 1, move: Morning Sun }
   - { level: 1, move: Tackle }
@@ -23,3 +22,4 @@ learnset:
   - { level: 40, move: Solar Beam }
   - { level: 45, move: Wonder Room }
   - { level: 50, move: Explosion }
+  - { level: 37, move: Cinder Smash }

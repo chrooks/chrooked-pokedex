@@ -2,3 +2,21 @@ name: Mawile
 chrooked_id: mawile
 aka: { pokeemerald: SPECIES_MAWILE }
 stats: { hp: 60, def: 95, spd: 75 }
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Fairy Wind }
+  - { level: 8, move: Baton Pass }
+  - { level: 12, move: Bite }
+  - { level: 16, move: Stockpile }
+  - { level: 16, move: Swallow }
+  - { level: 16, move: Spit Up }
+  - { level: 20, move: Sucker Punch }
+  - { level: 24, move: Iron Defense }
+  - { level: 28, move: Crunch }
+  - { level: 32, move: Sweet Scent }
+  - { level: 36, move: Iron Head }
+  - { level: 40, move: Taunt }
+  - { level: 44, move: Fake Tears }
+  - { level: 48, move: Play Rough }
+  - { level: 55, move: Pixie Slash }

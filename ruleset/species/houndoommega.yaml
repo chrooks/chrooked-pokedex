@@ -3,7 +3,6 @@ chrooked_id: houndoommega
 aka: { pokeemerald: SPECIES_HOUNDOOM_MEGA }
 stats: { atk: 130, def: 80, spa: 130, spd: 86, spe: 114 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }
   - { level: 1, move: Smog }

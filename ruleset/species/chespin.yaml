@@ -1,0 +1,17 @@
+name: Chespin
+chrooked_id: chespin
+aka: { dex: 650 }
+learnset:
+  - { level: 1, move: Vine Whip }
+  - { level: 1, move: Growl }
+  - { level: 8, move: Rollout }
+  - { level: 11, move: Bite }
+  - { level: 15, move: Leech Seed }
+  - { level: 18, move: Pin Missile }
+  - { level: 27, move: Take Down }
+  - { level: 32, move: Seed Bomb }
+  - { level: 35, move: Mud Shot }
+  - { level: 42, move: Body Slam }
+  - { level: 45, move: Pain Split }
+  - { level: 48, move: Wood Hammer }
+  - { level: 38, move: One-Inch Punch }

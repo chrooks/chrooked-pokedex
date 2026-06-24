@@ -1,0 +1,15 @@
+name: Grubbin
+chrooked_id: grubbin
+aka: { dex: 736 }
+learnset:
+  - { level: 1, move: Vise Grip }
+  - { level: 1, move: Mud-Slap }
+  - { level: 5, move: String Shot }
+  - { level: 10, move: Bug Bite }
+  - { level: 15, move: Bite }
+  - { level: 21, move: Spark }
+  - { level: 25, move: Sticky Web }
+  - { level: 30, move: X-Scissor }
+  - { level: 35, move: Crunch }
+  - { level: 40, move: Dig }
+  - { level: 48, move: Lightning Slam }

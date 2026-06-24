@@ -1,0 +1,24 @@
+name: Xerneas Active
+chrooked_id: xerneasactive
+aka: { dex: 716 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Gravity }
+  - { level: 5, move: Light Screen }
+  - { level: 10, move: Aurora Beam }
+  - { level: 15, move: Nature Power }
+  - { level: 20, move: Night Slash }
+  - { level: 25, move: Aromatherapy }
+  - { level: 30, move: Psych Up }
+  - { level: 35, move: Horn Leech }
+  - { level: 40, move: Misty Terrain }
+  - { level: 45, move: Ingrain }
+  - { level: 50, move: Take Down }
+  - { level: 55, move: Geomancy }
+  - { level: 60, move: Moonblast }
+  - { level: 65, move: Heal Pulse }
+  - { level: 70, move: Megahorn }
+  - { level: 75, move: Close Combat }
+  - { level: 80, move: Outrage }
+  - { level: 85, move: Giga Impact }
+  - { level: 42, move: Pixie Slash }

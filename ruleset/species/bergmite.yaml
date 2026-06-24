@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_BERGMITE }
 abilities:
   primary: Whiteout
   secondary: Permafrost
+learnset:
+  - { level: 1, move: Harden }
+  - { level: 1, move: Rapid Spin }
+  - { level: 3, move: Tackle }
+  - { level: 6, move: Powder Snow }
+  - { level: 9, move: Curse }
+  - { level: 12, move: Icy Wind }
+  - { level: 15, move: Protect }
+  - { level: 18, move: Avalanche }
+  - { level: 21, move: Bite }
+  - { level: 24, move: Ice Fang }
+  - { level: 27, move: Iron Defense }
+  - { level: 30, move: Recover }
+  - { level: 33, move: Crunch }
+  - { level: 36, move: Take Down }
+  - { level: 39, move: Blizzard }
+  - { level: 42, move: Double-Edge }
+  - { level: 46, move: Glacial Crush }

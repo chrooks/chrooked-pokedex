@@ -2,3 +2,18 @@ name: Toxapex
 chrooked_id: toxapex
 aka: { pokeemerald: SPECIES_TOXAPEX }
 stats: { hp: 65 }
+learnset:
+  - { level: 0, move: Baneful Bunker }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Wide Guard }
+  - { level: 15, move: Venoshock }
+  - { level: 20, move: Recover }
+  - { level: 25, move: Pin Missile }
+  - { level: 30, move: Toxic Spikes }
+  - { level: 35, move: Liquidation }
+  - { level: 42, move: Acid Spray }
+  - { level: 49, move: Poison Jab }
+  - { level: 56, move: Toxic }
+  - { level: 17, move: Water Whip }

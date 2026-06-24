@@ -2,3 +2,21 @@ name: Morgrem
 chrooked_id: morgrem
 aka: { pokeemerald: SPECIES_MORGREM }
 stats: { spa: 55, spd: 70 }
+learnset:
+  - { level: 0, move: False Surrender }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Flatter }
+  - { level: 1, move: Confide }
+  - { level: 12, move: Fake Tears }
+  - { level: 16, move: Assurance }
+  - { level: 20, move: Swagger }
+  - { level: 24, move: Sucker Punch }
+  - { level: 28, move: Torment }
+  - { level: 35, move: Dark Pulse }
+  - { level: 40, move: Nasty Plot }
+  - { level: 46, move: Play Rough }
+  - { level: 52, move: Foul Play }
+  - { level: 43, move: Pixie Slash }
+  - { level: 31, move: Cutsie Slap }
+  - { level: 37, move: Heel Drop }

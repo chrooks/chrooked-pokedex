@@ -6,4 +6,26 @@ abilities:
   secondary: Mountaineer
   hidden: Psyonize
 stats: { atk: 70, spe: 100 }
+learnset:
+  - { level: 1, move: Fire Punch }
+  - { level: 1, move: Ice Punch }
+  - { level: 1, move: Thunder Punch }
+  - { level: 1, move: Work Up }
+  - { level: 1, move: Detect }
+  - { level: 1, move: Confusion }
+  - { level: 12, move: Endure }
+  - { level: 15, move: Feint }
+  - { level: 17, move: Force Palm }
+  - { level: 20, move: Psybeam }
+  - { level: 23, move: Calm Mind }
+  - { level: 25, move: Zen Headbutt }
+  - { level: 28, move: High Jump Kick }
+  - { level: 31, move: Psych Up }
+  - { level: 33, move: Acupressure }
+  - { level: 36, move: Power Trick }
+  - { level: 47, move: Recover }
+  - { level: 53, move: Counter }
+  - { level: 53, move: Axe Kick }
+  - { level: 41, move: Astral Hand }
+  - { level: 44, move: One-Inch Punch }
 evolution: { from: Meditite, method: { level: 34 } }

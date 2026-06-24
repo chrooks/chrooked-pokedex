@@ -1,0 +1,19 @@
+name: Cobalion
+chrooked_id: cobalion
+aka: { dex: 638 }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Work Up }
+  - { level: 7, move: Metal Claw }
+  - { level: 14, move: Quick Guard }
+  - { level: 21, move: Double Kick }
+  - { level: 28, move: Retaliate }
+  - { level: 35, move: Metal Burst }
+  - { level: 42, move: Take Down }
+  - { level: 49, move: Sacred Sword }
+  - { level: 56, move: Swords Dance }
+  - { level: 63, move: Iron Head }
+  - { level: 70, move: Close Combat }
+  - { level: 45, move: Pixie Slash }

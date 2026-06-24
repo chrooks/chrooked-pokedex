@@ -1,0 +1,26 @@
+name: Escavalier
+chrooked_id: escavalier
+aka: { dex: 589 }
+learnset:
+  - { level: 1, move: Fell Stinger }
+  - { level: 1, move: Endure }
+  - { level: 1, move: Flail }
+  - { level: 1, move: Scary Face }
+  - { level: 1, move: Take Down }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Quick Guard }
+  - { level: 12, move: False Swipe }
+  - { level: 16, move: Acid Spray }
+  - { level: 20, move: Headbutt }
+  - { level: 24, move: Reversal }
+  - { level: 28, move: Iron Defense }
+  - { level: 32, move: X-Scissor }
+  - { level: 36, move: Swords Dance }
+  - { level: 40, move: Iron Head }
+  - { level: 44, move: Bug Buzz }
+  - { level: 48, move: Giga Impact }
+  - { level: 52, move: Metal Burst }
+  - { level: 55, move: Pixie Slash }

@@ -5,7 +5,6 @@ abilities:
   hidden: Immolate
 stats: { atk: 125, spe: 110 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Extreme Speed }
   - { level: 1, move: Play Rough }
   - { level: 1, move: Fire Fang }
@@ -23,3 +22,4 @@ learnset:
   - { level: 1, move: Flame Wheel }
   - { level: 1, move: Take Down }
   - { level: 5, move: Flamethrower }
+  - { level: 48, move: Cinder Smash }

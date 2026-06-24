@@ -2,3 +2,20 @@ name: Alomomola
 chrooked_id: alomomola
 aka: { pokeemerald: SPECIES_ALOMOMOLA }
 stats: { spa: 75 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Play Nice }
+  - { level: 5, move: Aqua Ring }
+  - { level: 9, move: Aqua Jet }
+  - { level: 13, move: Helping Hand }
+  - { level: 13, move: Wide Guard }
+  - { level: 21, move: Protect }
+  - { level: 25, move: Water Pulse }
+  - { level: 29, move: Healing Wish }
+  - { level: 33, move: Soak }
+  - { level: 37, move: Wish }
+  - { level: 41, move: Brine }
+  - { level: 45, move: Safeguard }
+  - { level: 49, move: Whirlpool }
+  - { level: 55, move: Hydro Pump }
+  - { level: 17, move: Water Whip }

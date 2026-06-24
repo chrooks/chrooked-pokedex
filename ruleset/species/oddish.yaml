@@ -3,3 +3,19 @@ chrooked_id: oddish
 aka: { pokeemerald: SPECIES_ODDISH }
 abilities:
   primary: Chloroplast
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Growth }
+  - { level: 4, move: Acid }
+  - { level: 8, move: Sweet Scent }
+  - { level: 12, move: Mega Drain }
+  - { level: 14, move: Poison Powder }
+  - { level: 16, move: Stun Spore }
+  - { level: 18, move: Sleep Powder }
+  - { level: 20, move: Giga Drain }
+  - { level: 24, move: Toxic }
+  - { level: 28, move: Moonblast }
+  - { level: 32, move: Grassy Terrain }
+  - { level: 36, move: Moonlight }
+  - { level: 40, move: Petal Dance }
+  - { level: 48, move: Miasma }

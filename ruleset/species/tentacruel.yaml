@@ -1,0 +1,20 @@
+name: Tentacruel
+chrooked_id: tentacruel
+aka: { dex: 73 }
+learnset:
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Acid }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Reflect Type }
+  - { level: 12, move: Supersonic }
+  - { level: 16, move: Water Pulse }
+  - { level: 20, move: Screech }
+  - { level: 24, move: Bubble Beam }
+  - { level: 28, move: Hex }
+  - { level: 34, move: Acid Armor }
+  - { level: 40, move: Poison Jab }
+  - { level: 46, move: Surf }
+  - { level: 52, move: Sludge Wave }
+  - { level: 58, move: Hydro Pump }
+  - { level: 31, move: Miasma }

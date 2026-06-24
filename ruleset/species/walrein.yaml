@@ -6,7 +6,6 @@ abilities:
   hidden: Permafrost
 stats: { atk: 100, def: 100, spa: 90, spd: 100, spe: 50 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Swagger }
   - { level: 1, move: Crunch }
   - { level: 1, move: Ice Fang }
@@ -25,3 +24,5 @@ learnset:
   - { level: 56, move: Blizzard }
   - { level: 64, move: Hail }
   - { level: 72, move: Sheer Cold }
+  - { level: 14, move: Water Whip }
+  - { level: 44, move: Glacial Crush }

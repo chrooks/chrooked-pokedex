@@ -8,7 +8,6 @@ abilities:
   hidden: Immolate
 stats: { atk: 110, def: 86, spa: 95, spd: 86 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Lick }
   - { level: 1, move: Tackle }
   - { level: 5, move: Fury Swipes }
@@ -25,3 +24,4 @@ learnset:
   - { level: 50, move: Fire Spin }
   - { level: 55, move: Inferno }
   - { level: 60, move: Flare Blitz }
+  - { level: 37, move: Cinder Smash }

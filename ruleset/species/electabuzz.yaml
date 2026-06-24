@@ -18,4 +18,6 @@ learnset:
   - { level: 46, move: Thunderbolt }
   - { level: 52, move: Close Combat }
   - { level: 58, move: Thunder }
+  - { level: 41, move: Lightning Slam }
+  - { level: 34, move: One-Inch Punch }
 evolution: { from: Elekid, method: { level: 24 } }

@@ -2,3 +2,10 @@ name: Tynamo
 chrooked_id: tynamo
 aka: { pokeemerald: SPECIES_TYNAMO }
 types: [Water, Electric]
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Spark }
+  - { level: 1, move: Charge Beam }
+  - { level: 26, move: Water Whip }
+  - { level: 48, move: Lightning Slam }

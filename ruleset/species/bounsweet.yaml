@@ -1,0 +1,14 @@
+name: Bounsweet
+chrooked_id: bounsweet
+aka: { dex: 761 }
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 4, move: Play Nice }
+  - { level: 8, move: Rapid Spin }
+  - { level: 12, move: Razor Leaf }
+  - { level: 16, move: Sweet Scent }
+  - { level: 20, move: Magical Leaf }
+  - { level: 24, move: Flail }
+  - { level: 28, move: Teeter Dance }
+  - { level: 32, move: Aromatic Mist }
+  - { level: 48, move: One-Inch Punch }

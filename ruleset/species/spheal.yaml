@@ -3,3 +3,21 @@ chrooked_id: spheal
 aka: { pokeemerald: SPECIES_SPHEAL }
 abilities:
   secondary: Ice Body
+learnset:
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Defense Curl }
+  - { level: 4, move: Growl }
+  - { level: 8, move: Water Gun }
+  - { level: 12, move: Powder Snow }
+  - { level: 16, move: Rest }
+  - { level: 20, move: Snore }
+  - { level: 24, move: Brine }
+  - { level: 28, move: Aurora Beam }
+  - { level: 33, move: Encore }
+  - { level: 36, move: Body Slam }
+  - { level: 40, move: Surf }
+  - { level: 44, move: Blizzard }
+  - { level: 48, move: Hail }
+  - { level: 52, move: Sheer Cold }
+  - { level: 14, move: Water Whip }
+  - { level: 38, move: Glacial Crush }

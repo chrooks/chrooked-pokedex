@@ -3,3 +3,9 @@ chrooked_id: tyrogue
 aka: { pokeemerald: SPECIES_TYROGUE }
 abilities:
   secondary: Steadfast
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Helping Hand }
+  - { level: 48, move: One-Inch Punch }

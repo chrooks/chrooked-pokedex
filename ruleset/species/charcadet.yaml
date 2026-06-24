@@ -4,3 +4,16 @@ aka: { pokeemerald: SPECIES_CHARCADET }
 abilities:
   secondary: Flame Body
   hidden: Weak Armor
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Astonish }
+  - { level: 8, move: Clear Smog }
+  - { level: 12, move: Fire Spin }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 20, move: Night Shade }
+  - { level: 24, move: Flame Charge }
+  - { level: 28, move: Incinerate }
+  - { level: 32, move: Lava Plume }
+  - { level: 55, move: Pixie Slash }
+  - { level: 43, move: Cinder Smash }

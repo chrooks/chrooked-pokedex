@@ -2,7 +2,6 @@ name: Kyurem Black
 chrooked_id: kyuremblack
 aka: { pokeemerald: SPECIES_KYUREM_BLACK }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Dragon Breath }
   - { level: 1, move: Ancient Power }
   - { level: 1, move: Noble Roar }

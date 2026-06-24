@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_METANG }
 abilities:
   secondary: Carnivore
   hidden: Battle Armor
+learnset:
+  - { level: 0, move: Confusion }
+  - { level: 0, move: Metal Claw }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Bullet Punch }
+  - { level: 1, move: Hone Claws }
+  - { level: 6, move: Zen Headbutt }
+  - { level: 12, move: Magnet Rise }
+  - { level: 18, move: Flash Cannon }
+  - { level: 26, move: Take Down }
+  - { level: 34, move: Psychic }
+  - { level: 42, move: Scary Face }
+  - { level: 50, move: Meteor Mash }
+  - { level: 58, move: Iron Defense }
+  - { level: 66, move: Agility }
+  - { level: 74, move: Hyper Beam }
+  - { level: 30, move: Astral Hand }

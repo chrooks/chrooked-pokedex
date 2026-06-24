@@ -3,3 +3,20 @@ chrooked_id: snorunt
 aka: { pokeemerald: SPECIES_SNORUNT }
 abilities:
   secondary: Ice Body
+learnset:
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Leer }
+  - { level: 10, move: Double Team }
+  - { level: 15, move: Ice Shard }
+  - { level: 20, move: Protect }
+  - { level: 25, move: Icy Wind }
+  - { level: 30, move: Frost Breath }
+  - { level: 35, move: Bite }
+  - { level: 40, move: Ice Fang }
+  - { level: 45, move: Snowscape }
+  - { level: 50, move: Weather Ball }
+  - { level: 55, move: Crunch }
+  - { level: 60, move: Blizzard }
+  - { level: 37, move: Glacial Crush }

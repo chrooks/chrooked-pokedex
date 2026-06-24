@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_CINDERACE }
 abilities:
   secondary: Striker
 stats: { atk: 115, spa: 70, spe: 125 }
+learnset:
+  - { level: 0, move: Pyro Ball }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Feint }
+  - { level: 12, move: Double Kick }
+  - { level: 19, move: Flame Charge }
+  - { level: 24, move: Agility }
+  - { level: 30, move: Headbutt }
+  - { level: 38, move: Counter }
+  - { level: 46, move: Bounce }
+  - { level: 54, move: Double-Edge }
+  - { level: 62, move: Court Change }
+  - { level: 42, move: Cinder Smash }

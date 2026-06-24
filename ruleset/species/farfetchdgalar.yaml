@@ -1,0 +1,20 @@
+name: Farfetchd Galar
+chrooked_id: farfetchdgalar
+aka: { dex: 83 }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Sand Attack }
+  - { level: 5, move: Leer }
+  - { level: 10, move: Fury Cutter }
+  - { level: 15, move: Rock Smash }
+  - { level: 20, move: Brutal Swing }
+  - { level: 25, move: Detect }
+  - { level: 30, move: Knock Off }
+  - { level: 35, move: Defog }
+  - { level: 40, move: Brick Break }
+  - { level: 45, move: Swords Dance }
+  - { level: 50, move: Slam }
+  - { level: 55, move: Leaf Blade }
+  - { level: 60, move: Final Gambit }
+  - { level: 65, move: Brave Bird }
+  - { level: 42, move: Pixie Slash }

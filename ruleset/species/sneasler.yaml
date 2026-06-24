@@ -4,4 +4,22 @@ aka: { pokeemerald: SPECIES_SNEASLER }
 abilities:
   primary: Mountaineer
   hidden: Venomize
+learnset:
+  - { level: 0, move: Dire Claw }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Rock Smash }
+  - { level: 1, move: Fling }
+  - { level: 6, move: Taunt }
+  - { level: 12, move: Quick Attack }
+  - { level: 18, move: Metal Claw }
+  - { level: 24, move: Poison Jab }
+  - { level: 30, move: Brick Break }
+  - { level: 36, move: Hone Claws }
+  - { level: 42, move: Slash }
+  - { level: 48, move: Agility }
+  - { level: 54, move: Screech }
+  - { level: 60, move: Close Combat }
+  - { level: 45, move: Pixie Slash }
+  - { level: 39, move: One-Inch Punch }
 evolution: { from: Sneasel Hisui, method: { item: Razor Claw } }

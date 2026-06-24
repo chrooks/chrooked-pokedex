@@ -1,0 +1,19 @@
+name: Stufful
+chrooked_id: stufful
+aka: { dex: 759 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Baby-Doll Eyes }
+  - { level: 8, move: Payback }
+  - { level: 12, move: Brutal Swing }
+  - { level: 16, move: Endure }
+  - { level: 20, move: Strength }
+  - { level: 24, move: Take Down }
+  - { level: 28, move: Flail }
+  - { level: 32, move: Hammer Arm }
+  - { level: 36, move: Thrash }
+  - { level: 40, move: Pain Split }
+  - { level: 44, move: Double-Edge }
+  - { level: 48, move: Superpower }
+  - { level: 34, move: One-Inch Punch }

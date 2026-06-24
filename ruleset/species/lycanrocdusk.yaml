@@ -30,4 +30,5 @@ learnset:
   - { level: 60, move: Stone Edge }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
+  - { level: 39, move: One-Inch Punch }
 evolution: { from: Rockruff Own Tempo, method: { level: 25 } }

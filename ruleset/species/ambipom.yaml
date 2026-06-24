@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_AMBIPOM }
 abilities:
   primary: Run Away
 stats: { atk: 105, spe: 120 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Astonish }
+  - { level: 11, move: Baton Pass }
+  - { level: 15, move: Tickle }
+  - { level: 18, move: Fury Swipes }
+  - { level: 22, move: Swift }
+  - { level: 25, move: Screech }
+  - { level: 29, move: Agility }
+  - { level: 32, move: Double Hit }
+  - { level: 36, move: Fling }
+  - { level: 39, move: Nasty Plot }
+  - { level: 43, move: Last Resort }
+  - { level: 48, move: One-Inch Punch }

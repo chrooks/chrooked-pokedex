@@ -4,3 +4,33 @@ aka: { pokeemerald: SPECIES_ZANGOOSE }
 abilities:
   primary: Toxic Boost
 stats: { atk: 125, spa: 50, spe: 110 }
+learnset:
+  - { level: 1, move: Double Kick }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Counter }
+  - { level: 1, move: Fury Swipes }
+  - { level: 1, move: Curse }
+  - { level: 1, move: Flail }
+  - { level: 1, move: Belly Drum }
+  - { level: 1, move: Feint }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Double Hit }
+  - { level: 1, move: Quick Guard }
+  - { level: 1, move: Final Gambit }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Quick Attack }
+  - { level: 8, move: Fury Cutter }
+  - { level: 12, move: Metal Claw }
+  - { level: 15, move: Hone Claws }
+  - { level: 19, move: Slash }
+  - { level: 22, move: Power Trip }
+  - { level: 26, move: Crush Claw }
+  - { level: 29, move: False Swipe }
+  - { level: 33, move: Switcheroo }
+  - { level: 36, move: Detect }
+  - { level: 40, move: X-Scissor }
+  - { level: 43, move: Taunt }
+  - { level: 47, move: Swords Dance }
+  - { level: 50, move: Close Combat }
+  - { level: 55, move: Pixie Slash }

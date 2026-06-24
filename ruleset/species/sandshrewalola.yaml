@@ -1,0 +1,22 @@
+name: Sandshrew Alola
+chrooked_id: sandshrewalola
+aka: { dex: 27 }
+learnset:
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Scratch }
+  - { level: 3, move: Mist }
+  - { level: 6, move: Powder Snow }
+  - { level: 9, move: Rollout }
+  - { level: 12, move: Fury Cutter }
+  - { level: 15, move: Rapid Spin }
+  - { level: 18, move: Metal Claw }
+  - { level: 21, move: Swift }
+  - { level: 24, move: Fury Swipes }
+  - { level: 27, move: Iron Defense }
+  - { level: 30, move: Slash }
+  - { level: 33, move: Iron Head }
+  - { level: 36, move: Gyro Ball }
+  - { level: 39, move: Swords Dance }
+  - { level: 42, move: Snowscape }
+  - { level: 45, move: Blizzard }
+  - { level: 37, move: Glacial Crush }

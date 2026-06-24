@@ -1,3 +1,21 @@
 name: Graveler Alola
 chrooked_id: graveleralola
 aka: { pokeemerald: SPECIES_GRAVELER_ALOLA }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Rock Polish }
+  - { level: 10, move: Rollout }
+  - { level: 12, move: Spark }
+  - { level: 16, move: Rock Throw }
+  - { level: 18, move: Smack Down }
+  - { level: 22, move: Thunder Punch }
+  - { level: 24, move: Self-Destruct }
+  - { level: 30, move: Stealth Rock }
+  - { level: 34, move: Rock Blast }
+  - { level: 40, move: Discharge }
+  - { level: 44, move: Explosion }
+  - { level: 50, move: Double-Edge }
+  - { level: 54, move: Stone Edge }
+  - { level: 37, move: Lightning Slam }

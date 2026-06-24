@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_POLIWRATH }
 abilities:
   secondary: Hydrate
 stats: { atk: 95, def: 100, spd: 95 }
+learnset:
+  - { level: 0, move: Dynamic Punch }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Hydro Pump }
+  - { level: 1, move: Belly Drum }
+  - { level: 1, move: Rain Dance }
+  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Earth Power }
+  - { level: 1, move: Circle Throw }
+  - { level: 1, move: Body Slam }
+  - { level: 1, move: Bubble Beam }
+  - { level: 1, move: Hypnosis }
+  - { level: 26, move: Water Whip }
+  - { level: 48, move: One-Inch Punch }

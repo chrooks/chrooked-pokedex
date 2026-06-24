@@ -6,7 +6,6 @@ abilities:
   secondary: Permafrost
 stats: { def: 164, spd: 66 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Body Slam }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Rapid Spin }
@@ -26,3 +25,4 @@ learnset:
   - { level: 41, move: Blizzard }
   - { level: 46, move: Double-Edge }
   - { level: 51, move: Icicle Crash }
+  - { level: 38, move: Glacial Crush }

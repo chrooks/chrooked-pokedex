@@ -2,3 +2,22 @@ name: Bibarel
 chrooked_id: bibarel
 aka: { pokeemerald: SPECIES_BIBAREL }
 stats: { hp: 90, def: 70, spa: 70, spd: 80 }
+learnset:
+  - { level: 0, move: Water Gun }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Aqua Jet }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Defense Curl }
+  - { level: 9, move: Rollout }
+  - { level: 13, move: Headbutt }
+  - { level: 18, move: Taunt }
+  - { level: 23, move: Yawn }
+  - { level: 28, move: Crunch }
+  - { level: 33, move: Take Down }
+  - { level: 38, move: Super Fang }
+  - { level: 43, move: Swords Dance }
+  - { level: 48, move: Amnesia }
+  - { level: 53, move: Superpower }
+  - { level: 58, move: Curse }
+  - { level: 15, move: Water Whip }

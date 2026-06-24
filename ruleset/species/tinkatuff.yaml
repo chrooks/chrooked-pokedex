@@ -20,3 +20,4 @@ learnset:
   - { level: 38, move: Heavy Slam }
   - { level: 42, move: Swords Dance }
   - { level: 46, move: Hammer Arm }
+  - { level: 55, move: Pixie Slash }

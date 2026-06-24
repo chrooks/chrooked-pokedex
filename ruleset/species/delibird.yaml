@@ -3,6 +3,5 @@ chrooked_id: delibird
 aka: { pokeemerald: SPECIES_DELIBIRD }
 stats: { hp: 75, atk: 80, def: 70, spa: 80, spd: 70, spe: 80 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Present }
   - { level: 25, move: Drill Peck }

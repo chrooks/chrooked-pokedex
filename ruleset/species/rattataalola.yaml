@@ -1,3 +1,18 @@
 name: Rattata Alola
 chrooked_id: rattataalola
 aka: { pokeemerald: SPECIES_RATTATA_ALOLA }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 4, move: Quick Attack }
+  - { level: 7, move: Focus Energy }
+  - { level: 10, move: Bite }
+  - { level: 13, move: Pursuit }
+  - { level: 16, move: Hyper Fang }
+  - { level: 19, move: Assurance }
+  - { level: 22, move: Crunch }
+  - { level: 25, move: Sucker Punch }
+  - { level: 28, move: Super Fang }
+  - { level: 31, move: Double-Edge }
+  - { level: 34, move: Endeavor }
+  - { level: 48, move: Heel Drop }

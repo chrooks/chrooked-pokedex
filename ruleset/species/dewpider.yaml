@@ -18,3 +18,4 @@ learnset:
   - { level: 40, move: Liquidation }
   - { level: 44, move: Leech Life }
   - { level: 48, move: Mirror Coat }
+  - { level: 14, move: Water Whip }

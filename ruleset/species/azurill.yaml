@@ -1,3 +1,13 @@
 name: Azurill
 chrooked_id: azurill
 aka: { pokeemerald: SPECIES_AZURILL }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Splash }
+  - { level: 3, move: Helping Hand }
+  - { level: 6, move: Bubble Beam }
+  - { level: 9, move: Charm }
+  - { level: 12, move: Slam }
+  - { level: 15, move: Bounce }
+  - { level: 26, move: Water Whip }

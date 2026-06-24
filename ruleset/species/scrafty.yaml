@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_SCRAFTY }
 abilities:
   secondary: Striker
 stats: { hp: 70, atk: 95, spe: 60 }
+learnset:
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Low Kick }
+  - { level: 1, move: Payback }
+  - { level: 12, move: Sand Attack }
+  - { level: 16, move: Facade }
+  - { level: 20, move: Torment }
+  - { level: 24, move: Beat Up }
+  - { level: 28, move: Scary Face }
+  - { level: 32, move: Brick Break }
+  - { level: 36, move: Swagger }
+  - { level: 42, move: Crunch }
+  - { level: 48, move: High Jump Kick }
+  - { level: 54, move: Focus Punch }
+  - { level: 60, move: Head Smash }
+  - { level: 39, move: Heel Drop }
+  - { level: 45, move: One-Inch Punch }

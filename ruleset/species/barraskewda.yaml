@@ -1,0 +1,16 @@
+name: Barraskewda
+chrooked_id: barraskewda
+aka: { dex: 847 }
+learnset:
+  - { level: 1, move: Fury Attack }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Aqua Jet }
+  - { level: 1, move: Throat Chop }
+  - { level: 18, move: Agility }
+  - { level: 24, move: Dive }
+  - { level: 32, move: Focus Energy }
+  - { level: 40, move: Crunch }
+  - { level: 48, move: Liquidation }
+  - { level: 56, move: Double-Edge }
+  - { level: 14, move: Water Whip }

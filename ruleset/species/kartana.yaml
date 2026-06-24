@@ -1,0 +1,21 @@
+name: Kartana
+chrooked_id: kartana
+aka: { dex: 798 }
+learnset:
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Vacuum Wave }
+  - { level: 5, move: Razor Leaf }
+  - { level: 10, move: False Swipe }
+  - { level: 15, move: Cut }
+  - { level: 20, move: Air Cutter }
+  - { level: 25, move: Aerial Ace }
+  - { level: 30, move: Detect }
+  - { level: 35, move: Night Slash }
+  - { level: 40, move: Synthesis }
+  - { level: 45, move: Laser Focus }
+  - { level: 50, move: Defog }
+  - { level: 55, move: Leaf Blade }
+  - { level: 60, move: Sacred Sword }
+  - { level: 65, move: Swords Dance }
+  - { level: 70, move: Guillotine }
+  - { level: 42, move: Pixie Slash }

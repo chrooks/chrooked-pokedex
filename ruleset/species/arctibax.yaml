@@ -1,0 +1,18 @@
+name: Arctibax
+chrooked_id: arctibax
+aka: { dex: 997 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Dragon Tail }
+  - { level: 6, move: Icy Wind }
+  - { level: 12, move: Dragon Breath }
+  - { level: 18, move: Focus Energy }
+  - { level: 24, move: Bite }
+  - { level: 29, move: Ice Fang }
+  - { level: 40, move: Take Down }
+  - { level: 45, move: Ice Beam }
+  - { level: 50, move: Crunch }
+  - { level: 55, move: Icicle Crash }
+  - { level: 36, move: Pixie Slash }
+  - { level: 38, move: Glacial Crush }

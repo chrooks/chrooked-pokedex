@@ -3,3 +3,8 @@ chrooked_id: feebas
 aka: { pokeemerald: SPECIES_FEEBAS }
 abilities:
   secondary: Oblivious
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 15, move: Tackle }
+  - { level: 25, move: Flail }
+  - { level: 20, move: Water Whip }

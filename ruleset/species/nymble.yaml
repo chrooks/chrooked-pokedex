@@ -17,3 +17,4 @@ learnset:
   - { level: 27, move: Agility }
   - { level: 30, move: Leech Life }
   - { level: 34, move: Guillotine }
+  - { level: 48, move: Heel Drop }

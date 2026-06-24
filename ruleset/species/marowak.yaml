@@ -15,7 +15,7 @@ learnset:
   - { level: 24, move: Knock Off }
   - { level: 28, move: Bone Rush }
   - { level: 32, move: Swords Dance }
-  - { level: 38, move: Slam }
+  - { level: 38, move: Shadow Bone }
   - { level: 44, move: Bonemerang }
   - { level: 50, move: Earthquake }
   - { level: 56, move: Double-Edge }

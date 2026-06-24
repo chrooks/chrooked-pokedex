@@ -5,7 +5,6 @@ abilities:
   hidden: Infernal Maw
 stats: { atk: 105 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }
   - { level: 1, move: Smog }

@@ -2,7 +2,6 @@ name: Cetitan
 chrooked_id: cetitan
 aka: { pokeemerald: SPECIES_CETITAN }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Tackle }
   - { level: 1, move: Powder Snow }
   - { level: 6, move: Growl }
@@ -18,3 +17,4 @@ learnset:
   - { level: 44, move: Ice Spinner }
   - { level: 49, move: Double-Edge }
   - { level: 53, move: Blizzard }
+  - { level: 38, move: Glacial Crush }

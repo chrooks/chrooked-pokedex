@@ -2,7 +2,6 @@ name: Groudon Primal
 chrooked_id: groudonprimal
 aka: { pokeemerald: SPECIES_GROUDON_PRIMAL }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Scary Face }
   - { level: 1, move: Ancient Power }
   - { level: 1, move: Mud Shot }

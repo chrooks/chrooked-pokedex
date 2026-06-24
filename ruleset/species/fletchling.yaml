@@ -22,3 +22,4 @@ learnset:
   - { level: 34, move: Tailwind }
   - { level: 38, move: Steel Wing }
   - { level: 42, move: Fly }
+  - { level: 48, move: Cinder Smash }

@@ -2,3 +2,18 @@ name: Relicanth
 chrooked_id: relicanth
 aka: { pokeemerald: SPECIES_RELICANTH }
 stats: { atk: 100 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 5, move: Water Gun }
+  - { level: 10, move: Ancient Power }
+  - { level: 15, move: Yawn }
+  - { level: 20, move: Dive }
+  - { level: 25, move: Take Down }
+  - { level: 30, move: Aqua Tail }
+  - { level: 35, move: Rest }
+  - { level: 40, move: Flail }
+  - { level: 45, move: Hydro Pump }
+  - { level: 50, move: Double-Edge }
+  - { level: 55, move: Head Smash }
+  - { level: 17, move: Water Whip }

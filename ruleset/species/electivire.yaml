@@ -14,7 +14,6 @@ learnset:
   - { level: 1, move: Ice Punch }
   - { level: 1, move: Fire Punch }
   - { level: 1, move: Brick Break }
-  - { level: 1, move: Lightning Slam }
   - { level: 24, move: Thunder Wave }
   - { level: 30, move: Discharge }
   - { level: 36, move: Bulk Up }
@@ -22,4 +21,6 @@ learnset:
   - { level: 48, move: Close Combat }
   - { level: 54, move: Thunder }
   - { level: 60, move: Giga Impact }
+  - { level: 39, move: Lightning Slam }
+  - { level: 45, move: One-Inch Punch }
 evolution: { from: Electabuzz, method: { level: 40 } }

@@ -1,0 +1,20 @@
+name: Psyduck
+chrooked_id: psyduck
+aka: { dex: 54 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 3, move: Water Gun }
+  - { level: 6, move: Confusion }
+  - { level: 9, move: Fury Swipes }
+  - { level: 12, move: Water Pulse }
+  - { level: 15, move: Disable }
+  - { level: 18, move: Zen Headbutt }
+  - { level: 21, move: Screech }
+  - { level: 24, move: Aqua Tail }
+  - { level: 27, move: Soak }
+  - { level: 30, move: Psych Up }
+  - { level: 34, move: Amnesia }
+  - { level: 39, move: Wonder Room }
+  - { level: 14, move: Water Whip }
+  - { level: 42, move: Astral Hand }

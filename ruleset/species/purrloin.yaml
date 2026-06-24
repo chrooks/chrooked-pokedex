@@ -1,0 +1,17 @@
+name: Purrloin
+chrooked_id: purrloin
+aka: { dex: 509 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Sand Attack }
+  - { level: 5, move: Fake Out }
+  - { level: 12, move: Fury Swipes }
+  - { level: 16, move: Torment }
+  - { level: 21, move: Assurance }
+  - { level: 24, move: Hone Claws }
+  - { level: 28, move: Sucker Punch }
+  - { level: 32, move: Nasty Plot }
+  - { level: 36, move: Night Slash }
+  - { level: 40, move: Play Rough }
+  - { level: 48, move: Heel Drop }

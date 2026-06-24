@@ -3,3 +3,19 @@ chrooked_id: totodile
 aka: { pokeemerald: SPECIES_TOTODILE }
 abilities:
   secondary: Carnivore
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 6, move: Water Gun }
+  - { level: 9, move: Bite }
+  - { level: 13, move: Scary Face }
+  - { level: 19, move: Ice Fang }
+  - { level: 22, move: Flail }
+  - { level: 27, move: Crunch }
+  - { level: 30, move: Slash }
+  - { level: 33, move: Screech }
+  - { level: 37, move: Thrash }
+  - { level: 41, move: Aqua Tail }
+  - { level: 45, move: Superpower }
+  - { level: 50, move: Hydro Pump }
+  - { level: 16, move: Water Whip }

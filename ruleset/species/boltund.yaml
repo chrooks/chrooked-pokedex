@@ -3,7 +3,6 @@ chrooked_id: boltund
 aka: { pokeemerald: SPECIES_BOLTUND }
 stats: { hp: 80, spe: 125 }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Electrify }
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
@@ -17,3 +16,4 @@ learnset:
   - { level: 48, move: Wild Charge }
   - { level: 55, move: Play Rough }
   - { level: 62, move: Electric Terrain }
+  - { level: 37, move: Lightning Slam }

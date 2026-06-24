@@ -7,7 +7,6 @@ abilities:
   hidden: Blitz
 stats: { spa: 75, spe: 120 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Smart Strike }
   - { level: 1, move: Smart Strike }
   - { level: 1, move: Megahorn }
@@ -26,3 +25,4 @@ learnset:
   - { level: 49, move: Inferno }
   - { level: 56, move: Fire Blast }
   - { level: 63, move: Flare Blitz }
+  - { level: 39, move: Cinder Smash }

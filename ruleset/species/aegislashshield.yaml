@@ -17,3 +17,4 @@ learnset:
   - { level: 1, move: Metal Sound }
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Tackle }
+  - { level: 55, move: Pixie Slash }

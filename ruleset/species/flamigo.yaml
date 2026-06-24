@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_FLAMIGO }
 abilities:
   secondary: Striker
 stats: { spd: 74 }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Copycat }
+  - { level: 5, move: Double Kick }
+  - { level: 9, move: Detect }
+  - { level: 12, move: Wing Attack }
+  - { level: 15, move: Focus Energy }
+  - { level: 18, move: Low Kick }
+  - { level: 21, move: Feint }
+  - { level: 27, move: Payback }
+  - { level: 31, move: Roost }
+  - { level: 35, move: Air Slash }
+  - { level: 39, move: Mega Kick }
+  - { level: 44, move: Wide Guard }
+  - { level: 48, move: Throat Chop }
+  - { level: 54, move: Brave Bird }
+  - { level: 37, move: One-Inch Punch }

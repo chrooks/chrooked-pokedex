@@ -5,3 +5,17 @@ abilities:
   primary: Hydrate
   secondary: Impale
 stats: { atk: 112, spa: 75 }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Water Pulse }
+  - { level: 15, move: Horn Attack }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Aqua Ring }
+  - { level: 30, move: Flail }
+  - { level: 37, move: Waterfall }
+  - { level: 44, move: Soak }
+  - { level: 51, move: Megahorn }
+  - { level: 58, move: Horn Drill }
+  - { level: 17, move: Water Whip }

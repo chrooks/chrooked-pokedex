@@ -4,7 +4,6 @@ aka: { pokeemerald: SPECIES_EMBOAR }
 types: [Fire, Dark]
 stats: { atk: 125, def: 75, spa: 90, spd: 75 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Endure }
   - { level: 1, move: Hammer Arm }
   - { level: 1, move: Tackle }
@@ -22,3 +21,6 @@ learnset:
   - { level: 50, move: Head Smash }
   - { level: 55, move: Roar }
   - { level: 62, move: Flare Blitz }
+  - { level: 46, move: Heel Drop }
+  - { level: 34, move: One-Inch Punch }
+  - { level: 36, move: Cinder Smash }

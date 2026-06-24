@@ -1,0 +1,19 @@
+name: Darumaka
+chrooked_id: darumaka
+aka: { dex: 554 }
+learnset:
+  - { level: 1, move: Ember }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Taunt }
+  - { level: 8, move: Bite }
+  - { level: 12, move: Incinerate }
+  - { level: 16, move: Work Up }
+  - { level: 20, move: Fire Fang }
+  - { level: 24, move: Headbutt }
+  - { level: 28, move: Fire Punch }
+  - { level: 32, move: Uproar }
+  - { level: 36, move: Belly Drum }
+  - { level: 40, move: Flare Blitz }
+  - { level: 44, move: Thrash }
+  - { level: 48, move: Superpower }
+  - { level: 38, move: Cinder Smash }

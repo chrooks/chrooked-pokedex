@@ -5,3 +5,19 @@ types: [Dark, Fairy]
 abilities:
   primary: Sharpness
 stats: { spe: 100 }
+learnset:
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Double Team }
+  - { level: 10, move: Knock Off }
+  - { level: 15, move: Detect }
+  - { level: 20, move: Taunt }
+  - { level: 25, move: Slash }
+  - { level: 30, move: Night Slash }
+  - { level: 35, move: Focus Energy }
+  - { level: 40, move: Sucker Punch }
+  - { level: 45, move: Swords Dance }
+  - { level: 50, move: Future Sight }
+  - { level: 55, move: Perish Song }
+  - { level: 42, move: Pixie Slash }
+  - { level: 22, move: Cutsie Slap }

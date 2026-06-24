@@ -2,3 +2,25 @@ name: Salazzle
 chrooked_id: salazzle
 aka: { pokeemerald: SPECIES_SALAZZLE }
 stats: { spa: 120, spe: 120 }
+learnset:
+  - { level: 0, move: Fire Lash }
+  - { level: 1, move: Endeavor }
+  - { level: 1, move: Knock Off }
+  - { level: 1, move: Torment }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Poison Gas }
+  - { level: 1, move: Encore }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Smog }
+  - { level: 1, move: Pound }
+  - { level: 15, move: Poison Fang }
+  - { level: 20, move: Sweet Scent }
+  - { level: 25, move: Nasty Plot }
+  - { level: 30, move: Incinerate }
+  - { level: 37, move: Venoshock }
+  - { level: 44, move: Dragon Pulse }
+  - { level: 51, move: Flamethrower }
+  - { level: 58, move: Toxic }
+  - { level: 33, move: Miasma }

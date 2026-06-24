@@ -1,0 +1,20 @@
+name: Inkay
+chrooked_id: inkay
+aka: { dex: 686 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Peck }
+  - { level: 3, move: Hypnosis }
+  - { level: 6, move: Wrap }
+  - { level: 9, move: Payback }
+  - { level: 12, move: Pluck }
+  - { level: 15, move: Psybeam }
+  - { level: 18, move: Swagger }
+  - { level: 21, move: Slash }
+  - { level: 24, move: Night Slash }
+  - { level: 27, move: Psycho Cut }
+  - { level: 31, move: Switcheroo }
+  - { level: 33, move: Foul Play }
+  - { level: 36, move: Topsy-Turvy }
+  - { level: 39, move: Superpower }
+  - { level: 42, move: Astral Hand }

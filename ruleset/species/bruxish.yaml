@@ -2,3 +2,17 @@ name: Bruxish
 chrooked_id: bruxish
 aka: { pokeemerald: SPECIES_BRUXISH }
 stats: { atk: 110, spe: 100 }
+learnset:
+  - { level: 1, move: Water Gun }
+  - { level: 4, move: Astonish }
+  - { level: 9, move: Confusion }
+  - { level: 12, move: Bite }
+  - { level: 17, move: Aqua Jet }
+  - { level: 20, move: Disable }
+  - { level: 25, move: Psyshock }
+  - { level: 28, move: Crunch }
+  - { level: 33, move: Aqua Tail }
+  - { level: 36, move: Screech }
+  - { level: 41, move: Psychic Fangs }
+  - { level: 44, move: Wave Crash }
+  - { level: 14, move: Water Whip }

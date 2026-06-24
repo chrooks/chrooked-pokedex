@@ -5,3 +5,21 @@ abilities:
   secondary: Tough Claws
   hidden: Intimidate
 stats: { hp: 85, atk: 105, def: 90, spa: 105, spd: 90, spe: 65 }
+learnset:
+  - { level: 0, move: Aqua Jet }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Metal Claw }
+  - { level: 11, move: Swords Dance }
+  - { level: 15, move: Peck }
+  - { level: 19, move: Bubble Beam }
+  - { level: 24, move: Swagger }
+  - { level: 28, move: Fury Attack }
+  - { level: 33, move: Brine }
+  - { level: 39, move: Whirlpool }
+  - { level: 46, move: Mist }
+  - { level: 52, move: Drill Peck }
+  - { level: 59, move: Hydro Pump }
+  - { level: 66, move: Wave Crash }
+  - { level: 17, move: Water Whip }

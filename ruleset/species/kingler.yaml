@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_KINGLER }
 types: [Water, Steel]
 abilities:
   hidden: Death Grip
+learnset:
+  - { level: 1, move: Wide Guard }
+  - { level: 1, move: Hammer Arm }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Metal Claw }
+  - { level: 12, move: Mud Shot }
+  - { level: 16, move: Protect }
+  - { level: 20, move: Bubble Beam }
+  - { level: 24, move: Stomp }
+  - { level: 31, move: Flail }
+  - { level: 36, move: Razor Shell }
+  - { level: 42, move: Slam }
+  - { level: 48, move: Swords Dance }
+  - { level: 54, move: Crabhammer }
+  - { level: 60, move: Guillotine }
+  - { level: 14, move: Water Whip }

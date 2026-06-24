@@ -2,7 +2,6 @@ name: Eiscue Noice
 chrooked_id: eiscuenoice
 aka: { pokeemerald: SPECIES_EISCUE_NOICE }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Tackle }
   - { level: 1, move: Powder Snow }
   - { level: 6, move: Mist }
@@ -15,3 +14,4 @@ learnset:
   - { level: 48, move: Aurora Veil }
   - { level: 54, move: Surf }
   - { level: 60, move: Blizzard }
+  - { level: 39, move: Glacial Crush }

@@ -3,7 +3,6 @@ chrooked_id: arctovish
 aka: { pokeemerald: SPECIES_ARCTOVISH }
 stats: { atk: 115, def: 90, spa: 90, spd: 80 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Water Gun }
   - { level: 7, move: Protect }
@@ -17,3 +16,5 @@ learnset:
   - { level: 63, move: Fishious Rend }
   - { level: 70, move: Icicle Crash }
   - { level: 77, move: Blizzard }
+  - { level: 17, move: Water Whip }
+  - { level: 38, move: Glacial Crush }

@@ -2,7 +2,6 @@ name: Abomasnow Mega
 chrooked_id: abomasnowmega
 aka: { pokeemerald: SPECIES_ABOMASNOW_MEGA }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Ice Punch }
   - { level: 1, move: Leer }
   - { level: 1, move: Mist }

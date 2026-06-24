@@ -6,4 +6,24 @@ abilities:
   secondary: Striker
   hidden: Scrappy
 stats: { atk: 110, def: 85, spa: 55, spd: 95, spe: 110 }
+learnset:
+  - { level: 1, move: Mirror Coat }
+  - { level: 1, move: Magic Coat }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 12, move: After You }
+  - { level: 16, move: Quick Attack }
+  - { level: 20, move: Double Kick }
+  - { level: 24, move: Charm }
+  - { level: 28, move: Baton Pass }
+  - { level: 32, move: Headbutt }
+  - { level: 36, move: Agility }
+  - { level: 40, move: Entrainment }
+  - { level: 44, move: Flatter }
+  - { level: 48, move: Bounce }
+  - { level: 52, move: Healing Wish }
+  - { level: 56, move: High Jump Kick }
+  - { level: 34, move: One-Inch Punch }
 evolution: { from: Buneary, method: { level: 34 } }

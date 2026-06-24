@@ -2,3 +2,20 @@ name: Heracross
 chrooked_id: heracross
 aka: { pokeemerald: SPECIES_HERACROSS }
 stats: { spe: 90 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Arm Thrust }
+  - { level: 5, move: Fury Attack }
+  - { level: 10, move: Endure }
+  - { level: 15, move: Aerial Ace }
+  - { level: 20, move: Horn Attack }
+  - { level: 25, move: Counter }
+  - { level: 30, move: Brick Break }
+  - { level: 35, move: Pin Missile }
+  - { level: 40, move: Throat Chop }
+  - { level: 45, move: Thrash }
+  - { level: 50, move: Swords Dance }
+  - { level: 55, move: Megahorn }
+  - { level: 60, move: Close Combat }
+  - { level: 37, move: One-Inch Punch }

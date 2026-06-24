@@ -3,7 +3,6 @@ chrooked_id: incineroar
 aka: { pokeemerald: SPECIES_INCINEROAR }
 stats: { def: 100 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Darkest Lariat }
   - { level: 1, move: Scratch }
   - { level: 1, move: Growl }
@@ -22,3 +21,6 @@ learnset:
   - { level: 44, move: Flamethrower }
   - { level: 51, move: Thrash }
   - { level: 58, move: Flare Blitz }
+  - { level: 38, move: Heel Drop }
+  - { level: 35, move: One-Inch Punch }
+  - { level: 41, move: Cinder Smash }

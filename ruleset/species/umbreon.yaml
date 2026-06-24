@@ -5,3 +5,29 @@ abilities:
   primary: Full Moon
   secondary: Magic Guard
   hidden: Obfuscate
+learnset:
+  - { level: 0, move: Snarl }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Take Down }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Swift }
+  - { level: 1, move: Baton Pass }
+  - { level: 5, move: Sand Attack }
+  - { level: 10, move: Quick Attack }
+  - { level: 15, move: Baby-Doll Eyes }
+  - { level: 20, move: Confuse Ray }
+  - { level: 25, move: Assurance }
+  - { level: 30, move: Moonlight }
+  - { level: 35, move: Guard Swap }
+  - { level: 40, move: Dark Pulse }
+  - { level: 45, move: Screech }
+  - { level: 50, move: Mean Look }
+  - { level: 55, move: Last Resort }
+  - { level: 37, move: Heel Drop }

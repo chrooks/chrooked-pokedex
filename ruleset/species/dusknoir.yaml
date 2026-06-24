@@ -5,3 +5,25 @@ types: [Ghost, Fighting]
 abilities:
   hidden: Frisk
 stats: { hp: 65 }
+learnset:
+  - { level: 1, move: Fire Punch }
+  - { level: 1, move: Ice Punch }
+  - { level: 1, move: Thunder Punch }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Shadow Sneak }
+  - { level: 1, move: Gravity }
+  - { level: 1, move: Shadow Punch }
+  - { level: 1, move: Astonish }
+  - { level: 12, move: Confuse Ray }
+  - { level: 16, move: Night Shade }
+  - { level: 20, move: Payback }
+  - { level: 24, move: Will-O-Wisp }
+  - { level: 28, move: Mean Look }
+  - { level: 32, move: Hex }
+  - { level: 36, move: Curse }
+  - { level: 42, move: Shadow Ball }
+  - { level: 48, move: Future Sight }
+  - { level: 54, move: Destiny Bond }
+  - { level: 39, move: One-Inch Punch }

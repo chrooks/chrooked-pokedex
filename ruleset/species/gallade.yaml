@@ -4,3 +4,40 @@ aka: { pokeemerald: SPECIES_GALLADE }
 abilities:
   secondary: Sharpness
 stats: { hp: 70, spa: 60, spd: 110, spe: 95 }
+learnset:
+  - { level: 0, move: Slash }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Imprison }
+  - { level: 1, move: Life Dew }
+  - { level: 1, move: Future Sight }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Sacred Sword }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Calm Mind }
+  - { level: 1, move: Leaf Blade }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Draining Kiss }
+  - { level: 1, move: Hypnosis }
+  - { level: 1, move: Psychic }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Psybeam }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Dream Eater }
+  - { level: 1, move: Aqua Cutter }
+  - { level: 9, move: Helping Hand }
+  - { level: 12, move: Feint }
+  - { level: 15, move: Teleport }
+  - { level: 18, move: Aerial Ace }
+  - { level: 23, move: False Swipe }
+  - { level: 28, move: Protect }
+  - { level: 35, move: Swords Dance }
+  - { level: 42, move: Psycho Cut }
+  - { level: 49, move: Heal Pulse }
+  - { level: 56, move: Wide Guard }
+  - { level: 56, move: Quick Guard }
+  - { level: 63, move: Close Combat }
+  - { level: 45, move: Pixie Slash }
+  - { level: 31, move: Astral Hand }
+  - { level: 38, move: One-Inch Punch }

@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_SHINX }
 abilities:
   secondary: Carnivore
 stats: { spe: 65 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Thunder Shock }
+  - { level: 8, move: Charge }
+  - { level: 12, move: Bite }
+  - { level: 16, move: Spark }
+  - { level: 20, move: Roar }
+  - { level: 24, move: Volt Switch }
+  - { level: 28, move: Scary Face }
+  - { level: 32, move: Thunder Wave }
+  - { level: 36, move: Crunch }
+  - { level: 40, move: Discharge }
+  - { level: 44, move: Swagger }
+  - { level: 48, move: Wild Charge }
+  - { level: 38, move: Lightning Slam }

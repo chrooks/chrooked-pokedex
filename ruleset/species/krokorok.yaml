@@ -22,3 +22,4 @@ learnset:
   - { level: 35, move: Foul Play }
   - { level: 42, move: Earthquake }
   - { level: 47, move: Thrash }
+  - { level: 38, move: Heel Drop }

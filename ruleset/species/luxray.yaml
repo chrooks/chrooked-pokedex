@@ -7,7 +7,6 @@ abilities:
   secondary: Carnivore
 stats: { def: 75, spa: 75, spd: 75, spe: 100 }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
   - { level: 1, move: Thunder Shock }
@@ -23,3 +22,4 @@ learnset:
   - { level: 64, move: Discharge }
   - { level: 72, move: Swagger }
   - { level: 80, move: Wild Charge }
+  - { level: 44, move: Lightning Slam }

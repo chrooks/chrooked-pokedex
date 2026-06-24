@@ -5,4 +5,23 @@ abilities:
   secondary: Sharpness
   hidden: Death Grip
 stats: { def: 105 }
+learnset:
+  - { level: 0, move: Bullet Punch }
+  - { level: 1, move: False Swipe }
+  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Agility }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Air Slash }
+  - { level: 1, move: Fury Cutter }
+  - { level: 12, move: Metal Claw }
+  - { level: 16, move: Double Team }
+  - { level: 20, move: Double Hit }
+  - { level: 24, move: Slash }
+  - { level: 28, move: Focus Energy }
+  - { level: 32, move: Iron Defense }
+  - { level: 36, move: Iron Head }
+  - { level: 40, move: X-Scissor }
+  - { level: 44, move: Swords Dance }
+  - { level: 55, move: Pixie Slash }
 evolution: { from: Scyther, method: { item: Metal Coat } }

@@ -1,0 +1,19 @@
+name: Pancham
+chrooked_id: pancham
+aka: { dex: 674 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Arm Thrust }
+  - { level: 8, move: Taunt }
+  - { level: 12, move: Circle Throw }
+  - { level: 16, move: Low Sweep }
+  - { level: 20, move: Work Up }
+  - { level: 24, move: Slash }
+  - { level: 28, move: Vital Throw }
+  - { level: 33, move: Crunch }
+  - { level: 36, move: Body Slam }
+  - { level: 40, move: Parting Shot }
+  - { level: 44, move: Entrainment }
+  - { level: 48, move: Heel Drop }
+  - { level: 38, move: One-Inch Punch }

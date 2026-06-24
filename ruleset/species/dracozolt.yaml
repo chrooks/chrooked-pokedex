@@ -3,7 +3,6 @@ chrooked_id: dracozolt
 aka: { pokeemerald: SPECIES_DRACOZOLT }
 stats: { atk: 115 }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Shock }
   - { level: 7, move: Charge }
@@ -17,3 +16,4 @@ learnset:
   - { level: 63, move: Bolt Beak }
   - { level: 70, move: Dragon Pulse }
   - { level: 77, move: Dragon Rush }
+  - { level: 38, move: Lightning Slam }

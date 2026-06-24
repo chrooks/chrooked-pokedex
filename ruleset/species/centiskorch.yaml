@@ -2,7 +2,6 @@ name: Centiskorch
 chrooked_id: centiskorch
 aka: { pokeemerald: SPECIES_CENTISKORCH }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Inferno }
   - { level: 1, move: Ember }
   - { level: 1, move: Smokescreen }
@@ -17,3 +16,4 @@ learnset:
   - { level: 53, move: Fire Lash }
   - { level: 60, move: Lunge }
   - { level: 67, move: Burn Up }
+  - { level: 36, move: Cinder Smash }

@@ -1,0 +1,16 @@
+name: Yamper
+chrooked_id: yamper
+aka: { dex: 835 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Nuzzle }
+  - { level: 10, move: Bite }
+  - { level: 15, move: Roar }
+  - { level: 20, move: Spark }
+  - { level: 26, move: Charm }
+  - { level: 30, move: Crunch }
+  - { level: 35, move: Charge }
+  - { level: 40, move: Wild Charge }
+  - { level: 45, move: Play Rough }
+  - { level: 48, move: Lightning Slam }

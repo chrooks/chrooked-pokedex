@@ -7,3 +7,20 @@ abilities:
   secondary: Frighten
   hidden: Hubris
 stats: { spa: 85 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Hypnosis }
+  - { level: 1, move: Switcheroo }
+  - { level: 13, move: Headbutt }
+  - { level: 17, move: Poison Gas }
+  - { level: 21, move: Psybeam }
+  - { level: 25, move: Psych Up }
+  - { level: 32, move: Zen Headbutt }
+  - { level: 37, move: Swagger }
+  - { level: 42, move: Psychic }
+  - { level: 47, move: Nasty Plot }
+  - { level: 51, move: Psyshock }
+  - { level: 56, move: Future Sight }
+  - { level: 29, move: Astral Hand }

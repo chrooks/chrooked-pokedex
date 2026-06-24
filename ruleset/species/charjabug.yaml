@@ -1,0 +1,18 @@
+name: Charjabug
+chrooked_id: charjabug
+aka: { dex: 737 }
+learnset:
+  - { level: 0, move: Charge }
+  - { level: 1, move: Vise Grip }
+  - { level: 1, move: String Shot }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Bug Bite }
+  - { level: 15, move: Bite }
+  - { level: 23, move: Spark }
+  - { level: 29, move: Sticky Web }
+  - { level: 36, move: X-Scissor }
+  - { level: 43, move: Crunch }
+  - { level: 50, move: Dig }
+  - { level: 57, move: Iron Defense }
+  - { level: 64, move: Discharge }
+  - { level: 39, move: Lightning Slam }

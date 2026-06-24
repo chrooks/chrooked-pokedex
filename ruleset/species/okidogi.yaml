@@ -2,3 +2,17 @@ name: Okidogi
 chrooked_id: okidogi
 aka: { pokeemerald: SPECIES_OKIDOGI }
 stats: { spd: 80 }
+learnset:
+  - { level: 1, move: Bite }
+  - { level: 1, move: Low Kick }
+  - { level: 1, move: Bulk Up }
+  - { level: 8, move: Howl }
+  - { level: 16, move: Poison Fang }
+  - { level: 24, move: Force Palm }
+  - { level: 32, move: Counter }
+  - { level: 40, move: Poison Jab }
+  - { level: 48, move: Brutal Swing }
+  - { level: 56, move: Crunch }
+  - { level: 64, move: Superpower }
+  - { level: 72, move: Giga Impact }
+  - { level: 36, move: One-Inch Punch }

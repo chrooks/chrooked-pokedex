@@ -1,4 +1,24 @@
 name: Raticate Alola Totem
 chrooked_id: raticatealolatotem
 aka: { pokeemerald: SPECIES_RATICATE_ALOLA_TOTEM }
+learnset:
+  - { level: 0, move: Scary Face }
+  - { level: 1, move: Scary Face }
+  - { level: 1, move: Swords Dance }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Focus Energy }
+  - { level: 4, move: Quick Attack }
+  - { level: 7, move: Focus Energy }
+  - { level: 10, move: Bite }
+  - { level: 13, move: Pursuit }
+  - { level: 16, move: Hyper Fang }
+  - { level: 19, move: Assurance }
+  - { level: 24, move: Crunch }
+  - { level: 29, move: Sucker Punch }
+  - { level: 34, move: Super Fang }
+  - { level: 39, move: Double-Edge }
+  - { level: 44, move: Endeavor }
+  - { level: 48, move: Heel Drop }
 evolution: { from: Rattata Alola, method: { pokeemerald: EVO_NONE, param: 0 } }

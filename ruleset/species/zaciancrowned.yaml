@@ -1,0 +1,19 @@
+name: Zacian Crowned
+chrooked_id: zaciancrowned
+aka: { dex: 888 }
+learnset:
+  - { level: 1, move: Bite }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Howl }
+  - { level: 1, move: Quick Guard }
+  - { level: 1, move: Sacred Sword }
+  - { level: 11, move: Slash }
+  - { level: 22, move: Swords Dance }
+  - { level: 33, move: Iron Head }
+  - { level: 44, move: Noble Roar }
+  - { level: 55, move: Crunch }
+  - { level: 66, move: Moonblast }
+  - { level: 77, move: Close Combat }
+  - { level: 88, move: Giga Impact }
+  - { level: 39, move: Pixie Slash }

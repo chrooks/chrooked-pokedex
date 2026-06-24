@@ -2,3 +2,21 @@ name: Panpour
 chrooked_id: panpour
 aka: { pokeemerald: SPECIES_PANPOUR }
 stats: { spa: 60 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Play Nice }
+  - { level: 4, move: Leer }
+  - { level: 7, move: Lick }
+  - { level: 10, move: Water Gun }
+  - { level: 13, move: Fury Swipes }
+  - { level: 16, move: Water Sport }
+  - { level: 19, move: Bite }
+  - { level: 22, move: Scald }
+  - { level: 25, move: Taunt }
+  - { level: 28, move: Fling }
+  - { level: 31, move: Acrobatics }
+  - { level: 34, move: Brine }
+  - { level: 37, move: Recycle }
+  - { level: 40, move: Natural Gift }
+  - { level: 43, move: Crunch }
+  - { level: 14, move: Water Whip }

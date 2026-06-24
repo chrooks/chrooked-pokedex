@@ -4,3 +4,23 @@ aka: { pokeemerald: SPECIES_ARMAROUGE }
 abilities:
   secondary: Mega Launcher
 stats: { spa: 130, spe: 80 }
+learnset:
+  - { level: 0, move: Psyshock }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Mystical Fire }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Wide Guard }
+  - { level: 8, move: Clear Smog }
+  - { level: 12, move: Fire Spin }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 20, move: Night Shade }
+  - { level: 24, move: Flame Charge }
+  - { level: 28, move: Incinerate }
+  - { level: 32, move: Lava Plume }
+  - { level: 37, move: Calm Mind }
+  - { level: 42, move: Ally Switch }
+  - { level: 48, move: Flamethrower }
+  - { level: 56, move: Expanding Force }
+  - { level: 62, move: Armor Cannon }
+  - { level: 45, move: Cinder Smash }

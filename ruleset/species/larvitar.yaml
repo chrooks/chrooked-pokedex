@@ -21,3 +21,4 @@ learnset:
   - { level: 36, move: Thrash }
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Hyper Beam }
+  - { level: 48, move: Heel Drop }

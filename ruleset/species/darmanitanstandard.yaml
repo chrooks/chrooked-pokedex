@@ -2,7 +2,6 @@ name: Darmanitan Standard
 chrooked_id: darmanitanstandard
 aka: { pokeemerald: SPECIES_DARMANITAN_STANDARD }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Hammer Arm }
   - { level: 1, move: Hammer Arm }
   - { level: 1, move: Ember }
@@ -19,3 +18,4 @@ learnset:
   - { level: 44, move: Flare Blitz }
   - { level: 50, move: Thrash }
   - { level: 56, move: Superpower }
+  - { level: 41, move: Cinder Smash }

@@ -4,3 +4,9 @@ aka: { pokeemerald: SPECIES_BUDEW }
 abilities:
   secondary: Venomous
   hidden: Bloom
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Worry Seed }
+  - { level: 48, move: Miasma }

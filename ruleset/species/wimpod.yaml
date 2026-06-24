@@ -1,0 +1,9 @@
+name: Wimpod
+chrooked_id: wimpod
+aka: { dex: 767 }
+learnset:
+  - { level: 1, move: Struggle Bug }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Defense Curl }
+  - { level: 26, move: Water Whip }
+  - { level: 55, move: Pixie Slash }

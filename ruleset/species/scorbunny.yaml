@@ -1,0 +1,16 @@
+name: Scorbunny
+chrooked_id: scorbunny
+aka: { dex: 813 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 6, move: Ember }
+  - { level: 8, move: Quick Attack }
+  - { level: 12, move: Double Kick }
+  - { level: 17, move: Flame Charge }
+  - { level: 20, move: Agility }
+  - { level: 24, move: Headbutt }
+  - { level: 28, move: Counter }
+  - { level: 32, move: Bounce }
+  - { level: 36, move: Double-Edge }
+  - { level: 48, move: Cinder Smash }

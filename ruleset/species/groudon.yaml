@@ -3,7 +3,6 @@ chrooked_id: groudon
 aka: { pokeemerald: SPECIES_GROUDON }
 types: [Ground, Fire]
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Scary Face }
   - { level: 1, move: Ancient Power }
   - { level: 1, move: Mud Shot }

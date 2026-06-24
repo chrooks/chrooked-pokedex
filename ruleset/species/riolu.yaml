@@ -1,3 +1,21 @@
 name: Riolu
 chrooked_id: riolu
 aka: { pokeemerald: SPECIES_RIOLU }
+learnset:
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Endure }
+  - { level: 4, move: Feint }
+  - { level: 8, move: Metal Claw }
+  - { level: 12, move: Counter }
+  - { level: 16, move: Work Up }
+  - { level: 20, move: Rock Smash }
+  - { level: 24, move: Vacuum Wave }
+  - { level: 28, move: Screech }
+  - { level: 32, move: Quick Guard }
+  - { level: 36, move: Force Palm }
+  - { level: 40, move: Swords Dance }
+  - { level: 44, move: Helping Hand }
+  - { level: 48, move: Copycat }
+  - { level: 52, move: Final Gambit }
+  - { level: 56, move: Reversal }
+  - { level: 34, move: One-Inch Punch }

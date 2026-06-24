@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_PONYTA }
 abilities:
   primary: Reckless
   hidden: Blitz
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Tail Whip }
+  - { level: 10, move: Ember }
+  - { level: 15, move: Flame Charge }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Flame Wheel }
+  - { level: 30, move: Stomp }
+  - { level: 35, move: Fire Spin }
+  - { level: 41, move: Take Down }
+  - { level: 45, move: Inferno }
+  - { level: 50, move: Fire Blast }
+  - { level: 55, move: Flare Blitz }
+  - { level: 38, move: Cinder Smash }

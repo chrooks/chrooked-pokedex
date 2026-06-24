@@ -2,3 +2,21 @@ name: Eelektrik
 chrooked_id: eelektrik
 aka: { pokeemerald: SPECIES_EELEKTRIK }
 types: [Water, Electric]
+learnset:
+  - { level: 0, move: Crunch }
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Spark }
+  - { level: 1, move: Charge Beam }
+  - { level: 9, move: Bind }
+  - { level: 19, move: Acid }
+  - { level: 29, move: Discharge }
+  - { level: 44, move: Thunderbolt }
+  - { level: 49, move: Acid Spray }
+  - { level: 54, move: Coil }
+  - { level: 59, move: Wild Charge }
+  - { level: 64, move: Gastro Acid }
+  - { level: 69, move: Zap Cannon }
+  - { level: 74, move: Thrash }
+  - { level: 14, move: Water Whip }
+  - { level: 36, move: Lightning Slam }

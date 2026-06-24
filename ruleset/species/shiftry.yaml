@@ -4,3 +4,27 @@ aka: { pokeemerald: SPECIES_SHIFTRY }
 abilities:
   secondary: Wind Rider
 stats: { spe: 90 }
+learnset:
+  - { level: 0, move: Leaf Blade }
+  - { level: 1, move: Whirlwind }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Mega Drain }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Explosion }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Synthesis }
+  - { level: 1, move: Beat Up }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Torment }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Extrasensory }
+  - { level: 1, move: Sucker Punch }
+  - { level: 1, move: Sunny Day }
+  - { level: 1, move: Air Cutter }
+  - { level: 1, move: Payback }
+  - { level: 1, move: Hurricane }
+  - { level: 48, move: Heel Drop }

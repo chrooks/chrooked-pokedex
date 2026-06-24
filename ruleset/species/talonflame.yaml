@@ -7,7 +7,6 @@ abilities:
   hidden: Rapid Combustion
 stats: { atk: 100, spa: 75, spd: 70 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Growl }
   - { level: 1, move: Peck }
   - { level: 1, move: Ember }
@@ -28,3 +27,4 @@ learnset:
   - { level: 48, move: U-turn }
   - { level: 52, move: Double-Edge }
   - { level: 56, move: Brave Bird }
+  - { level: 46, move: Cinder Smash }

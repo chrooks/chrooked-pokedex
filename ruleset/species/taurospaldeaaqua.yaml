@@ -1,0 +1,19 @@
+name: Tauros Paldea Aqua
+chrooked_id: taurospaldeaaqua
+aka: { dex: 128 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Work Up }
+  - { level: 10, move: Double Kick }
+  - { level: 15, move: Aqua Jet }
+  - { level: 20, move: Headbutt }
+  - { level: 25, move: Scary Face }
+  - { level: 30, move: Zen Headbutt }
+  - { level: 35, move: Raging Bull }
+  - { level: 40, move: Rest }
+  - { level: 45, move: Swagger }
+  - { level: 50, move: Thrash }
+  - { level: 55, move: Wave Crash }
+  - { level: 60, move: Close Combat }
+  - { level: 17, move: Water Whip }

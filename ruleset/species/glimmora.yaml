@@ -2,3 +2,22 @@ name: Glimmora
 chrooked_id: glimmora
 aka: { pokeemerald: SPECIES_GLIMMORA }
 stats: { spe: 90 }
+learnset:
+  - { level: 0, move: Mortal Spin }
+  - { level: 1, move: Smack Down }
+  - { level: 1, move: Spiky Shield }
+  - { level: 1, move: Toxic Spikes }
+  - { level: 1, move: Rock Throw }
+  - { level: 1, move: Harden }
+  - { level: 7, move: Acid Spray }
+  - { level: 11, move: Ancient Power }
+  - { level: 15, move: Rock Polish }
+  - { level: 18, move: Stealth Rock }
+  - { level: 22, move: Venoshock }
+  - { level: 26, move: Sandstorm }
+  - { level: 29, move: Self-Destruct }
+  - { level: 33, move: Rock Slide }
+  - { level: 39, move: Power Gem }
+  - { level: 44, move: Acid Armor }
+  - { level: 50, move: Sludge Wave }
+  - { level: 36, move: Miasma }

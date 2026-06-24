@@ -21,3 +21,4 @@ learnset:
   - { level: 36, move: Earth Power }
   - { level: 42, move: Drain Punch }
   - { level: 48, move: Hydro Pump }
+  - { level: 14, move: Water Whip }

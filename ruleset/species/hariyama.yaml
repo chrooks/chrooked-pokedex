@@ -2,3 +2,24 @@ name: Hariyama
 chrooked_id: hariyama
 aka: { pokeemerald: SPECIES_HARIYAMA }
 stats: { hp: 145, spd: 80 }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Brine }
+  - { level: 1, move: Arm Thrust }
+  - { level: 10, move: Fake Out }
+  - { level: 13, move: Force Palm }
+  - { level: 16, move: Whirlwind }
+  - { level: 19, move: Knock Off }
+  - { level: 22, move: Bulk Up }
+  - { level: 26, move: Belly Drum }
+  - { level: 30, move: Detect }
+  - { level: 34, move: Seismic Toss }
+  - { level: 38, move: Focus Punch }
+  - { level: 42, move: Endure }
+  - { level: 46, move: Close Combat }
+  - { level: 50, move: Reversal }
+  - { level: 54, move: Heavy Slam }
+  - { level: 60, move: Headlong Rush }
+  - { level: 36, move: One-Inch Punch }

@@ -3,7 +3,6 @@ chrooked_id: scovillain
 aka: { pokeemerald: SPECIES_SCOVILLAIN }
 stats: { atk: 115, spa: 115, spe: 95 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Spicy Extract }
   - { level: 0, move: Flamethrower }
   - { level: 1, move: Leer }

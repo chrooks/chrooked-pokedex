@@ -4,3 +4,9 @@ aka: { pokeemerald: SPECIES_SIMIPOUR }
 abilities:
   hidden: Sage Power
 stats: { atk: 100, spa: 100 }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Fury Swipes }
+  - { level: 1, move: Scald }
+  - { level: 26, move: Water Whip }

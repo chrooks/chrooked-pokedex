@@ -1,0 +1,20 @@
+name: Quaxwell
+chrooked_id: quaxwell
+aka: { dex: 913 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Double Hit }
+  - { level: 7, move: Work Up }
+  - { level: 10, move: Wing Attack }
+  - { level: 13, move: Aqua Jet }
+  - { level: 17, move: Water Pulse }
+  - { level: 19, move: Low Sweep }
+  - { level: 23, move: Aqua Cutter }
+  - { level: 27, move: Air Slash }
+  - { level: 32, move: Focus Energy }
+  - { level: 38, move: Acrobatics }
+  - { level: 43, move: Liquidation }
+  - { level: 48, move: Feather Dance }
+  - { level: 15, move: Water Whip }

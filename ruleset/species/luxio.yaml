@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_LUXIO }
 abilities:
   secondary: Carnivore
 stats: { spa: 65, spe: 80 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Charge }
+  - { level: 12, move: Bite }
+  - { level: 18, move: Spark }
+  - { level: 24, move: Roar }
+  - { level: 31, move: Volt Switch }
+  - { level: 36, move: Scary Face }
+  - { level: 42, move: Thunder Wave }
+  - { level: 48, move: Crunch }
+  - { level: 54, move: Discharge }
+  - { level: 60, move: Swagger }
+  - { level: 68, move: Wild Charge }
+  - { level: 39, move: Lightning Slam }

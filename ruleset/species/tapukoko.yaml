@@ -2,7 +2,6 @@ name: Tapu Koko
 chrooked_id: tapukoko
 aka: { pokeemerald: SPECIES_TAPU_KOKO }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Thunder Shock }
   - { level: 5, move: Withdraw }

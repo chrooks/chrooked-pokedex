@@ -2,7 +2,6 @@ name: Iron Thorns
 chrooked_id: ironthorns
 aka: { pokeemerald: SPECIES_IRON_THORNS }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Electric Terrain }
   - { level: 1, move: Rock Throw }
   - { level: 1, move: Fire Fang }

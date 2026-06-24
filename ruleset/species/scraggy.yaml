@@ -1,0 +1,21 @@
+name: Scraggy
+chrooked_id: scraggy
+aka: { dex: 559 }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Low Kick }
+  - { level: 4, move: Payback }
+  - { level: 8, move: Headbutt }
+  - { level: 12, move: Sand Attack }
+  - { level: 16, move: Facade }
+  - { level: 20, move: Torment }
+  - { level: 24, move: Beat Up }
+  - { level: 28, move: Scary Face }
+  - { level: 32, move: Brick Break }
+  - { level: 36, move: Swagger }
+  - { level: 40, move: Crunch }
+  - { level: 44, move: High Jump Kick }
+  - { level: 48, move: Focus Punch }
+  - { level: 52, move: Head Smash }
+  - { level: 38, move: Heel Drop }
+  - { level: 34, move: One-Inch Punch }

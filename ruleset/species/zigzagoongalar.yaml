@@ -20,3 +20,4 @@ learnset:
   - { level: 29, move: Counter }
   - { level: 32, move: Taunt }
   - { level: 35, move: Double-Edge }
+  - { level: 48, move: Heel Drop }

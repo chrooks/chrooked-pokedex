@@ -5,3 +5,22 @@ abilities:
   secondary: Hydration
   hidden: Permafrost
 stats: { atk: 80, def: 70, spa: 100, spe: 90 }
+learnset:
+  - { level: 0, move: Sheer Cold }
+  - { level: 1, move: Headbutt }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Icy Wind }
+  - { level: 13, move: Encore }
+  - { level: 17, move: Ice Shard }
+  - { level: 21, move: Rest }
+  - { level: 23, move: Aqua Ring }
+  - { level: 27, move: Aurora Beam }
+  - { level: 31, move: Aqua Jet }
+  - { level: 33, move: Brine }
+  - { level: 39, move: Take Down }
+  - { level: 45, move: Dive }
+  - { level: 49, move: Aqua Tail }
+  - { level: 55, move: Ice Beam }
+  - { level: 61, move: Safeguard }
+  - { level: 65, move: Snowscape }
+  - { level: 15, move: Water Whip }

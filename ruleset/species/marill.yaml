@@ -3,4 +3,23 @@ chrooked_id: marill
 aka: { pokeemerald: SPECIES_MARILL }
 abilities:
   primary: Huge Power
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Defense Curl }
+  - { level: 6, move: Bubble Beam }
+  - { level: 9, move: Charm }
+  - { level: 12, move: Slam }
+  - { level: 15, move: Bounce }
+  - { level: 19, move: Aqua Tail }
+  - { level: 21, move: Play Rough }
+  - { level: 24, move: Aqua Ring }
+  - { level: 27, move: Rain Dance }
+  - { level: 30, move: Hydro Pump }
+  - { level: 33, move: Double-Edge }
+  - { level: 36, move: Superpower }
+  - { level: 17, move: Water Whip }
 evolution: { from: Azurill, method: { level: 16 } }

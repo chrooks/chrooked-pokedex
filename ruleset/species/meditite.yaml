@@ -5,3 +5,22 @@ abilities:
   primary: Huge Power
   secondary: Mountaineer
   hidden: Psyonize
+learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Work Up }
+  - { level: 9, move: Detect }
+  - { level: 12, move: Endure }
+  - { level: 15, move: Feint }
+  - { level: 17, move: Force Palm }
+  - { level: 20, move: Psybeam }
+  - { level: 23, move: Calm Mind }
+  - { level: 25, move: Zen Headbutt }
+  - { level: 28, move: High Jump Kick }
+  - { level: 31, move: Psych Up }
+  - { level: 33, move: Acupressure }
+  - { level: 36, move: Power Trick }
+  - { level: 39, move: Reversal }
+  - { level: 41, move: Recover }
+  - { level: 44, move: Counter }
+  - { level: 29, move: Astral Hand }
+  - { level: 48, move: One-Inch Punch }

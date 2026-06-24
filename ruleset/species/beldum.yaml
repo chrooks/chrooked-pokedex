@@ -4,3 +4,6 @@ aka: { pokeemerald: SPECIES_BELDUM }
 abilities:
   secondary: Carnivore
   hidden: Battle Armor
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 42, move: Astral Hand }

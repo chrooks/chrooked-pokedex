@@ -25,3 +25,4 @@ learnset:
   - { level: 47, move: Flamethrower }
   - { level: 51, move: Fly }
   - { level: 55, move: Double-Edge }
+  - { level: 37, move: Cinder Smash }

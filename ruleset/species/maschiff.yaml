@@ -1,0 +1,20 @@
+name: Maschiff
+chrooked_id: maschiff
+aka: { dex: 942 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scary Face }
+  - { level: 4, move: Lick }
+  - { level: 7, move: Snarl }
+  - { level: 10, move: Hone Claws }
+  - { level: 14, move: Bite }
+  - { level: 18, move: Roar }
+  - { level: 22, move: Headbutt }
+  - { level: 26, move: Payback }
+  - { level: 31, move: Crunch }
+  - { level: 35, move: Swagger }
+  - { level: 39, move: Reversal }
+  - { level: 43, move: Jaw Lock }
+  - { level: 49, move: Double-Edge }
+  - { level: 46, move: Heel Drop }

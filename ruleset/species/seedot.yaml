@@ -3,3 +3,18 @@ chrooked_id: seedot
 aka: { pokeemerald: SPECIES_SEEDOT }
 abilities:
   secondary: Forestry
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 3, move: Absorb }
+  - { level: 6, move: Astonish }
+  - { level: 9, move: Growth }
+  - { level: 12, move: Rollout }
+  - { level: 15, move: Mega Drain }
+  - { level: 18, move: Payback }
+  - { level: 21, move: Headbutt }
+  - { level: 24, move: Sunny Day }
+  - { level: 27, move: Synthesis }
+  - { level: 30, move: Sucker Punch }
+  - { level: 33, move: Explosion }
+  - { level: 48, move: Heel Drop }

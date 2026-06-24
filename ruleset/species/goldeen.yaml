@@ -4,3 +4,17 @@ aka: { pokeemerald: SPECIES_GOLDEEN }
 abilities:
   primary: Water Veil
   secondary: Impale
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Supersonic }
+  - { level: 10, move: Water Pulse }
+  - { level: 15, move: Horn Attack }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Aqua Ring }
+  - { level: 30, move: Flail }
+  - { level: 35, move: Waterfall }
+  - { level: 40, move: Soak }
+  - { level: 45, move: Megahorn }
+  - { level: 50, move: Horn Drill }
+  - { level: 17, move: Water Whip }

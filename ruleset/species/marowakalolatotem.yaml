@@ -2,7 +2,6 @@ name: Marowak Alola Totem
 chrooked_id: marowakalolatotem
 aka: { pokeemerald: SPECIES_MAROWAK_ALOLA_TOTEM }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Shadow Bone }
   - { level: 1, move: Shadow Bone }
   - { level: 1, move: Bone Club }

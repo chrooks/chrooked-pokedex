@@ -2,3 +2,22 @@ name: Ralts
 chrooked_id: ralts
 aka: { pokeemerald: SPECIES_RALTS }
 types: [Psychic, Fairy]
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Disarming Voice }
+  - { level: 3, move: Double Team }
+  - { level: 6, move: Confusion }
+  - { level: 9, move: Hypnosis }
+  - { level: 12, move: Draining Kiss }
+  - { level: 15, move: Teleport }
+  - { level: 18, move: Psybeam }
+  - { level: 21, move: Life Dew }
+  - { level: 24, move: Charm }
+  - { level: 27, move: Calm Mind }
+  - { level: 30, move: Psychic }
+  - { level: 33, move: Heal Pulse }
+  - { level: 36, move: Dream Eater }
+  - { level: 39, move: Future Sight }
+  - { level: 55, move: Pixie Slash }
+  - { level: 42, move: Astral Hand }
+  - { level: 48, move: One-Inch Punch }

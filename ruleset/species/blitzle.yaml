@@ -1,0 +1,17 @@
+name: Blitzle
+chrooked_id: blitzle
+aka: { dex: 522 }
+learnset:
+  - { level: 1, move: Quick Attack }
+  - { level: 4, move: Tail Whip }
+  - { level: 8, move: Charge }
+  - { level: 11, move: Shock Wave }
+  - { level: 15, move: Thunder Wave }
+  - { level: 18, move: Flame Charge }
+  - { level: 22, move: Spark }
+  - { level: 25, move: Stomp }
+  - { level: 29, move: Discharge }
+  - { level: 33, move: Agility }
+  - { level: 35, move: Wild Charge }
+  - { level: 40, move: Thrash }
+  - { level: 48, move: Lightning Slam }

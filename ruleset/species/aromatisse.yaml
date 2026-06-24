@@ -4,3 +4,23 @@ aka: { pokeemerald: SPECIES_AROMATISSE }
 types: [Fairy, Poison]
 abilities:
   primary: Venomize
+learnset:
+  - { level: 1, move: Aromatic Mist }
+  - { level: 1, move: Heal Pulse }
+  - { level: 1, move: Fairy Wind }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Echoed Voice }
+  - { level: 9, move: Disarming Voice }
+  - { level: 12, move: Aromatherapy }
+  - { level: 15, move: Draining Kiss }
+  - { level: 18, move: Attract }
+  - { level: 21, move: Flail }
+  - { level: 24, move: Misty Terrain }
+  - { level: 27, move: Psychic }
+  - { level: 30, move: Charm }
+  - { level: 33, move: Calm Mind }
+  - { level: 36, move: Moonblast }
+  - { level: 39, move: Skill Swap }
+  - { level: 42, move: Psych Up }
+  - { level: 48, move: Miasma }

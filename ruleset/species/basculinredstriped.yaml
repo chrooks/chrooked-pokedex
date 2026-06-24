@@ -1,0 +1,21 @@
+name: Basculin Red Striped
+chrooked_id: basculinredstriped
+aka: { dex: 550 }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Water Gun }
+  - { level: 4, move: Tackle }
+  - { level: 8, move: Flail }
+  - { level: 12, move: Aqua Jet }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Scary Face }
+  - { level: 24, move: Headbutt }
+  - { level: 28, move: Soak }
+  - { level: 32, move: Crunch }
+  - { level: 36, move: Take Down }
+  - { level: 40, move: Final Gambit }
+  - { level: 44, move: Wave Crash }
+  - { level: 48, move: Thrash }
+  - { level: 52, move: Double-Edge }
+  - { level: 56, move: Head Smash }
+  - { level: 14, move: Water Whip }

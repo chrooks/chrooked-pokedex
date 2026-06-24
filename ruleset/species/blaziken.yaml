@@ -5,7 +5,6 @@ abilities:
   secondary: Striker
 stats: { spe: 90 }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Blaze Kick }
   - { level: 1, move: Fire Punch }
   - { level: 1, move: Ember }
@@ -26,3 +25,5 @@ learnset:
   - { level: 49, move: Reversal }
   - { level: 56, move: Flare Blitz }
   - { level: 63, move: Brave Bird }
+  - { level: 38, move: One-Inch Punch }
+  - { level: 45, move: Cinder Smash }

@@ -5,3 +5,22 @@ types: [Normal, Fairy]
 abilities:
   secondary: Normalize
 stats: { hp: 90, spd: 65, spe: 100 }
+learnset:
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Sing }
+  - { level: 1, move: Attract }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Fury Swipes }
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Payback }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Facade }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Heal Bell }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Play Rough }
+  - { level: 35, move: Cutsie Slap }

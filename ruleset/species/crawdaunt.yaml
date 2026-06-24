@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_CRAWDAUNT }
 abilities:
   hidden: Death Grip
 stats: { hp: 65, atk: 125, def: 90 }
+learnset:
+  - { level: 0, move: Swift }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Taunt }
+  - { level: 12, move: Bubble Beam }
+  - { level: 16, move: Knock Off }
+  - { level: 20, move: Double Hit }
+  - { level: 24, move: Protect }
+  - { level: 28, move: Night Slash }
+  - { level: 34, move: Razor Shell }
+  - { level: 40, move: Swords Dance }
+  - { level: 46, move: Crunch }
+  - { level: 52, move: Crabhammer }
+  - { level: 58, move: Endeavor }
+  - { level: 64, move: Guillotine }
+  - { level: 14, move: Water Whip }
+  - { level: 43, move: Pixie Slash }

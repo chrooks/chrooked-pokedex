@@ -4,7 +4,6 @@ aka: { pokeemerald: SPECIES_AVALUGG_HISUI }
 abilities:
   secondary: Permafrost
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Rock Slide }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Rapid Spin }
@@ -25,4 +24,5 @@ learnset:
   - { level: 46, move: Double-Edge }
   - { level: 51, move: Stone Edge }
   - { level: 61, move: Mountain Gale }
+  - { level: 38, move: Glacial Crush }
 evolution: { from: Bergmite, method: { level: 37 } }

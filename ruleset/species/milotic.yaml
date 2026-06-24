@@ -5,4 +5,25 @@ types: [Water, Fairy]
 abilities:
   secondary: Competitive
 stats: { hp: 100, def: 85, spe: 80 }
+learnset:
+  - { level: 0, move: Water Pulse }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Flail }
+  - { level: 4, move: Disarming Voice }
+  - { level: 8, move: Twister }
+  - { level: 12, move: Aqua Ring }
+  - { level: 16, move: Attract }
+  - { level: 20, move: Life Dew }
+  - { level: 24, move: Dragon Tail }
+  - { level: 28, move: Recover }
+  - { level: 32, move: Aqua Tail }
+  - { level: 36, move: Safeguard }
+  - { level: 40, move: Surf }
+  - { level: 44, move: Rain Dance }
+  - { level: 48, move: Coil }
+  - { level: 52, move: Hydro Pump }
+  - { level: 14, move: Water Whip }
 evolution: { from: Feebas, method: { item: Prism Scale } }

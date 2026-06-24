@@ -3,3 +3,21 @@ chrooked_id: growlithe
 aka: { pokeemerald: SPECIES_GROWLITHE }
 abilities:
   hidden: Immolate
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 4, move: Howl }
+  - { level: 8, move: Bite }
+  - { level: 12, move: Flame Wheel }
+  - { level: 16, move: Helping Hand }
+  - { level: 20, move: Agility }
+  - { level: 24, move: Fire Fang }
+  - { level: 28, move: Retaliate }
+  - { level: 32, move: Crunch }
+  - { level: 36, move: Take Down }
+  - { level: 40, move: Flamethrower }
+  - { level: 44, move: Roar }
+  - { level: 48, move: Play Rough }
+  - { level: 52, move: Reversal }
+  - { level: 56, move: Flare Blitz }
+  - { level: 38, move: Cinder Smash }

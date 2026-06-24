@@ -1,0 +1,19 @@
+name: Passimian
+chrooked_id: passimian
+aka: { dex: 766 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Rock Smash }
+  - { level: 10, move: Focus Energy }
+  - { level: 15, move: Beat Up }
+  - { level: 20, move: Scary Face }
+  - { level: 25, move: Take Down }
+  - { level: 30, move: Fling }
+  - { level: 35, move: Bulk Up }
+  - { level: 40, move: Thrash }
+  - { level: 45, move: Double-Edge }
+  - { level: 50, move: Close Combat }
+  - { level: 55, move: Reversal }
+  - { level: 60, move: Giga Impact }
+  - { level: 37, move: One-Inch Punch }

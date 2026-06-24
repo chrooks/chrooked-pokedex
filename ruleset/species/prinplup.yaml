@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_PRINPLUP }
 abilities:
   hidden: Intimidate
 stats: { hp: 65, atk: 75, def: 70, spa: 75, spd: 75 }
+learnset:
+  - { level: 0, move: Metal Claw }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 15, move: Peck }
+  - { level: 19, move: Bubble Beam }
+  - { level: 24, move: Swagger }
+  - { level: 28, move: Fury Attack }
+  - { level: 33, move: Brine }
+  - { level: 37, move: Whirlpool }
+  - { level: 42, move: Mist }
+  - { level: 46, move: Drill Peck }
+  - { level: 50, move: Hydro Pump }
+  - { level: 17, move: Water Whip }

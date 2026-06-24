@@ -25,3 +25,4 @@ learnset:
   - { level: 52, move: Poison Jab }
   - { level: 58, move: Earthquake }
   - { level: 64, move: Boomburst }
+  - { level: 14, move: Water Whip }

@@ -1,0 +1,21 @@
+name: Wailmer
+chrooked_id: wailmer
+aka: { dex: 320 }
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 3, move: Growl }
+  - { level: 6, move: Astonish }
+  - { level: 12, move: Water Gun }
+  - { level: 15, move: Mist }
+  - { level: 18, move: Water Pulse }
+  - { level: 21, move: Heavy Slam }
+  - { level: 24, move: Brine }
+  - { level: 27, move: Whirlpool }
+  - { level: 30, move: Dive }
+  - { level: 33, move: Bounce }
+  - { level: 36, move: Body Slam }
+  - { level: 39, move: Rest }
+  - { level: 42, move: Amnesia }
+  - { level: 45, move: Hydro Pump }
+  - { level: 48, move: Water Spout }
+  - { level: 14, move: Water Whip }

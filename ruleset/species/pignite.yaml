@@ -2,3 +2,23 @@ name: Pignite
 chrooked_id: pignite
 aka: { pokeemerald: SPECIES_PIGNITE }
 types: [Fire, Dark]
+learnset:
+  - { level: 0, move: Arm Thrust }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Endure }
+  - { level: 13, move: Defense Curl }
+  - { level: 15, move: Flame Charge }
+  - { level: 20, move: Smog }
+  - { level: 23, move: Rollout }
+  - { level: 28, move: Take Down }
+  - { level: 31, move: Heat Crash }
+  - { level: 36, move: Assurance }
+  - { level: 39, move: Flamethrower }
+  - { level: 44, move: Head Smash }
+  - { level: 47, move: Roar }
+  - { level: 52, move: Flare Blitz }
+  - { level: 41, move: Heel Drop }
+  - { level: 34, move: One-Inch Punch }
+  - { level: 37, move: Cinder Smash }

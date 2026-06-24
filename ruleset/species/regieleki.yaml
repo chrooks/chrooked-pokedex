@@ -2,7 +2,6 @@ name: Regieleki
 chrooked_id: regieleki
 aka: { pokeemerald: SPECIES_REGIELEKI }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Thunder Shock }
   - { level: 1, move: Rapid Spin }
   - { level: 6, move: Electroweb }

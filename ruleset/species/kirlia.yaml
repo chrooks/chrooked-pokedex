@@ -2,3 +2,22 @@ name: Kirlia
 chrooked_id: kirlia
 aka: { pokeemerald: SPECIES_KIRLIA }
 types: [Psychic, Fairy]
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Disarming Voice }
+  - { level: 9, move: Hypnosis }
+  - { level: 12, move: Draining Kiss }
+  - { level: 15, move: Teleport }
+  - { level: 18, move: Psybeam }
+  - { level: 23, move: Life Dew }
+  - { level: 28, move: Charm }
+  - { level: 33, move: Calm Mind }
+  - { level: 38, move: Psychic }
+  - { level: 43, move: Heal Pulse }
+  - { level: 48, move: Dream Eater }
+  - { level: 53, move: Future Sight }
+  - { level: 41, move: Pixie Slash }
+  - { level: 30, move: Astral Hand }
+  - { level: 35, move: One-Inch Punch }

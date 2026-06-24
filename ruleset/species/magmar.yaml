@@ -3,4 +3,22 @@ chrooked_id: magmar
 aka: { pokeemerald: SPECIES_MAGMAR }
 abilities:
   secondary: Flame Body
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Smokescreen }
+  - { level: 1, move: Smog }
+  - { level: 12, move: Clear Smog }
+  - { level: 16, move: Flame Wheel }
+  - { level: 20, move: Confuse Ray }
+  - { level: 24, move: Scary Face }
+  - { level: 28, move: Fire Punch }
+  - { level: 34, move: Lava Plume }
+  - { level: 40, move: Low Kick }
+  - { level: 46, move: Flamethrower }
+  - { level: 52, move: Sunny Day }
+  - { level: 58, move: Fire Blast }
+  - { level: 64, move: Hyper Beam }
+  - { level: 37, move: One-Inch Punch }
+  - { level: 43, move: Cinder Smash }
 evolution: { from: Magby, method: { level: 24 } }

@@ -1,0 +1,19 @@
+name: Frigibax
+chrooked_id: frigibax
+aka: { dex: 996 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Dragon Tail }
+  - { level: 6, move: Icy Wind }
+  - { level: 12, move: Dragon Breath }
+  - { level: 18, move: Focus Energy }
+  - { level: 24, move: Bite }
+  - { level: 29, move: Ice Fang }
+  - { level: 32, move: Dragon Claw }
+  - { level: 36, move: Take Down }
+  - { level: 40, move: Ice Beam }
+  - { level: 44, move: Crunch }
+  - { level: 48, move: Icicle Crash }
+  - { level: 55, move: Pixie Slash }
+  - { level: 38, move: Glacial Crush }

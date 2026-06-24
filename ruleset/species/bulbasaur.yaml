@@ -3,3 +3,20 @@ chrooked_id: bulbasaur
 aka: { pokeemerald: SPECIES_BULBASAUR }
 abilities:
   secondary: Chloroplast
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Vine Whip }
+  - { level: 6, move: Growth }
+  - { level: 9, move: Leech Seed }
+  - { level: 12, move: Razor Leaf }
+  - { level: 15, move: Poison Powder }
+  - { level: 15, move: Sleep Powder }
+  - { level: 18, move: Seed Bomb }
+  - { level: 21, move: Take Down }
+  - { level: 24, move: Sweet Scent }
+  - { level: 27, move: Synthesis }
+  - { level: 30, move: Worry Seed }
+  - { level: 33, move: Power Whip }
+  - { level: 36, move: Solar Beam }
+  - { level: 48, move: Miasma }

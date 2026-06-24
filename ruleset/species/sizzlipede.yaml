@@ -1,0 +1,18 @@
+name: Sizzlipede
+chrooked_id: sizzlipede
+aka: { dex: 850 }
+learnset:
+  - { level: 1, move: Ember }
+  - { level: 1, move: Smokescreen }
+  - { level: 5, move: Wrap }
+  - { level: 10, move: Bite }
+  - { level: 15, move: Flame Wheel }
+  - { level: 20, move: Bug Bite }
+  - { level: 25, move: Coil }
+  - { level: 30, move: Slam }
+  - { level: 35, move: Fire Spin }
+  - { level: 40, move: Crunch }
+  - { level: 45, move: Fire Lash }
+  - { level: 50, move: Lunge }
+  - { level: 55, move: Burn Up }
+  - { level: 37, move: Cinder Smash }

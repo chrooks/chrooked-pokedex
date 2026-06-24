@@ -6,3 +6,23 @@ abilities:
   secondary: Hydration
   hidden: Carnivore
 stats: { atk: 85, spa: 115, spd: 80, spe: 50 }
+learnset:
+  - { level: 1, move: Whirlpool }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Shell Smash }
+  - { level: 5, move: Rain Dance }
+  - { level: 9, move: Agility }
+  - { level: 11, move: Draining Kiss }
+  - { level: 14, move: Water Pulse }
+  - { level: 16, move: Amnesia }
+  - { level: 19, move: Aqua Ring }
+  - { level: 23, move: Safeguard }
+  - { level: 26, move: Dive }
+  - { level: 29, move: Baton Pass }
+  - { level: 34, move: Psychic }
+  - { level: 39, move: Aqua Tail }
+  - { level: 45, move: Coil }
+  - { level: 50, move: Hydro Pump }
+  - { level: 21, move: Water Whip }

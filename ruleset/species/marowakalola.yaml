@@ -6,7 +6,6 @@ abilities:
   secondary: Bone Breaker
   hidden: Lightning Rod
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 0, move: Shadow Bone }
   - { level: 1, move: Shadow Bone }
   - { level: 1, move: Bone Club }
@@ -27,4 +26,5 @@ learnset:
   - { level: 48, move: Bonemerang }
   - { level: 54, move: Iron Head }
   - { level: 60, move: Flare Blitz }
+  - { level: 39, move: Cinder Smash }
 evolution: { from: Cubone, method: { level: 28 } }

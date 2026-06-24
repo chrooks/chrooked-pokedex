@@ -1,0 +1,24 @@
+name: Vikavolt Totem
+chrooked_id: vikavolttotem
+aka: { dex: 738 }
+learnset:
+  - { level: 0, move: Thunderbolt }
+  - { level: 1, move: Vise Grip }
+  - { level: 1, move: Dig }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: X-Scissor }
+  - { level: 1, move: Bug Bite }
+  - { level: 1, move: String Shot }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Discharge }
+  - { level: 15, move: Bite }
+  - { level: 23, move: Spark }
+  - { level: 29, move: Sticky Web }
+  - { level: 36, move: Bug Buzz }
+  - { level: 43, move: Guillotine }
+  - { level: 50, move: Fly }
+  - { level: 57, move: Agility }
+  - { level: 64, move: Zap Cannon }
+  - { level: 39, move: Lightning Slam }

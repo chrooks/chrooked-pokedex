@@ -1,0 +1,20 @@
+name: Floragato
+chrooked_id: floragato
+aka: { dex: 907 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Leafage }
+  - { level: 7, move: Bite }
+  - { level: 10, move: Hone Claws }
+  - { level: 13, move: Magical Leaf }
+  - { level: 15, move: Quick Attack }
+  - { level: 20, move: Seed Bomb }
+  - { level: 24, move: U-turn }
+  - { level: 28, move: Worry Seed }
+  - { level: 33, move: Slash }
+  - { level: 38, move: Energy Ball }
+  - { level: 42, move: Play Rough }
+  - { level: 46, move: Leaf Storm }
+  - { level: 55, move: Pixie Slash }
+  - { level: 36, move: Heel Drop }

@@ -3,3 +3,17 @@ chrooked_id: shroomish
 aka: { pokeemerald: SPECIES_SHROOMISH }
 abilities:
   secondary: Poison Heal
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 5, move: Stun Spore }
+  - { level: 8, move: Leech Seed }
+  - { level: 12, move: Mega Drain }
+  - { level: 15, move: Headbutt }
+  - { level: 19, move: Poison Powder }
+  - { level: 26, move: Giga Drain }
+  - { level: 29, move: Growth }
+  - { level: 33, move: Toxic }
+  - { level: 36, move: Seed Bomb }
+  - { level: 40, move: Spore }
+  - { level: 48, move: One-Inch Punch }

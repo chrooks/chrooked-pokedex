@@ -2,3 +2,20 @@ name: Dachsbun
 chrooked_id: dachsbun
 aka: { pokeemerald: SPECIES_DACHSBUN }
 stats: { hp: 75 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Lick }
+  - { level: 6, move: Tail Whip }
+  - { level: 8, move: Covet }
+  - { level: 11, move: Bite }
+  - { level: 15, move: Baby-Doll Eyes }
+  - { level: 18, move: Play Rough }
+  - { level: 22, move: Work Up }
+  - { level: 29, move: Baton Pass }
+  - { level: 33, move: Roar }
+  - { level: 38, move: Double-Edge }
+  - { level: 42, move: Charm }
+  - { level: 47, move: Crunch }
+  - { level: 53, move: Last Resort }
+  - { level: 25, move: Cutsie Slap }

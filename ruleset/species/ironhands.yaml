@@ -2,7 +2,6 @@ name: Iron Hands
 chrooked_id: ironhands
 aka: { pokeemerald: SPECIES_IRON_HANDS }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Electric Terrain }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Tackle }
@@ -21,3 +20,4 @@ learnset:
   - { level: 77, move: Heavy Slam }
   - { level: 84, move: Belly Drum }
   - { level: 91, move: Focus Punch }
+  - { level: 38, move: One-Inch Punch }

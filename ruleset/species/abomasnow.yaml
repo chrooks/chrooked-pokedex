@@ -6,7 +6,6 @@ abilities:
   hidden: Mountaineer
 stats: { atk: 102, def: 85, spa: 102, spd: 95 }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Ice Punch }
   - { level: 1, move: Leer }
   - { level: 1, move: Mist }

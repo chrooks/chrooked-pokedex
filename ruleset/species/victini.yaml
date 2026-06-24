@@ -2,7 +2,6 @@ name: Victini
 chrooked_id: victini
 aka: { pokeemerald: SPECIES_VICTINI }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: V-create }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Flame Charge }

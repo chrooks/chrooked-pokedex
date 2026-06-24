@@ -6,3 +6,23 @@ abilities:
   secondary: Strong Jaw
   hidden: Carnivore
 stats: { atk: 115, spa: 95, spd: 80, spe: 50 }
+learnset:
+  - { level: 1, move: Whirlpool }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Shell Smash }
+  - { level: 5, move: Screech }
+  - { level: 9, move: Scary Face }
+  - { level: 11, move: Rain Dance }
+  - { level: 14, move: Water Pulse }
+  - { level: 16, move: Ice Fang }
+  - { level: 19, move: Brine }
+  - { level: 23, move: Sucker Punch }
+  - { level: 26, move: Dive }
+  - { level: 29, move: Baton Pass }
+  - { level: 34, move: Crunch }
+  - { level: 39, move: Aqua Tail }
+  - { level: 45, move: Coil }
+  - { level: 50, move: Hydro Pump }
+  - { level: 21, move: Water Whip }

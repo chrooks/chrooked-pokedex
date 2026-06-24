@@ -4,3 +4,18 @@ aka: { pokeemerald: SPECIES_CARVANHA }
 abilities:
   primary: Carnivore
   secondary: Blitz
+learnset:
+  - { level: 1, move: Aqua Jet }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Poison Fang }
+  - { level: 8, move: Focus Energy }
+  - { level: 12, move: Scary Face }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Ice Fang }
+  - { level: 24, move: Screech }
+  - { level: 28, move: Swagger }
+  - { level: 32, move: Crunch }
+  - { level: 36, move: Agility }
+  - { level: 40, move: Liquidation }
+  - { level: 44, move: Take Down }
+  - { level: 14, move: Water Whip }

@@ -1,0 +1,19 @@
+name: Sprigatito
+chrooked_id: sprigatito
+aka: { dex: 906 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Leafage }
+  - { level: 7, move: Bite }
+  - { level: 10, move: Hone Claws }
+  - { level: 13, move: Magical Leaf }
+  - { level: 15, move: Quick Attack }
+  - { level: 17, move: Seed Bomb }
+  - { level: 21, move: U-turn }
+  - { level: 25, move: Worry Seed }
+  - { level: 28, move: Slash }
+  - { level: 32, move: Energy Ball }
+  - { level: 36, move: Play Rough }
+  - { level: 55, move: Pixie Slash }
+  - { level: 45, move: Heel Drop }

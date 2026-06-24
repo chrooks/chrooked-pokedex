@@ -3,3 +3,18 @@ chrooked_id: scyther
 aka: { pokeemerald: SPECIES_SCYTHER }
 abilities:
   secondary: Sharpness
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 4, move: Fury Cutter }
+  - { level: 8, move: False Swipe }
+  - { level: 12, move: Wing Attack }
+  - { level: 16, move: Double Team }
+  - { level: 20, move: Double Hit }
+  - { level: 24, move: Slash }
+  - { level: 28, move: Focus Energy }
+  - { level: 32, move: Agility }
+  - { level: 36, move: Air Slash }
+  - { level: 40, move: X-Scissor }
+  - { level: 44, move: Swords Dance }
+  - { level: 55, move: Pixie Slash }

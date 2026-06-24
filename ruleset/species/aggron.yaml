@@ -21,3 +21,4 @@ learnset:
   - { level: 80, move: Double-Edge }
   - { level: 88, move: Metal Burst }
   - { level: 30, move: Metallic Fang }
+evolution: { from: Lairon, method: { level: 38 } }

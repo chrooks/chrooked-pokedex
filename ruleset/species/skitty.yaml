@@ -3,3 +3,22 @@ chrooked_id: skitty
 aka: { pokeemerald: SPECIES_SKITTY }
 abilities:
   secondary: Normalize
+learnset:
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tail Whip }
+  - { level: 4, move: Tackle }
+  - { level: 7, move: Sing }
+  - { level: 10, move: Attract }
+  - { level: 13, move: Disarming Voice }
+  - { level: 16, move: Fury Swipes }
+  - { level: 19, move: Copycat }
+  - { level: 22, move: Payback }
+  - { level: 25, move: Charm }
+  - { level: 31, move: Facade }
+  - { level: 34, move: Covet }
+  - { level: 37, move: Heal Bell }
+  - { level: 40, move: Double-Edge }
+  - { level: 43, move: Baby-Doll Eyes }
+  - { level: 46, move: Play Rough }
+  - { level: 28, move: Cutsie Slap }

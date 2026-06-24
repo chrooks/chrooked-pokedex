@@ -5,3 +5,20 @@ types: [Water, Dragon]
 abilities:
   secondary: Carnivore
 stats: { atk: 115, spa: 70, spd: 85, spe: 85 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Agility }
+  - { level: 13, move: Bite }
+  - { level: 15, move: Scary Face }
+  - { level: 21, move: Ice Fang }
+  - { level: 24, move: Flail }
+  - { level: 32, move: Crunch }
+  - { level: 37, move: Slash }
+  - { level: 44, move: Screech }
+  - { level: 51, move: Thrash }
+  - { level: 59, move: Aqua Tail }
+  - { level: 65, move: Superpower }
+  - { level: 70, move: Hydro Pump }
+  - { level: 18, move: Water Whip }

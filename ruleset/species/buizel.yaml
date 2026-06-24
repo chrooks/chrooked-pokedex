@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_BUIZEL }
 types: [Water, Normal]
 abilities:
   hidden: Hydrate
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Growl }
+  - { level: 7, move: Soak }
+  - { level: 11, move: Quick Attack }
+  - { level: 15, move: Water Gun }
+  - { level: 18, move: Bite }
+  - { level: 21, move: Swift }
+  - { level: 24, move: Aqua Jet }
+  - { level: 27, move: Double Hit }
+  - { level: 31, move: Whirlpool }
+  - { level: 35, move: Liquidation }
+  - { level: 38, move: Aqua Tail }
+  - { level: 41, move: Agility }
+  - { level: 45, move: Hydro Pump }
+  - { level: 49, move: Wave Crash }
+  - { level: 14, move: Water Whip }

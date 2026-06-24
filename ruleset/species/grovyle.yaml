@@ -7,3 +7,24 @@ abilities:
   secondary: Chloroplast
   hidden: Sharpness
 stats: { atk: 70, def: 40 }
+learnset:
+  - { level: 1, move: False Swipe }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: X-Scissor }
+  - { level: 1, move: Energy Ball }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Leafage }
+  - { level: 9, move: Mega Drain }
+  - { level: 12, move: Detect }
+  - { level: 15, move: Quick Guard }
+  - { level: 20, move: Assurance }
+  - { level: 25, move: Giga Drain }
+  - { level: 30, move: Slam }
+  - { level: 35, move: Double Team }
+  - { level: 40, move: Leaf Blade }
+  - { level: 45, move: Screech }
+  - { level: 50, move: Endeavor }
+  - { level: 55, move: Leaf Storm }
+  - { level: 37, move: One-Inch Punch }

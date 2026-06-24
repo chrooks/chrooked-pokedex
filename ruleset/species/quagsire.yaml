@@ -19,3 +19,4 @@ learnset:
   - { level: 40, move: Amnesia }
   - { level: 46, move: Toxic }
   - { level: 52, move: Earthquake }
+  - { level: 19, move: Water Whip }

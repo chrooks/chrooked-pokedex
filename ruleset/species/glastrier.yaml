@@ -4,7 +4,6 @@ aka: { pokeemerald: SPECIES_GLASTRIER }
 abilities:
   secondary: Permafrost
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 6, move: Double Kick }

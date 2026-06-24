@@ -1,0 +1,19 @@
+name: Crabrawler
+chrooked_id: crabrawler
+aka: { dex: 739 }
+learnset:
+  - { level: 1, move: Vise Grip }
+  - { level: 5, move: Rock Smash }
+  - { level: 9, move: Leer }
+  - { level: 13, move: Bubble Beam }
+  - { level: 17, move: Protect }
+  - { level: 22, move: Brick Break }
+  - { level: 25, move: Slam }
+  - { level: 29, move: Payback }
+  - { level: 33, move: Reversal }
+  - { level: 37, move: Crabhammer }
+  - { level: 42, move: Iron Defense }
+  - { level: 45, move: Dynamic Punch }
+  - { level: 49, move: Close Combat }
+  - { level: 39, move: Glacial Crush }
+  - { level: 35, move: One-Inch Punch }

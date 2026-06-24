@@ -21,3 +21,4 @@ learnset:
   - { level: 40, move: Earthquake }
   - { level: 48, move: Future Sight }
   - { level: 56, move: Fissure }
+  - { level: 15, move: Water Whip }

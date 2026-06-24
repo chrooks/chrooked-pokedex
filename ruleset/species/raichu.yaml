@@ -3,7 +3,6 @@ chrooked_id: raichu
 aka: { pokeemerald: SPECIES_RAICHU }
 stats: { atk: 100, spa: 100, spe: 115 }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 0, move: Thunder Punch }
   - { level: 1, move: Electro Ball }
   - { level: 1, move: Discharge }
@@ -25,3 +24,5 @@ learnset:
   - { level: 1, move: Double Team }
   - { level: 1, move: Light Screen }
   - { level: 5, move: Thunderbolt }
+  - { level: 35, move: Cutsie Slap }
+  - { level: 48, move: Lightning Slam }

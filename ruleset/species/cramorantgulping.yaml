@@ -1,0 +1,18 @@
+name: Cramorant Gulping
+chrooked_id: cramorantgulping
+aka: { dex: 845 }
+learnset:
+  - { level: 1, move: Belch }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Stockpile }
+  - { level: 1, move: Spit Up }
+  - { level: 1, move: Swallow }
+  - { level: 7, move: Water Gun }
+  - { level: 14, move: Fury Attack }
+  - { level: 21, move: Pluck }
+  - { level: 28, move: Dive }
+  - { level: 35, move: Drill Peck }
+  - { level: 42, move: Amnesia }
+  - { level: 49, move: Thrash }
+  - { level: 56, move: Hydro Pump }
+  - { level: 17, move: Water Whip }

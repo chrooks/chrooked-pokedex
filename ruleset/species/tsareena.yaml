@@ -5,3 +5,20 @@ types: [Grass, Fighting]
 abilities:
   primary: Striker
 stats: { hp: 70, def: 90, spd: 95, spe: 100 }
+learnset:
+  - { level: 0, move: Trop Kick }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Flail }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Rapid Spin }
+  - { level: 1, move: Power Whip }
+  - { level: 1, move: Play Nice }
+  - { level: 16, move: Sweet Scent }
+  - { level: 22, move: Magical Leaf }
+  - { level: 28, move: Stomp }
+  - { level: 34, move: Teeter Dance }
+  - { level: 40, move: Aromatic Mist }
+  - { level: 46, move: Leaf Storm }
+  - { level: 58, move: High Jump Kick }
+  - { level: 37, move: One-Inch Punch }

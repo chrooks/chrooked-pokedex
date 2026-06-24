@@ -3,3 +3,23 @@ chrooked_id: sealeo
 aka: { pokeemerald: SPECIES_SEALEO }
 abilities:
   secondary: Ice Body
+learnset:
+  - { level: 0, move: Swagger }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 12, move: Powder Snow }
+  - { level: 16, move: Rest }
+  - { level: 20, move: Snore }
+  - { level: 24, move: Brine }
+  - { level: 28, move: Aurora Beam }
+  - { level: 35, move: Encore }
+  - { level: 40, move: Body Slam }
+  - { level: 46, move: Surf }
+  - { level: 52, move: Blizzard }
+  - { level: 58, move: Hail }
+  - { level: 64, move: Sheer Cold }
+  - { level: 14, move: Water Whip }
+  - { level: 43, move: Glacial Crush }

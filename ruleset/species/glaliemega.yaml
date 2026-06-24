@@ -2,7 +2,6 @@ name: Glalie Mega
 chrooked_id: glaliemega
 aka: { pokeemerald: SPECIES_GLALIE_MEGA }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Freeze-Dry }
   - { level: 1, move: Headbutt }
   - { level: 1, move: Leer }

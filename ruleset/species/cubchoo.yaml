@@ -3,3 +3,21 @@ chrooked_id: cubchoo
 aka: { pokeemerald: SPECIES_CUBCHOO }
 abilities:
   secondary: Slush Rush
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Powder Snow }
+  - { level: 3, move: Endure }
+  - { level: 6, move: Fury Swipes }
+  - { level: 9, move: Icy Wind }
+  - { level: 12, move: Play Nice }
+  - { level: 15, move: Brine }
+  - { level: 18, move: Frost Breath }
+  - { level: 21, move: Slash }
+  - { level: 24, move: Flail }
+  - { level: 27, move: Charm }
+  - { level: 30, move: Snowscape }
+  - { level: 33, move: Thrash }
+  - { level: 36, move: Rest }
+  - { level: 39, move: Blizzard }
+  - { level: 42, move: Sheer Cold }
+  - { level: 46, move: Glacial Crush }

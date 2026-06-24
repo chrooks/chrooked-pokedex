@@ -1,0 +1,19 @@
+name: Chimchar
+chrooked_id: chimchar
+aka: { dex: 390 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 7, move: Ember }
+  - { level: 9, move: Taunt }
+  - { level: 15, move: Fury Swipes }
+  - { level: 17, move: Flame Wheel }
+  - { level: 23, move: Nasty Plot }
+  - { level: 25, move: Torment }
+  - { level: 31, move: Facade }
+  - { level: 33, move: Fire Spin }
+  - { level: 39, move: Acrobatics }
+  - { level: 41, move: Slack Off }
+  - { level: 47, move: Flamethrower }
+  - { level: 36, move: One-Inch Punch }
+  - { level: 44, move: Cinder Smash }

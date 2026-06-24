@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_SNUBBULL }
 abilities:
   secondary: Blitz
   hidden: Guts
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Scary Face }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Fire Fang }
+  - { level: 7, move: Bite }
+  - { level: 13, move: Lick }
+  - { level: 19, move: Headbutt }
+  - { level: 25, move: Roar }
+  - { level: 31, move: Last Resort }
+  - { level: 37, move: Play Rough }
+  - { level: 43, move: Payback }
+  - { level: 49, move: Crunch }
+  - { level: 35, move: Pixie Slash }

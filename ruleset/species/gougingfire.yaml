@@ -2,7 +2,6 @@ name: Gouging Fire
 chrooked_id: gougingfire
 aka: { pokeemerald: SPECIES_GOUGING_FIRE }
 learnset:
-  - { level: 1, move: Cinder Smash }
   - { level: 1, move: Double Kick }
   - { level: 1, move: Ancient Power }
   - { level: 1, move: Noble Roar }

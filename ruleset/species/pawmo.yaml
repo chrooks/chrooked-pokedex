@@ -1,0 +1,21 @@
+name: Pawmo
+chrooked_id: pawmo
+aka: { dex: 922 }
+learnset:
+  - { level: 0, move: Arm Thrust }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Thunder Shock }
+  - { level: 6, move: Quick Attack }
+  - { level: 8, move: Charge }
+  - { level: 12, move: Nuzzle }
+  - { level: 15, move: Dig }
+  - { level: 19, move: Bite }
+  - { level: 23, move: Spark }
+  - { level: 27, move: Thunder Wave }
+  - { level: 32, move: Slam }
+  - { level: 38, move: Entrainment }
+  - { level: 42, move: Discharge }
+  - { level: 46, move: Agility }
+  - { level: 52, move: Wild Charge }
+  - { level: 36, move: Lightning Slam }

@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_METAGROSS }
 abilities:
   secondary: Carnivore
   hidden: Battle Armor
+learnset:
+  - { level: 0, move: Hammer Arm }
+  - { level: 1, move: Explosion }
+  - { level: 1, move: Hone Claws }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Bullet Punch }
+  - { level: 6, move: Zen Headbutt }
+  - { level: 12, move: Magnet Rise }
+  - { level: 16, move: Flash Cannon }
+  - { level: 26, move: Take Down }
+  - { level: 34, move: Psychic }
+  - { level: 42, move: Scary Face }
+  - { level: 52, move: Meteor Mash }
+  - { level: 62, move: Iron Defense }
+  - { level: 72, move: Agility }
+  - { level: 82, move: Hyper Beam }
+  - { level: 30, move: Astral Hand }

@@ -22,3 +22,4 @@ learnset:
   - { level: 51, move: Earthquake }
   - { level: 58, move: Blizzard }
   - { level: 65, move: Thrash }
+  - { level: 40, move: Glacial Crush }

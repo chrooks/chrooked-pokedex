@@ -1,0 +1,19 @@
+name: Karrablast
+chrooked_id: karrablast
+aka: { dex: 588 }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Fury Cutter }
+  - { level: 8, move: Endure }
+  - { level: 12, move: False Swipe }
+  - { level: 16, move: Acid Spray }
+  - { level: 20, move: Headbutt }
+  - { level: 24, move: Flail }
+  - { level: 28, move: Scary Face }
+  - { level: 32, move: X-Scissor }
+  - { level: 36, move: Swords Dance }
+  - { level: 40, move: Take Down }
+  - { level: 44, move: Bug Buzz }
+  - { level: 48, move: Double-Edge }
+  - { level: 55, move: Pixie Slash }

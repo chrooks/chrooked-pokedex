@@ -1,0 +1,20 @@
+name: Kubfu
+chrooked_id: kubfu
+aka: { dex: 891 }
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Rock Smash }
+  - { level: 4, move: Endure }
+  - { level: 8, move: Focus Energy }
+  - { level: 12, move: Aerial Ace }
+  - { level: 16, move: Scary Face }
+  - { level: 20, move: Headbutt }
+  - { level: 24, move: Brick Break }
+  - { level: 28, move: Detect }
+  - { level: 32, move: Bulk Up }
+  - { level: 36, move: Iron Head }
+  - { level: 40, move: Dynamic Punch }
+  - { level: 44, move: Counter }
+  - { level: 48, move: Close Combat }
+  - { level: 52, move: Focus Punch }
+  - { level: 34, move: One-Inch Punch }

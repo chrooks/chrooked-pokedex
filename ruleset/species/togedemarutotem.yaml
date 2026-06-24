@@ -2,7 +2,6 @@ name: Togedemaru Totem
 chrooked_id: togedemarutotem
 aka: { pokeemerald: SPECIES_TOGEDEMARU_TOTEM }
 learnset:
-  - { level: 1, move: Lightning Slam }
   - { level: 1, move: Nuzzle }
   - { level: 1, move: Tackle }
   - { level: 5, move: Defense Curl }
@@ -17,3 +16,4 @@ learnset:
   - { level: 50, move: Electric Terrain }
   - { level: 55, move: Wild Charge }
   - { level: 60, move: Spiky Shield }
+  - { level: 37, move: Lightning Slam }

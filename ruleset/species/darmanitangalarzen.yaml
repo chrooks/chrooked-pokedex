@@ -2,7 +2,6 @@ name: Darmanitan Galar Zen
 chrooked_id: darmanitangalarzen
 aka: { pokeemerald: SPECIES_DARMANITAN_GALAR_ZEN }
 learnset:
-  - { level: 1, move: Glacial Crush }
   - { level: 0, move: Icicle Crash }
   - { level: 1, move: Icicle Crash }
   - { level: 1, move: Powder Snow }
@@ -19,3 +18,5 @@ learnset:
   - { level: 44, move: Blizzard }
   - { level: 50, move: Thrash }
   - { level: 56, move: Superpower }
+  - { level: 41, move: Glacial Crush }
+  - { level: 47, move: Cinder Smash }

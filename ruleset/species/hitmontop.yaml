@@ -4,3 +4,23 @@ aka: { pokeemerald: SPECIES_HITMONTOP }
 abilities:
   secondary: Technician
 stats: { atk: 100, def: 100, spe: 75 }
+learnset:
+  - { level: 0, move: Triple Kick }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Feint }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Fake Out }
+  - { level: 4, move: Quick Attack }
+  - { level: 8, move: Gyro Ball }
+  - { level: 12, move: Detect }
+  - { level: 16, move: Rapid Spin }
+  - { level: 21, move: Wide Guard }
+  - { level: 21, move: Quick Guard }
+  - { level: 24, move: Sucker Punch }
+  - { level: 28, move: Agility }
+  - { level: 32, move: Dig }
+  - { level: 36, move: Close Combat }
+  - { level: 40, move: Counter }
+  - { level: 44, move: Endeavor }
+  - { level: 48, move: One-Inch Punch }

@@ -1,0 +1,18 @@
+name: Binacle
+chrooked_id: binacle
+aka: { dex: 688 }
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Scratch }
+  - { level: 4, move: Withdraw }
+  - { level: 8, move: Water Gun }
+  - { level: 12, move: Fury Cutter }
+  - { level: 16, move: Fury Swipes }
+  - { level: 20, move: Ancient Power }
+  - { level: 24, move: Rock Polish }
+  - { level: 28, move: Slash }
+  - { level: 32, move: Hone Claws }
+  - { level: 36, move: Razor Shell }
+  - { level: 40, move: Shell Smash }
+  - { level: 44, move: Cross Chop }
+  - { level: 14, move: Water Whip }

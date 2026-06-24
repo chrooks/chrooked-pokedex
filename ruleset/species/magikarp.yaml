@@ -1,0 +1,8 @@
+name: Magikarp
+chrooked_id: magikarp
+aka: { dex: 129 }
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 15, move: Tackle }
+  - { level: 25, move: Flail }
+  - { level: 20, move: Water Whip }

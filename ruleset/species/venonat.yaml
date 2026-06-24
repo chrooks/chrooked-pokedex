@@ -3,3 +3,18 @@ chrooked_id: venonat
 aka: { pokeemerald: SPECIES_VENONAT }
 abilities:
   secondary: Tinted Lens
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Disable }
+  - { level: 5, move: Supersonic }
+  - { level: 11, move: Confusion }
+  - { level: 13, move: Poison Powder }
+  - { level: 17, move: Psybeam }
+  - { level: 23, move: Stun Spore }
+  - { level: 25, move: Bug Buzz }
+  - { level: 29, move: Sleep Powder }
+  - { level: 35, move: Leech Life }
+  - { level: 37, move: Zen Headbutt }
+  - { level: 41, move: Poison Fang }
+  - { level: 47, move: Psychic }
+  - { level: 32, move: Miasma }

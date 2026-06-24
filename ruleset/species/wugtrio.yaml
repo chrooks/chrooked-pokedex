@@ -20,3 +20,4 @@ learnset:
   - { level: 50, move: Flip Turn }
   - { level: 52, move: Aerial Ace }
   - { level: 54, move: Liquidation }
+  - { level: 14, move: Water Whip }

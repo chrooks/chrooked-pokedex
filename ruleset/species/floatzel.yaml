@@ -6,3 +6,21 @@ abilities:
   secondary: Water Veil
   hidden: Hydrate
 stats: { atk: 115, spa: 100 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Soak }
+  - { level: 15, move: Water Gun }
+  - { level: 18, move: Bite }
+  - { level: 21, move: Swift }
+  - { level: 24, move: Aqua Jet }
+  - { level: 29, move: Double Hit }
+  - { level: 35, move: Whirlpool }
+  - { level: 41, move: Liquidation }
+  - { level: 46, move: Aqua Tail }
+  - { level: 51, move: Agility }
+  - { level: 57, move: Hydro Pump }
+  - { level: 62, move: Wave Crash }
+  - { level: 26, move: Water Whip }

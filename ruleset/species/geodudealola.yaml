@@ -1,0 +1,21 @@
+name: Geodude Alola
+chrooked_id: geodudealola
+aka: { dex: 74 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Defense Curl }
+  - { level: 4, move: Charge }
+  - { level: 6, move: Rock Polish }
+  - { level: 10, move: Rollout }
+  - { level: 12, move: Spark }
+  - { level: 16, move: Rock Throw }
+  - { level: 18, move: Smack Down }
+  - { level: 22, move: Thunder Punch }
+  - { level: 24, move: Self-Destruct }
+  - { level: 28, move: Stealth Rock }
+  - { level: 30, move: Rock Blast }
+  - { level: 34, move: Discharge }
+  - { level: 36, move: Explosion }
+  - { level: 40, move: Double-Edge }
+  - { level: 42, move: Stone Edge }
+  - { level: 48, move: Lightning Slam }

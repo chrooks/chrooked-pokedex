@@ -2,3 +2,18 @@ name: Dracovish
 chrooked_id: dracovish
 aka: { pokeemerald: SPECIES_DRACOVISH }
 stats: { atk: 110 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 7, move: Protect }
+  - { level: 14, move: Brutal Swing }
+  - { level: 21, move: Ancient Power }
+  - { level: 28, move: Bite }
+  - { level: 35, move: Dragon Breath }
+  - { level: 42, move: Stomp }
+  - { level: 49, move: Super Fang }
+  - { level: 56, move: Crunch }
+  - { level: 63, move: Fishious Rend }
+  - { level: 70, move: Dragon Pulse }
+  - { level: 77, move: Dragon Rush }
+  - { level: 17, move: Water Whip }
