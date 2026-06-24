@@ -109,6 +109,50 @@ def test_put_species_writes_yaml_and_validates(
     assert response.json()["stats"]["spe"] == 99
 
 
+def test_put_species_sorts_learnset_ascending_by_level(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    # A learnset submitted out of order (a new move appended at the tail, as the
+    # distribution editor used to do) must be persisted ascending by level.
+    payload = {
+        "name": "Samurott",
+        "chrooked_id": "samurott",
+        "aka": {"dex": 503},
+        "learnset": [
+            {"level": 29, "move": "Aerial Ace"},
+            {"level": 63, "move": "Hydro Pump"},
+            {"level": 15, "move": "Water Whip"},
+            {"level": 42, "move": "Pixie Slash"},
+        ],
+    }
+    response = client.put("/api/species/samurott", json=payload)
+    assert response.status_code == 200, response.text
+    levels = [m["level"] for m in response.json()["learnset"]]
+    assert levels == sorted(levels)
+    assert levels == [15, 29, 42, 63]
+
+
+def test_put_species_learnset_sort_is_stable_within_a_level(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    # Same-level entries keep their submitted order (stable sort) so the base
+    # game's L1 block is never churned.
+    payload = {
+        "name": "Samurott",
+        "chrooked_id": "samurott",
+        "aka": {"dex": 503},
+        "learnset": [
+            {"level": 1, "move": "Megahorn"},
+            {"level": 1, "move": "Tackle"},
+            {"level": 0, "move": "Slash"},
+        ],
+    }
+    response = client.put("/api/species/samurott", json=payload)
+    assert response.status_code == 200, response.text
+    moves = [m["move"] for m in response.json()["learnset"]]
+    assert moves == ["Slash", "Megahorn", "Tackle"]
+
+
 def test_put_species_creates_new_override_file(
     client: TestClient, ruleset_dir: Path
 ) -> None:

@@ -80,7 +80,11 @@ export function buildLearnsetOverride(
 ): LearnsetMove[] {
   const withoutMove = entry.learnset.filter((m) => !nameEq(m.move, moveName));
   if (pending.type === "remove") return withoutMove;
-  return [...withoutMove, { level: pending.level, move: moveName }];
+  // Insert at the new level and keep the list ascending by level. A stable sort
+  // mirrors the backend invariant (crud._species_from_payload) so the optimistic
+  // UI matches the saved data without waiting for a refetch.
+  const next = [...withoutMove, { level: pending.level, move: moveName }];
+  return next.sort((a, b) => a.level - b.level);
 }
 
 /** Build the abilities Override after applying one pending change for

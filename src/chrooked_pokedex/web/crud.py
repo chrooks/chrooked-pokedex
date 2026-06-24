@@ -212,9 +212,18 @@ def _species_from_payload(payload: dict[str, Any], chrooked_id: str) -> SpeciesO
 
     learnset = None
     if payload.get("learnset") is not None:
+        # Enforce the learnset invariant: ascending by level. A STABLE sort on
+        # level alone keeps the relative order of same-level entries (e.g. the
+        # base game's L1 block) so we don't churn existing data, while moving any
+        # appended out-of-order rows (added via the distribution editor) into place.
         learnset = tuple(
-            LearnsetMove(level=entry["level"], move=entry["move"])
-            for entry in payload["learnset"]
+            sorted(
+                (
+                    LearnsetMove(level=entry["level"], move=entry["move"])
+                    for entry in payload["learnset"]
+                ),
+                key=lambda m: m.level,
+            )
         )
 
     evolution = None
