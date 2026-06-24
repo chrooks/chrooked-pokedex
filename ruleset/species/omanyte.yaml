@@ -1,0 +1,19 @@
+name: Omanyte
+chrooked_id: omanyte
+aka: { dex: 138 }
+learnset:
+  - { level: 1, move: Bind }
+  - { level: 1, move: Withdraw }
+  - { level: 5, move: Rollout }
+  - { level: 10, move: Sand Attack }
+  - { level: 15, move: Water Gun }
+  - { level: 20, move: Leer }
+  - { level: 25, move: Mud Shot }
+  - { level: 30, move: Ancient Power }
+  - { level: 35, move: Brine }
+  - { level: 38, move: Power Gem }
+  - { level: 41, move: Protect }
+  - { level: 45, move: Rock Blast }
+  - { level: 50, move: Surf }
+  - { level: 55, move: Shell Smash }
+  - { level: 60, move: Hydro Pump }

@@ -1,0 +1,19 @@
+name: Pumpkaboo Small
+chrooked_id: pumpkaboosmall
+aka: { dex: 710 }
+learnset:
+  - { level: 1, move: Trick-or-Treat }
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Shadow Sneak }
+  - { level: 8, move: Confuse Ray }
+  - { level: 12, move: Razor Leaf }
+  - { level: 16, move: Leech Seed }
+  - { level: 20, move: Bullet Seed }
+  - { level: 24, move: Trick-or-Treat }
+  - { level: 24, move: Scary Face }
+  - { level: 28, move: Worry Seed }
+  - { level: 32, move: Seed Bomb }
+  - { level: 36, move: Shadow Ball }
+  - { level: 40, move: Trick }
+  - { level: 44, move: Pain Split }
+  - { level: 48, move: Wraithstrike }

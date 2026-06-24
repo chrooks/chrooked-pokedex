@@ -1,0 +1,18 @@
+name: Pikipek
+chrooked_id: pikipek
+aka: { dex: 731 }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 3, move: Growl }
+  - { level: 7, move: Echoed Voice }
+  - { level: 9, move: Rock Smash }
+  - { level: 13, move: Supersonic }
+  - { level: 15, move: Pluck }
+  - { level: 19, move: Roost }
+  - { level: 21, move: Fury Attack }
+  - { level: 25, move: Screech }
+  - { level: 27, move: Drill Peck }
+  - { level: 31, move: Bullet Seed }
+  - { level: 33, move: Feather Dance }
+  - { level: 37, move: Hyper Voice }
+  - { level: 48, move: Dive Bomb }

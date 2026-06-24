@@ -1,0 +1,21 @@
+name: Squawkabilly Yellow
+chrooked_id: squawkabillyyellow
+aka: { dex: 931 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Mimic }
+  - { level: 6, move: Quick Attack }
+  - { level: 10, move: Torment }
+  - { level: 13, move: Aerial Ace }
+  - { level: 17, move: Fury Attack }
+  - { level: 20, move: Taunt }
+  - { level: 24, move: Uproar }
+  - { level: 27, move: Copycat }
+  - { level: 30, move: Fly }
+  - { level: 34, move: Facade }
+  - { level: 36, move: Dive Bomb }
+  - { level: 38, move: Swagger }
+  - { level: 42, move: Brave Bird }
+  - { level: 47, move: Roost }
+  - { level: 52, move: Reversal }

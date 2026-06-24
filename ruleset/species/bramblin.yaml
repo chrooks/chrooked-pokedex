@@ -1,0 +1,20 @@
+name: Bramblin
+chrooked_id: bramblin
+aka: { dex: 946 }
+learnset:
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Rapid Spin }
+  - { level: 13, move: Bullet Seed }
+  - { level: 17, move: Infestation }
+  - { level: 21, move: Hex }
+  - { level: 25, move: Mega Drain }
+  - { level: 29, move: Disable }
+  - { level: 35, move: Phantom Force }
+  - { level: 40, move: Giga Drain }
+  - { level: 42, move: Wraithstrike }
+  - { level: 45, move: Curse }
+  - { level: 50, move: Pain Split }
+  - { level: 55, move: Power Whip }

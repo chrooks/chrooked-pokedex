@@ -1,0 +1,20 @@
+name: Sigilyph
+chrooked_id: sigilyph
+aka: { dex: 561 }
+learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Confusion }
+  - { level: 5, move: Gravity }
+  - { level: 10, move: Hypnosis }
+  - { level: 15, move: Air Cutter }
+  - { level: 20, move: Psybeam }
+  - { level: 25, move: Whirlwind }
+  - { level: 30, move: Cosmic Power }
+  - { level: 35, move: Air Slash }
+  - { level: 40, move: Psychic }
+  - { level: 45, move: Tailwind }
+  - { level: 50, move: Light Screen }
+  - { level: 50, move: Reflect }
+  - { level: 55, move: Sky Attack }
+  - { level: 60, move: Skill Swap }
+  - { level: 64, move: Oblivion Wing }

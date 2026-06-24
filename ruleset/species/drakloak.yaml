@@ -1,0 +1,22 @@
+name: Drakloak
+chrooked_id: drakloak
+aka: { dex: 886 }
+learnset:
+  - { level: 0, move: Dragon Pulse }
+  - { level: 1, move: Infestation }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Astonish }
+  - { level: 6, move: Lock-On }
+  - { level: 12, move: Assurance }
+  - { level: 18, move: Hex }
+  - { level: 24, move: Agility }
+  - { level: 30, move: Double Hit }
+  - { level: 36, move: U-turn }
+  - { level: 39, move: Wraithstrike }
+  - { level: 42, move: Dragon Dance }
+  - { level: 48, move: Phantom Force }
+  - { level: 54, move: Take Down }
+  - { level: 61, move: Dragon Rush }
+  - { level: 66, move: Double-Edge }
+  - { level: 72, move: Last Resort }

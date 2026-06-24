@@ -1,0 +1,7 @@
+name: Gastrodon West
+chrooked_id: gastrodonwest
+aka: { dex: 423 }
+abilities:
+  primary: Sticky Hold
+  secondary: Storm Drain
+  hidden: Self Sufficient

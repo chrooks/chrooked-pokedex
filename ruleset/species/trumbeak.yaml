@@ -1,0 +1,19 @@
+name: Trumbeak
+chrooked_id: trumbeak
+aka: { dex: 732 }
+learnset:
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Rock Smash }
+  - { level: 1, move: Rock Blast }
+  - { level: 13, move: Supersonic }
+  - { level: 16, move: Pluck }
+  - { level: 21, move: Roost }
+  - { level: 24, move: Fury Attack }
+  - { level: 29, move: Screech }
+  - { level: 32, move: Drill Peck }
+  - { level: 37, move: Bullet Seed }
+  - { level: 40, move: Feather Dance }
+  - { level: 45, move: Hyper Voice }
+  - { level: 48, move: Dive Bomb }

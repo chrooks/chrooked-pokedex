@@ -1,0 +1,7 @@
+name: Shellos East
+chrooked_id: shelloseast
+aka: { dex: 422 }
+abilities:
+  primary: Sticky Hold
+  secondary: Storm Drain
+  hidden: Self Sufficient

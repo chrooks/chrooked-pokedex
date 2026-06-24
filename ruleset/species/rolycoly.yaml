@@ -1,0 +1,15 @@
+name: Rolycoly
+chrooked_id: rolycoly
+aka: { dex: 837 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Smokescreen }
+  - { level: 5, move: Rapid Spin }
+  - { level: 10, move: Smack Down }
+  - { level: 15, move: Rock Polish }
+  - { level: 20, move: Ancient Power }
+  - { level: 25, move: Incinerate }
+  - { level: 30, move: Stealth Rock }
+  - { level: 35, move: Heat Crash }
+  - { level: 40, move: Rock Blast }
+  - { level: 48, move: Power Gem }

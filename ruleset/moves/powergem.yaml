@@ -1,0 +1,9 @@
+name: Power Gem
+chrooked_id: powergem
+aka: { pokeemerald: MOVE_POWER_GEM }
+type: Rock
+category: special
+power: 90
+accuracy: 100
+pp: 15
+description: Attacks with rays of light that sparkle like diamonds.

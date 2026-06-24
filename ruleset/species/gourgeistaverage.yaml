@@ -1,0 +1,22 @@
+name: Gourgeist Average
+chrooked_id: gourgeistaverage
+aka: { dex: 711 }
+learnset:
+  - { level: 1, move: Explosion }
+  - { level: 1, move: Moonblast }
+  - { level: 1, move: Trick-or-Treat }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Shadow Sneak }
+  - { level: 1, move: Confuse Ray }
+  - { level: 12, move: Razor Leaf }
+  - { level: 16, move: Leech Seed }
+  - { level: 20, move: Bullet Seed }
+  - { level: 24, move: Trick-or-Treat }
+  - { level: 24, move: Scary Face }
+  - { level: 28, move: Worry Seed }
+  - { level: 32, move: Seed Bomb }
+  - { level: 36, move: Shadow Ball }
+  - { level: 40, move: Trick }
+  - { level: 42, move: Wraithstrike }
+  - { level: 44, move: Pain Split }
+  - { level: 48, move: Phantom Force }

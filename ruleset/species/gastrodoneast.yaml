@@ -1,0 +1,7 @@
+name: Gastrodon East
+chrooked_id: gastrodoneast
+aka: { dex: 423 }
+abilities:
+  primary: Sticky Hold
+  secondary: Storm Drain
+  hidden: Self Sufficient

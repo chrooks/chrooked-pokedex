@@ -1,0 +1,12 @@
+name: Energy Ball
+chrooked_id: energyball
+aka: { pokeemerald: MOVE_ENERGY_BALL }
+type: Grass
+category: special
+power: 90
+accuracy: 100
+pp: 10
+description: Draws power from nature to attack. May lower Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 10 }
+flags: [ballistic]

@@ -1,0 +1,9 @@
+name: Dreepy
+chrooked_id: dreepy
+aka: { dex: 885 }
+learnset:
+  - { level: 1, move: Bite }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Infestation }
+  - { level: 48, move: Wraithstrike }
