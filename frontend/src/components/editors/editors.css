@@ -671,11 +671,11 @@ button.move-tag:hover {
 }
 
 .dist-row {
-  /* name | controls on the first line; a "replaces X" note wraps to its own
-     full-width line below so it never crushes the name or pushes the controls
+  /* check | name | controls on the first line; a "replaces X" note wraps to its
+     own full-width line below so it never crushes the name or pushes the controls
      off the edge (a long species name truncates instead). */
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   column-gap: var(--space-2);
   row-gap: 4px;
@@ -790,6 +790,50 @@ button.move-tag:hover {
 .dist-row__undo:hover {
   color: var(--text);
   border-color: var(--chrome);
+}
+
+/* Bulk-action toolbar above the editable list: select-all + mass remove / level
+   nudge. The action buttons disable until at least one row is checked. */
+.dist-bulk {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.dist-bulk__all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.dist-bulk__count {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.dist-bulk__remove:hover:not(:disabled) {
+  color: var(--error, oklch(62% 0.2 25));
+  border-color: var(--error, oklch(62% 0.2 25));
+}
+
+.btn--small {
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.dist-row__check {
+  cursor: pointer;
+  margin: 0;
+}
+
+.dist-row[data-selected="true"] {
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 6%, var(--surface-0));
 }
 
 .dist-actions {

@@ -78,6 +78,7 @@ export function ReverseLookupTab({
 }: Props) {
   const [, updateView] = useUrlState();
   const [pending, setPending] = useState<Map<string, Pending>>(new Map());
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [addQuery, setAddQuery] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [failures, setFailures] = useState<string[]>([]);
@@ -132,6 +133,78 @@ export function ReverseLookupTab({
     });
   }
 
+  // --- Multi-select + bulk actions (check rows, then mass remove / nudge level).
+  function toggleSelected(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.chrooked_id));
+
+  function toggleSelectAll() {
+    setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.chrooked_id)));
+  }
+
+  function clearSelection() {
+    setSelected(new Set());
+  }
+
+  // Stage a removal for every selected row at once. A brand-new staged add is
+  // dropped outright rather than marked removed (mirrors the per-row × button).
+  function bulkRemove() {
+    setPending((prev) => {
+      const next = new Map(prev);
+      for (const id of selected) {
+        const isNew = next.get(id)?.isNew ?? false;
+        if (isNew) {
+          next.delete(id);
+          continue;
+        }
+        next.set(
+          id,
+          entityKind === "move"
+            ? { isNew: false, move: { type: "remove" } }
+            : { isNew: false, ability: { type: "remove" } },
+        );
+      }
+      return next;
+    });
+    clearSelection();
+  }
+
+  // Nudge the learn level of every selected move row by ±delta, clamped to
+  // [1, 100]. Rows staged for removal are skipped; a result equal to the
+  // species' base level clears the no-op edit (same rule as the inline input).
+  function bulkAdjustLevel(delta: number) {
+    setPending((prev) => {
+      const next = new Map(prev);
+      for (const id of selected) {
+        const entry = byId.get(id);
+        if (!entry) continue;
+        const existing = next.get(id);
+        if (existing && "move" in existing && existing.move.type === "remove") continue;
+        const isNew = existing?.isNew ?? false;
+        const base = currentLevel(entry, entityName);
+        const staged =
+          existing && "move" in existing && existing.move.type === "level"
+            ? existing.move.level
+            : null;
+        const shown = staged ?? base ?? DEFAULT_LEVEL;
+        const level = Math.min(LEVEL_MAX, Math.max(LEVEL_MIN, shown + delta));
+        if (!isNew && base !== null && level === base) {
+          next.delete(id);
+          continue;
+        }
+        next.set(id, { isNew, move: { type: "level", level } });
+      }
+      return next;
+    });
+  }
+
   function handleClick(entry: DexEntry) {
     // Navigate to the species' dex profile in ONE atomic update. Do NOT also call
     // onClose() here: onClose maps to the parent's `update({ selected: null })`,
@@ -159,6 +232,7 @@ export function ReverseLookupTab({
   function handleDiscard() {
     setPending(new Map());
     setFailures([]);
+    clearSelection();
   }
 
   // Save: for each touched species, fetch its raw Override (to keep aka +
@@ -218,7 +292,10 @@ export function ReverseLookupTab({
     setPending(stillPending);
     setFailures(errors);
     setIsSaving(false);
-    if (errors.length === 0) onSaved();
+    if (errors.length === 0) {
+      clearSelection();
+      onSaved();
+    }
   }
 
   // --- Add-a-species typeahead candidates (exclude those already present /
@@ -316,26 +393,79 @@ export function ReverseLookupTab({
           onPick={handleClick}
         />
       ) : (
-        <ul
-          id="reverse-lookup-list"
-          className="dist-list"
-          style={{ maxHeight: "none" }}
-        >
-          {rows.map((entry) => (
-            <EditableRow
-              key={entry.chrooked_id}
-              entry={entry}
-              entityKind={entityKind}
-              entityName={entityName}
-              rowIdPrefix={rowIdPrefix}
-              pending={pending.get(entry.chrooked_id) ?? null}
-              isAdded={!presentIds.has(entry.chrooked_id)}
-              backdropTargetId={backdropTargetId}
-              onNavigate={() => handleClick(entry)}
-              onChange={(change) => setPendingFor(entry.chrooked_id, change)}
-            />
-          ))}
-        </ul>
+        <>
+          <div className="dist-bulk" id="dist-bulk">
+            <label className="dist-bulk__all">
+              <input
+                id="dist-select-all"
+                type="checkbox"
+                checked={allSelected}
+                aria-label="Select all species"
+                onChange={toggleSelectAll}
+              />
+              <span className="dist-bulk__count" aria-live="polite">
+                {selected.size > 0 ? `${selected.size} selected` : "Select"}
+              </span>
+            </label>
+            <span className="editor-actions__spacer" />
+            {entityKind === "move" && (
+              <>
+                <button
+                  type="button"
+                  id="dist-bulk-dec"
+                  className="btn btn--small"
+                  disabled={selected.size === 0}
+                  title="Lower the learn level of selected species by 1"
+                  onClick={() => bulkAdjustLevel(-1)}
+                >
+                  −1 lv
+                </button>
+                <button
+                  type="button"
+                  id="dist-bulk-inc"
+                  className="btn btn--small"
+                  disabled={selected.size === 0}
+                  title="Raise the learn level of selected species by 1"
+                  onClick={() => bulkAdjustLevel(1)}
+                >
+                  +1 lv
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              id="dist-bulk-remove"
+              className="btn btn--small dist-bulk__remove"
+              disabled={selected.size === 0}
+              title="Stage removal of selected species"
+              onClick={bulkRemove}
+            >
+              Remove
+            </button>
+          </div>
+          <ul
+            id="reverse-lookup-list"
+            className="dist-list"
+            style={{ maxHeight: "none" }}
+          >
+            {rows.map((entry) => (
+              <EditableRow
+                key={entry.chrooked_id}
+                entry={entry}
+                entityKind={entityKind}
+                entityName={entityName}
+                rowIdPrefix={rowIdPrefix}
+                pending={pending.get(entry.chrooked_id) ?? null}
+                isAdded={!presentIds.has(entry.chrooked_id)}
+                isSelected={selected.has(entry.chrooked_id)}
+                backdropTargetId={backdropTargetId}
+                onNavigate={() => handleClick(entry)}
+                onToggleSelect={() => toggleSelected(entry.chrooked_id)}
+                onChange={(change) => setPendingFor(entry.chrooked_id, change)}
+              />
+            ))}
+          </ul>
+        </>
       )}
 
       {failures.length > 0 && (
@@ -456,8 +586,10 @@ type EditableRowProps = {
   rowIdPrefix: string;
   pending: Pending | null;
   isAdded: boolean;
+  isSelected: boolean;
   backdropTargetId?: string | null;
   onNavigate: () => void;
+  onToggleSelect: () => void;
   onChange: (change: Pending | null) => void;
 };
 
@@ -468,8 +600,10 @@ function EditableRow({
   rowIdPrefix,
   pending,
   isAdded,
+  isSelected,
   backdropTargetId,
   onNavigate,
+  onToggleSelect,
   onChange,
 }: EditableRowProps) {
   const isRemoved =
@@ -484,7 +618,16 @@ function EditableRow({
       className="dist-row"
       data-dirty={isDirty ? "true" : undefined}
       data-removed={isRemoved ? "true" : undefined}
+      data-selected={isSelected ? "true" : undefined}
     >
+      <input
+        type="checkbox"
+        className="dist-row__check"
+        id={`dist-select-${entry.chrooked_id}`}
+        checked={isSelected}
+        aria-label={`Select ${entry.name}`}
+        onChange={onToggleSelect}
+      />
       <button
         type="button"
         id={`${rowIdPrefix}-${entry.chrooked_id}`}
