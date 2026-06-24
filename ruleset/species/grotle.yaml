@@ -1,20 +1,23 @@
 name: Grotle
 chrooked_id: grotle
 aka: { pokeemerald: SPECIES_GROTLE }
-abilities:
-  secondary: Chloroplast
+types: [Grass, Ground]
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Absorb }
+  - { level: 1, move: Clod Toss }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Withdraw }
-  - { level: 13, move: Razor Leaf }
-  - { level: 17, move: Curse }
-  - { level: 22, move: Bite }
-  - { level: 27, move: Mega Drain }
-  - { level: 32, move: Leech Seed }
-  - { level: 37, move: Synthesis }
-  - { level: 42, move: Crunch }
-  - { level: 47, move: Giga Drain }
-  - { level: 52, move: Leaf Storm }
+  - { level: 13, move: Curse }
+  - { level: 17, move: Bite }
+  - { level: 22, move: Mega Drain }
   - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 27, move: Tectonic Fang }
+  - { level: 28, move: Leech Seed }
+  - { level: 32, move: Synthesis }
+  - { level: 37, move: Crunch }
+  - { level: 40, move: Grav Apple }
+  - { level: 42, move: Headlong Rush }
+  - { level: 47, move: Wood Hammer }
+  - { level: 52, move: Head Smash }
+evolution: { from: Turtwig, method: { level: 18 } }

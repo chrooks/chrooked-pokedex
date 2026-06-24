@@ -1,20 +1,22 @@
 name: Turtwig
 chrooked_id: turtwig
 aka: { pokeemerald: SPECIES_TURTWIG }
-abilities:
-  secondary: Chloroplast
 learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Razor Leaf }
   - { level: 1, move: Tackle }
-  - { level: 5, move: Withdraw }
-  - { level: 9, move: Absorb }
-  - { level: 13, move: Razor Leaf }
-  - { level: 17, move: Curse }
-  - { level: 21, move: Bite }
-  - { level: 25, move: Mega Drain }
-  - { level: 29, move: Leech Seed }
-  - { level: 33, move: Synthesis }
-  - { level: 37, move: Crunch }
-  - { level: 41, move: Giga Drain }
-  - { level: 45, move: Leaf Storm }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 1, move: Withdraw }
+  - { level: 5, move: Clod Toss }
+  - { level: 9, move: Curse }
+  - { level: 13, move: Bite }
+  - { level: 15, move: Mega Drain }
+  - { level: 17, move: Lithic Fang }
+  - { level: 19, move: Tectonic Fang }
+  - { level: 21, move: Leech Seed }
+  - { level: 25, move: Synthesis }
+  - { level: 29, move: Crunch }
+  - { level: 33, move: Grav Apple }
+  - { level: 37, move: Headlong Rush }
+  - { level: 41, move: Wood Hammer }
+  - { level: 45, move: Head Smash }
+  - { level: 48, move: Solar Blade }
