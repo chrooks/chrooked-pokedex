@@ -35,7 +35,9 @@ write) — it prints the full recipient table and writes nothing.
 
 ## How it works
 
-The skill shells out to its engine script:
+The skill shells out to its engine script, a thin CLI over the shared engine in
+`chrooked_pokedex.distribute` (the same code the web distributor uses, so the two
+can't drift):
 
 ```
 .venv/bin/python .claude/skills/move-distribute/distribute_move.py <move> <flags>
@@ -45,9 +47,12 @@ The skill shells out to its engine script:
    (`clodtoss`). Errors if the move doesn't exist yet (create it via `/move-design`).
 2. **Select recipients** — every species whose type list includes any `--types`
    value AND matches the `--split` predicate over base atk/spa.
-3. **Place the move** — into the widest gap of the level window (earliest level on
+3. **Expand evolution lines** — by default each matched species pulls in its whole
+   evolution line (relatives flagged `(line)` in the table). `--no-evolutions`
+   limits to the matched species only.
+4. **Place the move** — into the widest gap of the level window (earliest level on
    a tie). With `--evolved-at-1`, evolved forms instead get it at level 1.
-4. **Write** — through the project's `species_yaml` writer, preserving every other
+5. **Write** — through the project's `species_yaml` writer, preserving every other
    Override field (abilities, stats, typing, evolution). New recipients get a new
    learnset-only Override file.
 
@@ -57,10 +62,15 @@ The skill shells out to its engine script:
 - `--types T[,T]` (required) — a species matches if it has **any** listed type.
 - `--split` — `physical` (atk≥spa, default), `special` (spa≥atk),
   `strong-physical` (atk>spa), `strong-special` (spa>atk), or `any`.
-- `--preset early|mid|late` — window shorthand: early `4-15`, mid `16-35`,
-  late `36-55`. Default `early`.
+- `--preset start|early|mid|late|end` — window shorthand: start `1-5`, early
+  `6-15`, mid `16-35`, late `36-48`, end `48-64`. Default `early`.
 - `--levels MIN-MAX` — explicit window (overrides `--preset`). Level numbers are
   the real metric; presets are just shorthand.
+- `--rarity common|uncommon|rare|signature` — breadth tier (default `common`).
+  Narrows the matched set by BST (rare = only the strong few) and biases rarer
+  moves later in the level window. `common` keeps everyone and places early.
+- `--no-evolutions` — only the matched species; don't pull in their evolution
+  lines (default is to include the whole line).
 - `--evolved-at-1` — park the move at L1 on evolved forms for Move Reminder access
   (use for early-game moves a fully-evolved catch should still know).
 - `--include-legendaries` — keep legendaries/paradox/mythicals (excluded by default).

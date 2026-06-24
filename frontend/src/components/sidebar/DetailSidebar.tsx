@@ -37,6 +37,10 @@ type Props = {
   /** Open already in edit mode (the per-row list pencil routes here so it lands
       on the [Fields | Distribution] tabs instead of a bare editor). */
   initialEditing?: boolean;
+  /** Which edit tab to open when entering edit mode FROM a given read tab, e.g.
+      `{ "learned-by": "distribution" }` so the pencil on the Learned-by tab lands
+      on Distribution. Unmapped read tabs fall back to the first edit tab. */
+  readToEditTab?: Record<string, string>;
   onClose: () => void;
 };
 
@@ -58,6 +62,7 @@ export function DetailSidebar({
   tabs,
   editTabs,
   initialEditing = false,
+  readToEditTab,
   onClose,
 }: Props) {
   const [editing, setEditing] = useState(initialEditing);
@@ -79,9 +84,10 @@ export function DetailSidebar({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entityKey]);
 
-  // Entering edit mode always starts on the first edit tab (Fields).
+  // Entering edit mode lands on the edit tab mapped from the current read tab
+  // (e.g. Learned-by → Distribution); otherwise the first edit tab (Fields).
   function startEditing() {
-    setActiveEditTab(editTabs[0]?.id ?? "");
+    setActiveEditTab(readToEditTab?.[activeTab] ?? editTabs[0]?.id ?? "");
     setEditing(true);
   }
 

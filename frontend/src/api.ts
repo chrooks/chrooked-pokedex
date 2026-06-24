@@ -14,9 +14,13 @@ import type {
   AbilityProposal,
   AbilityWrite,
   ApplyReportSummary,
+  ApplyDistributionResponse,
+  ApplyDistributionRow,
   Behavior,
   BehaviorPacket,
   DexEntry,
+  DistributeRequest,
+  DistributeResponse,
   EngineKey,
   LearnsetProposal,
   LedgerEntry,
@@ -128,7 +132,12 @@ export const api = {
   // Species (raw Override read + write)
   speciesOverride: (id: string, signal?: AbortSignal) =>
     getJson<SpeciesOverride>(`/api/species/${encodeURIComponent(id)}`, signal),
-  putSpecies: (id: string, payload: SpeciesOverride, scope?: string) =>
+  putSpecies: (
+    id: string,
+    payload: SpeciesOverride,
+    scope?: string,
+    opts?: { silent?: boolean },
+  ) =>
     sendJson<SpeciesOverride>(
       "PUT",
       `/api/species/${encodeURIComponent(id)}${scopeQuery(scope)}`,
@@ -136,7 +145,9 @@ export const api = {
     ).then((result) => {
       // Species data changed → let the always-mounted dex resource refetch, so a
       // distribution/species edit made from any screen shows on the dex page.
-      emitDataChange();
+      // `silent` lets a batch caller suppress the per-write signal and emit once
+      // at the end (avoids an O(N) dex-refetch storm during a bulk save).
+      if (!opts?.silent) emitDataChange();
       return result;
     }),
   /** Ask the LLM to propose an abilities block for this species (#6). A read-only
@@ -181,6 +192,28 @@ export const api = {
       "DELETE",
       `/api/moves/${encodeURIComponent(id)}${confirmQuery(confirm)}`,
     ),
+  /** Propose recipients + gap-placed levels for distributing a move. Read-only —
+      returns candidate rows, never writes. Body carries exactly one recipient
+      mode (`rule` or `prompt`) plus the shared window/evolution options. Errors
+      carry the server's message (422 invalid/empty, 503 LLM key/upstream). */
+  distributeMove: (id: string, body: DistributeRequest) =>
+    sendJson<DistributeResponse>(
+      "POST",
+      `/api/moves/${encodeURIComponent(id)}/distribute`,
+      body,
+    ),
+  /** Write a whole distribution in ONE request (append-only). Replaces the
+      per-species GET+PUT fan-out, then emits a single data-change so the dex
+      refetches once. */
+  applyDistribution: (id: string, rows: ApplyDistributionRow[]) =>
+    sendJson<ApplyDistributionResponse>(
+      "POST",
+      `/api/moves/${encodeURIComponent(id)}/distribute/apply`,
+      { rows },
+    ).then((result) => {
+      emitDataChange();
+      return result;
+    }),
 
   // Abilities
   putAbility: (id: string, payload: AbilityWrite, scope?: string) =>

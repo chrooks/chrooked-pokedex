@@ -20,6 +20,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .. import distribute as distmod
 from .. import ledger as ledgermod
 from ..behavior import render_packet
 from ..env import load_env_file
@@ -493,6 +494,225 @@ def create_app(
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
+
+    @app.post("/api/moves/{chrooked_id}/distribute")
+    def distribute_move_recipients(
+        chrooked_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Propose recipients + gap-placed levels for distributing a move; never writes.
+
+        Two recipient modes (the body carries exactly one):
+        - ``rule``: ``{types[], split, include_legendaries?, include_megas?}`` —
+          deterministic selection by type + attack split.
+        - ``prompt``: a freeform instruction (mechanical OR thematic) — the LLM
+          Port chooses WHICH species fit; level placement stays deterministic.
+
+        Shared body fields: ``levels`` (``[min, max]``) or ``preset``
+        (early/mid/late) for the window; ``include_evolutions`` (default true) to
+        pull each recipient's whole evolution line; ``evolved_at_1`` to park
+        evolutions at level 1 instead of gap-placing them.
+
+        Returns ``{rows, rationale, warnings, window, move}`` — read-only. Each row
+        is ``{chrooked_id, name, dex, level, stage, line_id, matched, already_has}``.
+        The accept path is the existing per-species ``PUT /api/species/{id}``.
+
+        Honest errors: unknown move → 404; missing/invalid mode or split → 422;
+        a thematic pick that names nothing real (SuggestError) → 422; LLM key /
+        upstream failure (LlmError) → 503.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        dex = dexmod.build_dex(snapshot, ruleset)
+        move = next(
+            (m for m in dexmod.build_moves(snapshot, ruleset)
+             if m.get("chrooked_id") == chrooked_id),
+            None,
+        )
+        if move is None:
+            raise HTTPException(
+                status_code=404, detail=f"No move with chrooked_id {chrooked_id!r}."
+            )
+
+        body = payload or {}
+        levels = body.get("levels")
+        window = distmod.parse_window(
+            levels=tuple(levels) if isinstance(levels, list) and len(levels) == 2 else None,
+            preset=body.get("preset"),
+        )
+        include_evolutions = body.get("include_evolutions", True)
+        evolved_at_1 = body.get("evolved_at_1", False)
+        rarity = body.get("rarity", "common")
+        if rarity not in distmod.RARITY:
+            raise HTTPException(status_code=422, detail=f"Unknown rarity {rarity!r}.")
+
+        records = {
+            e["chrooked_id"]: distmod.SpeciesRecord(
+                chrooked_id=e["chrooked_id"],
+                name=e.get("name", e["chrooked_id"]),
+                dex=e.get("dex"),
+                types=tuple(e.get("types") or []),
+                atk=(e.get("stats") or {}).get("atk", 0),
+                spa=(e.get("stats") or {}).get("spa", 0),
+                levels=tuple(m.get("level") for m in (e.get("learnset") or [])),
+                bst=sum((e.get("stats") or {}).values()),
+                has_move=any(m.get("move") == move["name"] for m in (e.get("learnset") or [])),
+            )
+            for e in dex
+            if e.get("chrooked_id")
+        }
+        evo = distmod.build_evolution_index(snapshot["species"])
+
+        # Rule (type + split) and prompt now COMBINE: a rule narrows the
+        # candidate pool deterministically, and a prompt refines WITHIN it
+        # (e.g. Fighting physical AND "has feet/legs"). At least one side is
+        # required. A type makes the rule meaningful; split alone does not.
+        prompt = (body.get("prompt") or "").strip() if isinstance(body.get("prompt"), str) else ""
+        rule = body.get("rule") if isinstance(body.get("rule"), dict) else None
+        rule_types = {t for t in (rule.get("types") or [])} if rule else set()
+        split = (rule.get("split") if rule else None) or "physical"
+        if rule and split not in distmod.SPLITS:
+            raise HTTPException(status_code=422, detail=f"Unknown attack split {split!r}.")
+        if not (rule_types or prompt):
+            raise HTTPException(
+                status_code=422,
+                detail="Provide a type (with optional attack split) and/or a prompt.",
+            )
+
+        def _ruled_ids() -> list[str]:
+            return distmod.select_by_rule(
+                records.values(), types=rule_types, split=split,
+                include_legendaries=(rule or {}).get("include_legendaries", False),
+                include_megas=(rule or {}).get("include_megas", False),
+            )
+
+        rationale, warnings = "", []
+        try:
+            if prompt:
+                # A type rule pre-filters the pool so the prompt refines within it;
+                # without a type, the prompt ranges over the whole roster.
+                if rule_types:
+                    allowed = set(_ruled_ids())
+                    pool = [e for e in dex if e["chrooked_id"] in allowed]
+                    constraint = (
+                        f"Pre-filtered to types: {', '.join(sorted(rule_types))}; "
+                        f"attack split: {split}. Pick only from the roster shown."
+                    )
+                else:
+                    pool, constraint = dex, ""
+                sel = suggestmod.suggest_distribution_species(
+                    provider=_llm_provider(), move=move, species=pool, prompt=prompt,
+                    rarity=rarity, constraint=constraint,
+                )
+                matched, rationale, warnings = sel["ids"], sel["rationale"], sel["warnings"]
+            else:
+                # Deterministic rule only; rarity narrows by BST.
+                matched = distmod.apply_breadth(records, _ruled_ids(), rarity)
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+
+        rows = distmod.distribute(
+            records, evo, matched_ids=matched, window=window,
+            include_evolutions=include_evolutions, evolved_at_1=evolved_at_1,
+            level_bias=distmod.RARITY[rarity]["bias"],
+        )
+        return {
+            "rows": [
+                {
+                    "chrooked_id": r.chrooked_id,
+                    "name": r.name,
+                    "dex": r.dex,
+                    "level": r.level,
+                    "stage": r.stage,
+                    "line_id": r.line_id,
+                    "matched": r.matched,
+                    "already_has": r.already_has,
+                }
+                for r in rows
+            ],
+            "rationale": rationale,
+            "warnings": warnings,
+            "window": [window[0], window[1]],
+            "move": {"chrooked_id": chrooked_id, "name": move["name"]},
+        }
+
+    @app.post("/api/moves/{chrooked_id}/distribute/apply")
+    def apply_distribution(
+        chrooked_id: str, payload: dict[str, Any], scope: str = "base"
+    ) -> dict[str, Any]:
+        """Write a whole distribution in ONE request: append the move to each
+        listed species' learnset (append-only), preserving every other Override
+        field. Replaces the per-species GET+PUT fan-out the UI used to do, so a
+        90-species apply is one round-trip and one dex refetch, not ~180.
+
+        Body: ``{rows: [{chrooked_id, level}]}``. Each row adds the move at
+        ``level`` (1–100); an existing instance of this move is re-levelled in
+        place (no duplicate). Returns ``{applied, failed, count}`` — a bad row
+        (unknown species, out-of-range level, loader rejection) lands in
+        ``failed`` with a reason and never aborts the rest. Unknown move → 404;
+        empty rows → 422.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        move = next(
+            (m for m in dexmod.build_moves(snapshot, ruleset)
+             if m.get("chrooked_id") == chrooked_id),
+            None,
+        )
+        if move is None:
+            raise HTTPException(
+                status_code=404, detail=f"No move with chrooked_id {chrooked_id!r}."
+            )
+        move_name = move["name"]
+
+        rows = (payload or {}).get("rows")
+        if not isinstance(rows, list) or not rows:
+            raise HTTPException(status_code=422, detail="No rows to apply.")
+
+        dex_by_id = {e["chrooked_id"]: e for e in dexmod.build_dex(snapshot, ruleset)}
+        scope_dir = _scope_dir(scope)
+
+        applied: list[str] = []
+        failed: list[dict[str, str]] = []
+        for row in rows:
+            cid = row.get("chrooked_id") if isinstance(row, dict) else None
+            level = row.get("level") if isinstance(row, dict) else None
+            entry = dex_by_id.get(cid) if isinstance(cid, str) else None
+            if entry is None:
+                failed.append({"chrooked_id": str(cid), "error": "unknown species"})
+                continue
+            if not isinstance(level, int) or not 1 <= level <= 100:
+                failed.append({"chrooked_id": cid, "error": "level must be 1–100"})
+                continue
+
+            raw = ruleset.species.get(cid)
+            body = (
+                crudmod.serialize_species(raw)
+                if raw is not None
+                else {
+                    "name": entry.get("name", cid),
+                    "chrooked_id": cid,
+                    "aka": {"dex": entry["dex"]} if entry.get("dex") is not None else {},
+                    "types": None, "abilities": None, "stats": None,
+                    "learnset": None, "evolution": None,
+                }
+            )
+            # Append-only: drop only THIS move (re-level), then re-add it. No
+            # other learnset entry is ever removed.
+            current = entry.get("learnset") or []
+            kept = [m for m in current if m.get("move") != move_name]
+            body["learnset"] = [*kept, {"level": level, "move": move_name}]
+
+            try:
+                crudmod.upsert_species(
+                    scope_dir, cid, body, ledger_dir=ruleset_dir, scope=scope
+                )
+                applied.append(cid)
+            except crudmod.ValidationError as error:
+                failed.append({"chrooked_id": cid, "error": str(error)})
+
+        return {"applied": applied, "failed": failed, "count": len(applied)}
 
     @app.put("/api/abilities/{chrooked_id}")
     def put_ability(

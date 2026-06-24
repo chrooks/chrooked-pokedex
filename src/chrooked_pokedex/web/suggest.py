@@ -2174,3 +2174,157 @@ def _validate_move_result(
         out["before"] = before
 
     return out
+
+
+# --------------------------------------------------------------------------- #
+# Move-distribution: semantic recipient selection (the prompt mode).
+#
+# The deterministic engine (chrooked_pokedex.distribute) picks recipients by
+# type + attack split. A freeform prompt, though, may be *thematic* ("Pokémon
+# that could cut with sharp claws / scythes") and span many types. So this
+# capability uses the Port for ONE job only: choose WHICH species fit the prompt
+# from the real roster. Level placement stays deterministic in the engine — the
+# LLM never decides levels. The endpoint feeds these ids to engine.distribute().
+# --------------------------------------------------------------------------- #
+
+# A thematic pick can be broad. With the output trimmed to a flat id list (no
+# per-species prose), even a wide "common" pick of a few hundred ids fits — this
+# headroom is the safety margin, not the expected size.
+DISTRIBUTE_MAX_TOKENS = 8192
+
+
+def format_species_pool(species: list[dict[str, Any]]) -> str:
+    """Compact, cache-stable roster block: ``id  Name  Type[/Type]`` per line.
+
+    Built from the merged dex so it is the real, current roster (base ⊕ Ruleset).
+    Only the fields the model needs to choose by concept — id (what it must emit),
+    name, and types — so the cached prefix stays lean over ~1.5k species."""
+    lines = []
+    for entry in species:
+        cid = entry.get("chrooked_id")
+        if not cid:
+            continue
+        types = "/".join(entry.get("types") or []) or "?"
+        lines.append(f"{cid}\t{entry.get('name', cid)}\t{types}")
+    return "\n".join(sorted(lines))
+
+
+def _distribute_rubric() -> str:
+    return (
+        "You are a Pokémon game-design assistant. Given one move (its name and "
+        "description) and the full species roster, choose every species that "
+        "should learn this move under the user's instruction. The instruction may "
+        "be MECHANICAL (a type and an attack split) or THEMATIC (a concept from "
+        "the move's flavor, e.g. 'could plausibly cut with sharp claws, scythes, "
+        "or blades'). For a thematic instruction, include both obvious fits and "
+        "well-justified less-obvious ones, but stay faithful to the concept — do "
+        "not pad the list. You choose only WHICH species (the recipients); a "
+        "separate deterministic step decides at what level each learns it, so do "
+        "NOT propose levels. Emit each recipient's chrooked_id EXACTLY as it "
+        "appears in the roster. Put the recipient chrooked_ids in `species` (a "
+        "flat list of id strings — no per-species prose) and a one-line overall "
+        "summary in `rationale`."
+    )
+
+
+# How broad the recipient list should be, by rarity tier — the LLM owns breadth
+# in prompt mode (deterministic preset mode narrows by BST instead).
+_RARITY_GUIDANCE = {
+    "common": "Breadth COMMON: include everyone plausible for the concept.",
+    "uncommon": "Breadth UNCOMMON: skip the weakest or most tenuous fits; keep the solid majority.",
+    "rare": "Breadth RARE: only strong or notable users — a focused list, not everyone.",
+    "signature": "Breadth SIGNATURE: only the few most iconic, defining users (a handful at most).",
+}
+
+
+def _distribute_user_context(
+    move: dict[str, Any], prompt: str, rarity: str, constraint: str = ""
+) -> str:
+    lines = [
+        f"Move: {move.get('name', move.get('chrooked_id', '?'))}",
+        f"Type: {move.get('type', '?')}   Category: {move.get('category', '?')}",
+        f"Description: {move.get('description', '') or '(none)'}",
+        f"Instruction from the user: {prompt.strip()}",
+        _RARITY_GUIDANCE.get(rarity, _RARITY_GUIDANCE["common"]),
+    ]
+    if constraint:
+        lines.append(constraint)
+    return "\n".join(lines)
+
+
+def _distribute_schema() -> dict[str, Any]:
+    return {
+        "type": "object",
+        "properties": {
+            # A flat list of chrooked_id strings — no per-species prose, so a
+            # broad pick can't blow the token budget on reasoning strings.
+            "species": {
+                "type": "array",
+                "items": {"type": "string"},
+            },
+            "rationale": {"type": "string"},
+        },
+        "required": ["species", "rationale"],
+        "additionalProperties": False,
+    }
+
+
+def suggest_distribution_species(
+    *,
+    provider: LlmProvider,
+    move: dict[str, Any],
+    species: list[dict[str, Any]],
+    prompt: str,
+    rarity: str = "common",
+    constraint: str = "",
+) -> dict[str, Any]:
+    """Choose recipient species for a move from a freeform prompt; never writes.
+
+    Returns ``{ids, rationale, warnings}``: ``ids`` is the validated recipient
+    list (every id confirmed to be a real species), ``warnings`` collects any
+    hallucinated ids the model emitted (dropped, never guessed-at). The caller
+    feeds ``ids`` to the deterministic placement engine.
+    """
+    if not prompt or not prompt.strip():
+        raise SuggestError("A prompt is required to choose recipients.")
+    pool = [e for e in species if e.get("chrooked_id")]
+    if not pool:
+        raise SuggestError("No species are available to distribute to.")
+
+    known = {e["chrooked_id"] for e in pool}
+    result = provider.propose(
+        system=_distribute_rubric(),
+        cached_context="Species roster (emit chrooked_id exactly):\n"
+        + format_species_pool(pool),
+        user=_distribute_user_context(move, prompt, rarity, constraint),
+        schema=_distribute_schema(),
+        max_tokens=DISTRIBUTE_MAX_TOKENS,
+    )
+
+    if not isinstance(result, dict) or not isinstance(result.get("species"), list):
+        raise SuggestError("The suggestion came back in an unexpected shape.")
+
+    ids: list[str] = []
+    seen: set[str] = set()
+    warnings: list[str] = []
+    for item in result["species"]:
+        # The schema is a flat id list; tolerate a stray {"id": ...} object too.
+        cid = item.get("id") if isinstance(item, dict) else item
+        if not isinstance(cid, str):
+            continue
+        if cid not in known:
+            warnings.append(f"Dropped unknown species id {cid!r} from the suggestion.")
+            continue
+        if cid not in seen:
+            seen.add(cid)
+            ids.append(cid)
+
+    if not ids:
+        raise SuggestError("The suggestion did not name any known species.")
+
+    rationale = result.get("rationale")
+    return {
+        "ids": ids,
+        "rationale": rationale if isinstance(rationale, str) else "",
+        "warnings": warnings,
+    }

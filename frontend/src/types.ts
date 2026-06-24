@@ -138,6 +138,80 @@ export interface LearnsetDraft {
 
 export type LearnsetProposal = SuggestResponse<LearnsetDraft>;
 
+// --- Move distribution (`POST /api/moves/{id}/distribute`) ------------------ #
+
+/** The attack-split filters the deterministic distributor offers. */
+export type DistributeSplit =
+  | "physical"
+  | "special"
+  | "strong-physical"
+  | "strong-special"
+  | "any";
+
+/** Named level windows; the distributor also accepts explicit `[min, max]`. */
+export type DistributePreset = "start" | "early" | "mid" | "late" | "end";
+
+/** Rarity tiers: narrow the recipient set (rare = the strong few) and bias rarer
+    moves later in the level window. */
+export type DistributeRarity = "common" | "uncommon" | "rare" | "signature";
+
+/** Deterministic recipient rule: any matching type AND the split predicate. */
+export interface DistributeRule {
+  types: string[];
+  split: DistributeSplit;
+  include_legendaries?: boolean;
+  include_megas?: boolean;
+}
+
+/** Request body: exactly one of `rule` / `prompt`, plus shared window options. */
+export interface DistributeRequest {
+  rule?: DistributeRule;
+  prompt?: string;
+  /** Explicit window; wins over `preset`. */
+  levels?: [number, number];
+  preset?: DistributePreset;
+  /** Pull each matched recipient's whole evolution line (default true). */
+  include_evolutions?: boolean;
+  /** Park evolutions at level 1 (Move Reminder) instead of gap-placing them. */
+  evolved_at_1?: boolean;
+  /** Breadth tier: narrows the set and biases rarer moves later (default common). */
+  rarity?: DistributeRarity;
+}
+
+/** One proposed recipient: append-only (adds `move` to this species at `level`).
+    `matched` is a direct rule/prompt hit; `false` means pulled in via the line. */
+export interface DistributeRow {
+  chrooked_id: string;
+  name: string;
+  dex: number | null;
+  level: number;
+  stage: "first" | "evolved";
+  line_id: string;
+  matched: boolean;
+  already_has: boolean;
+}
+
+export interface DistributeResponse {
+  rows: DistributeRow[];
+  rationale: string;
+  warnings: string[];
+  window: [number, number];
+  move: { chrooked_id: string; name: string };
+}
+
+/** One row to write: add the move to `chrooked_id` at `level` (append-only). */
+export interface ApplyDistributionRow {
+  chrooked_id: string;
+  level: number;
+}
+
+/** `POST /api/moves/{id}/distribute/apply` — a whole distribution in one write. */
+export interface ApplyDistributionResponse {
+  applied: string[];
+  failed: { chrooked_id: string; error: string }[];
+  count: number;
+}
+
 export interface AdditionalEffect {
   effect: string;
   chance: number;

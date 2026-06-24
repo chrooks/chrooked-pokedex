@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
+import { emitDataChange } from "../../lib/dataChange";
 import { useUrlState } from "../../hooks/useUrlState";
 import { DexSprite } from "../DexSprite";
 import {
@@ -111,6 +112,17 @@ export function ReverseLookupTab({
 
   const dirtyCount = pending.size;
 
+  // Block Save while any staged level is out of range (1–100). Method/value are
+  // structured inputs, so this is the only validity gate today.
+  const hasInvalid = useMemo(() => {
+    for (const change of pending.values()) {
+      if ("move" in change && change.move.type === "level" && !isValidLevel(change.move.level)) {
+        return true;
+      }
+    }
+    return false;
+  }, [pending]);
+
   function setPendingFor(id: string, change: Pending | null) {
     setPending((prev) => {
       const next = new Map(prev);
@@ -170,11 +182,15 @@ export function ReverseLookupTab({
         const raw = await api
           .speciesOverride(entry.chrooked_id)
           .catch(() => null);
+        // Write silently in the loop, then emit one data-change after the batch
+        // (below) — avoids an O(N) dex-refetch storm on a multi-species save.
         if ("move" in change) {
           const learnset = buildLearnsetOverride(entry, entityName, change.move);
           await api.putSpecies(
             entry.chrooked_id,
             moveOverridePayload(entry, raw, learnset),
+            undefined,
+            { silent: true },
           );
         } else {
           const abilities = buildAbilitiesOverride(
@@ -185,6 +201,8 @@ export function ReverseLookupTab({
           await api.putSpecies(
             entry.chrooked_id,
             abilityOverridePayload(entry, raw, abilities),
+            undefined,
+            { silent: true },
           );
         }
       } catch (caught: unknown) {
@@ -195,6 +213,8 @@ export function ReverseLookupTab({
       }
     }
 
+    // One refetch signal for the whole batch (the per-write signals were silenced).
+    if (stillPending.size < pending.size) emitDataChange();
     setPending(stillPending);
     setFailures(errors);
     setIsSaving(false);
@@ -290,6 +310,8 @@ export function ReverseLookupTab({
         <ReadOnlyList
           species={rows}
           rowIdPrefix={rowIdPrefix}
+          entityKind={entityKind}
+          entityName={entityName}
           backdropTargetId={backdropTargetId}
           onPick={handleClick}
         />
@@ -343,7 +365,8 @@ export function ReverseLookupTab({
             type="button"
             id="dist-save"
             className="btn btn--primary"
-            disabled={isSaving}
+            disabled={isSaving || hasInvalid}
+            title={hasInvalid ? "Every level must be between 1 and 100" : undefined}
             onClick={() => void handleSave()}
           >
             {isSaving ? "Saving…" : "Save"}
@@ -354,41 +377,72 @@ export function ReverseLookupTab({
   );
 }
 
-// --- The read-only (backdrop) list: the original navigate-only chips. --------- #
+// --- The read-only list: one row per species as sprite · method · value. ------ #
+//
+// The method/value pair is deliberately generic so the same row extends past
+// level-up: today every learnset entry is a level-up move (method "Level", value
+// the level) or an ability (method "Slot", value the slot), but TM / Tutor / Egg
+// methods slot straight into the same two columns when the data model gains them.
 
 type ReadOnlyListProps = {
   species: DexEntry[];
   rowIdPrefix: string;
+  entityKind: "move" | "ability";
+  entityName: string;
   backdropTargetId?: string | null;
   onPick: (entry: DexEntry) => void;
 };
 
-function ReadOnlyList({ species, rowIdPrefix, backdropTargetId, onPick }: ReadOnlyListProps) {
+/** Derive how this species acquires the entity, as a {method, value} pair. */
+function acquisition(
+  entry: DexEntry,
+  entityKind: "move" | "ability",
+  entityName: string,
+): { method: string; value: string } {
+  if (entityKind === "move") {
+    const level = currentLevel(entry, entityName);
+    // Only level-up exists in the model today; the column is ready for TM/Tutor.
+    return { method: "Level", value: level !== null ? `L${level}` : "—" };
+  }
+  const slot = currentSlot(entry, entityName);
+  return { method: "Slot", value: slot ?? "—" };
+}
+
+function ReadOnlyList({
+  species,
+  rowIdPrefix,
+  entityKind,
+  entityName,
+  backdropTargetId,
+  onPick,
+}: ReadOnlyListProps) {
   return (
-    <ul
-      id="reverse-lookup-list"
-      className="reverse-lookup__list"
-      style={{ maxHeight: "none" }}
-    >
-      {species.map((entry) => (
-        <li key={entry.chrooked_id}>
-          <button
-            type="button"
-            id={`${rowIdPrefix}-${entry.chrooked_id}`}
-            className="reverse-lookup__species-btn"
-            onClick={() => onPick(entry)}
-          >
-            <DexSprite
-              chrookedId={entry.chrooked_id}
-              dex={entry.dex}
-              name={entry.name}
-              backdropTargetId={backdropTargetId}
-              size={32}
-            />
-            {entry.name}
-          </button>
-        </li>
-      ))}
+    <ul id="reverse-lookup-list" className="rl-rows" style={{ maxHeight: "none" }}>
+      {species.map((entry) => {
+        const { method, value } = acquisition(entry, entityKind, entityName);
+        return (
+          <li key={entry.chrooked_id} className="rl-row">
+            <button
+              type="button"
+              id={`${rowIdPrefix}-${entry.chrooked_id}`}
+              className="rl-row__name"
+              onClick={() => onPick(entry)}
+              title={`Open ${entry.name}`}
+            >
+              <DexSprite
+                chrookedId={entry.chrooked_id}
+                dex={entry.dex}
+                name={entry.name}
+                backdropTargetId={backdropTargetId}
+                size={28}
+              />
+              <span className="rl-row__name-text">{entry.name}</span>
+            </button>
+            <span className="rl-row__method">{method}</span>
+            <span className="rl-row__value mono">{value}</span>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -509,20 +563,36 @@ function MoveControls({
 
   return (
     <div className="dist-row__controls">
+      {/* Method picker — only level-up exists in the model today, but it's a
+          dropdown (not free text) so TM / Tutor / Egg slot in without a redesign. */}
+      <label className="sr-only" htmlFor={`dist-method-${entry.chrooked_id}`}>
+        Method for {entry.name}
+      </label>
+      <select
+        id={`dist-method-${entry.chrooked_id}`}
+        className="field__select dist-row__method"
+        disabled={isRemoved}
+        value="level"
+        onChange={() => undefined}
+      >
+        {MOVE_METHODS.map((m) => (
+          <option key={m.value} value={m.value}>
+            {m.label}
+          </option>
+        ))}
+      </select>
       <label className="sr-only" htmlFor={`dist-level-${entry.chrooked_id}`}>
         Learn level for {entry.name}
       </label>
-      <span className="dist-row__lv-label" aria-hidden="true">
-        Lv
-      </span>
       <input
         id={`dist-level-${entry.chrooked_id}`}
         className="field__input mono dist-row__lv"
         type="number"
         inputMode="numeric"
-        min={0}
-        max={100}
+        min={LEVEL_MIN}
+        max={LEVEL_MAX}
         disabled={isRemoved}
+        aria-invalid={!isRemoved && !isValidLevel(shownLevel) ? true : undefined}
         value={isRemoved ? "" : shownLevel}
         onChange={(e) => setLevel(e.target.value === "" ? "" : Number(e.target.value))}
       />
@@ -536,6 +606,20 @@ function MoveControls({
       />
     </div>
   );
+}
+
+/** Acquisition methods for a move. Only level-up exists in the data model today;
+    the list is the single place TM / Tutor / Egg get added later. */
+const MOVE_METHODS: { value: string; label: string }[] = [
+  { value: "level", label: "Level" },
+];
+
+const LEVEL_MIN = 1;
+const LEVEL_MAX = 100;
+
+/** Level value validation for the "Level" method: an integer in [1, 100]. */
+function isValidLevel(level: number): boolean {
+  return Number.isInteger(level) && level >= LEVEL_MIN && level <= LEVEL_MAX;
 }
 
 // --- Ability row controls: a slot picker (+ replacement note) + remove. ------- #

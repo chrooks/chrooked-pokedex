@@ -24,6 +24,7 @@ import { EntityControls } from "../filters/EntityControls";
 import { MoveEditor } from "../editors/MoveEditor";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { MoveDetail } from "../sidebar/MoveDetail";
+import { MoveDistributor } from "../sidebar/MoveDistributor";
 import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
@@ -370,28 +371,42 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
             {
               id: "distribution",
               label: "Distribution",
-              // Distribution edit tab: the staged learned-by editor. Backdrop
-              // (read-only fork preview) disables editing per ac5/D5.
+              // Distribution edit tab: the editable learned-by list (method +
+              // validated value per species) is the main content; the bulk
+              // rule/prompt distributor hides behind a ✦ suggest button on top.
+              // Backdrop (read-only fork preview) disables editing per ac5/D5.
               render: () => (
-                <ReverseLookupTab
-                  species={learnedByIndex.get(selected.chrooked_id) ?? []}
-                  dexData={dexData ?? []}
-                  rowIdPrefix="move-learner"
-                  entityKind="move"
-                  filterField="moves"
-                  entityName={selected.name}
-                  readOnly={view.backdrop !== null}
-                  backdropTargetId={backdropTargetId}
-                  onSaved={() => {
-                    reloadDex();
-                    reload();
-                  }}
-                  onClose={() => closeMove()}
-                />
+                <>
+                  <MoveDistributor
+                    move={{ chrooked_id: selected.chrooked_id, name: selected.name }}
+                    readOnly={view.backdrop !== null}
+                    backdropTargetId={backdropTargetId}
+                    onSaved={() => {
+                      reloadDex();
+                      reload();
+                    }}
+                  />
+                  <ReverseLookupTab
+                    species={learnedByIndex.get(selected.chrooked_id) ?? []}
+                    dexData={dexData ?? []}
+                    rowIdPrefix="move-learner"
+                    entityKind="move"
+                    filterField="moves"
+                    entityName={selected.name}
+                    readOnly={view.backdrop !== null}
+                    backdropTargetId={backdropTargetId}
+                    onSaved={() => {
+                      reloadDex();
+                      reload();
+                    }}
+                    onClose={() => closeMove()}
+                  />
+                </>
               ),
             },
           ]}
           initialEditing={openInEdit}
+          readToEditTab={{ "learned-by": "distribution" }}
           onClose={() => closeMove()}
         />
       )}

@@ -561,6 +561,66 @@ button.move-tag:hover {
   background: color-mix(in oklch, var(--chrome) 10%, var(--surface-0));
 }
 
+/* --- Read-only learned-by rows: sprite · method · value (extensible) -------- */
+
+.rl-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.rl-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 2px var(--space-2) 2px 2px;
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.rl-row__name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.rl-row__name:hover {
+  color: var(--chrome);
+}
+
+.rl-row__name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rl-row__method {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.rl-row__value {
+  min-width: 2.5rem;
+  text-align: right;
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+
 /* --- Inline distribution editing (#30): add typeahead, editable rows, save --- */
 
 .dist-add {
@@ -691,7 +751,15 @@ button.move-tag:hover {
 }
 
 .dist-row__lv {
-  width: 4rem;
+  width: 4.75rem;
+}
+
+.dist-row__method {
+  min-width: 5.5rem;
+}
+
+.dist-row__lv[aria-invalid="true"] {
+  border-color: color-mix(in oklch, var(--error, oklch(62% 0.2 25)) 70%, var(--line));
 }
 
 .dist-row__slot {
