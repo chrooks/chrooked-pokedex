@@ -38,6 +38,30 @@ _STAT_KEY_TO_INDEX = {"hp": 0, "atk": 1, "def": 2, "spe": 3, "spa": 4, "spd": 5}
 _ABILITY_SLOTS = ("primary", "secondary")
 _STAT_ORDER = ("hp", "atk", "def", "spe", "spa", "spd")
 
+# 16.2's compiler rejects a pokemon.txt section missing any of these "required value"
+# fields (raises "Un valor obligatorio X no ha sido encontrado"). A SpeciesOverride is
+# a diff and carries none of them, so a freshly-created section gets safe defaults.
+# ponytail: flat defaults — a created form/mega is playable; tune in PBS if a specific
+# BaseEXP/egg-group matters. Carry real values via the base snapshot if that need grows.
+_REQUIRED_NEW_FIELDS: tuple[tuple[str, str], ...] = (
+    ("GenderRate", "Female50Percent"),
+    ("GrowthRate", "Medium"),
+    ("BaseEXP", "100"),
+    ("EffortPoints", "0,0,0,0,0,0"),
+    ("Rareness", "45"),
+    ("Happiness", "70"),
+    ("Compatibility", "Undiscovered"),
+    ("Height", "1.0"),
+    ("Weight", "10.0"),
+    ("Color", "Black"),
+    ("Kind", "Pokemon"),
+    ("Pokedex", "No data."),
+    ("StepsToHatch", "5120"),
+    ("BattlerPlayerY", "0"),
+    ("BattlerEnemyY", "0"),
+    ("BattlerAltitude", "0"),
+)
+
 
 def apply_species(
     target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
@@ -172,7 +196,9 @@ def _render_new_block(
     stats = ",".join(str(override.stats[key]) for key in _STAT_ORDER)
 
     lines = [
-        f"Name={override.name}",
+        # 16.2 caps the display Name at 20 chars; long materialized form names
+        # ("Basculin Blue Striped" = 21) would fail to compile. ponytail: hard truncate.
+        f"Name={override.name[:20]}",
         f"InternalName={internal}",
         f"Type1={type_symbols[0]}",
     ]
@@ -184,6 +210,16 @@ def _render_new_block(
         ability_lines, ability_unresolved = _render_abilities(override.abilities, resmap)
         lines.extend(ability_lines)
         unresolved.extend(ability_unresolved)
+
+    # Compile-required fields the Override cannot supply — emit safe defaults so the
+    # section actually compiles (without these, 16.2 errors on the first missing one).
+    lines.extend(f"{key}={value}" for key, value in _REQUIRED_NEW_FIELDS)
+
+    # `Moves=` is required and non-blank. learnset_apply fills the real list when the
+    # Ruleset owns one; a form with no learnset would otherwise leave it blank.
+    # ponytail: one placeholder move keeps the section compilable; the real learnset
+    # (when present) overwrites this line.
+    lines.append("Moves=1,TACKLE")
 
     return "\n".join(lines), unresolved
 

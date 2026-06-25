@@ -583,6 +583,40 @@ def test_evolution_to_absent_species_is_dropped(tmp_path):
     assert any(e.category == "evolution" and e.status == "partial" for e in report.entries)
 
 
+def test_evolution_item_present_written_absent_dropped(tmp_path):
+    """An Item-method branch is written when the target's items.txt has the item, and
+    dropped + reported partial when it does not — writing an undefined PBItem (e.g. a
+    Hisui BLACKAUGURITE) breaks compilation."""
+    target = _target(tmp_path)
+    # The fixture has no items.txt; supply one with METALCOAT present, BLACKAUGURITE absent.
+    (target / "PBS" / "items.txt").write_text(
+        "1,METALCOAT,Metal Coat,Metal Coats,1,2000,\"Boosts steel moves.\",2,0,0,\n",
+        encoding="utf-8",
+    )
+    ruleset = _Ruleset(species={
+        "scizor": SpeciesOverride(
+            name="Scizor", chrooked_id="scizor", aka={"essentials": "IVYSAUR"},
+            evolution=EvolutionOverride(
+                from_species="Bulbasaur", method={"item": "Metal Coat"}
+            ),
+        ),
+        "kleavor": SpeciesOverride(
+            name="Kleavor", chrooked_id="kleavor", aka={"essentials": "VENUSAUR"},
+            evolution=EvolutionOverride(
+                from_species="Bulbasaur", method={"item": "Black Augurite"}
+            ),
+        ),
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    evolution_apply.apply_evolutions(target, ruleset, resmap, report)
+
+    evo_line = _field(target, "BULBASAUR", "Evolutions") or ""
+    assert "METALCOAT" in evo_line  # present item written
+    assert "BLACKAUGURITE" not in evo_line  # absent item dropped
+    assert any(e.category == "evolution" and e.status == "partial" for e in report.entries)
+
+
 # --- helpers for ability tests ----------------------------------------------------
 
 

@@ -39,7 +39,8 @@ def apply_evolutions(
     original = text
 
     existing = section_read.internal_names(text)
-    groups = _group_by_source(ruleset, resmap, report, existing)
+    items = _read_item_internal_names(target)
+    groups = _group_by_source(ruleset, resmap, report, existing, items)
     for source_symbol in sorted(groups):
         triples, partial = groups[source_symbol]
         if section_edit.find_section_by_internalname(text, source_symbol) is None:
@@ -72,8 +73,28 @@ def apply_evolutions(
     return set()
 
 
+def _read_item_internal_names(target: Path) -> set[str]:
+    """The INTERNALNAME (2nd CSV column) of every item in the target's `items.txt`.
+
+    Used to drop an `Item` evolution branch whose item the target lacks (e.g. a Hisui
+    BLACKAUGURITE/PEATBLOCK) — writing it references an undefined PBItem and breaks
+    compilation. An absent items.txt yields an empty set (every Item branch then drops).
+    """
+    path = target / "PBS" / "items.txt"
+    if not path.exists():
+        return set()
+    text, _ = pbs_io.read(path)
+    names: set[str] = set()
+    for line in text.splitlines():
+        fields = line.split(",")
+        if len(fields) > 1 and fields[1].strip():
+            names.add(fields[1].strip())
+    return names
+
+
 def _group_by_source(
-    ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport, existing: set[str]
+    ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport, existing: set[str],
+    items: set[str],
 ) -> dict[str, tuple[list[str], list[str]]]:
     """Build `{source_symbol: (triple_tokens, unresolved_notes)}` from every backward
     `evolution.from` pointer. Each branch contributes a flat `SPECIES,Method,Param`
@@ -117,6 +138,16 @@ def _group_by_source(
         triple = _render_triple(evo.method, target_symbol)
         if triple is None:
             partials.setdefault(source_symbol, []).append(f"{chrooked_id}:method")
+            continue
+        # An Item-method branch whose item the target lacks would write an undefined
+        # PBItem and break compilation — drop the branch and report it.
+        if triple[1] == "Item" and triple[2] not in items:
+            report.add(ReportEntry(
+                status="partial", category="evolution", chrooked_id=chrooked_id,
+                symbol=target_symbol,
+                reason=f"evolution item {triple[2]!r} not in target",
+            ))
+            partials.setdefault(source_symbol, []).append(f"{chrooked_id}:item_absent")
             continue
         by_source.setdefault(source_symbol, []).extend(triple)
 
