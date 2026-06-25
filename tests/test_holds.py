@@ -65,3 +65,39 @@ def test_missing_id_raises(tmp_path: Path) -> None:
 @pytest.mark.unit
 def test_empty_holdset_holds_nothing() -> None:
     assert not HoldSet().is_held("gothita", "species")
+
+
+@pytest.mark.unit
+def test_hold_filtered_ruleset_clears_held_fields() -> None:
+    """Display filter: held species/learnset categories are cleared so the backdrop
+    falls through to the Target's own data; unheld species are untouched."""
+    import dataclasses
+    from chrooked_pokedex.model.holds import hold_filtered_ruleset
+    from chrooked_pokedex.model.ruleset import Ruleset
+    from chrooked_pokedex.model.schema import (
+        AbilitiesOverride, AbilityDef, LearnsetMove, SpeciesOverride,
+    )
+
+    gothorita = SpeciesOverride(
+        name="Gothorita", chrooked_id="gothorita",
+        types=("Psychic",),
+        abilities=AbilitiesOverride(primary="Starfall", secondary="Competitive"),
+        stats={"hp": 70},
+        learnset=(LearnsetMove(level=1, move="Pound"),),
+    )
+    pikachu = SpeciesOverride(name="Pikachu", chrooked_id="pikachu", types=("Electric",))
+    ruleset = Ruleset(
+        species={"gothorita": gothorita, "pikachu": pikachu},
+        abilities={"starfall": AbilityDef(name="Starfall", chrooked_id="starfall")},
+    )
+    holds = HoldSet(held={"gothorita": frozenset({"species", "learnset"})})
+
+    filtered = hold_filtered_ruleset(ruleset, holds)
+    g = filtered.species["gothorita"]
+    assert g.types is None and g.abilities is None and g.stats is None  # species held
+    assert g.learnset is None  # learnset held
+    # Unheld species untouched; ability definitions not held here.
+    assert filtered.species["pikachu"].types == ("Electric",)
+    assert "starfall" in filtered.abilities
+    # Empty holds → identical object.
+    assert hold_filtered_ruleset(ruleset, HoldSet()) is ruleset

@@ -18,11 +18,15 @@ hold would clobber the Target's data without warning.
 
 from __future__ import annotations
 
+import dataclasses
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Mapping, Optional
+from typing import TYPE_CHECKING, Mapping, Optional
 
 import yaml
+
+if TYPE_CHECKING:
+    from .ruleset import Ruleset
 
 # The categories a hold may name. Each maps to an Applier write tier that loops a
 # single kind of `chrooked_id`, so a hold can suppress that tier's write for one
@@ -54,6 +58,58 @@ class HoldSet:
     def is_held(self, chrooked_id: str, category: str) -> bool:
         """True when the Ruleset must NOT write `category` for `chrooked_id`."""
         return category in self.held.get(chrooked_id, frozenset())
+
+
+# Which SpeciesOverride fields each species-keyed hold category covers. Clearing
+# them from the override makes a dex backdrop fall through to the Target's own value
+# (see web/dex.py::_merge_species — an absent override field keeps the snapshot's).
+_SPECIES_HOLD_FIELDS: Mapping[str, tuple[str, ...]] = {
+    "species": ("types", "abilities", "stats"),
+    "learnset": ("learnset",),
+    "evolution": ("evolution",),
+}
+
+
+def hold_filtered_ruleset(ruleset: "Ruleset", holds: "HoldSet") -> "Ruleset":
+    """Return a DISPLAY-only Ruleset with held categories removed for held entities.
+
+    For the per-Target dex backdrop: a hold means the Ruleset stands down, so the
+    backdrop must show the Target's own data, not the Ruleset Override. Clearing the
+    held category off each Override (species fields, ability/move definitions) makes
+    the merge fall through to the Target snapshot's value.
+
+    This is for read/display only. The APPLY path must NOT use this — it needs the
+    full Ruleset plus the separate HoldSet so the appliers can emit honest `held`
+    report rows. Returns the input unchanged when nothing is held.
+    """
+    if not holds.held:
+        return ruleset
+
+    new_species = {}
+    for chrooked_id, override in ruleset.species.items():
+        held = holds.held.get(chrooked_id)
+        if held:
+            cleared = {
+                field_name: None
+                for category, field_names in _SPECIES_HOLD_FIELDS.items()
+                if category in held
+                for field_name in field_names
+            }
+            if cleared:
+                override = dataclasses.replace(override, **cleared)
+        new_species[chrooked_id] = override
+
+    new_abilities = {
+        cid: a for cid, a in ruleset.abilities.items()
+        if not holds.is_held(cid, "abilities")
+    }
+    new_moves = {
+        cid: m for cid, m in ruleset.moves.items()
+        if not holds.is_held(cid, "moves")
+    }
+    return dataclasses.replace(
+        ruleset, species=new_species, abilities=new_abilities, moves=new_moves
+    )
 
 
 def load_holds(ruleset_dir: Path, slug: Optional[str]) -> HoldSet:

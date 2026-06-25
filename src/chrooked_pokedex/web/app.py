@@ -25,6 +25,7 @@ from .. import ledger as ledgermod
 from ..behavior import render_packet
 from ..env import load_env_file
 from ..model import Ruleset
+from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
 from . import crud as crudmod
 from . import dex as dexmod
@@ -200,6 +201,18 @@ def create_app(
         base = _load_ruleset_or_503()
         overlay = targetsmod.load_target_overlay(ruleset_dir, target)
         return targetsmod.effective_ruleset(base, overlay), overlay
+
+    def _display_effective(target):
+        """The effective Ruleset for a Target's read-only BACKDROP views.
+
+        Same as ``_effective`` but with per-Target holds applied: a held category is
+        cleared off the Override so the backdrop shows the Target's own data, matching
+        what an apply would keep. Display only — the apply path uses ``_effective``
+        plus the separate HoldSet so it can still report ``held`` rows.
+        """
+        effective, overlay = _effective(target)
+        holds = load_holds(ruleset_dir, target.namespace)
+        return hold_filtered_ruleset(effective, holds), overlay
 
     @app.get("/api/species/{chrooked_id}")
     def get_species_override(chrooked_id: str) -> dict[str, Any]:
@@ -945,7 +958,7 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
-            effective, overlay = _effective(target)
+            effective, overlay = _display_effective(target)
             return targetsmod.target_dex(
                 target,
                 effective,
@@ -961,7 +974,7 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
-            effective, _ = _effective(target)
+            effective, _ = _display_effective(target)
             return targetsmod.target_abilities(
                 target,
                 effective,
@@ -976,7 +989,7 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
-            effective, _ = _effective(target)
+            effective, _ = _display_effective(target)
             return targetsmod.target_moves(
                 target,
                 effective,
@@ -991,7 +1004,7 @@ def create_app(
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
-            effective, _ = _effective(target)
+            effective, _ = _display_effective(target)
             return targetsmod.target_type_chart(
                 target, effective, app.state.targets_state
             )
