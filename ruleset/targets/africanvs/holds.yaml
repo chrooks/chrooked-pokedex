@@ -3,5 +3,7 @@
 holds:
   - id: gothita
     categories: [species, learnset]
+  - id: gothorita
+    categories: [species, learnset]
   - id: gothitelle
     categories: [species, learnset]
