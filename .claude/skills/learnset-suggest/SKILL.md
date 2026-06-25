@@ -1,7 +1,7 @@
 ---
 name: learnset-suggest
 description: Suggest a complete level-up learnset (or surgically edit one move) for a species from chat, using the running chrooked-pokedex backend. Calls the same proposal endpoint the editor UI will use (one Seam), shows the proposed {level, move, reasoning} rows + rationale + alternatives, and on your confirmation writes the learnset Override through the existing CRUD API. Never writes without confirmation. Use when the user wants to draft or revise a learnset for a species in this Ruleset.
-argument-hint: "<species-chrooked-id> [full|surgical] [instruction...] [-- direction...]"
+argument-hint: "<species-chrooked-id> [full|surgical|line] [instruction...] [-- direction...]"
 disable-model-invocation: true
 ---
 
@@ -23,10 +23,12 @@ will be.
 /learnset-suggest goodra
 /learnset-suggest goodra full make it special-attack leaning
 /learnset-suggest goodra surgical swap the L1 move for Pound
+/learnset-suggest grotle line model the whole family on torterra
 ```
 
 - `<species-chrooked-id>` (required) — the species' `chrooked_id` (e.g. `goodra`).
-- `full|surgical` (optional, default `full`) — which mode to use.
+- `full|surgical|line` (optional, default `full`) — which mode to use. `line` proposes a
+  coherent learnset for **every member of the evolution line** (see "Line mode" below).
 - In `full` mode, an optional direction follows: freeform steer for the whole learnset.
 - In `surgical` mode, the instruction follows (required): describes exactly which
   move(s) to change.
@@ -171,6 +173,74 @@ Handle the write response:
   written — the same Boundary the UI's Save will hit.
 
 Chris reviews `git diff` and commits himself; the skill never touches git.
+
+## Line mode — suggest the whole evolution line
+
+`line` mode proposes a coherent, stage-appropriate learnset for **every member of the
+species' evolution line** in one flow. There is **no new endpoint**: it loops the same
+`POST …/suggest/learnset` once per member, feeding each call the anchor's learnset and the
+members already proposed (this run) through the existing `direction` field. Coherence
+rides in `direction`; the chain is the loop.
+
+A learnset is stage-specific, so each member gets its **own** stage-appropriate list — not
+one list copied. Shared signature moves carry across members at scaled levels.
+
+### Algorithm
+
+1. **Resolve the line.** Fetch the dex once:
+
+   ```bash
+   curl -sS "${CHROOKED_API:-http://127.0.0.1:8000}/api/dex"
+   ```
+
+   Each merged entry carries `evolution` (backward `{from, method}`) and `evolves_into`
+   (forward `[{to, …}]`). From the invoked species, walk `evolution.from` back to the base
+   (no `evolution`), then walk `evolves_into[].to` forward. Keep the **linear chain through
+   the invoked species**; for a branching tip (e.g. Eevee) take only the branch the invoked
+   species sits on and note the others are skipped in v1. Order the chain base → tip.
+
+2. **Anchor = the invoked species.** Its **current** learnset (from its dex entry) is the
+   fixed reference every other member is modeled on.
+
+3. **Propose each member in chain order.** For each member, call the existing endpoint,
+   building `direction` from: the user's freeform steer (the text after `line`) + the
+   anchor's learnset + the learnsets already proposed earlier in this run. Build the JSON
+   with a file (apostrophes/quotes break inline `-d`):
+
+   ```bash
+   # write payload.json = {"mode":"full","direction":"<built text>"}
+   curl -sS -X POST "${CHROOKED_API:-http://127.0.0.1:8000}/api/species/<member>/suggest/learnset" \
+     -H 'content-type: application/json' --data-binary @payload.json
+   ```
+
+   - **200** → keep the member's draft; add it to the running coherence context for the
+     next member.
+   - **422** → mark the member **blocked**, show the message, **continue** the chain (don't
+     abort the others).
+   - **503** → the LLM/key problem is global; stop and relay it.
+
+4. **Preview every member** as a level-sorted table (the same shape as single-species
+   mode), blocked members flagged. Show one combined rationale summary.
+
+5. **One confirm gate** for the whole line. On an explicit yes, **PUT each approved member**
+   exactly as single-species mode does (read raw Override → merge only `learnset` → PUT),
+   looping over the approved members. Report what landed per member. Reject → write nothing.
+
+**Draft capture invariant (the preview IS the write).** Each member's response must be
+saved to a **unique, immutable** file (e.g. `<run-id>/<member>.json`) the moment it
+returns — never a name reused across members or runs. Preview from that file, and PUT the
+learnset read back from that **same** file. If you run calls in the background, wait for
+each to fully complete (check the captured HTTP status, not a partial-JSON heuristic)
+before previewing. A divergence between what was shown and what is written is a write
+without consent — never let a late or duplicate call overwrite a draft mid-flow.
+
+**The anchor and the write set.** Pick the anchor explicitly — it can be the invoked
+species or any member the user names (e.g. "anchor on Arboliva"); its **current** learnset
+is the coherence reference. By default the anchor is the reference only and is **not**
+rewritten. If the user asks to **edit the whole line / include the anchor**, also propose
+the anchor: run a suggest for it too (direction = the family theme + the members already
+proposed), so every member gets a fresh draft while the anchor's *current* list still
+seeds the coherence. Always say which members you'll write before the confirm.
 
 ## Why this shares the Seam (reuse note)
 

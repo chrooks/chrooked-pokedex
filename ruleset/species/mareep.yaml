@@ -14,5 +14,6 @@ learnset:
   - { level: 30, move: Discharge }
   - { level: 34, move: Cotton Guard }
   - { level: 38, move: Dazzling Gleam }
+  - { level: 40, move: Milk Drink }
   - { level: 42, move: Light Screen }
   - { level: 46, move: Thunderbolt }

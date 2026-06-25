@@ -910,7 +910,7 @@ def test_dispatch_essentials16_routes_to_essentials162(
 
     called_as: list[str] = []
 
-    def fake_162(target, category, ruleset, report):  # noqa: ANN001
+    def fake_162(target, category, ruleset, report, **kwargs):  # noqa: ANN001
         called_as.append("essentials162")
 
     monkeypatch.setattr(cli_mod, "_apply_essentials162", fake_162)

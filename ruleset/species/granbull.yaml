@@ -1,8 +1,10 @@
 name: Granbull
 chrooked_id: granbull
 aka: { pokeemerald: SPECIES_GRANBULL }
+types: [Fairy, Ground]
 abilities:
-  secondary: Quick Feet
+  secondary: Strong Jaw
+  hidden: Quick Feet
 stats: { atk: 135, def: 80, spe: 75 }
 learnset:
   - { level: 1, move: Outrage }
@@ -23,3 +25,4 @@ learnset:
   - { level: 43, move: Play Rough }
   - { level: 51, move: Payback }
   - { level: 59, move: Crunch }
+evolution: { from: Snubbull, method: { level: 23 } }

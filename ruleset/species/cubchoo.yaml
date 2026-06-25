@@ -17,7 +17,7 @@ learnset:
   - { level: 27, move: Charm }
   - { level: 30, move: Snowscape }
   - { level: 33, move: Thrash }
-  - { level: 36, move: Rest }
+  - { level: 36, move: Brick Break }
   - { level: 39, move: Blizzard }
   - { level: 42, move: Sheer Cold }
   - { level: 46, move: Glacial Crush }

@@ -2,5 +2,27 @@ name: Arboliva
 chrooked_id: arboliva
 aka: { pokeemerald: SPECIES_ARBOLIVA }
 abilities:
-  secondary: Chloroplast
+  primary: Seed Sower
+  secondary: Deep-Rooted
+  hidden: Harvest
 stats: { hp: 80, atk: 70, spd: 110, spe: 40 }
+learnset:
+  - { level: 0, move: Giga Drain }
+  - { level: 1, move: Mirror Coat }
+  - { level: 1, move: Safeguard }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Absorb }
+  - { level: 7, move: Growth }
+  - { level: 10, move: Razor Leaf }
+  - { level: 13, move: Helping Hand }
+  - { level: 16, move: Flail }
+  - { level: 20, move: Mega Drain }
+  - { level: 23, move: Grassy Terrain }
+  - { level: 27, move: Leech Seed }
+  - { level: 31, move: Seed Bomb }
+  - { level: 36, move: Energy Ball }
+  - { level: 42, move: Terrain Pulse }
+  - { level: 48, move: Matcha Gotcha }
+  - { level: 54, move: Petal Blizzard }
+  - { level: 60, move: Petal Dance }

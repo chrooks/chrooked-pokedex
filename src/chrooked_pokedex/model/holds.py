@@ -24,11 +24,24 @@ from typing import Mapping, Optional
 
 import yaml
 
-# The categories a hold may name. These mirror the Appliers' write tiers; a hold
-# suppresses one tier's write for one entity. Engine-neutral: every engine applies
-# some subset of these, and naming one an engine does not write is harmless.
+# The categories a hold may name. Each maps to an Applier write tier that loops a
+# single kind of `chrooked_id`, so a hold can suppress that tier's write for one
+# entity by skipping it at the top of the loop:
+#   species, learnset  -> keyed by a SPECIES chrooked_id
+#   abilities          -> keyed by an ABILITY chrooked_id (its definition)
+#   moves              -> keyed by a MOVE chrooked_id (its definition)
+# Deliberately excluded (a hold naming one is a load-time error, never a silently
+# ignored hold):
+#   - `evolution`: the tier groups branches by pre-evolution and rebuilds whole
+#     lines, so honoring a per-species hold needs branch-level filtering, not a
+#     loop-top skip — added when a real need appears.
+#   - `type-chart`, `behaviors`: not keyed per entity (type-chart is attacker/
+#     defender pairs), so a per-id hold cannot address them.
+# Note: a species' ability *slots* live in the `species` tier (pokemon.txt), so
+# holding `species` keeps a regional form's typing, stats, AND abilities together;
+# the `abilities` category holds ability *definitions*, a different thing.
 HOLDABLE_CATEGORIES: frozenset[str] = frozenset(
-    {"abilities", "moves", "species", "learnset", "evolution", "type-chart", "behaviors"}
+    {"abilities", "moves", "species", "learnset"}
 )
 
 

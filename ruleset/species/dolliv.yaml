@@ -2,4 +2,20 @@ name: Dolliv
 chrooked_id: dolliv
 aka: { pokeemerald: SPECIES_DOLLIV }
 abilities:
-  secondary: Chloroplast
+  primary: Early Bird
+  secondary: Deep-Rooted
+  hidden: Harvest
+learnset:
+  - { level: 0, move: Giga Drain }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Absorb }
+  - { level: 7, move: Growth }
+  - { level: 10, move: Razor Leaf }
+  - { level: 13, move: Helping Hand }
+  - { level: 16, move: Flail }
+  - { level: 20, move: Mega Drain }
+  - { level: 23, move: Grassy Terrain }
+  - { level: 27, move: Leech Seed }
+  - { level: 31, move: Seed Bomb }
+  - { level: 34, move: Energy Ball }

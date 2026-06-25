@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Self Sufficient
+chrooked_id: selfsufficient
+applies_to: ability
+aka: { pokeemerald: ABILITY_SELF_SUFFICIENT }
+effects:
+  - summary: "Restores a little HP at the end of each turn (Leftovers as an ability)."
+    trigger: turn-end
+    when: "this Pokemon is on the field, not fainted, and below full HP at end of turn"
+    effect: "heal 1/16 of max HP (rounded down, minimum 1); skip if already at full HP"
+test_cases:
+  - given: "a Self Sufficient Pokemon with 160 max HP ends the turn at 100 HP"
+    expect: "it heals 10 HP (160 / 16) to 110"
+  - given: "a Self Sufficient Pokemon ends the turn at full HP"
+    expect: "no heal occurs"
+  - given: "a Self Sufficient Pokemon with 10 max HP ends the turn damaged"
+    expect: "it heals 1 HP (10/16 floors to 0, clamped to a 1 HP minimum)"
+  - given: "a Self Sufficient Pokemon also holding Leftovers ends the turn damaged"
+    expect: "both heals apply independently — Leftovers item heal and the ability heal stack"
+notes:
+  - "Same shape as the Leftovers hold item, but sourced from the ability instead of an item — so it stacks with an actual Leftovers."
+  - "Heal fraction is maxHP/16 (6.25%), floored, with a 1 HP minimum, matching Leftovers exactly."
+  - "Heaven-and-earth ordering: this is an end-of-turn passive heal, sequenced alongside other end-of-turn recovery (Leftovers, Ingrain, Aqua Ring). No effect if the holder is at full HP or fainted."
+  - "Healing Wish / Heal Block do not apply here in the base case; treat it as a plain Leftovers-equivalent unless the target engine already gates Leftovers behind Heal Block, in which case mirror that gate."
+engine_hints:
+  pokeemerald: "Add an end-of-turn ability case mirroring the Leftovers item path. In src/battle_util.c's end-of-turn handling (the ENDTURN ability/item recovery sequence that runs ItemBattleEffects ITEMEFFECT for Leftovers), give ABILITY_SELF_SUFFICIENT a recovery step: bs_recover = GetNonDynamaxMaxHP(battler) / 16, clamped to a minimum of 1, applied only when gBattleMons[battler].hp < maxHP and the mon is alive. Reuse the Leftovers heal-animation/printer path (STRINGID for HP restored)."
+  essentials: "In the end-of-turn ability handler (where abilities like Rain Dish / Ice Body heal), if the battler has Self Sufficient, is not at full HP, and is not fainted, recover (battler.totalhp / 16) floored, minimum 1. Reuse the same recoverHP path the Leftovers item uses so the heal message/animation matches."

@@ -21,6 +21,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...model.schema import MoveDef
 from ...report import ApplyReport, ReportEntry
 from ..essentials import vocab
@@ -48,8 +49,10 @@ _DEFAULT_DESC = '""'
 
 
 def apply_moves(
-    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
+    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
+    holds: HoldSet | None = None,
 ) -> set[Path]:
+    holds = holds or HoldSet()
     path = target / "PBS" / "moves.txt"
     if not path.exists():
         return set()
@@ -57,6 +60,12 @@ def apply_moves(
     original = text
 
     for chrooked_id in sorted(ruleset.moves):
+        if holds.is_held(chrooked_id, "moves"):
+            report.add(ReportEntry(
+                status="held", category="move", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
+            continue
         move = ruleset.moves[chrooked_id]
         # Edit when a row already exists under EITHER the resolved symbol or the
         # name-derived internal — so a move present but not indexed by the

@@ -3,6 +3,8 @@ chrooked_id: dusknoir
 aka: { pokeemerald: SPECIES_DUSKNOIR }
 types: [Ghost, Fighting]
 abilities:
+  primary: Pressure
+  secondary: Iron Fist
   hidden: Frisk
 stats: { hp: 65 }
 learnset:
@@ -28,3 +30,4 @@ learnset:
   - { level: 45, move: Wraithstrike }
   - { level: 48, move: Future Sight }
   - { level: 54, move: Destiny Bond }
+evolution: { from: Dusclops, method: { level: 45 } }

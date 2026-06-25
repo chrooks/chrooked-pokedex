@@ -44,6 +44,8 @@ from .appliers.pokeemerald.type_chart_apply import apply_type_chart
 from .behavior import render_manifest, render_packet
 from .harvest.harvester import apply_proposals, propose_changes
 from .model import Ruleset
+from .model.holds import HoldSet, load_holds
+from .model.target_edits import TargetEdits, load_target_edits
 from .report import ApplyReport
 from .seed.extractor import seed_from_fork
 from .seed.writer import write_ruleset
@@ -105,6 +107,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     apply.add_argument(
         "--force", action="store_true", help="Apply even if the target git tree is dirty."
+    )
+    apply.add_argument(
+        "--as",
+        dest="slug",
+        default=None,
+        help="Target slug, e.g. 'africanvs'. When given, loads per-Target holds "
+        "(ruleset/targets/<slug>/holds.yaml) and additive edits (edits.yaml). Omit "
+        "to apply the base Ruleset with no per-Target holds (today's behavior).",
     )
 
     harvest = sub.add_parser(
@@ -174,7 +184,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_seed(args.fork, args.base, args.ruleset)
     if args.command == "apply":
         return _run_apply(
-            args.target, args.engine, args.category, args.ruleset, args.force, args.dialect
+            args.target, args.engine, args.category, args.ruleset, args.force,
+            args.dialect, args.slug,
         )
     if args.command == "harvest":
         return _run_harvest(args.fork, args.ruleset, args.dry_run)
@@ -290,21 +301,34 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
 _ESSENTIALS162_CATEGORIES = ("abilities", "moves", "species", "learnset", "evolution", "type-chart", "behaviors")
 
 
-def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+def _apply_essentials162(
+    target: Path, category: str, ruleset, report: ApplyReport,
+    holds: "HoldSet | None" = None, target_edits: "TargetEdits | None" = None,
+) -> None:
     """Apply the Ruleset's data tiers into a target's Essentials 16.2 PBS.
 
     Mirrors `_apply_essentials` but builds on the 16.2 I/O + format rules: per-stat
     BaseStats (Speed at index 3), `Type1`/`Type2` with mono-type Type2 drop, singular
     `HiddenAbility`, flat moves.txt CSV scalars, and the defender-bucket type chart.
     Honors `--category`; anything that cannot resolve is recorded in the Apply Report.
+
+    `holds` pins chosen categories of chosen entities to the Target's own data (those
+    are reported `held`, not written). `target_edits` layers additive per-Target edits
+    on top (currently: extra learnset moves). Both default to empty.
     """
+    holds = holds or HoldSet()
+    target_edits = target_edits or TargetEdits()
     resmap = essentials162_resolution.build_resolution_map(target, ruleset)
     categories = _ESSENTIALS162_CATEGORIES if category == "all" else (category,)
     if "abilities" in categories:
-        changed = essentials162_abilities.apply_abilities(target, ruleset, resmap, report)
+        changed = essentials162_abilities.apply_abilities(
+            target, ruleset, resmap, report, holds=holds
+        )
         print(f"abilities: {len(changed)} file(s) changed")
     if "moves" in categories:
-        changed = essentials162_moves.apply_moves(target, ruleset, resmap, report)
+        changed = essentials162_moves.apply_moves(
+            target, ruleset, resmap, report, holds=holds
+        )
         print(f"moves: {len(changed)} file(s) changed")
     if "species" in categories:
         # Alt-forms live in pokemonforms.txt and are claimed FIRST, so species_apply
@@ -313,12 +337,14 @@ def _apply_essentials162(target: Path, category: str, ruleset, report: ApplyRepo
             target, ruleset, resmap, report
         )
         species_changed = essentials162_species.apply_species(
-            target, ruleset, resmap, report, skip=handled
+            target, ruleset, resmap, report, skip=handled, holds=holds
         )
         changed = forms_changed | species_changed
         print(f"species: {len(changed)} file(s) changed")
     if "learnset" in categories:
-        changed = essentials162_learnset.apply_learnsets(target, ruleset, resmap, report)
+        changed = essentials162_learnset.apply_learnsets(
+            target, ruleset, resmap, report, holds=holds, target_edits=target_edits
+        )
         print(f"learnset: {len(changed)} file(s) changed")
     if "evolution" in categories:
         changed = essentials162_evolution.apply_evolutions(target, ruleset, resmap, report)
@@ -340,6 +366,7 @@ def _run_apply(
     ruleset_dir: Path,
     force: bool,
     dialect: str = "auto",
+    slug: str | None = None,
 ) -> int:
     """Apply the Ruleset to a target fork.
 
@@ -347,6 +374,10 @@ def _run_apply(
     inspected to pick the right applier. A non-auto dialect forces the choice
     without reading any PBS files. An unrecognised format blocks with a clear
     message in the Apply Report and writes nothing to the target.
+
+    When `slug` is given, per-Target holds and additive edits for that slug are
+    loaded from `ruleset/targets/<slug>/` and honored by the applier. Omitting it
+    applies the base Ruleset with no per-Target holds.
     """
     try:
         require_clean_git_status(target, force=force)
@@ -355,11 +386,16 @@ def _run_apply(
         return 1
 
     ruleset = Ruleset.load(ruleset_dir)
+    holds = load_holds(ruleset_dir, slug)
+    target_edits = load_target_edits(ruleset_dir, slug)
     report = ApplyReport()
 
     from .appliers.dispatch import route_apply
 
-    route_apply(target, engine, ruleset, report, category=category, dialect=dialect)
+    route_apply(
+        target, engine, ruleset, report, category=category, dialect=dialect,
+        holds=holds, target_edits=target_edits,
+    )
 
     # When the format was unrecognized, route_apply writes a blocked entry and
     # returns without touching any files.  Surface the block to the console and

@@ -2,4 +2,21 @@ name: Smoliv
 chrooked_id: smoliv
 aka: { pokeemerald: SPECIES_SMOLIV }
 abilities:
-  secondary: Chloroplast
+  primary: Early Bird
+  secondary: Deep-Rooted
+  hidden: Harvest
+learnset:
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Absorb }
+  - { level: 7, move: Growth }
+  - { level: 10, move: Razor Leaf }
+  - { level: 13, move: Helping Hand }
+  - { level: 16, move: Leech Seed }
+  - { level: 19, move: Mega Drain }
+  - { level: 22, move: Grassy Terrain }
+  - { level: 25, move: Flail }
+  - { level: 28, move: Matcha Gotcha }
+  - { level: 32, move: Seed Bomb }
+  - { level: 36, move: Energy Ball }
+  - { level: 40, move: Terrain Pulse }

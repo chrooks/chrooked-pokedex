@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_SKIDDO }
 abilities:
   secondary: Mountaineer
   hidden: Foliate
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growth }
+  - { level: 7, move: Vine Whip }
+  - { level: 9, move: Tail Whip }
+  - { level: 12, move: Leech Seed }
+  - { level: 13, move: Razor Leaf }
+  - { level: 16, move: Worry Seed }
+  - { level: 20, move: Synthesis }
+  - { level: 22, move: Take Down }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Seed Bomb }
+  - { level: 34, move: Bulk Up }
+  - { level: 38, move: Double-Edge }
+  - { level: 42, move: Horn Leech }
+  - { level: 45, move: Leaf Blade }
+  - { level: 48, move: Milk Drink }

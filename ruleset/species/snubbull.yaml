@@ -1,6 +1,7 @@
 name: Snubbull
 chrooked_id: snubbull
 aka: { pokeemerald: SPECIES_SNUBBULL }
+types: [Fairy]
 abilities:
   secondary: Blitz
   hidden: Guts

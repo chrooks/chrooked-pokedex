@@ -36,6 +36,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...model.schema import AbilityDef
 from ...report import ApplyReport, ReportEntry
 from ..essentials import vocab
@@ -54,13 +55,18 @@ _ROW_WIDTH = 4
 
 
 def apply_abilities(
-    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
+    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
+    holds: HoldSet | None = None,
 ) -> set[Path]:
     """Write each Ruleset AbilityDef into `PBS/abilities.txt`.
 
     Runs before `apply_species` so freshly-written abilities are registered in
     `resmap.ability_by_name` and species slots resolve in the same apply run.
+
+    `holds` names abilities whose definition this Target pins to its own data;
+    those are reported `held` and not written.
     """
+    holds = holds or HoldSet()
     path = target / "PBS" / "abilities.txt"
     if not path.exists():
         return set()
@@ -68,6 +74,12 @@ def apply_abilities(
     original = text
 
     for chrooked_id in sorted(ruleset.abilities):
+        if holds.is_held(chrooked_id, "abilities"):
+            report.add(ReportEntry(
+                status="held", category="ability", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
+            continue
         ability = ruleset.abilities[chrooked_id]
         internal = _internal_of(ability)
         if not internal:

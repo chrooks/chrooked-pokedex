@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Any, Mapping, Optional
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...model.schema import AbilitiesOverride, SpeciesOverride
 from ...report import ApplyReport, ReportEntry
 from ..essentials import vocab
@@ -66,14 +67,20 @@ _REQUIRED_NEW_FIELDS: tuple[tuple[str, str], ...] = (
 def apply_species(
     target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
     skip: set[str] | None = None,
+    holds: HoldSet | None = None,
 ) -> set[Path]:
     """Apply species scalar Overrides into `pokemon.txt`.
 
     `skip` names chrooked_ids already claimed by `forms_apply` (alt-forms that live in
     `pokemonforms.txt`); they are passed over here so a form is never double-reported
     as both applied-in-forms and blocked-in-species.
+
+    `holds` names species whose `species` category this Target pins to its own data;
+    those are reported `held` and not written, keeping a regional form's typing,
+    stats, and abilities intact.
     """
     skip = skip or set()
+    holds = holds or HoldSet()
     path = target / "PBS" / "pokemon.txt"
     if not path.exists():
         return set()
@@ -82,6 +89,12 @@ def apply_species(
 
     for chrooked_id in sorted(ruleset.species):
         if chrooked_id in skip:
+            continue
+        if holds.is_held(chrooked_id, "species"):
+            report.add(ReportEntry(
+                status="held", category="species", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
             continue
         override = ruleset.species[chrooked_id]
         has_override = bool(override.types or override.abilities or override.stats)

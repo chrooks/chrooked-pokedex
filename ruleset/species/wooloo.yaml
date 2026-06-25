@@ -1,0 +1,17 @@
+name: Wooloo
+chrooked_id: wooloo
+aka: { dex: 831 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Defense Curl }
+  - { level: 8, move: Copycat }
+  - { level: 12, move: Guard Split }
+  - { level: 16, move: Double Kick }
+  - { level: 21, move: Headbutt }
+  - { level: 25, move: Take Down }
+  - { level: 28, move: Guard Swap }
+  - { level: 32, move: Reversal }
+  - { level: 36, move: Cotton Guard }
+  - { level: 40, move: Double-Edge }
+  - { level: 48, move: Milk Drink }

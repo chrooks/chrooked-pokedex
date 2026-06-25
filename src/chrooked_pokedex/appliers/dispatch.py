@@ -16,6 +16,8 @@ from typing import TYPE_CHECKING
 # These two have no back-reference to cli.py — safe at module level and
 # patchable by tests (patch("chrooked_pokedex.appliers.dispatch.detect_dialect")).
 from .essentials.dialect import detect_dialect
+from ..model.holds import HoldSet
+from ..model.target_edits import TargetEdits
 from ..report import ReportEntry
 
 if TYPE_CHECKING:
@@ -31,6 +33,8 @@ def route_apply(
     *,
     category: str = "all",
     dialect: str = "auto",
+    holds: "HoldSet | None" = None,
+    target_edits: "TargetEdits | None" = None,
 ) -> None:
     """Detect the format, dispatch to the right applier, and mutate ``report``.
 
@@ -44,9 +48,17 @@ def route_apply(
     For engine='pokeemerald' the pokeemerald applier is used directly;
     ``dialect`` is ignored.
 
+    ``holds`` (per-Target category stand-downs) and ``target_edits`` (additive
+    per-Target edits) are honored by the essentials162 applier; for other engines
+    they are accepted but not yet wired. Both default to empty, so an apply with no
+    slug behaves exactly as before.
+
     Side effects: modifies ``report`` in-place by appending ``ReportEntry``
     objects.  All file I/O is in the applier functions, not here.
     """
+    holds = holds or HoldSet()
+    target_edits = target_edits or TargetEdits()
+
     # --- pokeemerald path ---------------------------------------------------
     if engine != "essentials":
         # Imported inline to avoid circular: cli → dispatch → cli.
@@ -79,7 +91,9 @@ def route_apply(
         # Imported inline to avoid circular: cli → dispatch → cli.
         from ..cli import _apply_essentials162
 
-        _apply_essentials162(target, category, ruleset, report)
+        _apply_essentials162(
+            target, category, ruleset, report, holds=holds, target_edits=target_edits
+        )
     else:
         # Imported inline to avoid circular: cli → dispatch → cli.
         from ..cli import _apply_essentials
