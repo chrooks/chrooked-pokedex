@@ -1,0 +1,5 @@
+# On Africanvs only, the regional Gothita learns Water Whip. Canon Gothita does not.
+learnset_add:
+  - id: gothita
+    moves:
+      - { level: 1, move: Water Whip }

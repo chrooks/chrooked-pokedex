@@ -1,0 +1,7 @@
+# Africanvs defines the Gothita line as its own Water/Rock regional form.
+# Keep the Target's own species data and learnset; the base Ruleset stands down.
+holds:
+  - id: gothita
+    categories: [species, learnset]
+  - id: gothitelle
+    categories: [species, learnset]
