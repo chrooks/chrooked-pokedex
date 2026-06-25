@@ -8,6 +8,9 @@ nothing is ever silently dropped:
            move the target lacks); the unresolved references are listed.
   blocked  the whole entry could not land (e.g. a macro-form species entry that
            cannot be field-edited, or an unresolved species symbol).
+  held     the Ruleset deliberately did NOT write this category for this entity,
+           because the Target pinned it (a per-Target hold). Not a failure — the
+           Target's own data is kept on purpose. A hold is never a silent skip.
 
 The report renders as Markdown (for reading) with a JSON sidecar (for tooling).
 """
@@ -19,7 +22,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Literal
 
-Status = Literal["applied", "partial", "blocked"]
+Status = Literal["applied", "partial", "blocked", "held"]
 
 
 @dataclass(frozen=True)
@@ -40,7 +43,7 @@ class ApplyReport:
         self.entries.append(entry)
 
     def counts(self) -> dict[str, int]:
-        result = {"applied": 0, "partial": 0, "blocked": 0}
+        result = {"applied": 0, "partial": 0, "blocked": 0, "held": 0}
         for entry in self.entries:
             result[entry.status] += 1
         return result
@@ -53,6 +56,7 @@ class ApplyReport:
             f"- applied: {counts['applied']}",
             f"- partial: {counts['partial']}",
             f"- blocked: {counts['blocked']}",
+            f"- held: {counts['held']}",
             "",
             "| status | category | chrooked_id | symbol | reason |",
             "| --- | --- | --- | --- | --- |",

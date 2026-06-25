@@ -376,7 +376,7 @@ def _run_apply(
         json_path = report.write(target / "apply-report.md")
         print(
             f"Apply Report: applied={counts['applied']} "
-            f"partial={counts['partial']} blocked={counts['blocked']}"
+            f"partial={counts['partial']} blocked={counts['blocked']} held={counts['held']}"
         )
         print(f"  {target / 'apply-report.md'}")
         print(f"  {json_path}")
@@ -385,7 +385,7 @@ def _run_apply(
     json_path = report.write(target / "apply-report.md")
     print(
         f"Apply Report: applied={counts['applied']} "
-        f"partial={counts['partial']} blocked={counts['blocked']}"
+        f"partial={counts['partial']} blocked={counts['blocked']} held={counts['held']}"
     )
 
     data_only = [e for e in report.entries if "DATA ONLY" in e.reason]
