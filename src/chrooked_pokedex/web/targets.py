@@ -43,6 +43,8 @@ from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git
 from .. import ledger as ledgermod
 from ..model import Ruleset
 from ..model.compose import compose_ruleset, overlay_touched_fields
+from ..model.holds import HoldSet, load_holds
+from ..model.target_edits import TargetEdits, load_target_edits
 from ..report import ApplyReport
 from . import dex as dexmod
 from . import snapshot as snapmod
@@ -433,7 +435,10 @@ def _report_payload(report: ApplyReport) -> dict[str, Any]:
     }
 
 
-def _run_applier(target: Path, engine: str, ruleset: Ruleset) -> ApplyReport:
+def _run_applier(
+    target: Path, engine: str, ruleset: Ruleset,
+    holds: "HoldSet | None" = None, target_edits: "TargetEdits | None" = None,
+) -> ApplyReport:
     """Run the real applier for ``engine`` over ``target`` and return its report.
 
     Delegates to ``appliers/dispatch.py::route_apply`` so the web path and the
@@ -441,17 +446,38 @@ def _run_applier(target: Path, engine: str, ruleset: Ruleset) -> ApplyReport:
     nothing and records a ``blocked`` entry — the existing honest Error State.
     Preview's git revert (D1) is engine-agnostic and runs in the caller's
     ``finally`` block regardless of which applier ran.
+
+    ``holds`` and ``target_edits`` carry the per-Target stand-downs and additive
+    edits; both default to empty (the registry path may omit them), matching the
+    CLI's no-slug behavior.
     """
     report = ApplyReport()
-    _route_apply(target, engine, ruleset, report)
+    _route_apply(
+        target, engine, ruleset, report, holds=holds, target_edits=target_edits
+    )
     return report
+
+
+def _load_target_layers(
+    ruleset_dir: Optional[Path], target: Target
+) -> tuple["HoldSet", "TargetEdits"]:
+    """Load this Target's holds + additive edits from ``ruleset/targets/<slug>/``.
+
+    Keyed by ``target.namespace`` (the committed slug). Returns empty layers when
+    no ``ruleset_dir`` or no namespace is set — the same as a CLI apply with no
+    ``--as``, so an unregistered/base Target behaves exactly as before.
+    """
+    slug = target.namespace if ruleset_dir is not None else None
+    base = Path(ruleset_dir) if ruleset_dir is not None else Path(".")
+    return load_holds(base, slug), load_target_edits(base, slug)
 
 
 # --- Orchestration -------------------------------------------------------- #
 
 
 def preview_target(
-    target: Target, ruleset: Ruleset, state: TargetState
+    target: Target, ruleset: Ruleset, state: TargetState,
+    ruleset_dir: Optional[Path] = None,
 ) -> dict[str, Any]:
     """Apply-then-revert preview: real applier, then restore the target to prior state.
 
@@ -483,9 +509,12 @@ def preview_target(
         if not is_git:
             snapshot_dir = _snapshot_pbs_files(fork)
 
+        holds, target_edits = _load_target_layers(ruleset_dir, target)
         applier_error: BaseException | None = None
         try:
-            report = _run_applier(fork, target.engine, ruleset)
+            report = _run_applier(
+                fork, target.engine, ruleset, holds=holds, target_edits=target_edits
+            )
             return _report_payload(report)
         except BaseException as error:  # noqa: BLE001 — re-raised via finally
             applier_error = error
@@ -515,6 +544,7 @@ def apply_target(
     state: TargetState,
     force: bool,
     ledger_dir: Optional[Path] = None,
+    ruleset_dir: Optional[Path] = None,
 ) -> dict[str, Any]:
     """Real apply: run the applier and KEEP the changes.
 
@@ -534,7 +564,10 @@ def apply_target(
                 require_clean_git_status(fork, force=force)
             except DirtyWorkingTree as error:
                 raise TargetError(409, str(error)) from error
-        report = _run_applier(fork, target.engine, ruleset)
+        holds, target_edits = _load_target_layers(ruleset_dir, target)
+        report = _run_applier(
+            fork, target.engine, ruleset, holds=holds, target_edits=target_edits
+        )
         report.write(fork / "apply-report.md")
         state.invalidate_snapshot(target.path)
         if ledger_dir is not None:

@@ -914,7 +914,8 @@ def create_app(
             target = registry.get(target_id)
             effective, _ = _effective(target)
             return targetsmod.preview_target(
-                target, effective, app.state.targets_state
+                target, effective, app.state.targets_state,
+                ruleset_dir=ruleset_dir,
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
@@ -934,6 +935,7 @@ def create_app(
                 app.state.targets_state,
                 force=force,
                 ledger_dir=ruleset_dir,
+                ruleset_dir=ruleset_dir,
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error

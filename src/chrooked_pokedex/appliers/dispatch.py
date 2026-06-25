@@ -64,6 +64,7 @@ def route_apply(
         # Imported inline to avoid circular: cli → dispatch → cli.
         from ..cli import _apply_pokeemerald
 
+        _warn_unsupported_target_layers(holds, target_edits, "pokeemerald", report)
         _apply_pokeemerald(target, category, ruleset, report)
         return
 
@@ -98,4 +99,32 @@ def route_apply(
         # Imported inline to avoid circular: cli → dispatch → cli.
         from ..cli import _apply_essentials
 
+        _warn_unsupported_target_layers(holds, target_edits, "essentials21", report)
         _apply_essentials(target, category, ruleset, report)
+
+
+def _warn_unsupported_target_layers(
+    holds: HoldSet, target_edits: TargetEdits, engine: str, report: "ApplyReport"
+) -> None:
+    """Record a blocked entry when holds/edits are set for an engine that ignores them.
+
+    Per-Target holds and additive edits are honored only by the essentials16 (16.2)
+    applier so far. Without this note, a hold registered against a pokeemerald or
+    essentials21 Target would be silently ignored — and silently clobber the Target's
+    own data. Surfacing it keeps the apply honest (no silent stand-down failure).
+    """
+    if not holds.held and not target_edits.learnset_add:
+        return
+    report.add(
+        ReportEntry(
+            status="blocked",
+            category="(holds)",
+            chrooked_id="(all)",
+            reason=(
+                f"per-Target holds/edits are not yet honored on the {engine} engine "
+                "(supported on essentials16 only); the Target's data was written from "
+                "the base Ruleset without standing down. Apply with an essentials16 "
+                "Target, or remove the holds for this Target."
+            ),
+        )
+    )
