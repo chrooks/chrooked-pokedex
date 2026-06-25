@@ -93,13 +93,16 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
     [abilities],
   );
 
-  // name→chrooked_id map built from the loaded abilities list so we can normalize
-  // ability slot values (which store display names, e.g. "Snow Warning") to the
-  // stable chrooked_id key ("snowwarning") the AbilityEditor lookup uses.
+  // slot→chrooked_id map built from the loaded abilities list so we can normalize
+  // ability slot values to the stable chrooked_id ("snowwarning") the lookup uses.
+  // Canon dex slots store the display name ("Snow Warning"); target-backdrop dex
+  // slots store the title-cased internal name ("Ojospetreos"). Key on BOTH, all
+  // lowercased, so either form resolves to the same chrooked_id.
   const abilityNameToId = useMemo((): Map<string, string> => {
     const map = new Map<string, string>();
     for (const a of abilities) {
-      map.set(a.name, a.chrooked_id);
+      map.set(a.name.toLowerCase(), a.chrooked_id);
+      map.set(a.chrooked_id.toLowerCase(), a.chrooked_id);
     }
     return map;
   }, [abilities]);
@@ -119,8 +122,9 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
       const seen = new Set<string>();
       for (const slot of slots) {
         if (slot !== null) {
-          // Ability slots store display names; normalize to chrooked_id via the abilities list.
-          const key = abilityNameToId.get(slot) ?? slot;
+          // Normalize the slot (display OR internal name) to chrooked_id; lowercase
+          // so both the canon and target-backdrop slot forms resolve.
+          const key = abilityNameToId.get(slot.toLowerCase()) ?? slot;
           if (!seen.has(key)) {
             seen.add(key);
             const existing = index.get(key);
