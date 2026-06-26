@@ -2,7 +2,8 @@ name: Nidoran M
 chrooked_id: nidoranm
 aka: { pokeemerald: SPECIES_NIDORAN_M, essentials: NIDORANmA }
 abilities:
-  secondary: Rivalry
+  primary: Venomize
+  secondary: Impale
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Poison Sting }

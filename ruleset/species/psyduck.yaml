@@ -1,6 +1,10 @@
 name: Psyduck
 chrooked_id: psyduck
 aka: { dex: 54 }
+types: [Water, Psychic]
+abilities:
+  primary: Swift Swim
+  hidden: Psyonize
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Tail Whip }

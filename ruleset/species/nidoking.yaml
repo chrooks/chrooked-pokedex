@@ -2,7 +2,9 @@ name: Nidoking
 chrooked_id: nidoking
 aka: { pokeemerald: SPECIES_NIDOKING }
 abilities:
-  secondary: Rivalry
+  primary: Venomize
+  secondary: Impale
+  hidden: Sheer Force
 stats: { hp: 80, atk: 110, def: 75, spa: 110, spe: 90 }
 learnset:
   - { level: 0, move: Megahorn }
@@ -22,3 +24,4 @@ learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Clod Toss }
+evolution: { from: Nidorino, method: { item: MOONSTONE } }

@@ -1,6 +1,7 @@
 name: Nidorina
 chrooked_id: nidorina
 aka: { pokeemerald: SPECIES_NIDORINA }
+types: [Poison, Ground]
 abilities:
   secondary: Rivalry
 learnset:
@@ -18,3 +19,4 @@ learnset:
   - { level: 57, move: Flatter }
   - { level: 64, move: Crunch }
   - { level: 71, move: Earth Power }
+evolution: { from: Nidoran F, method: { level: 16 } }

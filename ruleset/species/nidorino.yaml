@@ -1,8 +1,11 @@
 name: Nidorino
 chrooked_id: nidorino
 aka: { pokeemerald: SPECIES_NIDORINO }
+types: [Poison, Ground]
 abilities:
-  secondary: Rivalry
+  primary: Venomize
+  secondary: Impale
+  hidden: Hustle
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Poison Sting }
@@ -18,3 +21,4 @@ learnset:
   - { level: 57, move: Flatter }
   - { level: 64, move: Poison Jab }
   - { level: 71, move: Earth Power }
+evolution: { from: Nidoran, method: { level: 16 } }

@@ -4,4 +4,5 @@ aka: { pokeemerald: SPECIES_WEEZING }
 abilities:
   secondary: Neutralizing Gas
   hidden: Exhaust
+stats: { hp: 70, spa: 90, spd: 75 }
 evolution: { from: Koffing, method: { pokeemerald: EVO_NONE, param: 0 } }

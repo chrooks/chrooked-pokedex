@@ -1,0 +1,6 @@
+name: Nidoran
+chrooked_id: nidoranma
+aka: { dex: 32 }
+abilities:
+  primary: Venomize
+  secondary: Impale
