@@ -11,6 +11,7 @@ learnset:
   - { level: 6, move: Ember }
   - { level: 8, move: Rock Throw }
   - { level: 13, move: Harden }
+  - { level: 17, move: Geo Pulse }
   - { level: 20, move: Clear Smog }
   - { level: 22, move: Ancient Power }
   - { level: 27, move: Incinerate }

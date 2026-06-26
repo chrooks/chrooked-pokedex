@@ -10,6 +10,7 @@ learnset:
   - { level: 15, move: Rock Polish }
   - { level: 18, move: Stealth Rock }
   - { level: 22, move: Venoshock }
+  - { level: 24, move: Geo Pulse }
   - { level: 26, move: Sandstorm }
   - { level: 29, move: Self-Destruct }
   - { level: 31, move: Miasma }

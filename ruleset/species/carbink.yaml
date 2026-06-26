@@ -1,0 +1,19 @@
+name: Carbink
+chrooked_id: carbink
+aka: { dex: 703 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 5, move: Guard Split }
+  - { level: 10, move: Smack Down }
+  - { level: 15, move: Flail }
+  - { level: 20, move: Ancient Power }
+  - { level: 22, move: Geo Pulse }
+  - { level: 25, move: Rock Polish }
+  - { level: 30, move: Light Screen }
+  - { level: 35, move: Rock Slide }
+  - { level: 40, move: Skill Swap }
+  - { level: 45, move: Power Gem }
+  - { level: 50, move: Stealth Rock }
+  - { level: 55, move: Moonblast }
+  - { level: 60, move: Stone Edge }

@@ -10,6 +10,7 @@ learnset:
   - { level: 10, move: Struggle Bug }
   - { level: 15, move: Rock Throw }
   - { level: 20, move: Safeguard }
+  - { level: 22, move: Geo Pulse }
   - { level: 25, move: Rest }
   - { level: 30, move: Bug Bite }
   - { level: 35, move: Power Split }

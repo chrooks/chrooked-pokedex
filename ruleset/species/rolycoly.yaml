@@ -8,6 +8,7 @@ learnset:
   - { level: 10, move: Smack Down }
   - { level: 15, move: Rock Polish }
   - { level: 20, move: Ancient Power }
+  - { level: 22, move: Geo Pulse }
   - { level: 25, move: Incinerate }
   - { level: 30, move: Stealth Rock }
   - { level: 35, move: Heat Crash }

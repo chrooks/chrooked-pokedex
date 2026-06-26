@@ -1,18 +1,11 @@
-name: Probopass
-chrooked_id: probopass
-aka: { pokeemerald: SPECIES_PROBOPASS }
-abilities:
-  primary: Lightning Rod
-stats: { hp: 75 }
+name: Nosepass
+chrooked_id: nosepass
+aka: { dex: 299 }
 learnset:
-  - { level: 0, move: Tri Attack }
-  - { level: 1, move: Magnetic Flux }
-  - { level: 1, move: Magnet Rise }
-  - { level: 1, move: Gravity }
-  - { level: 1, move: Block }
-  - { level: 1, move: Wide Guard }
-  - { level: 1, move: Iron Defense }
   - { level: 1, move: Tackle }
+  - { level: 4, move: Harden }
+  - { level: 7, move: Block }
+  - { level: 10, move: Rock Throw }
   - { level: 13, move: Thunder Wave }
   - { level: 16, move: Rest }
   - { level: 19, move: Spark }

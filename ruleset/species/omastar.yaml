@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Sand Attack }
   - { level: 15, move: Water Gun }
   - { level: 20, move: Leer }
+  - { level: 22, move: Geo Pulse }
   - { level: 25, move: Mud Shot }
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }

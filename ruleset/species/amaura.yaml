@@ -11,6 +11,7 @@ learnset:
   - { level: 12, move: Icy Wind }
   - { level: 16, move: Round }
   - { level: 20, move: Mist }
+  - { level: 22, move: Geo Pulse }
   - { level: 24, move: Aurora Beam }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }

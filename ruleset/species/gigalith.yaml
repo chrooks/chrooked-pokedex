@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_GIGALITH }
 abilities:
   secondary: Sand Stream
 stats: { atk: 60, spa: 135 }
+learnset:
+  - { level: 1, move: Power Gem }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Stealth Rock }
+  - { level: 12, move: Mud-Slap }
+  - { level: 16, move: Smack Down }
+  - { level: 20, move: Iron Defense }
+  - { level: 24, move: Headbutt }
+  - { level: 27, move: Geo Pulse }
+  - { level: 30, move: Rock Slide }
+  - { level: 36, move: Rock Blast }
+  - { level: 42, move: Sandstorm }
+  - { level: 48, move: Stone Edge }
+  - { level: 54, move: Explosion }

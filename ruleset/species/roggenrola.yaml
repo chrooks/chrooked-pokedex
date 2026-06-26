@@ -12,6 +12,7 @@ learnset:
   - { level: 12, move: Mud-Slap }
   - { level: 16, move: Smack Down }
   - { level: 20, move: Iron Defense }
+  - { level: 22, move: Geo Pulse }
   - { level: 24, move: Headbutt }
   - { level: 28, move: Rock Slide }
   - { level: 32, move: Rock Blast }

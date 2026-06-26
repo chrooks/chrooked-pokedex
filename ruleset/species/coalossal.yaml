@@ -12,6 +12,7 @@ learnset:
   - { level: 15, move: Rock Polish }
   - { level: 20, move: Ancient Power }
   - { level: 27, move: Incinerate }
+  - { level: 32, move: Geo Pulse }
   - { level: 37, move: Stealth Rock }
   - { level: 41, move: Power Gem }
   - { level: 45, move: Heat Crash }
