@@ -21,9 +21,9 @@ import { EvolutionSection } from "./ledger/EvolutionSection";
 import { TypesRow } from "./ledger/TypesRow";
 import { SpeciesEditor } from "./editors/SpeciesEditor";
 import { ProposedColumn } from "./proposal/ProposedColumn";
+import { LearnsetProposal } from "./proposal/LearnsetLineProposal";
 import { abilitiesRenderer } from "./proposal/abilitiesRenderer";
-import { learnsetRenderer } from "./proposal/learnsetRenderer";
-import { suggestAbilityCall, suggestLearnsetCall } from "./proposal/suggestCalls";
+import { suggestAbilityCall } from "./proposal/suggestCalls";
 import {
   shouldExpandLedger,
   updateActiveSet,
@@ -369,12 +369,12 @@ function DetailBody({
           tabIndex={0}
           onKeyDown={(e) => handleSectionKey(e, "proposal-learnset-suggest")}
         >
-          <ProposedColumn
+          <LearnsetProposal
             entry={entry}
-            renderer={learnsetRenderer(moveOptions)}
-            suggest={suggestLearnsetCall}
-            onApplied={onSaved}
-            onActiveChange={onProposalActive}
+            moveOptions={moveOptions}
+            onSaved={onSaved}
+            onProposalActive={onProposalActive}
+            backdropTargetId={backdropTargetId}
           >
             <LearnsetSection
               now={entry.learnset}
@@ -383,7 +383,7 @@ function DetailBody({
               onNavigate={onNavigate}
               bare
             />
-          </ProposedColumn>
+          </LearnsetProposal>
         </section>
 
         <EvolutionSection

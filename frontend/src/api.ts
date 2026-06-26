@@ -23,6 +23,7 @@ import type {
   DistributeResponse,
   EngineKey,
   LearnsetProposal,
+  LearnsetLineProposal,
   LedgerEntry,
   Move,
   MoveWrite,
@@ -170,6 +171,16 @@ export const api = {
       "POST",
       `/api/species/${encodeURIComponent(id)}/suggest/learnset`,
       { direction: opts?.direction, mode: opts?.mode ?? "full" },
+    ),
+  /** Ask the LLM to propose a learnset for every member of this species'
+      evolution line. Read-only; one server-side call per member, coherence
+      threaded base→tip. Returns a `{chain_label, stages}` stack — accept each
+      stage via the existing `PUT /api/species/{id}`. */
+  suggestLearnsetLine: (id: string, opts?: { direction?: string }) =>
+    sendJson<LearnsetLineProposal>(
+      "POST",
+      `/api/species/${encodeURIComponent(id)}/suggest/learnset/line`,
+      { direction: opts?.direction },
     ),
   deleteSpecies: (id: string, scope?: string) =>
     sendJson<{ deleted: string }>(

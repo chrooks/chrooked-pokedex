@@ -1349,3 +1349,140 @@ def test_suggest_learnset_truncated_response_is_503(
 
     assert response.status_code == 503
     assert "truncated" in response.json()["detail"].lower()
+
+
+# ===========================================================================
+# Line mode — suggest a learnset for the whole evolution line (one call per
+# member, coherence threaded base→tip, per-member errors isolated).
+# ===========================================================================
+
+
+class _SequenceProvider:
+    """A mock Port that returns a different canned result per call, in order."""
+
+    def __init__(self, results: list[dict[str, Any]]) -> None:
+        self.results = results
+        self.calls: list[dict[str, Any]] = []
+
+    def propose(self, **kwargs: Any) -> dict[str, Any]:
+        result = self.results[len(self.calls)]
+        self.calls.append(kwargs)
+        return result
+
+
+class _RaisingProvider:
+    """A mock Port that always raises LlmError (missing key / upstream outage)."""
+
+    def __init__(self) -> None:
+        self.calls: list[dict[str, Any]] = []
+
+    def propose(self, **kwargs: Any) -> dict[str, Any]:
+        self.calls.append(kwargs)
+        raise llmmod.LlmError("OPENAI_API_KEY not configured")
+
+
+def test_resolve_linear_chain_walks_base_to_tip() -> None:
+    """The chain through any member is base→tip, derived from the FORWARD graph.
+
+    Forward edges (``evolves_into[].to``) are reliable chrooked_ids; the backward
+    parent map is inverted from them. Goomy is absent here (no forward edge points
+    at Sliggoo), so the chain is just Sliggoo → Goodra."""
+    entries = [
+        {"chrooked_id": cid, **v} for cid, v in _SNAPSHOT["species"].items()
+    ]
+    children = suggestmod.build_evolution_children(entries)
+
+    assert suggestmod.resolve_linear_chain(children, "goodra") == ["sliggoo", "goodra"]
+    assert suggestmod.resolve_linear_chain(children, "sliggoo") == ["sliggoo", "goodra"]
+
+
+def test_resolve_linear_chain_ignores_display_name_from_edges() -> None:
+    """A chain resolves even when ``evolution.from`` holds a display name (an
+    override-sourced edge), because topology comes from forward edges only. This
+    is the Nido-line regression: Nidoking's override `from` is "Nidorino" (a name,
+    not the `nidorino` chrooked_id), which must NOT break the walk."""
+    entries = [
+        {"chrooked_id": "nidoranm", "evolves_into": [{"to": "nidorino"}],
+         "evolution": None},
+        {"chrooked_id": "nidorino", "evolves_into": [{"to": "nidoking"}],
+         "evolution": {"from": "Nidoran"}},  # display name, not chrooked_id
+        {"chrooked_id": "nidoking", "evolves_into": [],
+         "evolution": {"from": "Nidorino"}},  # display name, not chrooked_id
+    ]
+    children = suggestmod.build_evolution_children(entries)
+    assert suggestmod.resolve_linear_chain(children, "nidoking") == [
+        "nidoranm",
+        "nidorino",
+        "nidoking",
+    ]
+
+
+def test_line_endpoint_returns_stages_with_coherence(
+    ruleset_dir_no_goodra: Path, tmp_path: Path
+) -> None:
+    """One stage per member, anchor flagged, chain label set; the second member's
+    prompt carries the first member's accepted draft as coherence context; nothing
+    is written to disk."""
+    provider = _SequenceProvider([_GOOD_LEARNSET_RESULT, _GOOD_LEARNSET_RESULT])
+    client = _make_client(ruleset_dir_no_goodra, tmp_path, provider)
+    before = _species_files(ruleset_dir_no_goodra)
+
+    response = client.post("/api/species/goodra/suggest/learnset/line", json={})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["chain_label"] == "Sliggoo → Goodra"
+    stages = body["stages"]
+    assert [s["chrooked_id"] for s in stages] == ["sliggoo", "goodra"]
+    assert [s["anchor"] for s in stages] == [False, True]
+    # Each stage carries a draft and the member's current learnset for the diff.
+    assert stages[0]["draft"]["learnset"][0]["move"] == "Tackle"
+    assert stages[1]["current"] == [{"level": 1, "move": "Tackle"}, {"level": 5, "move": "Dragon Pulse"}]
+    # One Port call per member; the tip's prompt threads the base member's draft.
+    assert len(provider.calls) == 2
+    assert "Family coherence" in provider.calls[1]["user"]
+    assert "Sliggoo" in provider.calls[1]["user"]
+    # Read-only: no species file written.
+    assert _species_files(ruleset_dir_no_goodra) == before
+
+
+def test_line_endpoint_isolates_per_member_error(
+    ruleset_dir_no_goodra: Path, tmp_path: Path
+) -> None:
+    """A member whose proposal fails validation becomes a stage error; the other
+    members still return their drafts (stages are independent)."""
+    bad = {
+        "draft": {"learnset": [{"level": 1, "move": "Flamethrower"}]},  # not in pool
+        "rationale": {"learnset": "x"},
+        "alternatives": [],
+    }
+    provider = _SequenceProvider([_GOOD_LEARNSET_RESULT, bad])
+    client = _make_client(ruleset_dir_no_goodra, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/learnset/line", json={})
+
+    assert response.status_code == 200
+    stages = response.json()["stages"]
+    assert stages[0]["error"] is None and stages[0]["draft"] is not None
+    assert stages[1]["draft"] is None
+    assert "Flamethrower" in stages[1]["error"]
+
+
+def test_line_endpoint_missing_key_is_503(
+    ruleset_dir_no_goodra: Path, tmp_path: Path
+) -> None:
+    """A missing key / upstream failure fails every member identically → 503."""
+    client = _make_client(ruleset_dir_no_goodra, tmp_path, _RaisingProvider())
+    response = client.post("/api/species/goodra/suggest/learnset/line", json={})
+    assert response.status_code == 503
+
+
+def test_line_endpoint_unknown_species_is_404(
+    ruleset_dir_no_goodra: Path, tmp_path: Path
+) -> None:
+    """An unknown anchor species → 404 before any Port call."""
+    provider = _SequenceProvider([])
+    client = _make_client(ruleset_dir_no_goodra, tmp_path, provider)
+    response = client.post("/api/species/nope/suggest/learnset/line", json={})
+    assert response.status_code == 404
+    assert provider.calls == []

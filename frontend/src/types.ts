@@ -138,6 +138,32 @@ export interface LearnsetDraft {
 
 export type LearnsetProposal = SuggestResponse<LearnsetDraft>;
 
+/** One member of an evolution-line learnset proposal
+    (`POST /api/species/{id}/suggest/learnset/line`). Carries the member's
+    identity, its current learnset (for the Current column of the diff), and
+    either a proposal (`draft`/`rationale`/`alternatives`) or a per-member
+    `error` string. Stages are independent: one member failing leaves the
+    others' drafts intact. */
+export interface LearnsetLineStage {
+  chrooked_id: string;
+  name: string;
+  dex: number | null;
+  /** The invoked species — the rest of the chain hangs off it. */
+  anchor: boolean;
+  current: LearnsetMove[];
+  draft: LearnsetDraft | null;
+  rationale: Record<string, string>;
+  alternatives: ProposalAlternative[];
+  error: string | null;
+}
+
+/** The whole evolution-line learnset proposal: a base→tip ordered stack of
+    per-member stages plus a display label for the chain. */
+export interface LearnsetLineProposal {
+  chain_label: string;
+  stages: LearnsetLineStage[];
+}
+
 // --- Move distribution (`POST /api/moves/{id}/distribute`) ------------------ #
 
 /** The attack-split filters the deterministic distributor offers. */

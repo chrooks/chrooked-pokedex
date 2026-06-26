@@ -1129,6 +1129,185 @@ def suggest_learnset(
 
 
 # =========================================================================== #
+# Learnset across an evolution line (#? line mode) — run ONE suggest_learnset per
+# family member in chain order, threading each member's accepted draft into the
+# next member's prompt as coherence context. The server owns the loop (and the
+# coherence wording) so the client makes a single call; each stage is independent
+# (one member's SuggestError becomes a stage error, not a whole-run failure) and
+# the accept path stays the existing per-species PUT.
+# =========================================================================== #
+
+def build_evolution_children(
+    entries: list[dict[str, Any]],
+) -> dict[str, list[str]]:
+    """Forward adjacency ``{chrooked_id: [child chrooked_id, ...]}`` from the dex.
+
+    Keyed off ``evolves_into[].to``, which is ALWAYS a resolved chrooked_id (the
+    base-derived forward graph). Do NOT use ``evolution.from`` for topology — on
+    an override-sourced edge it stores a display name, not a chrooked_id, so a
+    line with evolution overrides (the Nido line) would resolve to one member.
+    """
+    children: dict[str, list[str]] = {}
+    for entry in entries:
+        cid = entry.get("chrooked_id")
+        if cid is None:
+            continue
+        children[cid] = [
+            edge["to"]
+            for edge in (entry.get("evolves_into") or [])
+            if edge.get("to")
+        ]
+    return children
+
+
+def resolve_linear_chain(
+    children: dict[str, list[str]], chrooked_id: str
+) -> list[str]:
+    """The ordered linear evolution chain *through* ``chrooked_id``.
+
+    Walks backward along single-parent edges to the base, then forward along
+    single-child edges to the tip — both derived from the reliable forward graph
+    (see :func:`build_evolution_children`). A branch (a member with more than one
+    child, or a target with more than one parent) STOPS the walk so we never pick
+    a branch arbitrarily; invoking a brancher (e.g. Eevee) yields just that
+    member, matching the skill's "linear chain through the invoked species" rule.
+
+    Returns ``[base, ..., chrooked_id, ..., tip]``; always at least
+    ``[chrooked_id]``.
+    """
+    parents: dict[str, list[str]] = {}
+    for src, tos in children.items():
+        for to in tos:
+            parents.setdefault(to, []).append(src)
+
+    seen = {chrooked_id}
+
+    # Backward: follow the single parent to the base.
+    ancestors: list[str] = []
+    cur = chrooked_id
+    while True:
+        ps = parents.get(cur) or []
+        if len(ps) != 1 or ps[0] in seen:
+            break
+        cur = ps[0]
+        ancestors.append(cur)
+        seen.add(cur)
+    ancestors.reverse()
+
+    # Forward: follow single child edges; a branch (or the tip) ends the chain.
+    descendants: list[str] = []
+    cur = chrooked_id
+    while True:
+        cs = children.get(cur) or []
+        if len(cs) != 1 or cs[0] in seen:
+            break
+        cur = cs[0]
+        descendants.append(cur)
+        seen.add(cur)
+
+    return ancestors + [chrooked_id] + descendants
+
+
+def _compose_line_direction(
+    base_direction: str | None,
+    prior: list[tuple[str, list[dict[str, Any]]]],
+    member_name: str,
+) -> str | None:
+    """Fold the earlier members' accepted drafts into a coherence steer for the
+    next member. Returns the base direction unchanged when nothing precedes."""
+    if not prior:
+        return base_direction
+
+    lines: list[str] = [
+        "Family coherence — earlier members of this evolution line were just "
+        "assigned these level-up learnsets:"
+    ]
+    for name, rows in prior:
+        moves = ", ".join(
+            f"L{row['level']} {row['move']}"
+            for row in sorted(rows, key=lambda r: (r["level"], r["move"]))
+        )
+        lines.append(f"- {name}: {moves or '(none)'}")
+    lines.append(
+        f"Keep {member_name} consistent with its line: it should generally know "
+        "what its pre-evolutions know (or stronger equivalents), learn comparable "
+        "moves at similar-or-later levels, and reflect its higher evolutionary stage."
+    )
+    coherence = "\n".join(lines)
+    if base_direction and base_direction.strip():
+        return f"{base_direction.strip()}\n\n{coherence}"
+    return coherence
+
+
+def suggest_learnset_line(
+    *,
+    provider: LlmProvider,
+    chrooked_id: str,
+    entries: list[dict[str, Any]],
+    move_pool: list[dict[str, Any]],
+    abilities: list[dict[str, Any]],
+    direction: str | None = None,
+) -> dict[str, Any]:
+    """Propose a full learnset for every member of ``chrooked_id``'s evolution line.
+
+    Resolves the linear chain from the full dex ``entries`` (forward topology),
+    then runs one ``suggest_learnset`` per member in base→tip order, threading
+    each accepted draft into the next member's prompt. Returns
+    ``{"chain_label", "stages": [...]}`` where each stage carries the member's
+    identity, its current learnset (for the diff's Current column), and either a
+    ``{draft, rationale, alternatives}`` proposal or an ``error`` string.
+
+    A per-member :class:`SuggestError` is captured on that stage and the loop
+    continues (stages are independent). An :class:`~...llm.LlmError` is fatal and
+    propagates — a missing key or upstream outage fails every member identically.
+    """
+    by_id = {e["chrooked_id"]: e for e in entries if e.get("chrooked_id")}
+    children = build_evolution_children(entries)
+    chain = resolve_linear_chain(children, chrooked_id)
+
+    stages: list[dict[str, Any]] = []
+    names: list[str] = []
+    prior: list[tuple[str, list[dict[str, Any]]]] = []
+
+    for cid in chain:
+        entry = by_id.get(cid)
+        if entry is None:
+            continue
+        name = entry.get("name") or cid
+        names.append(name)
+        stage: dict[str, Any] = {
+            "chrooked_id": cid,
+            "name": name,
+            "dex": entry.get("dex"),
+            "anchor": cid == chrooked_id,
+            "current": list(entry.get("learnset") or []),
+            "draft": None,
+            "rationale": {},
+            "alternatives": [],
+            "error": None,
+        }
+        member_direction = _compose_line_direction(direction, prior, name)
+        try:
+            result = suggest_learnset(
+                provider=provider,
+                entry=entry,
+                move_pool=move_pool,
+                abilities=abilities,
+                mode="full",
+                direction=member_direction,
+            )
+            stage["draft"] = result["draft"]
+            stage["rationale"] = result.get("rationale", {})
+            stage["alternatives"] = result.get("alternatives", [])
+            prior.append((name, list(result["draft"].get("learnset") or [])))
+        except SuggestError as error:
+            stage["error"] = str(error)
+        stages.append(stage)
+
+    return {"chain_label": " → ".join(names), "stages": stages}
+
+
+# =========================================================================== #
 # Ability creation — DRAFT a new owned ability + an engine-neutral behavior
 # stub + a species-distribution plan (#8). The FIRST capability that *creates*
 # owned content rather than picking from a pool, so it does NOT validate against
