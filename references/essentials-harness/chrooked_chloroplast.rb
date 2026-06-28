@@ -151,7 +151,7 @@ def chrooked_install_chloroplast_sungate
         mult = pbModifyDamage_chrooked_chloroplast_orig(damagemult, attacker, opponent)
         begin
           if (attacker.hasWorkingAbility(:CHLOROPLAST) rescue false)
-            movetype = (pbType(@type, attacker, opponent) rescue -1)
+            movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
             is_fire  = (isConst?(movetype, PBTypes, :FIRE) rescue false)
             is_water = (isConst?(movetype, PBTypes, :WATER) rescue false)
             if is_fire || is_water

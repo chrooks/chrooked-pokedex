@@ -88,7 +88,7 @@ def chrooked_install_pyre_damage
         mult = pbModifyDamage_chrooked_pyre_orig(damagemult, attacker, opponent)
         begin
           is_ab = (attacker.hasWorkingAbility(:PYRE) rescue false)
-          movetype = (pbType(@type, attacker, opponent) rescue -1)
+          movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
           is_fire = (isConst?(movetype, PBTypes, :FIRE) rescue false)
           is_ghost = (isConst?(movetype, PBTypes, :GHOST) rescue false)
           right_type = is_fire || is_ghost

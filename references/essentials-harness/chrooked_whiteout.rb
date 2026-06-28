@@ -14,8 +14,8 @@
 #   Gates, matching the SPEC exactly:
 #     attacker.hasWorkingAbility(:WHITEOUT)
 #       and @battle.pbWeather == PBWeather::HAIL
-#       and ( (pbIsPhysical?(movetype) and attacker.attack >= attacker.spatk)
-#          or (pbIsSpecial?(movetype)  and attacker.spatk  > attacker.attack) )
+#       and ( (Chrooked.move_physical?(self, movetype) and attacker.attack >= attacker.spatk)
+#          or (Chrooked.move_special?(self, movetype)  and attacker.spatk  > attacker.attack) )
 #   then mult = (mult * 1.5).round.
 #   movetype = pbType(@type, attacker, opponent).
 #
@@ -49,9 +49,9 @@ def chrooked_install_whiteout_damage
         mult = pbModifyDamage_chrooked_whiteout_orig(damagemult, attacker, opponent)
         is_whiteout = (attacker.hasWorkingAbility(:WHITEOUT) rescue false)
         is_hail = (@battle.pbWeather == PBWeather::HAIL rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
-        is_phys = (pbIsPhysical?(movetype) rescue false)
-        is_spec = (pbIsSpecial?(movetype) rescue false)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+        is_phys = (Chrooked.move_physical?(self, movetype) rescue false)
+        is_spec = (Chrooked.move_special?(self, movetype) rescue false)
         atk = (attacker.attack rescue 0)
         spatk = (attacker.spatk rescue 0)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)

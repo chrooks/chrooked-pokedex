@@ -35,7 +35,7 @@
 #      (high-SpAtk / low-Atk punch should out-damage the same punch read off Atk).
 #
 # Type / category resolution: movetype = pbType(@type, attacker, opponent);
-# physical test via pbIsPhysical?(movetype) (verified 16.2 helpers).
+# physical test via Chrooked.move_physical?(self, movetype) (verified 16.2 helpers).
 #
 # HARNESS (Route B log oracle): every pbModifyDamage call logs one line:
 #     [chrooked:magicalfists] OBS move=<NAME> ability=<true|false> result=<BOOSTED|NORMAL>
@@ -84,8 +84,8 @@ def chrooked_install_magicalfists
           mult = (mult * 1.3).round
           # Effect 2 (PHYSICAL only): emulate the Atk->SpAtk stat swap by
           # rescaling. *** EMULATION — see header caveat, needs in-game verify ***
-          movetype = (pbType(@type, attacker, opponent) rescue -1)
-          is_physical = (pbIsPhysical?(movetype) rescue false)
+          movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+          is_physical = (Chrooked.move_physical?(self, movetype) rescue false)
           if is_physical
             begin
               atk_stage   = attacker.stages[PBStats::ATTACK]

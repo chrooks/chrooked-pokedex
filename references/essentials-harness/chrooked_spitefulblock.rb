@@ -87,7 +87,7 @@ def chrooked_install_spitefulblock_consume
         begin
           is_spite = (attacker.hasWorkingAbility(:SPITEFULBLOCK) rescue false)
           armed = (attacker.instance_variable_get(:@chrooked_spitefulblock_flag) rescue false) ? true : false
-          movetype = (pbType(@type, attacker, opponent) rescue -1)
+          movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
           is_dark = (isConst?(movetype, PBTypes, :DARK) rescue false)
           if is_spite && armed && is_dark
             movename = (getConstantName(PBMoves, @id) rescue @id.to_s)

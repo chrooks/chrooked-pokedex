@@ -37,7 +37,7 @@ def chrooked_install_kindle
       def pbModifyDamage(damagemult, attacker, opponent)
         mult = pbModifyDamage_chrooked_orig(damagemult, attacker, opponent)
         is_kindle = (attacker.hasWorkingAbility(:KINDLE) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
         is_fire = (isConst?(movetype, PBTypes, :FIRE) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_kindle && is_fire

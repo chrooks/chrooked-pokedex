@@ -37,7 +37,7 @@ def chrooked_install_bloom
       def pbModifyDamage(damagemult, attacker, opponent)
         mult = pbModifyDamage_chrooked_bloom_orig(damagemult, attacker, opponent)
         is_bloom = (attacker.hasWorkingAbility(:BLOOM) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
         is_grass = (isConst?(movetype, PBTypes, :GRASS) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_bloom && is_grass

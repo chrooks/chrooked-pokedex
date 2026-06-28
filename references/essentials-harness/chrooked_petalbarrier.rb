@@ -6,7 +6,7 @@
 #   16.2 Seam (Data/Scripts.rxdata). In pbModifyDamage, `opponent` is the DEFENDER
 #   being hit, so this is a DEFENDER-side ability check (opponent.hasWorkingAbility).
 #   If the defender has PETALBARRIER and the move's resolved type is SPECIAL
-#   (pbIsSpecial?(movetype)), scale the final multiplier by 0.75. damagemult is in
+#   (Chrooked.move_special?(self, movetype)), scale the final multiplier by 0.75. damagemult is in
 #   0x1000 units; we round after scaling. The reduction is flat — it does NOT
 #   require a super-effective hit. Vanilla aliased _orig runs first.
 #
@@ -46,8 +46,8 @@ def chrooked_install_petalbarrier_reduction
         mult = pbModifyDamage_chrooked_petalbarrier_orig(damagemult, attacker, opponent)
         # opponent is the DEFENDER in pbModifyDamage.
         has_petalbarrier = (opponent.hasWorkingAbility(:PETALBARRIER) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
-        is_special = (pbIsSpecial?(movetype) rescue false)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+        is_special = (Chrooked.move_special?(self, movetype) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if has_petalbarrier && is_special
           mult = (mult * 0.75).round

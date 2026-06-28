@@ -23,7 +23,7 @@
 #   2. DAMAGE — PokeBattle_Move#pbModifyDamage(damagemult, attacker, opponent).
 #      Returns the multiplier in 0x1000 units. We multiply by 1.3 when the attacker
 #      has Blitz, attacker.turncount == 0, and the move's resolved type is physical
-#      (pbIsPhysical?(movetype), movetype = pbType(@type, attacker, opponent)).
+#      (Chrooked.move_physical?(self, movetype), movetype = pbType(@type, attacker, opponent)).
 #
 # HARNESS (Route B log oracle): each gate firing logs one OBS line:
 #     [chrooked:blitz] OBS hook=speed blitz=<bool> turncount=<n> result=<BOOSTED|NORMAL>
@@ -80,8 +80,8 @@ def chrooked_install_blitz_damage
         mult = pbModifyDamage_chrooked_blitz_orig(damagemult, attacker, opponent)
         is_blitz = (attacker.hasWorkingAbility(:BLITZ) rescue false)
         tc = (attacker.turncount rescue -1)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
-        is_phys = (pbIsPhysical?(movetype) rescue false)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+        is_phys = (Chrooked.move_physical?(self, movetype) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_blitz && (tc == 0 || tc == 1) && is_phys
           mult = (mult * 1.3).round

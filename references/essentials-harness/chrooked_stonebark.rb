@@ -74,7 +74,7 @@ def chrooked_install_stonebark_weakness
         mult = pbModifyDamage_chrooked_stonebark_orig(damagemult, attacker, opponent)
         # opponent is the DEFENDER in pbModifyDamage.
         has_stonebark = (opponent.hasWorkingAbility(:STONEBARK) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
         is_water = (isConst?(movetype, PBTypes, :WATER) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if has_stonebark && is_water

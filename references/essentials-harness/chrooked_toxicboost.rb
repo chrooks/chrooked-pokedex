@@ -14,7 +14,7 @@
 #       - attacker.status == PBStatuses::POISON (regular OR bad/toxic poison both
 #         report PBStatuses::POISON), AND
 #       - the move's resolved type is physical: movetype = pbType(@type, attacker,
-#         opponent); pbIsPhysical?(movetype).
+#         opponent); Chrooked.move_physical?(self, movetype).
 #
 # RESIDUAL IMMUNITY (precise) — PokeBattle_Battle#pbEndOfRoundPhase poison MASK.
 #   The end-of-turn poison chip block is gated on `i.status==PBStatuses::POISON`.
@@ -56,8 +56,8 @@ def chrooked_install_toxicboost_damage
         mult = pbModifyDamage_chrooked_toxicboost_orig(damagemult, attacker, opponent)
         is_tb = (attacker.hasWorkingAbility(:TOXICBOOST) rescue false)
         is_psn = (attacker.status == PBStatuses::POISON rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
-        is_phys = (pbIsPhysical?(movetype) rescue false)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+        is_phys = (Chrooked.move_physical?(self, movetype) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_tb && is_psn && is_phys
           mult = (mult * 1.5).round

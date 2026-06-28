@@ -50,7 +50,7 @@ def chrooked_install_highnoon
       def pbModifyDamage(damagemult, attacker, opponent)
         mult = pbModifyDamage_chrooked_highnoon_orig(damagemult, attacker, opponent)
         is_highnoon = (attacker.hasWorkingAbility(:HIGHNOON) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
         is_fire = (isConst?(movetype, PBTypes, :FIRE) rescue false)
         is_psychic = (isConst?(movetype, PBTypes, :PSYCHIC) rescue false)
         # Vanilla STAB already gives 1.5 if the user already has the move's type;

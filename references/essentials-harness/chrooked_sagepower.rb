@@ -46,8 +46,8 @@ def chrooked_install_sagepower_damage
       def pbModifyDamage(damagemult, attacker, opponent)
         mult = pbModifyDamage_chrooked_sagepower_orig(damagemult, attacker, opponent)
         is_sage = (attacker.hasWorkingAbility(:SAGEPOWER) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
-        is_special = (pbIsSpecial?(movetype) rescue false)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+        is_special = (Chrooked.move_special?(self, movetype) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_sage && is_special
           mult = (mult * 1.5).round

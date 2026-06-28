@@ -11,7 +11,7 @@
 #
 # GATE (single hook):
 #   - attacker.hasWorkingAbility(:MYSTICPOWER)
-#   - the move is damaging (not status): pbIsPhysical?(movetype) || pbIsSpecial?(movetype)
+#   - the move is damaging (not status): Chrooked.move_physical?(self, movetype) || Chrooked.move_special?(self, movetype)
 #   - NOT attacker.pbHasType?(movetype)
 #       Vanilla STAB is INLINE in pbCalcDamage (x1.5 when attacker.pbHasType?(type)).
 #       If the user already has the move's type, vanilla already granted 1.5 — so we
@@ -46,8 +46,8 @@ def chrooked_install_mysticpower
       def pbModifyDamage(damagemult, attacker, opponent)
         mult = pbModifyDamage_chrooked_mysticpower_orig(damagemult, attacker, opponent)
         is_mystic = (attacker.hasWorkingAbility(:MYSTICPOWER) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
-        is_damaging = ((pbIsPhysical?(movetype) || pbIsSpecial?(movetype)) rescue false)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+        is_damaging = ((Chrooked.move_physical?(self, movetype) || Chrooked.move_special?(self, movetype)) rescue false)
         already_has_type = (attacker.pbHasType?(movetype) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_mystic && is_damaging && !already_has_type

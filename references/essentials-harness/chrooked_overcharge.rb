@@ -41,7 +41,7 @@ def chrooked_install_overcharge
       def pbModifyDamage(damagemult, attacker, opponent)
         mult = pbModifyDamage_chrooked_overcharge_orig(damagemult, attacker, opponent)
         is_overcharge = (attacker.hasWorkingAbility(:OVERCHARGE) rescue false)
-        movetype = (pbType(@type, attacker, opponent) rescue -1)
+        movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
         is_electric = (isConst?(movetype, PBTypes, :ELECTRIC) rescue false)
         hp_low = (attacker.hp <= (attacker.totalhp / 3).floor rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)

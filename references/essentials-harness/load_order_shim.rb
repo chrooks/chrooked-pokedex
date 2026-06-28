@@ -31,8 +31,19 @@ $chrooked_log.call("[LOAD_ORDER_SHIM] active") rescue nil
 # the rest or block the boot.
 begin
   this_file = File.expand_path(__FILE__)
+  # Load the engine-compat layer FIRST — plugins call Chrooked.* helpers. It would
+  # otherwise sort after most plugins (chrooked_compat > chrooked_aerodynamic).
+  compat = File.join($chrooked_dir, "chrooked_compat.rb")
+  if File.exist?(compat)
+    begin
+      load compat
+    rescue Exception => e
+      ($chrooked_log.call("[LOAD_ORDER_SHIM] ERROR loading chrooked_compat.rb: #{e.class}: #{e.message}") rescue nil)
+    end
+  end
   Dir.glob(File.join($chrooked_dir, "chrooked_*.rb")).sort.each do |path|
     next if File.expand_path(path) == this_file
+    next if File.basename(path) == "chrooked_compat.rb"   # already loaded above
     begin
       load path
       ($chrooked_log.call("[LOAD_ORDER_SHIM] loaded #{File.basename(path)}") rescue nil)

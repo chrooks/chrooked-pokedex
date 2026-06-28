@@ -73,8 +73,8 @@ def chrooked_install_mysticblades
           # 1) BOOST: x1.3 for any slicing move.
           mult = (mult * 1.3).round
           # 2) STAT-SWAP EMULATION: physical only — rescale by staged spatk/atk.
-          movetype = (pbType(@type, attacker, opponent) rescue -1)
-          is_physical = (pbIsPhysical?(movetype) rescue false)
+          movetype = (Chrooked.move_type(self, attacker, opponent) rescue nil)
+          is_physical = (Chrooked.move_physical?(self, movetype) rescue false)
           if is_physical
             atk_stage  = (attacker.stages[PBStats::ATTACK] rescue 0)
             spa_stage  = (attacker.stages[PBStats::SPATK]  rescue 0)
