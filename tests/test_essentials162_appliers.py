@@ -984,24 +984,24 @@ def test_super_effective_on_arg_is_unresolved(tmp_path):
 
 
 def test_two_secondary_combo_without_bundled_code_is_unresolved(tmp_path):
-    """A two-secondary combo with NO bundled 16.2 funccode stays unresolved — funccode
-    stays 000, never approximated by dropping a secondary. (A stat-drop + flinch fang has
-    no vanilla code, unlike burn/paralysis fangs which now resolve via STATUS_FLINCH.)"""
+    """A two-secondary combo with NO bundled 16.2 funccode and NO flinch-defer path stays
+    unresolved — funccode stays 000, never approximated by dropping a secondary. (Two
+    statuses with no flinch is not a fang combo and has no single code.)"""
     target = _target(tmp_path)
     move = MoveDef(
-        name="Draconic Fang", chrooked_id="draconicfang", type="Dragon", category="physical",
-        power=65, accuracy=95, pp=15, aka={"essentials": "DRACONICFANGCUSTOM"},
+        name="Toxic Burn", chrooked_id="toxicburn", type="Fire", category="physical",
+        power=65, accuracy=95, pp=15, aka={"essentials": "TOXICBURNCUSTOM"},
         additional_effects=(
-            AdditionalEffect(effect="atk_minus_1", chance=10),
-            AdditionalEffect(effect="flinch", chance=10),
+            AdditionalEffect(effect="burn", chance=10),
+            AdditionalEffect(effect="poison", chance=10),
         ),
-        flags=("contact", "biting"),
+        flags=("contact",),
     )
     resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
     report = ApplyReport()
     move_apply.apply_moves(target, _new_move_ruleset(move), resmap, report)
 
-    assert _move_col(target, "DRACONICFANGCUSTOM", 3) == "000"  # nothing fabricated
+    assert _move_col(target, "TOXICBURNCUSTOM", 3) == "000"  # nothing fabricated
     entries = [e for e in report.entries if e.category == "move"]
     assert entries and entries[0].status == "partial"
 
@@ -1229,8 +1229,8 @@ def test_semi_invulnerable_resolves_with_bundled_secondary():
 
 
 def test_status_plus_flinch_fang_combo():
-    """A biting move with status + flinch collapses to its bundled fang code; the status
-    chance carries to col 9. Unmapped status (frostbite) or stat-drop stays unresolved."""
+    """A biting status+flinch move collapses to its bundled fang code; a biting
+    stat-drop+flinch move emits the stat-drop code and defers flinch to the plugin."""
     from chrooked_pokedex.appliers.essentials162 import effect_tables as et
 
     def fang(status, chance=10, flags=("contact", "biting")):
@@ -1245,9 +1245,26 @@ def test_status_plus_flinch_fang_combo():
     fire = et.resolve_behavior(fang("burn"))
     assert fire.funccode == "00B" and fire.effectchance == "10"
     assert et.resolve_behavior(fang("paralysis")).funccode == "009"
-    # frostbite naming + stat-drop+flinch have no clean fang code -> unresolved (#16)
+    assert et.resolve_behavior(fang("freeze")).funccode == "00E"  # plain freeze, Ice Fang
+    # stat-drop+flinch: engine does the drop (042), plugin adds flinch (reported deferred)
+    drac = et.resolve_behavior(fang("atk_minus_1"))
+    assert drac.funccode == "042" and drac.effectchance == "10"
+    assert et.deferred_effects(fang("atk_minus_1")) == ["flinch -> chrooked_fangflinch plugin"]
+    # a non-plain primary never resolves to a stat-drop code, so no deferred note either
+    # (deferred_effects must mirror _resolve_funccode's is_plain gate).
+    non_plain = MoveDef(
+        name="Odd Fang", chrooked_id="oddfang", type="Dragon", category="physical", power=80,
+        effect="ohko", flags=("contact", "biting"),
+        additional_effects=(
+            AdditionalEffect(effect="atk_minus_1", chance=10),
+            AdditionalEffect(effect="flinch", chance=10),
+        ),
+    )
+    assert et.resolve_behavior(non_plain) is None
+    assert et.deferred_effects(non_plain) == []
+    # frostbite naming has no clean code, and a status+flinch with no fang code -> None
     assert et.resolve_behavior(fang("freeze_or_frostbite")) is None
-    assert et.resolve_behavior(fang("atk_minus_1")) is None
     # the fang code is gated on the biting flag: a non-biting burn+flinch move stays
     # unresolved rather than borrowing Fire Fang's code.
     assert et.resolve_behavior(fang("burn", flags=("contact",))) is None
+    assert et.deferred_effects(fang("atk_minus_1", flags=("contact",))) == []

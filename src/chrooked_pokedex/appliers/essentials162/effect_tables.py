@@ -116,6 +116,7 @@ SECONDARY_TO_FUNCCODE: dict[str, str] = {
 STATUS_FLINCH_TO_FUNCCODE: dict[str, str] = {
     "burn": "00B",       # verified via FIREFANG (may burn + may flinch)
     "paralysis": "009",  # verified via THUNDERFANG (may paralyze + may flinch)
+    "freeze": "00E",     # verified via ICEFANG (may freeze + may flinch) — plain freeze
 }
 
 # Deliberately NOT mapped (resolve unresolved -> #12):
@@ -271,10 +272,16 @@ def _resolve_funccode(move: MoveDef) -> tuple[str, str] | None:
             return None
         (status,) = effects - {"flinch"}
         code = STATUS_FLINCH_TO_FUNCCODE.get(status)
-        if code is None:
-            return None
-        chance = next(str(a.chance) for a in additionals if a.effect == status)
-        return code, chance
+        if code is not None:
+            chance = next(str(a.chance) for a in additionals if a.effect == status)
+            return code, chance
+        # No bundled status+flinch code, but if the non-flinch half is a STAT-DROP the
+        # engine handles natively, emit that code and let the chrooked_fangflinch plugin
+        # add the flinch (see deferred_effects). The stat-drop chance carries to col 9.
+        if _is_statdrop_secondary(status):
+            chance = next(str(a.chance) for a in additionals if a.effect == status)
+            return SECONDARY_TO_FUNCCODE[status], chance
+        return None
 
     if not is_plain and not additionals:
         if move.effect == "absorb":
@@ -311,6 +318,35 @@ def resolve_behavior(move: MoveDef, named: bool = False) -> Behavior | None:
         target=_render_target(move, named),
         flags=flags,
     )
+
+
+def _is_statdrop_secondary(effect: str) -> bool:
+    """A single-stage stat-drop secondary the engine handles natively (042/043/...)."""
+    return effect.endswith("_minus_1") and effect in SECONDARY_TO_FUNCCODE
+
+
+def deferred_effects(move: MoveDef) -> list[str]:
+    """Effect parts intentionally handed to a plugin, not the funccode (for reporting).
+
+    A biting stat-drop + flinch move resolves to its stat-drop code (the engine lowers
+    the stat); the flinch is added by the `chrooked_fangflinch` plugin, so it is reported
+    deferred rather than silently absent. Keep the plugin's gated move list in sync with
+    this shape — a new biting stat-drop+flinch move needs adding to the plugin too.
+    """
+    # Mirror _resolve_funccode's stat-drop branch EXACTLY — including its is_plain gate —
+    # so a note is emitted only for a move that actually resolved to a stat-drop code.
+    if move.effect != DEFAULT_EFFECT:
+        return []
+    additionals = move.additional_effects
+    if "biting" not in move.flags or len(additionals) != 2:
+        return []
+    effects = {a.effect for a in additionals}
+    if len(effects) != 2 or "flinch" not in effects:
+        return []
+    (status,) = effects - {"flinch"}
+    if status in STATUS_FLINCH_TO_FUNCCODE or not _is_statdrop_secondary(status):
+        return []
+    return ["flinch -> chrooked_fangflinch plugin"]
 
 
 def dropped_flags(move: MoveDef) -> list[str]:

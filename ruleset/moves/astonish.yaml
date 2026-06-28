@@ -8,7 +8,5 @@ accuracy: 100
 pp: 10
 description: A 1st-turn, 1st-strike move that causes flinching.
 effect: first_turn_only
-additional_effects:
-  - { effect: flinch, chance: 100 }
 flags: [contact]
 priority: 3

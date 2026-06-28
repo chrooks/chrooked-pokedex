@@ -157,6 +157,8 @@ def _edit_behavior(
 
     for flag in effect_tables.dropped_flags(move):
         unresolved.append(f"flag:{flag} has no 16.2 letter -> dropped")
+    for note in effect_tables.deferred_effects(move):
+        unresolved.append(note)
     return text
 
 
@@ -195,6 +197,8 @@ def _create_row(
             columns[index] = value
         for flag in effect_tables.dropped_flags(move):
             unresolved.append(f"flag:{flag} has no 16.2 letter -> dropped")
+        for note in effect_tables.deferred_effects(move):
+            unresolved.append(note)
 
     text = csv_io.append_row(text, csv_io.join_columns(columns))
     status = "partial" if unresolved else "applied"

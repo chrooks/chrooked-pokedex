@@ -1,0 +1,36 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# A cross-move mechanic: the custom stat-drop fangs (Draconic/Lithic/Metallic/Tectonic
+# Fang, Lovely Bite) are biting moves that BOTH lower a stat AND may flinch. Essentials
+# 16.2 has a bundled funccode for status+flinch fangs (Fire/Thunder/Ice Fang) but NONE
+# for stat-drop+flinch. The data layer therefore emits the stat-drop funccode (the engine
+# lowers the stat natively) and this behavior adds the 10% flinch on top.
+name: Fang Flinch
+chrooked_id: fangflinch
+applies_to: move
+effects:
+  - summary: "A chrooked stat-drop fang has a 10% chance to make the target flinch."
+    trigger: on-hit
+    when: "one of the chrooked stat-drop fangs (Draconic/Lithic/Metallic/Tectonic Fang, Lovely Bite) connects"
+    effect: >-
+      in addition to the move's native stat-drop, roll a 10% chance to make the
+      target flinch (respecting the usual flinch gates — Inner Focus, substitute,
+      already-moved, etc., which the engine's own pbFlinch enforces)
+test_cases:
+  - given: "Draconic Fang (10% Atk-drop + 10% flinch) connects and the flinch roll succeeds"
+    expect: "the target flinches this turn (in addition to any Attack drop)"
+  - given: "Draconic Fang connects but the flinch roll fails"
+    expect: "no flinch; the native Attack-drop still rolls independently"
+  - given: "a non-fang move (e.g. Tackle) connects"
+    expect: "no added flinch — the delta is gated to the chrooked fang move ids only"
+notes:
+  - "The stat-drop itself is NOT in this behavior — the data layer's funccode (042/043/045/047) does it natively. This behavior only adds the flinch half the funccode can't express."
+  - "Status+flinch fangs (Fire/Thunder/Ice Fang) do NOT use this — they resolve to a single bundled funccode (00B/009/00E) in the data layer."
+engine_hints:
+  pokeemerald: "Native — pokeemerald models stat-drop + flinch directly on the move; no plugin needed."
+  essentials: >-
+    Needs a plugin (Scripts/chrooked_fangflinch.rb). Gate on the fang move ids and roll a
+    10% flinch via the battler's pbFlinch after the move connects, on top of the stat-drop
+    the funccode already applies. SEAM TO VERIFY against Data/Scripts.rxdata before trust:
+    the post-hit hook that fires for these (042/043/045/047) move classes — pbEffectAfterAllHits
+    on the PokeBattle_Move base vs a per-subclass pbAdditionalEffect — and pbFlinch's arity.

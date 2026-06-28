@@ -6,8 +6,6 @@ category: physical
 power: 15
 accuracy: 100
 pp: 10
-description: Hits three times with rising power. May flinch.
+description: Hits three times with rising power.
 effect: triple_kick
-additional_effects:
-  - { effect: flinch, chance: 10 }
 flags: [contact]

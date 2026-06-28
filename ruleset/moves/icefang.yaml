@@ -6,8 +6,8 @@ category: physical
 power: 80
 accuracy: 95
 pp: 15
-description: "May cause flinching or \" #if B_USE_FROSTBITE == TRUE \"leave the foe with frostbite."
+description: An icy bite that may freeze or make the foe flinch.
 additional_effects:
-  - { effect: freeze_or_frostbite, chance: 10 }
+  - { effect: freeze, chance: 10 }
   - { effect: flinch, chance: 10 }
 flags: [contact, biting]

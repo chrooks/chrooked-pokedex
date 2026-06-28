@@ -8,6 +8,4 @@ accuracy: 100
 pp: 20
 description: A kick that inflicts more damage on heavier foes.
 effect: low_kick
-additional_effects:
-  - { effect: flinch, chance: 30 }
 flags: [contact]
