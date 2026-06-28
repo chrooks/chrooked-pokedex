@@ -131,6 +131,16 @@ TARGET_TO_HEX: dict[str, str] = {
     "both": "04",       # verified via TWISTER, STRUGGLEBUG, SNARL (all opposing foes)
 }
 
+# A NAMED-target PBS variant (e.g. Infinite Fusion 2) spells col 10 as an engine
+# constant name instead of a hex bitcode. Same two neutral targets the Ruleset uses.
+# Detected per-file by `move_apply._uses_named_targets`; an unknown neutral target
+# falls back to the single-foe default.
+TARGET_TO_NAME: dict[str, str] = {
+    "selected": "NearOther",   # single adjacent target — the engine default
+    "both": "AllNearFoes",     # all adjacent foes
+}
+DEFAULT_TARGET_NAME = "NearOther"
+
 
 @dataclass(frozen=True)
 class Behavior:
@@ -155,8 +165,23 @@ def _internal_hint(move: MoveDef) -> str | None:
     return text.removeprefix("MOVE_").replace("_", "")
 
 
-def _render_target(move: MoveDef) -> str:
+def _render_target(move: MoveDef, named: bool) -> str:
+    if named:
+        return TARGET_TO_NAME.get(move.target, DEFAULT_TARGET_NAME)
     return TARGET_TO_HEX.get(move.target, DEFAULT_TARGET_HEX)
+
+
+def merge_flags(existing: str, add: str) -> str:
+    """Union the modeled flag letters onto a row's existing flags, stably ordered.
+
+    Additive only: every letter already on the row survives (engine-default letters the
+    Ruleset doesn't model — protect `b` / mirror-move `e` / flinch-eligible `f` — are
+    preserved), and the modeled letters are added. Flag REMOVAL is not expressed: the
+    neutral schema has no negative-flag intent, so a wholesale replace would silently
+    wipe those defaults (the IF2 regression this fixes). Alphabetical order matches the
+    engine's own convention (`abef`, `befk`).
+    """
+    return "".join(sorted(set(existing) | set(add)))
 
 
 def _render_flags(move: MoveDef) -> tuple[str, list[str]]:
@@ -210,7 +235,7 @@ def _resolve_funccode(move: MoveDef) -> tuple[str, str] | None:
     return None
 
 
-def resolve_behavior(move: MoveDef) -> Behavior | None:
+def resolve_behavior(move: MoveDef, named: bool = False) -> Behavior | None:
     """Resolve a move's behavior to its four 16.2 columns, or None when unresolved.
 
     None = the effect signature has no exact existing 16.2 funccode; the caller keeps
@@ -218,6 +243,9 @@ def resolve_behavior(move: MoveDef) -> Behavior | None:
     and flags resolve cleanly even for an unmapped-funccode move, but without a real
     funccode the move would behave wrong, so an unresolvable signature blocks the
     whole behavior write — honesty over a half-right row.)
+
+    `named` selects the col-10 target representation: a name (`NearOther`) for a
+    named-target PBS, else the hex bitcode (`00`).
     """
     resolved = _resolve_funccode(move)
     if resolved is None:
@@ -227,7 +255,7 @@ def resolve_behavior(move: MoveDef) -> Behavior | None:
     return Behavior(
         funccode=funccode,
         effectchance=effectchance,
-        target=_render_target(move),
+        target=_render_target(move, named),
         flags=flags,
     )
 

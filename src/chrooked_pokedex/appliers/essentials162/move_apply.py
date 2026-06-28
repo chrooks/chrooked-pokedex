@@ -58,6 +58,7 @@ def apply_moves(
         return set()
     text, had_bom = pbs_io.read(path)
     original = text
+    named = _uses_named_targets(text)
 
     for chrooked_id in sorted(ruleset.moves):
         if holds.is_held(chrooked_id, "moves"):
@@ -72,9 +73,9 @@ def apply_moves(
         # ResolutionMap is edited in place, never appended as a duplicate row.
         symbol = resmap.move(move.name) or _internal_of(move)
         if csv_io.find_row(text, symbol) is not None:
-            text = _edit_existing(text, symbol, move, resmap, report, chrooked_id)
+            text = _edit_existing(text, symbol, move, resmap, report, chrooked_id, named)
         else:
-            text = _create_row(text, move, resmap, report, chrooked_id)
+            text = _create_row(text, move, resmap, report, chrooked_id, named)
 
     if text != original:
         pbs_io.write(path, text, had_bom)
@@ -84,7 +85,7 @@ def apply_moves(
 
 def _edit_existing(
     text: str, symbol: str, move: MoveDef, resmap: ResolutionMap,
-    report: ApplyReport, chrooked_id: str,
+    report: ApplyReport, chrooked_id: str, named: bool,
 ) -> str:
     desired, unresolved = _scalar_columns(move, resmap)
     changed: list[str] = []
@@ -98,7 +99,7 @@ def _edit_existing(
         if applied:
             changed.append(name)
 
-    text = _edit_behavior(text, symbol, move, changed, unresolved)
+    text = _edit_behavior(text, symbol, move, changed, unresolved, named)
 
     if not changed and not unresolved:
         return text  # already matches — no churn, no report line
@@ -112,7 +113,8 @@ def _edit_existing(
 
 
 def _edit_behavior(
-    text: str, symbol: str, move: MoveDef, changed: list[str], unresolved: list[str]
+    text: str, symbol: str, move: MoveDef, changed: list[str], unresolved: list[str],
+    named: bool,
 ) -> str:
     """Reconcile the four behavior columns of an existing row from the effect tables.
 
@@ -121,15 +123,25 @@ def _edit_behavior(
     safe defaults are kept and an unresolved note is added so #12 picks the move up.
     A move with no behavior intent at all is left wholly untouched (it may be a known
     vanilla move whose existing columns we must not blank).
+
+    Two preservation rules keep an edit from clobbering engine-owned data on a row:
+    the TARGET column is only written when the Ruleset states a non-default target
+    (`selected` means "no opinion" — keep the file's `NearOther`/`Other`), and the
+    FLAGS column is MERGED additively so engine-default letters (b/e/f) survive.
     """
     if not effect_tables.specifies_behavior(move):
         return text
-    behavior = effect_tables.resolve_behavior(move)
+    behavior = effect_tables.resolve_behavior(move, named)
     if behavior is None:
         unresolved.append(f"effect:{_effect_label(move)} has no 16.2 funccode -> #12")
         return text
 
     for index, value, label in _behavior_columns(behavior):
+        if index == _TARGET_COL and move.target == "selected":
+            continue  # default target: keep the file's existing value, don't impose
+        if index == _FLAGS_COL:
+            existing = (csv_io.get_column(text, symbol, index) or "").strip()
+            value = effect_tables.merge_flags(existing, value)
         if csv_io.get_column(text, symbol, index) == value:
             continue
         text, applied = csv_io.set_column(text, symbol, index, value)
@@ -143,7 +155,7 @@ def _edit_behavior(
 
 def _create_row(
     text: str, move: MoveDef, resmap: ResolutionMap,
-    report: ApplyReport, chrooked_id: str,
+    report: ApplyReport, chrooked_id: str, named: bool,
 ) -> str:
     internal = _internal_of(move)
     desired, unresolved = _scalar_columns(move, resmap)
@@ -154,7 +166,10 @@ def _create_row(
     columns[2] = move.name
     columns[3] = _DEFAULT_FUNCCODE
     columns[9] = _DEFAULT_EFFECTCHANCE
-    columns[10] = _DEFAULT_TARGET
+    # Named-format files need a named default; an unresolved created move keeps this.
+    columns[10] = effect_tables.DEFAULT_TARGET_NAME if named else _DEFAULT_TARGET
+    # ponytail: a created move's engine-default flags (b/e/f) are #22's job — a brand
+    # new row has no existing letters to preserve, so it carries only modeled flags.
     columns[12] = _DEFAULT_FLAGS
     columns[13] = _DEFAULT_DESC
     for name, index in _COLUMN.items():
@@ -162,7 +177,10 @@ def _create_row(
 
     # Behavior columns from the effect tables; an unresolvable signature keeps the
     # safe defaults above and is reported for the #12 loop (never written wrong).
-    behavior = effect_tables.resolve_behavior(move)
+    # Unlike the edit path, a created row has no existing target to preserve, so the
+    # resolved target always overwrites the default stamped above (same value for
+    # `selected`; an explicit `both` upgrades it).
+    behavior = effect_tables.resolve_behavior(move, named)
     if behavior is None:
         unresolved.append(f"effect:{_effect_label(move)} has no 16.2 funccode -> #12")
     else:
@@ -224,6 +242,24 @@ def _scalar_columns(move: MoveDef, resmap: ResolutionMap) -> tuple[dict[str, str
     if move.priority:
         desired["priority"] = str(move.priority)
     return desired, unresolved
+
+
+def _uses_named_targets(text: str) -> bool:
+    """True when moves.txt col 10 spells targets as names (`NearOther`) not hex (`00`).
+
+    Sniffs the first data row with a non-empty target; a moves.txt is uniformly one
+    format, so a single sample decides it.
+    """
+    for line in text.split("\n"):
+        # lstrip a stray BOM so the first row's index column still reads as a digit
+        # even if this is ever called on un-stripped text (apply_moves goes via pbs_io).
+        columns = csv_io.split_columns(line.rstrip("\r").lstrip("﻿"))
+        if len(columns) <= _TARGET_COL or not columns[0].strip().isdigit():
+            continue
+        token = columns[_TARGET_COL].strip()
+        if token:
+            return any(char.isalpha() for char in token)
+    return False
 
 
 def _internal_of(move: MoveDef) -> str:

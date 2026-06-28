@@ -1021,3 +1021,101 @@ def test_unmapped_secondary_is_unresolved(tmp_path):
     assert _move_col(target, "GLACIALCRUSHX", 3) == "000"
     entries = [e for e in report.entries if e.category == "move"]
     assert entries and entries[0].status == "partial"
+
+
+# --- named-target PBS variant (Infinite Fusion 2) ---------------------------------
+# IF2 spells col 10 as a NAME (NearOther) and carries engine-default flag letters
+# (bef = protect/mirror/flinch). The hex-format applier was writing `00` into the
+# named column and wiping those flags; these lock the named-aware behavior.
+
+
+def test_resolve_behavior_named_targets():
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    selected = MoveDef(
+        name="Slash", chrooked_id="slash", type="Normal", category="physical",
+        power=70, flags=("contact",), target="selected",
+    )
+    both = MoveDef(
+        name="Gust Storm", chrooked_id="guststorm", type="Flying", category="special",
+        power=60, flags=("sound",), target="both",
+    )
+    assert et.resolve_behavior(selected, named=True).target == "NearOther"
+    assert et.resolve_behavior(both, named=True).target == "AllNearFoes"
+    # hex format unchanged (default named=False).
+    assert et.resolve_behavior(selected).target == "00"
+    assert et.resolve_behavior(both).target == "04"
+
+
+def test_merge_flags_is_additive_union():
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    assert et.merge_flags("bef", "") == "bef"          # nothing added -> preserved
+    assert et.merge_flags("bef", "a") == "abef"        # contact added, defaults kept
+    assert et.merge_flags("abef", "j") == "abefj"      # punching added
+    assert et.merge_flags("", "a") == "a"              # created row: no existing
+
+
+def _named_target(tmp_path: Path) -> Path:
+    """A target whose moves.txt uses NAMED targets + engine-default flags (IF2 shape)."""
+    pbs = tmp_path / "PBS"
+    pbs.mkdir()
+    for name in ("pokemon.txt", "types.txt", "abilities.txt"):
+        shutil.copy(_FIXTURES / name, pbs / name)
+    (pbs / "moves.txt").write_text(
+        "﻿1,ABSORB,Absorber,0DD,20,GRASS,Special,100,25,0,NearOther,0,bef,"
+        '"Drena PS."\r\n'
+        "2,TWISTER,Tornado,00F,40,DRAGON,Special,100,20,20,AllNearFoes,0,bef,"
+        '"Tornado."\r\n',
+        encoding="utf-8",
+    )
+    return tmp_path
+
+
+def test_named_edit_preserves_target_and_flags(tmp_path):
+    """Retuning a default-target move on a named-format file must NOT write `00` into
+    col 10 and must NOT wipe the row's engine-default flags."""
+    target = _named_target(tmp_path)
+    move = MoveDef(
+        name="Absorb", chrooked_id="absorb", type="Grass", category="special",
+        power=20, accuracy=100, pp=25, effect="absorb", target="selected",
+        aka={"essentials": "ABSORB"},
+    )
+    resmap = resolution.ResolutionMap(
+        type_by_name={"grass": "GRASS"}, move_by_name={"absorb": "ABSORB"}
+    )
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+
+    assert _move_col(target, "ABSORB", 10) == "NearOther"  # not 00
+    assert _move_col(target, "ABSORB", 12) == "bef"        # flags preserved, not wiped
+    assert _move_col(target, "ABSORB", 3) == "0DD"         # absorb funccode written
+
+
+def test_named_edit_writes_named_multitarget(tmp_path):
+    """A `both`-target retune writes the NAMED multi-foe constant, not hex 04."""
+    target = _named_target(tmp_path)
+    move = MoveDef(
+        name="Twister", chrooked_id="twister", type="Dragon", category="special",
+        power=40, accuracy=100, pp=20, target="both",
+        additional_effects=(AdditionalEffect(effect="flinch", chance=20),),
+        aka={"essentials": "TWISTER"},
+    )
+    resmap = resolution.ResolutionMap(
+        type_by_name={"dragon": "DRAGON"}, move_by_name={"twister": "TWISTER"}
+    )
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "TWISTER", 10) == "AllNearFoes"  # not 04
+    assert _move_col(target, "TWISTER", 12) == "bef"          # preserved
+
+
+def test_named_create_uses_named_default_target(tmp_path):
+    """A move IF2 lacks is created with a NAMED default target, never hex 00."""
+    target = _named_target(tmp_path)
+    move = MoveDef(
+        name="Astral Hand", chrooked_id="astralhand", type="Ghost", category="special",
+        power=70, accuracy=100, pp=10, target="selected",
+        aka={"essentials": "ASTRALHAND"},
+    )
+    resmap = resolution.ResolutionMap(type_by_name={"ghost": "GHOST"})
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "ASTRALHAND", 10) == "NearOther"
