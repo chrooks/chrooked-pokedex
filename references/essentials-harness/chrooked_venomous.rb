@@ -38,12 +38,10 @@ end
 def chrooked_install_venomous
   return if $chrooked_venomous_installed
   return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsOnDealingDamage_chrooked_venomous_orig")
-      alias_method :pbEffectsOnDealingDamage_chrooked_venomous_orig, :pbEffectsOnDealingDamage
-      def pbEffectsOnDealingDamage(move, user, target, damage)
-        pbEffectsOnDealingDamage_chrooked_venomous_orig(move, user, target, damage)
+  return unless defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_venomous_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_venomous_apply(move, user, target, damage)
         begin
           dealt    = (damage && damage > 0)
           contact  = (move.isContactMove? rescue false)
@@ -85,11 +83,12 @@ def chrooked_install_venomous
       end
     end
   end
+  return unless Chrooked.install_post_damage("chrooked_venomous_apply", "pbOnDamage_chrooked_venomous_orig")
   $chrooked_venomous_installed = true
   ($chrooked_log.call("[chrooked:venomous] installed on PokeBattle_Battler") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_venomous
 elsif defined?(Graphics)
   class << Graphics

@@ -52,13 +52,10 @@ end
 # --- (a) ARM: set the defender's flag when it takes a damaging hit ----------
 def chrooked_install_spitefulblock_arm
   return if $chrooked_spitefulblock_arm_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsOnDealingDamage_chrooked_spitefulblock_orig")
-      alias_method :pbEffectsOnDealingDamage_chrooked_spitefulblock_orig, :pbEffectsOnDealingDamage
-      def pbEffectsOnDealingDamage(move, user, target, damage)
-        pbEffectsOnDealingDamage_chrooked_spitefulblock_orig(move, user, target, damage)
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_spitefulblock_arm_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_spitefulblock_arm_apply(move, user, target, damage)
         begin
           if target && damage && damage > 0 &&
              (target.hasWorkingAbility(:SPITEFULBLOCK) rescue false)
@@ -70,8 +67,9 @@ def chrooked_install_spitefulblock_arm
       end
     end
   end
+  return unless Chrooked.install_post_damage("chrooked_spitefulblock_arm_apply", "pbOnDamage_chrooked_spitefulblock_orig")
   $chrooked_spitefulblock_arm_installed = true
-  ($chrooked_log.call("[chrooked:spitefulblock] arm hook installed on PokeBattle_Battler#pbEffectsOnDealingDamage") rescue nil)
+  ($chrooked_log.call("[chrooked:spitefulblock] arm hook installed (post-damage seam)") rescue nil)
 end
 
 # --- (b) CONSUME: boost the armed Dark move, then clear the flag ------------

@@ -87,7 +87,7 @@ module Chrooked
   # the type arg is ignored there. Returns false on an engine lacking both.
   def self.move_physical?(move, movetype)
     case engine
-    when :ess162  then (move.Chrooked.move_physical?(self, movetype) rescue false)
+    when :ess162  then (move.pbIsPhysical?(movetype) rescue false)
     when :if_fork then (move.physicalMove? rescue false)
     else false
     end
@@ -95,7 +95,7 @@ module Chrooked
 
   def self.move_special?(move, movetype)
     case engine
-    when :ess162  then (move.Chrooked.move_special?(self, movetype) rescue false)
+    when :ess162  then (move.pbIsSpecial?(movetype) rescue false)
     when :if_fork then (move.specialMove? rescue false)
     else false
     end
@@ -106,6 +106,36 @@ module Chrooked
   def self.seam(klass, candidates)
     names = klass.instance_methods.map { |m| m.to_s }
     candidates.find { |c| names.include?(c) }
+  end
+
+  # Install a post-damage hook on PokeBattle_Battler that calls the battler instance
+  # method named `apply_method` with (move, user, target, damage) AFTER the engine's
+  # own handler. Bridges the engine rename: 16.2's pbEffectsOnDealingDamage(move,user,
+  # target,damage) (damage passed) and IF2's pbEffectsOnMakingHit(move,user,target)
+  # (damage read from target.damageState.hpLost). `orig` is this plugin's unique backup
+  # name so multiple plugins chain on the same seam. Idempotent; returns true if the
+  # seam exists (installed or already), false if neither seam is present.
+  def self.install_post_damage(apply_method, orig)
+    return false unless defined?(PokeBattle_Battler)
+    s = seam(PokeBattle_Battler, ["pbEffectsOnDealingDamage", "pbEffectsOnMakingHit"])
+    return false unless s
+    return true if PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?(orig)
+    PokeBattle_Battler.class_eval do
+      alias_method orig.to_sym, s.to_sym
+      if s == "pbEffectsOnDealingDamage"
+        define_method(s) do |move, user, target, damage|
+          send(orig, move, user, target, damage)
+          send(apply_method, move, user, target, damage)
+        end
+      else
+        define_method(s) do |move, user, target|
+          send(orig, move, user, target)
+          dmg = (target.damageState.hpLost rescue 0)
+          send(apply_method, move, user, target, dmg)
+        end
+      end
+    end
+    true
   end
 end
 

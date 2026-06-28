@@ -32,16 +32,14 @@ end
 def chrooked_install_starfall
   return if $chrooked_starfall_installed
   return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsOnDealingDamage_chrooked_starfall_orig")
-      alias_method :pbEffectsOnDealingDamage_chrooked_starfall_orig, :pbEffectsOnDealingDamage
-      def pbEffectsOnDealingDamage(move, user, target, damage)
-        pbEffectsOnDealingDamage_chrooked_starfall_orig(move, user, target, damage)
+  return unless defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_starfall_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_starfall_apply(move, user, target, damage)
         if move && user && target &&
            damage && damage > 0 &&
            (user.hasWorkingAbility(:STARFALL) rescue false) &&
-           (move.pbIsSpecial?(move.pbType(move.type, user, target)) rescue (move.pbIsSpecial? rescue false))
+           (Chrooked.move_special?(move, Chrooked.move_type(move, user, target)) rescue false)
           if @battle.pbRandom(100) < 30
             (target.pbReduceStatWithCause(PBStats::SPDEF, 1, user, PBAbilities.getName(user.ability)) rescue nil)
             ($chrooked_log.call("[chrooked:starfall] OBS event=hit ability=true effect=lowered target SPDEF by 1") rescue nil)
@@ -52,11 +50,12 @@ def chrooked_install_starfall
       end
     end
   end
+  return unless Chrooked.install_post_damage("chrooked_starfall_apply", "pbOnDamage_chrooked_starfall_orig")
   $chrooked_starfall_installed = true
   ($chrooked_log.call("[chrooked:starfall] installed on PokeBattle_Battler") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_starfall
 elsif defined?(Graphics)
   class << Graphics

@@ -29,12 +29,10 @@ end
 def chrooked_install_deathgrip
   return if $chrooked_deathgrip_installed
   return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsOnDealingDamage_chrooked_deathgrip_orig")
-      alias_method :pbEffectsOnDealingDamage_chrooked_deathgrip_orig, :pbEffectsOnDealingDamage
-      def pbEffectsOnDealingDamage(move, user, target, damage)
-        pbEffectsOnDealingDamage_chrooked_deathgrip_orig(move, user, target, damage)
+  return unless defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_deathgrip_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_deathgrip_apply(move, user, target, damage)
         begin
           if move && user && target && damage && damage > 0 &&
              (user.hasWorkingAbility(:DEATHGRIP) rescue false) &&
@@ -58,11 +56,12 @@ def chrooked_install_deathgrip
       end
     end
   end
+  return unless Chrooked.install_post_damage("chrooked_deathgrip_apply", "pbOnDamage_chrooked_deathgrip_orig")
   $chrooked_deathgrip_installed = true
   ($chrooked_log.call("[chrooked:deathgrip] installed on PokeBattle_Battler") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_deathgrip
 elsif defined?(Graphics)
   class << Graphics

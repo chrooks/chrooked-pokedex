@@ -43,13 +43,13 @@ end
 
 def chrooked_install_fangflinch
   return if $chrooked_fangflinch_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsOnDealingDamage_chrooked_fangflinch_orig")
-      alias_method :pbEffectsOnDealingDamage_chrooked_fangflinch_orig, :pbEffectsOnDealingDamage
-      def pbEffectsOnDealingDamage(move, user, target, damage)
-        pbEffectsOnDealingDamage_chrooked_fangflinch_orig(move, user, target, damage)
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  # The gate+flinch logic as a battler instance method (idempotent). The compat shim's
+  # install_post_damage wires it to whichever post-damage seam this engine has (16.2
+  # pbEffectsOnDealingDamage or IF2 pbEffectsOnMakingHit) and feeds it the damage dealt.
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_fangflinch_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_fangflinch_apply(move, user, target, damage)
         begin
           dealt = (damage && damage > 0)
           is_fang = CHROOKED_FANGFLINCH_MOVES.any? { |s| (isConst?(move.id, PBMoves, s) rescue false) }
@@ -70,11 +70,12 @@ def chrooked_install_fangflinch
       end
     end
   end
+  return unless Chrooked.install_post_damage("chrooked_fangflinch_apply", "pbOnDamage_chrooked_fangflinch_orig")
   $chrooked_fangflinch_installed = true
-  ($chrooked_log.call("[chrooked:fangflinch] installed on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:fangflinch] installed (post-damage seam)") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_fangflinch
 elsif defined?(Graphics)
   class << Graphics

@@ -29,12 +29,10 @@ end
 def chrooked_install_exhaust
   return if $chrooked_exhaust_installed
   return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsOnDealingDamage_chrooked_exhaust_orig")
-      alias_method :pbEffectsOnDealingDamage_chrooked_exhaust_orig, :pbEffectsOnDealingDamage
-      def pbEffectsOnDealingDamage(move, user, target, damage)
-        pbEffectsOnDealingDamage_chrooked_exhaust_orig(move, user, target, damage)
+  return unless defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_exhaust_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_exhaust_apply(move, user, target, damage)
         dealt = (damage && damage > 0) rescue false
         contact = (move && move.isContactMove?) rescue false
         if user && target && dealt && contact && (user.hasWorkingAbility(:EXHAUST) rescue false)
@@ -44,11 +42,12 @@ def chrooked_install_exhaust
       end
     end
   end
+  return unless Chrooked.install_post_damage("chrooked_exhaust_apply", "pbOnDamage_chrooked_exhaust_orig")
   $chrooked_exhaust_installed = true
   ($chrooked_log.call("[chrooked:exhaust] installed on PokeBattle_Battler") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsOnDealingDamage")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_exhaust
 elsif defined?(Graphics)
   class << Graphics
