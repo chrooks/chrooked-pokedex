@@ -61,6 +61,9 @@ EFFECT_TO_FUNCCODE: dict[str, str] = {
     "first_turn_only": "012",  # verified via FAKEOUT (flinch, usable only turn 1)
     "recoil_if_miss": "10B",  # verified via JUMPKICK, HIGHJUMPKICK (crash damage on miss)
     "confuse": "013",         # verified via CONFUSION, SIGNALBEAM (damage + may confuse)
+    "curse": "10D",           # verified via CURSE (Ghost: cut HP, curse; else raise Atk/Def)
+    "moonlight": "0D8",       # verified via MOONLIGHT, MORNINGSUN, SYNTHESIS (weather heal)
+    "attack_down_2": "04B",   # verified via CHARM, FEATHERDANCE (lower target Attack by 2)
 }
 
 # `absorb` is fraction-specific in 16.2: the funccode encodes HOW MUCH HP is drained.
@@ -105,6 +108,16 @@ SECONDARY_TO_FUNCCODE: dict[str, str] = {
     "def_plus_1": "01D",      # verified via STEELWING (damaging, raises user Def; HARDEN status shares it)
     "spd_plus_1": "01F",      # verified via FLAMECHARGE, ESPERWING, AQUASTEP, TRAILBLAZE (raise user Speed)
 }
+# A biting move that applies BOTH a status AND a flinch (Fire/Thunder Fang) collapses to
+# ONE dedicated funccode that bundles both — distinct from the status-only secondary codes
+# above. Cribbed from each fang's own row; the status chance carries to col 9 (safe whether
+# the code reads it or hardcodes 10/10). `freeze_or_frostbite` is deliberately absent — only
+# plain `freeze` exists here, and the Ice Fang naming would mask the dropped frostbite half.
+STATUS_FLINCH_TO_FUNCCODE: dict[str, str] = {
+    "burn": "00B",       # verified via FIREFANG (may burn + may flinch)
+    "paralysis": "009",  # verified via THUNDERFANG (may paralyze + may flinch)
+}
+
 # Deliberately NOT mapped (resolve unresolved -> #12):
 #   freeze_or_frostbite — this Ruby-1.x 16.2 engine has no distinct "frostbite"
 #     effect (that is a gen9 concept); only plain `freeze` (00C) exists. Mapping it to
@@ -222,6 +235,20 @@ def _resolve_funccode(move: MoveDef) -> tuple[str, str] | None:
     is_plain = move.effect == DEFAULT_EFFECT
     additionals = move.additional_effects
 
+    # semi_invulnerable resolves by per-move code FIRST, with or without a secondary: the
+    # move's own code (FLY/DIG/DIVE/BOUNCE) already bundles its secondary, so a Bounce
+    # paralysis must not block resolution — its chance just carries to col 9.
+    if move.effect == "semi_invulnerable":
+        internal = _internal_hint(move)
+        code = SEMI_INVULNERABLE_BY_INTERNAL.get(internal) if internal else None
+        if code is None:
+            return None
+        # the per-move code bundles at most ONE secondary; 2+ would be an approximation.
+        if len(additionals) > 1:
+            return None
+        chance = str(additionals[0].chance) if additionals else PLAIN_EFFECTCHANCE
+        return code, chance
+
     if is_plain and not additionals:
         return PLAIN_FUNCCODE, PLAIN_EFFECTCHANCE
 
@@ -232,11 +259,24 @@ def _resolve_funccode(move: MoveDef) -> tuple[str, str] | None:
             return None
         return code, str(secondary.chance)
 
+    # A BITING move's `status + flinch` pair collapses to its bundled fang code; the
+    # status chance carries to col 9. The biting flag is required — the fang codes are
+    # the engine's fang functions, so a non-biting burn+flinch move must not borrow one.
+    # Any other two-secondary combo stays unresolved.
+    if is_plain and len(additionals) == 2 and "biting" in move.flags:
+        effects = {a.effect for a in additionals}
+        # need exactly {flinch, <one distinct status>}; a duplicate pair collapses the
+        # set to <2 and is not a fang combo -> unresolved.
+        if len(effects) != 2 or "flinch" not in effects:
+            return None
+        (status,) = effects - {"flinch"}
+        code = STATUS_FLINCH_TO_FUNCCODE.get(status)
+        if code is None:
+            return None
+        chance = next(str(a.chance) for a in additionals if a.effect == status)
+        return code, chance
+
     if not is_plain and not additionals:
-        if move.effect == "semi_invulnerable":
-            internal = _internal_hint(move)
-            code = SEMI_INVULNERABLE_BY_INTERNAL.get(internal) if internal else None
-            return (code, PLAIN_EFFECTCHANCE) if code else None
         if move.effect == "absorb":
             percent = (move.argument or {}).get("absorb_percentage", _DEFAULT_ABSORB_PERCENT)
             code = ABSORB_PERCENT_TO_FUNCCODE.get(percent)

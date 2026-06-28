@@ -983,15 +983,16 @@ def test_super_effective_on_arg_is_unresolved(tmp_path):
     assert any("funccode" in (f or "") for f in entries[0].partial_fields)
 
 
-def test_two_secondary_combo_is_unresolved(tmp_path):
-    """A move with TWO secondaries can't collapse to one 16.2 funccode — unresolved,
-    funccode stays 000, no approximation by dropping one secondary."""
+def test_two_secondary_combo_without_bundled_code_is_unresolved(tmp_path):
+    """A two-secondary combo with NO bundled 16.2 funccode stays unresolved — funccode
+    stays 000, never approximated by dropping a secondary. (A stat-drop + flinch fang has
+    no vanilla code, unlike burn/paralysis fangs which now resolve via STATUS_FLINCH.)"""
     target = _target(tmp_path)
     move = MoveDef(
-        name="Fire Fang", chrooked_id="firefang", type="Fire", category="physical",
-        power=65, accuracy=95, pp=15, aka={"essentials": "FIREFANGCUSTOM"},
+        name="Draconic Fang", chrooked_id="draconicfang", type="Dragon", category="physical",
+        power=65, accuracy=95, pp=15, aka={"essentials": "DRACONICFANGCUSTOM"},
         additional_effects=(
-            AdditionalEffect(effect="burn", chance=10),
+            AdditionalEffect(effect="atk_minus_1", chance=10),
             AdditionalEffect(effect="flinch", chance=10),
         ),
         flags=("contact", "biting"),
@@ -1000,7 +1001,7 @@ def test_two_secondary_combo_is_unresolved(tmp_path):
     report = ApplyReport()
     move_apply.apply_moves(target, _new_move_ruleset(move), resmap, report)
 
-    assert _move_col(target, "FIREFANGCUSTOM", 3) == "000"  # nothing fabricated
+    assert _move_col(target, "DRACONICFANGCUSTOM", 3) == "000"  # nothing fabricated
     entries = [e for e in report.entries if e.category == "move"]
     assert entries and entries[0].status == "partial"
 
@@ -1193,3 +1194,60 @@ def test_absorb_percentage_selects_drain_funccode():
     assert et.resolve_behavior(absorb(75)).funccode == "14F"
     assert et.resolve_behavior(absorb(None)).funccode == "0DD"   # default 50%
     assert et.resolve_behavior(absorb(25)) is None               # unmapped -> unresolved
+
+
+# --- #22 effect-coverage expansion: cribbed singles + bundled combos ---------------
+
+
+def test_new_primary_effect_table_rows():
+    """Single-effect moves whose code sits in IF2's own file, now cribbed in."""
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    def primary(effect):
+        return MoveDef(
+            name=effect, chrooked_id=effect, type="Normal", category="status",
+            effect=effect,
+        )
+    assert et.resolve_behavior(primary("curse")).funccode == "10D"
+    assert et.resolve_behavior(primary("moonlight")).funccode == "0D8"
+    assert et.resolve_behavior(primary("attack_down_2")).funccode == "04B"
+
+
+def test_semi_invulnerable_resolves_with_bundled_secondary():
+    """Bounce's per-move code (0CC) already bundles its paralysis, so the secondary no
+    longer blocks resolution; the secondary's chance carries to col 9."""
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    bounce = MoveDef(
+        name="Bounce", chrooked_id="bounce", type="Flying", category="physical",
+        power=85, effect="semi_invulnerable", aka={"essentials": "BOUNCE"},
+        additional_effects=(AdditionalEffect(effect="paralysis", chance=30),),
+    )
+    b = et.resolve_behavior(bounce)
+    assert b.funccode == "0CC"
+    assert b.effectchance == "30"
+
+
+def test_status_plus_flinch_fang_combo():
+    """A biting move with status + flinch collapses to its bundled fang code; the status
+    chance carries to col 9. Unmapped status (frostbite) or stat-drop stays unresolved."""
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    def fang(status, chance=10, flags=("contact", "biting")):
+        return MoveDef(
+            name="Fang", chrooked_id="fang", type="Fire", category="physical", power=65,
+            flags=flags,
+            additional_effects=(
+                AdditionalEffect(effect=status, chance=chance),
+                AdditionalEffect(effect="flinch", chance=10),
+            ),
+        )
+    fire = et.resolve_behavior(fang("burn"))
+    assert fire.funccode == "00B" and fire.effectchance == "10"
+    assert et.resolve_behavior(fang("paralysis")).funccode == "009"
+    # frostbite naming + stat-drop+flinch have no clean fang code -> unresolved (#16)
+    assert et.resolve_behavior(fang("freeze_or_frostbite")) is None
+    assert et.resolve_behavior(fang("atk_minus_1")) is None
+    # the fang code is gated on the biting flag: a non-biting burn+flinch move stays
+    # unresolved rather than borrowing Fire Fang's code.
+    assert et.resolve_behavior(fang("burn", flags=("contact",))) is None
