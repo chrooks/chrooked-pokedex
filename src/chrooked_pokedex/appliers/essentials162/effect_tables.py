@@ -59,11 +59,20 @@ EFFECT_TO_FUNCCODE: dict[str, str] = {
     "rage": "093",            # verified via RAGE (Attack rises when hit)
     "roar": "0EB",            # verified via ROAR, WHIRLWIND (force-switch the target)
     "first_turn_only": "012",  # verified via FAKEOUT (flinch, usable only turn 1)
+    # NOTE: 012 reads col 9 (effectchance) as its flinch probability — see
+    # EFFECT_DEFAULT_EFFECTCHANCE below, which gives first_turn_only its 100% flinch.
     "recoil_if_miss": "10B",  # verified via JUMPKICK, HIGHJUMPKICK (crash damage on miss)
     "confuse": "013",         # verified via CONFUSION, SIGNALBEAM (damage + may confuse)
     "curse": "10D",           # verified via CURSE (Ghost: cut HP, curse; else raise Atk/Def)
     "moonlight": "0D8",       # verified via MOONLIGHT, MORNINGSUN, SYNTHESIS (weather heal)
     "attack_down_2": "04B",   # verified via CHARM, FEATHERDANCE (lower target Attack by 2)
+}
+
+# A few primary-effect funccodes use col 9 (effectchance) as a probability the effect
+# implies, so they cannot default to "0" or the effect never fires. Fake Out (012) always
+# flinches. An effect not listed keeps PLAIN_EFFECTCHANCE ("0").
+EFFECT_DEFAULT_EFFECTCHANCE: dict[str, str] = {
+    "first_turn_only": "100",  # FAKEOUT always flinches
 }
 
 # `absorb` is fraction-specific in 16.2: the funccode encodes HOW MUCH HP is drained.
@@ -289,7 +298,10 @@ def _resolve_funccode(move: MoveDef) -> tuple[str, str] | None:
             code = ABSORB_PERCENT_TO_FUNCCODE.get(percent)
             return (code, PLAIN_EFFECTCHANCE) if code else None
         code = EFFECT_TO_FUNCCODE.get(move.effect)
-        return (code, PLAIN_EFFECTCHANCE) if code else None
+        if code is None:
+            return None
+        chance = EFFECT_DEFAULT_EFFECTCHANCE.get(move.effect, PLAIN_EFFECTCHANCE)
+        return code, chance
 
     # Any other combo (primary effect + secondary, or >=2 secondaries) -> unresolved.
     return None

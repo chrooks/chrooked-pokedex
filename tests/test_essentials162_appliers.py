@@ -1213,6 +1213,21 @@ def test_new_primary_effect_table_rows():
     assert et.resolve_behavior(primary("attack_down_2")).funccode == "04B"
 
 
+def test_first_turn_only_flinches_at_100():
+    """Fake Out's funccode (012) uses col 9 as the flinch probability, and Fake Out always
+    flinches. A `first_turn_only` move (e.g. Astonish-as-Fake-Out) must emit effectchance
+    100, not the plain 0 — otherwise the move has the code but never flinches."""
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    move = MoveDef(
+        name="Astonish", chrooked_id="astonish", type="Ghost", category="physical",
+        power=40, effect="first_turn_only", flags=("contact",), priority=3,
+    )
+    b = et.resolve_behavior(move)
+    assert b.funccode == "012"
+    assert b.effectchance == "100"
+
+
 def test_semi_invulnerable_resolves_with_bundled_secondary():
     """Bounce's per-move code (0CC) already bundles its paralysis, so the secondary no
     longer blocks resolution; the secondary's chance carries to col 9."""
