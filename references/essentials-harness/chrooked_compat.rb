@@ -137,6 +137,28 @@ module Chrooked
     end
     true
   end
+
+  # Install a type-effectiveness hook on PokeBattle_Move. Bridges 16.2's
+  # pbTypeModifier(type,attacker,opponent) and IF2's pbCalcTypeMod(moveType,user,
+  # target) — same 3-arg shape and same 8-base scale (neutral 8, super 16). The
+  # battler/move instance method `apply_method`(result, type, attacker, opponent)
+  # receives the engine's computed effectiveness and RETURNS the (possibly modified)
+  # value. `orig` is this plugin's unique backup name. Idempotent; returns true if a
+  # seam exists.
+  def self.install_typemod(apply_method, orig)
+    return false unless defined?(PokeBattle_Move)
+    s = seam(PokeBattle_Move, ["pbTypeModifier", "pbCalcTypeMod"])
+    return false unless s
+    return true if PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?(orig)
+    PokeBattle_Move.class_eval do
+      alias_method orig.to_sym, s.to_sym
+      define_method(s) do |type, attacker, opponent|
+        r = send(orig, type, attacker, opponent)
+        send(apply_method, r, type, attacker, opponent)
+      end
+    end
+    true
+  end
 end
 
 ($chrooked_log.call("[chrooked:compat] loaded") rescue nil)

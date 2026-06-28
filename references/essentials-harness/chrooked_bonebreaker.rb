@@ -57,19 +57,16 @@ end
 # --- Hook 1: immunity bypass via pbTypeModifier ----------------------------
 def chrooked_install_bonebreaker_typemod
   return if $chrooked_bonebreaker_typemod_installed
-  return unless defined?(PokeBattle_Move)
-  return unless PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbTypeModifier")
-  PokeBattle_Move.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbTypeModifier_chrooked_bonebreaker_orig")
-      alias_method :pbTypeModifier_chrooked_bonebreaker_orig, :pbTypeModifier
-      def pbTypeModifier(type, attacker, opponent)
-        result = pbTypeModifier_chrooked_bonebreaker_orig(type, attacker, opponent)
+  return unless defined?(PokeBattle_Move) && defined?(Chrooked)
+  unless PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("chrooked_bonebreaker_typemod_apply")
+    PokeBattle_Move.class_eval do
+      def chrooked_bonebreaker_typemod_apply(result, type, attacker, opponent)
         gate = ($chrooked_bonebreaker_gate.call(self, attacker) rescue false)
         if gate
           movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
           if result == 0
             ($chrooked_log.call("[chrooked:bonebreaker] OBS hook=typemod move=#{movename} bonebreaker=true orig=#{result} result=NEUTRALIZED") rescue nil)
-            result = 8
+            result = 8   # neutral on both engines' 8-base scale (NORMAL_EFFECTIVE)
           else
             ($chrooked_log.call("[chrooked:bonebreaker] OBS hook=typemod move=#{movename} bonebreaker=true orig=#{result} result=UNCHANGED") rescue nil)
           end
@@ -78,8 +75,9 @@ def chrooked_install_bonebreaker_typemod
       end
     end
   end
+  return unless Chrooked.install_typemod("chrooked_bonebreaker_typemod_apply", "pbTypeMod_chrooked_bonebreaker_orig")
   $chrooked_bonebreaker_typemod_installed = true
-  ($chrooked_log.call("[chrooked:bonebreaker] installed pbTypeModifier on PokeBattle_Move") rescue nil)
+  ($chrooked_log.call("[chrooked:bonebreaker] installed type-mod (seam)") rescue nil)
 end
 
 # --- Hook 2: 1.2x damage via pbModifyDamage --------------------------------
@@ -114,9 +112,7 @@ def chrooked_install_bonebreaker_all
   chrooked_install_bonebreaker_modifydamage
 end
 
-if defined?(PokeBattle_Move) &&
-   PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbTypeModifier") &&
-   PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
+if defined?(PokeBattle_Move) && defined?(Chrooked)
   chrooked_install_bonebreaker_all
 elsif defined?(Graphics)
   class << Graphics

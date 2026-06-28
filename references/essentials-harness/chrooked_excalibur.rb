@@ -33,18 +33,15 @@ end
 
 def chrooked_install_excalibur
   return if $chrooked_excalibur_installed
-  return unless defined?(PokeBattle_Move)
-  return unless PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbTypeModifier")
-  PokeBattle_Move.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbTypeModifier_chrooked_excalibur_orig")
-      alias_method :pbTypeModifier_chrooked_excalibur_orig, :pbTypeModifier
-      def pbTypeModifier(type, attacker, opponent)
-        mod = pbTypeModifier_chrooked_excalibur_orig(type, attacker, opponent)
+  return unless defined?(PokeBattle_Move) && defined?(Chrooked)
+  unless PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("chrooked_excalibur_typemod_apply")
+    PokeBattle_Move.class_eval do
+      def chrooked_excalibur_typemod_apply(mod, type, attacker, opponent)
         is_excalibur = (isConst?(@id, PBMoves, :EXCALIBUR) rescue false)
         is_dragon = (opponent && opponent.pbHasType?(:DRAGON) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_excalibur && is_dragon
-          mod = [mod, 16].max
+          mod = [mod, 16].max   # super-effective on both engines' 8-base scale
           ($chrooked_log.call("[chrooked:excalibur] OBS move=#{movename} dragon=#{is_dragon} result=FORCED_SE") rescue nil)
         else
           ($chrooked_log.call("[chrooked:excalibur] OBS move=#{movename} dragon=#{is_dragon} result=NORMAL") rescue nil)
@@ -53,11 +50,12 @@ def chrooked_install_excalibur
       end
     end
   end
+  return unless Chrooked.install_typemod("chrooked_excalibur_typemod_apply", "pbTypeMod_chrooked_excalibur_orig")
   $chrooked_excalibur_installed = true
-  ($chrooked_log.call("[chrooked:excalibur] installed on PokeBattle_Move") rescue nil)
+  ($chrooked_log.call("[chrooked:excalibur] installed type-mod (seam)") rescue nil)
 end
 
-if defined?(PokeBattle_Move) && PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbTypeModifier")
+if defined?(PokeBattle_Move) && defined?(Chrooked)
   chrooked_install_excalibur
 elsif defined?(Graphics)
   class << Graphics
