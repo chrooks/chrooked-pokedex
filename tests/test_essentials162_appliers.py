@@ -1175,3 +1175,21 @@ def test_edit_with_mapped_effect_still_writes_funccode(tmp_path):
     )
     move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
     assert _move_col(target, "ABSORB", 3) == "0DD"
+
+
+def test_absorb_percentage_selects_drain_funccode():
+    """Drain is fraction-specific: 50% -> 0DD, 75% -> 14F. Default (no argument) is 50%;
+    an unmapped fraction stays unresolved rather than draining the wrong amount (#22)."""
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    def absorb(pct):
+        arg = {"absorb_percentage": pct} if pct is not None else None
+        return MoveDef(
+            name="Drain", chrooked_id="drain", type="Grass", category="special",
+            power=60, effect="absorb", argument=arg,
+        )
+
+    assert et.resolve_behavior(absorb(50)).funccode == "0DD"
+    assert et.resolve_behavior(absorb(75)).funccode == "14F"
+    assert et.resolve_behavior(absorb(None)).funccode == "0DD"   # default 50%
+    assert et.resolve_behavior(absorb(25)) is None               # unmapped -> unresolved

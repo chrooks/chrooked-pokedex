@@ -63,6 +63,15 @@ EFFECT_TO_FUNCCODE: dict[str, str] = {
     "confuse": "013",         # verified via CONFUSION, SIGNALBEAM (damage + may confuse)
 }
 
+# `absorb` is fraction-specific in 16.2: the funccode encodes HOW MUCH HP is drained.
+# The neutral `argument.absorb_percentage` picks the right code; an unmapped fraction
+# stays unresolved rather than defaulting to the wrong drain amount.
+ABSORB_PERCENT_TO_FUNCCODE: dict[int, str] = {
+    50: "0DD",   # verified via ABSORB, MEGADRAIN, GIGADRAIN (drain 50%)
+    75: "14F",   # verified via DRAININGKISS, OBLIVIONWING (drain 75%)
+}
+_DEFAULT_ABSORB_PERCENT = 50
+
 # `semi_invulnerable` is PER-MOVE in 16.2 (Fly/Dig/Dive/Bounce each have their own
 # code), so it cannot map from the neutral name alone. We disambiguate by the move's
 # `aka.essentials`/`aka.pokeemerald` hint; an unrecognized one stays unresolved.
@@ -227,6 +236,10 @@ def _resolve_funccode(move: MoveDef) -> tuple[str, str] | None:
         if move.effect == "semi_invulnerable":
             internal = _internal_hint(move)
             code = SEMI_INVULNERABLE_BY_INTERNAL.get(internal) if internal else None
+            return (code, PLAIN_EFFECTCHANCE) if code else None
+        if move.effect == "absorb":
+            percent = (move.argument or {}).get("absorb_percentage", _DEFAULT_ABSORB_PERCENT)
+            code = ABSORB_PERCENT_TO_FUNCCODE.get(percent)
             return (code, PLAIN_EFFECTCHANCE) if code else None
         code = EFFECT_TO_FUNCCODE.get(move.effect)
         return (code, PLAIN_EFFECTCHANCE) if code else None
