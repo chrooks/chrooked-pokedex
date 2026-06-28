@@ -265,6 +265,19 @@ def dropped_flags(move: MoveDef) -> list[str]:
     return _render_flags(move)[1]
 
 
+def specifies_effect(move: MoveDef) -> bool:
+    """Whether the move carries EFFECT intent: a non-default primary or any secondary.
+
+    Distinct from `specifies_behavior` (which also fires on flag/target intent): a move
+    that only retunes flags or target has NO effect intent, so its funccode/effectchance
+    columns must be left alone. Writing a plain `000` there would silently flatten an
+    existing engine funccode the Ruleset never meant to touch — recoil (Brave Bird `0FB`),
+    charge, etc. The neutral schema can't express "remove an effect", so an unspecified
+    effect means "no opinion, keep the engine's code", mirroring how target/flags default.
+    """
+    return move.effect != DEFAULT_EFFECT or bool(move.additional_effects)
+
+
 def specifies_behavior(move: MoveDef) -> bool:
     """Whether the Ruleset move carries ANY behavior intent worth writing.
 

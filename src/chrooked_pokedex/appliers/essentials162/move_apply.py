@@ -124,10 +124,12 @@ def _edit_behavior(
     A move with no behavior intent at all is left wholly untouched (it may be a known
     vanilla move whose existing columns we must not blank).
 
-    Two preservation rules keep an edit from clobbering engine-owned data on a row:
-    the TARGET column is only written when the Ruleset states a non-default target
-    (`selected` means "no opinion" — keep the file's `NearOther`/`Other`), and the
-    FLAGS column is MERGED additively so engine-default letters (b/e/f) survive.
+    Three preservation rules keep an edit from clobbering engine-owned data on a row:
+    the FUNCCODE/EFFECTCHANCE columns are only written when the Ruleset states an EFFECT
+    (a flags/target-only retune leaves the engine's existing code — #22 AC4, never
+    silently flatten recoil/charge to plain `000`); the TARGET column is only written for
+    a non-default target (`selected` means "keep the file's value"); and the FLAGS column
+    is MERGED additively so engine-default letters (b/e/f) survive.
     """
     if not effect_tables.specifies_behavior(move):
         return text
@@ -136,7 +138,12 @@ def _edit_behavior(
         unresolved.append(f"effect:{_effect_label(move)} has no 16.2 funccode -> #12")
         return text
 
+    # A flags-only move never returns None above (plain-hit always resolves to 000), so
+    # this guard — not the None branch — is what spares its existing funccode.
+    specifies_effect = effect_tables.specifies_effect(move)
     for index, value, label in _behavior_columns(behavior):
+        if index in (_FUNCCODE_COL, _EFFECTCHANCE_COL) and not specifies_effect:
+            continue  # no effect intent: never flatten the engine's existing funccode
         if index == _TARGET_COL and move.target == "selected":
             continue  # default target: keep the file's existing value, don't impose
         if index == _FLAGS_COL:

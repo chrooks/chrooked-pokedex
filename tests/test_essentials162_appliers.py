@@ -1066,7 +1066,9 @@ def _named_target(tmp_path: Path) -> Path:
         "﻿1,ABSORB,Absorber,0DD,20,GRASS,Special,100,25,0,NearOther,0,bef,"
         '"Drena PS."\r\n'
         "2,TWISTER,Tornado,00F,40,DRAGON,Special,100,20,20,AllNearFoes,0,bef,"
-        '"Tornado."\r\n',
+        '"Tornado."\r\n'
+        "3,BRAVEBIRD,Pájaro Osado,0FB,120,FLYING,Physical,100,15,0,NearOther,0,abef,"
+        '"Carga con retroceso."\r\n',
         encoding="utf-8",
     )
     return tmp_path
@@ -1119,3 +1121,57 @@ def test_named_create_uses_named_default_target(tmp_path):
     resmap = resolution.ResolutionMap(type_by_name={"ghost": "GHOST"})
     move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
     assert _move_col(target, "ASTRALHAND", 10) == "NearOther"
+
+
+def test_specifies_effect_distinguishes_effect_from_flag_only():
+    from chrooked_pokedex.appliers.essentials162 import effect_tables as et
+
+    flags_only = MoveDef(
+        name="Brave Bird", chrooked_id="bravebird", type="Flying", category="physical",
+        power=120, flags=("contact",), target="selected",
+    )
+    has_effect = MoveDef(
+        name="Absorb", chrooked_id="absorb", type="Grass", category="special",
+        power=20, effect="absorb",
+    )
+    has_secondary = MoveDef(
+        name="Ember", chrooked_id="ember", type="Fire", category="special", power=40,
+        additional_effects=(AdditionalEffect(effect="burn", chance=10),),
+    )
+    assert et.specifies_effect(flags_only) is False
+    assert et.specifies_effect(has_effect) is True
+    assert et.specifies_effect(has_secondary) is True
+
+
+def test_edit_without_effect_intent_preserves_funccode(tmp_path):
+    """#22 AC4 — never silently wrong: a move the Ruleset only retunes for stats/flags
+    must keep its existing funccode, never flattened to plain 000 (Brave Bird keeps its
+    recoil code 0FB)."""
+    target = _named_target(tmp_path)
+    move = MoveDef(
+        name="Brave Bird", chrooked_id="bravebird", type="Flying", category="physical",
+        power=120, accuracy=100, pp=15, flags=("contact",), target="selected",
+        aka={"essentials": "BRAVEBIRD"},
+    )
+    resmap = resolution.ResolutionMap(
+        type_by_name={"flying": "FLYING"}, move_by_name={"bravebird": "BRAVEBIRD"}
+    )
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "BRAVEBIRD", 3) == "0FB"   # recoil code preserved, not 000
+    assert _move_col(target, "BRAVEBIRD", 12) == "abef"  # flags intact
+
+
+def test_edit_with_mapped_effect_still_writes_funccode(tmp_path):
+    """The guard only spares unspecified effects — a move that DOES name a mapped effect
+    still has its funccode written (Absorb -> 0DD)."""
+    target = _named_target(tmp_path)
+    move = MoveDef(
+        name="Absorb", chrooked_id="absorb", type="Grass", category="special",
+        power=20, accuracy=100, pp=25, effect="absorb", target="selected",
+        aka={"essentials": "ABSORB"},
+    )
+    resmap = resolution.ResolutionMap(
+        type_by_name={"grass": "GRASS"}, move_by_name={"absorb": "ABSORB"}
+    )
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, ApplyReport())
+    assert _move_col(target, "ABSORB", 3) == "0DD"
