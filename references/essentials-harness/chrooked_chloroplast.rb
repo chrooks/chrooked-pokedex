@@ -48,6 +48,10 @@ def chrooked_install_chloroplast_solarbeam
   return if $chrooked_chloroplast_solarbeam_installed
   klass = (Object.const_get("PokeBattle_Move_0C4") rescue nil)
   return if klass.nil?
+  # chrooked: IF2's fork renames these per-move seams; skip if absent or alias_method
+  # raises NameError and crashes boot.
+  return unless ["pbTwoTurnAttack", "pbBaseDamageMultiplier"].all? { |n|
+    klass.instance_methods.map { |m| m.to_s }.include?(n) }
   klass.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbTwoTurnAttack_chrooked_chloroplast_orig")
       alias_method :pbTwoTurnAttack_chrooked_chloroplast_orig, :pbTwoTurnAttack
@@ -79,6 +83,8 @@ def chrooked_install_chloroplast_solarblade
   return if $chrooked_chloroplast_solarblade_installed
   klass = (Object.const_get("PokeBattle_Move_CF7") rescue nil)
   return if klass.nil?
+  # chrooked: skip if IF2's fork lacks this seam (alias_method would crash boot).
+  return unless klass.instance_methods.map { |m| m.to_s }.include?("pbTwoTurnAttack")
   klass.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbTwoTurnAttack_chrooked_chloroplast_orig")
       alias_method :pbTwoTurnAttack_chrooked_chloroplast_orig, :pbTwoTurnAttack
@@ -103,6 +109,10 @@ def chrooked_install_chloroplast_weatherball
   return if $chrooked_chloroplast_weatherball_installed
   klass = (Object.const_get("PokeBattle_Move_087") rescue nil)
   return if klass.nil?
+  # chrooked: IF2's fork renames pbModifyType (and may rename pbBaseDamage); skip if
+  # absent or alias_method raises NameError and crashes boot.
+  return unless ["pbModifyType", "pbBaseDamage"].all? { |n|
+    klass.instance_methods.map { |m| m.to_s }.include?(n) }
   klass.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbModifyType_chrooked_chloroplast_orig")
       alias_method :pbModifyType_chrooked_chloroplast_orig, :pbModifyType
@@ -180,6 +190,8 @@ def chrooked_install_chloroplast_synthesis
   return if $chrooked_chloroplast_synthesis_installed
   klass = (Object.const_get("PokeBattle_Move_0D8") rescue nil)
   return if klass.nil?
+  # chrooked: IF2's fork lacks pbEffect on this class; skip or alias_method crashes boot.
+  return unless klass.instance_methods.map { |m| m.to_s }.include?("pbEffect")
   klass.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbEffect_chrooked_chloroplast_orig")
       alias_method :pbEffect_chrooked_chloroplast_orig, :pbEffect
@@ -205,6 +217,8 @@ def chrooked_install_chloroplast_growth
   return if $chrooked_chloroplast_growth_installed
   klass = (Object.const_get("PokeBattle_Move_028") rescue nil)
   return if klass.nil?
+  # chrooked: IF2's fork lacks pbEffect on this class; skip or alias_method crashes boot.
+  return unless klass.instance_methods.map { |m| m.to_s }.include?("pbEffect")
   klass.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbEffect_chrooked_chloroplast_orig")
       alias_method :pbEffect_chrooked_chloroplast_orig, :pbEffect

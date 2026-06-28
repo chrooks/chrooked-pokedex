@@ -73,6 +73,9 @@ def chrooked_install_fullmoon_heal
   return if $chrooked_fullmoon_heal_installed
   klass = (Object.const_get("PokeBattle_Move_0D8") rescue nil)
   return if klass.nil?
+  # chrooked: IF2's fork renames the per-move effect seam — 0D8 has no pbEffect to
+  # alias. Guard or alias_method raises NameError and crashes boot.
+  return unless klass.instance_methods.map { |m| m.to_s }.include?("pbEffect")
   klass.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbEffect_chrooked_fullmoon_orig")
       alias_method :pbEffect_chrooked_fullmoon_orig, :pbEffect

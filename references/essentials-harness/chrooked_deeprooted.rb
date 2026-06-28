@@ -86,6 +86,12 @@ def chrooked_install_deeprooted_drainmoves
       installed_all = false
       next
     end
+    # chrooked: IF2's fork renames the per-move effect seam — these drain-move classes
+    # have no pbEffect to alias. Guard or alias_method raises NameError and crashes boot.
+    unless klass.instance_methods.map { |m| m.to_s }.include?("pbEffect")
+      installed_all = false
+      next
+    end
     klass.class_eval do
       unless instance_methods(false).map { |m| m.to_s }.include?("pbEffect_chrooked_deeprooted_orig")
         alias_method :pbEffect_chrooked_deeprooted_orig, :pbEffect
