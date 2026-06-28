@@ -200,6 +200,11 @@ def _create_row(
         for note in effect_tables.deferred_effects(move):
             unresolved.append(note)
 
+    # Fail loud: a damaging move created with no power lands as 0, which the engine
+    # silently demotes to a Status move. Surface it instead of shipping a dud.
+    if move.category != "status" and columns[_COLUMN["power"]] in ("0", ""):
+        unresolved.append("damaging move created with power 0 -> engine demotes to Status")
+
     text = csv_io.append_row(text, csv_io.join_columns(columns))
     status = "partial" if unresolved else "applied"
     report.add(ReportEntry(

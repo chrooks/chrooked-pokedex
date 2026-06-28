@@ -1268,3 +1268,19 @@ def test_status_plus_flinch_fang_combo():
     # unresolved rather than borrowing Fire Fang's code.
     assert et.resolve_behavior(fang("burn", flags=("contact",))) is None
     assert et.deferred_effects(fang("atk_minus_1", flags=("contact",))) == []
+
+
+def test_created_damaging_move_without_power_is_flagged(tmp_path):
+    """A created physical/special move with no power lands as 0 (engine demotes to Status);
+    the applier must surface that as partial, not ship a silent dud."""
+    target = _target(tmp_path)
+    move = MoveDef(
+        name="Ghost Wing", chrooked_id="ghostwing", type="Psychic", category="special",
+        accuracy=100, pp=10, aka={"essentials": "GHOSTWINGCUSTOM"},
+    )
+    report = ApplyReport()
+    resmap = resolution.build_resolution_map(target, _new_move_ruleset(move))
+    move_apply.apply_moves(target, _new_move_ruleset(move), resmap, report)
+    entry = [e for e in report.entries if e.category == "move"][0]
+    assert entry.status == "partial"
+    assert any("power 0" in f for f in entry.partial_fields)

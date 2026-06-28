@@ -3,6 +3,8 @@ chrooked_id: esperwing
 aka: { pokeemerald: MOVE_ESPER_WING }
 type: Psychic
 category: special
+power: 80
+accuracy: 100
 pp: 10
 description: High critical hit ratio. Ups the user's Speed.
 additional_effects:
