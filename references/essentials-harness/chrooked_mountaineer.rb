@@ -83,7 +83,9 @@ def chrooked_install_mountaineer_sr
   PokeBattle_Battle.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbOnActiveOne_chrooked_mountaineer_orig")
       alias_method :pbOnActiveOne_chrooked_mountaineer_orig, :pbOnActiveOne
-      def pbOnActiveOne(pkmn, onlyabilities = false, moldbreaker = false)
+      # chrooked: forward extra args verbatim — IF2's fork has pbOnActiveOne(battler)
+      # 1-arg; 16.2 is (pkmn, onlyabilities, moldbreaker). Keep pkmn, pass the rest.
+      def pbOnActiveOne(pkmn, *rest)
         cleared = false
         begin
           if pkmn && (pkmn.hasWorkingAbility(:MOUNTAINEER) rescue false) &&
@@ -95,7 +97,7 @@ def chrooked_install_mountaineer_sr
         rescue Exception
         end
         begin
-          ret = pbOnActiveOne_chrooked_mountaineer_orig(pkmn, onlyabilities, moldbreaker)
+          ret = pbOnActiveOne_chrooked_mountaineer_orig(pkmn, *rest)
         ensure
           (pkmn.pbOwnSide.effects[PBEffects::StealthRock] = true if cleared) rescue nil
         end

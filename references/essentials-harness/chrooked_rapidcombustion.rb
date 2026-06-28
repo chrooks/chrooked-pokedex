@@ -40,8 +40,10 @@ def chrooked_install_rapidcombustion
   PokeBattle_Battle.class_eval do
     unless instance_methods(false).map { |m| m.to_s }.include?("pbPriority_chrooked_rapidcombustion_orig")
       alias_method :pbPriority_chrooked_rapidcombustion_orig, :pbPriority
-      def pbPriority(ignorequickclaw = false, log = false)
-        return pbPriority_chrooked_rapidcombustion_orig(ignorequickclaw, log) if @usepriority
+      # chrooked: forward args verbatim — IF2's fork rewrote pbPriority to 0..1 args
+      # (onlySpeedSort); 16.2 is 0..2 (ignorequickclaw, log). *args matches both.
+      def pbPriority(*args)
+        return pbPriority_chrooked_rapidcombustion_orig(*args) if @usepriority
         bumped = []
         begin
           for i in 0...@choices.length
@@ -64,7 +66,7 @@ def chrooked_install_rapidcombustion
           end
         rescue Exception
         end
-        ret = pbPriority_chrooked_rapidcombustion_orig(ignorequickclaw, log)
+        ret = pbPriority_chrooked_rapidcombustion_orig(*args)
         bumped.each { |m, base| (m.instance_variable_set(:@priority, base) rescue nil) }
         ret
       end
