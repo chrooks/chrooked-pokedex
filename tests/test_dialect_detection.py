@@ -52,6 +52,24 @@ def test_detect_english_162_not_tricked_by_language():
     assert detect_dialect(_ENGLISH_162) == "essentials16"
 
 
+def test_detect_ignores_utf8_bom_on_first_line(tmp_path: Path):
+    """A UTF-8 BOM on the leading comment line must not defeat detection.
+
+    Essentials exports PBS files with a leading ``﻿`` BOM; str.strip() doesn't
+    drop it, so without lstrip the BOM-glued comment reads as the first data
+    line and detection falls through to None (the IF2 Hoenn backdrop bug).
+    """
+    pbs = tmp_path / "PBS"
+    pbs.mkdir()
+    (pbs / "moves.txt").write_text(
+        "﻿# header comment\n277,ABSORB,Absorb,0DD,30\n", encoding="utf-8"
+    )
+    (pbs / "pokemon.txt").write_text(
+        "﻿# header comment\n[1]\nName = Bulbasaur\n", encoding="utf-8"
+    )
+    assert detect_dialect(tmp_path) == "essentials16"
+
+
 # ---------------------------------------------------------------------------
 # ac3: garbage / missing PBS returns None
 # ---------------------------------------------------------------------------

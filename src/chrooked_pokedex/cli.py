@@ -171,8 +171,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     ui.add_argument(
         "--reload",
-        action="store_true",
-        help="Dev mode: auto-restart the server when Python source changes.",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Auto-restart the server when Python source changes (default: on). "
+        "Use --no-reload to serve a single process.",
     )
 
     args = parser.parse_args(argv)

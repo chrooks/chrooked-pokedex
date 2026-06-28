@@ -38,7 +38,9 @@ _POKEMON_21_RE = re.compile(r"^\[[A-Za-z_][^\]]*\]\s*$")
 def _first_meaningful_line(text: str) -> str | None:
     """Return the first non-blank, non-comment line, or None."""
     for line in text.splitlines():
-        stripped = line.strip()
+        # PBS files exported by Essentials often carry a UTF-8 BOM on line 1;
+        # str.strip() doesn't drop ﻿, so lstrip it before the comment check.
+        stripped = line.lstrip("﻿").strip()
         if stripped and not stripped.startswith("#"):
             return stripped
     return None

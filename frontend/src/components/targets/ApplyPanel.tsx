@@ -93,6 +93,18 @@ export function ApplyPanel({ target, onViewBackdrop }: Props) {
           {busy ? "Running…" : "Preview"}
         </button>
 
+        {/* Backdrop is a read-only fork ⊕ Ruleset view — no Preview/clean tree
+            needed, so it's always available, not gated behind a preview run. */}
+        <button
+          type="button"
+          id="target-backdrop-button-direct"
+          className="btn"
+          disabled={busy}
+          onClick={() => onViewBackdrop(target.id)}
+        >
+          View dex backdrop
+        </button>
+
         {!confirming ? (
           <button
             type="button"
