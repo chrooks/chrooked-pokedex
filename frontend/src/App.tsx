@@ -388,7 +388,7 @@ function Readout({
   shown: number;
 }) {
   if (kind === "targets") {
-    return <span>targets · preview &amp; apply</span>;
+    return <span>targets · register &amp; manage</span>;
   }
   if (kind !== "dex") {
     return <span>{kind.replace("-", " ")} · read-only</span>;

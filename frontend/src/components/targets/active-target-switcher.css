@@ -73,6 +73,34 @@
   outline: none;
 }
 
+/* Manage affordance: opens the Targets registration screen (the rail tab is
+   gone, so registration lives on the switcher where targets belong). */
+.target-switcher__manage {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.target-switcher__manage:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
+
+.target-switcher__manage:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--chrome);
+}
+
 .target-switcher__actions {
   display: inline-flex;
   align-items: center;

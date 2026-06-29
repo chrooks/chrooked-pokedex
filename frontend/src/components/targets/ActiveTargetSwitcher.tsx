@@ -8,6 +8,8 @@
    is keyboard-accessible and familiar (no bespoke dropdown). */
 
 import type { RefObject } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import type { Target } from "../../types";
 import "./active-target-switcher.css";
 
@@ -74,6 +76,17 @@ export function ActiveTargetSwitcher({
           ))}
         </select>
       </div>
+
+      <button
+        type="button"
+        id="manage-targets-button"
+        className="target-switcher__manage"
+        onClick={onManage}
+        aria-label="Manage targets — register, remove, or inspect a game"
+        title="Manage targets"
+      >
+        <FontAwesomeIcon icon={faSliders} aria-hidden="true" />
+      </button>
 
       {active && (
         <div className="target-switcher__actions" role="group" aria-label="Patch actions">

@@ -4,14 +4,14 @@ import type { DexLayout } from "../hooks/useUrlState";
 import { ReseedNote } from "./ReseedNote";
 import "./device-frame.css";
 
+// The rail lists the dex-data browsing kinds. Targets (registration) is reached
+// from the header active-target switcher; the Ledger lives in the header navbar.
 const KIND_TABS: { key: KindKey; label: string }[] = [
   { key: "dex", label: "Dex" },
   { key: "moves", label: "Moves" },
   { key: "abilities", label: "Abilities" },
   { key: "type-chart", label: "Type Chart" },
   { key: "behaviors", label: "Behaviors" },
-  { key: "targets", label: "Targets" },
-  { key: "ledger", label: "Ledger" },
 ];
 
 type Props = {
@@ -77,8 +77,21 @@ export function DeviceFrame({
           </h1>
         </div>
         {targetBar && <div className="device__target-bar">{targetBar}</div>}
-        <div className="device__readout mono" id="dex-summary">
-          {readout}
+        <div className="device__header-right">
+          <nav className="device__header-nav" aria-label="Records">
+            <button
+              type="button"
+              className="device__nav-tab"
+              data-active={kind === "ledger"}
+              aria-current={kind === "ledger" ? "true" : undefined}
+              onClick={() => onKind("ledger")}
+            >
+              Ledger
+            </button>
+          </nav>
+          <div className="device__readout mono" id="dex-summary">
+            {readout}
+          </div>
         </div>
       </header>
 
