@@ -10,12 +10,12 @@ effects:
     trigger: damage-calc
     when: "this Pokemon uses a move flagged as a sound move"
     effect: "multiply the move's damage by 1.3"
-  - summary: "(Intended) The user's sound moves hit all adjacent foes."
-    trigger: damage-calc
-    when: "this Pokemon uses a single-target sound move in a multi-battle"
+  - summary: "The user's sound moves hit all adjacent foes."
+    trigger: damage-calc  # nearest allowed trigger; really fires at target-select (pbTarget)
+    when: "this Pokemon uses a single-target damaging sound move"
     effect: "expand the move's target set to all adjacent opponents"
-    # NOTE: imperfect trigger fit — this is a target-set change, not a power calc.
-    # NOT IMPLEMENTED in this fork's C (see notes + engine_hints).
+    # Implemented via the pbTarget seam on GameData::Target engines (IF2 fork):
+    # :NearFoe/:NearOther -> :AllNearFoes. See engine_hints.essentials.
 test_cases:
   - given: "Amplifier user uses Hyper Voice (a sound move)"
     expect: "damage is multiplied by 1.3"
@@ -23,9 +23,12 @@ test_cases:
     expect: "no boost; normal damage applies"
   - given: "a Pokemon without Amplifier uses a sound move"
     expect: "no boost; normal damage applies"
+  - given: "Amplifier user uses a single-target sound move (e.g. Bug Buzz) in a double battle"
+    expect: "target expands to all adjacent foes (:AllNearFoes)"
 notes:
-  - "Only the +30% sound boost is implemented in this fork's C. The data description reads 'Hits all adjacent foes' but NO target-set expansion logic was found in battle_util.c, battle_main.c, or battle_script_commands.c — the second effect is intent-only and currently inert."
-  - "Most sound moves (e.g. Hyper Voice, Boomburst) already hit all adjacent foes natively, which may be why no extra code exists."
+  - "Both effects are implemented in the Essentials plugin (chrooked_amplifier.rb): the +30% sound boost via pbModifyDamage, and target expansion via pbTarget. The expansion is live on GameData::Target engines (IF2 fork); on stock 16.2 (integer PBTargets) it stays a verified no-op until that target's pbTarget API is confirmed."
+  - "Most sound moves (e.g. Hyper Voice, Boomburst) already hit all adjacent foes natively; the expansion only changes single-target sound moves like Bug Buzz."
+  - "pokeemerald C still implements only the +30% boost — no target expansion there (see engine_hints)."
 engine_hints:
   pokeemerald: "Boost: src/battle_util.c attacker-ability damage modifier switch (~line 6957): case ABILITY_AMPLIFIER gates on IsSoundMove(move) → UQ_4_12(1.3). Data desc 'Hits all adjacent foes' at src/data/abilities.h:2448 has NO matching target-expansion code — flag as unimplemented."
   essentials: "Battle::Move damage-calc hook — if user ability is Amplifier and move has the sound flag, apply a 1.3x multiplier. Target expansion would need a pbTarget override; not present in source C."
