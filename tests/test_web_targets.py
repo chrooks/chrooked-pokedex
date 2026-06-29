@@ -354,14 +354,21 @@ def test_ac4_restore_runs_even_when_applier_raises(
 ) -> None:
     target_id = _register(client, fork)
 
-    def boom(target, engine, ruleset):  # noqa: ANN001
+    def boom(target, engine, ruleset, **kwargs):  # noqa: ANN001
         # Simulate a mid-run crash AFTER touching a file, to prove finally restores.
+        # Accept the real _run_applier kwargs (holds/target_edits) so the stub
+        # actually runs instead of dying on an arg mismatch before the crash.
         (Path(target) / "half_written.h").write_text("partial\n", encoding="utf-8")
         raise RuntimeError("applier exploded mid-run")
 
     monkeypatch.setattr(targetsmod, "_run_applier", boom)
     response = client.post(f"/api/targets/{target_id}/preview")
     assert response.status_code == 500  # the crash surfaces
+    # ...and it surfaces *descriptively*: the underlying cause + what failed,
+    # not Starlette's opaque "Internal Server Error" page.
+    detail = response.json()["detail"]
+    assert "applier exploded mid-run" in str(detail)
+    assert "preview" in str(detail).lower()
 
     # finally ran the restore: the half-written file is gone, tree clean.
     assert not (fork / "half_written.h").exists()

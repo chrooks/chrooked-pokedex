@@ -413,6 +413,12 @@ def _report_payload(report: ApplyReport) -> dict[str, Any]:
     ``created`` counts entries the applier created; ``data_only`` lists the
     created abilities whose mechanic is unimplemented, each carrying the packet
     link the UI surfaces so the silent-inert-ability trap stays visible.
+
+    ``held`` is the fourth status (target-pinned, deliberately not written);
+    ``by_category`` is a per-category status breakdown (so the UI can say
+    "moves 141 · 2 partial"); ``entries`` lists only the *actionable*
+    (non-applied) entries with their reasons — the bulk applied entries stay as
+    counts so the payload stays small.
     """
     counts = report.counts()
     created = sum(1 for e in report.entries if e.reason.startswith("created"))
@@ -425,11 +431,32 @@ def _report_payload(report: ApplyReport) -> dict[str, Any]:
         for e in report.entries
         if _DATA_ONLY_MARKER in e.reason
     ]
+    by_category: dict[str, dict[str, int]] = {}
+    for entry in report.entries:
+        bucket = by_category.setdefault(
+            entry.category, {"applied": 0, "partial": 0, "blocked": 0, "held": 0}
+        )
+        bucket[entry.status] += 1
+    entries = [
+        {
+            "status": e.status,
+            "category": e.category,
+            "chrooked_id": e.chrooked_id,
+            "symbol": e.symbol,
+            "reason": e.reason,
+            "partial_fields": list(e.partial_fields),
+        }
+        for e in report.entries
+        if e.status != "applied"
+    ]
     return {
         "applied": counts["applied"],
         "partial": counts["partial"],
         "blocked": counts["blocked"],
+        "held": counts["held"],
         "created": created,
+        "by_category": by_category,
+        "entries": entries,
         "data_only": data_only,
         "report_md": report.to_markdown(),
     }

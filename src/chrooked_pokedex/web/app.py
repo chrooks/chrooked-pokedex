@@ -12,6 +12,7 @@ server hosts the SPA separately).
 from __future__ import annotations
 
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Any, Callable
@@ -33,6 +34,8 @@ from . import llm as llmmod
 from . import snapshot as snapmod
 from . import suggest as suggestmod
 from . import targets as targetsmod
+
+_logger = logging.getLogger(__name__)
 
 # The Target registry lives at the project root by default (D4): a gitignored
 # `targets.json` holding machine-specific fork paths, never canon.
@@ -898,6 +901,31 @@ def create_app(
     def _target_error(error: targetsmod.TargetError) -> HTTPException:
         return HTTPException(status_code=error.status, detail=error.detail)
 
+    def _unexpected_target_error(
+        operation: str, target_id: str, error: Exception
+    ) -> HTTPException:
+        """Turn an unexpected crash into an honest 500 instead of an opaque page.
+
+        A non-``TargetError`` failure (e.g. the applier crashing mid-run) would
+        otherwise reach the client as Starlette's plain "Internal Server Error"
+        with no JSON body. Log the full traceback server-side, surface the cause
+        and what failed to the client.
+        """
+        _logger.exception(
+            "Unexpected error during %s of target %r", operation, target_id
+        )
+        # ponytail: surface the real message verbatim (type + str) — this is a
+        # localhost single-user tool whose whole point is honest, debuggable
+        # errors (PRODUCT.md). The full traceback is logged above. Sanitize the
+        # detail only if this app is ever hosted for someone other than its dev.
+        return HTTPException(
+            status_code=500,
+            detail=(
+                f"The {operation} of target {target_id!r} failed "
+                f"({type(error).__name__}): {error}"
+            ),
+        )
+
     @app.get("/api/targets")
     def list_targets() -> list[dict[str, Any]]:
         return [t.as_dict() for t in app.state.targets_registry.list()]
@@ -971,6 +999,8 @@ def create_app(
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
+        except Exception as error:  # applier crash etc. — keep the 500 honest
+            raise _unexpected_target_error("preview", target_id, error) from error
 
     @app.post("/api/targets/{target_id}/apply")
     def apply_target(
@@ -991,6 +1021,8 @@ def create_app(
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
+        except Exception as error:  # applier crash etc. — keep the 500 honest
+            raise _unexpected_target_error("apply", target_id, error) from error
 
     @app.get("/api/targets/{target_id}/dex")
     def get_target_dex(target_id: str) -> list[dict[str, Any]]:
