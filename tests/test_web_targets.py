@@ -903,6 +903,39 @@ def test_ac4_essentials162_preview_clean_and_apply_keeps(
     assert porcelain_after != "", "apply should leave the fork dirty (changes kept)"
 
 
+def test_preview_cache_hit_and_invalidation(
+    essentials162_client: TestClient,
+    essentials162_fork: Path,
+    essentials162_ruleset_dir: Path,
+) -> None:
+    """#63: identical Ruleset+Target previews hit the cache; a Ruleset edit or a
+    real apply forces a fresh report (never stale)."""
+    client = essentials162_client
+    state = client.app.state.targets_state
+    add = client.post(
+        "/api/targets",
+        json={"label": "E", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    target_id = add.json()["id"]
+    preview_url = f"/api/targets/{target_id}/preview"
+
+    client.post(preview_url)  # miss → compute
+    client.post(preview_url)  # hit → reuse
+    assert state.preview_stats == {"hits": 1, "misses": 1}
+
+    # Edit the Ruleset → new fingerprint → next preview recomputes (not stale).
+    (essentials162_ruleset_dir / "meta.yaml").write_text(
+        "base_version: 1.11.2\nschema_version: 1\n# edited\n", encoding="utf-8"
+    )
+    client.post(preview_url)
+    assert state.preview_stats == {"hits": 1, "misses": 2}
+
+    # A real apply mutates the Target; the next preview must not serve a stale slot.
+    client.post(f"/api/targets/{target_id}/apply", json={})
+    client.post(preview_url)
+    assert state.preview_stats["misses"] == 3
+
+
 def test_essentials_preview_succeeds_in_dirty_git_repo(
     essentials162_client: TestClient, essentials162_fork: Path
 ) -> None:

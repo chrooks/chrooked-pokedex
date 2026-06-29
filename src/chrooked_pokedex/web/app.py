@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import threading
 from pathlib import Path
 from typing import Any, Callable
 
@@ -25,6 +26,7 @@ from .. import distribute as distmod
 from .. import ledger as ledgermod
 from ..behavior import render_packet
 from ..env import load_env_file
+from ..fingerprint import hash_ruleset_dir
 from ..model import Ruleset
 from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
@@ -72,6 +74,23 @@ def create_app(
         Path(targets_path) if targets_path is not None else DEFAULT_TARGETS_PATH
     )
     app.state.targets_state = targetsmod.TargetState()
+
+    # Dex read-cache (#59): the base⊕Ruleset merge is deterministic and read-heavy,
+    # so cache it keyed on (snapshot identity, ruleset fingerprint). A changed input
+    # is a new key — no manual invalidation, never a stale dex. Single slot: a new
+    # key overwrites the old. `# ponytail:` one global lock, fine for one process.
+    _dex_cache: dict[str, Any] = {"key": None, "dex": None}
+    _dex_cache_lock = threading.Lock()
+    app.state.dex_cache_stats = {"hits": 0, "misses": 0}
+
+    def _dex_cache_key() -> tuple[Any, ...] | None:
+        # Stat (not read) the 2.9 MB snapshot for cheap identity; fingerprint the
+        # Ruleset bytes WITHOUT a full load so a hit can skip the load entirely.
+        try:
+            st = snapshot_path.stat()
+        except OSError:
+            return None
+        return ((st.st_mtime_ns, st.st_size), hash_ruleset_dir(ruleset_dir))
 
     def _load_snapshot_or_503() -> dict[str, Any]:
         """Load the base snapshot, or 503 with an actionable message.
@@ -121,8 +140,24 @@ def create_app(
 
     @app.get("/api/dex")
     def get_dex() -> list[dict[str, Any]]:
+        key = _dex_cache_key()
+        if key is not None:
+            with _dex_cache_lock:
+                if _dex_cache["key"] == key:
+                    app.state.dex_cache_stats["hits"] += 1
+                    # Returns the cached list by reference (no copy — copying it
+                    # would re-walk ~1000 species per hit and erase the win).
+                    # Contract: the cached dex is READ-ONLY; callers must not
+                    # mutate it. FastAPI only serializes (reads) it.
+                    return _dex_cache["dex"]
         snapshot = _load_snapshot_or_503()
-        return dexmod.build_dex(snapshot, _load_ruleset_or_503())
+        dex = dexmod.build_dex(snapshot, _load_ruleset_or_503())
+        if key is not None:
+            with _dex_cache_lock:
+                _dex_cache["key"] = key
+                _dex_cache["dex"] = dex
+                app.state.dex_cache_stats["misses"] += 1
+        return dex
 
     @app.get("/api/dex/{chrooked_id}")
     def get_dex_entry(chrooked_id: str) -> dict[str, Any]:

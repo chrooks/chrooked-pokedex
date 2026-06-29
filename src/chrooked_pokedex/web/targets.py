@@ -44,6 +44,7 @@ from ..appliers.essentials.data_backup import (
 )
 from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
 from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
+from ..fingerprint import hash_files, hash_ruleset_dir
 from .. import ledger as ledgermod
 from ..model import Ruleset
 from ..model.compose import compose_ruleset, overlay_touched_fields
@@ -213,6 +214,15 @@ class TargetState:
         self._registry_guard = threading.Lock()
         self._locks: dict[str, threading.Lock] = {}
         self._snapshots: dict[str, dict[str, Any]] = {}
+        # Preview report cache (#63): one slot per Target path holding
+        # ((ruleset_fp, target_fp), payload). A changed Ruleset or Target yields a
+        # new key, so the slot self-invalidates; a real apply drops it explicitly.
+        self._previews: dict[str, tuple[tuple[str, str], dict[str, Any]]] = {}
+        # Counters are shared across Targets but each preview holds only its own
+        # per-fork lock, so guard the increments with their own lock to avoid a
+        # lost-update race when two different Targets preview concurrently.
+        self.preview_stats = {"hits": 0, "misses": 0}
+        self._stats_lock = threading.Lock()
 
     def lock_for(self, fork_path: str) -> threading.Lock:
         with self._registry_guard:
@@ -525,6 +535,28 @@ def _load_target_layers(
 # --- Orchestration -------------------------------------------------------- #
 
 
+def _preview_cache_key(
+    target: Target, ruleset_dir: Optional[Path]
+) -> tuple[str, str] | None:
+    """Key for the preview cache: (ruleset fingerprint, target fingerprint).
+
+    Returns None when the inputs can't be fingerprinted cheaply, which disables
+    caching for that call — correctness over a cache hit. Essentials targets
+    fingerprint their ``PBS/*.txt`` inputs (exactly what the applier reads and
+    ``_snapshot_pbs_files`` snapshots). ``# ponytail:`` pokeemerald preview stays
+    uncached until it matters — enumerating its C inputs isn't worth it yet.
+    """
+    if ruleset_dir is None or target.engine != "essentials":
+        return None
+    pbs = Path(target.path) / "PBS"
+    if not pbs.is_dir():
+        return None
+    txts = sorted(pbs.glob("*.txt"))
+    if not txts:
+        return None
+    return (hash_ruleset_dir(Path(ruleset_dir)), hash_files(txts, pbs))
+
+
 def preview_target(
     target: Target, ruleset: Ruleset, state: TargetState,
     ruleset_dir: Optional[Path] = None,
@@ -545,6 +577,16 @@ def preview_target(
     fork = Path(target.path)
     lock = state.lock_for(target.path)
     with lock:
+        # Preview cache (#63): identical Ruleset + Target inputs → reuse the last
+        # report and skip the applier + restore churn entirely.
+        cache_key = _preview_cache_key(target, ruleset_dir)
+        if cache_key is not None:
+            cached = state._previews.get(target.path)
+            if cached is not None and cached[0] == cache_key:
+                with state._stats_lock:
+                    state.preview_stats["hits"] += 1
+                return cached[1]
+
         # The git gate + git restore are the pokeemerald (C source) path.
         # Essentials targets operate on PBS/*.txt and use the dirty-safe snapshot
         # restore even when the game folder happens to sit inside a git repo —
@@ -570,7 +612,12 @@ def preview_target(
             report = _run_applier(
                 fork, target.engine, ruleset, holds=holds, target_edits=target_edits
             )
-            return _report_payload(report)
+            payload = _report_payload(report)
+            if cache_key is not None:
+                state._previews[target.path] = (cache_key, payload)
+                with state._stats_lock:
+                    state.preview_stats["misses"] += 1
+            return payload
         except BaseException as error:  # noqa: BLE001 — re-raised via finally
             applier_error = error
             raise
@@ -634,6 +681,8 @@ def apply_target(
         )
         report.write(fork / "apply-report.md")
         state.invalidate_snapshot(target.path)
+        # Apply changed the Target, so any cached preview for it is now stale.
+        state._previews.pop(target.path, None)
         if ledger_dir is not None:
             scope = f"target:{target.namespace}" if target.namespace else "base"
             blocked = [
