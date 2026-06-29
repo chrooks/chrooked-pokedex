@@ -30,6 +30,7 @@ from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
 from . import crud as crudmod
 from . import dex as dexmod
+from . import folder_picker as pickermod
 from . import llm as llmmod
 from . import snapshot as snapmod
 from . import suggest as suggestmod
@@ -986,6 +987,19 @@ def create_app(
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
         return {"deleted": target_id}
+
+    @app.post("/api/pick-directory")
+    def pick_directory() -> dict[str, str | None]:
+        """Open the host's native folder picker; return {path} (null = cancelled).
+
+        Localhost-only convenience: the browser can't give the server a real
+        filesystem path, so the server pops the OS dialog. 501 when the host has
+        no picker we can drive — the form then falls back to typing the path.
+        """
+        try:
+            return {"path": pickermod.pick_directory()}
+        except pickermod.PickerUnavailable as error:
+            raise HTTPException(status_code=501, detail=str(error)) from error
 
     @app.post("/api/targets/{target_id}/preview")
     def preview_target(target_id: str) -> dict[str, Any]:

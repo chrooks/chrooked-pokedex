@@ -258,6 +258,10 @@ export const api = {
 
   // Targets (M3 — register a fork, preview/apply the Ruleset, read its backdrop)
   targets: (signal?: AbortSignal) => getJson<Target[]>("/api/targets", signal),
+  /** Open the host's native folder picker; resolves to the chosen absolute path,
+      or null if the user cancelled. 501 (ApiError) when the host has no picker. */
+  pickDirectory: () =>
+    sendJson<{ path: string | null }>("POST", "/api/pick-directory"),
   addTarget: (payload: { label: string; path: string; engine: EngineKey }) =>
     sendJson<Target>("POST", "/api/targets", payload),
   deleteTarget: (id: string) =>

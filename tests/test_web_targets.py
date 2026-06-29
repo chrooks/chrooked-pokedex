@@ -938,6 +938,63 @@ def test_essentials_preview_succeeds_in_dirty_git_repo(
 
 
 # ---------------------------------------------------------------------------
+# POST /api/pick-directory — the native folder picker
+# ---------------------------------------------------------------------------
+
+
+def test_pick_directory_returns_chosen_path(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The endpoint returns whatever absolute path the OS dialog yielded."""
+    from chrooked_pokedex.web import folder_picker
+
+    monkeypatch.setattr(folder_picker, "pick_directory", lambda: "/mnt/d/Games/IF2")
+    resp = client.post("/api/pick-directory")
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"path": "/mnt/d/Games/IF2"}
+
+
+def test_pick_directory_cancelled_returns_null(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Cancelling the dialog yields null, not an error."""
+    from chrooked_pokedex.web import folder_picker
+
+    monkeypatch.setattr(folder_picker, "pick_directory", lambda: None)
+    resp = client.post("/api/pick-directory")
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"path": None}
+
+
+def test_pick_directory_unavailable_is_501(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A host with no picker returns 501 so the form falls back to typing."""
+    from chrooked_pokedex.web import folder_picker
+
+    def _unavailable() -> str | None:
+        raise folder_picker.PickerUnavailable("no picker here")
+
+    monkeypatch.setattr(folder_picker, "pick_directory", _unavailable)
+    resp = client.post("/api/pick-directory")
+    assert resp.status_code == 501
+    assert "no picker here" in resp.json()["detail"]
+
+
+def test_pick_directory_dispatch_unavailable_on_unknown_host(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """With no WSL / macOS / zenity, the picker raises PickerUnavailable."""
+    from chrooked_pokedex.web import folder_picker
+
+    monkeypatch.setattr(folder_picker, "_is_wsl", lambda: False)
+    monkeypatch.setattr(folder_picker.sys, "platform", "linux")
+    monkeypatch.setattr(folder_picker.shutil, "which", lambda _name: None)
+    with pytest.raises(folder_picker.PickerUnavailable):
+        folder_picker.pick_directory()
+
+
+# ---------------------------------------------------------------------------
 # dispatch.py unit tests
 # ---------------------------------------------------------------------------
 

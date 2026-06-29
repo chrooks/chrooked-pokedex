@@ -24,9 +24,29 @@ export function TargetAddForm({ onAdded }: Props) {
   const [draft, setDraft] = useState<AddTargetDraft>(EMPTY);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isPicking, setIsPicking] = useState(false);
 
   function set<K extends keyof AddTargetDraft>(key: K, value: AddTargetDraft[K]) {
     setDraft((d) => ({ ...d, [key]: value }));
+  }
+
+  // Pop the host's native folder dialog (server-side) and drop the chosen path
+  // into the field. The browser can't read a real path, so the server picks.
+  async function handleBrowse() {
+    setIsPicking(true);
+    setError(null);
+    try {
+      const { path } = await api.pickDirectory();
+      if (path) set("path", path); // null = the user cancelled
+    } catch (caught: unknown) {
+      setError(
+        caught instanceof ApiError && caught.status === 501
+          ? "No folder picker on this host — type the path instead."
+          : "Could not open the folder picker.",
+      );
+    } finally {
+      setIsPicking(false);
+    }
   }
 
   async function handleSubmit() {
@@ -71,17 +91,31 @@ export function TargetAddForm({ onAdded }: Props) {
             onChange={(event) => set("label", event.target.value)}
           />
         </label>
-        <label className="target-add__field target-add__field--path">
-          <span className="target-add__label">Absolute path to the game directory</span>
-          <input
-            id="target-add-path"
-            className="target-add__input mono"
-            type="text"
-            placeholder="/Users/you/ROMs/dreamstone"
-            value={draft.path}
-            onChange={(event) => set("path", event.target.value)}
-          />
-        </label>
+        <div className="target-add__field target-add__field--path">
+          <label className="target-add__label" htmlFor="target-add-path">
+            Absolute path to the game directory
+          </label>
+          <div className="target-add__path-row">
+            <input
+              id="target-add-path"
+              className="target-add__input mono"
+              type="text"
+              placeholder="/Users/you/ROMs/dreamstone"
+              value={draft.path}
+              onChange={(event) => set("path", event.target.value)}
+            />
+            <button
+              type="button"
+              id="target-add-browse"
+              className="btn target-add__browse"
+              onClick={() => void handleBrowse()}
+              disabled={isPicking}
+              title="Pick the folder in a native dialog"
+            >
+              {isPicking ? "Opening…" : "Browse…"}
+            </button>
+          </div>
+        </div>
         <label className="target-add__field">
           <span className="target-add__label">Engine</span>
           <select
