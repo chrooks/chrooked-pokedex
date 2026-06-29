@@ -80,7 +80,13 @@ module Chrooked
     begin
       GameData::Move.each do |m|
         sym = m.id
-        PBMoves.const_set(sym, sym) unless PBMoves.const_defined?(sym)
+        # Per-id rescue: a move id that isn't a valid Ruby constant name (a fusion/odd
+        # id) would otherwise raise NameError and abort the whole sweep before reaching
+        # later moves (EXCALIBUR etc.). Skip the bad one, keep populating the rest.
+        begin
+          PBMoves.const_set(sym, sym) unless PBMoves.const_defined?(sym)
+        rescue Exception
+        end
       end
       @pbmoves_ready = true
       ($chrooked_log.call("[chrooked:compat] PBMoves constants populated (if_fork)") rescue nil)
