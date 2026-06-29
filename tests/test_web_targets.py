@@ -937,6 +937,49 @@ def test_essentials_preview_succeeds_in_dirty_git_repo(
     assert {"applied", "by_category", "entries", "held"} <= set(preview.json())
 
 
+def test_apply_backs_up_essentials_data_once(
+    essentials162_client: TestClient, essentials162_fork: Path
+) -> None:
+    """A real Essentials apply copies Data/ → Data.bak once, and never clobbers
+    an existing backup — the boot-recompile brick net for IF2-class forks."""
+    add = essentials162_client.post(
+        "/api/targets",
+        json={"label": "Backup", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    target_id = add.json()["id"]
+    data = essentials162_fork / "Data"
+    data.mkdir()
+    (data / "core.dat").write_text("ORIGINAL", encoding="utf-8")
+
+    first = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert first.status_code == 200, first.text
+    assert first.json()["data_backup"]["status"] == "created"
+    backup = essentials162_fork / "Data.bak"
+    assert (backup / "core.dat").read_text(encoding="utf-8") == "ORIGINAL"
+
+    # A later apply must NOT overwrite the good backup with an (now bricked) Data/.
+    (data / "core.dat").write_text("BRICKED", encoding="utf-8")
+    second = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert second.status_code == 200, second.text
+    assert second.json()["data_backup"]["status"] == "kept"
+    assert (backup / "core.dat").read_text(encoding="utf-8") == "ORIGINAL"
+
+
+def test_apply_skips_backup_when_no_data_dir(
+    essentials162_client: TestClient, essentials162_fork: Path
+) -> None:
+    """No Data/ directory → nothing to back up; the apply still succeeds."""
+    add = essentials162_client.post(
+        "/api/targets",
+        json={"label": "NoData", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    target_id = add.json()["id"]
+    assert not (essentials162_fork / "Data").exists()
+    resp = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["data_backup"]["status"] == "skipped"
+
+
 # ---------------------------------------------------------------------------
 # POST /api/pick-directory — the native folder picker
 # ---------------------------------------------------------------------------

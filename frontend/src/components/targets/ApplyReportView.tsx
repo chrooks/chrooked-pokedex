@@ -89,6 +89,18 @@ export function ApplyReportView({ report, mode }: Props) {
         </span>
       </h3>
 
+      {report.data_backup && report.data_backup.status !== "skipped" && (
+        <p
+          className="report__backup"
+          id="apply-data-backup"
+          data-status={report.data_backup.status}
+        >
+          {report.data_backup.status === "created"
+            ? "Backed up Data/ → Data.bak before writing (boot-recompile safety net)."
+            : report.data_backup.reason + "."}
+        </p>
+      )}
+
       <div
         className="report__counts"
         id="apply-report-counts"

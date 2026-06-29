@@ -462,6 +462,45 @@ def _report_payload(report: ApplyReport) -> dict[str, Any]:
     }
 
 
+def _backup_essentials_data(fork: Path) -> dict[str, Any]:
+    """Back up an Essentials game's ``Data/`` once before a real apply.
+
+    IF2-class targets recompile the edited PBS into ``Data/*.dat`` on the next
+    boot — Essentials ``File.delete``s the old ``.dat`` first, so an incomplete
+    PBS bricks mid-compile with the ``.dat`` already gone (and not in the Recycle
+    Bin). A one-time ``Data.bak`` is the only recovery net.
+
+    Copies ``Data/`` → ``Data.bak`` only when ``Data.bak`` does NOT already
+    exist, so a later apply can't clobber a good backup with an already-bricked
+    ``Data/``. Returns a status dict the UI surfaces. If the copy fails the
+    partial backup is removed and the apply aborts (a 500) — the user opted into
+    the net, so we never proceed pretending it's there.
+    """
+    data = fork / "Data"
+    if not data.is_dir():
+        return {"status": "skipped", "reason": "no Data/ directory", "path": None}
+    backup = fork / "Data.bak"
+    if backup.exists():
+        return {
+            "status": "kept",
+            "reason": "Data.bak already exists — left untouched",
+            "path": str(backup),
+        }
+    try:
+        shutil.copytree(data, backup)
+    except OSError as error:
+        shutil.rmtree(backup, ignore_errors=True)  # drop any partial copy
+        raise TargetError(
+            500,
+            (
+                f"Could not back up {data} → {backup} before applying: {error}. "
+                "Apply aborted to protect the game; free space or back up Data/ "
+                "by hand, then retry."
+            ),
+        ) from error
+    return {"status": "created", "reason": "", "path": str(backup)}
+
+
 def _run_applier(
     target: Path, engine: str, ruleset: Ruleset,
     holds: "HoldSet | None" = None, target_edits: "TargetEdits | None" = None,
@@ -599,6 +638,12 @@ def apply_target(
                 require_clean_git_status(fork, force=force)
             except DirtyWorkingTree as error:
                 raise TargetError(409, str(error)) from error
+        # Essentials forks recompile PBS → Data/*.dat on boot; back Data/ up once
+        # before writing so a bricking recompile is recoverable (raises if it
+        # can't, aborting the apply).
+        data_backup = (
+            _backup_essentials_data(fork) if target.engine == "essentials" else None
+        )
         holds, target_edits = _load_target_layers(ruleset_dir, target)
         report = _run_applier(
             fork, target.engine, ruleset, holds=holds, target_edits=target_edits
@@ -623,7 +668,9 @@ def apply_target(
                     "blocked_entries": blocked,
                 },
             )
-        return _report_payload(report)
+        payload = _report_payload(report)
+        payload["data_backup"] = data_backup
+        return payload
 
 
 def _prettify_internal_name(internal: str) -> str:

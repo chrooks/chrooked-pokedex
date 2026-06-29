@@ -491,6 +491,14 @@ export interface ApplyReportSummary {
   entries: ReportEntry[];
   data_only: DataOnlyEntry[];
   report_md: string;
+  /** Essentials Data/ backup outcome — present only on a real apply (the boot
+      recompile can brick an IF2-class fork; Data.bak is the recovery net).
+      Absent on preview and pokeemerald. */
+  data_backup?: {
+    status: "created" | "kept" | "skipped";
+    reason: string;
+    path: string | null;
+  } | null;
 }
 
 /** The markdown packet for one behavior, fetched on demand from a DATA-ONLY

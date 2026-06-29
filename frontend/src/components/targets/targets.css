@@ -699,6 +699,16 @@
   color: color-mix(in oklch, var(--type-grass) 70%, var(--text));
 }
 
+/* Data/ backup outcome line (apply only). */
+.report__backup {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+}
+.report__backup[data-status="created"] {
+  color: color-mix(in oklch, var(--type-grass) 70%, var(--text));
+}
+
 .report__data-only {
   display: flex;
   flex-direction: column;
