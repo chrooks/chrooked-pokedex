@@ -7,7 +7,7 @@ import "./device-frame.css";
 // The rail lists the dex-data browsing kinds. Targets (registration) is reached
 // from the header active-target switcher; the Ledger lives in the header navbar.
 const KIND_TABS: { key: KindKey; label: string }[] = [
-  { key: "dex", label: "Dex" },
+  { key: "dex", label: "Species" },
   { key: "moves", label: "Moves" },
   { key: "abilities", label: "Abilities" },
   { key: "type-chart", label: "Type Chart" },
