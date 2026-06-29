@@ -31,3 +31,6 @@ feature_requests/*
 # Local secrets/config (keep .env.example committed)
 .env
 !.env.example
+
+# Cowork handoffs/runtime — machine-local
+.cowork/
