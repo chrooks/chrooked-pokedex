@@ -903,6 +903,40 @@ def test_ac4_essentials162_preview_clean_and_apply_keeps(
     assert porcelain_after != "", "apply should leave the fork dirty (changes kept)"
 
 
+def test_essentials_preview_succeeds_in_dirty_git_repo(
+    essentials162_client: TestClient, essentials162_fork: Path
+) -> None:
+    """An Essentials game inside a DIRTY git repo still previews.
+
+    IF2 lives inside a git repo with hundreds of uncommitted modding edits.
+    Essentials uses the dirty-safe PBS-snapshot restore, not the pokeemerald
+    clean-tree gate (which has no force on preview), so a dirty git tree must
+    not 409 the preview of an Essentials target.
+    """
+    add = essentials162_client.post(
+        "/api/targets",
+        json={
+            "label": "Dirty Essentials",
+            "path": str(essentials162_fork),
+            "engine": "essentials",
+        },
+    )
+    target_id = add.json()["id"]
+
+    # Dirty the tree the way a real game folder is dirty.
+    (essentials162_fork / "uncommitted_mod.txt").write_text("dirty\n", encoding="utf-8")
+    porcelain = subprocess.run(
+        ["git", "-C", str(essentials162_fork), "status", "--porcelain"],
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert porcelain != "", "precondition: the fork must be dirty"
+
+    preview = essentials162_client.post(f"/api/targets/{target_id}/preview")
+    assert preview.status_code == 200, preview.text  # not 409
+    assert {"applied", "by_category", "entries", "held"} <= set(preview.json())
+
+
 # ---------------------------------------------------------------------------
 # dispatch.py unit tests
 # ---------------------------------------------------------------------------

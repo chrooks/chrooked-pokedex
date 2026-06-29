@@ -522,7 +522,12 @@ def preview_target(
     fork = Path(target.path)
     lock = state.lock_for(target.path)
     with lock:
-        is_git = _is_git_repo(fork)
+        # The git gate + git restore are the pokeemerald (C source) path.
+        # Essentials targets operate on PBS/*.txt and use the dirty-safe snapshot
+        # restore even when the game folder happens to sit inside a git repo —
+        # otherwise a dirty repo (e.g. IF2 with hundreds of uncommitted modding
+        # edits) would 409 every Preview, which has no force.
+        is_git = target.engine == "pokeemerald" and _is_git_repo(fork)
 
         if is_git:
             # Git path: gate on clean tree first.
@@ -586,7 +591,10 @@ def apply_target(
     fork = Path(target.path)
     lock = state.lock_for(target.path)
     with lock:
-        if _is_git_repo(fork):
+        # Clean-tree gate is pokeemerald-only (see preview_target): an Essentials
+        # game writes PBS text and keeps it — there is no git restore to protect,
+        # so a git repo it happens to live in must not gate the apply.
+        if target.engine == "pokeemerald" and _is_git_repo(fork):
             try:
                 require_clean_git_status(fork, force=force)
             except DirtyWorkingTree as error:
