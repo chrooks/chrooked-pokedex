@@ -35,6 +35,7 @@ def route_apply(
     dialect: str = "auto",
     holds: "HoldSet | None" = None,
     target_edits: "TargetEdits | None" = None,
+    create_absent: bool = True,
 ) -> None:
     """Detect the format, dispatch to the right applier, and mutate ``report``.
 
@@ -93,7 +94,8 @@ def route_apply(
         from ..cli import _apply_essentials162
 
         _apply_essentials162(
-            target, category, ruleset, report, holds=holds, target_edits=target_edits
+            target, category, ruleset, report, holds=holds, target_edits=target_edits,
+            create_absent=create_absent,
         )
     else:
         # Imported inline to avoid circular: cli → dispatch → cli.

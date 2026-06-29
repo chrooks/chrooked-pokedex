@@ -116,6 +116,15 @@ def main(argv: list[str] | None = None) -> int:
         "(ruleset/targets/<slug>/holds.yaml) and additive edits (edits.yaml). Omit "
         "to apply the base Ruleset with no per-Target holds (today's behavior).",
     )
+    apply.add_argument(
+        "--no-create-species",
+        dest="create_absent",
+        action="store_false",
+        default=True,
+        help="Do NOT create species absent from the target; report them blocked "
+        "instead. Use for a target with a small dex (e.g. Infinite Fusion 2 Hoenn) "
+        "where creating the full national dex floods it with unusable stubs.",
+    )
 
     harvest = sub.add_parser(
         "harvest", help="Propose Ruleset edits from a fork's in-game tuning."
@@ -187,7 +196,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "apply":
         return _run_apply(
             args.target, args.engine, args.category, args.ruleset, args.force,
-            args.dialect, args.slug,
+            args.dialect, args.slug, args.create_absent,
         )
     if args.command == "harvest":
         return _run_harvest(args.fork, args.ruleset, args.dry_run)
@@ -306,6 +315,7 @@ _ESSENTIALS162_CATEGORIES = ("abilities", "moves", "species", "learnset", "evolu
 def _apply_essentials162(
     target: Path, category: str, ruleset, report: ApplyReport,
     holds: "HoldSet | None" = None, target_edits: "TargetEdits | None" = None,
+    create_absent: bool = True,
 ) -> None:
     """Apply the Ruleset's data tiers into a target's Essentials 16.2 PBS.
 
@@ -339,7 +349,8 @@ def _apply_essentials162(
             target, ruleset, resmap, report
         )
         species_changed = essentials162_species.apply_species(
-            target, ruleset, resmap, report, skip=handled, holds=holds
+            target, ruleset, resmap, report, skip=handled, holds=holds,
+            create_absent=create_absent,
         )
         changed = forms_changed | species_changed
         print(f"species: {len(changed)} file(s) changed")
@@ -369,6 +380,7 @@ def _run_apply(
     force: bool,
     dialect: str = "auto",
     slug: str | None = None,
+    create_absent: bool = True,
 ) -> int:
     """Apply the Ruleset to a target fork.
 
@@ -420,7 +432,7 @@ def _run_apply(
 
     route_apply(
         target, engine, ruleset, report, category=category, dialect=dialect,
-        holds=holds, target_edits=target_edits,
+        holds=holds, target_edits=target_edits, create_absent=create_absent,
     )
 
     # When the format was unrecognized, route_apply writes a blocked entry and

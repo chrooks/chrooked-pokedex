@@ -149,3 +149,34 @@ def test_incomplete_base_stats_block_reason_names_the_gap(tmp_path):
     assert entry.status == "blocked"
     assert "stats:" in entry.reason
     assert "def" in entry.reason and "spe" in entry.reason
+
+
+def test_created_section_includes_shape(tmp_path):
+    """IF2 (the Essentials v19 fork) REQUIRES a Shape field — a created section lacking
+    it crashes compile_pokemon (BodyShape.get(nil)). Created sections must emit a
+    default Shape. (16.2/Africanvs has no Shape field and ignores the extra line.)"""
+    target = _target(tmp_path)
+    ruleset = _Ruleset(
+        species={"testmon": SpeciesOverride(name="Testmon", chrooked_id="testmon")},
+        base_species={"testmon": _BASE_FULL},
+    )
+    text, _ = _apply(target, ruleset)
+    assert "Shape=" in _section(text, "TESTMON")
+
+
+def test_create_absent_disabled_blocks_creatable_species(tmp_path):
+    """With create_absent=False (a Target opting out — e.g. IF2's small Hoenn dex), an
+    otherwise-creatable absent species is BLOCKED, not created, so a re-apply cannot
+    flood the target with national-dex stubs it cannot use."""
+    target = _target(tmp_path)
+    ruleset = _Ruleset(
+        species={"testmon": SpeciesOverride(name="Testmon", chrooked_id="testmon")},
+        base_species={"testmon": _BASE_FULL},
+    )
+    resmap = resolution.build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    species_apply.apply_species(target, ruleset, resmap, report, create_absent=False)
+    text, _ = pbs_io.read(target / "PBS" / "pokemon.txt")
+    assert "InternalName=TESTMON" not in text
+    entry = next(e for e in report.entries if e.chrooked_id == "testmon")
+    assert entry.status == "blocked"

@@ -55,6 +55,10 @@ _REQUIRED_NEW_FIELDS: tuple[tuple[str, str], ...] = (
     ("Height", "1.0"),
     ("Weight", "10.0"),
     ("Color", "Black"),
+    # IF2 (the Essentials v19 fork) REQUIRES Shape — compile_pokemon does
+    # GameData::BodyShape.get(contents["Shape"]).id and crashes on nil. "Head" is a
+    # valid BodyShape id there; 16.2/Africanvs has no Shape field and ignores the line.
+    ("Shape", "Head"),
     ("Kind", "Pokemon"),
     ("Pokedex", "No data."),
     ("StepsToHatch", "5120"),
@@ -68,6 +72,7 @@ def apply_species(
     target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
     skip: set[str] | None = None,
     holds: HoldSet | None = None,
+    create_absent: bool = True,
 ) -> set[Path]:
     """Apply species scalar Overrides into `pokemon.txt`.
 
@@ -111,6 +116,15 @@ def apply_species(
             base = (getattr(ruleset, "base_species", None) or {}).get(chrooked_id)
             if not (has_override or base):
                 continue  # absent, and no data to create a section from
+            if not create_absent:
+                # This Target opts out of creating absent species (e.g. IF2's small
+                # Hoenn dex — creating the full national dex floods it with spriteless
+                # stubs). Report blocked, write nothing.
+                report.add(ReportEntry(
+                    status="blocked", category="species", chrooked_id=chrooked_id,
+                    reason="absent-species creation disabled for this target",
+                ))
+                continue
             effective = _merge_base(override, base) if base else override
             text = _create_or_block(text, effective, resmap, report, chrooked_id)
 
