@@ -34,7 +34,7 @@ def chrooked_install_exhaust
     PokeBattle_Battler.class_eval do
       def chrooked_exhaust_apply(move, user, target, damage)
         dealt = (damage && damage > 0) rescue false
-        contact = (move && move.isContactMove?) rescue false
+        contact = Chrooked.contact_move?(move)
         if user && target && dealt && contact && (user.hasWorkingAbility(:EXHAUST) rescue false)
           (Chrooked.lower_stat(target, :accuracy, 1, user) rescue nil)
           ($chrooked_log.call("[chrooked:exhaust] OBS event=hit ability=true effect=lowered target ACCURACY by 1 (contact, no roll)") rescue nil)

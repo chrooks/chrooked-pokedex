@@ -28,6 +28,7 @@ end
 module Chrooked
   @engine = nil
   @pbtypes_ready = false
+  @pbmoves_ready = false
 
   # :ess162 (stock 16.2, has pbType) | :if_fork (IF2, has pbCalcType not pbType) |
   # :unknown. Memoized on first call. Safe to call before classes exist (returns
@@ -66,6 +67,42 @@ module Chrooked
     end
   end
 
+  # IF2's PBMoves compat module lists only IF2's OWN moves as constants, so a custom
+  # move (EXCALIBUR, DRACONICFANG, ...) makes isConst?(@id, PBMoves, :CUSTOM) false
+  # (const_defined? fails) — breaking every move-id gate (fangflinch, excalibur, the
+  # Moonlight/Synthesis checks). Populate PBMoves from GameData::Move (:ID => :ID) so
+  # all moves resolve. @id is a Symbol on this fork, so isConst? then compares
+  # symbol==symbol. 16.2 already has full PBMoves (integers) — never touched there.
+  def self.ensure_pbmoves!
+    return if @pbmoves_ready
+    return unless engine == :if_fork
+    return unless defined?(GameData) && defined?(GameData::Move) && defined?(PBMoves)
+    begin
+      GameData::Move.each do |m|
+        sym = m.id
+        PBMoves.const_set(sym, sym) unless PBMoves.const_defined?(sym)
+      end
+      @pbmoves_ready = true
+      ($chrooked_log.call("[chrooked:compat] PBMoves constants populated (if_fork)") rescue nil)
+    rescue Exception => e
+      ($chrooked_log.call("[chrooked:compat] PBMoves populate ERROR: #{e.class}: #{e.message}") rescue nil)
+    end
+  end
+
+  # Populate both compat constant tables once GameData is up. Plugins call
+  # isConst?(.., PBTypes/PBMoves, ..) DIRECTLY (not via a helper), so these must be
+  # filled eagerly before any battle — armed on Graphics.update at the file bottom.
+  def self.ensure_pb_constants!
+    ensure_pbtypes!
+    ensure_pbmoves!
+  end
+
+  # True if `move` makes contact. Bridges 16.2 isContactMove? and IF2's contactMove?.
+  def self.contact_move?(move)
+    return false unless move
+    (move.isContactMove? rescue (move.contactMove? rescue false))
+  end
+
   # The move's RESOLVED type in the engine's native representation (16.2 integer
   # id; IF2 symbol like :NORMAL), or nil if undeterminable. `move` is the
   # PokeBattle_Move (pass `self` from inside a move method); user/target battlers.
@@ -75,7 +112,7 @@ module Chrooked
     when :ess162
       (move.pbType(move.type, user, target) rescue nil)
     when :if_fork
-      ensure_pbtypes!
+      ensure_pb_constants!
       (move.pbCalcType(user) rescue nil)
     else
       (move.type rescue nil)
@@ -233,3 +270,19 @@ module Chrooked
 end
 
 ($chrooked_log.call("[chrooked:compat] loaded") rescue nil)
+
+# Eagerly populate PBTypes/PBMoves once GameData is up — plugins call isConst? against
+# them DIRECTLY, so the tables must be filled before the first battle, not lazily on a
+# helper call. Armed on Graphics.update; self-disarms after both populate.
+if defined?(Graphics)
+  class << Graphics
+    unless method_defined?(:update_chrooked_compat_orig)
+      alias_method :update_chrooked_compat_orig, :update
+      def update
+        (Chrooked.ensure_pb_constants! rescue nil) if defined?(GameData)
+        update_chrooked_compat_orig
+      end
+    end
+  end
+  ($chrooked_log.call("[chrooked:compat] PB-constant populate armed on Graphics.update") rescue nil)
+end

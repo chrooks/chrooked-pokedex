@@ -44,7 +44,7 @@ def chrooked_install_venomous
       def chrooked_venomous_apply(move, user, target, damage)
         begin
           dealt    = (damage && damage > 0)
-          contact  = (move.isContactMove? rescue false)
+          contact  = Chrooked.contact_move?(move)
           userv    = (user && (user.hasWorkingAbility(:VENOMOUS) rescue false))
           targetv  = (target && (target.hasWorkingAbility(:VENOMOUS) rescue false))
           if dealt && contact && (userv || targetv)

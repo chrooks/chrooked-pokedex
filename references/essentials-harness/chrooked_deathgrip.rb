@@ -36,7 +36,7 @@ def chrooked_install_deathgrip
         begin
           if move && user && target && damage && damage > 0 &&
              (user.hasWorkingAbility(:DEATHGRIP) rescue false) &&
-             (move.isContactMove? rescue false)
+             Chrooked.contact_move?(move)
             if @battle.pbRandom(100) < 30
               if (target.effects[PBEffects::MultiTurn] rescue 0) == 0
                 target.effects[PBEffects::MultiTurn]       = 5 + @battle.pbRandom(2)
