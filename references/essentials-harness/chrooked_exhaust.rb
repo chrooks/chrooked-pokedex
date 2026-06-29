@@ -1,8 +1,8 @@
 # chrooked:exhaust
 # ---------------------------------------------------------------------------
-# Exhaust: on dealing damage with a CONTACT move, unconditionally lower the
-# target's ACCURACY by 1 stage. No random roll. The engine handles the -6 floor
-# (pbReduceStatWithCause returns false / no-ops when already at minimum).
+# Exhaust: on dealing damage with a CONTACT move, 30% chance to lower the
+# target's ACCURACY by 1 stage. The engine handles the -6 floor
+# (the stat-lower no-ops when already at minimum).
 #
 # Seam (verified in Data/Scripts.rxdata): PokeBattle_Battler#pbEffectsOnDealingDamage
 # (move,user,target,damage) — runs after USER deals damage. Vanilla POISONTOUCH and
@@ -36,8 +36,12 @@ def chrooked_install_exhaust
         dealt = (damage && damage > 0) rescue false
         contact = Chrooked.contact_move?(move)
         if user && target && dealt && contact && (user.hasWorkingAbility(:EXHAUST) rescue false)
-          (Chrooked.lower_stat(target, :accuracy, 1, user) rescue nil)
-          ($chrooked_log.call("[chrooked:exhaust] OBS event=hit ability=true effect=lowered target ACCURACY by 1 (contact, no roll)") rescue nil)
+          if @battle.pbRandom(100) < 30
+            (Chrooked.lower_stat(target, :accuracy, 1, user) rescue nil)
+            ($chrooked_log.call("[chrooked:exhaust] OBS event=hit ability=true roll=hit effect=lowered target ACCURACY by 1 (30%)") rescue nil)
+          else
+            ($chrooked_log.call("[chrooked:exhaust] OBS event=hit ability=true roll=failed (>=30) no change") rescue nil)
+          end
         end
       end
     end
