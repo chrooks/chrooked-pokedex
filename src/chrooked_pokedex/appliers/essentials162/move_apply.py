@@ -37,6 +37,7 @@ _FUNCCODE_COL = 3
 _EFFECTCHANCE_COL = 9
 _TARGET_COL = 10
 _FLAGS_COL = 12
+_DESC_COL = 13
 
 # Total columns in a 16.2 moves.txt row, for emitting a brand-new row.
 _ROW_WIDTH = 14
@@ -100,6 +101,16 @@ def _edit_existing(
             changed.append(name)
 
     text = _edit_behavior(text, symbol, move, changed, unresolved, named)
+
+    # Description col is display text (neither #21 scalar nor #22 behavior). Write it
+    # only when the Ruleset states one — an Override means intent; an empty desc leaves
+    # the engine's existing text alone rather than blanking it.
+    if move.description:
+        desired_desc = _quote_desc(move.description)
+        if (csv_io.get_column(text, symbol, _DESC_COL) or "") != desired_desc:
+            text, applied = csv_io.set_column(text, symbol, _DESC_COL, desired_desc)
+            if applied:
+                changed.append("description")
 
     if not changed and not unresolved:
         return text  # already matches — no churn, no report line
@@ -180,7 +191,7 @@ def _create_row(
     # ponytail: a created move's engine-default flags (b/e/f) are #22's job — a brand
     # new row has no existing letters to preserve, so it carries only modeled flags.
     columns[12] = _DEFAULT_FLAGS
-    columns[13] = _DEFAULT_DESC
+    columns[13] = _quote_desc(move.description) if move.description else _DEFAULT_DESC
     for name, index in _COLUMN.items():
         columns[index] = desired.get(name, "0")
 
@@ -276,6 +287,17 @@ def _uses_named_targets(text: str) -> bool:
         if token:
             return any(char.isalpha() for char in token)
     return False
+
+
+def _quote_desc(description: str) -> str:
+    """CSV-quote a move description for col 13: wrap in quotes, neutralize inner quotes.
+
+    Inner double-quotes are swapped to single quotes rather than CSV-escaped. The escape
+    convention differs by Essentials fork — 16.2 uses doubled-quote (""), but IF2's fork
+    uses backslash (\\") and treats a bare " as the field terminator, so a ""-escaped inner
+    quote crashes IF2's compiler (the CLAMP "BINDING_TURNS" brick). Descriptions are flavor
+    text, so neutralizing inner quotes is safe and dialect-agnostic."""
+    return '"' + description.replace('"', "'") + '"'
 
 
 def _internal_of(move: MoveDef) -> str:

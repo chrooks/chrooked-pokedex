@@ -279,6 +279,23 @@ def test_new_move_appends_row(tmp_path):
     assert csv_io.get_column(text, "EXCALIBUR", 5) == "STEEL"
 
 
+def test_new_move_writes_description(tmp_path):
+    target = _target(tmp_path)
+    ruleset = _Ruleset(moves={
+        "clodtoss": MoveDef(
+            name="Clod Toss", chrooked_id="clodtoss", type="Ground",
+            category="physical", power=50, accuracy=100, pp=25, priority=0,
+            description="Flings dirt, crude, but it works.",
+        )
+    })
+    resmap = resolution.build_resolution_map(target, ruleset)
+    move_apply.apply_moves(target, ruleset, resmap, ApplyReport())
+
+    text, _ = pbs_io.read(target / "PBS" / "moves.txt")
+    # Comma inside the desc must stay quoted in one field, not shift later columns.
+    assert csv_io.get_column(text, "CLODTOSS", 13) == '"Flings dirt, crude, but it works."'
+
+
 def test_new_species_appends_section(tmp_path):
     target = _target(tmp_path)
     text, _ = pbs_io.read(target / "PBS" / "pokemon.txt")
@@ -1299,3 +1316,12 @@ def test_created_damaging_move_without_power_is_flagged(tmp_path):
     entry = [e for e in report.entries if e.category == "move"][0]
     assert entry.status == "partial"
     assert any("power 0" in f for f in entry.partial_fields)
+
+
+def test_quote_desc_neutralizes_inner_double_quotes():
+    """IF2's csvfield! uses backslash escaping, not CSV doubled-quote (""), so an inner
+    double-quote ends the field early and crashes compile (the CLAMP "BINDING_TURNS"
+    brick). _quote_desc must emit NO inner double-quote — swap them to single quotes."""
+    out = move_apply._quote_desc('Traps for "BINDING_TURNS" turns.')
+    assert out.count('"') == 2  # only the two wrapping quotes, none inside
+    assert out == "\"Traps for 'BINDING_TURNS' turns.\""
