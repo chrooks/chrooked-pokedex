@@ -13,7 +13,7 @@ import type { Target } from "../../types";
 import { ErrorView, EmptyView } from "../StatusView";
 import { TargetAddForm } from "../targets/TargetAddForm";
 import { TargetList } from "../targets/TargetList";
-import { ApplyPanel } from "../targets/ApplyPanel";
+import { TargetDetail } from "../targets/TargetDetail";
 import "../targets/targets.css";
 import "../editors/editors.css";
 
@@ -87,7 +87,7 @@ export function TargetsTab({ onViewBackdrop }: Props) {
           />
 
           {selected !== null ? (
-            <ApplyPanel
+            <TargetDetail
               key={selected.id}
               target={selected}
               onViewBackdrop={onViewBackdrop}
@@ -95,7 +95,8 @@ export function TargetsTab({ onViewBackdrop }: Props) {
           ) : (
             <div className="apply-panel apply-panel--empty" id="apply-panel-empty">
               <p className="apply-panel__hint">
-                Select a target to Preview or Apply the Ruleset.
+                Select a target to see its detail, or use the header switcher to
+                Preview or Apply the active target.
               </p>
             </div>
           )}

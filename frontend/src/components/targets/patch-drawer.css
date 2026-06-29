@@ -1,0 +1,158 @@
+/* The patch workspace drawer — same overlay/slide-in idiom as the dex detail
+   ledger (components/detail-ledger.css), scoped to its own classes so the two
+   surfaces stay independent. */
+
+.patch-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.patch-overlay__scrim {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: color-mix(in oklch, var(--surface-0) 60%, transparent);
+  backdrop-filter: blur(1px);
+  animation: patch-scrim-in var(--dur-mid) var(--ease-out);
+}
+
+@keyframes patch-scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.patch-drawer {
+  position: relative;
+  width: min(520px, 100%);
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--surface-1);
+  border-left: 1px solid var(--line-strong);
+  box-shadow: -16px 0 40px -20px color-mix(in oklch, var(--surface-0) 90%, black);
+  padding: var(--space-5);
+  animation: patch-drawer-in var(--dur-mid) var(--ease-out);
+}
+
+.patch-drawer:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .patch-overlay__scrim,
+  .patch-drawer {
+    animation: none;
+  }
+}
+
+@keyframes patch-drawer-in {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+
+.patch-drawer__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.patch-drawer__head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.patch-drawer__id {
+  min-width: 0;
+}
+
+.patch-drawer__eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.16em;
+  color: var(--chrome);
+}
+
+.patch-drawer__title {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.patch-drawer__path {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  word-break: break-all;
+}
+
+/* 44px hit area for the close target even though the glyph is small. */
+.patch-drawer__close {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: -8px -8px 0 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.patch-drawer__close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.patch-drawer__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.patch-drawer__engine {
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  padding: 2px var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.patch-drawer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.patch-drawer__arm {
+  margin-left: auto;
+}
+
+.patch-drawer__running {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-5) 0;
+}
+
+@media (max-width: 720px) {
+  .patch-drawer {
+    width: 100%;
+  }
+}

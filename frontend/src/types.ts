@@ -452,13 +452,43 @@ export interface DataOnlyEntry {
   packet_url: string;
 }
 
-/** The result of a preview or apply: the four headline counts, the DATA-ONLY
-    list, and the full markdown report. Shared by both endpoints. */
+/** One status an Apply Report entry can carry. `held` is a deliberate per-Target
+    stand-down (the Target pinned this category) — not a failure, never a silent
+    skip. `applied` entries are not listed individually (only counted). */
+export type ReportStatus = "applied" | "partial" | "blocked" | "held";
+
+/** An actionable Apply Report entry: a record that did NOT fully land (partial /
+    blocked / held), with the reason the applier recorded. */
+export interface ReportEntry {
+  status: ReportStatus;
+  /** "species", "moves", "abilities", "learnset", ... */
+  category: string;
+  chrooked_id: string;
+  /** Resolved target symbol (e.g. SPECIES_GOODRA), when known. */
+  symbol: string | null;
+  /** Why it blocked/partial, or what was held. */
+  reason: string;
+  /** For a partial: the referenced fields that could not resolve. */
+  partial_fields: string[];
+}
+
+/** Per-category status tally, e.g. `{ moves: { applied: 141, partial: 2, ... } }`. */
+export type ReportCategoryCounts = Record<
+  string,
+  { applied: number; partial: number; blocked: number; held: number }
+>;
+
+/** The result of a preview or apply: the headline counts (incl. `held`), the
+    per-category breakdown, the actionable (non-applied) `entries` with reasons,
+    the DATA-ONLY list, and the full markdown report. Shared by both endpoints. */
 export interface ApplyReportSummary {
   applied: number;
   partial: number;
   blocked: number;
+  held: number;
   created: number;
+  by_category: ReportCategoryCounts;
+  entries: ReportEntry[];
   data_only: DataOnlyEntry[];
   report_md: string;
 }

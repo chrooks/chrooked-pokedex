@@ -28,6 +28,9 @@ type Props = {
   layout: DexLayout;
   onLayout: (layout: DexLayout) => void;
   readout: ReactNode;
+  /** The active-target switcher — the highest-hierarchy control (drives the
+      backdrop across every tab), so it sits in the header, not the rail. */
+  targetBar?: ReactNode;
   searchRef: RefObject<HTMLInputElement>;
   children: ReactNode;
 };
@@ -51,6 +54,7 @@ export function DeviceFrame({
   layout,
   onLayout,
   readout,
+  targetBar,
   searchRef,
   children,
 }: Props) {
@@ -72,6 +76,7 @@ export function DeviceFrame({
             chrooked<span className="device__title-dim">·pokedex</span>
           </h1>
         </div>
+        {targetBar && <div className="device__target-bar">{targetBar}</div>}
         <div className="device__readout mono" id="dex-summary">
           {readout}
         </div>

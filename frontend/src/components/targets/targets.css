@@ -245,6 +245,14 @@
   word-break: break-all;
 }
 
+.apply-panel__head-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+  flex: none;
+}
+
 .apply-panel__engine {
   flex: none;
   font-size: var(--text-xs);
@@ -259,10 +267,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
-}
-
-.apply-panel__arm {
-  margin-left: auto;
 }
 
 /* The destructive confirm step — arms after the bare Apply button. */
@@ -304,23 +308,6 @@
   background: var(--surface-2);
   border-color: var(--line);
   color: var(--text-faint);
-}
-
-.apply-panel__backdrop-btn {
-  align-self: flex-start;
-  padding: var(--space-2) var(--space-3);
-  background: color-mix(in oklch, var(--edited) 12%, var(--surface-2));
-  border: 1px solid color-mix(in oklch, var(--edited) 40%, var(--line));
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  transition: all var(--dur-fast) var(--ease-out);
-}
-
-.apply-panel__backdrop-btn:hover {
-  border-color: var(--edited);
-  background: color-mix(in oklch, var(--edited) 20%, var(--surface-2));
 }
 
 /* --- Error State: dirty tree (409) + Force toggle -------------------------*/
@@ -391,6 +378,35 @@
   color: var(--text);
 }
 
+/* Structured RestoreError: the exact recovery command, copyable verbatim. */
+.apply-error__recovery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.apply-error__recovery-label {
+  margin: 0;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.apply-error__recovery-cmd {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: all;
+}
+
 /* --- Apply report ----------------------------------------------------------*/
 
 .report {
@@ -423,35 +439,63 @@
 .report__counts {
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Auto-fit so the five status tiles wrap to a second row inside the narrow
+     drawer instead of clipping (HELD/CREATED were running off the edge). */
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
   gap: var(--space-2);
 }
 
+/* A status tile: a leading tone dot (semantic, not a side-stripe) + the figure
+   over its label. A zero count recedes so the eye lands on what actually moved. */
 .report__count {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
   padding: var(--space-3);
   background: var(--surface-2);
   border: 1px solid var(--line);
-  border-left-width: 3px;
   border-radius: var(--radius-sm);
 }
 
+/* The tone dot is top-anchored next to the label only, so the value below can
+   use the full tile width (4-digit counts must not clip). */
+.report__count::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-3) + 4px);
+  left: var(--space-3);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tone, var(--text-faint));
+}
+
 .report__count[data-tone="ok"] {
-  border-left-color: var(--type-grass);
+  --tone: var(--type-grass);
 }
 .report__count[data-tone="warn"] {
-  border-left-color: var(--edited);
+  --tone: var(--edited);
 }
 .report__count[data-tone="bad"] {
-  border-left-color: var(--chrome);
+  --tone: var(--chrome);
+}
+.report__count[data-tone="hold"] {
+  --tone: var(--text-dim);
 }
 .report__count[data-tone="new"] {
-  border-left-color: var(--type-water);
+  --tone: var(--type-water);
+}
+
+.report__count[data-zero] {
+  opacity: 0.5;
+}
+.report__count[data-zero]::before {
+  background: var(--surface-3);
 }
 
 .report__count-label {
+  padding-left: 13px;
   font-size: var(--text-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -462,6 +506,130 @@
   font-size: var(--text-xl);
   font-weight: 700;
   color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Per-category breakdown — a compact ledger row per touched category. */
+.report__cats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.report__cat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--line);
+}
+.report__cat:last-child {
+  border-bottom: none;
+}
+
+.report__cat-name {
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+
+.report__cat-counts {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.report__cat-ok {
+  color: var(--text);
+}
+
+.report__cat-flag[data-tone="warn"] {
+  color: var(--edited);
+}
+.report__cat-flag[data-tone="bad"] {
+  color: color-mix(in oklch, var(--chrome) 80%, var(--text));
+}
+.report__cat-flag[data-tone="hold"] {
+  color: var(--text-dim);
+}
+
+/* Needs-attention list — the actionable, non-applied entries with reasons. */
+.report__attention {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.report__entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.report__entry {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.report__entry-tag {
+  flex: none;
+  align-self: flex-start;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 1px var(--space-1);
+  border-radius: 3px;
+  background: color-mix(in oklch, var(--tone, var(--text-faint)) 18%, var(--surface-2));
+  color: var(--tone, var(--text-dim));
+}
+.report__entry[data-tone="warn"] {
+  --tone: var(--edited);
+}
+.report__entry[data-tone="bad"] {
+  --tone: var(--chrome);
+}
+.report__entry[data-tone="hold"] {
+  --tone: var(--text-dim);
+}
+
+.report__entry-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.report__entry-id {
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.report__entry-reason {
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  text-wrap: pretty;
+}
+
+.report__entry-fields {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.report__all-clear {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: color-mix(in oklch, var(--type-grass) 70%, var(--text));
 }
 
 .report__data-only {

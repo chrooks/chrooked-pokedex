@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api";
 import { useResource } from "./hooks/useResource";
 import { useUrlState } from "./hooks/useUrlState";
@@ -7,7 +7,7 @@ import { onDataChange } from "./lib/dataChange";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { DexEntry, KindKey, Move } from "./types";
+import type { DexEntry, KindKey, Move, Target } from "./types";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
 import type { DexViewPatch } from "./components/filters/DexControls";
@@ -18,7 +18,8 @@ import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
 import { LedgerTab } from "./components/tabs/LedgerTab";
-import { BackdropChip } from "./components/targets/BackdropChip";
+import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
+import { PatchDrawer } from "./components/targets/PatchDrawer";
 
 /**
  * The Canon dex app shell. Owns the dex fetch, the URL-persisted view state, and
@@ -36,8 +37,25 @@ export default function App() {
   );
   const dex = useResource<DexEntry[]>(dexFetcher);
   const moves = useResource<Move[]>(api.moves);
+  const targets = useResource<Target[]>(api.targets);
   const reloadDex = dex.reload;
   const searchRef = useRef<HTMLInputElement>(null);
+  const targetSelectRef = useRef<HTMLSelectElement>(null);
+
+  // The patch workspace: which action (if any) opened the PatchDrawer. The drawer
+  // always acts on the active target (view.backdrop); null = closed.
+  const [patch, setPatch] = useState<{ trigger: "preview" | "apply" } | null>(
+    null,
+  );
+  const activeTarget = useMemo(
+    () => (targets.data ?? []).find((t) => t.id === view.backdrop) ?? null,
+    [targets.data, view.backdrop],
+  );
+  // If the active target is cleared (Canon) or removed while the drawer is open,
+  // there's nothing to patch — close it.
+  useEffect(() => {
+    if (patch !== null && activeTarget === null) setPatch(null);
+  }, [patch, activeTarget]);
 
   // The dex resource is mounted for the whole app, so a species write made from
   // another screen (e.g. ability/move distribution on its tab) would leave the
@@ -141,8 +159,18 @@ export default function App() {
       update({ kind: "dex", backdrop: targetId, selected: null }),
     [update],
   );
-  const handleClearBackdrop = useCallback(
-    () => update({ backdrop: null }),
+  // The header switcher sets the active target (the backdrop) without leaving
+  // the current tab — backdrop already redraws dex/moves/abilities/type-chart.
+  const handleSetActiveTarget = useCallback(
+    (targetId: string | null) => update({ backdrop: targetId }),
+    [update],
+  );
+  const handleOpenPatch = useCallback(
+    (trigger: "preview" | "apply") => setPatch({ trigger }),
+    [],
+  );
+  const handleManageTargets = useCallback(
+    () => update({ kind: "targets", selected: null }),
     [update],
   );
 
@@ -185,13 +213,24 @@ export default function App() {
     view.kind === "type-chart";
   const isEditedFilterable = isSearchable;
 
+  // Escape closes whatever overlay is open, drawer first (it's the most recent
+  // foreground), then the detail ledger.
+  const handleEscape = useCallback(() => {
+    if (patch !== null) {
+      setPatch(null);
+      return;
+    }
+    if (selectedEntry !== null) update({ selected: null });
+  }, [patch, selectedEntry, update]);
+
   useGlobalKeys({
     onSearch: () => searchRef.current?.focus(),
     onToggleEdited: () =>
       isEditedFilterable && update({ editedOnly: !view.editedOnly }),
-    onEscape: () => selectedEntry !== null && update({ selected: null }),
+    onSwitchTarget: () => targetSelectRef.current?.focus(),
+    onEscape: handleEscape,
     enabled: isEditedFilterable,
-    hasSelection: selectedEntry !== null,
+    hasSelection: selectedEntry !== null || patch !== null,
   });
 
   return (
@@ -207,23 +246,20 @@ export default function App() {
       layout={view.layout}
       onLayout={(layout) => update({ layout })}
       searchRef={searchRef}
+      targetBar={
+        <ActiveTargetSwitcher
+          targets={targets.data ?? []}
+          activeId={view.backdrop ?? null}
+          onSetActive={handleSetActiveTarget}
+          onPreview={() => handleOpenPatch("preview")}
+          onApply={() => handleOpenPatch("apply")}
+          onManage={handleManageTargets}
+          busy={patch !== null}
+          selectRef={targetSelectRef}
+        />
+      }
       readout={
-        <>
-          <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
-          {/* The backdrop chip rides along on the dex, abilities, moves, and
-              type-chart tabs — each swaps its fetcher to the Target's fork ⊕
-              Ruleset when set. */}
-          {(isDex ||
-            view.kind === "abilities" ||
-            view.kind === "moves" ||
-            view.kind === "type-chart") &&
-            view.backdrop !== null && (
-              <BackdropChip
-                targetId={view.backdrop}
-                onClear={handleClearBackdrop}
-              />
-            )}
-        </>
+        <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
       }
     >
       {/* Background is inert while the detail dialog is open: it can't be
@@ -261,6 +297,14 @@ export default function App() {
           moveOptions={moveOptions}
           speciesOptions={speciesOptions}
           backdropTargetId={view.backdrop}
+        />
+      )}
+      {patch !== null && activeTarget !== null && (
+        <PatchDrawer
+          target={activeTarget}
+          trigger={patch.trigger}
+          onClose={() => setPatch(null)}
+          onApplied={dex.reload}
         />
       )}
     </DeviceFrame>
@@ -363,20 +407,23 @@ function Readout({
 type KeyHandlers = {
   onSearch: () => void;
   onToggleEdited: () => void;
+  onSwitchTarget: () => void;
   onEscape: () => void;
   enabled: boolean;
   hasSelection: boolean;
 };
 
 /** Global keyboard shortcuts: `/` focuses search, `e` toggles the edited filter,
-    Escape closes the detail. Shortcuts ignore keystrokes inside form fields. */
+    `t` focuses the active-target switcher, Escape closes the open overlay.
+    Shortcuts ignore keystrokes inside form fields. */
 function useGlobalKeys(handlers: KeyHandlers): void {
   const ref = useRef(handlers);
   ref.current = handlers;
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      const { onSearch, onToggleEdited, onEscape, enabled, hasSelection } = ref.current;
+      const { onSearch, onToggleEdited, onSwitchTarget, onEscape, enabled, hasSelection } =
+        ref.current;
       // Escape closes the detail regardless of `enabled` — the dialog can be
       // open over any kind, and Escape should always dismiss it first.
       if (event.key === "Escape" && hasSelection) {
@@ -397,6 +444,9 @@ function useGlobalKeys(handlers: KeyHandlers): void {
         onSearch();
       } else if ((event.key === "e" || event.key === "E") && enabled) {
         onToggleEdited();
+      } else if (event.key === "t" || event.key === "T") {
+        event.preventDefault();
+        onSwitchTarget();
       }
     }
     window.addEventListener("keydown", onKeyDown);

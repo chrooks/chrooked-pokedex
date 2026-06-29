@@ -1,0 +1,133 @@
+/* The active-target switcher in the device header. Chrome-keyed because it is
+   device structure (the one global selector), not the amber edited signal. */
+
+.target-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.target-switcher__field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.target-switcher__field:focus-within {
+  border-color: var(--chrome);
+  box-shadow: 0 0 0 1px var(--chrome);
+}
+
+/* Lit when a target backdrop is active; dim well on Canon. */
+.target-switcher__lamp {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+  flex: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.target-switcher__field[data-on="true"] .target-switcher__lamp {
+  background: var(--chrome);
+  border-color: var(--chrome);
+  box-shadow: 0 0 8px 1px color-mix(in oklch, var(--chrome) 55%, transparent);
+}
+
+.target-switcher__caption {
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+}
+
+.target-switcher__select {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 28px;
+  padding: 0 var(--space-4) 0 var(--space-1);
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  /* a quiet caret drawn in CSS so the native arrow doesn't clash with the chrome */
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-dim) 50%),
+    linear-gradient(135deg, var(--text-dim) 50%, transparent 50%);
+  background-position:
+    right 9px center,
+    right 5px center;
+  background-size:
+    4px 4px,
+    4px 4px;
+  background-repeat: no-repeat;
+}
+
+.target-switcher__select:focus {
+  outline: none;
+}
+
+.target-switcher__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.target-switcher__btn {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.target-switcher__btn:hover:not(:disabled) {
+  border-color: var(--chrome);
+}
+
+.target-switcher__btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.target-switcher__btn:disabled {
+  opacity: 0.45;
+}
+
+.target-switcher__btn--danger {
+  color: color-mix(in oklch, var(--chrome) 80%, var(--text));
+}
+
+.target-switcher__btn--danger:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--chrome) 14%, var(--surface-2));
+}
+
+.target-switcher__empty {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-3);
+  background: transparent;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.target-switcher__empty:hover {
+  color: var(--text);
+  border-color: var(--chrome);
+}
