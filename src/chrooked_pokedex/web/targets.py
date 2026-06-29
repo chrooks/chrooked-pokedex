@@ -38,6 +38,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from ..appliers.dispatch import route_apply as _route_apply
+from ..appliers.essentials.data_backup import (
+    DataBackupError,
+    backup_essentials_data,
+)
 from ..appliers.essentials.dialect import detect_dialect as _detect_dialect
 from ..appliers.pokeemerald.git_guard import DirtyWorkingTree, require_clean_git_status
 from .. import ledger as ledgermod
@@ -463,42 +467,22 @@ def _report_payload(report: ApplyReport) -> dict[str, Any]:
 
 
 def _backup_essentials_data(fork: Path) -> dict[str, Any]:
-    """Back up an Essentials game's ``Data/`` once before a real apply.
+    """Web wrapper over the shared Data/ backup: map failure to a 500.
 
-    IF2-class targets recompile the edited PBS into ``Data/*.dat`` on the next
-    boot — Essentials ``File.delete``s the old ``.dat`` first, so an incomplete
-    PBS bricks mid-compile with the ``.dat`` already gone (and not in the Recycle
-    Bin). A one-time ``Data.bak`` is the only recovery net.
-
-    Copies ``Data/`` → ``Data.bak`` only when ``Data.bak`` does NOT already
-    exist, so a later apply can't clobber a good backup with an already-bricked
-    ``Data/``. Returns a status dict the UI surfaces. If the copy fails the
-    partial backup is removed and the apply aborts (a 500) — the user opted into
-    the net, so we never proceed pretending it's there.
+    The backup logic is engine-neutral (shared with the CLI ``apply``); the web
+    path maps a failed copy to a 500 so the apply aborts with a usable message
+    rather than proceeding without the recovery net.
     """
-    data = fork / "Data"
-    if not data.is_dir():
-        return {"status": "skipped", "reason": "no Data/ directory", "path": None}
-    backup = fork / "Data.bak"
-    if backup.exists():
-        return {
-            "status": "kept",
-            "reason": "Data.bak already exists — left untouched",
-            "path": str(backup),
-        }
     try:
-        shutil.copytree(data, backup)
-    except OSError as error:
-        shutil.rmtree(backup, ignore_errors=True)  # drop any partial copy
+        return backup_essentials_data(fork)
+    except DataBackupError as error:
         raise TargetError(
             500,
             (
-                f"Could not back up {data} → {backup} before applying: {error}. "
-                "Apply aborted to protect the game; free space or back up Data/ "
-                "by hand, then retry."
+                f"{error}. Apply aborted to protect the game; free space or back "
+                "up Data/ by hand, then retry."
             ),
         ) from error
-    return {"status": "created", "reason": "", "path": str(backup)}
 
 
 def _run_applier(

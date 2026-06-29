@@ -387,6 +387,30 @@ def _run_apply(
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
+    # Essentials forks recompile PBS → Data/*.dat on boot; back Data/ up once
+    # before writing so a bricking recompile is recoverable. Parity with the web
+    # apply path. Abort if the net can't be made.
+    if engine == "essentials":
+        from .appliers.essentials.data_backup import (
+            DataBackupError,
+            backup_essentials_data,
+        )
+
+        try:
+            backup = backup_essentials_data(target)
+        except DataBackupError as error:
+            print(f"ERROR: {error}", file=sys.stderr)
+            print(
+                "Apply aborted to protect the game; free space or back up Data/ "
+                "by hand, then retry.",
+                file=sys.stderr,
+            )
+            return 1
+        if backup["status"] == "created":
+            print(f"Backed up Data/ → {backup['path']} (boot-recompile safety net).")
+        elif backup["status"] == "kept":
+            print(f"Data.bak already exists — left untouched ({backup['path']}).")
+
     ruleset = Ruleset.load(ruleset_dir)
     holds = load_holds(ruleset_dir, slug)
     target_edits = load_target_edits(ruleset_dir, slug)
