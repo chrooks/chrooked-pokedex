@@ -25,7 +25,9 @@ from pathlib import Path
 from chrooked_pokedex.web import snapshot as snapmod
 
 POKEAPI_LIST = "https://pokeapi.co/api/v2/pokemon?limit=20000"
-OUT = Path(__file__).resolve().parent.parent / "frontend" / "src" / "data" / "sprite-ids.json"
+_DATA_DIR = Path(__file__).resolve().parent.parent / "frontend" / "src" / "data"
+OUT = _DATA_DIR / "sprite-ids.json"
+NATIONAL_OUT = _DATA_DIR / "national-dex.json"
 
 
 def _fetch_name_index() -> dict[str, int]:
@@ -61,9 +63,25 @@ def build_map() -> dict[str, int]:
     return dict(sorted(mapping.items()))
 
 
+def build_national_map() -> dict[str, int]:
+    """chrooked_id -> canonical national dex №, offline from the base snapshot.
+
+    The frontend CDN sprite resolver keys on national dex; a Target's own `dex`
+    is local order and desyncs from national once it reorders the dex.
+    """
+    species = snapmod.load_snapshot()["species"]
+    mapping = {cid: e["dex"] for cid, e in species.items() if e.get("dex")}
+    return dict(sorted(mapping.items()))
+
+
 def main() -> None:
-    mapping = build_map()
     OUT.parent.mkdir(parents=True, exist_ok=True)
+
+    national = build_national_map()
+    NATIONAL_OUT.write_text(json.dumps(national, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {NATIONAL_OUT} with {len(national)} national-dex entries.")
+
+    mapping = build_map()
     OUT.write_text(json.dumps(mapping, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {OUT} with {len(mapping)} form-sprite entries.")
 
