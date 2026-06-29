@@ -36,7 +36,7 @@ def chrooked_install_exhaust
         dealt = (damage && damage > 0) rescue false
         contact = (move && move.isContactMove?) rescue false
         if user && target && dealt && contact && (user.hasWorkingAbility(:EXHAUST) rescue false)
-          (target.pbReduceStatWithCause(PBStats::ACCURACY, 1, user, PBAbilities.getName(user.ability)) rescue nil)
+          (Chrooked.lower_stat(target, :accuracy, 1, user) rescue nil)
           ($chrooked_log.call("[chrooked:exhaust] OBS event=hit ability=true effect=lowered target ACCURACY by 1 (contact, no roll)") rescue nil)
         end
       end

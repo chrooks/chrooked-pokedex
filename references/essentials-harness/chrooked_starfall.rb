@@ -41,7 +41,7 @@ def chrooked_install_starfall
            (user.hasWorkingAbility(:STARFALL) rescue false) &&
            (Chrooked.move_special?(move, Chrooked.move_type(move, user, target)) rescue false)
           if @battle.pbRandom(100) < 30
-            (target.pbReduceStatWithCause(PBStats::SPDEF, 1, user, PBAbilities.getName(user.ability)) rescue nil)
+            (Chrooked.lower_stat(target, :spdef, 1, user) rescue nil)
             ($chrooked_log.call("[chrooked:starfall] OBS event=hit ability=true effect=lowered target SPDEF by 1") rescue nil)
           else
             ($chrooked_log.call("[chrooked:starfall] OBS event=hit ability=true effect=roll failed (>=30), no stat change") rescue nil)

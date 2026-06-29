@@ -159,6 +159,77 @@ module Chrooked
     end
     true
   end
+
+  # Neutral stat key -> [16.2 PBStats const name, IF2 GameData::Stat id symbol].
+  STAT_TOKENS = {
+    :attack   => ["ATTACK",   :ATTACK],
+    :defense  => ["DEFENSE",  :DEFENSE],
+    :spatk    => ["SPATK",    :SPECIAL_ATTACK],
+    :spdef    => ["SPDEF",    :SPECIAL_DEFENSE],
+    :speed    => ["SPEED",    :SPEED],
+    :accuracy => ["ACCURACY", :ACCURACY],
+    :evasion  => ["EVASION",  :EVASION],
+  }
+
+  # Lower `target`'s stat by `stages`, attributed to `user`. Bridges 16.2's
+  # pbReduceStatWithCause(PBStats::X int, stages, user, cause) and IF2's
+  # pbLowerStatStage(:GAMEDATA_STAT_ID sym, stages, user). `stat_key` is a neutral
+  # symbol from STAT_TOKENS (:spatk/:accuracy/...). Returns true if it attempted the drop.
+  def self.lower_stat(target, stat_key, stages, user)
+    pair = STAT_TOKENS[stat_key]
+    return false unless pair && target
+    case engine
+    when :ess162
+      const = (PBStats.const_get(pair[0]) rescue nil)
+      return false if const.nil?
+      cause = (PBAbilities.getName(user.ability) rescue "")
+      (target.pbReduceStatWithCause(const, stages, user, cause) rescue nil)
+      true
+    when :if_fork
+      (target.pbLowerStatStage(pair[1], stages, user) rescue nil)
+      true
+    else
+      false
+    end
+  end
+
+  # Non-fainted battlers opposing `battler`. Bridges 16.2's pbIsOpposing?/isFainted?
+  # and IF2's opposes?/fainted?. Returns [] if the battle context is unavailable.
+  def self.opposing_battlers(battler)
+    return [] unless battler
+    battle = (battler.instance_variable_get(:@battle) rescue nil)
+    return [] unless battle
+    list = (battle.battlers rescue [])
+    out = []
+    list.each_with_index do |b, i|
+      next unless b
+      opp = (battler.opposes?(i) rescue (battler.pbIsOpposing?(i) rescue false))
+      next unless opp
+      fnt = (b.fainted? rescue (b.isFainted? rescue true))
+      next if fnt
+      out.push(b)
+    end
+    out
+  end
+
+  # Install a switch-in hook on PokeBattle_Battler. Bridges 16.2's
+  # pbAbilitiesOnSwitchIn(onactive) and IF2's pbEffectsOnSwitchIn(switchIn=false).
+  # Calls the battler instance method `apply_method`(switched_in_bool) AFTER the
+  # engine's own. `orig` is this plugin's unique backup name. Idempotent.
+  def self.install_switch_in(apply_method, orig)
+    return false unless defined?(PokeBattle_Battler)
+    s = seam(PokeBattle_Battler, ["pbAbilitiesOnSwitchIn", "pbEffectsOnSwitchIn"])
+    return false unless s
+    return true if PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?(orig)
+    PokeBattle_Battler.class_eval do
+      alias_method orig.to_sym, s.to_sym
+      define_method(s) do |*args|
+        send(orig, *args)
+        send(apply_method, args[0])
+      end
+    end
+    true
+  end
 end
 
 ($chrooked_log.call("[chrooked:compat] loaded") rescue nil)

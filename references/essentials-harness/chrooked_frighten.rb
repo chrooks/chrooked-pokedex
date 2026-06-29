@@ -27,30 +27,25 @@ end
 
 def chrooked_install_frighten
   return if $chrooked_frighten_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn_chrooked_frighten_orig")
-      alias_method :pbAbilitiesOnSwitchIn_chrooked_frighten_orig, :pbAbilitiesOnSwitchIn
-      def pbAbilitiesOnSwitchIn(onactive)
-        pbAbilitiesOnSwitchIn_chrooked_frighten_orig(onactive)
-        if (self.hasWorkingAbility(:FRIGHTEN) rescue false) && onactive
-          name = (PBAbilities.getName(self.ability) rescue "Frighten")
-          for i in 0...4
-            if (pbIsOpposing?(i) rescue false) && !@battle.battlers[i].isFainted?
-              (@battle.battlers[i].pbReduceStatWithCause(PBStats::SPATK, 1, self, name) rescue nil)
-            end
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_frighten_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_frighten_apply(switched_in)
+        if (self.hasWorkingAbility(:FRIGHTEN) rescue false) && switched_in
+          Chrooked.opposing_battlers(self).each do |foe|
+            (Chrooked.lower_stat(foe, :spatk, 1, self) rescue nil)
           end
           ($chrooked_log.call("[chrooked:frighten] OBS event=switchin ability=true lowered=SPATK") rescue nil)
         end
       end
     end
   end
+  return unless Chrooked.install_switch_in("chrooked_frighten_apply", "pbSwitchIn_chrooked_frighten_orig")
   $chrooked_frighten_installed = true
-  ($chrooked_log.call("[chrooked:frighten] installed on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:frighten] installed (switch-in seam)") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_frighten
 elsif defined?(Graphics)
   class << Graphics
