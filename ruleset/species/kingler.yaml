@@ -3,7 +3,8 @@ chrooked_id: kingler
 aka: { pokeemerald: SPECIES_KINGLER }
 types: [Water, Steel]
 abilities:
-  hidden: Death Grip
+  primary: Death Grip
+  secondary: Shell Armor
 learnset:
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Hammer Arm }

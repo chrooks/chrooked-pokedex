@@ -1,6 +1,10 @@
 name: Tauros Paldea Aqua
 chrooked_id: taurospaldeaaqua
 aka: { dex: 128 }
+abilities:
+  primary: Intimidate
+  secondary: Stampede
+  hidden: Cud Chew
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }

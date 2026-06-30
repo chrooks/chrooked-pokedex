@@ -6,19 +6,21 @@ abilities:
   hidden: Forestry
 stats: { atk: 50, def: 30 }
 learnset:
-  - { level: 1, move: Pound }
   - { level: 1, move: Leer }
+  - { level: 1, move: Pound }
   - { level: 3, move: Leafage }
   - { level: 6, move: Quick Attack }
   - { level: 9, move: Mega Drain }
-  - { level: 12, move: Detect }
-  - { level: 15, move: Quick Guard }
+  - { level: 12, move: Slash }
+  - { level: 15, move: Fury Cutter }
+  - { level: 16, move: Razor Leaf }
   - { level: 18, move: Assurance }
   - { level: 21, move: Giga Drain }
-  - { level: 24, move: Slam }
-  - { level: 27, move: Double Team }
+  - { level: 24, move: Night Slash }
+  - { level: 27, move: Psycho Cut }
   - { level: 30, move: Energy Ball }
-  - { level: 33, move: Screech }
-  - { level: 36, move: Endeavor }
+  - { level: 33, move: X-Scissor }
+  - { level: 36, move: Dragon Claw }
   - { level: 39, move: Leaf Storm }
-  - { level: 48, move: One-Inch Punch }
+  - { level: 44, move: Breaking Swipe }
+  - { level: 48, move: Solar Blade }

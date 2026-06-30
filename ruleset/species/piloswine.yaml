@@ -2,7 +2,9 @@ name: Piloswine
 chrooked_id: piloswine
 aka: { pokeemerald: SPECIES_PILOSWINE }
 abilities:
-  secondary: Snow Cloak
+  primary: Thick Fat
+  secondary: Whiteout
+  hidden: Stampede
 learnset:
   - { level: 0, move: Ice Fang }
   - { level: 1, move: Tackle }

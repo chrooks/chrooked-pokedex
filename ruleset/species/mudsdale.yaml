@@ -3,6 +3,7 @@ chrooked_id: mudsdale
 aka: { pokeemerald: SPECIES_MUDSDALE }
 abilities:
   primary: Striker
+  secondary: Stampede
   hidden: Water Compaction
 stats: { spd: 90 }
 learnset:

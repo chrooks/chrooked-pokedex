@@ -1,3 +1,6 @@
 name: Type Null
 chrooked_id: typenull
 aka: { pokeemerald: SPECIES_TYPE_NULL }
+abilities:
+  primary: Battle Armor
+  secondary: Adaptability

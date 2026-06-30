@@ -1,6 +1,10 @@
 name: Tauros Paldea Blaze
 chrooked_id: taurospaldeablaze
 aka: { pokeemerald: SPECIES_TAUROS_PALDEA_BLAZE }
+abilities:
+  primary: Intimidate
+  secondary: Stampede
+  hidden: Cud Chew
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }

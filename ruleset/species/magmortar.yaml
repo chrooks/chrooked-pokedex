@@ -2,7 +2,9 @@ name: Magmortar
 chrooked_id: magmortar
 aka: { pokeemerald: SPECIES_MAGMORTAR }
 abilities:
-  secondary: Vital Spirit
+  primary: Flash Fire
+  secondary: Flame Body
+  hidden: Mega Launcher
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }

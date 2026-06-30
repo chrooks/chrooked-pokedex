@@ -1,6 +1,7 @@
 name: Raticate Alola
 chrooked_id: raticatealola
 aka: { pokeemerald: SPECIES_RATICATE_ALOLA }
+stats: { spd: 90, def: 90, hp: 85, atk: 80, spe: 75 }
 learnset:
   - { level: 0, move: Scary Face }
   - { level: 1, move: Scary Face }

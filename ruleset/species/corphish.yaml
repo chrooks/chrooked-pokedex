@@ -1,6 +1,10 @@
 name: Corphish
 chrooked_id: corphish
 aka: { dex: 341 }
+abilities:
+  primary: Death Grip
+  secondary: Shell Armor
+  hidden: Adaptability
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Harden }

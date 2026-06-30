@@ -1,0 +1,7 @@
+name: Tauros Paldea Combat
+chrooked_id: taurospaldeacombat
+aka: { dex: 128 }
+abilities:
+  primary: Intimidate
+  secondary: Stampede
+  hidden: Cud Chew

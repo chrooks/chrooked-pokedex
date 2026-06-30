@@ -3,6 +3,7 @@ chrooked_id: mudbray
 aka: { pokeemerald: SPECIES_MUDBRAY }
 abilities:
   primary: Striker
+  secondary: Stampede
   hidden: Water Compaction
 learnset:
   - { level: 1, move: Mud-Slap }

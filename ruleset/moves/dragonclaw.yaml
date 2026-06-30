@@ -1,0 +1,10 @@
+name: Dragon Claw
+chrooked_id: dragonclaw
+aka: {  }
+type: Dragon
+category: physical
+power: 80
+accuracy: 100
+pp: 15
+description: Slashes the foe with sharp claws.
+flags: [slicing]

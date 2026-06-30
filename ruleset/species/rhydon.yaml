@@ -3,6 +3,8 @@ chrooked_id: rhydon
 aka: { pokeemerald: SPECIES_RHYDON }
 abilities:
   primary: Impale
+  secondary: Rock Head
+  hidden: Stampede
 learnset:
   - { level: 0, move: Hammer Arm }
   - { level: 1, move: Tackle }

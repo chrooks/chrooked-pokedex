@@ -1,6 +1,10 @@
 name: Rhyhorn
 chrooked_id: rhyhorn
 aka: { pokeemerald: SPECIES_RHYHORN }
+abilities:
+  primary: Impale
+  secondary: Rock Head
+  hidden: Stampede
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }

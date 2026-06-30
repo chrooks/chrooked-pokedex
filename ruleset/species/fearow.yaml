@@ -2,6 +2,7 @@ name: Fearow
 chrooked_id: fearow
 aka: { pokeemerald: SPECIES_FEAROW }
 types: [Dark, Flying]
+stats: { hp: 77 }
 learnset:
   - { level: 1, move: Drill Run }
   - { level: 1, move: Pluck }

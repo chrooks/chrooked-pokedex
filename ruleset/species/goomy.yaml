@@ -1,6 +1,10 @@
 name: Goomy
 chrooked_id: goomy
 aka: { pokeemerald: SPECIES_GOOMY }
+abilities:
+  primary: Sap Sipper
+  secondary: Hydrate
+  hidden: Gooey
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Absorb }

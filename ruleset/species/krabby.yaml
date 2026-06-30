@@ -1,6 +1,10 @@
 name: Krabby
 chrooked_id: krabby
 aka: { dex: 98 }
+abilities:
+  primary: Death Grip
+  secondary: Shell Armor
+  hidden: Sheer Force
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Leer }

@@ -2,5 +2,7 @@ name: Tauros
 chrooked_id: tauros
 aka: { pokeemerald: SPECIES_TAUROS }
 abilities:
-  secondary: Anger Point
+  primary: Intimidate
+  secondary: Stampede
+  hidden: Sheer Force
 stats: { atk: 120 }

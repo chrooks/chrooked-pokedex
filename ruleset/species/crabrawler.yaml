@@ -1,6 +1,8 @@
 name: Crabrawler
 chrooked_id: crabrawler
 aka: { dex: 739 }
+abilities:
+  primary: Sledgehammer
 learnset:
   - { level: 1, move: Vise Grip }
   - { level: 5, move: Rock Smash }

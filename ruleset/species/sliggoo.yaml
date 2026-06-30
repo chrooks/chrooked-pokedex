@@ -2,6 +2,10 @@ name: Sliggoo
 chrooked_id: sliggoo
 aka: { pokeemerald: SPECIES_SLIGGOO }
 types: [Dragon, Water]
+abilities:
+  primary: Sap Sipper
+  secondary: Hydrate
+  hidden: Gooey
 learnset:
   - { level: 0, move: Acid Spray }
   - { level: 1, move: Tackle }

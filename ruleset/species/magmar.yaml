@@ -2,6 +2,7 @@ name: Magmar
 chrooked_id: magmar
 aka: { pokeemerald: SPECIES_MAGMAR }
 abilities:
+  primary: Flash Fire
   secondary: Flame Body
 learnset:
   - { level: 1, move: Leer }

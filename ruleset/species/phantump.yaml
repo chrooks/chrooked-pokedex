@@ -2,6 +2,7 @@ name: Phantump
 chrooked_id: phantump
 aka: { pokeemerald: SPECIES_PHANTUMP }
 abilities:
+  secondary: Forestry
   hidden: Insidious
 learnset:
   - { level: 1, move: Tackle }

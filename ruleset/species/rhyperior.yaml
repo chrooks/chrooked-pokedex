@@ -2,6 +2,7 @@ name: Rhyperior
 chrooked_id: rhyperior
 aka: { pokeemerald: SPECIES_RHYPERIOR }
 abilities:
+  primary: Mega Launcher
   secondary: Rock Head
   hidden: Stampede
 learnset:

@@ -2,7 +2,9 @@ name: Swinub
 chrooked_id: swinub
 aka: { pokeemerald: SPECIES_SWINUB }
 abilities:
-  secondary: Snow Cloak
+  primary: Thick Fat
+  secondary: Whiteout
+  hidden: Stampede
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Mud-Slap }

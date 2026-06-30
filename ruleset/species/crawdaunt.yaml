@@ -2,7 +2,8 @@ name: Crawdaunt
 chrooked_id: crawdaunt
 aka: { pokeemerald: SPECIES_CRAWDAUNT }
 abilities:
-  hidden: Death Grip
+  primary: Death Grip
+  secondary: Shell Armor
 stats: { hp: 65, atk: 125, def: 90 }
 learnset:
   - { level: 0, move: Swift }

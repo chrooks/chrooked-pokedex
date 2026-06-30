@@ -2,6 +2,7 @@ name: Magby
 chrooked_id: magby
 aka: { pokeemerald: SPECIES_MAGBY }
 abilities:
+  primary: Flash Fire
   secondary: Flame Body
 learnset:
   - { level: 1, move: Leer }
