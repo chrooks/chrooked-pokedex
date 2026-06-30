@@ -15,32 +15,36 @@ import {
   faRotateLeft,
   faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
-import { api } from "../../api";
+import { api, ApiError } from "../../api";
 import { STAT_ORDER, STAT_LABEL, TYPES, isEdited } from "../../lib/format";
 import type {
   AbilitySlots,
+  CanonicalMethod,
   DexEntry,
   Evolution,
+  EvolvesInto,
   LearnsetMove,
   OverridableField,
   SpeciesOverride,
   TargetNamespace,
 } from "../../types";
+import { DexSprite } from "../DexSprite";
 import { ScopeToggle } from "./ScopeToggle";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
 import { canonicalize, collectInvalidFields } from "../../lib/entityValidation";
-import { ComboField, NumberField, SelectField, TextField } from "./fields";
+import { ComboField, NumberField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import {
+  ADVANCED_ID,
+  emptyMethodForm,
+  requiredValueMissing,
   seedMethodForm,
   serializeMethod,
   type MethodForm,
-  type MethodKind,
 } from "./evolutionMethod";
 import "./editors.css";
-
-const METHOD_KINDS: readonly MethodKind[] = ["level", "item", "other"];
+import "../ledger/ledger-rows.css";
 
 type Props = {
   entry: DexEntry;
@@ -52,6 +56,8 @@ type Props = {
   moveOptions: readonly string[];
   /** Known species names for the evo-from combobox. */
   speciesOptions: readonly string[];
+  /** Canonical evolution methods for the Method dropdown + adaptive Value. */
+  evolutionMethods: readonly CanonicalMethod[];
   /** Active backdrop target id — enables the base-vs-target scope toggle. */
   backdropTargetId?: string | null;
 };
@@ -63,7 +69,7 @@ type StatForm = Record<string, number | "">;
 type AbilityForm = Record<AbilitySlot, string>;
 type LearnRow = { _id: number; level: number | ""; move: string };
 
-export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOptions, speciesOptions, backdropTargetId }: Props) {
+export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOptions, speciesOptions, evolutionMethods, backdropTargetId }: Props) {
   const { isSaving, error, run } = useSubmit();
   const del = useSubmit();
 
@@ -115,7 +121,28 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
     ),
   );
   const [evoMethod, setEvoMethod] = useState<MethodForm>(() =>
-    seedMethodForm(entry.evolution),
+    seedMethodForm(entry.evolution, evolutionMethods),
+  );
+  // Forward edges are the children's backward edges (base-derived). Each card is
+  // an editable method form seeded from the edge's structured method_detail; on
+  // Save we write each changed child's Override. The editor remounts per edit
+  // session (the ledger toggles editing off on species change), so seeding in the
+  // initializer is safe — evolutionMethods is loaded long before the modal opens.
+  const seedForward = (edge: EvolvesInto): MethodForm =>
+    seedMethodForm(
+      { from: null, method: edge.method, method_detail: edge.method_detail },
+      evolutionMethods,
+    );
+  const [forwardForms, setForwardForms] = useState<Record<string, MethodForm>>(() =>
+    Object.fromEntries(entry.evolves_into.map((e) => [e.to, seedForward(e)])),
+  );
+  const forwardSeeds = useMemo(
+    () => Object.fromEntries(entry.evolves_into.map((e) => [e.to, seedForward(e)])),
+    // seedForward closes over entry + evolutionMethods; both are inputs to the
+    // seed, so recompute when either changes (keeps the change-detection baseline
+    // aligned with forwardForms, which is seeded from the same two).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [entry.chrooked_id, evolutionMethods],
   );
 
   useEffect(() => {
@@ -144,12 +171,60 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
       learnset,
       evoFrom,
       evoMethod,
+      methods: evolutionMethods,
     });
-    const ok = await run(() => api.putSpecies(entry.chrooked_id, payload, scope));
+    // Write this species, then fan out one write per CHANGED forward edge. A
+    // forward edge lives on the child species, so we merge the new method into
+    // the child's existing Override rather than replacing it (which would wipe
+    // the child's stats/types/etc).
+    const ok = await run(async () => {
+      // Validate before any write so a half-filled method (e.g. "Trade w/ item"
+      // with a blank item) never reaches the engine as a malformed token.
+      if (evoFrom.trim() !== "" && requiredValueMissing(evoMethod, evolutionMethods)) {
+        throw new Error("Set a value for the evolution method.");
+      }
+      const changedEdges = entry.evolves_into.filter(
+        (edge) =>
+          forwardForms[edge.to] &&
+          JSON.stringify(forwardForms[edge.to]) !==
+            JSON.stringify(forwardSeeds[edge.to]),
+      );
+      for (const edge of changedEdges) {
+        if (requiredValueMissing(forwardForms[edge.to], evolutionMethods)) {
+          throw new Error(`Set a value for ${edge.to_name}'s evolution method.`);
+        }
+      }
+      await api.putSpecies(entry.chrooked_id, payload, scope);
+      for (const edge of changedEdges) {
+        await saveForwardEdge(edge, forwardForms[edge.to]);
+      }
+    });
     if (ok) {
       onSaved();
       onDone();
     }
+  }
+
+  async function saveForwardEdge(edge: EvolvesInto, form: MethodForm) {
+    // Only a 404 means "no Override yet". Any other failure (network, 503) must
+    // abort the save — treating it as null would replace the child's real
+    // Override with a blank one carrying only the new evolution.
+    const childRaw = await api.speciesOverride(edge.to).catch((caught: unknown) => {
+      if (caught instanceof ApiError && caught.status === 404) return null;
+      throw caught;
+    });
+    const method = serializeMethod(form, evolutionMethods);
+    const payload: SpeciesOverride = {
+      name: childRaw?.name ?? edge.to_name,
+      chrooked_id: edge.to,
+      aka: childRaw?.aka ?? (edge.to_dex !== null ? { dex: edge.to_dex } : {}),
+      types: childRaw?.types ?? null,
+      abilities: childRaw?.abilities ?? null,
+      stats: childRaw?.stats ?? null,
+      learnset: childRaw?.learnset ?? null,
+      evolution: { from: entry.name, method },
+    };
+    await api.putSpecies(edge.to, payload, scope);
   }
 
   async function handleRevert() {
@@ -377,63 +452,29 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
           error={invalidFields.has("species-evo-from") ? "Unknown species" : null}
           onChange={setEvoFrom}
         />
-        <div className="evo-method-row" style={{ marginTop: "var(--space-2)" }}>
-          <SelectField
-            id="species-evo-kind"
-            label="Method"
-            value={evoMethod.kind}
-            options={METHOD_KINDS as readonly string[]}
-            onChange={(v) =>
-              setEvoMethod((m) => ({ ...m, kind: v as MethodKind }))
-            }
+        <div style={{ marginTop: "var(--space-2)" }}>
+          <MethodEditor
+            idPrefix="species-evo"
+            form={evoMethod}
+            onChange={setEvoMethod}
+            methods={evolutionMethods}
+            moveOptions={moveOptions}
           />
-          {evoMethod.kind === "level" && (
-            <NumberField
-              id="species-evo-level"
-              label="Level"
-              min={1}
-              max={100}
-              value={evoMethod.param === "" ? "" : Number(evoMethod.param)}
-              onChange={(v) =>
-                setEvoMethod((m) => ({ ...m, param: v === "" ? "" : String(v) }))
-              }
-            />
-          )}
-          {evoMethod.kind === "item" && (
-            // TODO: itemOptions once #24 lands
-            <TextField
-              id="species-evo-item"
-              label="Item"
-              hint="internal name, e.g. FIRESTONE"
-              value={evoMethod.param}
-              onChange={(v) => setEvoMethod((m) => ({ ...m, param: v }))}
-            />
-          )}
-          {evoMethod.kind === "other" && (
-            <>
-              <TextField
-                id="species-evo-other-key"
-                label="Key"
-                hint="engine token, e.g. essentials"
-                value={evoMethod.rows[0]?.key ?? ""}
-                onChange={(v) =>
-                  setEvoMethod((m) => ({ ...m, rows: setRow0(m, { key: v }) }))
-                }
-              />
-              <span className="tc-row__vs" aria-hidden="true">
-                =
-              </span>
-              <TextField
-                id="species-evo-other-value"
-                label="Value"
-                value={evoMethod.rows[0]?.value ?? ""}
-                onChange={(v) =>
-                  setEvoMethod((m) => ({ ...m, rows: setRow0(m, { value: v }) }))
-                }
-              />
-            </>
-          )}
         </div>
+        {/* Forward edges live on the children; editing a card and saving writes
+            that child's Override (one PUT per changed card). */}
+        {entry.evolves_into.length > 0 && (
+          <EvolvesIntoEditor
+            edges={entry.evolves_into}
+            forms={forwardForms}
+            onChange={(to, next) =>
+              setForwardForms((prev) => ({ ...prev, [to]: next }))
+            }
+            methods={evolutionMethods}
+            moveOptions={moveOptions}
+            backdropTargetId={backdropTargetId}
+          />
+        )}
       </section>
 
       {(error !== null || del.error !== null) && (
@@ -477,6 +518,189 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
         </div>
       </div>
     </form>
+  );
+}
+
+/** The Method dropdown + one adaptive Value field. The dropdown lists the
+    canonical methods plus an "Advanced (raw token)" escape; the Value field's
+    shape follows the selected method's value_kind (number / move picker / text /
+    nothing). Reused by the backward edge and each forward-edge card. */
+function MethodEditor({
+  idPrefix,
+  form,
+  onChange,
+  methods,
+  moveOptions,
+}: {
+  idPrefix: string;
+  form: MethodForm;
+  onChange: (next: MethodForm) => void;
+  methods: readonly CanonicalMethod[];
+  moveOptions: readonly string[];
+}) {
+  const kind = methods.find((m) => m.id === form.id)?.value_kind ?? null;
+  return (
+    <div className="evo-method-row">
+      <div className="field">
+        <label className="field__label" htmlFor={`${idPrefix}-kind`}>
+          Method
+        </label>
+        <select
+          id={`${idPrefix}-kind`}
+          className="field__select"
+          value={form.id}
+          onChange={(e) => onChange({ ...form, id: e.target.value, value: "" })}
+        >
+          {methods.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.label}
+            </option>
+          ))}
+          <option value={ADVANCED_ID}>Advanced (raw token)</option>
+        </select>
+      </div>
+      {form.id === ADVANCED_ID ? (
+        <>
+          <div className="field">
+            <label className="field__label" htmlFor={`${idPrefix}-engine`}>
+              Engine
+            </label>
+            <select
+              id={`${idPrefix}-engine`}
+              className="field__select"
+              value={form.rawEngine}
+              onChange={(e) =>
+                onChange({ ...form, rawEngine: e.target.value as MethodForm["rawEngine"] })
+              }
+            >
+              <option value="pokeemerald">pokeemerald</option>
+              <option value="essentials">essentials</option>
+            </select>
+          </div>
+          <TextField
+            id={`${idPrefix}-token`}
+            label="Token"
+            hint="e.g. EVO_LEVEL_FOG"
+            value={form.rawToken}
+            onChange={(v) => onChange({ ...form, rawToken: v })}
+          />
+          <TextField
+            id={`${idPrefix}-param`}
+            label="Param"
+            value={form.rawParam}
+            onChange={(v) => onChange({ ...form, rawParam: v })}
+          />
+        </>
+      ) : (
+        <MethodValueField
+          idPrefix={idPrefix}
+          kind={kind}
+          form={form}
+          onChange={onChange}
+          moveOptions={moveOptions}
+        />
+      )}
+    </div>
+  );
+}
+
+/** The Value field for a canonical method, chosen by value_kind. `none` renders
+    nothing; `move` gets the move picker; `item`/`map` stay free text until an
+    item option source lands (#24). */
+function MethodValueField({
+  idPrefix,
+  kind,
+  form,
+  onChange,
+  moveOptions,
+}: {
+  idPrefix: string;
+  kind: CanonicalMethod["value_kind"] | null;
+  form: MethodForm;
+  onChange: (next: MethodForm) => void;
+  moveOptions: readonly string[];
+}) {
+  if (kind === null || kind === "none") return null;
+  if (kind === "level") {
+    return (
+      <NumberField
+        id={`${idPrefix}-value`}
+        label="Level"
+        min={1}
+        max={100}
+        value={form.value === "" ? "" : Number(form.value)}
+        onChange={(v) => onChange({ ...form, value: v === "" ? "" : String(v) })}
+      />
+    );
+  }
+  if (kind === "move") {
+    return (
+      <ComboField
+        id={`${idPrefix}-value`}
+        label="Move"
+        options={moveOptions}
+        value={form.value}
+        onChange={(v) => onChange({ ...form, value: v })}
+      />
+    );
+  }
+  // item or map — free text until item options exist (#24).
+  return (
+    <TextField
+      id={`${idPrefix}-value`}
+      label={kind === "item" ? "Item" : "Location"}
+      hint={kind === "item" ? "internal name, e.g. FIRESTONE" : "map id"}
+      value={form.value}
+      onChange={(v) => onChange({ ...form, value: v })}
+    />
+  );
+}
+
+/** The editable "Evolves into" list: a sprite/name + a MethodEditor per forward
+    branch. Each card edits the child species' backward method; the editor's Save
+    writes the changed children. */
+function EvolvesIntoEditor({
+  edges,
+  forms,
+  onChange,
+  methods,
+  moveOptions,
+  backdropTargetId,
+}: {
+  edges: EvolvesInto[];
+  forms: Record<string, MethodForm>;
+  onChange: (to: string, next: MethodForm) => void;
+  methods: readonly CanonicalMethod[];
+  moveOptions: readonly string[];
+  backdropTargetId?: string | null;
+}) {
+  return (
+    <div className="ledger__evo-group" style={{ marginTop: "var(--space-3)" }}>
+      <span className="ledger__evo-dir">Evolves into</span>
+      <ul className="ledger__evo-list">
+        {edges.map((edge) => (
+          <li key={edge.to} className="evo-into-card">
+            <span className="ledger__evo-mon">
+              <DexSprite
+                chrookedId={edge.to}
+                dex={edge.to_dex}
+                name=""
+                backdropTargetId={backdropTargetId}
+                size={40}
+              />
+              <span className="ledger__evo-mon-name">{edge.to_name}</span>
+            </span>
+            <MethodEditor
+              idPrefix={`evo-into-${edge.to}`}
+              form={forms[edge.to] ?? emptyMethodForm()}
+              onChange={(next) => onChange(edge.to, next)}
+              methods={methods}
+              moveOptions={moveOptions}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -539,17 +763,6 @@ function initialAbilities(slots: AbilitySlots): AbilityForm {
   };
 }
 
-/** Immutably patch the first Other-method row (the dense single key/value row).
-    Seeds a fresh row if the form somehow has none. */
-function setRow0(
-  form: MethodForm,
-  patch: Partial<{ key: string; value: string }>,
-): MethodForm["rows"] {
-  const [first, ...rest] = form.rows;
-  const base = first ?? { _id: rowId(), key: "", value: "" };
-  return [{ ...base, ...patch }, ...rest];
-}
-
 // --- parsing / comparison --------------------------------------------------- #
 
 /** The non-blank type slots as an ordered list (1 or 2 entries). */
@@ -571,6 +784,7 @@ type FormState = {
   learnset: LearnRow[];
   evoFrom: string;
   evoMethod: MethodForm;
+  methods: readonly CanonicalMethod[];
 };
 
 function buildOverride(
@@ -657,7 +871,7 @@ function buildOverride(
   // The method always serializes to a clean Override dict (never the backdrop
   // display string), via the discriminated-union form state.
   const evoFrom = form.evoFrom.trim();
-  const method = serializeMethod(form.evoMethod);
+  const method = serializeMethod(form.evoMethod, form.methods);
   const evolution: Evolution | null =
     evoFrom !== "" ? { from: evoFrom, method } : null;
 

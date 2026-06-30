@@ -18,6 +18,7 @@ import type {
   ApplyDistributionRow,
   Behavior,
   BehaviorPacket,
+  CanonicalMethod,
   DexEntry,
   DistributeRequest,
   DistributeResponse,
@@ -129,6 +130,8 @@ export const api = {
   typeChart: (signal?: AbortSignal) =>
     getJson<TypeChartCell[]>("/api/type-chart", signal),
   behaviors: (signal?: AbortSignal) => getJson<Behavior[]>("/api/behaviors", signal),
+  evolutionMethods: (signal?: AbortSignal) =>
+    getJson<CanonicalMethod[]>("/api/meta/evolution-methods", signal),
 
   // Species (raw Override read + write)
   speciesOverride: (id: string, signal?: AbortSignal) =>

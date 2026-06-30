@@ -30,6 +30,19 @@ export interface EvolvesInto {
       species (the sprite-id form map keys only forms). Null for a numberless form. */
   to_dex: number | null;
   method: string;
+  /** Structured form of the display `method` string, mirroring `Evolution`. Lets
+      the editor seed an editable forward-edge card without re-parsing the label. */
+  method_detail?: { kind: string; param: string };
+}
+
+/** One canonical, engine-neutral evolution method served by
+    `GET /api/meta/evolution-methods`. `value_kind` drives the editor's adaptive
+    Value field; `tokens` is `[pokeemerald, essentials]` for token→id seeding. */
+export interface CanonicalMethod {
+  id: string;
+  label: string;
+  value_kind: "none" | "level" | "item" | "move" | "map";
+  tokens: [string, string];
 }
 
 /** A species' pre-evolution (the backward edge). Base-derived `evolution` carries

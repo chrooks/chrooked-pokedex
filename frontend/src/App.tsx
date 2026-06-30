@@ -7,7 +7,7 @@ import { onDataChange } from "./lib/dataChange";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { DexEntry, KindKey, Move, Target } from "./types";
+import type { CanonicalMethod, DexEntry, KindKey, Move, Target } from "./types";
 import { applyInlineEdit, type InlineEdit } from "./lib/inlineEdit";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
@@ -39,6 +39,9 @@ export default function App() {
   const dex = useResource<DexEntry[]>(dexFetcher);
   const moves = useResource<Move[]>(api.moves);
   const targets = useResource<Target[]>(api.targets);
+  // The canonical evolution-method catalog drives the editor's Method dropdown.
+  // Static config — fetched once and threaded down like the option lists.
+  const evolutionMethods = useResource<CanonicalMethod[]>(api.evolutionMethods);
   const reloadDex = dex.reload;
   const searchRef = useRef<HTMLInputElement>(null);
   const targetSelectRef = useRef<HTMLSelectElement>(null);
@@ -309,6 +312,7 @@ export default function App() {
           abilityOptions={abilityOptions}
           moveOptions={moveOptions}
           speciesOptions={speciesOptions}
+          evolutionMethods={evolutionMethods.data ?? []}
           backdropTargetId={view.backdrop}
         />
       )}

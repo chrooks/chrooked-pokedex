@@ -139,9 +139,10 @@ def _group_by_source(
         if triple is None:
             partials.setdefault(source_symbol, []).append(f"{chrooked_id}:method")
             continue
-        # An Item-method branch whose item the target lacks would write an undefined
-        # PBItem and break compilation — drop the branch and report it.
-        if triple[1] == "Item" and triple[2] not in items:
+        # An item-bearing branch (Item or TradeItem) whose item the target lacks —
+        # including a blank item — would write an undefined PBItem and break
+        # compilation. Drop the branch and report it.
+        if triple[1] in ("Item", "TradeItem") and triple[2] not in items:
             report.add(ReportEntry(
                 status="partial", category="evolution", chrooked_id=chrooked_id,
                 symbol=target_symbol,
@@ -192,9 +193,6 @@ def _render_triple(method: Mapping[str, object], target_internal: str) -> Option
         param = vocab.internal_name(raw) if value_kind in ("item", "move") else (
             raw if value_kind == "level" else raw.upper()
         )
-        # ponytail: the Item-absent guard in _group_by_source only checks the clean
-        # "Item" method, not "TradeItem" — a missing TradeItem item could still
-        # break compile. Extend that guard if TradeItem evos land in real data.
         return [target_internal, token, param]
     if "essentials" in method:
         name = str(method["essentials"])

@@ -7,7 +7,7 @@ import {
   faPen,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import type { DexEntry, KindKey } from "../types";
+import type { CanonicalMethod, DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
 import { appendNameFilter } from "../lib/dexFilters";
 import { STAT_ORDER, STAT_LABEL, bst, dexLabel, isEdited } from "../lib/format";
@@ -49,6 +49,8 @@ type Props = {
   moveOptions: readonly string[];
   /** Known species names for the evo-from combobox. */
   speciesOptions: readonly string[];
+  /** Canonical evolution methods for the editor's Method dropdown. */
+  evolutionMethods: readonly CanonicalMethod[];
   /** Active backdrop target id — passed to DexSprite for the target-sprite fallback. */
   backdropTargetId?: string | null;
 };
@@ -68,6 +70,7 @@ export function DetailLedger({
   abilityOptions,
   moveOptions,
   speciesOptions,
+  evolutionMethods,
   backdropTargetId,
 }: Props) {
   const [showDiff, setShowDiff] = useState(false);
@@ -246,6 +249,7 @@ export function DetailLedger({
             abilityOptions={abilityOptions}
             moveOptions={moveOptions}
             speciesOptions={speciesOptions}
+            evolutionMethods={evolutionMethods}
             backdropTargetId={backdropTargetId}
           />
         ) : (
