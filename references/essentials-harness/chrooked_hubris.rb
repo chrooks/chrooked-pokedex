@@ -1,16 +1,14 @@
 # chrooked:hubris
 # ---------------------------------------------------------------------------
-# Hubris: KOing a foe raises the user's Special Attack by 1 (Moxie clone — Moxie
-# raises ATTACK; Hubris raises SPATK).
+# Hubris (ability :HUBRIS): KOing a foe raises the user's Special Attack by 1
+# (Moxie clone — Moxie raises Attack; Hubris raises SpAtk).
 #
-# Seam (verified in Data/Scripts.rxdata): PokeBattle_Battler#pbEffectsAfterHit —
-# vanilla MOXIE lives here ("if user.hasWorkingAbility(:MOXIE) && target.isFainted?
-# ... user.pbIncreaseStatWithCause(PBStats::ATTACK,1,user,name)"). Stat const is
-# PBStats::SPATK (this fork has no SPECIAL_ATTACK). pbIncreaseStatWithCause returns
-# false when already +6, so the "no boost when maxed" case is handled by the engine.
+# Seam: compat shim's install_after_move (16.2 pbEffectsAfterHit / IF2
+# pbEffectsAfterMove), normalized to one (user, target, move) call per target. Gate
+# on user ability + target fainted. SpAtk raise goes through Chrooked.raise_stat
+# (16.2 PBStats::SPATK / IF2 :SPECIAL_ATTACK); the engine no-ops at +6.
 #
-# Ruby 1.8: alias_method chaining; deferred install on Graphics.update (the shim
-# preloads before PokeBattle_Battler is defined).
+# Ruby 1.8: install via Chrooked.install_after_move; deferred on Graphics.update.
 # ---------------------------------------------------------------------------
 
 unless defined?($chrooked_log) && $chrooked_log
@@ -25,25 +23,28 @@ end
 
 def chrooked_install_hubris
   return if $chrooked_hubris_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsAfterHit")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsAfterHit_chrooked_hubris_orig")
-      alias_method :pbEffectsAfterHit_chrooked_hubris_orig, :pbEffectsAfterHit
-      def pbEffectsAfterHit(user, target, thismove, turneffects)
-        pbEffectsAfterHit_chrooked_hubris_orig(user, target, thismove, turneffects)
-        if user && target && (user.hasWorkingAbility(:HUBRIS) rescue false) && (target.isFainted? rescue false)
-          (user.pbIncreaseStatWithCause(PBStats::SPATK, 1, user, PBAbilities.getName(user.ability)) rescue nil)
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_hubris_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_hubris_apply(user, target, thismove)
+        begin
+          return unless user && target
+          return unless (user.hasWorkingAbility(:HUBRIS) rescue false)
+          fainted = (target.fainted? rescue (target.isFainted? rescue false))
+          return unless fainted
+          Chrooked.raise_stat(user, :spatk, 1, user)
           ($chrooked_log.call("[chrooked:hubris] OBS event=ko ability=true raised=SPATK") rescue nil)
+        rescue Exception
         end
       end
     end
   end
+  return unless Chrooked.install_after_move("chrooked_hubris_apply", "pbAfterMove_chrooked_hubris_orig")
   $chrooked_hubris_installed = true
-  ($chrooked_log.call("[chrooked:hubris] installed on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:hubris] installed (after-move seam)") rescue nil)
 end
 
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsAfterHit")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_hubris
 elsif defined?(Graphics)
   class << Graphics
@@ -57,5 +58,5 @@ elsif defined?(Graphics)
   end
   ($chrooked_log.call("[chrooked:hubris] deferred install armed on Graphics.update") rescue nil)
 else
-  ($chrooked_log.call("[chrooked:hubris] ERROR: PokeBattle_Battler/Graphics missing at load") rescue nil)
+  ($chrooked_log.call("[chrooked:hubris] ERROR: neither PokeBattle_Battler nor Graphics defined at load") rescue nil)
 end

@@ -249,6 +249,28 @@ module Chrooked
     end
   end
 
+  # Raise `target`'s stat by `stages`, attributed to `user`. Mirror of lower_stat:
+  # bridges 16.2's pbIncreaseStatWithCause(PBStats::X int, stages, user, cause) and
+  # IF2's pbRaiseStatStage(:GAMEDATA_STAT_ID sym, stages, user). Returns true if it
+  # attempted the raise.
+  def self.raise_stat(target, stat_key, stages, user)
+    pair = STAT_TOKENS[stat_key]
+    return false unless pair && target
+    case engine
+    when :ess162
+      const = (PBStats.const_get(pair[0]) rescue nil)
+      return false if const.nil?
+      cause = (PBAbilities.getName(user.ability) rescue "")
+      (target.pbIncreaseStatWithCause(const, stages, user, cause) rescue nil)
+      true
+    when :if_fork
+      (target.pbRaiseStatStage(pair[1], stages, user) rescue nil)
+      true
+    else
+      false
+    end
+  end
+
   # Non-fainted battlers opposing `battler`. Bridges 16.2's pbIsOpposing?/isFainted?
   # and IF2's opposes?/fainted?. Returns [] if the battle context is unavailable.
   def self.opposing_battlers(battler)
@@ -266,6 +288,36 @@ module Chrooked
       out.push(b)
     end
     out
+  end
+
+  # Install an after-move hook on PokeBattle_Battler. Bridges 16.2's
+  # pbEffectsAfterHit(user, target, thismove, turneffects) — per-target — and IF2's
+  # pbEffectsAfterMove(user, targets, move, numHits) — per-MOVE with a targets LIST.
+  # Normalizes to a per-target call: the battler instance method `apply_method`(user,
+  # target, move) runs once per target AFTER the engine's own handler. KO gating is the
+  # body's job (use `target.fainted? rescue target.isFainted?`). `orig` is this plugin's
+  # unique backup name so multiple plugins chain. Idempotent; returns true if a seam exists.
+  def self.install_after_move(apply_method, orig)
+    return false unless defined?(PokeBattle_Battler)
+    s = seam(PokeBattle_Battler, ["pbEffectsAfterHit", "pbEffectsAfterMove"])
+    return false unless s
+    return true if PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?(orig)
+    PokeBattle_Battler.class_eval do
+      alias_method orig.to_sym, s.to_sym
+      if s == "pbEffectsAfterHit"
+        define_method(s) do |user, target, thismove, turneffects|
+          send(orig, user, target, thismove, turneffects)
+          send(apply_method, user, target, thismove)
+        end
+      else
+        define_method(s) do |user, targets, move, numHits|
+          send(orig, user, targets, move, numHits)
+          list = targets.is_a?(Array) ? targets : [targets]
+          list.each { |t| send(apply_method, user, t, move) }
+        end
+      end
+    end
+    true
   end
 
   # Install a switch-in hook on PokeBattle_Battler. Bridges 16.2's

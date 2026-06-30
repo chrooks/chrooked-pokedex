@@ -6,24 +6,21 @@ chrooked_id: pyre
 applies_to: ability
 aka: { pokeemerald: ABILITY_PYRE }
 effects:
-  - summary: "Knocking out a target fuels this Pokemon's Fire and Ghost moves for 3 turns."
-    trigger: faint
-    when: "this Pokemon's move just knocked out the target and battlers remain on both sides"
-    effect: "set a 3-turn timer during which this Pokemon's Fire-type and Ghost-type moves are boosted"
-  - summary: "While the timer is active, Fire and Ghost moves deal 30% more damage."
-    trigger: damage-calc
-    when: "the Pyre timer is greater than 0 and the move being used is Fire-type or Ghost-type"
-    effect: "multiply the damage modifier by 1.3 (UQ_4_12(1.3))"
+  - summary: "This Pokemon's Ghost-type moves gain a 30% chance to burn the target."
+    trigger: status-apply
+    when: "this Pokemon uses a damaging Ghost-type move that damages a target which can be burned"
+    effect: "with 30% probability, apply the burn status to the target"
 test_cases:
-  - given: "a Pyre user lands a KO, then on a later turn uses a Fire-type move within 3 turns"
-    expect: "that Fire move deals 1.3x boosted damage"
-  - given: "a Pyre user lands a KO, then uses a Ghost-type move while the timer is active"
-    expect: "that Ghost move deals 1.3x boosted damage"
-  - given: "a Pyre user with the timer active uses a Water-type move"
-    expect: "no boost applies (only Fire and Ghost are fueled)"
+  - given: "a Pyre user lands a damaging Ghost-type move on a burnable target many times"
+    expect: "the target is burned about 30% of the time"
+  - given: "a Pyre user uses a Fire-type (or any non-Ghost) move"
+    expect: "no added burn chance (only Ghost moves carry it)"
+  - given: "a Pyre user lands a Ghost move on a Fire-type"
+    expect: "the burn cannot land (Fire-types are burn-immune)"
 notes:
-  - "Timer is set to 3 on KO and decrements by 1 each turn end (only while > 0). The boost applies as long as the timer is > 0 at damage-calc time."
-  - "Re-KOing resets the timer back to 3 (the KO handler assigns 3, it does not add)."
+  - "Burn chance is 30%, rolled after the Ghost move connects."
+  - "Respects normal immunities: the target must be burnable (not Fire-type, not already statused) and must actually be damaged by the hit; does not fire on confusion self-damage."
+  - "Redefined 2026-06-30 — previously a KO-triggered 3-turn Fire/Ghost 1.3x damage window; that mechanic is fully removed."
 engine_hints:
-  pokeemerald: "Set: src/battle_script_commands.c VARIOUS_TRY_ACTIVATE_GRIM_NEIGH (line ~10682) — gBattleStruct->pyreTimer[gBattlerAttacker] = 3 on HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty(). Boost: src/battle_util.c attack-modifier switch (line ~9737) — moveType FIRE or GHOST && pyreTimer > 0 → UQ_4_12(1.3). Decrement: src/battle_util.c turn-end ability switch (line ~5566) — pyreTimer-- while > 0. Field: include/battle.h line 756 (u8 pyreTimer[MAX_BATTLERS_COUNT])."
-  essentials: "On KO, set a 3-turn counter. In the damage modifier hook, multiply FIRE/GHOST damage by 1.3 while the counter > 0. Decrement the counter each round end."
+  pokeemerald: "src/battle_util.c after-hit handler (ABILITYEFFECT_MOVE_END_ATTACKER, model on Infernal Maw's burn): gate on moveType == TYPE_GHOST && CanBeBurned(target) && IsBattlerTurnDamaged(target) && RandomPercentage(RNG_PYRE, 30), then set MOVE_EFFECT_BURN. Remove the old pyreTimer field + set/boost/decrement sites."
+  essentials: "After-hit hook: if the user has Pyre and the move resolved as Ghost-type and the target was damaged, roll 30% to burn the target when it can be burned."

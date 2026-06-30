@@ -8,10 +8,10 @@
 #      (isBitingMove?, verified flag), scale the final multiplier by 1.3.
 #      damagemult is in 0x1000 units; base impl just returns damagemult.
 #
-#   2) BURN    — PokeBattle_Battler#pbEffectsAfterHit(user, target, thismove,
-#      turneffects): after a biting move connects, roll 20% to burn the target
-#      if it can be burned. Gated on hasWorkingAbility(:INFERNALMAW), actual
-#      damage dealt, pbRandom(100) < 20, and pbCanBurn?(user, false, thismove).
+#   2) BURN + FLINCH — after-hit seam (compat install_after_move): after a damaging
+#      biting move connects, roll 30% to burn the target (if burnable) AND an
+#      independent flat 30% to flinch it. Gated on hasWorkingAbility(:INFERNALMAW),
+#      actual damage dealt, and the move's bitingMove flag.
 #
 # Both methods are aliased onto their own class, and BOTH installs are deferred
 # onto Graphics.update so they arm regardless of script load order. Mirrors the
@@ -63,39 +63,52 @@ def chrooked_install_infernalmaw_damage
 end
 
 # --- Install 2: 20% burn-after-hit on PokeBattle_Battler -------------------
+# Via the compat shim's install_after_move (16.2 pbEffectsAfterHit / IF2
+# pbEffectsAfterMove), normalized to one (user, target, move) call per target.
+# Damage dealt read from target.damageState.hpLost (present on both engines) rather
+# than turneffects, which IF2's per-move seam doesn't pass.
 def chrooked_install_infernalmaw_burn
   return if $chrooked_infernalmaw_burn_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsAfterHit")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsAfterHit_chrooked_infernalmaw_orig")
-      alias_method :pbEffectsAfterHit_chrooked_infernalmaw_orig, :pbEffectsAfterHit
-      def pbEffectsAfterHit(user, target, thismove, turneffects)
-        pbEffectsAfterHit_chrooked_infernalmaw_orig(user, target, thismove, turneffects)
-        is_ab = (user.hasWorkingAbility(:INFERNALMAW) rescue false)
-        # Damage dealt this hit — turneffects[PBEffects::TotalDamage] is the
-        # accumulated damage for the move; guard for a missing/0 value.
-        dealt = (turneffects[PBEffects::TotalDamage] rescue 0)
-        dealt = 0 if dealt.nil?
-        if is_ab && dealt > 0
-          if @battle.pbRandom(100) < 20
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_infernalmaw_burn_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_infernalmaw_burn_apply(user, target, thismove)
+        begin
+          return unless user && target
+          return unless (user.hasWorkingAbility(:INFERNALMAW) rescue false)
+          dealt = (target.damageState.hpLost rescue 0)
+          dealt = 0 if dealt.nil?
+          return unless dealt > 0
+          is_biting = (thismove.bitingMove? rescue (thismove.isBitingMove? rescue false))
+          return unless is_biting
+          movename = (thismove.name rescue thismove)
+          # 30% burn (independent roll)
+          if @battle.pbRandom(100) < 30
             can_burn = (target.pbCanBurn?(user, false, thismove) rescue false)
             target.pbBurn(user) if can_burn
-            ($chrooked_log.call("[chrooked:infernalmaw] OBS move=#{(thismove.name rescue thismove)} ability=#{is_ab} burn=#{can_burn}") rescue nil)
+            ($chrooked_log.call("[chrooked:infernalmaw] OBS move=#{movename} ability=true burn=#{can_burn}") rescue nil)
           end
+          # flat 30% flinch (independent roll; engine's pbFlinch enforces Inner Focus/etc.)
+          fainted = (target.fainted? rescue (target.isFainted? rescue false))
+          if !fainted && @battle.pbRandom(100) < 30
+            (target.pbFlinch(user) rescue nil)
+            ($chrooked_log.call("[chrooked:infernalmaw] OBS move=#{movename} ability=true flinch=true") rescue nil)
+          end
+        rescue Exception
         end
       end
     end
   end
+  return unless Chrooked.install_after_move("chrooked_infernalmaw_burn_apply", "pbAfterMove_chrooked_infernalmaw_orig")
   $chrooked_infernalmaw_burn_installed = true
-  ($chrooked_log.call("[chrooked:infernalmaw] burn install on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:infernalmaw] burn install (after-move seam)") rescue nil)
 end
 
 # --- Arm both installs (immediate if classes are ready, else deferred) ------
 if defined?(PokeBattle_Move) && PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("pbModifyDamage")
   chrooked_install_infernalmaw_damage
 end
-if defined?(PokeBattle_Battler) && PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsAfterHit")
+if defined?(PokeBattle_Battler) && defined?(Chrooked)
   chrooked_install_infernalmaw_burn
 end
 

@@ -60,7 +60,7 @@ def chrooked_install_stampede_priority
             next unless batt
             next unless (batt.hasWorkingAbility(:STAMPEDE) rescue false)
             armed = (batt.instance_variable_get(:@chrooked_stampede_armed) rescue false) ? true : false
-            contact = (move.isContactMove? rescue false)
+            contact = (Chrooked.contact_move?(move) rescue (move.isContactMove? rescue false))
             movename = (getConstantName(PBMoves, move.id) rescue "?")
             if armed && contact
               base = move.priority
@@ -84,63 +84,64 @@ def chrooked_install_stampede_priority
 end
 
 # --- Hook (b): arm on KO, consume on contact move ---------------------------
+# Via the compat shim's install_after_move (16.2 pbEffectsAfterHit / IF2
+# pbEffectsAfterMove), normalized to one (user, target, move) call per target.
 def chrooked_install_stampede_arm
   return if $chrooked_stampede_arm_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsAfterHit")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbEffectsAfterHit_chrooked_stampede_orig")
-      alias_method :pbEffectsAfterHit_chrooked_stampede_orig, :pbEffectsAfterHit
-      def pbEffectsAfterHit(user, target, thismove, turneffects)
-        pbEffectsAfterHit_chrooked_stampede_orig(user, target, thismove, turneffects)
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_stampede_arm_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_stampede_arm_apply(user, target, thismove)
         begin
-          if user && (user.hasWorkingAbility(:STAMPEDE) rescue false)
-            was_armed = (user.instance_variable_get(:@chrooked_stampede_armed) rescue false)
-            if was_armed && (thismove.isContactMove? rescue false)
-              user.instance_variable_set(:@chrooked_stampede_armed, false)
-              ($chrooked_log.call("[chrooked:stampede] OBS event=consume contact=true") rescue nil)
-            end
-            if target && (target.isFainted? rescue false)
-              user.instance_variable_set(:@chrooked_stampede_armed, true)
-              ($chrooked_log.call("[chrooked:stampede] OBS event=ko armed=true") rescue nil)
-            end
+          return unless user && (user.hasWorkingAbility(:STAMPEDE) rescue false)
+          was_armed = (user.instance_variable_get(:@chrooked_stampede_armed) rescue false)
+          contact = (Chrooked.contact_move?(thismove) rescue false)
+          if was_armed && contact
+            user.instance_variable_set(:@chrooked_stampede_armed, false)
+            ($chrooked_log.call("[chrooked:stampede] OBS event=consume contact=true") rescue nil)
+          end
+          fainted = target && (target.fainted? rescue (target.isFainted? rescue false))
+          if fainted
+            user.instance_variable_set(:@chrooked_stampede_armed, true)
+            ($chrooked_log.call("[chrooked:stampede] OBS event=ko armed=true") rescue nil)
           end
         rescue Exception
         end
       end
     end
   end
+  return unless Chrooked.install_after_move("chrooked_stampede_arm_apply", "pbAfterMove_chrooked_stampede_orig")
   $chrooked_stampede_arm_installed = true
-  ($chrooked_log.call("[chrooked:stampede] arm hook installed on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:stampede] arm hook installed (after-move seam)") rescue nil)
 end
 
 # --- Hook (c): clear the flag on switch-in ----------------------------------
+# Via the compat shim's install_switch_in (16.2 pbAbilitiesOnSwitchIn / IF2
+# pbEffectsOnSwitchIn); apply receives the switched-in flag.
 def chrooked_install_stampede_reset
   return if $chrooked_stampede_reset_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn_chrooked_stampede_orig")
-      alias_method :pbAbilitiesOnSwitchIn_chrooked_stampede_orig, :pbAbilitiesOnSwitchIn
-      def pbAbilitiesOnSwitchIn(onactive)
-        if onactive
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_stampede_reset_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_stampede_reset_apply(switched_in)
+        begin
+          return unless switched_in
           @chrooked_stampede_armed = false
           ($chrooked_log.call("[chrooked:stampede] OBS event=switchin reset=armed") rescue nil)
+        rescue Exception
         end
-        pbAbilitiesOnSwitchIn_chrooked_stampede_orig(onactive)
       end
     end
   end
+  return unless Chrooked.install_switch_in("chrooked_stampede_reset_apply", "pbSwitchIn_chrooked_stampede_orig")
   $chrooked_stampede_reset_installed = true
-  ($chrooked_log.call("[chrooked:stampede] reset hook installed on PokeBattle_Battler") rescue nil)
+  ($chrooked_log.call("[chrooked:stampede] reset hook installed (switch-in seam)") rescue nil)
 end
 
 chrooked_install_stampede_priority if defined?(PokeBattle_Battle) &&
   PokeBattle_Battle.instance_methods.map { |m| m.to_s }.include?("pbPriority")
-chrooked_install_stampede_arm if defined?(PokeBattle_Battler) &&
-  PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbEffectsAfterHit")
-chrooked_install_stampede_reset if defined?(PokeBattle_Battler) &&
-  PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn")
+chrooked_install_stampede_arm if defined?(PokeBattle_Battler) && defined?(Chrooked)
+chrooked_install_stampede_reset if defined?(PokeBattle_Battler) && defined?(Chrooked)
 
 if (!$chrooked_stampede_priority_installed || !$chrooked_stampede_arm_installed || !$chrooked_stampede_reset_installed) && defined?(Graphics)
   class << Graphics

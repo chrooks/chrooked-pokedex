@@ -13,18 +13,24 @@ effects:
   - summary: "Biting moves gain a 20% chance to burn the target."
     trigger: status-apply
     when: "this Pokemon's biting move damages a target that can be burned"
-    effect: "with 20% probability, apply the burn status to the target"
+    effect: "with 30% probability, apply the burn status to the target"
+  - summary: "Biting moves gain a flat 30% chance to make the target flinch."
+    trigger: status-apply
+    when: "this Pokemon's biting move damages a target"
+    effect: "with 30% probability, make the target flinch (independent of the move's own flinch rate and of the burn roll)"
 test_cases:
   - given: "an Infernal Maw user uses Crunch (a biting move) many times against a burnable target"
-    expect: "damage is multiplied by 1.3, and the target is burned about 20% of the time"
+    expect: "damage is multiplied by 1.3, the target is burned about 30% of the time, and flinches about 30% of the time"
   - given: "an Infernal Maw user uses Tackle (not a biting move)"
-    expect: "no boost and no added burn chance"
+    expect: "no boost, no added burn chance, and no added flinch chance"
   - given: "an Infernal Maw user lands a biting move on a Fire-type"
-    expect: "the 1.3x boost applies, but the burn cannot land (Fire-types are burn-immune)"
+    expect: "the 1.3x boost applies and the flinch roll still happens, but the burn cannot land (Fire-types are burn-immune)"
 notes:
-  - "Boost is 1.3x (Strong Jaw uses 1.5x; Infernal Maw is the milder 1.3x) — confirmed in C. Burn chance is 20%, rolled via RNG_INFERNAL_MAW after the bite connects."
+  - "Boost is 1.3x (Strong Jaw uses 1.5x; Infernal Maw is the milder 1.3x) — confirmed in C. Burn chance is 30% and flinch chance is a flat 30%, each rolled independently after the bite connects."
   - "The burn respects normal immunities: CanBeBurned(target) is checked (Fire-types, already-statused, etc.), the target must actually be damaged by the hit, and it does not fire on confusion self-damage."
+  - "The flinch is a flat 30% regardless of the move's own flinch rate; it uses the normal flinch helper, so Inner Focus / substitute / already-moved gating still applies."
   - "Biting moves are matched by the dedicated bitingMove flag, the same one Strong Jaw uses."
+  - "Burn raised 20% -> 30% and flat 30% flinch added 2026-06-30."
 engine_hints:
-  pokeemerald: "src/battle_util.c. Power: CalcAttackerAbilitiesModifier switch (~line 9604) — `case ABILITY_INFERNAL_MAW: if (IsBitingMove(move)) modifier *= UQ_4_12(1.3);`. Burn: ABILITYEFFECT_MOVE_END_ATTACKER handler (~line 6300) — gated on CanBeBurned(target) && IsBitingMove(move) && IsBattlerTurnDamaged(target) && RandomPercentage(RNG_INFERNAL_MAW, 20), then sets MOVE_EFFECT_BURN. bitingMove flag = gMovesInfo[].bitingMove (include/move.h IsBitingMove)."
-  essentials: "Damage-calc: if the user has Infernal Maw and the move has the biting flag, apply 1.3x (model on Strong Jaw). After-hit: roll 20% to burn the target if it can be burned and was damaged."
+  pokeemerald: "src/battle_util.c. Power: CalcAttackerAbilitiesModifier switch (~line 9604) — `case ABILITY_INFERNAL_MAW: if (IsBitingMove(move)) modifier *= UQ_4_12(1.3);`. Burn + flinch: ABILITYEFFECT_MOVE_END_ATTACKER handler (~line 6300) — gated on IsBitingMove(move) && IsBattlerTurnDamaged(target); roll RandomPercentage(RNG_INFERNAL_MAW, 30) && CanBeBurned(target) -> MOVE_EFFECT_BURN, and an independent RandomPercentage(RNG_INFERNAL_MAW_FLINCH, 30) -> MOVE_EFFECT_FLINCH. bitingMove flag = gMovesInfo[].bitingMove (include/move.h IsBitingMove)."
+  essentials: "Damage-calc: if the user has Infernal Maw and the move has the biting flag, apply 1.3x (model on Strong Jaw). After-hit: on a damaging biting move, roll 30% to burn the target if it can be burned, and independently roll a flat 30% to flinch it."

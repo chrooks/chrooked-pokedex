@@ -104,27 +104,26 @@ def chrooked_install_spitefulblock_consume
 end
 
 # --- (c) RESET: clear the ivar on switch-in so it does not leak -------------
+# Via the compat shim's install_switch_in (16.2 pbAbilitiesOnSwitchIn / IF2
+# pbEffectsOnSwitchIn); apply receives the switched-in flag.
 def chrooked_install_spitefulblock_reset
   return if $chrooked_spitefulblock_reset_installed
-  return unless defined?(PokeBattle_Battler)
-  return unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn")
-  PokeBattle_Battler.class_eval do
-    unless instance_methods(false).map { |m| m.to_s }.include?("pbAbilitiesOnSwitchIn_chrooked_spitefulblock_orig")
-      alias_method :pbAbilitiesOnSwitchIn_chrooked_spitefulblock_orig, :pbAbilitiesOnSwitchIn
-      def pbAbilitiesOnSwitchIn(onactive)
-        pbAbilitiesOnSwitchIn_chrooked_spitefulblock_orig(onactive)
+  return unless defined?(PokeBattle_Battler) && defined?(Chrooked)
+  unless PokeBattle_Battler.instance_methods.map { |m| m.to_s }.include?("chrooked_spitefulblock_reset_apply")
+    PokeBattle_Battler.class_eval do
+      def chrooked_spitefulblock_reset_apply(switched_in)
         begin
-          if onactive   # only a REAL switch-in; this method also fires with onactive=false
-            self.instance_variable_set(:@chrooked_spitefulblock_flag, false)
-            ($chrooked_log.call("[chrooked:spitefulblock] OBS event=switchin effect=flag reset to default(false)") rescue nil)
-          end
+          return unless switched_in   # only a REAL switch-in
+          self.instance_variable_set(:@chrooked_spitefulblock_flag, false)
+          ($chrooked_log.call("[chrooked:spitefulblock] OBS event=switchin effect=flag reset to default(false)") rescue nil)
         rescue Exception
         end
       end
     end
   end
+  return unless Chrooked.install_switch_in("chrooked_spitefulblock_reset_apply", "pbSwitchIn_chrooked_spitefulblock_orig")
   $chrooked_spitefulblock_reset_installed = true
-  ($chrooked_log.call("[chrooked:spitefulblock] reset hook installed on PokeBattle_Battler#pbAbilitiesOnSwitchIn") rescue nil)
+  ($chrooked_log.call("[chrooked:spitefulblock] reset hook installed (switch-in seam)") rescue nil)
 end
 
 def chrooked_install_spitefulblock_all
