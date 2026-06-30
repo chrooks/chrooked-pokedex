@@ -4,6 +4,7 @@ import type { DexLayout } from "../hooks/useUrlState";
 import type { ColumnKey } from "../lib/dexColumns";
 import type { FilterEntry } from "../lib/dexFilters";
 import type { SortKey } from "../lib/dexSort";
+import type { InlineEdit } from "../lib/inlineEdit";
 import { DexGrid } from "./DexGrid";
 import { DexTable } from "./DexTable";
 import { DexControls, type DexViewPatch } from "./filters/DexControls";
@@ -21,6 +22,8 @@ type Props = {
   onChange: (patch: DexViewPatch) => void;
   onOpen: (chrookedId: string) => void;
   backdropTargetId?: string | null;
+  abilityOptions?: readonly string[];
+  onInlineEdit?: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
 };
 
 /** The dex screen: resolves load/error, renders the control stack above a
@@ -39,6 +42,8 @@ export function DexView({
   onChange,
   onOpen,
   backdropTargetId,
+  abilityOptions,
+  onInlineEdit,
 }: Props) {
   if (resource.error !== null) {
     return <ErrorView message={resource.error} status={resource.status} />;
@@ -77,6 +82,8 @@ export function DexView({
             onSort={(next) => onChange({ sort: next })}
             onOpen={onOpen}
             backdropTargetId={backdropTargetId}
+            abilityOptions={abilityOptions}
+            onInlineEdit={onInlineEdit}
           />
         ) : (
           <DexGrid

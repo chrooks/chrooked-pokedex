@@ -37,7 +37,11 @@ export function useResource<T>(
 
   useEffect(() => {
     const controller = new AbortController();
-    setState({ data: null, error: null, status: null, isLoading: true });
+    // Stale-while-revalidate: only the FIRST load (no data yet) shows the
+    // skeleton. A reload after a write keeps the current rows on screen and
+    // fetches in the background, so an edit swaps in the new data without the
+    // table flashing to skeleton or the scroll jumping to top.
+    setState((prev) => ({ ...prev, isLoading: prev.data === null, error: null }));
 
     fetcher(controller.signal)
       .then((data) => {
@@ -49,12 +53,16 @@ export function useResource<T>(
         if (controller.signal.aborted) {
           return;
         }
-        setState({
-          data: null,
-          error: messageOf(error),
-          status: error instanceof ApiError ? error.status : null,
+        // A failed BACKGROUND revalidate keeps the stale rows rather than
+        // blanking to the error view — the write that triggered it already
+        // surfaces its own error in the editor. Only a first-load failure (no
+        // rows to fall back to) owns the error view.
+        setState((prev) => ({
+          data: prev.data,
+          error: prev.data === null ? messageOf(error) : null,
+          status: error instanceof ApiError ? error.status : prev.status,
           isLoading: false,
-        });
+        }));
       });
 
     return () => controller.abort();

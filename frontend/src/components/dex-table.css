@@ -229,3 +229,112 @@
 .dex-table__faint {
   color: var(--text-faint);
 }
+
+/* ── Right-click inline edit popover ──────────────────────────────────────
+   Mirrors the editor field style on a floating panel. A right-clickable cell
+   gets a faint context-cursor and a hover tint so the affordance reads. */
+.dex-table__c[data-editable] {
+  cursor: context-menu;
+}
+
+.dex-table__c[data-editable]:hover {
+  background: var(--surface-3);
+}
+
+.dex-edit__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.dex-edit {
+  position: fixed;
+  z-index: 91;
+  width: 14rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px oklch(0% 0 0 / 0.45);
+}
+
+.dex-edit__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--space-2);
+}
+
+.dex-edit__title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dex-edit__name {
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dex-edit__row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.dex-edit__input,
+.dex-edit__select {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-0);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.dex-edit__input:focus,
+.dex-edit__select:focus {
+  outline: none;
+  border-color: var(--chrome);
+}
+
+.dex-edit__error {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--chrome);
+}
+
+.dex-edit__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.dex-edit__btn {
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface-3);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.dex-edit__btn--primary {
+  background: var(--chrome);
+  border-color: var(--chrome);
+  color: oklch(98% 0 0);
+}
+
+.dex-edit__btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

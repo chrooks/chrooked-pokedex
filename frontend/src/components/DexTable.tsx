@@ -1,13 +1,20 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import type { DexEntry } from "../types";
-import { bst, dexLabel, isEdited } from "../lib/format";
+import { bst, dexLabel, isEdited, STAT_LABEL, TYPES, type StatKey } from "../lib/format";
+import type { InlineEdit, AbilitySlot } from "../lib/inlineEdit";
 import { COLUMNS, type Column, type ColumnKey } from "../lib/dexColumns";
 import type { SortKey } from "../lib/dexSort";
 import { TypeChip } from "./TypeChip";
 import { EditedLed } from "./EditedLed";
 import { DexSprite } from "./DexSprite";
 import "./dex-table.css";
+
+/** Which cell a right-click targeted — the field the inline menu will edit. */
+type EditField =
+  | { kind: "stat"; key: StatKey }
+  | { kind: "types" }
+  | { kind: "ability" };
 
 type Props = {
   entries: DexEntry[];
@@ -17,6 +24,12 @@ type Props = {
   onSort: (sort: SortKey[]) => void;
   onOpen: (chrookedId: string) => void;
   backdropTargetId?: string | null;
+  /** Known ability names, for the inline ability combobox. */
+  abilityOptions?: readonly string[];
+  /** When provided, right-clicking a stat/types/abilities cell opens an inline
+      edit menu that saves one Override field. Absent → no inline editing (e.g.
+      on a Target backdrop, where the modal editor owns the scope toggle). */
+  onInlineEdit?: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
 };
 
 const ROW_HEIGHT = 38;
@@ -46,8 +59,21 @@ const WIDTH: Record<ColumnKey, string> = {
  * an overridden value keyed amber, the row's edited LED carrying the signal.
  * Rows are windowed; the header stays pinned.
  */
-export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, backdropTargetId }: Props) {
+export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, backdropTargetId, abilityOptions, onInlineEdit }: Props) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  // Right-click inline edit menu. Null when closed; carries the cursor position,
+  // the species, and which field the targeted cell maps to.
+  const [menu, setMenu] = useState<{ x: number; y: number; entry: DexEntry; field: EditField } | null>(null);
+  const openEdit = useCallback(
+    (e: React.MouseEvent, entry: DexEntry, field: EditField) => {
+      if (!onInlineEdit) return;
+      e.preventDefault();
+      e.stopPropagation();
+      setMenu({ x: Math.min(e.clientX, window.innerWidth - 240), y: Math.min(e.clientY, window.innerHeight - 200), entry, field });
+    },
+    [onInlineEdit],
+  );
   const rowVirtualizer = useVirtualizer({
     count: entries.length,
     getScrollElement: () => scrollRef.current,
@@ -115,12 +141,26 @@ export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, back
                 columns={visible}
                 top={vrow.start}
                 onOpen={onOpen}
+                onEdit={onInlineEdit ? openEdit : undefined}
                 backdropTargetId={backdropTargetId}
               />
             );
           })}
         </div>
       </div>
+
+      {menu && onInlineEdit && (
+        <InlineEditMenu
+          key={`${menu.entry.chrooked_id}:${menu.field.kind}:${menu.field.kind === "stat" ? menu.field.key : ""}`}
+          x={menu.x}
+          y={menu.y}
+          entry={menu.entry}
+          field={menu.field}
+          abilityOptions={abilityOptions ?? []}
+          onSave={onInlineEdit}
+          onClose={() => setMenu(null)}
+        />
+      )}
     </div>
   );
 }
@@ -185,6 +225,8 @@ function HeaderCell({ col, sortIndex, direction, multi, onSort }: HeaderProps) {
   );
 }
 
+type EditOpener = (e: React.MouseEvent, entry: DexEntry, field: EditField) => void;
+
 type RowProps = {
   entry: DexEntry;
   rowIndex: number;
@@ -192,10 +234,11 @@ type RowProps = {
   columns: Column[];
   top: number;
   onOpen: (id: string) => void;
+  onEdit?: EditOpener;
   backdropTargetId?: string | null;
 };
 
-function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, backdropTargetId }: RowProps) {
+function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, onEdit, backdropTargetId }: RowProps) {
   const edited = isEdited(entry);
   const open = useCallback(() => onOpen(entry.chrooked_id), [onOpen, entry.chrooked_id]);
 
@@ -211,7 +254,7 @@ function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, backdropTar
     >
       {/* Cells iterate the SAME visible-column list the header uses, so header
           and data can never drift out of alignment. */}
-      {columns.map((col) => renderCell(col, entry, edited, open, backdropTargetId))}
+      {columns.map((col) => renderCell(col, entry, edited, open, backdropTargetId, onEdit))}
     </div>
   );
 }
@@ -224,6 +267,7 @@ function renderCell(
   edited: boolean,
   open: () => void,
   backdropTargetId?: string | null,
+  onEdit?: EditOpener,
 ) {
   switch (col.key) {
     case "led":
@@ -262,7 +306,13 @@ function renderCell(
       );
     case "types":
       return (
-        <span key="types" className="dex-table__c dex-table__types" role="cell">
+        <span
+          key="types"
+          className="dex-table__c dex-table__types"
+          role="cell"
+          data-editable={onEdit ? true : undefined}
+          onContextMenu={onEdit ? (e) => onEdit(e, entry, { kind: "types" }) : undefined}
+        >
           {entry.types.map((t) => (
             <TypeChip key={t} type={t} variant="code" />
           ))}
@@ -276,7 +326,13 @@ function renderCell(
       );
     case "abilities":
       return (
-        <span key="abilities" className="dex-table__c dex-table__abil" role="cell">
+        <span
+          key="abilities"
+          className="dex-table__c dex-table__abil"
+          role="cell"
+          data-editable={onEdit ? true : undefined}
+          onContextMenu={onEdit ? (e) => onEdit(e, entry, { kind: "ability" }) : undefined}
+        >
           {abilityList(entry)}
         </span>
       );
@@ -289,12 +345,155 @@ function renderCell(
           className="dex-table__c dex-table__stat mono"
           role="cell"
           data-changed={changed || undefined}
+          data-editable={onEdit ? true : undefined}
+          onContextMenu={onEdit ? (e) => onEdit(e, entry, { kind: "stat", key: col.key as StatKey }) : undefined}
         >
           {entry.stats[col.key] ?? "—"}
         </span>
       );
     }
   }
+}
+
+const ABILITY_SLOTS: readonly AbilitySlot[] = ["primary", "secondary", "hidden"];
+
+type MenuProps = {
+  x: number;
+  y: number;
+  entry: DexEntry;
+  field: EditField;
+  abilityOptions: readonly string[];
+  onSave: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
+  onClose: () => void;
+};
+
+/** The right-click popover. Seeds from the cell's current merged value, edits one
+    field, and hands an {@link InlineEdit} to onSave (which builds the
+    overrides-only payload and PUTs it). Closes on save, Escape, or backdrop. */
+function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }: MenuProps) {
+  const [statValue, setStatValue] = useState<number | "">(
+    field.kind === "stat" ? entry.stats[field.key] ?? "" : "",
+  );
+  const [type1, setType1] = useState(entry.types[0] ?? "");
+  const [type2, setType2] = useState(entry.types[1] ?? "");
+  const [slot, setSlot] = useState<AbilitySlot>("primary");
+  const [ability, setAbility] = useState(entry.abilities.primary ?? "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Switching ability slot reseeds the name field to that slot's current value.
+  const pickSlot = (next: AbilitySlot) => {
+    setSlot(next);
+    setAbility(entry.abilities[next] ?? "");
+  };
+
+  async function submit() {
+    if (saving) return;
+    let edit: InlineEdit;
+    if (field.kind === "stat") {
+      if (statValue === "") return;
+      edit = { kind: "stat", key: field.key, value: statValue };
+    } else if (field.kind === "types") {
+      edit = { kind: "types", type1, type2 };
+    } else {
+      edit = { kind: "ability", slot, name: ability };
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      await onSave(entry, edit);
+      onClose();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Save failed");
+      setSaving(false);
+    }
+  }
+
+  const title = field.kind === "stat" ? STAT_LABEL[field.key] : field.kind === "types" ? "Types" : "Abilities";
+
+  return (
+    <>
+      <div className="dex-edit__backdrop" onMouseDown={onClose} />
+      <form
+        className="dex-edit"
+        role="menu"
+        aria-label={`Edit ${title} for ${entry.name}`}
+        style={{ left: x, top: y }}
+        onKeyDown={(e) => e.key === "Escape" && onClose()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          void submit();
+        }}
+      >
+        <div className="dex-edit__head">
+          <span className="dex-edit__title">{title}</span>
+          <span className="dex-edit__name">{entry.name}</span>
+        </div>
+
+        {field.kind === "stat" && (
+          <input
+            className="dex-edit__input mono"
+            type="number"
+            inputMode="numeric"
+            min={0}
+            max={255}
+            autoFocus
+            value={statValue}
+            onChange={(e) => setStatValue(e.target.value === "" ? "" : Math.max(0, Math.min(255, Number(e.target.value))))}
+          />
+        )}
+
+        {field.kind === "types" && (
+          <div className="dex-edit__row">
+            <select className="dex-edit__select" autoFocus value={type1} onChange={(e) => setType1(e.target.value)}>
+              {TYPES.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+            <select className="dex-edit__select" value={type2} onChange={(e) => setType2(e.target.value)}>
+              <option value="">— none —</option>
+              {TYPES.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {field.kind === "ability" && (
+          <div className="dex-edit__row">
+            <select className="dex-edit__select" value={slot} onChange={(e) => pickSlot(e.target.value as AbilitySlot)}>
+              {ABILITY_SLOTS.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <input
+              className="dex-edit__input"
+              type="text"
+              list="dex-edit-abilities"
+              autoComplete="off"
+              placeholder="blank = base"
+              value={ability}
+              onChange={(e) => setAbility(e.target.value)}
+            />
+            <datalist id="dex-edit-abilities">
+              {abilityOptions.map((a) => (
+                <option key={a} value={a} />
+              ))}
+            </datalist>
+          </div>
+        )}
+
+        {error && <p className="dex-edit__error">{error}</p>}
+
+        <div className="dex-edit__actions">
+          <button type="button" className="dex-edit__btn" onClick={onClose}>Cancel</button>
+          <button type="submit" className="dex-edit__btn dex-edit__btn--primary" disabled={saving}>
+            {saving ? "Saving…" : "Save"}
+          </button>
+        </div>
+      </form>
+    </>
+  );
 }
 
 /** Abilities as "primary · secondary · hidden", dim, with the hidden one marked. */

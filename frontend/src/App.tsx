@@ -8,6 +8,7 @@ import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
 import type { DexEntry, KindKey, Move, Target } from "./types";
+import { applyInlineEdit, type InlineEdit } from "./lib/inlineEdit";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
 import type { DexViewPatch } from "./components/filters/DexControls";
@@ -135,6 +136,16 @@ export default function App() {
     [update],
   );
   const handleClose = useCallback(() => update({ selected: null }), [update]);
+
+  // Right-click inline table edit: fetch the species' raw Override (404 → none),
+  // patch the one field to an overrides-only payload, PUT to base. putSpecies
+  // emits a data change, so the always-mounted dex refetches and the cell updates.
+  // ponytail: base scope only — a Target backdrop keeps the modal editor's scope
+  // toggle, so inline edit is gated off there (see onInlineEdit prop below).
+  const handleInlineEdit = useCallback(async (entry: DexEntry, edit: InlineEdit) => {
+    const raw = await api.speciesOverride(entry.chrooked_id).catch(() => null);
+    await api.putSpecies(entry.chrooked_id, applyInlineEdit(entry, raw, edit));
+  }, []);
 
   // From a species profile cross-link (#28): jump to the entity's page and open
   // its read-only detail. Types route to the Type Chart and open the breakdown
@@ -285,6 +296,8 @@ export default function App() {
           onOpen={handleOpen}
           onViewBackdrop={handleViewBackdrop}
           backdropTargetId={view.backdrop}
+          abilityOptions={abilityOptions}
+          onInlineEdit={view.backdrop ? undefined : handleInlineEdit}
         />
       </div>
       {selectedEntry !== null && (
@@ -327,6 +340,8 @@ type KindScreenProps = {
   onOpen: (id: string) => void;
   onViewBackdrop: (targetId: string) => void;
   backdropTargetId?: string | null;
+  abilityOptions?: readonly string[];
+  onInlineEdit?: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
 };
 
 function KindScreen({
@@ -343,6 +358,8 @@ function KindScreen({
   onOpen,
   onViewBackdrop,
   backdropTargetId,
+  abilityOptions,
+  onInlineEdit,
 }: KindScreenProps) {
   switch (kind) {
     case "moves":
@@ -371,6 +388,8 @@ function KindScreen({
           onChange={onChange}
           onOpen={onOpen}
           backdropTargetId={backdropTargetId}
+          abilityOptions={abilityOptions}
+          onInlineEdit={onInlineEdit}
         />
       );
   }
