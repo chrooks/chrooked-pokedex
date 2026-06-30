@@ -9,6 +9,7 @@
    state, the controls, and the Save orchestration. */
 
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api";
@@ -29,6 +30,7 @@ import {
   type MovePending,
 } from "../../lib/distributionEdits";
 import type { DexEntry } from "../../types";
+import { EditorDialog } from "../editors/EditorDialog";
 import { FormError } from "../editors/FormFeedback";
 import "../editors/editors.css";
 
@@ -82,6 +84,8 @@ export function ReverseLookupTab({
   const [addQuery, setAddQuery] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [failures, setFailures] = useState<string[]>([]);
+  // Species a navigation-away confirm is pending for (null = no prompt open).
+  const [confirmLeave, setConfirmLeave] = useState<DexEntry | null>(null);
 
   // chrooked_id → DexEntry over the whole dex, so an added species resolves to
   // its merged values for the override build, and rows can render sprites.
@@ -206,6 +210,17 @@ export function ReverseLookupTab({
   }
 
   function handleClick(entry: DexEntry) {
+    // Guard accidental navigation away from unsaved staged changes — leaving wipes
+    // the in-memory `pending` map (no draft persistence). Route through a themed
+    // confirm modal instead of leaving immediately.
+    if (pending.size > 0) {
+      setConfirmLeave(entry);
+      return;
+    }
+    navigateTo(entry);
+  }
+
+  function navigateTo(entry: DexEntry) {
     // Navigate to the species' dex profile in ONE atomic update. Do NOT also call
     // onClose() here: onClose maps to the parent's `update({ selected: null })`,
     // a second URL write that would immediately wipe the `id=` we just set (both
@@ -319,7 +334,8 @@ export function ReverseLookupTab({
         ? { isNew: true, move: { type: "level", level: DEFAULT_LEVEL } }
         : { isNew: true, ability: { type: "slot", slot: "primary" } };
     setPendingFor(entry.chrooked_id, change);
-    setAddQuery("");
+    // Keep the query (and dropdown) so several species matching the same search
+    // can be added in a row — the just-added one drops out of `candidates`.
   }
 
   return (
@@ -502,6 +518,49 @@ export function ReverseLookupTab({
             {isSaving ? "Saving…" : "Save"}
           </button>
         </div>
+      )}
+
+      {confirmLeave !== null && createPortal(
+        <EditorDialog
+          id="dist-leave-confirm"
+          titleId="dist-leave-confirm-title"
+          onClose={() => setConfirmLeave(null)}
+        >
+          <div className="confirm-dialog">
+            <h2 className="confirm-dialog__title" id="dist-leave-confirm-title">
+              Discard unsaved changes?
+            </h2>
+            <p className="confirm-dialog__body">
+              Opening <strong>{confirmLeave.name}</strong> will discard{" "}
+              {dirtyCount} unsaved {dirtyCount === 1 ? "change" : "changes"} to
+              this distribution.
+            </p>
+            <div className="editor-actions">
+              <span className="editor-actions__spacer" />
+              <button
+                type="button"
+                id="dist-leave-cancel"
+                className="btn"
+                onClick={() => setConfirmLeave(null)}
+              >
+                Keep editing
+              </button>
+              <button
+                type="button"
+                id="dist-leave-confirm-go"
+                className="btn btn--danger"
+                onClick={() => {
+                  const entry = confirmLeave;
+                  setConfirmLeave(null);
+                  navigateTo(entry);
+                }}
+              >
+                Discard &amp; open
+              </button>
+            </div>
+          </div>
+        </EditorDialog>,
+        document.body,
       )}
     </div>
   );

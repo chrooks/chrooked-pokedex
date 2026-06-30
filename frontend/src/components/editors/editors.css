@@ -961,3 +961,43 @@ button.move-tag:hover {
   border-radius: 999px;
   vertical-align: middle;
 }
+
+/* --- Confirm modal (distribution leave-guard) — reuses the EditorDialog shell
+   but reshapes the right-docked drawer into a small centered box. Scoped via
+   :has so it touches only this overlay, not the move/ability editor drawers. */
+
+.ledger-overlay:has(#dist-leave-confirm) {
+  /* fixed (not the base absolute) so the modal escapes the sidebar's stacking
+     context and centers over the whole viewport with a full-screen scrim. */
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+}
+
+#dist-leave-confirm {
+  width: min(420px, calc(100% - var(--space-5) * 2));
+  height: auto;
+  max-height: calc(100% - var(--space-5) * 2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px -24px color-mix(in oklch, var(--surface-0) 90%, black);
+  animation: scrim-in var(--dur-mid) var(--ease-out);
+}
+
+.confirm-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.confirm-dialog__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  color: var(--text);
+}
+
+.confirm-dialog__body {
+  margin: 0;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
