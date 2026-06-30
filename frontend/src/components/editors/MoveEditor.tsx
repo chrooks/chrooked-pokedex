@@ -1,18 +1,18 @@
 /* Create or edit one Ruleset-owned move. Moves are stored whole (not as
    Overrides), so the editor round-trips the entire record — the headline fields
-   are editable; the behaviour-carrying fields (effect / argument /
-   additional_effects / flags / aka) ride along untouched from the loaded move
-   so a quick power tweak never strips a move's mechanic or engine symbol.
+   plus the `flags` tags are editable; the remaining behaviour-carrying fields
+   (effect / argument / additional_effects / aka) ride along untouched from the
+   loaded move so a quick edit never strips a move's mechanic or engine symbol.
 
-   Slice 2a edits the common fields; the behaviour fields get a dedicated editor
-   in 2b. Delete runs the citation guard: a move cited by a learnset returns 409,
-   and the footer turns into a "Delete anyway" confirm naming the citing species. */
+   Tags toggle against schema.MOVE_FLAGS (the closed set mirrored in format.ts).
+   Delete runs the citation guard: a move cited by a learnset returns 409, and
+   the footer turns into a "Delete anyway" confirm naming the citing species. */
 
 import { useState } from "react";
 import { api } from "../../api";
 import type { Move, MoveField, MoveWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
-import { isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
+import { isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
 import { EditorDialog } from "./EditorDialog";
 import { NumberField, SelectField, TextAreaField, TextField } from "./fields";
@@ -43,6 +43,7 @@ type MoveForm = {
   priority: number | "";
   target: string;
   description: string;
+  flags: string[];
 };
 
 export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) {
@@ -239,6 +240,28 @@ export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) 
             value={form.description}
             onChange={(v) => set("description", v)}
           />
+          <fieldset id="move-flags" className="editor-flags field--full">
+            <legend className="field__label">Tags</legend>
+            <div className="editor-flags__grid">
+              {MOVE_FLAGS.map((flag) => {
+                const on = form.flags.includes(flag);
+                return (
+                  <label
+                    key={flag}
+                    className="editor-flags__chip"
+                    data-on={on}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={on}
+                      onChange={() => set("flags", toggleFlag(form.flags, flag))}
+                    />
+                    {flag}
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
         </div>
 
         {(error !== null || del.error !== null) && (
@@ -305,7 +328,14 @@ function initialForm(move: Move | null): MoveForm {
     priority: move?.priority ?? 0,
     target: move?.target ?? "selected",
     description: move?.description ?? "",
+    flags: [...(move?.flags ?? [])],
   };
+}
+
+function toggleFlag(flags: string[], flag: string): string[] {
+  return flags.includes(flag)
+    ? flags.filter((f) => f !== flag)
+    : [...flags, flag];
 }
 
 function buildMove(form: MoveForm, original: Move | null): MoveWrite {
@@ -327,7 +357,7 @@ function buildMove(form: MoveForm, original: Move | null): MoveWrite {
     effect: original?.effect ?? "hit",
     argument: original?.argument ?? null,
     additional_effects: original?.additional_effects ?? [],
-    flags: original?.flags ?? [],
+    flags: form.flags,
     priority: form.priority === "" ? 0 : form.priority,
     target: form.target.trim() || "selected",
   };

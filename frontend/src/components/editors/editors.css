@@ -471,6 +471,22 @@ button.move-tag:hover {
   color: var(--text-faint);
 }
 
+/* evolution method: Method select + conditional param fields on one line.
+   Own flex row (not tc-row) — the field count/shape differs per method kind. */
+.evo-method-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.evo-method-row .field {
+  flex: 1 1 0;
+}
+
+.evo-method-row .tc-row__vs {
+  padding-bottom: var(--space-2);
+}
+
 @media (max-width: 720px) {
   .editor-dialog__panel {
     width: 100%;
@@ -960,6 +976,45 @@ button.move-tag:hover {
   border: 1px solid var(--accent, #c0573e);
   border-radius: 999px;
   vertical-align: middle;
+}
+
+/* --- Move tags (flags) — a chip toggle grid; on-state borrows --chrome --- */
+
+.editor-flags {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.editor-flags__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.editor-flags__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  user-select: none;
+}
+
+.editor-flags__chip[data-on="true"] {
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 14%, var(--surface-0));
+}
+
+.editor-flags__chip input {
+  accent-color: var(--chrome);
 }
 
 /* --- Confirm modal (distribution leave-guard) — reuses the EditorDialog shell
