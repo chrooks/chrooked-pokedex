@@ -377,7 +377,7 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
           error={invalidFields.has("species-evo-from") ? "Unknown species" : null}
           onChange={setEvoFrom}
         />
-        <div className="tc-row" style={{ marginTop: "var(--space-2)" }}>
+        <div className="evo-method-row" style={{ marginTop: "var(--space-2)" }}>
           <SelectField
             id="species-evo-kind"
             label="Method"
