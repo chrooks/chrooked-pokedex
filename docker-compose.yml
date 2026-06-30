@@ -1,0 +1,15 @@
+# Always-on Ruleset editor for hestia. Serves the dex + edit UI on :8000.
+# Apply/targets are inert here (no game installs on hestia) — this box edits the
+# Ruleset; the gaming PC pulls and applies. See scripts/ruleset-autocommit.sh.
+services:
+  web:
+    build: .
+    image: chrooked-pokedex
+    container_name: chrooked-pokedex
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      # ruleset/ lives on the host so the host-side autocommit loop sees edits
+      # the web app writes, and can commit + push them to the remote.
+      - ./ruleset:/app/ruleset
