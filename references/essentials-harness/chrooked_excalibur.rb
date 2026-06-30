@@ -37,7 +37,7 @@ def chrooked_install_excalibur
   unless PokeBattle_Move.instance_methods.map { |m| m.to_s }.include?("chrooked_excalibur_typemod_apply")
     PokeBattle_Move.class_eval do
       def chrooked_excalibur_typemod_apply(mod, type, attacker, opponent)
-        is_excalibur = (isConst?(@id, PBMoves, :EXCALIBUR) rescue false)
+        is_excalibur = Chrooked.move_is?(self, :EXCALIBUR)
         is_dragon = (opponent && opponent.pbHasType?(:DRAGON) rescue false)
         movename = (getConstantName(PBMoves, @id) rescue @id.to_s)
         if is_excalibur && is_dragon

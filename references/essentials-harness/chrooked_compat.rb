@@ -103,6 +103,19 @@ module Chrooked
     ensure_pbmoves!
   end
 
+  # True if `move`'s id equals `sym` (e.g. :EXCALIBUR). On IF2 the move id IS a Symbol,
+  # so compare directly — this works even for CUSTOM moves that never made it into the
+  # PBMoves compat table (isConst?(@id, PBMoves, :CUSTOM) fails for those). On 16.2 the
+  # id is an integer keyed by PBMoves, so use isConst?.
+  def self.move_is?(move, sym)
+    return false unless move
+    mid = (move.id rescue (move.instance_variable_get(:@id) rescue nil))
+    case engine
+    when :if_fork then mid == sym
+    else (isConst?(mid, PBMoves, sym) rescue false)
+    end
+  end
+
   # True if `move` makes contact. Bridges 16.2 isContactMove? and IF2's contactMove?.
   def self.contact_move?(move)
     return false unless move

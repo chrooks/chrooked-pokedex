@@ -52,7 +52,7 @@ def chrooked_install_fangflinch
       def chrooked_fangflinch_apply(move, user, target, damage)
         begin
           dealt = (damage && damage > 0)
-          is_fang = CHROOKED_FANGFLINCH_MOVES.any? { |s| (isConst?(move.id, PBMoves, s) rescue false) }
+          is_fang = CHROOKED_FANGFLINCH_MOVES.any? { |s| Chrooked.move_is?(move, s) }
           if dealt && is_fang && target && !target.fainted?
             movename = (getConstantName(PBMoves, move.id) rescue move.id.to_s)
             if @battle.pbRandom(100) < CHROOKED_FANGFLINCH_CHANCE
