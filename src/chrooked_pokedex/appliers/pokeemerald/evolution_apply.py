@@ -18,10 +18,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ...model import Ruleset
+from ...model import Ruleset, evolution_methods
 from ...model.schema import SpeciesOverride
 from ...report import ApplyReport, ReportEntry
-from ...seed.neutralize import item_symbol, slug
+from ...seed.neutralize import item_symbol, move_symbol, slug
 from . import c_edit
 from .resolution import ResolutionMap
 
@@ -116,10 +116,28 @@ def _render_triple(method: dict, target_symbol: str) -> str | None:
         return f"{{EVO_LEVEL, {method['level']}, {target_symbol}}}"
     if "item" in method:
         return f"{{EVO_ITEM, {item_symbol(str(method['item']))}, {target_symbol}}}"
+    canonical = evolution_methods.to_engine(method, "pokeemerald")
+    if canonical is not None:
+        token, value_kind, raw = canonical
+        param = _pe_param(value_kind, raw)
+        return f"{{{token}, {param}, {target_symbol}}}"
     if "pokeemerald" in method:
         param = method.get("param", "0")
         return f"{{{method['pokeemerald']}, {param}, {target_symbol}}}"
     return None
+
+
+def _pe_param(value_kind: str, raw: str) -> str:
+    """Render a canonical method's param as a pokeemerald token."""
+    if value_kind == "none":
+        return "0"
+    if value_kind == "item":
+        return item_symbol(raw)
+    if value_kind == "move":
+        return move_symbol(raw)
+    if value_kind == "map":
+        return raw.upper()
+    return raw  # level: the integer as-is
 
 
 def _species_info_files(target: Path) -> list[Path]:

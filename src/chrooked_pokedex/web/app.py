@@ -27,7 +27,7 @@ from .. import ledger as ledgermod
 from ..behavior import render_packet
 from ..env import load_env_file
 from ..fingerprint import hash_ruleset_dir
-from ..model import Ruleset
+from ..model import Ruleset, evolution_methods
 from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
 from . import crud as crudmod
@@ -193,6 +193,12 @@ def create_app(
     @app.get("/api/behaviors")
     def get_behaviors() -> list[dict[str, Any]]:
         return colmod.build_behaviors(_load_ruleset_or_503())
+
+    @app.get("/api/meta/evolution-methods")
+    def get_evolution_methods() -> list[dict[str, Any]]:
+        # The canonical evolution-method catalog for the editor's Method dropdown.
+        # Served from the model table so the UI and the Appliers can't drift.
+        return evolution_methods.public_list()
 
     @app.get("/api/ledger")
     def get_ledger(

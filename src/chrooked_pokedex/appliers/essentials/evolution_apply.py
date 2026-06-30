@@ -22,7 +22,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Mapping, Optional
 
-from ...model import Ruleset
+from ...model import Ruleset, evolution_methods
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import slug
 from . import pbs_edit, vocab
@@ -141,6 +141,15 @@ def _render_line(method: Mapping[str, object], target_internal: str) -> Optional
         return f"{target_internal},Level,{method['level']}"
     if "item" in method:
         return f"{target_internal},Item,{vocab.internal_name(str(method['item']))}"
+    canonical = evolution_methods.to_engine(method, "essentials")
+    if canonical is not None:
+        token, value_kind, raw = canonical
+        if value_kind == "none":
+            return f"{target_internal},{token}"
+        param = vocab.internal_name(raw) if value_kind in ("item", "move") else (
+            raw if value_kind == "level" else raw.upper()
+        )
+        return f"{target_internal},{token},{param}"
     if "essentials" in method:
         name = method["essentials"]
         param = method.get("param")

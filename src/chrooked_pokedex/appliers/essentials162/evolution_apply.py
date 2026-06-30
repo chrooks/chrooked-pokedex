@@ -21,7 +21,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Mapping, Optional
 
-from ...model import Ruleset
+from ...model import Ruleset, evolution_methods
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import slug
 from ..essentials import vocab
@@ -184,6 +184,18 @@ def _render_triple(method: Mapping[str, object], target_internal: str) -> Option
         return [target_internal, "Level", str(method["level"])]
     if "item" in method:
         return [target_internal, "Item", vocab.internal_name(str(method["item"]))]
+    canonical = evolution_methods.to_engine(method, "essentials")
+    if canonical is not None:
+        token, value_kind, raw = canonical
+        if value_kind == "none":
+            return [target_internal, token, ""]
+        param = vocab.internal_name(raw) if value_kind in ("item", "move") else (
+            raw if value_kind == "level" else raw.upper()
+        )
+        # ponytail: the Item-absent guard in _group_by_source only checks the clean
+        # "Item" method, not "TradeItem" — a missing TradeItem item could still
+        # break compile. Extend that guard if TradeItem evos land in real data.
+        return [target_internal, token, param]
     if "essentials" in method:
         name = str(method["essentials"])
         param = method.get("param")

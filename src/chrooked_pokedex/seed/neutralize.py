@@ -201,6 +201,12 @@ def item_symbol(name: str) -> str:
     return "ITEM_" + name.strip().upper().replace(" ", "_")
 
 
+def move_symbol(name: str) -> str:
+    """`Dragon Breath` -> `MOVE_DRAGON_BREATH` (mirror of item_symbol for the
+    pokeemerald `knows_move` evolution param)."""
+    return "MOVE_" + name.strip().upper().replace(" ", "_")
+
+
 def neutralize_evolution_method(method_token: str, param: str) -> dict:
     """Turn a pokeemerald (EVO_*, param) pair into a neutral method dict.
 

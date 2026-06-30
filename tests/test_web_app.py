@@ -282,3 +282,18 @@ def test_collection_returns_503_when_ruleset_is_corrupt(tmp_path: Path) -> None:
     response = TestClient(app, raise_server_exceptions=False).get("/api/behaviors")
     assert response.status_code == 503
     assert "Ruleset" in response.json()["detail"]
+
+
+def test_evolution_methods_endpoint_lists_canonical_methods(
+    client: TestClient,
+) -> None:
+    # Static catalog (no Ruleset needed): the editor's Method dropdown source.
+    response = client.get("/api/meta/evolution-methods")
+    assert response.status_code == 200
+    rows = response.json()
+    ids = [r["id"] for r in rows]
+    assert ids[0] == "level"
+    assert "knows_move" in ids
+    knows_move = next(r for r in rows if r["id"] == "knows_move")
+    assert knows_move["value_kind"] == "move"
+    assert knows_move["tokens"] == ["EVO_MOVE", "HasMove"]
