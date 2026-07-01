@@ -488,6 +488,88 @@
   color: var(--text);
 }
 
+/* ─ Full-page mode ────────────────────────────────────────────────────────
+   The ledger docks over the dex main pane (the left rail stays put) and lays
+   its sections out in responsive columns. Toggled from the header / `f`. */
+.ledger--full {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  overflow: hidden;
+  animation: none;
+}
+
+.ledger--full > .ledger__head {
+  padding: var(--space-5) var(--space-6) var(--space-4);
+}
+
+.ledger__body--cols {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-5) var(--space-6);
+  padding: var(--space-5) var(--space-6);
+  align-content: start;
+}
+
+/* Read mode: each column stacks its sections; drop the trailing divider. */
+.ledger__col {
+  display: flex;
+  flex-direction: column;
+}
+
+.ledger__col > .ledger__section:last-child {
+  border-bottom: none;
+}
+
+/* Edit mode: the editor form fans across the same two columns. Identity, types,
+   stats, and evolution sit left; abilities and learnset right; full-width rows
+   (scope toggle, errors, actions) span both.
+   ponytail: sections are keyed by the aria-labelledby ids in SpeciesEditor.tsx
+   (species-*-heading). If a heading id is renamed, that section falls through to
+   the *:not([aria-labelledby]) full-width rule — keep the ids in sync. */
+.ledger__body--cols .editor-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-6);
+  align-items: start;
+}
+
+.ledger__body--cols .editor-form > [aria-labelledby="species-stats-heading"],
+.ledger__body--cols .editor-form > [aria-labelledby="species-types-heading"],
+.ledger__body--cols .editor-form > [aria-labelledby="species-evolution-heading"] {
+  grid-column: 1;
+}
+
+.ledger__body--cols .editor-form > [aria-labelledby="species-abilities-heading"],
+.ledger__body--cols .editor-form > [aria-labelledby="species-learnset-heading"] {
+  grid-column: 2;
+}
+
+.ledger__body--cols .editor-form > *:not([aria-labelledby]) {
+  grid-column: 1 / -1;
+}
+
+/* Narrow window: the editor collapses to one column (the outer grid already
+   collapses via auto-fit / minmax). */
+@media (max-width: 900px) {
+  .ledger__body--cols .editor-form {
+    grid-template-columns: 1fr;
+  }
+  .ledger__body--cols .editor-form > [aria-labelledby] {
+    grid-column: 1;
+  }
+}
+
 @media (max-width: 720px) {
   .ledger,
   .ledger--wide {

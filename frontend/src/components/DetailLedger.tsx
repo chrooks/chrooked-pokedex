@@ -6,6 +6,8 @@ import {
   faClockRotateLeft,
   faPen,
   faXmark,
+  faExpand,
+  faCompress,
 } from "@fortawesome/free-solid-svg-icons";
 import type { CanonicalMethod, DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
@@ -53,6 +55,10 @@ type Props = {
   evolutionMethods: readonly CanonicalMethod[];
   /** Active backdrop target id — passed to DexSprite for the target-sprite fallback. */
   backdropTargetId?: string | null;
+  /** True when this species renders as the full-page ledger (vs the side panel). */
+  full: boolean;
+  /** Flip between the side panel and full-page ledger (also bound to `f`). */
+  onToggleFull: () => void;
 };
 
 /**
@@ -72,6 +78,8 @@ export function DetailLedger({
   speciesOptions,
   evolutionMethods,
   backdropTargetId,
+  full,
+  onToggleFull,
 }: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -114,26 +122,8 @@ export function DetailLedger({
     panelRef.current?.focus();
   }, [entry.chrooked_id]);
 
-  return (
-    <div className="ledger-overlay">
-      <button
-        type="button"
-        className="ledger-overlay__scrim"
-        aria-label="Close detail"
-        tabIndex={-1}
-        onClick={onClose}
-      />
-      <aside
-        className={`ledger${expanded ? " ledger--wide" : ""}`}
-        id="dex-detail"
-        data-expanded={expanded}
-        ref={panelRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="ledger-title"
-      >
-        <header className="ledger__head">
+  const head = (
+    <header className="ledger__head">
           <div className="ledger__head-row">
             <div className="ledger__head-id">
               <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
@@ -183,6 +173,22 @@ export function DetailLedger({
                   >
                     <FontAwesomeIcon icon={faClockRotateLeft} aria-hidden="true" />
                     <span className="ledger__tool-label">History</span>
+                  </button>
+                  <button
+                    type="button"
+                    id="ledger-mode-toggle"
+                    className="ledger__tool"
+                    aria-pressed={full}
+                    onClick={onToggleFull}
+                    title={full ? "Back to side panel" : "Open full page (press f)"}
+                  >
+                    <FontAwesomeIcon
+                      icon={full ? faCompress : faExpand}
+                      aria-hidden="true"
+                    />
+                    <span className="ledger__tool-label">
+                      {full ? "Side panel" : "Full page"}
+                    </span>
                   </button>
                   <button
                     type="button"
@@ -239,31 +245,73 @@ export function DetailLedger({
               {showDiff ? "Showing base → now" : "Show what changed"}
             </button>
           )}
-        </header>
+    </header>
+  );
 
-        {editing ? (
-          <SpeciesEditor
-            entry={entry}
-            onDone={() => setEditing(false)}
-            onSaved={onSaved}
-            abilityOptions={abilityOptions}
-            moveOptions={moveOptions}
-            speciesOptions={speciesOptions}
-            evolutionMethods={evolutionMethods}
-            backdropTargetId={backdropTargetId}
-          />
-        ) : (
-          <DetailBody
-            entry={entry}
-            showDiff={showDiff}
-            onNavigate={onNavigate}
-            onSaved={onSaved}
-            abilityOptions={abilityOptions}
-            moveOptions={moveOptions}
-            onProposalActive={handleProposalActive}
-            backdropTargetId={backdropTargetId}
-          />
-        )}
+  const body = editing ? (
+    <SpeciesEditor
+      entry={entry}
+      onDone={() => setEditing(false)}
+      onSaved={onSaved}
+      abilityOptions={abilityOptions}
+      moveOptions={moveOptions}
+      speciesOptions={speciesOptions}
+      evolutionMethods={evolutionMethods}
+      backdropTargetId={backdropTargetId}
+    />
+  ) : (
+    <DetailBody
+      entry={entry}
+      showDiff={showDiff}
+      columns={full}
+      onNavigate={onNavigate}
+      onSaved={onSaved}
+      abilityOptions={abilityOptions}
+      moveOptions={moveOptions}
+      onProposalActive={handleProposalActive}
+      backdropTargetId={backdropTargetId}
+    />
+  );
+
+  // Full page: a pane docked over the dex main area (the rail stays), body laid
+  // out in responsive columns. Side panel: the overlay + scrim + narrow aside.
+  if (full) {
+    return (
+      <aside
+        className="ledger ledger--full"
+        id="dex-detail"
+        ref={panelRef}
+        tabIndex={-1}
+        role="region"
+        aria-labelledby="ledger-title"
+      >
+        {head}
+        <div className="ledger__body ledger__body--cols">{body}</div>
+      </aside>
+    );
+  }
+
+  return (
+    <div className="ledger-overlay">
+      <button
+        type="button"
+        className="ledger-overlay__scrim"
+        aria-label="Close detail"
+        tabIndex={-1}
+        onClick={onClose}
+      />
+      <aside
+        className={`ledger${expanded ? " ledger--wide" : ""}`}
+        id="dex-detail"
+        data-expanded={expanded}
+        ref={panelRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="ledger-title"
+      >
+        {head}
+        {body}
       </aside>
     </div>
   );
@@ -283,6 +331,8 @@ type BodyProps = {
   /** Report a section's active/idle proposal state up to the ledger (ac8). */
   onProposalActive: (sectionId: string, isActive: boolean) => void;
   backdropTargetId?: string | null;
+  /** Full-page layout: split the sections into two columns instead of stacking. */
+  columns: boolean;
 };
 
 /** Press `s` on a focused proposal section to open its `✦ suggest` input —
@@ -316,86 +366,115 @@ function DetailBody({
   moveOptions,
   onProposalActive,
   backdropTargetId,
+  columns,
 }: BodyProps) {
-  return (
-    <>
-      <section className="ledger__section" aria-label="Base stats">
-          <h3 className="ledger__heading">Base stats</h3>
-          <div className="ledger__stats">
-            {STAT_ORDER.map((key) => (
-              <StatRow
-                key={key}
-                label={STAT_LABEL[key]}
-                now={entry.stats[key]}
-                was={entry.base.stats?.[key]}
-                showDiff={showDiff}
-              />
-            ))}
-            <BstRow
-              now={bst(entry.stats)}
-              was={entry.base.stats ? bst(entry.base.stats) : undefined}
-              showDiff={showDiff}
-            />
-          </div>
-        </section>
+  const statsSection = (
+    <section className="ledger__section" aria-label="Base stats">
+      <h3 className="ledger__heading">Base stats</h3>
+      <div className="ledger__stats">
+        {STAT_ORDER.map((key) => (
+          <StatRow
+            key={key}
+            label={STAT_LABEL[key]}
+            now={entry.stats[key]}
+            was={entry.base.stats?.[key]}
+            showDiff={showDiff}
+          />
+        ))}
+        <BstRow
+          now={bst(entry.stats)}
+          was={entry.base.stats ? bst(entry.base.stats) : undefined}
+          showDiff={showDiff}
+        />
+      </div>
+    </section>
+  );
 
-        <section
-          className="ledger__section"
-          aria-label="Abilities"
-          tabIndex={0}
-          onKeyDown={(e) => handleSectionKey(e, "proposal-abilities-suggest")}
-        >
-          <ProposedColumn
-            entry={entry}
-            renderer={abilitiesRenderer(abilityOptions, entry)}
-            suggest={suggestAbilityCall}
-            onApplied={onSaved}
-            onActiveChange={onProposalActive}
-          >
-            <div className="ledger__abilities">
-              {(["primary", "secondary", "hidden"] as const).map((slot) => (
-                <AbilityRow
-                  key={slot}
-                  slot={slot}
-                  now={entry.abilities[slot]}
-                  was={entry.base.abilities?.[slot]}
-                  showDiff={showDiff}
-                  onNavigate={onNavigate}
-                />
-              ))}
-            </div>
-          </ProposedColumn>
-        </section>
-
-        <section
-          className="ledger__section"
-          aria-label="Learnset"
-          tabIndex={0}
-          onKeyDown={(e) => handleSectionKey(e, "proposal-learnset-suggest")}
-        >
-          <LearnsetProposal
-            entry={entry}
-            moveOptions={moveOptions}
-            onSaved={onSaved}
-            onProposalActive={onProposalActive}
-            backdropTargetId={backdropTargetId}
-          >
-            <LearnsetSection
-              now={entry.learnset}
-              was={entry.base.learnset}
+  const abilitiesSection = (
+    <section
+      className="ledger__section"
+      aria-label="Abilities"
+      tabIndex={0}
+      onKeyDown={(e) => handleSectionKey(e, "proposal-abilities-suggest")}
+    >
+      <ProposedColumn
+        entry={entry}
+        renderer={abilitiesRenderer(abilityOptions, entry)}
+        suggest={suggestAbilityCall}
+        onApplied={onSaved}
+        onActiveChange={onProposalActive}
+      >
+        <div className="ledger__abilities">
+          {(["primary", "secondary", "hidden"] as const).map((slot) => (
+            <AbilityRow
+              key={slot}
+              slot={slot}
+              now={entry.abilities[slot]}
+              was={entry.base.abilities?.[slot]}
               showDiff={showDiff}
               onNavigate={onNavigate}
-              bare
             />
-          </LearnsetProposal>
-        </section>
+          ))}
+        </div>
+      </ProposedColumn>
+    </section>
+  );
 
-        <EvolutionSection
-          evolution={entry.evolution}
-          evolvesInto={entry.evolves_into}
+  const learnsetSection = (
+    <section
+      className="ledger__section"
+      aria-label="Learnset"
+      tabIndex={0}
+      onKeyDown={(e) => handleSectionKey(e, "proposal-learnset-suggest")}
+    >
+      <LearnsetProposal
+        entry={entry}
+        moveOptions={moveOptions}
+        onSaved={onSaved}
+        onProposalActive={onProposalActive}
+        backdropTargetId={backdropTargetId}
+      >
+        <LearnsetSection
+          now={entry.learnset}
+          was={entry.base.learnset}
+          showDiff={showDiff}
           onNavigate={onNavigate}
-          backdropTargetId={backdropTargetId}
+          bare
         />
+      </LearnsetProposal>
+    </section>
+  );
+
+  const evolutionSection = (
+    <EvolutionSection
+      evolution={entry.evolution}
+      evolvesInto={entry.evolves_into}
+      onNavigate={onNavigate}
+      backdropTargetId={backdropTargetId}
+    />
+  );
+
+  // Full page: base stats + abilities + evolution stack in the left column,
+  // learnset (the tall one) in the right. Panel: the single-column stack.
+  if (columns) {
+    return (
+      <>
+        <div className="ledger__col">
+          {statsSection}
+          {abilitiesSection}
+          {evolutionSection}
+        </div>
+        <div className="ledger__col">{learnsetSection}</div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {statsSection}
+      {abilitiesSection}
+      {learnsetSection}
+      {evolutionSection}
     </>
   );
 }

@@ -128,6 +128,7 @@ export default function App() {
   const dexEntries = view.layout === "table" ? tableRows : filtered;
 
   const isDex = view.kind === "dex";
+  const full = view.detail === "full";
   const selectedEntry =
     isDex && view.selected !== null
       ? all.find((entry) => entry.chrooked_id === view.selected) ?? null
@@ -227,21 +228,28 @@ export default function App() {
     view.kind === "type-chart";
   const isEditedFilterable = isSearchable;
 
-  // Escape closes whatever overlay is open, drawer first (it's the most recent
-  // foreground), then the detail ledger.
+  // Escape unwinds one layer at a time: the patch drawer first (most recent
+  // foreground), then a full-page detail collapses back to the side panel, then
+  // the detail ledger closes.
   const handleEscape = useCallback(() => {
     if (patch !== null) {
       setPatch(null);
       return;
     }
+    if (selectedEntry !== null && view.detail === "full") {
+      update({ detail: "panel" });
+      return;
+    }
     if (selectedEntry !== null) update({ selected: null });
-  }, [patch, selectedEntry, update]);
+  }, [patch, selectedEntry, view.detail, update]);
 
   useGlobalKeys({
     onSearch: () => searchRef.current?.focus(),
     onToggleEdited: () =>
       isEditedFilterable && update({ editedOnly: !view.editedOnly }),
     onSwitchTarget: () => targetSelectRef.current?.focus(),
+    onToggleFull: () =>
+      selectedEntry !== null && update({ detail: full ? "panel" : "full" }),
     onEscape: handleEscape,
     enabled: isEditedFilterable,
     hasSelection: selectedEntry !== null || patch !== null,
@@ -276,9 +284,11 @@ export default function App() {
         <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
       }
     >
-      {/* Background is inert while the detail dialog is open: it can't be
-          tabbed into and is hidden from assistive tech (focus trap). `inert`
-          is spread as a raw attribute for React 18 (typed in React 19). */}
+      {/* Background is inert while a species is open — in both modes. In panel
+          mode it's the modal focus trap; in full mode the opaque pane fully
+          covers the grid, so inert keeps focus/AT out of the invisible list
+          behind it (the rail lives outside this layer and stays interactive).
+          `inert` is spread as a raw attribute for React 18 (typed in React 19). */}
       <div
         className="device__layer"
         {...(selectedEntry !== null
@@ -309,6 +319,8 @@ export default function App() {
           onClose={handleClose}
           onSaved={dex.reload}
           onNavigate={handleNavigate}
+          full={full}
+          onToggleFull={() => update({ detail: full ? "panel" : "full" })}
           abilityOptions={abilityOptions}
           moveOptions={moveOptions}
           speciesOptions={speciesOptions}
@@ -431,22 +443,31 @@ type KeyHandlers = {
   onSearch: () => void;
   onToggleEdited: () => void;
   onSwitchTarget: () => void;
+  onToggleFull: () => void;
   onEscape: () => void;
   enabled: boolean;
   hasSelection: boolean;
 };
 
 /** Global keyboard shortcuts: `/` focuses search, `e` toggles the edited filter,
-    `t` focuses the active-target switcher, Escape closes the open overlay.
-    Shortcuts ignore keystrokes inside form fields. */
+    `t` focuses the active-target switcher, `f` toggles full-page detail (only
+    while a species is open), Escape closes the open overlay. Shortcuts ignore
+    keystrokes inside form fields. */
 function useGlobalKeys(handlers: KeyHandlers): void {
   const ref = useRef(handlers);
   ref.current = handlers;
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      const { onSearch, onToggleEdited, onSwitchTarget, onEscape, enabled, hasSelection } =
-        ref.current;
+      const {
+        onSearch,
+        onToggleEdited,
+        onSwitchTarget,
+        onToggleFull,
+        onEscape,
+        enabled,
+        hasSelection,
+      } = ref.current;
       // Escape closes the detail regardless of `enabled` — the dialog can be
       // open over any kind, and Escape should always dismiss it first.
       if (event.key === "Escape" && hasSelection) {
@@ -458,6 +479,7 @@ function useGlobalKeys(handlers: KeyHandlers): void {
         target !== null &&
         (target.tagName === "INPUT" ||
           target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
           target.isContentEditable);
       if (inField || event.metaKey || event.ctrlKey || event.altKey) {
         return;
@@ -470,6 +492,10 @@ function useGlobalKeys(handlers: KeyHandlers): void {
       } else if (event.key === "t" || event.key === "T") {
         event.preventDefault();
         onSwitchTarget();
+      } else if (event.key === "f" || event.key === "F") {
+        // Toggle full-page detail; onToggleFull is a no-op with no species open.
+        event.preventDefault();
+        onToggleFull();
       }
     }
     window.addEventListener("keydown", onKeyDown);

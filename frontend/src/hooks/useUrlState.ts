@@ -23,6 +23,8 @@ export interface ViewState {
   query: string;
   editedOnly: boolean;
   selected: string | null;
+  /** How the open species renders: the side panel (default) or full-page. */
+  detail: "panel" | "full";
   layout: DexLayout;
   /** The boolean filter tree (applies to both grid and table). */
   filter: FilterEntry[];
@@ -67,6 +69,7 @@ function readState(): ViewState {
     query: params.get("q") ?? "",
     editedOnly: params.get("edited") === "1",
     selected: params.get("id"),
+    detail: params.get("detail") === "full" ? "full" : "panel",
     layout: params.get("view") === "table" ? "table" : "grid",
     filter: decodeFilter(params.get("filter")),
     sort: decodeSort(params.get("sort")),
@@ -93,6 +96,7 @@ const OWNED_PARAMS = [
   "q",
   "edited",
   "id",
+  "detail",
   "view",
   "filter",
   "sort",
@@ -108,6 +112,7 @@ function writeState(next: ViewState): void {
   if (next.query) params.set("q", next.query);
   if (next.editedOnly) params.set("edited", "1");
   if (next.selected) params.set("id", next.selected);
+  if (next.detail === "full") params.set("detail", "full");
   if (next.layout === "table") params.set("view", "table");
   if (next.filter.length) params.set("filter", encodeFilter(next.filter));
   if (next.sort.length) params.set("sort", encodeSort(next.sort));
