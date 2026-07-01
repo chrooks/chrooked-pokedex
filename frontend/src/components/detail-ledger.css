@@ -527,6 +527,13 @@
   flex-direction: column;
 }
 
+/* In full page the learnset drops the 280px side-panel cap so it grows to use
+   the tall column's vertical space; the pane body scrolls once content overflows
+   rather than stranding the learnset at a fixed height. */
+.ledger--full .ledger__learnset {
+  max-height: none;
+}
+
 .ledger__col > .ledger__section:last-child {
   border-bottom: none;
 }
