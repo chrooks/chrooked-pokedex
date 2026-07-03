@@ -2,7 +2,8 @@
 # it reuses the SSH key + git identity you already set up to clone/pull — no
 # credential plumbing into a container.
 #
-# Install (edit the two paths + User first):
+# Install (paths below assume the repo at /home/chrooks/projects/chrooked-pokedex
+# — edit User + the two paths if you cloned elsewhere):
 #   sudo cp deploy/ruleset-autocommit.service /etc/systemd/system/
 #   sudo systemctl daemon-reload
 #   sudo systemctl enable --now ruleset-autocommit
@@ -13,9 +14,9 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=CHANGEME
-WorkingDirectory=/home/CHANGEME/chrooked-pokedex
-ExecStart=/home/CHANGEME/chrooked-pokedex/scripts/ruleset-autocommit.sh
+User=chrooks
+WorkingDirectory=/home/chrooks/projects/chrooked-pokedex
+ExecStart=/home/chrooks/projects/chrooked-pokedex/scripts/ruleset-autocommit.sh
 Restart=always
 RestartSec=10
 
