@@ -22,3 +22,4 @@ learnset:
   - { level: 52, move: Sludge Bomb }
   - { level: 59, move: Hydro Pump }
   - { level: 66, move: Outrage }
+evolution: { from: Skrelp, method: { level: 38 } }
