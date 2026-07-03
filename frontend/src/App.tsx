@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api";
 import { useResource } from "./hooks/useResource";
 import { useUrlState } from "./hooks/useUrlState";
+import { useTheme } from "./hooks/useTheme";
 import { isEdited } from "./lib/format";
 import { onDataChange } from "./lib/dataChange";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
@@ -29,6 +30,7 @@ import { PatchDrawer } from "./components/targets/PatchDrawer";
  */
 export default function App() {
   const [view, update] = useUrlState();
+  const [theme, toggleTheme] = useTheme();
   // The dex fetch swaps to a Target's backdrop (target ⊕ Ruleset) when one is
   // set; otherwise it reads the base ⊕ Ruleset canon. Memoized by backdrop id so
   // useResource sees a stable fetcher and refetches only when the backdrop flips.
@@ -267,6 +269,8 @@ export default function App() {
       onSearchEnter={handleSearchEnter}
       layout={view.layout}
       onLayout={(layout) => update({ layout })}
+      theme={theme}
+      onToggleTheme={toggleTheme}
       searchRef={searchRef}
       targetBar={
         <ActiveTargetSwitcher

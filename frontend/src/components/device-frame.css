@@ -23,14 +23,40 @@
   gap: var(--space-3);
 }
 
+/* Premier Ball: mostly white body, a red band above the black seam. The
+   shell/seam are the ball's own fixed colors, not --text/--surface-0 — those
+   two invert meaning between themes, which would flip the ball inside out. */
 .device__lamp {
+  --lamp-shell: oklch(96% 0.006 19);
+  --lamp-seam: oklch(14% 0.01 19);
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--chrome);
-  box-shadow: 0 0 0 3px color-mix(in oklch, var(--chrome) 25%, transparent),
-    0 0 10px 1px color-mix(in oklch, var(--chrome) 50%, transparent);
   flex: none;
+  transform: rotate(-15deg);
+  background: linear-gradient(
+    to bottom,
+    var(--lamp-shell) 0% 36%,
+    var(--chrome) 36% 44%,
+    var(--lamp-seam) 44% 56%,
+    var(--lamp-shell) 56% 100%
+  );
+  box-shadow: inset 0 0 0 1px var(--lamp-seam),
+    0 0 0 3px color-mix(in oklch, var(--chrome) 25%, transparent),
+    0 0 10px 1px color-mix(in oklch, var(--chrome) 50%, transparent);
+  position: relative;
+}
+
+.device__lamp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--lamp-shell);
+  box-shadow: 0 0 0 1px var(--lamp-seam);
 }
 
 .device__title {

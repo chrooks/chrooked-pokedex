@@ -8,22 +8,22 @@
 
 :root {
   /* Surface — the warm-dark "screen" and its steps */
-  --surface-0: oklch(15% 0.012 60); /* inset wells, fields, sprite background */
-  --surface-1: oklch(19% 0.012 60); /* the screen itself */
-  --surface-2: oklch(23% 0.013 60); /* raised cells, panels */
-  --surface-3: oklch(27% 0.014 60); /* hover / active lift */
-  --line: oklch(33% 0.012 60); /* hairlines, dividers, keylines */
-  --line-strong: oklch(42% 0.014 60);
+  --surface-0: oklch(12.4% 0.011 19); /* inset wells, fields, sprite background */
+  --surface-1: oklch(16.4% 0.011 19); /* the screen itself */
+  --surface-2: oklch(20.4% 0.011 19); /* raised cells, panels */
+  --surface-3: oklch(24.4% 0.011 19); /* hover / active lift */
+  --line: oklch(30.4% 0.011 19); /* hairlines, dividers, keylines */
+  --line-strong: oklch(39.4% 0.011 19);
 
   /* Ink */
-  --text: oklch(93% 0.012 75);
-  --text-dim: oklch(72% 0.011 75);
+  --text: oklch(98.3% 0.001 17);
+  --text-dim: oklch(77.3% 0.001 17);
   /* Lifted to clear ~4.5:1 on the raised surfaces where small labels sit. */
-  --text-faint: oklch(63% 0.011 75);
+  --text-faint: oklch(68.3% 0.001 17);
 
   /* Chrome — device structure (frame accents, active rail). Brick-red, sparing. */
-  --chrome: oklch(56% 0.15 28);
-  --chrome-dim: oklch(46% 0.11 28);
+  --chrome: oklch(57.9% 0.203 26);
+  --chrome-dim: oklch(37.5% 0.141 28);
 
   /* Edited — the ONE attention signal: the Ruleset changed this. Amber LED. */
   --edited: oklch(80% 0.15 80);
@@ -80,4 +80,50 @@
   --type-dark: oklch(52% 0.05 300);
   --type-steel: oklch(70% 0.05 220);
   --type-fairy: oklch(80% 0.12 350);
+}
+
+/*
+ * Light theme — an explicit opt-in (see useTheme.ts), not the tool's default
+ * identity. Same warm hue family as dark, same semantic roles, every value
+ * re-solved (not just inverted) against the real formulas that consume them:
+ * chip labels (type-chip.css: 62% chip + 38% --text), chip fills (16% chip +
+ * --surface-0), and --chrome/--edited used directly as text color. Every
+ * token below clears 4.5:1 against the surface it actually renders on.
+ */
+:root[data-theme="light"] {
+  --surface-0: oklch(84% 0.010 19);
+  --surface-1: oklch(90% 0.010 19);
+  --surface-2: oklch(95% 0.008 19);
+  --surface-3: oklch(98% 0.006 19);
+  --line: oklch(76% 0.010 19);
+  --line-strong: oklch(64% 0.012 19);
+
+  --text: oklch(16% 0.006 17);
+  --text-dim: oklch(38% 0.006 17);
+  --text-faint: oklch(48% 0.006 17);
+
+  --chrome: oklch(48% 0.190 26);
+  --chrome-dim: oklch(36% 0.142 28);
+
+  --edited: oklch(48% 0.096 80);
+  --edited-glow: oklch(48% 0.096 80 / 0.25);
+
+  --type-normal: oklch(55% 0.030 95);
+  --type-fire: oklch(56% 0.163 45);
+  --type-water: oklch(55% 0.140 248);
+  --type-electric: oklch(55% 0.113 95);
+  --type-grass: oklch(53% 0.160 145);
+  --type-ice: oklch(54% 0.090 195);
+  --type-fighting: oklch(57% 0.190 22);
+  --type-poison: oklch(57% 0.180 320);
+  --type-ground: oklch(56% 0.120 65);
+  --type-flying: oklch(55% 0.100 270);
+  --type-psychic: oklch(57% 0.170 8);
+  --type-bug: oklch(54% 0.142 128);
+  --type-rock: oklch(55% 0.060 90);
+  --type-ghost: oklch(56% 0.130 290);
+  --type-dragon: oklch(56% 0.190 265);
+  --type-dark: oklch(55% 0.050 300);
+  --type-steel: oklch(55% 0.050 220);
+  --type-fairy: oklch(56% 0.120 350);
 }

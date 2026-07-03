@@ -1,6 +1,7 @@
 import type { ReactNode, RefObject } from "react";
 import type { KindKey } from "../types";
 import type { DexLayout } from "../hooks/useUrlState";
+import type { Theme } from "../hooks/useTheme";
 import { ReseedNote } from "./ReseedNote";
 import "./device-frame.css";
 
@@ -27,6 +28,8 @@ type Props = {
   onSearchEnter: () => void;
   layout: DexLayout;
   onLayout: (layout: DexLayout) => void;
+  theme: Theme;
+  onToggleTheme: () => void;
   readout: ReactNode;
   /** The active-target switcher — the highest-hierarchy control (drives the
       backdrop across every tab), so it sits in the header, not the rail. */
@@ -53,6 +56,8 @@ export function DeviceFrame({
   onSearchEnter,
   layout,
   onLayout,
+  theme,
+  onToggleTheme,
   readout,
   targetBar,
   searchRef,
@@ -91,6 +96,31 @@ export function DeviceFrame({
           </nav>
           <div className="device__readout mono" id="dex-summary">
             {readout}
+          </div>
+          <div
+            className="device__layout"
+            id="theme-toggle"
+            role="group"
+            aria-label="Theme"
+          >
+            <button
+              type="button"
+              className="device__layout-btn"
+              data-active={theme === "dark"}
+              aria-pressed={theme === "dark"}
+              onClick={() => theme !== "dark" && onToggleTheme()}
+            >
+              Dark
+            </button>
+            <button
+              type="button"
+              className="device__layout-btn"
+              data-active={theme === "light"}
+              aria-pressed={theme === "light"}
+              onClick={() => theme !== "light" && onToggleTheme()}
+            >
+              Light
+            </button>
           </div>
         </div>
       </header>
