@@ -6,28 +6,30 @@ The visual system for chrooked-pokedex. Concrete tokens and component rules; pai
 
 Terminal / data-dense **spine** (monospace data, dense grid, keyboard nav) carrying restrained **Pokédex-device** character (a thin device frame, a status LED for edited, a segmented readout for the dex number). A power tool that happens to feel like a handheld.
 
-**Scene sentence (forces the theme):** *Chris scanning a dense species ledger on a handheld-style screen, focused, the readout the bright object in the room.* → **dark**, warm-tinted screen surface.
+**Scene sentence (forces the theme):** *Chris scanning a dense species ledger on a handheld-style screen, focused, the readout the bright object in the room.* → **dark** is the default identity, warm-tinted screen surface. A **light theme exists as an explicit opt-in** (header toggle → `data-theme="light"` on the root, persisted in `localStorage`, never inferred from the OS) — dark stays what the tool *is*.
 
 ## Color
 
-Restrained surface + tinted neutrals, with three **semantic** color jobs that never overlap:
+Restrained surface + tinted neutrals, with three **semantic** color jobs that never overlap. Values below are the **dark (default) theme**, red-shifted to the brand palette (hue ~19–28); the light theme re-solves every token in `tokens.css` under `:root[data-theme="light"]`:
 
-| Job | Token | Meaning | OKLCH (target) |
+| Job | Token | Meaning | OKLCH (dark) |
 |---|---|---|---|
-| Surface | `--surface` | the screen | `oklch(20% 0.012 60)` |
-| Surface raised | `--surface-2` | cells, panels | `oklch(24% 0.012 60)` |
-| Surface inset | `--surface-0` | wells, fields | `oklch(16% 0.012 60)` |
-| Hairline | `--line` | borders, dividers | `oklch(32% 0.01 60)` |
-| Ink | `--text` | primary text | `oklch(92% 0.01 70)` |
-| Ink dim | `--text-dim` | labels, secondary | `oklch(68% 0.01 70)` |
-| Chrome | `--chrome` | device structure (frame, active rail) | `oklch(55% 0.15 28)` brick-red, desaturated, ≤10% area |
+| Surface inset | `--surface-0` | wells, fields, sprite bg | `oklch(12.4% 0.011 19)` |
+| Surface | `--surface-1` | the screen | `oklch(16.4% 0.011 19)` |
+| Surface raised | `--surface-2` | cells, panels | `oklch(20.4% 0.011 19)` |
+| Hairline | `--line` | borders, dividers | `oklch(30.4% 0.011 19)` |
+| Ink | `--text` | primary text | `oklch(98.3% 0.001 17)` |
+| Ink dim | `--text-dim` | labels, secondary | `oklch(77.3% 0.001 17)` |
+| Chrome | `--chrome` | device structure (frame, active rail) | `oklch(57.9% 0.203 26)` red, sparing, ≤10% area |
 | Edited | `--edited` | the **only** thing that means "Ruleset touched this" | `oklch(80% 0.15 80)` amber LED |
 
-`--chrome` is structure, not emphasis; `--edited` is the single attention signal. Don't reach for either decoratively.
+`--chrome` is structure, not emphasis; `--edited` is the single attention signal. Don't reach for either decoratively. The source palette's fifth swatch (`#bc0101`) is **deliberately unassigned** — every color job above is taken, and giving it one would break the one-color-one-job rule.
+
+**Light theme rules:** each light value is **re-solved, not inverted** — checked against the real formulas that consume it (type-chip `color-mix`, `--chrome`/`--edited` as text) so everything still clears AA. The **brand lamp and favicon** (a tilted Premier Ball) keep their own fixed shell/seam colors; they never borrow `--text`/`--surface-0`, which swap meaning between themes.
 
 ### Type colors — semantic token set
 
-All 18, used **wherever a type renders** (grid codes, detail chips, type-chart tab). Sourced from the franchise hues, **dark-tuned**: lightness lifted to ~58–85% and chroma held so each stays legible and passes AA on `--surface`. Lock exact values in `tokens.css` with a contrast check; these are the targets.
+All 18, used **wherever a type renders** (grid codes, detail chips, type-chart tab). Sourced from the franchise hues, **dark-tuned**: lightness lifted to ~58–85% and chroma held so each stays legible and passes AA on `--surface`. Lock exact values in `tokens.css` with a contrast check; these are the targets. The light theme carries its own **light-tuned** set (lightness pulled to ~53–57%, same hues) solved against the light chip formulas the same way.
 
 | Type | `--type-*` (OKLCH) | Type | `--type-*` (OKLCH) |
 |---|---|---|---|
