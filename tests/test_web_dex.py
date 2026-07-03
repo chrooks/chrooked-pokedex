@@ -11,6 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from chrooked_pokedex.model import Ruleset
+from chrooked_pokedex.model.schema import EvolutionOverride, SpeciesOverride
 from chrooked_pokedex.web import dex as dexmod
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -178,6 +179,63 @@ def test_override_evolution_wins_over_base_from() -> None:
     assert "evolution" in goodra["overridden_fields"]
     # The pre-override base evolution rides along for the diff toggle.
     assert goodra["base"]["evolution"]["from"] == "sliggoo-base"
+
+
+def test_pre_evo_forward_edge_reflects_evolution_override_on_child() -> None:
+    # Regression: an `evolution` override lives on the CHILD (evolved) species,
+    # e.g. `ruleset/species/dragalge.yaml` carries `evolution: {from: Skrelp,
+    # method: {level: 38}}`. Editing that level via the pre-evo's "evolves
+    # into" card only ever writes the child's Override, so the pre-evo's own
+    # base-derived `evolves_into` must be reconciled against it here — else
+    # Skrelp's profile keeps showing the frozen base level (48) forever, even
+    # though Dragalge's own `evolution` correctly shows 38.
+    ruleset = Ruleset(
+        species={
+            "floatzel": SpeciesOverride(
+                name="Floatzel",
+                chrooked_id="floatzel",
+                evolution=EvolutionOverride(from_species="Buizel", method={"level": 38}),
+            )
+        }
+    )
+    snapshot = {
+        "version": "1.11.2",
+        "species": {
+            "buizel": {
+                **_SNAPSHOT["species"]["pikachu"],
+                "chrooked_id": "buizel",
+                "name": "Buizel",
+                "evolves_into": [
+                    {"to": "floatzel", "to_name": "Floatzel", "method": "Level 26"}
+                ],
+                "evolution": None,
+            },
+            "floatzel": {
+                **_SNAPSHOT["species"]["pikachu"],
+                "chrooked_id": "floatzel",
+                "name": "Floatzel",
+                "evolves_into": [],
+                "evolution": None,
+            },
+        },
+        "moves": {},
+        "abilities": {},
+        "type_chart": [],
+    }
+    entries = dexmod.build_dex(snapshot, ruleset)
+    buizel = _entry(entries, "buizel")
+    floatzel = _entry(entries, "floatzel")
+    assert buizel["evolves_into"] == [
+        {
+            "to": "floatzel",
+            "to_name": "Floatzel",
+            "to_dex": 25,
+            "method": "Level 38",
+            "method_detail": {"kind": "EVO_LEVEL", "param": "38"},
+        }
+    ]
+    # Both directions of the same edge now agree.
+    assert floatzel["evolution"]["method"] == {"level": 38}
 
 
 def test_untouched_species_has_empty_base() -> None:

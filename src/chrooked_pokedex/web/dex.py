@@ -14,9 +14,10 @@ Override semantics follow the schema:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Mapping
 
 from ..model import Ruleset
+from ..model.evolution_methods import CANONICAL
 from ..model.schema import (
     AbilitiesOverride,
     AbilityDef,
@@ -24,6 +25,7 @@ from ..model.schema import (
     SpeciesOverride,
     TypeChartOverride,
 )
+from .evolution import method_label
 
 # Top-level species fields the dex flags as overridden, in display order.
 _FLAGGABLE_FIELDS = ("types", "abilities", "stats", "learnset", "evolution")
@@ -54,8 +56,9 @@ _MOVE_DIFF_FIELDS = (
 
 def build_dex(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
     """Merge the Ruleset onto every base species, sorted by national dex number."""
+    overrides_by_pre_evo = _index_overrides_by_pre_evo(snapshot, ruleset)
     entries = [
-        _merge_species(base, ruleset.species.get(chrooked_id))
+        _merge_species(base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo)
         for chrooked_id, base in snapshot["species"].items()
     ]
     return sorted(entries, key=_dex_sort_key)
@@ -72,7 +75,59 @@ def build_dex_entry(
     base = snapshot["species"].get(chrooked_id)
     if base is None:
         return None
-    return _merge_species(base, ruleset.species.get(chrooked_id))
+    overrides_by_pre_evo = _index_overrides_by_pre_evo(snapshot, ruleset)
+    return _merge_species(base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo)
+
+
+def _index_overrides_by_pre_evo(
+    snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, list[tuple[str, SpeciesOverride]]]:
+    """Ruleset `evolution` overrides, indexed by the pre-evo's `chrooked_id`.
+
+    An `EvolutionOverride` lives on the evolved-into species and names its
+    pre-evo by display name (`from_species`), not `chrooked_id` — so patching
+    the pre-evo's forward `evolves_into` means resolving that name once, then
+    grouping every override that points back at it. Without this, a level
+    edited via the pre-evo's "evolves into" card only ever updates the
+    evolved species' own backward `evolution`; the pre-evo's forward edge
+    keeps showing the frozen base value forever.
+    """
+    name_to_id = {base["name"]: cid for cid, base in snapshot["species"].items()}
+    index: dict[str, list[tuple[str, SpeciesOverride]]] = {}
+    for target_id, override in ruleset.species.items():
+        if override.evolution is None or override.evolution.from_species is None:
+            continue
+        from_id = name_to_id.get(override.evolution.from_species)
+        if from_id is None:
+            continue
+        index.setdefault(from_id, []).append((target_id, override))
+    return index
+
+
+def _resolved_evolution_method(method: Mapping[str, Any]) -> tuple[str, dict[str, str]]:
+    """A Ruleset evolution-override method dict as (display string, method_detail).
+
+    Mirrors the base snapshot's own `evolves_into` shape (`method_label` +
+    `{kind, param}`) so a Ruleset-authored forward edge reads and edits
+    identically to a base-derived one. Covers the three shapes
+    `EvolutionOverride.method` can take: the clean `level`/`item` dicts, a
+    canonical `{method: id, param?}`, and the raw `{pokeemerald|essentials:
+    token, param?}` escape.
+    """
+    if "level" in method:
+        param = str(method["level"])
+        return method_label("EVO_LEVEL", param), {"kind": "EVO_LEVEL", "param": param}
+    if "item" in method:
+        item = str(method["item"])
+        return method_label("EVO_ITEM", item), {"kind": "EVO_ITEM", "param": item}
+    if "method" in method:
+        canonical = CANONICAL.get(str(method["method"]))
+        token = canonical.pokeemerald if canonical is not None else str(method["method"])
+        param = str(method.get("param", ""))
+        return method_label(token, param), {"kind": token, "param": param}
+    token = str(method.get("pokeemerald") or method.get("essentials") or "")
+    param = str(method.get("param", ""))
+    return method_label(token, param), {"kind": token, "param": param}
 
 
 def _dex_sort_key(entry: dict[str, Any]) -> tuple[int, str]:
@@ -82,7 +137,10 @@ def _dex_sort_key(entry: dict[str, Any]) -> tuple[int, str]:
 
 
 def _merge_species(
-    base: dict[str, Any], override: SpeciesOverride | None
+    base: dict[str, Any],
+    override: SpeciesOverride | None,
+    snapshot: dict[str, Any],
+    overrides_by_pre_evo: dict[str, list[tuple[str, SpeciesOverride]]],
 ) -> dict[str, Any]:
     merged: dict[str, Any] = {
         "dex": base.get("dex"),
@@ -92,12 +150,14 @@ def _merge_species(
         "abilities": dict(base.get("abilities", {})),
         "stats": dict(base.get("stats", {})),
         "learnset": list(base.get("learnset", [])),
-        # The base evolution graph flows through unchanged: backward `evolution`
-        # (pre-evo + method) and forward `evolves_into` (branching targets). An
-        # override can still replace `evolution` below; `evolves_into` is base-
-        # derived only (overrides don't author forward edges today).
+        # The base evolution graph flows through, then any Ruleset override
+        # authored on a CHILD species (an `evolution` override) is spliced into
+        # this species' forward `evolves_into` below — so both directions of
+        # the same edge always agree, however they were edited.
         "evolution": _copy_evolution(base.get("evolution")),
-        "evolves_into": [dict(edge) for edge in base.get("evolves_into", [])],
+        "evolves_into": _forward_edges(
+            base, snapshot, overrides_by_pre_evo.get(base["chrooked_id"], [])
+        ),
         # A base fact (no outgoing evolution = final form or single-stage); the
         # Ruleset doesn't recompute it. Defaults False for an older snapshot that
         # predates the field. Drives the "Fully Evolved" class.
@@ -166,6 +226,33 @@ def _copy_evolution(evolution: dict[str, Any] | None) -> dict[str, Any] | None:
     so a later override that replaces `evolution` can't mutate the shared base.
     """
     return dict(evolution) if evolution is not None else None
+
+
+def _forward_edges(
+    base: dict[str, Any],
+    snapshot: dict[str, Any],
+    pre_evo_overrides: list[tuple[str, SpeciesOverride]],
+) -> list[dict[str, Any]]:
+    """This species' `evolves_into`: base-derived, with Ruleset overrides spliced in.
+
+    `pre_evo_overrides` is this species' entry in `_index_overrides_by_pre_evo` —
+    every override elsewhere in the Ruleset that names this species as its
+    pre-evo. Each one replaces (or adds) the matching edge with the override's
+    real method, keyed by the evolved species' `chrooked_id` so branching
+    (Eevee-style) targets don't collide.
+    """
+    edges = {edge["to"]: dict(edge) for edge in base.get("evolves_into", [])}
+    for target_id, override in pre_evo_overrides:
+        assert override.evolution is not None  # guaranteed by the index
+        method, method_detail = _resolved_evolution_method(override.evolution.method)
+        edges[target_id] = {
+            "to": target_id,
+            "to_name": override.name,
+            "to_dex": snapshot["species"].get(target_id, {}).get("dex"),
+            "method": method,
+            "method_detail": method_detail,
+        }
+    return list(edges.values())
 
 
 def _merge_abilities(
