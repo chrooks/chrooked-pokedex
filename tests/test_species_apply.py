@@ -60,6 +60,105 @@ const uq4_12_t gTypeEffectivenessTable[N][N] =
     return target
 
 
+def _build_brace_target(tmp_path: Path) -> Path:
+    """A target whose species file uses the older brace-array .types form
+    (no MON_TYPES macro anywhere) — e.g. pokeemerald-rogue-ex (expansion 1.7.4)."""
+    target = tmp_path / "fork"
+    pokemon = target / "src" / "data" / "pokemon"
+    pokemon.mkdir(parents=True)
+    (pokemon / "species_info.h").write_text(
+        """\
+const struct SpeciesInfo gSpeciesInfo[] =
+{
+    [SPECIES_GOODRA] =
+    {
+        .baseHP = 90,
+        .baseSpeed = 80,
+        .types = { TYPE_DRAGON, TYPE_DRAGON },
+        .abilities = {ABILITY_SAP_SIPPER, ABILITY_HYDRATION, ABILITY_GOOEY},
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    data = target / "src" / "data"
+    (data / "abilities.h").write_text(
+        """\
+const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
+{
+    [ABILITY_POISON_HEAL] =
+    {
+        .name = _("Poison Heal"),
+        .description = COMPOUND_STRING("Heals from poison."),
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    (data / "types_info.h").write_text(
+        """\
+#define X UQ_4_12
+#define ______ X(1.0)
+const uq4_12_t gTypeEffectivenessTable[N][N] =
+{
+    [TYPE_WATER] = {______},
+    [TYPE_DRAGON] = {______},
+    [TYPE_ROCK] = {______},
+};
+""",
+        encoding="utf-8",
+    )
+    return target
+
+
+def _build_split_dialect_target(tmp_path: Path) -> Path:
+    """A split-layout target (species_info/*.h) where one file is brace-form
+    and another is macro-form — a fork mid-migration between conventions."""
+    target = tmp_path / "fork"
+    split_dir = target / "src" / "data" / "pokemon" / "species_info"
+    split_dir.mkdir(parents=True)
+    (split_dir / "gen_a.h").write_text(
+        """\
+const struct SpeciesInfo gSpeciesInfoGenA[] =
+{
+    [SPECIES_GOODRA] =
+    {
+        .types = { TYPE_DRAGON, TYPE_DRAGON },
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    (split_dir / "gen_b.h").write_text(
+        """\
+const struct SpeciesInfo gSpeciesInfoGenB[] =
+{
+    [SPECIES_SLIGGOO] =
+    {
+        .types = MON_TYPES(TYPE_DRAGON),
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    data = target / "src" / "data"
+    (data / "abilities.h").write_text("// empty\n", encoding="utf-8")
+    (data / "types_info.h").write_text(
+        """\
+#define X UQ_4_12
+#define ______ X(1.0)
+const uq4_12_t gTypeEffectivenessTable[N][N] =
+{
+    [TYPE_WATER] = {______},
+    [TYPE_DRAGON] = {______},
+    [TYPE_ROCK] = {______},
+};
+""",
+        encoding="utf-8",
+    )
+    return target
+
+
 def _ruleset(tmp_path: Path) -> Ruleset:
     root = tmp_path / "ruleset"
     (root / "species").mkdir(parents=True)
@@ -102,6 +201,50 @@ def test_apply_species_rewrites_types_abilities_stats(tmp_path: Path) -> None:
     assert report.counts()["applied"] == 1
 
 
+def test_apply_species_rewrites_types_brace_form(tmp_path: Path) -> None:
+    """A target with no MON_TYPES usage (e.g. pokeemerald-rogue-ex) gets its
+    .types Override written as a plain brace array, matching its own convention."""
+    target = _build_brace_target(tmp_path)
+    ruleset = _ruleset(tmp_path)
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    changed = apply_species(target, ruleset, resmap, report)
+
+    assert changed
+    text = (target / "src/data/pokemon/species_info.h").read_text()
+    assert "MON_TYPES" not in text
+    profiles = species_parser.parse_species_profiles(target)
+    goodra = profiles["SPECIES_GOODRA"]
+    assert "TYPE_WATER" in goodra.fields["types"]
+    assert "TYPE_DRAGON" in goodra.fields["types"]
+
+
+def test_apply_species_brace_mono_type_duplicates(tmp_path: Path) -> None:
+    """A single-type Override on a brace-form target duplicates the type into
+    both slots, matching the target's own native mono-type convention."""
+    target = _build_brace_target(tmp_path)
+    root = tmp_path / "ruleset"
+    (root / "species").mkdir(parents=True)
+    (root / "meta.yaml").write_text("base_version: 1.11.2\nschema_version: 1\n")
+    (root / "species" / "goodra.yaml").write_text(
+        """\
+name: Goodra
+chrooked_id: goodra
+aka: { pokeemerald: SPECIES_GOODRA }
+types: [Rock]
+""",
+        encoding="utf-8",
+    )
+    ruleset = Ruleset.load(root)
+    resmap = build_resolution_map(target, ruleset)
+
+    apply_species(target, ruleset, resmap, ApplyReport())
+
+    text = (target / "src/data/pokemon/species_info.h").read_text()
+    assert "{ TYPE_ROCK, TYPE_ROCK }" in text
+
+
 def test_apply_species_is_idempotent(tmp_path: Path) -> None:
     target = _build_target(tmp_path)
     ruleset = _ruleset(tmp_path)
@@ -114,6 +257,47 @@ def test_apply_species_is_idempotent(tmp_path: Path) -> None:
 
     assert after_first == after_second
     assert second_changed == set()  # nothing changed on the re-run
+
+
+def test_apply_species_detects_dialect_per_file(tmp_path: Path) -> None:
+    """A split-layout target with genuinely mixed dialects across files must
+    render each file in its OWN dialect, not a global winner-takes-all verdict."""
+    target = _build_split_dialect_target(tmp_path)
+    root = tmp_path / "ruleset"
+    (root / "species").mkdir(parents=True)
+    (root / "meta.yaml").write_text("base_version: 1.11.2\nschema_version: 1\n")
+    (root / "species" / "goodra.yaml").write_text(
+        "name: Goodra\nchrooked_id: goodra\naka: { pokeemerald: SPECIES_GOODRA }\ntypes: [Water, Dragon]\n",
+        encoding="utf-8",
+    )
+    (root / "species" / "sliggoo.yaml").write_text(
+        "name: Sliggoo\nchrooked_id: sliggoo\naka: { pokeemerald: SPECIES_SLIGGOO }\ntypes: [Water, Rock]\n",
+        encoding="utf-8",
+    )
+    ruleset = Ruleset.load(root)
+    resmap = build_resolution_map(target, ruleset)
+
+    apply_species(target, ruleset, resmap, ApplyReport())
+
+    gen_a = (target / "src/data/pokemon/species_info/gen_a.h").read_text()
+    gen_b = (target / "src/data/pokemon/species_info/gen_b.h").read_text()
+    assert "{ TYPE_WATER, TYPE_DRAGON }" in gen_a
+    assert "MON_TYPES" not in gen_a
+    assert "MON_TYPES(TYPE_WATER, TYPE_ROCK)" in gen_b
+
+
+def test_apply_species_brace_form_is_idempotent(tmp_path: Path) -> None:
+    target = _build_brace_target(tmp_path)
+    ruleset = _ruleset(tmp_path)
+    resmap = build_resolution_map(target, ruleset)
+
+    apply_species(target, ruleset, resmap, ApplyReport())
+    after_first = (target / "src/data/pokemon/species_info.h").read_text()
+    second_changed = apply_species(target, ruleset, resmap, ApplyReport())
+    after_second = (target / "src/data/pokemon/species_info.h").read_text()
+
+    assert after_first == after_second
+    assert second_changed == set()
 
 
 def test_apply_blocks_missing_species(tmp_path: Path) -> None:

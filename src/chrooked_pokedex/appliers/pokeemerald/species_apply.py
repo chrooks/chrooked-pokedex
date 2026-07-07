@@ -78,8 +78,9 @@ def apply_species(
             continue
 
         path, span = located
+        dialect = _detect_types_dialect(texts[path])
         body = texts[path][span[0] + 1 : span[1]]
-        new_body, unresolved = _render_fields(body, override, resmap)
+        new_body, unresolved = _render_fields(body, override, resmap, dialect)
         new_text = c_edit.replace_entry_body(texts[path], span, new_body)
         if new_text != texts[path]:
             texts[path] = new_text
@@ -110,15 +111,24 @@ def _locate(texts: dict[Path, str], symbol: str):
     return None
 
 
+def _detect_types_dialect(text: str) -> str:
+    """Return "macro" if this species file already uses MON_TYPES(...), else
+    "brace" — matching this specific file's own native .types convention.
+    Detected per-file since a split-layout target can mix dialects across files."""
+    if "MON_TYPES(" in text:
+        return "macro"
+    return "brace"
+
+
 def _render_fields(
-    body: str, override: SpeciesOverride, resmap: ResolutionMap
+    body: str, override: SpeciesOverride, resmap: ResolutionMap, dialect: str
 ) -> tuple[str, list[str]]:
     unresolved: list[str] = []
 
     if override.types:
         symbols = [resmap.type(name) for name in override.types]
         if all(symbols):
-            body = c_edit.set_field_all(body, "types", _render_types(symbols))
+            body = c_edit.set_field_all(body, "types", _render_types(symbols, dialect))
         else:
             unresolved.append("types")
 
@@ -136,7 +146,12 @@ def _render_fields(
     return body, unresolved
 
 
-def _render_types(symbols: list[str]) -> str:
+def _render_types(symbols: list[str], dialect: str) -> str:
+    assert dialect in ("brace", "macro"), dialect
+    if dialect == "brace":
+        first = symbols[0]
+        second = symbols[1] if len(symbols) > 1 else symbols[0]
+        return "{ " + first + ", " + second + " }"
     return "MON_TYPES(" + ", ".join(symbols) + ")"
 
 
