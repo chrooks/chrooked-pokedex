@@ -134,7 +134,7 @@ class TargetRegistry:
         resolved = Path(path).expanduser().resolve()
         if not resolved.exists() or not resolved.is_dir():
             raise TargetError(422, f"Target path does not exist: {resolved}")
-        if engine not in ("pokeemerald", "essentials"):
+        if engine not in ("pokeemerald", "essentials", "polishedcrystal"):
             raise TargetError(422, f"Unknown engine {engine!r}.")
         # pokeemerald targets must be git repos (preview-restore is git-based).
         # essentials targets may be plain directories (non-git Essentials games).

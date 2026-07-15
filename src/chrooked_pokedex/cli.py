@@ -79,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--engine",
-        choices=("pokeemerald", "essentials"),
+        choices=("pokeemerald", "essentials", "polishedcrystal"),
         default="pokeemerald",
         help="Target engine (default: pokeemerald). 'essentials' writes Pokémon "
         "Essentials PBS text; the dialect (16.2 vs modern v21) is auto-detected from "
@@ -272,6 +272,42 @@ def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport
     if "type-chart" in categories:
         changed = apply_type_chart(target, ruleset, report)
         print(f"type-chart: {len(changed)} file(s) changed")
+
+
+# Polished Crystal is apply-only Overrides: moves before the species-referencing
+# categories, no create tier (a data-only Applier cannot author GB assembly —
+# missing content becomes a blocked report entry, per the behaviors Boundary).
+_POLISHEDCRYSTAL_CATEGORIES = ("moves", "learnset", "abilities")
+
+
+def _apply_polishedcrystal(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    from .appliers.polishedcrystal import ability_apply, learnset_apply, move_apply
+    from .appliers.polishedcrystal.resolution import (
+        build_resolution_map as pc_resolution_map,
+    )
+
+    import subprocess
+
+    # Apply-only engine: no base pin. The record of *what* was patched is the
+    # target's commit hash, printed alongside the report.
+    result = subprocess.run(
+        ["git", "-C", str(target), "rev-parse", "--short", "HEAD"],
+        capture_output=True, text=True, check=False,
+    )
+    if result.returncode == 0:
+        print(f"target commit: {result.stdout.strip()}")
+
+    resmap = pc_resolution_map(target)
+    categories = _POLISHEDCRYSTAL_CATEGORIES if category == "all" else (category,)
+    if "moves" in categories:
+        changed = move_apply.apply_moves(target, ruleset, resmap, report)
+        print(f"moves: {len(changed)} file(s) changed")
+    if "learnset" in categories:
+        changed = learnset_apply.apply_learnsets(target, ruleset, resmap, report)
+        print(f"learnset: {len(changed)} file(s) changed")
+    if "abilities" in categories:
+        changed = ability_apply.apply_abilities(target, ruleset, resmap, report)
+        print(f"abilities: {len(changed)} file(s) changed")
 
 
 # Essentials now covers the same tiers as pokeemerald. Evolution writes the

@@ -60,6 +60,15 @@ def route_apply(
     holds = holds or HoldSet()
     target_edits = target_edits or TargetEdits()
 
+    # --- polishedcrystal path -------------------------------------------------
+    if engine == "polishedcrystal":
+        # Imported inline to avoid circular: cli → dispatch → cli.
+        from ..cli import _apply_polishedcrystal
+
+        _warn_unsupported_target_layers(holds, target_edits, "polishedcrystal", report)
+        _apply_polishedcrystal(target, category, ruleset, report)
+        return
+
     # --- pokeemerald path ---------------------------------------------------
     if engine != "essentials":
         # Imported inline to avoid circular: cli → dispatch → cli.
