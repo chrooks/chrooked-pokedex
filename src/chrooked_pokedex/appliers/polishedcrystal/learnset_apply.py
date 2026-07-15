@@ -33,18 +33,22 @@ def apply_learnsets(
         label = resmap.species_label(override.name, dict(override.aka))
 
         moves = []
-        unresolved = []
+        dropped = []
         for entry in override.learnset:
             symbol = resmap.move(entry.move, {})
             if symbol is None:
-                unresolved.append(entry.move)
+                dropped.append(entry.move)
             else:
                 moves.append((entry.level, symbol))
-        if unresolved:
+        # Relaxed rule (2026-07-15): write what resolves, name every dropped
+        # move in a partial entry. Only an all-dropped learnset blocks — an
+        # empty list would corrupt the species.
+        if not moves:
             report.add(ReportEntry(
                 status="blocked", category="learnset", chrooked_id=chrooked_id,
                 symbol=label,
-                reason="unresolvable move(s): " + ", ".join(unresolved),
+                reason="no move in the learnset resolves in target: "
+                + ", ".join(dropped),
             ))
             continue
 
@@ -70,9 +74,17 @@ def apply_learnsets(
         if lines[region_start:end] != new_lines:
             lines[region_start:end] = new_lines
             changed = True
-        report.add(ReportEntry(
-            status="applied", category="learnset", chrooked_id=chrooked_id, symbol=label,
-        ))
+        if dropped:
+            report.add(ReportEntry(
+                status="partial", category="learnset", chrooked_id=chrooked_id,
+                symbol=label,
+                reason="dropped move(s) the target lacks: " + ", ".join(dropped),
+                partial_fields=tuple(dropped),
+            ))
+        else:
+            report.add(ReportEntry(
+                status="applied", category="learnset", chrooked_id=chrooked_id, symbol=label,
+            ))
 
     if changed:
         evos_path.write_text("\n".join(lines) + "\n", encoding="utf-8")

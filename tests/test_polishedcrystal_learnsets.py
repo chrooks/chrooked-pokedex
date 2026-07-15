@@ -84,15 +84,33 @@ def test_embedded_faithful_conditionals_are_flattened(target):
 
 
 @pytest.mark.unit
-def test_unresolvable_move_blocks_whole_species(target):
+def test_unresolvable_move_drops_to_partial_with_report(target):
+    # Relaxed rule (2026-07-15): write the resolvable moves, name the dropped
+    # ones in a partial entry — a custom move missing from PC no longer holds
+    # the whole species hostage.
     species = {"bulbasaur": _override("bulbasaur", [(1, "tackle"), (5, "chrooked-slam")])}
+    changed, report = _apply(target, species)
+    after = (target / EVOS).read_text()
+
+    assert changed == [target / EVOS]
+    block = after.split("\tevos_attacks Bulbasaur\n")[1].split("\n\n")[0]
+    assert block.splitlines()[1:] == ["\tlearnset 1, TACKLE"]
+    entry = report.entries[0]
+    assert entry.status == "partial"
+    assert "chrooked-slam" in entry.reason
+    assert entry.partial_fields == ("chrooked-slam",)
+
+
+@pytest.mark.unit
+def test_fully_unresolvable_learnset_blocks(target):
+    # An empty learnset would corrupt the species — all-dropped stays blocked.
+    species = {"bulbasaur": _override("bulbasaur", [(1, "chrooked-slam"), (5, "void-fang")])}
     before = (target / EVOS).read_bytes()
     changed, report = _apply(target, species)
 
     assert changed == []
     assert (target / EVOS).read_bytes() == before
     assert report.entries[0].status == "blocked"
-    assert "chrooked-slam" in report.entries[0].reason
 
 
 @pytest.mark.unit

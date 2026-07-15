@@ -44,9 +44,12 @@ def _apply_species_slots(
     target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
 ) -> list[Path]:
     changed = []
+    referenced: frozenset[str] | None = None  # lazy one-time target scan
     for chrooked_id, override in sorted(ruleset.species.items()):
         if override.abilities is None:
             continue
+        if referenced is None:
+            referenced = _referenced_abil_symbols(target)
         label = resmap.species_label(override.name, dict(override.aka))
         path = _base_stats_path(target, label)
         if path is None:
@@ -86,15 +89,84 @@ def _apply_species_slots(
             ))
             continue
 
-        new_line = splice_args(lines[index], replacements)
+        # The abilities_for macro DEFINES ABIL_<SPECIES>_<ABILITY> symbols that
+        # trainer/battle-tower data references by name. Swapping out an ability
+        # something references would undefine its symbol and break the link —
+        # keep that slot, write the rest, and say so.
+        kept = _conflicting_slots(lines[index], replacements, referenced)
+        for slot in kept:
+            del replacements[_SLOT_ARGS[slot]]
+
+        new_line = splice_args(lines[index], replacements) if replacements else lines[index]
         if new_line != lines[index]:
             lines[index] = new_line
             path.write_text("\n".join(lines) + "\n", encoding="utf-8")
             changed.append(path)
-        report.add(ReportEntry(
-            status="applied", category="abilities", chrooked_id=chrooked_id, symbol=label,
-        ))
+        if kept:
+            report.add(ReportEntry(
+                status="partial", category="abilities", chrooked_id=chrooked_id,
+                symbol=label,
+                reason="kept slot(s) whose ability is referenced by target data: "
+                + ", ".join(kept[slot] for slot in kept),
+                partial_fields=tuple(kept),
+            ))
+        else:
+            report.add(ReportEntry(
+                status="applied", category="abilities", chrooked_id=chrooked_id, symbol=label,
+            ))
     return changed
+
+
+def _referenced_abil_symbols(target: Path) -> frozenset[str]:
+    """All ABIL_* symbols referenced anywhere in the target's asm sources.
+
+    Two reference shapes exist: literal tokens (db ABIL_SCYTHER_TECHNICIAN | ...)
+    and macro-composed ones — `tr_extra STEADFAST` under `tr_mon 30, GENGAR ...`
+    expands to ABIL_GENGAR_STEADFAST. Non-ability tr_extra args (SHINY, natures)
+    compose symbols no abilities_for line ever defines, so over-collecting them
+    is harmless. Definition sites (`ABIL_\\1_\\2` in the macro body) never match
+    the literal pattern, so no exclusions are needed.
+    """
+    token = re.compile(r"\bABIL_[A-Z0-9_]+")
+    tr_mon = re.compile(r"\s*tr_mon\s+[^,]+,\s*([A-Z0-9_]+)")
+    tr_extra = re.compile(r"\s*tr_extra\s+(.+)")
+    found: set[str] = set()
+    for path in Path(target).rglob("*.asm"):
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        found.update(token.findall(text))
+        if "tr_extra" not in text:
+            continue
+        species = None
+        for line in text.splitlines():
+            mon = tr_mon.match(line)
+            if mon:
+                species = mon.group(1)
+                continue
+            extra = tr_extra.match(line)
+            if extra and species:
+                for arg in extra.group(1).split(","):
+                    found.add(f"ABIL_{species}_{arg.strip()}")
+    return frozenset(found)
+
+
+def _conflicting_slots(
+    line: str, replacements: dict[int, str], referenced: frozenset[str]
+) -> dict[str, str]:
+    """Slots whose outgoing ability is referenced: {slot_name: ABIL_ symbol}."""
+    args = [part.strip() for part in line.split(",")]
+    species_const = args[0].split()[-1]  # "\tabilities_for BULBASAUR" -> BULBASAUR
+    conflicts: dict[str, str] = {}
+    for slot, argnum in _SLOT_ARGS.items():
+        if argnum not in replacements or argnum - 1 >= len(args):
+            continue
+        outgoing = args[argnum - 1]
+        symbol = f"ABIL_{species_const}_{outgoing}"
+        if outgoing != replacements[argnum] and symbol in referenced:
+            conflicts[slot] = symbol
+    return conflicts
 
 
 def _apply_ability_defs(

@@ -139,3 +139,46 @@ def test_changed_paths_are_deduplicated(target):
     }
     changed, _ = _apply(target, abilities=abilities)
     assert len(changed) == len(set(changed))
+
+
+@pytest.mark.unit
+def test_referenced_outgoing_ability_slot_is_kept_and_reported(target):
+    # Trainer data references ABIL_BULBASAUR_CHLOROPHYLL (defined by the
+    # abilities_for macro). Swapping CHLOROPHYLL out would undefine the symbol
+    # and break the link — that slot must be kept, the rest written, partial.
+    changed, report = _apply(
+        target,
+        species={"bulbasaur": _override(
+            "bulbasaur", {"secondary": "solar-power", "hidden": "drizzle"}
+        )},
+    )
+    path = target / "data/pokemon/base_stats/bulbasaur.asm"
+    line = [l for l in path.read_text().splitlines() if "abilities_for" in l][0]
+
+    assert "CHLOROPHYLL" in line          # kept — referenced by trainer data
+    assert "DRIZZLE" in line              # written — hidden slot unreferenced
+    assert "SOLAR_POWER" not in line
+    entry = report.entries[0]
+    assert entry.status == "partial"
+    assert "ABIL_BULBASAUR_CHLOROPHYLL" in entry.reason
+    assert entry.partial_fields == ("secondary",)
+
+
+@pytest.mark.unit
+def test_macro_composed_ability_reference_is_detected(target):
+    # tr_extra STEADFAST under tr_mon FARFETCH_D_GALARIAN composes
+    # ABIL_FARFETCH_D_GALARIAN_STEADFAST via macro — no literal token exists.
+    changed, report = _apply(
+        target,
+        species={"farfetchd-galarian": _override(
+            "farfetchd-galarian", {"primary": "scrappy"},
+            aka={"polishedcrystal": "FarfetchDGalarian"},
+        )},
+    )
+    path = target / "data/pokemon/base_stats/farfetch_d_galarian.asm"
+    line = [l for l in path.read_text().splitlines() if "abilities_for" in l][0]
+
+    assert "STEADFAST, STEADFAST" in line  # primary kept — trainer references it
+    entry = report.entries[0]
+    assert entry.status == "partial"
+    assert "ABIL_FARFETCH_D_GALARIAN_STEADFAST" in entry.reason
