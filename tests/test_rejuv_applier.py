@@ -549,9 +549,21 @@ def test_harness_load_shape(tmp_path):
         f'eval(File.read({str(f)!r}), TOPLEVEL_BINDING)\n' for f in files
     ) + (
         'raise "damage table empty" if CHROOKED_DAMAGE_MODS.empty?\n'
-        'raise "lambda arity" unless CHROOKED_DAMAGE_MODS.values.all? { |l| l.arity == 3 }\n'
+        'tables = CHROOKED_DAMAGE_MODS.values + CHROOKED_DEFENSE_MODS.values\n'
+        'raise "lambda arity" unless tables.all? { |l| l.arity == 3 }\n'
         'puts "OK"\n'
     )
     proc = subprocess.run(["ruby", "-e", script], capture_output=True, text=True, cwd=tmp_path)
     assert proc.returncode == 0, proc.stderr
     assert "OK" in proc.stdout
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_harness_lambda_behavior(tmp_path):
+    """Every wave-1 lambda produces the spec'd multiplier against stub classes."""
+    import subprocess
+    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "lambda_checks.rb"
+    proc = subprocess.run(
+        ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr

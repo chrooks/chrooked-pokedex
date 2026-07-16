@@ -470,7 +470,7 @@ def _run_apply(
         f"partial={counts['partial']} blocked={counts['blocked']} held={counts['held']}"
     )
 
-    data_only = [e for e in report.entries if "DATA ONLY" in e.reason]
+    data_only = [e for e in report.entries if "DATA ONLY" in (e.reason or "")]
     if data_only:
         print(
             f"  ⚠ {len(data_only)} created ability/ies are DATA ONLY — their mechanics "

@@ -6,21 +6,56 @@
 # Behavior files (chrooked_<id>.rb) only append entries to the registry
 # tables below; all prepending happens here, once.
 
-# ability symbol => ->(move, attacker, opponent) { Float multiplier }
+# attacker ability => ->(move, attacker, opponent) { Float multiplier }
 CHROOKED_DAMAGE_MODS = {}
+# defender ability => ->(move, attacker, opponent) { Float multiplier on incoming damage }
+CHROOKED_DEFENSE_MODS = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
   HAMMER_MOVES = [:SLAM, :BODYSLAM, :HAMMERARM, :IRONHEAD, :WOODHAMMER,
                   :HEAVYSLAM, :ICEHAMMER, :GIGATONHAMMER].freeze
+  # No piercing flag either; the horn/drill set from the Ruleset's flag data.
+  # ponytail: covers Ruleset-flagged moves only — extend if a piercing move is missing in play.
+  PIERCING_MOVES = [:DRILLPECK, :DRILLRUN, :FURYATTACK, :HORNATTACK, :HORNDRILL,
+                    :HORNLEECH, :MEGAHORN, :PECK, :PSYCHOCUT, :PSYSHIELDBASH,
+                    :SMARTSTRIKE].freeze
+  # No wing flag; wind rides the native :windmove flag, wings ride this set.
+  WING_MOVES = [:WINGATTACK, :DUALWINGBEAT, :BRAVEBIRD, :OBLIVIONWING,
+                :ESPERWING, :AERIALACE].freeze
 
   def self.hammer_move?(move)
     HAMMER_MOVES.include?(move.move)
   end
 
+  def self.piercing_move?(move)
+    PIERCING_MOVES.include?(move.move)
+  end
+
+  def self.wing_or_wind_move?(move)
+    WING_MOVES.include?(move.move) || move.windMove?
+  end
+
+  def self.kick_move?(move)
+    move.hasFlag?(:kickmove)
+  end
+
+  # 1.5 STAB grant when the move's effective type is in `types` but the user
+  # does not carry that type (vanilla already paid STAB when it does).
+  def self.stab_grant(move, attacker, types = nil)
+    return 1.0 if move.basedamage.to_i <= 0 || move.move == :STRUGGLE
+    type = move.pbType(attacker)
+    return 1.0 if types && !types.include?(type)
+    attacker.hasType?(type) ? 1.0 : 1.5
+  end
+
   def self.damage_mult(move, attacker, opponent)
-    mod = CHROOKED_DAMAGE_MODS[attacker.ability]
-    mod ? mod.call(move, attacker, opponent) : 1.0
+    mult = 1.0
+    atk_mod = CHROOKED_DAMAGE_MODS[attacker.ability]
+    mult *= atk_mod.call(move, attacker, opponent) if atk_mod
+    def_mod = opponent && CHROOKED_DEFENSE_MODS[opponent.ability]
+    mult *= def_mod.call(move, attacker, opponent) if def_mod
+    mult
   end
 
   # Proof trail: one line per boosted hit in chrooked.log (game root).
@@ -39,7 +74,7 @@ module ChrookedDamageMods
     mult = Chrooked.damage_mult(self, attacker, opponent)
     return dmg if mult == 1.0
     boosted = (dmg * mult).round
-    Chrooked.log("#{attacker.ability} x#{mult} #{@move}: #{dmg} -> #{boosted}")
+    Chrooked.log("#{attacker.ability}/#{opponent ? opponent.ability : '-'} x#{mult.round(3)} #{@move}: #{dmg} -> #{boosted}")
     boosted
   end
 end
