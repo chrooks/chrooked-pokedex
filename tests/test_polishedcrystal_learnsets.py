@@ -154,3 +154,24 @@ def test_plain_form_suffix_fallback_finds_evos_block(target):
     after = (target / EVOS).read_text()
     block = after.split("\tevos_attacks FarfetchDPlain\n")[1].split("\n\n")[0]
     assert block.splitlines()[-1] == "\tlearnset 1, PECK"
+
+
+@pytest.mark.unit
+def test_standin_resolves_learnset_reference_without_touching_the_move(target):
+    # meta standins: a move PC lacks resolves to Chris's chosen stand-in for
+    # learnset references only — the stand-in move itself is never rewritten.
+    standins = {"Tail Whip": "LEER", "Bogus Move": "NOT_A_SYMBOL"}
+    resmap = build_resolution_map(target, standins=standins)
+    ruleset = Ruleset(
+        species={"bulbasaur": _override("bulbasaur", [(1, "tackle"), (3, "Tail Whip")])}
+    )
+    report = ApplyReport()
+    moves_before = (target / "data/moves/moves.asm").read_bytes()
+    apply_learnsets(target, ruleset, resmap, report)
+
+    assert report.entries[0].status == "applied"
+    block = (target / EVOS).read_text().split("\tevos_attacks Bulbasaur\n")[1].split("\n\n")[0]
+    assert "\tlearnset 3, LEER" in block.splitlines()
+    assert (target / "data/moves/moves.asm").read_bytes() == moves_before
+    # An unverifiable stand-in target is ignored, not written.
+    assert resmap.move_reference("Bogus Move") is None

@@ -297,7 +297,16 @@ def _apply_polishedcrystal(target: Path, category: str, ruleset, report: ApplyRe
     if result.returncode == 0:
         print(f"target commit: {result.stdout.strip()}")
 
-    resmap = pc_resolution_map(target)
+    # Learnset references resolve through stand-ins (meta.yaml) AND takeover
+    # hints (a MoveDef's aka: polishedcrystal:) — a taken-over slot must catch
+    # references to the move's display name. Explicit stand-ins win.
+    takeover_refs = {
+        m.name: str(dict(m.aka)["polishedcrystal"])
+        for m in ruleset.moves.values()
+        if dict(m.aka or {}).get("polishedcrystal")
+    }
+    standins = (ruleset.meta.get("standins") or {}).get("polishedcrystal") or {}
+    resmap = pc_resolution_map(target, standins={**takeover_refs, **standins})
     categories = _POLISHEDCRYSTAL_CATEGORIES if category == "all" else (category,)
     if "moves" in categories:
         changed = move_apply.apply_moves(target, ruleset, resmap, report)

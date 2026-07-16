@@ -96,6 +96,8 @@ def splice_args(line: str, replacements: dict[int, str]) -> str:
             width = max(pad + len(body), len(new) + 1)
             segments[index] = f"{new:>{width}}" + comment
         else:
-            segments[index] = " " + new + comment
-            carry = (1 + len(new)) - (pad + len(body))
+            # Keep the field's original left padding; the next field's padding
+            # absorbs any length difference so later commas stay aligned.
+            segments[index] = " " * pad + new + comment
+            carry = len(new) - len(body)
     return ",".join(segments)

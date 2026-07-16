@@ -35,7 +35,7 @@ def apply_learnsets(
         moves = []
         dropped = []
         for entry in override.learnset:
-            symbol = resmap.move(entry.move, {})
+            symbol = resmap.move_reference(entry.move)
             if symbol is None:
                 dropped.append(entry.move)
             else:
