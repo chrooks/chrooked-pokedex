@@ -523,3 +523,35 @@ def test_installer_write_failure_reports_blocked(tmp_path, monkeypatch):
     install_behaviors(target, r, report, source_dir=src)
     assert any(e.status == "blocked" and e.chrooked_id == "sledgehammer"
                and "copy failed" in (e.reason or "") for e in report.entries)
+
+
+# --- harness load-shape (real files, stubbed ruby eval) -----------------------
+
+HARNESS = Path(__file__).parent.parent / "references" / "rejuv-harness"
+
+_RUBY_STUB = """
+class PokeBattle_Move
+  def pbCalcDamage(a, o, h = 0, f = {}); 100; end
+  def pbType(attacker, type = nil); :NORMAL; end
+end
+class PokeBattle_Battler; end
+class PokeBattle_Battle; end
+"""
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_harness_load_shape(tmp_path):
+    """Core + every behavior file evals clean in load order; tables populate."""
+    import subprocess
+    files = sorted(HARNESS.glob("chrooked_*.rb"))
+    assert files, "harness is empty"
+    script = _RUBY_STUB + "".join(
+        f'eval(File.read({str(f)!r}), TOPLEVEL_BINDING)\n' for f in files
+    ) + (
+        'raise "damage table empty" if CHROOKED_DAMAGE_MODS.empty?\n'
+        'raise "lambda arity" unless CHROOKED_DAMAGE_MODS.values.all? { |l| l.arity == 3 }\n'
+        'puts "OK"\n'
+    )
+    proc = subprocess.run(["ruby", "-e", script], capture_output=True, text=True, cwd=tmp_path)
+    assert proc.returncode == 0, proc.stderr
+    assert "OK" in proc.stdout
