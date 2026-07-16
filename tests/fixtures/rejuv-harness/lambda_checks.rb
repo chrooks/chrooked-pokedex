@@ -2,9 +2,10 @@
 # battle classes (no game needed). Invoked by test_harness_lambda_behavior.
 # Exits non-zero listing each failed expectation.
 class PokeBattle_Move
-  attr_accessor :move, :battle, :basedamage, :flags, :cat, :type
+  attr_accessor :move, :battle, :basedamage, :flags, :cat, :type, :zmove
   def pbCalcDamage(a, o, h = 0, f = {}); 100; end
   def pbType(attacker, type = @type); @type; end
+  def isSoundBased?; @flags&.include?(:soundmove); end
   def punchMove?; @flags&.include?(:punchmove); end
   def windMove?; @flags&.include?(:windmove); end
   def hasFlag?(f); @flags&.include?(f); end
@@ -69,6 +70,16 @@ checks = {
   "permafrost SE" => [mv(:X).pbCalcDamage(atk.(:NONE), defender.(:PERMAFROST, true)), 65],
   "permafrost neutral" => [mv(:X).pbCalcDamage(atk.(:NONE), defender.(:PERMAFROST, false)), 100],
   "sledgehammer hammer" => [mv(:HAMMERARM).pbCalcDamage(atk.(:SLEDGEHAMMER), atk.(:NONE)), 130],
+  "venomize normal type" => [mv(:BODYSLAM, type: :NORMAL).pbType(atk.(:VENOMIZE)), :POISON],
+  "venomize normal dmg" => [mv(:BODYSLAM, type: :NORMAL).pbCalcDamage(atk.(:VENOMIZE), atk.(:NONE)), 120],
+  "venomize offtype" => [mv(:X, type: :FIRE).pbType(atk.(:VENOMIZE)), :FIRE],
+  "venomize offtype dmg" => [mv(:X, type: :FIRE).pbCalcDamage(atk.(:VENOMIZE), atk.(:NONE)), 100],
+  "venomize weatherball" => [mv(:WEATHERBALL, type: :NORMAL).pbType(atk.(:VENOMIZE)), :NORMAL],
+  "wyvernize normal type" => [mv(:BODYSLAM, type: :NORMAL).pbType(atk.(:WYVERNIZE)), :DRAGON],
+  "sacredtoll sound type" => [mv(:HYPERVOICE, type: :NORMAL, flags: [:soundmove]).pbType(atk.(:SACREDTOLL)), :PSYCHIC],
+  "sacredtoll sound dmg" => [mv(:HYPERVOICE, type: :NORMAL, flags: [:soundmove]).pbCalcDamage(atk.(:SACREDTOLL), atk.(:NONE)), 120],
+  "sacredtoll nonsound" => [mv(:TACKLE, type: :NORMAL).pbType(atk.(:SACREDTOLL)), :NORMAL],
+  "bloom sees ize type" => [mv(:BODYSLAM, type: :NORMAL).pbCalcDamage(atk.(:FOLIATE), atk.(:NONE)), 120],
   "sledgehammer punch" => [mv(:MACHPUNCH, flags: [:punchmove]).pbCalcDamage(atk.(:SLEDGEHAMMER), atk.(:NONE)), 100],
 }
 fails = checks.reject { |k, (got, want)| got == want }

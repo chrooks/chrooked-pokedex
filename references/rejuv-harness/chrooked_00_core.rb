@@ -10,6 +10,8 @@
 CHROOKED_DAMAGE_MODS = {}
 # defender ability => ->(move, attacker, opponent) { Float multiplier on incoming damage }
 CHROOKED_DEFENSE_MODS = {}
+# attacker ability => ->(move, type) { new type Symbol or nil } — consulted by pbType
+CHROOKED_TYPE_MODS = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
@@ -38,6 +40,33 @@ module Chrooked
 
   def self.kick_move?(move)
     move.hasFlag?(:kickmove)
+  end
+
+  # Moves whose type is computed by their own function code — never retyped by
+  # an "-ize" ability (mirrors the mainline -ate exclusions).
+  IZE_EXCLUDED = [:WEATHERBALL, :NATURALGIFT, :JUDGMENT, :TECHNOBLAST,
+                  :MULTIATTACK, :REVELATIONDANCE, :TERRAINPULSE, :STRUGGLE].freeze
+
+  def self.retypeable?(move)
+    !move.zmove && !IZE_EXCLUDED.include?(move.move)
+  end
+
+  # True when the attacker's type-mod actually converts this move — the shared
+  # predicate between pbType (the conversion) and the +20% damage rider.
+  def self.type_changed?(move, attacker)
+    mod = CHROOKED_TYPE_MODS[attacker.ability]
+    return false unless mod && retypeable?(move)
+    !mod.call(move, move.type).nil?
+  end
+
+  # One "-ize" ability = a Normal->X conversion plus a 1.2x damage rider.
+  def self.register_ize(ability, to_type)
+    CHROOKED_TYPE_MODS[ability] = lambda { |move, type|
+      type == :NORMAL ? to_type : nil
+    }
+    CHROOKED_DAMAGE_MODS[ability] = lambda { |move, attacker, opponent|
+      Chrooked.type_changed?(move, attacker) ? 1.2 : 1.0
+    }
   end
 
   # 1.5 STAB grant when the move's effective type is in `types` but the user
@@ -79,3 +108,16 @@ module ChrookedDamageMods
   end
 end
 PokeBattle_Move.prepend(ChrookedDamageMods)
+
+module ChrookedTypeMods
+  def pbType(attacker, type = @type)
+    t = super
+    mod = attacker && CHROOKED_TYPE_MODS[attacker.ability]
+    if mod && Chrooked.retypeable?(self)
+      new_type = mod.call(self, t)
+      t = new_type if new_type
+    end
+    t
+  end
+end
+PokeBattle_Move.prepend(ChrookedTypeMods)
