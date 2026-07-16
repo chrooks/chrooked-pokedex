@@ -16,7 +16,7 @@ from pathlib import Path
 from ...model import Ruleset
 from ...model.schema import STAT_KEYS
 from ...report import ApplyReport, ReportEntry
-from . import behavior_triage
+from . import behavior_install, behavior_triage
 from .emit import Sym, abiltext_delta, montext_delta, movetext_delta, to_ruby
 from .init_script import INIT_SCRIPT
 from .resolution import RejuvResolution
@@ -32,11 +32,23 @@ def apply_rejuv(
     report: ApplyReport,
     *,
     category: str = "all",
+    behavior_source_dir: Path | None = None,
 ) -> set[Path]:
     """Write the patch/ delta files and return the set of paths written."""
     resolution = RejuvResolution.build(target)
     categories = _CATEGORIES if category == "all" else (category,)
     written: set[Path] = set()
+
+    # Which behaviors will genuinely install battle code this run — abiltext may
+    # only drop its DATA ONLY warning for these (honesty Invariant). A
+    # category-limited run that skips "behaviors" installs nothing, so nothing
+    # counts as implemented.
+    implemented: set[str] = set()
+    if "behaviors" in categories:
+        implemented = {
+            cid for cid in ruleset.behaviors
+            if behavior_install.has_implementation(cid, behavior_source_dir)
+        }
 
     # Symbols the Ruleset will make exist (base ∪ owned) — used to resolve species
     # slots/learnset entries that point at a brand-new Ruleset ability or move.
@@ -50,7 +62,7 @@ def apply_rejuv(
     defs_dir = target / "patch" / "Definitions"
 
     if "abilities" in categories:
-        text = _build_abiltext(ruleset, resolution, report)
+        text = _build_abiltext(ruleset, resolution, report, implemented)
         written.add(_write(defs_dir / "abiltext.rb", text))
 
     if "moves" in categories:
@@ -62,8 +74,11 @@ def apply_rejuv(
         written.add(_write(defs_dir / "montext.rb", text))
 
     if "behaviors" in categories:
-        rows = behavior_triage.triage(ruleset, resolution)
+        rows = behavior_triage.triage(ruleset, resolution, implemented)
         _write(target / "rejuv-behavior-triage.md", behavior_triage.render_markdown(rows))
+        written |= behavior_install.install_behaviors(
+            target, ruleset, report, source_dir=behavior_source_dir
+        )
 
     # The compiler writes patch/Data/*.dat on boot; create the folder now so the
     # first compile has somewhere to land (the Init script also self-heals it).
@@ -206,6 +221,17 @@ _FLAG = {
 # ponytail: flat defaults — tune in the Ruleset if a created move needs otherwise.
 _CREATE_DEFAULTS = {"basedamage": 0, "accuracy": 100, "maxpp": 5}
 
+# Vanilla function codes for flinch combos (Bite 0x00F, Fire Fang 0x00B,
+# Ice Fang 0x00E, Thunder Fang 0x009). Keyed on the full additional-effect set;
+# a flinch+<anything unmapped> combo falls back to 0x00F — the flinch is real,
+# the leftover effect stays honestly DATA ONLY in the report.
+_FLINCH_COMBOS = {
+    frozenset({"flinch"}): 0x00F,
+    frozenset({"burn", "flinch"}): 0x00B,
+    frozenset({"freeze", "flinch"}): 0x00E,
+    frozenset({"paralysis", "flinch"}): 0x009,
+}
+
 
 def _build_movetext(ruleset: Ruleset, resolution: RejuvResolution, report: ApplyReport) -> str:
     next_id = resolution.max_move_id + 1
@@ -224,24 +250,54 @@ def _build_movetext(ruleset: Ruleset, resolution: RejuvResolution, report: Apply
             report.add(ReportEntry(status="applied", category="move",
                                    chrooked_id=move.chrooked_id, symbol=sym))
         else:
-            # New move — create a full MOVEHASH entry with :function 0x000 (plain
-            # damage). Its scripted effect, if any, is DATA ONLY until behavior code
-            # lands (phase 3).
+            # New move — create a full MOVEHASH entry. Flinch combos map onto a
+            # vanilla :function code (pure data); anything the code doesn't cover
+            # stays honestly DATA ONLY.
             sym = resolution.move_symbol(move.name)
-            blocks.append(_new_move_block(move, sym, next_id))
+            function, chance, leftover = _function_for(move)
+            blocks.append(_new_move_block(move, sym, next_id, function, chance))
             next_id += 1
+            if not move.additional_effects:
+                reason = None
+            elif not leftover:
+                reason = f"effects mapped to :function 0x{function:03X}"
+            elif function:
+                reason = (f"flinch via :function 0x{function:03X}; "
+                          f"DATA ONLY: {', '.join(leftover)}")
+            else:
+                reason = f"DATA ONLY (effects need battle code: {', '.join(leftover)})"
             report.add(ReportEntry(status="applied", category="move",
                                    chrooked_id=move.chrooked_id, symbol=sym,
-                                   reason="DATA ONLY (new move; :function 0x000, effect needs battle code)"))
+                                   reason=reason))
     return movetext_delta(blocks)
 
 
-def _new_move_block(move, sym: str, move_id: int) -> str:
+def _function_for(move) -> tuple[int, int | None, list[str]]:
+    """(function code, :effect chance, effect names NOT covered by the code).
+
+    A combo code carries ONE shared chance, so it only applies when every effect
+    in the combo rolls at the same chance; mismatched chances fall back to the
+    flinch-only code with the other effect honestly named as leftover.
+    """
+    names = frozenset(e.effect for e in move.additional_effects)
+    chances = {e.chance for e in move.additional_effects}
+    code = _FLINCH_COMBOS.get(names)
+    if code is not None and len(chances) <= 1:
+        return code, move.additional_effects[0].chance, []
+    if "flinch" in names:
+        flinch = next(e for e in move.additional_effects if e.effect == "flinch")
+        return 0x00F, flinch.chance, sorted(names - {"flinch"})
+    return 0x000, None, sorted(names)
+
+
+def _new_move_block(
+    move, sym: str, move_id: int, function: int = 0x000, effect_chance: int | None = None
+) -> str:
     fields = [
         f":ID => {move_id}",
         f":name => {to_ruby(move.name)}",
         f":desc => {to_ruby(move.description or move.name)}",
-        ":function => 0x000",
+        f":function => 0x{function:03X}",
         f":type => :{_type_sym(move.type)}",
         f":category => :{move.category}",
         f":basedamage => {move.power if move.power is not None else _CREATE_DEFAULTS['basedamage']}",
@@ -249,6 +305,8 @@ def _new_move_block(move, sym: str, move_id: int) -> str:
         f":maxpp => {move.pp if move.pp is not None else _CREATE_DEFAULTS['maxpp']}",
         f":target => :{_TARGET.get(move.target, 'SingleNonUser')}",
     ]
+    if effect_chance is not None:
+        fields.append(f":effect => {effect_chance}")
     for flag in move.flags:
         key = _FLAG.get(flag)
         if key:
@@ -258,7 +316,12 @@ def _new_move_block(move, sym: str, move_id: int) -> str:
 
 # --- abiltext ----------------------------------------------------------------
 
-def _build_abiltext(ruleset: Ruleset, resolution: RejuvResolution, report: ApplyReport) -> str:
+def _build_abiltext(
+    ruleset: Ruleset,
+    resolution: RejuvResolution,
+    report: ApplyReport,
+    implemented: set[str] = frozenset(),
+) -> str:
     next_id = resolution.max_ability_id + 1
     blocks: list[str] = []
     for ability in ruleset.abilities.values():
@@ -271,14 +334,19 @@ def _build_abiltext(ruleset: Ruleset, resolution: RejuvResolution, report: Apply
             report.add(ReportEntry(status="applied", category="ability",
                                    chrooked_id=ability.chrooked_id, symbol=sym))
         else:
-            # New ability — data-only (its mechanic still needs battle code).
+            # New ability — DATA ONLY unless its mechanic installs this run.
             blocks.append(
                 f"ABILHASH[:{sym}] = {{ :ID => {next_id}, "
                 f":name => {to_ruby(ability.name)}, "
                 f":desc => {to_ruby(ability.description)} }}"
             )
             next_id += 1
+            reason = (
+                "mechanic implemented (patch/Mods)"
+                if ability.chrooked_id in implemented
+                else "DATA ONLY (new ability; mechanic needs battle code)"
+            )
             report.add(ReportEntry(status="applied", category="ability",
                                    chrooked_id=ability.chrooked_id, symbol=sym,
-                                   reason="DATA ONLY (new ability; mechanic needs battle code)"))
+                                   reason=reason))
     return abiltext_delta(blocks)

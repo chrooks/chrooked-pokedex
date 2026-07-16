@@ -228,7 +228,9 @@ def test_new_move_created_with_next_id(tmp_path):
     assert ":type => :FIRE" in text
     assert ":basedamage => 90" in text
     assert ":contact => true" in text and ":soundmove => true" in text
-    assert any("DATA ONLY" in e.reason and e.chrooked_id == "madeup" for e in report.entries)
+    # No additional effects -> a plain 0x000 damage move is complete, no DATA ONLY.
+    entry = next(e for e in report.entries if e.chrooked_id == "madeup")
+    assert entry.status == "applied" and not entry.reason
 
 
 def test_new_move_resolves_in_learnset(tmp_path):
@@ -327,3 +329,197 @@ def test_triage_buckets_are_exclusive_and_complete():
     assert by_id["somemove"] == behavior_triage.BUCKET_FUNCTION_CODE  # move
     md = behavior_triage.render_markdown(rows)
     assert "Total behaviors: 3" in md
+
+
+# --- behavior installer (phase 3, M1) ----------------------------------------
+
+def _harness(tmp: Path, files: dict[str, str]) -> Path:
+    src = tmp / "harness"
+    src.mkdir()
+    for name, text in files.items():
+        (src / name).write_text(text)
+    return src
+
+
+_CORE = "# chrooked:core\nCHROOKED_DAMAGE_MODS = {}\n"
+
+
+def test_installer_copies_core_and_behavior(tmp_path):
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nCHROOKED_DAMAGE_MODS[:SLEDGEHAMMER] = 1\n",
+    })
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    r = Ruleset(behaviors={"sledgehammer": BehaviorSpec(
+        name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")})
+    report = ApplyReport()
+    install_behaviors(target, r, report, source_dir=src)
+    mods = target / "patch" / "Mods"
+    assert (mods / "chrooked_00_core.rb").exists()
+    assert (mods / "chrooked_sledgehammer.rb").exists()
+    assert any(e.status == "applied" and e.chrooked_id == "sledgehammer"
+               and "installed" in (e.reason or "") for e in report.entries)
+
+
+def test_installer_absent_implementation_is_silent(tmp_path):
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {"chrooked_00_core.rb": _CORE})
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    r = Ruleset(behaviors={"newab": BehaviorSpec(
+        name="Newab", chrooked_id="newab", applies_to="ability")})
+    report = ApplyReport()
+    written = install_behaviors(target, r, report, source_dir=src)
+    assert written == set()
+    assert not (target / "patch" / "Mods").exists()
+    assert not any(e.category == "behavior" for e in report.entries)
+
+
+def test_installer_untagged_implementation_blocks(tmp_path):
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_badone.rb": "CHROOKED_DAMAGE_MODS[:BADONE] = 1\n",  # no tag
+    })
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    r = Ruleset(behaviors={"badone": BehaviorSpec(
+        name="Badone", chrooked_id="badone", applies_to="ability")})
+    report = ApplyReport()
+    written = install_behaviors(target, r, report, source_dir=src)
+    assert written == set()
+    assert not (target / "patch" / "Mods").exists()
+    assert any(e.status == "blocked" and e.chrooked_id == "badone" for e in report.entries)
+
+
+def test_abiltext_drops_data_only_when_implemented(tmp_path):
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nX = 1\n",
+    })
+    r = Ruleset(
+        abilities={
+            "sledgehammer": AbilityDef(name="Sledgehammer", chrooked_id="sledgehammer"),
+            "newab": AbilityDef(name="Newab", chrooked_id="newab"),
+        },
+        behaviors={"sledgehammer": BehaviorSpec(
+            name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")},
+    )
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    report = ApplyReport()
+    apply_rejuv(target, r, report, behavior_source_dir=src)
+    sledge = next(e for e in report.entries if e.chrooked_id == "sledgehammer" and e.category == "ability")
+    newab = next(e for e in report.entries if e.chrooked_id == "newab" and e.category == "ability")
+    assert "DATA ONLY" not in (sledge.reason or "")
+    assert "DATA ONLY" in (newab.reason or "")
+    assert (target / "patch" / "Mods" / "chrooked_sledgehammer.rb").exists()
+
+
+def test_new_move_flinch_gets_function_code(tmp_path):
+    from chrooked_pokedex.model.schema import AdditionalEffect
+    r = Ruleset(moves={
+        "fangy": MoveDef(name="Fangy", chrooked_id="fangy", type="Dark",
+                         category="physical", power=80, accuracy=95, pp=15,
+                         additional_effects=(AdditionalEffect("flinch", 30),),
+                         flags=("contact", "biting")),
+        "frostfang": MoveDef(name="Frost Fang", chrooked_id="frostfang", type="Ice",
+                             category="physical", power=80, accuracy=95, pp=15,
+                             additional_effects=(AdditionalEffect("freeze", 10),
+                                                 AdditionalEffect("flinch", 10)),
+                             flags=("contact", "biting")),
+        "dropfang": MoveDef(name="Drop Fang", chrooked_id="dropfang", type="Rock",
+                            category="physical", power=80, accuracy=95, pp=15,
+                            additional_effects=(AdditionalEffect("def_minus_1", 10),
+                                                AdditionalEffect("flinch", 10)),
+                            flags=("contact", "biting")),
+    })
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    fangy = next(l for l in text.splitlines() if ":FANGY]" in l)
+    assert ":function => 0x00F" in fangy and ":effect => 30" in fangy
+    frost = next(l for l in text.splitlines() if ":FROSTFANG]" in l)
+    assert ":function => 0x00E" in frost and ":effect => 10" in frost
+    drop = next(l for l in text.splitlines() if ":DROPFANG]" in l)
+    assert ":function => 0x00F" in drop  # flinch real; stat drop stays honest
+    reasons = {e.chrooked_id: (e.reason or "") for e in report.entries if e.category == "move"}
+    assert "DATA ONLY" not in reasons["fangy"]
+    assert "DATA ONLY" not in reasons["frostfang"]
+    assert "def_minus_1" in reasons["dropfang"]  # remaining gap named
+
+
+def test_triage_notes_implemented_behaviors():
+    res = RejuvResolution.build(FIXTURE)
+    r = Ruleset(behaviors={
+        "sledge": BehaviorSpec(name="Sledge", chrooked_id="sledge", applies_to="ability"),
+        "newab": BehaviorSpec(name="Newab", chrooked_id="newab", applies_to="ability"),
+    })
+    rows = behavior_triage.triage(r, res, implemented={"sledge"})
+    notes = {row.chrooked_id: row.note for row in rows}
+    assert "implemented" in notes["sledge"]
+    assert "implemented" not in notes["newab"]
+    assert {row.bucket for row in rows} == {behavior_triage.BUCKET_CUSTOM_CODE}
+
+
+def test_abiltext_keeps_data_only_when_behaviors_category_skipped(tmp_path):
+    # `--category abilities` alone must NOT claim "mechanic implemented" — the
+    # installer never runs, so nothing lands in patch/Mods this run.
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nX = 1\n",
+    })
+    r = Ruleset(
+        abilities={"sledgehammer": AbilityDef(name="Sledgehammer", chrooked_id="sledgehammer")},
+        behaviors={"sledgehammer": BehaviorSpec(
+            name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")},
+    )
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    report = ApplyReport()
+    apply_rejuv(target, r, report, category="abilities", behavior_source_dir=src)
+    entry = next(e for e in report.entries if e.chrooked_id == "sledgehammer")
+    assert "DATA ONLY" in (entry.reason or "")
+    assert not (target / "patch" / "Mods").exists()
+
+
+def test_flinch_combo_with_mismatched_chances_falls_back(tmp_path):
+    # burn@10 + flinch@30 cannot ride one combo code chance — fall back to 0x00F
+    # (flinch real at its own chance) and name burn as the honest leftover.
+    from chrooked_pokedex.model.schema import AdditionalEffect
+    r = Ruleset(moves={"oddfang": MoveDef(
+        name="Odd Fang", chrooked_id="oddfang", type="Fire", category="physical",
+        power=80, accuracy=95, pp=15,
+        additional_effects=(AdditionalEffect("burn", 10), AdditionalEffect("flinch", 30)),
+    )})
+    report, target = _apply(r, tmp_path)
+    line = next(l for l in (target / "patch" / "Definitions" / "movetext.rb")
+                .read_text().splitlines() if ":ODDFANG]" in l)
+    assert ":function => 0x00F" in line and ":effect => 30" in line
+    reason = next(e.reason for e in report.entries if e.chrooked_id == "oddfang")
+    assert "burn" in reason
+
+
+def test_installer_write_failure_reports_blocked(tmp_path, monkeypatch):
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nX = 1\n",
+    })
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    real_write = Path.write_text
+
+    def failing_write(self, *a, **kw):
+        if self.parent.name == "Mods" and self.name == "chrooked_sledgehammer.rb":
+            raise OSError("disk full")
+        return real_write(self, *a, **kw)
+
+    monkeypatch.setattr(Path, "write_text", failing_write)
+    r = Ruleset(behaviors={"sledgehammer": BehaviorSpec(
+        name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")})
+    report = ApplyReport()
+    install_behaviors(target, r, report, source_dir=src)
+    assert any(e.status == "blocked" and e.chrooked_id == "sledgehammer"
+               and "copy failed" in (e.reason or "") for e in report.entries)

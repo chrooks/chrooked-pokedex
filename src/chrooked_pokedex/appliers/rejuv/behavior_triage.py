@@ -36,26 +36,29 @@ class TriageRow:
     note: str
 
 
-def triage(ruleset: Ruleset, resolution: RejuvResolution) -> list[TriageRow]:
+def triage(
+    ruleset: Ruleset,
+    resolution: RejuvResolution,
+    implemented: set[str] = frozenset(),
+) -> list[TriageRow]:
+    """Bucket every behavior; `implemented` ids get an installed note (bucket unchanged)."""
     rows: list[TriageRow] = []
     for behavior in ruleset.behaviors.values():
         if behavior.applies_to == "move":
-            rows.append(TriageRow(
-                behavior.chrooked_id, behavior.name, "move", BUCKET_FUNCTION_CODE,
-                "move mechanic — map to an existing Rejuv :function code (deferred)",
-            ))
-            continue
-        # applies_to == "ability"
-        if resolution.ability(behavior.name) is not None:
-            rows.append(TriageRow(
-                behavior.chrooked_id, behavior.name, "ability", BUCKET_DATA_ONLY,
-                "Rejuv implements this ability natively; only text/assignment needed",
-            ))
+            note = "move mechanic — map to an existing Rejuv :function code (deferred)"
+            bucket = BUCKET_FUNCTION_CODE
+            kind = "move"
+        elif resolution.ability(behavior.name) is not None:
+            note = "Rejuv implements this ability natively; only text/assignment needed"
+            bucket = BUCKET_DATA_ONLY
+            kind = "ability"
         else:
-            rows.append(TriageRow(
-                behavior.chrooked_id, behavior.name, "ability", BUCKET_CUSTOM_CODE,
-                "new ability — needs a patch/Mods battle-method override",
-            ))
+            note = "new ability — needs a patch/Mods battle-method override"
+            bucket = BUCKET_CUSTOM_CODE
+            kind = "ability"
+        if behavior.chrooked_id in implemented:
+            note = "implemented — installed to patch/Mods this run"
+        rows.append(TriageRow(behavior.chrooked_id, behavior.name, kind, bucket, note))
     return rows
 
 
