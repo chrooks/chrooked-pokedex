@@ -40,3 +40,6 @@
 	const SCRAPPY
 	const INFILTRATOR
 	const WIND_RIDER
+	const INSOMNIA
+	const PRESSURE
+	const UNNERVE

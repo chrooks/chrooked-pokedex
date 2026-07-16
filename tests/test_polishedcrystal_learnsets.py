@@ -140,3 +140,17 @@ def test_faithful_wrapped_evo_data_is_preserved_and_closed(target):
     assert lines[3] == "\tevo_data EVOLVE_LEVEL, 36, AMPHAROS"
     assert lines[4] == "endc"
     assert lines[5:] == ["\tlearnset 1, TACKLE", "\tlearnset 16, SPARK"]
+
+
+@pytest.mark.unit
+def test_plain_form_suffix_fallback_finds_evos_block(target):
+    # Farfetch'd's default form block is labeled FarfetchDPlain.
+    species = {"farfetchd": SpeciesOverride(
+        name="Farfetch'd", chrooked_id="farfetchd",
+        learnset=(LearnsetMove(1, "peck"),),
+    )}
+    changed, report = _apply(target, species)
+    assert report.entries[0].status == "applied"
+    after = (target / EVOS).read_text()
+    block = after.split("\tevos_attacks FarfetchDPlain\n")[1].split("\n\n")[0]
+    assert block.splitlines()[-1] == "\tlearnset 1, PECK"

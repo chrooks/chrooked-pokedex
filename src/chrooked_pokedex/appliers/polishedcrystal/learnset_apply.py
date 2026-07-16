@@ -93,14 +93,19 @@ def apply_learnsets(
 
 
 def _find_block(lines: list[str], label: str) -> tuple[int, int] | None:
-    """(start, end) line span of the species' block: header line to next blank."""
-    header = f"\tevos_attacks {label}"
-    for index, line in enumerate(lines):
-        if line == header:
-            end = index + 1
-            while end < len(lines) and lines[end].strip() != "":
-                end += 1
-            return index, end
+    """(start, end) line span of the species' block: header line to next blank.
+
+    Form species label their default form `<Label>Plain` (FarfetchDPlain), so
+    that suffix is tried when the bare label has no block.
+    """
+    for candidate in (label, label + "Plain"):
+        header = f"\tevos_attacks {candidate}"
+        for index, line in enumerate(lines):
+            if line == header:
+                end = index + 1
+                while end < len(lines) and lines[end].strip() != "":
+                    end += 1
+                return index, end
     return None
 
 

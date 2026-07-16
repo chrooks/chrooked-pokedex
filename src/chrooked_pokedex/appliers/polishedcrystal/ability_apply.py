@@ -266,8 +266,10 @@ def _base_stats_path(target: Path, label: str) -> Path | None:
     stripped: mrmimeplain == mrmimeplain.
     """
     want = re.sub(r"[^a-z0-9]", "", label.lower())
+    # Form species store their default form as <name>_plain.asm (mewtwo_plain).
+    wanted = (want, want + "plain")
     for path in sorted((target / _BASE_STATS_DIR).glob("*.asm")):
-        if re.sub(r"[^a-z0-9]", "", path.stem) == want:
+        if re.sub(r"[^a-z0-9]", "", path.stem) in wanted:
             return path
     return None
 

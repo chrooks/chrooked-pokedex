@@ -182,3 +182,17 @@ def test_macro_composed_ability_reference_is_detected(target):
     entry = report.entries[0]
     assert entry.status == "partial"
     assert "ABIL_FARFETCH_D_GALARIAN_STEADFAST" in entry.reason
+
+
+@pytest.mark.unit
+def test_plain_form_suffix_fallback_finds_base_stats_file(target):
+    # Form species store their default form as <name>_plain.asm (mewtwo_plain).
+    changed, report = _apply(
+        target, species={"mewtwo": _override("mewtwo", {"secondary": "overgrow"})}
+    )
+    assert report.entries[0].status == "applied"
+    line = [
+        l for l in (target / "data/pokemon/base_stats/mewtwo_plain.asm").read_text().splitlines()
+        if "abilities_for" in l
+    ][0]
+    assert "OVERGROW" in line

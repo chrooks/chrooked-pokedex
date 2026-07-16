@@ -133,6 +133,27 @@ endc
 	learnset 60, CLOSE_COMBAT ; Final Gambit → TR move
 	learnset 65, BRAVE_BIRD
 
+	evos_attacks FarfetchDPlain
+	learnset 1, POISON_JAB
+	learnset 1, BATON_PASS ; Brave Bird → event move
+	learnset 1, PECK
+	learnset 1, MUD_SLAP ; Sand Attack → similar move
+	learnset 1, LEER
+	learnset 7, FURY_STRIKES ; Fury Attack → similar move
+	learnset 9, AERIAL_ACE
+	learnset 13, KNOCK_OFF
+	learnset 15, RAZOR_LEAF ; LGPE move
+	learnset 19, SLASH
+	learnset 21, KARATE_CHOP ; Air Cutter → new move
+	learnset 25, SWORDS_DANCE
+	learnset 31, AGILITY
+	learnset 33, NIGHT_SLASH
+	learnset 37, ACROBATICS
+	learnset 43, HI_JUMP_KICK ; Feint → new move
+	learnset 45, FALSE_SWIPE
+	learnset 49, AIR_SLASH
+	learnset 55, BRAVE_BIRD
+
 	evos_attacks Flaaffy
 if DEF(FAITHFUL)
 	evo_data EVOLVE_LEVEL, 30, AMPHAROS
