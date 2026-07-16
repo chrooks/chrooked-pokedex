@@ -567,3 +567,15 @@ def test_harness_lambda_behavior(tmp_path):
         ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_harness_event_hooks(tmp_path):
+    """Wave-3 event hooks (KO, contact, switch-in, speed, priority, immunity,
+    stat swap, move lock) behave per spec against stub battle classes."""
+    import subprocess
+    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "event_checks.rb"
+    proc = subprocess.run(
+        ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr

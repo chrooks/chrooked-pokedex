@@ -12,6 +12,27 @@ CHROOKED_DAMAGE_MODS = {}
 CHROOKED_DEFENSE_MODS = {}
 # attacker ability => ->(move, type) { new type Symbol or nil } — consulted by pbType
 CHROOKED_TYPE_MODS = {}
+# attacker ability => ->(battler, targets, basemove, battle) — after its move KOs
+CHROOKED_ON_KO = {}
+# attacker ability => ->(move, user, target, battle) — after dealing damage
+CHROOKED_ON_DEAL = {}
+# defender ability => ->(move, user, target, battle) — after surviving a damaging hit
+CHROOKED_WHEN_HIT = {}
+# ability => ->(battler, battle) — on switch-in
+CHROOKED_SWITCH_IN = {}
+# ability => ->(battler, battle) — end of round while on the field
+CHROOKED_TURN_END = {}
+# ability => ->(battler) { Float multiplier } — effective Speed
+CHROOKED_SPEED_MODS = {}
+# ability => ->(move, attacker) { Integer priority delta }
+CHROOKED_PRIORITY_MODS = {}
+# defender ability => { type: Symbol, flag: Symbol } — :Soundproof blocks,
+# :HpAbsorbAbility absorbs + heals 1/4 (both resolved by vanilla flag handling)
+CHROOKED_TYPE_IMMUNITY = {}
+# attacker ability => ->(move, attacker) { true } — use SpA in place of Atk for this hit
+CHROOKED_STAT_SWAP = {}
+# ability => ->(battler, move_symbol, battle) — after the battler used a move
+CHROOKED_AFTER_MOVE = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
@@ -98,7 +119,18 @@ end
 
 module ChrookedDamageMods
   def pbCalcDamage(attacker, opponent, *args, **kwargs)
-    dmg = super
+    swap = CHROOKED_STAT_SWAP[attacker.ability]
+    if swap && swap.call(self, attacker)
+      original_attack = attacker.attack
+      attacker.attack = attacker.spatk
+      begin
+        dmg = super
+      ensure
+        attacker.attack = original_attack
+      end
+    else
+      dmg = super
+    end
     return dmg if !dmg.is_a?(Numeric) || dmg <= 0
     mult = Chrooked.damage_mult(self, attacker, opponent)
     return dmg if mult == 1.0
@@ -121,3 +153,97 @@ module ChrookedTypeMods
   end
 end
 PokeBattle_Move.prepend(ChrookedTypeMods)
+
+module ChrookedMoveHooks
+  def priorityCheck(attacker)
+    pri = super
+    mod = CHROOKED_PRIORITY_MODS[attacker.ability]
+    pri += mod.call(self, attacker) if mod
+    pri += 1 if attacker.effects[:ChrookedStampede] && contactMove?
+    pri
+  end
+
+  def pbTypeImmunities(attacker, targets, hitflags, movetype: nil)
+    super
+    # ponytail: primary effective type only — dual-type moves keep vanilla handling.
+    move_type = movetype || pbType(attacker)
+    targets.each_with_index do |opponent, i|
+      next if hitflags[i] != :Success
+      next unless pbShouldApplyTypeImmunity?(attacker, opponent)
+      immunity = CHROOKED_TYPE_IMMUNITY[opponent.ability]
+      next unless immunity && !opponent.moldbroken
+      hitflags[i] = immunity[:flag] if move_type == immunity[:type]
+    end
+  end
+end
+PokeBattle_Move.prepend(ChrookedMoveHooks)
+
+module ChrookedBattlerHooks
+  def pbOnKillEffects(targets, basemove, *args)
+    ret = super
+    return ret if @battle.pbAnySideAllFainted? || self.isFainted?
+    mod = CHROOKED_ON_KO[self.ability]
+    mod&.call(self, targets, basemove, @battle)
+    ret
+  end
+
+  def pbEffectsOnDealingDamage(move, user, target, damage, *args)
+    ret = super
+    return ret if damage.to_i <= 0 || target.damagestate.substitute
+    atk_mod = CHROOKED_ON_DEAL[user.ability]
+    atk_mod&.call(move, user, target, @battle) if !user.isFainted?
+    def_mod = CHROOKED_WHEN_HIT[target.ability]
+    def_mod&.call(move, user, target, @battle) if !target.isFainted?
+    ret
+  end
+
+  def pbAbilitiesOnSwitchIn(*args, **kwargs)
+    ret = super
+    mod = CHROOKED_SWITCH_IN[self.ability]
+    mod&.call(self, @battle) if !self.isFainted?
+    ret
+  end
+
+  def pbSpeed(*args)
+    speed = super
+    mod = CHROOKED_SPEED_MODS[self.ability]
+    mod ? (speed * mod.call(self)).floor : speed
+  end
+
+  def pbUseMove(choice, *args, **kwargs)
+    ret = super
+    mod = CHROOKED_AFTER_MOVE[self.ability]
+    mod&.call(self, self.lastMoveUsed, @battle) if mod && !self.isFainted? && self.lastMoveUsed.is_a?(Symbol)
+    ret
+  end
+end
+PokeBattle_Battler.prepend(ChrookedBattlerHooks)
+
+module ChrookedBattleHooks
+  def pbEndOfRoundPhase(*args, **kwargs)
+    ret = super
+    @battlers.each do |battler|
+      next if !battler || battler.isFainted?
+      mod = CHROOKED_TURN_END[battler.ability]
+      mod&.call(battler, self)
+    end
+    ret
+  end
+
+  # Sage Power's Gorilla-Tactics-style lock. Vanilla keys its lock checks on
+  # ability == :GORILLATACTICS, so the lock for other abilities is enforced
+  # here at move selection. ponytail: sleep-talk/z-move edge cases keep
+  # vanilla behavior (unlocked) — same ceiling as the AI's view of the lock.
+  def pbCanChooseMove?(idxPokemon, idxMove, *args, **kwargs)
+    allowed = super
+    return allowed unless allowed
+    battler = @battlers[idxPokemon]
+    lock = battler && battler.effects[:ChrookedMoveLock]
+    if lock && battler.moves.any? { |m| m && m.move == lock }
+      basemove = battler.moves[idxMove]
+      return false if basemove && basemove.move != lock
+    end
+    allowed
+  end
+end
+PokeBattle_Battle.prepend(ChrookedBattleHooks)
