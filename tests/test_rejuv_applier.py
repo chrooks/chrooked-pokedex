@@ -278,6 +278,12 @@ def test_init_script_written_with_three_pairs(tmp_path):
     init = (target / "patch" / "Init" / "chrooked_compile.rb").read_text()
     assert "compileMons" in init and "compileMoves" in init and "compileAbilities" in init
     assert "File.mtime(defn) > File.mtime(dat)" in init
+    assert 'Dir.mkdir("patch/Data")' in init
+
+
+def test_patch_data_dir_created(tmp_path):
+    _, target = _apply(Ruleset(), tmp_path)
+    assert (target / "patch" / "Data").is_dir()
 
 
 def test_writes_only_game_data_under_patch(tmp_path):

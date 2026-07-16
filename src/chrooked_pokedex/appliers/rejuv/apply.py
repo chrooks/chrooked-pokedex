@@ -65,6 +65,10 @@ def apply_rejuv(
         rows = behavior_triage.triage(ruleset, resolution)
         _write(target / "rejuv-behavior-triage.md", behavior_triage.render_markdown(rows))
 
+    # The compiler writes patch/Data/*.dat on boot; create the folder now so the
+    # first compile has somewhere to land (the Init script also self-heals it).
+    (target / "patch" / "Data").mkdir(parents=True, exist_ok=True)
+
     # The Init compile trigger — always written so a category-limited run still
     # recompiles whatever delta it produced.
     written.add(_write(target / "patch" / "Init" / "chrooked_compile.rb", INIT_SCRIPT))
