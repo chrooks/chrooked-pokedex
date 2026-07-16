@@ -1,6 +1,6 @@
 name: Water Whip
 chrooked_id: waterwhip
-aka: { pokeemerald: MOVE_WATER_WHIP }
+aka: { pokeemerald: MOVE_WATER_WHIP, polishedcrystal: CRABHAMMER }
 type: Water
 category: physical
 power: 60

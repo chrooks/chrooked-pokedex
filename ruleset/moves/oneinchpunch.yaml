@@ -1,6 +1,10 @@
 name: One-Inch Punch
 chrooked_id: oneinchpunch
-aka: { pokeemerald: MOVE_ONE_INCH_PUNCH }
+aka:
+  pokeemerald: MOVE_ONE_INCH_PUNCH
+  polishedcrystal: CROSS_CHOP
+  polishedcrystal_name: "1-Inch Punch"
+  polishedcrystal_crit: true
 type: Fighting
 category: physical
 power: 90

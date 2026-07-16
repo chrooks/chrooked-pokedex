@@ -1,2 +1,20 @@
 base_version: 1.11.2
 schema_version: 1
+
+# Engine-specific move stand-ins: when this engine lacks a move, learnset
+# references resolve to the mapped existing move instead of dropping.
+# Chosen per-move by Chris (2026-07-16). Stats/identity are NOT written —
+# the stand-in move stays itself; species just learn it.
+standins:
+  polishedcrystal:
+    "Tail Whip": LEER
+    "Sand Attack": SMOKESCREEN
+    "Fury Swipes": FURY_STRIKES
+    "Fury Attack": FURY_STRIKES
+    "Flail": REVERSAL
+    "Harden": DEFENSE_CURL
+    "Mud Shot": BULLDOZE
+    "Pound": SCRATCH
+    "Ice Fang": ICE_PUNCH
+    "Fire Fang": FIRE_PUNCH
+    "Miasma": SLUDGE_BOMB
