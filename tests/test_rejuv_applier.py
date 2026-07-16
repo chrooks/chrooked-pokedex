@@ -443,11 +443,12 @@ def test_new_move_flinch_gets_function_code(tmp_path):
     frost = next(l for l in text.splitlines() if ":FROSTFANG]" in l)
     assert ":function => 0x00E" in frost and ":effect => 10" in frost
     drop = next(l for l in text.splitlines() if ":DROPFANG]" in l)
-    assert ":function => 0x00F" in drop  # flinch real; stat drop stays honest
+    # stat drop rides the native code; the flinch leftover is fangflinch's job
+    assert ":function => 0x043" in drop and ":effect => 10" in drop
     reasons = {e.chrooked_id: (e.reason or "") for e in report.entries if e.category == "move"}
     assert "DATA ONLY" not in reasons["fangy"]
     assert "DATA ONLY" not in reasons["frostfang"]
-    assert "def_minus_1" in reasons["dropfang"]  # remaining gap named
+    assert "flinch" in reasons["dropfang"]  # remaining gap named
 
 
 def test_triage_notes_implemented_behaviors():
@@ -485,8 +486,8 @@ def test_abiltext_keeps_data_only_when_behaviors_category_skipped(tmp_path):
 
 
 def test_flinch_combo_with_mismatched_chances_falls_back(tmp_path):
-    # burn@10 + flinch@30 cannot ride one combo code chance — fall back to 0x00F
-    # (flinch real at its own chance) and name burn as the honest leftover.
+    # burn@10 + flinch@30 cannot ride one combo code chance — burn takes its
+    # own single-effect code at its chance; flinch is the named leftover.
     from chrooked_pokedex.model.schema import AdditionalEffect
     r = Ruleset(moves={"oddfang": MoveDef(
         name="Odd Fang", chrooked_id="oddfang", type="Fire", category="physical",
@@ -496,9 +497,9 @@ def test_flinch_combo_with_mismatched_chances_falls_back(tmp_path):
     report, target = _apply(r, tmp_path)
     line = next(l for l in (target / "patch" / "Definitions" / "movetext.rb")
                 .read_text().splitlines() if ":ODDFANG]" in l)
-    assert ":function => 0x00F" in line and ":effect => 30" in line
+    assert ":function => 0x00A" in line and ":effect => 10" in line
     reason = next(e.reason for e in report.entries if e.chrooked_id == "oddfang")
-    assert "burn" in reason
+    assert "flinch" in reason
 
 
 def test_installer_write_failure_reports_blocked(tmp_path, monkeypatch):

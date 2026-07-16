@@ -7,6 +7,28 @@ end
 def _INTL(s, *a); s; end
 $cache = Struct.new(:moves).new({})
 
+class Typemod
+  attr_reader :numerator, :denominator
+  def initialize(n = 1, d = 1); @numerator = n; @denominator = d; end
+  def self.normal; new(1, 1); end
+  def *(o)
+    n = numerator * o.numerator; d = denominator * o.denominator
+    d = 1 if n == 0
+    if n > 1 && d > 1
+      m = [n, d].min
+      n /= m; d /= m
+    end
+    Typemod.new(n, d)
+  end
+  def immune?; @numerator <= 0; end
+  def to_a; [@numerator, @denominator]; end
+end
+
+module PBTypes
+  CHART = { [:STEEL, :DRAGON] => [1, 2], [:GROUND, :FLYING] => [0, 1] }
+  def self.oneTypeEff(a, o); n, d = CHART.fetch([a, o], [1, 1]); Typemod.new(n, d); end
+end
+
 class StubDS
   attr_accessor :substitute, :typemod
   def initialize; @substitute = false; end
@@ -37,6 +59,10 @@ class PokeBattle_Battler
   def moldbroken; false; end
   # vanilla bodies our prepends wrap:
   def pbOnKillEffects(targets, basemove, *a); end
+  def absorbHP(hpgain, opponent, agent, move = nil); @log << [:absorb, hpgain]; end
+  def pbTarget(move); :SingleNonUser; end
+  def types; [@types_list ||= [:NORMAL]].flatten; end
+  def types_list=(t); @types_list = t; end
   def pbEffectsOnDealingDamage(move, user, target, damage, *a); end
   def pbAbilitiesOnSwitchIn(*a, **kw); end
   def pbSpeed(*a); 100; end
@@ -53,6 +79,7 @@ class PokeBattle_Battle
   def pbDisplay(*a); end
   def pbEndOfRoundPhase(*a, **kw); end
   def pbCanChooseMove?(idxPokemon, idxMove, *a, **kw); true; end
+  def pbWeather(moveuser); :RAINDANCE; end
 end
 
 class PokeBattle_Move
@@ -72,8 +99,18 @@ class PokeBattle_Move
   def hasFlag?(f); @flags.include?(f); end
   def contactMove?; @flags.include?(:contact); end
   def priorityCheck(attacker); 0; end
+  def pbTypeModifier(atype, attacker, opponent)
+    tm = Typemod.normal
+    opponent.types.each { |t| tm *= PBTypes.oneTypeEff(atype, t) }
+    tm
+  end
+  def pbAccuracyCheck(attacker, opponent); false; end
   def pbTypeImmunities(attacker, targets, hitflags, movetype: nil); end
   def pbShouldApplyTypeImmunity?(a, o); true; end
+end
+
+class PokeBattle_Move_0D8 < PokeBattle_Move
+  def pbEffect(attacker, alltargets, hitnum = 0); attacker.pbRecoverHP(50, true); end
 end
 
 Dir[File.join(ARGV[0], "chrooked_*.rb")].sort.each { |f| eval(File.read(f), TOPLEVEL_BINDING) }
@@ -206,6 +243,57 @@ tgt5 = PokeBattle_Battler.new(:NONE, battle)
 tgt5.effects[:MultiTurn] = 0
 dg.pbEffectsOnDealingDamage(PokeBattle_Move.new(:TACKLE, flags: [:contact]), dg, tgt5, 30)
 check(fails, "deathgrip trap", tgt5.effects[:MultiTurn], 5)
+
+# wave 4: excalibur forces 2x vs Dragon (steel chart 0.5 corrected)
+exc_user = PokeBattle_Battler.new(:NONE, battle)
+dragon = PokeBattle_Battler.new(:NONE, battle); dragon.types_list = [:DRAGON]
+tm = PokeBattle_Move.new(:EXCALIBUR, type: :STEEL).pbTypeModifier(:STEEL, exc_user, dragon)
+check(fails, "excalibur vs dragon", tm.to_a, [2, 1])
+nondragon = PokeBattle_Battler.new(:NONE, battle)
+tm2 = PokeBattle_Move.new(:EXCALIBUR, type: :STEEL).pbTypeModifier(:STEEL, exc_user, nondragon)
+check(fails, "excalibur vs nondragon", tm2.to_a, [1, 1])
+
+# bonebreaker: immune ground-vs-flying floored to neutral for bone moves
+bb = PokeBattle_Battler.new(:BONEBREAKER, battle)
+flyer = PokeBattle_Battler.new(:NONE, battle); flyer.types_list = [:FLYING]
+tm3 = PokeBattle_Move.new(:BONEMERANG, type: :GROUND).pbTypeModifier(:GROUND, bb, flyer)
+check(fails, "bonebreaker floors immunity", tm3.to_a, [1, 1])
+tm4 = PokeBattle_Move.new(:EARTHQUAKE, type: :GROUND).pbTypeModifier(:GROUND, bb, flyer)
+check(fails, "bonebreaker nonbone stays immune", tm4.immune?, true)
+check(fails, "bonebreaker bone dmg", PokeBattle_Move.new(:BONECLUB).pbCalcDamage(bb, nondragon), 120)
+hitflags_bb = [:Levitate]
+PokeBattle_Move.new(:BONEMERANG, type: :GROUND).pbTypeImmunities(bb, [flyer], hitflags_bb)
+check(fails, "bonebreaker reopens levitate", hitflags_bb, [:Success])
+
+# deeprooted: absorb heal x1.3
+dr = PokeBattle_Battler.new(:DEEPROOTED, battle)
+dr.absorbHP(40, nondragon, :HPDrainingMove)
+check(fails, "deeprooted absorb boost", dr.log, [[:absorb, 52]])
+
+# chloroplast: own moves see sun; others see real weather
+ch = PokeBattle_Battler.new(:CHLOROPLAST, battle)
+check(fails, "chloroplast sun", battle.pbWeather(ch), :SUNNYDAY)
+check(fails, "other user real weather", battle.pbWeather(nondragon), :RAINDANCE)
+
+# fullmoon: moonlight heal override 75%
+fm = PokeBattle_Battler.new(:FULLMOON, battle)
+ml = PokeBattle_Move_0D8.new(:MOONLIGHT)
+ml.pbEffect(fm, [])
+check(fails, "fullmoon moonlight 75", fm.log, [[:heal, 75]])
+other = PokeBattle_Battler.new(:NONE, battle)
+ml.pbEffect(other, [])
+check(fails, "moonlight vanilla for others", other.log, [[:heal, 50]])
+
+# amplifier: sound move spreads, 1.3x
+amp = PokeBattle_Battler.new(:AMPLIFIER, battle)
+check(fails, "amplifier spread", amp.pbTarget(PokeBattle_Move.new(:HYPERVOICE, flags: [:soundmove])), :AllOpposing)
+check(fails, "amplifier nonsound target", amp.pbTarget(PokeBattle_Move.new(:TACKLE)), :SingleNonUser)
+check(fails, "amplifier sound dmg", PokeBattle_Move.new(:HYPERVOICE, flags: [:soundmove]).pbCalcDamage(amp, nondragon), 130)
+
+# innerfocus: focus blast never misses
+inf = PokeBattle_Battler.new(:INNERFOCUS, battle)
+check(fails, "innerfocus focus blast", PokeBattle_Move.new(:FOCUSBLAST).pbAccuracyCheck(inf, nondragon), true)
+check(fails, "innerfocus other move", PokeBattle_Move.new(:TACKLE).pbAccuracyCheck(inf, nondragon), false)
 
 fails.each { |f| puts "FAIL #{f}" }
 raise "#{fails.size} failures" unless fails.empty?

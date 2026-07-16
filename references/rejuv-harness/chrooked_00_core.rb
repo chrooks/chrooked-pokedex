@@ -16,6 +16,8 @@ CHROOKED_TYPE_MODS = {}
 CHROOKED_ON_KO = {}
 # attacker ability => ->(move, user, target, battle) — after dealing damage
 CHROOKED_ON_DEAL = {}
+# move symbol => ->(move, user, target, battle) — after this MOVE deals damage
+CHROOKED_MOVE_ON_DEAL = {}
 # defender ability => ->(move, user, target, battle) — after surviving a damaging hit
 CHROOKED_WHEN_HIT = {}
 # ability => ->(battler, battle) — on switch-in
@@ -33,6 +35,22 @@ CHROOKED_TYPE_IMMUNITY = {}
 CHROOKED_STAT_SWAP = {}
 # ability => ->(battler, move_symbol, battle) — after the battler used a move
 CHROOKED_AFTER_MOVE = {}
+# ability => weather Symbol — this battler's MOVES resolve weather as this (Mega Sol seam)
+CHROOKED_WEATHER_FOR_USER = {}
+# move symbol => ->(move, atype, attacker, opponent, typemod) { adjusted Typemod }
+CHROOKED_MOVE_TYPEMOD = {}
+# attacker ability => ->(move, attacker) { true } — immune matchups become neutral
+CHROOKED_TYPEMOD_FLOOR = {}
+# attacker ability => ->(move, attacker) { true } — also bypass ability/levitation immunity hitflags
+CHROOKED_IMMUNITY_BYPASS = {}
+# ability => ->(battler, hpgain, agent) { adjusted hpgain } — drain/absorb heals
+CHROOKED_ABSORB_MODS = {}
+# [ability, move symbol] => Float fraction of max HP — fixed self-heal override
+CHROOKED_HEAL_OVERRIDE = {}
+# ability => ->(move, battler, target_kind) { new target kind or nil }
+CHROOKED_TARGET_MODS = {}
+# attacker ability => ->(move, attacker) { true } — skip the accuracy roll entirely
+CHROOKED_SURE_HIT = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
@@ -174,6 +192,32 @@ module ChrookedMoveHooks
       next unless immunity && !opponent.moldbroken
       hitflags[i] = immunity[:flag] if move_type == immunity[:type]
     end
+    # Immunity bypass (Bonebreaker): re-open levitation/absorb-ability blocks.
+    bypass = CHROOKED_IMMUNITY_BYPASS[attacker.ability]
+    if bypass && bypass.call(self, attacker)
+      reopened = [:Levitate, :AirBalloon, :MagnetRise, :Telekinesis,
+                  :HpAbsorbAbility, :FlashFireAbility]
+      hitflags.each_with_index do |flag, i|
+        hitflags[i] = :Success if reopened.include?(flag)
+      end
+    end
+  end
+
+  def pbTypeModifier(atype, attacker, opponent)
+    typemod = super
+    mod = CHROOKED_MOVE_TYPEMOD[@move]
+    typemod = mod.call(self, atype, attacker, opponent, typemod) if mod
+    floor = CHROOKED_TYPEMOD_FLOOR[attacker.ability]
+    if floor && typemod.immune? && floor.call(self, attacker)
+      typemod = Typemod.normal
+    end
+    typemod
+  end
+
+  def pbAccuracyCheck(attacker, opponent)
+    sure = CHROOKED_SURE_HIT[attacker.ability]
+    return true if sure && sure.call(self, attacker)
+    super
   end
 end
 PokeBattle_Move.prepend(ChrookedMoveHooks)
@@ -192,6 +236,8 @@ module ChrookedBattlerHooks
     return ret if damage.to_i <= 0 || target.damagestate.substitute
     atk_mod = CHROOKED_ON_DEAL[user.ability]
     atk_mod&.call(move, user, target, @battle) if !user.isFainted?
+    move_mod = CHROOKED_MOVE_ON_DEAL[move.move]
+    move_mod&.call(move, user, target, @battle) if !user.isFainted?
     def_mod = CHROOKED_WHEN_HIT[target.ability]
     def_mod&.call(move, user, target, @battle) if !target.isFainted?
     ret
@@ -215,6 +261,22 @@ module ChrookedBattlerHooks
     mod = CHROOKED_AFTER_MOVE[self.ability]
     mod&.call(self, self.lastMoveUsed, @battle) if mod && !self.isFainted? && self.lastMoveUsed.is_a?(Symbol)
     ret
+  end
+
+  def absorbHP(hpgain, opponent, agent, move = nil)
+    mod = CHROOKED_ABSORB_MODS[self.ability]
+    hpgain = mod.call(self, hpgain, agent) if mod
+    super
+  end
+
+  def pbTarget(move)
+    target = super
+    mod = CHROOKED_TARGET_MODS[self.ability]
+    if mod
+      new_target = mod.call(move, self, target)
+      target = new_target if new_target
+    end
+    target
   end
 end
 PokeBattle_Battler.prepend(ChrookedBattlerHooks)
@@ -245,5 +307,28 @@ module ChrookedBattleHooks
     end
     allowed
   end
+
+  # Per-user weather perception (Mega Sol's own seam): a battler whose ability
+  # is registered sees its OWN moves resolve under that weather.
+  def pbWeather(moveuser)
+    forced = moveuser && CHROOKED_WEATHER_FOR_USER[moveuser.ability]
+    return forced if forced
+    super
+  end
 end
 PokeBattle_Battle.prepend(ChrookedBattleHooks)
+
+# Fixed-fraction self-heal override for the weather-heal moves
+# (Synthesis / Moonlight / Morning Sun share function code 0x0D8).
+if defined?(PokeBattle_Move_0D8)
+  module ChrookedWeatherHealMods
+    def pbEffect(attacker, alltargets, hitnum = 0)
+      fraction = CHROOKED_HEAL_OVERRIDE[[attacker.ability, @move]]
+      return super unless fraction
+      hpgain = (attacker.totalhp * fraction).round
+      attacker.pbRecoverHP(hpgain, true,
+                           message: _INTL("{1} had its HP restored.", attacker.pbThis))
+    end
+  end
+  PokeBattle_Move_0D8.prepend(ChrookedWeatherHealMods)
+end

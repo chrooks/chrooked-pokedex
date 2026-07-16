@@ -66,7 +66,7 @@ def apply_rejuv(
         written.add(_write(defs_dir / "abiltext.rb", text))
 
     if "moves" in categories:
-        text = _build_movetext(ruleset, resolution, report)
+        text = _build_movetext(ruleset, resolution, report, implemented)
         written.add(_write(defs_dir / "movetext.rb", text))
 
     if "species" in categories:
@@ -221,19 +221,37 @@ _FLAG = {
 # ponytail: flat defaults — tune in the Ruleset if a created move needs otherwise.
 _CREATE_DEFAULTS = {"basedamage": 0, "accuracy": 100, "maxpp": 5}
 
-# Vanilla function codes for flinch combos (Bite 0x00F, Fire Fang 0x00B,
-# Ice Fang 0x00E, Thunder Fang 0x009). Keyed on the full additional-effect set;
-# a flinch+<anything unmapped> combo falls back to 0x00F — the flinch is real,
-# the leftover effect stays honestly DATA ONLY in the report.
+# Vanilla function codes for full effect-set combos (Bite 0x00F, Fire Fang
+# 0x00B, Ice Fang 0x00E, Thunder Fang 0x009). Keyed on the full
+# additional-effect set with a single shared chance.
 _FLINCH_COMBOS = {
     frozenset({"flinch"}): 0x00F,
     frozenset({"burn", "flinch"}): 0x00B,
     frozenset({"freeze", "flinch"}): 0x00E,
     frozenset({"paralysis", "flinch"}): 0x009,
 }
+# Vanilla function codes for one single secondary effect at :effect chance
+# (Ember, Poison Sting, Thunder Shock, Ice Beam, Aurora Beam, Crush Claw,
+# Moonblast, Acid/Psychic, Mud-Slap, Confusion).
+_SINGLE_EFFECT_CODES = {
+    "burn": 0x00A, "poison": 0x005, "paralysis": 0x007, "freeze": 0x00C,
+    "flinch": 0x00F, "atk_minus_1": 0x042, "def_minus_1": 0x043,
+    "sp_atk_minus_1": 0x045, "sp_def_minus_1": 0x046, "acc_minus_1": 0x047,
+    "confusion": 0x013,
+}
 
 
-def _build_movetext(ruleset: Ruleset, resolution: RejuvResolution, report: ApplyReport) -> str:
+# The stat-drop fangs whose flinch leftover is the fangflinch behavior's job
+# (see ruleset/behaviors/fangflinch.yaml).
+_FANGFLINCH_MOVES = {"draconicfang", "lithicfang", "metallicfang", "tectonicfang", "lovelybite"}
+
+
+def _build_movetext(
+    ruleset: Ruleset,
+    resolution: RejuvResolution,
+    report: ApplyReport,
+    implemented: set[str] = frozenset(),
+) -> str:
     next_id = resolution.max_move_id + 1
     blocks: list[str] = []
     for move in ruleset.moves.values():
@@ -261,8 +279,12 @@ def _build_movetext(ruleset: Ruleset, resolution: RejuvResolution, report: Apply
                 reason = None
             elif not leftover:
                 reason = f"effects mapped to :function 0x{function:03X}"
+            elif (leftover == ["flinch"] and "fangflinch" in implemented
+                  and move.chrooked_id in _FANGFLINCH_MOVES):
+                reason = (f"effects mapped to :function 0x{function:03X} "
+                          "+ fangflinch mechanic (flinch)")
             elif function:
-                reason = (f"flinch via :function 0x{function:03X}; "
+                reason = (f"partial via :function 0x{function:03X}; "
                           f"DATA ONLY: {', '.join(leftover)}")
             else:
                 reason = f"DATA ONLY (effects need battle code: {', '.join(leftover)})"
@@ -275,18 +297,27 @@ def _build_movetext(ruleset: Ruleset, resolution: RejuvResolution, report: Apply
 def _function_for(move) -> tuple[int, int | None, list[str]]:
     """(function code, :effect chance, effect names NOT covered by the code).
 
-    A combo code carries ONE shared chance, so it only applies when every effect
-    in the combo rolls at the same chance; mismatched chances fall back to the
-    flinch-only code with the other effect honestly named as leftover.
+    A function code carries ONE shared chance, so a combo code only applies
+    when every effect rolls at the same chance. A stat-drop+flinch pair (the
+    chrooked fangs) takes the stat-drop code — the flinch leftover is the
+    fangflinch behavior's job. Any other flinch pair keeps flinch (0x00F) and
+    names the leftover.
     """
     names = frozenset(e.effect for e in move.additional_effects)
     chances = {e.chance for e in move.additional_effects}
     code = _FLINCH_COMBOS.get(names)
     if code is not None and len(chances) <= 1:
         return code, move.additional_effects[0].chance, []
+    if len(names) == 1 and (only := next(iter(names))) in _SINGLE_EFFECT_CODES:
+        return _SINGLE_EFFECT_CODES[only], move.additional_effects[0].chance, []
     if "flinch" in names:
+        others = names - {"flinch"}
+        mapped = [n for n in sorted(others) if n in _SINGLE_EFFECT_CODES]
+        if len(others) == 1 and mapped:
+            effect = next(e for e in move.additional_effects if e.effect == mapped[0])
+            return _SINGLE_EFFECT_CODES[mapped[0]], effect.chance, ["flinch"]
         flinch = next(e for e in move.additional_effects if e.effect == "flinch")
-        return 0x00F, flinch.chance, sorted(names - {"flinch"})
+        return 0x00F, flinch.chance, sorted(others)
     return 0x000, None, sorted(names)
 
 
