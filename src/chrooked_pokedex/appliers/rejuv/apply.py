@@ -17,12 +17,14 @@ from ...model import Ruleset
 from ...model.schema import STAT_KEYS
 from ...report import ApplyReport, ReportEntry
 from . import behavior_install, behavior_triage
-from .emit import Sym, abiltext_delta, montext_delta, movetext_delta, to_ruby
+from .emit import (
+    Sym, abiltext_delta, montext_delta, movetext_delta, to_ruby, typetext_delta,
+)
 from .init_script import INIT_SCRIPT
 from .resolution import RejuvResolution
 
 # Species scalars first, then learnset — parity with the other engines' tier order.
-_CATEGORIES = ("abilities", "moves", "species", "behaviors")
+_CATEGORIES = ("abilities", "moves", "species", "type-chart", "behaviors")
 _STAT_INDEX = {k: i for i, k in enumerate(STAT_KEYS)}
 
 
@@ -72,6 +74,10 @@ def apply_rejuv(
     if "species" in categories:
         text = _build_montext(ruleset, resolution, known_abilities, known_moves, report)
         written.add(_write(defs_dir / "montext.rb", text))
+
+    if "type-chart" in categories:
+        text = _build_typetext(ruleset, report)
+        written.add(_write(defs_dir / "typetext.rb", text))
 
     if "behaviors" in categories:
         rows = behavior_triage.triage(ruleset, resolution, implemented)
@@ -197,6 +203,40 @@ def _type_sym(name: str) -> str:
     return slug(name).upper()
 
 
+# --- typetext ----------------------------------------------------------------
+
+# multiplier -> which TYPEHASH bucket on the DEFENDER lists the attacker type.
+_CHART_BUCKETS = {2: ":weaknesses", 0.5: ":resistances", 0: ":immunities"}
+
+
+def _build_typetext(ruleset: Ruleset, report: ApplyReport) -> str:
+    blocks: list[str] = []
+    for override in ruleset.type_chart:
+        atk = _type_sym(override.attacker)
+        dfn = _type_sym(override.defender)
+        mult = override.multiplier
+        bucket = _CHART_BUCKETS.get(mult)
+        if bucket is None and mult != 1:
+            report.add(ReportEntry(
+                status="blocked", category="type-chart",
+                chrooked_id=f"{override.attacker}-vs-{override.defender}",
+                reason=f"unsupported multiplier {mult} (chart holds 0/0.5/1/2 only)",
+            ))
+            continue
+        blocks.append(
+            f"[:weaknesses, :resistances, :immunities].each "
+            f"{{ |k| TYPEHASH[:{dfn}][k]&.delete(:{atk}) }}"
+        )
+        if bucket:
+            blocks.append(f"(TYPEHASH[:{dfn}][{bucket}] ||= []) << :{atk}")
+        report.add(ReportEntry(
+            status="applied", category="type-chart",
+            chrooked_id=f"{override.attacker}-vs-{override.defender}",
+            symbol=f"{atk}->{dfn} x{mult}",
+        ))
+    return typetext_delta(blocks)
+
+
 # --- movetext ----------------------------------------------------------------
 
 _MOVE_SCALARS: tuple[tuple[str, str], ...] = (
@@ -230,6 +270,10 @@ _FLINCH_COMBOS = {
     frozenset({"freeze", "flinch"}): 0x00E,
     frozenset({"paralysis", "flinch"}): 0x009,
 }
+# Primary `effect:` values that map onto a vanilla function code for
+# EXISTING moves (Fake Out is 0x012: first-turn-only + flinch + priority).
+_PRIMARY_EFFECT_CODES = {"first_turn_only": 0x012}
+
 # Vanilla function codes for one single secondary effect at :effect chance
 # (Ember, Poison Sting, Thunder Shock, Ice Beam, Aurora Beam, Crush Claw,
 # Moonblast, Acid/Psychic, Mud-Slap, Confusion).
@@ -264,6 +308,14 @@ def _build_movetext(
                 value = getattr(move, attr)
                 if value is not None and value != "":
                     lines.append(f"MOVEHASH[:{sym}][:{field}] = {to_ruby(value)}")
+            # ponytail: priority 0 is indistinguishable from "unset" in a
+            # MoveDef, so only a nonzero priority is written.
+            if move.priority:
+                lines.append(f"MOVEHASH[:{sym}][:priority] = {move.priority}")
+            if move.effect in _PRIMARY_EFFECT_CODES:
+                lines.append(
+                    f"MOVEHASH[:{sym}][:function] = 0x{_PRIMARY_EFFECT_CODES[move.effect]:03X}"
+                )
             blocks.extend(lines)
             report.add(ReportEntry(status="applied", category="move",
                                    chrooked_id=move.chrooked_id, symbol=sym))

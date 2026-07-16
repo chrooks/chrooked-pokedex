@@ -580,3 +580,47 @@ def test_harness_event_hooks(tmp_path):
         ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+# --- type chart ----------------------------------------------------------------
+
+def test_type_chart_overrides_emit_typetext(tmp_path):
+    from chrooked_pokedex.model.schema import TypeChartOverride
+    r = Ruleset(type_chart=(
+        TypeChartOverride("Poison", "Water", 2),
+        TypeChartOverride("Ice", "Water", 1),
+    ))
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "typetext.rb").read_text()
+    # old membership scrubbed from every bucket, then re-added where it belongs
+    assert "TYPEHASH[:WATER][k]&.delete(:POISON)" in text
+    assert "(TYPEHASH[:WATER][:weaknesses] ||= []) << :POISON" in text
+    assert "TYPEHASH[:WATER][k]&.delete(:ICE)" in text
+    assert "<< :ICE" not in text  # neutral = removal only
+    assert sum(1 for e in report.entries if e.category == "type-chart"
+               and e.status == "applied") == 2
+    # Init script recompiles types.dat
+    init = (target / "patch" / "Init" / "chrooked_compile.rb").read_text()
+    assert '"patch/Definitions/typetext.rb", "patch/Data/types.dat", :compileTypes' in init
+
+
+def test_existing_move_patches_priority_and_effect_function(tmp_path):
+    # Astonish: Fake Out clone — priority + first_turn_only ride the patch.
+    r = Ruleset(moves={"astonish": MoveDef(
+        name="Tackle", chrooked_id="astonish", type="Ghost", category="physical",
+        power=40, accuracy=100, pp=10, effect="first_turn_only", priority=3,
+    )})
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert "MOVEHASH[:TACKLE][:priority] = 3" in text
+    assert "MOVEHASH[:TACKLE][:function] = 0x012" in text
+
+
+def test_existing_move_default_priority_untouched(tmp_path):
+    r = Ruleset(moves={"tackle": MoveDef(
+        name="Tackle", chrooked_id="tackle", type="Normal", category="physical",
+        power=50, accuracy=100, pp=35,
+    )})
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert ":priority" not in text and ":function" not in text.split("MOVEHASH[:TACKLE]")[1]

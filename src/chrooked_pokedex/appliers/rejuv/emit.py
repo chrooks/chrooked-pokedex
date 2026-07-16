@@ -91,3 +91,7 @@ def movetext_delta(blocks: list[str]) -> str:
 def abiltext_delta(blocks: list[str]) -> str:
     """Build ``patch/Definitions/abiltext.rb`` from ready ABILHASH statement lines."""
     return _hash_delta("ABILHASH", "abiltext.rb", blocks)
+
+def typetext_delta(blocks: list[str]) -> str:
+    """Build ``patch/Definitions/typetext.rb`` from ready TYPEHASH statement lines."""
+    return _hash_delta("TYPEHASH", "typetext.rb", blocks)

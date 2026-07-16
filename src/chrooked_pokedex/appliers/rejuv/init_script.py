@@ -25,6 +25,7 @@ begin
     ["patch/Definitions/montext.rb", "patch/Data/mons.dat", :compileMons],
     ["patch/Definitions/movetext.rb", "patch/Data/moves.dat", :compileMoves],
     ["patch/Definitions/abiltext.rb", "patch/Data/abil.dat", :compileAbilities],
+    ["patch/Definitions/typetext.rb", "patch/Data/types.dat", :compileTypes],
   ]
   pairs.each do |defn, dat, fn|
     next unless File.exist?(defn)
