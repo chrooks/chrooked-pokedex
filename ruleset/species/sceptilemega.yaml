@@ -17,7 +17,7 @@ learnset:
   - { level: 15, move: Quick Guard }
   - { level: 20, move: Assurance }
   - { level: 25, move: Giga Drain }
-  - { level: 30, move: Slam }
+  - { level: 30, move: Body Slam }
   - { level: 35, move: Double Team }
   - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Screech }

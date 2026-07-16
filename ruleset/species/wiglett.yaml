@@ -8,7 +8,7 @@ learnset:
   - { level: 8, move: Wrap }
   - { level: 12, move: Aqua Jet }
   - { level: 16, move: Water Whip }
-  - { level: 20, move: Slam }
+  - { level: 20, move: Body Slam }
   - { level: 20, move: Water Pulse }
   - { level: 24, move: Headbutt }
   - { level: 28, move: Dig }

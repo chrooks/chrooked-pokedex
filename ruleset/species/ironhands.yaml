@@ -10,7 +10,7 @@ learnset:
   - { level: 7, move: Fake Out }
   - { level: 14, move: Whirlwind }
   - { level: 21, move: Thunder Punch }
-  - { level: 28, move: Slam }
+  - { level: 28, move: Body Slam }
   - { level: 35, move: Force Palm }
   - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Seismic Toss }

@@ -10,7 +10,7 @@ learnset:
   - { level: 15, move: Flame Wheel }
   - { level: 20, move: Bug Bite }
   - { level: 25, move: Coil }
-  - { level: 32, move: Slam }
+  - { level: 32, move: Body Slam }
   - { level: 36, move: Cinder Smash }
   - { level: 39, move: Fire Spin }
   - { level: 46, move: Crunch }

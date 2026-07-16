@@ -14,6 +14,6 @@ learnset:
   - { level: 25, move: Tectonic Fang }
   - { level: 30, move: Dig }
   - { level: 35, move: Sandstorm }
-  - { level: 40, move: Slam }
+  - { level: 40, move: Body Slam }
   - { level: 45, move: Coil }
   - { level: 50, move: Sand Tomb }

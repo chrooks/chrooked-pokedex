@@ -13,7 +13,7 @@ learnset:
   - { level: 19, move: Bite }
   - { level: 23, move: Spark }
   - { level: 27, move: Thunder Wave }
-  - { level: 32, move: Slam }
+  - { level: 32, move: Body Slam }
   - { level: 36, move: Lightning Slam }
   - { level: 38, move: Entrainment }
   - { level: 42, move: Discharge }

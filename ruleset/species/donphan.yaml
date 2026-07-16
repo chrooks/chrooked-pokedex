@@ -17,7 +17,7 @@ learnset:
   - { level: 10, move: Rollout }
   - { level: 15, move: Assurance }
   - { level: 19, move: Knock Off }
-  - { level: 24, move: Slam }
+  - { level: 24, move: Body Slam }
   - { level: 30, move: Stomping Tantrum }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }

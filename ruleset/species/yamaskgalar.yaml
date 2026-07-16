@@ -12,7 +12,7 @@ learnset:
   - { level: 20, move: Crafty Shield }
   - { level: 24, move: Hex }
   - { level: 28, move: Mean Look }
-  - { level: 32, move: Slam }
+  - { level: 32, move: Body Slam }
   - { level: 36, move: Curse }
   - { level: 40, move: Shadow Ball }
   - { level: 42, move: Wraithstrike }

@@ -22,7 +22,7 @@ learnset:
   - { level: 30, move: Tectonic Fang }
   - { level: 30, move: Metallic Fang }
   - { level: 32, move: Stealth Rock }
-  - { level: 36, move: Slam }
+  - { level: 36, move: Body Slam }
   - { level: 40, move: Sandstorm }
   - { level: 44, move: Dig }
   - { level: 48, move: Iron Tail }

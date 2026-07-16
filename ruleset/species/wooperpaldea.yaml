@@ -10,7 +10,7 @@ learnset:
   - { level: 6, move: Clod Toss }
   - { level: 8, move: Poison Tail }
   - { level: 12, move: Toxic Spikes }
-  - { level: 16, move: Slam }
+  - { level: 16, move: Body Slam }
   - { level: 21, move: Yawn }
   - { level: 24, move: Poison Jab }
   - { level: 28, move: Sludge Wave }
