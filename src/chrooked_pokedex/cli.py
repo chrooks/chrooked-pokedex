@@ -79,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--engine",
-        choices=("pokeemerald", "essentials"),
+        choices=("pokeemerald", "essentials", "rejuv"),
         default="pokeemerald",
         help="Target engine (default: pokeemerald). 'essentials' writes Pokémon "
         "Essentials PBS text; the dialect (16.2 vs modern v21) is auto-detected from "
@@ -249,6 +249,14 @@ def _run_harvest(fork: Path, ruleset_dir: Path, dry_run: bool) -> int:
 def _confirm(message: str) -> bool:
     answer = input(f"Accept {message}? [y/N] ").strip().lower()
     return answer in ("y", "yes")
+
+
+def _apply_rejuv(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    """Emit the Rejuvenation patch/ overlay (delta Ruby definition files)."""
+    from .appliers.rejuv import apply_rejuv
+
+    written = apply_rejuv(target, ruleset, report, category=category)
+    print(f"rejuv: {len(written)} file(s) written under patch/")
 
 
 def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport) -> None:

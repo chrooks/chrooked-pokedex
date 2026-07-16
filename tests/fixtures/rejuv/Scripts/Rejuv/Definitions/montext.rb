@@ -1,0 +1,41 @@
+MONHASH = {
+  :BULBASAUR => {
+    "Normal Form" => {
+      :name => "Bulbasaur",
+      :dexnum => 1,
+      :Type1 => :GRASS,
+      :Type2 => :POISON,
+      :BaseStats => [45, 49, 49, 65, 65, 45],
+      :Abilities => [:OVERGROW],
+      :HiddenAbility => :CHLOROPHYLL,
+      :Moveset => [
+        [1, :TACKLE],
+        [3, :VINEWHIP],
+      ],
+      :EggMoves => [
+        :CURSE,
+      ],
+    },
+  },
+
+  :ABSOL => {
+    "Normal Form" => {
+      :name => "Absol",
+      :dexnum => 359,
+      :Type1 => :DARK,
+      :Type2 => nil,
+      :BaseStats => [65, 130, 60, 75, 60, 75],
+      :Abilities => [:PRESSURE, :SUPERLUCK],
+      :HiddenAbility => :JUSTIFIED,
+      :Moveset => [
+        [1, :SCRATCH],
+      ],
+    },
+    "Mega Form" => {
+      :name => "Absol",
+      :Type1 => :DARK,
+      :BaseStats => [65, 150, 60, 115, 60, 115],
+      :Abilities => [:MAGICBOUNCE],
+    },
+  },
+}
