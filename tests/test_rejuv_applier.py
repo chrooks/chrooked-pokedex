@@ -55,7 +55,7 @@ def test_scan_monhash_keys_and_forms():
 
 
 def test_scan_symbol_keys():
-    assert definitions_read.scan_symbol_keys(DEFS / "movetext.rb") == {"TACKLE", "VINEWHIP"}
+    assert definitions_read.scan_symbol_keys(DEFS / "movetext.rb") == {"TACKLE", "VINEWHIP", "HIJUMPKICK"}
     assert definitions_read.scan_symbol_keys(DEFS / "abiltext.rb") == {"OVERGROW", "CHLOROPHYLL"}
 
 
@@ -75,6 +75,19 @@ def test_resolution_species_mega_heuristic():
     assert res.species("absolmega", {}) == ("ABSOL", "Mega Form")
 
 
+def test_resolution_form_matcher_unambiguous():
+    res = RejuvResolution.build(FIXTURE)
+    # "megax" matches only "Mega X Form"; "megay" only "Mega Y Form".
+    assert res.species("charizardmegax", {}) == ("CHARIZARD", "Mega X Form")
+    assert res.species("charizardmegay", {}) == ("CHARIZARD", "Mega Y Form")
+
+
+def test_resolution_form_matcher_ambiguous_blocks():
+    res = RejuvResolution.build(FIXTURE)
+    # "mega" matches BOTH Mega X and Mega Y forms -> ambiguous -> blocked, not guessed.
+    assert res.species("charizardmega", {}) is None
+
+
 def test_resolution_species_unresolved_blocks():
     res = RejuvResolution.build(FIXTURE)
     assert res.species("fakemon", {}) is None
@@ -91,6 +104,14 @@ def test_resolution_move_and_ability():
     assert res.move("Nonexistent") is None
     assert res.ability("Overgrow") == "OVERGROW"
     assert res.ability("Chloroplast") is None
+
+
+def test_resolution_move_by_name_index():
+    # Symbol :HIJUMPKICK differs from slug("High Jump Kick")="highjumpkick";
+    # the :name index resolves it where the symbol slug cannot.
+    res = RejuvResolution.build(FIXTURE)
+    assert res.move("High Jump Kick") == "HIJUMPKICK"
+    assert res.move_symbol("High Jump Kick") == "HIJUMPKICK"
 
 
 # --- montext emit ------------------------------------------------------------
@@ -114,6 +135,20 @@ def test_species_stats_emit_per_index(tmp_path):
     assert 'MONHASH[:ABSOL]["Normal Form"][:BaseStats][1] = 160' in text
     assert 'MONHASH[:ABSOL]["Normal Form"][:BaseStats][5] = 130' in text
     assert any(e.status == "applied" and e.chrooked_id == "absol" for e in report.entries)
+
+
+def test_form_lacking_array_is_seeded_from_base(tmp_path):
+    # Charizard "Mega X Form" in the fixture has no :BaseStats/:Abilities of its own.
+    # A per-index assign must seed the array from the base form first (no nil[]=).
+    r = Ruleset(species={"charizardmegax": _species(
+        cid="charizardmegax", stats={"atk": 130},
+        abilities=AbilitiesOverride(primary="Blaze"),
+    )})
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "montext.rb").read_text()
+    assert 'MONHASH[:CHARIZARD]["Mega X Form"][:BaseStats] ||= MONHASH[:CHARIZARD]["Normal Form"][:BaseStats].dup' in text
+    assert 'MONHASH[:CHARIZARD]["Mega X Form"][:Abilities] ||= MONHASH[:CHARIZARD]["Normal Form"][:Abilities].dup' in text
+    assert 'MONHASH[:CHARIZARD]["Mega X Form"][:BaseStats][1] = 130' in text
 
 
 def test_species_dig_guard_wraps(tmp_path):
@@ -179,12 +214,37 @@ def test_move_scalars_emit(tmp_path):
     assert "MOVEHASH[:TACKLE][:category] = :physical" in text
 
 
-def test_move_not_in_base_blocks(tmp_path):
+def test_new_move_created_with_next_id(tmp_path):
+    # Base fixture max move ID is 3 (Tackle=1, Vine Whip=2, HiJumpKick=3), so a new move gets 4.
     r = Ruleset(moves={"madeup": MoveDef(
-        name="Made Up", chrooked_id="madeup", type="Normal", category="physical", power=10,
+        name="Made Up", chrooked_id="madeup", type="Fire", category="special",
+        power=90, accuracy=95, pp=10, description="A made-up move.", flags=("contact", "sound"),
     )})
     report, target = _apply(r, tmp_path)
-    assert any(e.status == "blocked" and e.chrooked_id == "madeup" for e in report.entries)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert "MOVEHASH[:MADEUP] = {" in text
+    assert ":ID => 4" in text
+    assert ":function => 0x000" in text
+    assert ":type => :FIRE" in text
+    assert ":basedamage => 90" in text
+    assert ":contact => true" in text and ":soundmove => true" in text
+    assert any("DATA ONLY" in e.reason and e.chrooked_id == "madeup" for e in report.entries)
+
+
+def test_new_move_resolves_in_learnset(tmp_path):
+    # A species learning a brand-new Ruleset move keeps it (known_moves includes owned).
+    r = Ruleset(
+        species={"bulbasaur": _species(
+            cid="bulbasaur", learnset=(LearnsetMove(1, "Made Up"),),
+        )},
+        moves={"madeup": MoveDef(
+            name="Made Up", chrooked_id="madeup", type="Fire", category="special", power=90,
+        )},
+    )
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "montext.rb").read_text()
+    assert "[:Moveset] = [[1, :MADEUP]]" in text
+    assert not any(e.status == "partial" and e.chrooked_id == "bulbasaur" for e in report.entries)
 
 
 # --- abiltext emit -----------------------------------------------------------

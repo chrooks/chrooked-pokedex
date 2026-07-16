@@ -16,7 +16,7 @@ Form. Anything still unresolved (multi-mega, regional variants) blocks unless an
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Mapping, Optional
 
@@ -24,6 +24,20 @@ from ...seed.neutralize import slug
 from . import definitions_read
 
 _DEFAULT_FORM = "Normal Form"
+# Generic form words stripped when computing a form's "core" for exact matching.
+_FORM_WORDS = ("forme", "form", "mode")
+
+
+def _form_core(form_name: str) -> str:
+    """The distinguishing slug of a form name, minus generic words.
+
+    "Mega Form" -> "mega", "Mega X Form" -> "megax", "Standard Mode" -> "standard".
+    """
+    from ...seed.neutralize import slug as _slug
+    core = form_name.lower()
+    for word in _FORM_WORDS:
+        core = core.replace(word, " ")
+    return _slug(core)
 
 
 @dataclass
@@ -34,6 +48,9 @@ class RejuvResolution:
     move_syms: set[str]
     ability_syms: set[str]
     max_ability_id: int                # highest :ID in the base abiltext (for new abilities)
+    max_move_id: int                   # highest :ID in the base movetext (for new moves)
+    move_names: dict[str, str] = field(default_factory=dict)     # slug(display) -> symbol
+    ability_names: dict[str, str] = field(default_factory=dict)  # slug(display) -> symbol
 
     @classmethod
     def build(cls, target: Path) -> "RejuvResolution":
@@ -43,6 +60,9 @@ class RejuvResolution:
             move_syms=definitions_read.scan_symbol_keys(defs / "movetext.rb"),
             ability_syms=definitions_read.scan_symbol_keys(defs / "abiltext.rb"),
             max_ability_id=definitions_read.max_ability_id(defs / "abiltext.rb"),
+            max_move_id=definitions_read.max_move_id(defs / "movetext.rb"),
+            move_names=definitions_read.scan_symbol_names(defs / "movetext.rb"),
+            ability_names=definitions_read.scan_symbol_names(defs / "abiltext.rb"),
         )
 
     def species(self, chrooked_id: str, aka: Mapping[str, object]) -> Optional[tuple[str, str]]:
@@ -60,23 +80,53 @@ class RejuvResolution:
         if upper in self.monhash and _DEFAULT_FORM in self.monhash[upper]:
             return (upper, _DEFAULT_FORM)
 
-        # ponytail: cheap mega heuristic — "<base>mega" -> (BASE, "Mega Form").
-        # Covers the ~48 single-mega species; multi-megas (charizardmegax) and
-        # regionals still block and can be rescued with an aka.rejuv hint.
-        if upper.endswith("MEGA"):
-            base = upper[:-4]
-            if base in self.monhash and "Mega Form" in self.monhash[base]:
-                return (base, "Mega Form")
-        return None
+        return self._match_form(upper)
+
+    def _match_form(self, upper: str) -> Optional[tuple[str, str]]:
+        """Rescue a form/mega/regional id by matching its suffix to a form name.
+
+        Take the longest MONHASH key that prefixes the id, slug its remaining
+        suffix, and find forms whose slug CONTAINS that suffix slug. Resolve only
+        when exactly one form matches — an ambiguous or zero match stays blocked
+        rather than risk writing to the wrong form. Rejuv form spellings are
+        irregular ("Mega X Form", "Shield Forme", "Red-Striped", "Hisuian Form"),
+        so slug-substring beats any fixed suffix rule; the single-match guard keeps
+        it safe. Subsumes the old mega heuristic (suffix "megax" -> "Mega X Form").
+        """
+        prefixes = [k for k in self.monhash if upper.startswith(k)]
+        if not prefixes:
+            return None
+        key = max(prefixes, key=len)
+        suffix = slug(upper[len(key):])
+        if not suffix:
+            return (key, self.monhash[key][0])  # bare species, non-default first form
+        # Tier 1: exact form-core match — the form's name minus generic words
+        # ("Form"/"Forme"/"Mode") equals the suffix. This resolves "mega" to the
+        # plain "Mega Form" even when a "Mega Form Z" also exists, and rescues
+        # "standard" -> "Standard Mode".
+        exact = [f for f in self.monhash[key] if _form_core(f) == suffix]
+        if len(exact) == 1:
+            return (key, exact[0])
+        # Tier 2: unambiguous substring — resolve only on a single match.
+        forms = [f for f in self.monhash[key] if suffix in slug(f)]
+        return (key, forms[0]) if len(forms) == 1 else None
 
     def move(self, name: str) -> Optional[str]:
         sym = slug(name).upper()
-        return sym if sym in self.move_syms else None
+        if sym in self.move_syms:
+            return sym
+        return self.move_names.get(slug(name))  # name index (VICEGRIP/"Vise Grip")
+
+    def move_symbol(self, name: str) -> str:
+        """The existing symbol for this move, or the symbol a new move WOULD take."""
+        return self.move(name) or slug(name).upper()
 
     def ability(self, name: str) -> Optional[str]:
         sym = slug(name).upper()
-        return sym if sym in self.ability_syms else None
+        if sym in self.ability_syms:
+            return sym
+        return self.ability_names.get(slug(name))
 
     def ability_symbol(self, name: str) -> str:
-        """The symbol a name WOULD take, whether or not it exists yet (for new abilities)."""
-        return slug(name).upper()
+        """The existing symbol for this ability, or the symbol a new one WOULD take."""
+        return self.ability(name) or slug(name).upper()

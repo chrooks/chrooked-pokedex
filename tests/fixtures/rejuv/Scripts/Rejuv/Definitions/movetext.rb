@@ -26,4 +26,18 @@ MOVEHASH = {
     :target => :SingleNonUser,
     :contact => true,
   },
+
+  :HIJUMPKICK => {
+    :ID => 3,
+    :name => "High Jump Kick",
+    :desc => "The user jumps up high, then strikes with a kick.",
+    :function => 0x000,
+    :type => :FIGHTING,
+    :category => :physical,
+    :basedamage => 130,
+    :accuracy => 90,
+    :maxpp => 10,
+    :target => :SingleNonUser,
+    :contact => true,
+  },
 }

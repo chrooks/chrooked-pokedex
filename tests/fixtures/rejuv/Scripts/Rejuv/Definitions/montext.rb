@@ -38,4 +38,29 @@ MONHASH = {
       :Abilities => [:MAGICBOUNCE],
     },
   },
+
+  :CHARIZARD => {
+    "Normal Form" => {
+      :name => "Charizard",
+      :dexnum => 6,
+      :Type1 => :FIRE,
+      :Type2 => :FLYING,
+      :BaseStats => [78, 84, 78, 109, 85, 100],
+      :Abilities => [:BLAZE],
+      :HiddenAbility => :SOLARPOWER,
+      :Moveset => [
+        [1, :SCRATCH],
+      ],
+    },
+    "Mega X Form" => {
+      :name => "Charizard",
+      :Type1 => :FIRE,
+      :Type2 => :DRAGON,
+    },
+    "Mega Y Form" => {
+      :name => "Charizard",
+      :Type1 => :FIRE,
+      :Type2 => :FLYING,
+    },
+  },
 }

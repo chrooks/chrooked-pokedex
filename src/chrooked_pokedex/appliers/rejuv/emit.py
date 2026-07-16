@@ -56,17 +56,16 @@ def _mon_ref(key: str, form: str) -> str:
 def montext_delta(assignments: list[tuple[str, str, list[str]]]) -> str:
     """Build ``patch/Definitions/montext.rb``.
 
-    ``assignments`` is a list of ``(key, form, lines)`` where each ``lines`` entry
-    is a Ruby right-hand-side statement about ``MONHASH[:KEY]["FORM"]`` (already
-    prefixed, e.g. ``[:BaseStats][3] = 130``). Each species is wrapped in a dig
-    guard.
+    ``assignments`` is a list of ``(key, form, statements)`` where each statement
+    is a complete Ruby line (e.g. ``MONHASH[:KEY]["FORM"][:BaseStats][3] = 130``).
+    Each species is wrapped in a dig guard so a base update that drops the form
+    degrades to a console note instead of a crash.
     """
     out = [_HEADER, 'eval(File.read("Scripts/Rejuv/Definitions/montext.rb"), TOPLEVEL_BINDING)', ""]
-    for key, form, lines in assignments:
-        ref = _mon_ref(key, form)
+    for key, form, statements in assignments:
         out.append(f'if MONHASH.dig(:{key}, "{form}")')
-        for line in lines:
-            out.append(f"  {ref}{line}")
+        for stmt in statements:
+            out.append(f"  {stmt}")
         out.append("else")
         out.append(f'  puts "chrooked: skipped {key} {form} (missing in base montext)"')
         out.append("end")

@@ -26,6 +26,8 @@ _FORM = re.compile(r'^    "([^"]+)" => \{')
 _SYM_KEY = re.compile(r'^  :([A-Z0-9_]+) => \{')
 # An ``:ID => 123`` line (any indent).
 _ID = re.compile(r':ID => (\d+)')
+# A ``:name => "Display"`` line (any indent).
+_NAME = re.compile(r':name => "([^"]*)"')
 
 
 def scan_monhash_keys(path: Path) -> dict[str, list[str]]:
@@ -53,7 +55,38 @@ def scan_symbol_keys(path: Path) -> set[str]:
             if (m := _SYM_KEY.match(line))}
 
 
+def scan_symbol_names(path: Path) -> dict[str, str]:
+    """Map each top-level entry's display ``:name`` (slugged) to its ``:SYMBOL``.
+
+    Rescues the cases where Rejuv's internal symbol differs from the display name
+    (``:VICEGRIP`` / "Vise Grip", ``:HIJUMPKICK`` / "High Jump Kick"): the Ruleset
+    cites the display name, so a name index resolves what a symbol slug cannot.
+    """
+    from ...seed.neutralize import slug
+    result: dict[str, str] = {}
+    current: str | None = None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        key = _SYM_KEY.match(line)
+        if key:
+            current = key.group(1)
+            continue
+        name = _NAME.search(line)
+        if name and current is not None:
+            result.setdefault(slug(name.group(1)), current)
+            current = None  # first :name per block only
+    return result
+
+
 def max_ability_id(path: Path) -> int:
     """Return the highest ``:ID`` value in an ABILHASH file (0 if none)."""
+    return _max_id(path)
+
+
+def max_move_id(path: Path) -> int:
+    """Return the highest ``:ID`` value in a MOVEHASH file (0 if none)."""
+    return _max_id(path)
+
+
+def _max_id(path: Path) -> int:
     ids = [int(m.group(1)) for m in _ID.finditer(path.read_text(encoding="utf-8"))]
     return max(ids) if ids else 0
