@@ -299,10 +299,12 @@ module ChrookedBattleHooks
   def pbCanChooseMove?(idxPokemon, idxMove, *args, **kwargs)
     allowed = super
     return allowed unless allowed
-    battler = @battlers[idxPokemon]
+    # AI passes battler objects (and move objects) instead of indexes — mirror
+    # vanilla's own coercion at the top of this method.
+    battler = idxPokemon.is_a?(PokeBattle_Battler) ? idxPokemon : @battlers[idxPokemon]
     lock = battler && battler.effects[:ChrookedMoveLock]
     if lock && battler.moves.any? { |m| m && m.move == lock }
-      basemove = battler.moves[idxMove]
+      basemove = idxMove.is_a?(PokeBattle_Move) ? idxMove : battler.moves[idxMove]
       return false if basemove && basemove.move != lock
     end
     allowed
