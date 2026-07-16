@@ -6,8 +6,7 @@ category: physical
 power: 80
 accuracy: 95
 pp: 15
-description: An icy bite that may freeze or make the foe flinch.
+description: An icy bite that may freeze the foe.
 additional_effects:
   - { effect: freeze, chance: 10 }
-  - { effect: flinch, chance: 10 }
 flags: [contact, biting]

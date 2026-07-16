@@ -6,8 +6,7 @@ category: physical
 power: 80
 accuracy: 95
 pp: 15
-description: May cause flinching or leave the foe with a burn.
+description: May leave the foe with a burn.
 additional_effects:
   - { effect: burn, chance: 10 }
-  - { effect: flinch, chance: 10 }
 flags: [contact, biting]
