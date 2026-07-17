@@ -1153,25 +1153,36 @@ def create_app(
             raise _target_error(error) from error
 
     @app.get("/api/targets/{target_id}/sprite/{dex}")
-    def get_target_sprite(target_id: str, dex: int) -> FileResponse:
-        """Serve a target game's own front-battle sprite for a given dex №.
+    def get_target_sprite(target_id: str, dex: int, id: str | None = None) -> FileResponse:
+        """Serve a target game's own front-battle sprite.
 
         ``dex`` is an ``int`` path param — FastAPI rejects non-int inputs with 422,
-        which closes the path-traversal vector. The resolved path is asserted to stay
-        under the ``Graphics/Battlers/Front`` directory (defense in depth). A missing
-        file or an unknown/non-essentials target yields 404.
+        which closes the path-traversal vector. Essentials targets resolve
+        ``Graphics/Battlers/Front/<dex>.png``. Rejuv targets resolve by the
+        ``id`` query param (the entry's chrooked_id) through the cached snapshot's
+        per-form sprite hint: ``Graphics/Battlers/<species>/<form>.png`` — so a
+        form entry (Aevian, Mega) shows its own art. The resolved path is
+        asserted to stay under Graphics/Battlers (defense in depth); a missing
+        file or unsupported engine yields 404 (the UI falls back to the CDN).
         """
         registry = app.state.targets_registry
         try:
             target = registry.get(target_id)
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
-        if target.engine != "essentials":
-            raise HTTPException(status_code=404, detail="Sprite endpoint requires an Essentials target.")
-        front_dir = (Path(target.path) / "Graphics" / "Battlers" / "Front").resolve()
-        sprite_path = (front_dir / f"{dex:03d}.png").resolve()
-        # Assert the resolved path stays under the Front directory.
-        if not str(sprite_path).startswith(str(front_dir) + "/") and sprite_path != front_dir:
+        battlers_dir = (Path(target.path) / "Graphics" / "Battlers").resolve()
+        if target.engine == "essentials":
+            sprite_path = (battlers_dir / "Front" / f"{dex:03d}.png").resolve()
+        elif target.engine == "rejuv" and id:
+            snapshot = app.state.targets_state.snapshot_for(target)
+            entry = snapshot["species"].get(id)
+            hint = (entry or {}).get("sprite")
+            if not hint:
+                raise HTTPException(status_code=404, detail="Sprite not found.")
+            sprite_path = (battlers_dir / hint["folder"] / f"{hint['form']}.png").resolve()
+        else:
+            raise HTTPException(status_code=404, detail="Sprite endpoint requires an Essentials or Rejuv target.")
+        if not str(sprite_path).startswith(str(battlers_dir) + "/"):
             raise HTTPException(status_code=404, detail="Sprite not found.")
         if not sprite_path.is_file():
             raise HTTPException(status_code=404, detail=f"No sprite for dex {dex}.")

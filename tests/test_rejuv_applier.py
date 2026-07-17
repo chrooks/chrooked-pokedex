@@ -679,3 +679,11 @@ def test_rejuv_web_snapshot_includes_all_forms():
     # Charizard fixture Mega X inherits BaseStats from the base form
     megax = snap["species"]["charizard--megaxform"]
     assert megax["stats"]["hp"] == snap["species"]["charizard"]["stats"]["hp"]
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_web_snapshot_carries_sprite_hints():
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    snap = build_snapshot_rejuv(FIXTURE)
+    assert snap["species"]["absol"]["sprite"] == {"folder": "absol", "form": 0}
+    assert snap["species"]["absol--megaform"]["sprite"] == {"folder": "absol", "form": 1}

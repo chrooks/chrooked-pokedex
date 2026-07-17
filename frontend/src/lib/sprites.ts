@@ -37,10 +37,17 @@ export function spriteUrl(chrookedId: string, dex: number | null): string | null
 
 /** Return the target-local sprite URL for a given dex №, or null when dex is
     absent / non-positive.  The endpoint 404s if the file is not on disk, so
-    the caller should fall back to the CDN url via an onError handler. */
-export function targetSpriteUrl(targetId: string, dex: number | null): string | null {
+    the caller should fall back to the CDN url via an onError handler.
+    `chrookedId` rides along as a query param so Rejuv targets can resolve
+    per-form art (Essentials targets ignore it). */
+export function targetSpriteUrl(
+  targetId: string,
+  dex: number | null,
+  chrookedId?: string,
+): string | null {
   if (dex === null || dex <= 0) {
     return null;
   }
-  return `/api/targets/${encodeURIComponent(targetId)}/sprite/${dex}`;
+  const id = chrookedId ? `?id=${encodeURIComponent(chrookedId)}` : "";
+  return `/api/targets/${encodeURIComponent(targetId)}/sprite/${dex}${id}`;
 }

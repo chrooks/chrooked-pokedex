@@ -68,7 +68,7 @@ if defined?(MONHASH)
       # non-base forms inherit unset fields from the base form at compile time
       merged = i.zero? ? form : (base || {}).merge(form)
       out["mons"] << {
-        "key" => key, "form" => form_name, "base_form" => i.zero?,
+        "key" => key, "form" => form_name, "base_form" => i.zero?, "form_index" => i,
         "name" => merged[:name], "dexnum" => merged[:dexnum],
         "type1" => merged[:Type1], "type2" => merged[:Type2],
         "abilities" => merged[:Abilities] || [], "hidden" => merged[:HiddenAbility],
@@ -185,6 +185,8 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
             display = moves.get(move_id, {}).get("name") or str(pair[1]).capitalize()
             learnset.append({"level": pair[0], "move": display, "move_id": move_id})
         species[cid] = {
+            # The game's own battler art: Graphics/Battlers/<species>/<form>.png
+            "sprite": {"folder": nz.slug(mon["key"]), "form": mon.get("form_index", 0)},
             "dex": mon.get("dexnum") or index,
             "chrooked_id": cid,
             "name": (
