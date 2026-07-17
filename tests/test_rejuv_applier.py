@@ -687,3 +687,25 @@ def test_rejuv_web_snapshot_carries_sprite_hints():
     snap = build_snapshot_rejuv(FIXTURE)
     assert snap["species"]["absol"]["sprite"] == {"folder": "absol", "form": 0}
     assert snap["species"]["absol--megaform"]["sprite"] == {"folder": "absol", "form": 1}
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_web_snapshot_evolution_edges(tmp_path):
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    # Give the fixture a forward edge: Bulbasaur -> Absol at level 16 (nonsense
+    # biologically, real structurally).
+    game = tmp_path / "game"
+    shutil.copytree(FIXTURE, game)
+    mon = game / "Scripts" / "Rejuv" / "Definitions" / "montext.rb"
+    text = mon.read_text().replace(
+        ''':name => "Bulbasaur",''',
+        ''':name => "Bulbasaur",
+      :evolutions => [ { species: :ABSOL, method: :Level, parameter: 16 } ],''')
+    mon.write_text(text)
+    snap = build_snapshot_rejuv(game)
+    bulba = snap["species"]["bulbasaur"]
+    assert bulba["fully_evolved"] is False
+    assert bulba["evolves_into"][0]["to"] == "absol"
+    absol = snap["species"]["absol"]
+    assert absol["evolution"]["from"] == "bulbasaur"
+    assert snap["species"]["charizard"]["fully_evolved"] is True

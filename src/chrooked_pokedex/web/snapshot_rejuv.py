@@ -27,8 +27,21 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from dataclasses import dataclass
+
 from ..model.schema import STAT_KEYS
 from ..seed import neutralize as nz
+from .evolution import build_evolution_graph
+from .essentials_evolution import essentials_method_label
+
+
+@dataclass(frozen=True)
+class _RejuvEvolution:
+    """One outgoing edge, duck-typed to what ``build_evolution_graph`` reads."""
+
+    target_species: str
+    method: str
+    param: str
 
 SNAPSHOT_VERSION = "rejuv"
 
@@ -67,8 +80,13 @@ if defined?(MONHASH)
       next unless form.is_a?(Hash)
       # non-base forms inherit unset fields from the base form at compile time
       merged = i.zero? ? form : (base || {}).merge(form)
+      evos = (merged[:evolutions] || []).map { |e|
+        { "species" => e[:species], "form" => e[:form],
+          "method" => e[:method].to_s, "parameter" => e[:parameter].to_s }
+      }
       out["mons"] << {
         "key" => key, "form" => form_name, "base_form" => i.zero?, "form_index" => i,
+        "evolutions" => evos,
         "name" => merged[:name], "dexnum" => merged[:dexnum],
         "type1" => merged[:Type1], "type2" => merged[:Type2],
         "abilities" => merged[:Abilities] || [], "hidden" => merged[:HiddenAbility],
@@ -206,6 +224,44 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
             },
             "learnset": learnset,
         }
+
+    # Evolution edges: sources/targets are entry ids; a `form:` index on the
+    # edge routes to that form's entry (Aevian lines evolve within the family),
+    # defaulting to the base form. Reuses the shared invert+resolve transform.
+    entry_by_form: dict[tuple[str, int], str] = {}
+    for mon in raw["mons"]:
+        base_cid = nz.slug(mon["key"])
+        cid = base_cid if mon.get("base_form", True) else f"{base_cid}--{nz.slug(mon.get('form') or '')}"
+        entry_by_form[(base_cid, mon.get("form_index", 0))] = cid
+
+    forward: dict[str, list[_RejuvEvolution]] = {}
+    for mon in raw["mons"]:
+        base_cid = nz.slug(mon["key"])
+        source_cid = entry_by_form[(base_cid, mon.get("form_index", 0))]
+        edges = []
+        for evo in mon.get("evolutions") or []:
+            target_base = nz.slug(str(evo["species"]))
+            form = evo.get("form")
+            target_cid = entry_by_form.get(
+                (target_base, form if isinstance(form, int) else 0),
+                entry_by_form.get((target_base, 0)),
+            )
+            if target_cid is None or target_cid not in species:
+                continue
+            edges.append(_RejuvEvolution(target_cid, evo.get("method") or "", evo.get("parameter") or ""))
+        if edges:
+            forward[source_cid] = edges
+
+    def _resolver(cid: str):
+        entry = species.get(cid)
+        return (cid, entry["name"], entry["dex"]) if entry else None
+
+    graph = build_evolution_graph(forward, _resolver, labeler=essentials_method_label)
+    for cid, entry in species.items():
+        edges = graph.get(cid)
+        entry["evolution"] = edges["evolution"] if edges else None
+        entry["evolves_into"] = edges["evolves_into"] if edges else []
+        entry["fully_evolved"] = cid not in forward
 
     chart: list[dict[str, Any]] = []
     overrides: dict[str, dict[str, float]] = {}
