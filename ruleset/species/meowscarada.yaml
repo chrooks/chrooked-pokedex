@@ -22,6 +22,6 @@ learnset:
   - { level: 42, move: Energy Ball }
   - { level: 47, move: Play Rough }
   - { level: 52, move: Knock Off }
-  - { level: 55, move: Pixie Slash }
+  - { level: 55, move: Sucker Punch }
   - { level: 58, move: Grassy Terrain }
   - { level: 64, move: Leaf Storm }

@@ -21,7 +21,7 @@ learnset:
   - { level: 19, move: Headbutt }
   - { level: 27, move: Roar }
   - { level: 35, move: Last Resort }
-  - { level: 39, move: Pixie Slash }
+  - { level: 39, move: Crunch }
   - { level: 43, move: Play Rough }
   - { level: 51, move: Payback }
   - { level: 59, move: Crunch }

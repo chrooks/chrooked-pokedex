@@ -19,7 +19,7 @@ learnset:
   - { level: 35, move: Dark Pulse }
   - { level: 37, move: Heel Drop }
   - { level: 40, move: Nasty Plot }
-  - { level: 44, move: Pixie Slash }
+  - { level: 44, move: Crunch }
   - { level: 48, move: Play Rough }
   - { level: 56, move: Foul Play }
   - { level: 64, move: Hammer Arm }
