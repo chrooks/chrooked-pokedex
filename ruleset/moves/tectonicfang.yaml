@@ -1,6 +1,6 @@
 name: Tectonic Fang
 chrooked_id: tectonicfang
-aka: { pokeemerald: MOVE_TECTONIC_FANG }
+aka: { pokeemerald: MOVE_TECTONIC_FANG, polishedcrystal: BONEMERANG }
 type: Ground
 category: physical
 power: 80

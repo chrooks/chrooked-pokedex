@@ -1,6 +1,6 @@
 name: Lithic Fang
 chrooked_id: lithicfang
-aka: { pokeemerald: MOVE_LITHIC_FANG }
+aka: { pokeemerald: MOVE_LITHIC_FANG, polishedcrystal: KARATE_CHOP }
 type: Rock
 category: physical
 power: 80
