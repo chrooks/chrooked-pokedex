@@ -218,7 +218,7 @@ export function DetailLedger({
               dex={entry.dex}
               name={entry.name}
               backdropTargetId={backdropTargetId}
-              size={88}
+              size={128}
             />
             <div>
               <h2 className="ledger__name" id="ledger-title">
