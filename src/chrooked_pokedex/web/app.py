@@ -18,8 +18,10 @@ import threading
 from pathlib import Path
 from typing import Any, Callable
 
+from functools import lru_cache
+
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from .. import distribute as distmod
@@ -1152,6 +1154,22 @@ def create_app(
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
 
+    def _crop_quadrant(sprite_path: Path) -> bytes:
+        """Top-left quadrant of a 2x2 battler sheet as PNG bytes (lru-cached)."""
+        return _crop_quadrant_cached(str(sprite_path), sprite_path.stat().st_mtime_ns)
+
+    @lru_cache(maxsize=512)
+    def _crop_quadrant_cached(path: str, _mtime: int) -> bytes:
+        from io import BytesIO
+
+        from PIL import Image
+
+        with Image.open(path) as sheet:
+            quadrant = sheet.crop((0, 0, sheet.width // 2, sheet.height // 2))
+            buffer = BytesIO()
+            quadrant.save(buffer, format="PNG")
+            return buffer.getvalue()
+
     @app.get("/api/targets/{target_id}/sprite/{dex}")
     def get_target_sprite(target_id: str, dex: int, id: str | None = None) -> FileResponse:
         """Serve a target game's own front-battle sprite.
@@ -1186,6 +1204,10 @@ def create_app(
             raise HTTPException(status_code=404, detail="Sprite not found.")
         if not sprite_path.is_file():
             raise HTTPException(status_code=404, detail=f"No sprite for dex {dex}.")
+        if target.engine == "rejuv":
+            # Rejuv battlers are 2x2 sheets (front/back x normal/shiny); serve
+            # the front-normal quadrant (top-left) so the dex shows one sprite.
+            return Response(content=_crop_quadrant(sprite_path), media_type="image/png")
         return FileResponse(str(sprite_path), media_type="image/png")
 
     @app.get("/api/behaviors/{chrooked_id}/packet")
