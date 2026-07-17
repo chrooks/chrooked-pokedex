@@ -409,7 +409,7 @@ export type KindKey =
 
 /** The engines a Target fork can be (only pokeemerald applies end-to-end in M3;
     essentials is recorded for later). */
-export type EngineKey = "pokeemerald" | "essentials";
+export type EngineKey = "pokeemerald" | "essentials" | "rejuv";
 
 /** A registered game fork the Ruleset can be previewed against or applied to. */
 export interface Target {

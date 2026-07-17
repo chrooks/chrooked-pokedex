@@ -54,6 +54,7 @@ from ..report import ApplyReport
 from . import dex as dexmod
 from . import snapshot as snapmod
 from . import snapshot_essentials as snapmod_essentials
+from . import snapshot_rejuv as snapmod_rejuv
 
 # The marker the applier writes into a created DATA-ONLY ability's reason.
 _DATA_ONLY_MARKER = "DATA ONLY"
@@ -134,8 +135,14 @@ class TargetRegistry:
         resolved = Path(path).expanduser().resolve()
         if not resolved.exists() or not resolved.is_dir():
             raise TargetError(422, f"Target path does not exist: {resolved}")
-        if engine not in ("pokeemerald", "essentials"):
+        if engine not in ("pokeemerald", "essentials", "rejuv"):
             raise TargetError(422, f"Unknown engine {engine!r}.")
+        if engine == "rejuv" and not (resolved / "Scripts" / "Rejuv" / "Definitions").is_dir():
+            raise TargetError(
+                422,
+                f"Target path does not look like a Rejuvenation game "
+                f"(no Scripts/Rejuv/Definitions): {resolved}",
+            )
         # pokeemerald targets must be git repos (preview-restore is git-based).
         # essentials targets may be plain directories (non-git Essentials games).
         if engine == "pokeemerald" and not (resolved / ".git").exists():
@@ -252,6 +259,11 @@ class TargetState:
                 return cached
             if target.engine == "essentials":
                 snapshot = snapmod_essentials.build_snapshot_essentials(Path(fork_path))
+            elif target.engine == "rejuv":
+                try:
+                    snapshot = snapmod_rejuv.build_snapshot_rejuv(Path(fork_path))
+                except snapmod_rejuv.RejuvSnapshotError as error:
+                    raise TargetError(500, str(error)) from error
             else:
                 snapshot = snapmod.build_snapshot(Path(fork_path))
             self._snapshots[fork_path] = snapshot
@@ -574,6 +586,10 @@ def preview_target(
     A failed restore raises ``RestoreError`` (500-class).  No ``force`` option
     here — D1: force is for real apply only.
     """
+    if target.engine == "rejuv":
+        # ponytail: preview needs a restore strategy for patch/ deltas — real
+        # apply is idempotent and honest for rejuv, so preview waits for demand.
+        raise TargetError(422, "Preview is not supported for Rejuvenation targets yet; use Apply.")
     fork = Path(target.path)
     lock = state.lock_for(target.path)
     with lock:
@@ -966,7 +982,7 @@ def target_dex(
     """
     snapshot = state.snapshot_for(target)
     entries = dexmod.build_dex(snapshot, ruleset)
-    if target.engine == "essentials" and base_snapshot is not None:
+    if target.engine in ("essentials", "rejuv") and base_snapshot is not None:
         english_map = _english_species_map(base_snapshot, ruleset)
         entries = _relabel_names(entries, english_map)
         # #39: nested learnset moves render canonical English by move_id.
@@ -992,7 +1008,7 @@ def target_abilities(
     """
     snapshot = state.snapshot_for(target)
     entries = dexmod.build_abilities(snapshot, ruleset)
-    if target.engine == "essentials" and base_snapshot is not None:
+    if target.engine in ("essentials", "rejuv") and base_snapshot is not None:
         english_map = _english_abilities_map(base_snapshot, ruleset)
         entries = _relabel_names(entries, english_map)
         # #44: overlay the canonical English description by chrooked_id.
@@ -1015,7 +1031,7 @@ def target_moves(
     """
     snapshot = state.snapshot_for(target)
     entries = dexmod.build_moves(snapshot, ruleset)
-    if target.engine == "essentials" and base_snapshot is not None:
+    if target.engine in ("essentials", "rejuv") and base_snapshot is not None:
         english_map = _english_moves_map(base_snapshot, ruleset)
         entries = _relabel_names(entries, english_map, prefer_internal=True)
         # #44: overlay the canonical English description by chrooked_id.

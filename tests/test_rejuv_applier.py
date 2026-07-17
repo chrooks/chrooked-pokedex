@@ -625,3 +625,45 @@ def test_existing_move_default_priority_untouched(tmp_path):
     _, target = _apply(r, tmp_path)
     text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
     assert ":priority" not in text and ":function" not in text.split("MOVEHASH[:TACKLE]")[1]
+
+
+# --- web snapshot (rejuv target) ----------------------------------------------
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_web_snapshot_builds_from_fixture():
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    snap = build_snapshot_rejuv(FIXTURE)
+    assert snap["version"] == "rejuv"
+    bulba = snap["species"]["bulbasaur"]
+    assert bulba["name"] == "Bulbasaur"
+    assert bulba["types"] == ["Grass", "Poison"]
+    assert bulba["stats"] == {"hp": 45, "atk": 49, "def": 49, "spa": 65, "spd": 65, "spe": 45}
+    assert bulba["abilities"]["primary"] == "OVERGROW"
+    assert {"level": 3, "move": "Vine Whip", "move_id": "vinewhip"} in bulba["learnset"]
+    assert snap["moves"]["tackle"]["name"] == "Tackle"
+    assert snap["abilities"]["overgrow"]["chrooked_id"] == "overgrow"
+    cells = {(c["attacker"], c["defender"]): c["multiplier"] for c in snap["type_chart"]}
+    assert cells[("Grass", "Water")] == 2.0
+    assert cells[("Fire", "Water")] == 0.5
+    assert cells[("Ghost", "Normal")] == 0.0
+    assert cells[("Fire", "Fire")] == 1.0
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_web_snapshot_prefers_patch_delta(tmp_path):
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    r = Ruleset(species={"bulbasaur": _species(cid="bulbasaur", stats={"atk": 99})})
+    _, target = _apply(r, tmp_path)
+    snap = build_snapshot_rejuv(target)
+    assert snap["species"]["bulbasaur"]["stats"]["atk"] == 99  # patched value wins
+
+
+def test_registry_accepts_rejuv_engine(tmp_path):
+    from chrooked_pokedex.web.targets import TargetRegistry, TargetError
+    registry = TargetRegistry(tmp_path / "targets.json")
+    game = tmp_path / "game"
+    shutil.copytree(FIXTURE, game)
+    target = registry.add("Rejuv", str(game), "rejuv")
+    assert target.engine == "rejuv"
+    with pytest.raises(TargetError):
+        registry.add("NotRejuv", str(tmp_path), "rejuv")  # no Scripts/Rejuv/Definitions

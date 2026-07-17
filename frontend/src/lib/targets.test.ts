@@ -9,12 +9,13 @@ import {
 
 describe("engine options (ac9)", () => {
   it("offers pokeemerald first, essentials second", () => {
-    expect(ENGINES).toEqual(["pokeemerald", "essentials"]);
+    expect(ENGINES).toEqual(["pokeemerald", "essentials", "rejuv"]);
   });
 
   it("labels both engines plainly (version shows in the readout, not the label)", () => {
     expect(engineLabel("pokeemerald")).toBe("pokeemerald");
     expect(engineLabel("essentials")).toBe("Essentials");
+    expect(engineLabel("rejuv")).toBe("Rejuvenation");
   });
 });
 
