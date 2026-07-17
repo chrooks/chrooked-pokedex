@@ -138,6 +138,7 @@ check(fails, "stampede armed noncontact", PokeBattle_Move.new(:SWIFT).priorityCh
 
 # speed: blitz first turn
 bl = PokeBattle_Battler.new(:BLITZ, battle)
+bl.turncount = 1  # first attack phase: increment precedes setSpeedOrder
 check(fails, "blitz first turn", bl.pbSpeed, 150)
 bl.turncount = 2
 check(fails, "blitz later turn", bl.pbSpeed, 100)
