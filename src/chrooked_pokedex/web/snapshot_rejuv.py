@@ -242,8 +242,14 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
         for evo in mon.get("evolutions") or []:
             target_base = nz.slug(str(evo["species"]))
             form = evo.get("form")
+            # Engine rule (Evolution.rb getEvolutionForm): an edge without a
+            # form: index keeps the evolving mon's own form — Icy Aevian
+            # Sandygast becomes Icy Aevian Palossand. Fall back to the target's
+            # base form when that form index does not exist on the target.
+            if not isinstance(form, int):
+                form = mon.get("form_index", 0)
             target_cid = entry_by_form.get(
-                (target_base, form if isinstance(form, int) else 0),
+                (target_base, form),
                 entry_by_form.get((target_base, 0)),
             )
             if target_cid is None or target_cid not in species:

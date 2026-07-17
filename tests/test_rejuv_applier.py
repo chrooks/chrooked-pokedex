@@ -709,3 +709,26 @@ def test_rejuv_web_snapshot_evolution_edges(tmp_path):
     absol = snap["species"]["absol"]
     assert absol["evolution"]["from"] == "bulbasaur"
     assert snap["species"]["charizard"]["fully_evolved"] is True
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_evolution_keeps_source_form(tmp_path):
+    # Engine rule: an edge without form: keeps the evolving mon's form index —
+    # Mega Absol (form 1) evolving into Charizard lands on Mega X (form 1).
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    game = tmp_path / "game"
+    shutil.copytree(FIXTURE, game)
+    mon = game / "Scripts" / "Rejuv" / "Definitions" / "montext.rb"
+    text = mon.read_text().replace(
+        '''  :ABSOL => {
+    "Normal Form" => {''',
+        '''  :ABSOL => {
+    "Normal Form" => {
+      :evolutions => [ { species: :CHARIZARD, method: :Level, parameter: 30 } ],''')
+    mon.write_text(text)
+    snap = build_snapshot_rejuv(game)
+    # Base Absol (form 0) -> base Charizard (form 0)
+    assert snap["species"]["absol"]["evolves_into"][0]["to"] == "charizard"
+    # Mega Absol (form 1) inherits the edge at compile; keeps form 1 -> Mega X
+    mega_edges = snap["species"]["absol--megaform"]["evolves_into"]
+    assert mega_edges and mega_edges[0]["to"] == "charizard--megaxform"
