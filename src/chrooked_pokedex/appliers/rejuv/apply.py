@@ -270,9 +270,10 @@ _FLINCH_COMBOS = {
     frozenset({"freeze", "flinch"}): 0x00E,
     frozenset({"paralysis", "flinch"}): 0x009,
 }
-# Primary `effect:` values that map onto a vanilla function code for
-# EXISTING moves (Fake Out is 0x012: first-turn-only + flinch + priority).
-_PRIMARY_EFFECT_CODES = {"first_turn_only": 0x012}
+# Primary `effect:` values that map onto a vanilla function code for EXISTING
+# moves, with the :effect chance the code expects (Fake Out is 0x012:
+# first-turn-only + guaranteed flinch, chance lives in :effect).
+_PRIMARY_EFFECT_CODES = {"first_turn_only": (0x012, 100)}
 
 # Vanilla function codes for one single secondary effect at :effect chance
 # (Ember, Poison Sting, Thunder Shock, Ice Beam, Aurora Beam, Crush Claw,
@@ -313,9 +314,9 @@ def _build_movetext(
             if move.priority:
                 lines.append(f"MOVEHASH[:{sym}][:priority] = {move.priority}")
             if move.effect in _PRIMARY_EFFECT_CODES:
-                lines.append(
-                    f"MOVEHASH[:{sym}][:function] = 0x{_PRIMARY_EFFECT_CODES[move.effect]:03X}"
-                )
+                code, chance = _PRIMARY_EFFECT_CODES[move.effect]
+                lines.append(f"MOVEHASH[:{sym}][:function] = 0x{code:03X}")
+                lines.append(f"MOVEHASH[:{sym}][:effect] = {chance}")
             blocks.extend(lines)
             report.add(ReportEntry(status="applied", category="move",
                                    chrooked_id=move.chrooked_id, symbol=sym))

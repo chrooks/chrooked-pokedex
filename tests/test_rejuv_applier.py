@@ -614,6 +614,7 @@ def test_existing_move_patches_priority_and_effect_function(tmp_path):
     text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
     assert "MOVEHASH[:TACKLE][:priority] = 3" in text
     assert "MOVEHASH[:TACKLE][:function] = 0x012" in text
+    assert "MOVEHASH[:TACKLE][:effect] = 100" in text  # Fake Out flinch chance
 
 
 def test_existing_move_default_priority_untouched(tmp_path):
