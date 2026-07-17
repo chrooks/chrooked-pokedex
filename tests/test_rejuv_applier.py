@@ -667,3 +667,15 @@ def test_registry_accepts_rejuv_engine(tmp_path):
     assert target.engine == "rejuv"
     with pytest.raises(TargetError):
         registry.add("NotRejuv", str(tmp_path), "rejuv")  # no Scripts/Rejuv/Definitions
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_web_snapshot_includes_all_forms():
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    snap = build_snapshot_rejuv(FIXTURE)
+    mega = snap["species"]["absol--megaform"]
+    assert mega["name"] == "Absol (Mega Form)"
+    assert snap["species"]["absol"]["name"] == "Absol"  # base keeps plain slug
+    # Charizard fixture Mega X inherits BaseStats from the base form
+    megax = snap["species"]["charizard--megaxform"]
+    assert megax["stats"]["hp"] == snap["species"]["charizard"]["stats"]["hp"]

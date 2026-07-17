@@ -61,14 +61,20 @@ def puts(*args); end  # silence delta skip-guards; real output goes to STDOUT.wr
 out = { "mons" => [], "moves" => {}, "abils" => {}, "types" => {} }
 if defined?(MONHASH)
   MONHASH.each do |key, forms|
-    form = forms.is_a?(Hash) ? forms.values.first : nil
-    next unless form.is_a?(Hash)
-    out["mons"] << {
-      "key" => key, "name" => form[:name], "dexnum" => form[:dexnum],
-      "type1" => form[:Type1], "type2" => form[:Type2],
-      "abilities" => form[:Abilities] || [], "hidden" => form[:HiddenAbility],
-      "stats" => form[:BaseStats] || [], "moveset" => form[:Moveset] || [],
-    }
+    next unless forms.is_a?(Hash)
+    base = forms.values.first
+    forms.each_with_index do |(form_name, form), i|
+      next unless form.is_a?(Hash)
+      # non-base forms inherit unset fields from the base form at compile time
+      merged = i.zero? ? form : (base || {}).merge(form)
+      out["mons"] << {
+        "key" => key, "form" => form_name, "base_form" => i.zero?,
+        "name" => merged[:name], "dexnum" => merged[:dexnum],
+        "type1" => merged[:Type1], "type2" => merged[:Type2],
+        "abilities" => merged[:Abilities] || [], "hidden" => merged[:HiddenAbility],
+        "stats" => merged[:BaseStats] || [], "moveset" => merged[:Moveset] || [],
+      }
+    end
   end
 end
 if defined?(MOVEHASH)
@@ -160,7 +166,14 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
 
     species: dict[str, dict[str, Any]] = {}
     for index, mon in enumerate(raw["mons"], start=1):
+        # Base form keeps the plain slug (joins the Ruleset overlay); every other
+        # form is its own entry — Rejuv-original content (Aevian forms, megas)
+        # renders even though the Ruleset never names it. Values come from the
+        # patched eval, so overridden forms are already post-patch truth.
         cid = nz.slug(mon["key"])
+        form_label = mon.get("form") or ""
+        if not mon.get("base_form", True):
+            cid = f"{cid}--{nz.slug(form_label)}"
         types = [t for t in (_neutral_type(mon.get("type1")), _neutral_type(mon.get("type2"))) if t]
         listed = mon.get("abilities") or []
         stats_raw = mon.get("stats") or []
@@ -174,7 +187,10 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
         species[cid] = {
             "dex": mon.get("dexnum") or index,
             "chrooked_id": cid,
-            "name": mon.get("name") or str(mon["key"]).capitalize(),
+            "name": (
+                f"{mon.get('name') or str(mon['key']).capitalize()}"
+                + (f" ({form_label})" if not mon.get("base_form", True) else "")
+            ),
             "types": types,
             "abilities": {
                 "primary": listed[0] if listed else None,
