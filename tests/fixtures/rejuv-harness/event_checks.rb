@@ -11,6 +11,7 @@ class Typemod
   attr_reader :numerator, :denominator
   def initialize(n = 1, d = 1); @numerator = n; @denominator = d; end
   def self.normal; new(1, 1); end
+  def self.zero; new(0, 1); end
   def *(o)
     n = numerator * o.numerator; d = denominator * o.denominator
     d = 1 if n == 0
@@ -48,6 +49,7 @@ class PokeBattle_Battler
   def makesContact?(move); move.flags&.include?(:contact); end
   def pbCanIncreaseStatStage?(stat, inducer, mv); true; end
   def pbCanReduceAnyStat?(stats, inducer, mv, **kw); true; end
+  def shouldBeMoldBroken?(attacker, move); false; end
   def pbChangeStats(stat, amount, inducer, mv, **kw); @log << [:stats, stat, amount]; true; end
   def pbRecoverHP(amount, anim = false, *a, **kw); @log << [:heal, amount]; end
   def pbCanPoison?(a, m, **kw); true; end
@@ -301,6 +303,16 @@ check(fails, "amplifier sound dmg", PokeBattle_Move.new(:HYPERVOICE, flags: [:so
 inf = PokeBattle_Battler.new(:INNERFOCUS, battle)
 check(fails, "innerfocus focus blast", PokeBattle_Move.new(:FOCUSBLAST).pbAccuracyCheck(inf, nondragon), true)
 check(fails, "innerfocus other move", PokeBattle_Move.new(:TACKLE).pbAccuracyCheck(inf, nondragon), false)
+
+# AI visibility: block immunities zero the typemod; absorb-heals do not
+ft = PokeBattle_Battler.new(:FLYTRAP, battle)
+tm_ft = PokeBattle_Move.new(:XSCISSOR, type: :BUG).pbTypeModifier(:BUG, hitter, ft)
+check(fails, "flytrap typemod zero", tm_ft.immune?, true)
+tm_ft2 = PokeBattle_Move.new(:TACKLE).pbTypeModifier(:NORMAL, hitter, ft)
+check(fails, "flytrap other types normal", tm_ft2.immune?, false)
+sb2 = PokeBattle_Battler.new(:STONEBARK, battle)
+tm_sb = PokeBattle_Move.new(:VINEWHIP, type: :GRASS).pbTypeModifier(:GRASS, hitter, sb2)
+check(fails, "stonebark heal keeps typemod", tm_sb.immune?, false)
 
 fails.each { |f| puts "FAIL #{f}" }
 raise "#{fails.size} failures" unless fails.empty?

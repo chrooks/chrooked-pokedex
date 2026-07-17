@@ -207,6 +207,15 @@ module ChrookedMoveHooks
     typemod = super
     mod = CHROOKED_MOVE_TYPEMOD[@move]
     typemod = mod.call(self, atype, attacker, opponent, typemod) if mod
+    # Pure block immunities also zero the typemod so the AI's damage preview
+    # and immunity checks see them (the hitflag alone is invisible to the AI).
+    # Absorb-heal immunities stay hitflag-only — a zero typemod would skip the
+    # heal. ponytail: AI stays blind to absorb-heals, same as it is to ours.
+    opp_ability = opponent.shouldBeMoldBroken?(attacker, self) ? nil : opponent.ability
+    immunity = opp_ability && CHROOKED_TYPE_IMMUNITY[opp_ability]
+    if immunity && immunity[:flag] == :Soundproof && atype == immunity[:type]
+      typemod = Typemod.zero
+    end
     floor = CHROOKED_TYPEMOD_FLOOR[attacker.ability]
     if floor && typemod.immune? && floor.call(self, attacker)
       typemod = Typemod.normal
