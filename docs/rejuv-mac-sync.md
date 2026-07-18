@@ -135,6 +135,42 @@ Battle Debug Logs
 Turn on **Staggered File Versioning** for the folder. That is the backup, and
 the answer to "what if a bad sync overwrites a good save."
 
+### PC side — already done
+
+Set up 2026-07-18, nothing left to do here:
+
+- Syncthing 2.1.2 installed via winget (`Syncthing.Syncthing`). Runs as **you**,
+  not as a Windows service — a service account would create files in the save
+  folder as not-you.
+- Autostart: shortcut in the Startup folder (`shell:startup`), launched with
+  `--no-browser`, window hidden. Native Windows, no tray app needed.
+- Folder `rejuv-saves` -> `C:\Users\cdbro\Saved Games\Rejuv`, sendreceive,
+  filesystem watcher on.
+- Staggered file versioning, 30-day history. This is the backup.
+- `.stignore` in the save folder excludes `Battle Logs` / `Battle Debug Logs`
+  (dropped the synced set from 17 MB to 14.1 MB across 38 files).
+- Web UI: <http://127.0.0.1:8384> (from Windows — WSL can't reach it, Syncthing
+  binds loopback only).
+
+**PC device ID:**
+
+```
+QQ4IBTA-PNDSIIA-AVLEALC-KYWZIQY-ZACD46B-AKUDPOD-FEJG4J4-OTBAUQK
+```
+
+### Mac side — still to do
+
+1. `brew install --cask syncthing` (or the official app), let it start.
+2. Add the PC as a remote device using the ID above; accept the pairing prompt
+   back on the PC's web UI.
+3. Accept the shared `rejuv-saves` folder, point it at the Mac save folder
+   (probably `~/Library/Application Support/Rejuv` — launch the game once and
+   save first, so the folder exists and you know the real path).
+4. Turn on Staggered File Versioning there too. The setting is per-device.
+5. `.stignore` syncs across on its own; no need to recreate it.
+
+Before trusting it: copy `Saved Games\Rejuv` somewhere once. 14 MB.
+
 ### The three hazards, and what handles each
 
 | Hazard | Guardrail |
