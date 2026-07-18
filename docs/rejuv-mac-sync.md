@@ -117,7 +117,7 @@ and carries a `# chrooked:<id>` tag:
 Saves live **outside** the game folder, so nothing above touches them:
 
 - PC:  `C:\Users\cdbro\Saved Games\Rejuv`
-- Mac: `~/Library/Application Support/Rejuv` (verify — launch once and save)
+- Mac: `~/Library/Application Support/Pokemon Rejuvenation`
 
 Syncing them is optional and a separate problem: saves are mutable binary state,
 not build output, so git is the wrong tool. Use **Syncthing** (direct LAN, keeps
