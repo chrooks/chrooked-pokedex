@@ -117,7 +117,33 @@ and carries a `# chrooked:<id>` tag:
 Saves live **outside** the game folder, so nothing above touches them:
 
 - PC:  `C:\Users\cdbro\Saved Games\Rejuv`
-- Mac: `~/Library/Application Support/Rejuv` (verify — launch once and save)
+- Mac: `~/Library/Application Support/<something>` — find it with
+  `ls ~/Library/Application\ Support/ | grep -i rejuv`
+
+Where those come from, per `Scripts/RTP.rb` (`RTP.getSaveFolder`):
+
+- Windows -> `%USERPROFILE%/Saved Games/` + `SAVEFOLDER`, and
+  `Scripts/Rejuv/SystemConstants.rb` sets `SAVEFOLDER = "Rejuv"`.
+- Everything else -> mkxp-z's `System.data_directory`, which does **not** append
+  `SAVEFOLDER`. It's derived from the game title instead, so on macOS expect
+  `~/Library/Application Support/Pokemon Rejuvenation` — but check, don't assume.
+
+### Why not Portable Mode
+
+The game has one (Options -> Portable Mode), which writes a `Save Data/.portable`
+marker and moves saves to `<game dir>/Save Data/`. Tempting, since it makes the
+save path identical on both machines. Don't use it here:
+
+- On Mac the game dir is inside the app bundle, so saves would live in
+  `/Applications/Rejuvenation.app/Contents/Game/Save Data/`. Reinstalling or
+  updating the app wipes them — and with Syncthing watching, that mass delete
+  **propagates to the PC**. Versioning could recover it, but it's a self-inflicted
+  wound.
+- Syncthing writing inside `/Applications` invites permission and Gatekeeper
+  friction.
+
+Non-portable keeps saves outside the game, so apply/reinstall/delete of the game
+never touches them. That separation is what makes this safe.
 
 Syncing them is optional and a separate problem: saves are mutable binary state,
 not build output, so git is the wrong tool. Use **Syncthing** (direct LAN, keeps
@@ -163,9 +189,9 @@ QQ4IBTA-PNDSIIA-AVLEALC-KYWZIQY-ZACD46B-AKUDPOD-FEJG4J4-OTBAUQK
 1. `brew install --cask syncthing` (or the official app), let it start.
 2. Add the PC as a remote device using the ID above; accept the pairing prompt
    back on the PC's web UI.
-3. Accept the shared `rejuv-saves` folder, point it at the Mac save folder
-   (probably `~/Library/Application Support/Rejuv` — launch the game once and
-   save first, so the folder exists and you know the real path).
+3. Accept the shared `rejuv-saves` folder, point it at the Mac save folder.
+   Launch the game once and save first so it exists, then locate it:
+   `ls ~/Library/Application\ Support/ | grep -i rejuv`
 4. Turn on Staggered File Versioning there too. The setting is per-device.
 5. `.stignore` syncs across on its own; no need to recreate it.
 
