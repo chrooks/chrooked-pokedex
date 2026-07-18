@@ -59,5 +59,16 @@ Data flows one direction by default: **Ruleset YAML → model → Applier → ta
 - Frozen dataclasses, immutable updates (return new copies; never mutate). Python ≥3.11, type-annotated, PEP 8.
 - Tests: `pytest` markers `unit` (hermetic) and `integration` (needs a real on-disk checkout, auto-skipped when absent). Fixtures live under `tests/fixtures/`.
 - Conventional commits, scoped to one logical change; many small files over few large ones (<800 lines).
+
+### Evolution-line default (Ruleset design)
+
+When reworking a species that is part of an evolution line, default to this shape:
+
+1. **Design the final evo first** — typing, stats, abilities, learnset. That's where the line's identity is decided; get it approved before deriving anything.
+2. **Copy the kit down to every pre-evo**: same typing, same abilities, **same learnset (exact copy)**.
+3. **Only stats scale down.** Apply the *same BST delta* the final evo received to each pre-evo's canon BST, then redistribute within that total preserving the final evo's role emphasis (keep the dump stat low). Example: Sawsbuck 475 → 520 (**+45**), so Deerling 335 → **380**.
+4. **Multi-form lines**: do all of the above per form, so each form keeps its own typing and stat-role identity across both stages.
+
+Divergent typing, abilities, or stat shape between stages is an **exception** — allowed, but state it explicitly rather than doing it silently.
 </content>
 </invoke>
