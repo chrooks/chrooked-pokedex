@@ -46,12 +46,46 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   const [op, setOp] = useState<NumericOperator>("≥");
   const [value, setValue] = useState("");
   const [connector, setConnector] = useState<"AND" | "OR">("AND");
+  // Id of the pill the text box is currently driving live, so each keystroke
+  // rewrites that one pill instead of appending a new one. Released on Enter /
+  // Add (the pill becomes durable and the box starts a fresh one).
+  const [liveId, setLiveId] = useState<string | null>(null);
 
   const def = defs.find((d) => d.field === field);
   const filterCount = filter.filter((e) => e.kind === "filter").length;
   const atCap = filterCount >= MAX_FILTERS;
 
+  /** Text fields filter as you type: upsert (or drop, when blank) the live pill. */
+  function typeText(next: string) {
+    setValue(next);
+    const trimmed = next.trim();
+    if (trimmed === "") {
+      if (liveId) onChange(filter.filter((e) => e.id !== liveId));
+      setLiveId(null);
+      return;
+    }
+    if (liveId && filter.some((e) => e.id === liveId)) {
+      onChange(filter.map((e) => (e.id === liveId ? { ...e, value: trimmed } : e)));
+      return;
+    }
+    if (atCap) return;
+    const id = uid();
+    setLiveId(id);
+    onChange([
+      ...filter,
+      {
+        kind: "filter",
+        id,
+        field,
+        value: trimmed,
+        connector: filter.length ? connector : "AND",
+        negated: false,
+      },
+    ]);
+  }
+
   function pickField(nextField: string) {
+    setLiveId(null);
     setField(nextField);
     const nextDef = defs.find((d) => d.field === nextField);
     // Seed select fields with their first option so "Add" is one click.
@@ -59,7 +93,15 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   }
 
   function addFilter() {
-    if (!def || atCap) return;
+    if (!def) return;
+    // A text pill already exists live — Add/Enter just commits it and frees the
+    // box for the next one, so we never double-add the same term.
+    if (def.method === "text" && liveId) {
+      setLiveId(null);
+      setValue("");
+      return;
+    }
+    if (atCap) return;
     let stored: string;
     if (def.method === "numeric") {
       const num = value.trim();
@@ -177,7 +219,7 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
             placeholder="contains…"
             aria-label="Value"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => typeText(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && addFilter()}
           />
         )}

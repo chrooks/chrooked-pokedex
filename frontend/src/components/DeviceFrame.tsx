@@ -24,6 +24,9 @@ type Props = {
   searchable: boolean;
   editedOnly: boolean;
   onEditedOnly: (on: boolean) => void;
+  /** Expand every dex match to its whole evolution line. */
+  evoLine: boolean;
+  onEvoLine: (on: boolean) => void;
   /** Promote the current search term to a Name filter pill (Enter in search). */
   onSearchEnter: () => void;
   layout: DexLayout;
@@ -53,6 +56,8 @@ export function DeviceFrame({
   searchable,
   editedOnly,
   onEditedOnly,
+  evoLine,
+  onEvoLine,
   onSearchEnter,
   layout,
   onLayout,
@@ -169,6 +174,21 @@ export function DeviceFrame({
             Edited only
             <kbd className="device__kbd mono">E</kbd>
           </button>
+
+          {isDex && (
+            <button
+              type="button"
+              className="device__filter"
+              id="rail-evo-line"
+              data-on={evoLine}
+              aria-pressed={evoLine}
+              title="Any match also shows its pre-evolutions and evolutions"
+              onClick={() => onEvoLine(!evoLine)}
+            >
+              <span className="device__filter-lamp" aria-hidden="true" />
+              Whole evo line
+            </button>
+          )}
 
           {isDex && (
             <div

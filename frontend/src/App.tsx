@@ -7,6 +7,7 @@ import { isEdited } from "./lib/format";
 import { onDataChange } from "./lib/dataChange";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
+import { expandEvoLines } from "./lib/evoLine";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
 import type { CanonicalMethod, DexEntry, KindKey, Move, Target } from "./types";
 import { applyInlineEdit, type InlineEdit } from "./lib/inlineEdit";
@@ -118,8 +119,13 @@ export default function App() {
     if (view.filter.length) {
       list = list.filter((entry) => evalEntries(entry, view.filter));
     }
+    // Evo-line expansion runs last so it widens the final match set, not an
+    // intermediate one — a line-mate is kept even if it fails the filters.
+    if (view.evoLine && list !== all) {
+      list = expandEvoLines(list, all);
+    }
     return list;
-  }, [all, view.editedOnly, view.query, view.filter]);
+  }, [all, view.editedOnly, view.query, view.filter, view.evoLine]);
 
   // The table additionally sorts by the multi-key sort spec; the grid stays in
   // dex order. Only the visible view's list is consumed, so this is cheap.
@@ -266,6 +272,8 @@ export default function App() {
       searchable={isSearchable}
       editedOnly={view.editedOnly}
       onEditedOnly={(editedOnly) => update({ editedOnly })}
+      evoLine={view.evoLine}
+      onEvoLine={(evoLine) => update({ evoLine })}
       onSearchEnter={handleSearchEnter}
       layout={view.layout}
       onLayout={(layout) => update({ layout })}
