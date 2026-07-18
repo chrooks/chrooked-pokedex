@@ -1,0 +1,39 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Describes HOW Season's End works, engine-neutrally, so an implementer (Claude) can
+# compile it into any target engine. The move data itself lives in ruleset/moves/seasonsend.yaml.
+name: Season's End
+chrooked_id: seasonsend
+applies_to: move
+aka: {  }
+effects:
+  - summary: "Using Season's End rotates Sawsbuck/Deerling to its next seasonal form, in order."
+    trigger: on-hit
+    when: "the user is a Sawsbuck or Deerling and the move being used is Season's End"
+    effect: >
+      Change the user's form to the next season in the fixed cycle
+      Spring -> Summer -> Autumn -> Winter -> Spring (wraps). The new form's typing, stats,
+      and ability slots take effect immediately for the rest of the battle. Display "The season shifts!".
+      The move deals no damage and never misses (it is a status move that always resolves on the user).
+test_cases:
+  - given: "a Sawsbuck in its Spring form uses Season's End"
+    expect: "it becomes Summer form; its typing changes Normal/Fairy -> Normal/Grass and its stats/ability slots update immediately"
+  - given: "a Sawsbuck in its Winter form uses Season's End"
+    expect: "it wraps back to Spring form (Normal/Fairy)"
+  - given: "a Pokemon that is not Sawsbuck or Deerling somehow has Season's End"
+    expect: "the move fails with no form change (guard on species)"
+notes:
+  - "Form change persists after battle: form is a stored attribute on the Pokemon, not a battle-only volatile. A form set in the field before battle also persists into battle."
+  - "Season order is Spring(0) -> Summer(1) -> Autumn(2) -> Winter(3), matching the four separate species entries sawsbuck{spring,summer,autumn,winter}. In Essentials this is (form + 1) % 4; in pokeemerald-expansion it is a jump across the four SPECIES_SAWSBUCK_* form ids."
+  - "Out-of-battle change (preferred): a party-screen / field menu option on the Pokemon that opens a season picker (Spring/Summer/Autumn/Winter) and sets the form directly, like an in-menu form toggle. Fallback if a menu hook is unavailable: a form-change item (Tectonic's Universal Formalizer pattern) that opens the same picker when used on the Pokemon."
+engine_hints:
+  essentials: >
+    Move FunctionCode class (see Tectonic's ChangeUserDeerlingSawsbuckForm for a near-direct port):
+    in pbEffectGeneral(user), guard user.countsAs?(:SAWSBUCK) || user.countsAs?(:DEERLING),
+    then user.pbChangeForm((user.form + 1) % 4, _INTL("The season shifts!")). For the out-of-battle
+    picker, add a party-screen command (or an ItemHandlers::UseOnPokemon handler as fallback) that
+    lists the four form_names and sets pkmn.form to the chosen index.
+  pokeemerald: >
+    Add a custom move effect (EFFECT_CHANGE_FORM_NEXT_SEASON) that maps the current
+    SPECIES_SAWSBUCK_* form to the next in Spring->Summer->Autumn->Winter->Spring order and calls
+    the species/form set with the usual form-change animation. Fallback out-of-battle path is a
+    form-change item; the preferred path is a party-menu field option if the menu is extensible.

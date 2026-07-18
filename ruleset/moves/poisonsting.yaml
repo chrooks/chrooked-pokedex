@@ -1,0 +1,10 @@
+name: Poison Sting
+chrooked_id: poisonsting
+aka: {  }
+type: Poison
+category: physical
+power: 15
+accuracy: 100
+pp: 35
+description: A toxic attack with barbs, etc., that may poison.
+flags: [piercing]

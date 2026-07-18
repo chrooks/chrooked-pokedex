@@ -1,0 +1,12 @@
+name: Glitter Tap
+chrooked_id: glittertap
+aka: {  }
+type: Fairy
+category: physical
+power: 50
+accuracy: 100
+pp: 30
+description: The user strikes with a dazzling, glittering touch that may leave the target infatuated.
+additional_effects:
+  - { effect: infatuation, chance: 10 }
+flags: [contact]

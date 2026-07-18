@@ -1,0 +1,12 @@
+name: Mind Flick
+chrooked_id: mindflick
+aka: {  }
+type: Psychic
+category: physical
+power: 50
+accuracy: 100
+pp: 30
+description: The user flicks the target's forehead with a pulse of psychic force, scrambling its thoughts.
+additional_effects:
+  - { effect: confusion, chance: 20 }
+flags: [contact]

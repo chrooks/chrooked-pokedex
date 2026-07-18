@@ -51,6 +51,8 @@ CHROOKED_HEAL_OVERRIDE = {}
 CHROOKED_TARGET_MODS = {}
 # attacker ability => ->(move, attacker) { true } — skip the accuracy roll entirely
 CHROOKED_SURE_HIT = {}
+# attacker ability => ->(move, attacker, opponent) { float } — multiply final accuracy
+CHROOKED_ACCURACY_MODS = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
@@ -121,7 +123,14 @@ module Chrooked
     mult = 1.0
     atk_mod = CHROOKED_DAMAGE_MODS[attacker.ability]
     mult *= atk_mod.call(move, attacker, opponent) if atk_mod
-    def_mod = opponent && CHROOKED_DEFENSE_MODS[opponent.ability]
+    # Mold Breaker (and Teravolt/Turboblaze/Mycelium Might) ignore the TARGET's ability,
+    # so defender-side mods must not apply. shouldBeMoldBroken? also honours Ability Shield
+    # and sanity-checks the objects, so prefer it over the bare .moldbroken flag.
+    # Attacker-side mods above are deliberately NOT suppressed — Mold Breaker never
+    # disables the user's own ability.
+    mold_broken = opponent.respond_to?(:shouldBeMoldBroken?) &&
+                  opponent.shouldBeMoldBroken?(attacker, move)
+    def_mod = opponent && !mold_broken && CHROOKED_DEFENSE_MODS[opponent.ability]
     mult *= def_mod.call(move, attacker, opponent) if def_mod
     mult
   end
@@ -228,6 +237,17 @@ module ChrookedMoveHooks
     return true if sure && sure.call(self, attacker)
     super
   end
+
+  def pbCalcAccuracy(attacker, opponent)
+    acc = super
+    # -1 = perfect accuracy, 0 = auto-miss/Wonder Skin — leave both untouched.
+    return acc if acc <= 0
+    mod = CHROOKED_ACCURACY_MODS[attacker.ability]
+    # ponytail: multiply the final accuracy instead of appending to the engine's
+    # accmult array — one rounding step off from a native modifier, immaterial here.
+    acc = (acc * mod.call(self, attacker, opponent)).round if mod
+    acc
+  end
 end
 PokeBattle_Move.prepend(ChrookedMoveHooks)
 
@@ -247,7 +267,11 @@ module ChrookedBattlerHooks
     atk_mod&.call(move, user, target, @battle) if !user.isFainted?
     move_mod = CHROOKED_MOVE_ON_DEAL[move.move]
     move_mod&.call(move, user, target, @battle) if !user.isFainted?
-    def_mod = CHROOKED_WHEN_HIT[target.ability]
+    # Same Mold Breaker rule as damage_mult: the target's ability is ignored, so its
+    # when-hit reaction must not fire. Attacker-side mods above are unaffected.
+    target_mold_broken = target.respond_to?(:shouldBeMoldBroken?) &&
+                         target.shouldBeMoldBroken?(user, move)
+    def_mod = target_mold_broken ? nil : CHROOKED_WHEN_HIT[target.ability]
     def_mod&.call(move, user, target, @battle) if !target.isFainted?
     ret
   end

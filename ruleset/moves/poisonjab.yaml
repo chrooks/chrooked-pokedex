@@ -1,0 +1,10 @@
+name: Poison Jab
+chrooked_id: poisonjab
+aka: {  }
+type: Poison
+category: physical
+power: 80
+accuracy: 100
+pp: 20
+description: A stabbing attack that may poison the foe.
+flags: [piercing, punching]

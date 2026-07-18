@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Liquified
+chrooked_id: liquified
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Halve damage from contact moves
+    trigger: damage-calc
+    when: The incoming move makes contact (as defined by the contact flag)
+    effect: Multiply the final damage dealt to the bearer by 0.5. This applies after all other damage modifiers (type chart, stat stages, held items, etc.).
+  - summary: Water-type moves are super effective against the bearer
+    trigger: damage-calc
+    when: The incoming move is Water-type
+    effect: "Apply an additional ×2 multiplier to the damage dealt to the bearer, stacking multiplicatively with the standard type-effectiveness chart. This represents the liquid body dissolving or destabilising when struck by Water. (Example: a Water move that would normally be neutral deals ×2; one that would normally be ×2 deals ×4.)"
+test_cases:
+  - given: A Muk with Liquified is hit by Close Combat (contact, Fighting-type, normally neutral)
+    expect: Muk takes 0.5× the normal damage (contact halving applies; no Water interaction)
+  - given: A Swalot with Liquified is hit by Scald (non-contact, Water-type, normally neutral)
+    expect: Swalot takes 2× the normal damage (Water super-effective modifier applies; no contact, so no halving)
+  - given: A Reuniclus with Liquified is hit by Liquidation (contact AND Water-type, normally neutral)
+    expect: Reuniclus takes 1× the normal damage — the ×0.5 contact halving and the ×2 Water modifier cancel out exactly
+notes:
+  - The contact-move damage halving applies only to moves that physically make contact; non-contact physical moves (e.g., Rock Slide, Earthquake) are NOT halved.
+  - The Water super-effectiveness multiplier is independent of the bearer's actual typing. A Poison-type bearer normally immune or resistant to Water still takes the ×2 modifier from this ability.
+  - "If a move is both a contact move AND Water-type (e.g., Liquidation, Waterfall), BOTH effects apply: first halve for contact (×0.5), then double for Water (×2), yielding a net ×1.0 damage — the two effects cancel out exactly."
+  - Ability-suppressing mechanics (Mold Breaker, Neutralizing Gas, etc.) remove both effects simultaneously.
+  - This ability does NOT change the bearer's actual type chart for immunity purposes (e.g., a Water-immune bearer via Water Absorb would still trigger Water Absorb before this ability's modifier).
+  - STUB — engine_hints ungrounded, needs human grounding pass

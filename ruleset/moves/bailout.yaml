@@ -1,0 +1,11 @@
+name: Bail Out
+chrooked_id: bailout
+aka: {  }
+type: Normal
+category: physical
+power: 60
+accuracy: 100
+pp: 24
+description: The user panics and flees the fight after striking, hastily swapping places with another party member.
+effect: u-turn
+flags: [contact]
