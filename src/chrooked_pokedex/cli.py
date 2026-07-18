@@ -473,12 +473,12 @@ def _run_apply(
     data_only = [e for e in report.entries if "DATA ONLY" in (e.reason or "")]
     if data_only:
         print(
-            f"  ⚠ {len(data_only)} created ability/ies are DATA ONLY — their mechanics "
+            f"  ⚠ {len(data_only)} created entry/ies are DATA ONLY — their mechanics "
             "must be implemented in the target engine:"
         )
         for entry in data_only:
-            print(f"      {entry.chrooked_id} ({entry.symbol})")
-        print("  Run `chrooked-pokedex behaviors --ability <id> --engine <engine>` for a packet.")
+            print(f"      {entry.category} {entry.chrooked_id} ({entry.symbol})")
+        print("  Run `chrooked-pokedex behaviors --mechanic <id> --engine <engine>` for a packet.")
 
     print(f"  {target / 'apply-report.md'}")
     print(f"  {json_path}")

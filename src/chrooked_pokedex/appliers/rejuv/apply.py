@@ -349,10 +349,18 @@ def _build_movetext(
             function, chance, leftover = _function_for(move)
             blocks.append(_new_move_block(move, sym, next_id, function, chance))
             next_id += 1
+            # A move behavior sharing the move's chrooked_id owns whatever the
+            # funccode can't express, so the leftover is implemented, not missing.
+            own_behavior = move.chrooked_id in implemented
             if not move.additional_effects:
                 reason = None
             elif not leftover:
                 reason = f"effects mapped to :function 0x{function:03X}"
+            elif own_behavior and function:
+                reason = (f"effects mapped to :function 0x{function:03X} "
+                          f"+ {move.chrooked_id} mechanic ({', '.join(leftover)})")
+            elif own_behavior:
+                reason = f"{move.chrooked_id} mechanic ({', '.join(leftover)})"
             elif (leftover == ["flinch"] and "fangflinch" in implemented
                   and move.chrooked_id in _FANGFLINCH_MOVES):
                 reason = (f"effects mapped to :function 0x{function:03X} "
