@@ -22,7 +22,7 @@ learnset:
   - { level: 20, move: Swift }
   - { level: 25, move: Light Screen }
   - { level: 30, move: Draining Kiss }
-  - { level: 35, move: Misty Terrain }
+  - { level: 35, move: Bail Out }
   - { level: 40, move: Skill Swap }
   - { level: 42, move: Pixie Slash }
   - { level: 45, move: Psych Up }

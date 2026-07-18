@@ -1,0 +1,38 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# Glitter Tap is a damaging move with an infatuation chance. No engine models that
+# combination natively (infatuation is a status-move effect everywhere), so the data
+# layer emits the move as a plain damaging move and this behavior adds the 10% roll.
+name: Glitter Tap
+chrooked_id: glittertap
+applies_to: move
+effects:
+  - summary: "Glitter Tap has a 10% chance to infatuate the target."
+    trigger: on-hit
+    when: "Glitter Tap connects and deals damage"
+    effect: >-
+      roll a 10% chance to infatuate the target with the user, respecting the usual
+      infatuation gates (opposite genders required, neither genderless, target not
+      already infatuated, Oblivious and Aroma Veil immune) — the engine's own
+      can-attract check enforces them
+test_cases:
+  - given: "Glitter Tap connects on an opposite-gender target and the 10% roll succeeds"
+    expect: "the target becomes infatuated with the user, in addition to taking damage"
+  - given: "Glitter Tap connects but the roll fails"
+    expect: "damage only; no infatuation and no failure message"
+  - given: "Glitter Tap connects on a same-gender, genderless, Oblivious or Aroma Veil target"
+    expect: "damage only — the can-attract gate rejects it silently, no 'But it failed!' spam"
+  - given: "a move other than Glitter Tap connects"
+    expect: "no added infatuation — the delta is gated to the Glitter Tap move id"
+notes:
+  - "The damage half is NOT in this behavior — Glitter Tap is a plain 50 BP Fairy physical move in the data layer. This behavior only adds the infatuation the move data can't express."
+  - "The roll happens after damage, so a target that faints to the hit is never infatuated."
+engine_hints:
+  pokeemerald: "Needs battle-script work — pokeemerald has no additional-effect id for infatuation on a damaging move; a new MOVE_EFFECT_ATTRACT additional effect would have to be added."
+  essentials: >-
+    Plugin (Scripts/chrooked_glittertap.rb). Registers into CHROOKED_MOVE_ON_DEAL keyed
+    on :GLITTERTAP and calls the battler's own pbCanAttract?/pbAttract pair so every
+    immunity stays engine-owned. VERIFIED against Rejuv v14 Scripts/Battle_Effects.rb:
+    pbCanAttract?(attacker, move, showMessage: false) and pbAttract(attacker) — the
+    former covers already-attracted, genderless/same-gender, Aroma Veil and Oblivious;
+    the latter sets effects[:Attract], plays the animation and handles Destiny Knot.

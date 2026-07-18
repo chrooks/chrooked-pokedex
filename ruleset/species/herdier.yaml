@@ -1,0 +1,20 @@
+name: Herdier
+chrooked_id: herdier
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Work Up }
+  - { level: 1, move: Bite }
+  - { level: 9, move: Glitter Tap }
+  - { level: 12, move: Retaliate }
+  - { level: 19, move: Baby-Doll Eyes }
+  - { level: 24, move: Play Rough }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Bail Out }
+  - { level: 36, move: Take Down }
+  - { level: 42, move: Helping Hand }
+  - { level: 48, move: Reversal }
+  - { level: 54, move: Roar }
+  - { level: 60, move: Last Resort }
+  - { level: 66, move: Giga Impact }

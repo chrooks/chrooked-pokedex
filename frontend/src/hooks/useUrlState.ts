@@ -22,6 +22,8 @@ export interface ViewState {
   kind: KindKey;
   query: string;
   editedOnly: boolean;
+  /** Expand every match to its whole evolution line (dex only). */
+  evoLine: boolean;
   selected: string | null;
   /** How the open species renders: the side panel (default) or full-page. */
   detail: "panel" | "full";
@@ -68,6 +70,7 @@ function readState(): ViewState {
     kind,
     query: params.get("q") ?? "",
     editedOnly: params.get("edited") === "1",
+    evoLine: params.get("line") === "1",
     selected: params.get("id"),
     detail: params.get("detail") === "full" ? "full" : "panel",
     layout: params.get("view") === "table" ? "table" : "grid",
@@ -95,6 +98,7 @@ const OWNED_PARAMS = [
   "kind",
   "q",
   "edited",
+  "line",
   "id",
   "detail",
   "view",
@@ -111,6 +115,7 @@ function writeState(next: ViewState): void {
   if (next.kind !== "dex") params.set("kind", next.kind);
   if (next.query) params.set("q", next.query);
   if (next.editedOnly) params.set("edited", "1");
+  if (next.evoLine) params.set("line", "1");
   if (next.selected) params.set("id", next.selected);
   if (next.detail === "full") params.set("detail", "full");
   if (next.layout === "table") params.set("view", "table");

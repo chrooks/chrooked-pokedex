@@ -1,6 +1,9 @@
 name: Bagon
 chrooked_id: bagon
 aka: { pokeemerald: SPECIES_BAGON }
+abilities:
+  secondary: Carnivore
+  hidden: Moxie
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }

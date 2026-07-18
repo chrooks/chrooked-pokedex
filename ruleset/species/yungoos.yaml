@@ -1,0 +1,18 @@
+name: Yungoos
+chrooked_id: yungoos
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 3, move: Leer }
+  - { level: 7, move: Payback }
+  - { level: 10, move: Sand Attack }
+  - { level: 13, move: Work Up }
+  - { level: 19, move: Bite }
+  - { level: 22, move: Mud-Slap }
+  - { level: 25, move: Super Fang }
+  - { level: 28, move: Take Down }
+  - { level: 31, move: Bail Out }
+  - { level: 34, move: Crunch }
+  - { level: 37, move: Yawn }
+  - { level: 40, move: Thrash }
+  - { level: 43, move: Rest }

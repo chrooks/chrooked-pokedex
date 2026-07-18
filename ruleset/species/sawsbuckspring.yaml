@@ -1,6 +1,25 @@
 name: Sawsbuck Spring
 chrooked_id: sawsbuckspring
 aka: { pokeemerald: SPECIES_SAWSBUCK_SPRING, essentials: SAWSBUCK }
+types: [Normal, Fairy]
 abilities:
-  primary: Impale
-  hidden: Forestry
+  primary: Adaptability
+  secondary: Impale
+  hidden: Serene Grace
+stats: { hp: 80, atk: 100, def: 90, spa: 60, spd: 75, spe: 115 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Glitter Tap }
+  - { level: 6, move: Double Kick }
+  - { level: 11, move: Play Rough }
+  - { level: 16, move: Zen Headbutt }
+  - { level: 20, move: Take Down }
+  - { level: 26, move: Agility }
+  - { level: 31, move: Bail Out }
+  - { level: 36, move: Megahorn }
+  - { level: 40, move: Horn Leech }
+  - { level: 44, move: Swords Dance }
+  - { level: 48, move: Double-Edge }
+  - { level: 50, move: Jump Kick }
+  - { level: 52, move: Season's End }

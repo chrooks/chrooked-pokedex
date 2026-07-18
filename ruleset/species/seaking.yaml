@@ -1,21 +1,33 @@
 name: Seaking
 chrooked_id: seaking
 aka: { pokeemerald: SPECIES_SEAKING }
+types: [Water, Fairy]
 abilities:
   primary: Hydrate
   secondary: Impale
-stats: { atk: 112, spa: 75 }
+stats: { atk: 120, spa: 75, spe: 75, def: 75 }
 learnset:
+  - { level: 0, move: Aqua Step }
+  - { level: 1, move: Aqua Cutter }
+  - { level: 1, move: Aqua Jet }
+  - { level: 1, move: Horn Attack }
   - { level: 1, move: Peck }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Supersonic }
-  - { level: 1, move: Water Pulse }
-  - { level: 15, move: Horn Attack }
-  - { level: 17, move: Water Whip }
-  - { level: 20, move: Agility }
-  - { level: 25, move: Aqua Ring }
-  - { level: 30, move: Flail }
-  - { level: 37, move: Waterfall }
-  - { level: 44, move: Soak }
-  - { level: 51, move: Megahorn }
-  - { level: 58, move: Horn Drill }
+  - { level: 1, move: Water Whip }
+  - { level: 5, move: Razor Shell }
+  - { level: 10, move: Lovely Bite }
+  - { level: 12, move: Soak }
+  - { level: 15, move: Agility }
+  - { level: 18, move: Aqua Tail }
+  - { level: 22, move: Icicle Spear }
+  - { level: 26, move: Play Rough }
+  - { level: 30, move: Waterfall }
+  - { level: 34, move: Pin Missile }
+  - { level: 38, move: Bail Out }
+  - { level: 42, move: Liquidation }
+  - { level: 46, move: Swords Dance }
+  - { level: 50, move: Megahorn }
+  - { level: 54, move: Pixie Slash }
+  - { level: 58, move: Wave Crash }
+  - { level: 62, move: Horn Drill }
+evolution: { from: Goldeen, method: { level: 30 } }

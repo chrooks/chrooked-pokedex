@@ -1,5 +1,25 @@
 name: Deerling Autumn
 chrooked_id: deerlingautumn
 aka: { pokeemerald: SPECIES_DEERLING_AUTUMN }
+types: [Normal, Ground]
 abilities:
-  hidden: Forestry
+  primary: Adaptability
+  secondary: Impale
+  hidden: Serene Grace
+stats: { hp: 60, atk: 65, def: 50, spa: 40, spd: 90, spe: 75 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Sand Attack }
+  - { level: 6, move: Double Kick }
+  - { level: 11, move: Bulldoze }
+  - { level: 16, move: Zen Headbutt }
+  - { level: 20, move: Spikes }
+  - { level: 26, move: High Horsepower }
+  - { level: 31, move: Bail Out }
+  - { level: 36, move: Megahorn }
+  - { level: 40, move: Horn Leech }
+  - { level: 44, move: Wish }
+  - { level: 48, move: Double-Edge }
+  - { level: 50, move: Earthquake }
+  - { level: 52, move: Season's End }

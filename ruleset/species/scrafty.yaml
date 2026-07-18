@@ -1,8 +1,6 @@
 name: Scrafty
 chrooked_id: scrafty
 aka: { pokeemerald: SPECIES_SCRAFTY }
-abilities:
-  secondary: Striker
 stats: { hp: 70, atk: 95, spe: 60 }
 learnset:
   - { level: 1, move: Headbutt }

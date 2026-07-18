@@ -2,3 +2,24 @@ name: Purugly
 chrooked_id: purugly
 aka: { pokeemerald: SPECIES_PURUGLY }
 stats: { hp: 85, atk: 105, def: 70, spa: 65, spd: 65, spe: 115 }
+learnset:
+  - { level: 0, move: Swagger }
+  - { level: 1, move: Swagger }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Sucker Punch }
+  - { level: 1, move: Play Rough }
+  - { level: 5, move: Scratch }
+  - { level: 8, move: Growl }
+  - { level: 13, move: Hypnosis }
+  - { level: 17, move: Aerial Ace }
+  - { level: 20, move: Fury Swipes }
+  - { level: 25, move: Charm }
+  - { level: 29, move: Taunt }
+  - { level: 32, move: Retaliate }
+  - { level: 37, move: Slash }
+  - { level: 40, move: Bail Out }
+  - { level: 45, move: Body Slam }
+  - { level: 52, move: Attract }
+  - { level: 60, move: Hone Claws }

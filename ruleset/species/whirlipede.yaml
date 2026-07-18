@@ -2,4 +2,5 @@ name: Whirlipede
 chrooked_id: whirlipede
 aka: { pokeemerald: SPECIES_WHIRLIPEDE }
 abilities:
+  primary: Venomous
   hidden: Speed Boost

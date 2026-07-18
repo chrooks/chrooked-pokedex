@@ -26,6 +26,8 @@ web = [
     "litellm>=1.40",
     # Load provider keys/config from a repo-root `.env` (bring-your-own-key DX).
     "python-dotenv>=1.0",
+    # Crop Rejuv 2x2 battler sheets to the front-normal quadrant server-side.
+    "pillow>=10",
 ]
 
 [project.scripts]

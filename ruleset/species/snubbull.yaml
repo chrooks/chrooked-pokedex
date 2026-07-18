@@ -15,6 +15,7 @@ learnset:
   - { level: 1, move: Ice Fang }
   - { level: 1, move: Fire Fang }
   - { level: 7, move: Bite }
+  - { level: 10, move: Glitter Tap }
   - { level: 13, move: Lick }
   - { level: 19, move: Headbutt }
   - { level: 25, move: Roar }

@@ -1,0 +1,18 @@
+name: Minccino
+chrooked_id: minccino
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 4, move: Helping Hand }
+  - { level: 8, move: Echoed Voice }
+  - { level: 12, move: Glitter Tap }
+  - { level: 16, move: Charm }
+  - { level: 20, move: Swift }
+  - { level: 24, move: Encore }
+  - { level: 28, move: Bail Out }
+  - { level: 32, move: Tail Slap }
+  - { level: 36, move: Tickle }
+  - { level: 40, move: Slam }
+  - { level: 44, move: Hyper Voice }
+  - { level: 48, move: Last Resort }

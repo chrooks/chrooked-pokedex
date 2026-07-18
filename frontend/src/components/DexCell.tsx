@@ -36,7 +36,7 @@ function DexCellBase({ entry, isSelected, onOpen, backdropTargetId }: Props) {
         dex={entry.dex}
         name={entry.name}
         backdropTargetId={backdropTargetId}
-        size={72}
+        size={112}
       />
       <span className="dex-cell__name">{entry.name}</span>
       <span className="dex-cell__types">

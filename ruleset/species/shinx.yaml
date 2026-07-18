@@ -2,6 +2,7 @@ name: Shinx
 chrooked_id: shinx
 aka: { pokeemerald: SPECIES_SHINX }
 abilities:
+  primary: Strong Jaw
   secondary: Carnivore
 stats: { spe: 65 }
 learnset:

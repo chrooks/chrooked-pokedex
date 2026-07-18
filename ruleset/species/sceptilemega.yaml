@@ -1,6 +1,7 @@
 name: Sceptile Mega
 chrooked_id: sceptilemega
 aka: { dex: 254 }
+stats: { hp: 75 }
 learnset:
   - { level: 0, move: Leaf Blade }
   - { level: 1, move: False Swipe }

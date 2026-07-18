@@ -1,6 +1,9 @@
 name: Shelgon
 chrooked_id: shelgon
 aka: { pokeemerald: SPECIES_SHELGON }
+abilities:
+  secondary: Carnivore
+  hidden: Moxie
 learnset:
   - { level: 0, move: Protect }
   - { level: 1, move: Leer }

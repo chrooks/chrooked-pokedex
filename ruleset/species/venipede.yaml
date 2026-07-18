@@ -2,4 +2,5 @@ name: Venipede
 chrooked_id: venipede
 aka: { pokeemerald: SPECIES_VENIPEDE }
 abilities:
+  primary: Venomous
   hidden: Speed Boost

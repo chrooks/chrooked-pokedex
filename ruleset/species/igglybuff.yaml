@@ -4,3 +4,12 @@ aka: { pokeemerald: SPECIES_IGGLYBUFF }
 types: [Normal, Fairy]
 abilities:
   secondary: Competitive
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Sing }
+  - { level: 1, move: Copycat }
+  - { level: 4, move: Defense Curl }
+  - { level: 8, move: Glitter Tap }
+  - { level: 12, move: Disarming Voice }
+  - { level: 16, move: Disable }
+  - { level: 20, move: Charm }

@@ -1,0 +1,19 @@
+name: Greedent
+chrooked_id: greedent
+aka: {  }
+learnset:
+  - { level: 0, move: Covet }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Stuff Cheeks }
+  - { level: 15, move: Stockpile }
+  - { level: 15, move: Spit Up }
+  - { level: 15, move: Swallow }
+  - { level: 20, move: Body Slam }
+  - { level: 27, move: Rest }
+  - { level: 31, move: Bail Out }
+  - { level: 34, move: Counter }
+  - { level: 41, move: Bullet Seed }
+  - { level: 48, move: Super Fang }
+  - { level: 55, move: Belch }

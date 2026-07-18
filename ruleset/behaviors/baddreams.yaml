@@ -1,0 +1,21 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Bad Dreams
+chrooked_id: baddreams
+applies_to: ability
+aka: { pokeemerald: ABILITY_BAD_DREAMS }
+effects:
+  - summary: "The user's Hypnosis is 1.2x more accurate."
+    trigger: accuracy-check
+    when: "this Pokemon has Bad Dreams and the move being used is Hypnosis"
+    effect: "multiply Hypnosis's final accuracy by 1.2"
+test_cases:
+  - given: "a Bad Dreams Pokemon uses Hypnosis (60 base accuracy)"
+    expect: "the accuracy roll uses 72 (60 x 1.2)"
+  - given: "a Bad Dreams Pokemon uses any move other than Hypnosis"
+    expect: "accuracy is unchanged (only Hypnosis is boosted)"
+notes:
+  - "Extension only — Bad Dreams' native end-of-turn sleep damage is untouched. The accuracy buff stacks multiplicatively with the engine's other accuracy modifiers (Compound Eyes, Gravity, evasion stages)."
+engine_hints:
+  essentials: "In pbCalcAccuracy, after the base/stage/field accuracy is computed, multiply the final accuracy by 1.2 when the attacker has Bad Dreams and the move is Hypnosis."

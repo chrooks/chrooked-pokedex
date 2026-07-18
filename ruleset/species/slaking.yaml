@@ -1,0 +1,19 @@
+name: Slaking
+chrooked_id: slaking
+aka: {  }
+learnset:
+  - { level: 0, move: Swagger }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Encore }
+  - { level: 1, move: Yawn }
+  - { level: 1, move: Slack Off }
+  - { level: 1, move: Sucker Punch }
+  - { level: 17, move: Amnesia }
+  - { level: 23, move: Covet }
+  - { level: 27, move: Throat Chop }
+  - { level: 30, move: Bail Out }
+  - { level: 33, move: Counter }
+  - { level: 39, move: Flail }
+  - { level: 45, move: Fling }
+  - { level: 52, move: Mega Kick }
+  - { level: 63, move: Hammer Arm }

@@ -1,0 +1,17 @@
+name: Skwovet
+chrooked_id: skwovet
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Bite }
+  - { level: 10, move: Stuff Cheeks }
+  - { level: 15, move: Stockpile }
+  - { level: 15, move: Spit Up }
+  - { level: 15, move: Swallow }
+  - { level: 20, move: Body Slam }
+  - { level: 25, move: Bail Out }
+  - { level: 30, move: Counter }
+  - { level: 35, move: Bullet Seed }
+  - { level: 40, move: Super Fang }
+  - { level: 45, move: Belch }

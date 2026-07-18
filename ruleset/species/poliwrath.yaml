@@ -19,4 +19,5 @@ learnset:
   - { level: 1, move: Bubble Beam }
   - { level: 1, move: Hypnosis }
   - { level: 26, move: Water Whip }
+  - { level: 31, move: Bail Out }
   - { level: 48, move: One-Inch Punch }

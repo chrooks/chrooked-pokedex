@@ -1,0 +1,18 @@
+name: Lillipup
+chrooked_id: lillipup
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Glitter Tap }
+  - { level: 8, move: Bite }
+  - { level: 12, move: Retaliate }
+  - { level: 17, move: Baby-Doll Eyes }
+  - { level: 20, move: Play Rough }
+  - { level: 24, move: Crunch }
+  - { level: 28, move: Take Down }
+  - { level: 32, move: Bail Out }
+  - { level: 36, move: Reversal }
+  - { level: 40, move: Roar }
+  - { level: 44, move: Last Resort }
+  - { level: 48, move: Giga Impact }

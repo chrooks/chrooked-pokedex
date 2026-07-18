@@ -1,0 +1,320 @@
+# Behavioral checks for the rejuv-harness event hooks (waves 3+), run against
+# stub battle classes. ARGV[0] = harness dir. Non-zero exit lists failures.
+
+module PBStats
+  ATTACK = 1; SPATK = 3; SPDEF = 4; SPEED = 5; ACCURACY = 6
+end
+def _INTL(s, *a); s; end
+$cache = Struct.new(:moves).new({})
+
+class Typemod
+  attr_reader :numerator, :denominator
+  def initialize(n = 1, d = 1); @numerator = n; @denominator = d; end
+  def self.normal; new(1, 1); end
+  def self.zero; new(0, 1); end
+  def *(o)
+    n = numerator * o.numerator; d = denominator * o.denominator
+    d = 1 if n == 0
+    if n > 1 && d > 1
+      m = [n, d].min
+      n /= m; d /= m
+    end
+    Typemod.new(n, d)
+  end
+  def immune?; @numerator <= 0; end
+  def to_a; [@numerator, @denominator]; end
+end
+
+module PBTypes
+  CHART = { [:STEEL, :DRAGON] => [1, 2], [:GROUND, :FLYING] => [0, 1] }
+  def self.oneTypeEff(a, o); n, d = CHART.fetch([a, o], [1, 1]); Typemod.new(n, d); end
+end
+
+class StubDS
+  attr_accessor :substitute, :typemod
+  def initialize; @substitute = false; end
+end
+
+class PokeBattle_Battler
+  attr_accessor :ability, :hp, :totalhp, :attack, :spatk, :turncount, :effects,
+                :battle, :index, :moves, :lastMoveUsed, :damagestate, :log
+  def initialize(ability, battle = nil)
+    @ability = ability; @hp = 50; @totalhp = 100; @attack = 100; @spatk = 200
+    @turncount = 0; @effects = {}; @battle = battle; @index = 0; @moves = []
+    @lastMoveUsed = -1; @damagestate = StubDS.new; @log = []
+  end
+  def isFainted?; false; end
+  def canHeal?; true; end
+  def pbThis(lower = false); "Stub"; end
+  def makesContact?(move); move.flags&.include?(:contact); end
+  def pbCanIncreaseStatStage?(stat, inducer, mv); true; end
+  def pbCanReduceAnyStat?(stats, inducer, mv, **kw); true; end
+  def shouldBeMoldBroken?(attacker, move); false; end
+  def pbChangeStats(stat, amount, inducer, mv, **kw); @log << [:stats, stat, amount]; true; end
+  def pbRecoverHP(amount, anim = false, *a, **kw); @log << [:heal, amount]; end
+  def pbCanPoison?(a, m, **kw); true; end
+  def pbCanBurn?(a, m, **kw); true; end
+  def pbPoison(a, *rest); @log << [:poison]; end
+  def pbBurn(a, *rest); @log << [:burn]; end
+  def pbOpposing1; @battle.foes[0]; end
+  def pbOpposing2; @battle.foes[1]; end
+  def moldbroken; false; end
+  # vanilla bodies our prepends wrap:
+  def pbOnKillEffects(targets, basemove, *a); end
+  def absorbHP(hpgain, opponent, agent, move = nil); @log << [:absorb, hpgain]; end
+  def pbTarget(move); :SingleNonUser; end
+  def types; [@types_list ||= [:NORMAL]].flatten; end
+  def types_list=(t); @types_list = t; end
+  def pbEffectsOnDealingDamage(move, user, target, damage, *a); end
+  def pbAbilitiesOnSwitchIn(*a, **kw); end
+  def pbSpeed(*a); 100; end
+  def pbUseMove(choice, *a, **kw); end
+end
+
+class PokeBattle_Battle
+  attr_accessor :battlers, :foes, :rand_value
+  def initialize; @battlers = []; @foes = []; @rand_value = 0; end
+  def pbAnySideAllFainted?; false; end
+  def pbRandom(x); @rand_value; end
+  def pbShowAbilityBox(*a, **kw); end
+  def pbHideAbilityBox(*a, **kw); end
+  def pbDisplay(*a); end
+  def pbEndOfRoundPhase(*a, **kw); end
+  def pbCanChooseMove?(idxPokemon, idxMove, *a, **kw); true; end
+  def pbWeather(moveuser); :RAINDANCE; end
+end
+
+class PokeBattle_Move
+  attr_accessor :move, :flags, :type, :cat, :basedamage, :battle, :zmove
+  def initialize(sym, type: :NORMAL, flags: [], cat: :physical)
+    @move = sym; @type = type; @flags = flags; @cat = cat; @basedamage = 80
+  end
+  def pbCalcDamage(a, o, h = 0, f = {}); $observed_attack = a.attack; 100; end
+  def pbType(attacker, type = @type); @type; end
+  def pbIsPhysical?(a, t = nil); @cat == :physical; end
+  def pbIsSpecial?(a, t = nil); @cat == :special; end
+  def punchMove?; @flags.include?(:punchmove); end
+  def sharpMove?; @flags.include?(:sharpmove); end
+  def bitingMove?; @flags.include?(:bitingmove); end
+  def windMove?; @flags.include?(:windmove); end
+  def isSoundBased?; @flags.include?(:soundmove); end
+  def hasFlag?(f); @flags.include?(f); end
+  def contactMove?; @flags.include?(:contact); end
+  def priorityCheck(attacker); 0; end
+  def pbTypeModifier(atype, attacker, opponent)
+    tm = Typemod.normal
+    opponent.types.each { |t| tm *= PBTypes.oneTypeEff(atype, t) }
+    tm
+  end
+  def pbAccuracyCheck(attacker, opponent); false; end
+  def pbTypeImmunities(attacker, targets, hitflags, movetype: nil); end
+  def pbShouldApplyTypeImmunity?(a, o); true; end
+end
+
+class PokeBattle_Move_0D8 < PokeBattle_Move
+  def pbEffect(attacker, alltargets, hitnum = 0); attacker.pbRecoverHP(50, true); end
+end
+
+Dir[File.join(ARGV[0], "chrooked_*.rb")].sort.each { |f| eval(File.read(f), TOPLEVEL_BINDING) }
+
+fails = []
+def check(fails, name, got, want)
+  fails << "#{name}: got #{got.inspect} want #{want.inspect}" unless got == want
+end
+
+battle = PokeBattle_Battle.new
+
+# priority: rapid combustion full HP fire
+rc = PokeBattle_Battler.new(:RAPIDCOMBUSTION, battle); rc.hp = rc.totalhp
+check(fails, "rapidcombustion full-hp fire", PokeBattle_Move.new(:EMBER, type: :FIRE).priorityCheck(rc), 1)
+rc.hp = 50
+check(fails, "rapidcombustion damaged", PokeBattle_Move.new(:EMBER, type: :FIRE).priorityCheck(rc), 0)
+
+# priority: stampede armed contact
+st = PokeBattle_Battler.new(:STAMPEDE, battle)
+st.effects[:ChrookedStampede] = true
+check(fails, "stampede armed contact", PokeBattle_Move.new(:TACKLE, flags: [:contact]).priorityCheck(st), 1)
+check(fails, "stampede armed noncontact", PokeBattle_Move.new(:SWIFT).priorityCheck(st), 0)
+
+# speed: blitz first turn
+bl = PokeBattle_Battler.new(:BLITZ, battle)
+bl.turncount = 1  # first attack phase: increment precedes setSpeedOrder
+check(fails, "blitz first turn", bl.pbSpeed, 150)
+bl.turncount = 2
+check(fails, "blitz later turn", bl.pbSpeed, 100)
+
+# KO: demolition raises attack, carnivore heals
+dm = PokeBattle_Battler.new(:DEMOLITION, battle)
+dm.pbOnKillEffects([:x], nil)
+check(fails, "demolition ko", dm.log, [[:stats, PBStats::ATTACK, 1]])
+cv = PokeBattle_Battler.new(:CARNIVORE, battle)
+cv.pbOnKillEffects([:x], nil)
+check(fails, "carnivore ko heal", cv.log, [[:heal, 25]])
+
+# on-deal: venomous out (rand 0 => success), pyre burn, exhaust acc drop
+vn = PokeBattle_Battler.new(:VENOMOUS, battle)
+tgt = PokeBattle_Battler.new(:NONE, battle)
+vn.pbEffectsOnDealingDamage(PokeBattle_Move.new(:TACKLE, flags: [:contact]), vn, tgt, 30)
+check(fails, "venomous out poison", tgt.log, [[:poison]])
+py = PokeBattle_Battler.new(:PYRE, battle)
+tgt2 = PokeBattle_Battler.new(:NONE, battle)
+py.pbEffectsOnDealingDamage(PokeBattle_Move.new(:SHADOWBALL, type: :GHOST), py, tgt2, 30)
+check(fails, "pyre burn", tgt2.log, [[:burn]])
+ex = PokeBattle_Battler.new(:EXHAUST, battle)
+tgt3 = PokeBattle_Battler.new(:NONE, battle)
+ex.pbEffectsOnDealingDamage(PokeBattle_Move.new(:TACKLE, flags: [:contact]), ex, tgt3, 30)
+check(fails, "exhaust acc drop", tgt3.log, [[:stats, PBStats::ACCURACY, -1]])
+
+# spiteful block: arm on hit, boost dark, consume
+sp = PokeBattle_Battler.new(:SPITEFULBLOCK, battle)
+hitter = PokeBattle_Battler.new(:NONE, battle)
+sp.pbEffectsOnDealingDamage(PokeBattle_Move.new(:TACKLE), hitter, sp, 30)
+check(fails, "spiteful armed", sp.effects[:ChrookedSpiteful], true)
+check(fails, "spiteful dark boost", PokeBattle_Move.new(:CRUNCH, type: :DARK).pbCalcDamage(sp, hitter), 130)
+sp.pbEffectsOnDealingDamage(PokeBattle_Move.new(:CRUNCH, type: :DARK), sp, hitter, 30)
+check(fails, "spiteful consumed", sp.effects[:ChrookedSpiteful], nil)
+
+# infernal maw: flinch (rand 0 passes both rolls)
+im = PokeBattle_Battler.new(:INFERNALMAW, battle)
+tgt4 = PokeBattle_Battler.new(:NONE, battle)
+im.pbEffectsOnDealingDamage(PokeBattle_Move.new(:BITE, flags: [:bitingmove]), im, tgt4, 30)
+check(fails, "infernalmaw burn", tgt4.log.include?([:burn]), true)
+check(fails, "infernalmaw flinch", tgt4.effects[:Flinch], true)
+check(fails, "infernalmaw biting dmg", PokeBattle_Move.new(:BITE, flags: [:bitingmove]).pbCalcDamage(im, tgt4), 130)
+
+# immunities: flag set post-super
+aero = PokeBattle_Battler.new(:AERODYNAMIC, battle)
+hitflags = [:Success]
+PokeBattle_Move.new(:GUST, type: :FLYING).pbTypeImmunities(hitter, [aero], hitflags)
+check(fails, "aerodynamic blocks flying", hitflags, [:Soundproof])
+sb = PokeBattle_Battler.new(:STONEBARK, battle)
+hitflags2 = [:Success]
+PokeBattle_Move.new(:VINEWHIP, type: :GRASS).pbTypeImmunities(hitter, [sb], hitflags2)
+check(fails, "stonebark absorbs grass", hitflags2, [:HpAbsorbAbility])
+hitflags3 = [:Success]
+PokeBattle_Move.new(:TACKLE, type: :NORMAL).pbTypeImmunities(hitter, [sb], hitflags3)
+check(fails, "stonebark normal passes", hitflags3, [:Success])
+
+# stat swap: magical fists physical punch uses SpA during the vanilla calc
+mfist = PokeBattle_Battler.new(:MAGICALFISTS, battle)
+PokeBattle_Move.new(:MACHPUNCH, flags: [:punchmove]).pbCalcDamage(mfist, tgt4)
+check(fails, "magicalfists spa swap", $observed_attack, 200)
+check(fails, "magicalfists attack restored", mfist.attack, 100)
+PokeBattle_Move.new(:TACKLE).pbCalcDamage(mfist, tgt4)
+check(fails, "magicalfists no swap non-punch", $observed_attack, 100)
+
+# turn end: self sufficient heal 1/16
+ss = PokeBattle_Battler.new(:SELFSUFFICIENT, battle)
+battle.battlers = [ss]
+battle.pbEndOfRoundPhase
+check(fails, "selfsufficient heal", ss.log, [[:heal, 6]])
+
+# switch-in: frighten drops both foes' SpA
+fr = PokeBattle_Battler.new(:FRIGHTEN, battle)
+foe1 = PokeBattle_Battler.new(:NONE, battle); foe2 = PokeBattle_Battler.new(:NONE, battle)
+battle.foes = [foe1, foe2]
+fr.pbAbilitiesOnSwitchIn
+check(fails, "frighten foe1", foe1.log, [[:stats, PBStats::SPATK, -1]])
+check(fails, "frighten foe2", foe2.log, [[:stats, PBStats::SPATK, -1]])
+
+# after-move: insidious speed boost on status move
+$cache.moves[:TOXIC] = Struct.new(:category).new(:status)
+$cache.moves[:TACKLE] = Struct.new(:category).new(:physical)
+ins = PokeBattle_Battler.new(:INSIDIOUS, battle)
+ins.lastMoveUsed = :TOXIC
+ins.pbUseMove(nil)
+check(fails, "insidious status move", ins.log, [[:stats, PBStats::SPEED, 1]])
+ins.log.clear; ins.lastMoveUsed = :TACKLE
+ins.pbUseMove(nil)
+check(fails, "insidious damaging move", ins.log, [])
+
+# sage power: lock arms after first move, choose-move enforced
+sg = PokeBattle_Battler.new(:SAGEPOWER, battle)
+sg.lastMoveUsed = :PSYCHIC
+sg.pbUseMove(nil)
+check(fails, "sagepower lock armed", sg.effects[:ChrookedMoveLock], :PSYCHIC)
+MoveSlot = Struct.new(:move)
+sg.moves = [MoveSlot.new(:PSYCHIC), MoveSlot.new(:CALMMIND)]
+battle.battlers = [sg]
+check(fails, "sagepower locked move ok", battle.pbCanChooseMove?(0, 0), true)
+check(fails, "sagepower other move blocked", battle.pbCanChooseMove?(0, 1), false)
+# AI path passes the battler object and a move object directly
+ai_move = PokeBattle_Move.new(:CALMMIND)
+check(fails, "sagepower AI battler+move blocked", battle.pbCanChooseMove?(sg, ai_move), false)
+ai_locked = PokeBattle_Move.new(:PSYCHIC)
+check(fails, "sagepower AI locked move ok", battle.pbCanChooseMove?(sg, ai_locked), true)
+nolock = PokeBattle_Battler.new(:NONE, battle)
+check(fails, "no-lock battler AI path ok", battle.pbCanChooseMove?(nolock, ai_move), true)
+check(fails, "sagepower special dmg", PokeBattle_Move.new(:PSYCHIC, type: :PSYCHIC, cat: :special).pbCalcDamage(sg, tgt4), 150)
+
+# deathgrip trap
+dg = PokeBattle_Battler.new(:DEATHGRIP, battle)
+tgt5 = PokeBattle_Battler.new(:NONE, battle)
+tgt5.effects[:MultiTurn] = 0
+dg.pbEffectsOnDealingDamage(PokeBattle_Move.new(:TACKLE, flags: [:contact]), dg, tgt5, 30)
+check(fails, "deathgrip trap", tgt5.effects[:MultiTurn], 5)
+
+# wave 4: excalibur forces 2x vs Dragon (steel chart 0.5 corrected)
+exc_user = PokeBattle_Battler.new(:NONE, battle)
+dragon = PokeBattle_Battler.new(:NONE, battle); dragon.types_list = [:DRAGON]
+tm = PokeBattle_Move.new(:EXCALIBUR, type: :STEEL).pbTypeModifier(:STEEL, exc_user, dragon)
+check(fails, "excalibur vs dragon", tm.to_a, [2, 1])
+nondragon = PokeBattle_Battler.new(:NONE, battle)
+tm2 = PokeBattle_Move.new(:EXCALIBUR, type: :STEEL).pbTypeModifier(:STEEL, exc_user, nondragon)
+check(fails, "excalibur vs nondragon", tm2.to_a, [1, 1])
+
+# bonebreaker: immune ground-vs-flying floored to neutral for bone moves
+bb = PokeBattle_Battler.new(:BONEBREAKER, battle)
+flyer = PokeBattle_Battler.new(:NONE, battle); flyer.types_list = [:FLYING]
+tm3 = PokeBattle_Move.new(:BONEMERANG, type: :GROUND).pbTypeModifier(:GROUND, bb, flyer)
+check(fails, "bonebreaker floors immunity", tm3.to_a, [1, 1])
+tm4 = PokeBattle_Move.new(:EARTHQUAKE, type: :GROUND).pbTypeModifier(:GROUND, bb, flyer)
+check(fails, "bonebreaker nonbone stays immune", tm4.immune?, true)
+check(fails, "bonebreaker bone dmg", PokeBattle_Move.new(:BONECLUB).pbCalcDamage(bb, nondragon), 120)
+hitflags_bb = [:Levitate]
+PokeBattle_Move.new(:BONEMERANG, type: :GROUND).pbTypeImmunities(bb, [flyer], hitflags_bb)
+check(fails, "bonebreaker reopens levitate", hitflags_bb, [:Success])
+
+# deeprooted: absorb heal x1.3
+dr = PokeBattle_Battler.new(:DEEPROOTED, battle)
+dr.absorbHP(40, nondragon, :HPDrainingMove)
+check(fails, "deeprooted absorb boost", dr.log, [[:absorb, 52]])
+
+# chloroplast: own moves see sun; others see real weather
+ch = PokeBattle_Battler.new(:CHLOROPLAST, battle)
+check(fails, "chloroplast sun", battle.pbWeather(ch), :SUNNYDAY)
+check(fails, "other user real weather", battle.pbWeather(nondragon), :RAINDANCE)
+
+# fullmoon: moonlight heal override 75%
+fm = PokeBattle_Battler.new(:FULLMOON, battle)
+ml = PokeBattle_Move_0D8.new(:MOONLIGHT)
+ml.pbEffect(fm, [])
+check(fails, "fullmoon moonlight 75", fm.log, [[:heal, 75]])
+other = PokeBattle_Battler.new(:NONE, battle)
+ml.pbEffect(other, [])
+check(fails, "moonlight vanilla for others", other.log, [[:heal, 50]])
+
+# amplifier: sound move spreads, 1.3x
+amp = PokeBattle_Battler.new(:AMPLIFIER, battle)
+check(fails, "amplifier spread", amp.pbTarget(PokeBattle_Move.new(:HYPERVOICE, flags: [:soundmove])), :AllOpposing)
+check(fails, "amplifier nonsound target", amp.pbTarget(PokeBattle_Move.new(:TACKLE)), :SingleNonUser)
+check(fails, "amplifier sound dmg", PokeBattle_Move.new(:HYPERVOICE, flags: [:soundmove]).pbCalcDamage(amp, nondragon), 130)
+
+# innerfocus: focus blast never misses
+inf = PokeBattle_Battler.new(:INNERFOCUS, battle)
+check(fails, "innerfocus focus blast", PokeBattle_Move.new(:FOCUSBLAST).pbAccuracyCheck(inf, nondragon), true)
+check(fails, "innerfocus other move", PokeBattle_Move.new(:TACKLE).pbAccuracyCheck(inf, nondragon), false)
+
+# AI visibility: block immunities zero the typemod; absorb-heals do not
+ft = PokeBattle_Battler.new(:FLYTRAP, battle)
+tm_ft = PokeBattle_Move.new(:XSCISSOR, type: :BUG).pbTypeModifier(:BUG, hitter, ft)
+check(fails, "flytrap typemod zero", tm_ft.immune?, true)
+tm_ft2 = PokeBattle_Move.new(:TACKLE).pbTypeModifier(:NORMAL, hitter, ft)
+check(fails, "flytrap other types normal", tm_ft2.immune?, false)
+sb2 = PokeBattle_Battler.new(:STONEBARK, battle)
+tm_sb = PokeBattle_Move.new(:VINEWHIP, type: :GRASS).pbTypeModifier(:GRASS, hitter, sb2)
+check(fails, "stonebark heal keeps typemod", tm_sb.immune?, false)
+
+fails.each { |f| puts "FAIL #{f}" }
+raise "#{fails.size} failures" unless fails.empty?
+puts "all event-hook checks pass"

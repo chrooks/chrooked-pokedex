@@ -2,6 +2,7 @@ name: Seadra
 chrooked_id: seadra
 aka: { pokeemerald: SPECIES_SEADRA }
 abilities:
+  primary: Venomous
   secondary: Sniper
 learnset:
   - { level: 1, move: Leer }

@@ -15,7 +15,7 @@ learnset:
   - { level: 9, move: Fury Swipes }
   - { level: 12, move: Water Pulse }
   - { level: 14, move: Water Whip }
-  - { level: 15, move: Disable }
+  - { level: 15, move: Mind Flick }
   - { level: 18, move: Zen Headbutt }
   - { level: 21, move: Screech }
   - { level: 24, move: Aqua Tail }

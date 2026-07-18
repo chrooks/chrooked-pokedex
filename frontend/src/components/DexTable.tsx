@@ -1,6 +1,12 @@
 import { useCallback, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import type { DexEntry } from "../types";
+import type { CanonicalMethod, DexEntry, TargetNamespace } from "../types";
+import {
+  ADVANCED_ID,
+  requiredValueMissing,
+  seedMethodForm,
+  serializeMethod,
+} from "./editors/evolutionMethod";
 import { bst, dexLabel, isEdited, STAT_LABEL, TYPES, type StatKey } from "../lib/format";
 import type { InlineEdit, AbilitySlot } from "../lib/inlineEdit";
 import { COLUMNS, type Column, type ColumnKey } from "../lib/dexColumns";
@@ -14,7 +20,8 @@ import "./dex-table.css";
 type EditField =
   | { kind: "stat"; key: StatKey }
   | { kind: "types" }
-  | { kind: "ability" };
+  | { kind: "ability" }
+  | { kind: "evolution" };
 
 type Props = {
   entries: DexEntry[];
@@ -26,10 +33,16 @@ type Props = {
   backdropTargetId?: string | null;
   /** Known ability names, for the inline ability combobox. */
   abilityOptions?: readonly string[];
+  /** Known species names, for the inline evolution pre-evo combobox. */
+  speciesOptions?: readonly string[];
+  /** Canonical evolution methods, for the inline evolution method select. */
+  evolutionMethods?: readonly CanonicalMethod[];
   /** When provided, right-clicking a stat/types/abilities cell opens an inline
-      edit menu that saves one Override field. Absent → no inline editing (e.g.
-      on a Target backdrop, where the modal editor owns the scope toggle). */
-  onInlineEdit?: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
+      edit menu that saves one Override field to the chosen scope. */
+  onInlineEdit?: (entry: DexEntry, edit: InlineEdit, scope?: string) => Promise<void>;
+  /** Backdrop's Override namespace — when set, the menu offers a scope choice
+      (this Target vs Canon Ruleset), defaulting to the Target. */
+  inlineScopeTarget?: TargetNamespace | null;
 };
 
 const ROW_HEIGHT = 38;
@@ -50,6 +63,7 @@ const WIDTH: Record<ColumnKey, string> = {
   spe: "3rem",
   bst: "3.5rem",
   abilities: "minmax(12rem, 1.6fr)",
+  evolution: "minmax(9rem, 1.1fr)",
 };
 
 /**
@@ -59,7 +73,7 @@ const WIDTH: Record<ColumnKey, string> = {
  * an overridden value keyed amber, the row's edited LED carrying the signal.
  * Rows are windowed; the header stays pinned.
  */
-export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, backdropTargetId, abilityOptions, onInlineEdit }: Props) {
+export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, backdropTargetId, abilityOptions, speciesOptions, evolutionMethods, onInlineEdit, inlineScopeTarget }: Props) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   // Right-click inline edit menu. Null when closed; carries the cursor position,
@@ -157,6 +171,9 @@ export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, back
           entry={menu.entry}
           field={menu.field}
           abilityOptions={abilityOptions ?? []}
+          speciesOptions={speciesOptions ?? []}
+          evolutionMethods={evolutionMethods ?? []}
+          scopeTarget={inlineScopeTarget ?? null}
           onSave={onInlineEdit}
           onClose={() => setMenu(null)}
         />
@@ -178,6 +195,7 @@ const HEADER_CLASS: Record<ColumnKey, string> = {
   spe: "dex-table__stat mono",
   bst: "dex-table__stat mono",
   abilities: "dex-table__abil",
+  evolution: "dex-table__evo",
 };
 
 type HeaderProps = {
@@ -336,6 +354,19 @@ function renderCell(
           {abilityList(entry)}
         </span>
       );
+    case "evolution":
+      return (
+        <span
+          key="evolution"
+          className="dex-table__c dex-table__evo"
+          role="cell"
+          data-changed={entry.overridden_fields.includes("evolution") || undefined}
+          data-editable={onEdit ? true : undefined}
+          onContextMenu={onEdit ? (e) => onEdit(e, entry, { kind: "evolution" }) : undefined}
+        >
+          {evolutionLabel(entry) ?? <span className="dex-table__faint">—</span>}
+        </span>
+      );
     default: {
       // one of the six stat columns
       const changed = (entry.base.stats ?? {})[col.key] !== undefined;
@@ -363,14 +394,20 @@ type MenuProps = {
   entry: DexEntry;
   field: EditField;
   abilityOptions: readonly string[];
-  onSave: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
+  speciesOptions: readonly string[];
+  evolutionMethods: readonly CanonicalMethod[];
+  scopeTarget: TargetNamespace | null;
+  onSave: (entry: DexEntry, edit: InlineEdit, scope?: string) => Promise<void>;
   onClose: () => void;
 };
 
 /** The right-click popover. Seeds from the cell's current merged value, edits one
     field, and hands an {@link InlineEdit} to onSave (which builds the
-    overrides-only payload and PUTs it). Closes on save, Escape, or backdrop. */
-function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }: MenuProps) {
+    overrides-only payload and PUTs it). On a Target backdrop a scope select
+    routes the write to that Target's namespace (default) or the Canon Ruleset —
+    the same contract as the modal editor's toggle. Closes on save, Escape, or
+    backdrop. */
+function InlineEditMenu({ x, y, entry, field, abilityOptions, speciesOptions, evolutionMethods, scopeTarget, onSave, onClose }: MenuProps) {
   const [statValue, setStatValue] = useState<number | "">(
     field.kind === "stat" ? entry.stats[field.key] ?? "" : "",
   );
@@ -378,8 +415,15 @@ function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }:
   const [type2, setType2] = useState(entry.types[1] ?? "");
   const [slot, setSlot] = useState<AbilitySlot>("primary");
   const [ability, setAbility] = useState(entry.abilities.primary ?? "");
+  // Evolution: pre-evo name + the same MethodForm the modal editor uses.
+  const [evoFrom, setEvoFrom] = useState(entry.evolution?.from_name ?? entry.evolution?.from ?? "");
+  const [evoForm, setEvoForm] = useState(() => seedMethodForm(entry.evolution, evolutionMethods));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Backdrop open on purpose → default the write to that Target's namespace
+  // (mirrors SpeciesEditor's scopeToTarget default).
+  const [scopeToTarget, setScopeToTarget] = useState(true);
+  const scope = scopeTarget && scopeToTarget ? `target:${scopeTarget.slug}` : "base";
 
   // Switching ability slot reseeds the name field to that slot's current value.
   const pickSlot = (next: AbilitySlot) => {
@@ -395,13 +439,19 @@ function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }:
       edit = { kind: "stat", key: field.key, value: statValue };
     } else if (field.kind === "types") {
       edit = { kind: "types", type1, type2 };
+    } else if (field.kind === "evolution") {
+      if (evoFrom.trim() !== "" && requiredValueMissing(evoForm, evolutionMethods)) {
+        setError("Set a value for the evolution method.");
+        return;
+      }
+      edit = { kind: "evolution", from: evoFrom, method: serializeMethod(evoForm, evolutionMethods) };
     } else {
       edit = { kind: "ability", slot, name: ability };
     }
     setSaving(true);
     setError(null);
     try {
-      await onSave(entry, edit);
+      await onSave(entry, edit, scope);
       onClose();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Save failed");
@@ -409,7 +459,11 @@ function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }:
     }
   }
 
-  const title = field.kind === "stat" ? STAT_LABEL[field.key] : field.kind === "types" ? "Types" : "Abilities";
+  const title =
+    field.kind === "stat" ? STAT_LABEL[field.key]
+    : field.kind === "types" ? "Types"
+    : field.kind === "evolution" ? "Evolution"
+    : "Abilities";
 
   return (
     <>
@@ -483,6 +537,82 @@ function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }:
           </div>
         )}
 
+        {field.kind === "evolution" && (
+          <>
+            <div className="dex-edit__row">
+              <input
+                className="dex-edit__input"
+                type="text"
+                list="dex-edit-species"
+                autoComplete="off"
+                autoFocus
+                placeholder="pre-evo; blank = none"
+                value={evoFrom}
+                onChange={(e) => setEvoFrom(e.target.value)}
+              />
+              <datalist id="dex-edit-species">
+                {speciesOptions.map((s) => (
+                  <option key={s} value={s} />
+                ))}
+              </datalist>
+            </div>
+            <div className="dex-edit__row">
+              <select
+                className="dex-edit__select"
+                aria-label="Evolution method"
+                value={evoForm.id}
+                onChange={(e) => setEvoForm({ ...evoForm, id: e.target.value, value: "" })}
+              >
+                {evolutionMethods.map((m) => (
+                  <option key={m.id} value={m.id}>{m.label}</option>
+                ))}
+                <option value={ADVANCED_ID}>Advanced (raw token)</option>
+              </select>
+              {evoForm.id === ADVANCED_ID ? (
+                <>
+                  <input
+                    className="dex-edit__input mono"
+                    type="text"
+                    placeholder="EVO_TOKEN"
+                    value={evoForm.rawToken}
+                    onChange={(e) => setEvoForm({ ...evoForm, rawToken: e.target.value })}
+                  />
+                  <input
+                    className="dex-edit__input mono"
+                    type="text"
+                    placeholder="param"
+                    value={evoForm.rawParam}
+                    onChange={(e) => setEvoForm({ ...evoForm, rawParam: e.target.value })}
+                  />
+                </>
+              ) : (
+                evoNeedsValue(evoForm.id, evolutionMethods) && (
+                  <input
+                    className="dex-edit__input"
+                    type="text"
+                    placeholder="value"
+                    value={evoForm.value}
+                    onChange={(e) => setEvoForm({ ...evoForm, value: e.target.value })}
+                  />
+                )
+              )}
+            </div>
+          </>
+        )}
+
+        {scopeTarget && (
+          <select
+            id="dex-edit-scope"
+            className="dex-edit__select"
+            aria-label="Edit scope"
+            value={scopeToTarget ? "target" : "base"}
+            onChange={(e) => setScopeToTarget(e.target.value === "target")}
+          >
+            <option value="target">{scopeTarget.label} only</option>
+            <option value="base">Canon Ruleset</option>
+          </select>
+        )}
+
         {error && <p className="dex-edit__error">{error}</p>}
 
         <div className="dex-edit__actions">
@@ -494,6 +624,28 @@ function InlineEditMenu({ x, y, entry, field, abilityOptions, onSave, onClose }:
       </form>
     </>
   );
+}
+
+/** True when a canonical method id takes a value (level/item/move/map). */
+function evoNeedsValue(id: string, methods: readonly CanonicalMethod[]): boolean {
+  const kind = methods.find((m) => m.id === id)?.value_kind;
+  return kind === "level" || kind === "item" || kind === "move" || kind === "map";
+}
+
+/** "Goldeen · Level 30" — pre-evo plus a compact method label. Handles both
+    method shapes (backdrop display string vs Override dict). Null = base mon. */
+function evolutionLabel(entry: DexEntry): string | null {
+  const evo = entry.evolution;
+  if (!evo || !evo.from) return null;
+  const from = evo.from_name ?? evo.from;
+  const m = evo.method;
+  let label: string;
+  if (typeof m === "string") label = m;
+  else if ("level" in m) label = `Level ${m.level}`;
+  else if ("item" in m) label = String(m.item);
+  else if ("method" in m) label = `${m.method}${"param" in m ? ` ${m.param}` : ""}`;
+  else label = Object.values(m).map(String).join(" ");
+  return label ? `${from} · ${label}` : from;
 }
 
 /** Abilities as "primary · secondary · hidden", dim, with the hidden one marked. */

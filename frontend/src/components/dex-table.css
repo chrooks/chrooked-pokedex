@@ -338,3 +338,15 @@
   opacity: 0.5;
   cursor: default;
 }
+
+.dex-table__evo {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dex-table__evo[data-changed] {
+  color: var(--edited);
+}

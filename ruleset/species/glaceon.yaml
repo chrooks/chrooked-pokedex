@@ -5,4 +5,28 @@ abilities:
   primary: Cryomancer
   secondary: Whiteout
   hidden: Refrigerate
+learnset:
+  - { level: 0, move: Icy Wind }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Take Down }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Swift }
+  - { level: 1, move: Baton Pass }
+  - { level: 5, move: Sand Attack }
+  - { level: 10, move: Quick Attack }
+  - { level: 15, move: Baby-Doll Eyes }
+  - { level: 20, move: Ice Shard }
+  - { level: 25, move: Bite }
+  - { level: 30, move: Ice Fang }
+  - { level: 35, move: Bail Out }
+  - { level: 40, move: Freeze-Dry }
+  - { level: 45, move: Mirror Coat }
+  - { level: 50, move: Blizzard }
+  - { level: 55, move: Last Resort }
 evolution: { from: Eevee, method: { item: Ice Stone } }

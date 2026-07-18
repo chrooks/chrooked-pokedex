@@ -1,6 +1,7 @@
 name: Blaziken Mega
 chrooked_id: blazikenmega
 aka: { pokeemerald: SPECIES_BLAZIKEN_MEGA }
+stats: { spe: 105 }
 learnset:
   - { level: 0, move: Blaze Kick }
   - { level: 1, move: Fire Punch }

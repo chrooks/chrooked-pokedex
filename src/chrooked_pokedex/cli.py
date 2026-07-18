@@ -79,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--engine",
-        choices=("pokeemerald", "essentials", "polishedcrystal"),
+        choices=("pokeemerald", "essentials", "polishedcrystal", "rejuv"),
         default="pokeemerald",
         help="Target engine (default: pokeemerald). 'essentials' writes Pokémon "
         "Essentials PBS text; the dialect (16.2 vs modern v21) is auto-detected from "
@@ -249,6 +249,14 @@ def _run_harvest(fork: Path, ruleset_dir: Path, dry_run: bool) -> int:
 def _confirm(message: str) -> bool:
     answer = input(f"Accept {message}? [y/N] ").strip().lower()
     return answer in ("y", "yes")
+
+
+def _apply_rejuv(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    """Emit the Rejuvenation patch/ overlay (delta Ruby definition files)."""
+    from .appliers.rejuv import apply_rejuv
+
+    written = apply_rejuv(target, ruleset, report, category=category)
+    print(f"rejuv: {len(written)} file(s) written under patch/")
 
 
 def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport) -> None:
@@ -507,15 +515,15 @@ def _run_apply(
         f"partial={counts['partial']} blocked={counts['blocked']} held={counts['held']}"
     )
 
-    data_only = [e for e in report.entries if "DATA ONLY" in e.reason]
+    data_only = [e for e in report.entries if "DATA ONLY" in (e.reason or "")]
     if data_only:
         print(
-            f"  ⚠ {len(data_only)} created ability/ies are DATA ONLY — their mechanics "
+            f"  ⚠ {len(data_only)} created entry/ies are DATA ONLY — their mechanics "
             "must be implemented in the target engine:"
         )
         for entry in data_only:
-            print(f"      {entry.chrooked_id} ({entry.symbol})")
-        print("  Run `chrooked-pokedex behaviors --ability <id> --engine <engine>` for a packet.")
+            print(f"      {entry.category} {entry.chrooked_id} ({entry.symbol})")
+        print("  Run `chrooked-pokedex behaviors --mechanic <id> --engine <engine>` for a packet.")
 
     print(f"  {target / 'apply-report.md'}")
     print(f"  {json_path}")

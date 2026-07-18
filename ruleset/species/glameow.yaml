@@ -1,0 +1,18 @@
+name: Glameow
+chrooked_id: glameow
+aka: {  }
+learnset:
+  - { level: 1, move: Fake Out }
+  - { level: 5, move: Scratch }
+  - { level: 8, move: Growl }
+  - { level: 13, move: Hypnosis }
+  - { level: 17, move: Aerial Ace }
+  - { level: 20, move: Fury Swipes }
+  - { level: 25, move: Charm }
+  - { level: 29, move: Bail Out }
+  - { level: 32, move: Retaliate }
+  - { level: 37, move: Slash }
+  - { level: 41, move: Sucker Punch }
+  - { level: 44, move: Attract }
+  - { level: 48, move: Hone Claws }
+  - { level: 50, move: Play Rough }

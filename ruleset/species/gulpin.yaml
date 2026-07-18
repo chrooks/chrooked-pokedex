@@ -2,3 +2,7 @@ name: Gulpin
 chrooked_id: gulpin
 aka: { pokeemerald: SPECIES_GULPIN }
 types: [Poison, Normal]
+abilities:
+  primary: Liquid Ooze
+  secondary: Liquified
+  hidden: Gluttony

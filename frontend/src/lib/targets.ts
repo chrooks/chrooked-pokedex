@@ -7,11 +7,12 @@ import type { EngineKey } from "../types";
 
 /** The engines a Target can register as, in display order. Both apply
     end-to-end; the detected version shows in the ENGINE · VERSION readout. */
-export const ENGINES: readonly EngineKey[] = ["pokeemerald", "essentials"];
+export const ENGINES: readonly EngineKey[] = ["pokeemerald", "essentials", "rejuv"];
 
 const ENGINE_LABELS: Record<EngineKey, string> = {
   pokeemerald: "pokeemerald",
   essentials: "Essentials",
+  rejuv: "Rejuvenation",
 };
 
 export function engineLabel(engine: EngineKey): string {

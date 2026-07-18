@@ -11,9 +11,9 @@ type Props = {
   backdropTargetId?: string | null;
 };
 
-const MIN_CELL = 138; // px; matches the grid template below
+const MIN_CELL = 176; // px; matches the grid template below
 const GAP = 12;
-const ROW_HEIGHT = 168; // cell height + gap
+const ROW_HEIGHT = 214; // cell height + gap
 
 /**
  * A windowed sprite grid over the full national dex (~1451 cells). Columns flow

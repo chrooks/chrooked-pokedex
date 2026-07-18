@@ -2,3 +2,17 @@ name: Komala
 chrooked_id: komala
 aka: { pokeemerald: SPECIES_KOMALA }
 stats: { hp: 75 }
+learnset:
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Rollout }
+  - { level: 6, move: Stockpile }
+  - { level: 6, move: Spit Up }
+  - { level: 6, move: Swallow }
+  - { level: 11, move: Rapid Spin }
+  - { level: 16, move: Yawn }
+  - { level: 21, move: Slam }
+  - { level: 26, move: Flail }
+  - { level: 31, move: Sucker Punch }
+  - { level: 36, move: Bail Out }
+  - { level: 41, move: Wood Hammer }
+  - { level: 46, move: Thrash }

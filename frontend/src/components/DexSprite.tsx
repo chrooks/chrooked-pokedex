@@ -25,7 +25,7 @@ export function DexSprite({
   size = 72,
 }: Props) {
   const targetUrl =
-    backdropTargetId != null ? targetSpriteUrl(backdropTargetId, dex) : null;
+    backdropTargetId != null ? targetSpriteUrl(backdropTargetId, dex, chrookedId) : null;
   const cdnUrl = spriteUrl(chrookedId, dex);
 
   // Fallback chain: target file → CDN → placeholder.

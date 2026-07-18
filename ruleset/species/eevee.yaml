@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_EEVEE }
 abilities:
   secondary: Adaptability
   hidden: Normalize
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Covet }
+  - { level: 5, move: Sand Attack }
+  - { level: 10, move: Quick Attack }
+  - { level: 15, move: Baby-Doll Eyes }
+  - { level: 20, move: Swift }
+  - { level: 25, move: Bite }
+  - { level: 30, move: Bail Out }
+  - { level: 35, move: Baton Pass }
+  - { level: 40, move: Take Down }
+  - { level: 45, move: Charm }
+  - { level: 50, move: Double-Edge }
+  - { level: 55, move: Last Resort }

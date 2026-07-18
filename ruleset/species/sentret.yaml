@@ -1,0 +1,18 @@
+name: Sentret
+chrooked_id: sentret
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 4, move: Defense Curl }
+  - { level: 7, move: Quick Attack }
+  - { level: 13, move: Fury Swipes }
+  - { level: 16, move: Helping Hand }
+  - { level: 19, move: Follow Me }
+  - { level: 22, move: Bail Out }
+  - { level: 25, move: Slam }
+  - { level: 28, move: Rest }
+  - { level: 31, move: Sucker Punch }
+  - { level: 36, move: Amnesia }
+  - { level: 39, move: Baton Pass }
+  - { level: 42, move: Double-Edge }
+  - { level: 47, move: Hyper Voice }

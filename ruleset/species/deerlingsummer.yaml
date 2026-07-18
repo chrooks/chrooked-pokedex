@@ -1,5 +1,25 @@
 name: Deerling Summer
 chrooked_id: deerlingsummer
 aka: { pokeemerald: SPECIES_DEERLING_SUMMER }
+types: [Normal, Grass]
 abilities:
-  hidden: Forestry
+  primary: Adaptability
+  secondary: Impale
+  hidden: Serene Grace
+stats: { hp: 60, atk: 95, def: 50, spa: 40, spd: 80, spe: 55 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Leech Seed }
+  - { level: 6, move: Double Kick }
+  - { level: 11, move: Bullet Seed }
+  - { level: 16, move: Zen Headbutt }
+  - { level: 20, move: Horn Leech }
+  - { level: 26, move: Seed Bomb }
+  - { level: 31, move: Bail Out }
+  - { level: 36, move: Megahorn }
+  - { level: 40, move: Synthesis }
+  - { level: 44, move: Swords Dance }
+  - { level: 48, move: Double-Edge }
+  - { level: 50, move: Petal Blizzard }
+  - { level: 52, move: Season's End }

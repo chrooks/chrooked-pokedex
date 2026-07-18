@@ -15,4 +15,5 @@ learnset:
   - { level: 31, move: Bullet Seed }
   - { level: 33, move: Feather Dance }
   - { level: 37, move: Hyper Voice }
+  - { level: 40, move: Bail Out }
   - { level: 48, move: Dive Bomb }

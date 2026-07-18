@@ -1,6 +1,25 @@
 name: Wartortle
 chrooked_id: wartortle
 aka: { pokeemerald: SPECIES_WARTORTLE }
+types: [Water, Steel]
 abilities:
   secondary: Mega Launcher
   hidden: Shell Armor
+learnset:
+  - { level: 0, move: Flash Cannon }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Withdraw }
+  - { level: 9, move: Rapid Spin }
+  - { level: 12, move: Water Pulse }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Protect }
+  - { level: 25, move: Rain Dance }
+  - { level: 30, move: Bubble Beam }
+  - { level: 35, move: Iron Defense }
+  - { level: 40, move: Shell Smash }
+  - { level: 44, move: Dark Pulse }
+  - { level: 49, move: Aura Sphere }
+  - { level: 54, move: Hydro Pump }
+  - { level: 60, move: Origin Pulse }

@@ -34,6 +34,10 @@ Save is.
   ability creation is a separate capability (issue #8), out of scope here.
 - **One Seam.** Always call the backend endpoint. Do NOT re-implement the rubric or call
   an LLM directly from this skill — that would fork the prompt away from the UI.
+- **Evolution-line default.** If the species is part of an evo line, follow the
+  "Evolution-line default" convention in `CLAUDE.md`: pick the **final evo's** abilities
+  first, then copy the same ability kit down to every pre-evo. A pre-evo with different
+  abilities is an exception — state it explicitly.
 
 ## Prerequisites
 

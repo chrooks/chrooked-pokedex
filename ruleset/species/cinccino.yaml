@@ -1,0 +1,22 @@
+name: Cinccino
+chrooked_id: cinccino
+aka: {  }
+learnset:
+  - { level: 0, move: Tail Slap }
+  - { level: 1, move: Slam }
+  - { level: 1, move: Swift }
+  - { level: 1, move: Encore }
+  - { level: 1, move: Helping Hand }
+  - { level: 1, move: Hyper Voice }
+  - { level: 1, move: Tickle }
+  - { level: 1, move: Rock Blast }
+  - { level: 1, move: Last Resort }
+  - { level: 1, move: After You }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Sing }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Bullet Seed }
+  - { level: 10, move: Glitter Tap }
+  - { level: 31, move: Bail Out }

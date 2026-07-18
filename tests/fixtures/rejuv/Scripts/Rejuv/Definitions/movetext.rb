@@ -1,0 +1,43 @@
+MOVEHASH = {
+  :TACKLE => {
+    :ID => 1,
+    :name => "Tackle",
+    :desc => "A physical attack in which the user charges and slams into the target.",
+    :function => 0x000,
+    :type => :NORMAL,
+    :category => :physical,
+    :basedamage => 40,
+    :accuracy => 100,
+    :maxpp => 35,
+    :target => :SingleNonUser,
+    :contact => true,
+  },
+
+  :VINEWHIP => {
+    :ID => 2,
+    :name => "Vine Whip",
+    :desc => "The target is struck with slender, whiplike vines.",
+    :function => 0x000,
+    :type => :GRASS,
+    :category => :physical,
+    :basedamage => 45,
+    :accuracy => 100,
+    :maxpp => 25,
+    :target => :SingleNonUser,
+    :contact => true,
+  },
+
+  :HIJUMPKICK => {
+    :ID => 3,
+    :name => "High Jump Kick",
+    :desc => "The user jumps up high, then strikes with a kick.",
+    :function => 0x000,
+    :type => :FIGHTING,
+    :category => :physical,
+    :basedamage => 130,
+    :accuracy => 90,
+    :maxpp => 10,
+    :target => :SingleNonUser,
+    :contact => true,
+  },
+}

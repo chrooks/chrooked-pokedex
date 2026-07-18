@@ -14,6 +14,8 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Headbutt }
   - { level: 1, move: Disarming Voice }
+  - { level: 10, move: Glitter Tap }
+  - { level: 13, move: Mind Flick }
   - { level: 16, move: Agility }
   - { level: 20, move: Stomp }
   - { level: 24, move: Play Rough }

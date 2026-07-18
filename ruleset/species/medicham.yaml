@@ -13,6 +13,7 @@ learnset:
   - { level: 1, move: Work Up }
   - { level: 1, move: Detect }
   - { level: 1, move: Confusion }
+  - { level: 9, move: Mind Flick }
   - { level: 12, move: Endure }
   - { level: 15, move: Feint }
   - { level: 17, move: Force Palm }

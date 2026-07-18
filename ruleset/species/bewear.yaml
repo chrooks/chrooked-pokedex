@@ -14,6 +14,7 @@ learnset:
   - { level: 20, move: Strength }
   - { level: 24, move: Take Down }
   - { level: 30, move: Flail }
+  - { level: 33, move: Bail Out }
   - { level: 36, move: Hammer Arm }
   - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Thrash }

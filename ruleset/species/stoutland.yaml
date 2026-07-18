@@ -1,0 +1,23 @@
+name: Stoutland
+chrooked_id: stoutland
+aka: {  }
+learnset:
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Work Up }
+  - { level: 1, move: Bite }
+  - { level: 9, move: Glitter Tap }
+  - { level: 12, move: Retaliate }
+  - { level: 19, move: Baby-Doll Eyes }
+  - { level: 24, move: Play Rough }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Bail Out }
+  - { level: 38, move: Take Down }
+  - { level: 46, move: Helping Hand }
+  - { level: 54, move: Reversal }
+  - { level: 62, move: Roar }
+  - { level: 70, move: Last Resort }
+  - { level: 78, move: Giga Impact }

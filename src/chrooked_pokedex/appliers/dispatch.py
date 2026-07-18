@@ -69,6 +69,15 @@ def route_apply(
         _apply_polishedcrystal(target, category, ruleset, report)
         return
 
+    # --- rejuv path ---------------------------------------------------------
+    if engine == "rejuv":
+        # Imported inline to avoid circular: cli → dispatch → cli.
+        from ..cli import _apply_rejuv
+
+        _warn_unsupported_target_layers(holds, target_edits, "rejuv", report)
+        _apply_rejuv(target, category, ruleset, report)
+        return
+
     # --- pokeemerald path ---------------------------------------------------
     if engine != "essentials":
         # Imported inline to avoid circular: cli → dispatch → cli.

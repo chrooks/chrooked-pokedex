@@ -1,0 +1,18 @@
+name: Lechonk
+chrooked_id: lechonk
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Disarming Voice }
+  - { level: 8, move: Echoed Voice }
+  - { level: 12, move: Mud Shot }
+  - { level: 15, move: Covet }
+  - { level: 17, move: Dig }
+  - { level: 21, move: Headbutt }
+  - { level: 24, move: Yawn }
+  - { level: 27, move: Take Down }
+  - { level: 30, move: Work Up }
+  - { level: 32, move: Uproar }
+  - { level: 35, move: Double-Edge }
+  - { level: 38, move: Bail Out }

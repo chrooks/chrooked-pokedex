@@ -12,6 +12,7 @@ learnset:
   - { level: 16, move: Pluck }
   - { level: 21, move: Roost }
   - { level: 24, move: Fury Attack }
+  - { level: 27, move: Bail Out }
   - { level: 30, move: Screech }
   - { level: 34, move: Drill Peck }
   - { level: 37, move: Dive Bomb }

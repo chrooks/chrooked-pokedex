@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_PERSIAN }
 abilities:
   secondary: Technician
 stats: { atk: 90, spa: 60 }
+learnset:
+  - { level: 0, move: Power Gem }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Feint }
+  - { level: 1, move: Switcheroo }
+  - { level: 12, move: Pay Day }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Taunt }
+  - { level: 24, move: Assurance }
+  - { level: 28, move: Bail Out }
+  - { level: 31, move: Fury Swipes }
+  - { level: 36, move: Screech }
+  - { level: 42, move: Slash }
+  - { level: 48, move: Nasty Plot }
+  - { level: 54, move: Play Rough }

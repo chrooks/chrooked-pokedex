@@ -1,0 +1,11 @@
+name: Season's End
+chrooked_id: seasonsend
+aka: {  }
+type: Normal
+category: status
+power: 0
+accuracy: 0
+pp: 10
+description: The user calls the turning of the seasons, shifting to its next seasonal form.
+effect: change_form_next_season
+target: user

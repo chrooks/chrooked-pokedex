@@ -44,6 +44,10 @@ the UI's Save is.
   integer in [1, 255] and rejects anything out of range with a 422.
 - **One Seam.** Always call the backend endpoint. Do NOT re-implement the rubric or
   call an LLM directly from this skill — that would fork the prompt away from the UI.
+- **Evolution-line default.** If the species is part of an evo line, follow the
+  "Evolution-line default" convention in `CLAUDE.md`: design the **final evo first**,
+  then copy its typing/abilities/learnset down to the pre-evos and scale only stats by
+  the same BST delta. Divergences are exceptions — state them explicitly.
 
 ## Prerequisites
 

@@ -3,6 +3,7 @@ chrooked_id: sealeo
 aka: { pokeemerald: SPECIES_SEALEO }
 abilities:
   secondary: Ice Body
+  hidden: Permafrost
 learnset:
   - { level: 0, move: Swagger }
   - { level: 1, move: Swagger }

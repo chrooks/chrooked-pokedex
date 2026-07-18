@@ -1,5 +1,27 @@
 name: Porygon Z
 chrooked_id: porygonz
 aka: { pokeemerald: SPECIES_PORYGON_Z }
+types: [Normal, Ghost]
 abilities:
-  primary: Trace
+  primary: Adaptability
+  secondary: Download
+  hidden: Virtualized
+stats: { atk: 70, hp: 90, spd: 80, spe: 95 }
+learnset:
+  - { level: 1, move: Conversion }
+  - { level: 1, move: Nasty Plot }
+  - { level: 1, move: Magnet Rise }
+  - { level: 1, move: Recycle }
+  - { level: 1, move: Trick Room }
+  - { level: 1, move: Thunder Wave }
+  - { level: 9, move: Hex }
+  - { level: 16, move: Shadow Ball }
+  - { level: 25, move: Conversion 2 }
+  - { level: 30, move: Bail Out }
+  - { level: 35, move: Recover }
+  - { level: 42, move: Thunderbolt }
+  - { level: 48, move: Tri Attack }
+  - { level: 54, move: Lock-On }
+  - { level: 58, move: Zap Cannon }
+  - { level: 64, move: Specter Bomb }
+  - { level: 70, move: Hyper Beam }

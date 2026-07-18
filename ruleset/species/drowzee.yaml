@@ -1,23 +1,24 @@
 name: Drowzee
 chrooked_id: drowzee
 aka: { pokeemerald: SPECIES_DROWZEE }
+types: [Psychic, Dark]
 abilities:
   primary: Bad Dreams
   secondary: Frighten
-  hidden: Hubris
+  hidden: Magical Fists
+stats: { atk: 53 }
 learnset:
-  - { level: 1, move: Pound }
   - { level: 1, move: Hypnosis }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Pound }
   - { level: 5, move: Disable }
   - { level: 9, move: Confusion }
+  - { level: 11, move: Fake Out }
   - { level: 13, move: Headbutt }
-  - { level: 17, move: Poison Gas }
+  - { level: 16, move: Nightmare }
+  - { level: 17, move: Mind Flick }
+  - { level: 19, move: Pursuit }
   - { level: 21, move: Psybeam }
+  - { level: 23, move: Payback }
   - { level: 25, move: Psych Up }
-  - { level: 29, move: Zen Headbutt }
-  - { level: 31, move: Astral Hand }
-  - { level: 33, move: Swagger }
-  - { level: 37, move: Psychic }
-  - { level: 41, move: Nasty Plot }
-  - { level: 45, move: Psyshock }
-  - { level: 49, move: Future Sight }
+  - { level: 26, move: Zen Headbutt }

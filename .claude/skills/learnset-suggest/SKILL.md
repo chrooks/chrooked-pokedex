@@ -50,6 +50,10 @@ will be.
   it is stripped before the PUT (the loader stores only `level` + `move`).
 - **One Seam.** Always call the backend endpoint. Do NOT re-implement the rubric or
   call an LLM directly from this skill.
+- **Evolution-line default.** If the species is part of an evo line, follow the
+  "Evolution-line default" convention in `CLAUDE.md`: draft the **final evo's** learnset
+  first, then copy it down to the pre-evos **verbatim** (`line` mode is the natural fit).
+  A pre-evo learnset that differs from its final evo is an exception — state it explicitly.
 
 ## Prerequisites
 
@@ -241,6 +245,49 @@ rewritten. If the user asks to **edit the whole line / include the anchor**, als
 the anchor: run a suggest for it too (direction = the family theme + the members already
 proposed), so every member gets a fresh draft while the anchor's *current* list still
 seeds the coherence. Always say which members you'll write before the confirm.
+
+## Distribute mode — one move across many species
+
+`/learnset-suggest distribute <steer>` spreads an existing move (usually one just
+created by `/move-design`) across many learnsets. This is **mechanical, not LLM-driven**:
+no suggest calls, no per-species prompts. Candidates come from a dex scan, placement
+from fixed rules, writes from the same read-Override → merge-learnset → PUT loop.
+
+### Algorithm
+
+1. **Curate candidates from the dex.** Scan `GET /api/dex` against the steer's criteria
+   (typing, atk vs spa lean, abilities, flavor). Whole evolution lines by default —
+   pre-evos included unless the user says otherwise. Skip megas, totems, cosplay/starter
+   event forms, and legendaries/paradox unless asked. Present the list + placement rules
+   and **wait for approval** (the normal confirm gate).
+
+2. **Placement rules** (the house convention):
+   - **Band.** Place the move inside a level band fitting its role — early-game moves
+     ~6–16, mid-game utility ~22–40. Confirm the band with the user in the proposal.
+   - **Spacing invariant.** A new row must land **≥3 levels from every existing row**.
+     Prefer the free level nearest the band's anchor (mid-band, or the user's stated
+     target level).
+   - **No free slot → replace, prioritizing passive status moves.** Pick the in-band row
+     nearest the anchor whose move is `category == "status"` (from `GET /api/moves`).
+   - **Never silently eat an attack or a signature move.** If only non-status rows are
+     in the band, or the auto-pick would take a STAB attack, a signature (Shed Tail,
+     Milk Drink, recovery moves), or a move this session just placed — hand-pick a
+     different victim (redundant coverage, junk utility) or relocate the new move
+     (an L1 status slot is a legal fallback). Report every replacement in the summary,
+     flagging hand-picks.
+   - **Status-first beats theme-protection.** When both a status move and an attack sit
+     in the band, replace the status move — even a thematic one (e.g. Poison Gas on the
+     Drowzee line) — before touching any attack. Only signatures on the protect list
+     above outrank the status-first rule.
+
+3. **Write mechanically.** For each approved species: fresh merged learnset from the dex
+   (NOT a stale snapshot — earlier writes this session change it), apply the placement,
+   read the raw Override (404 → skeleton `{name, chrooked_id}`), PUT with only
+   `learnset` merged. Skip a species whose learnset already contains the move.
+
+4. **Report** — counts of inserts vs replacements, every replaced move by name, any
+   species missing from the dex (form ids like `deerlingspring` vs `deerling`), and a
+   reminder that a Rejuv apply is needed to land it in-game.
 
 ## Why this shares the Seam (reuse note)
 

@@ -1,6 +1,7 @@
 name: Scraggy
 chrooked_id: scraggy
 aka: { dex: 559 }
+stats: { atk: 80, hp: 55, spe: 50 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }

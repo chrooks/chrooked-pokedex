@@ -34,3 +34,4 @@ feature_requests/*
 
 # Cowork handoffs/runtime — machine-local
 .cowork/
+chrooked.log

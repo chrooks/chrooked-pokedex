@@ -20,6 +20,7 @@ import type { EngineKey } from "../../types";
 const ENGINE_DISPLAY: Record<EngineKey, string> = {
   pokeemerald: "POKEEMERALD",
   essentials: "ESSENTIALS",
+  rejuv: "REJUVENATION",
 };
 
 type Props = {

@@ -1,6 +1,8 @@
 name: Qwilfish Hisui
 chrooked_id: qwilfishhisui
 aka: { pokeemerald: SPECIES_QWILFISH_HISUI }
+abilities:
+  primary: Venomous
 learnset:
   - { level: 1, move: Tackle }
   - { level: 4, move: Harden }
