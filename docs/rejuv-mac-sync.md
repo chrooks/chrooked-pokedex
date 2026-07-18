@@ -30,14 +30,14 @@ Hestia runs the edit UI and autocommits/pushes (see `docker-compose.yml` and
    pip install -e .
    ```
 
-3. Find the game folder. Mac Rejuvenation is mkxp-z, so the game files are
-   usually inside the app bundle — right-click `Pokemon Rejuvenation.app` →
-   Show Package Contents. You want the directory that contains `Data/`,
-   `Graphics/`, and `Scripts/`, typically:
+3. The game data dir is inside the app bundle:
 
    ```
-   /path/to/Pokemon Rejuvenation.app/Contents/Resources
+   /Applications/Rejuvenation.app/Contents/Game
    ```
+
+   That's the directory holding `Data/`, `Graphics/`, `Scripts/` — the one
+   `apply` writes `patch/` into. You still *launch* the `.app` itself.
 
    If macOS quarantined the bundle, the game can't write its compiled data on
    boot. Clear it once:
@@ -49,25 +49,39 @@ Hestia runs the edit UI and autocommits/pushes (see `docker-compose.yml` and
 4. Register the target (`targets.json` is gitignored and per-machine, so this
    does not carry over from the PC):
 
-   ```bash
-   export REJUV_MAC="/path/to/Pokemon Rejuvenation.app/Contents/Resources"
+   ```json
+   [
+     {
+       "engine": "rejuv",
+       "id": "rejuv-mac",
+       "label": "Rejuvenation v14 (Mac)",
+       "path": "/Applications/Rejuvenation.app/Contents/Game"
+     }
+   ]
    ```
 
 ## The sync loop
 
-Every time you want the latest edits in the game:
+Don't run `apply` by hand and don't double-click the game. Use the wrapper:
 
 ```bash
-cd ~/chrooked-pokedex
-git pull && chrooked-pokedex apply --target "$REJUV_MAC" --engine rejuv
+scripts/rejuv_play.sh
 ```
 
-Worth aliasing to `rejuv-sync`.
+It pulls, applies, takes the cross-machine play lock, launches, and releases the
+lock on exit. Same script on both machines. See *Save sync* below for why the
+lock exists. Flags: `--no-pull`, `--no-apply`, `--apply-only`, `--force-unlock`.
+
+The underlying commands, if you ever want them raw:
+
+```bash
+git pull && chrooked-pokedex apply --engine rejuv --target "$REJUV_GAME"
+```
 
 Notes:
 
-- `apply` wants a clean git tree in the target (`git_guard.py`). The game folder
-  isn't a repo, so this is normally a no-op — add `--force` if it complains.
+- No `--force` needed. The clean-tree guard (`git_guard.py`) is pokeemerald-only;
+  the rejuv applier doesn't use it.
 - The rejuv applier only **writes** into `<target>/patch/`. It never reads or
   modifies base game files, so this is safe to re-run and easy to undo (delete
   `patch/`).
@@ -97,6 +111,48 @@ and carries a `# chrooked:<id>` tag:
   `DATA ONLY` line in-game
 - present but empty/untagged -> `blocked` in the report, nothing copied
 - present and tagged -> `applied`, mechanic is live
+
+## Save sync
+
+Saves live **outside** the game folder, so nothing above touches them:
+
+- PC:  `C:\Users\cdbro\Saved Games\Rejuv`
+- Mac: `~/Library/Application Support/Rejuv` (verify — launch once and save)
+
+Syncing them is optional and a separate problem: saves are mutable binary state,
+not build output, so git is the wrong tool. Use **Syncthing** (direct LAN, keeps
+conflict copies rather than silently picking a winner). Not Obsidian LiveSync —
+that's an Obsidian plugin, it can't see folders outside the vault, and CouchDB
+revision history on 30 slots of binary `.rxdata` would balloon.
+
+Ignore these in the shared folder, they churn and are worthless:
+
+```
+Battle Logs
+Battle Debug Logs
+```
+
+Turn on **Staggered File Versioning** for the folder. That is the backup, and
+the answer to "what if a bad sync overwrites a good save."
+
+### The three hazards, and what handles each
+
+| Hazard | Guardrail |
+|---|---|
+| Local `patch/` older than the save you're loading | `rejuv_play.sh` pulls + applies before launch |
+| Both machines playing at once | `.rejuv-playing` lock inside the synced save folder |
+| Bad overwrite loses progress | Syncthing staggered versioning |
+
+The lock is a **forgetfulness guardrail, not a mutex**. Launch both machines
+within Syncthing's propagation window (a few seconds) and both can take it.
+It's aimed at the real failure mode — walking to the other machine and
+forgetting. A crash leaves the lock behind; the script auto-reclaims a lock held
+by *this* host, and `--force-unlock` overrides one held by the other.
+
+Saves reference *your edited* species and abilities, which is why hazard 1
+matters: a save from a machine running a newer Ruleset can point at data the
+local `patch/` hasn't built. The wrapper makes that impossible rather than
+merely documented.
 
 ## If the Mac should stay dev-tool-free
 
