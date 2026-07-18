@@ -117,7 +117,33 @@ and carries a `# chrooked:<id>` tag:
 Saves live **outside** the game folder, so nothing above touches them:
 
 - PC:  `C:\Users\cdbro\Saved Games\Rejuv`
-- Mac: `~/Library/Application Support/Pokemon Rejuvenation`
+- Mac: `~/Library/Application Support/<something>` — find it with
+  `ls ~/Library/Application\ Support/ | grep -i rejuv`
+
+Where those come from, per `Scripts/RTP.rb` (`RTP.getSaveFolder`):
+
+- Windows -> `%USERPROFILE%/Saved Games/` + `SAVEFOLDER`, and
+  `Scripts/Rejuv/SystemConstants.rb` sets `SAVEFOLDER = "Rejuv"`.
+- Everything else -> mkxp-z's `System.data_directory`, which does **not** append
+  `SAVEFOLDER`. It's derived from the game title instead, so on macOS expect
+  `~/Library/Application Support/Pokemon Rejuvenation` — but check, don't assume.
+
+### Why not Portable Mode
+
+The game has one (Options -> Portable Mode), which writes a `Save Data/.portable`
+marker and moves saves to `<game dir>/Save Data/`. Tempting, since it makes the
+save path identical on both machines. Don't use it here:
+
+- On Mac the game dir is inside the app bundle, so saves would live in
+  `/Applications/Rejuvenation.app/Contents/Game/Save Data/`. Reinstalling or
+  updating the app wipes them — and with Syncthing watching, that mass delete
+  **propagates to the PC**. Versioning could recover it, but it's a self-inflicted
+  wound.
+- Syncthing writing inside `/Applications` invites permission and Gatekeeper
+  friction.
+
+Non-portable keeps saves outside the game, so apply/reinstall/delete of the game
+never touches them. That separation is what makes this safe.
 
 Syncing them is optional and a separate problem: saves are mutable binary state,
 not build output, so git is the wrong tool. Use **Syncthing** (direct LAN, keeps
@@ -134,6 +160,42 @@ Battle Debug Logs
 
 Turn on **Staggered File Versioning** for the folder. That is the backup, and
 the answer to "what if a bad sync overwrites a good save."
+
+### PC side — already done
+
+Set up 2026-07-18, nothing left to do here:
+
+- Syncthing 2.1.2 installed via winget (`Syncthing.Syncthing`). Runs as **you**,
+  not as a Windows service — a service account would create files in the save
+  folder as not-you.
+- Autostart: shortcut in the Startup folder (`shell:startup`), launched with
+  `--no-browser`, window hidden. Native Windows, no tray app needed.
+- Folder `rejuv-saves` -> `C:\Users\cdbro\Saved Games\Rejuv`, sendreceive,
+  filesystem watcher on.
+- Staggered file versioning, 30-day history. This is the backup.
+- `.stignore` in the save folder excludes `Battle Logs` / `Battle Debug Logs`
+  (dropped the synced set from 17 MB to 14.1 MB across 38 files).
+- Web UI: <http://127.0.0.1:8384> (from Windows — WSL can't reach it, Syncthing
+  binds loopback only).
+
+**PC device ID:**
+
+```
+QQ4IBTA-PNDSIIA-AVLEALC-KYWZIQY-ZACD46B-AKUDPOD-FEJG4J4-OTBAUQK
+```
+
+### Mac side — still to do
+
+1. `brew install --cask syncthing` (or the official app), let it start.
+2. Add the PC as a remote device using the ID above; accept the pairing prompt
+   back on the PC's web UI.
+3. Accept the shared `rejuv-saves` folder, point it at the Mac save folder.
+   Launch the game once and save first so it exists, then locate it:
+   `ls ~/Library/Application\ Support/ | grep -i rejuv`
+4. Turn on Staggered File Versioning there too. The setting is per-device.
+5. `.stignore` syncs across on its own; no need to recreate it.
+
+Before trusting it: copy `Saved Games\Rejuv` somewhere once. 14 MB.
 
 ### The three hazards, and what handles each
 

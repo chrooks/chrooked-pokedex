@@ -72,7 +72,17 @@ fi
 # --- where the saves live ---------------------------------------------------
 if [[ -z "${REJUV_SAVES:-}" ]]; then
   case "${PLATFORM}" in
-    mac) REJUV_SAVES="${HOME}/Library/Application Support/Rejuv" ;;
+    # macOS goes through mkxp-z's System.data_directory, which (unlike the
+    # Windows branch) does NOT append SAVEFOLDER — it's named off the game
+    # title. Take the first candidate that exists rather than guessing one.
+    mac)
+      for c in "${HOME}/Library/Application Support/Pokemon Rejuvenation" \
+               "${HOME}/Library/Application Support/Rejuvenation" \
+               "${HOME}/Library/Application Support/Rejuv"; do
+        [[ -d "$c" ]] && { REJUV_SAVES="$c"; break; }
+      done
+      REJUV_SAVES="${REJUV_SAVES:-${HOME}/Library/Application Support/Pokemon Rejuvenation}"
+      ;;
     # %USERPROFILE%, not %USERNAME% — the login name and the profile FOLDER name
     # differ on this box (Chris vs cdbro), and it's the folder we need.
     wsl) REJUV_SAVES="$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r\n')")/Saved Games/Rejuv" ;;
@@ -82,6 +92,8 @@ fi
 [[ -d "${REJUV_SAVES}" ]] || {
   echo "ERROR: save folder not found: ${REJUV_SAVES}" >&2
   echo "Launch the game once and save, then set REJUV_SAVES to wherever it wrote." >&2
+  [[ "${PLATFORM}" == "mac" ]] && \
+    echo "Find it with: ls ~/Library/Application\\ Support/ | grep -i rejuv" >&2
   exit 1
 }
 
