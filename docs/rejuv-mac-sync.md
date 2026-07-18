@@ -74,6 +74,30 @@ Notes:
 - `patch/Init/chrooked_compile.rb` recompiles `patch/Data/*.dat` on next boot.
 - Existing saves are fine — these are data-only changes.
 
+## What about the behaviors (custom mechanics)?
+
+Nothing extra to do — they ride along with the Ruleset.
+
+The battle code lives in this repo at `references/rejuv-harness/`: one
+`chrooked_<id>.rb` per mechanic plus `chrooked_00_core.rb`. All of it is
+tracked in git, so `git pull` brings it, and `apply` copies it into
+`patch/Mods/`. The game loads `patch/Mods/*.rb` after every base script, and
+the core wraps base methods with Ruby `Module#prepend` — so **no base game
+file is ever modified**.
+
+```
+references/rejuv-harness/*.rb  (git) --apply--> patch/Mods/*.rb
+ruleset/*.yaml                 (git) --apply--> patch/Definitions/*.rb
+```
+
+Check the Apply Report afterwards. A behavior installs only if its `.rb` exists
+and carries a `# chrooked:<id>` tag:
+
+- implementation missing -> not installed, the ability keeps its honest
+  `DATA ONLY` line in-game
+- present but empty/untagged -> `blocked` in the report, nothing copied
+- present and tagged -> `applied`, mechanic is live
+
 ## If the Mac should stay dev-tool-free
 
 Not built, and probably not worth it. The alternative is having Hestia run
