@@ -1,0 +1,5 @@
+name: Blastoise Mega
+chrooked_id: blastoisemega
+aka: { dex: 9 }
+types: [Water, Steel]
+stats: { hp: 80, spe: 80, atk: 105 }

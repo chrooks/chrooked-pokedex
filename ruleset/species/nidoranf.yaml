@@ -2,6 +2,7 @@ name: Nidoran F
 chrooked_id: nidoranf
 aka: { pokeemerald: SPECIES_NIDORAN_F, essentials: NIDORANfE }
 abilities:
+  primary: Venomous
   secondary: Rivalry
 learnset:
   - { level: 1, move: Growl }

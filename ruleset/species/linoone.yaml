@@ -4,3 +4,23 @@ aka: { pokeemerald: SPECIES_LINOONE }
 abilities:
   secondary: Gluttony
 stats: { hp: 80, atk: 80, def: 65, spd: 60, spe: 125 }
+learnset:
+  - { level: 0, move: Slash }
+  - { level: 1, move: Slash }
+  - { level: 1, move: Switcheroo }
+  - { level: 1, move: Pin Missile }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tail Whip }
+  - { level: 9, move: Covet }
+  - { level: 12, move: Headbutt }
+  - { level: 15, move: Hone Claws }
+  - { level: 18, move: Fury Swipes }
+  - { level: 23, move: Bail Out }
+  - { level: 28, move: Take Down }
+  - { level: 33, move: Fling }
+  - { level: 38, move: Flail }
+  - { level: 43, move: Belly Drum }
+  - { level: 48, move: Double-Edge }

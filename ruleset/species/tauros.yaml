@@ -6,3 +6,18 @@ abilities:
   secondary: Stampede
   hidden: Sheer Force
 stats: { atk: 120 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Work Up }
+  - { level: 10, move: Payback }
+  - { level: 15, move: Assurance }
+  - { level: 20, move: Horn Attack }
+  - { level: 25, move: Bail Out }
+  - { level: 30, move: Zen Headbutt }
+  - { level: 35, move: Raging Bull }
+  - { level: 40, move: Rest }
+  - { level: 45, move: Swagger }
+  - { level: 50, move: Thrash }
+  - { level: 55, move: Double-Edge }
+  - { level: 60, move: Giga Impact }

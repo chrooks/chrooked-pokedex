@@ -3,4 +3,19 @@ chrooked_id: miltank
 aka: { pokeemerald: SPECIES_MILTANK }
 abilities:
   secondary: Scrappy
-stats: { hp: 100, atk: 85 }
+  hidden: Self Sufficient
+stats: { hp: 100, atk: 93, def: 103, spd: 69 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Rollout }
+  - { level: 10, move: Defense Curl }
+  - { level: 15, move: Stomp }
+  - { level: 20, move: Heal Bell }
+  - { level: 25, move: Bail Out }
+  - { level: 30, move: Zen Headbutt }
+  - { level: 35, move: Milk Drink }
+  - { level: 40, move: Body Slam }
+  - { level: 45, move: Play Rough }
+  - { level: 50, move: Double-Edge }
+  - { level: 55, move: High Horsepower }

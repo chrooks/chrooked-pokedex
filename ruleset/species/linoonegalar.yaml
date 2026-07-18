@@ -21,7 +21,7 @@ learnset:
   - { level: 18, move: Fury Swipes }
   - { level: 23, move: Rest }
   - { level: 28, move: Take Down }
-  - { level: 33, move: Scary Face }
+  - { level: 33, move: Bail Out }
   - { level: 36, move: Heel Drop }
   - { level: 38, move: Counter }
   - { level: 43, move: Taunt }

@@ -12,6 +12,7 @@ learnset:
   - { level: 1, move: Hone Claws }
   - { level: 6, move: Zen Headbutt }
   - { level: 12, move: Magnet Rise }
+  - { level: 15, move: Mind Flick }
   - { level: 18, move: Flash Cannon }
   - { level: 26, move: Take Down }
   - { level: 30, move: Astral Hand }

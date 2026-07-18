@@ -5,3 +5,26 @@ types: [Normal, Fairy]
 abilities:
   secondary: Competitive
 stats: { spa: 85 }
+learnset:
+  - { level: 1, move: Stockpile }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Round }
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Gyro Ball }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Hyper Voice }
+  - { level: 1, move: Swallow }
+  - { level: 1, move: Spit Up }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Rest }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Mimic }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Sing }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Body Slam }
+  - { level: 1, move: Charm }
+  - { level: 5, move: Play Rough }
+  - { level: 10, move: Glitter Tap }

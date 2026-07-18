@@ -3,6 +3,7 @@ chrooked_id: spheal
 aka: { pokeemerald: SPECIES_SPHEAL }
 abilities:
   secondary: Ice Body
+  hidden: Permafrost
 learnset:
   - { level: 1, move: Rollout }
   - { level: 1, move: Defense Curl }

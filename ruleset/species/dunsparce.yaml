@@ -2,3 +2,19 @@ name: Dunsparce
 chrooked_id: dunsparce
 aka: { pokeemerald: SPECIES_DUNSPARCE }
 types: [Normal, Ground]
+learnset:
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Flail }
+  - { level: 4, move: Mud-Slap }
+  - { level: 8, move: Rollout }
+  - { level: 12, move: Glare }
+  - { level: 16, move: Screech }
+  - { level: 20, move: Ancient Power }
+  - { level: 24, move: Drill Run }
+  - { level: 28, move: Bail Out }
+  - { level: 32, move: Hyper Drill }
+  - { level: 36, move: Roost }
+  - { level: 40, move: Dragon Rush }
+  - { level: 44, move: Coil }
+  - { level: 48, move: Double-Edge }
+  - { level: 52, move: Endeavor }

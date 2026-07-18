@@ -4,3 +4,25 @@ aka: { pokeemerald: SPECIES_EXPLOUD }
 abilities:
   secondary: Amplifier
 stats: { hp: 105, atk: 95, def: 65, spa: 130, spd: 75, spe: 80 }
+learnset:
+  - { level: 0, move: Crunch }
+  - { level: 1, move: Crunch }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Howl }
+  - { level: 15, move: Rest }
+  - { level: 15, move: Sleep Talk }
+  - { level: 23, move: Stomp }
+  - { level: 29, move: Roar }
+  - { level: 32, move: Bail Out }
+  - { level: 36, move: Supersonic }
+  - { level: 45, move: Uproar }
+  - { level: 54, move: Screech }
+  - { level: 63, move: Hyper Voice }
+  - { level: 72, move: Boomburst }
+  - { level: 81, move: Hyper Beam }

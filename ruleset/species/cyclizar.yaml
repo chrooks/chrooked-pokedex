@@ -2,3 +2,18 @@ name: Cyclizar
 chrooked_id: cyclizar
 aka: { pokeemerald: SPECIES_CYCLIZAR }
 stats: { spe: 125 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 7, move: Rapid Spin }
+  - { level: 11, move: Taunt }
+  - { level: 14, move: Breaking Swipe }
+  - { level: 18, move: Quick Attack }
+  - { level: 23, move: Bite }
+  - { level: 27, move: Bail Out }
+  - { level: 31, move: Shed Tail }
+  - { level: 36, move: Dragon Claw }
+  - { level: 40, move: Shift Gear }
+  - { level: 45, move: Dragon Pulse }
+  - { level: 51, move: Double-Edge }
+  - { level: 57, move: Dragon Rush }

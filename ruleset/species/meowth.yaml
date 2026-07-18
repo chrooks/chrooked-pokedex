@@ -1,0 +1,17 @@
+name: Meowth
+chrooked_id: meowth
+aka: {  }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Fake Out }
+  - { level: 4, move: Feint }
+  - { level: 8, move: Scratch }
+  - { level: 12, move: Pay Day }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Taunt }
+  - { level: 24, move: Assurance }
+  - { level: 29, move: Fury Swipes }
+  - { level: 32, move: Bail Out }
+  - { level: 36, move: Slash }
+  - { level: 40, move: Nasty Plot }
+  - { level: 44, move: Play Rough }

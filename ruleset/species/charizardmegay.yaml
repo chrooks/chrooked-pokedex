@@ -1,6 +1,7 @@
 name: Charizard Mega Y
 chrooked_id: charizardmegay
 aka: { pokeemerald: SPECIES_CHARIZARD_MEGA_Y }
+stats: { spa: 160 }
 learnset:
   - { level: 0, move: Air Slash }
   - { level: 1, move: Scratch }

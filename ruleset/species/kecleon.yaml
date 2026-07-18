@@ -3,3 +3,23 @@ chrooked_id: kecleon
 aka: { pokeemerald: SPECIES_KECLEON }
 abilities:
   hidden: Protean
+learnset:
+  - { level: 1, move: Thief }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Lick }
+  - { level: 1, move: Scratch }
+  - { level: 4, move: Bind }
+  - { level: 7, move: Shadow Sneak }
+  - { level: 10, move: Feint }
+  - { level: 13, move: Fury Swipes }
+  - { level: 16, move: Disable }
+  - { level: 18, move: Psybeam }
+  - { level: 21, move: Ancient Power }
+  - { level: 25, move: Slash }
+  - { level: 30, move: Bail Out }
+  - { level: 33, move: Shadow Claw }
+  - { level: 38, move: Screech }
+  - { level: 42, move: Substitute }
+  - { level: 46, move: Sucker Punch }
+  - { level: 50, move: Foul Play }

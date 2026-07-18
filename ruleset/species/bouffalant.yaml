@@ -3,3 +3,17 @@ chrooked_id: bouffalant
 aka: { pokeemerald: SPECIES_BOUFFALANT }
 abilities:
   hidden: Stampede
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Focus Energy }
+  - { level: 10, move: Fury Attack }
+  - { level: 15, move: Revenge }
+  - { level: 20, move: Scary Face }
+  - { level: 25, move: Horn Attack }
+  - { level: 30, move: Bail Out }
+  - { level: 35, move: Throat Chop }
+  - { level: 40, move: Head Charge }
+  - { level: 45, move: Swords Dance }
+  - { level: 50, move: Megahorn }
+  - { level: 55, move: Giga Impact }

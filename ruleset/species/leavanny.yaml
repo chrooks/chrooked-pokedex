@@ -3,7 +3,6 @@ chrooked_id: leavanny
 aka: { pokeemerald: SPECIES_LEAVANNY }
 abilities:
   primary: Sharpness
-  hidden: Forestry
 stats: { atk: 115 }
 learnset:
   - { level: 0, move: Slash }

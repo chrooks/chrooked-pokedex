@@ -9,11 +9,11 @@ learnset:
   - { level: 1, move: Aqua Jet }
   - { level: 7, move: Pluck }
   - { level: 11, move: Water Pulse }
-  - { level: 15, move: Focus Energy }
+  - { level: 15, move: Mind Flick }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Slash }
   - { level: 25, move: Aqua Cutter }
-  - { level: 30, move: Fillet Away }
+  - { level: 30, move: Bail Out }
   - { level: 35, move: Night Slash }
   - { level: 40, move: Psycho Cut }
   - { level: 45, move: Liquidation }

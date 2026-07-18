@@ -5,3 +5,20 @@ abilities:
   primary: Self Sufficient
   secondary: Thick Fat
   hidden: Cheek Pouch
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Lick }
+  - { level: 4, move: Defense Curl }
+  - { level: 8, move: Recycle }
+  - { level: 12, move: Covet }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Stockpile }
+  - { level: 20, move: Swallow }
+  - { level: 24, move: Screech }
+  - { level: 28, move: Body Slam }
+  - { level: 32, move: Fling }
+  - { level: 36, move: Bail Out }
+  - { level: 40, move: Metronome }
+  - { level: 44, move: Flail }
+  - { level: 48, move: Belly Drum }
+  - { level: 52, move: Last Resort }

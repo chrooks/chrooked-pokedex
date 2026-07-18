@@ -2,4 +2,8 @@ name: Swalot
 chrooked_id: swalot
 aka: { pokeemerald: SPECIES_SWALOT }
 types: [Poison, Normal]
+abilities:
+  primary: Liquid Ooze
+  secondary: Liquified
+  hidden: Gluttony
 stats: { hp: 115, atk: 75, def: 85, spa: 75, spd: 85 }

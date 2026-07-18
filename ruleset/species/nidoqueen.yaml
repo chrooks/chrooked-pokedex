@@ -2,6 +2,7 @@ name: Nidoqueen
 chrooked_id: nidoqueen
 aka: { pokeemerald: SPECIES_NIDOQUEEN }
 abilities:
+  primary: Venomous
   secondary: Rivalry
 stats: { hp: 95, atk: 95, def: 95, spd: 105, spe: 75 }
 learnset:

@@ -6,7 +6,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Peck }
   - { level: 4, move: Disarming Voice }
-  - { level: 8, move: Mist }
+  - { level: 8, move: Glitter Tap }
   - { level: 12, move: Fury Attack }
   - { level: 16, move: Round }
   - { level: 20, move: Dragon Breath }

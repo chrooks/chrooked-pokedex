@@ -10,7 +10,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 5, move: Double Team }
   - { level: 10, move: Knock Off }
-  - { level: 15, move: Detect }
+  - { level: 15, move: Glitter Tap }
   - { level: 20, move: Taunt }
   - { level: 22, move: Cutsie Slap }
   - { level: 25, move: Slash }

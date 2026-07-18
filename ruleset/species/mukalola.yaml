@@ -2,7 +2,7 @@ name: Muk Alola
 chrooked_id: mukalola
 aka: { dex: 89 }
 abilities:
-  primary: Poison Touch
+  primary: Venomous
   secondary: Self Sufficient
-  hidden: Power Of Alchemy
+  hidden: Liquified
 stats: { spd: 105 }

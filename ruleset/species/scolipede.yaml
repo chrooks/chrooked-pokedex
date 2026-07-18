@@ -2,5 +2,6 @@ name: Scolipede
 chrooked_id: scolipede
 aka: { pokeemerald: SPECIES_SCOLIPEDE }
 abilities:
+  primary: Venomous
   hidden: Speed Boost
 stats: { def: 90, spe: 115 }

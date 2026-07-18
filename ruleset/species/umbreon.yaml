@@ -25,7 +25,7 @@ learnset:
   - { level: 20, move: Confuse Ray }
   - { level: 25, move: Assurance }
   - { level: 30, move: Moonlight }
-  - { level: 35, move: Guard Swap }
+  - { level: 35, move: Bail Out }
   - { level: 37, move: Heel Drop }
   - { level: 40, move: Dark Pulse }
   - { level: 45, move: Screech }

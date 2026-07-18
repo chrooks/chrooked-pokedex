@@ -4,5 +4,5 @@ aka: { pokeemerald: SPECIES_MUK }
 abilities:
   primary: Corrosion
   secondary: Venomous
-  hidden: Regenerator
+  hidden: Liquified
 stats: { spd: 105 }

@@ -1,21 +1,25 @@
 name: Goldeen
 chrooked_id: goldeen
 aka: { pokeemerald: SPECIES_GOLDEEN }
+types: [Water, Fairy]
 abilities:
   primary: Hydrate
   secondary: Impale
   hidden: Lightning Rod
+stats: { atk: 80, spe: 65, spd: 65, hp: 70 }
 learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Tail Whip }
-  - { level: 5, move: Supersonic }
-  - { level: 10, move: Water Pulse }
-  - { level: 15, move: Horn Attack }
-  - { level: 17, move: Water Whip }
-  - { level: 20, move: Agility }
-  - { level: 25, move: Aqua Ring }
-  - { level: 30, move: Flail }
-  - { level: 35, move: Waterfall }
-  - { level: 40, move: Soak }
-  - { level: 45, move: Megahorn }
-  - { level: 50, move: Horn Drill }
+  - { level: 3, move: Aqua Jet }
+  - { level: 5, move: Baby-Doll Eyes }
+  - { level: 7, move: Horn Attack }
+  - { level: 10, move: Tail Slap }
+  - { level: 13, move: Aqua Cutter }
+  - { level: 16, move: Water Whip }
+  - { level: 17, move: Aqua Ring }
+  - { level: 19, move: Razor Shell }
+  - { level: 22, move: Lovely Bite }
+  - { level: 25, move: Aqua Tail }
+  - { level: 28, move: Pin Missile }
+  - { level: 30, move: Agility }
+  - { level: 30, move: Waterfall }

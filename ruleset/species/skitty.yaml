@@ -9,12 +9,12 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 4, move: Tackle }
   - { level: 7, move: Sing }
-  - { level: 10, move: Attract }
+  - { level: 10, move: Glitter Tap }
   - { level: 13, move: Disarming Voice }
   - { level: 16, move: Fury Swipes }
   - { level: 19, move: Copycat }
   - { level: 22, move: Payback }
-  - { level: 25, move: Charm }
+  - { level: 25, move: Bail Out }
   - { level: 28, move: Cutsie Slap }
   - { level: 31, move: Facade }
   - { level: 34, move: Covet }

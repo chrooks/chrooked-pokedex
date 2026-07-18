@@ -11,7 +11,7 @@ learnset:
   - { level: 16, move: Air Cutter }
   - { level: 20, move: Swagger }
   - { level: 24, move: Feather Dance }
-  - { level: 28, move: Detect }
+  - { level: 28, move: Bail Out }
   - { level: 32, move: Air Slash }
   - { level: 36, move: Roost }
   - { level: 40, move: Tailwind }

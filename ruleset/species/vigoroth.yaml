@@ -1,0 +1,16 @@
+name: Vigoroth
+chrooked_id: vigoroth
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Encore }
+  - { level: 1, move: Uproar }
+  - { level: 14, move: Fury Swipes }
+  - { level: 17, move: Endure }
+  - { level: 23, move: Slash }
+  - { level: 27, move: Throat Chop }
+  - { level: 30, move: Bail Out }
+  - { level: 33, move: Counter }
+  - { level: 37, move: Focus Punch }
+  - { level: 43, move: Reversal }

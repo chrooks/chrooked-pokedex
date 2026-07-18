@@ -1,0 +1,15 @@
+name: Slakoth
+chrooked_id: slakoth
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Yawn }
+  - { level: 6, move: Encore }
+  - { level: 9, move: Slack Off }
+  - { level: 14, move: Headbutt }
+  - { level: 17, move: Amnesia }
+  - { level: 22, move: Covet }
+  - { level: 25, move: Throat Chop }
+  - { level: 30, move: Bail Out }
+  - { level: 33, move: Flail }
+  - { level: 38, move: Play Rough }

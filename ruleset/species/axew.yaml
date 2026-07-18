@@ -1,27 +1,32 @@
 name: Axew
 chrooked_id: axew
 aka: { pokeemerald: SPECIES_AXEW }
+types: [Dragon, Steel]
 abilities:
   primary: Sharpness
   hidden: Carnivore
+stats: { hp: 56, atk: 100, def: 66, spa: 35, spd: 52, spe: 71 }
 learnset:
-  - { level: 1, move: Scratch }
+  - { level: 0, move: Iron Head }
+  - { level: 1, move: Bite }
+  - { level: 1, move: False Swipe }
   - { level: 1, move: Leer }
-  - { level: 3, move: Bite }
-  - { level: 6, move: False Swipe }
+  - { level: 1, move: Scratch }
   - { level: 9, move: Assurance }
   - { level: 12, move: Taunt }
   - { level: 15, move: Slash }
   - { level: 18, move: Dragon Claw }
   - { level: 21, move: Scary Face }
   - { level: 24, move: Crunch }
-  - { level: 25, move: Draconic Fang }
   - { level: 27, move: Dragon Dance }
   - { level: 30, move: Breaking Swipe }
+  - { level: 30, move: Metal Claw }
   - { level: 33, move: Focus Energy }
-  - { level: 36, move: Dragon Pulse }
-  - { level: 39, move: Swords Dance }
-  - { level: 42, move: Outrage }
-  - { level: 45, move: Guillotine }
-  - { level: 48, move: Giga Impact }
-  - { level: 55, move: Pixie Slash }
+  - { level: 37, move: Psycho Cut }
+  - { level: 41, move: Night Slash }
+  - { level: 44, move: Swords Dance }
+  - { level: 47, move: Leaf Blade }
+  - { level: 51, move: Smart Strike }
+  - { level: 55, move: Ceaseless Edge }
+  - { level: 60, move: Outrage }
+  - { level: 65, move: Behemoth Blade }

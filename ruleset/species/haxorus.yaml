@@ -1,14 +1,17 @@
 name: Haxorus
 chrooked_id: haxorus
 aka: { pokeemerald: SPECIES_HAXORUS }
+types: [Dragon, Steel]
 abilities:
   primary: Sharpness
   hidden: Carnivore
+stats: { hp: 86, atk: 155, def: 105, spa: 60, spd: 87, spe: 107 }
 learnset:
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
+  - { level: 0, move: Iron Head }
   - { level: 1, move: Bite }
   - { level: 1, move: False Swipe }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
   - { level: 9, move: Assurance }
   - { level: 12, move: Taunt }
   - { level: 15, move: Slash }
@@ -17,11 +20,13 @@ learnset:
   - { level: 24, move: Crunch }
   - { level: 27, move: Dragon Dance }
   - { level: 30, move: Breaking Swipe }
-  - { level: 30, move: Draconic Fang }
+  - { level: 30, move: Metal Claw }
   - { level: 33, move: Focus Energy }
-  - { level: 36, move: Dragon Pulse }
-  - { level: 41, move: Swords Dance }
-  - { level: 46, move: Outrage }
-  - { level: 49, move: Pixie Slash }
-  - { level: 53, move: Guillotine }
-  - { level: 60, move: Giga Impact }
+  - { level: 37, move: Psycho Cut }
+  - { level: 41, move: Night Slash }
+  - { level: 44, move: Swords Dance }
+  - { level: 47, move: Leaf Blade }
+  - { level: 51, move: Smart Strike }
+  - { level: 55, move: Ceaseless Edge }
+  - { level: 60, move: Outrage }
+  - { level: 65, move: Behemoth Blade }

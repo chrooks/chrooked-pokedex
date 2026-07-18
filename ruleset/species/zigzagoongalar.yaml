@@ -20,4 +20,5 @@ learnset:
   - { level: 29, move: Counter }
   - { level: 32, move: Taunt }
   - { level: 35, move: Double-Edge }
+  - { level: 38, move: Bail Out }
   - { level: 48, move: Heel Drop }

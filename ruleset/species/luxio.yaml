@@ -2,6 +2,7 @@ name: Luxio
 chrooked_id: luxio
 aka: { pokeemerald: SPECIES_LUXIO }
 abilities:
+  primary: Strong Jaw
   secondary: Carnivore
 stats: { spa: 65, spe: 80 }
 learnset:

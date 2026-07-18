@@ -5,3 +5,20 @@ abilities:
   secondary: Mystic Power
   hidden: Impale
 stats: { hp: 100, def: 70 }
+learnset:
+  - { level: 0, move: Psyshield Bash }
+  - { level: 1, move: Tackle }
+  - { level: 3, move: Leer }
+  - { level: 7, move: Astonish }
+  - { level: 10, move: Hypnosis }
+  - { level: 13, move: Stomp }
+  - { level: 16, move: Mind Flick }
+  - { level: 21, move: Take Down }
+  - { level: 23, move: Confuse Ray }
+  - { level: 27, move: Calm Mind }
+  - { level: 32, move: Role Play }
+  - { level: 37, move: Zen Headbutt }
+  - { level: 40, move: Bail Out }
+  - { level: 49, move: Imprison }
+  - { level: 55, move: Double-Edge }
+  - { level: 62, move: Megahorn }

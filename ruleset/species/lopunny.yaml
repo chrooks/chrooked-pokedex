@@ -13,11 +13,12 @@ learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Baby-Doll Eyes }
+  - { level: 9, move: Glitter Tap }
   - { level: 12, move: After You }
   - { level: 16, move: Quick Attack }
   - { level: 20, move: Double Kick }
   - { level: 24, move: Charm }
-  - { level: 28, move: Baton Pass }
+  - { level: 28, move: Bail Out }
   - { level: 32, move: Headbutt }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Agility }

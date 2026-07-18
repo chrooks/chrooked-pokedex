@@ -1,0 +1,20 @@
+name: Oinkolognem
+chrooked_id: oinkolognem
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Disarming Voice }
+  - { level: 8, move: Echoed Voice }
+  - { level: 12, move: Mud Shot }
+  - { level: 15, move: Covet }
+  - { level: 17, move: Dig }
+  - { level: 23, move: Headbutt }
+  - { level: 26, move: Take Down }
+  - { level: 27, move: Yawn }
+  - { level: 31, move: Bail Out }
+  - { level: 34, move: Work Up }
+  - { level: 38, move: Uproar }
+  - { level: 42, move: Double-Edge }
+  - { level: 48, move: Earth Power }
+  - { level: 54, move: Belch }

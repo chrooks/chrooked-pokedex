@@ -2,3 +2,20 @@ name: Furret
 chrooked_id: furret
 aka: { pokeemerald: SPECIES_FURRET }
 stats: { atk: 86, spe: 115 }
+learnset:
+  - { level: 0, move: Agility }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Coil }
+  - { level: 13, move: Fury Swipes }
+  - { level: 17, move: Helping Hand }
+  - { level: 21, move: Follow Me }
+  - { level: 25, move: Bail Out }
+  - { level: 28, move: Slam }
+  - { level: 32, move: Rest }
+  - { level: 36, move: Sucker Punch }
+  - { level: 42, move: Amnesia }
+  - { level: 46, move: Baton Pass }
+  - { level: 50, move: Double-Edge }
+  - { level: 56, move: Hyper Voice }

@@ -3,3 +3,19 @@ chrooked_id: zigzagoon
 aka: { pokeemerald: SPECIES_ZIGZAGOON }
 abilities:
   secondary: Gluttony
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Sand Attack }
+  - { level: 6, move: Tail Whip }
+  - { level: 9, move: Covet }
+  - { level: 12, move: Headbutt }
+  - { level: 15, move: Baby-Doll Eyes }
+  - { level: 18, move: Pin Missile }
+  - { level: 21, move: Rest }
+  - { level: 24, move: Take Down }
+  - { level: 27, move: Fling }
+  - { level: 30, move: Flail }
+  - { level: 33, move: Belly Drum }
+  - { level: 36, move: Double-Edge }
+  - { level: 39, move: Bail Out }

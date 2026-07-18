@@ -1,4 +1,28 @@
 name: Weezing Galar
 chrooked_id: weezinggalar
 aka: { pokeemerald: SPECIES_WEEZING_GALAR }
+learnset:
+  - { level: 0, move: Double Hit }
+  - { level: 1, move: Strange Steam }
+  - { level: 1, move: Defog }
+  - { level: 1, move: Heat Wave }
+  - { level: 1, move: Aromatic Mist }
+  - { level: 1, move: Poison Gas }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Smog }
+  - { level: 1, move: Haze }
+  - { level: 1, move: Smokescreen }
+  - { level: 9, move: Glitter Tap }
+  - { level: 12, move: Clear Smog }
+  - { level: 16, move: Assurance }
+  - { level: 20, move: Sludge }
+  - { level: 24, move: Fairy Wind }
+  - { level: 28, move: Self-Destruct }
+  - { level: 32, move: Sludge Bomb }
+  - { level: 38, move: Toxic }
+  - { level: 44, move: Belch }
+  - { level: 50, move: Explosion }
+  - { level: 56, move: Memento }
+  - { level: 62, move: Destiny Bond }
+  - { level: 68, move: Misty Terrain }
 evolution: { from: Koffing, method: { level: 35 } }

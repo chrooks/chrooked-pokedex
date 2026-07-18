@@ -3,6 +3,7 @@ chrooked_id: nidorina
 aka: { pokeemerald: SPECIES_NIDORINA }
 types: [Poison, Ground]
 abilities:
+  primary: Venomous
   secondary: Rivalry
 learnset:
   - { level: 1, move: Growl }

@@ -1,7 +1,7 @@
 name: Kricketune
 chrooked_id: kricketune
 aka: { pokeemerald: SPECIES_KRICKETUNE }
-types: [Bug, Fighting]
+types: [Bug, Normal]
 abilities:
   primary: Chitinize
   secondary: Technician
