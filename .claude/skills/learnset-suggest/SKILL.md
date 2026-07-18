@@ -55,6 +55,43 @@ will be.
   first, then copy it down to the pre-evos **verbatim** (`line` mode is the natural fit).
   A pre-evo learnset that differs from its final evo is an exception — state it explicitly.
 
+## Learnset design defaults (house style)
+
+Fold these into the `direction` you send the endpoint **by default**, unless the user
+steers otherwise. They shape input only — the server still owns the rubric and validation
+(One Seam). State any deliberate departure in the preview.
+
+1. **STAB progression is the backbone.** Every STAB type gets a full power ramp in the
+   species' **preferred attacking category** (physical if Atk > SpA, special if SpA > Atk).
+   Use these level brackets as anchors, then build the rest of the curve around them:
+
+   | Bracket | BP of the STAB step |
+   |---|---|
+   | before L15 | low-BP STAB (the weak "starter" hit) |
+   | twenties | 50–70 BP |
+   | thirties | 70–80 BP |
+   | forties | 80–<100 BP |
+   | after ~L50 | 100+ BP (or a setup capstone that gets there) |
+
+   If a species has two STAB types, interleave the ramps so each bracket has a step.
+
+2. **Match the category to the stat.** When SpA > Atk, drop physical STAB/coverage in
+   favor of special equivalents (and vice-versa). A dump-stat physical move is dead weight —
+   keep at most one L1 flavor move (e.g. Tackle), not a real attacking slot.
+
+3. **Leverage the abilities.** After the STAB backbone, add moves the species' abilities
+   pay off: e.g. **Serene Grace** → strong-secondary moves (Air Slash flinch, Mystical Fire
+   SpA drop, Scorching Sands burn); **High Noon** → Fire/Psychic + Morning Sun; **Striker**
+   → kicking coverage; **Corrosion** → Poison moves + Toxic/Toxic Spikes. Prankster → keep a
+   lean priority-status support layer.
+
+4. **Coverage should fit the flavor.** Round out with coverage that matches the species'
+   concept, not just raw type-chart gaps — e.g. a firefly (Illumise) leans Electric / Grass
+   / Ground + Mystical Fire, which also double-pays via Serene Grace.
+
+Order of construction: **STAB ramp → ability-leveraged moves → flavor coverage → lean
+support layer → late capstone.**
+
 ## Prerequisites
 
 - The backend is running (default `http://127.0.0.1:8000`; launch with
