@@ -732,3 +732,12 @@ def test_rejuv_evolution_keeps_source_form(tmp_path):
     # Mega Absol (form 1) inherits the edge at compile; keeps form 1 -> Mega X
     mega_edges = snap["species"]["absol--megaform"]["evolves_into"]
     assert mega_edges and mega_edges[0]["to"] == "charizard--megaxform"
+
+
+def test_static_mod_relearn_always_installed(tmp_path):
+    # chrooked_zz_*.rb static mods install on every apply, even with an empty
+    # Ruleset and no behaviors — they carry the "relearn freely" UI override.
+    _, target = _apply(Ruleset(), tmp_path)
+    mod = target / "patch" / "Mods" / "chrooked_zz_relearn.rb"
+    assert mod.exists()
+    assert "def canRelearnAll?" in mod.read_text()
