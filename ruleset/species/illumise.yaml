@@ -3,5 +3,29 @@ chrooked_id: illumise
 aka: { pokeemerald: SPECIES_ILLUMISE }
 types: [Bug, Fairy]
 abilities:
-  secondary: Tinted Lens
-stats: { def: 75, spa: 90, spd: 95, spe: 95 }
+  primary: Fairy Aura
+  secondary: Serene Grace
+  hidden: Prankster
+stats: { hp: 60, atk: 42, def: 80, spa: 105, spd: 72, spe: 110 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Fairy Wind }
+  - { level: 9, move: Struggle Bug }
+  - { level: 12, move: Charm }
+  - { level: 15, move: Air Slash }
+  - { level: 18, move: Charge Beam }
+  - { level: 22, move: Draining Kiss }
+  - { level: 25, move: Silver Wind }
+  - { level: 28, move: Encore }
+  - { level: 31, move: Wish }
+  - { level: 33, move: Dazzling Gleam }
+  - { level: 36, move: Bug Buzz }
+  - { level: 39, move: Mystical Fire }
+  - { level: 42, move: Moonblast }
+  - { level: 45, move: Energy Ball }
+  - { level: 48, move: Earth Power }
+  - { level: 51, move: Scorching Sands }
+  - { level: 54, move: Moonlight }
+  - { level: 57, move: Extrasensory }
+  - { level: 62, move: Quiver Dance }

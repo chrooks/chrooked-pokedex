@@ -1,8 +1,8 @@
-name: Musharna
-chrooked_id: musharna
-aka: { pokeemerald: SPECIES_MUSHARNA }
+name: Munna
+chrooked_id: munna
+aka: {  }
 types: [Psychic, Fairy]
-stats: { hp: 125, atk: 50, def: 80, spa: 115, spd: 125, spe: 30 }
+stats: { hp: 86, atk: 20, def: 40, spa: 72, spd: 65, spe: 24 }
 learnset:
   - { level: 0, move: Moonblast }
   - { level: 1, move: Defense Curl }

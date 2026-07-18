@@ -2,20 +2,25 @@ name: Volbeat
 chrooked_id: volbeat
 aka: { pokeemerald: SPECIES_VOLBEAT }
 types: [Bug, Electric]
-stats: { atk: 90, def: 75, spd: 95, spe: 95 }
+abilities:
+  primary: Dazzling
+  secondary: Levitate
+  hidden: Prankster
+stats: { hp: 75, atk: 42, def: 100, spa: 85, spd: 115, spe: 52 }
 learnset:
   - { level: 1, move: Tackle }
-  - { level: 5, move: Double Team }
-  - { level: 8, move: Confuse Ray }
-  - { level: 12, move: Quick Attack }
-  - { level: 15, move: Struggle Bug }
-  - { level: 19, move: Moonlight }
-  - { level: 22, move: Tail Glow }
-  - { level: 26, move: Protect }
-  - { level: 29, move: Zen Headbutt }
-  - { level: 33, move: Helping Hand }
-  - { level: 36, move: Bug Buzz }
-  - { level: 38, move: Lightning Slam }
-  - { level: 40, move: Play Rough }
-  - { level: 43, move: Double-Edge }
-  - { level: 47, move: Infestation }
+  - { level: 5, move: Confuse Ray }
+  - { level: 8, move: Helping Hand }
+  - { level: 8, move: Double Team }
+  - { level: 12, move: Struggle Bug }
+  - { level: 15, move: Shock Wave }
+  - { level: 19, move: Infestation }
+  - { level: 19, move: Thunder Wave }
+  - { level: 22, move: Protect }
+  - { level: 26, move: Moonlight }
+  - { level: 29, move: Electroweb }
+  - { level: 33, move: Bug Buzz }
+  - { level: 36, move: Charge Beam }
+  - { level: 40, move: Discharge }
+  - { level: 43, move: Quiver Dance }
+  - { level: 47, move: Tail Glow }

@@ -4,3 +4,17 @@ aka: { pokeemerald: SPECIES_WOOBAT }
 abilities:
   primary: Aerodynamic
   secondary: Psyonize
+learnset:
+  - { level: 1, move: Attract }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Gust }
+  - { level: 5, move: Endeavor }
+  - { level: 10, move: Psybeam }
+  - { level: 15, move: Air Cutter }
+  - { level: 18, move: Swift }
+  - { level: 20, move: Icy Wind }
+  - { level: 25, move: Amnesia }
+  - { level: 28, move: Air Slash }
+  - { level: 32, move: Calm Mind }
+  - { level: 37, move: Psyshock }
+  - { level: 40, move: Charge Beam }
