@@ -13,7 +13,8 @@ export type AbilitySlot = keyof AbilitySlots;
 export type InlineEdit =
   | { kind: "stat"; key: StatKey; value: number }
   | { kind: "types"; type1: string; type2: string }
-  | { kind: "ability"; slot: AbilitySlot; name: string };
+  | { kind: "ability"; slot: AbilitySlot; name: string }
+  | { kind: "evolution"; from: string; method: Record<string, number | string> };
 
 /** The columns a right-click can edit, with the cell each maps to. */
 const NULL_OVERRIDE = {
@@ -75,6 +76,13 @@ export function applyInlineEdit(
     return { ...ov, types: same ? null : list };
   }
 
+  if (edit.kind === "evolution") {
+    // The base snapshot carries no evolution, so any set evolution is an
+    // Override; a blank pre-evo name clears it (falls back to base).
+    const from = edit.from.trim();
+    return { ...ov, evolution: from === "" ? null : { from, method: edit.method } };
+  }
+
   // ability: a whole-block Override; a slot is null when it falls through to base.
   const block: AbilitySlots = ov.abilities ?? { primary: null, secondary: null, hidden: null };
   const value = edit.name.trim();
@@ -84,4 +92,24 @@ export function applyInlineEdit(
   };
   const allNull = (["primary", "secondary", "hidden"] as const).every((s) => next[s] == null);
   return { ...ov, abilities: allNull ? null : next };
+}
+
+/** Optimistic preview: patch the merged DexEntry's own display fields (not the
+    Override) so the table can show an edit instantly, before the PUT round-trips.
+    Approximate by design — `overridden_fields`/badges reconcile on the reload
+    that follows a successful write. */
+export function previewInlineEdit(entry: DexEntry, edit: InlineEdit): DexEntry {
+  if (edit.kind === "stat") {
+    return { ...entry, stats: { ...entry.stats, [edit.key]: edit.value } };
+  }
+  if (edit.kind === "types") {
+    const types = [edit.type1, edit.type2].map((t) => t.trim()).filter(Boolean);
+    return { ...entry, types };
+  }
+  if (edit.kind === "ability") {
+    return { ...entry, abilities: { ...entry.abilities, [edit.slot]: edit.name.trim() || null } };
+  }
+  // evolution: leave `evolves_into`/base facts alone — only the pre-evo link
+  // most inline editors show is worth previewing here.
+  return entry;
 }

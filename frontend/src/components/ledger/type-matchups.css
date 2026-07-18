@@ -1,0 +1,53 @@
+/* Ability toggle + two-column Defending/Attacking layout for the species
+   profile's type-matchups section. Bucket styling itself is borrowed from
+   tabs/type-chart.css (tc-bucket, tc-breakdown__section-title) so the profile
+   and the Type Chart tab read as one visual language. */
+
+.tm-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-block-end: 0.75rem;
+}
+
+.tm-toggle__chip {
+  border: 1px solid var(--border, currentColor);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  background: transparent;
+  color: var(--text-dim, inherit);
+  cursor: pointer;
+}
+
+.tm-toggle__chip[data-active="true"] {
+  background: var(--surface-2, currentColor);
+  color: var(--text, inherit);
+  font-weight: 600;
+}
+
+.tm-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .tm-breakdown {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Full page: the matchups column is narrower than the old stretched half-page
+   panel, so Defending/Attacking stack instead of squeezing into two 170px
+   sub-columns — each bucket gets the column's full width to breathe. */
+.ledger--full .tm-breakdown {
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.tm-multiplier {
+  font-size: 0.7em;
+  opacity: 0.75;
+  margin-inline-start: 0.2em;
+}

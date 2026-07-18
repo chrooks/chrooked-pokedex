@@ -8,6 +8,8 @@ import {
   faXmark,
   faExpand,
   faCompress,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import type { CanonicalMethod, DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
@@ -21,6 +23,7 @@ import { AbilityRow } from "./ledger/AbilityRow";
 import { LearnsetSection } from "./ledger/LearnsetSection";
 import { EvolutionSection } from "./ledger/EvolutionSection";
 import { TypesRow } from "./ledger/TypesRow";
+import { TypeMatchupsSection } from "./ledger/TypeMatchupsSection";
 import { SpeciesEditor } from "./editors/SpeciesEditor";
 import { ProposedColumn } from "./proposal/ProposedColumn";
 import { LearnsetProposal } from "./proposal/LearnsetLineProposal";
@@ -41,6 +44,9 @@ export type NavHandler = (kind: KindKey, key: string) => void;
 type Props = {
   entry: DexEntry;
   onClose: () => void;
+  /** Step to the previous (-1) / next (+1) species in the visible dex order.
+      Bound to the header arrows and the ←/→ keys. */
+  onStep: (delta: -1 | 1) => void;
   /** Refetch the dex after a save/delete so the merged view reflects the edit. */
   onSaved: () => void;
   /** Cross-link out of the profile to a type / move / ability (#28). */
@@ -71,6 +77,7 @@ type Props = {
 export function DetailLedger({
   entry,
   onClose,
+  onStep,
   onSaved,
   onNavigate,
   abilityOptions,
@@ -122,10 +129,49 @@ export function DetailLedger({
     panelRef.current?.focus();
   }, [entry.chrooked_id]);
 
+  // ←/→ step through the visible dex order while the read-only profile is
+  // open. Off while editing, and ignored when the key lands in a field.
+  useEffect(() => {
+    if (editing) return;
+    function onKeyDown(event: globalThis.KeyboardEvent) {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      const target = event.target as HTMLElement;
+      if (["INPUT", "SELECT", "TEXTAREA"].includes(target.tagName)) return;
+      event.preventDefault();
+      onStep(event.key === "ArrowLeft" ? -1 : 1);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [editing, onStep]);
+
   const head = (
     <header className="ledger__head">
           <div className="ledger__head-row">
             <div className="ledger__head-id">
+              {!editing && (
+                <span className="ledger__steppers" role="group" aria-label="Browse species">
+                  <button
+                    type="button"
+                    id="ledger-prev"
+                    className="ledger__step"
+                    onClick={() => onStep(-1)}
+                    title="Previous species (←)"
+                    aria-label="Previous species"
+                  >
+                    <FontAwesomeIcon icon={faChevronLeft} aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    id="ledger-next"
+                    className="ledger__step"
+                    onClick={() => onStep(1)}
+                    title="Next species (→)"
+                    aria-label="Next species"
+                  >
+                    <FontAwesomeIcon icon={faChevronRight} aria-hidden="true" />
+                  </button>
+                </span>
+              )}
               <span className="ledger__dex mono">{dexLabel(entry.dex)}</span>
               {edited && <EditedLed on variant="tag" />}
             </div>
@@ -454,17 +500,24 @@ function DetailBody({
     />
   );
 
-  // Full page: base stats + abilities + evolution stack in the left column,
-  // learnset (the tall one) in the right. Panel: the single-column stack.
+  const matchupsSection = (
+    <TypeMatchupsSection types={entry.types} abilities={entry.abilities} />
+  );
+
+  // Full page: three purpose-sized columns instead of a stretched two-column
+  // panel — vitals (stats + abilities + evolution) narrow, matchups mid,
+  // learnset wide (it sets two-up internally to use the room). Panel: the
+  // single-column stack.
   if (columns) {
     return (
       <>
-        <div className="ledger__col">
+        <div className="ledger__col ledger__col--vitals">
           {statsSection}
           {abilitiesSection}
           {evolutionSection}
         </div>
-        <div className="ledger__col">{learnsetSection}</div>
+        <div className="ledger__col ledger__col--matchups">{matchupsSection}</div>
+        <div className="ledger__col ledger__col--learnset">{learnsetSection}</div>
       </>
     );
   }
@@ -473,6 +526,7 @@ function DetailBody({
     <>
       {statsSection}
       {abilitiesSection}
+      {matchupsSection}
       {learnsetSection}
       {evolutionSection}
     </>

@@ -82,6 +82,38 @@
   letter-spacing: 0.06em;
 }
 
+/* Prev/next species steppers, ahead of the dex № readout. Same quiet-tool
+   treatment as .ledger__tool, square. */
+.ledger__steppers {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.ledger__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.ledger__step:hover {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+
+.ledger__step:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
 .ledger__head-actions {
   display: flex;
   align-items: center;
@@ -515,7 +547,10 @@
   flex: 1;
   overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  /* Vitals and matchups are purpose-sized (they hold a fixed-shape readout);
+     learnset takes whatever's left so its two-up move list (below) actually
+     uses the wide page instead of a long column of dead whitespace beside it. */
+  grid-template-columns: minmax(280px, 360px) minmax(280px, 360px) minmax(360px, 1fr);
   gap: var(--space-5) var(--space-6);
   padding: var(--space-5) var(--space-6);
   align-content: start;
@@ -527,11 +562,47 @@
   flex-direction: column;
 }
 
+@media (max-width: 1400px) {
+  .ledger__body--cols {
+    grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+  }
+  .ledger__col--learnset {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 900px) {
+  .ledger__body--cols {
+    grid-template-columns: 1fr;
+  }
+  .ledger__col--learnset {
+    grid-column: 1;
+  }
+}
+
 /* In full page the learnset drops the 280px side-panel cap so it grows to use
    the tall column's vertical space; the pane body scrolls once content overflows
    rather than stranding the learnset at a fixed height. */
+/* Full-page learnset: drop the side-panel's scroll cap and flex column, and
+   flow the moves into CSS columns instead — the wide learnset column would
+   otherwise sit as a single narrow list with the rest of its width empty. */
 .ledger--full .ledger__learnset {
   max-height: none;
+  display: block;
+  column-width: 15rem;
+  column-gap: var(--space-6);
+}
+
+.ledger--full .ledger__move {
+  break-inside: avoid;
+}
+
+/* The vitals column is narrower than the old stretched half-page panel, so the
+   stat bar's track (the grid's 1fr third column) no longer needs to run the
+   full column width to read as a bar — cap it so low stats don't leave a long
+   empty track. */
+.ledger--full .lrow--stat {
+  grid-template-columns: 3.5rem auto minmax(0, 12rem);
 }
 
 .ledger__col > .ledger__section:last-child {
@@ -545,6 +616,9 @@
    (species-*-heading). If a heading id is renamed, that section falls through to
    the *:not([aria-labelledby]) full-width rule — keep the ids in sync. */
 .ledger__body--cols .editor-form {
+  /* The editor is ONE child of the outer 3-track grid — span every track so
+     its own two-column layout gets the full page width, not the first track. */
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4) var(--space-6);

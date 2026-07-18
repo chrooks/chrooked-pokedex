@@ -17,7 +17,8 @@ export type ColumnKey =
   | "spd"
   | "spe"
   | "bst"
-  | "abilities";
+  | "abilities"
+  | "evolution";
 
 export interface Column {
   key: ColumnKey;
@@ -130,6 +131,14 @@ export const COLUMNS: Column[] = [
     locked: false,
     sortable: true,
     sortValue: (entry) => entry.abilities.primary ?? undefined,
+  },
+  {
+    key: "evolution",
+    label: "Evolution",
+    cellType: "string",
+    locked: false,
+    sortable: true,
+    sortValue: (entry) => entry.evolution?.from_name ?? entry.evolution?.from ?? undefined,
   },
 ];
 

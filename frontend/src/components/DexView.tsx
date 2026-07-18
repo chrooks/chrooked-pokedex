@@ -1,4 +1,4 @@
-import type { DexEntry } from "../types";
+import type { CanonicalMethod, DexEntry, TargetNamespace } from "../types";
 import type { ResourceState } from "../hooks/useResource";
 import type { DexLayout } from "../hooks/useUrlState";
 import type { ColumnKey } from "../lib/dexColumns";
@@ -23,7 +23,10 @@ type Props = {
   onOpen: (chrookedId: string) => void;
   backdropTargetId?: string | null;
   abilityOptions?: readonly string[];
-  onInlineEdit?: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
+  speciesOptions?: readonly string[];
+  evolutionMethods?: readonly CanonicalMethod[];
+  onInlineEdit?: (entry: DexEntry, edit: InlineEdit, scope?: string) => Promise<void>;
+  inlineScopeTarget?: TargetNamespace | null;
 };
 
 /** The dex screen: resolves load/error, renders the control stack above a
@@ -43,7 +46,10 @@ export function DexView({
   onOpen,
   backdropTargetId,
   abilityOptions,
+  speciesOptions,
+  evolutionMethods,
   onInlineEdit,
+  inlineScopeTarget,
 }: Props) {
   if (resource.error !== null) {
     return <ErrorView message={resource.error} status={resource.status} />;
@@ -83,7 +89,10 @@ export function DexView({
             onOpen={onOpen}
             backdropTargetId={backdropTargetId}
             abilityOptions={abilityOptions}
+            speciesOptions={speciesOptions}
+            evolutionMethods={evolutionMethods}
             onInlineEdit={onInlineEdit}
+            inlineScopeTarget={inlineScopeTarget}
           />
         ) : (
           <DexGrid

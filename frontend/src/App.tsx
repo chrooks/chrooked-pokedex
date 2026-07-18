@@ -9,8 +9,8 @@ import { evalEntries, appendNameFilter } from "./lib/dexFilters";
 import { stableMultiSort } from "./lib/dexSort";
 import { expandEvoLines } from "./lib/evoLine";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { CanonicalMethod, DexEntry, KindKey, Move, Target } from "./types";
-import { applyInlineEdit, type InlineEdit } from "./lib/inlineEdit";
+import type { CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace } from "./types";
+import { applyInlineEdit, previewInlineEdit, type InlineEdit } from "./lib/inlineEdit";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
 import type { DexViewPatch } from "./components/filters/DexControls";
@@ -149,15 +149,69 @@ export default function App() {
   );
   const handleClose = useCallback(() => update({ selected: null }), [update]);
 
+  // Step the open profile to the previous/next species in the CURRENT visible
+  // order (filters + table sort applied), wrapping at the ends. Bound to the
+  // header arrows and ←/→ in DetailLedger.
+  const handleStep = useCallback(
+    (delta: -1 | 1) => {
+      if (view.selected === null || dexEntries.length === 0) return;
+      const index = dexEntries.findIndex(
+        (entry) => entry.chrooked_id === view.selected,
+      );
+      // Selected species filtered out of the list: step to the first entry.
+      const next =
+        index === -1
+          ? 0
+          : (index + delta + dexEntries.length) % dexEntries.length;
+      update({ selected: dexEntries[next].chrooked_id });
+    },
+    [view.selected, dexEntries, update],
+  );
+
   // Right-click inline table edit: fetch the species' raw Override (404 → none),
-  // patch the one field to an overrides-only payload, PUT to base. putSpecies
+  // patch the one field to an overrides-only payload, PUT to the chosen scope
+  // ("base" or "target:<slug>" — same contract as the modal editor). putSpecies
   // emits a data change, so the always-mounted dex refetches and the cell updates.
-  // ponytail: base scope only — a Target backdrop keeps the modal editor's scope
-  // toggle, so inline edit is gated off there (see onInlineEdit prop below).
-  const handleInlineEdit = useCallback(async (entry: DexEntry, edit: InlineEdit) => {
-    const raw = await api.speciesOverride(entry.chrooked_id).catch(() => null);
-    await api.putSpecies(entry.chrooked_id, applyInlineEdit(entry, raw, edit));
-  }, []);
+  //
+  // Optimistic: the cell is patched in `dex` locally the instant the menu
+  // submits, so the table updates before the network round-trip. A successful
+  // PUT's emitDataChange → reload replaces the guess with the real merged row;
+  // a failed PUT rolls the local patch back to the pre-edit snapshot.
+  const handleInlineEdit = useCallback(
+    async (entry: DexEntry, edit: InlineEdit, scope?: string) => {
+      dex.mutate((rows) =>
+        rows?.map((row) =>
+          row.chrooked_id === entry.chrooked_id ? previewInlineEdit(row, edit) : row,
+        ) ?? rows,
+      );
+      try {
+        const raw = await api.speciesOverride(entry.chrooked_id).catch(() => null);
+        await api.putSpecies(entry.chrooked_id, applyInlineEdit(entry, raw, edit), scope);
+      } catch (error) {
+        dex.mutate((rows) =>
+          rows?.map((row) => (row.chrooked_id === entry.chrooked_id ? entry : row)) ?? rows,
+        );
+        throw error;
+      }
+    },
+    [dex],
+  );
+
+  // Backdrop's Override namespace — lets the inline edit menu offer a scope
+  // choice (mirrors SpeciesEditor's namespace resolution; unbound → null → base).
+  const [inlineNamespace, setInlineNamespace] = useState<TargetNamespace | null>(null);
+  useEffect(() => {
+    if (!view.backdrop) {
+      setInlineNamespace(null);
+      return;
+    }
+    const controller = new AbortController();
+    api
+      .targetNamespace(view.backdrop, controller.signal)
+      .then((ns) => !controller.signal.aborted && setInlineNamespace(ns))
+      .catch(() => !controller.signal.aborted && setInlineNamespace(null));
+    return () => controller.abort();
+  }, [view.backdrop]);
 
   // From a species profile cross-link (#28): jump to the entity's page and open
   // its read-only detail. Types route to the Type Chart and open the breakdown
@@ -322,13 +376,17 @@ export default function App() {
           onViewBackdrop={handleViewBackdrop}
           backdropTargetId={view.backdrop}
           abilityOptions={abilityOptions}
-          onInlineEdit={view.backdrop ? undefined : handleInlineEdit}
+          speciesOptions={speciesOptions}
+          evolutionMethods={evolutionMethods.data ?? []}
+          onInlineEdit={handleInlineEdit}
+          inlineScopeTarget={inlineNamespace}
         />
       </div>
       {selectedEntry !== null && (
         <DetailLedger
           entry={selectedEntry}
           onClose={handleClose}
+          onStep={handleStep}
           onSaved={dex.reload}
           onNavigate={handleNavigate}
           full={full}
@@ -369,7 +427,10 @@ type KindScreenProps = {
   onViewBackdrop: (targetId: string) => void;
   backdropTargetId?: string | null;
   abilityOptions?: readonly string[];
-  onInlineEdit?: (entry: DexEntry, edit: InlineEdit) => Promise<void>;
+  speciesOptions?: readonly string[];
+  evolutionMethods?: readonly CanonicalMethod[];
+  onInlineEdit?: (entry: DexEntry, edit: InlineEdit, scope?: string) => Promise<void>;
+  inlineScopeTarget?: TargetNamespace | null;
 };
 
 function KindScreen({
@@ -387,7 +448,10 @@ function KindScreen({
   onViewBackdrop,
   backdropTargetId,
   abilityOptions,
+  speciesOptions,
+  evolutionMethods,
   onInlineEdit,
+  inlineScopeTarget,
 }: KindScreenProps) {
   switch (kind) {
     case "moves":
@@ -417,7 +481,10 @@ function KindScreen({
           onOpen={onOpen}
           backdropTargetId={backdropTargetId}
           abilityOptions={abilityOptions}
+          speciesOptions={speciesOptions}
+          evolutionMethods={evolutionMethods}
           onInlineEdit={onInlineEdit}
+          inlineScopeTarget={inlineScopeTarget}
         />
       );
   }
