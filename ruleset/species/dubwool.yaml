@@ -1,6 +1,7 @@
 name: Dubwool
 chrooked_id: dubwool
 aka: { dex: 832 }
+stats: { hp: 82, atk: 83, spd: 95, spe: 90 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
@@ -16,3 +17,4 @@ learnset:
   - { level: 44, move: Cotton Guard }
   - { level: 50, move: Double-Edge }
   - { level: 56, move: Last Resort }
+evolution: { from: Wooloo, method: { level: 24 } }
