@@ -275,7 +275,7 @@ _TARGET = {"selected": "SingleNonUser", "user": "User", "both": "AllOpposing"}
 _FLAG = {
     "contact": "contact", "punching": "punchmove", "biting": "bitingmove",
     "sound": "soundmove", "slicing": "sharpmove", "wind": "windmove",
-    "ballistic": "ballmove", "kicking": "kickmove",
+    "ballistic": "ballmove", "kicking": "kickmove", "high_crit": "highcrit",
 }
 # Creation defaults for a scalar a MoveDef leaves as None (all 23 current
 # creation moves carry full numbers; these guard a future sparse def).
@@ -334,6 +334,11 @@ def _build_movetext(
             # MoveDef, so only a nonzero priority is written.
             if move.priority:
                 lines.append(f"MOVEHASH[:{sym}][:priority] = {move.priority}")
+            # ponytail: additive only — sets modeled flags the Ruleset declares,
+            # never clears one the engine already has.
+            for flag in move.flags:
+                if (key := _FLAG.get(flag)):
+                    lines.append(f"MOVEHASH[:{sym}][:{key}] = true")
             if move.effect in _PRIMARY_EFFECT_CODES:
                 code, chance = _PRIMARY_EFFECT_CODES[move.effect]
                 lines.append(f"MOVEHASH[:{sym}][:function] = 0x{code:03X}")

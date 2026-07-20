@@ -32,6 +32,7 @@ _FLAG = {
     "sound": "Sound",
     "slicing": "Slicing",
     "wind": "Wind",
+    "high_crit": "HighCriticalHitRate",
 }
 
 # The Essentials flag names the Ruleset models. When move_apply reconciles an
