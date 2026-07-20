@@ -33,7 +33,7 @@ import subprocess
 import tempfile
 import threading
 import uuid
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -962,6 +962,60 @@ def _annotate_target_fields(
     ]
 
 
+def rekey_ruleset_to_rejuv(ruleset: Ruleset, snapshot: dict[str, Any]) -> Ruleset:
+    """Re-key the Ruleset's species Overrides onto a Rejuv snapshot's form ids.
+
+    The two name forms differently. The Ruleset follows the base snapshot
+    (`sawsbuckspring`, `ponytagalar`); Rejuv slugs a form `<base>--<label slug>`
+    and leaves form 0 as the bare base (`sawsbuck`, `ponyta--galarianform`). The
+    projection joins on `chrooked_id` alone, so 189 of ~1000 Overrides — every
+    form species — silently failed to join and the dex showed unedited target
+    truth. The Applier already resolves these (RejuvResolution._match_form); this
+    is the same bridge for the read path.
+
+    Match rule: a snapshot entry's base id plus its form label's core
+    ("Galarian Form" -> "galarian"), against Ruleset ids that start with that
+    base and whose remaining suffix PREFIXES the core — "ponytagalar" bridges to
+    "galarian", "arcaninehisui" to "hisuian". Longest suffix wins; a tie is
+    ambiguous and left unjoined. A snapshot id that already joins directly is
+    never rewritten, so this can only add joins, never move existing ones.
+    """
+    from ..appliers.rejuv.resolution import _form_core
+
+    # Pass 1: every (snapshot form -> Ruleset id) the match rule allows.
+    claims: dict[str, list[tuple[str, str]]] = {}
+    for cid, entry in snapshot.get("species", {}).items():
+        if cid in ruleset.species:
+            continue  # already joins directly — never override a real match
+        base = cid.split("--")[0]
+        core = _form_core(str(entry.get("form") or ""))
+        if not core:
+            continue
+        matches = [
+            rid
+            for rid in ruleset.species
+            if rid.startswith(base) and rid != base and core.startswith(rid[len(base):])
+        ]
+        if not matches:
+            continue
+        best = max(matches, key=len)
+        if sum(1 for m in matches if len(m) == len(best)) > 1:
+            continue  # ambiguous — leave unjoined rather than guess a form
+        claims.setdefault(best, []).append((cid, core))
+
+    # Pass 2: keep the join one-to-one. Rejuv carries original forms the Ruleset
+    # never named (Absol's "Mega Form Z" alongside "Mega Form"), and both prefix-
+    # match the one Override. The Applier resolves such an id to a single form, so
+    # letting every near-match inherit it would preview edits Apply won't write.
+    # Closest core wins: an exact suffix match first, then the shortest core.
+    species = dict(ruleset.species)
+    for rid, candidates in claims.items():
+        suffix = rid[len(min(c for c, _ in candidates).split("--")[0]):]
+        cid, _ = min(candidates, key=lambda c: (c[1] != suffix, len(c[1]), c[0]))
+        species[cid] = ruleset.species[rid]
+    return replace(ruleset, species=species)
+
+
 def target_dex(
     target: Target,
     ruleset: Ruleset,
@@ -981,6 +1035,8 @@ def target_dex(
     relabel (pokeemerald targets and tests that don't inject the base).
     """
     snapshot = state.snapshot_for(target)
+    if target.engine == "rejuv":
+        ruleset = rekey_ruleset_to_rejuv(ruleset, snapshot)
     entries = dexmod.build_dex(snapshot, ruleset)
     if target.engine in ("essentials", "rejuv") and base_snapshot is not None:
         english_map = _english_species_map(base_snapshot, ruleset)

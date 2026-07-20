@@ -102,6 +102,8 @@ if defined?(MOVEHASH)
       "name" => m[:name], "type" => m[:type], "category" => m[:category],
       "power" => m[:basedamage], "accuracy" => m[:accuracy], "pp" => m[:maxpp],
       "desc" => m[:desc],
+      "flags" => %i[contact soundmove punchmove bitingmove sharpmove ballmove bombmove windmove]
+                   .select { |f| m[f] }.map(&:to_s),
     }
   end
 end
@@ -147,6 +149,46 @@ def _dump(target: Path) -> dict[str, Any]:
         raise RejuvSnapshotError(f"Rejuv dump was not valid JSON: {exc}") from exc
 
 
+# Rejuv keeps move flags as loose symbol keys on the move hash (anything the
+# compiler doesn't recognise lands in MoveData's @flags). These seven are the ones
+# the neutral schema models — verified against the game's own exporter in
+# `Scripts/DataObjects - Yeeters.rb`. Rejuv flags we don't model (magiccoat,
+# powdermove, dancemove, ...) are dropped, same as every other reader.
+_REJUV_FLAG_TO_NEUTRAL = {
+    "contact": "contact",
+    "soundmove": "sound",
+    "punchmove": "punching",
+    "bitingmove": "biting",
+    "sharpmove": "slicing",
+    # Rejuv splits ballistic in two — `:ballmove` (ball-shaped) and `:bombmove`.
+    # Bulletproof checks both (Battle_Move.rb:165), so both fold to one neutral flag.
+    "ballmove": "ballistic",
+    "bombmove": "ballistic",
+    "windmove": "wind",
+}
+
+
+# Form labels that carry no information and must not reach a display name.
+# Rejuv gives ~975 of its ~1025 base forms the placeholder "Normal Form"; a
+# handful (Rotom, Arceus) label form 0 with the species' own name instead.
+_EMPTY_FORM_LABELS: frozenset[str] = frozenset({"normal form", "normal forme", ""})
+
+
+def _display_name(name: str, form_label: str) -> str:
+    """Species name with its form in parentheses, when the form actually names something.
+
+    Labelling only non-base forms leaves the *first* form of a genuinely
+    multi-form species bare — Rejuv's form 0 for Deerling is "Spring Form", so
+    Spring Deerling rendered as plain "Deerling" beside its three labelled
+    siblings. Keying on the label instead of the base-form flag labels all four,
+    and still leaves single-form species (label "Normal Form") untouched.
+    """
+    label = form_label.strip()
+    if label.lower() in _EMPTY_FORM_LABELS or label == name:
+        return name
+    return f"{name} ({label})"
+
+
 def _neutral_type(sym: str | None) -> str | None:
     if not sym or sym == "QMARKS":
         return None
@@ -170,6 +212,12 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
             "accuracy": m.get("accuracy"),
             "pp": m.get("pp"),
             "description": (m.get("desc") or "").strip(),
+            # dict.fromkeys dedupes (ball+bomb both fold to `ballistic`) order-stably.
+            "flags": list(dict.fromkeys(
+                _REJUV_FLAG_TO_NEUTRAL[f]
+                for f in m.get("flags") or []
+                if f in _REJUV_FLAG_TO_NEUTRAL
+            )),
         }
 
     abilities: dict[str, dict[str, Any]] = {}
@@ -207,9 +255,12 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
             "sprite": {"folder": nz.slug(mon["key"]), "form": mon.get("form_index", 0)},
             "dex": mon.get("dexnum") or index,
             "chrooked_id": cid,
-            "name": (
-                f"{mon.get('name') or str(mon['key']).capitalize()}"
-                + (f" ({form_label})" if not mon.get("base_form", True) else "")
+            # Rejuv's own form label ("Spring Form", "Galarian Form"). Carried so the
+            # Ruleset overlay can be rekeyed onto form entries — Rejuv slugs a form
+            # `<base>--<label>` while the Ruleset names it `<base><suffix>`.
+            "form": form_label,
+            "name": _display_name(
+                mon.get("name") or str(mon["key"]).capitalize(), form_label
             ),
             "types": types,
             "abilities": {

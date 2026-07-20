@@ -1747,3 +1747,86 @@ def test_ledger_records_scoped_edit_and_apply(
     # Ledger lives at the BASE ruleset dir, not inside the namespace.
     assert (ruleset_dir / "ledger.ndjson").exists()
     assert not (ruleset_dir / "targets" / "africanvs" / "ledger.ndjson").exists()
+
+
+# --- Rejuv Ruleset rekey ------------------------------------------------------
+# The Ruleset names forms after the base snapshot (`sawsbuckspring`); Rejuv slugs
+# them `<base>--<label>` and leaves form 0 bare (`sawsbuck`). Without a bridge the
+# projection joined on chrooked_id alone and every form Override silently missed.
+
+
+def _rekey_fixture():
+    from chrooked_pokedex.model.ruleset import Ruleset
+    from chrooked_pokedex.model.schema import SpeciesOverride
+
+    def ovr(cid, types):
+        return SpeciesOverride(name=cid, chrooked_id=cid, types=tuple(types))
+
+    ruleset = Ruleset(
+        species={
+            "sawsbuckspring": ovr("sawsbuckspring", ["Normal", "Fairy"]),
+            "sawsbuckwinter": ovr("sawsbuckwinter", ["Normal", "Ice"]),
+            "ponytagalar": ovr("ponytagalar", ["Psychic", "Fairy"]),
+            "arcaninehisui": ovr("arcaninehisui", ["Fire", "Rock"]),
+            "absolmega": ovr("absolmega", ["Dark"]),
+            "bulbasaur": ovr("bulbasaur", ["Grass", "Poison"]),
+        }
+    )
+    snapshot = {
+        "species": {
+            # form 0 of a multi-form species — bare id, meaningful label
+            "sawsbuck": {"chrooked_id": "sawsbuck", "form": "Spring Form"},
+            "sawsbuck--winterform": {"chrooked_id": "sawsbuck--winterform", "form": "Winter Form"},
+            # abbreviated Ruleset suffixes ("galar" for "Galarian Form")
+            "ponyta--galarianform": {"chrooked_id": "ponyta--galarianform", "form": "Galarian Form"},
+            "arcanine--hisuianform": {"chrooked_id": "arcanine--hisuianform", "form": "Hisuian Form"},
+            # Rejuv-original extra form with no Override of its own
+            "absol--megaform": {"chrooked_id": "absol--megaform", "form": "Mega Form"},
+            "absol--megaformz": {"chrooked_id": "absol--megaformz", "form": "Mega Form Z"},
+            # single-form species — placeholder label, already joins directly
+            "bulbasaur": {"chrooked_id": "bulbasaur", "form": "Normal Form"},
+        }
+    }
+    return ruleset, snapshot
+
+
+@pytest.mark.unit
+def test_rekey_joins_form_overrides_onto_rejuv_ids():
+    ruleset, snapshot = _rekey_fixture()
+    rekeyed = targetsmod.rekey_ruleset_to_rejuv(ruleset, snapshot)
+
+    # form 0 of a multi-form species picks up its season's Override
+    assert rekeyed.species["sawsbuck"].chrooked_id == "sawsbuckspring"
+    assert rekeyed.species["sawsbuck--winterform"].chrooked_id == "sawsbuckwinter"
+    # abbreviated suffixes bridge to the full Rejuv label
+    assert rekeyed.species["ponyta--galarianform"].chrooked_id == "ponytagalar"
+    assert rekeyed.species["arcanine--hisuianform"].chrooked_id == "arcaninehisui"
+
+
+@pytest.mark.unit
+def test_rekey_is_additive_and_one_to_one():
+    ruleset, snapshot = _rekey_fixture()
+    rekeyed = targetsmod.rekey_ruleset_to_rejuv(ruleset, snapshot)
+
+    # never rewrites or drops an Override that already joined directly
+    assert rekeyed.species["bulbasaur"] is ruleset.species["bulbasaur"]
+    for cid, override in ruleset.species.items():
+        assert rekeyed.species[cid] is override
+
+    # One Override may not be claimed by two forms: Rejuv's "Mega Form Z" has no
+    # Override of its own, and inheriting absolmega would preview an edit that
+    # Apply will never write. Closest core ("mega") wins.
+    assert rekeyed.species["absol--megaform"].chrooked_id == "absolmega"
+    assert "absol--megaformz" not in rekeyed.species
+
+
+@pytest.mark.unit
+def test_rekey_leaves_unmatched_forms_alone():
+    ruleset, snapshot = _rekey_fixture()
+    snapshot["species"]["tauros--combatbreed"] = {
+        "chrooked_id": "tauros--combatbreed",
+        "form": "Combat Breed",
+    }
+    rekeyed = targetsmod.rekey_ruleset_to_rejuv(ruleset, snapshot)
+    # No Override prefixes "combatbreed" — stays unjoined rather than guessing.
+    assert "tauros--combatbreed" not in rekeyed.species
