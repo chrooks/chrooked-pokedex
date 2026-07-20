@@ -52,8 +52,11 @@ will be.
   call an LLM directly from this skill.
 - **Evolution-line default.** If the species is part of an evo line, follow the
   "Evolution-line default" convention in `CLAUDE.md`: draft the **final evo's** learnset
-  first, then copy it down to the pre-evos **verbatim** (`line` mode is the natural fit).
-  A pre-evo learnset that differs from its final evo is an exception — state it explicitly.
+  first, then copy it down to the pre-evos **verbatim minus L0 on-evo moves** (`line`
+  mode is the natural fit). A pre-evo learnset that differs beyond the L0 strip is an
+  exception — state it explicitly.
+- **Megas and battle forms mirror the base form's learnset** — never draft a bespoke
+  learnset for a mega/form. Copy the base form's list, keeping its L0 row.
 
 ## Learnset design defaults (house style)
 
@@ -74,6 +77,15 @@ steers otherwise. They shape input only — the server still owns the rubric and
    | after ~L50 | 100+ BP (or a setup capstone that gets there) |
 
    If a species has two STAB types, interleave the ramps so each bracket has a step.
+
+   **Hard pacing caps** (violations are the most-corrected mistake — check before preview):
+   - **No move above 60 BP before L20.** A 75 BP punch at L12 is exactly the miss.
+   - **Every STAB type lands its first real (reliable, ≥50 BP) hit by the mid-20s.**
+     A type whose first move arrives at L38 — or whose only ramp step is low-accuracy
+     (Iron Tail) — fails the ramp.
+   - **At most ~4 moves at L1.** L1 is the floor kit, not a dumping ground.
+   - Signature/user-anchored moves the user has placed (e.g. Mach Punch @14) survive
+     redrafts — re-check they're still present after any "try again".
 
 2. **Match the category to the stat.** When SpA > Atk, drop physical STAB/coverage in
    favor of special equivalents (and vice-versa). A dump-stat physical move is dead weight —
@@ -217,14 +229,10 @@ Chris reviews `git diff` and commits himself; the skill never touches git.
 
 ## Line mode — suggest the whole evolution line
 
-`line` mode proposes a coherent, stage-appropriate learnset for **every member of the
-species' evolution line** in one flow. There is **no new endpoint**: it loops the same
-`POST …/suggest/learnset` once per member, feeding each call the anchor's learnset and the
-members already proposed (this run) through the existing `direction` field. Coherence
-rides in `direction`; the chain is the loop.
-
-A learnset is stage-specific, so each member gets its **own** stage-appropriate list — not
-one list copied. Shared signature moves carry across members at scaled levels.
+`line` mode gives **every member of the species' evolution line** a learnset in one flow.
+Only the **final evo** gets an LLM proposal; every pre-evo is a **mechanical copy-down**
+of the approved final-evo list — the house convention (see `CLAUDE.md` "Evolution-line
+default"). No per-member suggest calls, no per-stage rescaling.
 
 ### Algorithm
 
@@ -240,48 +248,30 @@ one list copied. Shared signature moves carry across members at scaled levels.
    the invoked species**; for a branching tip (e.g. Eevee) take only the branch the invoked
    species sits on and note the others are skipped in v1. Order the chain base → tip.
 
-2. **Anchor = the invoked species.** Its **current** learnset (from its dex entry) is the
-   fixed reference every other member is modeled on.
+2. **Propose the final evo only.** One `POST …/suggest/learnset` call for the tip of the
+   chain (mode `full`, direction = the user's steer after `line`), handled exactly as
+   single-species mode. Preview it; iterate with the user until approved.
 
-3. **Propose each member in chain order.** For each member, call the existing endpoint,
-   building `direction` from: the user's freeform steer (the text after `line`) + the
-   anchor's learnset + the learnsets already proposed earlier in this run. Build the JSON
-   with a file (apostrophes/quotes break inline `-d`):
+3. **Copy down mechanically.** For each pre-evo, the learnset is the approved final-evo
+   list **minus every L0 row** (L0 = on-evo reward; it stays on the stage that evolves
+   into it — for a 3-stage line, the middle stage keeps the L0 rows it earns on evolving
+   from the base, i.e. strip only rows above that member's stage). Levels are otherwise
+   untouched. Any divergence is an exception the user must state.
 
-   ```bash
-   # write payload.json = {"mode":"full","direction":"<built text>"}
-   curl -sS -X POST "${CHROOKED_API:-http://127.0.0.1:8000}/api/species/<member>/suggest/learnset" \
-     -H 'content-type: application/json' --data-binary @payload.json
-   ```
+4. **Preview the whole line** — final evo's table plus one line per pre-evo noting
+   "copy minus L0 rows: <stripped moves>".
 
-   - **200** → keep the member's draft; add it to the running coherence context for the
-     next member.
-   - **422** → mark the member **blocked**, show the message, **continue** the chain (don't
-     abort the others).
-   - **503** → the LLM/key problem is global; stop and relay it.
+5. **One confirm gate** for the whole line. On an explicit yes, **PUT each member**
+   exactly as single-species mode does (read raw Override → merge only `learnset` → PUT).
+   Report what landed per member. Reject → write nothing.
 
-4. **Preview every member** as a level-sorted table (the same shape as single-species
-   mode), blocked members flagged. Show one combined rationale summary.
+**Megas/forms in the line:** if the species has megas or battle forms, mirror the base
+form's approved list onto them (keeping the L0 row) in the same write pass.
 
-5. **One confirm gate** for the whole line. On an explicit yes, **PUT each approved member**
-   exactly as single-species mode does (read raw Override → merge only `learnset` → PUT),
-   looping over the approved members. Report what landed per member. Reject → write nothing.
-
-**Draft capture invariant (the preview IS the write).** Each member's response must be
-saved to a **unique, immutable** file (e.g. `<run-id>/<member>.json`) the moment it
-returns — never a name reused across members or runs. Preview from that file, and PUT the
-learnset read back from that **same** file. If you run calls in the background, wait for
-each to fully complete (check the captured HTTP status, not a partial-JSON heuristic)
-before previewing. A divergence between what was shown and what is written is a write
-without consent — never let a late or duplicate call overwrite a draft mid-flow.
-
-**The anchor and the write set.** Pick the anchor explicitly — it can be the invoked
-species or any member the user names (e.g. "anchor on Arboliva"); its **current** learnset
-is the coherence reference. By default the anchor is the reference only and is **not**
-rewritten. If the user asks to **edit the whole line / include the anchor**, also propose
-the anchor: run a suggest for it too (direction = the family theme + the members already
-proposed), so every member gets a fresh draft while the anchor's *current* list still
-seeds the coherence. Always say which members you'll write before the confirm.
+**Draft capture invariant (the preview IS the write).** Save the final-evo response to a
+unique file the moment it returns; preview from that file and derive every copy-down from
+that **same** file. A divergence between what was shown and what is written is a write
+without consent.
 
 ## Distribute mode — one move across many species
 

@@ -49,6 +49,23 @@ the UI's Save is.
   then copy its typing/abilities/learnset down to the pre-evos and scale only stats by
   the same BST delta. Divergences are exceptions — state them explicitly.
 
+## Makeover opening move — lore first, endpoint second
+
+When the ask is an **open-ended makeover** (no direction given, e.g. "cufant line
+makeover"), do NOT open with a cold endpoint call — a rubric guess with no flavor
+grounding is how bad first proposals happen. Instead:
+
+1. **Research the line's lore.** What kind of creature is it — dex flavor, name
+   etymology, real-world inspiration, signature traits? Use what you know; search if
+   thin.
+2. **Present 2–3 makeover options**, each naming a **typing + role** grounded in that
+   lore (e.g. "pure Steel physical wall — copper temple guardian"), one line of why
+   each fits.
+3. **Only after the user picks a direction**, call the endpoint with that pick as the
+   `direction`.
+
+When the user already gives a direction, skip straight to the endpoint as usual.
+
 ## Prerequisites
 
 - The backend is running (default `http://127.0.0.1:8000`; launch with

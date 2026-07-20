@@ -65,10 +65,21 @@ Data flows one direction by default: **Ruleset YAML → model → Applier → ta
 When reworking a species that is part of an evolution line, default to this shape:
 
 1. **Design the final evo first** — typing, stats, abilities, learnset. That's where the line's identity is decided; get it approved before deriving anything.
-2. **Copy the kit down to every pre-evo**: same typing, same abilities, **same learnset (exact copy)**.
+2. **Copy the kit down to every pre-evo**: same typing, same abilities, **same learnset (exact copy, minus L0 on-evo moves)** — L0 rows are the evolution's reward and stay on the evolved stage only. No per-stage rescaling of levels.
 3. **Only stats scale down.** Apply the *same BST delta* the final evo received to each pre-evo's canon BST, then redistribute within that total preserving the final evo's role emphasis (keep the dump stat low). Example: Sawsbuck 475 → 520 (**+45**), so Deerling 335 → **380**.
 4. **Multi-form lines**: do all of the above per form, so each form keeps its own typing and stat-role identity across both stages.
+5. **Megas and battle forms mirror the base form's learnset** — never bespoke. Keep the base form's L0 row.
 
 Divergent typing, abilities, or stat shape between stages is an **exception** — allowed, but state it explicitly rather than doing it silently.
+
+### Makeover definition of done
+
+A species makeover is **not done** at Ruleset write. Done means:
+
+1. **Applied** — run `apply` against the active Rejuv target automatically once the makeover is locked in; don't wait to be asked.
+2. **Read back** — after apply, read the applied PBS entry for each changed species from the target and diff it against the Ruleset expectation (types, stats, abilities, learnset rows, evolutions). A green Apply Report alone is not In-Game Proof — form-join and clobber bugs have shipped past it.
+3. **Committed and pushed** once the read-back checks out.
+
+Dex UI changes get the same discipline: drive the running UI with a real query (screenshot or assertion) before calling it done — passing vitest alone has shipped broken filters.
 </content>
 </invoke>
