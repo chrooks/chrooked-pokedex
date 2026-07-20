@@ -11,24 +11,37 @@
 # whichever slot is active, the hook fires. The lambda guards on move + species, so every
 # other Pokemon with those abilities pays only a symbol comparison after each move.
 #
-# In-battle form refresh mirrors Rejuv's own sequence (Scripts/Battle.rb:2380-2381):
-# set the underlying Pokemon's form, sync the battler, then pbUpdate(true) to recalc
-# stats/types/sprite for the rest of the battle. The form persists after battle because it
-# is stored on the Pokemon, not a battle-only volatile.
+# In-battle form refresh mirrors Rejuv's own Mega sequence (Scripts/Battle.rb:2379-2396):
+# set the underlying Pokemon's form, sync the battler, pbUpdate(true) to recalc
+# stats/types, THEN scene.pbChangePokemon to redraw the battle sprite. pbUpdate only
+# touches battler data (Battler.rb:774) — it never touches the scene, so without the
+# pbChangePokemon call the stats/typing shift but the sprite stays the old season until
+# the party screen redraws after battle. The form persists after battle because it is
+# stored on the Pokemon, not a battle-only volatile.
 #
 # Test cases:
-#   - a Spring Sawsbuck uses Season's End => becomes Summer (Normal/Grass); stats/types update
+#   - a Spring Sawsbuck uses Season's End => becomes Summer (Normal/Grass); stats/types AND
+#     the on-field sprite update immediately, not only after the battle ends
 #   - a Winter Sawsbuck uses Season's End => wraps to Spring (Normal/Fairy)
 #   - a non-Deerling/Sawsbuck that somehow has Season's End => no form change
+
+CHROOKED_SEASON_NAMES = ["Spring", "Summer", "Autumn", "Winter"]
 
 _chrooked_season_shift = lambda { |user, move_sym, battle|
   next unless move_sym == :SEASONSEND
   pkmn = user.pokemon
   next unless pkmn && [:DEERLING, :SAWSBUCK].include?(pkmn.species)
-  new_form = (user.form + 1) % 4
+  old_form = user.form
+  new_form = (old_form + 1) % 4
   pkmn.changeForm(new_form)
   user.changeForm(new_form)
   user.pbUpdate(true)
+  battle.scene.pbChangePokemon(user, pkmn)
+  # Proof trail: types come from pbUpdate, sprite from pbChangePokemon. If the sprite bug
+  # is back, this line still reads correct while the screen shows the old season.
+  Chrooked.log("SEASONSEND battle #{pkmn.species} #{CHROOKED_SEASON_NAMES[old_form]}" \
+               "(#{old_form}) -> #{CHROOKED_SEASON_NAMES[new_form]}(#{new_form}) " \
+               "types=#{user.type1}/#{user.type2} spr=#{user.pokemon.form} sprite=redrawn")
   battle.pbDisplay(_INTL("The season shifts!"))
 }
 

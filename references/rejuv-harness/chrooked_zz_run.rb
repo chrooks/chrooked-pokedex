@@ -18,6 +18,7 @@ class PokeBattle_Scene
     pbRefresh
     update_menu = true
     holdZ = false
+    $chrooked_quickrun = false # chrooked: cleared each time the command menu opens
     tts(texts[0].gsub("\n", " "))
     loop do
       pbFrameUpdate(cw, update_menu)
@@ -83,6 +84,7 @@ class PokeBattle_Scene
         # to the base no-op; pbRun still gates escape.
         if @battle.pbIsWild?
           pbPlayDecisionSE()
+          $chrooked_quickrun = true
           return 3
         end
       else
@@ -117,6 +119,19 @@ class PokeBattle_Scene
       end
 
       tts(texts[cw.index + 1], true) if update_menu
+    end
+  end
+end
+
+# chrooked: a B-triggered run shouldn't make you press A again to leave.
+# Full-method override of PokeBattle_Battle#pbDisplayAutoPaused (Battle.rb) —
+# unpaused only for the one message that follows a B-run.
+class PokeBattle_Battle
+  def pbDisplayAutoPaused(msg)
+    if @controlPlayer || $game_switches[:SpeedSkip_Password] || $chrooked_quickrun
+      @scene.pbDisplayMessage(msg)
+    else
+      @scene.pbDisplayPausedMessage(msg)
     end
   end
 end
