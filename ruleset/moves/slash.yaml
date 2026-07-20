@@ -7,4 +7,4 @@ power: 60
 accuracy: 100
 pp: 20
 description: Slashes with claws, etc. Has a high critical-hit ratio.
-flags: [contact, slicing]
+flags: [contact, slicing, high_crit]

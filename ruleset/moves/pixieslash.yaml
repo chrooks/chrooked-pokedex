@@ -7,4 +7,4 @@ power: 80
 accuracy: 100
 pp: 15
 description: Slashes the foe with a whimsical blade. High crit.
-flags: [contact, slicing]
+flags: [contact, slicing, high_crit]

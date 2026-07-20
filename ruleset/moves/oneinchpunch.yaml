@@ -11,4 +11,4 @@ power: 90
 accuracy: 0
 pp: 10
 description: A focused strike that can't miss. High critical-hit rate.
-flags: [contact, punching]
+flags: [contact, punching, high_crit]

@@ -9,4 +9,4 @@ pp: 10
 description: High critical hit ratio. Ups the user's Speed.
 additional_effects:
   - { effect: spd_plus_1, chance: 100 }
-flags: [wing]
+flags: [wing, high_crit]

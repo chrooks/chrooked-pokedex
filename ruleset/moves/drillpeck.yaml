@@ -6,5 +6,5 @@ category: physical
 power: 80
 accuracy: 100
 pp: 20
-description: A corkscrewing attack with the beak acting as a drill.
-flags: [contact, piercing]
+description: A corkscrewing attack with the beak acting as a drill. High critical-hit ratio.
+flags: [contact, piercing, high_crit]

@@ -2,20 +2,25 @@ name: Honchkrow
 chrooked_id: honchkrow
 aka: { pokeemerald: SPECIES_HONCHKROW }
 abilities:
-  primary: Moxie
-  secondary: Intimidate
-  hidden: Prankster
+  primary: Super Luck
+  secondary: Sniper
 stats: { def: 50, spd: 50, spe: 75 }
 learnset:
-  - { level: 1, move: Wing Attack }
+  - { level: 0, move: Night Slash }
   - { level: 1, move: Haze }
-  - { level: 1, move: Astonish }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Night Slash }
-  - { level: 1, move: Quash }
-  - { level: 25, move: Swagger }
-  - { level: 35, move: Nasty Plot }
-  - { level: 40, move: Dive Bomb }
-  - { level: 45, move: Foul Play }
-  - { level: 55, move: Dark Pulse }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Wing Attack }
+  - { level: 10, move: Hone Claws }
+  - { level: 12, move: Slash }
+  - { level: 15, move: Drill Peck }
+  - { level: 18, move: Night Slash }
+  - { level: 20, move: Roost }
+  - { level: 25, move: Focus Energy }
+  - { level: 30, move: Foul Play }
+  - { level: 35, move: Tailwind }
+  - { level: 42, move: Dive Bomb }
+  - { level: 50, move: Kowtow Cleave }
+  - { level: 58, move: Throat Chop }
   - { level: 65, move: Comeuppance }
+  - { level: 75, move: Brave Bird }
