@@ -8,20 +8,27 @@ abilities:
 stats: { hp: 80, atk: 110, def: 75, spa: 110, spe: 90 }
 learnset:
   - { level: 0, move: Megahorn }
-  - { level: 1, move: Sludge Wave }
-  - { level: 1, move: Megahorn }
-  - { level: 1, move: Fury Attack }
-  - { level: 1, move: Toxic Spikes }
-  - { level: 1, move: Double Kick }
+  - { level: 1, move: Focus Energy }
   - { level: 1, move: Horn Attack }
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Toxic }
-  - { level: 1, move: Flatter }
-  - { level: 1, move: Poison Jab }
-  - { level: 1, move: Earth Power }
   - { level: 1, move: Leer }
   - { level: 1, move: Poison Sting }
-  - { level: 1, move: Peck }
-  - { level: 1, move: Focus Energy }
-  - { level: 1, move: Clod Toss }
+  - { level: 5, move: Peck }
+  - { level: 8, move: Double Kick }
+  - { level: 10, move: Poison Tail }
+  - { level: 13, move: Clod Toss }
+  - { level: 16, move: Fury Attack }
+  - { level: 18, move: Toxic Spikes }
+  - { level: 20, move: Sludge }
+  - { level: 23, move: Bulldoze }
+  - { level: 26, move: Poison Jab }
+  - { level: 29, move: Drill Run }
+  - { level: 32, move: Ice Punch }
+  - { level: 35, move: Thunder Punch }
+  - { level: 38, move: Earth Power }
+  - { level: 42, move: Sludge Bomb }
+  - { level: 46, move: Toxic }
+  - { level: 48, move: Stone Edge }
+  - { level: 50, move: Gunk Shot }
+  - { level: 54, move: Earthquake }
+  - { level: 58, move: Sludge Wave }
 evolution: { from: Nidorino, method: { item: MOONSTONE } }

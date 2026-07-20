@@ -7,15 +7,21 @@ abilities:
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Poison Sting }
-  - { level: 5, move: Scratch }
-  - { level: 7, move: Clod Toss }
-  - { level: 10, move: Tail Whip }
-  - { level: 15, move: Fury Swipes }
-  - { level: 20, move: Toxic Spikes }
-  - { level: 25, move: Double Kick }
-  - { level: 30, move: Bite }
-  - { level: 35, move: Helping Hand }
-  - { level: 40, move: Toxic }
-  - { level: 45, move: Flatter }
-  - { level: 50, move: Crunch }
-  - { level: 55, move: Earth Power }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Double Kick }
+  - { level: 8, move: Bite }
+  - { level: 11, move: Clod Toss }
+  - { level: 14, move: Poison Tail }
+  - { level: 18, move: Helping Hand }
+  - { level: 22, move: Bulldoze }
+  - { level: 27, move: Poison Jab }
+  - { level: 30, move: Body Slam }
+  - { level: 31, move: Crunch }
+  - { level: 34, move: Toxic Spikes }
+  - { level: 38, move: Ice Punch }
+  - { level: 45, move: Toxic }
+  - { level: 46, move: Body Press }
+  - { level: 48, move: Sludge Wave }
+  - { level: 52, move: Earthquake }
+  - { level: 58, move: Superpower }

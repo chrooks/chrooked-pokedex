@@ -10,14 +10,20 @@ learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Scratch }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Clod Toss }
-  - { level: 15, move: Fury Swipes }
-  - { level: 22, move: Toxic Spikes }
-  - { level: 29, move: Double Kick }
-  - { level: 36, move: Bite }
-  - { level: 43, move: Helping Hand }
-  - { level: 50, move: Toxic }
-  - { level: 57, move: Flatter }
-  - { level: 64, move: Crunch }
-  - { level: 71, move: Earth Power }
+  - { level: 5, move: Double Kick }
+  - { level: 8, move: Bite }
+  - { level: 11, move: Clod Toss }
+  - { level: 14, move: Poison Tail }
+  - { level: 18, move: Helping Hand }
+  - { level: 22, move: Bulldoze }
+  - { level: 27, move: Poison Jab }
+  - { level: 30, move: Body Slam }
+  - { level: 31, move: Crunch }
+  - { level: 34, move: Toxic Spikes }
+  - { level: 38, move: Ice Punch }
+  - { level: 45, move: Toxic }
+  - { level: 46, move: Body Press }
+  - { level: 48, move: Sludge Wave }
+  - { level: 52, move: Earthquake }
+  - { level: 58, move: Superpower }
 evolution: { from: Nidoran F, method: { level: 16 } }

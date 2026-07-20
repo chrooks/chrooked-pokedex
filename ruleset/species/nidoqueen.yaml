@@ -7,19 +7,23 @@ abilities:
 stats: { hp: 95, atk: 95, def: 95, spd: 105, spe: 75 }
 learnset:
   - { level: 0, move: Superpower }
-  - { level: 1, move: Sludge Wave }
-  - { level: 1, move: Superpower }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Toxic Spikes }
-  - { level: 1, move: Double Kick }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Toxic }
-  - { level: 1, move: Flatter }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Earth Power }
   - { level: 1, move: Growl }
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Scratch }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Clod Toss }
+  - { level: 5, move: Double Kick }
+  - { level: 8, move: Bite }
+  - { level: 11, move: Clod Toss }
+  - { level: 14, move: Poison Tail }
+  - { level: 18, move: Helping Hand }
+  - { level: 22, move: Bulldoze }
+  - { level: 27, move: Poison Jab }
+  - { level: 30, move: Body Slam }
+  - { level: 31, move: Crunch }
+  - { level: 34, move: Toxic Spikes }
+  - { level: 38, move: Ice Punch }
+  - { level: 45, move: Toxic }
+  - { level: 46, move: Body Press }
+  - { level: 48, move: Sludge Wave }
+  - { level: 52, move: Earthquake }
+  - { level: 58, move: Superpower }
