@@ -4,22 +4,24 @@ aka: { pokeemerald: SPECIES_GARDEVOIR_MEGA }
 stats: { hp: 70, spd: 140 }
 learnset:
   - { level: 0, move: Dazzling Gleam }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Mystical Fire }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Misty Terrain }
   - { level: 1, move: Charm }
+  - { level: 1, move: Confusion }
   - { level: 1, move: Disarming Voice }
-  - { level: 1, move: Healing Wish }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Growl }
   - { level: 1, move: Heal Pulse }
+  - { level: 1, move: Healing Wish }
+  - { level: 1, move: Misty Terrain }
+  - { level: 1, move: Mystical Fire }
   - { level: 9, move: Hypnosis }
   - { level: 12, move: Draining Kiss }
   - { level: 15, move: Teleport }
   - { level: 18, move: Psybeam }
   - { level: 23, move: Life Dew }
   - { level: 28, move: Wish }
+  - { level: 31, move: Astral Hand }
   - { level: 35, move: Calm Mind }
+  - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Psychic }
   - { level: 45, move: Pixie Slash }
   - { level: 49, move: Moonblast }

@@ -1,6 +1,8 @@
 name: Sizzlipede
 chrooked_id: sizzlipede
 aka: { dex: 850 }
+abilities:
+  secondary: Coil Up
 learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Smokescreen }

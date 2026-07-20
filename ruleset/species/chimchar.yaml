@@ -1,20 +1,25 @@
 name: Chimchar
 chrooked_id: chimchar
 aka: { dex: 390 }
+abilities:
+  secondary: Magical Fists
 learnset:
-  - { level: 1, move: Scratch }
+  - { level: 1, move: Ember }
   - { level: 1, move: Leer }
-  - { level: 7, move: Ember }
+  - { level: 1, move: Scratch }
   - { level: 9, move: Taunt }
-  - { level: 15, move: Fury Swipes }
+  - { level: 14, move: Mach Punch }
   - { level: 17, move: Flame Wheel }
-  - { level: 23, move: Nasty Plot }
-  - { level: 25, move: Torment }
-  - { level: 31, move: Facade }
-  - { level: 33, move: Fire Spin }
-  - { level: 36, move: One-Inch Punch }
-  - { level: 37, move: Aura Sphere }
-  - { level: 39, move: Acrobatics }
-  - { level: 41, move: Slack Off }
-  - { level: 44, move: Cinder Smash }
-  - { level: 47, move: Flamethrower }
+  - { level: 20, move: Fire Punch }
+  - { level: 24, move: Drain Punch }
+  - { level: 27, move: Brick Break }
+  - { level: 29, move: Bulk Up }
+  - { level: 32, move: Thunder Punch }
+  - { level: 36, move: Ice Punch }
+  - { level: 39, move: One-Inch Punch }
+  - { level: 42, move: Slack Off }
+  - { level: 45, move: Cinder Smash }
+  - { level: 48, move: Blaze Kick }
+  - { level: 53, move: Focus Punch }
+  - { level: 58, move: Flare Blitz }
+  - { level: 65, move: Aura Sphere }

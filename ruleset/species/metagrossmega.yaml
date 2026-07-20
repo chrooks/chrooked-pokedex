@@ -1,0 +1,23 @@
+name: Metagross Mega
+chrooked_id: metagrossmega
+aka: {  }
+learnset:
+  - { level: 0, move: Hammer Arm }
+  - { level: 1, move: Bullet Punch }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Explosion }
+  - { level: 1, move: Hone Claws }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Tackle }
+  - { level: 6, move: Zen Headbutt }
+  - { level: 9, move: Mind Flick }
+  - { level: 12, move: Magnet Rise }
+  - { level: 16, move: Flash Cannon }
+  - { level: 26, move: Take Down }
+  - { level: 30, move: Astral Hand }
+  - { level: 34, move: Psychic }
+  - { level: 42, move: Scary Face }
+  - { level: 52, move: Meteor Mash }
+  - { level: 62, move: Iron Defense }
+  - { level: 72, move: Agility }
+  - { level: 82, move: Hyper Beam }

@@ -2,12 +2,13 @@ name: Medicham Mega
 chrooked_id: medichammega
 aka: { dex: 308 }
 learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Detect }
   - { level: 1, move: Fire Punch }
   - { level: 1, move: Ice Punch }
   - { level: 1, move: Thunder Punch }
   - { level: 1, move: Work Up }
-  - { level: 1, move: Detect }
-  - { level: 1, move: Confusion }
+  - { level: 9, move: Mind Flick }
   - { level: 12, move: Endure }
   - { level: 15, move: Feint }
   - { level: 17, move: Force Palm }
@@ -18,7 +19,9 @@ learnset:
   - { level: 31, move: Psych Up }
   - { level: 33, move: Acupressure }
   - { level: 36, move: Power Trick }
-  - { level: 41, move: One-Inch Punch }
+  - { level: 38, move: Aura Sphere }
+  - { level: 41, move: Astral Hand }
+  - { level: 44, move: One-Inch Punch }
   - { level: 47, move: Recover }
-  - { level: 53, move: Counter }
   - { level: 53, move: Axe Kick }
+  - { level: 53, move: Counter }

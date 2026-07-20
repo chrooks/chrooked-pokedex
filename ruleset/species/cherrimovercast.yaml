@@ -1,0 +1,26 @@
+name: Cherrim Overcast
+chrooked_id: cherrimovercast
+aka: {  }
+types: [Grass]
+abilities:
+  primary: Flower Gift
+  secondary: Bloom
+stats: { hp: 95, atk: 55, def: 80, spa: 95, spd: 90, spe: 88 }
+learnset:
+  - { level: 0, move: Sunny Day }
+  - { level: 1, move: Flower Shield }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Leafage }
+  - { level: 1, move: Morning Sun }
+  - { level: 10, move: Ember }
+  - { level: 15, move: Magical Leaf }
+  - { level: 18, move: Disarming Voice }
+  - { level: 22, move: Flame Burst }
+  - { level: 26, move: Dazzling Gleam }
+  - { level: 30, move: Energy Ball }
+  - { level: 34, move: Leech Seed }
+  - { level: 43, move: Fiery Dance }
+  - { level: 48, move: Aromatherapy }
+  - { level: 52, move: Moonblast }
+  - { level: 57, move: Petal Dance }
+  - { level: 62, move: Solar Beam }

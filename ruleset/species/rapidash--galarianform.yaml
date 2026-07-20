@@ -1,0 +1,5 @@
+name: Rapidash (Galarian Form)
+chrooked_id: rapidash--galarianform
+aka: { dex: 78 }
+stats: { spe: 120 }
+evolution: { from: Ponyta (Galarian Form), method: { level: 40 } }

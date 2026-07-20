@@ -2,3 +2,22 @@ name: Venusaur Mega
 chrooked_id: venusaurmega
 aka: { dex: 3 }
 stats: { spd: 125, spa: 127 }
+learnset:
+  - { level: 0, move: Petal Blizzard }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Petal Dance }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Vine Whip }
+  - { level: 9, move: Leech Seed }
+  - { level: 12, move: Razor Leaf }
+  - { level: 15, move: Poison Powder }
+  - { level: 15, move: Sleep Powder }
+  - { level: 20, move: Seed Bomb }
+  - { level: 25, move: Take Down }
+  - { level: 30, move: Sweet Scent }
+  - { level: 33, move: Miasma }
+  - { level: 37, move: Synthesis }
+  - { level: 44, move: Worry Seed }
+  - { level: 51, move: Power Whip }
+  - { level: 58, move: Solar Beam }

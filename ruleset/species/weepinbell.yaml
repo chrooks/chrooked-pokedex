@@ -2,4 +2,26 @@ name: Weepinbell
 chrooked_id: weepinbell
 aka: { pokeemerald: SPECIES_WEEPINBELL }
 abilities:
+  primary: Corrosion
   secondary: Flytrap
+  hidden: Chlorophyll
+learnset:
+  - { level: 1, move: Vine Whip }
+  - { level: 1, move: Growth }
+  - { level: 4, move: Poison Sting }
+  - { level: 7, move: Sleep Powder }
+  - { level: 10, move: Leafage }
+  - { level: 13, move: Sweet Scent }
+  - { level: 16, move: Acid }
+  - { level: 18, move: Razor Leaf }
+  - { level: 22, move: Poison Tail }
+  - { level: 24, move: Gastro Acid }
+  - { level: 26, move: Acid Spray }
+  - { level: 30, move: Seed Bomb }
+  - { level: 34, move: Cross Poison }
+  - { level: 38, move: Toxic }
+  - { level: 42, move: Gunk Shot }
+  - { level: 46, move: Leaf Blade }
+  - { level: 52, move: Power Whip }
+  - { level: 58, move: Sludge Wave }
+  - { level: 63, move: Leaf Storm }

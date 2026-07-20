@@ -4,13 +4,14 @@ aka: { pokeemerald: SPECIES_SHARPEDO_MEGA }
 stats: { spe: 125 }
 learnset:
   - { level: 0, move: Slash }
-  - { level: 1, move: Slash }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Aqua Jet }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Poison Fang }
   - { level: 1, move: Focus Energy }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Night Slash }
+  - { level: 1, move: Poison Fang }
+  - { level: 1, move: Slash }
   - { level: 12, move: Scary Face }
+  - { level: 14, move: Water Whip }
   - { level: 16, move: Bite }
   - { level: 20, move: Ice Fang }
   - { level: 24, move: Screech }

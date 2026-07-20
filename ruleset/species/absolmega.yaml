@@ -3,12 +3,13 @@ chrooked_id: absolmega
 aka: { pokeemerald: SPECIES_ABSOL_MEGA }
 types: [Dark, Fairy]
 learnset:
-  - { level: 1, move: Quick Attack }
   - { level: 1, move: Leer }
+  - { level: 1, move: Quick Attack }
   - { level: 5, move: Double Team }
   - { level: 10, move: Knock Off }
-  - { level: 15, move: Detect }
+  - { level: 15, move: Glitter Tap }
   - { level: 20, move: Taunt }
+  - { level: 22, move: Cutsie Slap }
   - { level: 25, move: Slash }
   - { level: 30, move: Night Slash }
   - { level: 35, move: Focus Energy }

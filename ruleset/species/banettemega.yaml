@@ -1,0 +1,18 @@
+name: Banette Mega
+chrooked_id: banettemega
+aka: {  }
+learnset:
+  - { level: 0, move: Knock Off }
+  - { level: 1, move: Night Shade }
+  - { level: 1, move: Screech }
+  - { level: 1, move: Spite }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 19, move: Shadow Sneak }
+  - { level: 22, move: Hex }
+  - { level: 26, move: Curse }
+  - { level: 30, move: Shadow Ball }
+  - { level: 34, move: Role Play }
+  - { level: 40, move: Sucker Punch }
+  - { level: 43, move: Wraithstrike }
+  - { level: 46, move: Trick }
+  - { level: 53, move: Phantom Force }

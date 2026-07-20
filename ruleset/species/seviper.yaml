@@ -1,4 +1,6 @@
 name: Seviper
 chrooked_id: seviper
 aka: { pokeemerald: SPECIES_SEVIPER }
+abilities:
+  secondary: Coil Up
 stats: { atk: 110, spa: 110 }

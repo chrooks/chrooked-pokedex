@@ -2,6 +2,8 @@ name: Musharna
 chrooked_id: musharna
 aka: { pokeemerald: SPECIES_MUSHARNA }
 types: [Psychic, Fairy]
+abilities:
+  hidden: Daydreamer
 stats: { hp: 125, atk: 50, def: 80, spa: 115, spd: 125, spe: 30 }
 learnset:
   - { level: 0, move: Moonblast }
@@ -12,10 +14,10 @@ learnset:
   - { level: 8, move: Hypnosis }
   - { level: 12, move: Disarming Voice }
   - { level: 16, move: Magic Coat }
+  - { level: 20, move: Dream Mist }
   - { level: 20, move: Imprison }
-  - { level: 20, move: Psybeam }
-  - { level: 24, move: Stored Power }
   - { level: 24, move: Dazzling Gleam }
+  - { level: 24, move: Stored Power }
   - { level: 28, move: Calm Mind }
   - { level: 32, move: Psychic Terrain }
   - { level: 36, move: Moonlight }

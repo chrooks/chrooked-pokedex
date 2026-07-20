@@ -2,9 +2,10 @@ name: Munna
 chrooked_id: munna
 aka: {  }
 types: [Psychic, Fairy]
+abilities:
+  hidden: Daydreamer
 stats: { hp: 86, atk: 20, def: 40, spa: 72, spd: 65, spe: 24 }
 learnset:
-  - { level: 0, move: Moonblast }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Growl }
   - { level: 1, move: Yawn }
@@ -12,10 +13,10 @@ learnset:
   - { level: 8, move: Hypnosis }
   - { level: 12, move: Disarming Voice }
   - { level: 16, move: Magic Coat }
+  - { level: 20, move: Dream Mist }
   - { level: 20, move: Imprison }
-  - { level: 20, move: Psybeam }
-  - { level: 24, move: Stored Power }
   - { level: 24, move: Dazzling Gleam }
+  - { level: 24, move: Stored Power }
   - { level: 28, move: Calm Mind }
   - { level: 32, move: Psychic Terrain }
   - { level: 36, move: Moonlight }

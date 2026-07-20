@@ -3,17 +3,19 @@ chrooked_id: garchompmega
 aka: { pokeemerald: SPECIES_GARCHOMP_MEGA }
 learnset:
   - { level: 0, move: Crunch }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Clod Toss }
   - { level: 1, move: Dragon Breath }
+  - { level: 1, move: Sand Attack }
   - { level: 1, move: Sand Tomb }
+  - { level: 1, move: Tackle }
   - { level: 18, move: Bulldoze }
   - { level: 27, move: Bite }
+  - { level: 30, move: Draconic Fang }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Draconic Fang }
   - { level: 34, move: Slash }
   - { level: 42, move: Dragon Claw }
+  - { level: 47, move: Pixie Slash }
   - { level: 52, move: Dig }
   - { level: 62, move: Sandstorm }
   - { level: 72, move: Take Down }

@@ -1,0 +1,25 @@
+name: Cherubi
+chrooked_id: cherubi
+aka: {  }
+abilities:
+  primary: Chloroplast
+  secondary: Bloom
+stats: { hp: 62, atk: 36, def: 52, spa: 62, spd: 59, spe: 57 }
+learnset:
+  - { level: 0, move: Sunny Day }
+  - { level: 1, move: Flower Shield }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Leafage }
+  - { level: 1, move: Morning Sun }
+  - { level: 10, move: Ember }
+  - { level: 15, move: Magical Leaf }
+  - { level: 18, move: Disarming Voice }
+  - { level: 22, move: Flame Burst }
+  - { level: 26, move: Dazzling Gleam }
+  - { level: 30, move: Energy Ball }
+  - { level: 34, move: Leech Seed }
+  - { level: 43, move: Fiery Dance }
+  - { level: 48, move: Aromatherapy }
+  - { level: 52, move: Moonblast }
+  - { level: 57, move: Petal Dance }
+  - { level: 62, move: Solar Beam }

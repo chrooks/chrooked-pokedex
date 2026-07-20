@@ -2,5 +2,6 @@ name: Drapion
 chrooked_id: drapion
 aka: { pokeemerald: SPECIES_DRAPION }
 abilities:
+  primary: Coil Up
   hidden: Death Grip
 stats: { atk: 110, def: 120 }

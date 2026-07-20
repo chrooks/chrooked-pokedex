@@ -2,6 +2,8 @@ name: Eelektrik
 chrooked_id: eelektrik
 aka: { pokeemerald: SPECIES_EELEKTRIK }
 types: [Water, Electric]
+abilities:
+  secondary: Coil Up
 learnset:
   - { level: 0, move: Crunch }
   - { level: 1, move: Headbutt }

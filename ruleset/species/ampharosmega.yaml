@@ -3,20 +3,18 @@ chrooked_id: ampharosmega
 aka: { pokeemerald: SPECIES_AMPHAROS_MEGA }
 learnset:
   - { level: 0, move: Dragon Pulse }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Confuse Ray }
   - { level: 1, move: Growl }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Shock }
   - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Charge Beam }
-  - { level: 1, move: Cotton Spore }
-  - { level: 1, move: Confuse Ray }
-  - { level: 1, move: Volt Switch }
-  - { level: 1, move: Dragon Breath }
-  - { level: 1, move: Tail Glow }
-  - { level: 20, move: Milk Drink }
+  - { level: 10, move: Charge Beam }
+  - { level: 18, move: Cotton Spore }
+  - { level: 24, move: Volt Switch }
+  - { level: 30, move: Dragon Breath }
   - { level: 34, move: Power Gem }
   - { level: 38, move: Discharge }
-  - { level: 42, move: Cotton Guard }
+  - { level: 42, move: Milk Drink }
   - { level: 46, move: Dazzling Gleam }
   - { level: 50, move: Focus Blast }
   - { level: 54, move: Thunderbolt }

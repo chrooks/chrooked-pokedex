@@ -1,12 +1,10 @@
-name: Arbok
-chrooked_id: arbok
-aka: { pokeemerald: SPECIES_ARBOK }
+name: Ekans
+chrooked_id: ekans
+aka: { dex: 23 }
 abilities:
   secondary: Coil Up
   hidden: Strong Jaw
-stats: { def: 80 }
 learnset:
-  - { level: 0, move: Crunch }
   - { level: 1, move: Leer }
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Wrap }
@@ -26,4 +24,3 @@ learnset:
   - { level: 60, move: Gastro Acid }
   - { level: 64, move: Haze }
   - { level: 68, move: Gunk Shot }
-evolution: { from: Ekans, method: { level: 25 } }

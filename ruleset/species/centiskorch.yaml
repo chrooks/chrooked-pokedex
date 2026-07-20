@@ -1,6 +1,8 @@
 name: Centiskorch
 chrooked_id: centiskorch
 aka: { pokeemerald: SPECIES_CENTISKORCH }
+abilities:
+  secondary: Coil Up
 learnset:
   - { level: 1, move: Inferno }
   - { level: 1, move: Ember }

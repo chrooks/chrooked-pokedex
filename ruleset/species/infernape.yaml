@@ -6,21 +6,22 @@ abilities:
 stats: { hp: 75, atk: 110, def: 70, spa: 105, spd: 70, spe: 110 }
 learnset:
   - { level: 0, move: Close Combat }
-  - { level: 1, move: Taunt }
-  - { level: 1, move: Slack Off }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
   - { level: 1, move: Ember }
-  - { level: 1, move: Mach Punch }
-  - { level: 16, move: Fury Swipes }
-  - { level: 19, move: Flame Wheel }
-  - { level: 26, move: Feint }
-  - { level: 29, move: Torment }
-  - { level: 35, move: One-Inch Punch }
-  - { level: 38, move: Cinder Smash }
-  - { level: 40, move: Aura Sphere }
-  - { level: 42, move: Fire Spin }
-  - { level: 47, move: Flare Blitz }
-  - { level: 52, move: Acrobatics }
-  - { level: 58, move: Calm Mind }
-  - { level: 65, move: Raging Fury }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 9, move: Taunt }
+  - { level: 14, move: Mach Punch }
+  - { level: 17, move: Flame Wheel }
+  - { level: 20, move: Fire Punch }
+  - { level: 24, move: Drain Punch }
+  - { level: 27, move: Brick Break }
+  - { level: 29, move: Bulk Up }
+  - { level: 32, move: Thunder Punch }
+  - { level: 36, move: Ice Punch }
+  - { level: 39, move: One-Inch Punch }
+  - { level: 42, move: Slack Off }
+  - { level: 45, move: Cinder Smash }
+  - { level: 48, move: Blaze Kick }
+  - { level: 53, move: Focus Punch }
+  - { level: 58, move: Flare Blitz }
+  - { level: 65, move: Aura Sphere }

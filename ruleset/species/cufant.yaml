@@ -1,9 +1,9 @@
-name: Copperajah
-chrooked_id: copperajah
-aka: { pokeemerald: SPECIES_COPPERAJAH }
+name: Cufant
+chrooked_id: cufant
+aka: { pokeemerald: SPECIES_CUFANT }
 abilities:
   secondary: Stampede
-stats: { hp: 135, atk: 130, def: 105, spa: 35, spd: 90, spe: 30 }
+stats: { hp: 86, atk: 83, def: 67, spa: 22, spd: 57, spe: 40 }
 learnset:
   - { level: 0, move: Heavy Slam }
   - { level: 1, move: Tackle }

@@ -3,19 +3,20 @@ chrooked_id: salamencemega
 aka: { pokeemerald: SPECIES_SALAMENCE_MEGA }
 learnset:
   - { level: 0, move: Fly }
-  - { level: 1, move: Roost }
+  - { level: 1, move: Bite }
   - { level: 1, move: Dragon Breath }
   - { level: 1, move: Dragon Tail }
-  - { level: 1, move: Ember }
   - { level: 1, move: Dual Wingbeat }
+  - { level: 1, move: Ember }
   - { level: 1, move: Leer }
-  - { level: 1, move: Bite }
   - { level: 1, move: Protect }
+  - { level: 1, move: Roost }
   - { level: 15, move: Headbutt }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Crunch }
   - { level: 30, move: Draconic Fang }
   - { level: 33, move: Dragon Claw }
+  - { level: 36, move: Dive Bomb }
   - { level: 39, move: Zen Headbutt }
   - { level: 46, move: Focus Energy }
   - { level: 55, move: Flamethrower }

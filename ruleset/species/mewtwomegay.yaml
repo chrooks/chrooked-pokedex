@@ -1,0 +1,21 @@
+name: Mewtwo Mega Y
+chrooked_id: mewtwomegay
+aka: {  }
+learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Life Dew }
+  - { level: 1, move: Swift }
+  - { level: 8, move: Ancient Power }
+  - { level: 16, move: Psycho Cut }
+  - { level: 24, move: Safeguard }
+  - { level: 32, move: Amnesia }
+  - { level: 36, move: One-Inch Punch }
+  - { level: 40, move: Aura Sphere }
+  - { level: 48, move: Psychic }
+  - { level: 56, move: Guard Swap }
+  - { level: 56, move: Power Swap }
+  - { level: 64, move: Mist }
+  - { level: 72, move: Psystrike }
+  - { level: 80, move: Recover }
+  - { level: 88, move: Future Sight }

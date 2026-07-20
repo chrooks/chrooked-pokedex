@@ -1,21 +1,25 @@
 name: Monferno
 chrooked_id: monferno
 aka: { dex: 391 }
+abilities:
+  secondary: Magical Fists
 learnset:
-  - { level: 0, move: Mach Punch }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
   - { level: 1, move: Ember }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
   - { level: 9, move: Taunt }
-  - { level: 16, move: Fury Swipes }
-  - { level: 19, move: Flame Wheel }
-  - { level: 26, move: Feint }
-  - { level: 29, move: Torment }
-  - { level: 36, move: Close Combat }
-  - { level: 37, move: Aura Sphere }
-  - { level: 39, move: Fire Spin }
-  - { level: 42, move: One-Inch Punch }
-  - { level: 44, move: Cinder Smash }
-  - { level: 46, move: Acrobatics }
-  - { level: 49, move: Slack Off }
-  - { level: 56, move: Flare Blitz }
+  - { level: 14, move: Mach Punch }
+  - { level: 17, move: Flame Wheel }
+  - { level: 20, move: Fire Punch }
+  - { level: 24, move: Drain Punch }
+  - { level: 27, move: Brick Break }
+  - { level: 29, move: Bulk Up }
+  - { level: 32, move: Thunder Punch }
+  - { level: 36, move: Ice Punch }
+  - { level: 39, move: One-Inch Punch }
+  - { level: 42, move: Slack Off }
+  - { level: 45, move: Cinder Smash }
+  - { level: 48, move: Blaze Kick }
+  - { level: 53, move: Focus Punch }
+  - { level: 58, move: Flare Blitz }
+  - { level: 65, move: Aura Sphere }

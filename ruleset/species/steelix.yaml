@@ -1,33 +1,32 @@
 name: Steelix
 chrooked_id: steelix
 aka: { pokeemerald: SPECIES_STEELIX }
+abilities:
+  hidden: Coil Up
 stats: { hp: 80, atk: 90, spd: 75, spe: 40 }
 learnset:
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Thunder Fang }
-  - { level: 1, move: Ice Fang }
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Rock Polish }
+  - { level: 0, move: Iron Head }
   - { level: 1, move: Tackle }
   - { level: 1, move: Harden }
-  - { level: 1, move: Bind }
-  - { level: 1, move: Rock Throw }
-  - { level: 1, move: Clod Toss }
-  - { level: 4, move: Smack Down }
-  - { level: 8, move: Autotomize }
-  - { level: 12, move: Dragon Breath }
-  - { level: 16, move: Curse }
-  - { level: 20, move: Rock Slide }
-  - { level: 24, move: Screech }
-  - { level: 28, move: Sand Tomb }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Ice Fang }
+  - { level: 5, move: Metal Claw }
+  - { level: 9, move: Clod Toss }
+  - { level: 11, move: Bite }
+  - { level: 13, move: Bulldoze }
+  - { level: 17, move: Rock Slide }
+  - { level: 20, move: Curse }
+  - { level: 24, move: Stomping Tantrum }
+  - { level: 28, move: Smart Strike }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 30, move: Metallic Fang }
-  - { level: 32, move: Stealth Rock }
-  - { level: 36, move: Body Slam }
-  - { level: 40, move: Sandstorm }
-  - { level: 44, move: Dig }
-  - { level: 48, move: Iron Tail }
-  - { level: 52, move: Stone Edge }
+  - { level: 34, move: Stealth Rock }
+  - { level: 37, move: Crunch }
+  - { level: 40, move: Iron Tail }
+  - { level: 44, move: High Horsepower }
+  - { level: 48, move: Body Press }
+  - { level: 52, move: Head Smash }
   - { level: 56, move: Double-Edge }
-  - { level: 60, move: Magnet Rise }
+  - { level: 60, move: Earthquake }
