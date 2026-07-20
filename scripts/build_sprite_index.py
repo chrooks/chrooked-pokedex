@@ -48,10 +48,28 @@ def _pokeapi_slug(name: str) -> str:
     return re.sub(r"\s+", "-", cleaned.strip())
 
 
-def build_map() -> dict[str, int]:
+# Forms PokeAPI exposes only under /pokemon-form, never /pokemon, so the name
+# match below can't find them. Their sprites are keyed by a name-suffixed path
+# ("421-sunshine.png") rather than a numeric id; the frontend map takes either.
+# Add here rather than hand-editing sprite-ids.json — a re-bake would drop it.
+MANUAL: dict[str, int | str] = {
+    "cherrimovercast": 421,
+    "cherrimsunshine": "421-sunshine",
+    "deerlingspring": 585,
+    "deerlingsummer": "585-summer",
+    "deerlingautumn": "585-autumn",
+    "deerlingwinter": "585-winter",
+    "sawsbuckspring": 586,
+    "sawsbucksummer": "586-summer",
+    "sawsbuckautumn": "586-autumn",
+    "sawsbuckwinter": "586-winter",
+}
+
+
+def build_map() -> dict[str, int | str]:
     index = _fetch_name_index()
     species = snapmod.load_snapshot()["species"]
-    mapping: dict[str, int] = {}
+    mapping: dict[str, int | str] = dict(MANUAL)
     for chrooked_id, entry in species.items():
         if len(entry["name"].split()) < 2:
             continue  # single-word names are base forms; sprite-by-dex already works
