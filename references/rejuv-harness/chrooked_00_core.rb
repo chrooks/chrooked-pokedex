@@ -39,6 +39,11 @@ CHROOKED_AFTER_MOVE = {}
 CHROOKED_WEATHER_FOR_USER = {}
 # move symbol => ->(move, atype, attacker, opponent, typemod) { adjusted Typemod }
 CHROOKED_MOVE_TYPEMOD = {}
+# attacker ability => ->(move, atype, attacker, opponent, typemod) { adjusted Typemod }
+# The ability-keyed twin of CHROOKED_MOVE_TYPEMOD. Needed when the matchup being
+# rewritten is a 0x immunity: MOVE_TYPEMOD's multiply-by-(2/chart) trick cannot
+# scale away from zero, so these handlers rebuild the whole Typemod slot by slot.
+CHROOKED_ABILITY_TYPEMOD = {}
 # attacker ability => ->(move, attacker) { true } — immune matchups become neutral
 CHROOKED_TYPEMOD_FLOOR = {}
 # attacker ability => ->(move, attacker) { true } — also bypass ability/levitation immunity hitflags
@@ -214,6 +219,15 @@ module ChrookedMoveHooks
 
   def pbTypeModifier(atype, attacker, opponent)
     typemod = super
+    # Ability-keyed pass runs BEFORE the move-keyed one, and the order is
+    # load-bearing. An ability handler may rebuild a 0x matchup into a non-zero
+    # one (Corrosion: Poison-vs-Steel 0x -> 2x); the move handlers scale a slot
+    # by multiplication, which is a no-op against zero. Ability first means a
+    # move override (Gastric Snare's Bug 2x) composes on top of the rebuilt
+    # value instead of being silently discarded by it. Mold Breaker does not
+    # suppress this — it is the ATTACKER's ability, not the defender's.
+    amod = CHROOKED_ABILITY_TYPEMOD[attacker.ability]
+    typemod = amod.call(self, atype, attacker, opponent, typemod) if amod
     mod = CHROOKED_MOVE_TYPEMOD[@move]
     typemod = mod.call(self, atype, attacker, opponent, typemod) if mod
     # Pure block immunities also zero the typemod so the AI's damage preview

@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Coil Up
+chrooked_id: coilup
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Gain the coiled charge on entry
+    trigger: switch-in
+    effect: Set an internal flag COIL_UP_READY = true on the user. No visible stat change or message beyond the optional flavor announcement.
+  - summary: Grant +1 priority to the first biting move while the charge is active
+    trigger: turn-order
+    when: COIL_UP_READY is true AND the move selected this turn has the 'bite' flag (i.e., is affected by Strong Jaw)
+    effect: Add +1 to the move's effective priority bracket for turn-order resolution only. Do NOT alter base move priority permanently. The charge is consumed once that biting move deals damage.
+test_cases:
+  - given: Arbok (Coil Up) switches in. Opponent's Pokémon uses Earthquake (priority 0) on the same turn. Arbok selects Crunch (priority 0 base).
+    expect: Arbok's Crunch resolves at effective priority +1, so Arbok moves first despite equal base Speed or even lower Speed, then COIL_UP_READY is set to false.
+  - given: Arbok (Coil Up) switches in. Turn 1 it uses Glare (not a biting move). Turn 2 it uses Crunch.
+    expect: "Turn 1: Glare resolves normally, charge is NOT consumed. Turn 2: Crunch receives +1 priority (charge spent). COIL_UP_READY becomes false after Turn 2's Crunch."
+  - given: Arbok (Coil Up) switches in, uses Crunch (charge spent). Arbok is then switched out and switched back in the same battle.
+    expect: On re-entry COIL_UP_READY is reset to true. The next biting move after re-entry again receives +1 priority.
+notes:
+  - Charge is consumed when the biting move DEALS DAMAGE, not at turn-order resolution. A bite blocked outright (Queenly Majesty, Dazzling, immunity) leaves the charge armed. This mirrors the existing Stampede implementation.
+  - The charge flag should be stored per-slot (not per-species) so that Baton Pass / U-turn / Volt Switch sequences correctly reset it.
+  - The priority boost applies at the turn-order calculation step, not at the accuracy or damage step — it does not interact with Taunts, Prankster, or Quick Claw in any special way beyond normal priority stacking.
+  - If the user is forced to use a non-biting move while the charge is loaded (e.g., via Encore, Sleep Talk, Outrage lock), the charge is NOT consumed — it persists until a biting move is chosen voluntarily or the Pokémon leaves the field.
+  - Moves that are redirected (e.g., by Follow Me) still consume the charge if the user's selection was a biting move.
+  - The ability interacts naturally with Strong Jaw (power) and does not double-dip — Coil Up only affects priority, not damage.
+  - STUB — engine_hints ungrounded, needs human grounding pass

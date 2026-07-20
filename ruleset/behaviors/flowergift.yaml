@@ -1,0 +1,39 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Flower Gift
+chrooked_id: flowergift
+applies_to: ability
+aka: {  }
+effects:
+  - summary: "Form flip: Overcast → Sunshine in harsh sunlight"
+    trigger: switch-in
+    when: Harsh sunlight is active when this Pokémon enters the field
+    effect: If the bearer is Cherrim Overcast Form, transform it into Cherrim Sunshine Form. If the bearer is Cherrim Sunshine Form and harsh sunlight is NOT active, transform it into Cherrim Overcast Form. (Mirrors the existing hardcoded form-change keyed to ability ID flowergift.)
+  - summary: Form flip driven by weather changes mid-battle
+    trigger: turn-end
+    when: Weather changed to or from harsh sunlight during this turn
+    effect: "Re-evaluate form: if harsh sunlight is now active and bearer is Cherrim Overcast, transform to Cherrim Sunshine. If harsh sunlight is no longer active and bearer is Cherrim Sunshine, transform to Cherrim Overcast."
+  - summary: Ability-granted STAB for Fire-type and Grass-type moves
+    trigger: damage-calc
+    when: The move being used is Fire-type or Grass-type
+    effect: Apply a 1.5× multiplier to the move's base damage. If the user's own typing already grants a natural STAB bonus on this move, this 1.5× does NOT stack — the move receives only the single 1.5× bonus (whichever source applies, the result is the same).
+  - summary: Morning Sun heals 75% max HP regardless of weather
+    trigger: on-hit
+    when: The move used is Morning Sun
+    effect: Override the standard weather-dependent healing formula. Morning Sun always restores exactly 75% of the user's maximum HP, regardless of the current weather (including no weather, rain, sandstorm, hail/snow, or any other condition).
+test_cases:
+  - given: Cherrim Overcast uses Petal Dance in rain (harsh sunlight is absent, bearer is Grass-type and therefore has natural STAB on Grass)
+    expect: Petal Dance deals 1.5× damage. The ability-granted bonus and natural STAB are treated as equivalent; no doubling occurs.
+  - given: Harsh sunlight is active; Cherrim becomes Cherrim Sunshine (Fire/Fairy) and uses SolarBeam
+    expect: SolarBeam deals 1.5× damage from the ability-granted Grass bonus. Cherrim Sunshine is not Grass-typed, so natural STAB does not apply — the ability-granted 1.5× is the sole multiplier.
+  - given: Cherrim Sunshine uses Morning Sun while Sandstorm is active (which normally cuts Morning Sun to 25% healing)
+    expect: Morning Sun restores exactly 75% of Cherrim's maximum HP, ignoring the sandstorm penalty entirely.
+notes:
+  - The old team-wide 1.5× Attack and Special Defense boost to the user and allies in sun is FULLY REMOVED. That clause must not appear in any implementation.
+  - The ability ID must remain 'flowergift' so the engine's hardcoded Cherrim form-change hook continues to fire correctly.
+  - Cherrim Overcast is pure Grass-type. Cherrim Sunshine is Fire/Fairy-type. The ability-granted Grass STAB ensures that Grass-type moves such as SolarBeam, Petal Dance, and Magical Leaf receive the 1.5× bonus even in Sunshine Form when Cherrim is no longer Grass-typed. Symmetrically, Fire-type moves receive the bonus in both forms.
+  - The non-stacking rule means a Cherrim Overcast using a Grass move gets exactly 1.5× (natural STAB equals ability-granted bonus — no doubling). A Cherrim Sunshine using a Grass move also gets exactly 1.5× from the ability (it lost natural Grass STAB). A Cherrim Sunshine using a Fire move gets 1.5× from the ability (it is not natively Fire-typed, so no conflict). If a future form or type-adding item somehow gives the bearer natural Fire-type, the bonus is still only 1.5× total.
+  - This ability mirrors the design pattern of High Noon (STAB on Fire+Psychic, Morning Sun heals 75%) and Full Moon (STAB on Dark+Fairy, Moonlight heals 75%).
+  - Morning Sun's 75% heal is unconditional — it cannot be suppressed by Cloud Nine, Air Lock, or any other weather-negation ability that would otherwise reduce the heal to 50%.
+  - The form-change trigger should also fire any time the weather changes mid-battle (e.g., another Pokémon uses Sunny Day or the sun expires), not only on switch-in.
+engine_hints:
+  essentials: "Rejuv (mkxp): patch/Mods/chrooked_flowergift.rb. STAB: CHROOKED_DAMAGE_MODS[:FLOWERGIFT] = Chrooked.stab_grant(move, attacker, [:FIRE, :GRASS]) - same shape as chrooked_highnoon.rb; Chrooked.stab_grant (patch/Mods/chrooked_00_core.rb) already returns 1.0 when the user natively carries the type, so non-stacking is free. Heal: CHROOKED_HEAL_OVERRIDE[[:FLOWERGIFT, :MORNINGSUN]] = 0.75 - core prepends PokeBattle_Move_0D8 (the shared Synthesis/Moonlight/Morning Sun function code). Form flip: NO CODE NEEDED - Rejuv drives Cherrim natively at Scripts/Battler.rb (self.flowerGiftActive?), predicate defined at Scripts/Battle_Effects.rb flowerGiftActive?. Team Atk/SpDef buff removal: all 9 vanilla buff sites resolve the holder through PokeBattle_Battle#pbCheckSideAbility(:FLOWERGIFT, ...) (Scripts/Battle_Move.rb atkmult/defmult; Scripts/Battler.rb pbAttack/pbDefense/pbSpecialAttack/pbSpecialDefense). The form flip does NOT use that lookup, so a prepended pbCheckSideAbility that strips :FLOWERGIFT from the queried list kills the buff and leaves the flip intact. Side effect: Rejuv's Cherrim Crest boosts ride the same lookup (gated on crested == :CHERRIM) and are silenced too. Not patched: 5 aiCheckSideAbility(:FLOWERGIFT) scoring sites in Scripts/Battle_AI.rb - the AI still values the removed team buff."

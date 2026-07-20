@@ -1,0 +1,52 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Describes HOW Season's Edge works, engine-neutrally, so an implementer (Claude) can
+# compile it into any target engine. The move data itself lives in ruleset/moves/seasonsedge.yaml.
+name: Season's Edge
+chrooked_id: seasonsedge
+applies_to: move
+aka: {  }
+effects:
+  - summary: "Season's Edge takes the type of the user's seasonal form."
+    trigger: damage-calc
+    when: "the user is a Sawsbuck or Deerling and the move being used is Season's Edge"
+    effect: >
+      Before type effectiveness and STAB are computed, set the move's type from the user's
+      current seasonal form: Spring -> Fairy, Summer -> Grass, Autumn -> Ground, Winter -> Ice.
+      This is the form's SECONDARY type, never the shared Normal primary. Power (85), category
+      (physical), accuracy (100), and the contact flag are unchanged in every season. The
+      resolved type is what STAB, type effectiveness, Adaptability, type-absorbing abilities,
+      and type-resisting berries all key off — the swap happens early enough that nothing
+      downstream sees Normal.
+test_cases:
+  - given: "Sawsbuck Spring uses Season's Edge"
+    expect: "the move resolves as an 85 BP physical Fairy move; with Adaptability it gets the 2.0x STAB multiplier, not 1.5x"
+  - given: "Sawsbuck Winter uses Season's Edge into a Ground-type target"
+    expect: "the move resolves as Ice and deals 2x damage; it is NOT resisted as a Normal move would be"
+  - given: "Sawsbuck Summer uses Season's Edge into a Pokemon with Sap Sipper"
+    expect: "the move is absorbed as a Grass move (Sap Sipper triggers, +1 Attack, no damage) — the type swap is visible to type-absorbing abilities"
+  - given: "Sawsbuck Autumn uses Season's Edge into a Flying-type target"
+    expect: "the move resolves as Ground and does not affect the target (immunity applies to the resolved type)"
+  - given: "a Pokemon that is not Sawsbuck or Deerling somehow has Season's Edge"
+    expect: "the move resolves as its declared Normal type with no swap (guard on species, fail soft — it still deals damage)"
+notes:
+  - "Season order and form indices match Season's End exactly: Spring(0), Summer(1), Autumn(2), Winter(3), matching the eight species entries {deerling,sawsbuck}{spring,summer,autumn,winter}. Keep the two moves reading the same form index so a form set by Season's End is immediately reflected by Season's Edge in the same battle."
+  - "The type map is the form's secondary type by design — it is derived from the species typing rather than hardcoded twice, so a future retype of a seasonal form carries into this move without a second edit. An implementer may hardcode the four-entry table if reading species typing at damage-calc time is awkward in the target engine, but must keep it in sync with ruleset/species/sawsbuck*.yaml."
+  - "This is the attacking half of the seasonal pair: Season's End (status) rotates the form, Season's Edge (physical) cashes the current form in for coverage. Together they let one Sawsbuck cover Fairy/Grass/Ground/Ice across a battle at the cost of a turn per rotation — that turn cost is the intended brake on the coverage."
+  - "Declared type stays Normal in the move data so any engine that reads the move table without running the effect shows a sane fallback rather than a null type."
+  - "Power is 85, deliberately 5 below Raging Bull's 90: the whole seasonal line runs Adaptability, so STAB here is 2.0x rather than the 1.5x the precedent assumes. Do not 'correct' it back up to 90 when porting."
+  - "Direct precedent: Raging Bull (Paldean Tauros) is a 90 BP physical move whose type is set by the user's form. Ivy Cudgel (Ogerpon) and Multi-Attack (Silvally) are the same shape. Prefer porting whichever of these the target engine already implements over writing a new effect from scratch."
+engine_hints:
+  essentials: >
+    Move FunctionCode class. Override pbBaseType(user) (Essentials 21) / pbModifyType or the
+    move's @type assignment (16.x) to return the seasonal type rather than :NORMAL — do NOT do
+    this in pbEffectGeneral, which runs after type effectiveness is already resolved. Guard on
+    user.countsAs?(:SAWSBUCK) || user.countsAs?(:DEERLING) and index a four-entry table by
+    user.form; fall through to the declared type otherwise. Raging Bull's function code
+    (PokeBattle_Move_XXX with pbBaseType keyed on user.form) is a near-direct port — copy it and
+    swap the type table.
+  pokeemerald: >
+    Add a custom move effect (EFFECT_SEASONAL_TYPE) handled in the same place as
+    EFFECT_CHANGE_TYPE_ON_ITEM / Raging Bull's type resolution — the dynamic-type hook in
+    GetMoveType / SetTypeBeforeUsingMove, not the move-effect script. Map the current
+    SPECIES_SAWSBUCK_*/SPECIES_DEERLING_* form to TYPE_FAIRY, TYPE_GRASS, TYPE_GROUND, TYPE_ICE
+    in Spring/Summer/Autumn/Winter order; leave TYPE_NORMAL for any other species.

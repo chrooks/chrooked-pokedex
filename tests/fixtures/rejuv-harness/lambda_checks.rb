@@ -12,6 +12,12 @@ class PokeBattle_Move
   def pbIsPhysical?(a, t = nil); @cat == :physical; end
   def pbIsSpecial?(a, t = nil); @cat == :special; end
 end
+class PokeBattle_Move_0DE < PokeBattle_Move; end
+# Rejuv's party-menu registry — the zz_* QoL mods register handlers on it.
+module MenuHandlers
+  def self.add(*args, &blk); end
+end
+def _INTL(s, *a); s; end
 class PokeBattle_Battler; end
 class PokeBattle_Battle; end
 Dir[File.join(ARGV[0], "chrooked_*.rb")].sort.each { |f| eval(File.read(f), TOPLEVEL_BINDING) }

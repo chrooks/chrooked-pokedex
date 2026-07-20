@@ -1,0 +1,11 @@
+name: Season's Edge
+chrooked_id: seasonsedge
+aka: {  }
+type: Normal
+category: physical
+power: 85
+accuracy: 100
+pp: 10
+description: The user gores with antlers charged by the current season. This move's type matches the user's seasonal form.
+effect: type_matches_seasonal_form
+flags: [contact]

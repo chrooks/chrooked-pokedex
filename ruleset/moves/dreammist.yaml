@@ -1,0 +1,9 @@
+name: Dream Mist
+chrooked_id: dreammist
+aka: {  }
+type: Psychic
+category: special
+power: 65
+accuracy: 100
+pp: 10
+description: Envelops the target in hypnagogic mist, dealing damage and inflicting the Nightmare effect if the target is asleep or the user has the Daydreamer ability.

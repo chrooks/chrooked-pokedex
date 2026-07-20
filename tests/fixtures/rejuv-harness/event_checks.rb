@@ -111,6 +111,13 @@ class PokeBattle_Move
   def pbShouldApplyTypeImmunity?(a, o); true; end
 end
 
+class PokeBattle_Move_0DE < PokeBattle_Move; end
+# Rejuv's party-menu registry — the zz_* QoL mods register handlers on it.
+module MenuHandlers
+  def self.add(*args, &blk); end
+end
+def _INTL(s, *a); s; end
+
 class PokeBattle_Move_0D8 < PokeBattle_Move
   def pbEffect(attacker, alltargets, hitnum = 0); attacker.pbRecoverHP(50, true); end
 end

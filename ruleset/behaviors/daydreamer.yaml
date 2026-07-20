@@ -1,0 +1,35 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Grounded in the live Rejuv v14 scripts; every site is cited in engine_hints.
+name: Daydreamer
+chrooked_id: daydreamer
+applies_to: ability
+aka: {  }
+effects:
+  - summary: "Moves that require a sleeping target ignore that requirement."
+    trigger: on-hit
+    when: "this Pokémon uses a move whose only failure condition is that the target is not asleep"
+    effect: "Resolve the move's target-asleep gate as if the target were asleep. The target's real status is unchanged — it is not put to sleep, and no other sleep-dependent effect fires."
+  - summary: "Nightmare's residual damage keeps ticking on an awake target."
+    trigger: turn-end
+    when: "a foe carries the Nightmare effect and this Pokémon is on the field opposing it"
+    effect: "Deal Nightmare's normal 1/4 max HP end-of-turn damage even though the target is awake. If this Pokémon leaves the field and the target is not actually asleep, the Nightmare effect clears as it normally would."
+test_cases:
+  - given: "a Daydreamer Pokémon uses Dream Eater on a fully awake foe"
+    expect: "Dream Eater hits for full damage and heals the user for half the damage dealt, instead of failing with 'It doesn't affect...'"
+  - given: "a Daydreamer Pokémon uses Nightmare on an awake foe"
+    expect: "Nightmare applies successfully and the foe begins losing 1/4 max HP at the end of each round"
+  - given: "a Daydreamer Pokémon switches out while an awake foe is under Nightmare"
+    expect: "the Nightmare effect clears on the next end-of-round check, because neither real sleep nor a Daydreamer bearer is sustaining it"
+  - given: "a Daydreamer Pokémon uses Hypnosis, Yawn, or any move that INFLICTS sleep"
+    expect: "unchanged — Daydreamer only removes target-asleep REQUIREMENTS, it does not alter sleep infliction"
+  - given: "a Daydreamer Pokémon uses Snore or Sleep Talk (which require the USER to be asleep)"
+    expect: "unchanged — those gate on the user's own sleep, which Daydreamer does not touch. That is Comatose's half of the mechanic."
+  - given: "an ally without Daydreamer uses Dream Eater on an awake foe while Daydreamer is on the field"
+    expect: "fails as normal — the Dream Eater bypass is keyed to the attacker's own ability, not to the side"
+notes:
+  - "Scope is target-asleep REQUIREMENTS only. It does not double Wake-Up Slap's power, does not affect user-asleep moves (Snore, Sleep Talk), and never changes the target's actual status."
+  - "Deliberately the mirror of Comatose: Comatose makes the USER count as asleep for its own sleep-gated moves; Daydreamer makes the TARGET count as asleep for the user's sleep-gated moves."
+  - "Rejuv already ships an ability with exactly this bypass — World of Nightmares — so all three engine sites carry a working precedent to mirror rather than a new hook to invent."
+  - "The Nightmare-on-an-awake-target case is self-limiting and needs no invented duration rule: Rejuv re-checks the sustain condition every end-of-round and sets effects[:Nightmare] = false when it fails, so the effect dies the moment the Daydreamer leaves the field."
+engine_hints:
+  essentials: "Rejuv (mkxp): patch/Mods/chrooked_daydreamer.rb. Two prepends, no whole-method overrides. (1) Nightmare — both the can-affect gate (Scripts/Battle_MoveEffects.rb:6575, PokeBattle_Move_10F#pbCanAffectTarget) and the end-of-round residual (Scripts/Battle.rb:6516) resolve their bypass through PokeBattle_Battle#pbCheckSideAbility(:WORLDOFNIGHTMARES, ...). pbCheckSideAbility (Scripts/Battle.rb:823) takes an abilities LIST and does Array(abilities), so prepending it to append :DAYDREAMER whenever :WORLDOFNIGHTMARES is queried covers both sites with one wrapper. (2) Dream Eater — Scripts/Battle_MoveEffects.rb:5390, PokeBattle_Move_0DE#pbCanAffectTarget, gates on `attacker.ability == :WORLDOFNIGHTMARES` rather than the side lookup, so it needs its own prepend on that class. Not touched by the pbCheckSideAbility wrapper (verified safe): Battle.rb:4527 uses pbCheckGlobalAbility, Battle.rb:7285 and Battle_MoveEffects.rb:6585 use `i.ability ==` / `attacker.ability ==` directly — so Daydreamer does NOT inherit World of Nightmares' MeanLook trapping or its Starlight field message. Not patched: the Battle_AI.rb scoring sites (7718, 14720) still assume the target must be asleep, so the AI undervalues Dream Eater and Nightmare from a Daydreamer bearer."

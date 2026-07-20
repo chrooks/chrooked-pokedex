@@ -1,0 +1,31 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Gastric Snare
+chrooked_id: gastricsnare
+applies_to: move
+aka: {  }
+effects:
+  - summary: Always super effective against Bug-type targets.
+    trigger: damage-calc
+    when: The target is a Bug type (primary or secondary).
+    effect: Force the type-effectiveness multiplier to x2 for the Bug typing slot, regardless of the standard Poison-vs-Bug matchup. Other type slots are resolved normally and multiplied together with this forced x2. Steel is NOT handled here - the Corrosion ability governs Poison-vs-Steel.
+  - summary: 30% chance to poison the target after damage is dealt.
+    trigger: on-hit
+    when: Move connects and target is not already statused or immune to poison.
+    effect: Apply the Poisoned status condition to the target with 30% probability.
+test_cases:
+  - given: Victreebel uses Gastric Snare vs. a pure Bug-type (e.g. Caterpie).
+    expect: Damage is calculated with a ×2 type multiplier (super effective) and the hit message reads 'It's super effective!'
+  - given: Victreebel uses Gastric Snare vs. a Bug/Flying-type (e.g. Scyther).
+    expect: Bug slot forces ×2; Flying slot resolves normally (Poison vs Flying = ×1); net multiplier is ×2. 'It's super effective!' displayed.
+  - given: Victreebel uses Gastric Snare vs. a non-Bug type (e.g. Kangaskhan).
+    expect: Type effectiveness resolves by the standard chart (Poison vs Normal = ×1); no forced multiplier applied.
+  - given: Gastric Snare hits a Bug-type target that already has a status condition.
+    expect: Super-effective damage is dealt normally; the 30% poison effect does not apply because the target already has a status.
+  - given: Victreebel (Corrosion) uses Gastric Snare vs Scizor (Bug/Steel).
+    expect: Bug slot forces x2; Steel slot resolves via Corrosion (x2, see the corrosion behavior); net x4. Super effective.
+notes:
+  - "Gen 1 callback: Poison was super effective vs Bug in RBY. This restores it as a trait of the Victreebel line's acidic pitcher-plant biology."
+  - This move only overrides the Bug slot. Poison-vs-Steel is owned by the Corrosion ability behavior, not by this move.
+  - 80 BP with a 30% poison chance sits level with Poison Jab; the Bug bonus is the signature hook.
+engine_hints:
+  essentials: "Rejuv (mkxp): patch/Mods/chrooked_gastricsnare.rb. CHROOKED_MOVE_TYPEMOD[:GASTRICSNARE] = lambda multiplying the Bug slot by (2/chart) so it lands at exactly 2x - identical shape to chrooked_excalibur.rb (always-SE-vs-Dragon), the existing precedent for this mechanic. Consumed by the pbTypeModifier prepend in chrooked_00_core.rb. Typemod is a fraction class (Scripts/Battle_Typemod.rb: numerator/denominator, #* reduces by the smaller term); chart lookups via PBTypes.oneTypeEff(atype, dtype). NO Steel handling here - Poison-vs-Steel is owned by the corrosion behavior. Because the core runs the ability-keyed pass BEFORE the move-keyed pass, this multiply composes correctly on top of Corrosion's rebuilt non-zero Typemod (Scizor = 2x Bug * 2x Steel = 4x). Move data itself needs no custom function code: movetext.rb emits :function => 0x005 (damage + 30% poison), which is correct - the type quirk lives entirely in the typemod hook. Verified by references/rejuv-harness/typemod_check.rb (8 assertions, run with `ruby`)."

@@ -535,6 +535,13 @@ class PokeBattle_Move
   def pbCalcDamage(a, o, h = 0, f = {}); 100; end
   def pbType(attacker, type = nil); :NORMAL; end
 end
+# Dream Eater's effect class — chrooked_daydreamer prepends onto it.
+class PokeBattle_Move_0DE < PokeBattle_Move; end
+# Rejuv's party-menu registry — the zz_* QoL mods register handlers on it.
+module MenuHandlers
+  def self.add(*args, &blk); end
+end
+def _INTL(s, *a); s; end
 class PokeBattle_Battler; end
 class PokeBattle_Battle; end
 """
@@ -741,3 +748,27 @@ def test_static_mod_relearn_always_installed(tmp_path):
     mod = target / "patch" / "Mods" / "chrooked_zz_relearn.rb"
     assert mod.exists()
     assert "def canRelearnAll?" in mod.read_text()
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    ("name", "form_label", "expected"),
+    [
+        # Form 0 of a genuinely multi-form species must be labelled — this is the
+        # case that regressed: Spring Deerling rendered bare beside its siblings.
+        ("Deerling", "Spring Form", "Deerling (Spring Form)"),
+        ("Sawsbuck", "Spring Form", "Sawsbuck (Spring Form)"),
+        ("Cherrim", "Overcast Form", "Cherrim (Overcast Form)"),
+        ("Deerling", "Winter Form", "Deerling (Winter Form)"),
+        # Rejuv's placeholder label for single-form species stays invisible.
+        ("Bulbasaur", "Normal Form", "Bulbasaur"),
+        ("Tornadus", "Normal Forme", "Tornadus"),
+        ("Ponyta", "", "Ponyta"),
+        # A label echoing the species name adds nothing (Rotom's own form 0).
+        ("Rotom", "Rotom", "Rotom"),
+    ],
+)
+def test_display_name_labels_only_meaningful_forms(name, form_label, expected):
+    from chrooked_pokedex.web.snapshot_rejuv import _display_name
+
+    assert _display_name(name, form_label) == expected

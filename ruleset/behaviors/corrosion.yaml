@@ -1,0 +1,35 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Corrosion
+chrooked_id: corrosion
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Poison status can be inflicted on any type, including Steel and Poison.
+    trigger: on-hit
+    when: The bearer applies the poisoned or badly-poisoned status to a target.
+    effect: Ignore the Steel-type and Poison-type immunity to the poisoned status. This is the vanilla Corrosion clause and is unchanged.
+  - summary: The bearer's Poison-type moves are super effective against Steel.
+    trigger: damage-calc
+    when: The bearer uses a Poison-type damaging move against a target with Steel in either type slot.
+    effect: Override the standard Poison-vs-Steel matchup (normally x0, immune) and force the multiplier to x2 for the Steel typing slot. Other type slots resolve normally and multiply together with this forced x2. This applies only to moves used BY the ability bearer.
+test_cases:
+  - given: Victreebel (Corrosion) uses Poison Jab vs Steelix (Steel/Ground).
+    expect: Steel slot forces x2; Ground slot resolves normally (Poison vs Ground = x0.5); net x1. Neutral damage rather than the vanilla immunity.
+  - given: Victreebel (Corrosion) uses Gunk Shot vs Registeel (pure Steel).
+    expect: x2, super effective. Vanilla would be x0.
+  - given: Victreebel (Corrosion) uses Gastric Snare vs Scizor (Bug/Steel).
+    expect: Bug slot forces x2 from the gastricsnare move behavior; Steel slot forces x2 from Corrosion; net x4.
+  - given: A Pokemon WITHOUT Corrosion uses Poison Jab vs Registeel.
+    expect: x0, immune. The override is bearer-only and does not change the global type chart.
+  - given: Victreebel (Corrosion) uses Toxic vs Registeel.
+    expect: Registeel is badly poisoned. Status clause, unchanged from vanilla Corrosion.
+  - given: Victreebel (Corrosion) uses Razor Leaf (Grass) vs Registeel.
+    expect: Standard chart applies (Grass vs Steel = x0.5). The override touches Poison-type moves only.
+notes:
+  - DIVERGES FROM VANILLA. Vanilla Corrosion only bypasses the poison-STATUS immunity; it does not change Poison-vs-Steel damage. This version adds the damage clause.
+  - "Deliberate power increase: Steel is a premier defensive type and this removes its best offensive check against the bearer. Chosen over the milder x1 (immunity-removal-only) variant."
+  - Bearer-only. The global type chart is untouched - a Poison move from any non-Corrosion Pokemon still reads x0 vs Steel.
+  - Affects every Corrosion holder in the Ruleset, not just the Victreebel line. Check the holder list before the engine grounding pass.
+  - "Ability suppression: the handler reads attacker.ability bare, matching engine convention (vanilla Battle_Move.rb does the same at lines 233/245/365) and every other chrooked handler. Rejuv's abilityWorks? is marked deprecated in-source. Worth an in-game check that Gastro Acid (which is in this very learnset at L24) does switch the Steel override back off."
+engine_hints:
+  essentials: "Rejuv (mkxp): patch/Mods/chrooked_corrosion.rb. ONLY the added damage clause is implemented; the vanilla poison-status-ignores-Steel/Poison clause is NATIVE in Rejuv and is left untouched. Poison-vs-Steel is 0x on the chart and Typemod multiplication cannot scale away from zero, so the multiply-by-(2/chart) trick used by excalibur/gastricsnare does NOT work here. Instead the handler rebuilds the Typemod slot by slot, substituting Typemod.new(2,1) for the Steel slot and PBTypes.oneTypeEff for every other slot. That rebuild needs the ATTACKER's ability as the key, so it required a NEW core table: CHROOKED_ABILITY_TYPEMOD in chrooked_00_core.rb, consumed in the pbTypeModifier prepend immediately BEFORE CHROOKED_MOVE_TYPEMOD. That ordering is load-bearing - ability-first lets a move-keyed override compose on top of the rebuilt value instead of being discarded by it. Guarded to atype == :POISON and targets with :STEEL, so non-Poison moves and non-Steel targets are untouched, and the global chart is unchanged for non-bearers. AI coverage: NO separate AI patch is needed. Scripts/Battle_AI.rb funnels move type effectiveness through pbTypeModNoMessages (line 9400) -> PokeBattle_Move#pbCalcTypeMod (Battle_Move.rb:780) -> pbTypeModifier (Battle_Move.rb:429), which is the method chrooked_00_core.rb prepends, so the AI sees this override for free. The bare PBTypes.oneTypeEff sites in Battle_AI.rb (5427/5462/5489) belong to typechangecode / opptypechangecode / opptypeaddcode - scoring for type-CHANGING moves such as Soak, not damage estimation. Every hardcoded :POISON/:STEEL pair in Battle_AI.rb concerns poison STATUS immunity (Toxic Spikes, Synchronize, Corrosive-field self-poison), not the damage matchup. Rejuv's existing :CORROSION references (Battle_Inspect.rb line 10, Battle_AI.rb 454/9866/9867/9886) are all Corrosive-field scoring and are unaffected. Verified by references/rejuv-harness/typemod_check.rb (8 assertions, run with `ruby`)."

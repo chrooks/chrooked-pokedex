@@ -1,0 +1,36 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Dream Mist
+chrooked_id: dreammist
+applies_to: move
+aka: {  }
+effects:
+  - summary: Deal damage as normal.
+    trigger: damage-calc
+    when: Always, on a successful accuracy check.
+    effect: Apply 65-BP special Psychic damage to the target using standard damage formula. No drain; user HP is unchanged.
+  - summary: Attempt to apply the Nightmare residual effect after damage lands.
+    trigger: on-hit
+    when: After damage is dealt and the target has not fainted.
+    effect: "Check condition: (a) target has the SLP (sleep) status, OR (b) the user has the ability Daydreamer. If either condition is true and the target is not already under the Nightmare effect, apply Nightmare to the target. At the end of each subsequent round while Nightmare persists, the target loses 1/4 of its maximum HP. Nightmare is re-checked each end-of-round: it persists while the target is asleep OR a Daydreamer bearer opposes it, and clears otherwise. If neither condition is met, the Nightmare effect silently fails — the move still deals its damage with no additional message beyond a standard failure note."
+  - summary: Nightmare residual tick.
+    trigger: turn-end
+    when: While the target has the Nightmare effect active.
+    effect: Target loses HP equal to 1/4 of its maximum HP (rounded down, minimum 1). This mirrors the vanilla Nightmare residual exactly; no new mechanic is introduced for the tick itself.
+test_cases:
+  - given: Target has SLP status, user does NOT have Daydreamer.
+    expect: Move deals damage, Nightmare effect is applied. Target loses 1/4 max HP at end of that round and every subsequent round it remains asleep.
+  - given: Target is fully healthy, has no status condition, user has Daydreamer.
+    expect: Move deals damage, Nightmare effect is applied despite target not being asleep. Target loses 1/4 max HP at end of round.
+  - given: Target has no status condition, user does NOT have Daydreamer.
+    expect: Move deals damage only. Nightmare effect silently fails; no residual damage is applied.
+  - given: Target already has Nightmare active, user has Daydreamer.
+    expect: Move deals damage, but Nightmare is NOT reapplied (target already afflicted). Residual continues as normal.
+  - given: Target has SLP status but faints from the initial 65-BP hit.
+    expect: Nightmare application step is skipped entirely (faint check precedes on-hit secondary effect).
+notes:
+  - "Design intent: Dream Mist is the offensive, single-turn alternative to the vanilla Nightmare status move. Vanilla Nightmare costs a full turn and deals zero damage; Dream Mist deals 65 BP damage AND sets up residual in one action, at the cost of requiring the target to be asleep (or the user to have Daydreamer)."
+  - "The Daydreamer ability gate is the key differentiator: only Musharna (or a future Daydreamer user) gets the unconditional payoff. Other users of the move (via Sketch, etc.) get a conditional payoff, keeping the move balanced."
+  - The move is deliberately NOT a drain move. Musharna already learns Dream Eater at L40; making Dream Mist a drain would create redundancy. The residual is the unique value proposition, not HP recovery.
+  - engine_hints is left empty per design spec; C citations and Essentials translation are a human pass.
+  - STUB — engine_hints ungrounded, needs human grounding pass
+  - "Nightmare persistence is self-limiting and needs no new rule: the engine re-checks the sustain condition every end-of-round and clears the effect when it fails, so on an awake target the residual dies the moment the Daydreamer bearer leaves the field. See the daydreamer behavior spec."
