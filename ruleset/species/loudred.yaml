@@ -5,18 +5,20 @@ abilities:
   secondary: Amplifier
 stats: { spa: 95 }
 learnset:
-  - { level: 0, move: Bite }
-  - { level: 1, move: Bite }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Pound }
+  - { level: 1, move: Disarming Voice }
   - { level: 1, move: Echoed Voice }
-  - { level: 1, move: Howl }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Pound }
   - { level: 15, move: Rest }
   - { level: 15, move: Sleep Talk }
-  - { level: 23, move: Stomp }
-  - { level: 29, move: Roar }
-  - { level: 32, move: Bail Out }
-  - { level: 36, move: Supersonic }
-  - { level: 43, move: Uproar }
+  - { level: 23, move: Round }
+  - { level: 29, move: Uproar }
+  - { level: 32, move: Snarl }
+  - { level: 36, move: Overdrive }
+  - { level: 42, move: Hyper Voice }
   - { level: 50, move: Screech }
-  - { level: 57, move: Hyper Voice }
+  - { level: 58, move: Nasty Plot }
+  - { level: 66, move: Roar }
+  - { level: 72, move: Boomburst }
+  - { level: 81, move: Hyper Beam }

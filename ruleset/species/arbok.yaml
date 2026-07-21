@@ -1,10 +1,11 @@
 name: Arbok
 chrooked_id: arbok
 aka: { pokeemerald: SPECIES_ARBOK }
+types: [Poison, Dark]
 abilities:
   secondary: Coil Up
   hidden: Strong Jaw
-stats: { def: 80 }
+stats: { def: 80, atk: 105, hp: 80, spd: 95 }
 learnset:
   - { level: 0, move: Crunch }
   - { level: 1, move: Leer }

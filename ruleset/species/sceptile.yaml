@@ -1,6 +1,7 @@
 name: Sceptile
 chrooked_id: sceptile
 aka: { pokeemerald: SPECIES_SCEPTILE }
+types: [Grass, Dragon]
 abilities:
   secondary: Forestry
   hidden: Sharpness

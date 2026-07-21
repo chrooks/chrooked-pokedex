@@ -33,4 +33,4 @@ learnset:
   - { level: 52, move: Dragon Pulse }
   - { level: 56, move: Extreme Speed }
   - { level: 60, move: Close Combat }
-evolution: { from: Riolu, method: { level: 30 } }
+evolution: { from: Riolu, method: { level: 36 } }

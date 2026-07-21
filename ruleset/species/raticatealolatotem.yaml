@@ -21,4 +21,3 @@ learnset:
   - { level: 39, move: Double-Edge }
   - { level: 44, move: Endeavor }
   - { level: 48, move: Heel Drop }
-evolution: { from: Rattata Alola, method: { pokeemerald: EVO_NONE, param: 0 } }

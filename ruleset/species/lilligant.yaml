@@ -4,4 +4,3 @@ aka: { pokeemerald: SPECIES_LILLIGANT }
 abilities:
   secondary: Bloom
   hidden: Chloroplast
-evolution: { from: Petilil, method: { pokeemerald: EVO_NONE, param: 0 } }

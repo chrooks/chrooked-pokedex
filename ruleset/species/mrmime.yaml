@@ -2,4 +2,3 @@ name: Mr Mime
 chrooked_id: mrmime
 aka: { pokeemerald: SPECIES_MR_MIME }
 stats: { def: 70 }
-evolution: { from: Mime Jr, method: { pokeemerald: EVO_NONE, param: 0 } }
