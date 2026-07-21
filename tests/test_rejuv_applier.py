@@ -230,8 +230,10 @@ def test_new_move_created_with_next_id(tmp_path):
     assert ":basedamage => 90" in text
     assert ":contact => true" in text and ":soundmove => true" in text
     # No additional effects -> a plain 0x000 damage move is complete, no DATA ONLY.
+    # reason must be exactly "" (str Contract) — a None here crashed the web
+    # apply summary's reason.startswith().
     entry = next(e for e in report.entries if e.chrooked_id == "madeup")
-    assert entry.status == "applied" and not entry.reason
+    assert entry.status == "applied" and entry.reason == ""
 
 
 def test_new_move_resolves_in_learnset(tmp_path):

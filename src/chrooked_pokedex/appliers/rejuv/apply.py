@@ -482,7 +482,7 @@ def _build_movetext(
             # funccode can't express, so the leftover is implemented, not missing.
             own_behavior = move.chrooked_id in implemented
             if not move.additional_effects:
-                reason = None
+                reason = ""
             elif not leftover:
                 reason = f"effects mapped to :function 0x{function:03X}"
             elif own_behavior and function:
