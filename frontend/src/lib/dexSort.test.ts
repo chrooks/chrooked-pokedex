@@ -92,3 +92,32 @@ describe("stableMultiSort (ac5)", () => {
     expect(names(rows)).toEqual(before);
   });
 });
+
+describe("evolution sort", () => {
+  const withEvo = (name: string, evolution: DexEntry["evolution"]): DexEntry => ({
+    ...makeEntry(name, ["normal"], full(50)),
+    evolution,
+  });
+
+  it("sorts by evolution level across all method shapes, base mons last", () => {
+    const rows = [
+      withEvo("Base", null),
+      withEvo("Dict", { from: "a", method: { level: 30 } }),
+      withEvo("Stone", { from: "b", method: "Fire Stone" }),
+      withEvo("Str", { from: "c", method: "Level 9" }),
+      withEvo("Detail", {
+        from: "d",
+        method: {},
+        method_detail: { kind: "EVO_LEVEL", param: "16" },
+      }),
+    ];
+    const keys: SortKey[] = [{ field: "evolution", direction: "asc" }];
+    expect(names(stableMultiSort(rows, keys))).toEqual([
+      "Str",
+      "Detail",
+      "Dict",
+      "Base",
+      "Stone",
+    ]);
+  });
+});

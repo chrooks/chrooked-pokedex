@@ -28,6 +28,11 @@ function describe(def: FilterDef | undefined, value: string): string {
     const [op, num] = value.split("|");
     return `${def.label} ${op} ${num}`;
   }
+  if (def.method === "selectnum") {
+    const [selected, op, num] = value.split("|");
+    const clause = op && num ? ` ${op} ${num}` : "";
+    return `${def.label}: ${selected}${clause}`;
+  }
   return `${def.label}: ${value}`;
 }
 
@@ -45,6 +50,8 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   const [field, setField] = useState(defaultField);
   const [op, setOp] = useState<NumericOperator>("≥");
   const [value, setValue] = useState("");
+  // The optional numeric clause of a `selectnum` field (blank = category only).
+  const [num, setNum] = useState("");
   const [connector, setConnector] = useState<"AND" | "OR">("AND");
   // Id of the pill the text box is currently driving live, so each keystroke
   // rewrites that one pill instead of appending a new one. Released on Enter /
@@ -89,7 +96,9 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
     setField(nextField);
     const nextDef = defs.find((d) => d.field === nextField);
     // Seed select fields with their first option so "Add" is one click.
-    setValue(nextDef?.method === "select" ? (nextDef.values?.[0] ?? "") : "");
+    const isSelect = nextDef?.method === "select" || nextDef?.method === "selectnum";
+    setValue(isSelect ? (nextDef?.values?.[0] ?? "") : "");
+    setNum("");
   }
 
   function addFilter() {
@@ -110,6 +119,16 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
     } else if (def.method === "select") {
       stored = value || (def.values?.[0] ?? "");
       if (stored === "") return;
+    } else if (def.method === "selectnum") {
+      const selected = value || (def.values?.[0] ?? "");
+      if (selected === "") return;
+      const clause = num.trim();
+      const wantsNumber = def.numericValues?.includes(selected) ?? false;
+      if (!wantsNumber || clause === "" || Number.isNaN(Number(clause))) {
+        stored = selected;
+      } else {
+        stored = `${selected}|${op}|${clause}`;
+      }
     } else {
       stored = value.trim();
       if (stored === "") return;
@@ -210,6 +229,51 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
               </option>
             ))}
           </select>
+        )}
+        {def?.method === "selectnum" && (
+          <>
+            <select
+              id={`${idPrefix}-value-kind`}
+              className="dexc-select"
+              aria-label={`${def.label} kind`}
+              value={value || def.values?.[0] || ""}
+              onChange={(e) => setValue(e.target.value)}
+            >
+              {def.values?.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+            {def.numericValues?.includes(value || def.values?.[0] || "") && (
+              <>
+                <select
+                  id={`${idPrefix}-kind-op`}
+                  className="dexc-select dexc-select--op"
+                  aria-label="Operator"
+                  value={op}
+                  onChange={(e) => setOp(e.target.value as NumericOperator)}
+                >
+                  {NUMERIC_OPERATORS.map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  id={`${idPrefix}-kind-num`}
+                  className="dexc-input dexc-input--num"
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="any"
+                  aria-label="Value (optional)"
+                  value={num}
+                  onChange={(e) => setNum(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && addFilter()}
+                />
+              </>
+            )}
+          </>
         )}
         {def?.method === "text" && (
           <input

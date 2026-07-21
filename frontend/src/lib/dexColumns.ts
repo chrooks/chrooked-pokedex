@@ -2,7 +2,7 @@
    table render, the filter defs, the sort comparators, and the columns panel
    all derive from this single source so they cannot drift. Pure, no React. */
 
-import type { DexEntry } from "../types";
+import type { DexEntry, Evolution } from "../types";
 import { STAT_LABEL, bst } from "./format";
 
 export type ColumnKey =
@@ -135,12 +135,76 @@ export const COLUMNS: Column[] = [
   {
     key: "evolution",
     label: "Evolution",
-    cellType: "string",
+    cellType: "number",
     locked: false,
     sortable: true,
-    sortValue: (entry) => entry.evolution?.from_name ?? entry.evolution?.from ?? undefined,
+    sortValue: evoLevel,
   },
 ];
+
+/** An evolution method as one readable string, across every shape the API can
+    ship: a base-derived display string ("Level 26"), an Override dict
+    (`{level: 26}`, `{item: …}`, `{method, param}`, the raw engine-token escape),
+    or the structured `method_detail`. The single place that shape-switching
+    lives — the column sort, the kind/level extraction, and the table cell label
+    all read through it, so no caller can miss a shape. Empty = no method. */
+export function evoMethodText(evolution: Evolution | null): string {
+  if (!evolution || !evolution.from) return "";
+  const method = evolution.method;
+  if (typeof method === "string") return method;
+  if (method && typeof method === "object") {
+    const dict = method as Record<string, unknown>;
+    if ("level" in dict) return `Level ${dict.level}`;
+    if ("item" in dict) return String(dict.item);
+    if ("method" in dict) {
+      return `${dict.method}${"param" in dict ? ` ${dict.param}` : ""}`;
+    }
+    const values = Object.values(dict).map(String).join(" ");
+    if (values !== "") return values;
+  }
+  const detail = evolution.method_detail;
+  return detail ? `${detail.kind} ${detail.param}` : "";
+}
+
+/** The level a species evolves at, or undefined for base mons and level-less
+    methods (they sort and filter to the end). */
+export function evoLevel(entry: DexEntry): number | undefined {
+  const match = /level\D*(\d+)/i.exec(evoMethodText(entry.evolution));
+  return match ? Number(match[1]) : undefined;
+}
+
+/** The evolution method families, in filter-menu order. "None" is a base mon (or
+    any species with no pre-evolution); "Other" is anything unmodeled. */
+export const EVO_KINDS = [
+  "None",
+  "Level",
+  "Item",
+  "Friendship",
+  "Trade",
+  "Move",
+  "Location",
+  "Other",
+] as const;
+export type EvoKind = (typeof EVO_KINDS)[number];
+
+/** Classify a species' evolution method into one family. Reads the method text
+    rather than the engine token so Override and base-derived edges classify
+    identically. */
+export function evoKind(entry: DexEntry): EvoKind {
+  const evolution = entry.evolution;
+  if (!evolution || !evolution.from) return "None";
+  const text = evoMethodText(evolution).toLowerCase();
+  if (text === "") return "Other";
+  if (/level/.test(text)) return "Level";
+  if (text.includes("friendship")) return "Friendship";
+  if (text.includes("trade")) return "Trade";
+  if (text.includes("move") || text.startsWith("knows")) return "Move";
+  if (text.startsWith("at ") || text.startsWith("in ") || text.includes("map")) {
+    return "Location";
+  }
+  if (text.includes("stone") || text.includes("item")) return "Item";
+  return "Other";
+}
 
 /** Lookup a column by key. */
 export const COLUMN_BY_KEY: Map<ColumnKey, Column> = new Map(

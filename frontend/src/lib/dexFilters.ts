@@ -6,7 +6,7 @@
 
 import type { DexEntry } from "../types";
 import { STAT_ORDER, TYPES, bst, isEdited } from "./format";
-import { COLUMNS } from "./dexColumns";
+import { COLUMNS, EVO_KINDS, evoKind, evoLevel } from "./dexColumns";
 import { CLASS_VALUES, classesOf } from "./dexTags";
 import type { ClassValue } from "./dexTags";
 import {
@@ -32,7 +32,9 @@ export type { FieldRegistry } from "./filterEngine";
     but the value sets here are static (TYPES, CLASS_VALUES). */
 export function buildFilterDefs(_entries: DexEntry[]): FilterDef[] {
   const numericDefs: FilterDef[] = COLUMNS.filter(
-    (column) => column.cellType === "number",
+    // Evolution is numeric for sorting (evo level) but filters as a method-kind
+    // select with an optional level clause, so it gets its own def below.
+    (column) => column.cellType === "number" && column.key !== "evolution",
   ).map((column) => ({
     field: column.key,
     label: column.label,
@@ -40,6 +42,13 @@ export function buildFilterDefs(_entries: DexEntry[]): FilterDef[] {
   }));
   return [
     ...numericDefs,
+    {
+      field: "evolution",
+      label: "Evolution",
+      method: "selectnum",
+      values: [...EVO_KINDS],
+      numericValues: ["Level"],
+    },
     { field: "type", label: "Type", method: "select", values: [...TYPES] },
     { field: "class", label: "Class", method: "select", values: [...CLASS_VALUES] },
     {
@@ -63,6 +72,9 @@ function numericValue(field: string, entry: DexEntry): number | undefined {
   if (field === "bst") {
     return bst(entry.stats);
   }
+  if (field === "evolution") {
+    return evoLevel(entry);
+  }
   // Only the six stat keys read from entry.stats; any other field fails safe so
   // a future numeric column without a stats backing never silently matches.
   return STAT_FIELDS.has(field) ? entry.stats[field] : undefined;
@@ -83,6 +95,9 @@ function selectMatch(field: string, entry: DexEntry, value: string): boolean {
   }
   if (field === "class") {
     return classesOf(entry).includes(value as ClassValue);
+  }
+  if (field === "evolution") {
+    return evoKind(entry) === value;
   }
   if (field === "edited") {
     return value === "Edited" ? isEdited(entry) : !isEdited(entry);

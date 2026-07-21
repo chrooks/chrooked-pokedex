@@ -33,9 +33,14 @@ export type FilterEntry =
 export interface FilterDef {
   field: string;
   label: string;
-  method: "numeric" | "select" | "text";
-  /** Allowed values for a `select` field. */
+  /** `selectnum` is a select narrowed by an OPTIONAL numeric clause — pick a
+      category first, then (when it makes sense) constrain its number. */
+  method: "numeric" | "select" | "text" | "selectnum";
+  /** Allowed values for a `select` / `selectnum` field. */
   values?: string[];
+  /** `selectnum` only: the values whose numeric clause is offered. Others are
+      category-only. */
+  numericValues?: string[];
 }
 
 /** The seam that makes the engine entity-generic. A registry bundles the field
@@ -143,6 +148,23 @@ export function applyFilter<T>(
 
   if (def.method === "select") {
     return registry.selectMatch(def.field, item, value);
+  }
+
+  // selectnum — "Level|≥|30" (category plus clause) or "Level" (category only).
+  if (def.method === "selectnum") {
+    const [selected, op, numberPart] = value.split("|");
+    if (!registry.selectMatch(def.field, item, selected)) {
+      return false;
+    }
+    if (op === undefined || numberPart === undefined || numberPart === "") {
+      return true;
+    }
+    const threshold = Number(numberPart);
+    const cell = registry.numericValue(def.field, item);
+    if (cell === undefined || Number.isNaN(threshold)) {
+      return false;
+    }
+    return compareNumeric(cell, op, threshold);
   }
 
   // text — an empty pill filters nothing.

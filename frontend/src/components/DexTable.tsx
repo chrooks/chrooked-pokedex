@@ -9,7 +9,7 @@ import {
 } from "./editors/evolutionMethod";
 import { bst, dexLabel, isEdited, STAT_LABEL, TYPES, type StatKey } from "../lib/format";
 import type { InlineEdit, AbilitySlot } from "../lib/inlineEdit";
-import { COLUMNS, type Column, type ColumnKey } from "../lib/dexColumns";
+import { COLUMNS, evoMethodText, type Column, type ColumnKey } from "../lib/dexColumns";
 import type { SortKey } from "../lib/dexSort";
 import { TypeChip } from "./TypeChip";
 import { EditedLed } from "./EditedLed";
@@ -638,13 +638,7 @@ function evolutionLabel(entry: DexEntry): string | null {
   const evo = entry.evolution;
   if (!evo || !evo.from) return null;
   const from = evo.from_name ?? evo.from;
-  const m = evo.method;
-  let label: string;
-  if (typeof m === "string") label = m;
-  else if ("level" in m) label = `Level ${m.level}`;
-  else if ("item" in m) label = String(m.item);
-  else if ("method" in m) label = `${m.method}${"param" in m ? ` ${m.param}` : ""}`;
-  else label = Object.values(m).map(String).join(" ");
+  const label = evoMethodText(evo);
   return label ? `${from} · ${label}` : from;
 }
 

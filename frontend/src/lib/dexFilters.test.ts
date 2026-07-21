@@ -258,3 +258,31 @@ describe("evalEntries — boolean structure (ac1)", () => {
     expect(evalEntries(entry, expr)).toBe(false); // atk 84 < 100 short-circuits the AND
   });
 });
+
+describe("evolution filter", () => {
+  const levelDisplay = makeEntry({ evolution: { from: "charmeleon", method: "Level 36" } });
+  const levelOverride = makeEntry({ evolution: { from: "kirlia", method: { method: "level_up", param: "30" } } });
+  const levelDict = makeEntry({ evolution: { from: "pupitar", method: { level: 55 } } });
+  const stone = makeEntry({ evolution: { from: "eevee", method: "Fire Stone" } });
+  const trade = makeEntry({ evolution: { from: "machoke", method: "Trade" } });
+  const base = makeEntry({ evolution: null });
+  const def = () => defFor("evolution");
+
+  it("matches a method kind across every method shape", () => {
+    expect(applyFilter(def(), levelDisplay, "Level")).toBe(true);
+    expect(applyFilter(def(), levelOverride, "Level")).toBe(true);
+    expect(applyFilter(def(), levelDict, "Level")).toBe(true);
+    expect(applyFilter(def(), stone, "Level")).toBe(false);
+    expect(applyFilter(def(), stone, "Item")).toBe(true);
+    expect(applyFilter(def(), trade, "Trade")).toBe(true);
+    expect(applyFilter(def(), base, "None")).toBe(true);
+    expect(applyFilter(def(), levelDisplay, "None")).toBe(false);
+  });
+
+  it("narrows a level kind by the optional numeric clause", () => {
+    expect(applyFilter(def(), levelOverride, "Level|≤|30")).toBe(true);
+    expect(applyFilter(def(), levelOverride, "Level|>|30")).toBe(false);
+    expect(applyFilter(def(), levelDict, "Level|≥|50")).toBe(true);
+    expect(applyFilter(def(), stone, "Level|≥|1")).toBe(false);
+  });
+});
