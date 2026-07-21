@@ -498,6 +498,7 @@ _FLINCH_COMBOS = {
 _PRIMARY_EFFECT_CODES = {
     "first_turn_only": (0x012, 100),
     "u-turn": (0x0EE, None),
+    "triple_kick": (0x0BF, None),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance

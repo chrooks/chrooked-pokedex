@@ -439,6 +439,16 @@ def test_new_move_primary_effect_uturn_gets_function_code(tmp_path):
     assert "0x0EE" in entry.reason
 
 
+def test_new_move_primary_effect_triple_kick_gets_function_code(tmp_path):
+    r = Ruleset(moves={"triplehit": MoveDef(
+        name="Triple Hit", chrooked_id="triplehit", type="Normal", category="physical",
+        power=15, accuracy=100, pp=10, effect="triple_kick", flags=("contact",),
+    )})
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert ":function => 0x0BF" in text
+
+
 def test_new_move_unmapped_primary_effect_reports_data_only(tmp_path):
     r = Ruleset(moves={"weird": MoveDef(
         name="Weird", chrooked_id="weird", type="Normal", category="physical",

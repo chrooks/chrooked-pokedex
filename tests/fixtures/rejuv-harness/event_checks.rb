@@ -322,6 +322,21 @@ sb2 = PokeBattle_Battler.new(:STONEBARK, battle)
 tm_sb = PokeBattle_Move.new(:VINEWHIP, type: :GRASS).pbTypeModifier(:GRASS, hitter, sb2)
 check(fails, "stonebark heal keeps typemod", tm_sb.immune?, false)
 
+# season's edge: type follows the user's seasonal form; others untouched
+StubSpecies = Struct.new(:species)
+se = PokeBattle_Battler.new(:NONE, battle)
+def se.pokemon; StubSpecies.new(:SAWSBUCK); end
+def se.form; 3; end
+se_move = PokeBattle_Move.new(:SEASONSEDGE, type: :NORMAL)
+check(fails, "seasons edge winter -> ice", se_move.pbType(se), :ICE)
+def se.form; 0; end
+check(fails, "seasons edge spring -> fairy", se_move.pbType(se), :FAIRY)
+notdeer = PokeBattle_Battler.new(:NONE, battle)
+def notdeer.pokemon; StubSpecies.new(:KANGASKHAN); end
+def notdeer.form; 0; end
+check(fails, "seasons edge non-seasonal user stays normal", se_move.pbType(notdeer), :NORMAL)
+check(fails, "other move unaffected", PokeBattle_Move.new(:TACKLE, type: :NORMAL).pbType(se), :NORMAL)
+
 fails.each { |f| puts "FAIL #{f}" }
 raise "#{fails.size} failures" unless fails.empty?
 puts "all event-hook checks pass"
