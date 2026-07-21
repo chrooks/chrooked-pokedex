@@ -4,13 +4,15 @@ aka: { pokeemerald: SPECIES_SPRITZEE }
 types: [Fairy, Poison]
 abilities:
   primary: Venomize
+stats: { hp: 92, atk: 40, def: 68, spa: 69, spd: 76, spe: 23 }
 learnset:
   - { level: 1, move: Fairy Wind }
   - { level: 1, move: Sweet Scent }
-  - { level: 3, move: Sweet Kiss }
-  - { level: 6, move: Echoed Voice }
-  - { level: 12, move: Draining Kiss }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Echoed Voice }
+  - { level: 9, move: Disarming Voice }
   - { level: 12, move: Aromatherapy }
+  - { level: 15, move: Draining Kiss }
   - { level: 18, move: Attract }
   - { level: 21, move: Flail }
   - { level: 24, move: Misty Terrain }
@@ -19,4 +21,5 @@ learnset:
   - { level: 33, move: Calm Mind }
   - { level: 36, move: Moonblast }
   - { level: 39, move: Skill Swap }
+  - { level: 42, move: Psych Up }
   - { level: 48, move: Miasma }

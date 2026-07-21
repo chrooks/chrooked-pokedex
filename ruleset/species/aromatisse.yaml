@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_AROMATISSE }
 types: [Fairy, Poison]
 abilities:
   primary: Venomize
+stats: { hp: 115, atk: 60, def: 80, spa: 105, spd: 100, spe: 29 }
 learnset:
   - { level: 1, move: Aromatic Mist }
   - { level: 1, move: Heal Pulse }
