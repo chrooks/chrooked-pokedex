@@ -95,3 +95,8 @@ def abiltext_delta(blocks: list[str]) -> str:
 def typetext_delta(blocks: list[str]) -> str:
     """Build ``patch/Definitions/typetext.rb`` from ready TYPEHASH statement lines."""
     return _hash_delta("TYPEHASH", "typetext.rb", blocks)
+
+
+def itemtext_delta(blocks: list[str]) -> str:
+    """Build ``patch/Definitions/itemtext.rb`` from ready ITEMHASH statement lines."""
+    return _hash_delta("ITEMHASH", "itemtext.rb", blocks)

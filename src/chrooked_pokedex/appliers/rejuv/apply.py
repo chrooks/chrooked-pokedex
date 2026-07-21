@@ -18,7 +18,8 @@ from ...model.schema import STAT_KEYS
 from ...report import ApplyReport, ReportEntry
 from . import behavior_install, behavior_triage
 from .emit import (
-    Sym, abiltext_delta, montext_delta, movetext_delta, to_ruby, typetext_delta,
+    Sym, abiltext_delta, itemtext_delta, montext_delta, movetext_delta, to_ruby,
+    typetext_delta,
 )
 from .init_script import INIT_SCRIPT
 from .resolution import RejuvResolution
@@ -72,8 +73,19 @@ def apply_rejuv(
         written.add(_write(defs_dir / "movetext.rb", text))
 
     if "species" in categories:
-        text = _build_montext(ruleset, resolution, known_abilities, known_moves, report)
+        text, evo_items = _build_montext(
+            ruleset, resolution, known_abilities, known_moves, report
+        )
         written.add(_write(defs_dir / "montext.rb", text))
+        # Item evolutions need the item usable from the bag: clear :noUse in the
+        # item data, and register it as an evolution stone (EVOSTONES membership
+        # + the Fire Stone UseOnPokemon handler) via a generated mod. Both files
+        # are always written so removing the last item evolution self-heals.
+        written.add(_write(defs_dir / "itemtext.rb", _build_itemtext(evo_items)))
+        written.add(_write(
+            target / "patch" / "Mods" / "chrooked_zz_evoitems.rb",
+            _build_evoitem_mod(evo_items),
+        ))
 
     if "type-chart" in categories:
         text = _build_typetext(ruleset, report)
@@ -131,11 +143,12 @@ def _build_montext(
     known_abilities: set[str],
     known_moves: set[str],
     report: ApplyReport,
-) -> str:
+) -> tuple[str, set[str]]:
+    """(montext delta text, item symbols used by applied item evolutions)."""
     # Evolutions are keyed by the PRE-evolution, which is usually a different
     # species from the one carrying the Override — collect them up front so each
     # source's statements ride inside its own dig guard below.
-    evo_stmts = _evolution_statements(ruleset, resolution, report)
+    evo_stmts, evo_items = _evolution_statements(ruleset, resolution, report)
 
     assignments: list[tuple[str, str, list[str]]] = []
     for species in ruleset.species.values():
@@ -166,7 +179,7 @@ def _build_montext(
     # A pre-evolution with no Override of its own still needs its block emitted.
     for (key, form), stmts in evo_stmts.items():
         assignments.append((key, form, stmts))
-    return montext_delta(assignments)
+    return montext_delta(assignments), evo_items
 
 
 def _species_lines(
@@ -238,7 +251,7 @@ def _type_sym(name: str) -> str:
 
 def _evolution_statements(
     ruleset: Ruleset, resolution: RejuvResolution, report: ApplyReport
-) -> dict[tuple[str, str], list[str]]:
+) -> tuple[dict[tuple[str, str], list[str]], set[str]]:
     """Ruby statements that write each evolution onto its PRE-evolution's entry.
 
     The neutral schema points backward (species X carries ``evolution.from = Y``)
@@ -253,6 +266,7 @@ def _evolution_statements(
     from ...model import evolution_methods
 
     stmts: dict[tuple[str, str], list[str]] = {}
+    item_syms: set[str] = set()
     for chrooked_id in sorted(ruleset.species):
         species = ruleset.species[chrooked_id]
         evo = species.evolution
@@ -278,7 +292,7 @@ def _evolution_statements(
             continue
 
         target_form = resolution.monhash[target[0]].index(target[1])
-        rendered = _render_evolution(
+        rendered, item_sym = _render_evolution(
             evo.method, target[0], target_form, resolution, evolution_methods
         )
         if rendered is None:
@@ -299,17 +313,23 @@ def _evolution_statements(
             f"e[:species] == :{target[0]} && (e[:form] || 0) == {target_form} }}"
             f" + [{rendered}]"
         )
+        if item_sym is not None:
+            item_syms.add(item_sym)
         report.add(ReportEntry(
             status="applied", category="evolution", chrooked_id=chrooked_id,
             symbol=f"{source[0]}::{source[1]}",
         ))
-    return stmts
+    return stmts, item_syms
 
 
 def _render_evolution(
     method, target_symbol: str, target_form: int, resolution, evolution_methods
-) -> str | None:
-    """One Ruby hash literal, or None when the method has no Rejuv rendering.
+) -> tuple[str | None, str | None]:
+    """(Ruby hash literal or None, evolution item symbol or None).
+
+    The rendered literal is None when the method has no Rejuv rendering. The
+    item symbol is set only for item-use methods, so the caller can make that
+    item bag-usable (clear :noUse + register the evolution-stone handler).
 
     Rejuv is Essentials-derived, so the canonical vocabulary's ``essentials``
     token is the right one. A method carrying only a ``pokeemerald:`` hint has no
@@ -324,28 +344,65 @@ def _render_evolution(
     """
     head = f"{{ species: :{target_symbol}, form: {target_form}, method: "
     if "level" in method:
-        return f"{head}:Level, parameter: {int(method['level'])} }}"
+        return f"{head}:Level, parameter: {int(method['level'])} }}", None
     if "item" in method:
-        return f"{head}:Item, parameter: :{_type_sym(str(method['item']))} }}"
+        sym = _type_sym(str(method["item"]))
+        return f"{head}:Item, parameter: :{sym} }}", sym
 
     canonical = evolution_methods.to_engine(method, "essentials")
     if canonical is None:
-        return None
+        return None, None
     token, value_kind, raw = canonical
     if value_kind == "none":
-        return f"{head}:{token} }}"
+        return f"{head}:{token} }}", None
     if value_kind == "level":
-        return f"{head}:{token}, parameter: {int(raw)} }}"
+        return f"{head}:{token}, parameter: {int(raw)} }}", None
     if value_kind == "move":
-        return f"{head}:{token}, parameter: :{resolution.move_symbol(str(raw))} }}"
+        return f"{head}:{token}, parameter: :{resolution.move_symbol(str(raw))} }}", None
     if value_kind == "item":
-        return f"{head}:{token}, parameter: :{_type_sym(str(raw))} }}"
-    return None
+        sym = _type_sym(str(raw))
+        item_use = token == "Item"
+        return f"{head}:{token}, parameter: :{sym} }}", (sym if item_use else None)
+    return None, None
 
 
 def _slug(name: str) -> str:
     from ...seed.neutralize import slug
     return slug(name)
+
+
+def _build_itemtext(item_syms: set[str]) -> str:
+    """Clear ``:noUse`` on every applied evolution item so the bag offers Use.
+
+    Trade-evolution items (Sachet, Whipped Dream, ...) ship with ``:noUse``
+    because the base game only holds them; an Item-method evolution needs them
+    usable on a Pokémon.
+    """
+    blocks = [
+        f"ITEMHASH[:{sym}].delete(:noUse) if ITEMHASH[:{sym}]"
+        for sym in sorted(item_syms)
+    ]
+    return itemtext_delta(blocks)
+
+
+def _build_evoitem_mod(item_syms: set[str]) -> str:
+    """The ``patch/Mods`` script that makes evolution items act like stones.
+
+    The bag's use path only evolves via items in the hardcoded ``EVOSTONES``
+    list, which also carries the shared ``UseOnPokemon`` handler (see the
+    game's ``ItemEffects.rb``). Mods load after ItemEffects, so appending here
+    picks up both the handler copy and the Able/Not Able party annotations.
+    """
+    items = ", ".join(f":{sym}" for sym in sorted(item_syms))
+    return (
+        "# Generated by chrooked-pokedex — do not hand-edit.\n"
+        "# Register Ruleset evolution items as bag-usable evolution stones.\n"
+        f"[{items}].each do |item|\n"
+        "  next if EVOSTONES.include?(item)\n"
+        "  EVOSTONES.push(item)\n"
+        "  ItemHandlers::UseOnPokemon.copy(:FIRESTONE, item)\n"
+        "end\n"
+    )
 
 
 # --- typetext ----------------------------------------------------------------

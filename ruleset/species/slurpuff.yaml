@@ -1,0 +1,4 @@
+name: Slurpuff
+chrooked_id: slurpuff
+aka: { pokeemerald: SPECIES_SLURPUFF }
+evolution: { from: Swirlix, method: { item: WHIPPEDDREAM } }

@@ -800,6 +800,41 @@ def test_evolution_level_writes_onto_the_pre_evolution(tmp_path):
     assert any(e.category == "evolution" and e.status == "applied" for e in report.entries)
 
 
+def test_evolution_item_makes_item_bag_usable(tmp_path):
+    """An Item-method evolution must also make the item usable from the bag.
+
+    Regression: Sachet kept its base :noUse flag and was absent from EVOSTONES,
+    so the bag only offered Give — the applied evolution was unreachable.
+    """
+    r = Ruleset(species={
+        "charizard": _species(
+            cid="charizard", name="Charizard",
+            evolution=EvolutionOverride(from_species="Absol", method={"item": "SACHET"}),
+        )
+    })
+    _, target = _apply(r, tmp_path)
+    itemtext = (target / "patch" / "Definitions" / "itemtext.rb").read_text()
+    assert "ITEMHASH[:SACHET].delete(:noUse) if ITEMHASH[:SACHET]" in itemtext
+    mod = (target / "patch" / "Mods" / "chrooked_zz_evoitems.rb").read_text()
+    assert "[:SACHET].each" in mod
+    assert "EVOSTONES.push(item)" in mod
+    assert "ItemHandlers::UseOnPokemon.copy(:FIRESTONE, item)" in mod
+    init = (target / "patch" / "Init" / "chrooked_compile.rb").read_text()
+    assert '"patch/Definitions/itemtext.rb", "patch/Data/items.dat", :compileItems' in init
+
+
+def test_no_item_evolution_writes_empty_item_patch(tmp_path):
+    """No item evolutions -> both files still written, as self-healing no-ops."""
+    r = Ruleset(species={"bulbasaur": _species(cid="bulbasaur", stats={"hp": 50})})
+    _, target = _apply(r, tmp_path)
+    itemtext = (target / "patch" / "Definitions" / "itemtext.rb").read_text()
+    assert "ITEMHASH" not in itemtext.replace(
+        'eval(File.read("Scripts/Rejuv/Definitions/itemtext.rb"), TOPLEVEL_BINDING)', ""
+    )
+    mod = (target / "patch" / "Mods" / "chrooked_zz_evoitems.rb").read_text()
+    assert "[].each" in mod
+
+
 def test_evolution_preserves_unrelated_base_branches(tmp_path):
     """Writing one branch must not wipe a base branch the Ruleset never mentions."""
     r = Ruleset(species={
