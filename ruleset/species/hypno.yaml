@@ -6,29 +6,28 @@ abilities:
   primary: Bad Dreams
   secondary: Frighten
   hidden: Magical Fists
-stats: { atk: 95, spa: 70, spe: 65 }
+stats: { atk: 70, spa: 95, spe: 65 }
 learnset:
   - { level: 0, move: Switcheroo }
-  - { level: 1, move: Bite }
   - { level: 1, move: Confusion }
   - { level: 1, move: Disable }
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Leer }
   - { level: 1, move: Pound }
-  - { level: 13, move: Headbutt }
+  - { level: 13, move: Snarl }
   - { level: 16, move: Nightmare }
   - { level: 17, move: Mind Flick }
   - { level: 21, move: Psybeam }
-  - { level: 23, move: Night Slash }
+  - { level: 23, move: Hex }
   - { level: 25, move: Psych Up }
-  - { level: 29, move: Zen Headbutt }
+  - { level: 29, move: Extrasensory }
   - { level: 32, move: Astral Hand }
-  - { level: 36, move: Sucker Punch }
+  - { level: 36, move: Dark Pulse }
   - { level: 38, move: Dream Eater }
   - { level: 40, move: Psychic }
   - { level: 44, move: Foul Play }
   - { level: 47, move: Nasty Plot }
   - { level: 51, move: Psyshock }
-  - { level: 55, move: Throat Chop }
+  - { level: 55, move: Future Sight }
   - { level: 60, move: Dark Void }
 evolution: { from: Drowzee, method: { level: 26 } }
