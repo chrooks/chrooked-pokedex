@@ -421,6 +421,34 @@ def test_abiltext_drops_data_only_when_implemented(tmp_path):
     assert (target / "patch" / "Mods" / "chrooked_sledgehammer.rb").exists()
 
 
+def test_new_move_primary_effect_uturn_gets_function_code(tmp_path):
+    """A new move's primary `effect:` must render, not silently drop.
+
+    Regression: Bail Out (effect: u-turn) shipped as :function 0x000 — a plain
+    damage move that never switched the attacker — reported applied, no reason.
+    """
+    r = Ruleset(moves={"bailout": MoveDef(
+        name="Bail Out", chrooked_id="bailout", type="Normal", category="physical",
+        power=60, accuracy=100, pp=24, effect="u-turn", flags=("contact",),
+    )})
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert "MOVEHASH[:BAILOUT] = {" in text
+    assert ":function => 0x0EE" in text
+    entry = next(e for e in report.entries if e.chrooked_id == "bailout")
+    assert "0x0EE" in entry.reason
+
+
+def test_new_move_unmapped_primary_effect_reports_data_only(tmp_path):
+    r = Ruleset(moves={"weird": MoveDef(
+        name="Weird", chrooked_id="weird", type="Normal", category="physical",
+        power=60, accuracy=100, pp=10, effect="no_such_mechanic",
+    )})
+    report, _ = _apply(r, tmp_path)
+    entry = next(e for e in report.entries if e.chrooked_id == "weird")
+    assert "no_such_mechanic" in entry.reason and "DATA ONLY" in entry.reason
+
+
 def test_new_move_flinch_gets_function_code(tmp_path):
     from chrooked_pokedex.model.schema import AdditionalEffect
     r = Ruleset(moves={

@@ -14,7 +14,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ...model import Ruleset
-from ...model.schema import STAT_KEYS
+from ...model.schema import DEFAULT_EFFECT, STAT_KEYS
 from ...report import ApplyReport, ReportEntry
 from . import behavior_install, behavior_triage
 from .emit import (
@@ -491,10 +491,14 @@ _FLINCH_COMBOS = {
     frozenset({"freeze", "flinch"}): 0x00E,
     frozenset({"paralysis", "flinch"}): 0x009,
 }
-# Primary `effect:` values that map onto a vanilla function code for EXISTING
-# moves, with the :effect chance the code expects (Fake Out is 0x012:
-# first-turn-only + guaranteed flinch, chance lives in :effect).
-_PRIMARY_EFFECT_CODES = {"first_turn_only": (0x012, 100)}
+# Primary `effect:` values that map onto a vanilla function code, with the
+# :effect chance the code expects (Fake Out is 0x012: first-turn-only +
+# guaranteed flinch, chance lives in :effect; None means no :effect field).
+# Consulted for existing-move patches AND new-move creation.
+_PRIMARY_EFFECT_CODES = {
+    "first_turn_only": (0x012, 100),
+    "u-turn": (0x0EE, None),
+}
 
 # Vanilla function codes for one single secondary effect at :effect chance
 # (Ember, Poison Sting, Thunder Shock, Ice Beam, Aurora Beam, Crush Claw,
@@ -542,7 +546,8 @@ def _build_movetext(
             if move.effect in _PRIMARY_EFFECT_CODES:
                 code, chance = _PRIMARY_EFFECT_CODES[move.effect]
                 lines.append(f"MOVEHASH[:{sym}][:function] = 0x{code:03X}")
-                lines.append(f"MOVEHASH[:{sym}][:effect] = {chance}")
+                if chance is not None:
+                    lines.append(f"MOVEHASH[:{sym}][:effect] = {chance}")
             blocks.extend(lines)
             report.add(ReportEntry(status="applied", category="move",
                                    chrooked_id=move.chrooked_id, symbol=sym))
@@ -552,12 +557,22 @@ def _build_movetext(
             # stays honestly DATA ONLY.
             sym = resolution.move_symbol(move.name)
             function, chance, leftover = _function_for(move)
+            # The primary effect: takes the function slot when the additional
+            # effects left it free; otherwise it joins the leftover so it is
+            # reported, never silently dropped (Bail Out shipped as plain 0x000).
+            primary = move.effect if move.effect != DEFAULT_EFFECT else ""
+            if primary:
+                primary_code = _PRIMARY_EFFECT_CODES.get(primary)
+                if primary_code is not None and function == 0x000:
+                    function, chance = primary_code
+                else:
+                    leftover = sorted(leftover + [primary])
             blocks.append(_new_move_block(move, sym, next_id, function, chance))
             next_id += 1
             # A move behavior sharing the move's chrooked_id owns whatever the
             # funccode can't express, so the leftover is implemented, not missing.
             own_behavior = move.chrooked_id in implemented
-            if not move.additional_effects:
+            if not move.additional_effects and not primary:
                 reason = ""
             elif not leftover:
                 reason = f"effects mapped to :function 0x{function:03X}"
