@@ -8,6 +8,7 @@ abilities:
   hidden: Serene Grace
 stats: { hp: 80, atk: 100, def: 90, spa: 60, spd: 75, spe: 115 }
 learnset:
+  - { level: 0, move: Season's Edge }
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
   - { level: 1, move: Glitter Tap }
@@ -16,11 +17,10 @@ learnset:
   - { level: 16, move: Zen Headbutt }
   - { level: 20, move: Take Down }
   - { level: 26, move: Agility }
-  - { level: 31, move: Bail Out }
+  - { level: 26, move: Bail Out }
+  - { level: 30, move: Season's End }
   - { level: 36, move: Megahorn }
   - { level: 40, move: Horn Leech }
   - { level: 44, move: Swords Dance }
-  - { level: 46, move: Season's Edge }
   - { level: 48, move: Double-Edge }
   - { level: 50, move: Jump Kick }
-  - { level: 52, move: Season's End }

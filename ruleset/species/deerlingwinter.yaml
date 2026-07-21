@@ -10,18 +10,16 @@ stats: { hp: 60, atk: 75, def: 100, spa: 40, spd: 60, spe: 45 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Glitter Tap }
   - { level: 6, move: Double Kick }
-  - { level: 11, move: Ice Shard }
+  - { level: 11, move: Play Rough }
   - { level: 16, move: Zen Headbutt }
-  - { level: 20, move: Charm }
-  - { level: 26, move: Avalanche }
-  - { level: 31, move: Bail Out }
+  - { level: 20, move: Take Down }
+  - { level: 26, move: Agility }
+  - { level: 26, move: Bail Out }
+  - { level: 30, move: Season's End }
   - { level: 36, move: Megahorn }
-  - { level: 40, move: Wish }
-  - { level: 42, move: Freeze-Dry }
-  - { level: 44, move: Aurora Veil }
-  - { level: 46, move: Season's Edge }
+  - { level: 40, move: Horn Leech }
+  - { level: 44, move: Swords Dance }
   - { level: 48, move: Double-Edge }
-  - { level: 50, move: Icicle Crash }
-  - { level: 52, move: Season's End }
+  - { level: 50, move: Jump Kick }
