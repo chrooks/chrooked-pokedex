@@ -5,7 +5,7 @@ types: [Psychic, Dark]
 abilities:
   primary: Bad Dreams
   secondary: Frighten
-  hidden: Magical Fists
+  hidden: Daydreamer
 stats: { spa: 48 }
 learnset:
   - { level: 1, move: Confusion }
@@ -13,19 +13,17 @@ learnset:
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Leer }
   - { level: 1, move: Pound }
-  - { level: 13, move: Snarl }
-  - { level: 16, move: Nightmare }
-  - { level: 17, move: Mind Flick }
-  - { level: 21, move: Psybeam }
-  - { level: 23, move: Hex }
-  - { level: 25, move: Psych Up }
-  - { level: 29, move: Extrasensory }
-  - { level: 32, move: Astral Hand }
-  - { level: 36, move: Dark Pulse }
-  - { level: 38, move: Dream Eater }
-  - { level: 40, move: Psychic }
-  - { level: 44, move: Foul Play }
-  - { level: 47, move: Nasty Plot }
-  - { level: 51, move: Psyshock }
-  - { level: 55, move: Future Sight }
-  - { level: 60, move: Dark Void }
+  - { level: 6, move: Nightmare }
+  - { level: 10, move: Snarl }
+  - { level: 14, move: Psybeam }
+  - { level: 18, move: Nasty Plot }
+  - { level: 22, move: Hex }
+  - { level: 26, move: Dream Eater }
+  - { level: 30, move: Dark Pulse }
+  - { level: 34, move: Extrasensory }
+  - { level: 38, move: Psychic Noise }
+  - { level: 42, move: Foul Play }
+  - { level: 46, move: Psyshock }
+  - { level: 50, move: Psychic }
+  - { level: 54, move: Dark Void }
+  - { level: 60, move: Future Sight }
