@@ -819,8 +819,11 @@ def test_evolution_item_makes_item_bag_usable(tmp_path):
     assert "[:SACHET].each" in mod
     assert "EVOSTONES.push(item)" in mod
     assert "ItemHandlers::UseOnPokemon.copy(:FIRESTONE, item)" in mod
+    # items.dat compiles from the mod, NOT the Init script: compileItems needs
+    # PBStats, which the game defines after Init but before Mods.
+    assert "compileItems" in mod
     init = (target / "patch" / "Init" / "chrooked_compile.rb").read_text()
-    assert '"patch/Definitions/itemtext.rb", "patch/Data/items.dat", :compileItems' in init
+    assert '"patch/Definitions/itemtext.rb"' not in init
 
 
 def test_no_item_evolution_writes_empty_item_patch(tmp_path):

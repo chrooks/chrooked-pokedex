@@ -26,8 +26,11 @@ begin
     ["patch/Definitions/movetext.rb", "patch/Data/moves.dat", :compileMoves],
     ["patch/Definitions/abiltext.rb", "patch/Data/abil.dat", :compileAbilities],
     ["patch/Definitions/typetext.rb", "patch/Data/types.dat", :compileTypes],
-    ["patch/Definitions/itemtext.rb", "patch/Data/items.dat", :compileItems],
   ]
+  # NOTE: items.dat is deliberately NOT compiled here. compileItems builds
+  # ItemData objects that reference PBStats, which the main scripts have not
+  # defined yet at Init time — the evoitems mod (patch/Mods) compiles it
+  # instead, after every game script has loaded.
   pairs.each do |defn, dat, fn|
     next unless File.exist?(defn)
     stale = !File.exist?(dat) || File.mtime(defn) > File.mtime(dat)

@@ -392,6 +392,11 @@ def _build_evoitem_mod(item_syms: set[str]) -> str:
     list, which also carries the shared ``UseOnPokemon`` handler (see the
     game's ``ItemEffects.rb``). Mods load after ItemEffects, so appending here
     picks up both the handler copy and the Able/Not Able party annotations.
+
+    The items.dat recompile also lives here rather than in the Init script:
+    ``compileItems`` references ``PBStats``, which only exists once the main
+    game scripts have loaded — Init runs before them, Mods run after (and
+    still before the cache first reads items.dat).
     """
     items = ", ".join(f":{sym}" for sym in sorted(item_syms))
     return (
@@ -401,6 +406,20 @@ def _build_evoitem_mod(item_syms: set[str]) -> str:
         "  next if EVOSTONES.include?(item)\n"
         "  EVOSTONES.push(item)\n"
         "  ItemHandlers::UseOnPokemon.copy(:FIRESTONE, item)\n"
+        "end\n"
+        "\n"
+        "# Recompile items.dat when the patched item definitions are newer.\n"
+        "# Runs here (not patch/Init) because compileItems needs PBStats,\n"
+        "# which the main scripts define after Init but before Mods.\n"
+        "begin\n"
+        '  defn = "patch/Definitions/itemtext.rb"\n'
+        '  dat = "patch/Data/items.dat"\n'
+        "  if File.exist?(defn) && (!File.exist?(dat) || File.mtime(defn) > File.mtime(dat))\n"
+        '    Dir.mkdir("patch/Data") unless File.directory?("patch/Data")\n'
+        "    compileItems\n"
+        "  end\n"
+        "rescue => e\n"
+        '  dp("chrooked item compile failed: #{e.message}") if defined?(dp)\n'
         "end\n"
     )
 
