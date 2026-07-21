@@ -1,7 +1,6 @@
 name: Aromatisse
 chrooked_id: aromatisse
 aka: { pokeemerald: SPECIES_AROMATISSE }
-types: [Fairy, Poison]
 abilities:
   primary: Venomize
   secondary: Poison Heal
@@ -28,3 +27,4 @@ learnset:
   - { level: 42, move: Skill Swap }
   - { level: 45, move: Psych Up }
   - { level: 48, move: Miasma }
+evolution: { from: Spritzee, method: { item: SACHET } }
