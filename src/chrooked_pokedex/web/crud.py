@@ -265,12 +265,13 @@ def upsert_species(
 ) -> dict[str, Any]:
     """Validate-write a species Override; returns the raw Override as JSON."""
     _reject_unknown(payload, _SPECIES_FIELDS, f"{chrooked_id}.yaml")
+    path = Path(ruleset_dir) / "species" / f"{chrooked_id}.yaml"
+    payload = _merge_over_stored(payload, path, load_species, serialize_species)
     try:
         override = _species_from_payload(payload, chrooked_id)
         yaml_text = writer.species_yaml(override)
     except (KeyError, TypeError) as error:
         raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
-    path = Path(ruleset_dir) / "species" / f"{chrooked_id}.yaml"
     before = serialize_species(load_species(path)) if (ledger_dir and path.exists()) else None
     after = serialize_species(_validated_write(path, yaml_text, load_species))
     _log_write(ledger_dir, scope, "species", chrooked_id, before, after)
@@ -379,6 +380,8 @@ def upsert_move(
 ) -> dict[str, Any]:
     """Validate-write an owned move; returns the move as JSON."""
     _reject_unknown(payload, _MOVE_FIELDS, f"{chrooked_id}.yaml")
+    path = Path(ruleset_dir) / "moves" / f"{chrooked_id}.yaml"
+    payload = _merge_over_stored(payload, path, load_move, colmod.serialize_move)
     try:
         move = _move_from_payload(payload, chrooked_id)
         yaml_text = writer.move_yaml(move)
@@ -386,7 +389,6 @@ def upsert_move(
         # _require/_check_id raise ValidationError (not a ValueError), so they
         # propagate unwrapped; this catches only payload-shape errors.
         raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
-    path = Path(ruleset_dir) / "moves" / f"{chrooked_id}.yaml"
     before = colmod.serialize_move(load_move(path)) if (ledger_dir and path.exists()) else None
     after = colmod.serialize_move(_validated_write(path, yaml_text, load_move))
     _log_write(ledger_dir, scope, "move", chrooked_id, before, after)
@@ -464,9 +466,10 @@ def upsert_ability(
     allowed set is rejected here before the render.
     """
     _reject_unknown(payload, _ABILITY_FIELDS, f"{chrooked_id}.yaml")
+    path = Path(ruleset_dir) / "abilities" / f"{chrooked_id}.yaml"
+    payload = _merge_over_stored(payload, path, load_ability, colmod.serialize_ability)
     ability = _ability_from_payload(payload, chrooked_id)
     yaml_text = writer.ability_yaml(ability)
-    path = Path(ruleset_dir) / "abilities" / f"{chrooked_id}.yaml"
     before = colmod.serialize_ability(load_ability(path)) if (ledger_dir and path.exists()) else None
     after = colmod.serialize_ability(_validated_write(path, yaml_text, load_ability))
     _log_write(ledger_dir, scope, "ability", chrooked_id, before, after)
@@ -474,6 +477,31 @@ def upsert_ability(
 
 
 _ABILITY_FIELDS = ("name", "chrooked_id", "aka", "description")
+
+
+def _merge_over_stored(
+    payload: dict[str, Any],
+    path: Path,
+    loader: Callable[[Path], Any],
+    serializer: Callable[[Any], dict[str, Any]],
+) -> dict[str, Any]:
+    """Fill in fields the payload never mentioned from the record already on disk.
+
+    A save carries only the fields the caller edited -- that is true of the web
+    editor and of every suggest-accept skill. Treated as a full replace, such a
+    save silently cleared everything it omitted: ten confirmed losses in the
+    ledger, including arbok's Poison/Dark typing and its stat Override in a
+    single write.
+
+    The distinction restored here is **absent vs. null**. A key missing from the
+    payload keeps its stored value; a key present as ``None`` still clears the
+    field, so an intentional "drop this Override" remains expressible. Callers
+    that do send a complete body are unaffected -- their keys all win.
+    """
+    if not path.exists():
+        return payload
+    stored = serializer(loader(path))
+    return {**stored, **payload}
 
 
 def _reject_unknown(payload: dict[str, Any], allowed: tuple[str, ...], where: str) -> None:
@@ -608,6 +636,8 @@ def upsert_behavior(
 ) -> dict[str, Any]:
     """Validate-write one behavior spec; returns it serialized."""
     _reject_unknown(payload, _BEHAVIOR_FIELDS, f"{chrooked_id}.yaml")
+    path = Path(ruleset_dir) / "behaviors" / f"{chrooked_id}.yaml"
+    payload = _merge_over_stored(payload, path, load_behavior, colmod.serialize_behavior)
     try:
         spec = _behavior_from_payload(payload, chrooked_id)
         yaml_text = writer.behavior_yaml(spec)
@@ -615,7 +645,6 @@ def upsert_behavior(
         # _check_id raises ValidationError (not a ValueError) and propagates
         # unwrapped; this catches only payload-shape errors.
         raise ValidationError(f"{chrooked_id}.yaml: malformed payload ({error}).") from error
-    path = Path(ruleset_dir) / "behaviors" / f"{chrooked_id}.yaml"
     before = colmod.serialize_behavior(load_behavior(path)) if (ledger_dir and path.exists()) else None
     after = colmod.serialize_behavior(_validated_write(path, yaml_text, load_behavior))
     _log_write(ledger_dir, scope, "behavior", chrooked_id, before, after)

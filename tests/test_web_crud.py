@@ -563,3 +563,62 @@ def test_delete_behavior_removes_file(
 def test_delete_behavior_404_when_absent(client: TestClient) -> None:
     response = client.delete("/api/behaviors/missing")
     assert response.status_code == 404
+
+
+@pytest.mark.unit
+def test_put_species_omitted_field_does_not_clear_existing_override(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    """A save that omits a field must leave that field's Override alone.
+
+    Regression: every caller (the UI editor and the suggest-accept skills alike)
+    sends only the fields it edited. The route was a full replace, so an
+    abilities-only save silently cleared `types`/`stats`/`learnset` -- ten
+    confirmed losses in the ledger (arbok lost Poison/Dark, sceptile lost
+    Grass/Dragon, hypno lost Psychic/Dark).
+    """
+    seed = {
+        "name": "Goodra",
+        "chrooked_id": "goodra",
+        "types": ["Water", "Dragon"],
+        "stats": {"spe": 99},
+    }
+    assert client.put("/api/species/goodra", json=seed).status_code == 200
+
+    # A later save that only touches abilities -- types/stats are not mentioned.
+    partial = {
+        "name": "Goodra",
+        "chrooked_id": "goodra",
+        "abilities": {"hidden": "Rough Skin"},
+    }
+    response = client.put("/api/species/goodra", json=partial)
+    assert response.status_code == 200, response.text
+
+    body = response.json()
+    assert body["abilities"]["hidden"] == "Rough Skin"
+    assert body["types"] == ["Water", "Dragon"], "omitted types were cleared"
+    assert body["stats"] == {"spe": 99}, "omitted stats were cleared"
+
+
+@pytest.mark.unit
+def test_put_species_explicit_null_still_clears_a_field(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    """Explicit null remains the way to clear an Override field."""
+    seed = {
+        "name": "Goodra",
+        "chrooked_id": "goodra",
+        "types": ["Water", "Dragon"],
+        "stats": {"spe": 99},
+    }
+    assert client.put("/api/species/goodra", json=seed).status_code == 200
+
+    clear = {
+        "name": "Goodra",
+        "chrooked_id": "goodra",
+        "types": None,
+        "stats": {"spe": 99},
+    }
+    response = client.put("/api/species/goodra", json=clear)
+    assert response.status_code == 200, response.text
+    assert response.json()["types"] is None, "explicit null must still clear"
