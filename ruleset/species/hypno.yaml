@@ -1,20 +1,18 @@
 name: Hypno
 chrooked_id: hypno
 aka: { pokeemerald: SPECIES_HYPNO }
-types: [Psychic, Dark]
 abilities:
   primary: Bad Dreams
   secondary: Frighten
   hidden: Daydreamer
 stats: { atk: 70, spa: 95, spe: 65 }
 learnset:
-  - { level: 0, move: Switcheroo }
+  - { level: 0, move: Nightmare }
   - { level: 1, move: Confusion }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Hypnosis }
   - { level: 1, move: Leer }
   - { level: 1, move: Pound }
-  - { level: 6, move: Nightmare }
+  - { level: 5, move: Hypnosis }
+  - { level: 7, move: Disable }
   - { level: 10, move: Snarl }
   - { level: 14, move: Psybeam }
   - { level: 18, move: Nasty Plot }
