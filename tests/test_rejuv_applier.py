@@ -16,6 +16,7 @@ from chrooked_pokedex.model.behavior_spec import BehaviorSpec
 from chrooked_pokedex.model.schema import (
     AbilitiesOverride,
     AbilityDef,
+    EvolutionOverride,
     LearnsetMove,
     MoveDef,
     SpeciesOverride,
@@ -772,3 +773,139 @@ def test_display_name_labels_only_meaningful_forms(name, form_label, expected):
     from chrooked_pokedex.web.snapshot_rejuv import _display_name
 
     assert _display_name(name, form_label) == expected
+
+
+# --- evolutions --------------------------------------------------------------
+
+def test_evolution_level_writes_onto_the_pre_evolution(tmp_path):
+    """A backward `evolution.from` lands as a forward `:evolutions` entry on the source.
+
+    Regression: the Rejuv applier emitted no `:evolutions` at all, so all 88
+    evolution Overrides in the Ruleset were silently dropped -- Goldeen kept its
+    base evolution level in game while the Ruleset said 30.
+    """
+    r = Ruleset(species={
+        "charizard": _species(
+            cid="charizard", name="Charizard",
+            evolution=EvolutionOverride(from_species="Absol", method={"level": 30}),
+        )
+    })
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "montext.rb").read_text()
+    # written onto ABSOL (the pre-evolution), not CHARIZARD
+    assert 'MONHASH[:ABSOL]["Normal Form"][:evolutions]' in text
+    assert "species: :CHARIZARD, form: 0, method: :Level, parameter: 30" in text
+    assert any(e.category == "evolution" and e.status == "applied" for e in report.entries)
+
+
+def test_evolution_preserves_unrelated_base_branches(tmp_path):
+    """Writing one branch must not wipe a base branch the Ruleset never mentions."""
+    r = Ruleset(species={
+        "charizard": _species(
+            cid="charizard", name="Charizard",
+            evolution=EvolutionOverride(from_species="Absol", method={"level": 30}),
+        )
+    })
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "montext.rb").read_text()
+    # The emitted statement must merge with whatever the base already had,
+    # replacing only the branch pointing at our target.
+    assert ".reject" in text, "evolution write replaces the whole array"
+
+
+def test_evolution_unrenderable_method_is_reported_not_dropped(tmp_path):
+    """A method with only a pokeemerald hint can't render for Rejuv -- it must report."""
+    r = Ruleset(species={
+        "charizard": _species(
+            cid="charizard", name="Charizard",
+            evolution=EvolutionOverride(
+                from_species="Absol", method={"pokeemerald": "EVO_LEVEL_FOG", "param": 35},
+            ),
+        )
+    })
+    report, _ = _apply(r, tmp_path)
+    assert any(
+        e.category == "evolution" and e.status in ("blocked", "partial")
+        for e in report.entries
+    ), "unrenderable evolution vanished from the report"
+
+
+def test_evolution_unresolved_pre_evolution_is_blocked(tmp_path):
+    r = Ruleset(species={
+        "charizard": _species(
+            cid="charizard", name="Charizard",
+            evolution=EvolutionOverride(from_species="Nonexistent", method={"level": 5}),
+        )
+    })
+    report, _ = _apply(r, tmp_path)
+    assert any(
+        e.category == "evolution" and e.status == "blocked" for e in report.entries
+    )
+
+
+def test_evolution_reject_is_form_aware(tmp_path):
+    """Rewriting one branch must not delete sibling branches to OTHER forms.
+
+    Rejuv keys branches by (species, form): Rockruff carries three separate
+    edges to LYCANROC forms 0/1/2, and Petilil carries two to LILLIGANT 0/1.
+    A reject on the species symbol alone would collapse all of them into one.
+    """
+    r = Ruleset(species={
+        "charizard": _species(
+            cid="charizard", name="Charizard",
+            evolution=EvolutionOverride(from_species="Absol", method={"level": 30}),
+        )
+    })
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "montext.rb").read_text()
+    line = next(ln for ln in text.splitlines() if "[:evolutions]" in ln)
+    assert "e[:form]" in line, f"reject ignores form, will eat sibling branches: {line}"
+    assert "form:" in line.split(".reject")[1], "appended branch does not pin its form"
+
+
+def test_resolution_species_falls_back_to_essentials_aka():
+    """Rejuv is Essentials-derived, so an `essentials:` aka names a real MONHASH key.
+
+    Regression: Rejuv keys are not always uppercase (`:NIDORANfE`, `:NIDORANmA`),
+    so `slug(id).upper()` can never match them and the form matcher can't either.
+    The Ruleset already carries the exact symbol under `essentials:`; without this
+    fallback the Nidoran family's evolutions were blocked with no way to rescue
+    them short of hand-adding a duplicate `rejuv:` hint to every such species.
+    """
+    res = RejuvResolution.build(FIXTURE)
+    assert res.species("whatever", {"essentials": "ABSOL"}) == ("ABSOL", "Normal Form")
+    # an explicit rejuv hint still wins over the essentials one
+    assert res.species("x", {"rejuv": "ABSOL::Mega Form", "essentials": "BULBASAUR"}) == (
+        "ABSOL", "Mega Form"
+    )
+    # a bogus essentials symbol resolves to nothing rather than being fabricated
+    assert res.species("x", {"essentials": "NOPE"}) is None
+
+
+def test_scan_monhash_keys_accepts_mixed_case_symbols(tmp_path):
+    """Rejuv MONHASH keys are not all uppercase -- `:NIDORANfE`, `:NIDORANmA`.
+
+    Regression: the key regex was `[A-Z0-9_]+`, so those species never entered
+    the resolution map at all. Every Override on them -- stats, types, abilities,
+    learnset, evolution -- was reported blocked and silently skipped.
+    """
+    from chrooked_pokedex.appliers.rejuv import definitions_read as dr
+
+    path = tmp_path / "montext.rb"
+    path.write_text(
+        'MONHASH = {\n'
+        '  :NIDORANfE => {\n'
+        '    "Normal Form" => {\n'
+        '      :name => "Nidoran",\n'
+        '    },\n'
+        '  },\n'
+        '  :BULBASAUR => {\n'
+        '    "Normal Form" => {\n'
+        '    },\n'
+        '  },\n'
+        '}\n',
+        encoding="utf-8",
+    )
+    keys = dr.scan_monhash_keys(path)
+    assert keys["NIDORANfE"] == ["Normal Form"]
+    assert keys["BULBASAUR"] == ["Normal Form"]

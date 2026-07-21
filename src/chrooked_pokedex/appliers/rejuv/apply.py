@@ -132,6 +132,11 @@ def _build_montext(
     known_moves: set[str],
     report: ApplyReport,
 ) -> str:
+    # Evolutions are keyed by the PRE-evolution, which is usually a different
+    # species from the one carrying the Override — collect them up front so each
+    # source's statements ride inside its own dig guard below.
+    evo_stmts = _evolution_statements(ruleset, resolution, report)
+
     assignments: list[tuple[str, str, list[str]]] = []
     for species in ruleset.species.values():
         resolved = resolution.species(species.chrooked_id, species.aka)
@@ -146,6 +151,9 @@ def _build_montext(
         stmts, unresolved = _species_lines(
             species, key, form, base_form, resolution, known_abilities, known_moves
         )
+        # This species may also be some other species' pre-evolution; fold those
+        # statements in here so the pair shares one dig guard.
+        stmts = stmts + evo_stmts.pop((key, form), [])
         if not stmts:
             continue  # nothing to change for this species
         assignments.append((key, form, stmts))
@@ -154,6 +162,10 @@ def _build_montext(
             category="species", chrooked_id=species.chrooked_id, symbol=f"{key}::{form}",
             partial_fields=tuple(unresolved),
         ))
+
+    # A pre-evolution with no Override of its own still needs its block emitted.
+    for (key, form), stmts in evo_stmts.items():
+        assignments.append((key, form, stmts))
     return montext_delta(assignments)
 
 
@@ -222,6 +234,118 @@ def _species_lines(
 def _type_sym(name: str) -> str:
     from ...seed.neutralize import slug
     return slug(name).upper()
+
+
+def _evolution_statements(
+    ruleset: Ruleset, resolution: RejuvResolution, report: ApplyReport
+) -> dict[tuple[str, str], list[str]]:
+    """Ruby statements that write each evolution onto its PRE-evolution's entry.
+
+    The neutral schema points backward (species X carries ``evolution.from = Y``)
+    while Rejuv stores the edge forward, in Y's ``:evolutions`` array — so every
+    statement here targets the source, not the species that owns the Override.
+
+    Each statement rewrites only its own branch: it rejects any existing entry
+    aimed at the same target species, then appends ours. A pre-evolution that
+    branches (Eevee) keeps the branches the Ruleset never mentions, including
+    ones that exist only in the base game and are therefore invisible to us.
+    """
+    from ...model import evolution_methods
+
+    stmts: dict[tuple[str, str], list[str]] = {}
+    for chrooked_id in sorted(ruleset.species):
+        species = ruleset.species[chrooked_id]
+        evo = species.evolution
+        if evo is None or not evo.from_species:
+            continue
+
+        target = resolution.species(chrooked_id, species.aka)
+        if target is None:
+            report.add(ReportEntry(
+                status="blocked", category="evolution", chrooked_id=chrooked_id,
+                reason="no MONHASH key/form for the evolved species",
+            ))
+            continue
+
+        source_id = _slug(evo.from_species)
+        source_aka = ruleset.species[source_id].aka if source_id in ruleset.species else {}
+        source = resolution.species(source_id, source_aka)
+        if source is None:
+            report.add(ReportEntry(
+                status="blocked", category="evolution", chrooked_id=chrooked_id,
+                reason=f"unresolved pre-evolution {evo.from_species!r}",
+            ))
+            continue
+
+        target_form = resolution.monhash[target[0]].index(target[1])
+        rendered = _render_evolution(
+            evo.method, target[0], target_form, resolution, evolution_methods
+        )
+        if rendered is None:
+            report.add(ReportEntry(
+                status="blocked", category="evolution", chrooked_id=chrooked_id,
+                symbol=f"{source[0]}::{source[1]}",
+                reason=f"evolution method not renderable for rejuv: {dict(evo.method)}",
+            ))
+            continue
+
+        # Rejuv keys a branch by (species, form): Rockruff carries three separate
+        # edges to LYCANROC forms 0/1/2, Petilil two to LILLIGANT 0/1. Rejecting
+        # on the species symbol alone would collapse every sibling branch into
+        # ours, silently deleting the regional/alternate-form evolutions.
+        ref = f'MONHASH[:{source[0]}]["{source[1]}"][:evolutions]'
+        stmts.setdefault(source, []).append(
+            f"{ref} = ({ref} || []).reject {{ |e| "
+            f"e[:species] == :{target[0]} && (e[:form] || 0) == {target_form} }}"
+            f" + [{rendered}]"
+        )
+        report.add(ReportEntry(
+            status="applied", category="evolution", chrooked_id=chrooked_id,
+            symbol=f"{source[0]}::{source[1]}",
+        ))
+    return stmts
+
+
+def _render_evolution(
+    method, target_symbol: str, target_form: int, resolution, evolution_methods
+) -> str | None:
+    """One Ruby hash literal, or None when the method has no Rejuv rendering.
+
+    Rejuv is Essentials-derived, so the canonical vocabulary's ``essentials``
+    token is the right one. A method carrying only a ``pokeemerald:`` hint has no
+    Rejuv equivalent — it returns None and the caller reports it blocked rather
+    than guessing a token.
+
+    ``form:`` is always written, matching the reject predicate that pairs with it.
+    ponytail: the base game omits ``form:`` on some edges, which makes them
+    form-inheriting (Mega Absol's edge lands on Mega Charizard X). Ours are
+    explicit instead, because we know the exact target form — an Override that
+    wants inheriting behavior would need a new method flag.
+    """
+    head = f"{{ species: :{target_symbol}, form: {target_form}, method: "
+    if "level" in method:
+        return f"{head}:Level, parameter: {int(method['level'])} }}"
+    if "item" in method:
+        return f"{head}:Item, parameter: :{_type_sym(str(method['item']))} }}"
+
+    canonical = evolution_methods.to_engine(method, "essentials")
+    if canonical is None:
+        return None
+    token, value_kind, raw = canonical
+    if value_kind == "none":
+        return f"{head}:{token} }}"
+    if value_kind == "level":
+        return f"{head}:{token}, parameter: {int(raw)} }}"
+    if value_kind == "move":
+        return f"{head}:{token}, parameter: :{resolution.move_symbol(str(raw))} }}"
+    if value_kind == "item":
+        return f"{head}:{token}, parameter: :{_type_sym(str(raw))} }}"
+    return None
+
+
+def _slug(name: str) -> str:
+    from ...seed.neutralize import slug
+    return slug(name)
 
 
 # --- typetext ----------------------------------------------------------------

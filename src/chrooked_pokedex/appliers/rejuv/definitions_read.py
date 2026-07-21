@@ -19,7 +19,10 @@ import re
 from pathlib import Path
 
 # Top-level MONHASH key:  two-space indent, ``:SYMBOL => {``.
-_MON_KEY = re.compile(r'^  :([A-Z0-9_]+) => \{')
+# Mixed case is deliberate: Rejuv spells a few keys with lowercase runs
+# (:NIDORANfE, :NIDORANmA). An uppercase-only pattern dropped those species from
+# the resolution map entirely, so every Override on them was silently skipped.
+_MON_KEY = re.compile(r'^  :([A-Za-z0-9_]+) => \{')
 # Form name inside a species block: four-space indent, ``"Form Name" => {``.
 _FORM = re.compile(r'^    "([^"]+)" => \{')
 # Top-level key for MOVEHASH / ABILHASH: same two-space ``:SYMBOL => {``.

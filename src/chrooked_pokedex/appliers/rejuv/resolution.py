@@ -80,6 +80,17 @@ class RejuvResolution:
         if upper in self.monhash and _DEFAULT_FORM in self.monhash[upper]:
             return (upper, _DEFAULT_FORM)
 
+        # Rejuv is Essentials-derived, so an `essentials:` symbol names a real
+        # MONHASH key. This rescues keys that no slug can reach because they are
+        # not uppercase — `:NIDORANfE`, `:NIDORANmA`. Checked after the direct
+        # match so a plain species never pays for the lookup, and only trusted
+        # when the symbol really exists (never fabricated).
+        essentials = aka.get("essentials") if aka else None
+        if isinstance(essentials, str) and essentials in self.monhash:
+            if _DEFAULT_FORM in self.monhash[essentials]:
+                return (essentials, _DEFAULT_FORM)
+            return (essentials, self.monhash[essentials][0])
+
         return self._match_form(upper)
 
     def _match_form(self, upper: str) -> Optional[tuple[str, str]]:
