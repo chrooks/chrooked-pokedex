@@ -4,4 +4,5 @@ aka: { pokeemerald: SPECIES_SUNFLORA }
 types: [Grass, Fire]
 abilities:
   secondary: Solar Power
+  hidden: Drought
 stats: { hp: 80, def: 60, spa: 125, spe: 50 }
