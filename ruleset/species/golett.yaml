@@ -1,6 +1,8 @@
 name: Golett
 chrooked_id: golett
 aka: {  }
+abilities:
+  secondary: Shadow Shield
 learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Astonish }

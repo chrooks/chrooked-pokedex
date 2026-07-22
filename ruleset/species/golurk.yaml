@@ -1,6 +1,8 @@
 name: Golurk
 chrooked_id: golurk
 aka: { pokeemerald: SPECIES_GOLURK }
+abilities:
+  secondary: Shadow Shield
 stats: { hp: 95, atk: 135, def: 90, spd: 90 }
 learnset:
   - { level: 1, move: Mud-Slap }
