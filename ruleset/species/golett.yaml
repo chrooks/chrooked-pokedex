@@ -3,6 +3,7 @@ chrooked_id: golett
 aka: {  }
 abilities:
   secondary: Shadow Shield
+stats: { hp: 65, atk: 85, def: 60, spd: 60 }
 learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Astonish }
