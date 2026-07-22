@@ -6,21 +6,28 @@ abilities:
   secondary: Full Moon
 stats: { hp: 90, spa: 120, spd: 115 }
 learnset:
-  - { level: 1, move: Moonblast }
-  - { level: 1, move: Moonlight }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Harden }
   - { level: 1, move: Confusion }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Moonlight }
   - { level: 1, move: Rock Throw }
   - { level: 5, move: Hypnosis }
-  - { level: 10, move: Rock Polish }
-  - { level: 15, move: Rock Slide }
-  - { level: 20, move: Psyshock }
+  - { level: 8, move: Fairy Wind }
+  - { level: 12, move: Ancient Power }
+  - { level: 15, move: Disarming Voice }
+  - { level: 18, move: Psybeam }
+  - { level: 20, move: Snarl }
   - { level: 22, move: Geo Pulse }
-  - { level: 25, move: Cosmic Power }
-  - { level: 30, move: Psychic }
-  - { level: 35, move: Stone Edge }
-  - { level: 40, move: Future Sight }
-  - { level: 42, move: Power Gem }
-  - { level: 45, move: Magic Room }
-  - { level: 50, move: Explosion }
+  - { level: 25, move: Draining Kiss }
+  - { level: 28, move: Cosmic Power }
+  - { level: 30, move: Dark Pulse }
+  - { level: 33, move: Psyshock }
+  - { level: 36, move: Power Gem }
+  - { level: 40, move: Dazzling Gleam }
+  - { level: 44, move: Future Sight }
+  - { level: 47, move: Night Daze }
+  - { level: 50, move: Moonblast }
+  - { level: 54, move: Magic Room }
+  - { level: 58, move: Meteor Beam }
+  - { level: 62, move: Nasty Plot }
+  - { level: 66, move: Fiery Wrath }
+  - { level: 70, move: Explosion }

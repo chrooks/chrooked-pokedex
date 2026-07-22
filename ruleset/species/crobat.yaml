@@ -8,22 +8,25 @@ abilities:
 stats: { spa: 85 }
 learnset:
   - { level: 0, move: Cross Poison }
-  - { level: 1, move: Cross Poison }
-  - { level: 1, move: Tailwind }
-  - { level: 1, move: Toxic }
-  - { level: 1, move: Screech }
   - { level: 1, move: Absorb }
-  - { level: 1, move: Supersonic }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Mean Look }
-  - { level: 15, move: Poison Fang }
-  - { level: 20, move: Quick Guard }
+  - { level: 1, move: Screech }
+  - { level: 1, move: Supersonic }
+  - { level: 5, move: Poison Sting }
+  - { level: 10, move: Wing Attack }
+  - { level: 15, move: Toxic }
+  - { level: 20, move: Poison Tail }
+  - { level: 23, move: Acrobatics }
   - { level: 27, move: Air Cutter }
-  - { level: 34, move: Bite }
-  - { level: 37, move: Dive Bomb }
-  - { level: 41, move: Haze }
-  - { level: 48, move: Venoshock }
+  - { level: 30, move: Leech Life }
+  - { level: 34, move: Cross Poison }
+  - { level: 37, move: Air Slash }
+  - { level: 40, move: U-turn }
+  - { level: 43, move: Poison Jab }
+  - { level: 47, move: Dive Bomb }
+  - { level: 52, move: Hypnosis }
   - { level: 55, move: Confuse Ray }
-  - { level: 62, move: Air Slash }
-  - { level: 69, move: Leech Life }
+  - { level: 58, move: Gunk Shot }
+  - { level: 62, move: Haze }
+  - { level: 68, move: Brave Bird }
 evolution: { from: Golbat, method: { level: 33 } }
