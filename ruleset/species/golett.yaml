@@ -5,21 +5,22 @@ abilities:
   secondary: Shadow Shield
 stats: { hp: 65, atk: 85, def: 60, spd: 60 }
 learnset:
-  - { level: 1, move: Mud-Slap }
   - { level: 1, move: Astonish }
-  - { level: 4, move: Defense Curl }
-  - { level: 6, move: Clod Toss }
-  - { level: 8, move: Pound }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Pound }
+  - { level: 8, move: Shadow Sneak }
   - { level: 12, move: Shadow Punch }
-  - { level: 16, move: Curse }
+  - { level: 16, move: Clod Toss }
   - { level: 20, move: Night Shade }
   - { level: 24, move: Stomping Tantrum }
-  - { level: 28, move: Iron Defense }
-  - { level: 32, move: Mega Punch }
-  - { level: 36, move: Shadow Ball }
-  - { level: 40, move: Heavy Slam }
-  - { level: 42, move: Wraithstrike }
-  - { level: 44, move: Phantom Force }
-  - { level: 48, move: Hammer Arm }
-  - { level: 52, move: Earthquake }
-  - { level: 56, move: Dynamic Punch }
+  - { level: 28, move: Curse }
+  - { level: 32, move: Bulldoze }
+  - { level: 36, move: Shadow Claw }
+  - { level: 40, move: Drain Punch }
+  - { level: 43, move: Wraithstrike }
+  - { level: 46, move: Earthquake }
+  - { level: 50, move: Phantom Force }
+  - { level: 54, move: Hammer Arm }
+  - { level: 58, move: Focus Punch }
+  - { level: 64, move: Dynamic Punch }
