@@ -1,0 +1,18 @@
+name: Electrike
+chrooked_id: electrike
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Thunder Wave }
+  - { level: 4, move: Leer }
+  - { level: 8, move: Howl }
+  - { level: 12, move: Quick Attack }
+  - { level: 16, move: Shock Wave }
+  - { level: 18, move: Short Circuit }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Thunder Fang }
+  - { level: 28, move: Roar }
+  - { level: 32, move: Discharge }
+  - { level: 36, move: Charge }
+  - { level: 40, move: Wild Charge }
+  - { level: 44, move: Thunder }

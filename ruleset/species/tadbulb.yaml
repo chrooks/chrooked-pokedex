@@ -1,11 +1,9 @@
-name: Bellibolt
-chrooked_id: bellibolt
-aka: { pokeemerald: SPECIES_BELLIBOLT }
-stats: { spa: 105 }
+name: Tadbulb
+chrooked_id: tadbulb
+aka: {  }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Slack Off }
   - { level: 7, move: Thunder Shock }
   - { level: 11, move: Water Gun }
   - { level: 17, move: Charge }

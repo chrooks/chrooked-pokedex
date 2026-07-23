@@ -13,6 +13,7 @@ learnset:
   - { level: 8, move: Infestation }
   - { level: 13, move: Shock Wave }
   - { level: 17, move: Thunder Wave }
+  - { level: 18, move: Short Circuit }
   - { level: 22, move: Electroweb }
   - { level: 26, move: Toxic Thread }
   - { level: 30, move: Signal Beam }

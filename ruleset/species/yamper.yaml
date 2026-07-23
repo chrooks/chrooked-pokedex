@@ -8,6 +8,7 @@ learnset:
   - { level: 10, move: Bite }
   - { level: 15, move: Roar }
   - { level: 20, move: Spark }
+  - { level: 23, move: Short Circuit }
   - { level: 26, move: Charm }
   - { level: 30, move: Crunch }
   - { level: 35, move: Charge }

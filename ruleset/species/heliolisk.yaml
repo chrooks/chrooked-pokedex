@@ -2,3 +2,20 @@ name: Heliolisk
 chrooked_id: heliolisk
 aka: { pokeemerald: SPECIES_HELIOLISK }
 stats: { spa: 115, spe: 112 }
+learnset:
+  - { level: 1, move: Eerie Impulse }
+  - { level: 1, move: Discharge }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Bulldoze }
+  - { level: 1, move: Volt Switch }
+  - { level: 1, move: Parabolic Charge }
+  - { level: 1, move: Thunder Wave }
+  - { level: 1, move: Thunderbolt }
+  - { level: 1, move: Electrify }
+  - { level: 1, move: Thunder }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Thunder Shock }
+  - { level: 35, move: Short Circuit }

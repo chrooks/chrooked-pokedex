@@ -9,6 +9,7 @@ learnset:
   - { level: 10, move: Swift }
   - { level: 13, move: Thunder Wave }
   - { level: 16, move: Shock Wave }
+  - { level: 18, move: Short Circuit }
   - { level: 19, move: Low Kick }
   - { level: 22, move: Thunder Punch }
   - { level: 24, move: Discharge }

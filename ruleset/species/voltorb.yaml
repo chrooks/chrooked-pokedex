@@ -1,0 +1,22 @@
+name: Voltorb
+chrooked_id: voltorb
+aka: {  }
+learnset:
+  - { level: 1, move: Charge }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Thunder Shock }
+  - { level: 6, move: Eerie Impulse }
+  - { level: 9, move: Spark }
+  - { level: 11, move: Rollout }
+  - { level: 13, move: Screech }
+  - { level: 16, move: Charge Beam }
+  - { level: 18, move: Short Circuit }
+  - { level: 20, move: Swift }
+  - { level: 22, move: Electro Ball }
+  - { level: 26, move: Self-Destruct }
+  - { level: 29, move: Light Screen }
+  - { level: 34, move: Magnet Rise }
+  - { level: 37, move: Discharge }
+  - { level: 41, move: Explosion }
+  - { level: 46, move: Gyro Ball }
+  - { level: 50, move: Mirror Coat }

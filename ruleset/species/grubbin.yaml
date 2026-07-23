@@ -7,6 +7,7 @@ learnset:
   - { level: 5, move: String Shot }
   - { level: 10, move: Bug Bite }
   - { level: 15, move: Bite }
+  - { level: 18, move: Short Circuit }
   - { level: 21, move: Spark }
   - { level: 25, move: Sticky Web }
   - { level: 30, move: X-Scissor }

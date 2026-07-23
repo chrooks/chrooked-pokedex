@@ -24,4 +24,5 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 5, move: Thunderbolt }
   - { level: 35, move: Cutsie Slap }
+  - { level: 35, move: Short Circuit }
   - { level: 48, move: Lightning Slam }

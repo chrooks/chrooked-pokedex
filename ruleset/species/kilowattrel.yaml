@@ -12,6 +12,7 @@ learnset:
   - { level: 15, move: Charge }
   - { level: 18, move: Air Cutter }
   - { level: 22, move: Roost }
+  - { level: 27, move: Short Circuit }
   - { level: 28, move: Tailwind }
   - { level: 34, move: Volt Switch }
   - { level: 40, move: Discharge }

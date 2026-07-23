@@ -2,3 +2,23 @@ name: Electrode
 chrooked_id: electrode
 aka: { pokeemerald: SPECIES_ELECTRODE }
 stats: { spe: 150 }
+learnset:
+  - { level: 1, move: Eerie Impulse }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Magnetic Flux }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Thunder Shock }
+  - { level: 9, move: Spark }
+  - { level: 11, move: Rollout }
+  - { level: 13, move: Screech }
+  - { level: 16, move: Charge Beam }
+  - { level: 20, move: Swift }
+  - { level: 22, move: Electro Ball }
+  - { level: 26, move: Self-Destruct }
+  - { level: 29, move: Light Screen }
+  - { level: 32, move: Short Circuit }
+  - { level: 36, move: Magnet Rise }
+  - { level: 41, move: Discharge }
+  - { level: 47, move: Explosion }
+  - { level: 54, move: Gyro Ball }
+  - { level: 58, move: Mirror Coat }

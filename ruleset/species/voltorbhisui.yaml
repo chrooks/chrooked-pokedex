@@ -1,0 +1,22 @@
+name: Voltorb Hisui
+chrooked_id: voltorbhisui
+aka: {  }
+learnset:
+  - { level: 1, move: Charge }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Thunder Shock }
+  - { level: 6, move: Stun Spore }
+  - { level: 9, move: Bullet Seed }
+  - { level: 11, move: Rollout }
+  - { level: 13, move: Screech }
+  - { level: 16, move: Charge Beam }
+  - { level: 18, move: Short Circuit }
+  - { level: 20, move: Swift }
+  - { level: 22, move: Electro Ball }
+  - { level: 26, move: Self-Destruct }
+  - { level: 29, move: Energy Ball }
+  - { level: 34, move: Seed Bomb }
+  - { level: 34, move: Discharge }
+  - { level: 41, move: Explosion }
+  - { level: 46, move: Gyro Ball }
+  - { level: 50, move: Grassy Terrain }

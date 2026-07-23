@@ -1,0 +1,18 @@
+name: Rotom Frost
+chrooked_id: rotomfrost
+aka: {  }
+learnset:
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Thunder Shock }
+  - { level: 10, move: Confuse Ray }
+  - { level: 15, move: Charge }
+  - { level: 17, move: Short Circuit }
+  - { level: 20, move: Electro Ball }
+  - { level: 25, move: Thunder Wave }
+  - { level: 30, move: Shock Wave }
+  - { level: 35, move: Hex }
+  - { level: 40, move: Substitute }
+  - { level: 45, move: Trick }
+  - { level: 50, move: Discharge }
+  - { level: 55, move: Uproar }

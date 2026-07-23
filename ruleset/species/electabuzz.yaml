@@ -13,6 +13,7 @@ learnset:
   - { level: 20, move: Thunder Wave }
   - { level: 24, move: Brick Break }
   - { level: 28, move: Ice Punch }
+  - { level: 31, move: Short Circuit }
   - { level: 32, move: Discharge }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Bulk Up }

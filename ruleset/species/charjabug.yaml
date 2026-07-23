@@ -8,6 +8,7 @@ learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Bug Bite }
   - { level: 15, move: Bite }
+  - { level: 19, move: Short Circuit }
   - { level: 23, move: Spark }
   - { level: 29, move: Sticky Web }
   - { level: 36, move: X-Scissor }

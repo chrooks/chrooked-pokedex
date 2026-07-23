@@ -4,3 +4,25 @@ aka: { pokeemerald: SPECIES_PLUSLE }
 abilities:
   hidden: Lightning Rod
 stats: { spa: 95, spe: 100 }
+learnset:
+  - { level: 1, move: Nuzzle }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Thunder Wave }
+  - { level: 4, move: Helping Hand }
+  - { level: 7, move: Spark }
+  - { level: 10, move: Encore }
+  - { level: 13, move: Switcheroo }
+  - { level: 16, move: Swift }
+  - { level: 19, move: Electro Ball }
+  - { level: 22, move: Copycat }
+  - { level: 24, move: Short Circuit }
+  - { level: 26, move: Charge }
+  - { level: 31, move: Discharge }
+  - { level: 34, move: Baton Pass }
+  - { level: 37, move: Agility }
+  - { level: 40, move: Last Resort }
+  - { level: 43, move: Thunder }
+  - { level: 46, move: Nasty Plot }
+  - { level: 49, move: Entrainment }

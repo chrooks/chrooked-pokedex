@@ -16,6 +16,7 @@ learnset:
   - { level: 1, move: Brick Break }
   - { level: 24, move: Thunder Wave }
   - { level: 30, move: Discharge }
+  - { level: 31, move: Short Circuit }
   - { level: 36, move: Bulk Up }
   - { level: 37, move: Aura Sphere }
   - { level: 39, move: Lightning Slam }

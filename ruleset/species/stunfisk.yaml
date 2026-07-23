@@ -1,0 +1,20 @@
+name: Stunfisk
+chrooked_id: stunfisk
+aka: {  }
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Thunder Shock }
+  - { level: 5, move: Endure }
+  - { level: 10, move: Mud Shot }
+  - { level: 15, move: Revenge }
+  - { level: 17, move: Short Circuit }
+  - { level: 20, move: Charge }
+  - { level: 25, move: Sucker Punch }
+  - { level: 30, move: Electric Terrain }
+  - { level: 35, move: Bounce }
+  - { level: 40, move: Muddy Water }
+  - { level: 45, move: Discharge }
+  - { level: 50, move: Flail }
+  - { level: 55, move: Fissure }

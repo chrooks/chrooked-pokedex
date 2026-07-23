@@ -2,3 +2,20 @@ name: Dedenne
 chrooked_id: dedenne
 aka: { pokeemerald: SPECIES_DEDENNE }
 stats: { spa: 100, spd: 85 }
+learnset:
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Nuzzle }
+  - { level: 5, move: Tackle }
+  - { level: 10, move: Charge }
+  - { level: 15, move: Thunder Shock }
+  - { level: 17, move: Short Circuit }
+  - { level: 20, move: Charm }
+  - { level: 25, move: Parabolic Charge }
+  - { level: 30, move: Volt Switch }
+  - { level: 35, move: Rest }
+  - { level: 35, move: Snore }
+  - { level: 40, move: Discharge }
+  - { level: 45, move: Play Rough }
+  - { level: 50, move: Super Fang }
+  - { level: 55, move: Entrainment }
+  - { level: 60, move: Thunder }

@@ -2,3 +2,20 @@ name: Pachirisu
 chrooked_id: pachirisu
 aka: { pokeemerald: SPECIES_PACHIRISU }
 stats: { spa: 90, spe: 115 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Thunder Shock }
+  - { level: 5, move: Quick Attack }
+  - { level: 9, move: Charm }
+  - { level: 13, move: Spark }
+  - { level: 17, move: Endure }
+  - { level: 19, move: Nuzzle }
+  - { level: 21, move: Swift }
+  - { level: 23, move: Short Circuit }
+  - { level: 25, move: Electro Ball }
+  - { level: 29, move: Sweet Kiss }
+  - { level: 33, move: Thunder Wave }
+  - { level: 37, move: Super Fang }
+  - { level: 41, move: Discharge }
+  - { level: 45, move: Last Resort }
+  - { level: 49, move: Thunder }

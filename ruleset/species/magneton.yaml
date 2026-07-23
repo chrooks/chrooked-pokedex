@@ -1,23 +1,19 @@
-name: Magnezone
-chrooked_id: magnezone
-aka: { pokeemerald: SPECIES_MAGNEZONE }
+name: Magneton
+chrooked_id: magneton
+aka: {  }
 learnset:
-  - { level: 1, move: Electric Terrain }
-  - { level: 1, move: Mirror Coat }
-  - { level: 1, move: Magnetic Flux }
-  - { level: 1, move: Tri Attack }
-  - { level: 1, move: Tackle }
+  - { level: 0, move: Tri Attack }
   - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Thunder Shock }
+  - { level: 1, move: Electric Terrain }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Supersonic }
+  - { level: 1, move: Thunder Shock }
   - { level: 12, move: Electro Ball }
   - { level: 16, move: Gyro Ball }
   - { level: 20, move: Spark }
   - { level: 24, move: Screech }
   - { level: 28, move: Magnet Rise }
-  - { level: 30, move: Flamethrower }
   - { level: 31, move: Short Circuit }
-  - { level: 32, move: Ice Beam }
   - { level: 34, move: Flash Cannon }
   - { level: 40, move: Discharge }
   - { level: 46, move: Metal Sound }
