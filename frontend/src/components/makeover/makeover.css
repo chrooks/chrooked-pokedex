@@ -964,6 +964,153 @@
   margin: 0;
 }
 
+/* --- Rail à la carte picker (ac8) ----------------------------------------- */
+
+.mk-rail__hint {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: 0 var(--space-4) var(--space-2);
+  margin: 0;
+}
+.mk-rail__row[data-state="keep"] {
+  color: var(--text-faint);
+  opacity: 0.75;
+}
+.mk-rail__row[data-state="keep"] .mk-rail__mark {
+  color: var(--text-faint);
+}
+.mk-rail__row[data-state="pending"] .mk-rail__mark {
+  color: var(--text-dim);
+}
+.mk-rail__keep {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+}
+
+/* --- Mode toggle (swap existing | create new) ----------------------------- */
+
+.mk-mode {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  background: var(--surface-0);
+}
+.mk-mode__btn {
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.mk-mode__btn[data-active="true"] {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.mk-mode__btn:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+/* --- Ability create panel ------------------------------------------------- */
+
+.mk-create__warnings {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--chrome-dim);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklch, var(--chrome) 8%, var(--surface-1));
+  color: var(--chrome);
+  font-size: var(--text-xs);
+}
+.mk-create__preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.mk-create__ability-name {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-md);
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.mk-create__id {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+.mk-create__ability-desc {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+  max-width: 65ch;
+}
+.mk-create__rating {
+  margin: var(--space-1) 0 0;
+  color: var(--edited);
+  font-size: var(--text-xs);
+}
+.mk-create__sub {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  margin: 0 0 var(--space-2);
+}
+.mk-create__effects {
+  list-style: none;
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+.mk-create__trigger {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+  margin-right: var(--space-1);
+}
+.mk-create__stub {
+  margin: 0;
+  color: var(--edited);
+  font-size: var(--text-xs);
+}
+.mk-create__dist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.mk-create__dist-table th,
+.mk-create__dist-table td {
+  text-align: left;
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+.mk-create__dist-table th {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
 /* --- Responsive + reduced motion ------------------------------------------ */
 
 @media (max-width: 900px) {

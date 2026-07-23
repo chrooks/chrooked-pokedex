@@ -5,7 +5,7 @@
    honest, verbatim server messages (422/503 surfaced as-is). */
 
 import { ApiError } from "../api";
-import type { AbilitySlots, ApplyReportSummary } from "../types";
+import type { AbilitySlots, ApplyReportSummary, Behavior } from "../types";
 import type { LearnsetRubric } from "./learnsetBands";
 
 async function postJson<T>(path: string, payload?: unknown): Promise<T> {
@@ -86,6 +86,31 @@ export interface ReadBackResponse {
   ok: boolean;
 }
 
+/** One proposed distribution target from ability-create. `replaces` is the
+    species' real current occupant of that slot (proposal-only, stripped on write). */
+export interface AbilityDistributionRow {
+  species: string;
+  slot: "primary" | "secondary" | "hidden";
+  replaces?: string;
+  reasoning?: string;
+}
+
+/** The ability-create draft: a new owned ability, its engine-neutral behavior stub
+    (engine_hints ALWAYS empty — the human's grounding pass), and a distribution
+    plan. Mirrors the POST /api/abilities/suggest contract. */
+export interface AbilityCreateDraft {
+  ability: { chrooked_id: string; name: string; description: string };
+  behavior: Behavior;
+  distribution: AbilityDistributionRow[];
+}
+
+export interface AbilityCreateResponse {
+  draft: AbilityCreateDraft;
+  rationale: { ability?: string; ai_rating?: string; distribution?: string };
+  alternatives: { value: unknown; rationale: string }[];
+  warnings?: string[];
+}
+
 export const makeoverApi = {
   /** The makeover opening move: 2-3 lore-grounded typing+role directions, on the
       species-suggest typing Seam (`mode: "lore-options"`). */
@@ -128,6 +153,11 @@ export const makeoverApi = {
     corrections?: string;
     new_mechanics?: string;
   }) => postJson<{ section: string }>("/api/design-log", payload),
+  /** Drive the existing ability-create Seam: propose a brand-new ability + behavior
+      stub + distribution. Writes nothing — the accept path is PUT ability →
+      behavior → species ×N through the existing CRUD routes, on confirm. */
+  createAbility: (direction: string) =>
+    postJson<AbilityCreateResponse>("/api/abilities/suggest", { direction }),
 };
 
 /** The anchor kit a design stage produces, used by the line strip + mirror-down. */

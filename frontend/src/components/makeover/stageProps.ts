@@ -18,8 +18,10 @@ export interface CommonStageProps {
   redirectRef: RefObject<HTMLInputElement>;
   /** Register the stage's imperative actions for the workbench keyboard path. */
   registerActions: (actions: StageActions | null) => void;
-  /** Called on a clean LOCK IN with the facts to land in the line strip + advance. */
-  onLocked: (facts: StageFacts) => void;
+  /** Called on a clean LOCK IN with the facts to land in the line strip + advance.
+      `writtenIds` are the species this lock actually wrote (default: the anchor),
+      so the read-back tail checks exactly what this session touched. */
+  onLocked: (facts: StageFacts, writtenIds?: string[]) => void;
   /** Called on a re-roll with the composed redirect, so the session harvests it. */
   onRedirect: (text: string) => void;
 }

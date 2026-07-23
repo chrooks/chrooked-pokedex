@@ -71,4 +71,22 @@ describe("mirrorDownPreview — the whole-line write plan", () => {
     // The stripped L0 is surfaced for the "minus L0" annotation.
     expect(rows[0].strippedL0).toEqual(["Dragon Pulse"]);
   });
+
+  it("mirror-only journey: copies the anchor's CURRENT kit and never touches the anchor", () => {
+    // No design stage ran — the kit is the final evo's current types/abilities/
+    // learnset. The preview must yield only pre-evo copies (the anchor's own
+    // fields are left untouched — it is absent from the write plan).
+    const anchor = { ...goodra, types: ["Dragon"], learnset: [
+      { level: 0, move: "Dragon Pulse" },
+      { level: 30, move: "Dragon Breath" },
+    ] } as typeof goodra;
+    const rows = mirrorDownPreview(anchor, byId, {
+      types: anchor.types,
+      abilities: anchor.abilities,
+      learnset: anchor.learnset,
+    });
+    expect(rows.map((r) => r.chrooked_id)).toEqual(["goomy", "sliggoo"]);
+    expect(rows.map((r) => r.chrooked_id)).not.toContain("goodra");
+    expect(rows[0].learnset).toEqual([{ level: 30, move: "Dragon Breath" }]);
+  });
 });

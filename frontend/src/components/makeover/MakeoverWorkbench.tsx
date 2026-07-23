@@ -1,22 +1,23 @@
 /* The Makeover Workbench — a full-screen takeover inside the device frame. Three
-   columns: the stage rail (left), the active stage (center), the line strip
-   (right). The heartbeat is propose → tweak → LOCK IN per design stage; after the
-   last design lock the tail runs automatically (apply → proof → log). The Ruleset
-   is the source of truth for progression, so a reload resumes on the first
-   unlocked stage and Back returns to the dex exactly as left (ac1).
+   columns: the stage rail (left, the à la carte picker), the active stage
+   (center), the line strip (right). À la carte (ac8): the rail toggles which
+   design facets this session touches. The heartbeat is propose → tweak → LOCK IN
+   per selected stage; with nothing selected it is the mirror-only journey; after
+   the last lock the tail runs automatically (apply → proof → log). The Ruleset +
+   this session's toggles drive progression, so a reload resumes on the first
+   unlocked selected stage and Back returns to the dex exactly as left (ac1).
 
-   Keyboard path (ac7): Enter = LOCK IN, t = focus redirect, Esc = back/abandon.
-   ArrowUp/Down + e (row focus / edit) are handled inside the learnset stage where
-   the rows live. */
+   Keyboard path (ac7/ac8): Enter = LOCK IN, t = focus redirect, space = toggle a
+   focused rail stage (native button), Esc = abandon. ArrowUp/Down + e (row focus /
+   edit) live inside the learnset stage where the rows are. */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DexEntry, Move, Target } from "../../types";
 import {
-  isDesignStage,
-  lockedFromFields,
-  nextStage,
-  prevStage,
+  defaultSelected,
+  firstUnlocked,
   resolveActiveStage,
+  toggleSelected,
   type DesignStage,
   type Stage,
 } from "../../lib/makeoverStages";
@@ -30,6 +31,7 @@ import { TypingStage } from "./TypingStage";
 import { StatsStage } from "./StatsStage";
 import { AbilitiesStage } from "./AbilitiesStage";
 import { LearnsetStage } from "./LearnsetStage";
+import { MirrorStage } from "./MirrorStage";
 import { AutoTail } from "./AutoTail";
 import type { StageActions } from "./StagePanel";
 import type { CommonStageProps } from "./stageProps";
@@ -64,7 +66,14 @@ export function MakeoverWorkbench({
   activeTargetId,
   backdropTargetId,
 }: Props) {
-  const [sessionLocked, setSessionLocked] = useState<Set<DesignStage>>(new Set());
+  // The à la carte selection — seeded once from the Ruleset (smart defaults), then
+  // toggled by the rail. Session state: a lock+reload does not reset it (the same
+  // mount), but a fresh page reload re-derives (resume).
+  const [selected, setSelected] = useState<Set<DesignStage>>(() =>
+    defaultSelected(entry.overridden_fields),
+  );
+  const [sessionLocked, setSessionLocked] = useState<Set<Stage>>(new Set());
+  const [writtenIds, setWrittenIds] = useState<Set<string>>(new Set());
   const [direction, setDirection] = useState("");
   const [corrections, setCorrections] = useState<string[]>([]);
   const [facts, setFacts] = useState<StageFacts>({});
@@ -72,7 +81,6 @@ export function MakeoverWorkbench({
 
   const redirectRef = useRef<HTMLInputElement>(null);
   const actionsRef = useRef<StageActions | null>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
 
   const byId = useMemo(() => new Map(allEntries.map((e) => [e.chrooked_id, e])), [allEntries]);
   const linePre = useMemo(() => preEvos(entry, byId), [entry, byId]);
@@ -82,16 +90,7 @@ export function MakeoverWorkbench({
     return map;
   }, [moves]);
 
-  // Progression: the Ruleset (the species' overridden fields) plus this session's
-  // optimistic locks (direction has no field; a just-locked stage before the dex
-  // refetch lands). Resume derives from the Ruleset alone.
-  const locked = useMemo(() => {
-    const set = lockedFromFields(entry.overridden_fields);
-    for (const s of sessionLocked) set.add(s);
-    return set;
-  }, [entry.overridden_fields, sessionLocked]);
-
-  const active = resolveActiveStage(stage, locked);
+  const active = resolveActiveStage(stage, selected, sessionLocked);
 
   // Fetch the pacing-band rubric once (single source of truth; annotates learnset
   // rows). A failure leaves it null → rows simply render without band flags.
@@ -112,60 +111,54 @@ export function MakeoverWorkbench({
     setCorrections((prev) => [...prev, text]);
   }, []);
 
-  const handleNavigate = useCallback(
-    (target: Stage) => {
-      onStage(target);
-    },
-    [onStage],
-  );
+  const handleNavigate = useCallback((target: Stage) => onStage(target), [onStage]);
+
+  const handleToggle = useCallback((toggled: DesignStage) => {
+    setSelected((prev) => toggleSelected(prev, toggled));
+  }, []);
 
   const handleDirectionChosen = useCallback(
     (chosen: string) => {
+      const nextLocked = new Set(sessionLocked).add("direction");
       setDirection(chosen);
-      setSessionLocked((prev) => new Set(prev).add("direction"));
-      onStage("typing");
+      setSessionLocked(nextLocked);
+      onStage(firstUnlocked(selected, nextLocked));
     },
-    [onStage],
+    [selected, sessionLocked, onStage],
   );
 
   const handleLocked = useCallback(
-    (nextFacts: StageFacts) => {
+    (nextFacts: StageFacts, ids?: string[]) => {
       setFacts((prev) => ({ ...prev, ...nextFacts }));
-      if (isDesignStage(active)) {
-        setSessionLocked((prev) => new Set(prev).add(active));
-        onStage(nextStage(active));
-      }
+      setWrittenIds((prev) => new Set([...prev, ...(ids ?? [entry.chrooked_id])]));
+      const nextLocked = new Set(sessionLocked).add(active);
+      setSessionLocked(nextLocked);
+      onStage(firstUnlocked(selected, nextLocked));
       onSaved();
     },
-    [active, onStage, onSaved],
+    [active, selected, sessionLocked, entry.chrooked_id, onStage, onSaved],
   );
 
-  const handleEscape = useCallback(() => {
-    if (isDesignStage(active) && active !== "direction") {
-      onStage(prevStage(active));
-      return;
-    }
-    onExit();
-  }, [active, onStage, onExit]);
-
-  // Global keyboard path. Enter = LOCK IN, t = focus redirect, Esc = back/abandon.
-  // Skipped inside form fields (so typing a redirect / editing a row is unhurt),
-  // except Escape which always unwinds.
+  // Global keyboard path. Enter = LOCK IN, t = focus redirect, Esc = abandon.
+  // Skipped inside form fields AND on focused buttons (a rail button handles its
+  // own Enter/space natively — space toggles it), except Escape which always
+  // unwinds.
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       const target = event.target as HTMLElement | null;
-      const inField =
+      const inControl =
         target !== null &&
         (target.tagName === "INPUT" ||
           target.tagName === "SELECT" ||
           target.tagName === "TEXTAREA" ||
+          target.tagName === "BUTTON" ||
           target.isContentEditable);
       if (event.key === "Escape") {
         event.preventDefault();
-        handleEscape();
+        onExit();
         return;
       }
-      if (inField || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (inControl || event.metaKey || event.ctrlKey || event.altKey) return;
       if (event.key === "Enter") {
         if (actionsRef.current?.canLock) {
           event.preventDefault();
@@ -178,12 +171,12 @@ export function MakeoverWorkbench({
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleEscape]);
+  }, [onExit]);
 
   const commonProps: CommonStageProps = {
     entry,
     initialDirection: direction,
-    canLock: isDesignStage(active) ? true : false,
+    canLock: true,
     redirectRef,
     registerActions,
     onLocked: handleLocked,
@@ -192,6 +185,7 @@ export function MakeoverWorkbench({
 
   const targetId = activeTargetId ?? targets[0]?.id ?? null;
   const targetLabel = targets.find((t) => t.id === targetId)?.label ?? null;
+  const changedIds = writtenIds.size > 0 ? [...writtenIds] : [entry.chrooked_id];
 
   let panel: React.ReactNode;
   switch (active) {
@@ -212,7 +206,7 @@ export function MakeoverWorkbench({
       panel = <StatsStage {...commonProps} />;
       break;
     case "abilities":
-      panel = <AbilitiesStage {...commonProps} abilityOptions={abilityOptions} />;
+      panel = <AbilitiesStage {...commonProps} abilityOptions={abilityOptions} byId={byId} />;
       break;
     case "learnset":
       panel = (
@@ -222,6 +216,16 @@ export function MakeoverWorkbench({
           movePower={movePower}
           rubric={rubric}
           byId={byId}
+        />
+      );
+      break;
+    case "mirror":
+      panel = (
+        <MirrorStage
+          entry={entry}
+          byId={byId}
+          registerActions={registerActions}
+          onLocked={handleLocked}
         />
       );
       break;
@@ -239,7 +243,7 @@ export function MakeoverWorkbench({
       panel = (
         <AutoTail
           anchorName={entry.name}
-          changedIds={[entry.chrooked_id, ...linePre.map((m) => m.chrooked_id)]}
+          changedIds={changedIds}
           targetId={targetId}
           targetLabel={targetLabel}
           direction={direction}
@@ -251,7 +255,7 @@ export function MakeoverWorkbench({
   }
 
   return (
-    <div className="mk-workbench" id="makeover-workbench" ref={rootRef}>
+    <div className="mk-workbench" id="makeover-workbench">
       <header className="mk-workbench__head">
         <button type="button" className="mk-workbench__exit mono" onClick={onExit} aria-label="Close makeover (Esc)">
           ← dex
@@ -261,7 +265,13 @@ export function MakeoverWorkbench({
         </h2>
       </header>
       <div className="mk-workbench__body">
-        <StageRail locked={locked} active={active} onNavigate={handleNavigate} />
+        <StageRail
+          selected={selected}
+          sessionLocked={sessionLocked}
+          active={active}
+          onNavigate={handleNavigate}
+          onToggle={handleToggle}
+        />
         <main className="mk-workbench__stage" aria-live="polite">
           {panel}
         </main>
@@ -269,7 +279,7 @@ export function MakeoverWorkbench({
           anchor={entry}
           preEvos={linePre}
           facts={facts}
-          lockedLearnset={locked.has("learnset")}
+          lockedLearnset={sessionLocked.has("learnset") || sessionLocked.has("mirror")}
           backdropTargetId={backdropTargetId}
         />
       </div>

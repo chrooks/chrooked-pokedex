@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { api } from "../../api";
 import { isKnown } from "../../lib/entityValidation";
-import type { LearnsetDraft, LearnsetMove, ProposalAlternative, SpeciesOverride } from "../../types";
+import type { LearnsetDraft, LearnsetMove, ProposalAlternative } from "../../types";
 import {
   applyAlternative,
   classifyProposed,
@@ -24,6 +24,7 @@ import {
 } from "../proposal/learnsetDraft";
 import { bandViolation, type LearnsetRubric } from "../../lib/learnsetBands";
 import { copyDownLearnset, mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
+import { writeMirror } from "./mirrorWrite";
 import { StagePanel } from "./StagePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
 import type { CommonStageProps } from "./stageProps";
@@ -37,19 +38,6 @@ interface Props extends CommonStageProps {
   rubric: LearnsetRubric | null;
   /** The whole dex by chrooked_id, for the mirror-down line resolution. */
   byId: ReadonlyMap<string, DexEntry>;
-}
-
-function seedOverride(entry: { name: string; chrooked_id: string; dex: number | null }): SpeciesOverride {
-  return {
-    name: entry.name,
-    chrooked_id: entry.chrooked_id,
-    aka: entry.dex !== null ? { dex: entry.dex } : {},
-    types: null,
-    abilities: null,
-    stats: null,
-    learnset: null,
-    evolution: null,
-  };
 }
 
 export function LearnsetStage(props: Props) {
@@ -87,22 +75,11 @@ export function LearnsetStage(props: Props) {
       // anchor learnset minus L0. Silent so the workbench flushes ONE dex refresh.
       const learnset: LearnsetMove[] = draft.learnset.map((r) => ({ level: r.level, move: r.move }));
       const kit = { types: entry.types, abilities: entry.abilities, learnset };
-      for (const row of mirrorDownPreview(entry, byId, kit)) {
-        let raw: SpeciesOverride;
-        try {
-          raw = await api.speciesOverride(row.chrooked_id);
-        } catch {
-          raw = seedOverride({ name: row.name, chrooked_id: row.chrooked_id, dex: row.dex });
-        }
-        await api.putSpecies(
-          row.chrooked_id,
-          { ...raw, types: row.types, abilities: row.abilities, learnset: row.learnset },
-          undefined,
-          { silent: true },
-        );
-      }
+      await writeMirror(mirrorDownPreview(entry, byId, kit));
     },
-    onLocked: () => onLocked({}),
+    // The learnset lock writes the anchor's learnset AND every pre-evo copy — the
+    // read-back tail checks the whole line.
+    onLocked: () => onLocked({}, [entry.chrooked_id, ...line.map((m) => m.chrooked_id)]),
     onRedirect,
   });
 
