@@ -1,6 +1,7 @@
 name: Pancham
 chrooked_id: pancham
 aka: { dex: 674 }
+types: [Fighting, Dark]
 stats: { hp: 72, atk: 83, def: 64, spe: 50 }
 learnset:
   - { level: 1, move: Arm Thrust }
