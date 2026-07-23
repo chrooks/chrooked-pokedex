@@ -641,7 +641,10 @@ def _validate_typing_result(
 # =========================================================================== #
 
 
-def _build_lore_options_rubric() -> str:
+def _build_lore_options_rubric(
+    kept_types: list[str] | None = None,
+    kept_abilities: dict[str, Any] | None = None,
+) -> str:
     """The lore-options system rubric (the makeover opening move, server-side).
 
     Directs the model to research the species' flavor — dex text, name etymology,
@@ -649,8 +652,12 @@ def _build_lore_options_rubric() -> str:
     directions, each a typing (1-2 pool types) plus a short battle-role label,
     grounded in that lore. Mirrors the "Makeover opening move" in the
     species-suggest skill so chat and UI share one prompt path (One Seam).
+
+    À la carte KEPT facets constrain the options: a KEPT typing is fixed (every
+    option keeps it verbatim and differentiates by role), and KEPT abilities must
+    not be the axis an option hinges on.
     """
-    return (
+    base = (
         "You are a Pokémon game-design assistant helping brainstorm a species "
         "makeover. Given one species and the full type pool, research the "
         "species' lore — its dex flavor, name etymology, real-world inspiration, "
@@ -663,6 +670,25 @@ def _build_lore_options_rubric() -> str:
         "{types: [1-2 pool types], role: short label, rationale: one line of why "
         "this fits the lore}), and a one-line framing in `rationale.options`."
     )
+    constraints = []
+    if kept_types:
+        joined = "/".join(kept_types)
+        constraints.append(
+            f"HARD CONSTRAINT — the typing is KEPT and FIXED at {joined}. EVERY "
+            f"option MUST use exactly this typing ([{', '.join(kept_types)}]) "
+            "verbatim; do NOT change or add a type. Differentiate the options by "
+            "battle ROLE and identity WITHIN this typing (e.g. physical "
+            "wallbreaker vs bulky trapper vs speed-crept bruiser), not by type."
+        )
+    if kept_abilities:
+        constraints.append(
+            "HARD CONSTRAINT — the abilities are KEPT. Do NOT propose options that "
+            "hinge on a new or changed ability; the role must work with the "
+            "current abilities."
+        )
+    if constraints:
+        return base + "\n" + "\n".join(constraints)
+    return base
 
 
 def _lore_options_draft_schema() -> dict[str, Any]:
@@ -728,15 +754,18 @@ def suggest_lore_options(
     entry: dict[str, Any],
     type_pool: list[str],
     direction: str | None = None,
+    kept_types: list[str] | None = None,
+    kept_abilities: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Propose 2-3 lore-grounded typing+role makeover directions; never writes.
 
-    Assembles the same species context as typing suggest, runs ONE bounded Port
-    call, then validates each option's types against the real pool (an option with
-    a hallucinated type is DROPPED, mirroring alternatives handling; at least one
-    valid option must survive or it is a clean :class:`SuggestError`). Returns
-    ``{draft: {options: [...]}, rationale, alternatives}`` — the same envelope
-    every sibling returns, with ``options`` in place of a single draft field.
+    Assembles the same species context as typing suggest, runs a bounded Port call
+    (with one self-repair retry via :func:`propose_with_repair`), then validates
+    each option's types against the real pool — a hallucinated type DROPS that
+    option. À la carte KEPT facets constrain the options: a KEPT typing forces
+    every option to keep the current typing verbatim (options differ by role), and
+    an option that changes a kept facet is dropped. Returns ``{draft: {options:
+    [...]}, rationale, alternatives}``.
     """
     if not type_pool:
         raise SuggestError("No types are available to suggest from.")
@@ -744,23 +773,30 @@ def suggest_lore_options(
     cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
     return propose_with_repair(
         provider=provider,
-        system=_build_lore_options_rubric(),
+        system=_build_lore_options_rubric(kept_types, kept_abilities),
         cached_context=cached_context,
         user=_build_typing_user_context(entry, direction),
         schema=_lore_options_draft_schema(),
         max_tokens=DEFAULT_MAX_TOKENS,
-        validate=lambda draft: _validate_lore_options_result(draft, type_pool),
+        validate=lambda draft: _validate_lore_options_result(
+            draft, type_pool, kept_types=kept_types
+        ),
     )
 
 
 def _validate_lore_options_result(
-    result: dict[str, Any], type_pool: list[str]
+    result: dict[str, Any],
+    type_pool: list[str],
+    kept_types: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Shape-and-pool check on the lore-options draft (never trusted).
+    """Shape-, pool-, and kept-facet check on the lore-options draft (never trusted).
 
-    Confirms the contract keys, keeps only options whose every type is a real pool
-    member (a hallucinated type drops that one option, not the whole request), and
-    requires at least one surviving option. Returns the reusable envelope.
+    Keeps only options whose every type is a real pool member (a hallucinated type
+    drops that one option). When ``kept_types`` is set, an option whose typing
+    differs from the kept typing is ALSO dropped, and at least TWO options must
+    survive (fewer → a :class:`SuggestError` naming the violation, which
+    :func:`propose_with_repair` retries once before failing honestly). Otherwise at
+    least one option must survive. Returns the reusable envelope.
     """
     if not isinstance(result, dict):
         raise SuggestError("The suggestion came back in an unexpected shape.")
@@ -770,6 +806,7 @@ def _validate_lore_options_result(
         raise SuggestError("The suggestion was missing a draft options list.")
 
     known = {t.strip().casefold() for t in type_pool}
+    kept_key = {t.strip().casefold() for t in kept_types} if kept_types else None
     options: list[dict[str, Any]] = []
     for opt in draft["options"]:
         if not isinstance(opt, dict):
@@ -783,14 +820,22 @@ def _validate_lore_options_result(
         if any(t.strip().casefold() not in known for t in types):
             # Drop an option with a hallucinated type rather than failing the run.
             continue
+        if kept_key is not None and {t.strip().casefold() for t in types} != kept_key:
+            # A KEPT typing was violated — drop this option (the retry names it).
+            continue
         options.append(
             {
-                "types": types,
+                "types": list(kept_types) if kept_types else types,
                 "role": str(opt.get("role", "")).strip(),
                 "rationale": str(opt.get("rationale", "")).strip(),
             }
         )
 
+    if kept_types is not None and len(options) < 2:
+        raise SuggestError(
+            f"Fewer than 2 options kept the fixed typing {'/'.join(kept_types)}; "
+            "every option must keep the current typing and differ only by role."
+        )
     if not options:
         raise SuggestError("The suggestion did not propose any valid direction.")
 

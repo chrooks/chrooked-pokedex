@@ -797,6 +797,30 @@
   font-size: var(--text-sm);
   letter-spacing: 0.04em;
 }
+/* A KEPT typing is not a proposal — dim it and label it so it reads as fixed. */
+.mk-direction__types[data-kept] {
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.mk-direction__kept-tag {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+}
+.mk-direction__kept-note {
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+  white-space: nowrap;
+}
 .mk-direction__role {
   font-size: var(--text-md);
   font-weight: 500;

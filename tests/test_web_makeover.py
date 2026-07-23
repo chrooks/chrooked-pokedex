@@ -170,6 +170,102 @@ def test_plain_typing_mode_unaffected(ruleset_dir: Path, tmp_path: Path) -> None
 
 
 # --------------------------------------------------------------------------- #
+# Kept facets (à la carte): a KEPT typing constrains the lore options — every
+# option keeps the current typing verbatim and differs only by role.
+# --------------------------------------------------------------------------- #
+
+
+class _SeqProvider:
+    """Returns a scripted result per call (last repeats)."""
+
+    def __init__(self, results: list[dict[str, Any]]) -> None:
+        self.results = results
+        self.calls: list[dict[str, Any]] = []
+
+    def propose(self, **kwargs: Any) -> dict[str, Any]:
+        self.calls.append(kwargs)
+        return self.results[min(len(self.calls) - 1, len(self.results) - 1)]
+
+
+# Goodra's current type in the fixture snapshot is Dragon.
+_KEPT_OK = {
+    "draft": {"options": [
+        {"types": ["Dragon"], "role": "physical wallbreaker", "rationale": "a"},
+        {"types": ["Dragon"], "role": "bulky trapper", "rationale": "b"},
+    ]},
+    "rationale": {"options": "Two roles within Dragon."},
+}
+_KEPT_VIOLATING = {
+    "draft": {"options": [
+        {"types": ["Water", "Dragon"], "role": "changed typing", "rationale": "a"},
+        {"types": ["Poison", "Dragon"], "role": "also changed", "rationale": "b"},
+    ]},
+    "rationale": {"options": "These change the typing."},
+}
+
+
+@pytest.mark.unit
+def test_kept_typing_puts_constraint_in_the_prompt(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _FakeProvider(_KEPT_OK)
+    client = _client(ruleset_dir, tmp_path, provider)
+
+    client.post(
+        "/api/species/goodra/suggest/typing",
+        json={"mode": "lore-options", "kept_types": ["Dragon"]},
+    )
+
+    system = provider.calls[0]["system"]
+    assert "KEPT" in system and "Dragon" in system
+
+
+@pytest.mark.unit
+def test_kept_typing_options_echo_the_kept_typing(ruleset_dir: Path, tmp_path: Path) -> None:
+    client = _client(ruleset_dir, tmp_path, _FakeProvider(_KEPT_OK))
+
+    response = client.post(
+        "/api/species/goodra/suggest/typing",
+        json={"mode": "lore-options", "kept_types": ["Dragon"]},
+    )
+
+    assert response.status_code == 200
+    options = response.json()["draft"]["options"]
+    assert len(options) >= 2
+    assert all(o["types"] == ["Dragon"] for o in options)
+
+
+@pytest.mark.unit
+def test_kept_typing_violation_triggers_one_retry(ruleset_dir: Path, tmp_path: Path) -> None:
+    # First response changes the typing (all dropped -> <2 survive -> retry); the
+    # retry keeps it -> a valid 200.
+    provider = _SeqProvider([_KEPT_VIOLATING, _KEPT_OK])
+    client = _client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/typing",
+        json={"mode": "lore-options", "kept_types": ["Dragon"]},
+    )
+
+    assert response.status_code == 200
+    assert all(o["types"] == ["Dragon"] for o in response.json()["draft"]["options"])
+    assert len(provider.calls) == 2  # exactly one retry
+
+
+@pytest.mark.unit
+def test_kept_typing_violation_twice_is_honest_error(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _SeqProvider([_KEPT_VIOLATING, _KEPT_VIOLATING])
+    client = _client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/typing",
+        json={"mode": "lore-options", "kept_types": ["Dragon"]},
+    )
+
+    assert response.status_code == 422
+    assert "typing" in response.json()["detail"].lower()
+    assert len(provider.calls) == 2
+
+
+# --------------------------------------------------------------------------- #
 # Learnset rubric — the pacing bands as data
 # --------------------------------------------------------------------------- #
 

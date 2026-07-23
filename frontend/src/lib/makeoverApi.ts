@@ -113,11 +113,21 @@ export interface AbilityCreateResponse {
 
 export const makeoverApi = {
   /** The makeover opening move: 2-3 lore-grounded typing+role directions, on the
-      species-suggest typing Seam (`mode: "lore-options"`). */
-  loreOptions: (id: string, direction?: string) =>
+      species-suggest typing Seam (`mode: "lore-options"`). À la carte KEPT facets
+      (current typing/abilities of facets set to KEEP) constrain the options so a
+      kept typing is never changed. */
+  loreOptions: (
+    id: string,
+    opts?: { direction?: string; keptTypes?: string[]; keptAbilities?: AbilitySlots },
+  ) =>
     postJson<LoreOptionsResponse>(
       `/api/species/${encodeURIComponent(id)}/suggest/typing`,
-      { mode: "lore-options", direction },
+      {
+        mode: "lore-options",
+        direction: opts?.direction,
+        kept_types: opts?.keptTypes,
+        kept_abilities: opts?.keptAbilities,
+      },
     ),
   suggestTyping: (id: string, direction?: string) =>
     postJson<TypingProposal>(

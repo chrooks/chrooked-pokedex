@@ -441,6 +441,10 @@ def create_app(
                     entry=entry,
                     type_pool=type_pool,
                     direction=direction,
+                    # KEPT facets (à la carte): the SPA sends the species' current
+                    # values for facets set to KEEP so the options honor them.
+                    kept_types=body.get("kept_types"),
+                    kept_abilities=body.get("kept_abilities"),
                 )
             return suggestmod.suggest_typing(
                 provider=_llm_provider(),

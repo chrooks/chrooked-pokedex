@@ -197,6 +197,10 @@ export function MakeoverWorkbench({
           redirectRef={redirectRef}
           registerActions={registerActions}
           onChosen={handleDirectionChosen}
+          // KEPT facets constrain the lore options: a facet not in `selected` is
+          // KEEP, so its current value is fixed and the options must honor it.
+          keptTypes={selected.has("typing") ? undefined : entry.types}
+          keptAbilities={selected.has("abilities") ? undefined : entry.abilities}
         />
       );
       break;

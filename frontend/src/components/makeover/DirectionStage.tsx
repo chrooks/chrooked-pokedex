@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../../api";
-import type { DexEntry } from "../../types";
+import type { AbilitySlots, DexEntry } from "../../types";
 import { makeoverApi, type LoreOption } from "../../lib/makeoverApi";
 import type { StageActions } from "./StagePanel";
 
@@ -16,6 +16,11 @@ interface Props {
   registerActions: (actions: StageActions | null) => void;
   /** Chosen direction → advance to typing, carrying the steer forward. */
   onChosen: (direction: string) => void;
+  /** Current typing when TYPING is KEPT (à la carte) — options keep it verbatim
+      and differ only by role. Undefined when typing is in play. */
+  keptTypes?: string[];
+  /** Current abilities when ABILITIES is KEPT — options must not hinge on new ones. */
+  keptAbilities?: AbilitySlots;
 }
 
 type Phase = "loading" | "ready" | "error";
@@ -25,12 +30,25 @@ function optionDirection(option: LoreOption): string {
   return `${option.role} — typing ${option.types.join("/")}`;
 }
 
-export function DirectionStage({ entry, redirectRef, registerActions, onChosen }: Props) {
+export function DirectionStage({
+  entry,
+  redirectRef,
+  registerActions,
+  onChosen,
+  keptTypes,
+  keptAbilities,
+}: Props) {
   const [phase, setPhase] = useState<Phase>("loading");
   const [options, setOptions] = useState<LoreOption[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [free, setFree] = useState("");
   const fetchedOnce = useRef(false);
+  const typingKept = keptTypes != null;
+
+  // Read the kept-facet constraints through refs so the fetch effect stays keyed
+  // on the species alone (the constraints are stable while this stage is active).
+  const keptRef = useRef({ keptTypes, keptAbilities });
+  keptRef.current = { keptTypes, keptAbilities };
 
   useEffect(() => {
     if (fetchedOnce.current) return;
@@ -38,7 +56,10 @@ export function DirectionStage({ entry, redirectRef, registerActions, onChosen }
     let cancelled = false;
     void (async () => {
       try {
-        const result = await makeoverApi.loreOptions(entry.chrooked_id);
+        const result = await makeoverApi.loreOptions(entry.chrooked_id, {
+          keptTypes: keptRef.current.keptTypes,
+          keptAbilities: keptRef.current.keptAbilities,
+        });
         if (!cancelled) {
           setOptions(result.draft.options);
           setPhase("ready");
@@ -82,6 +103,14 @@ export function DirectionStage({ entry, redirectRef, registerActions, onChosen }
     <div className="mk-stage" data-phase={phase} id="mk-stage-direction">
       <p className="mk-direction__lead">
         Pick a lore-grounded direction for <strong>{entry.name}</strong>, or write your own.
+        {typingKept && (
+          <>
+            {" "}
+            <span className="mk-direction__kept-note mono">
+              typing kept · {keptTypes?.join("/")}
+            </span>
+          </>
+        )}
       </p>
 
       {phase === "loading" && (
@@ -113,7 +142,10 @@ export function DirectionStage({ entry, redirectRef, registerActions, onChosen }
                 id={`mk-direction-option-${index}`}
                 onClick={() => onChosen(optionDirection(option))}
               >
-                <span className="mk-direction__types mono">{option.types.join(" / ")}</span>
+                <span className="mk-direction__types mono" data-kept={typingKept || undefined}>
+                  {option.types.join(" / ")}
+                  {typingKept && <span className="mk-direction__kept-tag">kept</span>}
+                </span>
                 <span className="mk-direction__role">{option.role}</span>
                 <span className="mk-direction__why">{option.rationale}</span>
               </button>
