@@ -117,15 +117,44 @@ def propose_with_repair(
 
     result = _run(user)
     try:
-        return validate(result)
+        return _validate_draft(validate, result)
     except SuggestError as first_error:
         retry = _run(f"{user}\n\n{_generic_repair_note(str(first_error))}")
         try:
-            return validate(retry)
+            return _validate_draft(validate, retry)
         except SuggestError as second_error:
             raise SuggestError(
                 f"{second_error} — after one automatic retry, {_describe_draft(retry)}."
             ) from second_error
+
+
+_DRAFT_SHAPE_ERRORS = (AttributeError, TypeError, KeyError, ValueError, IndexError)
+
+
+def _validate_draft(
+    validate: "Callable[[dict[str, Any]], dict[str, Any]]", result: dict[str, Any]
+) -> dict[str, Any]:
+    """LLM output is untrusted; a validator crashing on its shape IS a validation
+    failure (retryable), never a 500."""
+    try:
+        return validate(result)
+    except SuggestError:
+        raise
+    except _DRAFT_SHAPE_ERRORS as exc:
+        raise SuggestError(
+            f"The draft had an unexpected shape ({type(exc).__name__}: {exc})"
+        ) from exc
+
+
+def _rationale_map(result: dict[str, Any], fallback_key: str) -> dict[str, str]:
+    """The model sometimes returns ``rationale`` as a bare string instead of an
+    object; tolerate both. A bare string lands under ``fallback_key``."""
+    raw = result.get("rationale")
+    if isinstance(raw, dict):
+        return {k: v for k, v in raw.items() if isinstance(v, str)}
+    if isinstance(raw, str) and raw:
+        return {fallback_key: raw}
+    return {}
 
 
 # --------------------------------------------------------------------------- #
@@ -420,7 +449,7 @@ def _build_ability_response(
 
     rationale = {
         slot: text
-        for slot, text in (result.get("rationale") or {}).items()
+        for slot, text in _rationale_map(result, "ability").items()
         if slot in valid and isinstance(text, str)
     }
 
@@ -623,7 +652,7 @@ def _validate_typing_result(
             continue
         alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
 
-    rationale_text = (result.get("rationale") or {}).get("types")
+    rationale_text = _rationale_map(result, "types").get("types")
     rationale = {"types": rationale_text} if isinstance(rationale_text, str) else {}
 
     return {
@@ -839,7 +868,7 @@ def _validate_lore_options_result(
     if not options:
         raise SuggestError("The suggestion did not propose any valid direction.")
 
-    rationale_text = (result.get("rationale") or {}).get("options")
+    rationale_text = _rationale_map(result, "options").get("options")
     rationale = {"options": rationale_text} if isinstance(rationale_text, str) else {}
 
     return {"draft": {"options": options}, "rationale": rationale, "alternatives": []}
@@ -1030,7 +1059,7 @@ def _validate_stats_result(result: dict[str, Any]) -> dict[str, Any]:
             continue
         alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
 
-    rationale_text = (result.get("rationale") or {}).get("stats")
+    rationale_text = _rationale_map(result, "stats").get("stats")
     rationale = {"stats": rationale_text} if isinstance(rationale_text, str) else {}
 
     return {
@@ -1365,7 +1394,7 @@ def _validate_learnset_result(
         # since the format is freeform we just keep them as-is (they're advisory).
         alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
 
-    rationale_text = (result.get("rationale") or {}).get("learnset")
+    rationale_text = _rationale_map(result, "learnset").get("learnset")
     rationale = (
         {"learnset": rationale_text} if isinstance(rationale_text, str) else {}
     )
@@ -1987,7 +2016,7 @@ def _validate_ability_creation_result(
         draft.get("distribution"), dex_lookup
     )
 
-    rationale_raw = result.get("rationale") or {}
+    rationale_raw = _rationale_map(result, "ability")
     rationale = {
         key: rationale_raw[key]
         for key in ("ability", "ai_rating", "distribution")
@@ -2678,7 +2707,7 @@ def _validate_move_result(
         full_move = dict(validated)
 
     # --- Rationale + alternatives ---
-    rationale_raw = result.get("rationale") or {}
+    rationale_raw = _rationale_map(result, "move")
     rationale: dict[str, str] = {}
     for key in ("move", "edit"):
         val = rationale_raw.get(key)
