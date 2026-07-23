@@ -33,12 +33,18 @@ from ..model import Ruleset, evolution_methods
 from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
 from . import crud as crudmod
+from . import design_log as designlogmod
 from . import dex as dexmod
 from . import folder_picker as pickermod
 from . import llm as llmmod
+from . import readback as readbackmod
 from . import snapshot as snapmod
 from . import suggest as suggestmod
 from . import targets as targetsmod
+
+# The learnset pacing-band rubric — a single JSON source of truth served to the
+# workbench (and derivable by the suggest-skill prose). Loaded once at import.
+_LEARNSET_RUBRIC_PATH = Path(__file__).resolve().parent / "learnset_rubric.json"
 
 _logger = logging.getLogger(__name__)
 
@@ -202,6 +208,24 @@ def create_app(
         # Served from the model table so the UI and the Appliers can't drift.
         return evolution_methods.public_list()
 
+    @app.get("/api/meta/learnset-rubric")
+    def get_learnset_rubric() -> dict[str, Any]:
+        # The level-up BP pacing bands as data — the single source of truth the
+        # Makeover Workbench annotates learnset rows against (a 75BP move at L8
+        # shows a BAND ≤60 flag). Served verbatim from the repo JSON so the SPA
+        # never hardcodes the bands and the skill prose can derive from the same
+        # file. Read per request so an edit to the file shows without a restart.
+        return _load_learnset_rubric()
+
+    def _load_learnset_rubric() -> dict[str, Any]:
+        try:
+            return json.loads(_LEARNSET_RUBRIC_PATH.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise HTTPException(
+                status_code=503,
+                detail=f"Learnset rubric unreadable at {_LEARNSET_RUBRIC_PATH}: {error}.",
+            ) from error
+
     @app.get("/api/ledger")
     def get_ledger(
         scope: str | None = None,
@@ -214,6 +238,31 @@ def create_app(
             ruleset_dir, scope=scope, kind=kind, chrooked_id=chrooked_id, limit=limit
         )
         return {"entries": entries}
+
+    @app.post("/api/design-log")
+    def append_design_log(payload: dict[str, Any] | None = None) -> dict[str, str]:
+        """Append one dated makeover section to ``ruleset/DESIGN-LOG.md``.
+
+        The auto tail of a workbench makeover harvests the direction picked and the
+        corrections given in the tweak loops, confirms them on one editable line,
+        and posts here. This route validates (a line name + a direction are
+        required) and appends — never rewrites history. Returns the appended
+        section verbatim so the UI can confirm exactly what landed.
+
+        Missing line/direction → 422 with the honest message; nothing is written.
+        """
+        body = payload or {}
+        try:
+            section = designlogmod.append_entry(
+                ruleset_dir / "DESIGN-LOG.md",
+                line=body.get("line", ""),
+                direction=body.get("direction", ""),
+                new_mechanics=body.get("new_mechanics"),
+                corrections=body.get("corrections"),
+            )
+        except designlogmod.DesignLogError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        return {"section": section}
 
     # --- Write routes (Milestone 2a): species / moves / abilities ----------- #
     # Each write validates by reloading through the loader; a rejected edit is a
@@ -357,8 +406,20 @@ def create_app(
                 status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
             )
         type_pool = dexmod.build_type_pool(snapshot, ruleset)
-        direction = (payload or {}).get("direction")
+        body = payload or {}
+        direction = body.get("direction")
+        # The makeover opening move rides this same Seam: `mode: "lore-options"`
+        # returns 2-3 lore-grounded typing+role directions (`draft.options`)
+        # instead of a single typing draft. Not a second prompt path (One Seam).
+        mode = body.get("mode", "typing")
         try:
+            if mode == "lore-options":
+                return suggestmod.suggest_lore_options(
+                    provider=_llm_provider(),
+                    entry=entry,
+                    type_pool=type_pool,
+                    direction=direction,
+                )
             return suggestmod.suggest_typing(
                 provider=_llm_provider(),
                 entry=entry,
@@ -1080,6 +1141,53 @@ def create_app(
             raise _target_error(error) from error
         except Exception as error:  # applier crash etc. — keep the 500 honest
             raise _unexpected_target_error("apply", target_id, error) from error
+
+    @app.post("/api/targets/{target_id}/read-back")
+    def read_back_target(
+        target_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Diff a Target's applied on-disk species against the Ruleset expectation.
+
+        In-Game Proof for the workbench tail: after an apply, read each changed
+        species back off the Target's fresh snapshot and diff it field-by-field
+        against the merged canon dex entry (the Ruleset's expectation). A green
+        Apply Report is not proof — this catches form-join/clobber bugs that ship
+        past it. Body: ``{chrooked_ids: [...]}``; only the fields the Ruleset
+        actually overrode are asserted. Returns the ``read_back`` proof artifact.
+        """
+        chrooked_ids = (payload or {}).get("chrooked_ids") or []
+        if not isinstance(chrooked_ids, list) or not chrooked_ids:
+            raise HTTPException(
+                status_code=422,
+                detail="read-back needs a non-empty `chrooked_ids` list.",
+            )
+        registry = app.state.targets_registry
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        try:
+            target = registry.get(target_id)
+            # A fresh parse of the Target's on-disk state (apply invalidates the
+            # cache, so this reflects what actually landed).
+            target_snapshot = app.state.targets_state.snapshot_for(target)
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+        target_species = target_snapshot.get("species", {})
+        results: list[dict[str, Any]] = []
+        for cid in chrooked_ids:
+            expected = dexmod.build_dex_entry(snapshot, ruleset, cid)
+            if expected is None:
+                continue
+            fields = [
+                f
+                for f in expected.get("overridden_fields", [])
+                if f in readbackmod.COMPARABLE_FIELDS
+            ] or list(readbackmod.COMPARABLE_FIELDS)
+            results.append(
+                readbackmod.diff_species(
+                    expected, target_species.get(cid), fields=fields
+                )
+            )
+        return readbackmod.read_back(results)
 
     @app.get("/api/targets/{target_id}/dex")
     def get_target_dex(target_id: str) -> list[dict[str, Any]]:
