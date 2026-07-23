@@ -41,6 +41,10 @@ from .llm import DEFAULT_MAX_TOKENS, LlmProvider
 # safety net for the rest.
 LEARNSET_MAX_TOKENS = 8192
 
+# Learnset drafts are the fattest, most fragile output; Chris's ruling is that
+# they should retry harder than other modes (which default to one extra attempt).
+_LEARNSET_MAX_RETRIES = 3
+
 # The ability slots an Override may set, in display order. The draft is a partial
 # Override: only the slots the model proposes appear.
 _ABILITY_SLOTS = ("primary", "secondary", "hidden")
@@ -99,12 +103,19 @@ def propose_with_repair(
     schema: dict[str, Any],
     max_tokens: int,
     validate: "Callable[[dict[str, Any]], dict[str, Any]]",
+    max_retries: int = 1,
 ) -> dict[str, Any]:
-    """Propose → ``validate``; on a :class:`SuggestError`, retry ONCE feeding the
-    violation back, then validate again. A second failure raises an honest error
-    naming what the model returned (a truncated/empty draft is not a bare dead
-    end). ``LlmError`` from the Port (transport / hard truncation) propagates
-    unretried."""
+    """Propose → ``validate``; on a :class:`SuggestError`, retry up to
+    ``max_retries`` times feeding the violation back each round, then validate
+    again. The final failure raises an honest error naming what the model
+    returned (a truncated/empty draft is not a bare dead end). ``LlmError`` from
+    the Port (transport / hard truncation) propagates unretried.
+
+    ``max_retries`` is the number of *extra* attempts after the first. Modes with
+    fragile, high-token drafts (learnset) pass a higher value — Chris's ruling is
+    that learnset suggestion should be especially eager to retry. The deterministic
+    auto-repairs a validator can make (dedupe, drop-and-warn) never reach here;
+    they happen inside ``validate`` and cost no retry."""
 
     def _run(user_text: str) -> dict[str, Any]:
         return provider.propose(
@@ -116,16 +127,20 @@ def propose_with_repair(
         )
 
     result = _run(user)
+    for _ in range(max(0, max_retries)):
+        try:
+            return _validate_draft(validate, result)
+        except SuggestError as error:
+            result = _run(f"{user}\n\n{_generic_repair_note(str(error))}")
     try:
         return _validate_draft(validate, result)
-    except SuggestError as first_error:
-        retry = _run(f"{user}\n\n{_generic_repair_note(str(first_error))}")
-        try:
-            return _validate_draft(validate, retry)
-        except SuggestError as second_error:
-            raise SuggestError(
-                f"{second_error} — after one automatic retry, {_describe_draft(retry)}."
-            ) from second_error
+    except SuggestError as final_error:
+        attempts = max(1, max_retries)
+        plural = "retry" if attempts == 1 else "retries"
+        raise SuggestError(
+            f"{final_error} — after {attempts} automatic {plural}, "
+            f"{_describe_draft(result)}."
+        ) from final_error
 
 
 _DRAFT_SHAPE_ERRORS = (AttributeError, TypeError, KeyError, ValueError, IndexError)
@@ -1309,29 +1324,43 @@ def _validate_learnset_result(
 
     known_moves = _pool_move_names(move_pool)
 
-    # Step 2+3: pool check + level range + normalize move name.
+    # Chris's ruling: learnset suggestion is especially risk-tolerant. Mechanical
+    # defects the server can fix deterministically (unknown-move rows, duplicate
+    # levels) are REPAIRED with a visible warning, not rejected — a repair costs
+    # no retry. Only a draft too broken to salvage (empty, or below the row floor
+    # after dropping junk) raises a SuggestError, which the eager retry loop feeds
+    # back to the model.
+    warnings: list[str] = []
+
+    # Step 2+3: pool check + level range + normalize move name. A row whose move
+    # isn't in the pool, or whose level is malformed, is DROPPED with a warning
+    # (rather than sinking the whole draft) as long as the list stays viable.
     validated_rows: list[dict[str, Any]] = []
     for row in raw_rows:
         if not isinstance(row, dict):
-            raise SuggestError("A learnset row was not a dict.")
+            warnings.append("dropped a learnset row that was not an object")
+            continue
         move_raw = row.get("move")
         if not isinstance(move_raw, str) or not move_raw.strip():
-            raise SuggestError("A learnset row is missing a move name.")
+            warnings.append("dropped a learnset row with no move name")
+            continue
         canonical = known_moves.get(move_raw.strip().casefold())
         if canonical is None:
-            raise SuggestError(
-                f"The suggested move {move_raw!r} is not in the move pool; "
-                "only moves from the merged move pool can be suggested."
+            warnings.append(
+                f"dropped {move_raw.strip()!r} — not a known move in the pool"
             )
+            continue
         level = row.get("level")
         if not isinstance(level, int) or isinstance(level, bool):
-            raise SuggestError(
-                f"The suggested level for {move_raw!r} is not an integer: {level!r}."
+            warnings.append(
+                f"dropped {canonical} — its level {level!r} was not an integer"
             )
+            continue
         if not (0 <= level <= 100):
-            raise SuggestError(
-                f"The suggested level for {move_raw!r} ({level}) is outside [0, 100]."
+            warnings.append(
+                f"dropped {canonical} — its level {level} is outside [0, 100]"
             )
+            continue
         validated_rows.append(
             {
                 "level": level,
@@ -1340,8 +1369,18 @@ def _validate_learnset_result(
             }
         )
 
-    # Step 4: repeat-move B rule — deduplicate exact (level, move) pairs first,
-    # then enforce: ≤1 non-zero level per move + optional 1 L0 per move.
+    # If dropping junk left nothing, the draft was unusable — raise (retryable),
+    # don't return an empty learnset. A short-but-nonempty list is respected; its
+    # warnings make the drops visible and the user can retry or accept.
+    if not validated_rows:
+        raise SuggestError(
+            "No usable learnset rows survived validation; every proposed row was "
+            "dropped (unknown move or invalid level)."
+        )
+
+    # Step 4: repeat-move rule — repair, don't reject. Dedupe exact (level, move)
+    # pairs, then for each move keep at most one non-zero level (the LOWEST) plus
+    # at most one L0, dropping the rest with a warning.
     seen_pairs: set[tuple[int, str]] = set()
     deduped: list[dict[str, Any]] = []
     for row in validated_rows:
@@ -1350,29 +1389,26 @@ def _validate_learnset_result(
             seen_pairs.add(pair)
             deduped.append(row)
 
-    move_levels: dict[str, list[int]] = {}
-    for row in deduped:
-        move_levels.setdefault(row["move"], []).append(row["level"])
-
-    for move_name, levels in move_levels.items():
-        non_zero = [lvl for lvl in levels if lvl != 0]
-        zeros = [lvl for lvl in levels if lvl == 0]
-        if len(non_zero) > 1:
-            raise SuggestError(
-                f"The move {move_name!r} appears at multiple non-zero levels "
-                f"({', '.join(str(l) for l in non_zero)}). A move may appear at "
-                "most once at a non-zero level (plus optionally once at L0)."
-            )
-        if len(zeros) > 1:
-            raise SuggestError(
-                f"The move {move_name!r} appears more than once at level 0. "
-                "A move may appear at most once at L0."
-            )
-        if len(levels) > 2:
-            raise SuggestError(
-                f"The move {move_name!r} appears {len(levels)} times; "
-                "at most 2 rows per move are allowed (one L0 + one non-zero)."
-            )
+    kept_nonzero: dict[str, int] = {}
+    kept_zero: set[str] = set()
+    repaired: list[dict[str, Any]] = []
+    for row in sorted(deduped, key=lambda r: (r["level"], r["move"])):
+        move_name = row["move"]
+        if row["level"] == 0:
+            if move_name in kept_zero:
+                warnings.append(f"dropped duplicate {move_name} @L0")
+                continue
+            kept_zero.add(move_name)
+        else:
+            if move_name in kept_nonzero:
+                warnings.append(
+                    f"dropped duplicate {move_name} @{row['level']} "
+                    f"— kept @{kept_nonzero[move_name]}"
+                )
+                continue
+            kept_nonzero[move_name] = row["level"]
+        repaired.append(row)
+    deduped = repaired
 
     # Step 6: sort by (level, move name).
     deduped.sort(key=lambda r: (r["level"], r["move"]))
@@ -1399,11 +1435,14 @@ def _validate_learnset_result(
         {"learnset": rationale_text} if isinstance(rationale_text, str) else {}
     )
 
-    return {
+    contract: dict[str, Any] = {
         "draft": {"learnset": deduped},
         "rationale": rationale,
         "alternatives": alternatives,
     }
+    if warnings:
+        contract["warnings"] = warnings
+    return contract
 
 
 def _check_untouched_rows(
@@ -1510,6 +1549,7 @@ def suggest_learnset(
             current_learnset=current_learnset,
             instruction=instruction,
         ),
+        max_retries=_LEARNSET_MAX_RETRIES,
     )
 
 

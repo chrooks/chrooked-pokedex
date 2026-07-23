@@ -205,6 +205,16 @@ export function LearnsetStage(props: Props) {
         </div>
       </div>
 
+      {hook.warnings.length > 0 && (
+        <ul className="mk-slot-warnings" id="mk-learnset-warnings">
+          {hook.warnings.map((warning, i) => (
+            <li key={i} className="mk-slot-warning mono" role="status">
+              {warning}
+            </li>
+          ))}
+        </ul>
+      )}
+
       {draft !== null && line.length > 0 && (
         <details className="mk-mirror" id="mk-mirror-down" open>
           <summary className="mk-mirror__summary mono">

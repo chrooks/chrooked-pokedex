@@ -382,52 +382,59 @@ def test_validate_learnset_accepts_valid_result() -> None:
     assert len(out["draft"]["learnset"]) == 2
 
 
-def test_validate_learnset_rejects_hallucinated_move() -> None:
+def test_validate_learnset_drops_hallucinated_move_with_warning() -> None:
+    """Risk-tolerant contract: a hallucinated move is DROPPED with a warning while
+    valid rows survive, not rejected wholesale."""
     result = {
         "draft": {
             "learnset": [
-                {"level": 1, "move": "FakeMove", "reasoning": "invented"},
+                {"level": 1, "move": "Tackle", "reasoning": "basic"},
+                {"level": 5, "move": "FakeMove", "reasoning": "invented"},
             ]
         },
+        "rationale": {"learnset": "Mostly OK."},
+        "alternatives": [],
+    }
+    out = suggestmod._validate_learnset_result(
+        result, _make_pool(), mode="full", current_learnset=[]
+    )
+    moves = [r["move"] for r in out["draft"]["learnset"]]
+    assert moves == ["Tackle"]
+    assert any("FakeMove" in w for w in out["warnings"])
+
+
+def test_validate_learnset_all_rows_dropped_raises() -> None:
+    """If every row is junk, nothing survives → retryable SuggestError."""
+    result = {
+        "draft": {"learnset": [{"level": 5, "move": "FakeMove", "reasoning": "x"}]},
         "rationale": {"learnset": "Bad."},
         "alternatives": [],
     }
-    with pytest.raises(suggestmod.SuggestError, match="move pool"):
+    with pytest.raises(suggestmod.SuggestError, match="No usable learnset rows"):
         suggestmod._validate_learnset_result(
             result, _make_pool(), mode="full", current_learnset=[]
         )
 
 
-def test_validate_learnset_rejects_level_101() -> None:
+def test_validate_learnset_drops_out_of_range_level_with_warning() -> None:
+    """A level outside [0, 100] drops that row with a warning; valid rows stay."""
     result = {
         "draft": {
             "learnset": [
-                {"level": 101, "move": "Tackle", "reasoning": "too high"},
+                {"level": 1, "move": "Tackle", "reasoning": "ok"},
+                {"level": 101, "move": "Dragon Pulse", "reasoning": "too high"},
+                {"level": -1, "move": "Dragon Pulse", "reasoning": "negative"},
             ]
         },
-        "rationale": {"learnset": "Bad."},
+        "rationale": {"learnset": "Mixed."},
         "alternatives": [],
     }
-    with pytest.raises(suggestmod.SuggestError, match="outside \\[0, 100\\]"):
-        suggestmod._validate_learnset_result(
-            result, _make_pool(), mode="full", current_learnset=[]
-        )
-
-
-def test_validate_learnset_rejects_negative_level() -> None:
-    result = {
-        "draft": {
-            "learnset": [
-                {"level": -1, "move": "Tackle", "reasoning": "negative"},
-            ]
-        },
-        "rationale": {"learnset": "Bad."},
-        "alternatives": [],
-    }
-    with pytest.raises(suggestmod.SuggestError, match="outside \\[0, 100\\]"):
-        suggestmod._validate_learnset_result(
-            result, _make_pool(), mode="full", current_learnset=[]
-        )
+    out = suggestmod._validate_learnset_result(
+        result, _make_pool(), mode="full", current_learnset=[]
+    )
+    moves = [r["move"] for r in out["draft"]["learnset"]]
+    assert moves == ["Tackle"]
+    assert sum("Dragon Pulse" in w for w in out["warnings"]) == 2
 
 
 def test_validate_learnset_accepts_level_zero() -> None:
@@ -468,63 +475,46 @@ def test_validate_learnset_accepts_l0_plus_nonzero_same_move() -> None:
     assert moves.count("Dragon Pulse") == 2
 
 
-def test_validate_learnset_rejects_two_nonzero_levels() -> None:
-    """Same move at two non-zero levels → SuggestError."""
+def test_validate_learnset_repairs_two_nonzero_levels_keeping_lowest() -> None:
+    """Risk-tolerant contract: a move at two non-zero levels is REPAIRED by keeping
+    the lowest and dropping the rest with a warning (Chris's Bonemerang case)."""
     result = {
         "draft": {
             "learnset": [
-                {"level": 5, "move": "Tackle", "reasoning": "first"},
                 {"level": 20, "move": "Tackle", "reasoning": "second"},
+                {"level": 5, "move": "Tackle", "reasoning": "first"},
             ]
         },
-        "rationale": {"learnset": "Bad."},
+        "rationale": {"learnset": "Fixable."},
         "alternatives": [],
     }
-    with pytest.raises(suggestmod.SuggestError, match="multiple non-zero levels"):
-        suggestmod._validate_learnset_result(
-            result, _make_pool(), mode="full", current_learnset=[]
-        )
+    out = suggestmod._validate_learnset_result(
+        result, _make_pool(), mode="full", current_learnset=[]
+    )
+    rows = out["draft"]["learnset"]
+    assert [(r["level"], r["move"]) for r in rows] == [(5, "Tackle")]
+    assert any("Tackle" in w and "@20" in w for w in out["warnings"])
 
 
-def test_validate_learnset_rejects_more_than_two_rows_per_move() -> None:
-    """More than 2 rows for one move → SuggestError (>2 total rows violates D4).
-
-    Note: exact (level, move) duplicates are silently deduped first. To get >2
-    rows for one move they must be at different levels: L0 + L5 + L20 (3 rows).
-    """
+def test_validate_learnset_repairs_more_than_two_rows_per_move() -> None:
+    """L0 + two non-zero → keep L0 + the lowest non-zero, drop the extra, warn."""
     result = {
         "draft": {
             "learnset": [
-                # L0 + non-zero is valid (B carve-out), but L0 + L5 + L20 = 3 rows
-                # which means we'd need two non-zero levels → caught by the two-
-                # non-zero check first (which fires before the >2-rows check).
-                # So test exactly >2 by doing L0 + two non-zero (already covered)
-                # OR by having 3 different moves to confirm the path fires.
-                # The simplest valid test: assert the ">2 rows" error message path.
-                # We trigger it via the len(levels) > 2 guard after non-zero check.
-                # Two non-zero levels are rejected first; so test 3 identical
-                # exact-pair rows → they dedup to 1. Instead: test 3 distinct rows
-                # (L0, L5, L20) for one move to hit >2 rows. But two non-zero
-                # levels fires first. The `>2 rows` branch guards against an edge
-                # case that can't arise through the current logic, so we test the
-                # two-non-zero path which covers the same intent.
-                #
-                # This test now validates the `>2 rows` message is correct for
-                # L0 + two non-zero, but that hits `multiple non-zero levels` first.
-                # Adjust: we just confirm D4 errors cleanly for any >B-rule violation.
                 {"level": 0, "move": "Dragon Pulse", "reasoning": "on-evo"},
                 {"level": 5, "move": "Dragon Pulse", "reasoning": "first non-zero"},
                 {"level": 20, "move": "Dragon Pulse", "reasoning": "second non-zero"},
             ]
         },
-        "rationale": {"learnset": "Bad."},
+        "rationale": {"learnset": "Fixable."},
         "alternatives": [],
     }
-    # Two non-zero levels fires first (before >2 rows check).
-    with pytest.raises(suggestmod.SuggestError, match="non-zero"):
-        suggestmod._validate_learnset_result(
-            result, _make_pool(), mode="full", current_learnset=[]
-        )
+    out = suggestmod._validate_learnset_result(
+        result, _make_pool(), mode="full", current_learnset=[]
+    )
+    kept = sorted((r["level"], r["move"]) for r in out["draft"]["learnset"])
+    assert kept == [(0, "Dragon Pulse"), (5, "Dragon Pulse")]
+    assert any("@20" in w for w in out["warnings"])
 
 
 def test_validate_learnset_deduplicates_exact_pairs() -> None:
@@ -858,17 +848,19 @@ def test_learnset_missing_list_repairs_in_one_retry(
 def test_learnset_missing_twice_errors_honestly_naming_what_came_back(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    provider = _SequenceProvider([_MISSING_LEARNSET_RESULT, _MISSING_LEARNSET_RESULT])
+    # Learnset retries eagerly (3 extra attempts); a persistently missing list
+    # exhausts all four calls, then errors honestly.
+    provider = _SequenceProvider([_MISSING_LEARNSET_RESULT] * 4)
     client = _make_client(ruleset_dir, tmp_path, provider)
 
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
 
     assert response.status_code == 422
     detail = response.json()["detail"]
-    # Not a bare dead end: names the original miss AND what the retry returned.
+    # Not a bare dead end: names the original miss AND what the retries returned.
     assert "learnset list" in detail
-    assert "after one automatic retry" in detail
-    assert len(provider.calls) == 2  # tried the repair, then gave up
+    assert "after 3 automatic retries" in detail
+    assert len(provider.calls) == 4  # first try + 3 eager repairs, then gave up
 
 
 def test_learnset_token_limit_raised_for_full_draft() -> None:
@@ -1011,9 +1003,11 @@ def test_suggest_learnset_surgical_writes_nothing(
 # ===========================================================================
 
 
-def test_suggest_learnset_hallucinated_move_is_422(
+def test_suggest_learnset_all_hallucinated_is_422(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
+    """A draft whose ONLY row is a hallucinated move drops to empty and, after the
+    eager retries, is an honest 422 — nothing written."""
     bad = {
         "draft": {
             "learnset": [
@@ -1029,8 +1023,34 @@ def test_suggest_learnset_hallucinated_move_is_422(
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
 
     assert response.status_code == 422
-    assert "move pool" in response.json()["detail"].lower()
+    assert "no usable learnset rows" in response.json()["detail"].lower()
     assert _species_files(ruleset_dir) == before
+
+
+def test_suggest_learnset_hallucinated_move_dropped_among_valid(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """A hallucinated move alongside valid rows is dropped with a warning; the
+    proposal still returns 200 with the valid rows (risk-tolerant contract)."""
+    mixed = {
+        "draft": {
+            "learnset": [
+                {"level": 1, "move": "Tackle", "reasoning": "basic"},
+                {"level": 5, "move": "FakeMoveXYZ", "reasoning": "invented"},
+            ]
+        },
+        "rationale": {"learnset": "Mostly OK."},
+        "alternatives": [],
+    }
+    client = _make_client(ruleset_dir, tmp_path, _FakeProvider(mixed))
+
+    response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
+
+    assert response.status_code == 200
+    body = response.json()
+    moves = [r["move"] for r in body["draft"]["learnset"]]
+    assert "FakeMoveXYZ" not in moves
+    assert any("FakeMoveXYZ" in w for w in body["warnings"])
 
 
 def test_suggest_learnset_edited_move_in_pool(tmp_path: Path) -> None:
@@ -1065,45 +1085,55 @@ def test_suggest_learnset_edited_move_in_pool(tmp_path: Path) -> None:
 # ===========================================================================
 
 
-def test_suggest_learnset_level_101_is_422(
+def test_suggest_learnset_out_of_range_level_dropped_among_valid(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    bad = {
+    """An out-of-range level is dropped with a warning; valid rows return 200."""
+    mixed = {
         "draft": {
             "learnset": [
-                {"level": 101, "move": "Tackle", "reasoning": "too high"},
+                {"level": 1, "move": "Tackle", "reasoning": "ok"},
+                {"level": 101, "move": "Dragon Pulse", "reasoning": "too high"},
             ]
         },
-        "rationale": {"learnset": "Bad."},
+        "rationale": {"learnset": "Mixed."},
         "alternatives": [],
     }
-    client = _make_client(ruleset_dir, tmp_path, _FakeProvider(bad))
+    client = _make_client(ruleset_dir, tmp_path, _FakeProvider(mixed))
 
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
 
-    assert response.status_code == 422
-    assert "0, 100" in response.json()["detail"]
+    assert response.status_code == 200
+    body = response.json()
+    moves = [r["move"] for r in body["draft"]["learnset"]]
+    assert moves == ["Tackle"]
+    assert any("Dragon Pulse" in w for w in body["warnings"])
 
 
-def test_suggest_learnset_two_nonzero_levels_is_422(
+def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    bad = {
+    """A move at two non-zero levels is repaired (keep lowest) and returns 200 with
+    a warning, not a 422 — Chris's risk-tolerant ruling."""
+    dupe = {
         "draft": {
             "learnset": [
                 {"level": 5, "move": "Tackle", "reasoning": "first"},
                 {"level": 20, "move": "Tackle", "reasoning": "second"},
             ]
         },
-        "rationale": {"learnset": "Bad."},
+        "rationale": {"learnset": "Fixable."},
         "alternatives": [],
     }
-    client = _make_client(ruleset_dir, tmp_path, _FakeProvider(bad))
+    client = _make_client(ruleset_dir, tmp_path, _FakeProvider(dupe))
 
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
 
-    assert response.status_code == 422
-    assert "non-zero" in response.json()["detail"].lower()
+    assert response.status_code == 200
+    body = response.json()
+    rows = [(r["level"], r["move"]) for r in body["draft"]["learnset"]]
+    assert rows == [(5, "Tackle")]
+    assert any("@20" in w for w in body["warnings"])
 
 
 def test_suggest_learnset_l0_plus_nonzero_accepted(
@@ -1500,9 +1530,10 @@ def test_line_endpoint_isolates_per_member_error(
         "rationale": {"learnset": "x"},
         "alternatives": [],
     }
-    # member1 → good; member2 → bad on both the first attempt AND the one automatic
-    # self-repair retry, so it ends as that member's stage error (isolation holds).
-    provider = _SequenceProvider([_GOOD_LEARNSET_RESULT, bad, bad])
+    # member1 → good (1 call); member2 → bad on the first attempt AND all 3 eager
+    # self-repair retries (4 calls), so it ends as that member's stage error
+    # (isolation holds). Its only row is junk → dropped → empty → honest error.
+    provider = _SequenceProvider([_GOOD_LEARNSET_RESULT, bad, bad, bad, bad])
     client = _make_client(ruleset_dir_no_goodra, tmp_path, provider)
 
     response = client.post("/api/species/goodra/suggest/learnset/line", json={})
@@ -1511,7 +1542,7 @@ def test_line_endpoint_isolates_per_member_error(
     stages = response.json()["stages"]
     assert stages[0]["error"] is None and stages[0]["draft"] is not None
     assert stages[1]["draft"] is None
-    assert "Flamethrower" in stages[1]["error"]
+    assert "no usable learnset rows" in stages[1]["error"].lower()
 
 
 def test_line_endpoint_missing_key_is_503(
