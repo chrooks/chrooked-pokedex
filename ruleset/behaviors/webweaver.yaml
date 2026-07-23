@@ -1,0 +1,37 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+#
+# Web Weaver fuses two known mechanics: an entry-hazard setter (like the weather/terrain
+# "on switch-in" abilities) and Arena Trap's grounded escape-lock. Reusable on any trapper.
+name: Web Weaver
+chrooked_id: webweaver
+applies_to: ability
+aka: { pokeemerald: ABILITY_WEB_WEAVER }
+effects:
+  - summary: "On switch-in, lay Sticky Web on the opposing side."
+    trigger: switch-in
+    when: "this Pokemon enters the battle and the opposing side does not already have Sticky Web set"
+    effect: "set the Sticky Web side hazard on the opposing side (as if the move Sticky Web had been used) — grounded foes that switch in have their Speed lowered by one stage"
+  - summary: "Grounded opposing Pokemon cannot switch out."
+    trigger: escape-check
+    when: "an opposing Pokemon that is grounded (not Flying-type, no Levitate, not holding Air Balloon, not under Magnet Rise/Telekinesis) attempts to switch out or flee while this Pokemon is active"
+    effect: "prevent the switch/flee, exactly as Arena Trap does — the foe is trapped on the ground by the web"
+test_cases:
+  - given: "a Web Weaver Pokemon switches in with no Sticky Web on the opposing side"
+    expect: "Sticky Web is set on the opposing side; the 'sticky web' entry message fires"
+  - given: "a Web Weaver Pokemon switches in and the opposing side already has Sticky Web"
+    expect: "no second Sticky Web is set (it does not stack)"
+  - given: "a grounded opposing Pokemon tries to switch out while Web Weaver is active"
+    expect: "the switch is blocked — the foe cannot escape (same as Arena Trap)"
+  - given: "an opposing Flying-type (or Levitate / Air Balloon holder) tries to switch out"
+    expect: "the switch succeeds — only grounded foes are trapped"
+  - given: "the opposing Pokemon holds a Shed Shell"
+    expect: "the switch succeeds — Shed Shell bypasses trapping, as with Arena Trap"
+notes:
+  - "Two independent clauses; either can be reused alone on a future ability. The trap clause is Arena Trap verbatim (grounded-only, Shed Shell / Ghost-type escape still bypass it). The entry clause mirrors the on-switch-in hazard/field setters."
+  - "Sticky Web here is the standard side hazard: it lowers the Speed of grounded foes that switch in by one stage, is removed by Defog/Rapid Spin/Mortal Spin, and does not stack."
+  - "Order on switch-in: set the hazard during the same on-switch-in resolution used by weather/terrain abilities."
+engine_hints:
+  pokeemerald: "Two seams. (1) Entry: ABILITYEFFECT_ON_SWITCHIN in src/battle_util.c — add a case ABILITY_WEB_WEAVER that sets SIDE_STATUS_STICKY_WEB on the opposing side (gSideStatuses[GetBattlerSide(BATTLE_OPPOSITE(battler))]) with the standard Sticky Web setup, mirroring how the terrain-setter abilities apply their field on entry; gate on the flag not already set so it does not stack. (2) Trap: add ABILITY_WEB_WEAVER alongside ABILITY_ARENA_TRAP in the escape-prevention path (GetBattlerEscapePreventionAbility / CanBattlerEscape), grounded-only, so it inherits Shed Shell / Ghost / Run-Away bypass for free."
+  essentials: "Rejuv is Essentials. (1) Entry: in the ability's on-switch-in / pbOnBattlerEnteringBattle handler, call the opposing side's pbStartSideEffect / add the :StickyWeb PBEffects hazard (same code path Sticky Web the move uses), only if not already present. (2) Trap: in pbCanSwitch? / the trapping check, treat Web Weaver exactly like Arena Trap — trap grounded foes, honoring the standard Shed Shell / airborne / Ghost-type escapes."

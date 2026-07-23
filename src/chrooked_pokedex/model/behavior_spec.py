@@ -39,6 +39,7 @@ TRIGGERS: frozenset[str] = frozenset(
         "stat-change",    # a stat stage would change
         "turn-end",       # end-of-turn resolution
         "faint",          # the Pokemon faints
+        "escape-check",   # a Pokemon attempts to switch out or flee
     }
 )
 
