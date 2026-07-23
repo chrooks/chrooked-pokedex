@@ -2,7 +2,6 @@
 name: makeover
 description: Run a full species-line makeover end to end — lore research, typing, stats, abilities, learnset, pre-evo copy-down, auto-apply to the active Rejuv target, read-back verification, commit and push. Orchestrates the existing suggest skills (one Seam each); design steps keep their confirm gates, the tail (apply, verify, commit) runs automatically. Use when the user asks for a "makeover" of a species or line, or names a line and a rework intent.
 argument-hint: "<species-chrooked-id> [direction...]"
-disable-model-invocation: true
 ---
 
 # Makeover — the full line-rework pipeline
@@ -63,11 +62,17 @@ stats, abilities, learnset rows, evolutions. Form species (e.g. `cherrimsunshine
 get checked individually — form-join bugs have shipped past the report before.
 Any mismatch: stop, report it, fix before continuing.
 
-## 8. Commit and push — automatic
+## 8. Design log + commit and push — automatic
 
-`/commit` the Ruleset changes (one logical scope; behaviors/engine work may be a second
-commit), then push. Lead the completion report with the read-back proof, then what
-changed, then the commit hashes.
+Before committing, append a short section to `ruleset/DESIGN-LOG.md`: date, line,
+the **direction picked** (and options rejected, when stage 1 ran), any **new mechanics**
+created, and the **corrections** the user gave in the tweak loops — near-verbatim, these
+are the raw material for refining the suggest-skill rubrics. The ledger records what
+changed; the design log records why.
+
+Then `/commit` the Ruleset changes (one logical scope; behaviors/engine work may be a
+second commit — the design-log entry rides with the Ruleset commit), then push. Lead the
+completion report with the read-back proof, then what changed, then the commit hashes.
 
 ## Invariants
 
