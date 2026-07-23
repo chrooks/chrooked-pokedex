@@ -532,17 +532,22 @@
   color: var(--edited);
   font-size: var(--text-xs);
 }
+/* The band annotation is a violation SIGNAL, not a color job of its own: the
+   severity is carried by the --chrome border + the row's --chrome tint (borders /
+   fills are not held to the 4.5:1 text floor), while the label text itself uses
+   --text-dim, which clears AA at 11px on the surface. Keeps one-color-one-job
+   honest — --chrome stays structure, and no new text color is invented. */
 .mk-lrow__band {
-  color: var(--chrome);
+  color: var(--text-dim);
   font-size: var(--text-xs);
   letter-spacing: 0.02em;
-  border: 1px solid var(--chrome-dim);
+  border: 1px solid var(--chrome);
   border-radius: var(--radius-sm);
   padding: 0 var(--space-1);
   white-space: nowrap;
 }
 .mk-lrow[data-violation] {
-  background: color-mix(in oklch, var(--chrome) 6%, transparent);
+  background: color-mix(in oklch, var(--chrome) 10%, transparent);
 }
 .mk-lrow__edit {
   background: none;

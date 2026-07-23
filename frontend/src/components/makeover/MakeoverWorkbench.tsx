@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DexEntry, Move, Target } from "../../types";
 import {
   defaultSelected,
+  facetSummary,
   firstUnlocked,
   resolveActiveStage,
   toggleSelected,
@@ -246,7 +247,7 @@ export function MakeoverWorkbench({
           changedIds={changedIds}
           targetId={targetId}
           targetLabel={targetLabel}
-          direction={direction}
+          direction={direction.trim() || facetSummary(selected)}
           corrections={corrections}
           onStage={(sub) => onStage(sub)}
           onDone={onExit}

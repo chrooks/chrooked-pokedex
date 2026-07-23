@@ -3,6 +3,7 @@ import {
   DESIGN_STAGES,
   canNavigate,
   defaultSelected,
+  facetSummary,
   firstUnlocked,
   lockedFromFields,
   resolveActiveStage,
@@ -43,6 +44,21 @@ describe("defaultSelected — smart defaults", () => {
   });
   it("a fully made-over species defaults to mirror-only (empty selection)", () => {
     expect(defaultSelected(["types", "stats", "abilities", "learnset"]).size).toBe(0);
+  });
+});
+
+describe("facetSummary — direction-less design-log line (ac6)", () => {
+  it("names a single-facet repass", () => {
+    expect(facetSummary(sel("learnset"))).toBe("learnset-only repass");
+  });
+  it("names a multi-facet repass", () => {
+    expect(facetSummary(sel("typing", "stats"))).toBe("typing + stats repass");
+  });
+  it("describes the mirror-only journey when nothing is selected", () => {
+    expect(facetSummary(sel())).toBe("mirror-only: current kit onto pre-evos");
+  });
+  it("ignores direction (not a written facet)", () => {
+    expect(facetSummary(sel("direction", "learnset"))).toBe("learnset-only repass");
   });
 });
 

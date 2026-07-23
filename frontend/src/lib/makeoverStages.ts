@@ -90,6 +90,16 @@ export function defaultSelected(
   return new Set(DESIGN_STAGES.filter((stage) => !locked.has(stage)));
 }
 
+/** A facet-derived summary for the design-log line when the run had no picked
+    direction (ac6): a direction-less à la carte run (learnset-only, mirror-only)
+    still logs *why* by naming the facets it touched. */
+export function facetSummary(selected: ReadonlySet<DesignStage>): string {
+  const worked = DESIGN_STAGES.filter((s) => s !== "direction" && selected.has(s));
+  if (worked.length === 0) return "mirror-only: current kit onto pre-evos";
+  if (worked.length === 1) return `${worked[0]}-only repass`;
+  return `${worked.join(" + ")} repass`;
+}
+
 /** Toggle a stage in/out of the selection (immutable). KEEP ⇄ selected. */
 export function toggleSelected(
   selected: ReadonlySet<DesignStage>,
