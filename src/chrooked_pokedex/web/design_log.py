@@ -29,25 +29,28 @@ class DesignLogError(ValueError):
 def render_entry(
     *,
     line: str,
-    direction: str,
+    direction: str = "",
     on_date: str,
     new_mechanics: str | None = None,
     corrections: str | None = None,
 ) -> str:
     """Render one dated section, mirroring the existing DESIGN-LOG.md format.
 
-    ``line`` and ``direction`` are required (an entry with neither says nothing).
-    ``new_mechanics`` and ``corrections`` are optional bullets, omitted when blank.
-    Returns the section text ending in a single newline.
+    Only ``line`` is required. ``direction`` is OPTIONAL: a direction-less à la
+    carte run (learnset-only, mirror-only) has no picked direction, so the caller
+    supplies a facet-derived summary instead — but if even that is blank the
+    Direction bullet is simply omitted (never a 422). ``new_mechanics`` and
+    ``corrections`` are optional bullets, omitted when blank. Returns the section
+    text ending in a single newline.
     """
     line = (line or "").strip()
     direction = (direction or "").strip()
     if not line:
         raise DesignLogError("A design-log entry needs a line name.")
-    if not direction:
-        raise DesignLogError("A design-log entry needs the direction picked.")
 
-    parts = [f"## {on_date} — {line}", "", f"- **Direction:** {direction}"]
+    parts = [f"## {on_date} — {line}", ""]
+    if direction:
+        parts.append(f"- **Direction:** {direction}")
     if new_mechanics and new_mechanics.strip():
         parts.append(f"- **New mechanics:** {new_mechanics.strip()}")
     if corrections and corrections.strip():
@@ -59,7 +62,7 @@ def append_entry(
     design_log_path: Path | str,
     *,
     line: str,
-    direction: str,
+    direction: str = "",
     on_date: str | None = None,
     new_mechanics: str | None = None,
     corrections: str | None = None,

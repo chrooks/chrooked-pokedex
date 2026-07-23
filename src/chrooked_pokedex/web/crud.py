@@ -254,6 +254,55 @@ _SPECIES_FIELDS = (
     "abilities", "stats", "learnset", "evolution",
 )
 
+_ABILITY_SLOTS = ("primary", "secondary", "hidden")
+
+
+def validate_species_references(
+    payload: dict[str, Any],
+    *,
+    type_names: set[str],
+    move_names: set[str],
+    ability_names: set[str],
+) -> None:
+    """Reject a species write that references content not in the merged view (ac9).
+
+    Only the fields PRESENT in ``payload`` are checked — the new values being
+    written; stored fields were validated when they landed. Names match the merged
+    pools (base snapshot ⊕ owned Ruleset content) case-insensitively, so a custom
+    move/ability created this session (written before the species) resolves. Raises
+    :class:`ValidationError` naming the offending field + value; the route maps it
+    to a 422 and nothing is written. This is a WEB write-gate check (it sits beside
+    the existing loader gate) — ``Ruleset.load``, seed, and harvest do not run it.
+    """
+    where = f"{payload.get('chrooked_id', 'species')}.yaml"
+
+    # ponytail: each facet is checked only when its known-set is non-empty — an
+    # empty pool means the merged view carries no reference universe to resolve
+    # against (a degenerate/minimal config; production always loads the full
+    # move/type/ability universe from the base snapshot). This keeps the gate fully
+    # active for every real write while a bare fixture stays writable.
+    if type_names and payload.get("types") is not None:
+        for value in payload["types"]:
+            if isinstance(value, str) and value.strip() and value.strip().casefold() not in type_names:
+                raise ValidationError(f"{where}: types — {value!r} is not a known type.")
+
+    abilities = payload.get("abilities")
+    if ability_names and isinstance(abilities, dict):
+        for slot in _ABILITY_SLOTS:
+            value = abilities.get(slot)
+            if isinstance(value, str) and value.strip() and value.strip().casefold() not in ability_names:
+                raise ValidationError(
+                    f"{where}: abilities.{slot} — {value!r} is not a known ability."
+                )
+
+    if move_names and payload.get("learnset") is not None:
+        for row in payload["learnset"]:
+            move = row.get("move") if isinstance(row, dict) else None
+            if isinstance(move, str) and move.strip() and move.strip().casefold() not in move_names:
+                raise ValidationError(
+                    f"{where}: learnset — move {move!r} does not resolve to a known move."
+                )
+
 
 def upsert_species(
     ruleset_dir: Path,

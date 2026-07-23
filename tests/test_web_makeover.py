@@ -44,8 +44,24 @@ _SNAPSHOT = {
     },
     "abilities": {
         "sap-sipper": {"chrooked_id": "sap-sipper", "name": "Sap Sipper", "description": "x", "aka": {}},
+        "gooey": {"chrooked_id": "gooey", "name": "Gooey", "description": "x", "aka": {}},
     },
-    "moves": {},
+    "moves": {
+        "tackle": {
+            "chrooked_id": "tackle", "name": "Tackle", "type": "Normal",
+            "category": "Physical", "power": 40, "accuracy": 100, "pp": 35,
+            "description": "x", "effect": "hit", "argument": None,
+            "additional_effects": [], "flags": [], "priority": 0,
+            "target": "selected", "aka": {},
+        },
+        "dragon-pulse": {
+            "chrooked_id": "dragon-pulse", "name": "Dragon Pulse", "type": "Dragon",
+            "category": "Special", "power": 85, "accuracy": 100, "pp": 10,
+            "description": "x", "effect": "hit", "argument": None,
+            "additional_effects": [], "flags": [], "priority": 0,
+            "target": "selected", "aka": {},
+        },
+    },
     # The type pool is the distinct set across the chart; list the types the
     # lore/typing tests pick from so the validator recognizes them.
     "type_chart": [
@@ -205,17 +221,40 @@ def test_design_log_appends_section(ruleset_dir: Path, tmp_path: Path) -> None:
 
 
 @pytest.mark.unit
-def test_design_log_requires_direction(ruleset_dir: Path, tmp_path: Path) -> None:
+def test_design_log_accepts_directionless_run(ruleset_dir: Path, tmp_path: Path) -> None:
+    # A direction-less à la carte run (learnset-only/mirror-only) sends a
+    # facet-derived summary as the direction — the endpoint must NOT 422 (ac6).
     client = _client(ruleset_dir, tmp_path)
     log_path = ruleset_dir / "DESIGN-LOG.md"
-    before = log_path.read_text(encoding="utf-8") if log_path.exists() else None
 
-    response = client.post("/api/design-log", json={"line": "Goodra line"})
+    response = client.post(
+        "/api/design-log",
+        json={"line": "Goodra line", "direction": "learnset-only repass"},
+    )
 
+    assert response.status_code == 200
+    assert "learnset-only repass" in log_path.read_text(encoding="utf-8")
+
+
+@pytest.mark.unit
+def test_design_log_omits_direction_bullet_when_blank(ruleset_dir: Path, tmp_path: Path) -> None:
+    # Even a truly blank direction must not 422; the Direction bullet is omitted.
+    client = _client(ruleset_dir, tmp_path)
+
+    response = client.post("/api/design-log", json={"line": "Goodra line", "corrections": "x"})
+
+    assert response.status_code == 200
+    section = response.json()["section"]
+    assert "## " in section
+    assert "**Direction:**" not in section
+    assert "**Corrections:**" in section
+
+
+@pytest.mark.unit
+def test_design_log_still_requires_a_line(ruleset_dir: Path, tmp_path: Path) -> None:
+    client = _client(ruleset_dir, tmp_path)
+    response = client.post("/api/design-log", json={"direction": "whatever"})
     assert response.status_code == 422
-    # Nothing was written on the reject.
-    after = log_path.read_text(encoding="utf-8") if log_path.exists() else None
-    assert after == before
 
 
 @pytest.mark.unit
@@ -274,3 +313,91 @@ def test_read_back_missing_species_fails() -> None:
     diff = readbackmod.diff_species(expected, None, fields=["types"])
     assert diff["missing"] is True
     assert diff["ok"] is False
+
+
+# --------------------------------------------------------------------------- #
+# ac9 — referential validation at the species write gate
+# --------------------------------------------------------------------------- #
+
+
+def _species_files_now(ruleset_dir: Path) -> set[str]:
+    d = ruleset_dir / "species"
+    return {p.name for p in d.iterdir()} if d.exists() else set()
+
+
+@pytest.mark.unit
+def test_write_gate_rejects_unknown_move(ruleset_dir: Path, tmp_path: Path) -> None:
+    client = _client(ruleset_dir, tmp_path)
+    before = _species_files_now(ruleset_dir)
+
+    response = client.put(
+        "/api/species/goodra",
+        json={
+            "name": "Goodra",
+            "chrooked_id": "goodra",
+            "learnset": [{"level": 1, "move": "Nonexistent Move"}],
+        },
+    )
+
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert "learnset" in detail and "Nonexistent Move" in detail
+    # Nothing new written on the reject (the gate ran before the write).
+    assert _species_files_now(ruleset_dir) == before or "goodra.yaml" in before
+
+
+@pytest.mark.unit
+def test_write_gate_rejects_unknown_type(ruleset_dir: Path, tmp_path: Path) -> None:
+    client = _client(ruleset_dir, tmp_path)
+    response = client.put(
+        "/api/species/goodra",
+        json={"name": "Goodra", "chrooked_id": "goodra", "types": ["Faketype"]},
+    )
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert "types" in detail and "Faketype" in detail
+
+
+@pytest.mark.unit
+def test_write_gate_rejects_unknown_ability(ruleset_dir: Path, tmp_path: Path) -> None:
+    client = _client(ruleset_dir, tmp_path)
+    response = client.put(
+        "/api/species/goodra",
+        json={"name": "Goodra", "chrooked_id": "goodra", "abilities": {"primary": "Imaginary"}},
+    )
+    assert response.status_code == 422
+    assert "Imaginary" in response.json()["detail"]
+
+
+@pytest.mark.unit
+def test_write_gate_accepts_valid_references(ruleset_dir: Path, tmp_path: Path) -> None:
+    client = _client(ruleset_dir, tmp_path)
+    response = client.put(
+        "/api/species/goodra",
+        json={
+            "name": "Goodra",
+            "chrooked_id": "goodra",
+            "types": ["Water", "Dragon"],
+            "abilities": {"primary": "Sap Sipper", "hidden": "Gooey"},
+            "learnset": [{"level": 1, "move": "Tackle"}, {"level": 0, "move": "Dragon Pulse"}],
+        },
+    )
+    assert response.status_code == 200
+
+
+@pytest.mark.unit
+def test_write_gate_accepts_owned_custom_ability(ruleset_dir: Path, tmp_path: Path) -> None:
+    # A custom ability created this session (written BEFORE the species) must
+    # resolve — the merged view includes owned content (ac9).
+    client = _client(ruleset_dir, tmp_path)
+    made = client.put(
+        "/api/abilities/tidalforce",
+        json={"chrooked_id": "tidalforce", "name": "Tidal Force", "description": "x", "aka": {}},
+    )
+    assert made.status_code == 200
+
+    response = client.put(
+        "/api/species/goodra",
+        json={"name": "Goodra", "chrooked_id": "goodra", "abilities": {"hidden": "Tidal Force"}},
+    )
+    assert response.status_code == 200

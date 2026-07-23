@@ -329,6 +329,28 @@ def create_app(
         chrooked_id: str, payload: dict[str, Any], scope: str = "base"
     ) -> dict[str, Any]:
         try:
+            # Referential write-gate (ac9): reject a BASE write whose types / ability
+            # names / learnset moves don't resolve against the merged view (base ⊕
+            # owned content), naming the offending field. Only base scope — a
+            # target-scoped re-theme resolves against that fork's own universe (the
+            # target engine validates it on apply), not the base pools. Sits beside
+            # the loader gate; seed/harvest/Ruleset.load never run it.
+            if scope == "base":
+                snapshot = _load_snapshot_or_503()
+                ruleset = _load_ruleset_or_503()
+                crudmod.validate_species_references(
+                    {**payload, "chrooked_id": chrooked_id},
+                    type_names={t.casefold() for t in dexmod.build_type_pool(snapshot, ruleset)},
+                    move_names={
+                        row["move"].casefold()
+                        for row in dexmod.build_move_pool(snapshot, ruleset)
+                    },
+                    ability_names={
+                        entry["name"].casefold()
+                        for entry in dexmod.build_abilities(snapshot, ruleset)
+                        if entry.get("name")
+                    },
+                )
             return crudmod.upsert_species(
                 _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
             )

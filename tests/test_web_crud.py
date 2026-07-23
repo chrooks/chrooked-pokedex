@@ -41,11 +41,30 @@ _SNAPSHOT = {
             "learnset": [{"level": 1, "move": "Tackle"}],
         },
     },
-    "moves": {},
-    "abilities": {},
-    # A base cell so a PUT override merges onto it (canon /api/type-chart is now
-    # the full base ⊕ Ruleset grid, merged per cell).
-    "type_chart": [{"attacker": "Water", "defender": "Fire", "multiplier": 1.0}],
+    # The moves/abilities these CRUD tests write into species learnsets/slots must
+    # exist in the merged pool for the referential write-gate (ac9) to accept them.
+    "moves": {
+        name.lower().replace(" ", "-"): {
+            "chrooked_id": name.lower().replace(" ", "-"), "name": name,
+            "type": "Normal", "category": "Physical", "power": 50, "accuracy": 100,
+            "pp": 20, "description": "x", "effect": "hit", "argument": None,
+            "additional_effects": [], "flags": [], "priority": 0,
+            "target": "selected", "aka": {},
+        }
+        for name in ("Tackle", "Slash", "Aerial Ace", "Hydro Pump", "Megahorn")
+    },
+    "abilities": {
+        "sap-sipper": {"chrooked_id": "sap-sipper", "name": "Sap Sipper", "description": "x", "aka": {}},
+        "gooey": {"chrooked_id": "gooey", "name": "Gooey", "description": "x", "aka": {}},
+        "rough-skin": {"chrooked_id": "rough-skin", "name": "Rough Skin", "description": "x", "aka": {}},
+    },
+    # Base cells so a PUT override merges onto them (canon /api/type-chart is now
+    # the full base ⊕ Ruleset grid, merged per cell). Water + Dragon appear so the
+    # referential write-gate (ac9) recognizes the types these tests write.
+    "type_chart": [
+        {"attacker": "Water", "defender": "Fire", "multiplier": 1.0},
+        {"attacker": "Dragon", "defender": "Dragon", "multiplier": 1.0},
+    ],
 }
 
 
@@ -121,8 +140,8 @@ def test_put_species_sorts_learnset_ascending_by_level(
         "learnset": [
             {"level": 29, "move": "Aerial Ace"},
             {"level": 63, "move": "Hydro Pump"},
-            {"level": 15, "move": "Water Whip"},
-            {"level": 42, "move": "Pixie Slash"},
+            {"level": 15, "move": "Slash"},
+            {"level": 42, "move": "Megahorn"},
         ],
     }
     response = client.put("/api/species/samurott", json=payload)
