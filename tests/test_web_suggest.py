@@ -292,3 +292,93 @@ def test_build_ability_pool_trims_and_sorts() -> None:
         {"name": "Adrenaline", "description": "a"},
         {"name": "Zephyr", "description": "z"},
     ]
+
+
+# --------------------------------------------------------------------------- #
+# Hallucinated-move self-repair (a MOVE proposed for an ability slot must not
+# nuke the whole proposal). One retry → partial → NO PROPOSAL only when empty.
+# --------------------------------------------------------------------------- #
+
+
+class _ScriptedProvider:
+    """Returns a scripted result per call (the last repeats if calls exceed it)."""
+
+    def __init__(self, results: list[dict[str, Any]]) -> None:
+        self.results = results
+        self.calls: list[dict[str, Any]] = []
+
+    def propose(self, **kwargs: Any) -> dict[str, Any]:
+        self.calls.append(kwargs)
+        index = min(len(self.calls) - 1, len(self.results) - 1)
+        return self.results[index]
+
+
+def _draft(abilities: dict[str, str]) -> dict[str, Any]:
+    return {"draft": {"abilities": abilities}, "rationale": {}, "alternatives": []}
+
+
+def test_invalid_then_valid_repairs_in_one_retry(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _ScriptedProvider([
+        _draft({"hidden": "Nasty Plot"}),  # a MOVE — invalid
+        _draft({"hidden": "Rough Skin"}),  # corrected on retry
+    ])
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/ability")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["draft"]["abilities"] == {"hidden": "Rough Skin"}
+    assert body.get("repaired") == 1
+    assert "warnings" not in body  # fully corrected → no warnings
+    assert len(provider.calls) == 2  # exactly one retry
+
+
+def test_invalid_twice_returns_partial_with_warnings(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _ScriptedProvider([
+        _draft({"primary": "Nasty Plot"}),                         # invalid move
+        _draft({"primary": "Sap Sipper", "hidden": "Swords Dance"}),  # 1 valid, 1 move
+    ])
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/ability")
+
+    assert response.status_code == 200
+    body = response.json()
+    # The valid slot survives; the still-invalid slot is a per-slot warning.
+    assert body["draft"]["abilities"] == {"primary": "Sap Sipper"}
+    assert body["warnings"] and "Swords Dance" in body["warnings"][0]
+    assert "hidden" in body["warnings"][0]
+    assert body["repaired"] == 1
+
+
+def test_repair_preserves_valid_slot_from_first_attempt(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _ScriptedProvider([
+        _draft({"primary": "Sap Sipper", "hidden": "Nasty Plot"}),  # 1 valid, 1 move
+        _draft({"hidden": "Rough Skin"}),                            # retry fixes hidden only
+    ])
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/ability")
+
+    assert response.status_code == 200
+    # primary from the first attempt AND hidden from the retry both survive.
+    assert response.json()["draft"]["abilities"] == {
+        "primary": "Sap Sipper",
+        "hidden": "Rough Skin",
+    }
+    assert "warnings" not in response.json()
+
+
+def test_all_invalid_twice_is_no_proposal(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _ScriptedProvider([
+        _draft({"primary": "Nasty Plot"}),
+        _draft({"primary": "Swords Dance"}),
+    ])
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/ability")
+
+    assert response.status_code == 422
+    assert "existing" in response.json()["detail"].lower()
+    assert len(provider.calls) == 2  # tried the repair, then gave up

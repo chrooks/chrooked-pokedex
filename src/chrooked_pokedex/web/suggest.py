@@ -116,7 +116,11 @@ def _build_rubric() -> str:
         "You are a Pokémon game-design assistant. Given one species and the full "
         "pool of existing abilities, recommend the best-fit EXISTING ability for a "
         "slot. You MUST pick only from the provided ability pool — never invent a "
-        "new ability. Score candidates on:\n"
+        "new ability, and NEVER propose a MOVE. A move is not an ability: names "
+        "like 'Nasty Plot', 'Swords Dance', or 'Recover' are MOVES and must never "
+        "appear in an ability slot. Every value you emit for a slot must be an "
+        "ability that appears verbatim in the ability pool below. Score candidates "
+        "on:\n"
         "- Type synergy: the ability boosts or interacts with the species' types.\n"
         "- Stat alignment: physical abilities for physical attackers, special for "
         "special, defensive for tanks (judge by the base stats).\n"
@@ -211,85 +215,146 @@ def suggest_ability(
     abilities: list[dict[str, Any]],
     direction: str | None = None,
 ) -> dict[str, Any]:
-    """Propose a best-fit existing ability for a species; never writes a file.
+    """Propose best-fit existing abilities for a species; never writes a file.
 
-    Assembles the rubric + context, runs ONE bounded Port call, then validates
-    that every ability the model named (in the draft slots and in the
-    alternatives) exists in the real pool — a hallucinated name is a clean
-    :class:`SuggestError`, not a silently-bad draft. Returns the reusable
-    ``{draft, rationale, alternatives}`` contract.
+    Assembles the rubric + context and runs a bounded Port call. If the model
+    names something that is NOT an existing ability (typically a MOVE, e.g.
+    'Nasty Plot'), it does ONE automatic self-repair retry, feeding the violation
+    back verbatim. Valid slots from BOTH attempts are preserved; any slot still
+    invalid after the retry becomes a per-slot ``warnings`` entry (verbatim
+    message) rather than nuking the whole proposal. Only when ZERO slots survive
+    is it a :class:`SuggestError` (NO PROPOSAL). Returns the reusable
+    ``{draft, rationale, alternatives}`` contract, plus ``warnings`` and a
+    ``repaired`` count when a repair ran.
     """
     pool = build_ability_pool(abilities)
     if not pool:
         raise SuggestError("No abilities are available to suggest from.")
 
+    known = _pool_names(pool)
+    system = _build_rubric()
     cached_context = "Ability pool (pick only from these):\n" + _format_pool(pool)
-    result = provider.propose(
-        system=_build_rubric(),
-        cached_context=cached_context,
-        user=_build_user_context(entry, direction),
-        schema=_draft_schema(),
-        max_tokens=DEFAULT_MAX_TOKENS,
-    )
+    user = _build_user_context(entry, direction)
 
-    return _validate_result(result, pool)
+    def _run(user_text: str) -> dict[str, Any]:
+        return provider.propose(
+            system=system,
+            cached_context=cached_context,
+            user=user_text,
+            schema=_draft_schema(),
+            max_tokens=DEFAULT_MAX_TOKENS,
+        )
+
+    result = _run(user)
+    valid, invalid = _split_ability_slots(_draft_abilities(result), known)
+
+    repaired = 0
+    if invalid:
+        # ONE self-repair retry: feed the exact violation back so the model can
+        # correct the offending slot(s). No more than one — an unbounded loop on a
+        # stubborn model would burn tokens for nothing.
+        result = _run(f"{user}\n\n{_ability_repair_note(invalid)}")
+        valid_retry, invalid = _split_ability_slots(_draft_abilities(result), known)
+        repaired = 1
+        # Preserve valid slots from EITHER attempt (the retry wins a conflict), so
+        # a good slot from the first pass is not lost if the retry drops it.
+        valid = {**valid, **valid_retry}
+        invalid = [(slot, value) for slot, value in invalid if slot not in valid]
+
+    warnings = [_ability_slot_warning(slot, value) for slot, value in invalid]
+
+    if not valid:
+        # Nothing survived even after the repair — an honest NO PROPOSAL.
+        raise SuggestError(
+            warnings[0] if warnings else "The suggestion did not propose any ability."
+        )
+
+    return _build_ability_response(result, valid, known, warnings, repaired)
 
 
-def _validate_result(
-    result: dict[str, Any], pool: list[dict[str, str]]
-) -> dict[str, Any]:
-    """Shape-and-pool check on the model's draft (the draft is never trusted).
-
-    The Port forces the JSON shape, but the *values* are model output: confirm
-    `result` carries the contract keys and that every proposed/alternative
-    ability name is a real pool member. Any miss is a `SuggestError` — nothing
-    is written and the endpoint surfaces an honest message.
-    """
+def _draft_abilities(result: Any) -> dict[str, Any]:
+    """The draft.abilities object, or a `SuggestError` on a malformed response."""
     if not isinstance(result, dict):
         raise SuggestError("The suggestion came back in an unexpected shape.")
-
     draft = result.get("draft")
     if not isinstance(draft, dict) or not isinstance(draft.get("abilities"), dict):
         raise SuggestError("The suggestion was missing a draft abilities object.")
+    return draft["abilities"]
 
-    known = _pool_names(pool)
-    proposed_slots = {
-        slot: value
-        for slot, value in draft["abilities"].items()
-        if slot in _ABILITY_SLOTS and value
-    }
-    if not proposed_slots:
-        raise SuggestError("The suggestion did not propose any ability.")
 
-    for slot, value in proposed_slots.items():
-        if value.strip().casefold() not in known:
-            raise SuggestError(
-                f"The suggested ability {value!r} for the {slot} slot is not an "
-                "existing ability; only existing abilities can be suggested."
-            )
+def _split_ability_slots(
+    abilities: dict[str, Any], known: set[str]
+) -> tuple[dict[str, str], list[tuple[str, str]]]:
+    """Partition proposed slots into (valid pool members, invalid name pairs)."""
+    valid: dict[str, str] = {}
+    invalid: list[tuple[str, str]] = []
+    for slot, value in abilities.items():
+        if slot not in _ABILITY_SLOTS or not value:
+            continue
+        if value.strip().casefold() in known:
+            valid[slot] = value
+        else:
+            invalid.append((slot, value))
+    return valid, invalid
 
+
+def _ability_slot_warning(slot: str, value: str) -> str:
+    """The verbatim per-slot rejection message (unchanged wording, now a warning)."""
+    return (
+        f"The suggested ability {value!r} for the {slot} slot is not an existing "
+        "ability; only existing abilities can be suggested."
+    )
+
+
+def _ability_repair_note(invalid: list[tuple[str, str]]) -> str:
+    """The correction fed back to the model on the one self-repair retry."""
+    lines = ["Your previous answer named things that are NOT existing abilities:"]
+    for slot, value in invalid:
+        lines.append(
+            f"- {value!r} for the {slot} slot (this is likely a MOVE or an invented "
+            "name, not an ability)."
+        )
+    lines.append(
+        "Re-propose using ONLY ability names that appear verbatim in the ability "
+        "pool. Do not propose any move."
+    )
+    return "\n".join(lines)
+
+
+def _build_ability_response(
+    result: dict[str, Any],
+    valid: dict[str, str],
+    known: set[str],
+    warnings: list[str],
+    repaired: int,
+) -> dict[str, Any]:
+    """Assemble the contract from the surviving valid slots + filtered extras."""
     alternatives = []
     for alt in result.get("alternatives") or []:
         if not isinstance(alt, dict):
             continue
         value = alt.get("value")
         if not value or value.strip().casefold() not in known:
-            # Drop a hallucinated alternative rather than failing the whole
-            # request — the primary draft is the load-bearing part.
+            # Drop a hallucinated alternative; the primary draft is load-bearing.
             continue
         alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
 
     rationale = {
         slot: text
         for slot, text in (result.get("rationale") or {}).items()
-        if slot in proposed_slots and isinstance(text, str)
+        if slot in valid and isinstance(text, str)
     }
 
-    return {
-        "draft": {"abilities": proposed_slots},
+    response: dict[str, Any] = {
+        "draft": {"abilities": valid},
         "rationale": rationale,
         "alternatives": alternatives,
     }
+    if warnings:
+        response["warnings"] = warnings
+    if repaired:
+        response["repaired"] = repaired
+    return response
 
 
 # =========================================================================== #
