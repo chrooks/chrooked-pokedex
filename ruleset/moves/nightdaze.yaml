@@ -1,0 +1,11 @@
+name: Night Daze
+chrooked_id: nightdaze
+aka: { pokeemerald: MOVE_NIGHT_DAZE }
+type: Dark
+category: special
+power: 95
+accuracy: 100
+pp: 10
+description: Looses a pitch-black shock wave. May lower accuracy.
+additional_effects:
+  - { effect: acc_minus_1, chance: 40 }

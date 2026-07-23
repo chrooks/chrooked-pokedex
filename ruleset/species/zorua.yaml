@@ -1,9 +1,7 @@
-name: Zoroark
-chrooked_id: zoroark
-aka: { pokeemerald: SPECIES_ZOROARK }
-stats: { spe: 115 }
+name: Zorua
+chrooked_id: zorua
+aka: {  }
 learnset:
-  - { level: 0, move: Night Daze }
   - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
   - { level: 1, move: Torment }
