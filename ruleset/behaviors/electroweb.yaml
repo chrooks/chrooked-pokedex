@@ -1,0 +1,35 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# Electroweb carries the chrooked buff's 50% paralysis rider. The Speed drop is native
+# (Rejuv function 0x044 / pokeemerald's own additional effect), so the data layer's
+# additional_effects already express it. This behavior only exists because the Rejuv
+# move applier does not translate additional_effects into engine code — so the paralysis
+# half needs a plugin. See fangflinch for the same "funccode does one half, plugin adds
+# the other" split.
+name: Electroweb
+chrooked_id: electroweb
+applies_to: move
+effects:
+  - summary: "Electroweb has a 50% chance to paralyze the target on hit."
+    trigger: on-hit
+    when: "Electroweb connects and the target can be paralyzed"
+    effect: >-
+      in addition to the move's native 100% Speed drop, roll a 50% chance to
+      paralyze the target (respecting the usual paralysis gates — Electric-type
+      immunity, already-statused, Safeguard — which pbCanParalyze? enforces)
+test_cases:
+  - given: "Electroweb connects on a paralyzable foe and the 50% roll succeeds"
+    expect: "the target is paralyzed (in addition to the Speed drop)"
+  - given: "Electroweb connects on an Electric-type or already-statused foe"
+    expect: "no paralysis (pbCanParalyze? blocks it); the Speed drop still applies"
+  - given: "the 50% roll fails"
+    expect: "no paralysis; the native Speed drop still rolls"
+notes:
+  - "The Speed drop is NOT in this behavior — the data layer / native funccode does it. This behavior only adds the paralysis half the Rejuv applier can't emit."
+  - "Follow-up: the Rejuv move applier should translate move additional_effects into engine code so riders like this don't need a hand-written plugin (issue-worthy)."
+engine_hints:
+  pokeemerald: "Native — pokeemerald models the additional_effects (spd_minus_1 100% + paralysis 50%) directly on the move; no plugin needed."
+  essentials: >-
+    Needs a plugin (patch/Mods/chrooked_electroweb.rb). Register CHROOKED_MOVE_ON_DEAL[:ELECTROWEB]
+    to roll 50% and call target.pbParalyze(user) if target.pbCanParalyze?(user, move), after the
+    move connects. The native function 0x044 already applies the 100% Speed drop.
