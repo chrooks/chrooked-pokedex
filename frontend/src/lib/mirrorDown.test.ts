@@ -4,7 +4,10 @@ import type { AbilitySlots, DexEntry } from "../types";
 
 const ABILITIES: AbilitySlots = { primary: "Sap Sipper", secondary: null, hidden: "Gooey" };
 
-function mon(id: string, name: string, from: string | null): DexEntry {
+// `into` is the chrooked_id this species evolves INTO (the reliable forward edge).
+// `evolution.from` is deliberately set to a DISPLAY NAME (capitalized) to prove
+// preEvos resolves the line from forward edges, not that unreliable field.
+function mon(id: string, name: string, into: string | null, fromName?: string): DexEntry {
   return {
     chrooked_id: id,
     name,
@@ -13,17 +16,19 @@ function mon(id: string, name: string, from: string | null): DexEntry {
     abilities: ABILITIES,
     stats: {},
     learnset: [],
-    evolution: from ? { from, method: "Level 40" } : null,
-    evolves_into: [],
-    fully_evolved: from !== null,
+    evolution: fromName ? { from: fromName, method: { level: 40 } } : null,
+    evolves_into: into
+      ? [{ to: into, to_name: into, to_dex: null, method: "Level 40" }]
+      : [],
+    fully_evolved: into === null,
     overridden_fields: [],
     base: {},
   } as unknown as DexEntry;
 }
 
-const goomy = mon("goomy", "Goomy", null);
-const sliggoo = mon("sliggoo", "Sliggoo", "goomy");
-const goodra = mon("goodra", "Goodra", "sliggoo");
+const goomy = mon("goomy", "Goomy", "sliggoo");
+const sliggoo = mon("sliggoo", "Sliggoo", "goodra", "Goomy");
+const goodra = mon("goodra", "Goodra", null, "Sliggoo");
 const byId = new Map([goomy, sliggoo, goodra].map((m) => [m.chrooked_id, m]));
 
 describe("preEvos", () => {

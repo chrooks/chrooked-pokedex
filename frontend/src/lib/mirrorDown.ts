@@ -7,23 +7,37 @@
 
 import type { AbilitySlots, DexEntry, LearnsetMove } from "../types";
 
-/** The pre-evolutions of `anchor`, base→(anchor-1), walking `evolution.from`
-    backward. A member with no resolvable pre-evo (or a cycle) ends the walk. */
+/** The pre-evolutions of `anchor`, base→(anchor-1). Resolved from the reliable
+    FORWARD graph (`evolves_into[].to` is always a chrooked_id) rather than
+    `evolution.from`, which stores a DISPLAY NAME on an override edge (e.g. a
+    reworked Venusaur whose `evolution.from` is "Ivysaur", not "ivysaur"). A member
+    with a branch (more than one parent) or a cycle ends the walk. */
 export function preEvos(
   anchor: DexEntry,
   byId: ReadonlyMap<string, DexEntry>,
 ): DexEntry[] {
+  // Parent adjacency from forward edges across the whole dex.
+  const parents = new Map<string, string[]>();
+  for (const entry of byId.values()) {
+    for (const edge of entry.evolves_into ?? []) {
+      if (!edge.to) continue;
+      const list = parents.get(edge.to) ?? [];
+      list.push(entry.chrooked_id);
+      parents.set(edge.to, list);
+    }
+  }
+
   const chain: DexEntry[] = [];
   const seen = new Set<string>([anchor.chrooked_id]);
-  let current: DexEntry | undefined = anchor;
-  while (current) {
-    const fromId = current.evolution?.from ?? null;
-    if (fromId === null || seen.has(fromId)) break;
-    const parent = byId.get(fromId);
+  let currentId = anchor.chrooked_id;
+  while (true) {
+    const ps = parents.get(currentId) ?? [];
+    if (ps.length !== 1 || seen.has(ps[0])) break;
+    const parent = byId.get(ps[0]);
     if (parent === undefined) break;
     chain.push(parent);
     seen.add(parent.chrooked_id);
-    current = parent;
+    currentId = parent.chrooked_id;
   }
   return chain.reverse();
 }
