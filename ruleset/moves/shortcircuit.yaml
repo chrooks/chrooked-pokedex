@@ -1,0 +1,9 @@
+name: Short Circuit
+chrooked_id: shortcircuit
+aka: {  }
+type: Electric
+category: special
+power: 70
+accuracy: 100
+pp: 10
+description: Deals damage, with power doubled if the target is paralyzed.

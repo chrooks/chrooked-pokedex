@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Short Circuit
+chrooked_id: shortcircuit
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Double base power when target is paralyzed
+    trigger: damage-calc
+    when: Target has the paralysis status condition at the time of the damage calculation
+    effect: Multiply the moves base power by 2.
+test_cases:
+  - given: Target has no status condition
+    expect: Move deals damage at base power 70
+  - given: Target is paralyzed
+    expect: Move deals damage at effective base power 140 (doubled)
+  - given: Target is burned (not paralyzed)
+    expect: Move deals damage at base power 70, no bonus
+  - given: Target is paralyzed and has a type immunity to Electric (e.g., Ground-type)
+    expect: Move still misses due to type immunity; the power doubling is irrelevant
+notes:
+  - Mirrors Venoshocks mechanic (double power on Poison status) but mapped to Electric type and Paralysis status.
+  - The doubling occurs at the damage-calc step, after type-effectiveness but before random variance.
+  - STUB — engine_hints ungrounded, needs human grounding pass
