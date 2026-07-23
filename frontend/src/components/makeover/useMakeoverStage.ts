@@ -22,6 +22,9 @@ export interface StageProposal<Draft> {
   draft: Draft;
   rationale: Record<string, string>;
   alternatives: ProposalAlternative[];
+  /** Per-item verbatim warnings on a PARTIAL proposal (e.g. an ability slot the
+      model couldn't fill with a real ability). The stage stays usable. */
+  warnings?: string[];
 }
 
 interface State<Draft> {
@@ -34,6 +37,8 @@ interface State<Draft> {
   baseline: Draft | null;
   rationale: Record<string, string>;
   alternatives: ProposalAlternative[];
+  /** Per-item warnings from a partial proposal (verbatim server messages). */
+  warnings: string[];
   error: string | null;
   errorKind: StageErrorKind | null;
 }
@@ -60,6 +65,7 @@ function reducer<Draft>(state: State<Draft>, action: Action<Draft>): State<Draft
         baseline: action.proposal.draft,
         rationale: action.proposal.rationale,
         alternatives: action.proposal.alternatives,
+        warnings: action.proposal.warnings ?? [],
         error: null,
         errorKind: null,
       };
@@ -88,6 +94,7 @@ export interface UseMakeoverStage<Draft> {
   draft: Draft | null;
   rationale: Record<string, string>;
   alternatives: ProposalAlternative[];
+  warnings: string[];
   error: string | null;
   errorKind: StageErrorKind | null;
   setDirection: (text: string) => void;
@@ -146,6 +153,7 @@ export function useMakeoverStage<Draft extends SectionDraft>({
     baseline: null,
     rationale: {},
     alternatives: [],
+    warnings: [],
     error: null,
     errorKind: null,
   });
@@ -205,6 +213,7 @@ export function useMakeoverStage<Draft extends SectionDraft>({
     draft: state.draft,
     rationale: state.rationale,
     alternatives: state.alternatives,
+    warnings: state.warnings,
     error: state.error,
     errorKind: state.errorKind,
     setDirection,

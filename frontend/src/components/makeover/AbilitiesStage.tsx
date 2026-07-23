@@ -56,10 +56,15 @@ export function AbilitiesStage(props: Props) {
     initialDirection,
     propose: async (id, direction) => {
       const result = await api.suggestAbility(id, { direction: direction || undefined });
+      // The server may partially degrade: valid slots in `draft`, per-slot verbatim
+      // `warnings` for a name it couldn't resolve (usually a move). Not in the
+      // AbilityProposal type — read it off the runtime response.
+      const partial = result as typeof result & { warnings?: string[] };
       return {
         draft: result.draft,
         rationale: result.rationale ?? {},
         alternatives: (result.alternatives ?? []) as ProposalAlternative[],
+        warnings: partial.warnings,
       };
     },
     merge: (raw, draft) => mergeDraft(raw, draft, entry),
@@ -153,6 +158,18 @@ export function AbilitiesStage(props: Props) {
             </div>
           );
         })}
+        {hook.warnings.length > 0 && (
+          <ul className="mk-slot-warnings" id="mk-abilities-warnings">
+            {hook.warnings.map((warning, i) => (
+              <li key={i} className="mk-stage__error" role="alert">
+                <span className="mk-stage__error-tag mono" aria-hidden="true">
+                  no fill
+                </span>
+                {warning}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       </StagePanel>
     </>
