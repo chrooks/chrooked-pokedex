@@ -25,7 +25,7 @@ this ``{draft, rationale, alternatives}`` contract, and the accept-through-CRUD 
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, Callable
 
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider
 
@@ -33,7 +33,13 @@ from .llm import DEFAULT_MAX_TOKENS, LlmProvider
 # 2–3k tokens in full mode). The shared DEFAULT_MAX_TOKENS (1024) is sized for
 # the tiny ability/typing/stats outputs and truncates a learnset response.
 # Only this capability uses the larger budget; the other three stay on 1024.
-LEARNSET_MAX_TOKENS = 4096
+# A full learnset draft is ~20-25 rows, each with a per-row `reasoning` string,
+# plus a section rationale and alternatives. A verbose generation of that overran
+# the old 4096 cap → truncation (or a truncation-adjacent empty draft), the real
+# cause of the "missing a draft learnset list" dead-end. 8192 gives comfortable
+# headroom (a typical response is ~2k completion tokens); the repair layer is the
+# safety net for the rest.
+LEARNSET_MAX_TOKENS = 8192
 
 # The ability slots an Override may set, in display order. The draft is a partial
 # Override: only the slots the model proposes appear.
@@ -47,6 +53,79 @@ class SuggestError(Exception):
     validation problem — an unknown species, or a draft naming an ability that
     isn't in the real pool — that the endpoint surfaces as an honest message.
     """
+
+
+# --------------------------------------------------------------------------- #
+# Shared repair layer — validate → ONE retry feeding the violation back →
+# degrade honestly. Applied uniformly across the raise-based modes (typing,
+# stats, lore-options, learnset). A hard truncation still surfaces as an
+# ``LlmError`` from the Port (finish_reason == "length") and is NOT retried —
+# retrying a truncation is futile; that is why the token limit is the real cure.
+# Abilities keeps its own per-slot PARTIAL degradation (same one-retry principle,
+# different degradation), built in ``suggest_ability``.
+# --------------------------------------------------------------------------- #
+
+
+def _describe_draft(result: Any) -> str:
+    """An honest one-line description of what the model actually returned, so a
+    twice-failed suggest names the shape instead of leaving a bare dead end."""
+    if not isinstance(result, dict):
+        return f"the response was not an object ({type(result).__name__})"
+    draft = result.get("draft")
+    if not isinstance(draft, dict):
+        return f"the response had no draft object (top-level keys: {sorted(result)})"
+    if not draft:
+        return "the draft object was empty (likely truncated)"
+    return f"the draft had keys {sorted(draft)}"
+
+
+def _generic_repair_note(error_msg: str) -> str:
+    """The correction fed back to the model on the single self-repair retry."""
+    return (
+        "Your previous answer was rejected: "
+        f"{error_msg}\n"
+        "Return the COMPLETE structured proposal matching the required schema — "
+        "every required field present and non-empty. Do not omit any field, and "
+        "do not truncate the output."
+    )
+
+
+def propose_with_repair(
+    *,
+    provider: LlmProvider,
+    system: str,
+    cached_context: str,
+    user: str,
+    schema: dict[str, Any],
+    max_tokens: int,
+    validate: "Callable[[dict[str, Any]], dict[str, Any]]",
+) -> dict[str, Any]:
+    """Propose → ``validate``; on a :class:`SuggestError`, retry ONCE feeding the
+    violation back, then validate again. A second failure raises an honest error
+    naming what the model returned (a truncated/empty draft is not a bare dead
+    end). ``LlmError`` from the Port (transport / hard truncation) propagates
+    unretried."""
+
+    def _run(user_text: str) -> dict[str, Any]:
+        return provider.propose(
+            system=system,
+            cached_context=cached_context,
+            user=user_text,
+            schema=schema,
+            max_tokens=max_tokens,
+        )
+
+    result = _run(user)
+    try:
+        return validate(result)
+    except SuggestError as first_error:
+        retry = _run(f"{user}\n\n{_generic_repair_note(str(first_error))}")
+        try:
+            return validate(retry)
+        except SuggestError as second_error:
+            raise SuggestError(
+                f"{second_error} — after one automatic retry, {_describe_draft(retry)}."
+            ) from second_error
 
 
 # --------------------------------------------------------------------------- #
@@ -485,15 +564,15 @@ def suggest_typing(
         raise SuggestError("No types are available to suggest from.")
 
     cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
-    result = provider.propose(
+    return propose_with_repair(
+        provider=provider,
         system=_build_typing_rubric(),
         cached_context=cached_context,
         user=_build_typing_user_context(entry, direction),
         schema=_typing_draft_schema(),
         max_tokens=DEFAULT_MAX_TOKENS,
+        validate=lambda draft: _validate_typing_result(draft, type_pool),
     )
-
-    return _validate_typing_result(result, type_pool)
 
 
 def _validate_typing_result(
@@ -663,15 +742,15 @@ def suggest_lore_options(
         raise SuggestError("No types are available to suggest from.")
 
     cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
-    result = provider.propose(
+    return propose_with_repair(
+        provider=provider,
         system=_build_lore_options_rubric(),
         cached_context=cached_context,
         user=_build_typing_user_context(entry, direction),
         schema=_lore_options_draft_schema(),
         max_tokens=DEFAULT_MAX_TOKENS,
+        validate=lambda draft: _validate_lore_options_result(draft, type_pool),
     )
-
-    return _validate_lore_options_result(result, type_pool)
 
 
 def _validate_lore_options_result(
@@ -844,7 +923,8 @@ def suggest_stats(
     clean :class:`SuggestError`. Returns the reusable ``{draft, rationale,
     alternatives}`` contract.
     """
-    result = provider.propose(
+    return propose_with_repair(
+        provider=provider,
         system=_build_stats_rubric(),
         cached_context=(
             f"Valid stat keys: {', '.join(_STAT_KEYS)}. "
@@ -853,9 +933,8 @@ def suggest_stats(
         user=_build_stats_user_context(entry, direction),
         schema=_stats_draft_schema(),
         max_tokens=DEFAULT_MAX_TOKENS,
+        validate=_validate_stats_result,
     )
-
-    return _validate_stats_result(result)
 
 
 def _validate_stats_result(result: dict[str, Any]) -> dict[str, Any]:
@@ -1343,20 +1422,20 @@ def suggest_learnset(
     )
     current_learnset = list(entry.get("learnset") or [])
 
-    result = provider.propose(
+    return propose_with_repair(
+        provider=provider,
         system=_build_learnset_rubric(),
         cached_context=cached_context,
         user=user_context,
         schema=_learnset_draft_schema(),
         max_tokens=LEARNSET_MAX_TOKENS,
-    )
-
-    return _validate_learnset_result(
-        result,
-        move_pool,
-        mode=mode,
-        current_learnset=current_learnset,
-        instruction=instruction,
+        validate=lambda draft: _validate_learnset_result(
+            draft,
+            move_pool,
+            mode=mode,
+            current_learnset=current_learnset,
+            instruction=instruction,
+        ),
     )
 
 

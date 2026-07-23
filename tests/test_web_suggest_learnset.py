@@ -833,6 +833,50 @@ def test_suggest_learnset_full_writes_nothing(
     assert _species_files(ruleset_dir) == before
 
 
+# --------------------------------------------------------------------------- #
+# Self-repair layer — a missing/empty draft list (the truncation-adjacent
+# failure) retries ONCE; a persistent miss errors honestly naming what came back.
+# --------------------------------------------------------------------------- #
+
+# An empty draft — what a truncation-adjacent response parses to (arguments "{}").
+_MISSING_LEARNSET_RESULT: dict[str, Any] = {}
+
+
+def test_learnset_missing_list_repairs_in_one_retry(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _SequenceProvider([_MISSING_LEARNSET_RESULT, _GOOD_LEARNSET_RESULT])
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
+
+    assert response.status_code == 200
+    assert len(response.json()["draft"]["learnset"]) > 0
+    assert len(provider.calls) == 2  # exactly one retry
+
+
+def test_learnset_missing_twice_errors_honestly_naming_what_came_back(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _SequenceProvider([_MISSING_LEARNSET_RESULT, _MISSING_LEARNSET_RESULT])
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
+
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    # Not a bare dead end: names the original miss AND what the retry returned.
+    assert "learnset list" in detail
+    assert "after one automatic retry" in detail
+    assert len(provider.calls) == 2  # tried the repair, then gave up
+
+
+def test_learnset_token_limit_raised_for_full_draft() -> None:
+    # The real cure for the intermittent truncation: a comfortable output budget
+    # for a ~20-25 row learnset with per-row reasoning.
+    assert suggestmod.LEARNSET_MAX_TOKENS >= 8192
+
+
 def test_suggest_learnset_full_no_body_accepted(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
@@ -1456,7 +1500,9 @@ def test_line_endpoint_isolates_per_member_error(
         "rationale": {"learnset": "x"},
         "alternatives": [],
     }
-    provider = _SequenceProvider([_GOOD_LEARNSET_RESULT, bad])
+    # member1 → good; member2 → bad on both the first attempt AND the one automatic
+    # self-repair retry, so it ends as that member's stage error (isolation holds).
+    provider = _SequenceProvider([_GOOD_LEARNSET_RESULT, bad, bad])
     client = _make_client(ruleset_dir_no_goodra, tmp_path, provider)
 
     response = client.post("/api/species/goodra/suggest/learnset/line", json={})
