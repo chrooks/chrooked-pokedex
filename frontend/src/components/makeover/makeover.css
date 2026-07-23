@@ -426,13 +426,15 @@
   border-color: var(--edited);
 }
 .mk-stats__input {
-  width: 5ch;
+  width: 8.5ch;
   text-align: right;
   background: var(--surface-0);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   color: var(--text);
   padding: var(--space-1);
+  /* keep 3-digit values clear of the native spin buttons */
+  padding-right: 1.75em;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
