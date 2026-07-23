@@ -1194,6 +1194,14 @@ def create_app(
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
         target_species = target_snapshot.get("species", {})
+        # Display-name → aka hints, so an explicit engine symbol wins over the
+        # derived one when the read-back compares in resolution space (ac: names
+        # are engine symbols on disk, display names in the Ruleset).
+        aka_by_name: dict[str, dict[str, Any]] = {}
+        for entry in (*dexmod.build_abilities(snapshot, ruleset), *dexmod.build_moves(snapshot, ruleset)):
+            name = entry.get("name")
+            if name and entry.get("aka"):
+                aka_by_name[str(name).casefold()] = entry["aka"]
         results: list[dict[str, Any]] = []
         for cid in chrooked_ids:
             expected = dexmod.build_dex_entry(snapshot, ruleset, cid)
@@ -1206,7 +1214,10 @@ def create_app(
             ] or list(readbackmod.COMPARABLE_FIELDS)
             results.append(
                 readbackmod.diff_species(
-                    expected, target_species.get(cid), fields=fields
+                    expected,
+                    target_species.get(cid),
+                    fields=fields,
+                    aka_by_name=aka_by_name,
                 )
             )
         return readbackmod.read_back(results)

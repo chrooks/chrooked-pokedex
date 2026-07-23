@@ -316,6 +316,72 @@ def test_read_back_missing_species_fails() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# Resolution-space normalization: PBS stores engine symbols (SERENEGRACE) while
+# the Ruleset stores display names (Serene Grace) — compare in symbol space so
+# these are NOT false mismatches, but a genuinely different value still mismatches.
+# --------------------------------------------------------------------------- #
+
+
+@pytest.mark.unit
+def test_read_back_display_vs_symbol_matches() -> None:
+    expected = {
+        "chrooked_id": "mismagius", "name": "Mismagius",
+        "types": ["Ghost", "Fairy"],
+        "abilities": {"primary": "Levitate", "secondary": "Serene Grace", "hidden": "Pixilate"},
+        "learnset": [{"level": 0, "move": "Shadow Ball"}, {"level": 1, "move": "Magical Leaf"}],
+    }
+    actual = {  # what Essentials PBS holds on disk — engine symbols / uppercase
+        "types": ["GHOST", "FAIRY"],
+        "abilities": {"primary": "LEVITATE", "secondary": "SERENEGRACE", "hidden": "PIXILATE"},
+        "learnset": [{"level": 0, "move": "SHADOWBALL"}, {"level": 1, "move": "MAGICALLEAF"}],
+    }
+    diff = readbackmod.diff_species(
+        expected, actual, fields=["types", "abilities", "learnset"]
+    )
+    assert diff["ok"] is True, [c for c in diff["checks"] if not c["ok"]]
+    assert diff["ok_count"] == diff["total"] > 0
+
+
+@pytest.mark.unit
+def test_read_back_genuine_ability_mismatch_shows_both_representations() -> None:
+    expected = {"chrooked_id": "x", "name": "X", "abilities": {"primary": "Levitate"}}
+    actual = {"abilities": {"primary": "PIXILATE"}}  # engine holds a different one
+    diff = readbackmod.diff_species(expected, actual, fields=["abilities"])
+    assert diff["ok"] is False
+    check = diff["checks"][0]
+    assert check["ok"] is False
+    # Both representations are kept verbatim so the user sees what the engine holds.
+    assert check["expected"] == "Levitate"
+    assert check["actual"] == "PIXILATE"
+
+
+@pytest.mark.unit
+def test_read_back_respects_aka_essentials_hint() -> None:
+    # An ability whose engine symbol deviates from the derived form: the aka hint
+    # is the expected symbol (the applier used it), so it matches the disk value.
+    expected = {"chrooked_id": "x", "name": "X", "abilities": {"primary": "Odd Ability"}}
+    actual = {"abilities": {"primary": "ODDABILITYX"}}
+    aka = {"odd ability": {"essentials": "ODDABILITYX"}}
+    diff = readbackmod.diff_species(
+        expected, actual, fields=["abilities"], aka_by_name=aka
+    )
+    assert diff["ok"] is True
+    # Without the hint, the derived "ODDABILITY" would (correctly) NOT match.
+    assert readbackmod.diff_species(expected, actual, fields=["abilities"])["ok"] is False
+
+
+@pytest.mark.unit
+def test_read_back_learnset_move_symbol_matches_but_wrong_move_mismatches() -> None:
+    expected = {"chrooked_id": "x", "name": "X", "learnset": [{"level": 5, "move": "Aerial Ace"}]}
+    assert readbackmod.diff_species(
+        expected, {"learnset": [{"level": 5, "move": "AERIALACE"}]}, fields=["learnset"]
+    )["ok"] is True
+    assert readbackmod.diff_species(
+        expected, {"learnset": [{"level": 5, "move": "TACKLE"}]}, fields=["learnset"]
+    )["ok"] is False
+
+
+# --------------------------------------------------------------------------- #
 # ac9 — referential validation at the species write gate
 # --------------------------------------------------------------------------- #
 
