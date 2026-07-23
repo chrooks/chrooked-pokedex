@@ -1,0 +1,14 @@
+name: Electroweb
+chrooked_id: electroweb
+aka: { pokeemerald: MOVE_ELECTROWEB }
+type: Electric
+category: special
+power: 65
+accuracy: 95
+pp: 15
+description: Snares foes with an electric net. Lowers Speed and may paralyze.
+effect: hit
+target: both
+additional_effects:
+  - { effect: spd_minus_1, chance: 100 }
+  - { effect: paralysis, chance: 50 }
