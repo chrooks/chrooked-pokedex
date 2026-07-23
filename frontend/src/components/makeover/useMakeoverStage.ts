@@ -1,0 +1,215 @@
+/* The per-stage heartbeat: propose → tweak → LOCK IN, with the hybrid tweak loop
+   (ac3). A design stage proposes via the existing /api suggest Seam, lets the
+   author edit the draft inline AND re-roll with a redirect that carries their
+   edits forward as constraints, and writes NOTHING to the Ruleset until an
+   explicit LOCK IN (the read-merge-write through the existing CRUD route). The
+   pure re-roll rule lives in lib/makeoverTweak.ts and is unit-tested there. */
+
+import { useCallback, useReducer } from "react";
+import { api, ApiError } from "../../api";
+import type { DexEntry, SpeciesOverride } from "../../types";
+import {
+  rerollDirection,
+  type MakeoverSection,
+  type SectionDraft,
+} from "../../lib/makeoverTweak";
+import type { ProposalAlternative } from "../../types";
+
+export type StagePhase = "propose" | "proposing" | "proposed" | "locking" | "error";
+export type StageErrorKind = "propose" | "lock";
+
+export interface StageProposal<Draft> {
+  draft: Draft;
+  rationale: Record<string, string>;
+  alternatives: ProposalAlternative[];
+}
+
+interface State<Draft> {
+  phase: StagePhase;
+  /** The author's freeform redirect steer; persists across a re-roll. */
+  direction: string;
+  /** The working (possibly hand-edited) draft, or null before a proposal. */
+  draft: Draft | null;
+  /** The last draft the model proposed — the baseline the re-roll diffs against. */
+  baseline: Draft | null;
+  rationale: Record<string, string>;
+  alternatives: ProposalAlternative[];
+  error: string | null;
+  errorKind: StageErrorKind | null;
+}
+
+type Action<Draft> =
+  | { type: "setDirection"; direction: string }
+  | { type: "proposing" }
+  | { type: "proposed"; proposal: StageProposal<Draft> }
+  | { type: "edit"; draft: Draft }
+  | { type: "locking" }
+  | { type: "failed"; kind: StageErrorKind; message: string };
+
+function reducer<Draft>(state: State<Draft>, action: Action<Draft>): State<Draft> {
+  switch (action.type) {
+    case "setDirection":
+      return { ...state, direction: action.direction };
+    case "proposing":
+      return { ...state, phase: "proposing", error: null, errorKind: null };
+    case "proposed":
+      return {
+        ...state,
+        phase: "proposed",
+        draft: action.proposal.draft,
+        baseline: action.proposal.draft,
+        rationale: action.proposal.rationale,
+        alternatives: action.proposal.alternatives,
+        error: null,
+        errorKind: null,
+      };
+    case "edit":
+      // Curating a row only makes sense once a draft exists.
+      if (state.draft === null) return state;
+      return { ...state, draft: action.draft };
+    case "locking":
+      if (state.phase !== "proposed" || state.draft === null) return state;
+      return { ...state, phase: "locking", error: null, errorKind: null };
+    case "failed":
+      return { ...state, phase: "error", error: action.message, errorKind: action.kind };
+    default:
+      return state;
+  }
+}
+
+function messageOf(error: unknown): string {
+  if (error instanceof ApiError) return error.message;
+  return error instanceof Error ? error.message : "Unexpected error";
+}
+
+export interface UseMakeoverStage<Draft> {
+  phase: StagePhase;
+  direction: string;
+  draft: Draft | null;
+  rationale: Record<string, string>;
+  alternatives: ProposalAlternative[];
+  error: string | null;
+  errorKind: StageErrorKind | null;
+  setDirection: (text: string) => void;
+  /** Run the first proposal (or a re-roll — edits ride along as constraints). */
+  propose: () => Promise<void>;
+  /** Replace the working draft after an inline edit or an alternative swap. */
+  editDraft: (draft: Draft) => void;
+  /** Write the locked draft through CRUD, plus any extra writes (mirror-down). */
+  lockIn: () => Promise<boolean>;
+}
+
+interface Args<Draft extends SectionDraft> {
+  section: MakeoverSection;
+  entry: DexEntry;
+  /** The direction carried from the direction stage — the first proposal's steer. */
+  initialDirection?: string;
+  /** The suggest call for this section (the existing /api Seam). */
+  propose: (id: string, direction: string) => Promise<StageProposal<Draft>>;
+  /** Merge the locked draft into the raw Override (this section's field only). */
+  merge: (raw: SpeciesOverride, draft: Draft) => SpeciesOverride;
+  /** Extra writes at lock (the learnset stage's whole-line mirror-down). */
+  extraWrites?: (draft: Draft) => Promise<void>;
+  /** Called once the lock lands cleanly, with the locked draft (record facts). */
+  onLocked: (draft: Draft) => void;
+  /** Called on a re-roll with the composed redirect, so the session harvests it. */
+  onRedirect?: (text: string) => void;
+}
+
+function seedOverride(entry: DexEntry): SpeciesOverride {
+  return {
+    name: entry.name,
+    chrooked_id: entry.chrooked_id,
+    aka: entry.dex !== null ? { dex: entry.dex } : {},
+    types: null,
+    abilities: null,
+    stats: null,
+    learnset: null,
+    evolution: null,
+  };
+}
+
+export function useMakeoverStage<Draft extends SectionDraft>({
+  section,
+  entry,
+  initialDirection,
+  propose,
+  merge,
+  extraWrites,
+  onLocked,
+  onRedirect,
+}: Args<Draft>): UseMakeoverStage<Draft> {
+  const [state, dispatch] = useReducer(reducer<Draft>, {
+    phase: "propose",
+    direction: initialDirection ?? "",
+    draft: null,
+    baseline: null,
+    rationale: {},
+    alternatives: [],
+    error: null,
+    errorKind: null,
+  });
+
+  const setDirection = useCallback(
+    (direction: string) => dispatch({ type: "setDirection", direction }),
+    [],
+  );
+
+  const editDraft = useCallback(
+    (draft: Draft) => dispatch({ type: "edit", draft }),
+    [],
+  );
+
+  const runPropose = useCallback(async () => {
+    // On a re-roll (a draft already exists) fold the author's edits into the
+    // direction so their hand-tuning survives (ac3). The first proposal just
+    // sends the raw direction.
+    const isReroll = state.draft !== null;
+    const composed = isReroll
+      ? rerollDirection(section, state.direction, state.baseline, state.draft)
+      : state.direction;
+    if (isReroll && composed.trim() !== "") onRedirect?.(composed);
+    dispatch({ type: "proposing" });
+    try {
+      const proposal = await propose(entry.chrooked_id, composed);
+      dispatch({ type: "proposed", proposal });
+    } catch (caught: unknown) {
+      dispatch({ type: "failed", kind: "propose", message: messageOf(caught) });
+    }
+  }, [section, state.direction, state.baseline, state.draft, propose, entry.chrooked_id, onRedirect]);
+
+  const lockIn = useCallback(async (): Promise<boolean> => {
+    if (state.draft === null) return false;
+    const draft = state.draft;
+    dispatch({ type: "locking" });
+    try {
+      let raw: SpeciesOverride;
+      try {
+        raw = await api.speciesOverride(entry.chrooked_id);
+      } catch {
+        raw = seedOverride(entry);
+      }
+      await api.putSpecies(entry.chrooked_id, merge(raw, draft));
+      if (extraWrites) await extraWrites(draft);
+      onLocked(draft);
+      return true;
+    } catch (caught: unknown) {
+      dispatch({ type: "failed", kind: "lock", message: messageOf(caught) });
+      return false;
+    }
+  }, [state.draft, entry, merge, extraWrites, onLocked]);
+
+  return {
+    phase: state.phase,
+    direction: state.direction,
+    draft: state.draft,
+    rationale: state.rationale,
+    alternatives: state.alternatives,
+    error: state.error,
+    errorKind: state.errorKind,
+    setDirection,
+    propose: runPropose,
+    editDraft,
+    lockIn,
+  };
+}
