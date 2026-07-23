@@ -1,7 +1,7 @@
 # Behavior spec — human-owned. The seed never touches this folder.
 name: Short Circuit
 chrooked_id: shortcircuit
-applies_to: ability
+applies_to: move
 aka: {  }
 effects:
   - summary: Double base power when target is paralyzed
@@ -20,4 +20,5 @@ test_cases:
 notes:
   - Mirrors Venoshocks mechanic (double power on Poison status) but mapped to Electric type and Paralysis status.
   - The doubling occurs at the damage-calc step, after type-effectiveness but before random variance.
-  - STUB — engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: "In pbCalcDamage, after the base damage is computed, multiply the result by 2 when the move is Short Circuit and the target's status is :PARALYSIS. Implemented in references/rejuv-harness/chrooked_shortcircuit.rb via the new CHROOKED_MOVE_DAMAGE_MODS table (final-damage x2, a hair off a literal base-power double — see the file's ponytail note)."

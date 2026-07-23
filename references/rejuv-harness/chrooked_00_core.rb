@@ -8,6 +8,11 @@
 
 # attacker ability => ->(move, attacker, opponent) { Float multiplier }
 CHROOKED_DAMAGE_MODS = {}
+# move symbol => ->(move, attacker, opponent) { Float multiplier } — the
+# move-keyed twin of CHROOKED_DAMAGE_MODS, for a move whose own damage scales on
+# a condition (Short Circuit x2 vs paralyzed). Not a defender ability, so Mold
+# Breaker never suppresses it.
+CHROOKED_MOVE_DAMAGE_MODS = {}
 # defender ability => ->(move, attacker, opponent) { Float multiplier on incoming damage }
 CHROOKED_DEFENSE_MODS = {}
 # attacker ability => ->(move, type) { new type Symbol or nil } — consulted by pbType
@@ -128,6 +133,10 @@ module Chrooked
     mult = 1.0
     atk_mod = CHROOKED_DAMAGE_MODS[attacker.ability]
     mult *= atk_mod.call(move, attacker, opponent) if atk_mod
+    # Move-keyed damage rider — a property of the move, so it rides with the
+    # attacker side (never suppressed by the target's Mold Breaker).
+    move_mod = CHROOKED_MOVE_DAMAGE_MODS[move.move]
+    mult *= move_mod.call(move, attacker, opponent) if move_mod
     # Mold Breaker (and Teravolt/Turboblaze/Mycelium Might) ignore the TARGET's ability,
     # so defender-side mods must not apply. shouldBeMoldBroken? also honours Ability Shield
     # and sanity-checks the objects, so prefer it over the bare .moldbroken flag.
