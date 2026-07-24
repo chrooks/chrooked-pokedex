@@ -338,6 +338,19 @@ def create_app(
             if scope == "base":
                 snapshot = _load_snapshot_or_503()
                 ruleset = _load_ruleset_or_503()
+                # Bridge a backdrop-launched form id to canon so the write lands on
+                # the canon file (`marowakalola`), not the Rejuv slug. Resolve the
+                # payload's OWN id through the same bridge rather than overwriting it:
+                # a backdrop id on either side maps to canon and agrees, but a genuine
+                # path/payload mismatch still resolves to two different ids and 422s.
+                chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
+                if isinstance(payload.get("chrooked_id"), str):
+                    payload = {
+                        **payload,
+                        "chrooked_id": dexmod.resolve_form_id(
+                            snapshot, payload["chrooked_id"]
+                        ),
+                    }
                 crudmod.validate_species_references(
                     {**payload, "chrooked_id": chrooked_id},
                     type_names={t.casefold() for t in dexmod.build_type_pool(snapshot, ruleset)},
@@ -374,6 +387,9 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
+        # A backdrop-launched makeover hands us a Target-form id (`marowak--
+        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
+        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
         entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
         if entry is None:
             raise HTTPException(
@@ -422,6 +438,9 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
+        # A backdrop-launched makeover hands us a Target-form id (`marowak--
+        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
+        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
         entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
         if entry is None:
             raise HTTPException(
@@ -481,6 +500,9 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
+        # A backdrop-launched makeover hands us a Target-form id (`marowak--
+        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
+        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
         entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
         if entry is None:
             raise HTTPException(
@@ -527,6 +549,7 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
+        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
         if dexmod.build_dex_entry(snapshot, ruleset, chrooked_id) is None:
             raise HTTPException(
                 status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
@@ -564,6 +587,9 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
+        # A backdrop-launched makeover hands us a Target-form id (`marowak--
+        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
+        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
         entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
         if entry is None:
             raise HTTPException(

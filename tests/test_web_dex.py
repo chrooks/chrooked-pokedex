@@ -591,3 +591,43 @@ def test_type_chart_multipliers_are_always_floats() -> None:
     assert isinstance(flying_ice["multiplier"], float)
     assert isinstance(flying_ice["base_multiplier"], float)
     assert flying_ice["base_multiplier"] == 2.0
+
+
+# --------------------------------------------------------------------------- #
+# resolve_form_id — bridge a Target-backdrop form id back to canon
+# --------------------------------------------------------------------------- #
+
+
+def _form_snapshot() -> dict:
+    """A snapshot whose species use canon form ids (concatenated slugs, no `--`)."""
+    return {
+        "species": {
+            "marowak": {"name": "Marowak"},
+            "marowakalola": {"name": "Marowak Alola"},
+            "marowakalolatotem": {"name": "Marowak Alola Totem"},
+            "ponyta": {"name": "Ponyta"},
+            "ponytagalar": {"name": "Ponyta Galar"},
+        }
+    }
+
+
+def test_resolve_form_id_bridges_backdrop_form_to_canon() -> None:
+    snap = _form_snapshot()
+    # Rejuv backdrop re-slugs `<base>--<label slug>`; canon concatenates.
+    assert dexmod.resolve_form_id(snap, "marowak--alolanform") == "marowakalola"
+    assert dexmod.resolve_form_id(snap, "ponyta--galarianform") == "ponytagalar"
+
+
+def test_resolve_form_id_passes_through_canon_and_unknown() -> None:
+    snap = _form_snapshot()
+    # Already canon, no `--`, and genuinely-unknown ids are returned unchanged so
+    # the caller still yields its honest 404.
+    assert dexmod.resolve_form_id(snap, "marowakalola") == "marowakalola"
+    assert dexmod.resolve_form_id(snap, "marowak") == "marowak"
+    assert dexmod.resolve_form_id(snap, "marowak--nonsenseform") == "marowak--nonsenseform"
+    assert dexmod.resolve_form_id(snap, "missingno--weirdform") == "missingno--weirdform"
+
+
+def test_resolve_form_id_does_not_bridge_to_a_longer_form_variant() -> None:
+    # `alolan` core must match `alola` (marowakalola), not `alolatotem`.
+    assert dexmod.resolve_form_id(_form_snapshot(), "marowak--alolanform") == "marowakalola"

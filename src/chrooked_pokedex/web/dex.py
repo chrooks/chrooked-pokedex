@@ -79,6 +79,43 @@ def build_dex_entry(
     return _merge_species(base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo)
 
 
+def resolve_form_id(snapshot: dict[str, Any], chrooked_id: str) -> str:
+    """Map a Target-backdrop form id to its canon `chrooked_id`.
+
+    The makeover operates on **canon** (base ⊕ Ruleset), where a regional form is
+    a bare concatenated slug — `marowakalola`, `ponytagalar`. But a Rejuv/Essentials
+    backdrop preview re-slugs non-base forms `<base>--<label slug>` (`marowak--
+    alolanform`), so the workbench, launched from that preview, hands us an id canon
+    doesn't have. This bridges it back, mirroring ``rekey_ruleset_to_rejuv`` inverted
+    onto the canon id set: base + the form label's core, matched against canon ids
+    that start with the base and whose suffix PREFIXES that core ("alola" ⊂ "alolan").
+
+    Returns the input unchanged when it already resolves directly, carries no `--`,
+    or is ambiguous — so a genuinely unknown id still yields the caller's honest 404,
+    never a silent wrong match.
+    """
+    from ..appliers.rejuv.resolution import _form_core
+
+    species = snapshot.get("species", {})
+    if chrooked_id in species or "--" not in chrooked_id:
+        return chrooked_id
+    base, _, form_slug = chrooked_id.partition("--")
+    core = _form_core(form_slug)
+    if not core:
+        return chrooked_id
+    candidates = [
+        cid
+        for cid in species
+        if cid != base and cid.startswith(base) and core.startswith(cid[len(base):])
+    ]
+    if not candidates:
+        return chrooked_id
+    best = max(candidates, key=len)
+    if sum(1 for cid in candidates if len(cid) == len(best)) > 1:
+        return chrooked_id  # ambiguous — leave unresolved rather than guess a form
+    return best
+
+
 def _index_overrides_by_pre_evo(
     snapshot: dict[str, Any], ruleset: Ruleset
 ) -> dict[str, list[tuple[str, SpeciesOverride]]]:
