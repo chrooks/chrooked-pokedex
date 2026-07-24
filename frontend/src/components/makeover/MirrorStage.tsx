@@ -10,6 +10,7 @@ import type { DexEntry } from "../../types";
 import type { StageFacts } from "../../lib/makeoverApi";
 import { mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
 import { writeMirror } from "./mirrorWrite";
+import { MirrorRowList } from "./MirrorRowList";
 import type { StageActions } from "./StagePanel";
 
 interface Props {
@@ -24,6 +25,7 @@ type Phase = "ready" | "writing" | "error";
 export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
   const [phase, setPhase] = useState<Phase>("ready");
   const [error, setError] = useState<string | null>(null);
+  const [excluded, setExcluded] = useState<ReadonlySet<string>>(new Set());
 
   const rows = useMemo(
     () =>
@@ -34,16 +36,31 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
       }),
     [entry, byId],
   );
+  const included = useMemo(
+    () => rows.filter((row) => !excluded.has(row.chrooked_id)),
+    [rows, excluded],
+  );
   const hasLine = preEvos(entry, byId).length > 0;
+  // Nothing to lock if every pre-evo is skipped.
+  const canWrite = included.length > 0;
+
+  function toggle(chrookedId: string) {
+    setExcluded((prev) => {
+      const next = new Set(prev);
+      if (next.has(chrookedId)) next.delete(chrookedId);
+      else next.add(chrookedId);
+      return next;
+    });
+  }
 
   const writeRef = useRef<() => void>(() => {});
   writeRef.current = () => {
-    if (phase === "writing" || !hasLine) return;
+    if (phase === "writing" || !hasLine || !canWrite) return;
     void (async () => {
       setPhase("writing");
       setError(null);
       try {
-        const written = await writeMirror(rows);
+        const written = await writeMirror(included);
         onLocked({}, written);
       } catch (caught: unknown) {
         setError(
@@ -62,11 +79,11 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
     registerActions({
       lockIn: () => writeRef.current(),
       focusRedirect: () => undefined,
-      canLock: hasLine && phase !== "writing",
+      canLock: hasLine && canWrite && phase !== "writing",
       phase,
     });
     return () => registerActions(null);
-  }, [registerActions, hasLine, phase]);
+  }, [registerActions, hasLine, canWrite, phase]);
 
   return (
     <div className="mk-stage" data-phase={phase} id="mk-stage-mirror">
@@ -78,17 +95,15 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
       {!hasLine && <p className="mk-empty mono">no pre-evolutions to mirror to.</p>}
 
       {hasLine && (
-        <ul className="mk-mirror__list" id="mk-mirror-only-list">
-          {rows.map((row) => (
-            <li key={row.chrooked_id} className="mk-mirror__row">
-              <span className="mk-mirror__name">{row.name}</span>
-              <span className="mono mk-mirror__count">
-                {row.types.join("/")} · {row.learnset.length} moves
-                {row.strippedL0.length > 0 && ` · −L0: ${row.strippedL0.join(", ")}`}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <MirrorRowList
+          rows={rows}
+          excluded={excluded}
+          onToggle={toggle}
+          id="mk-mirror-only-list"
+        />
+      )}
+      {hasLine && !canWrite && (
+        <p className="mk-empty mono">every pre-evo skipped — nothing to mirror.</p>
       )}
 
       {error !== null && (
@@ -106,7 +121,7 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
             type="button"
             id="mk-mirror-lock"
             className="mk-btn mk-btn--lock"
-            disabled={phase === "writing"}
+            disabled={phase === "writing" || !canWrite}
             onClick={() => writeRef.current()}
           >
             {phase === "writing" ? "WRITING…" : "LOCK IN"}

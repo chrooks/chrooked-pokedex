@@ -24,8 +24,9 @@ import {
   removeRow,
 } from "../proposal/learnsetDraft";
 import { bandViolation, type LearnsetRubric } from "../../lib/learnsetBands";
-import { copyDownLearnset, mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
+import { mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
 import { writeMirror } from "./mirrorWrite";
+import { MirrorRowList } from "./MirrorRowList";
 import { StagePanel } from "./StagePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
 import type { CommonStageProps } from "./stageProps";
@@ -57,6 +58,18 @@ export function LearnsetStage(props: Props) {
   } = props;
 
   const line = useMemo(() => preEvos(entry, byId), [entry, byId]);
+  // Pre-evos the author has opted OUT of mirroring to (by chrooked_id). Declared
+  // before the hook so extraWrites / onLocked close over the current set.
+  const [excludedPreEvos, setExcludedPreEvos] = useState<ReadonlySet<string>>(new Set());
+
+  function togglePreEvo(chrookedId: string) {
+    setExcludedPreEvos((prev) => {
+      const next = new Set(prev);
+      if (next.has(chrookedId)) next.delete(chrookedId);
+      else next.add(chrookedId);
+      return next;
+    });
+  }
 
   const hook = useMakeoverStage<LearnsetDraft>({
     section: "learnset",
@@ -72,15 +85,23 @@ export function LearnsetStage(props: Props) {
     },
     merge: (raw, draft) => mergeDraft(raw, draft),
     extraWrites: async (draft) => {
-      // Mirror the anchor kit down to every pre-evo: same typing + abilities, the
-      // anchor learnset minus L0. Silent so the workbench flushes ONE dex refresh.
+      // Mirror the anchor kit down to every INCLUDED pre-evo: same typing +
+      // abilities, the anchor learnset minus L0. A pre-evo the author skipped is
+      // left untouched. Silent so the workbench flushes ONE dex refresh.
       const learnset: LearnsetMove[] = draft.learnset.map((r) => ({ level: r.level, move: r.move }));
       const kit = { types: entry.types, abilities: entry.abilities, learnset };
-      await writeMirror(mirrorDownPreview(entry, byId, kit));
+      const targets = mirrorDownPreview(entry, byId, kit).filter(
+        (row) => !excludedPreEvos.has(row.chrooked_id),
+      );
+      await writeMirror(targets);
     },
-    // The learnset lock writes the anchor's learnset AND every pre-evo copy — the
-    // read-back tail checks the whole line.
-    onLocked: () => onLocked({}, [entry.chrooked_id, ...line.map((m) => m.chrooked_id)]),
+    // The learnset lock writes the anchor's learnset AND every INCLUDED pre-evo
+    // copy — the read-back tail checks exactly what was written.
+    onLocked: () =>
+      onLocked({}, [
+        entry.chrooked_id,
+        ...line.map((m) => m.chrooked_id).filter((id) => !excludedPreEvos.has(id)),
+      ]),
     onRedirect,
   });
 
@@ -88,11 +109,6 @@ export function LearnsetStage(props: Props) {
   const proposed = useMemo(() => draft?.learnset ?? [], [draft]);
   const classified = classifyProposed(entry.learnset, proposed);
   const dropped = removedRows(entry.learnset, proposed);
-
-  const mirrorLearnset = useMemo(
-    () => copyDownLearnset(proposed.map((r) => ({ level: r.level, move: r.move }))),
-    [proposed],
-  );
 
   const [editingKey, setEditingKey] = useState<string | null>(null);
 
@@ -249,24 +265,18 @@ export function LearnsetStage(props: Props) {
       {draft !== null && line.length > 0 && (
         <details className="mk-mirror" id="mk-mirror-down" open>
           <summary className="mk-mirror__summary mono">
-            mirror-down · {line.length} pre-evo{line.length === 1 ? "" : "s"} (types + abilities +
-            learnset − L0)
+            mirror-down · {line.length - excludedPreEvos.size}/{line.length} pre-evo
+            {line.length === 1 ? "" : "s"} (types + abilities + learnset − L0) · toggle to skip
           </summary>
-          <ul className="mk-mirror__list">
-            {mirrorDownPreview(entry, byId, {
+          <MirrorRowList
+            rows={mirrorDownPreview(entry, byId, {
               types: entry.types,
               abilities: entry.abilities,
               learnset: proposed.map((r) => ({ level: r.level, move: r.move })),
-            }).map((row) => (
-              <li key={row.chrooked_id} className="mk-mirror__row">
-                <span className="mk-mirror__name">{row.name}</span>
-                <span className="mono mk-mirror__count">
-                  {mirrorLearnset.length} moves
-                  {row.strippedL0.length > 0 && ` · −L0: ${row.strippedL0.join(", ")}`}
-                </span>
-              </li>
-            ))}
-          </ul>
+            })}
+            excluded={excludedPreEvos}
+            onToggle={togglePreEvo}
+          />
         </details>
       )}
     </StagePanel>

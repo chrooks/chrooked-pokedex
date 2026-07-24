@@ -665,7 +665,7 @@
 }
 .mk-mirror__row {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   gap: var(--space-3);
   font-size: var(--text-sm);
 }
@@ -673,8 +673,39 @@
   color: var(--text);
 }
 .mk-mirror__count {
+  margin-left: auto;
   color: var(--text-faint);
   font-size: var(--text-xs);
+  text-align: right;
+}
+/* mirror/skip toggle: a role="switch" pill. "mirror" reads active (chrome
+   keyline), "skip" reads muted; the whole row dims when skipped. */
+.mk-mirror__toggle {
+  flex: none;
+  min-width: 5ch;
+  background: none;
+  border: 1px solid var(--chrome-dim);
+  border-radius: var(--radius-sm);
+  color: var(--chrome);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: 0 var(--space-2);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.mk-mirror__toggle[aria-checked="false"] {
+  border-color: var(--line);
+  color: var(--text-faint);
+}
+.mk-mirror__toggle:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+.mk-mirror__row[data-skipped] .mk-mirror__name,
+.mk-mirror__row[data-skipped] .mk-mirror__count {
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
 }
 
 /* --- Line strip ----------------------------------------------------------- */
