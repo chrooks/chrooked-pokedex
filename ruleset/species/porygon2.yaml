@@ -2,6 +2,7 @@ name: Porygon2
 chrooked_id: porygon2
 aka: { pokeemerald: SPECIES_PORYGON2 }
 types: [Normal, Electric]
+evolution: { from: Porygon, method: { item: UPGRADE } }
 abilities:
   primary: Adaptability
   secondary: Download

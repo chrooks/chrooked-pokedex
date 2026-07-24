@@ -2,6 +2,7 @@ name: Porygon Z
 chrooked_id: porygonz
 aka: { pokeemerald: SPECIES_PORYGON_Z }
 types: [Normal, Ghost]
+evolution: { from: Porygon2, method: { item: DUBIOUSDISC } }
 abilities:
   primary: Adaptability
   secondary: Download
