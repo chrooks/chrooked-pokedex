@@ -13,6 +13,7 @@ import {
   learnsetChanged,
   mergeDraft,
   removedRows,
+  removeRow,
   removeSelectedMoves,
   sortMoves,
 } from "./learnsetDraft";
@@ -29,6 +30,26 @@ describe("learnset draft — bulk edits", () => {
   it("removes selected moves and keeps the list sorted", () => {
     const next = removeSelectedMoves(draft, new Set(["Tackle", "Bite"]));
     expect(next.learnset).toEqual([{ level: 10, move: "Ember" }]);
+  });
+
+  it("removeRow drops one row by index, keeping a same-move sibling", () => {
+    const withDup = {
+      learnset: [
+        { level: 0, move: "Ember" },
+        { level: 10, move: "Ember" },
+        { level: 5, move: "Tackle" },
+      ],
+    };
+    // Remove the L10 Ember (index 1 after the draft's own order); the L0 Ember stays.
+    const next = removeRow(withDup, 1);
+    expect(next.learnset).toEqual([
+      { level: 0, move: "Ember" },
+      { level: 5, move: "Tackle" },
+    ]);
+  });
+
+  it("removeRow on an empty/null draft is a no-op", () => {
+    expect(removeRow(null, 0).learnset).toEqual([]);
   });
 
   it("nudges selected levels by delta, re-sorting", () => {

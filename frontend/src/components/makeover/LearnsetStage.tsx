@@ -21,6 +21,7 @@ import {
   editRow,
   mergeDraft,
   removedRows,
+  removeRow,
 } from "../proposal/learnsetDraft";
 import { bandViolation, type LearnsetRubric } from "../../lib/learnsetBands";
 import { copyDownLearnset, mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
@@ -99,18 +100,38 @@ export function LearnsetStage(props: Props) {
     return proposed.findIndex((m) => m.level === level && m.move === move);
   }
 
+  function removeRowByKey(rowKey: string) {
+    const [lvStr, ...moveParts] = rowKey.split("-");
+    const index = draftIndexOf(Number(lvStr), moveParts.join("-"));
+    if (index >= 0) hook.editDraft(removeRow(draft, index));
+    if (editingKey === rowKey) setEditingKey(null);
+  }
+
   // ArrowUp/Down move row focus within the proposed list; `e` opens the focused
-  // row's editor. Enter is left to bubble to the workbench (LOCK IN).
+  // row's editor, `d`/Delete removes it. Enter is left to bubble to the workbench
+  // (LOCK IN).
   function handleListKey(event: KeyboardEvent<HTMLOListElement>) {
-    if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "e") return;
+    const isNav = event.key === "ArrowDown" || event.key === "ArrowUp";
+    const isEdit = event.key === "e";
+    const isDelete = event.key === "d" || event.key === "Delete" || event.key === "Backspace";
+    if (!isNav && !isEdit && !isDelete) return;
     const rows = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".mk-lrow"));
     const active = document.activeElement as HTMLElement | null;
     const index = rows.findIndex((r) => r === active);
-    if (event.key === "e") {
-      const key = active?.dataset.rowkey;
+    const key = active?.dataset.rowkey;
+    if (isEdit) {
       if (key) {
         event.preventDefault();
         setEditingKey(key);
+      }
+      return;
+    }
+    if (isDelete) {
+      if (key) {
+        event.preventDefault();
+        // Focus the neighbour so the keyboard flow survives the removal.
+        rows[index + 1 < rows.length ? index + 1 : index - 1]?.focus();
+        removeRowByKey(key);
       }
       return;
     }
@@ -180,6 +201,7 @@ export function LearnsetStage(props: Props) {
                         if (draftIndex >= 0) hook.editDraft(editRow(draft, draftIndex, patch));
                         setEditingKey(null);
                       }}
+                      onRemove={() => removeRowByKey(rowKey)}
                       onCancel={() => setEditingKey(null)}
                     />
                   ) : (
@@ -195,6 +217,15 @@ export function LearnsetStage(props: Props) {
                         onClick={() => setEditingKey(rowKey)}
                       >
                         edit
+                      </button>
+                      <button
+                        type="button"
+                        className="mk-lrow__remove mono"
+                        aria-label={`Remove ${row.move}`}
+                        title={`Remove ${row.move}`}
+                        onClick={() => removeRowByKey(rowKey)}
+                      >
+                        ✕
                       </button>
                     </>
                   )}
@@ -247,10 +278,11 @@ interface RowEditorProps {
   move: string;
   moveOptions: readonly string[];
   onCommit: (patch: { level: number; move: string }) => void;
+  onRemove: () => void;
   onCancel: () => void;
 }
 
-function RowEditor({ level, move, moveOptions, onCommit, onCancel }: RowEditorProps) {
+function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: RowEditorProps) {
   const [lv, setLv] = useState(String(level));
   const [mv, setMv] = useState(move);
   const [error, setError] = useState<string | null>(null);
@@ -317,6 +349,15 @@ function RowEditor({ level, move, moveOptions, onCommit, onCancel }: RowEditorPr
       )}
       <button type="button" className="mk-lrow__commit mono" aria-label="Save row" onClick={commit}>
         ✓
+      </button>
+      <button
+        type="button"
+        className="mk-lrow__remove mono"
+        aria-label="Remove row"
+        title="Remove this move"
+        onClick={onRemove}
+      >
+        ✕
       </button>
     </span>
   );

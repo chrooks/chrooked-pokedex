@@ -35,6 +35,17 @@ export function editRow(
   return { learnset: sortMoves(next) };
 }
 
+/** Drop the proposed row at `index`, then autosort. Index-based (not move-keyed)
+    so removing one row of a move that appears at both L0 and a level leaves the
+    other intact. */
+export function removeRow(
+  draft: LearnsetDraft | null,
+  index: number,
+): LearnsetDraft {
+  const rows = draft?.learnset ?? [];
+  return { learnset: sortMoves(rows.filter((_, i) => i !== index)) };
+}
+
 const LEARNSET_LEVEL_MIN = 0;
 const LEARNSET_LEVEL_MAX = 100;
 
