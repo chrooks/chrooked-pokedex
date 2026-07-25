@@ -19,9 +19,9 @@ _spec.loader.exec_module(mc)
 @pytest.mark.parametrize(
     "power, expected",
     [
-        (29, None),      # below the ladder floor
-        (30, "30-50"),
-        (50, "30-50"),   # upper bound inclusive
+        (1, None),       # variable-power sentinel stays out
+        (15, "≤50"),     # weak starter rungs count (Poison Sting)
+        (50, "≤50"),     # upper bound inclusive
         (51, "51-75"),
         (75, "51-75"),   # upper bound inclusive
         (90, "76-90"),
@@ -39,10 +39,34 @@ def test_flamethrower_resolves_and_fills_fire_special_76_90() -> None:
     # power 90 -> band 76-90 (the plan text's "91-110" is a typo; that band is
     # filled by Fire Blast at 110).
     pool = mc.build_pool()
+    filled, neutral = mc.filled_cells(pool)
 
     assert pool.moves["flamethrower"]["power"] == 90
     assert pool.learners["flamethrower"] >= mc.COMMON_THRESHOLD
-    assert ("Fire", "special", "76-90") in mc.filled_cells(pool)
+    assert ("Fire", "special", "76-90") in filled
+    assert ("Fire", "special", "76-90") in neutral  # Flamethrower is body-neutral
+
+
+@pytest.mark.unit
+def test_drain_family_eligible_despite_null_pp() -> None:
+    # The base snapshot hides drain-family pp behind gen-config ternaries
+    # (pp: null); unknown pp must not disqualify (only a literal 1 does).
+    pool = mc.build_pool()
+
+    assert pool.moves["megadrain"]["pp"] is None
+    assert mc.is_ladder_eligible(pool.moves["megadrain"])
+
+
+@pytest.mark.unit
+def test_curated_exclusions_and_body_specific_tagging() -> None:
+    pool = mc.build_pool()
+
+    # Chris-ruled flavor/effect-specific moves never count as rungs.
+    assert not mc.is_ladder_eligible(pool.moves["payback"])
+    assert not mc.is_ladder_eligible(pool.moves["whirlpool"])
+    # Body-plan words tag; ordinary moves don't.
+    assert mc.is_body_specific(pool.moves["irontail"])
+    assert not mc.is_body_specific(pool.moves["flamethrower"])
 
 
 @pytest.mark.unit

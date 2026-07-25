@@ -40,7 +40,28 @@ BASE_SNAPSHOT = RULESET / ".base" / "1.11.2.json"
 # --- Domain constants --------------------------------------------------------
 
 COMMON_THRESHOLD = 18  # a cell is "common" at >= this many level-up learners
-MIN_LADDER_POWER = 30  # below this a move is too weak to be a ladder rung
+MIN_LADDER_POWER = 2   # 1 = sentinel for variable-power moves; real weak moves count
+
+# Moves Chris ruled too flavor- or effect-specific to be ladder rungs, even
+# though they pass the mechanical filters (2026-07-25 review). Trap-family
+# moves ride along with Whirlpool — same partial-trapping effect class.
+CURATED_EXCLUSIONS: frozenset[str] = frozenset({
+    "payback", "foulplay", "axekick", "hammerarm", "secretsword", "bonetorch",
+    "oblivionwing", "shadowbone", "seasonsedge", "belch", "dreameater",
+    "esperwing", "whirlpool",
+    # trap family (Whirlpool's effect class)
+    "bind", "wrap", "clamp", "firespin", "sandtomb", "infestation",
+    "snaptrap", "thundercage",
+})
+
+# Body-plan-specific moves (fangs, punches, tails, blades...) need a specific
+# anatomy in a way Flamethrower or Acid does not. They still count as ladder
+# moves, but a cell whose only common moves are body-specific is flagged
+# "body-only" — it wants a body-neutral companion.
+BODY_SPECIFIC_RE = re.compile(
+    r"fang|punch|kick|tail|claw|slash|blade|wing|bone|horn|drill|peck",
+    re.IGNORECASE,
+)
 
 # 18 real types, in matrix order. Excludes '', None, Typeless, ???.
 TYPES: tuple[str, ...] = (
@@ -52,8 +73,10 @@ REAL_TYPES = frozenset(TYPES)
 SPLITS: tuple[str, ...] = ("physical", "special")
 
 # Bands are upper-inclusive. A move's band is the last edge <= its power.
+# First band opens at 2 so weak starter rungs (Poison Sting 15, Mud-Slap 20,
+# Absorb 30) count; power 1 stays out as the variable-power sentinel.
 BAND_EDGES: tuple[tuple[int, str], ...] = (
-    (30, "30-50"),
+    (2, "≤50"),
     (51, "51-75"),
     (76, "76-90"),
     (91, "91-110"),
@@ -144,7 +167,7 @@ EFFECT_MAP: dict[str, EffectSpec] = {
 }
 
 BAND_CONVENTIONS: dict[str, dict[str, int]] = {
-    "30-50": {"accuracy": 100, "pp": 30},
+    "≤50": {"accuracy": 100, "pp": 30},
     "51-75": {"accuracy": 100, "pp": 25},
     "76-90": {"accuracy": 100, "pp": 15},
     "91-110": {"accuracy": 90, "pp": 10},
@@ -162,7 +185,7 @@ KNOWN_SECONDARY = STATUS_EFFECTS | STAT_DROP_EFFECTS
 
 STATUS_CHANCE = 10
 STAT_DROP_CHANCE: dict[str, int] = {
-    "30-50": 100, "51-75": 100, "76-90": 20, "91-110": 20, ">110": 30,
+    "≤50": 100, "51-75": 100, "76-90": 20, "91-110": 20, ">110": 30,
 }
 
 
@@ -296,7 +319,11 @@ def is_ladder_eligible(move: Mapping) -> bool:
     if priority != 0:
         return False
     pp = move.get("pp")
-    if pp is None or pp <= 1:
+    # pp None = hidden behind a gen-config ternary in the base source (drain
+    # family); unknown is fine — only a literal 1 (Z/Max) disqualifies.
+    if pp is not None and pp <= 1:
+        return False
+    if move.get("chrooked_id") in CURATED_EXCLUSIONS:
         return False
     if move.get("effect") in EXCLUDED_EFFECTS:
         return False
@@ -307,18 +334,26 @@ def is_ladder_eligible(move: Mapping) -> bool:
     return True
 
 
-def filled_cells(pool: Pool) -> set[tuple[str, str, str]]:
-    """The set of (type, split, band) cells that a qualifying move fills."""
+def is_body_specific(move: Mapping) -> bool:
+    """True when the move's name implies a body plan (fang, punch, tail...)."""
+    return bool(BODY_SPECIFIC_RE.search(move.get("name") or ""))
+
+
+def filled_cells(pool: Pool) -> tuple[set[tuple[str, str, str]], set[tuple[str, str, str]]]:
+    """(cells with any common move, cells with a body-NEUTRAL common move)."""
     filled: set[tuple[str, str, str]] = set()
+    neutral: set[tuple[str, str, str]] = set()
     for mid, move in pool.moves.items():
         if not is_ladder_eligible(move):
             continue
         common = mid in pool.custom or pool.learners.get(mid, 0) >= COMMON_THRESHOLD
         if not common:
             continue
-        band = band_of(move["power"])
-        filled.add((move["type"], move["category"], band))
-    return filled
+        cell = (move["type"], move["category"], band_of(move["power"]))
+        filled.add(cell)
+        if not is_body_specific(move):
+            neutral.add(cell)
+    return filled, neutral
 
 
 # --- Conformance audit (`check`) ---------------------------------------------
@@ -397,18 +432,30 @@ def audit_move(mid: str, move: Mapping) -> list[str]:
 
 
 def cmd_gaps(pool: Pool) -> int:
-    filled = filled_cells(pool)
-    rows: list[tuple[str, str, list[str]]] = []
-    total_blank = 0
+    filled, neutral = filled_cells(pool)
+    blank_rows: list[tuple[str, str, list[str]]] = []
+    body_rows: list[tuple[str, str, list[str]]] = []
+    total_blank = total_body = 0
     for move_type in TYPES:
         for split in SPLITS:
             missing = [b for b in BAND_LABELS if (move_type, split, b) not in filled]
+            body_only = [
+                b for b in BAND_LABELS
+                if (move_type, split, b) in filled and (move_type, split, b) not in neutral
+            ]
             if missing:
                 total_blank += len(missing)
-                rows.append((move_type, split, missing))
-    print(f"{total_blank} blank cells across {len(rows)} rows")
-    for move_type, split, missing in rows:
+                blank_rows.append((move_type, split, missing))
+            if body_only:
+                total_body += len(body_only)
+                body_rows.append((move_type, split, body_only))
+    print(f"{total_blank} blank cells across {len(blank_rows)} rows")
+    for move_type, split, missing in blank_rows:
         print(f"{move_type} {split}: {', '.join(missing)}")
+    print(f"\n{total_body} body-only cells (common moves exist, all body-specific) "
+          f"across {len(body_rows)} rows")
+    for move_type, split, body_only in body_rows:
+        print(f"{move_type} {split}: {', '.join(body_only)}")
     return 0
 
 

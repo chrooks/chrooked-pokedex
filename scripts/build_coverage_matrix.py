@@ -17,6 +17,7 @@ from move_coverage import (
     COMMON_THRESHOLD,
     band_of,
     build_pool,
+    is_body_specific,
     is_ladder_eligible,
 )
 
@@ -57,6 +58,8 @@ td.type{font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);white-s
 .custom{color:var(--star);font-weight:700}
 td.empty{background:color-mix(in srgb,var(--empty) 16%,transparent)}
 td.empty::after{content:'—';color:var(--empty);font-weight:700}
+td.bodyonly{background:color-mix(in srgb,var(--star) 18%,transparent)}
+.bd{color:var(--star);font-size:10px;vertical-align:super}
 tr[data-cat=special] td:not(.type){background:color-mix(in srgb,var(--rowc) 7%,var(--bg))}
 tr[data-cat=special] td.empty{background:color-mix(in srgb,var(--empty) 16%,var(--bg))}
 </style>
@@ -64,7 +67,8 @@ tr[data-cat=special] td.empty{background:color-mix(in srgb,var(--empty) 16%,var(
 <h1 id=title-heading>Move Ladder Coverage — Type × Split × BP Band</h1>
 <p class=sub>Rendered from <code>scripts/move_coverage.py</code> (base 1.11.2 ⊕ ruleset;
 <span class=custom>★ = ruleset/moves/</span>, threshold-exempt). Ladder moves only.
-<i>n</i> = species with the move at level-up. Red <b>—</b> = gap at the current threshold.</p>
+<i>n</i> = species with the move at level-up. Red <b>—</b> = gap at the current threshold.
+Amber cell = <b>body-only</b>: every common move needs a body plan (fang/punch/tail/blade<span class=bd>b</span>…) — wants a neutral companion.</p>
 <div id=controls>
 <label>Common = learned by ≥ <input id=th type=range min=0 max=40 value=__FLOOR__ step=1> <span id=thv></span></label>
 <label><input type=checkbox id=gaps> Only rows with gaps</label>
@@ -103,8 +107,10 @@ function render(){
       let r='<tr data-cat='+b.cat+' style="--rowc:'+col+'">';
       if(i===0) r+='<td class=type rowspan='+built.length+' style="background:'+col+'">'+t+'</td>';
       r+='<td class=split>'+(b.cat==='physical'?'Phys':'Spec')+'</td>';
-      r+=bands.map(k=>{const c=b.cells[k];return !c.length?'<td class=empty></td>':'<td>'+c.map(m=>
-        '<span class=mv>'+(m.custom?'<span class=custom>★</span> ':'')+m.name+' <span class=bp>'+m.power+'</span> <span class=ln>n='+m.n+'</span></span>').join('')+'</td>'}).join('');
+      r+=bands.map(k=>{const c=b.cells[k];if(!c.length)return '<td class=empty></td>';
+        const bodyOnly=c.every(m=>m.body);
+        return '<td'+(bodyOnly?' class=bodyonly':'')+'>'+c.map(m=>
+        '<span class=mv>'+(m.custom?'<span class=custom>★</span> ':'')+m.name+(m.body?'<span class=bd>b</span>':'')+' <span class=bp>'+m.power+'</span> <span class=ln>n='+m.n+'</span></span>').join('')+'</td>'}).join('');
       out+=r+'</tr>';
     });
   }
@@ -116,6 +122,7 @@ render();
 
 
 def main() -> None:
+    """Render the matrix HTML from the harness's merged pool."""
     pool = build_pool()
     rows = [
         {
@@ -127,6 +134,7 @@ def main() -> None:
             "band": band_of(move["power"]),
             "n": pool.learners.get(mid, 0),
             "custom": mid in pool.custom,
+            "body": is_body_specific(move),
         }
         for mid, move in sorted(pool.moves.items())
         if is_ladder_eligible(move)
