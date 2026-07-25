@@ -25,7 +25,9 @@ import {
 import { makeoverApi, type StageFacts } from "../../lib/makeoverApi";
 import type { LearnsetRubric } from "../../lib/learnsetBands";
 import { preEvos } from "../../lib/mirrorDown";
+import { snapshotProfile } from "../../lib/profileDiff";
 import { StageRail } from "./StageRail";
+import { OverheadRail } from "./OverheadRail";
 import { LineStrip } from "./LineStrip";
 import { DirectionStage } from "./DirectionStage";
 import { TypingStage } from "./TypingStage";
@@ -79,6 +81,12 @@ export function MakeoverWorkbench({
   const [corrections, setCorrections] = useState<string[]>([]);
   const [facts, setFacts] = useState<StageFacts>({});
   const [rubric, setRubric] = useState<LearnsetRubric | null>(null);
+  // The line strip's diff baseline: the anchor's profile frozen at workbench OPEN
+  // (ac12). Captured once; the live entry is diffed against it as facets lock.
+  const [before] = useState(() => snapshotProfile(entry));
+  // The active stage's sub-surface label for the overhead rail (e.g. "create new"
+  // when the abilities CREATE NEW panel is open); null otherwise (ac11).
+  const [subSurface, setSubSurface] = useState<string | null>(null);
 
   const redirectRef = useRef<HTMLInputElement>(null);
   const actionsRef = useRef<StageActions | null>(null);
@@ -211,7 +219,14 @@ export function MakeoverWorkbench({
       panel = <StatsStage {...commonProps} />;
       break;
     case "abilities":
-      panel = <AbilitiesStage {...commonProps} abilityOptions={abilityOptions} byId={byId} />;
+      panel = (
+        <AbilitiesStage
+          {...commonProps}
+          abilityOptions={abilityOptions}
+          byId={byId}
+          onSubSurface={setSubSurface}
+        />
+      );
       break;
     case "learnset":
       panel = (
@@ -269,6 +284,12 @@ export function MakeoverWorkbench({
           makeover · <strong>{entry.name}</strong>
         </h2>
       </header>
+      <OverheadRail
+        selected={selected}
+        sessionLocked={sessionLocked}
+        active={active}
+        subLabel={subSurface}
+      />
       <div className="mk-workbench__body">
         <StageRail
           selected={selected}
@@ -283,6 +304,7 @@ export function MakeoverWorkbench({
         <LineStrip
           anchor={entry}
           preEvos={linePre}
+          before={before}
           facts={facts}
           lockedLearnset={sessionLocked.has("learnset") || sessionLocked.has("mirror")}
           backdropTargetId={backdropTargetId}

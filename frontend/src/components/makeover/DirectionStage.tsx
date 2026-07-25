@@ -23,7 +23,7 @@ interface Props {
   keptAbilities?: AbilitySlots;
 }
 
-type Phase = "loading" | "ready" | "error";
+type Phase = "idle" | "loading" | "ready" | "error";
 
 /** The direction string a picked option carries into the typing stage. */
 function optionDirection(option: LoreOption): string {
@@ -38,49 +38,39 @@ export function DirectionStage({
   keptTypes,
   keptAbilities,
 }: Props) {
-  const [phase, setPhase] = useState<Phase>("loading");
+  // ac13: lore options load ON DEMAND (SUGGEST DIRECTIONS), never on mount — the
+  // free-direction path stays entirely call-free. `idle` is the opening state.
+  const [phase, setPhase] = useState<Phase>("idle");
   const [options, setOptions] = useState<LoreOption[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [free, setFree] = useState("");
-  const fetchedOnce = useRef(false);
   const typingKept = keptTypes != null;
 
-  // Read the kept-facet constraints through refs so the fetch effect stays keyed
-  // on the species alone (the constraints are stable while this stage is active).
+  // Read the kept-facet constraints through a ref so the load callback stays stable.
   const keptRef = useRef({ keptTypes, keptAbilities });
   keptRef.current = { keptTypes, keptAbilities };
 
-  useEffect(() => {
-    if (fetchedOnce.current) return;
-    fetchedOnce.current = true;
-    let cancelled = false;
-    void (async () => {
-      try {
-        const result = await makeoverApi.loreOptions(entry.chrooked_id, {
-          keptTypes: keptRef.current.keptTypes,
-          keptAbilities: keptRef.current.keptAbilities,
-        });
-        if (!cancelled) {
-          setOptions(result.draft.options);
-          setPhase("ready");
-        }
-      } catch (caught: unknown) {
-        if (!cancelled) {
-          setError(
-            caught instanceof ApiError
-              ? caught.message
-              : caught instanceof Error
-                ? caught.message
-                : "Unexpected error",
-          );
-          setPhase("error");
-        }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [entry.chrooked_id]);
+  async function loadOptions() {
+    setPhase("loading");
+    setError(null);
+    try {
+      const result = await makeoverApi.loreOptions(entry.chrooked_id, {
+        keptTypes: keptRef.current.keptTypes,
+        keptAbilities: keptRef.current.keptAbilities,
+      });
+      setOptions(result.draft.options);
+      setPhase("ready");
+    } catch (caught: unknown) {
+      setError(
+        caught instanceof ApiError
+          ? caught.message
+          : caught instanceof Error
+            ? caught.message
+            : "Unexpected error",
+      );
+      setPhase("error");
+    }
+  }
 
   // The workbench's Enter = LOCK IN maps here to "use the free direction" when the
   // author has typed one; `t` focuses the free-direction input.
@@ -112,6 +102,17 @@ export function DirectionStage({
           </>
         )}
       </p>
+
+      {(phase === "idle" || phase === "error") && (
+        <button
+          type="button"
+          className="mk-btn mk-btn--ghost"
+          id="mk-suggest-directions"
+          onClick={() => void loadOptions()}
+        >
+          {phase === "error" ? "TRY AGAIN" : "SUGGEST DIRECTIONS"}
+        </button>
+      )}
 
       {phase === "loading" && (
         <div className="mk-stage__skeleton" aria-busy="true" aria-live="polite">

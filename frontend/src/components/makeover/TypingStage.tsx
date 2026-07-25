@@ -63,6 +63,18 @@ export function TypingStage(props: CommonStageProps) {
       registerActions={registerActions}
       applyAlternative={(alt) => applyTypingAlt(alt)}
       altLabel={typingAltLabel}
+      current={
+        <div className="mk-cols">
+          <div className="mk-col">
+            <p className="mk-col__head mono">current</p>
+            <div className="mk-chips">
+              {entry.types.map((t) => (
+                <TypeChip key={t} type={t} />
+              ))}
+            </div>
+          </div>
+        </div>
+      }
     >
       <div className="mk-cols">
         <div className="mk-col">

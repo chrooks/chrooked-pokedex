@@ -167,6 +167,22 @@ export function LearnsetStage(props: Props) {
       registerActions={registerActions}
       applyAlternative={(alt, current) => applyAlternative(current, alt)}
       altLabel={(value) => (Array.isArray(value) ? `${value.length} moves` : String(value))}
+      current={
+        <div className="mk-col">
+          <p className="mk-col__head mono">current</p>
+          <ol className="mk-learnset">
+            {entry.learnset.length === 0 && <li className="mk-empty mono">no level-up moves</li>}
+            {[...entry.learnset]
+              .sort((a, b) => a.level - b.level || a.move.localeCompare(b.move))
+              .map((m, i) => (
+                <li key={`ready-${m.level}-${m.move}-${i}`} className="mk-lrow">
+                  <span className="mk-lrow__lv mono">{m.level === 0 ? "—" : `L${m.level}`}</span>
+                  <span className="mk-lrow__move">{m.move}</span>
+                </li>
+              ))}
+          </ol>
+        </div>
+      }
     >
       <div className="mk-cols mk-cols--learnset">
         <div className="mk-col">

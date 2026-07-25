@@ -57,6 +57,30 @@ export function StatsStage(props: CommonStageProps) {
       placeholder="steer the spread (e.g. faster special attacker)…"
       redirectRef={redirectRef}
       registerActions={registerActions}
+      current={
+        <table className="mk-stats">
+          <thead>
+            <tr>
+              <th className="mono" scope="col">stat</th>
+              <th className="mono" scope="col">now</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STAT_ORDER.map((key) => (
+              <tr key={key}>
+                <th className="mono mk-stats__label" scope="row">
+                  {STAT_LABEL[key]}
+                </th>
+                <td className="mono mk-stats__now">{entry.stats[key] ?? 0}</td>
+              </tr>
+            ))}
+            <tr className="mk-stats__bst">
+              <th className="mono" scope="row">BST</th>
+              <td className="mono">{currentBst}</td>
+            </tr>
+          </tbody>
+        </table>
+      }
     >
       <table className="mk-stats" id="mk-stats-table">
         <thead>

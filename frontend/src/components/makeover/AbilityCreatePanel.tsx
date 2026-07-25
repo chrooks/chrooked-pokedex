@@ -6,7 +6,7 @@
    the server refuses to clobber an id collision (422, shown verbatim). Proposal-
    only fields (replaces/reasoning/ai_rating/warnings) are stripped before writes. */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { api, ApiError } from "../../api";
 import type { DexEntry, SpeciesOverride } from "../../types";
@@ -16,7 +16,10 @@ import {
   type AbilityCreateResponse,
   type StageFacts,
 } from "../../lib/makeoverApi";
+import { addRow, deriveReplaces, removeRow, setSlot, type DistRow } from "./distributionDraft";
 import type { StageActions } from "./StagePanel";
+
+const SLOTS: DistRow["slot"][] = ["primary", "secondary", "hidden"];
 
 interface Props {
   entry: DexEntry;
@@ -93,6 +96,36 @@ export function AbilityCreatePanel({ entry, byId, redirectRef, registerActions, 
   const [direction, setDirection] = useState("");
   const [result, setResult] = useState<AbilityCreateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // The editable distribution — seeded fresh each time a proposal lands (a TRY
+  // AGAIN discards prior edits and re-seeds from the new proposal, per ac10).
+  const [dist, setDist] = useState<DistRow[]>([]);
+  const [addSpecies, setAddSpecies] = useState("");
+  const [addSlot, setAddSlot] = useState<DistRow["slot"]>("primary");
+
+  useEffect(() => {
+    setDist(
+      (result?.draft.distribution ?? []).map((row) => ({ species: row.species, slot: row.slot })),
+    );
+    setAddSpecies("");
+    setAddSlot("primary");
+  }, [result]);
+
+  // Typed-name → chrooked_id resolver for the add-species datalist (the same
+  // affordance the learnset RowEditor uses for moves, keyed on display name).
+  const idByName = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const member of byId.values()) map.set(member.name.toLowerCase(), member.chrooked_id);
+    return map;
+  }, [byId]);
+  const resolvedAddId =
+    idByName.get(addSpecies.trim().toLowerCase()) ??
+    (byId.has(addSpecies.trim()) ? addSpecies.trim() : null);
+
+  function commitAdd() {
+    if (resolvedAddId === null) return;
+    setDist((rows) => addRow(rows, { species: resolvedAddId, slot: addSlot }));
+    setAddSpecies("");
+  }
 
   async function propose() {
     if (direction.trim() === "") return;
@@ -115,7 +148,9 @@ export function AbilityCreatePanel({ entry, byId, redirectRef, registerActions, 
       setPhase("writing");
       setError(null);
       try {
-        const written = await writeCreation(result.draft, byId);
+        // Write the EDITED distribution, not the proposal's — the author's slot
+        // retargets, removals, and added species are what lands (ac10).
+        const written = await writeCreation({ ...result.draft, distribution: dist }, byId);
         onLocked({ abilities: entry.abilities }, written);
       } catch (caught: unknown) {
         setError(
@@ -223,31 +258,115 @@ export function AbilityCreatePanel({ entry, byId, redirectRef, registerActions, 
             </p>
           </section>
 
-          {draft.distribution.length > 0 ? (
-            <section className="mk-create__dist">
-              <h5 className="mk-create__sub mono">distribution ({draft.distribution.length})</h5>
+          <section className="mk-create__dist" id="mk-create-dist">
+            <h5 className="mk-create__sub mono">distribution ({dist.length})</h5>
+            {dist.length > 0 ? (
               <table className="mk-create__dist-table mono">
                 <thead>
                   <tr>
                     <th scope="col">species</th>
                     <th scope="col">slot</th>
                     <th scope="col">replaces</th>
+                    <th scope="col">
+                      <span className="sr-only">remove</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {draft.distribution.map((row) => (
-                    <tr key={`${row.species}-${row.slot}`}>
-                      <td>{byId.get(row.species)?.name ?? row.species}</td>
-                      <td>{row.slot}</td>
-                      <td>{row.replaces ?? "—"}</td>
-                    </tr>
-                  ))}
+                  {dist.map((row, index) => {
+                    const label = byId.get(row.species)?.name ?? row.species;
+                    const replaces = deriveReplaces(byId, row.species, row.slot);
+                    return (
+                      <tr key={row.species} id={`mk-dist-row-${row.species}`}>
+                        <td>{label}</td>
+                        <td>
+                          <select
+                            className="mk-select mono"
+                            aria-label={`${label} slot`}
+                            value={row.slot}
+                            onChange={(event) =>
+                              setDist((rows) =>
+                                setSlot(rows, index, event.target.value as DistRow["slot"]),
+                              )
+                            }
+                          >
+                            {SLOTS.map((slot) => (
+                              <option key={slot} value={slot}>
+                                {slot}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td>{replaces ?? "—"}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="mk-lrow__remove mono"
+                            aria-label={`Remove ${label} from the distribution`}
+                            title={`Remove ${label}`}
+                            onClick={() => setDist((rows) => removeRow(rows, index))}
+                          >
+                            ✕
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
-            </section>
-          ) : (
-            <p className="mk-empty mono">no species distribution — author now, distribute later.</p>
-          )}
+            ) : (
+              <p className="mk-empty mono">
+                no species yet — add one below, or author now and distribute later.
+              </p>
+            )}
+
+            <div className="mk-dist-add" id="mk-dist-add">
+              <input
+                className="mk-stage__redirect-input mono"
+                id="mk-dist-add-species"
+                type="text"
+                list="mk-dist-species-list"
+                aria-label="Add a species to the distribution"
+                placeholder="add a species…"
+                value={addSpecies}
+                onChange={(event) => setAddSpecies(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    commitAdd();
+                  }
+                }}
+                autoComplete="off"
+              />
+              <datalist id="mk-dist-species-list">
+                {[...byId.values()].map((member) => (
+                  <option key={member.chrooked_id} value={member.name} />
+                ))}
+              </datalist>
+              <select
+                className="mk-select mono"
+                aria-label="Slot for the added species"
+                value={addSlot}
+                onChange={(event) => setAddSlot(event.target.value as DistRow["slot"])}
+              >
+                {SLOTS.map((slot) => (
+                  <option key={slot} value={slot}>
+                    {slot}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className="mk-btn mk-btn--ghost"
+                id="mk-dist-add-btn"
+                disabled={resolvedAddId === null}
+                title={resolvedAddId === null ? "Type a known species name" : "Add to distribution"}
+                onClick={commitAdd}
+              >
+                ADD
+              </button>
+            </div>
+          </section>
 
           <div className="mk-stage__actions">
             <button

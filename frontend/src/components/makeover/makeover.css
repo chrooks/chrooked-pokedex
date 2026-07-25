@@ -744,6 +744,12 @@
   gap: var(--space-3);
 }
 .mk-line__fact {
+  /* Raised onto surface-1 so the --edited amber "after" values clear 4.5:1 AA in
+     the light theme (amber on surface-0 measures 4.04; on surface-1, 4.89). */
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
   animation: mk-fact-in var(--mk-slide) var(--mk-ease);
 }
 .mk-line__fact-label {
@@ -1208,6 +1214,213 @@
   font-size: var(--text-xs);
   letter-spacing: 0.04em;
   font-weight: 500;
+}
+
+/* --- Overhead rail (ac11) ------------------------------------------------- */
+
+/* A full-width second header row: passive position Signifier only (no click
+   handlers). On surface-1 so the locked ✓ (--edited) clears AA in light. */
+.mk-overhead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-1);
+}
+.mk-overhead__step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+}
+.mk-overhead__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 1ch;
+  color: var(--edited);
+  font-size: var(--text-xs);
+}
+.mk-overhead__led {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--edited);
+}
+.mk-overhead__label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+}
+/* Locked — done this session: dim label, ✓ + filled LED carry the state. */
+.mk-overhead__step[data-state="locked"] .mk-overhead__label {
+  color: var(--text-dim);
+}
+/* Active — the accent pill (+ the sub-surface label when one is open). */
+.mk-overhead__step[data-state="active"] {
+  border-color: var(--chrome-dim);
+  background: color-mix(in oklch, var(--chrome) 14%, var(--surface-1));
+}
+.mk-overhead__step[data-state="active"] .mk-overhead__label {
+  color: var(--text);
+}
+/* Queued — selected, not yet reached: dim (text-dim clears AA both themes). */
+.mk-overhead__step[data-state="queued"] .mk-overhead__label {
+  color: var(--text-dim);
+}
+/* KEPT — not in the selection: struck + dim (text-dim, above the AA floor). */
+.mk-overhead__step[data-state="kept"] .mk-overhead__label {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
+}
+.mk-overhead__tail {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  opacity: 0.6;
+  transition: opacity var(--dur-mid) var(--ease-out);
+}
+.mk-overhead__tail[data-open] {
+  opacity: 1;
+}
+.mk-overhead__auto[data-active] {
+  color: var(--text);
+}
+.mk-overhead__auto-sep {
+  color: var(--text-faint);
+}
+
+/* --- Ready view (ac13, pre-proposal call-free state) ---------------------- */
+
+.mk-stage__ready {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+}
+.mk-stage__hint {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* --- Distribution add row + inline remove (ac10) -------------------------- */
+
+.mk-dist-add {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.mk-dist-add .mk-stage__redirect-input {
+  flex: 1;
+}
+/* Reuse the learnset row's quiet-✕ language in the table: hidden until the row is
+   hovered or holds focus, revealed on keyboard focus so it stays reachable. */
+.mk-create__dist-table .mk-lrow__remove {
+  opacity: 0;
+}
+.mk-create__dist-table tr:hover .mk-lrow__remove,
+.mk-create__dist-table tr:focus-within .mk-lrow__remove,
+.mk-create__dist-table .mk-lrow__remove:focus-visible {
+  opacity: 1;
+}
+.mk-create__dist-table td .mk-select {
+  padding: 0 var(--space-1);
+}
+
+/* --- Line strip before→after diff (ac12) ---------------------------------- */
+
+.mk-line__fact[data-changed] .mk-line__fact-label {
+  color: var(--text-dim);
+}
+.mk-line__diff {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+/* Old value: struck + dim (text-dim, clears AA in both themes). Never amber. */
+.mk-line__was {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
+  font-size: var(--text-xs);
+}
+/* New value: the ONE amber signal (--edited), on surface-1 so it clears AA. */
+.mk-line__now {
+  color: var(--edited);
+}
+.mk-line__now-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+.mk-line__stat[data-changed] {
+  color: var(--edited);
+}
+.mk-line__stat-delta {
+  color: var(--edited);
+}
+.mk-line__stat--bst {
+  color: var(--text);
+}
+.mk-line__unchanged {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+.mk-line__learnset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.mk-line__learnset-head {
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+}
+.mk-line__ls-add {
+  color: var(--edited);
+}
+.mk-line__ls-move {
+  color: var(--text);
+}
+.mk-line__ls-drop {
+  color: var(--text-dim);
+}
+.mk-line__ls-summary {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.mk-line__ls-list {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: var(--text-xs);
+}
+.mk-line__ls-row {
+  color: var(--text-dim);
+}
+.mk-line__ls-row--add {
+  color: var(--edited);
+}
+.mk-line__ls-row--drop {
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
 }
 
 /* --- Responsive + reduced motion ------------------------------------------ */

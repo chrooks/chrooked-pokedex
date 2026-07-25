@@ -4,7 +4,7 @@
    LOCK IN writes through the existing CRUD routes. Reuses the pure abilitiesDraft
    logic (merge, edit, alternatives) — the same machinery the ledger uses. */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { AbilityDraft, AbilitySlots, DexEntry, ProposalAlternative } from "../../types";
 import { api } from "../../api";
 import {
@@ -31,6 +31,9 @@ interface Props extends CommonStageProps {
   abilityOptions: readonly string[];
   /** The whole dex by chrooked_id, for the create mode's distribution writes. */
   byId: ReadonlyMap<string, DexEntry>;
+  /** Report the open sub-surface to the overhead rail (ac11): "create new" when
+      the CREATE NEW panel is open, null on swap/close. */
+  onSubSurface?: (label: string | null) => void;
 }
 
 type AbilityMode = "swap" | "create";
@@ -46,9 +49,17 @@ export function AbilitiesStage(props: Props) {
     onRedirect,
     abilityOptions,
     byId,
+    onSubSurface,
   } = props;
 
   const [mode, setMode] = useState<AbilityMode>("swap");
+
+  // Tell the overhead rail which sub-surface is open; reset on unmount so the pill
+  // never keeps a stale "create new" label after the stage closes (ac11).
+  useEffect(() => {
+    onSubSurface?.(mode === "create" ? "create new" : null);
+    return () => onSubSurface?.(null);
+  }, [mode, onSubSurface]);
 
   const hook = useMakeoverStage<AbilityDraft>({
     section: "abilities",
@@ -132,6 +143,16 @@ export function AbilitiesStage(props: Props) {
         registerActions={registerActions}
         applyAlternative={(alt, current) => applyAlternative(current, alt)}
         altLabel={(value) => (typeof value === "string" ? value : String(value))}
+        current={
+          <div className="mk-abilities">
+            {ABILITY_SLOTS.map((slot) => (
+              <div key={slot} className="mk-ability">
+                <span className="mk-ability__label mono">{SLOT_LABEL[slot]}</span>
+                <span className="mk-ability__now mono">{currentSlot(entry, slot) ?? "—"}</span>
+              </div>
+            ))}
+          </div>
+        }
       >
       <div className="mk-abilities">
         {ABILITY_SLOTS.map((slot) => {

@@ -31,6 +31,9 @@ interface Props<Draft> {
   applyAlternative?: (alt: ProposalAlternative, draft: Draft | null) => Draft;
   /** A compact label for an alternative value (section-specific). */
   altLabel?: (value: unknown) => string;
+  /** The stage's current-state view, shown in the READY (pre-proposal) phase so
+      the author sees what's there before spending a call (ac13). */
+  current?: ReactNode;
   /** The current │ proposed cell grid. */
   children: ReactNode;
 }
@@ -44,6 +47,7 @@ export function StagePanel<Draft>({
   registerActions,
   applyAlternative,
   altLabel,
+  current,
   children,
 }: Props<Draft>) {
   const {
@@ -60,15 +64,8 @@ export function StagePanel<Draft>({
     lockIn,
   } = hook;
 
-  // Auto-propose once when the stage first mounts (the flow proposes per stage);
-  // the ref guard survives React 18 StrictMode's double-invoke.
-  const proposedOnce = useRef(false);
-  useEffect(() => {
-    if (!proposedOnce.current && phase === "propose") {
-      proposedOnce.current = true;
-      void propose();
-    }
-  }, [phase, propose]);
+  // ac13: no auto-propose. The stage opens in a call-free READY view; PROPOSE (the
+  // form submit / button) spends the first call only when the author is ready.
 
   // Register the imperative actions for the workbench keyboard path. Re-registers
   // whenever lock-ability changes; clears on unmount so a stale handle never fires.
@@ -100,7 +97,7 @@ export function StagePanel<Draft>({
         }}
       >
         <label className="mk-stage__redirect-label mono" htmlFor="mk-redirect">
-          redirect
+          {phase === "propose" ? "direction" : "redirect"}
         </label>
         <input
           ref={redirectRef}
@@ -121,6 +118,13 @@ export function StagePanel<Draft>({
           {proposed ? "TRY AGAIN" : "PROPOSE"}
         </button>
       </form>
+
+      {phase === "propose" && (
+        <div className="mk-stage__ready" id={`mk-ready-${stageLabel.toLowerCase()}`}>
+          {current}
+          <p className="mk-stage__hint mono">no call yet — PROPOSE when ready (Enter)</p>
+        </div>
+      )}
 
       {isProposing && (
         <div className="mk-stage__skeleton" aria-live="polite" aria-busy="true">
