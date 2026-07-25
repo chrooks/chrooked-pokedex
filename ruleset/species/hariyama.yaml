@@ -8,13 +8,16 @@ learnset:
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Brine }
   - { level: 1, move: Arm Thrust }
+  - { level: 5, move: Aura Spark }
   - { level: 10, move: Fake Out }
   - { level: 13, move: Force Palm }
   - { level: 16, move: Whirlwind }
   - { level: 19, move: Knock Off }
   - { level: 22, move: Bulk Up }
+  - { level: 24, move: Chi Wave }
   - { level: 26, move: Belly Drum }
   - { level: 30, move: Detect }
+  - { level: 32, move: Ki Blast }
   - { level: 34, move: Seismic Toss }
   - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Focus Punch }
@@ -22,4 +25,5 @@ learnset:
   - { level: 46, move: Close Combat }
   - { level: 50, move: Reversal }
   - { level: 54, move: Heavy Slam }
+  - { level: 57, move: Focus Blast }
   - { level: 60, move: Headlong Rush }

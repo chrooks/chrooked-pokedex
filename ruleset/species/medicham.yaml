@@ -13,9 +13,11 @@ learnset:
   - { level: 1, move: Work Up }
   - { level: 1, move: Detect }
   - { level: 1, move: Confusion }
+  - { level: 6, move: Aura Spark }
   - { level: 9, move: Mind Flick }
   - { level: 12, move: Endure }
   - { level: 15, move: Feint }
+  - { level: 16, move: Chi Wave }
   - { level: 17, move: Force Palm }
   - { level: 20, move: Psybeam }
   - { level: 23, move: Calm Mind }
@@ -26,8 +28,10 @@ learnset:
   - { level: 36, move: Power Trick }
   - { level: 38, move: Aura Sphere }
   - { level: 41, move: Astral Hand }
+  - { level: 41, move: Ki Blast }
   - { level: 44, move: One-Inch Punch }
   - { level: 47, move: Recover }
   - { level: 53, move: Counter }
   - { level: 53, move: Axe Kick }
+  - { level: 62, move: Focus Blast }
 evolution: { from: Meditite, method: { level: 34 } }

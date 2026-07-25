@@ -12,15 +12,19 @@ learnset:
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Fake Out }
   - { level: 4, move: Quick Attack }
+  - { level: 6, move: Aura Spark }
   - { level: 8, move: Gyro Ball }
   - { level: 12, move: Detect }
   - { level: 16, move: Rapid Spin }
+  - { level: 18, move: Chi Wave }
   - { level: 21, move: Wide Guard }
   - { level: 21, move: Quick Guard }
   - { level: 24, move: Sucker Punch }
   - { level: 28, move: Agility }
+  - { level: 30, move: Ki Blast }
   - { level: 32, move: Dig }
   - { level: 36, move: Close Combat }
   - { level: 40, move: Counter }
   - { level: 44, move: Endeavor }
   - { level: 48, move: One-Inch Punch }
+  - { level: 62, move: Focus Blast }

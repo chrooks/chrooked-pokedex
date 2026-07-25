@@ -7,16 +7,20 @@ learnset:
   - { level: 1, move: Low Kick }
   - { level: 1, move: Leer }
   - { level: 4, move: Focus Energy }
+  - { level: 6, move: Aura Spark }
   - { level: 8, move: Revenge }
   - { level: 12, move: Low Sweep }
   - { level: 16, move: Knock Off }
+  - { level: 18, move: Chi Wave }
   - { level: 20, move: Scary Face }
   - { level: 24, move: Vital Throw }
   - { level: 29, move: Strength }
   - { level: 32, move: Dual Chop }
   - { level: 34, move: One-Inch Punch }
+  - { level: 34, move: Ki Blast }
   - { level: 36, move: Bulk Up }
   - { level: 40, move: Seismic Toss }
   - { level: 44, move: Dynamic Punch }
   - { level: 48, move: Cross Chop }
   - { level: 52, move: Double-Edge }
+  - { level: 62, move: Focus Blast }

@@ -1,0 +1,11 @@
+name: Aura Spark
+chrooked_id: auraspark
+aka: { pokeemerald: MOVE_AURA_SPARK }
+type: Fighting
+category: special
+power: 40
+accuracy: 100
+pp: 30
+description: A small burst of fighting aura. Lowers the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 100 }

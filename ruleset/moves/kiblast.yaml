@@ -1,0 +1,11 @@
+name: Ki Blast
+chrooked_id: kiblast
+aka: { pokeemerald: MOVE_KI_BLAST }
+type: Fighting
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: A powerful sphere of channeled ki. May lower the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 20 }

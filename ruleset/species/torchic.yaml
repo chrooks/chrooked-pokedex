@@ -4,11 +4,13 @@ aka: { dex: 255 }
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Growl }
+  - { level: 2, move: Aura Spark }
   - { level: 3, move: Ember }
   - { level: 6, move: Quick Attack }
   - { level: 9, move: Flame Charge }
   - { level: 12, move: Detect }
   - { level: 15, move: Sand Attack }
+  - { level: 16, move: Chi Wave }
   - { level: 18, move: Aerial Ace }
   - { level: 21, move: Slash }
   - { level: 24, move: Bounce }
@@ -19,4 +21,6 @@ learnset:
   - { level: 39, move: Flare Blitz }
   - { level: 41, move: Aura Sphere }
   - { level: 43, move: Cinder Smash }
+  - { level: 45, move: Ki Blast }
   - { level: 48, move: One-Inch Punch }
+  - { level: 62, move: Focus Blast }

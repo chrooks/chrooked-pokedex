@@ -14,17 +14,21 @@ learnset:
   - { level: 1, move: Double Kick }
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
+  - { level: 5, move: Aura Spark }
   - { level: 9, move: Flame Charge }
   - { level: 12, move: Detect }
   - { level: 15, move: Sand Attack }
+  - { level: 17, move: Chi Wave }
   - { level: 20, move: Aerial Ace }
   - { level: 25, move: Slash }
   - { level: 30, move: Bounce }
   - { level: 35, move: Focus Energy }
   - { level: 38, move: One-Inch Punch }
+  - { level: 38, move: Ki Blast }
   - { level: 40, move: Aura Sphere }
   - { level: 42, move: Bulk Up }
   - { level: 45, move: Cinder Smash }
+  - { level: 45, move: Focus Blast }
   - { level: 49, move: Reversal }
   - { level: 56, move: Flare Blitz }
   - { level: 63, move: Brave Bird }

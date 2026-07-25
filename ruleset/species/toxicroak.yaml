@@ -13,16 +13,20 @@ learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Taunt }
   - { level: 4, move: Sucker Punch }
+  - { level: 6, move: Aura Spark }
   - { level: 8, move: Low Kick }
   - { level: 12, move: Mud Shot }
   - { level: 16, move: Venoshock }
+  - { level: 18, move: Chi Wave }
   - { level: 20, move: Aqua Jet }
   - { level: 24, move: Mud Shot }
   - { level: 28, move: Cross Poison }
   - { level: 32, move: Liquidation }
   - { level: 36, move: Drain Punch }
+  - { level: 39, move: Ki Blast }
   - { level: 40, move: Mud Bomb }
   - { level: 44, move: Sludge Bomb }
   - { level: 48, move: Earthquake }
   - { level: 52, move: Close Combat }
   - { level: 58, move: Gunk Shot }
+  - { level: 62, move: Focus Blast }

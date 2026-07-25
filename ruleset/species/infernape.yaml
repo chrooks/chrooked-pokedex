@@ -9,19 +9,23 @@ learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
+  - { level: 8, move: Aura Spark }
   - { level: 9, move: Taunt }
   - { level: 14, move: Mach Punch }
   - { level: 17, move: Flame Wheel }
   - { level: 20, move: Fire Punch }
+  - { level: 22, move: Chi Wave }
   - { level: 24, move: Drain Punch }
   - { level: 27, move: Brick Break }
   - { level: 29, move: Bulk Up }
   - { level: 32, move: Thunder Punch }
+  - { level: 35, move: Ki Blast }
   - { level: 36, move: Ice Punch }
   - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Slack Off }
   - { level: 45, move: Cinder Smash }
   - { level: 48, move: Blaze Kick }
   - { level: 53, move: Focus Punch }
+  - { level: 55, move: Focus Blast }
   - { level: 58, move: Flare Blitz }
   - { level: 65, move: Aura Sphere }

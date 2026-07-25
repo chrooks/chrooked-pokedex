@@ -1,0 +1,11 @@
+name: Chi Wave
+chrooked_id: chiwave
+aka: { pokeemerald: MOVE_CHI_WAVE }
+type: Fighting
+category: special
+power: 65
+accuracy: 100
+pp: 25
+description: A focused wave of inner energy. Lowers the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 100 }

@@ -12,15 +12,19 @@ learnset:
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Low Sweep }
   - { level: 4, move: Double Kick }
+  - { level: 6, move: Aura Spark }
   - { level: 8, move: Low Kick }
   - { level: 12, move: Endure }
   - { level: 16, move: Sucker Punch }
+  - { level: 18, move: Chi Wave }
   - { level: 21, move: Wide Guard }
   - { level: 24, move: Blaze Kick }
   - { level: 28, move: Feint }
+  - { level: 30, move: Ki Blast }
   - { level: 32, move: Mega Kick }
   - { level: 36, move: Close Combat }
   - { level: 40, move: Reversal }
   - { level: 44, move: High Jump Kick }
   - { level: 47, move: One-Inch Punch }
   - { level: 50, move: Axe Kick }
+  - { level: 62, move: Focus Blast }

@@ -8,15 +8,18 @@ abilities:
 learnset:
   - { level: 1, move: Confusion }
   - { level: 1, move: Work Up }
+  - { level: 5, move: Aura Spark }
   - { level: 9, move: Detect }
   - { level: 12, move: Mind Flick }
   - { level: 15, move: Feint }
+  - { level: 16, move: Chi Wave }
   - { level: 17, move: Force Palm }
   - { level: 20, move: Psybeam }
   - { level: 23, move: Calm Mind }
   - { level: 25, move: Zen Headbutt }
   - { level: 28, move: High Jump Kick }
   - { level: 29, move: Astral Hand }
+  - { level: 30, move: Ki Blast }
   - { level: 31, move: Psych Up }
   - { level: 33, move: Acupressure }
   - { level: 36, move: Power Trick }
@@ -25,3 +28,4 @@ learnset:
   - { level: 44, move: Counter }
   - { level: 46, move: Aura Sphere }
   - { level: 48, move: One-Inch Punch }
+  - { level: 62, move: Focus Blast }

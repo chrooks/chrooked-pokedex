@@ -8,4 +8,8 @@ learnset:
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Fake Out }
   - { level: 1, move: Helping Hand }
+  - { level: 15, move: Aura Spark }
+  - { level: 28, move: Chi Wave }
+  - { level: 45, move: Ki Blast }
   - { level: 48, move: One-Inch Punch }
+  - { level: 62, move: Focus Blast }

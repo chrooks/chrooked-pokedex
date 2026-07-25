@@ -4,15 +4,18 @@ aka: { dex: 296 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Focus Energy }
+  - { level: 2, move: Aura Spark }
   - { level: 4, move: Sand Attack }
   - { level: 7, move: Arm Thrust }
   - { level: 10, move: Fake Out }
   - { level: 13, move: Force Palm }
+  - { level: 15, move: Chi Wave }
   - { level: 16, move: Whirlwind }
   - { level: 19, move: Knock Off }
   - { level: 22, move: Bulk Up }
   - { level: 25, move: Belly Drum }
   - { level: 28, move: Detect }
+  - { level: 30, move: Ki Blast }
   - { level: 31, move: Seismic Toss }
   - { level: 34, move: Focus Punch }
   - { level: 37, move: Endure }
@@ -20,3 +23,4 @@ learnset:
   - { level: 43, move: Reversal }
   - { level: 46, move: Heavy Slam }
   - { level: 48, move: One-Inch Punch }
+  - { level: 62, move: Focus Blast }

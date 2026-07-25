@@ -9,15 +9,19 @@ learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Leer }
   - { level: 4, move: Low Kick }
+  - { level: 6, move: Aura Spark }
   - { level: 8, move: Rock Throw }
   - { level: 12, move: Focus Energy }
   - { level: 16, move: Bulk Up }
   - { level: 18, move: Mach Punch }
+  - { level: 18, move: Chi Wave }
   - { level: 22, move: Rock Slide }
   - { level: 26, move: Body Slam }
   - { level: 30, move: Drain Punch }
+  - { level: 30, move: Ki Blast }
   - { level: 34, move: Dynamic Punch }
   - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Hammer Arm }
   - { level: 42, move: Stone Edge }
   - { level: 46, move: Superpower }
+  - { level: 62, move: Focus Blast }
