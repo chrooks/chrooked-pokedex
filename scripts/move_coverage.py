@@ -162,7 +162,7 @@ EFFECT_MAP: dict[str, EffectSpec] = {
     "Ghost": {"physical": "def_minus_1", "special": "sp_def_minus_1"},
     "Dragon": None,
     "Dark": "flinch",
-    "Steel": "flinch",
+    "Steel": {"physical": "flinch", "special": "acc_minus_1"},
     "Fairy": "sp_atk_minus_1",
 }
 
