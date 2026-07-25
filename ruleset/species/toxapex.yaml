@@ -1,6 +1,10 @@
 name: Toxapex
 chrooked_id: toxapex
 aka: { pokeemerald: SPECIES_TOXAPEX }
+abilities:
+  primary: Merciless
+  secondary: Limber
+  hidden: Regenerator
 stats: { hp: 65 }
 learnset:
   - { level: 0, move: Baneful Bunker }

@@ -2,8 +2,9 @@ name: Overqwil
 chrooked_id: overqwil
 aka: { pokeemerald: SPECIES_OVERQWIL }
 abilities:
-  primary: Venomous
+  primary: Nematocyst
   secondary: Toxic Debris
+  hidden: Intimidate
 learnset:
   - { level: 1, move: Tackle }
   - { level: 4, move: Harden }

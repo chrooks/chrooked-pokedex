@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_GALVANTULA }
 abilities:
   primary: Web Weaver
   secondary: Carnivore
-stats: { hp: 77, atk: 45, def: 74, spa: 112, spd: 74 }
+stats: { atk: 75, def: 70, spa: 112, spd: 65 }
 learnset:
   - { level: 0, move: Leech Life }
   - { level: 1, move: Thunder Shock }
@@ -18,9 +18,9 @@ learnset:
   - { level: 26, move: Toxic Thread }
   - { level: 30, move: Signal Beam }
   - { level: 33, move: Venoshock }
-  - { level: 35, move: Agility }
-  - { level: 35, move: Short Circuit }
+  - { level: 36, move: Short Circuit }
   - { level: 40, move: Discharge }
   - { level: 46, move: Giga Drain }
   - { level: 50, move: Bug Buzz }
   - { level: 64, move: Thunder }
+evolution: { from: Joltik, method: { level: 36 } }

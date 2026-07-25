@@ -3,6 +3,26 @@ chrooked_id: maractus
 aka: { pokeemerald: SPECIES_MARACTUS }
 abilities:
   primary: Self Sufficient
-  secondary: Chlorophyll
+  secondary: Iron Barbs
   hidden: Storm Drain
-stats: { atk: 85, def: 80, spa: 110, spd: 80 }
+stats: { hp: 100, atk: 65, def: 95, spa: 115, spd: 95, spe: 55 }
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Ingrain }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Spiky Shield }
+  - { level: 4, move: Growth }
+  - { level: 8, move: Poison Sting }
+  - { level: 12, move: Mega Drain }
+  - { level: 16, move: Leech Seed }
+  - { level: 20, move: Spikes }
+  - { level: 24, move: Mud Shot }
+  - { level: 28, move: Pin Missile }
+  - { level: 32, move: Giga Drain }
+  - { level: 36, move: Strength Sap }
+  - { level: 40, move: Scorching Sands }
+  - { level: 44, move: Sunny Day }
+  - { level: 48, move: Burning Jealousy }
+  - { level: 52, move: Cotton Guard }
+  - { level: 56, move: Solar Beam }
+  - { level: 60, move: Petal Dance }

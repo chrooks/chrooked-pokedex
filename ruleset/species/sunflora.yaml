@@ -3,6 +3,29 @@ chrooked_id: sunflora
 aka: { pokeemerald: SPECIES_SUNFLORA }
 types: [Grass, Fire]
 abilities:
-  secondary: Solar Power
-  hidden: Drought
-stats: { hp: 80, def: 60, spa: 125, spe: 50 }
+  primary: Chlorophyll
+  secondary: Solar Dynamo
+  hidden: Chloroplast
+stats: { hp: 80, atk: 70, def: 55, spa: 145, spd: 80, spe: 50 }
+learnset:
+  - { level: 0, move: Sunny Day }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Mud-Slap }
+  - { level: 7, move: Absorb }
+  - { level: 10, move: Ember }
+  - { level: 13, move: Mega Drain }
+  - { level: 16, move: Leech Seed }
+  - { level: 19, move: Flame Burst }
+  - { level: 22, move: Razor Leaf }
+  - { level: 25, move: Mud Shot }
+  - { level: 28, move: Giga Drain }
+  - { level: 31, move: Mystical Fire }
+  - { level: 34, move: Mud Bomb }
+  - { level: 37, move: Matcha Gotcha }
+  - { level: 40, move: Flamethrower }
+  - { level: 43, move: Energy Ball }
+  - { level: 46, move: Fire Blast }
+  - { level: 50, move: Solar Beam }
+  - { level: 55, move: Overheat }

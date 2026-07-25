@@ -1,8 +1,10 @@
 name: Marowak
 chrooked_id: marowak
 aka: { pokeemerald: SPECIES_MAROWAK }
+types: [Ground, Ghost]
 abilities:
   secondary: Bone Breaker
+stats: { hp: 60, atk: 95, def: 110, spa: 35, spd: 80, spe: 45 }
 learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Growl }

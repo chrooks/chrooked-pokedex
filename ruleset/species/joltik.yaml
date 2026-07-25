@@ -1,24 +1,26 @@
 name: Joltik
 chrooked_id: joltik
 aka: { pokeemerald: SPECIES_JOLTIK }
+types: [Bug, Electric]
 abilities:
   primary: Web Weaver
   secondary: Carnivore
+  hidden: Swarm
 stats: { hp: 55, atk: 35, def: 55, spa: 72, spd: 55 }
 learnset:
-  - { level: 1, move: Thunder Shock }
-  - { level: 1, move: Struggle Bug }
   - { level: 1, move: Absorb }
   - { level: 1, move: Sticky Web }
+  - { level: 1, move: Struggle Bug }
+  - { level: 1, move: Thunder Shock }
   - { level: 8, move: Infestation }
   - { level: 13, move: Shock Wave }
   - { level: 17, move: Thunder Wave }
-  - { level: 18, move: Short Circuit }
   - { level: 22, move: Electroweb }
   - { level: 26, move: Toxic Thread }
   - { level: 30, move: Signal Beam }
   - { level: 33, move: Venoshock }
   - { level: 35, move: Agility }
+  - { level: 35, move: Short Circuit }
   - { level: 40, move: Discharge }
   - { level: 46, move: Giga Drain }
   - { level: 50, move: Bug Buzz }

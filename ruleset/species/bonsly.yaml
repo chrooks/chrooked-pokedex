@@ -2,4 +2,22 @@ name: Bonsly
 chrooked_id: bonsly
 aka: { pokeemerald: SPECIES_BONSLY }
 abilities:
-  hidden: Mineralize
+  primary: Stonebark
+  secondary: Rock Head
+  hidden: Foliate
+learnset:
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Rock Throw }
+  - { level: 8, move: Synthesis }
+  - { level: 10, move: Bullet Seed }
+  - { level: 14, move: Rock Tomb }
+  - { level: 18, move: Low Kick }
+  - { level: 22, move: Seed Bomb }
+  - { level: 26, move: Sucker Punch }
+  - { level: 28, move: Rock Slide }
+  - { level: 30, move: Mimic }
+  - { level: 34, move: Hammer Arm }
+  - { level: 38, move: Earthquake }
+  - { level: 42, move: Wood Hammer }
+  - { level: 46, move: Double-Edge }
+  - { level: 50, move: Head Smash }

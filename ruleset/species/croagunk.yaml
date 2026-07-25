@@ -1,22 +1,27 @@
 name: Croagunk
 chrooked_id: croagunk
 aka: { pokeemerald: SPECIES_CROAGUNK }
+types: [Poison, Fighting]
 abilities:
   primary: Venomous
-  hidden: Anticipation
+  secondary: Dry Skin
+  hidden: Sheer Force
 learnset:
-  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Astonish }
   - { level: 1, move: Mud-Slap }
-  - { level: 4, move: Astonish }
-  - { level: 8, move: Taunt }
-  - { level: 12, move: Flatter }
-  - { level: 16, move: Low Kick }
-  - { level: 20, move: Venoshock }
-  - { level: 24, move: Sucker Punch }
-  - { level: 28, move: Swagger }
-  - { level: 32, move: Poison Jab }
-  - { level: 36, move: Toxic }
-  - { level: 38, move: Aura Sphere }
-  - { level: 40, move: Nasty Plot }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Taunt }
+  - { level: 4, move: Sucker Punch }
+  - { level: 8, move: Low Kick }
+  - { level: 12, move: Mud Shot }
+  - { level: 16, move: Venoshock }
+  - { level: 20, move: Aqua Jet }
+  - { level: 24, move: Mud Shot }
+  - { level: 28, move: Cross Poison }
+  - { level: 32, move: Liquidation }
+  - { level: 36, move: Drain Punch }
+  - { level: 40, move: Mud Bomb }
   - { level: 44, move: Sludge Bomb }
-  - { level: 48, move: Belch }
+  - { level: 48, move: Earthquake }
+  - { level: 52, move: Close Combat }
+  - { level: 58, move: Gunk Shot }

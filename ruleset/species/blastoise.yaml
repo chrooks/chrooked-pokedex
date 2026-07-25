@@ -1,7 +1,6 @@
 name: Blastoise
 chrooked_id: blastoise
 aka: { pokeemerald: SPECIES_BLASTOISE }
-types: [Water, Steel]
 abilities:
   secondary: Mega Launcher
   hidden: Shell Armor
@@ -16,11 +15,12 @@ learnset:
   - { level: 12, move: Water Pulse }
   - { level: 16, move: Bite }
   - { level: 20, move: Protect }
-  - { level: 25, move: Rain Dance }
+  - { level: 25, move: Flip Turn }
   - { level: 30, move: Bubble Beam }
-  - { level: 35, move: Iron Defense }
+  - { level: 35, move: Recover }
   - { level: 40, move: Shell Smash }
   - { level: 44, move: Dark Pulse }
   - { level: 49, move: Aura Sphere }
   - { level: 54, move: Hydro Pump }
   - { level: 60, move: Origin Pulse }
+evolution: { from: Wartortle, method: { level: 36 } }

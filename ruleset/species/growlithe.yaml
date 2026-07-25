@@ -1,23 +1,35 @@
 name: Growlithe
 chrooked_id: growlithe
 aka: { pokeemerald: SPECIES_GROWLITHE }
+types: [Fire]
 abilities:
+  primary: Intimidate
+  secondary: Flash Fire
   hidden: Immolate
 learnset:
-  - { level: 1, move: Leer }
+  - { level: 1, move: Bite }
   - { level: 1, move: Ember }
-  - { level: 4, move: Howl }
-  - { level: 8, move: Bite }
-  - { level: 12, move: Flame Wheel }
-  - { level: 16, move: Helping Hand }
-  - { level: 20, move: Agility }
-  - { level: 24, move: Fire Fang }
-  - { level: 28, move: Retaliate }
-  - { level: 32, move: Crunch }
-  - { level: 36, move: Take Down }
-  - { level: 38, move: Cinder Smash }
-  - { level: 40, move: Flamethrower }
-  - { level: 44, move: Roar }
-  - { level: 48, move: Play Rough }
-  - { level: 52, move: Reversal }
-  - { level: 56, move: Flare Blitz }
+  - { level: 1, move: Howl }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Flame Wheel }
+  - { level: 10, move: Roar }
+  - { level: 15, move: Fire Fang }
+  - { level: 18, move: Quick Attack }
+  - { level: 20, move: Helping Hand }
+  - { level: 22, move: Retaliate }
+  - { level: 25, move: Crunch }
+  - { level: 28, move: Bulldoze }
+  - { level: 30, move: Flamethrower }
+  - { level: 33, move: Body Slam }
+  - { level: 36, move: Play Rough }
+  - { level: 38, move: Will-O-Wisp }
+  - { level: 40, move: Take Down }
+  - { level: 42, move: Heat Wave }
+  - { level: 45, move: Morning Sun }
+  - { level: 48, move: Cinder Smash }
+  - { level: 50, move: Earthquake }
+  - { level: 52, move: Close Combat }
+  - { level: 55, move: Flare Blitz }
+  - { level: 58, move: Double-Edge }
+  - { level: 60, move: Extreme Speed }

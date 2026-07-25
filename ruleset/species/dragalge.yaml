@@ -3,7 +3,8 @@ chrooked_id: dragalge
 aka: { pokeemerald: SPECIES_DRAGALGE }
 abilities:
   primary: Venomous
-  secondary: Corrosion
+  secondary: Nematocyst
+  hidden: Adaptability
 stats: { hp: 70, spa: 110 }
 learnset:
   - { level: 1, move: Tackle }

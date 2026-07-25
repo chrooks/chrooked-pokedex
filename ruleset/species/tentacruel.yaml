@@ -1,20 +1,30 @@
 name: Tentacruel
 chrooked_id: tentacruel
 aka: { dex: 73 }
+abilities:
+  primary: Regenerator
+  secondary: Merciless
+  hidden: Nematocyst
+stats: { hp: 90, atk: 63, def: 80, spa: 78, spd: 114, spe: 90 }
 learnset:
-  - { level: 1, move: Wrap }
+  - { level: 0, move: Venoshock }
   - { level: 1, move: Poison Sting }
-  - { level: 1, move: Acid }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Reflect Type }
+  - { level: 1, move: Toxic Spikes }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Wrap }
   - { level: 12, move: Supersonic }
-  - { level: 16, move: Water Pulse }
-  - { level: 20, move: Screech }
-  - { level: 24, move: Bubble Beam }
-  - { level: 28, move: Hex }
-  - { level: 31, move: Miasma }
-  - { level: 34, move: Acid Armor }
-  - { level: 40, move: Poison Jab }
-  - { level: 46, move: Surf }
-  - { level: 52, move: Sludge Wave }
-  - { level: 58, move: Hydro Pump }
+  - { level: 16, move: Bubble Beam }
+  - { level: 20, move: Acid }
+  - { level: 24, move: Clear Smog }
+  - { level: 28, move: Mortal Spin }
+  - { level: 31, move: Flip Turn }
+  - { level: 34, move: Hex }
+  - { level: 38, move: Sludge }
+  - { level: 40, move: Recover }
+  - { level: 44, move: Surf }
+  - { level: 48, move: Miasma }
+  - { level: 52, move: Acid Armor }
+  - { level: 56, move: Sludge Wave }
+  - { level: 60, move: Hydro Pump }
+  - { level: 60, move: Venoshock }

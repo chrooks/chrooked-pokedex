@@ -2,6 +2,7 @@ name: Flareon
 chrooked_id: flareon
 aka: { pokeemerald: SPECIES_FLAREON }
 abilities:
+  primary: Flash Fire
   secondary: Kindle
   hidden: Immolate
 learnset:

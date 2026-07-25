@@ -1,0 +1,5 @@
+name: Flareon (Rift Corrupted)
+chrooked_id: flareon--riftcorrupted
+aka: { dex: 136 }
+abilities:
+  hidden: Immolate
