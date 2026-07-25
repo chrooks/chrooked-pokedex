@@ -39,6 +39,19 @@ describe("preEvos", () => {
   it("is empty for a base species", () => {
     expect(preEvos(goomy, byId)).toEqual([]);
   });
+
+  it("treats a form variant of the pre-evo as the same parent, not a branch", () => {
+    // joltik AND joltik--riftform both evolve into galvantula. That is one
+    // logical pre-evo (a base + its form), not a two-species branch — the line
+    // must resolve to the BASE form joltik, not bail as if it were ambiguous.
+    const joltik = mon("joltik", "Joltik", "galvantula");
+    const joltikRift = mon("joltik--riftform", "Joltik (Rift)", "galvantula");
+    const galvantula = mon("galvantula", "Galvantula", null, "Joltik");
+    const line = new Map(
+      [joltik, joltikRift, galvantula].map((m) => [m.chrooked_id, m]),
+    );
+    expect(preEvos(galvantula, line).map((m) => m.chrooked_id)).toEqual(["joltik"]);
+  });
 });
 
 describe("copyDownLearnset — anchor minus L0", () => {

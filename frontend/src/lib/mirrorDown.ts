@@ -7,6 +7,10 @@
 
 import type { AbilitySlots, DexEntry, LearnsetMove } from "../types";
 
+/** The base-form id of a chrooked_id: `joltik--riftform` → `joltik`. Form ids
+    carry a `--<form>` suffix; a base form has none, so this is a no-op for it. */
+const baseStem = (id: string): string => id.split("--")[0];
+
 /** The pre-evolutions of `anchor`, base→(anchor-1). Resolved from the reliable
     FORWARD graph (`evolves_into[].to` is always a chrooked_id) rather than
     `evolution.from`, which stores a DISPLAY NAME on an override edge (e.g. a
@@ -32,12 +36,22 @@ export function preEvos(
   let currentId = anchor.chrooked_id;
   while (true) {
     const ps = parents.get(currentId) ?? [];
-    if (ps.length !== 1 || seen.has(ps[0])) break;
-    const parent = byId.get(ps[0]);
+    // Collapse form variants of one species (`base--form`, e.g. joltik +
+    // joltik--riftform) to their shared base stem: multiple such edges are ONE
+    // logical pre-evo, not a branch. More than one DISTINCT stem is a genuine
+    // multi-species branch (Eevee, Wurmple) — stop the linear walk there.
+    const stems = new Set(ps.map(baseStem));
+    if (stems.size !== 1) break;
+    const stem = [...stems][0];
+    if (seen.has(stem)) break;
+    // Mirror onto the base form (forms mirror the base's kit), so prefer the
+    // base-stem entry; fall back to the only edge if the base isn't in the dex.
+    const parent = byId.get(stem) ?? byId.get(ps[0]);
     if (parent === undefined) break;
     chain.push(parent);
     seen.add(parent.chrooked_id);
-    currentId = parent.chrooked_id;
+    seen.add(stem);
+    currentId = stem;
   }
   return chain.reverse();
 }
