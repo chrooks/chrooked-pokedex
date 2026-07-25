@@ -18,6 +18,8 @@ import {
 } from "../proposal/abilitiesDraft";
 import { StagePanel } from "./StagePanel";
 import { AbilityCreatePanel } from "./AbilityCreatePanel";
+import { MoveCreatePanel } from "./MoveCreatePanel";
+import { DistributePanel } from "./DistributePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
 import type { CommonStageProps } from "./stageProps";
 
@@ -31,12 +33,30 @@ interface Props extends CommonStageProps {
   abilityOptions: readonly string[];
   /** The whole dex by chrooked_id, for the create mode's distribution writes. */
   byId: ReadonlyMap<string, DexEntry>;
-  /** Report the open sub-surface to the overhead rail (ac11): "create new" when
-      the CREATE NEW panel is open, null on swap/close. */
+  /** Report the open sub-surface to the overhead rail (ac11): the open panel's
+      label ("create new" / "distribute" / "create move"), null on swap/close. */
   onSubSurface?: (label: string | null) => void;
+  /** Refresh the dex after a side write (distribute / create move). */
+  onSaved: () => void;
+  /** Record session-created content so later suggest calls are steered to use it. */
+  onCreated: (name: string, kind: "ability" | "move") => void;
 }
 
-type AbilityMode = "swap" | "create";
+type AbilityMode = "swap" | "create" | "distribute" | "create-move";
+
+const MODES: { id: AbilityMode; label: string; btnId?: string }[] = [
+  { id: "swap", label: "swap existing" },
+  { id: "create", label: "create new", btnId: "mk-abilities-create-toggle" },
+  { id: "distribute", label: "distribute", btnId: "mk-abilities-distribute-toggle" },
+  { id: "create-move", label: "create move", btnId: "mk-abilities-move-toggle" },
+];
+
+const SUB_LABEL: Record<AbilityMode, string | null> = {
+  swap: null,
+  create: "create new",
+  distribute: "distribute",
+  "create-move": "create move",
+};
 
 export function AbilitiesStage(props: Props) {
   const {
@@ -50,14 +70,16 @@ export function AbilitiesStage(props: Props) {
     abilityOptions,
     byId,
     onSubSurface,
+    onSaved,
+    onCreated,
   } = props;
 
   const [mode, setMode] = useState<AbilityMode>("swap");
 
   // Tell the overhead rail which sub-surface is open; reset on unmount so the pill
-  // never keeps a stale "create new" label after the stage closes (ac11).
+  // never keeps a stale label after the stage closes (ac11).
   useEffect(() => {
-    onSubSurface?.(mode === "create" ? "create new" : null);
+    onSubSurface?.(SUB_LABEL[mode]);
     return () => onSubSurface?.(null);
   }, [mode, onSubSurface]);
 
@@ -94,25 +116,19 @@ export function AbilitiesStage(props: Props) {
 
   const modeToggle = (
     <div className="mk-mode" role="group" aria-label="Abilities mode" id="mk-abilities-mode">
-      <button
-        type="button"
-        className="mk-mode__btn mono"
-        data-active={mode === "swap"}
-        aria-pressed={mode === "swap"}
-        onClick={() => setMode("swap")}
-      >
-        swap existing
-      </button>
-      <button
-        type="button"
-        id="mk-abilities-create-toggle"
-        className="mk-mode__btn mono"
-        data-active={mode === "create"}
-        aria-pressed={mode === "create"}
-        onClick={() => setMode("create")}
-      >
-        create new
-      </button>
+      {MODES.map((m) => (
+        <button
+          key={m.id}
+          type="button"
+          id={m.btnId}
+          className="mk-mode__btn mono"
+          data-active={mode === m.id}
+          aria-pressed={mode === m.id}
+          onClick={() => setMode(m.id)}
+        >
+          {m.label}
+        </button>
+      ))}
     </div>
   );
 
@@ -126,6 +142,36 @@ export function AbilitiesStage(props: Props) {
           redirectRef={redirectRef}
           registerActions={registerActions}
           onLocked={onLocked}
+          onCreated={onCreated}
+        />
+      </div>
+    );
+  }
+
+  if (mode === "distribute") {
+    return (
+      <div className="mk-stage" id="mk-stage-abilities">
+        {modeToggle}
+        <DistributePanel
+          byId={byId}
+          abilityOptions={abilityOptions}
+          registerActions={registerActions}
+          onSaved={onSaved}
+          onClose={() => setMode("swap")}
+        />
+      </div>
+    );
+  }
+
+  if (mode === "create-move") {
+    return (
+      <div className="mk-stage" id="mk-stage-abilities">
+        {modeToggle}
+        <MoveCreatePanel
+          redirectRef={redirectRef}
+          registerActions={registerActions}
+          onCreated={onCreated}
+          onClose={() => setMode("swap")}
         />
       </div>
     );

@@ -3,9 +3,11 @@
    the anchor's profile captured at workbench OPEN; each facet reads
    `facts[facet] ?? entry[facet]` as its after-state. A changed facet shows the old
    value struck+dim and the new value amber (--edited), with numeric deltas + BST
-   for stats and an expandable row list for the learnset. An unchanged facet reads
-   a quiet "unchanged" — never amber. Each fact blooms once as it lands (a one-shot
-   LED bloom, reduced-motion respected). Reuses DexSprite and TypeChip. */
+   for stats and an expandable row list for the learnset. An unchanged facet renders
+   the anchor's compact CURRENT profile (type chips, stat line, ability slots,
+   learnset count) in a quiet dim — never amber — and flips to the before→after diff
+   the moment it changes. Each fact blooms once as it lands (a one-shot LED bloom,
+   reduced-motion respected). Reuses DexSprite and TypeChip. */
 
 import type { ReactNode } from "react";
 import type { AbilitySlots, DexEntry } from "../../types";
@@ -35,8 +37,11 @@ function signed(delta: number): string {
 export function LineStrip({ anchor, preEvos, before, facts, lockedLearnset, backdropTargetId }: Props) {
   const line = [...preEvos, anchor];
   const diff = diffProfile(before, anchor, facts);
-  const learnsetTouched =
-    lockedLearnset || diff.learnset.added.length + diff.learnset.moved.length + diff.learnset.removed.length > 0;
+  // The anchor's OWN learnset diff — the only honest driver of the amber/changed
+  // state. A mirror-only run leaves the anchor's learnset untouched (only pre-evos
+  // were written), so lockedLearnset alone must NOT light this facet amber.
+  const learnsetChanged =
+    diff.learnset.added.length + diff.learnset.moved.length + diff.learnset.removed.length > 0;
 
   return (
     <aside className="mk-line" aria-label="The evolution line" id="mk-line-strip">
@@ -71,7 +76,13 @@ export function LineStrip({ anchor, preEvos, before, facts, lockedLearnset, back
               </span>
             </span>
           ) : (
-            <Unchanged />
+            <span className="mk-line__now-chips">
+              {diff.types.after.length === 0 ? (
+                <span className="mono mk-line__unchanged">—</span>
+              ) : (
+                diff.types.after.map((t) => <TypeChip key={t} type={t} />)
+              )}
+            </span>
           )}
         </Fact>
 
@@ -98,7 +109,18 @@ export function LineStrip({ anchor, preEvos, before, facts, lockedLearnset, back
               </span>
             </span>
           ) : (
-            <Unchanged />
+            <span className="mono mk-line__stats mk-line__stats--current">
+              {STAT_ORDER.map((key) => (
+                <span key={key} className="mk-line__stat">
+                  <span className="mk-line__stat-k">{STAT_LABEL[key]}</span>
+                  {diff.stats.after[key] ?? 0}
+                </span>
+              ))}
+              <span className="mk-line__stat mk-line__stat--bst">
+                <span className="mk-line__stat-k">BST</span>
+                {bst(diff.stats.after)}
+              </span>
+            </span>
           )}
         </Fact>
 
@@ -114,12 +136,12 @@ export function LineStrip({ anchor, preEvos, before, facts, lockedLearnset, back
               <span className="mk-line__now"> {abilityList(diff.abilities.after)}</span>
             </span>
           ) : (
-            <Unchanged />
+            <span className="mono mk-line__abilities">{abilityList(diff.abilities.after)}</span>
           )}
         </Fact>
 
-        <Fact label="learnset" k="learnset" landed={lockedLearnset} changed={learnsetTouched}>
-          {learnsetTouched ? (
+        <Fact label="learnset" k="learnset" landed={learnsetChanged} changed={learnsetChanged}>
+          {learnsetChanged ? (
             <div className="mk-line__learnset">
               <span className="mono mk-line__learnset-head">
                 <span className="mk-line__ls-add">+{diff.learnset.added.length} added</span>
@@ -128,35 +150,37 @@ export function LineStrip({ anchor, preEvos, before, facts, lockedLearnset, back
                 {" · "}
                 <span className="mk-line__ls-drop">−{diff.learnset.removed.length} dropped</span>
               </span>
-              {diff.learnset.added.length + diff.learnset.moved.length + diff.learnset.removed.length >
-                0 && (
-                <details className="mk-line__ls-details">
-                  <summary className="mono mk-line__ls-summary">rows</summary>
-                  <ul className="mk-line__ls-list mono">
-                    {diff.learnset.added.map((row) => (
-                      <li key={`a-${row.level}-${row.move}`} className="mk-line__ls-row mk-line__ls-row--add">
-                        + {row.level === 0 ? "—" : `L${row.level}`} {row.move}
-                      </li>
-                    ))}
-                    {diff.learnset.moved.map((row) => (
-                      <li key={`m-${row.move}`} className="mk-line__ls-row mk-line__ls-row--move">
-                        {row.move} L{row.from} → L{row.to}
-                      </li>
-                    ))}
-                    {diff.learnset.removed.map((row) => (
-                      <li key={`r-${row.level}-${row.move}`} className="mk-line__ls-row mk-line__ls-row--drop">
-                        − {row.level === 0 ? "—" : `L${row.level}`} {row.move}
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              )}
+              <details className="mk-line__ls-details">
+                <summary className="mono mk-line__ls-summary">rows</summary>
+                <ul className="mk-line__ls-list mono">
+                  {diff.learnset.added.map((row) => (
+                    <li key={`a-${row.level}-${row.move}`} className="mk-line__ls-row mk-line__ls-row--add">
+                      + {row.level === 0 ? "—" : `L${row.level}`} {row.move}
+                    </li>
+                  ))}
+                  {diff.learnset.moved.map((row) => (
+                    <li key={`m-${row.move}`} className="mk-line__ls-row mk-line__ls-row--move">
+                      {row.move} L{row.from} → L{row.to}
+                    </li>
+                  ))}
+                  {diff.learnset.removed.map((row) => (
+                    <li key={`r-${row.level}-${row.move}`} className="mk-line__ls-row mk-line__ls-row--drop">
+                      − {row.level === 0 ? "—" : `L${row.level}`} {row.move}
+                    </li>
+                  ))}
+                </ul>
+              </details>
               {lockedLearnset && (
                 <span className="mono mk-line__learnset-mark">mirrored to line</span>
               )}
             </div>
           ) : (
-            <Unchanged />
+            // Anchor learnset unchanged — compact current, never amber. A mirror-only
+            // run still notes it went to the line (the pre-evos got the copy-down).
+            <span className="mono mk-line__abilities">
+              {anchor.learnset.length} moves
+              {lockedLearnset && <span className="mk-line__learnset-mark"> · mirrored to line</span>}
+            </span>
           )}
         </Fact>
       </dl>
@@ -172,10 +196,6 @@ function bstDelta(
   const a = bst(after);
   if (b === undefined || a === undefined || a === b) return null;
   return <span className="mk-line__stat-delta"> ({signed(a - b)})</span>;
-}
-
-function Unchanged() {
-  return <span className="mono mk-line__unchanged">unchanged</span>;
 }
 
 /** One fact row. When `landed` flips true (a facet locks this session) the LED

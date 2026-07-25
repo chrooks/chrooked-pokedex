@@ -87,8 +87,15 @@ export function MakeoverWorkbench({
   // The active stage's sub-surface label for the overhead rail (e.g. "create new"
   // when the abilities CREATE NEW panel is open); null otherwise (ac11).
   const [subSurface, setSubSurface] = useState<string | null>(null);
+  // Custom content created mid-flow (name + kind). Auto-persisted on CONFIRM by its
+  // panel; recorded here so a note is appended to the direction sent to SUBSEQUENT
+  // suggest calls — the model is actively steered to use it, not merely allowed to
+  // (the ordering guard: pool-level awareness already exists; this is the nudge).
+  const [createdContent, setCreatedContent] = useState<{ name: string; kind: "ability" | "move" }[]>(
+    [],
+  );
 
-  const redirectRef = useRef<HTMLInputElement>(null);
+  const redirectRef = useRef<HTMLTextAreaElement>(null);
   const actionsRef = useRef<StageActions | null>(null);
 
   const byId = useMemo(() => new Map(allEntries.map((e) => [e.chrooked_id, e])), [allEntries]);
@@ -119,6 +126,29 @@ export function MakeoverWorkbench({
   const handleRedirect = useCallback((text: string) => {
     setCorrections((prev) => [...prev, text]);
   }, []);
+
+  // A mid-flow create persisted to the Ruleset; record it + refresh the dex so the
+  // new move/ability shows in the option pools and later suggests can reference it.
+  const handleCreated = useCallback(
+    (name: string, kind: "ability" | "move") => {
+      setCreatedContent((prev) => [...prev, { name, kind }]);
+      onSaved();
+    },
+    [onSaved],
+  );
+
+  // The direction sent to subsequent design-stage suggests: the human's steer plus
+  // a per-item nudge to prefer any custom content created this session for this mon.
+  const injectedDirection = useMemo(() => {
+    if (createdContent.length === 0) return direction;
+    const notes = createdContent
+      .map(
+        (c) =>
+          ` Note: the custom ${c.kind} '${c.name}' was created specifically for ${entry.name} — prefer to use it.`,
+      )
+      .join("");
+    return `${direction}${notes}`;
+  }, [direction, createdContent, entry.name]);
 
   const handleNavigate = useCallback((target: Stage) => onStage(target), [onStage]);
 
@@ -184,7 +214,7 @@ export function MakeoverWorkbench({
 
   const commonProps: CommonStageProps = {
     entry,
-    initialDirection: direction,
+    initialDirection: injectedDirection,
     canLock: true,
     redirectRef,
     registerActions,
@@ -225,6 +255,8 @@ export function MakeoverWorkbench({
           abilityOptions={abilityOptions}
           byId={byId}
           onSubSurface={setSubSurface}
+          onSaved={onSaved}
+          onCreated={handleCreated}
         />
       );
       break;
@@ -236,6 +268,8 @@ export function MakeoverWorkbench({
           movePower={movePower}
           rubric={rubric}
           byId={byId}
+          onSubSurface={setSubSurface}
+          onCreated={handleCreated}
         />
       );
       break;

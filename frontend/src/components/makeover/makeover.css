@@ -69,7 +69,18 @@
   max-width: 68ch;
   margin: 0 auto;
   width: 100%;
+  /* Flex column so sparse call-free states can center themselves (f3); a
+     content-filling stage stretches exactly as before. */
+  display: flex;
+  flex-direction: column;
   animation: mk-stage-slide var(--mk-slide) var(--mk-ease);
+  /* Sparse call-free READY states (direction idle, abilities ready, the create
+     panels) underfill the column and read as empty in the lower half; center them.
+     `safe` reverts to start-alignment once content overflows, so tall proposed
+     states still scroll from the top instead of clipping. */
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
 }
 
 @keyframes mk-stage-slide {
@@ -169,7 +180,7 @@
 .mk-stage__redirect,
 .mk-direction__free {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
 }
@@ -178,6 +189,8 @@
   font-size: var(--text-xs);
   letter-spacing: 0.08em;
   white-space: nowrap;
+  /* Line the label up with the textarea's first row (padding + border). */
+  padding-top: calc(var(--space-2) + 1px);
 }
 .mk-stage__redirect-input {
   flex: 1;
@@ -188,6 +201,16 @@
   color: var(--text);
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
+}
+/* The direction/redirect box is a textarea: a real paragraph of steer fits.
+   Auto-grows to content where supported (field-sizing), stays manually
+   resizable vertically everywhere. rows=2 sets the min height. */
+textarea.mk-stage__redirect-input {
+  resize: vertical;
+  line-height: 1.4;
+  font-family: var(--font-mono);
+  field-sizing: content;
+  max-height: 12rem;
 }
 .mk-stage__redirect-input:focus-visible {
   outline: none;
@@ -331,6 +354,22 @@
 }
 .mk-skel-row {
   height: 1.4rem;
+}
+/* Static ghosts (f4): placeholder geometry with the shimmer stilled — motion
+   stays reserved for a genuinely in-flight proposal. */
+.mk-skel-static {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.mk-skel-static .mk-skel-row {
+  animation: none;
+  background: var(--surface-2);
+  opacity: 0.6;
+}
+.mk-skel-static .mk-skel-row:nth-child(4) {
+  width: 55%;
 }
 .mk-skel-row:nth-child(2) {
   width: 85%;
@@ -528,7 +567,11 @@
   color: var(--text-dim);
 }
 .mk-lrow__move {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text);
 }
 .mk-lrow[data-removed] {
@@ -550,6 +593,7 @@
    --text-dim, which clears AA at 11px on the surface. Keeps one-color-one-job
    honest — --chrome stays structure, and no new text color is invented. */
 .mk-lrow__band {
+  flex: none;
   color: var(--text-dim);
   font-size: var(--text-xs);
   letter-spacing: 0.02em;
@@ -582,6 +626,18 @@
   align-items: center;
   gap: var(--space-2);
   width: 100%;
+}
+/* The "＋ add move" control under the proposed learnset list. */
+.mk-lrow-add {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--line);
+}
+.mk-lrow-add .mk-btn {
+  white-space: nowrap;
 }
 .mk-lrow__lv-input {
   width: 4ch;
@@ -787,6 +843,10 @@
 .mk-line__stat-k {
   color: var(--text-faint);
   margin-right: 2px;
+}
+/* The compact CURRENT stat line shown for an unchanged facet — quiet, never amber. */
+.mk-line__stats--current {
+  color: var(--text-dim);
 }
 .mk-line__stat--bst {
   color: var(--edited);
@@ -1120,9 +1180,12 @@
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
+/* Active segment: a filled/inverted chip so the selected mode is unmistakable
+   against the plain-text siblings. --text-dim fill + --surface-0 ink clears AA in
+   both themes (9.9:1 dark, 6.1:1 light) without inventing a color job. */
 .mk-mode__btn[data-active="true"] {
-  background: var(--surface-2);
-  color: var(--text);
+  background: var(--text-dim);
+  color: var(--surface-0);
 }
 .mk-mode__btn:focus-visible {
   outline: 2px solid var(--chrome);
@@ -1145,6 +1208,36 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+/* The drafted move's stat block: label-over-value cells in an explicit grid so a
+   long value (category "physical") never overprints its neighbour. Mirrors the
+   mono stat presentation in StatsStage — faint label above, ink value below. */
+.mk-create__move-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9ch, 1fr));
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-2) 0;
+  font-size: var(--text-sm);
+}
+.mk-create__move-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--space-1);
+}
+.mk-create__move-stats dt {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+.mk-create__move-stats dd {
+  margin: 0;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .mk-create__ability-name {
   margin: 0 0 var(--space-1);
@@ -1301,6 +1394,14 @@
 }
 
 /* --- Ready view (ac13, pre-proposal call-free state) ---------------------- */
+
+/* Sparse call-free states drift to the vertical center of the stage column
+   (f3); tall content (the learnset two-pane) absorbs the auto margins and sits
+   exactly where it did. */
+.mk-stage[data-phase="propose"],
+.mk-stage[data-phase="idle"] {
+  margin-block: auto;
+}
 
 .mk-stage__ready {
   display: flex;

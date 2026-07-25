@@ -10,12 +10,13 @@
    learnsetBands + mirrorDown logic — extends the proposal machinery, never forks
    it. */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { api } from "../../api";
 import { isKnown } from "../../lib/entityValidation";
 import type { LearnsetDraft, LearnsetMove, ProposalAlternative } from "../../types";
 import {
+  addRow,
   applyAlternative,
   classifyProposed,
   editRow,
@@ -28,6 +29,7 @@ import { mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
 import { writeMirror } from "./mirrorWrite";
 import { MirrorRowList } from "./MirrorRowList";
 import { StagePanel } from "./StagePanel";
+import { MoveCreatePanel } from "./MoveCreatePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
 import type { CommonStageProps } from "./stageProps";
 import type { DexEntry } from "../../types";
@@ -40,6 +42,11 @@ interface Props extends CommonStageProps {
   rubric: LearnsetRubric | null;
   /** The whole dex by chrooked_id, for the mirror-down line resolution. */
   byId: ReadonlyMap<string, DexEntry>;
+  /** Report the open sub-surface to the overhead rail: "new move" when the inline
+      CREATE MOVE panel is open, null otherwise. */
+  onSubSurface?: (label: string | null) => void;
+  /** Record a move authored mid-learnset so later suggests are steered to use it. */
+  onCreated: (name: string, kind: "ability" | "move") => void;
 }
 
 export function LearnsetStage(props: Props) {
@@ -55,7 +62,17 @@ export function LearnsetStage(props: Props) {
     movePower,
     rubric,
     byId,
+    onSubSurface,
+    onCreated,
   } = props;
+
+  // The inline CREATE MOVE panel (the "＋ new move" affordance beside the redirect
+  // box). Mutually exclusive with the learnset panel so only one owns the keyboard.
+  const [moveCreateOpen, setMoveCreateOpen] = useState(false);
+  useEffect(() => {
+    onSubSurface?.(moveCreateOpen ? "new move" : null);
+    return () => onSubSurface?.(null);
+  }, [moveCreateOpen, onSubSurface]);
 
   const line = useMemo(() => preEvos(entry, byId), [entry, byId]);
   // Pre-evos the author has opted OUT of mirroring to (by chrooked_id). Declared
@@ -157,6 +174,50 @@ export function LearnsetStage(props: Props) {
     rows[nextIndex]?.focus();
   }
 
+  // The CURRENT column, reused verbatim in both phases so it never shifts on load
+  // → proposal (ac: stable two-pane). `marks` flags dropped rows (empty pre-proposal).
+  const currentColumn = (marks: readonly LearnsetMove[]) => (
+    <div className="mk-col">
+      <p className="mk-col__head mono">current</p>
+      <ol className="mk-learnset">
+        {entry.learnset.length === 0 && <li className="mk-empty mono">no level-up moves</li>}
+        {[...entry.learnset]
+          .sort((a, b) => a.level - b.level || a.move.localeCompare(b.move))
+          .map((m, i) => {
+            const isDropped = marks.some((d) => d.level === m.level && d.move === m.move);
+            return (
+              <li key={`cur-${m.level}-${m.move}-${i}`} className="mk-lrow" data-removed={isDropped || undefined}>
+                <span className="mk-lrow__lv mono">{m.level === 0 ? "—" : `L${m.level}`}</span>
+                <span className="mk-lrow__move">{m.move}</span>
+                {isDropped && <span className="mk-lrow__mark mono">→ removed</span>}
+              </li>
+            );
+          })}
+      </ol>
+    </div>
+  );
+
+  if (moveCreateOpen) {
+    return (
+      <div className="mk-stage" id="mk-stage-learnset-movecreate">
+        <button
+          type="button"
+          className="mk-btn mk-btn--ghost mono"
+          id="mk-learnset-movecreate-back"
+          onClick={() => setMoveCreateOpen(false)}
+        >
+          ← back to learnset
+        </button>
+        <MoveCreatePanel
+          redirectRef={redirectRef}
+          registerActions={registerActions}
+          onCreated={onCreated}
+          onClose={() => setMoveCreateOpen(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <StagePanel
       stageLabel="LEARNSET"
@@ -165,44 +226,43 @@ export function LearnsetStage(props: Props) {
       placeholder="steer the learnset (e.g. special-attack leaning)…"
       redirectRef={redirectRef}
       registerActions={registerActions}
-      applyAlternative={(alt, current) => applyAlternative(current, alt)}
+      extraControl={
+        <button
+          type="button"
+          className="mk-btn mk-btn--ghost mono"
+          id="mk-learnset-new-move"
+          title="Author a new move to use in this learnset"
+          onClick={() => setMoveCreateOpen(true)}
+        >
+          ＋ new move
+        </button>
+      }
+      applyAlternative={(alt, current) => applyAlternative(current, alt, moveOptions)}
       altLabel={(value) => (Array.isArray(value) ? `${value.length} moves` : String(value))}
       current={
-        <div className="mk-col">
-          <p className="mk-col__head mono">current</p>
-          <ol className="mk-learnset">
-            {entry.learnset.length === 0 && <li className="mk-empty mono">no level-up moves</li>}
-            {[...entry.learnset]
-              .sort((a, b) => a.level - b.level || a.move.localeCompare(b.move))
-              .map((m, i) => (
-                <li key={`ready-${m.level}-${m.move}-${i}`} className="mk-lrow">
-                  <span className="mk-lrow__lv mono">{m.level === 0 ? "—" : `L${m.level}`}</span>
-                  <span className="mk-lrow__move">{m.move}</span>
-                </li>
-              ))}
-          </ol>
+        // Two-pane from load: CURRENT holds the left cell; the right cell is an
+        // empty PROPOSED placeholder until a learnset is generated (no auto-fire).
+        <div className="mk-cols mk-cols--learnset">
+          {currentColumn([])}
+          <div className="mk-col">
+            <p className="mk-col__head mono">proposed</p>
+            <p className="mk-empty mono" id="mk-learnset-proposed-empty">
+              no learnset yet — PROPOSE to generate
+            </p>
+            {/* Static row ghosts balance the two panes pre-generation (not a
+                loading signal — the shimmer stays reserved for proposing). */}
+            <div className="mk-skel-static" aria-hidden="true">
+              <span className="mk-skel-row" />
+              <span className="mk-skel-row" />
+              <span className="mk-skel-row" />
+              <span className="mk-skel-row" />
+            </div>
+          </div>
         </div>
       }
     >
       <div className="mk-cols mk-cols--learnset">
-        <div className="mk-col">
-          <p className="mk-col__head mono">current</p>
-          <ol className="mk-learnset">
-            {entry.learnset.length === 0 && <li className="mk-empty mono">no level-up moves</li>}
-            {[...entry.learnset]
-              .sort((a, b) => a.level - b.level || a.move.localeCompare(b.move))
-              .map((m, i) => {
-                const isDropped = dropped.some((d) => d.level === m.level && d.move === m.move);
-                return (
-                  <li key={`cur-${m.level}-${m.move}-${i}`} className="mk-lrow" data-removed={isDropped || undefined}>
-                    <span className="mk-lrow__lv mono">{m.level === 0 ? "—" : `L${m.level}`}</span>
-                    <span className="mk-lrow__move">{m.move}</span>
-                    {isDropped && <span className="mk-lrow__mark mono">→ removed</span>}
-                  </li>
-                );
-              })}
-          </ol>
-        </div>
+        {currentColumn(dropped)}
 
         <div className="mk-col">
           <p className="mk-col__head mono">proposed</p>
@@ -265,6 +325,10 @@ export function LearnsetStage(props: Props) {
               );
             })}
           </ol>
+          <AddRow
+            moveOptions={moveOptions}
+            onAdd={(level, move) => hook.editDraft(addRow(draft, { level, move }))}
+          />
         </div>
       </div>
 
@@ -296,6 +360,79 @@ export function LearnsetStage(props: Props) {
         </details>
       )}
     </StagePanel>
+  );
+}
+
+interface AddRowProps {
+  moveOptions: readonly string[];
+  onAdd: (level: number, move: string) => void;
+}
+
+/** The "＋ add move" control under the proposed list: a level input + a move
+    datalist that appends a new (level, move) row. Disabled until the move name
+    resolves against the pool (isKnown), mirroring the RowEditor's guard. */
+function AddRow({ moveOptions, onAdd }: AddRowProps) {
+  const [lv, setLv] = useState("1");
+  const [mv, setMv] = useState("");
+  const known = mv.trim() !== "" && isKnown(mv, moveOptions);
+
+  function commit() {
+    if (!known) return;
+    const parsed = Number(lv);
+    const level = Number.isFinite(parsed) ? Math.min(100, Math.max(0, Math.round(parsed))) : 0;
+    onAdd(level, mv.trim());
+    setMv("");
+  }
+
+  return (
+    <div className="mk-lrow-add" id="mk-learnset-add">
+      <input
+        className="mk-lrow__lv-input mono"
+        type="number"
+        min={0}
+        max={100}
+        aria-label="New move level"
+        value={lv}
+        onChange={(e) => setLv(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            commit();
+          }
+        }}
+      />
+      <input
+        className="mk-lrow__move-input mono"
+        type="text"
+        list="mk-add-move-list"
+        aria-label="New move"
+        placeholder="add a move…"
+        value={mv}
+        onChange={(e) => setMv(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            commit();
+          }
+        }}
+        autoComplete="off"
+      />
+      <datalist id="mk-add-move-list">
+        {moveOptions.map((opt) => (
+          <option key={opt} value={opt} />
+        ))}
+      </datalist>
+      <button
+        type="button"
+        className="mk-btn mk-btn--ghost"
+        id="mk-learnset-add-btn"
+        disabled={!known}
+        title={known ? "Add this move" : "Type a known move name"}
+        onClick={commit}
+      >
+        ＋ add move
+      </button>
+    </div>
   );
 }
 

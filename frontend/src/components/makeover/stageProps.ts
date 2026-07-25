@@ -15,7 +15,7 @@ export interface CommonStageProps {
   /** Lock gating from the stage machine (earlier stages must be locked first). */
   canLock: boolean;
   /** Shared redirect input ref so the workbench's `t` shortcut can focus it. */
-  redirectRef: RefObject<HTMLInputElement>;
+  redirectRef: RefObject<HTMLTextAreaElement>;
   /** Register the stage's imperative actions for the workbench keyboard path. */
   registerActions: (actions: StageActions | null) => void;
   /** Called on a clean LOCK IN with the facts to land in the line strip + advance.

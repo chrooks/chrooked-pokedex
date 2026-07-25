@@ -25,8 +25,11 @@ interface Props<Draft> {
   /** Lock gating from the stage machine — a locked-out LOCK IN is disabled. */
   canLock: boolean;
   placeholder: string;
-  redirectRef: RefObject<HTMLInputElement>;
+  redirectRef: RefObject<HTMLTextAreaElement>;
   registerActions: (actions: StageActions | null) => void;
+  /** An optional control rendered beside the redirect button (e.g. the learnset
+      stage's "＋ new move" affordance). */
+  extraControl?: ReactNode;
   /** Swap an alternative into the current draft (section-specific). */
   applyAlternative?: (alt: ProposalAlternative, draft: Draft | null) => Draft;
   /** A compact label for an alternative value (section-specific). */
@@ -49,6 +52,7 @@ export function StagePanel<Draft>({
   altLabel,
   current,
   children,
+  extraControl,
 }: Props<Draft>) {
   const {
     phase,
@@ -99,14 +103,21 @@ export function StagePanel<Draft>({
         <label className="mk-stage__redirect-label mono" htmlFor="mk-redirect">
           {phase === "propose" ? "direction" : "redirect"}
         </label>
-        <input
+        <textarea
           ref={redirectRef}
           id="mk-redirect"
           className="mk-stage__redirect-input mono"
-          type="text"
+          rows={2}
           value={direction}
           placeholder={placeholder}
           onChange={(event) => setDirection(event.target.value)}
+          onKeyDown={(event) => {
+            // Enter submits (re-roll); Shift+Enter inserts a newline.
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              if (!isProposing && !isLocking) void propose();
+            }
+          }}
           autoComplete="off"
         />
         <button
@@ -117,6 +128,7 @@ export function StagePanel<Draft>({
         >
           {proposed ? "TRY AGAIN" : "PROPOSE"}
         </button>
+        {extraControl}
       </form>
 
       {phase === "propose" && (

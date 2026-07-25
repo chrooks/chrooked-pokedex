@@ -12,7 +12,7 @@ import type { StageActions } from "./StagePanel";
 
 interface Props {
   entry: DexEntry;
-  redirectRef: React.RefObject<HTMLInputElement>;
+  redirectRef: React.RefObject<HTMLTextAreaElement>;
   registerActions: (actions: StageActions | null) => void;
   /** Chosen direction → advance to typing, carrying the steer forward. */
   onChosen: (direction: string) => void;
@@ -166,14 +166,22 @@ export function DirectionStage({
         <label className="mk-stage__redirect-label mono" htmlFor="mk-direction-free">
           your direction
         </label>
-        <input
+        <textarea
           ref={redirectRef}
           id="mk-direction-free"
           className="mk-stage__redirect-input mono"
-          type="text"
+          rows={2}
           value={free}
           placeholder="e.g. lean into the trapper role"
           onChange={(event) => setFree(event.target.value)}
+          onKeyDown={(event) => {
+            // Enter submits the free direction; Shift+Enter inserts a newline.
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              const text = free.trim();
+              if (text) onChosen(text);
+            }
+          }}
           autoComplete="off"
         />
         <button type="submit" className="mk-btn mk-btn--lock" disabled={free.trim() === ""}>

@@ -6,12 +6,14 @@
 import { describe, it, expect } from "vitest";
 import type { LearnsetMove, SpeciesOverride } from "../../types";
 import {
+  addRow,
   adjustSelectedLevels,
   applyAlternative,
   classifyProposed,
   editRow,
   learnsetChanged,
   mergeDraft,
+  parseAltRow,
   removedRows,
   removeRow,
   removeSelectedMoves,
@@ -129,6 +131,45 @@ describe("learnset draft — diff (ac3)", () => {
   });
 });
 
+describe("learnset draft — add row", () => {
+  it("appends a new row and keeps the list sorted", () => {
+    const next = addRow({ learnset: [{ level: 10, move: "Ember" }] }, { level: 3, move: "Tackle" });
+    expect(next.learnset).toEqual([
+      { level: 3, move: "Tackle" },
+      { level: 10, move: "Ember" },
+    ]);
+  });
+
+  it("dedupes an exact (level, move) add (case-insensitive)", () => {
+    const next = addRow({ learnset: [{ level: 5, move: "Tackle" }] }, { level: 5, move: "tackle" });
+    expect(next.learnset).toEqual([{ level: 5, move: "Tackle" }]);
+  });
+
+  it("ignores an empty move name", () => {
+    const next = addRow({ learnset: [{ level: 5, move: "Tackle" }] }, { level: 8, move: "  " });
+    expect(next.learnset).toEqual([{ level: 5, move: "Tackle" }]);
+  });
+});
+
+describe("learnset draft — parse free-text alternative", () => {
+  const pool = ["Aqua Jet", "Hydro Pump", "Tackle"];
+
+  it("pulls the move name (pinned to the pool) and the @L level", () => {
+    expect(parseAltRow("Aqua Jet @ L24 — priority STAB option", pool)).toEqual({
+      level: 24,
+      move: "Aqua Jet",
+    });
+  });
+
+  it("prefers the longest pool match, so a substring name doesn't win", () => {
+    expect(parseAltRow("add Hydro Pump at level 40", pool)?.move).toBe("Hydro Pump");
+  });
+
+  it("falls back to the text head when no pool is given", () => {
+    expect(parseAltRow("Bubble @ 12")).toEqual({ level: 12, move: "Bubble" });
+  });
+});
+
 describe("learnset draft — alternative swap (ac3)", () => {
   it("a list-valued alternative replaces the whole draft, sorted", () => {
     const next = applyAlternative(
@@ -142,6 +183,21 @@ describe("learnset draft — alternative swap (ac3)", () => {
       },
     );
     expect(next.learnset.map((m) => m.move)).toEqual(["A", "B"]);
+  });
+
+  it("a STRING-valued alternative adds the parsed row (the real Seam shape)", () => {
+    // The suggest backend forces alternatives[].value to be a string; a click must
+    // still yield a distinct draft the UI re-derives from.
+    const before = { learnset: [{ level: 1, move: "Tackle" }] };
+    const next = applyAlternative(before, {
+      value: "Aqua Jet @ L24 — priority STAB",
+      rationale: "coverage",
+    }, ["Aqua Jet", "Tackle"]);
+    expect(next).not.toBe(before);
+    expect(next.learnset).toEqual([
+      { level: 1, move: "Tackle" },
+      { level: 24, move: "Aqua Jet" },
+    ]);
   });
 });
 

@@ -49,6 +49,50 @@ export function removeRow(
 const LEARNSET_LEVEL_MIN = 0;
 const LEARNSET_LEVEL_MAX = 100;
 
+/** Append a (level, move) row, then autosort. Immutable; skips an exact
+    (level, move) duplicate so re-adding the same row is a no-op. Mirrors
+    removeRow — the pure half of the learnset stage's add-row control. */
+export function addRow(
+  draft: LearnsetDraft | null,
+  row: { level: number; move: string },
+): LearnsetDraft {
+  const rows = draft?.learnset ?? [];
+  const exists = rows.some(
+    (r) => r.level === row.level && r.move.trim().toLowerCase() === row.move.trim().toLowerCase(),
+  );
+  if (exists || row.move.trim() === "") return { learnset: sortMoves(rows) };
+  return { learnset: sortMoves([...rows, { level: row.level, move: row.move.trim() }]) };
+}
+
+/** Parse a free-text learnset alternative into a (level, move) row. The suggest
+    Seam emits alternatives as strings like "Aqua Jet @ L24 — priority STAB
+    option" (backend schema forces a string value), so a click can't swap a whole
+    list — it adds the suggested move. Pass `moveOptions` to pin the move name to a
+    real pool entry (the longest known name found in the text); falls back to the
+    text before the first separator. Level pulled from an `@`/`L`/`level` marker,
+    else the first bare number, else 0. Returns null when no move name is found. */
+export function parseAltRow(
+  text: string,
+  moveOptions?: readonly string[],
+): { level: number; move: string } | null {
+  const marked = text.match(/(?:@|\bl|\blevel|\blvl)\s*(\d{1,3})/i);
+  const bare = text.match(/\b(\d{1,3})\b/);
+  const level = marked ? Number(marked[1]) : bare ? Number(bare[1]) : 0;
+
+  let move: string | null = null;
+  if (moveOptions && moveOptions.length > 0) {
+    const lower = text.toLowerCase();
+    const hits = moveOptions.filter((name) => lower.includes(name.toLowerCase()));
+    move = hits.sort((a, b) => b.length - a.length)[0] ?? null;
+  }
+  if (move === null) {
+    const head = text.split(/[@:—–-]/)[0]?.trim() ?? "";
+    move = head || null;
+  }
+  if (move === null) return null;
+  return { level: Math.min(LEARNSET_LEVEL_MAX, Math.max(LEARNSET_LEVEL_MIN, level)), move };
+}
+
 /** Drop every proposed row whose move is in `moves`, then autosort. Used by the
     proposed-learnset bulk "Remove" action (selection is keyed by move name). */
 export function removeSelectedMoves(
@@ -131,11 +175,16 @@ export function learnsetChanged(
   return proposed.some((m) => !currentKeys.has(moveKey(m.level, m.move)));
 }
 
-/** Swap an alternative into the draft. A learnset alternative is a whole
-    proposed list (the model's runner-up learnset). */
+/** Apply an alternative into the draft, returning a NEW draft the UI re-derives
+    from. Two shapes:
+    - an array value (a whole runner-up learnset) replaces the list, sorted;
+    - a string value (the shape the suggest Seam actually emits — a single
+      suggested move like "Aqua Jet @ L24") is parsed and ADDED as a row.
+    Falls back to the unchanged draft only when a string can't be parsed. */
 export function applyAlternative(
   draft: LearnsetDraft | null,
   alt: ProposalAlternative,
+  moveOptions?: readonly string[],
 ): LearnsetDraft {
   if (Array.isArray(alt.value)) {
     const moves = (alt.value as unknown[])
@@ -152,6 +201,10 @@ export function applyAlternative(
         reasoning: m.reasoning,
       }));
     return { learnset: sortMoves(moves) };
+  }
+  if (typeof alt.value === "string") {
+    const parsed = parseAltRow(alt.value, moveOptions);
+    if (parsed !== null) return addRow(draft, parsed);
   }
   return draft ?? { learnset: [] };
 }

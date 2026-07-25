@@ -24,9 +24,12 @@ const SLOTS: DistRow["slot"][] = ["primary", "secondary", "hidden"];
 interface Props {
   entry: DexEntry;
   byId: ReadonlyMap<string, DexEntry>;
-  redirectRef: RefObject<HTMLInputElement>;
+  redirectRef: RefObject<HTMLTextAreaElement>;
   registerActions: (actions: StageActions | null) => void;
   onLocked: (facts: StageFacts, writtenIds?: string[]) => void;
+  /** Report the created ability's name so later suggest calls can be steered to
+      use it (the ordering-guard direction injection). */
+  onCreated?: (name: string, kind: "ability" | "move") => void;
 }
 
 type Phase = "input" | "proposing" | "proposed" | "writing" | "error";
@@ -91,7 +94,14 @@ async function writeCreation(
   return written;
 }
 
-export function AbilityCreatePanel({ entry, byId, redirectRef, registerActions, onLocked }: Props) {
+export function AbilityCreatePanel({
+  entry,
+  byId,
+  redirectRef,
+  registerActions,
+  onLocked,
+  onCreated,
+}: Props) {
   const [phase, setPhase] = useState<Phase>("input");
   const [direction, setDirection] = useState("");
   const [result, setResult] = useState<AbilityCreateResponse | null>(null);
@@ -151,6 +161,7 @@ export function AbilityCreatePanel({ entry, byId, redirectRef, registerActions, 
         // Write the EDITED distribution, not the proposal's — the author's slot
         // retargets, removals, and added species are what lands (ac10).
         const written = await writeCreation({ ...result.draft, distribution: dist }, byId);
+        onCreated?.(result.draft.ability.name, "ability");
         onLocked({ abilities: entry.abilities }, written);
       } catch (caught: unknown) {
         setError(
@@ -185,14 +196,21 @@ export function AbilityCreatePanel({ entry, byId, redirectRef, registerActions, 
         <label className="mk-stage__redirect-label mono" htmlFor="mk-create-direction">
           new ability
         </label>
-        <input
+        <textarea
           ref={redirectRef}
           id="mk-create-direction"
           className="mk-stage__redirect-input mono"
-          type="text"
+          rows={2}
           value={direction}
           placeholder="describe it (e.g. a Water sponge that boosts Speed when hit by Water)…"
           onChange={(event) => setDirection(event.target.value)}
+          onKeyDown={(event) => {
+            // Enter proposes; Shift+Enter inserts a newline.
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              if (phase !== "proposing" && phase !== "writing") void propose();
+            }
+          }}
           autoComplete="off"
         />
         <button
