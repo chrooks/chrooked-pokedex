@@ -17,6 +17,10 @@ learnset:
   - { level: 1, move: Metal Sound }
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Tackle }
+  - { level: 15, move: Glint }
+  - { level: 30, move: Mirror Shot }
   - { level: 36, move: Secret Sword }
   - { level: 45, move: Wraithstrike }
+  - { level: 48, move: Luster Cannon }
   - { level: 55, move: Pixie Slash }
+  - { level: 62, move: Steel Beam }

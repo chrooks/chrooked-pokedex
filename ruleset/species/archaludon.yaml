@@ -1,8 +1,8 @@
-name: Duraludon
-chrooked_id: duraludon
-aka: { pokeemerald: SPECIES_DURALUDON }
-stats: { def: 120, spa: 125, spd: 75 }
+name: Archaludon
+chrooked_id: archaludon
+aka: {  }
 learnset:
+  - { level: 0, move: Electro Shot }
   - { level: 1, move: Leer }
   - { level: 1, move: Metal Claw }
   - { level: 6, move: Rock Smash }

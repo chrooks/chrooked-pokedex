@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_BASTIODON }
 abilities:
   secondary: Battle Armor
 stats: { hp: 75, atk: 50, def: 170, spa: 45, spd: 140 }
+learnset:
+  - { level: 0, move: Block }
+  - { level: 1, move: Wide Guard }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Metal Sound }
+  - { level: 8, move: Glint }
+  - { level: 15, move: Take Down }
+  - { level: 19, move: Iron Defense }
+  - { level: 21, move: Mirror Shot }
+  - { level: 24, move: Swagger }
+  - { level: 28, move: Ancient Power }
+  - { level: 36, move: Endure }
+  - { level: 43, move: Metal Burst }
+  - { level: 47, move: Luster Cannon }
+  - { level: 51, move: Iron Head }
+  - { level: 58, move: Heavy Slam }
+  - { level: 62, move: Steel Beam }

@@ -1,0 +1,11 @@
+name: Luster Cannon
+chrooked_id: lustercannon
+aka: { pokeemerald: MOVE_LUSTER_CANNON }
+type: Steel
+category: special
+power: 105
+accuracy: 90
+pp: 10
+description: Unleashes a concentrated beam of light. May lower the target's accuracy.
+additional_effects:
+  - { effect: acc_minus_1, chance: 20 }

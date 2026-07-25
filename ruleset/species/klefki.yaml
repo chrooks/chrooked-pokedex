@@ -1,0 +1,22 @@
+name: Klefki
+chrooked_id: klefki
+aka: {  }
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Tackle }
+  - { level: 6, move: Glint }
+  - { level: 8, move: Fairy Wind }
+  - { level: 12, move: Torment }
+  - { level: 16, move: Fairy Lock }
+  - { level: 18, move: Mirror Shot }
+  - { level: 20, move: Metal Sound }
+  - { level: 24, move: Draining Kiss }
+  - { level: 28, move: Recycle }
+  - { level: 32, move: Imprison }
+  - { level: 36, move: Flash Cannon }
+  - { level: 38, move: Luster Cannon }
+  - { level: 40, move: Play Rough }
+  - { level: 44, move: Magic Room }
+  - { level: 48, move: Foul Play }
+  - { level: 52, move: Last Resort }
+  - { level: 62, move: Steel Beam }

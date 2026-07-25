@@ -2,3 +2,20 @@ name: Gholdengo
 chrooked_id: gholdengo
 aka: { pokeemerald: SPECIES_GHOLDENGO }
 stats: { spa: 135 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Astonish }
+  - { level: 7, move: Night Shade }
+  - { level: 10, move: Glint }
+  - { level: 14, move: Confuse Ray }
+  - { level: 18, move: Mirror Shot }
+  - { level: 21, move: Substitute }
+  - { level: 28, move: Metal Sound }
+  - { level: 35, move: Shadow Ball }
+  - { level: 38, move: Luster Cannon }
+  - { level: 42, move: Recover }
+  - { level: 49, move: Power Gem }
+  - { level: 52, move: Steel Beam }
+  - { level: 56, move: Make It Rain }
+  - { level: 63, move: Nasty Plot }
+  - { level: 70, move: Memento }

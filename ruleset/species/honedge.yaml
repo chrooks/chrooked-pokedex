@@ -5,15 +5,19 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Fury Cutter }
   - { level: 5, move: Shadow Sneak }
+  - { level: 6, move: Glint }
   - { level: 9, move: Metal Sound }
   - { level: 13, move: Aerial Ace }
   - { level: 17, move: Iron Defense }
+  - { level: 18, move: Mirror Shot }
   - { level: 21, move: Slash }
   - { level: 25, move: Shadow Claw }
   - { level: 29, move: Night Slash }
   - { level: 33, move: Iron Head }
   - { level: 37, move: Swords Dance }
+  - { level: 38, move: Luster Cannon }
   - { level: 41, move: Sacred Sword }
   - { level: 44, move: Wraithstrike }
   - { level: 48, move: Secret Sword }
   - { level: 55, move: Pixie Slash }
+  - { level: 62, move: Steel Beam }

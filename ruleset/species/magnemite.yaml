@@ -5,16 +5,20 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Shock }
   - { level: 4, move: Supersonic }
+  - { level: 6, move: Glint }
   - { level: 8, move: Thunder Wave }
   - { level: 12, move: Electro Ball }
   - { level: 16, move: Gyro Ball }
   - { level: 18, move: Short Circuit }
+  - { level: 18, move: Mirror Shot }
   - { level: 20, move: Spark }
   - { level: 24, move: Screech }
   - { level: 28, move: Magnet Rise }
   - { level: 32, move: Flash Cannon }
   - { level: 36, move: Discharge }
+  - { level: 38, move: Luster Cannon }
   - { level: 40, move: Metal Sound }
   - { level: 44, move: Light Screen }
   - { level: 48, move: Lock-On }
   - { level: 52, move: Zap Cannon }
+  - { level: 62, move: Steel Beam }

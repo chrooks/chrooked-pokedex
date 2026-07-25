@@ -9,13 +9,17 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Absorb }
   - { level: 5, move: Water Gun }
+  - { level: 7, move: Glint }
   - { level: 10, move: Dragon Breath }
   - { level: 15, move: Protect }
+  - { level: 18, move: Mirror Shot }
   - { level: 20, move: Flail }
   - { level: 25, move: Water Pulse }
   - { level: 25, move: Draconic Fang }
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
+  - { level: 38, move: Luster Cannon }
   - { level: 41, move: Curse }
   - { level: 45, move: Body Slam }
   - { level: 50, move: Muddy Water }
+  - { level: 62, move: Steel Beam }

@@ -1,0 +1,12 @@
+name: Burmy Trash
+chrooked_id: burmytrash
+aka: {  }
+learnset:
+  - { level: 1, move: Protect }
+  - { level: 6, move: Glint }
+  - { level: 10, move: Tackle }
+  - { level: 15, move: Bug Bite }
+  - { level: 20, move: String Shot }
+  - { level: 30, move: Mirror Shot }
+  - { level: 48, move: Luster Cannon }
+  - { level: 62, move: Steel Beam }

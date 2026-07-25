@@ -11,16 +11,20 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Metal Claw }
+  - { level: 6, move: Glint }
   - { level: 11, move: Swords Dance }
   - { level: 15, move: Peck }
   - { level: 17, move: Water Whip }
   - { level: 19, move: Bubble Beam }
+  - { level: 21, move: Mirror Shot }
   - { level: 24, move: Swagger }
   - { level: 28, move: Fury Attack }
   - { level: 33, move: Brine }
+  - { level: 36, move: Luster Cannon }
   - { level: 39, move: Whirlpool }
   - { level: 46, move: Mist }
   - { level: 52, move: Drill Peck }
+  - { level: 55, move: Steel Beam }
   - { level: 59, move: Hydro Pump }
   - { level: 66, move: Wave Crash }
 evolution: { from: Prinplup, method: { level: 36 } }

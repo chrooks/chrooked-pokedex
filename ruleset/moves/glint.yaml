@@ -1,0 +1,11 @@
+name: Glint
+chrooked_id: glint
+aka: { pokeemerald: MOVE_GLINT }
+type: Steel
+category: special
+power: 40
+accuracy: 100
+pp: 30
+description: A dazzling flash of reflected light. Lowers the target's accuracy.
+additional_effects:
+  - { effect: acc_minus_1, chance: 100 }

@@ -6,11 +6,13 @@ abilities:
 learnset:
   - { level: 1, move: Pound }
   - { level: 4, move: Growl }
+  - { level: 6, move: Glint }
   - { level: 8, move: Water Gun }
   - { level: 11, move: Charm }
   - { level: 15, move: Peck }
   - { level: 18, move: Bubble Beam }
   - { level: 20, move: Water Whip }
+  - { level: 20, move: Mirror Shot }
   - { level: 22, move: Swagger }
   - { level: 25, move: Fury Attack }
   - { level: 29, move: Brine }
@@ -18,3 +20,5 @@ learnset:
   - { level: 36, move: Mist }
   - { level: 39, move: Drill Peck }
   - { level: 43, move: Hydro Pump }
+  - { level: 48, move: Luster Cannon }
+  - { level: 62, move: Steel Beam }
