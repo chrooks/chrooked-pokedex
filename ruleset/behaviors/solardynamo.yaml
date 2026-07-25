@@ -1,0 +1,35 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Solar Dynamo
+chrooked_id: solardynamo
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Summon harsh sunlight on entry
+    trigger: switch-in
+    when: This Pokémon switches in AND the weather is not already harsh sunlight
+    effect: Set the weather to harsh sunlight (SUNNYDAY), identical to the Drought ability — same 5-turn duration (8 with Heat Rock), same field-effect duration rules, and blocked by the same conditions that block Drought (Heavy Rain, Delta Stream, and other locked weather). The ability is now self-sufficient — it sets up its own sun.
+  - summary: Boost Special Attack in harsh sunlight
+    trigger: damage-calc
+    when: Current weather is harsh sunlight AND this Pokémon is the attacker AND the move is a special move
+    effect: Multiply the Special Attack stat by 1.5× before damage calculation.
+  - summary: No end-of-turn HP drain
+    trigger: turn-end
+    when: Always (Solar Dynamo is active)
+    effect: Skip any HP-draining side-effect that would normally be applied by Solar Power. This Pokémon takes no end-of-turn damage from this ability under any weather condition.
+  - summary: Ability dormant outside sunlight
+    trigger: turn-end
+    when: Current weather is NOT harsh sunlight, OR weather is suppressed by Air Lock / Cloud Nine
+    effect: No Special Attack modifier is applied and no HP is lost. Ability has no effect this turn.
+test_cases:
+  - given: Solar Dynamo user with 150 base Sp. Atk uses Flamethrower under Drought-summoned harsh sunlight.
+    expect: The effective Sp. Atk is multiplied by 1.5× during the damage roll; no HP is deducted from the user at end of turn.
+  - given: Solar Dynamo user is on the field while an opponent has Air Lock active. Sunlight would otherwise be harsh.
+    expect: The 1.5× Sp. Atk bonus is NOT applied, and no HP drain occurs. Ability is fully suppressed.
+  - given: Solar Dynamo user survives to end of turn under harsh sunlight at 1 HP.
+    expect: The user does NOT faint from end-of-turn HP loss; it remains at 1 HP. The ability grants only the offensive bonus.
+notes:
+  - Solar Dynamo is Drought + Solar Power with the HP-drain drawback removed — it sets its own sun on entry and then rides the 1.5× Sp. Atk boost with no penalty. Self-sufficient; no Drought teammate needed.
+  - Air Lock and Cloud Nine suppress the weather, so the 1.5× boost becomes inert while those abilities are active (the sun is still set, it just reads as no-weather for the boost check).
+  - Unlike the base Solar Power, this ability provides no penalty, so it pairs especially well with high Sp. Atk sweepers that would otherwise struggle to accept chip damage.
+  - Desolate Land and Orichalcum Pulse both count as harsh sunlight and trigger the boost; the on-entry sun is blocked by locked weather (Heavy Rain, Delta Stream) just as Drought is.
+  - Rejuv implementation: patch/Mods/chrooked_solardynamo.rb (canonical source references/rejuv-harness/) — CHROOKED_SWITCH_IN summons SUNNYDAY like Drought, CHROOKED_DAMAGE_MODS gives 1.5× special-move damage in sun, no turn-end drain.

@@ -1779,8 +1779,10 @@ def _build_ability_creation_rubric() -> str:
     return (
         "You are a Pokémon game-design assistant. From a freeform direction, "
         "DESIGN ONE brand-new ability. Produce:\n"
-        "- `ability`: a `name` (Title Case) and a one-paragraph `description` of "
-        "the mechanic.\n"
+        "- `ability`: a `name` (Title Case) and a `description` of the mechanic — "
+        "ONE or TWO short sentences, ~25 words max, matching the terse style of the "
+        "existing ability pool (e.g. 'Normal moves become Ghost-type. +20% power.'). "
+        "State the effect plainly; no flavor prose, no restating the numbers twice.\n"
         "- `behavior`: an engine-neutral behavior spec for the ability. Each "
         "effect is {summary, trigger, when, effect}; the `trigger` MUST be one of: "
         f"{triggers}. `when` is an optional plain-language condition (use '' if "

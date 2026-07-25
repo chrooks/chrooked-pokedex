@@ -1,4 +1,8 @@
 name: Volcarona
 chrooked_id: volcarona
 aka: { pokeemerald: SPECIES_VOLCARONA }
+abilities:
+  primary: Levitate
+  hidden: Drought
 stats: { def: 75 }
+evolution: { from: Larvesta, method: { level: 40 } }

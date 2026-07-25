@@ -3,7 +3,7 @@ chrooked_id: skrelp
 aka: { pokeemerald: SPECIES_SKRELP }
 abilities:
   primary: Venomous
-  secondary: Corrosion
+  secondary: Nematocyst
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Smokescreen }

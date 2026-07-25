@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Nematocyst
+chrooked_id: toxictide
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Water moves have a 30% chance to badly poison the target on hit.
+    trigger: on-hit
+    when: The move used is Water-type and the target is not already statused.
+    effect: Roll a 30% chance. On success, inflict bad poison (toxic) on the target, bypassing the normal type restriction that limits poisoning to Poison/Steel interactions. This proc respects immunity to poison (e.g. Poison-type, Steel-type, Immunity ability holders) and cannot poison a target that is already statused.
+  - summary: All poison applications made by this Pokémon are upgraded to bad poison.
+    trigger: status-apply
+    when: This Pokémon is the source of a regular poison status being applied to any target (via move, ability secondary effect, or any other source).
+    effect: Intercept the poison status before it is written. Replace regular poison with bad poison (toxic), so the target begins accumulating escalating damage each turn instead of a flat 1/16 per turn. This upgrade applies to all moves and ability effects this Pokémon uses that can inflict poison (e.g. Poison Sting, Sludge, Poison Point contact proc).
+test_cases:
+  - given: Bearer uses Surf against a Chansey (no status, no poison immunity ability). Roll returns 22 (under 30%).
+    expect: Chansey is inflicted with bad poison (toxic), not regular poison. Its residual damage the following turn is 1/16 max HP, escalating each subsequent turn.
+  - given: Bearer uses Poison Sting (a Poison-type move that normally inflicts regular poison on a 30% chance) against a Snorlax. Roll succeeds.
+    expect: The status-apply upgrade layer intercepts the regular poison result and replaces it with bad poison before it is applied to Snorlax.
+  - given: Bearer uses Surf against a Toxapex (Poison-type).
+    expect: The 30% proc does not fire — Poison-type targets are immune to being poisoned. Toxapex takes normal Surf damage only.
+notes:
+  - "The 30% Water-move proc and the upgrade-to-bad-poison effect are independent layers: the proc already inflicts bad poison directly, but the upgrade layer acts as a safety net to ensure no regular poison can slip through from any other source the bearer uses."
+  - Standard poison immunities (Poison-type, Steel-type, Immunity, Pastel Veil, etc.) still block both effects entirely.
+  - The ability does NOT grant immunity to being poisoned by the opponent — it only governs poison the bearer inflicts on others.
+  - In doubles, the Water-move proc can trigger on spread moves (e.g. Surf, Muddy Water) against all targets hit, rolling independently for each.
+  - Poison-type targets and Steel-type targets are immune to the proc despite the type-bypass clause (the bypass only waives the 'Poison/Steel users only' restriction on the user side, not the target's type-based immunity).
+  - STUB — engine_hints ungrounded, needs human grounding pass

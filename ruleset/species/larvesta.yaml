@@ -1,6 +1,9 @@
 name: Larvesta
 chrooked_id: larvesta
 aka: { pokeemerald: SPECIES_LARVESTA }
+abilities:
+  primary: Swarm
+  secondary: Drought
 stats: { hp: 75, spa: 85, spe: 70 }
 learnset:
   - { level: 1, move: Ember }
