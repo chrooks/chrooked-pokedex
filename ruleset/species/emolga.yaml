@@ -3,22 +3,28 @@ chrooked_id: emolga
 aka: { pokeemerald: SPECIES_EMOLGA }
 abilities:
   secondary: Aerodynamic
-stats: { atk: 95, spa: 95, spe: 110 }
+stats: { hp: 75, atk: 60, def: 80, spa: 90, spd: 85, spe: 115 }
 learnset:
   - { level: 1, move: Nuzzle }
   - { level: 1, move: Tail Whip }
   - { level: 5, move: Double Team }
   - { level: 10, move: Quick Attack }
+  - { level: 12, move: Thunder Wave }
   - { level: 15, move: Thunder Shock }
   - { level: 17, move: Short Circuit }
   - { level: 20, move: Charge }
+  - { level: 23, move: Helping Hand }
   - { level: 25, move: Acrobatics }
+  - { level: 28, move: U-turn }
   - { level: 30, move: Spark }
+  - { level: 33, move: Grass Knot }
   - { level: 35, move: Encore }
-  - { level: 37, move: Dive Bomb }
   - { level: 37, move: Arc Strike }
+  - { level: 37, move: Dive Bomb }
   - { level: 37, move: Nosedive }
   - { level: 40, move: Volt Switch }
+  - { level: 43, move: Energy Ball }
   - { level: 45, move: Light Screen }
   - { level: 50, move: Discharge }
-  - { level: 55, move: Agility }
+  - { level: 55, move: Thunderbolt }
+  - { level: 60, move: Agility }
