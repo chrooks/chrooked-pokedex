@@ -20,6 +20,8 @@ learnset:
   - { level: 28, move: Self-Destruct }
   - { level: 32, move: Sludge Bomb }
   - { level: 38, move: Toxic }
+  - { level: 41, move: Venom Slam }
+  - { level: 41, move: Starfall Slam }
   - { level: 44, move: Belch }
   - { level: 50, move: Explosion }
   - { level: 56, move: Memento }

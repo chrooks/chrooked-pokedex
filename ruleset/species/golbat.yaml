@@ -19,6 +19,8 @@ learnset:
   - { level: 30, move: Leech Life }
   - { level: 34, move: Cross Poison }
   - { level: 37, move: Air Slash }
+  - { level: 37, move: Venom Slam }
+  - { level: 37, move: Nosedive }
   - { level: 40, move: U-turn }
   - { level: 43, move: Poison Jab }
   - { level: 47, move: Dive Bomb }

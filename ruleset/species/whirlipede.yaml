@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_WHIRLIPEDE }
 abilities:
   primary: Venomous
   hidden: Speed Boost
+learnset:
+  - { level: 0, move: Iron Defense }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Protect }
+  - { level: 12, move: Poison Tail }
+  - { level: 16, move: Screech }
+  - { level: 20, move: Bug Bite }
+  - { level: 26, move: Venoshock }
+  - { level: 32, move: Take Down }
+  - { level: 38, move: Agility }
+  - { level: 41, move: Venom Slam }
+  - { level: 41, move: Moltstrike }
+  - { level: 44, move: Toxic }
+  - { level: 50, move: Venom Drench }
+  - { level: 56, move: Double-Edge }

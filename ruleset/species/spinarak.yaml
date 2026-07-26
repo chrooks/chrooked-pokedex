@@ -1,0 +1,22 @@
+name: Spinarak
+chrooked_id: spinarak
+aka: {  }
+learnset:
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: String Shot }
+  - { level: 5, move: Absorb }
+  - { level: 8, move: Infestation }
+  - { level: 12, move: Scary Face }
+  - { level: 15, move: Night Shade }
+  - { level: 19, move: Shadow Sneak }
+  - { level: 22, move: Fury Swipes }
+  - { level: 26, move: Sucker Punch }
+  - { level: 29, move: Agility }
+  - { level: 33, move: Pin Missile }
+  - { level: 36, move: Psychic }
+  - { level: 38, move: Venom Slam }
+  - { level: 38, move: Moltstrike }
+  - { level: 40, move: Poison Jab }
+  - { level: 44, move: Cross Poison }
+  - { level: 47, move: Sticky Web }
+  - { level: 51, move: Toxic Thread }

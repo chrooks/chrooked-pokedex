@@ -1,0 +1,9 @@
+name: Weedle
+chrooked_id: weedle
+aka: {  }
+learnset:
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: String Shot }
+  - { level: 9, move: Bug Bite }
+  - { level: 46, move: Venom Slam }
+  - { level: 46, move: Moltstrike }

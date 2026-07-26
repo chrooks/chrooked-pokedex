@@ -20,4 +20,5 @@ learnset:
   - { level: 39, move: Belch }
   - { level: 42, move: Explosion }
   - { level: 45, move: Backstab }
+  - { level: 46, move: Venom Slam }
   - { level: 60, move: Havoc }

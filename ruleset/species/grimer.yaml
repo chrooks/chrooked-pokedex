@@ -5,3 +5,21 @@ abilities:
   primary: Corrosion
   secondary: Venomous
   hidden: Liquified
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Poison Gas }
+  - { level: 4, move: Harden }
+  - { level: 7, move: Mud-Slap }
+  - { level: 12, move: Disable }
+  - { level: 15, move: Sludge }
+  - { level: 18, move: Mud Shot }
+  - { level: 21, move: Minimize }
+  - { level: 26, move: Toxic }
+  - { level: 29, move: Sludge Bomb }
+  - { level: 32, move: Sludge Wave }
+  - { level: 36, move: Venom Slam }
+  - { level: 37, move: Screech }
+  - { level: 40, move: Gunk Shot }
+  - { level: 43, move: Acid Armor }
+  - { level: 46, move: Belch }
+  - { level: 48, move: Memento }

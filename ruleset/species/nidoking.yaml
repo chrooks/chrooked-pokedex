@@ -27,6 +27,7 @@ learnset:
   - { level: 38, move: Earth Power }
   - { level: 42, move: Sludge Bomb }
   - { level: 46, move: Toxic }
+  - { level: 46, move: Venom Slam }
   - { level: 48, move: Stone Edge }
   - { level: 50, move: Gunk Shot }
   - { level: 54, move: Earthquake }

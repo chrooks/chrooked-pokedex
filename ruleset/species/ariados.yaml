@@ -4,3 +4,26 @@ aka: { pokeemerald: SPECIES_ARIADOS }
 abilities:
   secondary: Venomous
 stats: { hp: 90, atk: 110, def: 80, spd: 80, spe: 55 }
+learnset:
+  - { level: 0, move: Swords Dance }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Fell Stinger }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: String Shot }
+  - { level: 1, move: Bug Bite }
+  - { level: 1, move: Focus Energy }
+  - { level: 8, move: Infestation }
+  - { level: 12, move: Scary Face }
+  - { level: 15, move: Night Shade }
+  - { level: 19, move: Shadow Sneak }
+  - { level: 23, move: Fury Swipes }
+  - { level: 28, move: Sucker Punch }
+  - { level: 31, move: Agility }
+  - { level: 35, move: Pin Missile }
+  - { level: 38, move: Venom Slam }
+  - { level: 38, move: Moltstrike }
+  - { level: 41, move: Psychic }
+  - { level: 46, move: Poison Jab }
+  - { level: 50, move: Cross Poison }
+  - { level: 54, move: Sticky Web }
+  - { level: 59, move: Toxic Thread }

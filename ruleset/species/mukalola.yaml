@@ -22,6 +22,7 @@ learnset:
   - { level: 37, move: Screech }
   - { level: 40, move: Gunk Shot }
   - { level: 43, move: Backstab }
+  - { level: 43, move: Venom Slam }
   - { level: 46, move: Acid Armor }
   - { level: 49, move: Havoc }
   - { level: 52, move: Belch }

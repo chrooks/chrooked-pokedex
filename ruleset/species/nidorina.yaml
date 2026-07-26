@@ -21,6 +21,7 @@ learnset:
   - { level: 31, move: Crunch }
   - { level: 34, move: Toxic Spikes }
   - { level: 38, move: Ice Punch }
+  - { level: 39, move: Venom Slam }
   - { level: 45, move: Toxic }
   - { level: 46, move: Body Press }
   - { level: 48, move: Sludge Wave }

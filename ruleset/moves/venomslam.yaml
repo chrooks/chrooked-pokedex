@@ -1,0 +1,11 @@
+name: Venom Slam
+chrooked_id: venomslam
+aka: { pokeemerald: MOVE_VENOM_SLAM }
+type: Poison
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user delivers a venom-soaked body blow. May poison the target.
+additional_effects:
+  - { effect: poison, chance: 10 }

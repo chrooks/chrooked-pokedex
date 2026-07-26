@@ -4,3 +4,24 @@ aka: { pokeemerald: SPECIES_BEEDRILL }
 abilities:
   primary: Levitate
 stats: { atk: 105 }
+learnset:
+  - { level: 0, move: Fury Attack }
+  - { level: 1, move: Bug Bite }
+  - { level: 1, move: Fury Attack }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: String Shot }
+  - { level: 1, move: Harden }
+  - { level: 11, move: Fury Cutter }
+  - { level: 14, move: Laser Focus }
+  - { level: 17, move: Poison Sting }
+  - { level: 20, move: Focus Energy }
+  - { level: 23, move: Venoshock }
+  - { level: 26, move: Assurance }
+  - { level: 29, move: Toxic Spikes }
+  - { level: 32, move: Pin Missile }
+  - { level: 35, move: Poison Jab }
+  - { level: 38, move: Agility }
+  - { level: 41, move: Endeavor }
+  - { level: 44, move: Fell Stinger }
+  - { level: 46, move: Venom Slam }
+  - { level: 46, move: Moltstrike }

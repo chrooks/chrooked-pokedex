@@ -6,3 +6,21 @@ abilities:
   secondary: Venomous
   hidden: Liquified
 stats: { spd: 105 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Poison Gas }
+  - { level: 1, move: Mud-Slap }
+  - { level: 12, move: Disable }
+  - { level: 15, move: Sludge }
+  - { level: 18, move: Mud Shot }
+  - { level: 21, move: Minimize }
+  - { level: 26, move: Toxic }
+  - { level: 29, move: Sludge Bomb }
+  - { level: 32, move: Sludge Wave }
+  - { level: 37, move: Screech }
+  - { level: 40, move: Gunk Shot }
+  - { level: 43, move: Venom Slam }
+  - { level: 46, move: Acid Armor }
+  - { level: 52, move: Belch }
+  - { level: 57, move: Memento }

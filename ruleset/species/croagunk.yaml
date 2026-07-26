@@ -23,6 +23,8 @@ learnset:
   - { level: 30, move: Ki Blast }
   - { level: 32, move: Liquidation }
   - { level: 36, move: Drain Punch }
+  - { level: 38, move: Venom Slam }
+  - { level: 38, move: Cross Chop }
   - { level: 40, move: Mud Bomb }
   - { level: 44, move: Sludge Bomb }
   - { level: 48, move: Earthquake }

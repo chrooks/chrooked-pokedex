@@ -5,3 +5,22 @@ abilities:
   primary: Venomous
   hidden: Speed Boost
 stats: { def: 90, spe: 115 }
+learnset:
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Baton Pass }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Rollout }
+  - { level: 1, move: Protect }
+  - { level: 12, move: Poison Tail }
+  - { level: 16, move: Screech }
+  - { level: 20, move: Bug Bite }
+  - { level: 26, move: Venoshock }
+  - { level: 34, move: Take Down }
+  - { level: 38, move: Venom Slam }
+  - { level: 38, move: Moltstrike }
+  - { level: 42, move: Agility }
+  - { level: 50, move: Toxic }
+  - { level: 58, move: Venom Drench }
+  - { level: 66, move: Double-Edge }
+  - { level: 74, move: Megahorn }

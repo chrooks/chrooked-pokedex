@@ -25,3 +25,4 @@ learnset:
   - { level: 37, move: Pain Split }
   - { level: 39, move: Gunk Shot }
   - { level: 42, move: Explosion }
+  - { level: 46, move: Venom Slam }

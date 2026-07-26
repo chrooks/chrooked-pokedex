@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_KOFFING }
 abilities:
   secondary: Neutralizing Gas
   hidden: Exhaust
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Poison Gas }
+  - { level: 4, move: Smog }
+  - { level: 8, move: Smokescreen }
+  - { level: 12, move: Clear Smog }
+  - { level: 16, move: Assurance }
+  - { level: 20, move: Sludge }
+  - { level: 24, move: Haze }
+  - { level: 28, move: Self-Destruct }
+  - { level: 32, move: Sludge Bomb }
+  - { level: 36, move: Toxic }
+  - { level: 38, move: Venom Slam }
+  - { level: 40, move: Belch }
+  - { level: 44, move: Explosion }
+  - { level: 48, move: Memento }
+  - { level: 52, move: Destiny Bond }
