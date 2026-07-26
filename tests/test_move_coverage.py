@@ -134,3 +134,26 @@ def test_over110_requires_drawback_not_target_effect() -> None:
     # ...but a drawback-less >110 nuke is rejected (no free lunch).
     phys_bad = {**phys_ok, "effect": "hit"}
     assert any("drawback expected recoil" in d for d in mc.audit_move("bad", phys_bad))
+
+
+@pytest.mark.unit
+def test_over110_accepts_sinkhole_sink_pair_drawback() -> None:
+    # Sinkhole's type-flavored >110 drawback: caster's Sp. Atk AND Speed each -1
+    # (a behavior applies it; the data carries both markers). Must pass audit.
+    sink = {
+        "type": "Ground", "category": "special", "power": 130,
+        "accuracy": 90, "pp": 5, "effect": "hit",
+        "additional_effects": [
+            {"effect": "sp_atk_minus_1", "chance": 100},
+            {"effect": "spd_minus_1", "chance": 100},
+        ],
+    }
+    assert mc.audit_move("sinkhole", sink) == []
+
+    # Quagmire — Ground special 91-110, target -Speed at the 20% mid-band chance.
+    quag = {
+        "type": "Ground", "category": "special", "power": 100,
+        "accuracy": 90, "pp": 10,
+        "additional_effects": [{"effect": "spd_minus_1", "chance": 20}],
+    }
+    assert mc.audit_move("quagmire", quag) == []

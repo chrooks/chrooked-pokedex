@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# Sinkhole is the Ground special >110 rung. Its self-cost is type-flavored: a
+# sinkhole bogs the caster down (Sp. Atk AND Speed each fall one stage) instead
+# of the standard -2 Sp. Atk. No vanilla Rejuv funccode lowers SpA + Speed
+# together, so the move ships as a plain damage funccode and this behavior adds
+# the whole self-drawback on top.
+name: Sinkhole
+chrooked_id: sinkhole
+applies_to: move
+effects:
+  - summary: "After Sinkhole strikes, the caster sinks: its Sp. Atk and Speed each fall one stage."
+    trigger: on-hit
+    when: "Sinkhole (Ground special, >110 band) deals damage"
+    effect: >-
+      after the move deals damage, lower the USER's Special Attack by one stage
+      and its Speed by one stage, each respecting the usual can-lower gates
+      (Clear Body, already at -6, etc.)
+test_cases:
+  - given: "Sinkhole deals damage with the caster's Sp. Atk and Speed above -6"
+    expect: "caster Sp. Atk -1 and Speed -1"
+  - given: "the caster's Speed is already at -6"
+    expect: "Speed holds; Sp. Atk still falls one stage"
+  - given: "a non-Sinkhole move deals damage"
+    expect: "no self-drop — gated to the Sinkhole move id only"
+notes:
+  - "The -1 SpA / -1 Spe self-cost is NOT in the data funccode (none exists for that combo); this behavior is the entire drawback. The move's additional_effects carry sp_atk_minus_1 + spd_minus_1 only as harness markers so the >110 conformance audit passes."
+engine_hints:
+  pokeemerald: "Native — model as a self stat-drop (SpA + Speed, one stage) in the move's effect."
+  essentials: >-
+    Plugin (Scripts/chrooked_sinkhole.rb): register CHROOKED_MOVE_ON_DEAL[:SINKHOLE]
+    to lower the user's Sp. Atk and Speed by one stage each via pbChangeStats,
+    gated by pbCanReduceAnyStat? — the exhaust behavior's proven stat-change path.

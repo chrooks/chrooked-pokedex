@@ -508,7 +508,7 @@ _SINGLE_EFFECT_CODES = {
     "burn": 0x00A, "poison": 0x005, "paralysis": 0x007, "freeze": 0x00C,
     "flinch": 0x00F, "atk_minus_1": 0x042, "def_minus_1": 0x043,
     "sp_atk_minus_1": 0x045, "sp_def_minus_1": 0x046, "acc_minus_1": 0x047,
-    "confusion": 0x013,
+    "spd_minus_1": 0x044, "confusion": 0x013,
     # The >110 special drawback: user's Sp. Atk falls two steps after use
     # (Overheat / Draco Meteor / Leaf Storm all share 0x03F, :effect 100).
     "sp_atk_minus_2": 0x03F,

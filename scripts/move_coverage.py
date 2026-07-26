@@ -384,10 +384,17 @@ def _drawback_deviations(mid: str, split: str, move: Mapping) -> list[str]:
             return [f"{mid}: drawback expected recoil got {move.get('effect')}"]
         return []
     effects = {ae.get("effect") for ae in (move.get("additional_effects") or [])}
-    if "sp_atk_minus_2" not in effects:
-        got = sorted(e for e in effects if e) or "none"
-        return [f"{mid}: drawback expected sp_atk_minus_2 got {got}"]
-    return []
+    # Standard special >110 drawback: user's Sp. Atk falls two steps (Draco
+    # Meteor / Overheat, funccode 0x03F).
+    if "sp_atk_minus_2" in effects:
+        return []
+    # Type-flavored variant (Sinkhole): the caster sinks — Sp. Atk AND Speed each
+    # -1. No vanilla funccode does both, so a behavior (chrooked_sinkhole) applies
+    # it; the data carries both markers so this audit passes.
+    if {"sp_atk_minus_1", "spd_minus_1"} <= effects:
+        return []
+    got = sorted(e for e in effects if e) or "none"
+    return [f"{mid}: drawback expected sp_atk_minus_2 or sp_atk_minus_1+spd_minus_1 got {got}"]
 
 
 def audit_move(mid: str, move: Mapping) -> list[str]:
