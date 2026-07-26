@@ -24,5 +24,6 @@ learnset:
   - { level: 41, move: Blizzard }
   - { level: 46, move: Double-Edge }
   - { level: 51, move: Stone Edge }
+  - { level: 56, move: Icebreaker }
   - { level: 61, move: Mountain Gale }
 evolution: { from: Bergmite, method: { level: 37 } }

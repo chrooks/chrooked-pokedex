@@ -15,3 +15,4 @@ learnset:
   - { level: 48, move: Aurora Veil }
   - { level: 54, move: Surf }
   - { level: 60, move: Blizzard }
+  - { level: 64, move: Icebreaker }

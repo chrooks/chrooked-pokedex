@@ -17,3 +17,4 @@ learnset:
   - { level: 40, move: Blizzard }
   - { level: 44, move: Thrash }
   - { level: 48, move: Superpower }
+  - { level: 64, move: Icebreaker }

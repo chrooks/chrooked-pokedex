@@ -17,6 +17,7 @@ learnset:
   - { level: 42, move: Freeze-Dry }
   - { level: 45, move: Wave Crash }
   - { level: 49, move: Super Fang }
+  - { level: 52, move: Icebreaker }
   - { level: 56, move: Crunch }
   - { level: 63, move: Fishious Rend }
   - { level: 70, move: Icicle Crash }

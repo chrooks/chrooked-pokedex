@@ -18,3 +18,4 @@ learnset:
   - { level: 44, move: Ice Spinner }
   - { level: 49, move: Double-Edge }
   - { level: 53, move: Blizzard }
+  - { level: 64, move: Icebreaker }

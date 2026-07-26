@@ -22,3 +22,4 @@ learnset:
   - { level: 39, move: Blizzard }
   - { level: 42, move: Double-Edge }
   - { level: 46, move: Glacial Crush }
+  - { level: 64, move: Icebreaker }

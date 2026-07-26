@@ -21,3 +21,4 @@ learnset:
   - { level: 47, move: Cinder Smash }
   - { level: 50, move: Thrash }
   - { level: 56, move: Superpower }
+  - { level: 64, move: Icebreaker }

@@ -28,4 +28,5 @@ learnset:
   - { level: 41, move: Blizzard }
   - { level: 46, move: Sheer Cold }
   - { level: 51, move: Superpower }
+  - { level: 64, move: Icebreaker }
 evolution: { from: Cubchoo, method: { level: 37 } }

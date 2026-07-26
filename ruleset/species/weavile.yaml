@@ -30,5 +30,6 @@ learnset:
   - { level: 48, move: Nasty Plot }
   - { level: 51, move: Havoc }
   - { level: 54, move: Screech }
+  - { level: 57, move: Icebreaker }
   - { level: 60, move: Night Slash }
   - { level: 66, move: Dark Pulse }

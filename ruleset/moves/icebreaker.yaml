@@ -1,0 +1,10 @@
+name: Icebreaker
+chrooked_id: icebreaker
+aka: { pokeemerald: MOVE_ICEBREAKER }
+type: Ice
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: The user shatters the target with a bone-jarring frozen crash, recoiling from the impact.
+effect: recoil

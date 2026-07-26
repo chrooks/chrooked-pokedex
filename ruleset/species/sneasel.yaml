@@ -24,3 +24,4 @@ learnset:
   - { level: 51, move: Havoc }
   - { level: 54, move: Screech }
   - { level: 60, move: Slash }
+  - { level: 64, move: Icebreaker }

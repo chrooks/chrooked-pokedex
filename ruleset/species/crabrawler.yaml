@@ -20,3 +20,4 @@ learnset:
   - { level: 42, move: Iron Defense }
   - { level: 45, move: Dynamic Punch }
   - { level: 49, move: Close Combat }
+  - { level: 64, move: Icebreaker }

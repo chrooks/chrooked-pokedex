@@ -27,3 +27,4 @@ learnset:
   - { level: 45, move: Maelstrom }
   - { level: 46, move: Glacial Crush }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Icebreaker }
