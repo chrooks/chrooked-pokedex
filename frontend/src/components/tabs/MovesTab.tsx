@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { PokeballSpinner } from "../PokeballSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
@@ -16,19 +16,25 @@ import {
 } from "../../lib/moveColumns";
 import { moveCodec } from "../../lib/moveViewCodec";
 import { stableMultiSort, type SortKey } from "../../lib/sortEngine";
-import type { DexEntry, Move } from "../../types";
+import type { DexEntry, DistributeSplit, Move } from "../../types";
+import type { MoveDistRow } from "../makeover/moveDistribution";
 import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
 import { CategoryChip } from "../CategoryChip";
 import { ErrorView, EmptyView } from "../StatusView";
 import { EntityControls } from "../filters/EntityControls";
 import { MoveEditor } from "../editors/MoveEditor";
+import { EditorDialog } from "../editors/EditorDialog";
+import { MoveCreatePanel } from "../makeover/MoveCreatePanel";
+import { MoveDistributePanel } from "../makeover/MoveDistributePanel";
+import { AddEntityDialog } from "./AddEntityDialog";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { MoveDetail } from "../sidebar/MoveDetail";
 import { MoveDistributor } from "../sidebar/MoveDistributor";
 import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
+import "../makeover/makeover.css";
 
 /** The Moves entity owns its own namespaced URL params (D3) so its control state
     never bleeds into the dex or Abilities. */
@@ -74,13 +80,63 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
   const { data, error, status, isLoading, reload } = useResource<Move[]>(fetcher);
   const { data: dexData, reload: reloadDex } =
     useResource<DexEntry[]>(dexFetcher);
-  /** "New move" → editor directly (no read-only step for a record not yet created). */
-  const [editingNew, setEditingNew] = useState(false);
+  /** "+ Add move" → the shared add dialog (Manual | Generate, then optional
+      distribute step). */
+  const [adding, setAdding] = useState(false);
+  /** "✦ Distribute" → the move-distribute panel, pick-your-own move. */
+  const [distributing, setDistributing] = useState(false);
+  const genRef = useRef<HTMLTextAreaElement>(null);
   /** Whether the open sidebar should land in edit mode — set true by the per-row
       pencil so it opens on the [Fields | Distribution] tabs, false by a row click. */
   const [openInEdit, setOpenInEdit] = useState(false);
 
   const moves = useMemo(() => data ?? [], [data]);
+  // Inputs for the distribute panel: the dex keyed by chrooked_id and the known
+  // move names (the picker chooses from these).
+  const byId = useMemo(
+    () => new Map((dexData ?? []).map((e) => [e.chrooked_id, e])),
+    [dexData],
+  );
+  const moveOptions = useMemo(() => moves.map((m) => m.name), [moves]);
+  // Lowercased move NAME → its record, so ✦ Suggest can resolve the chosen move to
+  // its chrooked_id (the distribute endpoint's key) + type/category (the rule).
+  const moveByName = useMemo(() => {
+    const map = new Map<string, Move>();
+    for (const m of moves) map.set(m.name.toLowerCase(), m);
+    return map;
+  }, [moves]);
+
+  // Opt-in AI distribution (the ✦ Suggest gate — fires ONLY on the panel's button
+  // click). Build a rule from the move's own type + attack split, hit the existing
+  // distribute endpoint, and hand the proposed {species, level} rows to the panel
+  // (skipping species that already learn it).
+  const suggestMoveDistribution = useCallback(
+    async (moveName: string, direction: string, limit: number) => {
+      const m = moveByName.get(moveName.trim().toLowerCase());
+      if (m === undefined) throw new Error(`Unknown move ${moveName}.`);
+      const category = (m.category ?? "").toLowerCase();
+      const split: DistributeSplit =
+        category === "special" ? "special" : category === "status" ? "any" : "physical";
+      // A freeform direction wins (thematic OR mechanical prompt mode); empty
+      // falls back to the deterministic type + attack-split rule.
+      const recipients = direction.trim()
+        ? { prompt: direction.trim() }
+        : { rule: { types: [m.type], split } };
+      // `limit` is the pre-request size budget (evolution families) set before the
+      // click — the server bounds both prompt and rule mode to it.
+      const result = await api.distributeMove(m.chrooked_id, {
+        ...recipients,
+        include_evolutions: true,
+        rarity: "common",
+        limit,
+      });
+      const rows: MoveDistRow[] = result.rows
+        .filter((r) => !r.already_has)
+        .map((r) => ({ species: r.chrooked_id, level: r.level }));
+      return { rows, rationale: result.rationale, warnings: result.warnings };
+    },
+    [moveByName],
+  );
 
   // The open read-only sidebar is URL-addressable (#28): `view.selected` (the
   // shared `id=` param) names the move. Species cross-links carry the DISPLAY
@@ -210,14 +266,24 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
             <span className="sr-only"> by the Ruleset</span>
           </span>
         </span>
-        <button
-          type="button"
-          id="moves-new"
-          className="btn btn--primary btn--new"
-          onClick={() => setEditingNew(true)}
-        >
-          <span aria-hidden="true">+ </span>New move
-        </button>
+        <div className="tab-toolbar__actions">
+          <button
+            type="button"
+            id="moves-add"
+            className="btn btn--primary btn--new"
+            onClick={() => setAdding(true)}
+          >
+            <span aria-hidden="true">+ </span>Add move
+          </button>
+          <button
+            type="button"
+            id="moves-distribute"
+            className="btn btn--new"
+            onClick={() => setDistributing(true)}
+          >
+            <span aria-hidden="true">✦ </span>Distribute
+          </button>
+        </div>
       </div>
 
       {moves.length === 0 ? (
@@ -416,16 +482,88 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
         />
       )}
 
-      {/* New move editor — opened directly without the read-only step. */}
-      {editingNew && (
-        <MoveEditor
-          move={null}
-          onClose={() => setEditingNew(false)}
-          onSaved={() => {
-            reload();
-            setEditingNew(false);
-          }}
+      {/* + Add move — Manual | Generate, then an optional locked distribute step. */}
+      {adding && (
+        <AddEntityDialog
+          id="moves-add-dialog"
+          titleId="moves-add-title"
+          kindLabel="MOVE"
+          title="Add a move"
+          onClose={() => setAdding(false)}
+          renderManual={({ onCreated, onCancel }) => (
+            <MoveEditor
+              move={null}
+              embedded
+              onClose={onCancel}
+              onSaved={(name) => {
+                reload();
+                if (name) onCreated(name);
+              }}
+            />
+          )}
+          renderGenerate={({ onCreated, onCancel }) => (
+            <MoveCreatePanel
+              redirectRef={genRef}
+              registerActions={() => undefined}
+              onCreated={(name) => {
+                reload();
+                onCreated(name);
+              }}
+              onClose={onCancel}
+            />
+          )}
+          renderDistribute={(createdName, onDone) => (
+            <MoveDistributePanel
+              byId={byId}
+              moveOptions={moveOptions}
+              registerActions={() => undefined}
+              initialMove={createdName}
+              onSuggest={suggestMoveDistribution}
+              onSaved={() => {
+                reloadDex();
+                reload();
+              }}
+              onClose={onDone}
+            />
+          )}
         />
+      )}
+
+      {/* ✦ Distribute — spread an EXISTING move onto species learnsets. */}
+      {distributing && (
+        <EditorDialog
+          id="moves-distribute-dialog"
+          titleId="moves-distribute-title"
+          onClose={() => setDistributing(false)}
+        >
+          <header className="ledger__head">
+            <div className="ledger__head-row">
+              <span className="ledger__dex mono">DISTRIBUTE</span>
+              <button
+                type="button"
+                className="ledger__close"
+                aria-label="Close"
+                onClick={() => setDistributing(false)}
+              >
+                Close <kbd className="mono" aria-hidden="true">Esc</kbd>
+              </button>
+            </div>
+            <h2 className="ledger__name" id="moves-distribute-title">
+              Distribute a move
+            </h2>
+          </header>
+          <MoveDistributePanel
+            byId={byId}
+            moveOptions={moveOptions}
+            registerActions={() => undefined}
+            onSuggest={suggestMoveDistribution}
+            onSaved={() => {
+              reloadDex();
+              reload();
+            }}
+            onClose={() => setDistributing(false)}
+          />
+        </EditorDialog>
       )}
     </div>
   );

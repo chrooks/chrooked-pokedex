@@ -2798,6 +2798,27 @@ def _validate_move_result(
 # headroom is the safety margin, not the expected size.
 DISTRIBUTE_MAX_TOKENS = 8192
 
+# Distribution size budget, in evolution FAMILIES, chosen BEFORE the request. A
+# broad ability used to return ~150 mons (slow + a truncated response); bounding
+# the ask to the best-fitting N families is the real cure. Default when the caller
+# omits it — an unbounded request is the bug this fixes, so never fall back to
+# "no limit".
+DEFAULT_DISTRIBUTION_LIMIT = 12
+MIN_DISTRIBUTION_LIMIT = 1
+MAX_DISTRIBUTION_LIMIT = 40
+
+
+def clamp_distribution_limit(value: Any) -> int:
+    """Clamp a requested family budget into ``[MIN, MAX]``; default when unset/invalid.
+
+    A missing, non-int, or bool ``value`` yields :data:`DEFAULT_DISTRIBUTION_LIMIT`
+    (bool is guarded because ``bool`` is an ``int`` subclass). Values outside the
+    range are clamped, not rejected.
+    """
+    if not isinstance(value, int) or isinstance(value, bool):
+        return DEFAULT_DISTRIBUTION_LIMIT
+    return max(MIN_DISTRIBUTION_LIMIT, min(MAX_DISTRIBUTION_LIMIT, value))
+
 
 def format_species_pool(species: list[dict[str, Any]]) -> str:
     """Compact, cache-stable roster block: ``id  Name  Type[/Type]`` per line.
@@ -2844,7 +2865,11 @@ _RARITY_GUIDANCE = {
 
 
 def _distribute_user_context(
-    move: dict[str, Any], prompt: str, rarity: str, constraint: str = ""
+    move: dict[str, Any],
+    prompt: str,
+    rarity: str,
+    constraint: str = "",
+    limit: int = DEFAULT_DISTRIBUTION_LIMIT,
 ) -> str:
     lines = [
         f"Move: {move.get('name', move.get('chrooked_id', '?'))}",
@@ -2852,6 +2877,10 @@ def _distribute_user_context(
         f"Description: {move.get('description', '') or '(none)'}",
         f"Instruction from the user: {prompt.strip()}",
         _RARITY_GUIDANCE.get(rarity, _RARITY_GUIDANCE["common"]),
+        # The size budget lives in the per-call user message (not the cached system
+        # rubric) so the cached prefix stays stable across different budgets.
+        f"Choose AT MOST {limit} evolution lines (families), ranked BEST-FIRST; "
+        "list each chosen family's roster members. Fewer is fine — do NOT pad.",
     ]
     if constraint:
         lines.append(constraint)
@@ -2883,6 +2912,7 @@ def suggest_distribution_species(
     prompt: str,
     rarity: str = "common",
     constraint: str = "",
+    limit: int = DEFAULT_DISTRIBUTION_LIMIT,
 ) -> dict[str, Any]:
     """Choose recipient species for a move from a freeform prompt; never writes.
 
@@ -2902,7 +2932,7 @@ def suggest_distribution_species(
         system=_distribute_rubric(),
         cached_context="Species roster (emit chrooked_id exactly):\n"
         + format_species_pool(pool),
-        user=_distribute_user_context(move, prompt, rarity, constraint),
+        user=_distribute_user_context(move, prompt, rarity, constraint, limit),
         schema=_distribute_schema(),
         max_tokens=DISTRIBUTE_MAX_TOKENS,
     )
@@ -2932,5 +2962,133 @@ def suggest_distribution_species(
     return {
         "ids": ids,
         "rationale": rationale if isinstance(rationale, str) else "",
+        "warnings": warnings,
+    }
+
+
+# =========================================================================== #
+# Ability distribution — propose recipients + SLOTS for an EXISTING ability.
+# The distribution twin of `suggest_ability_creation`: it reuses that flow's
+# distribution rubric shape AND its `_validate_distribution` (species resolved BY
+# NAME, invalid rows DROPPED with warnings), but designs no ability — the ability
+# already exists. Never writes; the accept path is the species CRUD.
+# =========================================================================== #
+
+
+def _build_ability_distribution_rubric(
+    limit: int = DEFAULT_DISTRIBUTION_LIMIT,
+) -> str:
+    """System rubric for spreading an EXISTING ability onto fitting species.
+
+    The distribution half of the ability-creation contract, on its own: pick
+    recipient species (BY NAME, from the roster only) and a slot each, bounded to
+    the best-fitting ``limit`` evolution families. The model never invents species;
+    a hallucinated pick is dropped downstream.
+    """
+    return (
+        "You are a Pokémon game-design assistant. Given an EXISTING ability and an "
+        "instruction, choose which species should have it and in which slot. "
+        f"Choose AT MOST {limit} of the BEST-FITTING evolution families (ranked "
+        "best-first); for each chosen family list its in-roster members, each with "
+        "a slot. Fewer is fine; do NOT pad. "
+        "Produce `distribution`: a compact list where each row is ONLY {species "
+        "(real Pokémon NAME), slot (one of primary/secondary/hidden)} — do NOT emit "
+        "per-row reasoning (it wastes the budget and is discarded). Choose species "
+        "ONLY from the provided roster; do NOT name any species not listed (this "
+        "dex is a subset of all Pokémon). Prefer the hidden slot unless the ability "
+        "defines the species. It is fine to propose ZERO species. Put the list in "
+        "`draft.distribution` and a one-line summary in `rationale.distribution`."
+    )
+
+
+def _ability_distribution_schema() -> dict[str, Any]:
+    """JSON schema for the ability-distribution draft: ``{draft:{distribution:[]}}``."""
+    return {
+        "type": "object",
+        "properties": {
+            "draft": {
+                "type": "object",
+                "properties": {
+                    "distribution": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "species": {"type": "string"},
+                                "slot": {"type": "string"},
+                            },
+                            "required": ["species", "slot"],
+                            "additionalProperties": False,
+                        },
+                    },
+                },
+                "required": ["distribution"],
+                "additionalProperties": False,
+            },
+            "rationale": {
+                "type": "object",
+                "properties": {"distribution": {"type": "string"}},
+                "additionalProperties": False,
+            },
+        },
+        "required": ["draft"],
+        "additionalProperties": False,
+    }
+
+
+def suggest_ability_distribution(
+    *,
+    provider: LlmProvider,
+    ability: dict[str, Any],
+    dex_lookup: dict[str, dict[str, Any]],
+    roster: list[str],
+    prompt: str,
+    rarity: str = "common",
+    limit: int = DEFAULT_DISTRIBUTION_LIMIT,
+) -> dict[str, Any]:
+    """Propose recipient species + slots for an EXISTING ability; never writes.
+
+    Reuses the ability-creation distribution rubric shape and the shared
+    :func:`_validate_distribution` (species resolved BY NAME via ``dex_lookup``;
+    a row naming an out-of-dex species or an invalid slot is DROPPED into
+    ``warnings`` rather than failing the proposal). Returns
+    ``{rows, rationale, warnings}`` where each row is ``{species (chrooked_id),
+    slot, replaces, reasoning}``.
+
+    ``prompt`` is the instruction (the route passes the ability's own description
+    when the user gives none); an empty prompt is guarded. ``roster`` is the sorted
+    in-dex species NAME list fed to the model so its picks stay in-dex.
+    """
+    if not prompt or not prompt.strip():
+        raise SuggestError("A prompt is required to choose recipients.")
+    name = ability.get("name") or ability.get("chrooked_id") or "?"
+    cached_context = (
+        "Species roster (choose distribution species ONLY from these — this dex is "
+        "a subset of all Pokémon; do NOT name any species not listed):\n"
+        + (_format_roster(roster) or "(none)")
+    )
+    user = (
+        f"Existing ability: {name}\n"
+        f"Description: {ability.get('description', '') or '(none)'}\n"
+        f"Instruction from the user: {prompt.strip()}\n"
+        + _RARITY_GUIDANCE.get(rarity, _RARITY_GUIDANCE["common"])
+    )
+    result = provider.propose(
+        system=_build_ability_distribution_rubric(limit),
+        cached_context=cached_context,
+        user=user,
+        schema=_ability_distribution_schema(),
+        max_tokens=DISTRIBUTE_MAX_TOKENS,
+    )
+    if not isinstance(result, dict):
+        raise SuggestError("The suggestion came back in an unexpected shape.")
+    draft = result.get("draft")
+    if not isinstance(draft, dict):
+        raise SuggestError("The suggestion was missing a draft object.")
+    rows, warnings = _validate_distribution(draft.get("distribution"), dex_lookup)
+    summary = _rationale_map(result, "distribution").get("distribution")
+    return {
+        "rows": rows,
+        "rationale": summary if isinstance(summary, str) else "",
         "warnings": warnings,
     }

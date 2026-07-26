@@ -22,14 +22,24 @@ import type { StageActions } from "./StagePanel";
 const SLOTS: DistRow["slot"][] = ["primary", "secondary", "hidden"];
 
 interface Props {
-  entry: DexEntry;
+  /** The anchor species whose abilities the makeover locks in. Optional so a
+      standalone (tab) caller with no anchor can create+behavior-only (see
+      `showDistribution`). */
+  entry?: DexEntry;
   byId: ReadonlyMap<string, DexEntry>;
   redirectRef: RefObject<HTMLTextAreaElement>;
   registerActions: (actions: StageActions | null) => void;
   onLocked: (facts: StageFacts, writtenIds?: string[]) => void;
   /** Report the created ability's name so later suggest calls can be steered to
-      use it (the ordering-guard direction injection). */
-  onCreated?: (name: string, kind: "ability" | "move") => void;
+      use it (the ordering-guard direction injection). On the standalone create-only
+      path (`showDistribution={false}`) it also carries the AI's proposed
+      distribution rows forward so the after-create distribute step opens prefilled;
+      the makeover path (`showDistribution` true) calls it name-only, unchanged. */
+  onCreated?: (name: string, kind: "ability" | "move", distribution?: DistRow[]) => void;
+  /** When false, hide the inline distribution table and write ONLY the ability
+      (+behavior) — no species writes, and `onLocked` is not called (a standalone
+      tab caller distributes in a later step). Default true = makeover behavior. */
+  showDistribution?: boolean;
 }
 
 type Phase = "input" | "proposing" | "proposed" | "writing" | "error";
@@ -53,23 +63,29 @@ function seedOverride(species: string, byId: ReadonlyMap<string, DexEntry>): Spe
   };
 }
 
-/** Write the created ability, its behavior stub, then each distribution species —
-    in order, stop-and-report. Returns the species written (for the read-back). */
-async function writeCreation(
-  draft: AbilityCreateDraft,
-  byId: ReadonlyMap<string, DexEntry>,
-): Promise<string[]> {
-  // 1. The owned ability (strip everything but the ability fields).
+/** Write the owned ability then its behavior stub — the two writes both the
+    makeover and the standalone (create-only) path share. */
+async function writeAbilityAndBehavior(draft: AbilityCreateDraft): Promise<void> {
+  // The owned ability (strip everything but the ability fields).
   await api.putAbility(draft.ability.chrooked_id, {
     name: draft.ability.name,
     chrooked_id: draft.ability.chrooked_id,
     description: draft.ability.description,
     aka: {},
   });
-  // 2. The behavior stub AS-IS — engine_hints stays {} (never filled here).
+  // The behavior stub AS-IS — engine_hints stays {} (never filled here).
   await api.putBehavior(draft.behavior.chrooked_id, draft.behavior);
-  // 3. Distribute into the chosen slot on each species (merge, don't clobber
-  //    other slots). Silent so the workbench flushes ONE dex refresh.
+}
+
+/** Write the created ability, its behavior stub, then each distribution species —
+    in order, stop-and-report. Returns the species written (for the read-back). */
+async function writeCreation(
+  draft: AbilityCreateDraft,
+  byId: ReadonlyMap<string, DexEntry>,
+): Promise<string[]> {
+  await writeAbilityAndBehavior(draft);
+  // Distribute into the chosen slot on each species (merge, don't clobber other
+  // slots). Silent so the workbench flushes ONE dex refresh.
   const written: string[] = [];
   for (const row of draft.distribution) {
     let raw: SpeciesOverride;
@@ -101,6 +117,7 @@ export function AbilityCreatePanel({
   registerActions,
   onLocked,
   onCreated,
+  showDistribution = true,
 }: Props) {
   const [phase, setPhase] = useState<Phase>("input");
   const [direction, setDirection] = useState("");
@@ -158,11 +175,21 @@ export function AbilityCreatePanel({
       setPhase("writing");
       setError(null);
       try {
-        // Write the EDITED distribution, not the proposal's — the author's slot
-        // retargets, removals, and added species are what lands (ac10).
-        const written = await writeCreation({ ...result.draft, distribution: dist }, byId);
-        onCreated?.(result.draft.ability.name, "ability");
-        onLocked({ abilities: entry.abilities }, written);
+        if (showDistribution) {
+          // Write the EDITED distribution, not the proposal's — the author's slot
+          // retargets, removals, and added species are what lands (ac10).
+          const written = await writeCreation({ ...result.draft, distribution: dist }, byId);
+          onCreated?.(result.draft.ability.name, "ability");
+          // entry is always present on the makeover path (showDistribution true).
+          if (entry) onLocked({ abilities: entry.abilities }, written);
+        } else {
+          // Standalone (tab) create: write only the ability + behavior, then hand
+          // the name back — AND the AI's proposed distribution rows (seeded into
+          // `dist` from the proposal) so the after-create distribute step opens
+          // prefilled instead of dropping the plan.
+          await writeAbilityAndBehavior(result.draft);
+          onCreated?.(result.draft.ability.name, "ability", dist);
+        }
       } catch (caught: unknown) {
         setError(
           `${messageOf(caught)} — partial writes may have landed (git is the undo).`,
@@ -276,6 +303,7 @@ export function AbilityCreatePanel({
             </p>
           </section>
 
+          {showDistribution && (
           <section className="mk-create__dist" id="mk-create-dist">
             <h5 className="mk-create__sub mono">distribution ({dist.length})</h5>
             {dist.length > 0 ? (
@@ -385,6 +413,7 @@ export function AbilityCreatePanel({
               </button>
             </div>
           </section>
+          )}
 
           <div className="mk-stage__actions">
             <button
@@ -394,7 +423,11 @@ export function AbilityCreatePanel({
               disabled={phase === "writing"}
               onClick={() => confirmRef.current()}
             >
-              {phase === "writing" ? "WRITING…" : "CREATE & DISTRIBUTE"}
+              {phase === "writing"
+                ? "WRITING…"
+                : showDistribution
+                  ? "CREATE & DISTRIBUTE"
+                  : "CREATE"}
             </button>
           </div>
         </div>

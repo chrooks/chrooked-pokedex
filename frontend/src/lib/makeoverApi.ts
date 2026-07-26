@@ -142,6 +142,22 @@ export interface MoveCreateResponse {
   chrooked_id: string;
 }
 
+/** One proposed recipient for distributing an EXISTING ability: species
+    (chrooked_id) + slot. `replaces` is the species' current occupant of that slot
+    (display-only). Mirrors `POST /api/abilities/{id}/distribute`. */
+export interface AbilityDistributeRow {
+  species: string;
+  slot: "primary" | "secondary" | "hidden";
+  replaces?: string;
+  reasoning?: string;
+}
+
+export interface AbilityDistributeResponse {
+  rows: AbilityDistributeRow[];
+  rationale: string;
+  warnings: string[];
+}
+
 export const makeoverApi = {
   /** The makeover opening move: 2-3 lore-grounded typing+role directions, on the
       species-suggest typing Seam (`mode: "lore-options"`). À la carte KEPT facets
@@ -204,6 +220,18 @@ export const makeoverApi = {
       through the existing CRUD routes, on confirm (mirrors createAbility). */
   createMove: (direction: string) =>
     postJson<MoveCreateResponse>("/api/moves/suggest", { direction, mode: "create" }),
+  /** Opt-in AI distribution for an EXISTING ability (the ✦ Suggest gate): propose
+      recipient species + slots. Never writes — the accept path is the species CRUD
+      through the panel's confirm. The route falls back to the ability's own
+      description when `prompt` is omitted. */
+  distributeAbility: (
+    id: string,
+    body: { prompt?: string; rarity?: string; limit?: number },
+  ) =>
+    postJson<AbilityDistributeResponse>(
+      `/api/abilities/${encodeURIComponent(id)}/distribute`,
+      body,
+    ),
 };
 
 /** The anchor kit a design stage produces, used by the line strip + mirror-down. */

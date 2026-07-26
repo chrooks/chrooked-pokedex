@@ -215,6 +215,10 @@ export interface DistributeRequest {
   evolved_at_1?: boolean;
   /** Breadth tier: narrows the set and biases rarer moves later (default common). */
   rarity?: DistributeRarity;
+  /** Size budget in evolution FAMILIES, chosen BEFORE the request so a broad ask
+      returns at most this many best-fitting lines (server clamps 1..40, default
+      12). Prompt mode threads it to the model; rule mode caps the selection. */
+  limit?: number;
 }
 
 /** One proposed recipient: append-only (adds `move` to this species at `level`).

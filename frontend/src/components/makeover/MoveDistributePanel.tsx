@@ -1,18 +1,14 @@
-/* DISTRIBUTE an EXISTING ability onto species — the ac10 distribution editor
-   surfaced as its own reachable step (not only the tail of ability-create). Pick a
-   known ability, add species + slots, CONFIRM writes each slot through the existing
-   species CRUD route (read-merge-write, other slots preserved). Reuses the pure
-   distributionDraft ops and the shared writeDistribution.
-
-   ponytail: the rows/add-species table markup overlaps the ability-create panel's;
-   kept separate rather than extracting a shared table so the working create panel
-   stays untouched. Extract a DistributionTable if a third caller appears. */
+/* DISTRIBUTE a MOVE onto species learnsets — the learnset twin of DistributePanel.
+   Pick a known move (or prefilled + locked via `initialMove`), add species + a
+   level per row, DISTRIBUTE merges each (level, move) row into its species
+   learnset (other rows preserved). Reuses the pure moveDistribution ops and the
+   shared writeMoveDistribution. */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ApiError } from "../../api";
 import type { DexEntry } from "../../types";
 import { evoLine } from "../../lib/evoLine";
-import { addRow, deriveReplaces, type DistRow } from "./distributionDraft";
+import { addRow, deriveCurrentLevel, type MoveDistRow } from "./moveDistribution";
 import {
   allLineIds,
   groupByLine,
@@ -22,22 +18,24 @@ import {
   topLineIds,
 } from "./distributionLines";
 import { LineDistribution } from "./LineDistribution";
-import { writeDistribution } from "./distributionWrite";
+import { writeMoveDistribution } from "./moveDistributionWrite";
 import type { StageActions } from "./StagePanel";
 
-/** The opt-in AI distribution result (✦ Suggest). Proposed {species, slot} rows
-    plus an optional one-line rationale and any dropped-species warnings. */
-export interface AbilitySuggestResult {
-  rows: DistRow[];
+/** The opt-in AI distribution result (✦ Suggest) for a move: proposed
+    {species, level} rows plus an optional rationale and dropped-species warnings. */
+export interface MoveSuggestResult {
+  rows: MoveDistRow[];
   rationale?: string;
   warnings?: string[];
 }
 
-const SLOTS: DistRow["slot"][] = ["primary", "secondary", "hidden"];
+const DEFAULT_LEVEL = 1;
+const MIN_LEVEL = 0;
+const MAX_LEVEL = 100;
 
 /** The pre-request size budget (evolution FAMILIES): default + range. Set BEFORE
-    ✦ Suggest, it bounds the ASK so a broad ability returns ~N best-fit lines, not
-    ~150. The server clamps to this same range. The post-request breadth slider
+    ✦ Suggest, it bounds the ASK so a broad move returns ~N best-fit lines, not a
+    huge set. The server clamps to this same range. The post-request breadth slider
     then trims DOWN within the returned set — to get MORE, raise this and ✦ Suggest
     again (the only LLM call stays the explicit button). */
 const DEFAULT_SIZE_BUDGET = 12;
@@ -46,30 +44,25 @@ const MAX_SIZE_BUDGET = 40;
 
 interface Props {
   byId: ReadonlyMap<string, DexEntry>;
-  abilityOptions: readonly string[];
+  moveOptions: readonly string[];
   registerActions: (actions: StageActions | null) => void;
-  /** Refresh the dex after the distribution lands (a side write — it does NOT lock
-      the abilities design stage). */
+  /** Refresh the dex after the distribution lands (a side write). */
   onSaved: () => void;
-  /** Return to the host stage after a write or CANCEL. */
+  /** Return to the host after a write or CANCEL. */
   onClose: () => void;
-  /** When set, the ability is fixed to this one — the picker is locked to a label
+  /** When set, the move is fixed to this one — the picker is locked to a label
       (used by the create→distribute step). Default (undefined) = pick-your-own. */
-  initialAbility?: string;
-  /** Opt-in AI distribution (✦ Suggest). Given the resolved ability name and the
-      author's freeform direction (may be empty → the caller falls back to the
-      ability's own description), returns proposed {species, slot} rows. Absent →
-      NO ✦ Suggest button (the makeover distribute stage omits it, staying
-      behavior-identical). Fires ONLY on click. `limit` is the pre-request size
-      budget (evolution families) the author set before the click. */
+  initialMove?: string;
+  /** Opt-in AI distribution (✦ Suggest). Given the resolved move name and the
+      author's freeform direction (may be empty → the caller falls back to a
+      type/split rule), returns proposed {species, level} rows. Absent → NO ✦
+      Suggest button. Fires ONLY on the explicit click. `limit` is the pre-request
+      size budget (evolution families) the author set before the click. */
   onSuggest?: (
-    abilityName: string,
+    moveName: string,
     direction: string,
     limit: number,
-  ) => Promise<AbilitySuggestResult>;
-  /** Prefill the editable rows — the generate-ability create→distribute handoff
-      hands the AI's create-time distribution forward so the step opens populated. */
-  initialRows?: readonly DistRow[];
+  ) => Promise<MoveSuggestResult>;
 }
 
 type Phase = "input" | "writing" | "error";
@@ -79,37 +72,36 @@ function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : "Unexpected error";
 }
 
-export function DistributePanel({
+function clampLevel(value: number): number {
+  if (Number.isNaN(value)) return MIN_LEVEL;
+  return Math.min(MAX_LEVEL, Math.max(MIN_LEVEL, Math.trunc(value)));
+}
+
+export function MoveDistributePanel({
   byId,
-  abilityOptions,
+  moveOptions,
   registerActions,
   onSaved,
   onClose,
-  initialAbility,
+  initialMove,
   onSuggest,
-  initialRows,
 }: Props) {
-  const locked = initialAbility !== undefined && initialAbility.trim() !== "";
+  const locked = initialMove !== undefined && initialMove.trim() !== "";
   const [phase, setPhase] = useState<Phase>("input");
-  const [ability, setAbility] = useState(initialAbility ?? "");
+  const [move, setMove] = useState(initialMove ?? "");
   // The full suggested/added set is the source of truth; the grouped view, the
-  // include set, and the per-line slot map all derive from it.
-  const [dist, setDist] = useState<DistRow[]>(initialRows ? [...initialRows] : []);
+  // include set, and the per-line level map all derive from it.
+  const [dist, setDist] = useState<MoveDistRow[]>([]);
   // Included evo lines (by lineId). `included.size` is the breadth slider's K, so
-  // a slider move (top-K) and a manual toggle stay in sync by construction. A
-  // create→distribute handoff opens with every line included.
-  const [included, setIncluded] = useState<Set<string>>(
-    () => new Set(allLineIds(groupByLine(initialRows ?? [], byId))),
-  );
-  // Author overrides of a line's slot; the default comes from the proposal rows.
-  const [slotOverride, setSlotOverride] = useState<Map<string, DistRow["slot"]>>(
-    () => new Map(),
-  );
+  // a slider move (top-K) and a manual toggle stay in sync by construction.
+  const [included, setIncluded] = useState<Set<string>>(() => new Set());
+  // Author overrides of a line's level; the default comes from the proposal rows.
+  const [levelOverride, setLevelOverride] = useState<Map<string, number>>(() => new Map());
   const [addSpecies, setAddSpecies] = useState("");
-  const [addSlot, setAddSlot] = useState<DistRow["slot"]>("primary");
+  const [addLevel, setAddLevel] = useState(DEFAULT_LEVEL);
   const [error, setError] = useState<string | null>(null);
-  // The author's freeform steer for ✦ Suggest — empty falls back to the ability's
-  // description (the caller decides). Long-form so a real sentence of intent fits.
+  // The author's freeform steer for ✦ Suggest — empty falls back to a type/split
+  // rule (the caller decides). Long-form so a real sentence of intent fits.
   const [direction, setDirection] = useState("");
   // The pre-request size budget (evolution families) — how many best-fit lines to
   // ASK for. Bounds the request; the post-request breadth slider trims within it.
@@ -118,11 +110,11 @@ export function DistributePanel({
   const [suggesting, setSuggesting] = useState(false);
   const [suggestNote, setSuggestNote] = useState<string | null>(null);
   const [suggestWarnings, setSuggestWarnings] = useState<string[]>([]);
-  const abilityRef = useRef<HTMLInputElement>(null);
+  const moveRef = useRef<HTMLInputElement>(null);
 
-  // When locked the ability is trusted (the author just created it, so it may not
-  // be in abilityOptions until the parent reload lands); otherwise it must be known.
-  const knownAbility = locked || (ability.trim() !== "" && abilityOptions.includes(ability.trim()));
+  // When locked the move is trusted (the author just created it, so it may not be
+  // in moveOptions until the parent reload lands); otherwise it must be a known move.
+  const knownMove = locked || (move.trim() !== "" && moveOptions.includes(move.trim()));
 
   const idByName = useMemo(() => {
     const map = new Map<string, string>();
@@ -136,18 +128,18 @@ export function DistributePanel({
   // Fold the source-of-truth rows into evo-line groups (ordered by first
   // appearance). Pure trim + grouping — no LLM call.
   const groups = useMemo(() => groupByLine(dist, byId), [dist, byId]);
-  // Default slot per line: the first present member's proposed slot. Author edits
-  // land in slotOverride and win.
-  const defaultLineSlot = useMemo(() => {
-    const map = new Map<string, DistRow["slot"]>();
+  // Default level per line: the first present member's proposed level. Author
+  // edits land in levelOverride and win.
+  const defaultLineLevel = useMemo(() => {
+    const map = new Map<string, number>();
     for (const row of dist) {
       const id = lineIdOf(row.species, byId);
-      if (!map.has(id)) map.set(id, row.slot);
+      if (!map.has(id)) map.set(id, row.level);
     }
     return map;
   }, [dist, byId]);
-  const slotOf = (lineId: string): DistRow["slot"] =>
-    slotOverride.get(lineId) ?? defaultLineSlot.get(lineId) ?? "primary";
+  const levelOf = (lineId: string): number =>
+    levelOverride.get(lineId) ?? defaultLineLevel.get(lineId) ?? DEFAULT_LEVEL;
 
   const includedLineCount = groups.filter((g) => included.has(g.lineId)).length;
   const includedMons = includedMemberCount(groups, included);
@@ -155,21 +147,22 @@ export function DistributePanel({
   function commitAdd() {
     if (resolvedAddId === null) return;
     const lineId = lineIdOf(resolvedAddId, byId);
-    setDist((rows) => addRow(rows, { species: resolvedAddId, slot: addSlot }));
+    setDist((rows) => addRow(rows, { species: resolvedAddId, level: clampLevel(addLevel) }));
     setIncluded((prev) => new Set(prev).add(lineId)); // a manual add is included
     setAddSpecies("");
   }
 
   // ＋ line: add every member of the resolved species' evolution family at the
-  // add-row's slot (deduped by addRow). Same slot for the whole line.
+  // add-row's level (deduped by addRow). Same level for the whole line.
   function commitAddLine() {
     if (resolvedAddId === null) return;
     const entry = byId.get(resolvedAddId);
     if (entry === undefined) return;
     const lineId = lineIdOf(resolvedAddId, byId);
+    const level = clampLevel(addLevel);
     const family = evoLine(entry, byId);
     setDist((rows) =>
-      family.reduce((acc, member) => addRow(acc, { species: member.chrooked_id, slot: addSlot }), rows),
+      family.reduce((acc, member) => addRow(acc, { species: member.chrooked_id, level }), rows),
     );
     setIncluded((prev) => new Set(prev).add(lineId));
     setAddSpecies("");
@@ -186,22 +179,29 @@ export function DistributePanel({
     });
   }
 
-  // The live "replaces" for the add-row — what ADD would clobber, before the click.
-  const addReplaces = resolvedAddId !== null ? deriveReplaces(byId, resolvedAddId, addSlot) : null;
+  // Whether/at what level the resolved add-row species already learns this move —
+  // a live "currently: L{n}" / "not learned" hint before the ADD click.
+  const addCurrentLevel =
+    resolvedAddId !== null && knownMove
+      ? deriveCurrentLevel(byId, resolvedAddId, move.trim())
+      : null;
 
   // ✦ Suggest (opt-in): fires ONLY here, on the explicit button click. Populates
   // the editable rows from the AI proposal; the author still edits before writing.
   async function runSuggest() {
-    if (onSuggest === undefined || !knownAbility || suggesting) return;
+    if (onSuggest === undefined || !knownMove || suggesting) return;
     setSuggesting(true);
     setError(null);
     setSuggestNote(null);
     setSuggestWarnings([]);
     try {
-      const result = await onSuggest(ability.trim(), direction.trim(), sizeBudget);
-      const nextRows = result.rows.map((row) => ({ species: row.species, slot: row.slot }));
+      const result = await onSuggest(move.trim(), direction.trim(), sizeBudget);
+      const nextRows = result.rows.map((row) => ({
+        species: row.species,
+        level: clampLevel(row.level),
+      }));
       setDist(nextRows);
-      setSlotOverride(new Map());
+      setLevelOverride(new Map());
       // The request was BOUNDED to sizeBudget families, so the returned set is
       // already scannable — include it all. The post-request breadth slider trims
       // DOWN within it; to get MORE, raise the size budget and ✦ Suggest again.
@@ -225,23 +225,23 @@ export function DistributePanel({
     }
   }
 
-  const canConfirm = knownAbility && includedMons > 0;
+  const canConfirm = knownMove && includedMons > 0;
 
   const confirmRef = useRef<() => void>(() => {});
   confirmRef.current = () => {
     if (!canConfirm) return;
     // Materialize only the INCLUDED lines → one species row per present member at
-    // that line's slot. The excluded (dimmed) lines are never written.
-    const outRows: DistRow[] = groups
+    // that line's level. The excluded (dimmed) lines are never written.
+    const outRows: MoveDistRow[] = groups
       .filter((group) => included.has(group.lineId))
       .flatMap((group) =>
-        group.members.map((species) => ({ species, slot: slotOf(group.lineId) })),
+        group.members.map((species) => ({ species, level: levelOf(group.lineId) })),
       );
     void (async () => {
       setPhase("writing");
       setError(null);
       try {
-        await writeDistribution(ability.trim(), outRows, byId);
+        await writeMoveDistribution(move.trim(), outRows, byId);
         onSaved();
         onClose();
       } catch (caught: unknown) {
@@ -254,7 +254,7 @@ export function DistributePanel({
   useEffect(() => {
     registerActions({
       lockIn: () => confirmRef.current(),
-      focusRedirect: () => abilityRef.current?.focus(),
+      focusRedirect: () => moveRef.current?.focus(),
       canLock: canConfirm,
       phase,
     });
@@ -262,30 +262,30 @@ export function DistributePanel({
   }, [registerActions, canConfirm, phase]);
 
   return (
-    <div className="mk-create" id="mk-distribute" data-phase={phase}>
+    <div className="mk-create" id="mk-move-distribute" data-phase={phase}>
       <div className="mk-stage__redirect">
-        <label className="mk-stage__redirect-label mono" htmlFor="mk-distribute-ability">
-          ability
+        <label className="mk-stage__redirect-label mono" htmlFor="mk-move-distribute-move">
+          move
         </label>
         {locked ? (
-          <span className="mk-move-distribute__locked mono" id="mk-distribute-ability">
-            {ability}
+          <span className="mk-move-distribute__locked mono" id="mk-move-distribute-move">
+            {move}
           </span>
         ) : (
           <>
             <input
-              ref={abilityRef}
-              id="mk-distribute-ability"
+              ref={moveRef}
+              id="mk-move-distribute-move"
               className="mk-stage__redirect-input mono"
               type="text"
-              list="mk-distribute-ability-list"
-              value={ability}
-              placeholder="pick an existing ability to distribute…"
-              onChange={(event) => setAbility(event.target.value)}
+              list="mk-move-distribute-move-list"
+              value={move}
+              placeholder="pick an existing move to distribute…"
+              onChange={(event) => setMove(event.target.value)}
               autoComplete="off"
             />
-            <datalist id="mk-distribute-ability-list">
-              {abilityOptions.map((name) => (
+            <datalist id="mk-move-distribute-move-list">
+              {moveOptions.map((name) => (
                 <option key={name} value={name} />
               ))}
             </datalist>
@@ -302,27 +302,27 @@ export function DistributePanel({
         </p>
       )}
 
-      <section className="mk-create__dist" id="mk-distribute-dist">
+      <section className="mk-create__dist" id="mk-move-distribute-dist">
         {onSuggest !== undefined && (
           <div className="mk-dist-direction">
-            <label className="mk-stage__redirect-label mono" htmlFor="mk-distribute-direction">
+            <label className="mk-stage__redirect-label mono" htmlFor="mk-move-distribute-direction">
               direction <span className="mk-dist-direction__opt">— optional, steers ✦ Suggest</span>
             </label>
             <textarea
-              id="mk-distribute-direction"
+              id="mk-move-distribute-direction"
               className="mk-stage__redirect-input mono"
               rows={2}
               value={direction}
-              placeholder="e.g. bulky Water / Ground types that live in mud and swamps…"
+              placeholder="e.g. fast physical attackers and bug-catchers…"
               onChange={(event) => setDirection(event.target.value)}
             />
-            <div className="mk-dist-budget" id="mk-distribute-budget">
-              <label className="mk-linedist__slider-label mono" htmlFor="mk-distribute-size">
+            <div className="mk-dist-budget" id="mk-move-distribute-budget">
+              <label className="mk-linedist__slider-label mono" htmlFor="mk-move-distribute-size">
                 size: <span className="mk-linedist__k">{sizeBudget}</span> evo lines to request
               </label>
               <input
                 type="range"
-                id="mk-distribute-size"
+                id="mk-move-distribute-size"
                 className="mk-linedist__slider"
                 min={MIN_SIZE_BUDGET}
                 max={MAX_SIZE_BUDGET}
@@ -342,13 +342,13 @@ export function DistributePanel({
           {onSuggest !== undefined && (
             <button
               type="button"
-              id="mk-distribute-suggest"
+              id="mk-move-distribute-suggest"
               className="mk-suggest mono"
-              disabled={!knownAbility || suggesting}
+              disabled={!knownMove || suggesting}
               title={
-                knownAbility
+                knownMove
                   ? "Suggest fitting species with AI (fills the rows — you still edit)"
-                  : "Pick an ability first"
+                  : "Pick a move first"
               }
               onClick={() => void runSuggest()}
             >
@@ -358,12 +358,12 @@ export function DistributePanel({
           )}
         </div>
         {suggestNote !== null && (
-          <p className="mk-dist-note mono" id="mk-distribute-suggest-note" aria-live="polite">
+          <p className="mk-dist-note mono" id="mk-move-distribute-suggest-note" aria-live="polite">
             {suggestNote}
           </p>
         )}
         {suggestWarnings.length > 0 && (
-          <ul className="mk-create__warnings" id="mk-distribute-suggest-warnings" role="alert">
+          <ul className="mk-create__warnings" id="mk-move-distribute-suggest-warnings" role="alert">
             {suggestWarnings.map((warning, i) => (
               <li key={i} className="mono">
                 {warning}
@@ -376,64 +376,59 @@ export function DistributePanel({
             groups={groups}
             byId={byId}
             included={included}
-            idPrefix="mk-distribute"
+            idPrefix="mk-move-distribute"
             onSlider={(k) => setIncluded(new Set(topLineIds(groups, k)))}
             onToggleLine={(lineId) => setIncluded((prev) => toggleIncluded(prev, lineId))}
             onRemoveLine={removeLine}
             onAll={() => setIncluded(new Set(allLineIds(groups)))}
             onNone={() => setIncluded(new Set())}
             renderValue={(group) => (
-              <select
-                className="mk-select mono mk-linedist__value"
-                aria-label={`${group.members.map((m) => byId.get(m)?.name ?? m).join(", ")} slot`}
-                value={slotOf(group.lineId)}
+              <input
+                className="mk-num mono mk-linedist__value"
+                type="number"
+                inputMode="numeric"
+                min={MIN_LEVEL}
+                max={MAX_LEVEL}
+                aria-label={`${group.members.map((m) => byId.get(m)?.name ?? m).join(", ")} level`}
+                value={levelOf(group.lineId)}
                 onChange={(event) =>
-                  setSlotOverride((prev) =>
-                    new Map(prev).set(group.lineId, event.target.value as DistRow["slot"]),
+                  setLevelOverride((prev) =>
+                    new Map(prev).set(group.lineId, clampLevel(Number(event.target.value))),
                   )
                 }
-              >
-                {SLOTS.map((slot) => (
-                  <option key={slot} value={slot}>
-                    {slot}
-                  </option>
-                ))}
-              </select>
+              />
             )}
-            renderDetail={(group) => {
-              const slot = slotOf(group.lineId);
-              return (
-                <>
-                  replaces —{" "}
-                  {group.members.map((m, i) => {
-                    const name = byId.get(m)?.name ?? m;
-                    const rep = deriveReplaces(byId, m, slot);
-                    return (
-                      <span key={m}>
-                        {i > 0 ? " · " : ""}
-                        {name}:{" "}
-                        {rep ? (
-                          <span className="mk-linedist__rep-has">{rep}</span>
-                        ) : (
-                          <span className="mk-linedist__rep-new">free</span>
-                        )}
-                      </span>
-                    );
-                  })}
-                </>
-              );
-            }}
+            renderDetail={(group) => (
+              <>
+                currently —{" "}
+                {group.members.map((m, i) => {
+                  const name = byId.get(m)?.name ?? m;
+                  const cur = deriveCurrentLevel(byId, m, move.trim());
+                  return (
+                    <span key={m}>
+                      {i > 0 ? " · " : ""}
+                      {name}:{" "}
+                      {cur !== null ? (
+                        <span className="mk-linedist__rep-has">L{cur}</span>
+                      ) : (
+                        <span className="mk-linedist__rep-new">not learned</span>
+                      )}
+                    </span>
+                  );
+                })}
+              </>
+            )}
           />
         ) : (
           <p className="mk-empty mono">no species yet — add one below.</p>
         )}
 
-        <div className="mk-dist-add" id="mk-distribute-add">
+        <div className="mk-dist-add" id="mk-move-distribute-add">
           <input
             className="mk-stage__redirect-input mono"
-            id="mk-distribute-add-species"
+            id="mk-move-distribute-add-species"
             type="text"
-            list="mk-distribute-species-list"
+            list="mk-move-distribute-species-list"
             aria-label="Add a species to the distribution"
             placeholder="add a species…"
             value={addSpecies}
@@ -446,27 +441,26 @@ export function DistributePanel({
             }}
             autoComplete="off"
           />
-          <datalist id="mk-distribute-species-list">
+          <datalist id="mk-move-distribute-species-list">
             {[...byId.values()].map((member) => (
               <option key={member.chrooked_id} value={member.name} />
             ))}
           </datalist>
-          <select
-            className="mk-select mono"
-            aria-label="Slot for the added species"
-            value={addSlot}
-            onChange={(event) => setAddSlot(event.target.value as DistRow["slot"])}
-          >
-            {SLOTS.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
+          <input
+            className="mk-num mono"
+            id="mk-move-distribute-add-level"
+            type="number"
+            inputMode="numeric"
+            min={MIN_LEVEL}
+            max={MAX_LEVEL}
+            aria-label="Level for the added species"
+            value={addLevel}
+            onChange={(event) => setAddLevel(clampLevel(Number(event.target.value)))}
+          />
           <button
             type="button"
             className="mk-btn mk-btn--ghost"
-            id="mk-distribute-add-btn"
+            id="mk-move-distribute-add-btn"
             disabled={resolvedAddId === null}
             title={resolvedAddId === null ? "Type a known species name" : "Add to distribution"}
             onClick={commitAdd}
@@ -476,12 +470,12 @@ export function DistributePanel({
           <button
             type="button"
             className="mk-btn mk-btn--ghost"
-            id="mk-distribute-add-line"
+            id="mk-move-distribute-add-line"
             disabled={resolvedAddId === null}
             title={
               resolvedAddId === null
                 ? "Type a known species name"
-                : "Add this species' whole evolution line at this slot"
+                : "Add this species' whole evolution line at this level"
             }
             onClick={commitAddLine}
           >
@@ -489,8 +483,8 @@ export function DistributePanel({
           </button>
         </div>
         {resolvedAddId !== null && (
-          <p className="mk-dist-add__hint mono" id="mk-distribute-add-replaces" aria-live="polite">
-            replaces: {addReplaces ?? "—"}
+          <p className="mk-dist-add__hint mono" id="mk-move-distribute-add-current" aria-live="polite">
+            {addCurrentLevel !== null ? `currently: L${addCurrentLevel}` : "not learned"}
           </p>
         )}
       </section>
@@ -506,10 +500,10 @@ export function DistributePanel({
         </button>
         <button
           type="button"
-          id="mk-distribute-confirm"
+          id="mk-move-distribute-confirm"
           className="mk-btn mk-btn--lock"
           disabled={!canConfirm || phase === "writing"}
-          title={canConfirm ? "Distribute this ability" : "Pick an ability and at least one species"}
+          title={canConfirm ? "Distribute this move" : "Pick a move and at least one species"}
           onClick={() => confirmRef.current()}
         >
           {phase === "writing" ? "WRITING…" : "DISTRIBUTE"}

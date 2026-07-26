@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PokeballSpinner } from "../PokeballSpinner";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
@@ -20,11 +20,18 @@ import { EditedLed } from "../EditedLed";
 import { ErrorView, EmptyView } from "../StatusView";
 import { EntityControls } from "../filters/EntityControls";
 import { AbilityEditor } from "../editors/AbilityEditor";
+import { EditorDialog } from "../editors/EditorDialog";
+import { DistributePanel } from "../makeover/DistributePanel";
+import type { DistRow } from "../makeover/distributionDraft";
+import { AbilityCreatePanel } from "../makeover/AbilityCreatePanel";
+import { makeoverApi } from "../../lib/makeoverApi";
+import { AddEntityDialog } from "./AddEntityDialog";
 import { DetailSidebar } from "../sidebar/DetailSidebar";
 import { AbilityDetail } from "../sidebar/AbilityDetail";
 import { ReverseLookupTab } from "../sidebar/ReverseLookupTab";
 import "./tabs.css";
 import "../editors/editors.css";
+import "../makeover/makeover.css";
 
 /** The Abilities entity owns its own namespaced URL params (D3). */
 const ABILITY_PARAM_KEYS: EntityParamKeys = {
@@ -61,14 +68,52 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
     useResource<Ability[]>(fetcher);
   const { data: dexData, reload: reloadDex } =
     useResource<DexEntry[]>(dexFetcher);
-  /** "New ability" → editor directly (no read-only step for a new record). */
-  const [editingNew, setEditingNew] = useState(false);
+  /** "+ Add ability" → the shared add dialog (Manual | Generate, then optional
+      distribute step). */
+  const [adding, setAdding] = useState(false);
+  /** "✦ Distribute" → the distribute-an-ability panel, pick-your-own ability. */
+  const [distributing, setDistributing] = useState(false);
+  const genRef = useRef<HTMLTextAreaElement>(null);
   /** Whether the open sidebar should land in edit mode — set true by the per-row
       pencil so it opens on the [Fields | Distribution] tabs, false by a row click
       (read-only first). */
   const [openInEdit, setOpenInEdit] = useState(false);
 
   const abilities = useMemo(() => data ?? [], [data]);
+  // Inputs for the distribute panel: the dex keyed by chrooked_id and the known
+  // ability names (the distribute Seam picks from these).
+  const byId = useMemo(
+    () => new Map((dexData ?? []).map((e) => [e.chrooked_id, e])),
+    [dexData],
+  );
+  const abilityOptions = useMemo(() => abilities.map((a) => a.name), [abilities]);
+  // Lowercased ability NAME → its record, so ✦ Suggest can resolve the chosen
+  // ability to its chrooked_id (the distribute endpoint's key) + description.
+  const abilityByName = useMemo(() => {
+    const map = new Map<string, Ability>();
+    for (const a of abilities) map.set(a.name.toLowerCase(), a);
+    return map;
+  }, [abilities]);
+
+  // Opt-in AI distribution (the ✦ Suggest gate — fires ONLY on the panel's button
+  // click). Resolve the ability name → id + description, hit the distribute
+  // endpoint, and hand the proposed {species, slot} rows back to the panel.
+  const suggestAbilityDistribution = useCallback(
+    async (abilityName: string, direction: string, limit: number) => {
+      const a = abilityByName.get(abilityName.trim().toLowerCase());
+      if (a === undefined) throw new Error(`Unknown ability ${abilityName}.`);
+      // The author's freeform steer wins; empty falls back to the ability's own
+      // description so a bare ✦ Suggest still works. `limit` is the pre-request
+      // size budget (evolution families) the author set before clicking.
+      const result = await makeoverApi.distributeAbility(a.chrooked_id, {
+        prompt: direction.trim() || a.description || a.name,
+        limit,
+      });
+      const rows: DistRow[] = result.rows.map((r) => ({ species: r.species, slot: r.slot }));
+      return { rows, rationale: result.rationale, warnings: result.warnings };
+    },
+    [abilityByName],
+  );
 
   // The open read-only sidebar is URL-addressable (#28): `view.selected` (the
   // shared `id=` param) names the ability. Species cross-links carry the DISPLAY
@@ -181,14 +226,24 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
             <span className="sr-only"> by the Ruleset</span>
           </span>
         </span>
-        <button
-          type="button"
-          id="abilities-new"
-          className="btn btn--primary btn--new"
-          onClick={() => setEditingNew(true)}
-        >
-          <span aria-hidden="true">+ </span>New ability
-        </button>
+        <div className="tab-toolbar__actions">
+          <button
+            type="button"
+            id="abilities-add"
+            className="btn btn--primary btn--new"
+            onClick={() => setAdding(true)}
+          >
+            <span aria-hidden="true">+ </span>Add ability
+          </button>
+          <button
+            type="button"
+            id="abilities-distribute"
+            className="btn btn--new"
+            onClick={() => setDistributing(true)}
+          >
+            <span aria-hidden="true">✦ </span>Distribute
+          </button>
+        </div>
       </div>
 
       {abilities.length === 0 ? (
@@ -337,16 +392,93 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
         />
       )}
 
-      {/* New ability editor — opened directly without the read-only step. */}
-      {editingNew && (
-        <AbilityEditor
-          ability={null}
-          onClose={() => setEditingNew(false)}
-          onSaved={() => {
-            reload();
-            setEditingNew(false);
-          }}
+      {/* + Add ability — Manual | Generate, then an optional locked distribute step. */}
+      {adding && (
+        <AddEntityDialog
+          id="abilities-add-dialog"
+          titleId="abilities-add-title"
+          kindLabel="ABILITY"
+          title="Add an ability"
+          onClose={() => setAdding(false)}
+          renderManual={({ onCreated, onCancel }) => (
+            <AbilityEditor
+              ability={null}
+              embedded
+              onClose={onCancel}
+              onSaved={(name) => {
+                reload();
+                if (name) onCreated(name);
+              }}
+            />
+          )}
+          renderGenerate={({ onCreated }) => (
+            <AbilityCreatePanel
+              byId={byId}
+              redirectRef={genRef}
+              registerActions={() => undefined}
+              onLocked={() => undefined}
+              showDistribution={false}
+              onCreated={(name, _kind, distribution) => {
+                reload();
+                // Carry the AI's create-time distribution forward so the after-
+                // create distribute step opens with those rows prefilled.
+                onCreated(name, distribution);
+              }}
+            />
+          )}
+          renderDistribute={(createdName, onDone, initialRows) => (
+            <DistributePanel
+              byId={byId}
+              abilityOptions={abilityOptions}
+              registerActions={() => undefined}
+              initialAbility={createdName}
+              initialRows={initialRows}
+              onSuggest={suggestAbilityDistribution}
+              onSaved={() => {
+                reloadDex();
+                reload();
+              }}
+              onClose={onDone}
+            />
+          )}
         />
+      )}
+
+      {/* ✦ Distribute — spread an EXISTING ability onto species (pick-your-own). */}
+      {distributing && (
+        <EditorDialog
+          id="abilities-distribute-dialog"
+          titleId="abilities-distribute-title"
+          onClose={() => setDistributing(false)}
+        >
+          <header className="ledger__head">
+            <div className="ledger__head-row">
+              <span className="ledger__dex mono">DISTRIBUTE</span>
+              <button
+                type="button"
+                className="ledger__close"
+                aria-label="Close"
+                onClick={() => setDistributing(false)}
+              >
+                Close <kbd className="mono" aria-hidden="true">Esc</kbd>
+              </button>
+            </div>
+            <h2 className="ledger__name" id="abilities-distribute-title">
+              Distribute an ability
+            </h2>
+          </header>
+          <DistributePanel
+            byId={byId}
+            abilityOptions={abilityOptions}
+            registerActions={() => undefined}
+            onSuggest={suggestAbilityDistribution}
+            onSaved={() => {
+              reloadDex();
+              reload();
+            }}
+            onClose={() => setDistributing(false)}
+          />
+        </EditorDialog>
       )}
     </div>
   );

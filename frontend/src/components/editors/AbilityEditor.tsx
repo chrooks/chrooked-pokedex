@@ -20,7 +20,10 @@ type Props = {
   /** null = create a new ability; otherwise edit this one. */
   ability: Ability | null;
   onClose: () => void;
-  onSaved: () => void;
+  /** Fired on a successful save. Carries the saved ability's display name so a
+      host flow (the tab Add dialog) can advance to a distribute step for it;
+      callers that don't need it ignore the argument. */
+  onSaved: (savedName?: string) => void;
   /** When true the editor renders without the overlay/header chrome — it is
       already hosted inside a DetailSidebar shell. */
   embedded?: boolean;
@@ -58,7 +61,7 @@ export function AbilityEditor({ ability, onClose, onSaved, embedded = false }: P
     };
     const ok = await run(() => api.putAbility(id, payload));
     if (ok) {
-      onSaved();
+      onSaved(form.name.trim());
       onClose();
     }
   }

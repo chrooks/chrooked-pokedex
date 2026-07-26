@@ -24,7 +24,10 @@ type Props = {
   /** null = create a new move; otherwise edit this one. */
   move: Move | null;
   onClose: () => void;
-  onSaved: () => void;
+  /** Fired on a successful save. Carries the saved move's display name so a host
+      flow (the tab Add dialog) can advance to a distribute step for it; callers
+      that don't need it ignore the argument. */
+  onSaved: (savedName?: string) => void;
   /** When true the editor renders without the overlay/header chrome — it is
       already hosted inside a DetailSidebar shell. */
   embedded?: boolean;
@@ -66,7 +69,7 @@ export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) 
     // move upserts a Ruleset entry (mirrors species "edit base → make override").
     const ok = await run(() => api.putMove(id, buildMove(form, move)));
     if (ok) {
-      onSaved();
+      onSaved(form.name.trim());
       onClose();
     }
   }

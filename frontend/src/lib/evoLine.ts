@@ -23,3 +23,17 @@ export function expandEvoLines(matches: DexEntry[], all: DexEntry[]): DexEntry[]
   for (const match of matches) walk(match);
   return all.filter((entry) => keep.has(entry.chrooked_id));
 }
+
+/**
+ * One species' whole evolution family — every transitive pre-evo and evo (both
+ * `evolves_into` forward and `evolution.from` backward), the species itself
+ * included, deduped, in `byId` insertion order. A thin wrapper over
+ * {@link expandEvoLines} for callers that hold a `byId` Map (the distribute
+ * panels' "＋ line" control).
+ */
+export function evoLine(
+  entry: DexEntry,
+  byId: ReadonlyMap<string, DexEntry>,
+): DexEntry[] {
+  return expandEvoLines([entry], [...byId.values()]);
+}

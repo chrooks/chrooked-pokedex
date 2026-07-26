@@ -1427,6 +1427,107 @@ textarea.mk-stage__redirect-input {
 .mk-dist-add .mk-stage__redirect-input {
   flex: 1;
 }
+
+/* The distribution section header: the "distribution (n)" sub-heading with the
+   opt-in ✦ Suggest button pushed to the trailing edge. */
+/* The long-form direction box that steers ✦ Suggest (optional). */
+.mk-dist-direction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+.mk-dist-direction__opt {
+  color: var(--text-faint);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* The pre-request size budget: how many best-fit evolution lines to ASK for,
+   chosen BEFORE ✦ Suggest. A quiet slider row (reuses the line-trim slider
+   styling) sitting under the direction box. */
+.mk-dist-budget {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-1);
+}
+
+.mk-dist-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.mk-dist-head .mk-create__sub {
+  margin-bottom: var(--space-2);
+}
+
+/* The opt-in ✦ Suggest button — a quiet chrome-accented text button (mirrors the
+   sidebar distributor's ✦ suggest language). Fires an AI call ONLY on click. */
+.mk-suggest {
+  appearance: none;
+  border: 1px solid var(--chrome-dim);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--chrome);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  transition: background var(--dur-fast, 120ms) ease;
+}
+.mk-suggest:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--chrome) 10%, transparent);
+}
+.mk-suggest:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+.mk-suggest:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* The ✦ Suggest rationale line + the add-row live "replaces"/"currently" hint —
+   quiet, small, faint. */
+.mk-dist-note {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  margin: var(--space-1) 0 0;
+}
+.mk-dist-add__hint {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  margin: var(--space-1) 0 0;
+}
+
+/* A narrow numeric input for the move-distribute level (row + add-row), styled to
+   match the mk-select/redirect-input language. */
+.mk-num {
+  width: 5ch;
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+  text-align: right;
+}
+.mk-num:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+/* The locked move/ability label shown in place of the picker when the distribute
+   panel is prefilled to a just-created entity (create → distribute step). */
+.mk-move-distribute__locked {
+  flex: 1;
+  color: var(--text);
+  font-size: var(--text-sm);
+  padding: var(--space-1) 0;
+}
 /* Reuse the learnset row's quiet-✕ language in the table: hidden until the row is
    hovered or holds focus, revealed on keyboard focus so it stays reachable. */
 .mk-create__dist-table .mk-lrow__remove {
@@ -1439,6 +1540,181 @@ textarea.mk-stage__redirect-input {
 }
 .mk-create__dist-table td .mk-select {
   padding: 0 var(--space-1);
+}
+
+/* --- Grouped-by-evo-line distribution + breadth slider ------------------- */
+
+/* The distribution proposal folded to one row per evolution family (the LINE is
+   the controlling unit, not the individual mon). The slider is a pure client-side
+   trim of the already-fetched proposal — top-K lines by rank, NO new LLM call. */
+.mk-linedist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Breadth control: "lines: K / total" + the range slider + all/none bulk. */
+.mk-linedist__trim {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+.mk-linedist__slider-label {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.mk-linedist__k {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.mk-linedist__slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  min-width: 10ch;
+  height: 4px;
+  background: var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.mk-linedist__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--chrome);
+  border: 1px solid var(--chrome-dim);
+  cursor: pointer;
+}
+.mk-linedist__slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--chrome);
+  border: 1px solid var(--chrome-dim);
+  cursor: pointer;
+}
+.mk-linedist__slider::-moz-range-track {
+  height: 4px;
+  background: var(--line);
+  border-radius: 999px;
+}
+.mk-linedist__slider:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 3px;
+}
+.mk-linedist__bulk {
+  display: flex;
+  gap: var(--space-1);
+}
+/* Quiet neutral text buttons (not the chrome ✦ Suggest accent — these are pure
+   client-side set ops, not an AI call). text-dim clears AA on the panel surface. */
+.mk-linedist__bulk-btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease;
+}
+.mk-linedist__bulk-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.mk-linedist__bulk-btn:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.mk-linedist__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mk-linedist__group {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--line);
+}
+.mk-linedist__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+/* The per-member "replaces / currently" line — indented under the checkbox,
+   quiet, wraps. --text-dim keeps it ≥4.5:1 in both themes. */
+.mk-linedist__detail {
+  padding-left: calc(14px + var(--space-2));
+  margin-top: 2px;
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+.mk-linedist__group[data-included="false"] .mk-linedist__detail {
+  color: var(--text-faint);
+}
+.mk-linedist__rep-new {
+  color: var(--text-faint);
+}
+.mk-linedist__rep-has {
+  color: var(--edited);
+}
+.mk-linedist__check {
+  accent-color: var(--chrome);
+  width: 14px;
+  height: 14px;
+  flex: none;
+  cursor: pointer;
+}
+.mk-linedist__names {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.mk-linedist__count {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.mk-linedist__value {
+  flex: none;
+}
+/* Excluded (behind the slider): present but not written. Dim via --text-dim —
+   NOT opacity — so it still clears 4.5:1 AA in dark AND light (same pattern the
+   overhead rail uses for queued/kept). The value control stays full-contrast
+   (still legible + editable if the author re-includes the line). */
+.mk-linedist__group[data-included="false"] .mk-linedist__names {
+  color: var(--text-dim);
+}
+.mk-linedist__group[data-included="false"] .mk-linedist__count {
+  color: var(--text-dim);
+}
+/* Quiet-✕ remove: revealed on row hover or keyboard focus (learnset-row idiom). */
+.mk-linedist__remove {
+  flex: none;
+  opacity: 0;
+}
+.mk-linedist__group:hover .mk-linedist__remove,
+.mk-linedist__group:focus-within .mk-linedist__remove,
+.mk-linedist__remove:focus-visible {
+  opacity: 1;
 }
 
 /* --- Line strip before→after diff (ac12) ---------------------------------- */

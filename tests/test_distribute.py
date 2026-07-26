@@ -253,6 +253,35 @@ def test_endpoint_combines_rule_and_prompt(tmp_path: Path) -> None:
     assert {r["chrooked_id"] for r in resp.json()["rows"]} == {"sandshrew"}
 
 
+def test_endpoint_prompt_mode_caps_to_family_budget(tmp_path: Path) -> None:
+    """The size budget bounds prompt-mode recipients to N evolution FAMILIES."""
+    provider = _FakeProvider({
+        "species": ["sandshrew", "psyduck", "groudon"],  # three distinct families
+        "rationale": "many",
+    })
+    client = _client(tmp_path, provider)
+    resp = client.post("/api/moves/clodtoss/distribute", json={
+        "prompt": "anything", "limit": 2, "include_evolutions": True})
+    assert resp.status_code == 200
+    body = resp.json()
+    # The budget is threaded into the model's per-call instruction.
+    assert "at most 2" in provider.calls[0]["user"].lower()
+    # Only the first two families survive; the sandshrew line still expands.
+    assert len({r["line_id"] for r in body["rows"]}) == 2
+    ids = {r["chrooked_id"] for r in body["rows"]}
+    assert {"sandshrew", "sandslash", "psyduck"} <= ids
+    assert "groudon" not in ids  # the third family is over budget → dropped
+
+
+def test_endpoint_default_family_budget_when_omitted(tmp_path: Path) -> None:
+    """Omitting `limit` still bounds the ask (default 12), never unbounded."""
+    provider = _FakeProvider({"species": ["psyduck"], "rationale": "x"})
+    client = _client(tmp_path, provider)
+    resp = client.post("/api/moves/clodtoss/distribute", json={"prompt": "x"})
+    assert resp.status_code == 200
+    assert "at most 12" in provider.calls[0]["user"].lower()
+
+
 def test_endpoint_unknown_move_404(tmp_path: Path) -> None:
     resp = _client(tmp_path, _ExplodingProvider()).post(
         "/api/moves/nope/distribute", json={"rule": {"types": ["Ground"]}})

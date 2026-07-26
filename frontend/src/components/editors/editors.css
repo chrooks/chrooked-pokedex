@@ -279,6 +279,12 @@
   color: var(--text-dim);
 }
 
+.tab-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .btn--new {
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-xs);

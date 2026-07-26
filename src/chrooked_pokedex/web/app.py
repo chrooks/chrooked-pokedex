@@ -54,6 +54,50 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DEFAULT_TARGETS_PATH = _PROJECT_ROOT / "targets.json"
 
 
+def _cap_to_families(
+    ids: list[str], evo: "distmod.EvolutionIndex", limit: int
+) -> list[str]:
+    """Trim a recipient id list to the first ``limit`` distinct evolution families.
+
+    Order is preserved (best-first from the caller). Every member of an accepted
+    family stays; the first member of a family beyond the budget is dropped, so
+    the size budget counts FAMILIES, not individual mons.
+    """
+    lines: list[str] = []
+    kept: list[str] = []
+    for cid in ids:
+        line_id = evo.line_of.get(cid, cid)
+        if line_id not in lines:
+            if len(lines) >= limit:
+                continue
+            lines.append(line_id)
+        kept.append(cid)
+    return kept
+
+
+def _cap_ability_rows_to_families(
+    rows: list[dict[str, Any]], evo: "distmod.EvolutionIndex", limit: int
+) -> list[dict[str, Any]]:
+    """Trim {species, slot} distribution rows to the first ``limit`` families.
+
+    The ability-distribution rubric ASKS for at most ``limit`` families, but the
+    model over-produces on a broad prompt; this enforces the pre-request size
+    budget deterministically (the rows-shaped twin of :func:`_cap_to_families`).
+    Best-first order is preserved.
+    """
+    lines: list[str] = []
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        species = row.get("species", "")
+        line_id = evo.line_of.get(species, species)
+        if line_id not in lines:
+            if len(lines) >= limit:
+                continue
+            lines.append(line_id)
+        kept.append(row)
+    return kept
+
+
 def create_app(
     *,
     ruleset_dir: Path,
@@ -756,6 +800,9 @@ def create_app(
         rarity = body.get("rarity", "common")
         if rarity not in distmod.RARITY:
             raise HTTPException(status_code=422, detail=f"Unknown rarity {rarity!r}.")
+        # Size budget (evolution families), chosen BEFORE the request; clamped so a
+        # bad/missing value never becomes an unbounded ask (the bug this fixes).
+        limit = suggestmod.clamp_distribution_limit(body.get("limit"))
 
         records = {
             e["chrooked_id"]: distmod.SpeciesRecord(
@@ -813,7 +860,7 @@ def create_app(
                     pool, constraint = dex, ""
                 sel = suggestmod.suggest_distribution_species(
                     provider=_llm_provider(), move=move, species=pool, prompt=prompt,
-                    rarity=rarity, constraint=constraint,
+                    rarity=rarity, constraint=constraint, limit=limit,
                 )
                 matched, rationale, warnings = sel["ids"], sel["rationale"], sel["warnings"]
             else:
@@ -823,6 +870,13 @@ def create_app(
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
+
+        # Cap the selection to the first `limit` evolution FAMILIES (best-first:
+        # BST-ranked in rule mode, model-ranked in prompt mode). Members of an
+        # accepted family are all kept; the first member of a new family past the
+        # budget is where the cut lands. include_evolutions still fills each kept
+        # family's line downstream.
+        matched = _cap_to_families(matched, evo, limit)
 
         rows = distmod.distribute(
             records, evo, matched_ids=matched, window=window,
@@ -992,6 +1046,74 @@ def create_app(
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
+
+    @app.post("/api/abilities/{chrooked_id}/distribute")
+    def distribute_ability_recipients(
+        chrooked_id: str, payload: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        """Propose recipient species + slots for an EXISTING ability; never writes.
+
+        The ability twin of ``POST /api/moves/{id}/distribute``: the LLM Port
+        chooses WHICH in-dex species should carry this ability and in which slot,
+        from a freeform prompt (the route falls back to the ability's own
+        description when the caller gives none, so a one-click ✦ Suggest works).
+        Returns ``{rows, rationale, warnings}`` — read-only. The accept path is the
+        existing per-species ``PUT /api/species/{id}`` (through the panel's
+        confirm). A hallucinated species is DROPPED into ``warnings`` (never
+        guessed), mirroring the ability-creation distribution validation.
+
+        Honest errors: unknown ability → 404; an empty prompt AND empty ability
+        (``SuggestError``) → 422; LLM key / upstream failure (``LlmError``) → 503.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        abilities = dexmod.build_abilities(snapshot, ruleset)
+        ability = next(
+            (a for a in abilities if a.get("chrooked_id") == chrooked_id), None
+        )
+        if ability is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No ability with chrooked_id {chrooked_id!r}.",
+            )
+        # Name → merged dex entry (the model proposes species BY NAME); the sorted
+        # in-dex roster is fed to the model so its picks land in-dex (mirrors the
+        # ability-creation route's context assembly).
+        dex = dexmod.build_dex(snapshot, ruleset)
+        dex_lookup = {entry["name"].strip().casefold(): entry for entry in dex}
+        roster = sorted(entry["name"] for entry in dex if entry.get("name"))
+        body = payload or {}
+        prompt = body.get("prompt")
+        if not isinstance(prompt, str) or not prompt.strip():
+            # Fall back to the ability's own description (then name) as the
+            # instruction so the opt-in ✦ Suggest needs no typed prompt.
+            prompt = str(ability.get("description") or ability.get("name") or "")
+        rarity = body.get("rarity", "common")
+        # Size budget (evolution families), chosen BEFORE the request; clamped so a
+        # bad/missing value never becomes an unbounded ask (the bug this fixes).
+        limit = suggestmod.clamp_distribution_limit(body.get("limit"))
+        try:
+            result = suggestmod.suggest_ability_distribution(
+                provider=_llm_provider(),
+                ability=ability,
+                dex_lookup=dex_lookup,
+                roster=roster,
+                prompt=prompt,
+                rarity=rarity,
+                limit=limit,
+            )
+        except suggestmod.SuggestError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        except llmmod.LlmError as error:
+            raise HTTPException(status_code=503, detail=str(error)) from error
+        # Hard family cap: the rubric only ASKS for at most `limit` families; a
+        # broad prompt makes the model over-produce, so enforce the budget here so
+        # the returned size actually matches what the author requested.
+        evo = distmod.build_evolution_index(snapshot["species"])
+        result["rows"] = _cap_ability_rows_to_families(
+            result.get("rows", []), evo, limit
+        )
+        return result
 
     @app.delete("/api/abilities/{chrooked_id}")
     def delete_ability(chrooked_id: str, confirm: bool = False) -> dict[str, str]:
