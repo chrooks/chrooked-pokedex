@@ -1,0 +1,20 @@
+name: Cursola
+chrooked_id: cursola
+aka: {  }
+learnset:
+  - { level: 1, move: Perish Song }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Disable }
+  - { level: 8, move: Knell }
+  - { level: 15, move: Spite }
+  - { level: 20, move: Ancient Power }
+  - { level: 25, move: Hex }
+  - { level: 30, move: Curse }
+  - { level: 35, move: Strength Sap }
+  - { level: 40, move: Power Gem }
+  - { level: 45, move: Night Shade }
+  - { level: 50, move: Grudge }
+  - { level: 55, move: Mirror Coat }
+  - { level: 64, move: Netherstorm }

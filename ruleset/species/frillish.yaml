@@ -3,3 +3,20 @@ chrooked_id: frillish
 aka: { dex: 592 }
 abilities:
   hidden: Nematocyst
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Water Gun }
+  - { level: 4, move: Poison Sting }
+  - { level: 6, move: Knell }
+  - { level: 8, move: Night Shade }
+  - { level: 12, move: Water Pulse }
+  - { level: 16, move: Rain Dance }
+  - { level: 20, move: Hex }
+  - { level: 24, move: Brine }
+  - { level: 28, move: Recover }
+  - { level: 32, move: Shadow Ball }
+  - { level: 36, move: Whirlpool }
+  - { level: 41, move: Hydro Pump }
+  - { level: 44, move: Destiny Bond }
+  - { level: 48, move: Water Spout }
+  - { level: 64, move: Netherstorm }

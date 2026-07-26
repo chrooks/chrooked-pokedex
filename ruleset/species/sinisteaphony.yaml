@@ -5,3 +5,17 @@ abilities:
   primary: Weak Armor
   secondary: Liquified
   hidden: Cursed Body
+learnset:
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Astonish }
+  - { level: 6, move: Aromatic Mist }
+  - { level: 9, move: Knell }
+  - { level: 12, move: Mega Drain }
+  - { level: 24, move: Sucker Punch }
+  - { level: 30, move: Sweet Scent }
+  - { level: 36, move: Giga Drain }
+  - { level: 42, move: Nasty Plot }
+  - { level: 48, move: Shadow Ball }
+  - { level: 54, move: Memento }
+  - { level: 60, move: Shell Smash }
+  - { level: 64, move: Netherstorm }

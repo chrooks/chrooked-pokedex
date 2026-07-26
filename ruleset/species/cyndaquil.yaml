@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_CYNDAQUIL }
 abilities:
   secondary: Earth Eater
   hidden: Rapid Combustion
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 6, move: Smokescreen }
+  - { level: 8, move: Knell }
+  - { level: 10, move: Ember }
+  - { level: 13, move: Quick Attack }
+  - { level: 19, move: Flame Wheel }
+  - { level: 22, move: Defense Curl }
+  - { level: 28, move: Flame Charge }
+  - { level: 31, move: Swift }
+  - { level: 37, move: Lava Plume }
+  - { level: 40, move: Flamethrower }
+  - { level: 46, move: Inferno }
+  - { level: 49, move: Rollout }
+  - { level: 55, move: Double-Edge }
+  - { level: 58, move: Overheat }
+  - { level: 61, move: Netherstorm }
+  - { level: 64, move: Eruption }

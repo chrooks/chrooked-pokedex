@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_LAMPENT }
 abilities:
   secondary: Pyre
 stats: { atk: 55, def: 65, spd: 65 }
+learnset:
+  - { level: 1, move: Ember }
+  - { level: 1, move: Minimize }
+  - { level: 1, move: Smog }
+  - { level: 1, move: Astonish }
+  - { level: 6, move: Knell }
+  - { level: 12, move: Confuse Ray }
+  - { level: 16, move: Hex }
+  - { level: 20, move: Will-O-Wisp }
+  - { level: 24, move: Fire Spin }
+  - { level: 28, move: Night Shade }
+  - { level: 32, move: Curse }
+  - { level: 36, move: Shadow Ball }
+  - { level: 40, move: Inferno }
+  - { level: 46, move: Imprison }
+  - { level: 52, move: Pain Split }
+  - { level: 55, move: Netherstorm }
+  - { level: 58, move: Overheat }
+  - { level: 64, move: Memento }

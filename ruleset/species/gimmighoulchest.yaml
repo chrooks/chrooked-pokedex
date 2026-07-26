@@ -5,6 +5,8 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Tackle }
   - { level: 15, move: Glint }
+  - { level: 15, move: Knell }
   - { level: 30, move: Mirror Shot }
   - { level: 48, move: Luster Cannon }
   - { level: 62, move: Steel Beam }
+  - { level: 64, move: Netherstorm }

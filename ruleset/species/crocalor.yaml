@@ -1,0 +1,20 @@
+name: Crocalor
+chrooked_id: crocalor
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 6, move: Knell }
+  - { level: 7, move: Lick }
+  - { level: 10, move: Round }
+  - { level: 12, move: Bite }
+  - { level: 15, move: Yawn }
+  - { level: 17, move: Incinerate }
+  - { level: 24, move: Snarl }
+  - { level: 28, move: Roar }
+  - { level: 32, move: Flamethrower }
+  - { level: 38, move: Hyper Voice }
+  - { level: 42, move: Will-O-Wisp }
+  - { level: 47, move: Fire Blast }
+  - { level: 64, move: Netherstorm }

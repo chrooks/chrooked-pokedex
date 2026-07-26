@@ -1,0 +1,11 @@
+name: Knell
+chrooked_id: knell
+aka: { pokeemerald: MOVE_KNELL }
+type: Ghost
+category: special
+power: 40
+accuracy: 100
+pp: 30
+description: A mournful death-knell that saps the spirit. Lowers the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 100 }

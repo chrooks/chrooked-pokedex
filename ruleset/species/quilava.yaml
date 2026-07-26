@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_QUILAVA }
 abilities:
   secondary: Earth Eater
   hidden: Rapid Combustion
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Smokescreen }
+  - { level: 6, move: Knell }
+  - { level: 10, move: Ember }
+  - { level: 13, move: Quick Attack }
+  - { level: 20, move: Flame Wheel }
+  - { level: 24, move: Defense Curl }
+  - { level: 31, move: Swift }
+  - { level: 35, move: Flame Charge }
+  - { level: 42, move: Lava Plume }
+  - { level: 46, move: Flamethrower }
+  - { level: 53, move: Inferno }
+  - { level: 57, move: Rollout }
+  - { level: 60, move: Netherstorm }
+  - { level: 64, move: Double-Edge }
+  - { level: 68, move: Overheat }
+  - { level: 75, move: Eruption }

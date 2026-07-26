@@ -6,6 +6,7 @@ learnset:
   - { level: 1, move: Fury Cutter }
   - { level: 5, move: Shadow Sneak }
   - { level: 6, move: Glint }
+  - { level: 6, move: Knell }
   - { level: 9, move: Metal Sound }
   - { level: 13, move: Aerial Ace }
   - { level: 17, move: Iron Defense }
@@ -21,3 +22,4 @@ learnset:
   - { level: 48, move: Secret Sword }
   - { level: 55, move: Pixie Slash }
   - { level: 62, move: Steel Beam }
+  - { level: 64, move: Netherstorm }

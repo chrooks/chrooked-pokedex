@@ -1,0 +1,20 @@
+name: Sandygast
+chrooked_id: sandygast
+aka: {  }
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Harden }
+  - { level: 5, move: Astonish }
+  - { level: 7, move: Knell }
+  - { level: 10, move: Sand Tomb }
+  - { level: 15, move: Mega Drain }
+  - { level: 20, move: Sand Attack }
+  - { level: 25, move: Bulldoze }
+  - { level: 30, move: Hypnosis }
+  - { level: 35, move: Giga Drain }
+  - { level: 40, move: Iron Defense }
+  - { level: 45, move: Shadow Ball }
+  - { level: 50, move: Earth Power }
+  - { level: 55, move: Shore Up }
+  - { level: 60, move: Sandstorm }
+  - { level: 64, move: Netherstorm }

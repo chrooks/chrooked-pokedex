@@ -5,3 +5,26 @@ abilities:
   secondary: Amplifier
   hidden: Pyre
 stats: { hp: 105, def: 105, spd: 80, spe: 65 }
+learnset:
+  - { level: 0, move: Torch Song }
+  - { level: 1, move: Sing }
+  - { level: 1, move: Yawn }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 6, move: Knell }
+  - { level: 7, move: Lick }
+  - { level: 10, move: Round }
+  - { level: 12, move: Scary Face }
+  - { level: 15, move: Bite }
+  - { level: 17, move: Incinerate }
+  - { level: 24, move: Snarl }
+  - { level: 28, move: Roar }
+  - { level: 32, move: Flamethrower }
+  - { level: 38, move: Shadow Ball }
+  - { level: 42, move: Hyper Voice }
+  - { level: 47, move: Will-O-Wisp }
+  - { level: 47, move: Hex }
+  - { level: 55, move: Netherstorm }
+  - { level: 58, move: Fire Blast }
+  - { level: 64, move: Overheat }

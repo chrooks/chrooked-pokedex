@@ -9,6 +9,8 @@ learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 3, move: Cheap Shot }
   - { level: 5, move: Shadow Sneak }
+  - { level: 7, move: Knell }
+  - { level: 7, move: Slander }
   - { level: 10, move: Spite }
   - { level: 15, move: Payback }
   - { level: 20, move: Nasty Plot }
@@ -23,3 +25,5 @@ learnset:
   - { level: 50, move: Dark Pulse }
   - { level: 55, move: Hypnosis }
   - { level: 60, move: Dream Eater }
+  - { level: 64, move: Netherstorm }
+  - { level: 65, move: Eclipse }

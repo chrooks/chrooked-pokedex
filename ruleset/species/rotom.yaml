@@ -5,6 +5,7 @@ learnset:
   - { level: 1, move: Double Team }
   - { level: 1, move: Astonish }
   - { level: 5, move: Thunder Shock }
+  - { level: 7, move: Knell }
   - { level: 10, move: Confuse Ray }
   - { level: 15, move: Charge }
   - { level: 17, move: Short Circuit }
@@ -16,3 +17,4 @@ learnset:
   - { level: 45, move: Trick }
   - { level: 50, move: Discharge }
   - { level: 55, move: Uproar }
+  - { level: 64, move: Netherstorm }

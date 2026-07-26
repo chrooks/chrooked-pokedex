@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 7, move: Night Shade }
   - { level: 10, move: Glint }
+  - { level: 10, move: Knell }
   - { level: 14, move: Confuse Ray }
   - { level: 18, move: Mirror Shot }
   - { level: 21, move: Substitute }
@@ -17,5 +18,6 @@ learnset:
   - { level: 49, move: Power Gem }
   - { level: 52, move: Steel Beam }
   - { level: 56, move: Make It Rain }
+  - { level: 59, move: Netherstorm }
   - { level: 63, move: Nasty Plot }
   - { level: 70, move: Memento }

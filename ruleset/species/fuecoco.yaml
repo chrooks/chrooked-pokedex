@@ -1,0 +1,18 @@
+name: Fuecoco
+chrooked_id: fuecoco
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 7, move: Round }
+  - { level: 9, move: Knell }
+  - { level: 12, move: Bite }
+  - { level: 15, move: Incinerate }
+  - { level: 17, move: Yawn }
+  - { level: 21, move: Snarl }
+  - { level: 25, move: Roar }
+  - { level: 28, move: Flamethrower }
+  - { level: 32, move: Hyper Voice }
+  - { level: 36, move: Fire Blast }
+  - { level: 64, move: Netherstorm }

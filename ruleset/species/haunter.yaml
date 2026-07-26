@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Lick }
   - { level: 1, move: Mean Look }
+  - { level: 6, move: Knell }
   - { level: 12, move: Payback }
   - { level: 16, move: Spite }
   - { level: 20, move: Curse }
@@ -18,3 +19,4 @@ learnset:
   - { level: 48, move: Shadow Ball }
   - { level: 54, move: Destiny Bond }
   - { level: 60, move: Dream Eater }
+  - { level: 64, move: Netherstorm }

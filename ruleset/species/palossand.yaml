@@ -2,3 +2,20 @@ name: Palossand
 chrooked_id: palossand
 aka: { pokeemerald: SPECIES_PALOSSAND }
 stats: { hp: 90, def: 115 }
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Sand Tomb }
+  - { level: 8, move: Knell }
+  - { level: 15, move: Mega Drain }
+  - { level: 20, move: Sand Attack }
+  - { level: 25, move: Bulldoze }
+  - { level: 30, move: Hypnosis }
+  - { level: 35, move: Giga Drain }
+  - { level: 40, move: Iron Defense }
+  - { level: 47, move: Shadow Ball }
+  - { level: 54, move: Earth Power }
+  - { level: 57, move: Netherstorm }
+  - { level: 61, move: Shore Up }
+  - { level: 68, move: Sandstorm }

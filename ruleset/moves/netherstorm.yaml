@@ -1,0 +1,11 @@
+name: Netherstorm
+chrooked_id: netherstorm
+aka: { pokeemerald: MOVE_NETHERSTORM }
+type: Ghost
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: A tempest torn from the netherworld. Sharply lowers the user's Sp. Atk.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

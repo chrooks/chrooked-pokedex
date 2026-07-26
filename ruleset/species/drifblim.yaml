@@ -1,0 +1,23 @@
+name: Drifblim
+chrooked_id: drifblim
+aka: {  }
+learnset:
+  - { level: 0, move: Phantom Force }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Strength Sap }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Minimize }
+  - { level: 6, move: Knell }
+  - { level: 12, move: Payback }
+  - { level: 16, move: Hex }
+  - { level: 20, move: Shadow Ball }
+  - { level: 24, move: Spit Up }
+  - { level: 24, move: Swallow }
+  - { level: 24, move: Stockpile }
+  - { level: 31, move: Self-Destruct }
+  - { level: 36, move: Destiny Bond }
+  - { level: 42, move: Baton Pass }
+  - { level: 48, move: Tailwind }
+  - { level: 54, move: Explosion }
+  - { level: 64, move: Netherstorm }
