@@ -14,5 +14,6 @@ learnset:
   - { level: 28, move: Scary Face }
   - { level: 34, move: Drill Peck }
   - { level: 37, move: Dive Bomb }
+  - { level: 37, move: Nosedive }
   - { level: 40, move: Swagger }
   - { level: 46, move: Brave Bird }

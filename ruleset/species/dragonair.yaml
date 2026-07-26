@@ -14,6 +14,7 @@ learnset:
   - { level: 29, move: Breaking Swipe }
   - { level: 33, move: Aqua Tail }
   - { level: 36, move: Dive Bomb }
+  - { level: 36, move: Nosedive }
   - { level: 39, move: Dragon Rush }
   - { level: 42, move: Dragon Hammer }
   - { level: 46, move: Safeguard }

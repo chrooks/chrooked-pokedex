@@ -1,0 +1,9 @@
+name: Nosedive
+chrooked_id: nosedive
+aka: { pokeemerald: MOVE_NOSEDIVE }
+type: Flying
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user makes a headlong plunge from above.

@@ -18,6 +18,7 @@ learnset:
   - { level: 30, move: Crunch }
   - { level: 35, move: Iron Head }
   - { level: 37, move: Dive Bomb }
+  - { level: 37, move: Nosedive }
   - { level: 40, move: Take Down }
   - { level: 45, move: Stone Edge }
   - { level: 48, move: Dragon Rush }

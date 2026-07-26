@@ -16,6 +16,7 @@ learnset:
   - { level: 31, move: Maelstrom }
   - { level: 35, move: Drill Peck }
   - { level: 38, move: Dive Bomb }
+  - { level: 38, move: Nosedive }
   - { level: 42, move: Amnesia }
   - { level: 49, move: Thrash }
   - { level: 56, move: Hydro Pump }

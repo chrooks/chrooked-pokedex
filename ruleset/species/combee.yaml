@@ -8,4 +8,6 @@ learnset:
   - { level: 1, move: Sweet Scent }
   - { level: 1, move: Bug Bite }
   - { level: 1, move: Struggle Bug }
+  - { level: 46, move: Nosedive }
+  - { level: 46, move: Moltstrike }
   - { level: 48, move: Dive Bomb }

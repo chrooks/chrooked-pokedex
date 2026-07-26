@@ -19,6 +19,7 @@ learnset:
   - { level: 30, move: Crunch }
   - { level: 33, move: Agility }
   - { level: 36, move: Tailwind }
+  - { level: 37, move: Nosedive }
   - { level: 39, move: Dragon Claw }
   - { level: 42, move: Thrash }
   - { level: 45, move: Endeavor }

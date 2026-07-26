@@ -19,6 +19,8 @@ learnset:
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Roost }
   - { level: 38, move: Dive Bomb }
+  - { level: 38, move: Nosedive }
+  - { level: 38, move: Cross Chop }
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Flying Press }
   - { level: 48, move: High Jump Kick }

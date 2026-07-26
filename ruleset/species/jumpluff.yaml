@@ -22,5 +22,6 @@ learnset:
   - { level: 39, move: U-turn }
   - { level: 43, move: Giga Drain }
   - { level: 46, move: Dive Bomb }
+  - { level: 46, move: Nosedive }
   - { level: 49, move: Bounce }
   - { level: 55, move: Memento }

@@ -16,4 +16,6 @@ learnset:
   - { level: 33, move: Agility }
   - { level: 37, move: Brave Bird }
   - { level: 41, move: Final Gambit }
+  - { level: 46, move: Nosedive }
+  - { level: 46, move: Cross Chop }
   - { level: 48, move: Dive Bomb }

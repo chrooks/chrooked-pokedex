@@ -15,6 +15,7 @@ learnset:
   - { level: 32, move: Payback }
   - { level: 36, move: Drill Peck }
   - { level: 38, move: Dive Bomb }
+  - { level: 38, move: Nosedive }
   - { level: 40, move: Metal Sound }
   - { level: 44, move: Spikes }
   - { level: 48, move: Iron Defense }

@@ -22,4 +22,5 @@ learnset:
   - { level: 32, move: Giga Drain }
   - { level: 35, move: Bounce }
   - { level: 38, move: Memento }
+  - { level: 46, move: Nosedive }
   - { level: 48, move: Dive Bomb }

@@ -20,6 +20,7 @@ learnset:
   - { level: 31, move: Cotton Spore }
   - { level: 34, move: U-turn }
   - { level: 37, move: Giga Drain }
+  - { level: 39, move: Nosedive }
   - { level: 41, move: Bounce }
   - { level: 44, move: Memento }
   - { level: 48, move: Dive Bomb }

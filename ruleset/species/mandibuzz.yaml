@@ -19,6 +19,7 @@ learnset:
   - { level: 36, move: Whirlwind }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Backstab }
+  - { level: 39, move: Nosedive }
   - { level: 42, move: Air Slash }
   - { level: 48, move: Dark Pulse }
   - { level: 52, move: Havoc }
