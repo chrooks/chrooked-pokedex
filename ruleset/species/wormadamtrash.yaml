@@ -22,6 +22,7 @@ learnset:
   - { level: 35, move: Infestation }
   - { level: 36, move: Luster Cannon }
   - { level: 36, move: Antennae Blast }
+  - { level: 36, move: Moltstrike }
   - { level: 38, move: Flail }
   - { level: 41, move: Attract }
   - { level: 44, move: Psychic }

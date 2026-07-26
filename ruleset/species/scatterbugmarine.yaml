@@ -1,0 +1,5 @@
+name: Scatterbug Marine
+chrooked_id: scatterbugmarine
+aka: {  }
+learnset:
+  - { level: 36, move: Moltstrike }

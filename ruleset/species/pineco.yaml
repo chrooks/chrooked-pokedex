@@ -1,0 +1,19 @@
+name: Pineco
+chrooked_id: pineco
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Protect }
+  - { level: 6, move: Self-Destruct }
+  - { level: 9, move: Bug Bite }
+  - { level: 12, move: Take Down }
+  - { level: 17, move: Rapid Spin }
+  - { level: 20, move: Rollout }
+  - { level: 23, move: Curse }
+  - { level: 28, move: Spikes }
+  - { level: 31, move: Payback }
+  - { level: 34, move: Explosion }
+  - { level: 36, move: Moltstrike }
+  - { level: 39, move: Iron Defense }
+  - { level: 42, move: Gyro Ball }
+  - { level: 45, move: Double-Edge }

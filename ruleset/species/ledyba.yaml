@@ -1,0 +1,20 @@
+name: Ledyba
+chrooked_id: ledyba
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Supersonic }
+  - { level: 8, move: Swift }
+  - { level: 12, move: Light Screen }
+  - { level: 12, move: Reflect }
+  - { level: 12, move: Safeguard }
+  - { level: 15, move: Mach Punch }
+  - { level: 19, move: Roost }
+  - { level: 22, move: Struggle Bug }
+  - { level: 26, move: Baton Pass }
+  - { level: 29, move: Agility }
+  - { level: 33, move: Bug Buzz }
+  - { level: 36, move: Air Slash }
+  - { level: 40, move: Double-Edge }
+  - { level: 46, move: Moltstrike }
+  - { level: 46, move: Cross Chop }

@@ -1,0 +1,9 @@
+name: Burmy Sandy
+chrooked_id: burmysandy
+aka: {  }
+learnset:
+  - { level: 1, move: Protect }
+  - { level: 10, move: Tackle }
+  - { level: 15, move: Bug Bite }
+  - { level: 20, move: String Shot }
+  - { level: 46, move: Moltstrike }

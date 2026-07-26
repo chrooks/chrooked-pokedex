@@ -14,6 +14,7 @@ learnset:
   - { level: 28, move: Dig }
   - { level: 32, move: X-Scissor }
   - { level: 36, move: Crunch }
+  - { level: 38, move: Moltstrike }
   - { level: 40, move: Metal Sound }
   - { level: 44, move: Iron Head }
   - { level: 48, move: Entrainment }

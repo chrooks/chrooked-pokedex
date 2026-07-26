@@ -1,0 +1,7 @@
+name: Scatterbug Pokeball
+chrooked_id: scatterbugpokeball
+aka: {  }
+learnset:
+  - { level: 0, move: Protect }
+  - { level: 1, move: Harden }
+  - { level: 46, move: Moltstrike }

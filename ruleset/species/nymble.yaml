@@ -19,5 +19,6 @@ learnset:
   - { level: 30, move: Leech Life }
   - { level: 34, move: Guillotine }
   - { level: 45, move: Backstab }
+  - { level: 46, move: Moltstrike }
   - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }

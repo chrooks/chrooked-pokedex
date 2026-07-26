@@ -6,3 +6,22 @@ abilities:
   primary: Huge Power
   secondary: Aerodynamic
 stats: { atk: 75, def: 60, spe: 95 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Swift }
+  - { level: 5, move: Supersonic }
+  - { level: 8, move: Swift }
+  - { level: 12, move: Light Screen }
+  - { level: 12, move: Reflect }
+  - { level: 12, move: Safeguard }
+  - { level: 15, move: Mach Punch }
+  - { level: 20, move: Roost }
+  - { level: 24, move: Struggle Bug }
+  - { level: 29, move: Baton Pass }
+  - { level: 33, move: Agility }
+  - { level: 36, move: Moltstrike }
+  - { level: 36, move: Cross Chop }
+  - { level: 38, move: Bug Buzz }
+  - { level: 42, move: Air Slash }
+  - { level: 47, move: Double-Edge }

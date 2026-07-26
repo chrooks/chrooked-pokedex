@@ -8,5 +8,6 @@ learnset:
   - { level: 15, move: Undertow }
   - { level: 26, move: Water Whip }
   - { level: 45, move: Maelstrom }
+  - { level: 46, move: Moltstrike }
   - { level: 55, move: Pixie Slash }
   - { level: 60, move: Wave Crash }

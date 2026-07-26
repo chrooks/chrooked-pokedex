@@ -1,0 +1,19 @@
+name: Tarountula
+chrooked_id: tarountula
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: String Shot }
+  - { level: 5, move: Struggle Bug }
+  - { level: 8, move: Assurance }
+  - { level: 11, move: Feint }
+  - { level: 14, move: Bug Bite }
+  - { level: 18, move: Block }
+  - { level: 22, move: Counter }
+  - { level: 25, move: Headbutt }
+  - { level: 29, move: Sticky Web }
+  - { level: 33, move: Gastro Acid }
+  - { level: 36, move: Circle Throw }
+  - { level: 38, move: Moltstrike }
+  - { level: 40, move: Throat Chop }
+  - { level: 44, move: Skitter Smack }

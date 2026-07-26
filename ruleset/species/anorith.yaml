@@ -1,12 +1,11 @@
-name: Armaldo
-chrooked_id: armaldo
-aka: { pokeemerald: SPECIES_ARMALDO }
-stats: { hp: 80 }
+name: Anorith
+chrooked_id: anorith
+aka: {  }
 learnset:
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Harden }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Smack Down }
+  - { level: 4, move: Water Gun }
+  - { level: 8, move: Smack Down }
   - { level: 12, move: Metal Claw }
   - { level: 16, move: Ancient Power }
   - { level: 20, move: Bug Bite }
@@ -14,6 +13,6 @@ learnset:
   - { level: 28, move: Slash }
   - { level: 32, move: Crush Claw }
   - { level: 36, move: Rock Blast }
-  - { level: 39, move: Moltstrike }
-  - { level: 43, move: Protect }
-  - { level: 48, move: X-Scissor }
+  - { level: 38, move: Moltstrike }
+  - { level: 41, move: Protect }
+  - { level: 44, move: X-Scissor }

@@ -2,3 +2,19 @@ name: Crustle
 chrooked_id: crustle
 aka: { pokeemerald: SPECIES_CRUSTLE }
 stats: { def: 135 }
+learnset:
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Withdraw }
+  - { level: 1, move: Smack Down }
+  - { level: 12, move: Bug Bite }
+  - { level: 16, move: Flail }
+  - { level: 20, move: Slash }
+  - { level: 24, move: Rock Slide }
+  - { level: 28, move: Stealth Rock }
+  - { level: 32, move: Rock Blast }
+  - { level: 38, move: X-Scissor }
+  - { level: 41, move: Moltstrike }
+  - { level: 44, move: Rock Polish }
+  - { level: 50, move: Shell Smash }
+  - { level: 56, move: Rock Wrecker }

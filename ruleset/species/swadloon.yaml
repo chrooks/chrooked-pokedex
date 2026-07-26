@@ -11,5 +11,6 @@ learnset:
   - { level: 29, move: Endure }
   - { level: 31, move: Sticky Web }
   - { level: 36, move: Bug Buzz }
+  - { level: 39, move: Moltstrike }
   - { level: 43, move: Flail }
   - { level: 55, move: Pixie Slash }

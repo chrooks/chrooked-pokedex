@@ -18,6 +18,7 @@ learnset:
   - { level: 36, move: Fury Swipes }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Interment }
+  - { level: 39, move: Moltstrike }
   - { level: 43, move: Mind Reader }
   - { level: 50, move: Shadow Ball }
   - { level: 53, move: Necrosis }
