@@ -1,0 +1,11 @@
+name: Rapture
+chrooked_id: rapture
+aka: { pokeemerald: MOVE_RAPTURE }
+type: Fairy
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: An overwhelming rapture. The user's Sp. Atk falls sharply.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

@@ -13,6 +13,7 @@ learnset:
   - { level: 12, move: Fake Tears }
   - { level: 16, move: Assurance }
   - { level: 20, move: Swagger }
+  - { level: 22, move: Beguile }
   - { level: 24, move: Sucker Punch }
   - { level: 28, move: Torment }
   - { level: 31, move: Cutsie Slap }
@@ -25,3 +26,5 @@ learnset:
   - { level: 46, move: Play Rough }
   - { level: 52, move: Foul Play }
   - { level: 60, move: Havoc }
+  - { level: 64, move: Rapture }
+  - { level: 64, move: Faeblitz }

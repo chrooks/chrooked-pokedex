@@ -10,6 +10,7 @@ learnset:
   - { level: 12, move: Mega Drain }
   - { level: 16, move: Sleep Powder }
   - { level: 20, move: Moonlight }
+  - { level: 22, move: Beguile }
   - { level: 25, move: Strength Sap }
   - { level: 28, move: Giga Drain }
   - { level: 32, move: Dazzling Gleam }
@@ -17,3 +18,4 @@ learnset:
   - { level: 38, move: Siphon }
   - { level: 40, move: Moonblast }
   - { level: 44, move: Dream Eater }
+  - { level: 64, move: Rapture }

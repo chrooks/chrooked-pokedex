@@ -10,9 +10,11 @@ learnset:
   - { level: 10, move: Disarming Voice }
   - { level: 15, move: Aromatic Mist }
   - { level: 20, move: Psybeam }
+  - { level: 22, move: Beguile }
   - { level: 25, move: Heal Pulse }
   - { level: 30, move: Dazzling Gleam }
   - { level: 35, move: Calm Mind }
   - { level: 37, move: Mindwarp }
   - { level: 40, move: Psychic }
   - { level: 45, move: Healing Wish }
+  - { level: 64, move: Rapture }

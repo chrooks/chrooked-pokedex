@@ -10,6 +10,7 @@ learnset:
   - { level: 16, move: Fairy Lock }
   - { level: 18, move: Mirror Shot }
   - { level: 20, move: Metal Sound }
+  - { level: 22, move: Beguile }
   - { level: 24, move: Draining Kiss }
   - { level: 28, move: Recycle }
   - { level: 32, move: Imprison }
@@ -21,3 +22,4 @@ learnset:
   - { level: 48, move: Foul Play }
   - { level: 52, move: Last Resort }
   - { level: 62, move: Steel Beam }
+  - { level: 64, move: Rapture }

@@ -1,11 +1,11 @@
-name: Slurpuff
-chrooked_id: slurpuff
-aka: { pokeemerald: SPECIES_SLURPUFF }
+name: Swirlix
+chrooked_id: swirlix
+aka: {  }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Sweet Scent }
-  - { level: 1, move: Play Nice }
-  - { level: 1, move: Fairy Wind }
+  - { level: 3, move: Play Nice }
+  - { level: 6, move: Fairy Wind }
   - { level: 9, move: Aromatherapy }
   - { level: 12, move: Draining Kiss }
   - { level: 15, move: Fake Tears }
@@ -18,6 +18,4 @@ learnset:
   - { level: 33, move: Play Rough }
   - { level: 36, move: Cotton Guard }
   - { level: 39, move: Endeavor }
-  - { level: 42, move: Sticky Web }
   - { level: 64, move: Rapture }
-evolution: { from: Swirlix, method: { item: WHIPPEDDREAM } }

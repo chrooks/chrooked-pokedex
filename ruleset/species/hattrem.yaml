@@ -11,9 +11,11 @@ learnset:
   - { level: 1, move: Life Dew }
   - { level: 15, move: Aromatic Mist }
   - { level: 20, move: Psybeam }
+  - { level: 22, move: Beguile }
   - { level: 25, move: Heal Pulse }
   - { level: 30, move: Dazzling Gleam }
   - { level: 37, move: Calm Mind }
   - { level: 40, move: Mindwarp }
   - { level: 44, move: Psychic }
   - { level: 51, move: Healing Wish }
+  - { level: 64, move: Rapture }

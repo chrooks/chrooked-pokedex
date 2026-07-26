@@ -1,0 +1,11 @@
+name: Beguile
+chrooked_id: beguile
+aka: { pokeemerald: MOVE_BEGUILE }
+type: Fairy
+category: special
+power: 65
+accuracy: 100
+pp: 25
+description: A beguiling glow saps the target's focus. May lower the target's Sp. Atk.
+additional_effects:
+  - { effect: sp_atk_minus_1, chance: 100 }
