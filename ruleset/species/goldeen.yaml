@@ -25,4 +25,5 @@ learnset:
   - { level: 30, move: Agility }
   - { level: 30, move: Waterfall }
   - { level: 32, move: Maelstrom }
+  - { level: 37, move: Starfall Slam }
   - { level: 60, move: Wave Crash }

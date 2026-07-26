@@ -16,5 +16,6 @@ learnset:
   - { level: 30, move: Roar }
   - { level: 33, move: Double-Edge }
   - { level: 36, move: Charm }
+  - { level: 38, move: Starfall Slam }
   - { level: 40, move: Crunch }
   - { level: 45, move: Last Resort }

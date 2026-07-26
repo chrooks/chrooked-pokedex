@@ -1,0 +1,11 @@
+name: Starfall Slam
+chrooked_id: starfallslam
+aka: { pokeemerald: MOVE_STARFALL_SLAM }
+type: Fairy
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: A slam of falling starlight. May lower the target's Sp. Atk.
+additional_effects:
+  - { effect: sp_atk_minus_1, chance: 20 }
