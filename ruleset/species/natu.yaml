@@ -1,0 +1,17 @@
+name: Natu
+chrooked_id: natu
+aka: {  }
+learnset:
+  - { level: 1, move: Peck }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Stored Power }
+  - { level: 10, move: Teleport }
+  - { level: 15, move: Confuse Ray }
+  - { level: 20, move: Night Shade }
+  - { level: 26, move: Psycho Shift }
+  - { level: 30, move: Power Swap }
+  - { level: 35, move: Guard Swap }
+  - { level: 35, move: Psychic }
+  - { level: 37, move: Mindwarp }
+  - { level: 40, move: Wish }
+  - { level: 45, move: Future Sight }

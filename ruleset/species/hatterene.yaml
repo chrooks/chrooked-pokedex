@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_HATTERENE }
 abilities:
   primary: Insidious
 stats: { def: 100 }
+learnset:
+  - { level: 0, move: Psycho Cut }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Brutal Swing }
+  - { level: 1, move: Life Dew }
+  - { level: 15, move: Aromatic Mist }
+  - { level: 20, move: Psybeam }
+  - { level: 25, move: Heal Pulse }
+  - { level: 30, move: Dazzling Gleam }
+  - { level: 37, move: Calm Mind }
+  - { level: 41, move: Mindwarp }
+  - { level: 46, move: Psychic }
+  - { level: 55, move: Healing Wish }
+  - { level: 64, move: Magic Powder }

@@ -17,4 +17,5 @@ learnset:
   - { level: 28, move: Air Slash }
   - { level: 32, move: Calm Mind }
   - { level: 37, move: Psyshock }
+  - { level: 37, move: Mindwarp }
   - { level: 40, move: Charge Beam }

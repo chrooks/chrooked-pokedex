@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_STARYU }
 abilities:
   primary: Mystic Power
   hidden: Victory Star
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 4, move: Water Gun }
+  - { level: 8, move: Confuse Ray }
+  - { level: 12, move: Rapid Spin }
+  - { level: 16, move: Minimize }
+  - { level: 20, move: Swift }
+  - { level: 24, move: Psybeam }
+  - { level: 28, move: Brine }
+  - { level: 32, move: Light Screen }
+  - { level: 36, move: Power Gem }
+  - { level: 38, move: Mindwarp }
+  - { level: 40, move: Psychic }
+  - { level: 44, move: Surf }
+  - { level: 48, move: Recover }
+  - { level: 52, move: Cosmic Power }
+  - { level: 56, move: Hydro Pump }

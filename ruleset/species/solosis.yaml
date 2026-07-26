@@ -5,3 +5,20 @@ abilities:
   primary: Overcoat
   secondary: Magic Guard
   hidden: Liquified
+learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Protect }
+  - { level: 4, move: Recover }
+  - { level: 8, move: Endeavor }
+  - { level: 12, move: Psybeam }
+  - { level: 16, move: Charm }
+  - { level: 20, move: Psyshock }
+  - { level: 24, move: Light Screen }
+  - { level: 24, move: Reflect }
+  - { level: 28, move: Ally Switch }
+  - { level: 33, move: Pain Split }
+  - { level: 36, move: Psychic }
+  - { level: 38, move: Mindwarp }
+  - { level: 40, move: Skill Swap }
+  - { level: 44, move: Future Sight }
+  - { level: 48, move: Wonder Room }

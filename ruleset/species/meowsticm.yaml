@@ -1,0 +1,24 @@
+name: Meowstic M
+chrooked_id: meowsticm
+aka: {  }
+learnset:
+  - { level: 1, move: Mean Look }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 9, move: Confusion }
+  - { level: 12, move: Helping Hand }
+  - { level: 15, move: Charm }
+  - { level: 18, move: Covet }
+  - { level: 21, move: Psybeam }
+  - { level: 24, move: Sucker Punch }
+  - { level: 29, move: Role Play }
+  - { level: 34, move: Light Screen }
+  - { level: 34, move: Reflect }
+  - { level: 36, move: Mindwarp }
+  - { level: 39, move: Psyshock }
+  - { level: 44, move: Imprison }
+  - { level: 49, move: Quick Guard }
+  - { level: 54, move: Psychic }
+  - { level: 59, move: Misty Terrain }

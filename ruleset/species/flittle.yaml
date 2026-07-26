@@ -3,3 +3,15 @@ chrooked_id: flittle
 aka: { pokeemerald: SPECIES_FLITTLE }
 abilities:
   secondary: Mystic Power
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 5, move: Confusion }
+  - { level: 8, move: Baby-Doll Eyes }
+  - { level: 11, move: Disarming Voice }
+  - { level: 15, move: Quick Attack }
+  - { level: 19, move: Psybeam }
+  - { level: 24, move: Pluck }
+  - { level: 29, move: Agility }
+  - { level: 34, move: Uproar }
+  - { level: 46, move: Mindwarp }

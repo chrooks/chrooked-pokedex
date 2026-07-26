@@ -3,3 +3,6 @@ chrooked_id: abra
 aka: { pokeemerald: SPECIES_ABRA }
 abilities:
   primary: Mystic Power
+learnset:
+  - { level: 1, move: Teleport }
+  - { level: 46, move: Mindwarp }

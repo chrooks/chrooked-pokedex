@@ -26,5 +26,6 @@ learnset:
   - { level: 1, move: Wood Hammer }
   - { level: 1, move: Giga Drain }
   - { level: 45, move: Cataclysm }
+  - { level: 46, move: Mindwarp }
   - { level: 60, move: Draco Meteor }
 evolution: { from: Exeggcute, method: { item: LEAFSTONE } }

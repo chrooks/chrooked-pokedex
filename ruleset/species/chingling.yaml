@@ -4,3 +4,13 @@ aka: { pokeemerald: SPECIES_CHINGLING }
 types: [Steel, Psychic]
 abilities:
   primary: Sacred Toll
+learnset:
+  - { level: 1, move: Wrap }
+  - { level: 4, move: Growl }
+  - { level: 7, move: Astonish }
+  - { level: 10, move: Confusion }
+  - { level: 13, move: Yawn }
+  - { level: 16, move: Last Resort }
+  - { level: 19, move: Entrainment }
+  - { level: 32, move: Uproar }
+  - { level: 46, move: Mindwarp }

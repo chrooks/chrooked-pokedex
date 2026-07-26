@@ -1,0 +1,24 @@
+name: Meowstic F
+chrooked_id: meowsticf
+aka: {  }
+learnset:
+  - { level: 1, move: Magical Leaf }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 9, move: Confusion }
+  - { level: 12, move: Stored Power }
+  - { level: 15, move: Charge Beam }
+  - { level: 18, move: Covet }
+  - { level: 21, move: Psybeam }
+  - { level: 24, move: Sucker Punch }
+  - { level: 29, move: Role Play }
+  - { level: 34, move: Light Screen }
+  - { level: 34, move: Reflect }
+  - { level: 36, move: Mindwarp }
+  - { level: 39, move: Psyshock }
+  - { level: 44, move: Extrasensory }
+  - { level: 49, move: Shadow Ball }
+  - { level: 54, move: Psychic }
+  - { level: 59, move: Future Sight }

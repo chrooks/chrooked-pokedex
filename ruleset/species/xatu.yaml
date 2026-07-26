@@ -2,3 +2,20 @@ name: Xatu
 chrooked_id: xatu
 aka: { pokeemerald: SPECIES_XATU }
 stats: { spa: 110, spe: 85 }
+learnset:
+  - { level: 0, move: Air Slash }
+  - { level: 1, move: Air Slash }
+  - { level: 1, move: Tailwind }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Stored Power }
+  - { level: 1, move: Teleport }
+  - { level: 15, move: Confuse Ray }
+  - { level: 20, move: Night Shade }
+  - { level: 28, move: Psycho Shift }
+  - { level: 34, move: Power Swap }
+  - { level: 34, move: Guard Swap }
+  - { level: 37, move: Mindwarp }
+  - { level: 41, move: Psychic }
+  - { level: 48, move: Wish }
+  - { level: 55, move: Future Sight }

@@ -3,3 +3,22 @@ chrooked_id: mimejr
 aka: { pokeemerald: SPECIES_MIME_JR }
 abilities:
   secondary: Filter
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Copycat }
+  - { level: 4, move: Baton Pass }
+  - { level: 8, move: Encore }
+  - { level: 12, move: Confusion }
+  - { level: 16, move: Role Play }
+  - { level: 20, move: Protect }
+  - { level: 24, move: Recycle }
+  - { level: 28, move: Psybeam }
+  - { level: 32, move: Mimic }
+  - { level: 36, move: Light Screen }
+  - { level: 36, move: Reflect }
+  - { level: 36, move: Safeguard }
+  - { level: 38, move: Mindwarp }
+  - { level: 40, move: Sucker Punch }
+  - { level: 44, move: Dazzling Gleam }
+  - { level: 48, move: Psychic }
+  - { level: 52, move: Teeter Dance }

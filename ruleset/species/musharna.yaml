@@ -23,5 +23,6 @@ learnset:
   - { level: 36, move: Moonlight }
   - { level: 40, move: Dream Eater }
   - { level: 44, move: Wonder Room }
+  - { level: 46, move: Mindwarp }
   - { level: 48, move: Future Sight }
   - { level: 52, move: Psychic }

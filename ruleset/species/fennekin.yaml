@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_FENNEKIN }
 abilities:
   secondary: Mystic Power
   hidden: Magic Guard
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Ember }
+  - { level: 11, move: Howl }
+  - { level: 14, move: Flame Charge }
+  - { level: 17, move: Psybeam }
+  - { level: 20, move: Fire Spin }
+  - { level: 25, move: Light Screen }
+  - { level: 31, move: Psyshock }
+  - { level: 35, move: Flamethrower }
+  - { level: 38, move: Will-O-Wisp }
+  - { level: 41, move: Psychic }
+  - { level: 43, move: Sunny Day }
+  - { level: 45, move: Mindwarp }
+  - { level: 48, move: Fire Blast }

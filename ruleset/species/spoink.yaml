@@ -3,3 +3,18 @@ chrooked_id: spoink
 aka: { pokeemerald: SPECIES_SPOINK }
 abilities:
   secondary: Psyonize
+learnset:
+  - { level: 1, move: Splash }
+  - { level: 7, move: Confusion }
+  - { level: 10, move: Growl }
+  - { level: 14, move: Psybeam }
+  - { level: 18, move: Psych Up }
+  - { level: 22, move: Confuse Ray }
+  - { level: 29, move: Rest }
+  - { level: 29, move: Power Gem }
+  - { level: 33, move: Snore }
+  - { level: 36, move: Mindwarp }
+  - { level: 38, move: Psyshock }
+  - { level: 40, move: Payback }
+  - { level: 44, move: Psychic }
+  - { level: 50, move: Bounce }

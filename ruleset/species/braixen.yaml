@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_BRAIXEN }
 abilities:
   secondary: Mystic Power
   hidden: Magic Guard
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Ember }
+  - { level: 11, move: Howl }
+  - { level: 14, move: Flame Charge }
+  - { level: 18, move: Psybeam }
+  - { level: 22, move: Fire Spin }
+  - { level: 28, move: Light Screen }
+  - { level: 36, move: Psyshock }
+  - { level: 38, move: Mindwarp }
+  - { level: 41, move: Flamethrower }
+  - { level: 45, move: Will-O-Wisp }
+  - { level: 49, move: Psychic }
+  - { level: 52, move: Sunny Day }
+  - { level: 56, move: Magic Room }
+  - { level: 59, move: Fire Blast }

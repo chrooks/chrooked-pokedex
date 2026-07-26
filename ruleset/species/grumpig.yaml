@@ -5,3 +5,20 @@ abilities:
   secondary: Psyonize
   hidden: Magical Fists
 stats: { hp: 95, spd: 120 }
+learnset:
+  - { level: 0, move: Teeter Dance }
+  - { level: 1, move: Psybeam }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Belch }
+  - { level: 18, move: Psych Up }
+  - { level: 22, move: Confuse Ray }
+  - { level: 26, move: Zen Headbutt }
+  - { level: 29, move: Power Gem }
+  - { level: 35, move: Rest }
+  - { level: 35, move: Snore }
+  - { level: 38, move: Mindwarp }
+  - { level: 42, move: Psyshock }
+  - { level: 46, move: Payback }
+  - { level: 52, move: Psychic }
+  - { level: 60, move: Bounce }

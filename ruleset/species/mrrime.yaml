@@ -1,7 +1,11 @@
-name: Mr Mime Galar
-chrooked_id: mrmimegalar
-aka: { pokeemerald: SPECIES_MR_MIME_GALAR }
+name: Mr Rime
+chrooked_id: mrrime
+aka: {  }
 learnset:
+  - { level: 1, move: Fake Tears }
+  - { level: 1, move: Slack Off }
+  - { level: 1, move: After You }
+  - { level: 1, move: Block }
   - { level: 1, move: Copycat }
   - { level: 1, move: Encore }
   - { level: 1, move: Role Play }
@@ -29,4 +33,3 @@ learnset:
   - { level: 44, move: Freeze-Dry }
   - { level: 48, move: Psychic }
   - { level: 52, move: Teeter Dance }
-evolution: { from: Mime Jr, method: { pokeemerald: EVO_MOVE, param: MOVE_MIMIC } }

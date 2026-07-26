@@ -15,4 +15,5 @@ learnset:
   - { level: 29, move: Dig }
   - { level: 35, move: Lunge }
   - { level: 45, move: Antennae Blast }
+  - { level: 46, move: Mindwarp }
   - { level: 60, move: Drone Chorus }

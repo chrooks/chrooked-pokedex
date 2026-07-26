@@ -20,6 +20,7 @@ learnset:
   - { level: 28, move: Calm Mind }
   - { level: 32, move: Psychic Terrain }
   - { level: 36, move: Moonlight }
+  - { level: 38, move: Mindwarp }
   - { level: 40, move: Dream Eater }
   - { level: 44, move: Wonder Room }
   - { level: 48, move: Future Sight }

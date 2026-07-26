@@ -3,3 +3,17 @@ chrooked_id: hattrem
 aka: { pokeemerald: SPECIES_HATTREM }
 abilities:
   primary: Insidious
+learnset:
+  - { level: 0, move: Brutal Swing }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Play Nice }
+  - { level: 1, move: Life Dew }
+  - { level: 15, move: Aromatic Mist }
+  - { level: 20, move: Psybeam }
+  - { level: 25, move: Heal Pulse }
+  - { level: 30, move: Dazzling Gleam }
+  - { level: 37, move: Calm Mind }
+  - { level: 40, move: Mindwarp }
+  - { level: 44, move: Psychic }
+  - { level: 51, move: Healing Wish }

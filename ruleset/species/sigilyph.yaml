@@ -11,6 +11,7 @@ learnset:
   - { level: 25, move: Whirlwind }
   - { level: 30, move: Cosmic Power }
   - { level: 35, move: Air Slash }
+  - { level: 37, move: Mindwarp }
   - { level: 40, move: Psychic }
   - { level: 45, move: Tailwind }
   - { level: 50, move: Light Screen }

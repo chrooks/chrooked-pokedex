@@ -1,0 +1,15 @@
+name: Espurr
+chrooked_id: espurr
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 3, move: Fake Out }
+  - { level: 6, move: Disarming Voice }
+  - { level: 9, move: Confusion }
+  - { level: 18, move: Covet }
+  - { level: 21, move: Psybeam }
+  - { level: 30, move: Light Screen }
+  - { level: 30, move: Reflect }
+  - { level: 33, move: Psyshock }
+  - { level: 46, move: Mindwarp }

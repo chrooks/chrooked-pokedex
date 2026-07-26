@@ -3,3 +3,16 @@ chrooked_id: hatenna
 aka: { pokeemerald: SPECIES_HATENNA }
 abilities:
   primary: Insidious
+learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Play Nice }
+  - { level: 5, move: Life Dew }
+  - { level: 10, move: Disarming Voice }
+  - { level: 15, move: Aromatic Mist }
+  - { level: 20, move: Psybeam }
+  - { level: 25, move: Heal Pulse }
+  - { level: 30, move: Dazzling Gleam }
+  - { level: 35, move: Calm Mind }
+  - { level: 37, move: Mindwarp }
+  - { level: 40, move: Psychic }
+  - { level: 45, move: Healing Wish }

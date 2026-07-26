@@ -1,0 +1,11 @@
+name: Mindwarp
+chrooked_id: mindwarp
+aka: { pokeemerald: MOVE_MINDWARP }
+type: Psychic
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: A warping wave that muddles the mind. May confuse the target.
+additional_effects:
+  - { effect: confusion, chance: 10 }

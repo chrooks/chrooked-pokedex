@@ -5,3 +5,25 @@ abilities:
   secondary: Mystic Power
   hidden: Magic Guard
 stats: { atk: 70, def: 70, spa: 120, spe: 105 }
+learnset:
+  - { level: 0, move: Mystical Fire }
+  - { level: 1, move: Switcheroo }
+  - { level: 1, move: Howl }
+  - { level: 1, move: Role Play }
+  - { level: 1, move: Future Sight }
+  - { level: 1, move: Shadow Ball }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Tail Whip }
+  - { level: 14, move: Flame Charge }
+  - { level: 18, move: Psybeam }
+  - { level: 22, move: Fire Spin }
+  - { level: 28, move: Light Screen }
+  - { level: 38, move: Psyshock }
+  - { level: 41, move: Mindwarp }
+  - { level: 45, move: Flamethrower }
+  - { level: 51, move: Will-O-Wisp }
+  - { level: 57, move: Psychic }
+  - { level: 62, move: Sunny Day }
+  - { level: 68, move: Magic Room }
+  - { level: 74, move: Fire Blast }

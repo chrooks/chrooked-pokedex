@@ -19,6 +19,7 @@ learnset:
   - { level: 29, move: Extrasensory }
   - { level: 35, move: Lunge }
   - { level: 37, move: Antennae Blast }
+  - { level: 37, move: Mindwarp }
   - { level: 40, move: Speed Swap }
   - { level: 40, move: Power Swap }
   - { level: 40, move: Guard Swap }

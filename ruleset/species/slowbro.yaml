@@ -20,6 +20,7 @@ learnset:
   - { level: 33, move: Slack Off }
   - { level: 36, move: Psychic }
   - { level: 38, move: Astral Hand }
+  - { level: 38, move: Mindwarp }
   - { level: 41, move: Psych Up }
   - { level: 46, move: Rain Dance }
   - { level: 51, move: Heal Pulse }

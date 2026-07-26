@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_ALAKAZAM }
 abilities:
   primary: Mystic Power
 stats: { spd: 95 }
+learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Kinesis }
+  - { level: 1, move: Disable }
+  - { level: 1, move: Teleport }
+  - { level: 5, move: Psybeam }
+  - { level: 10, move: Reflect }
+  - { level: 15, move: Ally Switch }
+  - { level: 20, move: Psycho Cut }
+  - { level: 25, move: Recover }
+  - { level: 30, move: Psyshock }
+  - { level: 35, move: Psychic }
+  - { level: 37, move: Mindwarp }
+  - { level: 40, move: Role Play }
+  - { level: 45, move: Future Sight }
+  - { level: 50, move: Calm Mind }

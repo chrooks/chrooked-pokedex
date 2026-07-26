@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_ESPATHRA }
 abilities:
   secondary: Mystic Power
 stats: { spa: 105, spd: 70 }
+learnset:
+  - { level: 0, move: Lumina Crash }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Drill Peck }
+  - { level: 1, move: Feather Dance }
+  - { level: 5, move: Confusion }
+  - { level: 8, move: Baby-Doll Eyes }
+  - { level: 11, move: Disarming Voice }
+  - { level: 15, move: Quick Attack }
+  - { level: 19, move: Psybeam }
+  - { level: 24, move: Pluck }
+  - { level: 29, move: Agility }
+  - { level: 34, move: Uproar }
+  - { level: 38, move: Mindwarp }
+  - { level: 43, move: Dazzling Gleam }
+  - { level: 49, move: Psychic }
+  - { level: 54, move: Last Resort }

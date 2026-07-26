@@ -6,3 +6,21 @@ abilities:
   primary: Inner Focus
   secondary: Early Bird
 stats: { atk: 95, spa: 115 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Power Swap }
+  - { level: 1, move: Guard Swap }
+  - { level: 5, move: Confusion }
+  - { level: 10, move: Assurance }
+  - { level: 14, move: Stomp }
+  - { level: 19, move: Psybeam }
+  - { level: 23, move: Agility }
+  - { level: 28, move: Double Hit }
+  - { level: 32, move: Twin Beam }
+  - { level: 37, move: Crunch }
+  - { level: 39, move: Mindwarp }
+  - { level: 41, move: Baton Pass }
+  - { level: 46, move: Nasty Plot }
+  - { level: 50, move: Psychic }

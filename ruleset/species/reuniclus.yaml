@@ -6,3 +6,21 @@ abilities:
   secondary: Magic Guard
   hidden: Liquified
 stats: { def: 80, spa: 130, spd: 105 }
+learnset:
+  - { level: 0, move: Hammer Arm }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Recover }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Endeavor }
+  - { level: 12, move: Psybeam }
+  - { level: 16, move: Charm }
+  - { level: 20, move: Psyshock }
+  - { level: 24, move: Light Screen }
+  - { level: 24, move: Reflect }
+  - { level: 28, move: Ally Switch }
+  - { level: 35, move: Pain Split }
+  - { level: 40, move: Psychic }
+  - { level: 44, move: Mindwarp }
+  - { level: 48, move: Skill Swap }
+  - { level: 56, move: Future Sight }
+  - { level: 64, move: Wonder Room }
