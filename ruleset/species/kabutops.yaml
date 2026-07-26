@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Harden }
   - { level: 1, move: Scratch }
   - { level: 1, move: Sand Attack }
+  - { level: 8, move: Undertow }
   - { level: 15, move: Aqua Jet }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Leer }
@@ -17,8 +18,10 @@ learnset:
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
   - { level: 39, move: Pixie Slash }
+  - { level: 39, move: Maelstrom }
   - { level: 43, move: Protect }
   - { level: 46, move: Secret Sword }
+  - { level: 46, move: Wave Crash }
   - { level: 49, move: Leech Life }
   - { level: 56, move: Liquidation }
   - { level: 63, move: Metal Sound }

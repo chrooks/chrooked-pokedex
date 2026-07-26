@@ -14,11 +14,14 @@ learnset:
   - { level: 1, move: Zen Headbutt }
   - { level: 1, move: Belch }
   - { level: 1, move: Clod Toss }
+  - { level: 6, move: Undertow }
   - { level: 12, move: Water Pulse }
   - { level: 15, move: Water Whip }
   - { level: 18, move: Amnesia }
   - { level: 24, move: Aqua Tail }
   - { level: 33, move: Muddy Water }
   - { level: 40, move: Earthquake }
+  - { level: 44, move: Maelstrom }
   - { level: 48, move: Future Sight }
+  - { level: 52, move: Wave Crash }
   - { level: 56, move: Fissure }

@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Withdraw }
+  - { level: 2, move: Undertow }
   - { level: 3, move: Protect }
   - { level: 6, move: Aqua Jet }
   - { level: 9, move: Smack Down }
@@ -17,8 +18,10 @@ learnset:
   - { level: 24, move: Rock Slide }
   - { level: 27, move: Crunch }
   - { level: 30, move: Curse }
+  - { level: 31, move: Maelstrom }
   - { level: 33, move: Iron Defense }
   - { level: 36, move: Aqua Tail }
   - { level: 39, move: Rain Dance }
   - { level: 42, move: Hydro Pump }
   - { level: 45, move: Shell Smash }
+  - { level: 60, move: Wave Crash }

@@ -18,6 +18,9 @@ learnset:
   - { level: 1, move: Body Slam }
   - { level: 1, move: Bubble Beam }
   - { level: 1, move: Hypnosis }
+  - { level: 15, move: Undertow }
   - { level: 26, move: Water Whip }
   - { level: 31, move: Bail Out }
+  - { level: 45, move: Maelstrom }
   - { level: 48, move: One-Inch Punch }
+  - { level: 60, move: Wave Crash }

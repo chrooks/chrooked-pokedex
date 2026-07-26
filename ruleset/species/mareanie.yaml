@@ -4,6 +4,7 @@ aka: { dex: 747 }
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Peck }
+  - { level: 3, move: Undertow }
   - { level: 5, move: Wide Guard }
   - { level: 10, move: Bite }
   - { level: 15, move: Venoshock }
@@ -11,7 +12,9 @@ learnset:
   - { level: 20, move: Recover }
   - { level: 25, move: Pin Missile }
   - { level: 30, move: Toxic Spikes }
+  - { level: 32, move: Maelstrom }
   - { level: 35, move: Liquidation }
   - { level: 40, move: Acid Spray }
   - { level: 45, move: Poison Jab }
   - { level: 50, move: Toxic }
+  - { level: 60, move: Wave Crash }

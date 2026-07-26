@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Bubble }
   - { level: 1, move: Growl }
   - { level: 4, move: Supersonic }
+  - { level: 6, move: Undertow }
   - { level: 8, move: Water Gun }
   - { level: 11, move: Mud-Slap }
   - { level: 14, move: Acid Spray }
@@ -16,5 +17,7 @@ learnset:
   - { level: 23, move: Rain Dance }
   - { level: 25, move: Mud Bomb }
   - { level: 30, move: Round }
+  - { level: 30, move: Maelstrom }
   - { level: 34, move: Muddy Water }
   - { level: 40, move: Hydro Pump }
+  - { level: 60, move: Wave Crash }

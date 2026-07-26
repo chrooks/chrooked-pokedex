@@ -9,13 +9,16 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Smokescreen }
   - { level: 1, move: Twister }
+  - { level: 8, move: Undertow }
   - { level: 15, move: Focus Energy }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Dragon Breath }
   - { level: 25, move: Bubble Beam }
   - { level: 30, move: Agility }
+  - { level: 33, move: Maelstrom }
   - { level: 37, move: Water Pulse }
   - { level: 44, move: Dragon Pulse }
+  - { level: 47, move: Wave Crash }
   - { level: 51, move: Hydro Pump }
   - { level: 58, move: Dragon Dance }
   - { level: 65, move: Rain Dance }

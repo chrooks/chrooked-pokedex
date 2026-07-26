@@ -13,6 +13,7 @@ learnset:
   - { level: 1, move: Splash }
   - { level: 1, move: Flail }
   - { level: 4, move: Whirlpool }
+  - { level: 6, move: Undertow }
   - { level: 8, move: Ice Fang }
   - { level: 12, move: Brine }
   - { level: 14, move: Water Whip }
@@ -20,10 +21,12 @@ learnset:
   - { level: 21, move: Breaking Swipe }
   - { level: 24, move: Crunch }
   - { level: 28, move: Dragon Tail }
+  - { level: 30, move: Maelstrom }
   - { level: 32, move: Aqua Tail }
   - { level: 36, move: Dragon Dance }
   - { level: 40, move: Hydro Pump }
   - { level: 44, move: Hurricane }
   - { level: 48, move: Outrage }
   - { level: 52, move: Hyper Beam }
+  - { level: 60, move: Wave Crash }
 evolution: { from: Magikarp, method: { level: 20 } }

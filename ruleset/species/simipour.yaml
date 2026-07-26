@@ -9,4 +9,7 @@ learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Fury Swipes }
   - { level: 1, move: Scald }
+  - { level: 15, move: Undertow }
   - { level: 26, move: Water Whip }
+  - { level: 45, move: Maelstrom }
+  - { level: 60, move: Wave Crash }

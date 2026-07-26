@@ -4,6 +4,7 @@ aka: { dex: 258 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 2, move: Undertow }
   - { level: 3, move: Water Gun }
   - { level: 6, move: Rock Smash }
   - { level: 9, move: Rock Throw }
@@ -18,3 +19,5 @@ learnset:
   - { level: 33, move: Screech }
   - { level: 36, move: Endeavor }
   - { level: 39, move: Hydro Pump }
+  - { level: 45, move: Maelstrom }
+  - { level: 60, move: Wave Crash }

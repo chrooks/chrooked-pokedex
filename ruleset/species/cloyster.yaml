@@ -22,5 +22,8 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Tackle }
   - { level: 5, move: Razor Shell }
+  - { level: 15, move: Undertow }
   - { level: 26, move: Water Whip }
+  - { level: 45, move: Maelstrom }
   - { level: 46, move: Glacial Crush }
+  - { level: 60, move: Wave Crash }

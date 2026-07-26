@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Poison Sting }
   - { level: 4, move: Harden }
+  - { level: 6, move: Undertow }
   - { level: 8, move: Water Gun }
   - { level: 12, move: Fell Stinger }
   - { level: 14, move: Water Whip }
@@ -16,6 +17,7 @@ learnset:
   - { level: 20, move: Spikes }
   - { level: 24, move: Brine }
   - { level: 28, move: Poison Jab }
+  - { level: 30, move: Maelstrom }
   - { level: 32, move: Pin Missile }
   - { level: 36, move: Toxic Spikes }
   - { level: 40, move: Stockpile }
@@ -24,3 +26,4 @@ learnset:
   - { level: 48, move: Aqua Tail }
   - { level: 52, move: Acupressure }
   - { level: 56, move: Destiny Bond }
+  - { level: 60, move: Wave Crash }

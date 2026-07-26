@@ -5,14 +5,17 @@ stats: { atk: 115, def: 90, spa: 90, spd: 80 }
 learnset:
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Water Gun }
+  - { level: 4, move: Undertow }
   - { level: 7, move: Protect }
   - { level: 14, move: Icy Wind }
   - { level: 17, move: Water Whip }
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Bite }
+  - { level: 31, move: Maelstrom }
   - { level: 35, move: Aurora Veil }
   - { level: 38, move: Glacial Crush }
   - { level: 42, move: Freeze-Dry }
+  - { level: 45, move: Wave Crash }
   - { level: 49, move: Super Fang }
   - { level: 56, move: Crunch }
   - { level: 63, move: Fishious Rend }

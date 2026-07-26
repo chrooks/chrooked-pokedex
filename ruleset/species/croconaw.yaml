@@ -7,15 +7,18 @@ learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
   - { level: 1, move: Water Gun }
+  - { level: 7, move: Undertow }
   - { level: 13, move: Bite }
   - { level: 15, move: Scary Face }
   - { level: 18, move: Water Whip }
   - { level: 21, move: Ice Fang }
   - { level: 24, move: Flail }
   - { level: 30, move: Crunch }
+  - { level: 32, move: Maelstrom }
   - { level: 34, move: Slash }
   - { level: 37, move: Screech }
   - { level: 42, move: Thrash }
   - { level: 47, move: Aqua Tail }
   - { level: 50, move: Superpower }
   - { level: 55, move: Hydro Pump }
+  - { level: 60, move: Wave Crash }

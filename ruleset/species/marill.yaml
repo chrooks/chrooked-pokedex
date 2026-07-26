@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Rollout }
   - { level: 1, move: Defense Curl }
+  - { level: 3, move: Undertow }
   - { level: 6, move: Bubble Beam }
   - { level: 9, move: Charm }
   - { level: 12, move: Body Slam }
@@ -22,4 +23,6 @@ learnset:
   - { level: 30, move: Hydro Pump }
   - { level: 33, move: Double-Edge }
   - { level: 36, move: Superpower }
+  - { level: 45, move: Maelstrom }
+  - { level: 60, move: Wave Crash }
 evolution: { from: Azurill, method: { level: 16 } }

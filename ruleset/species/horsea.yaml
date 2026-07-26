@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Water Gun }
+  - { level: 3, move: Undertow }
   - { level: 5, move: Smokescreen }
   - { level: 10, move: Twister }
   - { level: 15, move: Focus Energy }
@@ -13,8 +14,10 @@ learnset:
   - { level: 20, move: Dragon Breath }
   - { level: 25, move: Bubble Beam }
   - { level: 30, move: Agility }
+  - { level: 32, move: Maelstrom }
   - { level: 35, move: Water Pulse }
   - { level: 40, move: Dragon Pulse }
   - { level: 45, move: Hydro Pump }
   - { level: 50, move: Dragon Dance }
   - { level: 55, move: Rain Dance }
+  - { level: 60, move: Wave Crash }

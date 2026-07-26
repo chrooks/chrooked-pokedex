@@ -7,10 +7,13 @@ learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Aqua Jet }
   - { level: 1, move: Throat Chop }
+  - { level: 9, move: Undertow }
   - { level: 14, move: Water Whip }
   - { level: 18, move: Agility }
   - { level: 24, move: Dive }
   - { level: 32, move: Focus Energy }
+  - { level: 36, move: Maelstrom }
   - { level: 40, move: Crunch }
   - { level: 48, move: Liquidation }
+  - { level: 52, move: Wave Crash }
   - { level: 56, move: Double-Edge }

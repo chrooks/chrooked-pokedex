@@ -11,16 +11,19 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Harden }
   - { level: 1, move: Taunt }
+  - { level: 6, move: Undertow }
   - { level: 12, move: Bubble Beam }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Knock Off }
   - { level: 20, move: Double Hit }
   - { level: 24, move: Protect }
   - { level: 28, move: Night Slash }
+  - { level: 31, move: Maelstrom }
   - { level: 34, move: Razor Shell }
   - { level: 40, move: Swords Dance }
   - { level: 43, move: Pixie Slash }
   - { level: 46, move: Crunch }
+  - { level: 49, move: Wave Crash }
   - { level: 52, move: Crabhammer }
   - { level: 58, move: Endeavor }
   - { level: 64, move: Guillotine }

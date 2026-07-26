@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Double Hit }
+  - { level: 4, move: Undertow }
   - { level: 7, move: Work Up }
   - { level: 10, move: Wing Attack }
   - { level: 13, move: Aqua Jet }
@@ -20,6 +21,7 @@ learnset:
   - { level: 24, move: Water Whip }
   - { level: 27, move: Air Slash }
   - { level: 32, move: Focus Energy }
+  - { level: 35, move: Maelstrom }
   - { level: 38, move: Mega Kick }
   - { level: 43, move: Acrobatics }
   - { level: 47, move: Liquidation }

@@ -4,6 +4,7 @@ aka: { dex: 399 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 3, move: Undertow }
   - { level: 5, move: Defense Curl }
   - { level: 9, move: Rollout }
   - { level: 13, move: Headbutt }
@@ -12,8 +13,10 @@ learnset:
   - { level: 21, move: Yawn }
   - { level: 25, move: Crunch }
   - { level: 29, move: Take Down }
+  - { level: 31, move: Maelstrom }
   - { level: 33, move: Super Fang }
   - { level: 37, move: Swords Dance }
   - { level: 41, move: Amnesia }
   - { level: 45, move: Superpower }
   - { level: 49, move: Curse }
+  - { level: 60, move: Wave Crash }

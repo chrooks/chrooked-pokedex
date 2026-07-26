@@ -1,0 +1,11 @@
+name: Maelstrom
+chrooked_id: maelstrom
+aka: { pokeemerald: MOVE_MAELSTROM }
+type: Water
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: A churning vortex of water batters the target. May make it flinch.
+additional_effects:
+  - { effect: flinch, chance: 10 }

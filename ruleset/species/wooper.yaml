@@ -6,6 +6,7 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 4, move: Rain Dance }
   - { level: 6, move: Clod Toss }
+  - { level: 6, move: Undertow }
   - { level: 8, move: Mud Shot }
   - { level: 12, move: Mist }
   - { level: 12, move: Haze }
@@ -17,3 +18,5 @@ learnset:
   - { level: 32, move: Amnesia }
   - { level: 36, move: Toxic }
   - { level: 40, move: Earthquake }
+  - { level: 45, move: Maelstrom }
+  - { level: 60, move: Wave Crash }

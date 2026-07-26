@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Tail Whip }
   - { level: 3, move: Aqua Jet }
+  - { level: 3, move: Undertow }
   - { level: 5, move: Baby-Doll Eyes }
   - { level: 7, move: Horn Attack }
   - { level: 10, move: Tail Slap }
@@ -23,3 +24,5 @@ learnset:
   - { level: 28, move: Pin Missile }
   - { level: 30, move: Agility }
   - { level: 30, move: Waterfall }
+  - { level: 32, move: Maelstrom }
+  - { level: 60, move: Wave Crash }

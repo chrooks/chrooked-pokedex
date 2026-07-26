@@ -5,6 +5,7 @@ abilities:
   secondary: Mystic Blades
 learnset:
   - { level: 1, move: Tackle }
+  - { level: 3, move: Undertow }
   - { level: 5, move: Tail Whip }
   - { level: 7, move: Water Gun }
   - { level: 11, move: Soak }
@@ -16,6 +17,7 @@ learnset:
   - { level: 25, move: Aerial Ace }
   - { level: 29, move: Aqua Jet }
   - { level: 31, move: Encore }
+  - { level: 33, move: Maelstrom }
   - { level: 35, move: Aqua Tail }
   - { level: 37, move: Retaliate }
   - { level: 41, move: Swords Dance }
@@ -23,3 +25,4 @@ learnset:
   - { level: 48, move: Aura Sphere }
   - { level: 55, move: Pixie Slash }
   - { level: 60, move: Secret Sword }
+  - { level: 60, move: Wave Crash }

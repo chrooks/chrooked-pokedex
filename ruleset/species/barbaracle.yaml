@@ -8,6 +8,7 @@ learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Withdraw }
   - { level: 1, move: Water Gun }
+  - { level: 6, move: Undertow }
   - { level: 12, move: Fury Cutter }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Fury Swipes }
@@ -16,6 +17,8 @@ learnset:
   - { level: 28, move: Slash }
   - { level: 32, move: Hone Claws }
   - { level: 36, move: Razor Shell }
+  - { level: 39, move: Maelstrom }
   - { level: 42, move: Shell Smash }
   - { level: 48, move: Cross Chop }
   - { level: 54, move: Stone Edge }
+  - { level: 60, move: Wave Crash }

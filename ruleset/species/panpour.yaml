@@ -5,6 +5,7 @@ stats: { spa: 60 }
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Play Nice }
+  - { level: 2, move: Undertow }
   - { level: 4, move: Leer }
   - { level: 7, move: Lick }
   - { level: 10, move: Water Gun }
@@ -20,3 +21,5 @@ learnset:
   - { level: 37, move: Recycle }
   - { level: 40, move: Natural Gift }
   - { level: 43, move: Crunch }
+  - { level: 45, move: Maelstrom }
+  - { level: 60, move: Wave Crash }

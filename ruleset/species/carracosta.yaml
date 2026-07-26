@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Withdraw }
   - { level: 1, move: Protect }
   - { level: 1, move: Aqua Jet }
+  - { level: 5, move: Undertow }
   - { level: 9, move: Smack Down }
   - { level: 12, move: Ancient Power }
   - { level: 14, move: Water Whip }
@@ -20,6 +21,8 @@ learnset:
   - { level: 30, move: Curse }
   - { level: 33, move: Iron Defense }
   - { level: 36, move: Aqua Tail }
+  - { level: 38, move: Maelstrom }
   - { level: 41, move: Rain Dance }
   - { level: 46, move: Hydro Pump }
   - { level: 51, move: Shell Smash }
+  - { level: 60, move: Wave Crash }

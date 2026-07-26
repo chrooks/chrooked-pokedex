@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Infestation }
   - { level: 4, move: Bug Bite }
+  - { level: 6, move: Undertow }
   - { level: 8, move: Bite }
   - { level: 12, move: Water Gun }
   - { level: 14, move: Water Whip }
@@ -14,8 +15,10 @@ learnset:
   - { level: 24, move: Bubble Beam }
   - { level: 26, move: Crunch }
   - { level: 28, move: Soak }
+  - { level: 30, move: Maelstrom }
   - { level: 32, move: Entrainment }
   - { level: 36, move: Lunge }
   - { level: 40, move: Liquidation }
   - { level: 44, move: Leech Life }
   - { level: 48, move: Mirror Coat }
+  - { level: 60, move: Wave Crash }

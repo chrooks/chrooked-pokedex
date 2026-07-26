@@ -6,6 +6,7 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Supersonic }
   - { level: 1, move: Water Gun }
+  - { level: 3, move: Undertow }
   - { level: 5, move: Tickle }
   - { level: 10, move: Flail }
   - { level: 15, move: Rest }
@@ -14,6 +15,7 @@ learnset:
   - { level: 20, move: Dive }
   - { level: 25, move: Noble Roar }
   - { level: 30, move: Soak }
+  - { level: 32, move: Maelstrom }
   - { level: 35, move: Body Slam }
   - { level: 40, move: Aqua Tail }
   - { level: 45, move: Rain Dance }

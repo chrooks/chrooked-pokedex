@@ -12,12 +12,15 @@ learnset:
   - { level: 1, move: Bite }
   - { level: 1, move: Peck }
   - { level: 1, move: Wide Guard }
+  - { level: 8, move: Undertow }
   - { level: 15, move: Venoshock }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Recover }
   - { level: 25, move: Pin Missile }
   - { level: 30, move: Toxic Spikes }
   - { level: 35, move: Liquidation }
+  - { level: 38, move: Maelstrom }
   - { level: 42, move: Acid Spray }
   - { level: 49, move: Poison Jab }
   - { level: 56, move: Toxic }
+  - { level: 60, move: Wave Crash }

@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Spite }
   - { level: 4, move: Rock Smash }
+  - { level: 6, move: Undertow }
   - { level: 8, move: Fury Cutter }
   - { level: 12, move: Mud Shot }
   - { level: 14, move: Water Whip }
@@ -17,8 +18,10 @@ learnset:
   - { level: 20, move: Iron Defense }
   - { level: 24, move: Sucker Punch }
   - { level: 28, move: Slash }
+  - { level: 30, move: Maelstrom }
   - { level: 32, move: Razor Shell }
   - { level: 36, move: Pin Missile }
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Liquidation }
   - { level: 55, move: Pixie Slash }
+  - { level: 60, move: Wave Crash }

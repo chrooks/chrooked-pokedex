@@ -1,0 +1,11 @@
+name: Undertow
+chrooked_id: undertow
+aka: { pokeemerald: MOVE_UNDERTOW }
+type: Water
+category: physical
+power: 50
+accuracy: 100
+pp: 30
+description: A staggering undertow drags the target down. May make it flinch.
+additional_effects:
+  - { effect: flinch, chance: 10 }

@@ -5,13 +5,16 @@ stats: { atk: 110 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
+  - { level: 4, move: Undertow }
   - { level: 7, move: Protect }
   - { level: 14, move: Brutal Swing }
   - { level: 17, move: Water Whip }
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Bite }
+  - { level: 31, move: Maelstrom }
   - { level: 35, move: Dragon Breath }
   - { level: 42, move: Stomp }
+  - { level: 45, move: Wave Crash }
   - { level: 49, move: Super Fang }
   - { level: 56, move: Crunch }
   - { level: 63, move: Fishious Rend }

@@ -5,9 +5,12 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Splash }
+  - { level: 2, move: Undertow }
   - { level: 3, move: Helping Hand }
   - { level: 6, move: Bubble Beam }
   - { level: 9, move: Charm }
   - { level: 12, move: Body Slam }
   - { level: 15, move: Bounce }
   - { level: 26, move: Water Whip }
+  - { level: 45, move: Maelstrom }
+  - { level: 60, move: Wave Crash }

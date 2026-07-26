@@ -3,6 +3,7 @@ chrooked_id: castformrainy
 aka: { dex: 351 }
 learnset:
   - { level: 1, move: Tackle }
+  - { level: 5, move: Undertow }
   - { level: 10, move: Water Gun }
   - { level: 10, move: Ember }
   - { level: 10, move: Powder Snow }
@@ -12,7 +13,9 @@ learnset:
   - { level: 20, move: Sunny Day }
   - { level: 20, move: Hail }
   - { level: 25, move: Weather Ball }
+  - { level: 30, move: Maelstrom }
   - { level: 35, move: Hydro Pump }
   - { level: 35, move: Fire Blast }
   - { level: 35, move: Blizzard }
   - { level: 45, move: Hurricane }
+  - { level: 60, move: Wave Crash }
