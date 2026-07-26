@@ -19,6 +19,7 @@ learnset:
   - { level: 28, move: Syrup Bomb }
   - { level: 32, move: Dragon Pulse }
   - { level: 36, move: Recover }
+  - { level: 38, move: Cataclysm }
   - { level: 40, move: Earth Power }
   - { level: 44, move: Energy Ball }
   - { level: 48, move: Draco Meteor }

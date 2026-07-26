@@ -21,8 +21,10 @@ learnset:
   - { level: 28, move: Sing }
   - { level: 32, move: Cotton Guard }
   - { level: 35, move: Bail Out }
+  - { level: 35, move: Cataclysm }
   - { level: 38, move: Take Down }
   - { level: 41, move: Dive Bomb }
   - { level: 44, move: Moonblast }
   - { level: 50, move: Perish Song }
   - { level: 56, move: Sky Attack }
+  - { level: 60, move: Draco Meteor }

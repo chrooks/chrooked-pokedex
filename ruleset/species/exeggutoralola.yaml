@@ -1,13 +1,10 @@
-name: Exeggutor
-chrooked_id: exeggutor
-aka: { pokeemerald: SPECIES_EXEGGUTOR }
-abilities:
-  primary: Chloroplast
-  secondary: Harvest
-stats: { hp: 100, spe: 45 }
+name: Exeggutor Alola
+chrooked_id: exeggutoralola
+aka: {  }
 learnset:
-  - { level: 0, move: Stomp }
+  - { level: 0, move: Dragon Hammer }
   - { level: 1, move: Growth }
+  - { level: 1, move: Wood Hammer }
   - { level: 1, move: Leaf Storm }
   - { level: 1, move: Seed Bomb }
   - { level: 1, move: Worry Seed }
@@ -15,16 +12,14 @@ learnset:
   - { level: 1, move: Extrasensory }
   - { level: 1, move: Uproar }
   - { level: 1, move: Synthesis }
-  - { level: 1, move: Psyshock }
+  - { level: 1, move: Giga Drain }
   - { level: 1, move: Reflect }
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Confusion }
   - { level: 1, move: Solar Beam }
   - { level: 1, move: Leech Seed }
   - { level: 1, move: Mega Drain }
+  - { level: 1, move: Psyshock }
   - { level: 1, move: Absorb }
-  - { level: 1, move: Wood Hammer }
-  - { level: 1, move: Giga Drain }
   - { level: 45, move: Cataclysm }
   - { level: 60, move: Draco Meteor }
-evolution: { from: Exeggcute, method: { item: LEAFSTONE } }

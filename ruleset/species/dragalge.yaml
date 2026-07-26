@@ -17,9 +17,11 @@ learnset:
   - { level: 25, move: Poison Tail }
   - { level: 30, move: Water Pulse }
   - { level: 35, move: Toxic }
+  - { level: 37, move: Cataclysm }
   - { level: 40, move: Dragon Pulse }
   - { level: 45, move: Aqua Tail }
   - { level: 48, move: Miasma }
+  - { level: 48, move: Draco Meteor }
   - { level: 52, move: Sludge Bomb }
   - { level: 59, move: Hydro Pump }
   - { level: 66, move: Outrage }

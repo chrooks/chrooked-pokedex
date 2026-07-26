@@ -1,0 +1,19 @@
+name: Exeggcute
+chrooked_id: exeggcute
+aka: {  }
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Hypnosis }
+  - { level: 5, move: Reflect }
+  - { level: 10, move: Leech Seed }
+  - { level: 15, move: Mega Drain }
+  - { level: 20, move: Confusion }
+  - { level: 25, move: Synthesis }
+  - { level: 30, move: Bullet Seed }
+  - { level: 35, move: Giga Drain }
+  - { level: 37, move: Cataclysm }
+  - { level: 40, move: Extrasensory }
+  - { level: 45, move: Uproar }
+  - { level: 50, move: Worry Seed }
+  - { level: 55, move: Solar Beam }
+  - { level: 60, move: Draco Meteor }

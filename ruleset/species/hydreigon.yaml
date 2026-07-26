@@ -19,9 +19,11 @@ learnset:
   - { level: 30, move: Draconic Fang }
   - { level: 32, move: Crunch }
   - { level: 36, move: Scary Face }
+  - { level: 38, move: Cataclysm }
   - { level: 40, move: Dragon Pulse }
   - { level: 44, move: Body Slam }
   - { level: 48, move: Hyper Voice }
+  - { level: 51, move: Draco Meteor }
   - { level: 54, move: Dragon Rush }
   - { level: 60, move: Nasty Plot }
   - { level: 68, move: Outrage }

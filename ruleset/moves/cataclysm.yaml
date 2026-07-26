@@ -1,0 +1,9 @@
+name: Cataclysm
+chrooked_id: cataclysm
+aka: { pokeemerald: MOVE_CATACLYSM }
+type: Dragon
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: The user unleashes a draconic cataclysm of raw arcane power.

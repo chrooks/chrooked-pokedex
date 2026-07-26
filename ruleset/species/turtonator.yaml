@@ -15,7 +15,9 @@ learnset:
   - { level: 28, move: Dragon Pulse }
   - { level: 32, move: Body Slam }
   - { level: 36, move: Flamethrower }
+  - { level: 38, move: Cataclysm }
   - { level: 40, move: Shell Trap }
   - { level: 44, move: Shell Smash }
   - { level: 48, move: Overheat }
   - { level: 52, move: Explosion }
+  - { level: 60, move: Draco Meteor }

@@ -22,8 +22,10 @@ learnset:
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
   - { level: 39, move: Luster Cannon }
+  - { level: 39, move: Cataclysm }
   - { level: 43, move: Curse }
   - { level: 49, move: Body Slam }
   - { level: 56, move: Muddy Water }
+  - { level: 60, move: Draco Meteor }
   - { level: 62, move: Steel Beam }
 evolution: { from: Goomy, method: { pokeemerald: EVO_LEVEL_FOG, param: 35 } }
