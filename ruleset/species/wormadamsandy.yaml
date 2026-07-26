@@ -23,3 +23,4 @@ learnset:
   - { level: 44, move: Psychic }
   - { level: 47, move: Fissure }
   - { level: 50, move: Bug Buzz }
+  - { level: 64, move: Faultbreak }

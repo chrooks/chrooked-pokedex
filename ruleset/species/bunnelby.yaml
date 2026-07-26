@@ -19,3 +19,4 @@ learnset:
   - { level: 36, move: Earthquake }
   - { level: 39, move: Super Fang }
   - { level: 46, move: Rampage }
+  - { level: 64, move: Faultbreak }

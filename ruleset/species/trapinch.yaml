@@ -19,3 +19,4 @@ learnset:
   - { level: 40, move: Earthquake }
   - { level: 44, move: Superpower }
   - { level: 48, move: Fissure }
+  - { level: 64, move: Faultbreak }

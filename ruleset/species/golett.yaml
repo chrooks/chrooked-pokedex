@@ -26,3 +26,4 @@ learnset:
   - { level: 58, move: Focus Punch }
   - { level: 62, move: Necrosis }
   - { level: 64, move: Dynamic Punch }
+  - { level: 64, move: Faultbreak }

@@ -18,3 +18,4 @@ learnset:
   - { level: 36, move: Toxic }
   - { level: 40, move: Earthquake }
   - { level: 46, move: Venom Slam }
+  - { level: 64, move: Faultbreak }

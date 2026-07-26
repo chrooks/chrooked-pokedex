@@ -22,6 +22,7 @@ learnset:
   - { level: 42, move: Rest }
   - { level: 46, move: Focus Blast }
   - { level: 50, move: Moonblast }
+  - { level: 52, move: Faultbreak }
   - { level: 55, move: Lunar Blessing }
   - { level: 60, move: Tri Attack }
   - { level: 60, move: Sinkhole }

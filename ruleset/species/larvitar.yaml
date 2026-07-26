@@ -25,3 +25,4 @@ learnset:
   - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }
+  - { level: 64, move: Faultbreak }

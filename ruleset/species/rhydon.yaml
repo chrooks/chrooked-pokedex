@@ -22,5 +22,6 @@ learnset:
   - { level: 40, move: Take Down }
   - { level: 47, move: Earthquake }
   - { level: 54, move: Stone Edge }
+  - { level: 57, move: Faultbreak }
   - { level: 61, move: Megahorn }
   - { level: 68, move: Horn Drill }

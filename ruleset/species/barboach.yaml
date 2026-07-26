@@ -20,3 +20,4 @@ learnset:
   - { level: 42, move: Future Sight }
   - { level: 48, move: Fissure }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Faultbreak }

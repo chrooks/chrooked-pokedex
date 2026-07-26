@@ -18,3 +18,4 @@ learnset:
   - { level: 45, move: Snap Trap }
   - { level: 50, move: Flail }
   - { level: 55, move: Fissure }
+  - { level: 64, move: Faultbreak }

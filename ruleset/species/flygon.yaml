@@ -30,5 +30,6 @@ learnset:
   - { level: 38, move: Earth Power }
   - { level: 44, move: Earthquake }
   - { level: 52, move: Uproar }
+  - { level: 56, move: Faultbreak }
   - { level: 60, move: Dragon Rush }
   - { level: 68, move: Boomburst }

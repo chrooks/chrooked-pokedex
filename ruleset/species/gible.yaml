@@ -21,3 +21,4 @@ learnset:
   - { level: 48, move: Sandstorm }
   - { level: 54, move: Take Down }
   - { level: 60, move: Dragon Rush }
+  - { level: 64, move: Faultbreak }

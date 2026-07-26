@@ -25,6 +25,7 @@ learnset:
   - { level: 45, move: Crunch }
   - { level: 48, move: Grav Apple }
   - { level: 51, move: Headlong Rush }
+  - { level: 54, move: Faultbreak }
   - { level: 57, move: Wood Hammer }
   - { level: 63, move: Head Smash }
   - { level: 68, move: Solar Blade }

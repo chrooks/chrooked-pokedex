@@ -26,5 +26,6 @@ learnset:
   - { level: 46, move: Body Press }
   - { level: 48, move: Sludge Wave }
   - { level: 52, move: Earthquake }
+  - { level: 53, move: Faultbreak }
   - { level: 58, move: Superpower }
 evolution: { from: Nidoran F, method: { level: 16 } }

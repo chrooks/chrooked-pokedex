@@ -27,5 +27,6 @@ learnset:
   - { level: 42, move: Muddy Water }
   - { level: 45, move: Wave Crash }
   - { level: 49, move: Screech }
+  - { level: 52, move: Faultbreak }
   - { level: 56, move: Endeavor }
   - { level: 63, move: Hydro Pump }

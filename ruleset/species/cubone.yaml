@@ -23,3 +23,4 @@ learnset:
   - { level: 44, move: Earthquake }
   - { level: 48, move: Double-Edge }
   - { level: 62, move: Necrosis }
+  - { level: 64, move: Faultbreak }

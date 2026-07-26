@@ -23,6 +23,7 @@ learnset:
   - { level: 44, move: Shadow Ball }
   - { level: 50, move: Earthquake }
   - { level: 53, move: Necrosis }
+  - { level: 53, move: Faultbreak }
   - { level: 56, move: Power Split }
   - { level: 56, move: Guard Split }
   - { level: 62, move: Destiny Bond }

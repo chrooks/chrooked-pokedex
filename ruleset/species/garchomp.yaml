@@ -20,6 +20,7 @@ learnset:
   - { level: 42, move: Dragon Claw }
   - { level: 47, move: Pixie Slash }
   - { level: 52, move: Dig }
+  - { level: 57, move: Faultbreak }
   - { level: 62, move: Sandstorm }
   - { level: 72, move: Take Down }
   - { level: 82, move: Dragon Rush }

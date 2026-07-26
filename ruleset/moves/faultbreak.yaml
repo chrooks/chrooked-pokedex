@@ -1,0 +1,10 @@
+name: Faultbreak
+chrooked_id: faultbreak
+aka: { pokeemerald: MOVE_FAULTBREAK }
+type: Ground
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: The ground ruptures under a savage charge that batters the user too.
+effect: recoil

@@ -21,3 +21,4 @@ learnset:
   - { level: 41, move: Wood Hammer }
   - { level: 45, move: Head Smash }
   - { level: 48, move: Solar Blade }
+  - { level: 64, move: Faultbreak }

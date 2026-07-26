@@ -7,3 +7,4 @@ learnset:
   - { level: 15, move: Bug Bite }
   - { level: 20, move: String Shot }
   - { level: 46, move: Moltstrike }
+  - { level: 64, move: Faultbreak }

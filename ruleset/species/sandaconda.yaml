@@ -17,3 +17,4 @@ learnset:
   - { level: 42, move: Body Slam }
   - { level: 49, move: Coil }
   - { level: 51, move: Sand Tomb }
+  - { level: 64, move: Faultbreak }

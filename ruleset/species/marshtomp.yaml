@@ -23,3 +23,4 @@ learnset:
   - { level: 50, move: Endeavor }
   - { level: 55, move: Hydro Pump }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Faultbreak }

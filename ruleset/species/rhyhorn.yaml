@@ -23,3 +23,4 @@ learnset:
   - { level: 50, move: Stone Edge }
   - { level: 55, move: Megahorn }
   - { level: 60, move: Horn Drill }
+  - { level: 64, move: Faultbreak }

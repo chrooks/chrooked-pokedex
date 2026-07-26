@@ -28,3 +28,4 @@ learnset:
   - { level: 48, move: Havoc }
   - { level: 51, move: Thrash }
   - { level: 58, move: Outrage }
+  - { level: 64, move: Faultbreak }

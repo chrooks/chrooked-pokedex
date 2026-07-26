@@ -27,3 +27,4 @@ learnset:
   - { level: 48, move: Earthquake }
   - { level: 52, move: Head Smash }
   - { level: 56, move: Double-Edge }
+  - { level: 64, move: Faultbreak }

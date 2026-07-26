@@ -20,3 +20,4 @@ learnset:
   - { level: 48, move: Earthquake }
   - { level: 53, move: Super Fang }
   - { level: 58, move: Hammer Arm }
+  - { level: 64, move: Faultbreak }

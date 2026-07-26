@@ -28,3 +28,4 @@ learnset:
   - { level: 48, move: Sludge Wave }
   - { level: 52, move: Earthquake }
   - { level: 58, move: Superpower }
+  - { level: 64, move: Faultbreak }

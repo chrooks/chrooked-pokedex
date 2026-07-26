@@ -20,3 +20,4 @@ learnset:
   - { level: 40, move: Earthquake }
   - { level: 45, move: Maelstrom }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Faultbreak }

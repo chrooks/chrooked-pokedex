@@ -22,3 +22,4 @@ learnset:
   - { level: 36, move: Earthquake }
   - { level: 40, move: Mega Kick }
   - { level: 44, move: Superpower }
+  - { level: 64, move: Faultbreak }

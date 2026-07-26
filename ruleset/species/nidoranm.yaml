@@ -29,3 +29,4 @@ learnset:
   - { level: 50, move: Gunk Shot }
   - { level: 54, move: Earthquake }
   - { level: 58, move: Sludge Wave }
+  - { level: 64, move: Faultbreak }

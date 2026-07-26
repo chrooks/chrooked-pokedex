@@ -19,3 +19,4 @@ learnset:
   - { level: 36, move: Explosion }
   - { level: 40, move: Double-Edge }
   - { level: 42, move: Stone Edge }
+  - { level: 64, move: Faultbreak }
