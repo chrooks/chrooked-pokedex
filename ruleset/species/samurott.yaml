@@ -26,6 +26,7 @@ learnset:
   - { level: 42, move: Pixie Slash }
   - { level: 42, move: Maelstrom }
   - { level: 42, move: Backstab }
+  - { level: 42, move: Cross Chop }
   - { level: 46, move: Aqua Tail }
   - { level: 51, move: Retaliate }
   - { level: 54, move: Secret Sword }

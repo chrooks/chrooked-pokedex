@@ -20,6 +20,7 @@ learnset:
   - { level: 32, move: Ki Blast }
   - { level: 34, move: Seismic Toss }
   - { level: 36, move: One-Inch Punch }
+  - { level: 36, move: Cross Chop }
   - { level: 38, move: Focus Punch }
   - { level: 42, move: Endure }
   - { level: 46, move: Close Combat }

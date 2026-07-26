@@ -17,6 +17,7 @@ learnset:
   - { level: 28, move: Iron Defense }
   - { level: 32, move: Dragon Claw }
   - { level: 38, move: Noble Roar }
+  - { level: 41, move: Cross Chop }
   - { level: 44, move: Dragon Dance }
   - { level: 48, move: Dragon Hammer }
   - { level: 52, move: Outrage }

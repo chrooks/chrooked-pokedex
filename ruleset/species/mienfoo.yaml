@@ -14,6 +14,7 @@ learnset:
   - { level: 25, move: Force Palm }
   - { level: 30, move: U-turn }
   - { level: 35, move: Drain Punch }
+  - { level: 37, move: Cross Chop }
   - { level: 40, move: Hone Claws }
   - { level: 45, move: Aura Sphere }
   - { level: 48, move: One-Inch Punch }

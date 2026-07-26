@@ -22,6 +22,7 @@ learnset:
   - { level: 34, move: Dynamic Punch }
   - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Hammer Arm }
+  - { level: 38, move: Cross Chop }
   - { level: 42, move: Stone Edge }
   - { level: 46, move: Superpower }
   - { level: 62, move: Focus Blast }

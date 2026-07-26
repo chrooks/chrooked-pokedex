@@ -15,6 +15,7 @@ learnset:
   - { level: 35, move: Sucker Punch }
   - { level: 37, move: One-Inch Punch }
   - { level: 37, move: Interment }
+  - { level: 37, move: Cross Chop }
   - { level: 40, move: Leaf Blade }
   - { level: 42, move: Dive Bomb }
   - { level: 45, move: Feather Dance }

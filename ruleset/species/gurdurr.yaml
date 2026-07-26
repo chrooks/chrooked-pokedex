@@ -21,6 +21,7 @@ learnset:
   - { level: 33, move: Ki Blast }
   - { level: 36, move: Dynamic Punch }
   - { level: 39, move: One-Inch Punch }
+  - { level: 39, move: Cross Chop }
   - { level: 42, move: Hammer Arm }
   - { level: 45, move: Focus Blast }
   - { level: 48, move: Stone Edge }

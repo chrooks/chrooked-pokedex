@@ -33,6 +33,7 @@ learnset:
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Bone Rush }
   - { level: 38, move: Luster Cannon }
+  - { level: 38, move: Cross Chop }
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Heal Pulse }
   - { level: 46, move: Focus Blast }

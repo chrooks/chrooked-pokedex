@@ -30,6 +30,7 @@ learnset:
   - { level: 41, move: Astral Hand }
   - { level: 41, move: Ki Blast }
   - { level: 41, move: Kinetic Slam }
+  - { level: 41, move: Cross Chop }
   - { level: 44, move: One-Inch Punch }
   - { level: 47, move: Recover }
   - { level: 53, move: Counter }

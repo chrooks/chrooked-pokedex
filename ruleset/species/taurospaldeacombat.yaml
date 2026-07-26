@@ -5,3 +5,19 @@ abilities:
   primary: Intimidate
   secondary: Stampede
   hidden: Cud Chew
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Work Up }
+  - { level: 10, move: Double Kick }
+  - { level: 15, move: Assurance }
+  - { level: 20, move: Headbutt }
+  - { level: 25, move: Scary Face }
+  - { level: 30, move: Zen Headbutt }
+  - { level: 35, move: Raging Bull }
+  - { level: 37, move: Cross Chop }
+  - { level: 40, move: Rest }
+  - { level: 45, move: Swagger }
+  - { level: 50, move: Thrash }
+  - { level: 55, move: Double-Edge }
+  - { level: 60, move: Close Combat }

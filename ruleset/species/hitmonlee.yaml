@@ -23,6 +23,7 @@ learnset:
   - { level: 30, move: Ki Blast }
   - { level: 32, move: Mega Kick }
   - { level: 36, move: Close Combat }
+  - { level: 38, move: Cross Chop }
   - { level: 40, move: Reversal }
   - { level: 44, move: High Jump Kick }
   - { level: 47, move: One-Inch Punch }

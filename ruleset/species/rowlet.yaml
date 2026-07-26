@@ -19,6 +19,7 @@ learnset:
   - { level: 40, move: Dive Bomb }
   - { level: 42, move: Interment }
   - { level: 45, move: One-Inch Punch }
+  - { level: 46, move: Cross Chop }
   - { level: 48, move: Wraithstrike }
   - { level: 55, move: Pixie Slash }
   - { level: 62, move: Necrosis }

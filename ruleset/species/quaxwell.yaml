@@ -17,6 +17,7 @@ learnset:
   - { level: 27, move: Air Slash }
   - { level: 32, move: Focus Energy }
   - { level: 35, move: Maelstrom }
+  - { level: 36, move: Cross Chop }
   - { level: 38, move: Acrobatics }
   - { level: 43, move: Liquidation }
   - { level: 48, move: Feather Dance }

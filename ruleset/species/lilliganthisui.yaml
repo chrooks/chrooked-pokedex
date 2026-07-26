@@ -1,4 +1,29 @@
 name: Lilligant Hisui
 chrooked_id: lilliganthisui
 aka: { pokeemerald: SPECIES_LILLIGANT_HISUI }
+learnset:
+  - { level: 0, move: Victory Dance }
+  - { level: 1, move: Teeter Dance }
+  - { level: 1, move: Solar Blade }
+  - { level: 1, move: Petal Blizzard }
+  - { level: 1, move: After You }
+  - { level: 1, move: Entrainment }
+  - { level: 1, move: Leaf Storm }
+  - { level: 1, move: Defog }
+  - { level: 1, move: Energy Ball }
+  - { level: 1, move: Leaf Blade }
+  - { level: 1, move: Magical Leaf }
+  - { level: 1, move: Mega Kick }
+  - { level: 1, move: Sunny Day }
+  - { level: 1, move: Synthesis }
+  - { level: 1, move: Giga Drain }
+  - { level: 1, move: Sleep Powder }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Leech Seed }
+  - { level: 1, move: Mega Drain }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Helping Hand }
+  - { level: 5, move: Axe Kick }
+  - { level: 46, move: Cross Chop }
 evolution: { from: Petilil, method: { item: Sun Stone } }

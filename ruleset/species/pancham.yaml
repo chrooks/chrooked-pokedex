@@ -19,6 +19,7 @@ learnset:
   - { level: 36, move: Crunch }
   - { level: 37, move: One-Inch Punch }
   - { level: 38, move: Backstab }
+  - { level: 38, move: Cross Chop }
   - { level: 39, move: Knock Off }
   - { level: 43, move: Heel Drop }
   - { level: 46, move: Parting Shot }

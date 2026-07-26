@@ -17,4 +17,5 @@ learnset:
   - { level: 31, move: Acrobatics }
   - { level: 35, move: Liquidation }
   - { level: 45, move: Maelstrom }
+  - { level: 46, move: Cross Chop }
   - { level: 60, move: Wave Crash }

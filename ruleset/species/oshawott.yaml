@@ -24,6 +24,7 @@ learnset:
   - { level: 39, move: Backstab }
   - { level: 41, move: Swords Dance }
   - { level: 43, move: Hydro Pump }
+  - { level: 46, move: Cross Chop }
   - { level: 48, move: Aura Sphere }
   - { level: 55, move: Pixie Slash }
   - { level: 60, move: Secret Sword }
