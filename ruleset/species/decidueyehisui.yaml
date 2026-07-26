@@ -15,6 +15,7 @@ learnset:
   - { level: 25, move: Pluck }
   - { level: 30, move: Bulk Up }
   - { level: 34, move: One-Inch Punch }
+  - { level: 36, move: Reap }
   - { level: 37, move: Sucker Punch }
   - { level: 39, move: Wraithstrike }
   - { level: 40, move: Cross Chop }

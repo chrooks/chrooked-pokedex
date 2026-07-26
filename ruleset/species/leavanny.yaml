@@ -15,6 +15,7 @@ learnset:
   - { level: 29, move: Fell Stinger }
   - { level: 32, move: Helping Hand }
   - { level: 36, move: Leaf Blade }
+  - { level: 37, move: Reap }
   - { level: 39, move: X-Scissor }
   - { level: 41, move: Moltstrike }
   - { level: 43, move: Entrainment }

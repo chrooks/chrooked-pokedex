@@ -25,5 +25,6 @@ learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Helping Hand }
   - { level: 5, move: Axe Kick }
+  - { level: 36, move: Reap }
   - { level: 46, move: Cross Chop }
 evolution: { from: Petilil, method: { item: Sun Stone } }

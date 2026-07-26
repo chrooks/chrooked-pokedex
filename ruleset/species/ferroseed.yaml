@@ -1,0 +1,17 @@
+name: Ferroseed
+chrooked_id: ferroseed
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Harden }
+  - { level: 5, move: Metal Claw }
+  - { level: 10, move: Pin Missile }
+  - { level: 15, move: Ingrain }
+  - { level: 20, move: Flash Cannon }
+  - { level: 25, move: Iron Head }
+  - { level: 30, move: Self-Destruct }
+  - { level: 35, move: Iron Defense }
+  - { level: 38, move: Reap }
+  - { level: 41, move: Curse }
+  - { level: 45, move: Gyro Ball }
+  - { level: 50, move: Explosion }

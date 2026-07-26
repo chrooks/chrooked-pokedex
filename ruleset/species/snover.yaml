@@ -4,3 +4,17 @@ aka: { pokeemerald: SPECIES_SNOVER }
 abilities:
   secondary: Ice Scales
   hidden: Mountaineer
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Powder Snow }
+  - { level: 5, move: Leafage }
+  - { level: 10, move: Mist }
+  - { level: 15, move: Ice Shard }
+  - { level: 20, move: Razor Leaf }
+  - { level: 25, move: Icy Wind }
+  - { level: 30, move: Swagger }
+  - { level: 35, move: Ingrain }
+  - { level: 38, move: Reap }
+  - { level: 41, move: Wood Hammer }
+  - { level: 45, move: Blizzard }
+  - { level: 50, move: Sheer Cold }

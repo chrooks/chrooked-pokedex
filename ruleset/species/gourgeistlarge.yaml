@@ -20,5 +20,6 @@ learnset:
   - { level: 40, move: Trick }
   - { level: 42, move: Wraithstrike }
   - { level: 44, move: Pain Split }
+  - { level: 46, move: Reap }
   - { level: 48, move: Phantom Force }
   - { level: 62, move: Necrosis }

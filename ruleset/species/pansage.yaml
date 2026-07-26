@@ -2,3 +2,21 @@ name: Pansage
 chrooked_id: pansage
 aka: { pokeemerald: SPECIES_PANSAGE }
 stats: { atk: 60 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Play Nice }
+  - { level: 4, move: Leer }
+  - { level: 7, move: Lick }
+  - { level: 10, move: Vine Whip }
+  - { level: 13, move: Fury Swipes }
+  - { level: 16, move: Leech Seed }
+  - { level: 19, move: Bite }
+  - { level: 22, move: Seed Bomb }
+  - { level: 25, move: Torment }
+  - { level: 28, move: Fling }
+  - { level: 31, move: Acrobatics }
+  - { level: 34, move: Grass Knot }
+  - { level: 37, move: Recycle }
+  - { level: 40, move: Natural Gift }
+  - { level: 43, move: Crunch }
+  - { level: 46, move: Reap }

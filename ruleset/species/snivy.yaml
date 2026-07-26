@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_SNIVY }
 abilities:
   primary: Chloroplast
 stats: { atk: 50, spa: 50 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Leer }
+  - { level: 7, move: Vine Whip }
+  - { level: 10, move: Wrap }
+  - { level: 13, move: Growth }
+  - { level: 16, move: Magical Leaf }
+  - { level: 19, move: Leech Seed }
+  - { level: 22, move: Mega Drain }
+  - { level: 25, move: Slam }
+  - { level: 28, move: Leaf Blade }
+  - { level: 31, move: Coil }
+  - { level: 34, move: Giga Drain }
+  - { level: 37, move: Gastro Acid }
+  - { level: 40, move: Leaf Storm }
+  - { level: 46, move: Reap }

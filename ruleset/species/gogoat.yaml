@@ -6,3 +6,23 @@ abilities:
   secondary: Mountaineer
   hidden: Foliate
 stats: { atk: 105 }
+learnset:
+  - { level: 0, move: Aerial Ace }
+  - { level: 1, move: Earthquake }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Vine Whip }
+  - { level: 1, move: Tackle }
+  - { level: 12, move: Leech Seed }
+  - { level: 13, move: Razor Leaf }
+  - { level: 16, move: Worry Seed }
+  - { level: 20, move: Synthesis }
+  - { level: 22, move: Take Down }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Seed Bomb }
+  - { level: 34, move: Bulk Up }
+  - { level: 37, move: Reap }
+  - { level: 40, move: Double-Edge }
+  - { level: 47, move: Horn Leech }
+  - { level: 55, move: Leaf Blade }
+  - { level: 58, move: Milk Drink }

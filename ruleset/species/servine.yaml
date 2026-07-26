@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_SERVINE }
 abilities:
   primary: Chloroplast
 stats: { atk: 70, spa: 70 }
+learnset:
+  - { level: 1, move: Vine Whip }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Leer }
+  - { level: 13, move: Growth }
+  - { level: 16, move: Magical Leaf }
+  - { level: 20, move: Leech Seed }
+  - { level: 24, move: Mega Drain }
+  - { level: 28, move: Slam }
+  - { level: 32, move: Leaf Blade }
+  - { level: 36, move: Coil }
+  - { level: 38, move: Reap }
+  - { level: 40, move: Giga Drain }
+  - { level: 44, move: Gastro Acid }
+  - { level: 48, move: Leaf Storm }

@@ -2,3 +2,21 @@ name: Rillaboom
 chrooked_id: rillaboom
 aka: { pokeemerald: SPECIES_RILLABOOM }
 stats: { spd: 75, spe: 90 }
+learnset:
+  - { level: 0, move: Drum Beating }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Double Hit }
+  - { level: 1, move: Noble Roar }
+  - { level: 1, move: Grassy Terrain }
+  - { level: 1, move: Branch Poke }
+  - { level: 12, move: Razor Leaf }
+  - { level: 19, move: Screech }
+  - { level: 24, move: Knock Off }
+  - { level: 30, move: Slam }
+  - { level: 38, move: Uproar }
+  - { level: 42, move: Reap }
+  - { level: 46, move: Wood Hammer }
+  - { level: 54, move: Endeavor }
+  - { level: 62, move: Boomburst }

@@ -17,6 +17,7 @@ learnset:
   - { level: 35, move: Backstab }
   - { level: 36, move: Heel Drop }
   - { level: 38, move: Energy Ball }
+  - { level: 40, move: Reap }
   - { level: 42, move: Play Rough }
   - { level: 46, move: Leaf Storm }
   - { level: 55, move: Night Slash }

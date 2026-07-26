@@ -17,6 +17,7 @@ learnset:
   - { level: 28, move: Rock Slide }
   - { level: 30, move: Mimic }
   - { level: 34, move: Hammer Arm }
+  - { level: 36, move: Reap }
   - { level: 38, move: Earthquake }
   - { level: 42, move: Wood Hammer }
   - { level: 46, move: Double-Edge }

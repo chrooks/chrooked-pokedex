@@ -1,0 +1,16 @@
+name: Grookey
+chrooked_id: grookey
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 6, move: Branch Poke }
+  - { level: 8, move: Taunt }
+  - { level: 12, move: Razor Leaf }
+  - { level: 17, move: Screech }
+  - { level: 20, move: Knock Off }
+  - { level: 24, move: Slam }
+  - { level: 28, move: Uproar }
+  - { level: 32, move: Wood Hammer }
+  - { level: 36, move: Endeavor }
+  - { level: 46, move: Reap }

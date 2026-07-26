@@ -16,5 +16,6 @@ learnset:
   - { level: 33, move: Toxic }
   - { level: 36, move: Seed Bomb }
   - { level: 40, move: Spore }
+  - { level: 43, move: Reap }
   - { level: 46, move: Cross Chop }
   - { level: 48, move: One-Inch Punch }

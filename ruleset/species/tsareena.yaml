@@ -22,6 +22,7 @@ learnset:
   - { level: 28, move: Night Slash }
   - { level: 32, move: Stomp }
   - { level: 36, move: Low Sweep }
+  - { level: 38, move: Reap }
   - { level: 40, move: Trop Kick }
   - { level: 42, move: Jump Kick }
   - { level: 44, move: Petal Blizzard }

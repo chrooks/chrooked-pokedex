@@ -1,0 +1,11 @@
+name: Reap
+chrooked_id: reap
+aka: { pokeemerald: MOVE_REAP }
+type: Grass
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user scythes the target and drinks its vigor, recovering a quarter of the damage dealt.
+effect: absorb
+argument: { absorb_percentage: 25 }

@@ -17,6 +17,7 @@ learnset:
   - { level: 25, move: Icy Wind }
   - { level: 30, move: Swagger }
   - { level: 35, move: Ingrain }
+  - { level: 39, move: Reap }
   - { level: 43, move: Wood Hammer }
   - { level: 49, move: Blizzard }
   - { level: 56, move: Sheer Cold }

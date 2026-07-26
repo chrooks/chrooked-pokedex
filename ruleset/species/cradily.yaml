@@ -24,5 +24,6 @@ learnset:
   - { level: 43, move: Stockpile }
   - { level: 43, move: Spit Up }
   - { level: 43, move: Swallow }
+  - { level: 45, move: Reap }
   - { level: 48, move: Energy Ball }
   - { level: 62, move: Meteor Surge }

@@ -10,5 +10,6 @@ learnset:
   - { level: 12, move: Acid Spray }
   - { level: 16, move: Dragon Tail }
   - { level: 20, move: Recover }
+  - { level: 36, move: Reap }
   - { level: 45, move: Cataclysm }
   - { level: 60, move: Draco Meteor }

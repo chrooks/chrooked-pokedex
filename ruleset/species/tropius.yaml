@@ -5,3 +5,20 @@ types: [Grass, Dragon]
 abilities:
   secondary: Solar Power
 stats: { hp: 100, atk: 90, def: 95, spa: 90, spd: 100, spe: 50 }
+learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Growth }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Leaf Storm }
+  - { level: 6, move: Sweet Scent }
+  - { level: 10, move: Stomp }
+  - { level: 16, move: Magical Leaf }
+  - { level: 21, move: Whirlwind }
+  - { level: 30, move: Wide Guard }
+  - { level: 36, move: Air Slash }
+  - { level: 38, move: Reap }
+  - { level: 41, move: Body Slam }
+  - { level: 46, move: Outrage }
+  - { level: 50, move: Synthesis }
+  - { level: 56, move: Solar Beam }

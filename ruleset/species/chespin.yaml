@@ -13,6 +13,7 @@ learnset:
   - { level: 35, move: Mud Shot }
   - { level: 38, move: One-Inch Punch }
   - { level: 38, move: Cross Chop }
+  - { level: 40, move: Reap }
   - { level: 42, move: Body Slam }
   - { level: 45, move: Pain Split }
   - { level: 48, move: Wood Hammer }

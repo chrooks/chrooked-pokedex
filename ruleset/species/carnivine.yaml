@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_CARNIVINE }
 abilities:
   secondary: Flytrap
 stats: { hp: 80, atk: 110 }
+learnset:
+  - { level: 1, move: Bind }
+  - { level: 1, move: Growth }
+  - { level: 7, move: Bite }
+  - { level: 11, move: Vine Whip }
+  - { level: 17, move: Sweet Scent }
+  - { level: 21, move: Ingrain }
+  - { level: 27, move: Grass Knot }
+  - { level: 31, move: Leaf Tornado }
+  - { level: 37, move: Stockpile }
+  - { level: 37, move: Spit Up }
+  - { level: 37, move: Swallow }
+  - { level: 41, move: Crunch }
+  - { level: 44, move: Reap }
+  - { level: 47, move: Seed Bomb }
+  - { level: 50, move: Power Whip }

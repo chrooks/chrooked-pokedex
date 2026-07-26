@@ -18,6 +18,7 @@ learnset:
   - { level: 27, move: Synthesis }
   - { level: 30, move: Sucker Punch }
   - { level: 33, move: Explosion }
+  - { level: 39, move: Reap }
   - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }

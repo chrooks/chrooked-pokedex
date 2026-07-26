@@ -14,6 +14,7 @@ learnset:
   - { level: 25, move: Mega Drain }
   - { level: 29, move: Disable }
   - { level: 35, move: Phantom Force }
+  - { level: 36, move: Reap }
   - { level: 37, move: Interment }
   - { level: 40, move: Giga Drain }
   - { level: 42, move: Wraithstrike }

@@ -20,6 +20,7 @@ learnset:
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 33, move: Leech Seed }
+  - { level: 36, move: Reap }
   - { level: 39, move: Synthesis }
   - { level: 45, move: Crunch }
   - { level: 48, move: Grav Apple }
