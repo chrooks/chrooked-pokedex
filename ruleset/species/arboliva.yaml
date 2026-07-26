@@ -23,6 +23,7 @@ learnset:
   - { level: 31, move: Seed Bomb }
   - { level: 36, move: Energy Ball }
   - { level: 42, move: Terrain Pulse }
+  - { level: 42, move: Resonance }
   - { level: 48, move: Matcha Gotcha }
   - { level: 54, move: Petal Blizzard }
   - { level: 60, move: Petal Dance }

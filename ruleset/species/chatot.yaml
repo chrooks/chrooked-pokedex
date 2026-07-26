@@ -4,3 +4,23 @@ aka: { pokeemerald: SPECIES_CHATOT }
 abilities:
   hidden: Amplifier
 stats: { atk: 90, def: 55, spa: 110, spd: 52, spe: 105 }
+learnset:
+  - { level: 1, move: Hyper Voice }
+  - { level: 1, move: Chatter }
+  - { level: 1, move: Confide }
+  - { level: 1, move: Taunt }
+  - { level: 5, move: Peck }
+  - { level: 9, move: Growl }
+  - { level: 13, move: Sing }
+  - { level: 17, move: Fury Attack }
+  - { level: 21, move: Chatter }
+  - { level: 25, move: Taunt }
+  - { level: 29, move: Round }
+  - { level: 33, move: Mimic }
+  - { level: 37, move: Echoed Voice }
+  - { level: 39, move: Resonance }
+  - { level: 41, move: Roost }
+  - { level: 45, move: Uproar }
+  - { level: 49, move: Parting Shot }
+  - { level: 50, move: Feather Dance }
+  - { level: 57, move: Hyper Voice }

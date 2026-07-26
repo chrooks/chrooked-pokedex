@@ -1,0 +1,9 @@
+name: Resonance
+chrooked_id: resonance
+aka: { pokeemerald: MOVE_RESONANCE }
+type: Normal
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: A resonant pulse of raw force.

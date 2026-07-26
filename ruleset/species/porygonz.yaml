@@ -2,7 +2,6 @@ name: Porygon Z
 chrooked_id: porygonz
 aka: { pokeemerald: SPECIES_PORYGON_Z }
 types: [Normal, Ghost]
-evolution: { from: Porygon2, method: { item: DUBIOUSDISC } }
 abilities:
   primary: Adaptability
   secondary: Download
@@ -20,9 +19,11 @@ learnset:
   - { level: 25, move: Conversion 2 }
   - { level: 30, move: Bail Out }
   - { level: 35, move: Recover }
+  - { level: 37, move: Resonance }
   - { level: 42, move: Thunderbolt }
   - { level: 48, move: Tri Attack }
   - { level: 54, move: Lock-On }
   - { level: 58, move: Zap Cannon }
   - { level: 64, move: Specter Bomb }
   - { level: 70, move: Hyper Beam }
+evolution: { from: Porygon2, method: { item: DUBIOUSDISC } }

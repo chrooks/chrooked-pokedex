@@ -1,0 +1,19 @@
+name: Indeedee M
+chrooked_id: indeedeem
+aka: {  }
+learnset:
+  - { level: 1, move: Stored Power }
+  - { level: 1, move: Play Nice }
+  - { level: 5, move: Encore }
+  - { level: 10, move: Disarming Voice }
+  - { level: 15, move: Psybeam }
+  - { level: 20, move: Helping Hand }
+  - { level: 25, move: After You }
+  - { level: 30, move: Healing Wish }
+  - { level: 35, move: Psychic }
+  - { level: 37, move: Resonance }
+  - { level: 37, move: Mindwarp }
+  - { level: 40, move: Calm Mind }
+  - { level: 45, move: Power Split }
+  - { level: 50, move: Psychic Terrain }
+  - { level: 55, move: Last Resort }

@@ -1,0 +1,20 @@
+name: Oranguru
+chrooked_id: oranguru
+aka: {  }
+learnset:
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Taunt }
+  - { level: 5, move: After You }
+  - { level: 10, move: Calm Mind }
+  - { level: 15, move: Stored Power }
+  - { level: 20, move: Psych Up }
+  - { level: 25, move: Quash }
+  - { level: 30, move: Nasty Plot }
+  - { level: 35, move: Zen Headbutt }
+  - { level: 37, move: Resonance }
+  - { level: 37, move: Mindwarp }
+  - { level: 40, move: Trick Room }
+  - { level: 45, move: Psychic }
+  - { level: 50, move: Instruct }
+  - { level: 55, move: Foul Play }
+  - { level: 60, move: Future Sight }

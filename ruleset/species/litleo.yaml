@@ -5,3 +5,20 @@ abilities:
   primary: Hubris
   secondary: Carnivore
   hidden: Intimidate
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Ember }
+  - { level: 8, move: Work Up }
+  - { level: 11, move: Headbutt }
+  - { level: 15, move: Noble Roar }
+  - { level: 20, move: Take Down }
+  - { level: 23, move: Fire Fang }
+  - { level: 28, move: Endeavor }
+  - { level: 33, move: Echoed Voice }
+  - { level: 36, move: Flamethrower }
+  - { level: 39, move: Crunch }
+  - { level: 41, move: Resonance }
+  - { level: 43, move: Hyper Voice }
+  - { level: 46, move: Incinerate }
+  - { level: 50, move: Overheat }

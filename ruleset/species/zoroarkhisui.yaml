@@ -15,6 +15,7 @@ learnset:
   - { level: 24, move: Knock Off }
   - { level: 28, move: Spite }
   - { level: 34, move: Agility }
+  - { level: 37, move: Resonance }
   - { level: 40, move: Shadow Ball }
   - { level: 46, move: Bitter Malice }
   - { level: 52, move: Nasty Plot }

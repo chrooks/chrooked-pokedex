@@ -3,3 +3,20 @@ chrooked_id: hoothoot
 aka: { pokeemerald: SPECIES_HOOTHOOT }
 abilities:
   secondary: Psyonize
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Peck }
+  - { level: 3, move: Tackle }
+  - { level: 6, move: Echoed Voice }
+  - { level: 9, move: Confusion }
+  - { level: 12, move: Reflect }
+  - { level: 15, move: Defog }
+  - { level: 18, move: Air Slash }
+  - { level: 21, move: Extrasensory }
+  - { level: 24, move: Take Down }
+  - { level: 27, move: Uproar }
+  - { level: 30, move: Roost }
+  - { level: 33, move: Moonblast }
+  - { level: 36, move: Hypnosis }
+  - { level: 39, move: Dream Eater }
+  - { level: 46, move: Resonance }

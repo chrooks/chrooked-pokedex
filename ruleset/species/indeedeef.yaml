@@ -1,0 +1,18 @@
+name: Indeedee F
+chrooked_id: indeedeef
+aka: {  }
+learnset:
+  - { level: 1, move: Stored Power }
+  - { level: 1, move: Play Nice }
+  - { level: 5, move: Baton Pass }
+  - { level: 10, move: Disarming Voice }
+  - { level: 15, move: Psybeam }
+  - { level: 20, move: Helping Hand }
+  - { level: 25, move: Follow Me }
+  - { level: 30, move: Healing Wish }
+  - { level: 35, move: Psychic }
+  - { level: 37, move: Resonance }
+  - { level: 37, move: Mindwarp }
+  - { level: 40, move: Calm Mind }
+  - { level: 45, move: Guard Split }
+  - { level: 50, move: Psychic Terrain }

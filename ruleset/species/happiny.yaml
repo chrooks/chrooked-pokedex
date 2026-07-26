@@ -5,3 +5,12 @@ abilities:
   primary: Natural Cure
   secondary: Self Sufficient
   hidden: Friend Guard
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Copycat }
+  - { level: 4, move: Defense Curl }
+  - { level: 8, move: Sweet Kiss }
+  - { level: 12, move: Disarming Voice }
+  - { level: 16, move: Covet }
+  - { level: 20, move: Charm }
+  - { level: 46, move: Resonance }

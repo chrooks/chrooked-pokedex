@@ -5,3 +5,25 @@ abilities:
   primary: Natural Cure
   secondary: Self Sufficient
   hidden: Healer
+learnset:
+  - { level: 1, move: Charm }
+  - { level: 1, move: Copycat }
+  - { level: 1, move: Covet }
+  - { level: 1, move: Disarming Voice }
+  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Defense Curl }
+  - { level: 4, move: Tail Whip }
+  - { level: 8, move: Echoed Voice }
+  - { level: 12, move: Life Dew }
+  - { level: 16, move: Sing }
+  - { level: 20, move: Fling }
+  - { level: 24, move: Take Down }
+  - { level: 28, move: Heal Pulse }
+  - { level: 32, move: Helping Hand }
+  - { level: 36, move: Light Screen }
+  - { level: 38, move: Resonance }
+  - { level: 40, move: Double-Edge }
+  - { level: 44, move: Soft-Boiled }
+  - { level: 48, move: Last Resort }
+  - { level: 52, move: Healing Wish }
