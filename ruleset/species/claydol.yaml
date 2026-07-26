@@ -25,6 +25,8 @@ learnset:
   - { level: 38, move: Guard Split }
   - { level: 38, move: Power Split }
   - { level: 40, move: Kinetic Slam }
+  - { level: 40, move: Quagmire }
   - { level: 43, move: Sandstorm }
   - { level: 48, move: Explosion }
   - { level: 62, move: Psycrush }
+  - { level: 62, move: Sinkhole }

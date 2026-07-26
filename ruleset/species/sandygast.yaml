@@ -12,9 +12,11 @@ learnset:
   - { level: 25, move: Bulldoze }
   - { level: 30, move: Hypnosis }
   - { level: 35, move: Giga Drain }
+  - { level: 38, move: Quagmire }
   - { level: 40, move: Iron Defense }
   - { level: 45, move: Shadow Ball }
   - { level: 50, move: Earth Power }
   - { level: 55, move: Shore Up }
+  - { level: 57, move: Sinkhole }
   - { level: 60, move: Sandstorm }
   - { level: 64, move: Netherstorm }

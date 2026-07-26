@@ -23,4 +23,6 @@ learnset:
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Explosion }
   - { level: 46, move: Kinetic Slam }
+  - { level: 46, move: Quagmire }
   - { level: 62, move: Psycrush }
+  - { level: 62, move: Sinkhole }

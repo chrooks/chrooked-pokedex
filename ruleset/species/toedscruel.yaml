@@ -1,0 +1,24 @@
+name: Toedscruel
+chrooked_id: toedscruel
+aka: {  }
+learnset:
+  - { level: 1, move: Reflect Type }
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Mud-Slap }
+  - { level: 4, move: Absorb }
+  - { level: 8, move: Stun Spore }
+  - { level: 8, move: Poison Powder }
+  - { level: 12, move: Supersonic }
+  - { level: 15, move: Tackle }
+  - { level: 16, move: Mega Drain }
+  - { level: 20, move: Screech }
+  - { level: 24, move: Mud Shot }
+  - { level: 28, move: Hex }
+  - { level: 34, move: Seed Bomb }
+  - { level: 38, move: Quagmire }
+  - { level: 40, move: Spore }
+  - { level: 44, move: Growth }
+  - { level: 48, move: Giga Drain }
+  - { level: 54, move: Earth Power }
+  - { level: 58, move: Power Whip }
+  - { level: 62, move: Sinkhole }

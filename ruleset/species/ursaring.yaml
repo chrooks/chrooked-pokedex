@@ -19,9 +19,11 @@ learnset:
   - { level: 30, move: Facade }
   - { level: 34, move: Bulk Up }
   - { level: 38, move: Crunch }
+  - { level: 38, move: Quagmire }
   - { level: 42, move: Rest }
   - { level: 42, move: Snore }
   - { level: 47, move: Cross Chop }
   - { level: 52, move: Thrash }
   - { level: 58, move: Hammer Arm }
+  - { level: 60, move: Sinkhole }
   - { level: 64, move: Superpower }

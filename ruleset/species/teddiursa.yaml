@@ -21,3 +21,5 @@ learnset:
   - { level: 33, move: Snore }
   - { level: 37, move: Facade }
   - { level: 41, move: Thrash }
+  - { level: 46, move: Quagmire }
+  - { level: 62, move: Sinkhole }

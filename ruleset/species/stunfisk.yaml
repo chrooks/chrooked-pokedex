@@ -14,7 +14,9 @@ learnset:
   - { level: 25, move: Sucker Punch }
   - { level: 30, move: Electric Terrain }
   - { level: 35, move: Bounce }
+  - { level: 38, move: Quagmire }
   - { level: 40, move: Muddy Water }
   - { level: 45, move: Discharge }
   - { level: 50, move: Flail }
   - { level: 55, move: Fissure }
+  - { level: 62, move: Sinkhole }

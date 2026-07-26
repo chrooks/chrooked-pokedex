@@ -1,0 +1,11 @@
+name: Quagmire
+chrooked_id: quagmire
+aka: { pokeemerald: MOVE_QUAGMIRE }
+type: Ground
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: The user drags the target into sucking mire. May lower its Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 20 }

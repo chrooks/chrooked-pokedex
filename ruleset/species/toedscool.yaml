@@ -1,0 +1,23 @@
+name: Toedscool
+chrooked_id: toedscool
+aka: {  }
+learnset:
+  - { level: 1, move: Wrap }
+  - { level: 1, move: Mud-Slap }
+  - { level: 4, move: Absorb }
+  - { level: 8, move: Poison Powder }
+  - { level: 8, move: Stun Spore }
+  - { level: 12, move: Supersonic }
+  - { level: 15, move: Tackle }
+  - { level: 16, move: Mega Drain }
+  - { level: 20, move: Screech }
+  - { level: 24, move: Mud Shot }
+  - { level: 28, move: Hex }
+  - { level: 32, move: Seed Bomb }
+  - { level: 36, move: Spore }
+  - { level: 38, move: Quagmire }
+  - { level: 40, move: Growth }
+  - { level: 44, move: Giga Drain }
+  - { level: 48, move: Earth Power }
+  - { level: 52, move: Power Whip }
+  - { level: 62, move: Sinkhole }

@@ -1,0 +1,12 @@
+name: Sinkhole
+chrooked_id: sinkhole
+aka: { pokeemerald: MOVE_SINKHOLE }
+type: Ground
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: The ground collapses beneath the target. The user sinks, its Sp. Atk and Speed falling.
+additional_effects:
+  - { effect: sp_atk_minus_1, chance: 100 }
+  - { effect: spd_minus_1, chance: 100 }

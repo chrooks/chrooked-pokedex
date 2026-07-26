@@ -24,4 +24,6 @@ learnset:
   - { level: 36, move: Earth Power }
   - { level: 42, move: Drain Punch }
   - { level: 45, move: Wave Crash }
+  - { level: 45, move: Quagmire }
   - { level: 48, move: Hydro Pump }
+  - { level: 57, move: Sinkhole }
