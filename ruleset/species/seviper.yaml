@@ -23,3 +23,4 @@ learnset:
   - { level: 41, move: Belch }
   - { level: 44, move: Coil }
   - { level: 46, move: Sludge Bomb }
+  - { level: 64, move: Contagion }

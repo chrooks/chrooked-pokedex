@@ -23,3 +23,4 @@ learnset:
   - { level: 47, move: Poison Fang }
   - { level: 55, move: Psychic }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Contagion }

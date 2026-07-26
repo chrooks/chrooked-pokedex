@@ -32,3 +32,4 @@ learnset:
   - { level: 44, move: Overdrive }
   - { level: 48, move: Boomburst }
   - { level: 52, move: Magnetic Flux }
+  - { level: 64, move: Contagion }

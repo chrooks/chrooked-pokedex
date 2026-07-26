@@ -1,0 +1,11 @@
+name: Contagion
+chrooked_id: contagion
+aka: { pokeemerald: MOVE_CONTAGION }
+type: Poison
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: A spreading plague erupts. The user's Sp. Atk falls sharply.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

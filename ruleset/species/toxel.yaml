@@ -12,3 +12,4 @@ learnset:
   - { level: 35, move: Short Circuit }
   - { level: 36, move: Lightning Slam }
   - { level: 48, move: Miasma }
+  - { level: 64, move: Contagion }

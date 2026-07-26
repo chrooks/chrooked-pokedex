@@ -24,3 +24,4 @@ learnset:
   - { level: 45, move: Heal Pulse }
   - { level: 48, move: Miasma }
   - { level: 62, move: Psycrush }
+  - { level: 64, move: Contagion }

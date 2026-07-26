@@ -25,4 +25,5 @@ learnset:
   - { level: 50, move: Aromatherapy }
   - { level: 55, move: Ingrain }
   - { level: 60, move: Petal Dance }
+  - { level: 64, move: Contagion }
 evolution: { from: Budew, method: { level: 16 } }

@@ -25,3 +25,4 @@ learnset:
   - { level: 41, move: Belch }
   - { level: 44, move: Pain Split }
   - { level: 49, move: Gunk Shot }
+  - { level: 64, move: Contagion }

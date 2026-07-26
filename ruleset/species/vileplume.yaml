@@ -22,3 +22,4 @@ learnset:
   - { level: 1, move: Moonblast }
   - { level: 36, move: Siphon }
   - { level: 48, move: Miasma }
+  - { level: 64, move: Contagion }

@@ -7,7 +7,10 @@ learnset:
   - { level: 5, move: Poison Sting }
   - { level: 15, move: Bug Bite }
   - { level: 30, move: Signal Beam }
+  - { level: 42, move: Galeburst }
   - { level: 45, move: Antennae Blast }
   - { level: 46, move: Venom Slam }
   - { level: 46, move: Moltstrike }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Contagion }
+  - { level: 64, move: Tempest }

@@ -18,3 +18,4 @@ learnset:
   - { level: 40, move: Rage Powder }
   - { level: 44, move: Solar Beam }
   - { level: 48, move: Spore }
+  - { level: 64, move: Contagion }

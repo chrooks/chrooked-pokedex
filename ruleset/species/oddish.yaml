@@ -20,3 +20,4 @@ learnset:
   - { level: 40, move: Petal Dance }
   - { level: 44, move: Siphon }
   - { level: 48, move: Miasma }
+  - { level: 64, move: Contagion }

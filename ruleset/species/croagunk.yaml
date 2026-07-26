@@ -31,3 +31,4 @@ learnset:
   - { level: 52, move: Close Combat }
   - { level: 58, move: Gunk Shot }
   - { level: 62, move: Focus Blast }
+  - { level: 64, move: Contagion }

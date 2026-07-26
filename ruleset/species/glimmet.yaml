@@ -21,3 +21,4 @@ learnset:
   - { level: 41, move: Acid Armor }
   - { level: 46, move: Sludge Wave }
   - { level: 62, move: Meteor Surge }
+  - { level: 64, move: Contagion }

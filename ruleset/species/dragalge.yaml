@@ -23,6 +23,7 @@ learnset:
   - { level: 48, move: Miasma }
   - { level: 48, move: Draco Meteor }
   - { level: 52, move: Sludge Bomb }
+  - { level: 55, move: Contagion }
   - { level: 59, move: Hydro Pump }
   - { level: 66, move: Outrage }
 evolution: { from: Skrelp, method: { level: 38 } }

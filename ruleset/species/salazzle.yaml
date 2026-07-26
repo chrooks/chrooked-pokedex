@@ -24,3 +24,4 @@ learnset:
   - { level: 44, move: Dragon Pulse }
   - { level: 51, move: Flamethrower }
   - { level: 58, move: Toxic }
+  - { level: 64, move: Contagion }

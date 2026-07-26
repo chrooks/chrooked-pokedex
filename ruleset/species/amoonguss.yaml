@@ -19,3 +19,4 @@ learnset:
   - { level: 45, move: Siphon }
   - { level: 48, move: Solar Beam }
   - { level: 54, move: Spore }
+  - { level: 64, move: Contagion }

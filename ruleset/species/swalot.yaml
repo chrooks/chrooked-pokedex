@@ -26,3 +26,4 @@ learnset:
   - { level: 45, move: Rampage }
   - { level: 45, move: Venom Slam }
   - { level: 49, move: Belch }
+  - { level: 64, move: Contagion }

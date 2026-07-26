@@ -7,3 +7,4 @@ learnset:
   - { level: 9, move: Bug Bite }
   - { level: 46, move: Venom Slam }
   - { level: 46, move: Moltstrike }
+  - { level: 64, move: Contagion }

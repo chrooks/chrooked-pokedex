@@ -19,3 +19,4 @@ learnset:
   - { level: 44, move: Destiny Bond }
   - { level: 48, move: Dream Eater }
   - { level: 64, move: Netherstorm }
+  - { level: 64, move: Contagion }
