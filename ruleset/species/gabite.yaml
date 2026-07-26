@@ -7,12 +7,15 @@ learnset:
   - { level: 1, move: Dragon Breath }
   - { level: 1, move: Sand Tomb }
   - { level: 1, move: Clod Toss }
+  - { level: 9, move: Maul }
   - { level: 18, move: Bulldoze }
+  - { level: 22, move: Breaking Swipe }
   - { level: 27, move: Bite }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 30, move: Draconic Fang }
   - { level: 34, move: Slash }
+  - { level: 38, move: Dragon Hammer }
   - { level: 42, move: Dragon Claw }
   - { level: 50, move: Dig }
   - { level: 58, move: Sandstorm }

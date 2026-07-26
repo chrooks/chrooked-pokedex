@@ -5,13 +5,16 @@ stats: { atk: 115 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Shock }
+  - { level: 4, move: Maul }
   - { level: 7, move: Charge }
   - { level: 14, move: Aerial Ace }
   - { level: 21, move: Ancient Power }
+  - { level: 24, move: Breaking Swipe }
   - { level: 28, move: Pluck }
   - { level: 35, move: Dragon Tail }
   - { level: 38, move: Lightning Slam }
   - { level: 42, move: Stomp }
+  - { level: 45, move: Dragon Hammer }
   - { level: 49, move: Body Slam }
   - { level: 56, move: Discharge }
   - { level: 63, move: Bolt Beak }

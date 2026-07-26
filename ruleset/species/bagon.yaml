@@ -7,16 +7,19 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }
+  - { level: 3, move: Maul }
   - { level: 5, move: Bite }
   - { level: 10, move: Dragon Breath }
   - { level: 15, move: Headbutt }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Crunch }
   - { level: 25, move: Draconic Fang }
+  - { level: 28, move: Breaking Swipe }
   - { level: 31, move: Dragon Claw }
   - { level: 35, move: Zen Headbutt }
   - { level: 37, move: Dive Bomb }
   - { level: 40, move: Focus Energy }
+  - { level: 42, move: Dragon Hammer }
   - { level: 45, move: Flamethrower }
   - { level: 50, move: Outrage }
   - { level: 55, move: Double-Edge }

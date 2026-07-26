@@ -3,9 +3,12 @@ chrooked_id: magikarp
 aka: { dex: 129 }
 learnset:
   - { level: 1, move: Splash }
+  - { level: 4, move: Maul }
   - { level: 8, move: Undertow }
   - { level: 15, move: Tackle }
   - { level: 20, move: Water Whip }
   - { level: 25, move: Flail }
+  - { level: 32, move: Breaking Swipe }
+  - { level: 36, move: Dragon Hammer }
   - { level: 45, move: Maelstrom }
   - { level: 60, move: Wave Crash }

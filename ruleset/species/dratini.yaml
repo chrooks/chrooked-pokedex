@@ -4,16 +4,19 @@ aka: { pokeemerald: SPECIES_DRATINI }
 learnset:
   - { level: 1, move: Wrap }
   - { level: 1, move: Leer }
+  - { level: 3, move: Maul }
   - { level: 5, move: Twister }
   - { level: 10, move: Thunder Wave }
   - { level: 15, move: Dragon Tail }
   - { level: 20, move: Agility }
   - { level: 25, move: Body Slam }
   - { level: 25, move: Draconic Fang }
+  - { level: 28, move: Breaking Swipe }
   - { level: 31, move: Aqua Tail }
   - { level: 35, move: Dragon Rush }
   - { level: 37, move: Dive Bomb }
   - { level: 40, move: Safeguard }
+  - { level: 42, move: Dragon Hammer }
   - { level: 45, move: Rain Dance }
   - { level: 50, move: Dragon Dance }
   - { level: 55, move: Outrage }

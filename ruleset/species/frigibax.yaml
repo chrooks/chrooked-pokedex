@@ -6,14 +6,17 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Dragon Tail }
   - { level: 6, move: Icy Wind }
+  - { level: 9, move: Maul }
   - { level: 12, move: Dragon Breath }
   - { level: 18, move: Focus Energy }
+  - { level: 21, move: Breaking Swipe }
   - { level: 24, move: Bite }
   - { level: 29, move: Ice Fang }
   - { level: 32, move: Dragon Claw }
   - { level: 36, move: Take Down }
   - { level: 38, move: Glacial Crush }
   - { level: 40, move: Ice Beam }
+  - { level: 42, move: Dragon Hammer }
   - { level: 44, move: Crunch }
   - { level: 48, move: Icicle Crash }
   - { level: 55, move: Pixie Slash }

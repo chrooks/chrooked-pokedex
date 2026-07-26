@@ -10,13 +10,16 @@ learnset:
   - { level: 1, move: Bite }
   - { level: 1, move: Ember }
   - { level: 1, move: Dragon Breath }
+  - { level: 8, move: Maul }
   - { level: 15, move: Headbutt }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Crunch }
   - { level: 25, move: Draconic Fang }
+  - { level: 29, move: Breaking Swipe }
   - { level: 33, move: Dragon Claw }
   - { level: 36, move: Dive Bomb }
   - { level: 39, move: Zen Headbutt }
+  - { level: 42, move: Dragon Hammer }
   - { level: 46, move: Focus Energy }
   - { level: 53, move: Flamethrower }
   - { level: 60, move: Outrage }

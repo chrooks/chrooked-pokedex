@@ -7,12 +7,15 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 4, move: Undertow }
   - { level: 7, move: Protect }
+  - { level: 10, move: Maul }
   - { level: 14, move: Brutal Swing }
   - { level: 17, move: Water Whip }
   - { level: 21, move: Ancient Power }
+  - { level: 24, move: Breaking Swipe }
   - { level: 28, move: Bite }
   - { level: 31, move: Maelstrom }
   - { level: 35, move: Dragon Breath }
+  - { level: 38, move: Dragon Hammer }
   - { level: 42, move: Stomp }
   - { level: 45, move: Wave Crash }
   - { level: 49, move: Super Fang }

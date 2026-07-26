@@ -1,0 +1,9 @@
+name: Maul
+chrooked_id: maul
+aka: { pokeemerald: MOVE_MAUL }
+type: Dragon
+category: physical
+power: 50
+accuracy: 100
+pp: 30
+description: The user mauls the target with raw draconic force.

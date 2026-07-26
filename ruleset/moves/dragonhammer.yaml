@@ -1,0 +1,9 @@
+name: Dragon Hammer
+chrooked_id: dragonhammer
+aka: { pokeemerald: MOVE_DRAGON_HAMMER }
+type: Dragon
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user swings its body like a hammer to batter the target.

@@ -1,0 +1,25 @@
+name: Kommo O
+chrooked_id: kommoo
+aka: {  }
+learnset:
+  - { level: 0, move: Clanging Scales }
+  - { level: 1, move: Belly Drum }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Dragon Tail }
+  - { level: 6, move: Maul }
+  - { level: 12, move: Scary Face }
+  - { level: 16, move: Headbutt }
+  - { level: 20, move: Work Up }
+  - { level: 22, move: Breaking Swipe }
+  - { level: 24, move: Screech }
+  - { level: 28, move: Iron Defense }
+  - { level: 32, move: Dragon Claw }
+  - { level: 38, move: Noble Roar }
+  - { level: 44, move: Dragon Dance }
+  - { level: 48, move: Dragon Hammer }
+  - { level: 52, move: Outrage }
+  - { level: 60, move: Close Combat }
+  - { level: 68, move: Clangorous Soul }
+  - { level: 76, move: Boomburst }

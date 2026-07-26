@@ -10,16 +10,19 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Agility }
+  - { level: 4, move: Maul }
   - { level: 7, move: Undertow }
   - { level: 13, move: Bite }
   - { level: 15, move: Scary Face }
   - { level: 18, move: Water Whip }
   - { level: 21, move: Ice Fang }
   - { level: 24, move: Flail }
+  - { level: 28, move: Breaking Swipe }
   - { level: 32, move: Crunch }
   - { level: 37, move: Slash }
   - { level: 40, move: Maelstrom }
   - { level: 44, move: Screech }
+  - { level: 47, move: Dragon Hammer }
   - { level: 51, move: Thrash }
   - { level: 55, move: Wave Crash }
   - { level: 59, move: Aqua Tail }

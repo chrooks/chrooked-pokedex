@@ -9,13 +9,16 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Infestation }
   - { level: 6, move: Lock-On }
+  - { level: 9, move: Maul }
   - { level: 12, move: Assurance }
   - { level: 18, move: Hex }
+  - { level: 21, move: Breaking Swipe }
   - { level: 24, move: Agility }
   - { level: 30, move: Double Hit }
   - { level: 36, move: U-turn }
   - { level: 39, move: Wraithstrike }
   - { level: 42, move: Dragon Dance }
+  - { level: 45, move: Dragon Hammer }
   - { level: 48, move: Phantom Force }
   - { level: 54, move: Take Down }
   - { level: 63, move: Dragon Rush }

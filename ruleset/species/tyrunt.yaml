@@ -7,10 +7,12 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 4, move: Bite }
+  - { level: 6, move: Maul }
   - { level: 8, move: Rock Tomb }
   - { level: 12, move: Stomp }
   - { level: 16, move: Fire Fang }
   - { level: 20, move: Dragon Tail }
+  - { level: 22, move: Breaking Swipe }
   - { level: 24, move: Rock Slide }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
@@ -19,5 +21,6 @@ learnset:
   - { level: 32, move: Dragon Claw }
   - { level: 36, move: Ice Fang }
   - { level: 39, move: Psychic Fangs }
+  - { level: 41, move: Dragon Hammer }
   - { level: 44, move: Earthquake }
   - { level: 48, move: Head Smash }

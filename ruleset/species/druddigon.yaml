@@ -5,17 +5,20 @@ types: [Dragon, Rock]
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
+  - { level: 3, move: Maul }
   - { level: 5, move: Bite }
   - { level: 10, move: Dragon Tail }
   - { level: 15, move: Rock Tomb }
   - { level: 18, move: Accelerock }
   - { level: 20, move: Slash }
+  - { level: 22, move: Breaking Swipe }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
   - { level: 30, move: Draconic Fang }
   - { level: 35, move: Rock Slide }
   - { level: 38, move: Dragon Claw }
   - { level: 40, move: Crunch }
+  - { level: 42, move: Dragon Hammer }
   - { level: 45, move: Iron Head }
   - { level: 48, move: Stone Edge }
   - { level: 50, move: Outrage }

@@ -6,13 +6,16 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Thunder Wave }
   - { level: 1, move: Twister }
+  - { level: 8, move: Maul }
   - { level: 15, move: Dragon Tail }
   - { level: 20, move: Agility }
   - { level: 25, move: Body Slam }
   - { level: 25, move: Draconic Fang }
+  - { level: 29, move: Breaking Swipe }
   - { level: 33, move: Aqua Tail }
   - { level: 36, move: Dive Bomb }
   - { level: 39, move: Dragon Rush }
+  - { level: 42, move: Dragon Hammer }
   - { level: 46, move: Safeguard }
   - { level: 53, move: Rain Dance }
   - { level: 60, move: Dragon Dance }
