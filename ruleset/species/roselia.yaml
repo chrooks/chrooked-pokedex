@@ -19,6 +19,7 @@ learnset:
   - { level: 30, move: Giga Drain }
   - { level: 32, move: Miasma }
   - { level: 35, move: Synthesis }
+  - { level: 37, move: Siphon }
   - { level: 40, move: Toxic }
   - { level: 45, move: Petal Blizzard }
   - { level: 50, move: Aromatherapy }

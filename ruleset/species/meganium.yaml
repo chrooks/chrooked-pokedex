@@ -6,3 +6,21 @@ abilities:
   secondary: Triage
   hidden: Petal Barrier
 stats: { hp: 85, atk: 80, def: 105, spa: 85, spd: 105 }
+learnset:
+  - { level: 0, move: Petal Dance }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Poison Powder }
+  - { level: 1, move: Petal Blizzard }
+  - { level: 12, move: Synthesis }
+  - { level: 18, move: Reflect }
+  - { level: 22, move: Magical Leaf }
+  - { level: 26, move: Leech Seed }
+  - { level: 34, move: Sweet Scent }
+  - { level: 37, move: Siphon }
+  - { level: 40, move: Light Screen }
+  - { level: 46, move: Body Slam }
+  - { level: 54, move: Safeguard }
+  - { level: 60, move: Giga Drain }
+  - { level: 65, move: Solar Beam }

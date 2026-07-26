@@ -20,4 +20,5 @@ learnset:
   - { level: 32, move: Seed Bomb }
   - { level: 36, move: Energy Ball }
   - { level: 40, move: Terrain Pulse }
+  - { level: 43, move: Siphon }
   - { level: 46, move: Resonance }

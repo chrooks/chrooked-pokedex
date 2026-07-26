@@ -20,6 +20,7 @@ learnset:
   - { level: 28, move: Pin Missile }
   - { level: 32, move: Giga Drain }
   - { level: 36, move: Strength Sap }
+  - { level: 38, move: Siphon }
   - { level: 40, move: Scorching Sands }
   - { level: 44, move: Sunny Day }
   - { level: 48, move: Burning Jealousy }

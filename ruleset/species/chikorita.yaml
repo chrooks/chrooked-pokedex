@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_CHIKORITA }
 abilities:
   secondary: Triage
   hidden: Petal Barrier
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 6, move: Razor Leaf }
+  - { level: 9, move: Poison Powder }
+  - { level: 12, move: Synthesis }
+  - { level: 17, move: Reflect }
+  - { level: 20, move: Magical Leaf }
+  - { level: 23, move: Leech Seed }
+  - { level: 28, move: Sweet Scent }
+  - { level: 31, move: Light Screen }
+  - { level: 34, move: Body Slam }
+  - { level: 36, move: Siphon }
+  - { level: 39, move: Safeguard }
+  - { level: 42, move: Giga Drain }
+  - { level: 45, move: Solar Beam }

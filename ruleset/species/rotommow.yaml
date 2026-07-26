@@ -12,6 +12,7 @@ learnset:
   - { level: 25, move: Thunder Wave }
   - { level: 30, move: Shock Wave }
   - { level: 35, move: Hex }
+  - { level: 37, move: Siphon }
   - { level: 40, move: Substitute }
   - { level: 45, move: Trick }
   - { level: 50, move: Discharge }

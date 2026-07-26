@@ -19,6 +19,7 @@ learnset:
   - { level: 26, move: Dazzling Gleam }
   - { level: 30, move: Energy Ball }
   - { level: 34, move: Leech Seed }
+  - { level: 38, move: Siphon }
   - { level: 43, move: Fiery Dance }
   - { level: 48, move: Aromatherapy }
   - { level: 52, move: Moonblast }

@@ -2,3 +2,18 @@ name: Morelull
 chrooked_id: morelull
 aka: { pokeemerald: SPECIES_MORELULL }
 stats: { hp: 55 }
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Astonish }
+  - { level: 4, move: Confuse Ray }
+  - { level: 8, move: Ingrain }
+  - { level: 12, move: Mega Drain }
+  - { level: 16, move: Sleep Powder }
+  - { level: 20, move: Moonlight }
+  - { level: 25, move: Strength Sap }
+  - { level: 28, move: Giga Drain }
+  - { level: 32, move: Dazzling Gleam }
+  - { level: 36, move: Spore }
+  - { level: 38, move: Siphon }
+  - { level: 40, move: Moonblast }
+  - { level: 44, move: Dream Eater }

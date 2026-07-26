@@ -25,4 +25,5 @@ learnset:
   - { level: 1, move: Growth }
   - { level: 1, move: Stun Spore }
   - { level: 1, move: Worry Seed }
+  - { level: 36, move: Siphon }
   - { level: 48, move: Miasma }

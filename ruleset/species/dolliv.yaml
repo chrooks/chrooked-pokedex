@@ -19,4 +19,5 @@ learnset:
   - { level: 27, move: Leech Seed }
   - { level: 31, move: Seed Bomb }
   - { level: 34, move: Energy Ball }
+  - { level: 40, move: Siphon }
   - { level: 46, move: Resonance }

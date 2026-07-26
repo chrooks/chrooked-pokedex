@@ -3,3 +3,21 @@ chrooked_id: tangela
 aka: { pokeemerald: SPECIES_TANGELA }
 abilities:
   secondary: Leaf Guard
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Bind }
+  - { level: 4, move: Stun Spore }
+  - { level: 8, move: Growth }
+  - { level: 12, move: Mega Drain }
+  - { level: 16, move: Vine Whip }
+  - { level: 20, move: Poison Powder }
+  - { level: 24, move: Ancient Power }
+  - { level: 28, move: Knock Off }
+  - { level: 32, move: Giga Drain }
+  - { level: 36, move: Sleep Powder }
+  - { level: 38, move: Siphon }
+  - { level: 40, move: Slam }
+  - { level: 44, move: Tickle }
+  - { level: 48, move: Power Whip }
+  - { level: 52, move: Ingrain }
+  - { level: 56, move: Grassy Terrain }

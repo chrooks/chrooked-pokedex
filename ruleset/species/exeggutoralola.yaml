@@ -21,5 +21,6 @@ learnset:
   - { level: 1, move: Mega Drain }
   - { level: 1, move: Psyshock }
   - { level: 1, move: Absorb }
+  - { level: 36, move: Siphon }
   - { level: 45, move: Cataclysm }
   - { level: 60, move: Draco Meteor }

@@ -5,3 +5,19 @@ types: [Grass, Fairy]
 abilities:
   secondary: Triage
   hidden: Petal Barrier
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Razor Leaf }
+  - { level: 1, move: Poison Powder }
+  - { level: 12, move: Synthesis }
+  - { level: 18, move: Reflect }
+  - { level: 22, move: Magical Leaf }
+  - { level: 26, move: Leech Seed }
+  - { level: 32, move: Sweet Scent }
+  - { level: 36, move: Light Screen }
+  - { level: 40, move: Body Slam }
+  - { level: 43, move: Siphon }
+  - { level: 46, move: Safeguard }
+  - { level: 50, move: Giga Drain }
+  - { level: 54, move: Solar Beam }

@@ -2,3 +2,19 @@ name: Eldegoss
 chrooked_id: eldegoss
 aka: { pokeemerald: SPECIES_ELDEGOSS }
 stats: { spa: 90 }
+learnset:
+  - { level: 0, move: Cotton Spore }
+  - { level: 1, move: Cotton Spore }
+  - { level: 1, move: Leafage }
+  - { level: 1, move: Sing }
+  - { level: 1, move: Rapid Spin }
+  - { level: 1, move: Sweet Scent }
+  - { level: 12, move: Razor Leaf }
+  - { level: 16, move: Round }
+  - { level: 23, move: Leaf Tornado }
+  - { level: 28, move: Synthesis }
+  - { level: 34, move: Hyper Voice }
+  - { level: 37, move: Siphon }
+  - { level: 40, move: Aromatherapy }
+  - { level: 46, move: Leaf Storm }
+  - { level: 52, move: Cotton Guard }

@@ -1,0 +1,16 @@
+name: Gossifleur
+chrooked_id: gossifleur
+aka: {  }
+learnset:
+  - { level: 1, move: Leafage }
+  - { level: 1, move: Sing }
+  - { level: 4, move: Rapid Spin }
+  - { level: 8, move: Sweet Scent }
+  - { level: 12, move: Razor Leaf }
+  - { level: 16, move: Round }
+  - { level: 21, move: Leaf Tornado }
+  - { level: 24, move: Synthesis }
+  - { level: 28, move: Hyper Voice }
+  - { level: 32, move: Aromatherapy }
+  - { level: 36, move: Leaf Storm }
+  - { level: 46, move: Siphon }

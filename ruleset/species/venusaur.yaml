@@ -20,6 +20,7 @@ learnset:
   - { level: 30, move: Sweet Scent }
   - { level: 33, move: Miasma }
   - { level: 37, move: Synthesis }
+  - { level: 40, move: Siphon }
   - { level: 44, move: Worry Seed }
   - { level: 51, move: Power Whip }
   - { level: 58, move: Solar Beam }

@@ -18,4 +18,5 @@ learnset:
   - { level: 32, move: Grassy Terrain }
   - { level: 36, move: Moonlight }
   - { level: 40, move: Petal Dance }
+  - { level: 44, move: Siphon }
   - { level: 48, move: Miasma }

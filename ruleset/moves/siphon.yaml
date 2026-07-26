@@ -1,0 +1,11 @@
+name: Siphon
+chrooked_id: siphon
+aka: { pokeemerald: MOVE_SIPHON }
+type: Grass
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: The user drains life essence from afar, recovering a quarter of the damage dealt.
+effect: absorb
+argument: { absorb_percentage: 25 }
