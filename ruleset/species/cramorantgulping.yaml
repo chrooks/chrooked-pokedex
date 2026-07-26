@@ -14,6 +14,7 @@ learnset:
   - { level: 21, move: Pluck }
   - { level: 28, move: Dive }
   - { level: 31, move: Maelstrom }
+  - { level: 31, move: Galeburst }
   - { level: 35, move: Drill Peck }
   - { level: 38, move: Dive Bomb }
   - { level: 38, move: Nosedive }
@@ -21,3 +22,5 @@ learnset:
   - { level: 49, move: Thrash }
   - { level: 56, move: Hydro Pump }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Tempest }

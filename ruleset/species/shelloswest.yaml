@@ -19,3 +19,4 @@ learnset:
   - { level: 40, move: Rain Dance }
   - { level: 45, move: Memento }
   - { level: 62, move: Sinkhole }
+  - { level: 64, move: Tsunami }

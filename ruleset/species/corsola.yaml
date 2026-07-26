@@ -20,3 +20,4 @@ learnset:
   - { level: 50, move: Recover }
   - { level: 55, move: Mirror Coat }
   - { level: 62, move: Meteor Surge }
+  - { level: 64, move: Tsunami }

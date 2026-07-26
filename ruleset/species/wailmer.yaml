@@ -19,3 +19,4 @@ learnset:
   - { level: 42, move: Amnesia }
   - { level: 45, move: Hydro Pump }
   - { level: 48, move: Water Spout }
+  - { level: 64, move: Tsunami }

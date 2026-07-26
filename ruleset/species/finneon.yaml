@@ -2,3 +2,18 @@ name: Finneon
 chrooked_id: finneon
 aka: { pokeemerald: SPECIES_FINNEON }
 stats: { spa: 69, spd: 60, spe: 65 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 6, move: Water Gun }
+  - { level: 13, move: Rain Dance }
+  - { level: 17, move: Gust }
+  - { level: 22, move: Water Pulse }
+  - { level: 26, move: Attract }
+  - { level: 29, move: Safeguard }
+  - { level: 33, move: Aqua Ring }
+  - { level: 38, move: Whirlpool }
+  - { level: 42, move: U-turn }
+  - { level: 45, move: Bounce }
+  - { level: 49, move: Tailwind }
+  - { level: 54, move: Soak }
+  - { level: 64, move: Tsunami }

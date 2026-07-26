@@ -1,0 +1,21 @@
+name: Popplio
+chrooked_id: popplio
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Growl }
+  - { level: 3, move: Water Gun }
+  - { level: 6, move: Disarming Voice }
+  - { level: 9, move: Aqua Jet }
+  - { level: 12, move: Baby-Doll Eyes }
+  - { level: 15, move: Icy Wind }
+  - { level: 18, move: Sing }
+  - { level: 21, move: Bubble Beam }
+  - { level: 22, move: Beguile }
+  - { level: 24, move: Encore }
+  - { level: 27, move: Misty Terrain }
+  - { level: 30, move: Hyper Voice }
+  - { level: 33, move: Moonblast }
+  - { level: 36, move: Hydro Pump }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Rapture }

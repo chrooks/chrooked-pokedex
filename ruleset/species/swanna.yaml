@@ -14,7 +14,10 @@ learnset:
   - { level: 27, move: Air Slash }
   - { level: 30, move: Roost }
   - { level: 34, move: Rain Dance }
+  - { level: 37, move: Galeburst }
   - { level: 40, move: Tailwind }
   - { level: 47, move: Brave Bird }
   - { level: 55, move: Hurricane }
   - { level: 64, move: Oblivion Wing }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Tempest }

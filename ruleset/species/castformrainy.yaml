@@ -19,3 +19,4 @@ learnset:
   - { level: 35, move: Blizzard }
   - { level: 45, move: Hurricane }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }

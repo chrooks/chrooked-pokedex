@@ -31,4 +31,5 @@ learnset:
   - { level: 48, move: Outrage }
   - { level: 52, move: Hyper Beam }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }
 evolution: { from: Magikarp, method: { level: 20 } }

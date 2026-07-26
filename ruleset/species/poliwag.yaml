@@ -22,3 +22,4 @@ learnset:
   - { level: 48, move: Belly Drum }
   - { level: 54, move: Double-Edge }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }

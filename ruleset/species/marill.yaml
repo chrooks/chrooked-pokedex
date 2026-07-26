@@ -25,4 +25,5 @@ learnset:
   - { level: 36, move: Superpower }
   - { level: 45, move: Maelstrom }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }
 evolution: { from: Azurill, method: { level: 16 } }

@@ -1,15 +1,11 @@
-name: Mantine
-chrooked_id: mantine
-aka: { pokeemerald: SPECIES_MANTINE }
-stats: { hp: 85 }
+name: Mantyke
+chrooked_id: mantyke
+aka: {  }
 learnset:
-  - { level: 1, move: Psybeam }
-  - { level: 1, move: Bullet Seed }
-  - { level: 1, move: Roost }
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
-  - { level: 1, move: Supersonic }
-  - { level: 1, move: Wing Attack }
+  - { level: 4, move: Supersonic }
+  - { level: 8, move: Wing Attack }
   - { level: 12, move: Water Pulse }
   - { level: 16, move: Wide Guard }
   - { level: 20, move: Agility }

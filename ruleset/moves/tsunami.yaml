@@ -1,0 +1,11 @@
+name: Tsunami
+chrooked_id: tsunami
+aka: { pokeemerald: MOVE_TSUNAMI }
+type: Water
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: A towering wave crashes down. The user's Sp. Atk falls sharply.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

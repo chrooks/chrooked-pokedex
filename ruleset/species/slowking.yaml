@@ -26,3 +26,4 @@ learnset:
   - { level: 39, move: Psych Up }
   - { level: 42, move: Rain Dance }
   - { level: 45, move: Heal Pulse }
+  - { level: 64, move: Tsunami }

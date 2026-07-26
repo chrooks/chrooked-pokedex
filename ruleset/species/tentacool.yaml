@@ -27,3 +27,5 @@ learnset:
   - { level: 56, move: Sludge Wave }
   - { level: 60, move: Hydro Pump }
   - { level: 60, move: Venoshock }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Contagion }

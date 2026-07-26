@@ -1,9 +1,7 @@
-name: Primarina
-chrooked_id: primarina
-aka: { pokeemerald: SPECIES_PRIMARINA }
-stats: { hp: 85, atk: 75, def: 75, spa: 125, spd: 115, spe: 65 }
+name: Brionne
+chrooked_id: brionne
+aka: {  }
 learnset:
-  - { level: 0, move: Sparkling Aria }
   - { level: 1, move: Pound }
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
@@ -15,9 +13,9 @@ learnset:
   - { level: 22, move: Beguile }
   - { level: 25, move: Bubble Beam }
   - { level: 30, move: Encore }
-  - { level: 37, move: Misty Terrain }
-  - { level: 44, move: Hyper Voice }
-  - { level: 51, move: Moonblast }
-  - { level: 58, move: Hydro Pump }
+  - { level: 35, move: Misty Terrain }
+  - { level: 40, move: Hyper Voice }
+  - { level: 45, move: Moonblast }
+  - { level: 50, move: Hydro Pump }
   - { level: 64, move: Tsunami }
   - { level: 64, move: Rapture }

@@ -18,3 +18,4 @@ learnset:
   - { level: 36, move: Hydro Pump }
   - { level: 40, move: Soak }
   - { level: 44, move: Hyper Beam }
+  - { level: 64, move: Tsunami }

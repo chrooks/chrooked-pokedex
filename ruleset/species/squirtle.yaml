@@ -23,3 +23,4 @@ learnset:
   - { level: 49, move: Aura Sphere }
   - { level: 54, move: Hydro Pump }
   - { level: 60, move: Origin Pulse }
+  - { level: 64, move: Tsunami }

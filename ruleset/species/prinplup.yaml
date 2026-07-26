@@ -24,4 +24,5 @@ learnset:
   - { level: 46, move: Drill Peck }
   - { level: 50, move: Hydro Pump }
   - { level: 62, move: Steel Beam }
+  - { level: 64, move: Tsunami }
 evolution: { from: Piplup, method: { level: 16 } }

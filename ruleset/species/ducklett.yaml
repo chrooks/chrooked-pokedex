@@ -13,8 +13,11 @@ learnset:
   - { level: 24, move: Aqua Ring }
   - { level: 27, move: Air Slash }
   - { level: 30, move: Roost }
+  - { level: 32, move: Galeburst }
   - { level: 34, move: Rain Dance }
   - { level: 37, move: Tailwind }
   - { level: 41, move: Brave Bird }
   - { level: 46, move: Hurricane }
   - { level: 64, move: Oblivion Wing }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Tempest }

@@ -23,3 +23,4 @@ learnset:
   - { level: 44, move: Leech Life }
   - { level: 48, move: Mirror Coat }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }

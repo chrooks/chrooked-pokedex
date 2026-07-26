@@ -30,3 +30,4 @@ learnset:
   - { level: 60, move: Secret Sword }
   - { level: 60, move: Wave Crash }
   - { level: 60, move: Havoc }
+  - { level: 64, move: Tsunami }

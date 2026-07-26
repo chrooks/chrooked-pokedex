@@ -8,3 +8,4 @@ learnset:
   - { level: 15, move: Tackle }
   - { level: 20, move: Water Whip }
   - { level: 25, move: Flail }
+  - { level: 64, move: Tsunami }

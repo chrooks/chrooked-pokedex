@@ -2,4 +2,20 @@ name: Inteleon
 chrooked_id: inteleon
 aka: { pokeemerald: SPECIES_INTELEON }
 stats: { spa: 135 }
+learnset:
+  - { level: 0, move: Snipe Shot }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Acrobatics }
+  - { level: 12, move: Water Pulse }
+  - { level: 19, move: Tearful Look }
+  - { level: 24, move: Sucker Punch }
+  - { level: 30, move: U-turn }
+  - { level: 38, move: Liquidation }
+  - { level: 46, move: Soak }
+  - { level: 54, move: Rain Dance }
+  - { level: 58, move: Tsunami }
+  - { level: 62, move: Hydro Pump }
 evolution: { from: Drizzile, method: { level: 35 } }

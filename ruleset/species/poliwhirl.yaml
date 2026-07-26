@@ -21,4 +21,5 @@ learnset:
   - { level: 48, move: Hydro Pump }
   - { level: 52, move: Wave Crash }
   - { level: 56, move: Belly Drum }
+  - { level: 61, move: Tsunami }
   - { level: 66, move: Double-Edge }

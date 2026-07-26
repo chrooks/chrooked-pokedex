@@ -30,4 +30,6 @@ learnset:
   - { level: 52, move: Poison Jab }
   - { level: 58, move: Earthquake }
   - { level: 58, move: Sinkhole }
+  - { level: 58, move: Faultbreak }
+  - { level: 58, move: Tsunami }
   - { level: 64, move: Boomburst }

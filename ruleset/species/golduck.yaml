@@ -25,3 +25,4 @@ learnset:
   - { level: 36, move: Amnesia }
   - { level: 40, move: Hydro Pump }
   - { level: 45, move: Wonder Room }
+  - { level: 64, move: Tsunami }

@@ -3,3 +3,16 @@ chrooked_id: drizzile
 aka: { pokeemerald: SPECIES_DRIZZILE }
 types: [Water, Dark]
 stats: { atk: 50, spd: 50 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 12, move: Water Pulse }
+  - { level: 19, move: Tearful Look }
+  - { level: 24, move: Sucker Punch }
+  - { level: 30, move: U-turn }
+  - { level: 36, move: Liquidation }
+  - { level: 42, move: Soak }
+  - { level: 48, move: Rain Dance }
+  - { level: 64, move: Tsunami }

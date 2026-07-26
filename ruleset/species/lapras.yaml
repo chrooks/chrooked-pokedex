@@ -6,3 +6,21 @@ abilities:
   secondary: Shell Armor
   hidden: Permafrost
 stats: { atk: 75, spa: 105 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 5, move: Sing }
+  - { level: 10, move: Mist }
+  - { level: 15, move: Life Dew }
+  - { level: 20, move: Ice Shard }
+  - { level: 25, move: Confuse Ray }
+  - { level: 30, move: Water Pulse }
+  - { level: 35, move: Brine }
+  - { level: 40, move: Body Slam }
+  - { level: 45, move: Ice Beam }
+  - { level: 50, move: Rain Dance }
+  - { level: 52, move: Tsunami }
+  - { level: 52, move: Cryoblast }
+  - { level: 55, move: Hydro Pump }
+  - { level: 60, move: Perish Song }
+  - { level: 65, move: Sheer Cold }

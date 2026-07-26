@@ -24,3 +24,4 @@ learnset:
   - { level: 42, move: Flail }
   - { level: 48, move: Take Down }
   - { level: 54, move: Hydro Pump }
+  - { level: 64, move: Tsunami }

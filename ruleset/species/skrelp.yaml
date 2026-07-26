@@ -22,3 +22,5 @@ learnset:
   - { level: 50, move: Sludge Bomb }
   - { level: 55, move: Hydro Pump }
   - { level: 60, move: Draco Meteor }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Contagion }

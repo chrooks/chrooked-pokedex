@@ -6,3 +6,18 @@ abilities:
   primary: Dazzling
   hidden: Updraft
 stats: { hp: 80, atk: 70, def: 75, spa: 105, spd: 85, spe: 90 }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Soak }
+  - { level: 13, move: Rain Dance }
+  - { level: 22, move: Water Pulse }
+  - { level: 26, move: Attract }
+  - { level: 29, move: Safeguard }
+  - { level: 35, move: Aqua Ring }
+  - { level: 42, move: Whirlpool }
+  - { level: 48, move: U-turn }
+  - { level: 53, move: Bounce }
+  - { level: 59, move: Tailwind }
+  - { level: 64, move: Tsunami }

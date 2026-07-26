@@ -28,3 +28,4 @@ learnset:
   - { level: 52, move: Double-Edge }
   - { level: 56, move: Head Smash }
   - { level: 62, move: Necrosis }
+  - { level: 64, move: Tsunami }

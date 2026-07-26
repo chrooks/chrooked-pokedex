@@ -22,3 +22,4 @@ learnset:
   - { level: 1, move: Rain Dance }
   - { level: 1, move: Bubble Beam }
   - { level: 46, move: Siphon }
+  - { level: 64, move: Tsunami }

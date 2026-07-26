@@ -1,23 +1,19 @@
-name: Wishiwashi School
-chrooked_id: wishiwashischool
-aka: { dex: 746 }
+name: Wishiwashi Solo
+chrooked_id: wishiwashisolo
+aka: {  }
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Growl }
   - { level: 4, move: Helping Hand }
-  - { level: 6, move: Undertow }
   - { level: 8, move: Beat Up }
   - { level: 12, move: Brine }
-  - { level: 14, move: Water Whip }
   - { level: 16, move: Tearful Look }
   - { level: 20, move: Dive }
   - { level: 24, move: Soak }
   - { level: 28, move: Uproar }
-  - { level: 30, move: Maelstrom }
   - { level: 32, move: Aqua Tail }
   - { level: 36, move: Aqua Ring }
   - { level: 40, move: Endeavor }
   - { level: 44, move: Hydro Pump }
   - { level: 48, move: Double-Edge }
-  - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

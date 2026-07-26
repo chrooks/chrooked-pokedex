@@ -21,6 +21,8 @@ learnset:
   - { level: 39, move: Take Down }
   - { level: 45, move: Dive }
   - { level: 49, move: Aqua Tail }
+  - { level: 52, move: Tsunami }
+  - { level: 52, move: Cryoblast }
   - { level: 55, move: Ice Beam }
   - { level: 61, move: Safeguard }
   - { level: 65, move: Snowscape }

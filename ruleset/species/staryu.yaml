@@ -22,3 +22,4 @@ learnset:
   - { level: 48, move: Recover }
   - { level: 52, move: Cosmic Power }
   - { level: 56, move: Hydro Pump }
+  - { level: 64, move: Tsunami }

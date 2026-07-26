@@ -21,4 +21,5 @@ learnset:
   - { level: 49, move: Extrasensory }
   - { level: 56, move: Double Team }
   - { level: 62, move: Eclipse }
+  - { level: 62, move: Tsunami }
   - { level: 68, move: Hydro Pump }

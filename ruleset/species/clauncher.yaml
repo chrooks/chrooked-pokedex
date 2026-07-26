@@ -3,3 +3,18 @@ chrooked_id: clauncher
 aka: { pokeemerald: SPECIES_CLAUNCHER }
 abilities:
   secondary: Hydrate
+learnset:
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Splash }
+  - { level: 5, move: Vise Grip }
+  - { level: 10, move: Flail }
+  - { level: 15, move: Aqua Jet }
+  - { level: 20, move: Smack Down }
+  - { level: 25, move: Hone Claws }
+  - { level: 30, move: Water Pulse }
+  - { level: 35, move: Swords Dance }
+  - { level: 40, move: Aura Sphere }
+  - { level: 45, move: Bounce }
+  - { level: 50, move: Muddy Water }
+  - { level: 55, move: Crabhammer }
+  - { level: 64, move: Tsunami }

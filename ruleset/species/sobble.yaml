@@ -1,0 +1,16 @@
+name: Sobble
+chrooked_id: sobble
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Growl }
+  - { level: 6, move: Water Gun }
+  - { level: 8, move: Bind }
+  - { level: 12, move: Water Pulse }
+  - { level: 17, move: Tearful Look }
+  - { level: 20, move: Sucker Punch }
+  - { level: 24, move: U-turn }
+  - { level: 28, move: Liquidation }
+  - { level: 32, move: Soak }
+  - { level: 36, move: Rain Dance }
+  - { level: 64, move: Tsunami }

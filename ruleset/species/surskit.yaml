@@ -14,7 +14,10 @@ learnset:
   - { level: 25, move: Mist }
   - { level: 25, move: Haze }
   - { level: 30, move: Signal Beam }
+  - { level: 30, move: Galeburst }
   - { level: 35, move: Baton Pass }
   - { level: 38, move: Sticky Web }
   - { level: 45, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Tempest }

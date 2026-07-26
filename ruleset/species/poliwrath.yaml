@@ -25,3 +25,4 @@ learnset:
   - { level: 46, move: Cross Chop }
   - { level: 48, move: One-Inch Punch }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }

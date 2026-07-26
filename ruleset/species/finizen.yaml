@@ -19,3 +19,4 @@ learnset:
   - { level: 44, move: Mist }
   - { level: 50, move: Hydro Pump }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }

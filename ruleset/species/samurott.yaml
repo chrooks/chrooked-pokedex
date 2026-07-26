@@ -32,5 +32,6 @@ learnset:
   - { level: 54, move: Secret Sword }
   - { level: 54, move: Wave Crash }
   - { level: 54, move: Havoc }
+  - { level: 54, move: Tsunami }
   - { level: 58, move: Swords Dance }
   - { level: 63, move: Hydro Pump }

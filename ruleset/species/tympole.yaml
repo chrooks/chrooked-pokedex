@@ -23,3 +23,5 @@ learnset:
   - { level: 40, move: Hydro Pump }
   - { level: 60, move: Wave Crash }
   - { level: 62, move: Sinkhole }
+  - { level: 64, move: Faultbreak }
+  - { level: 64, move: Tsunami }

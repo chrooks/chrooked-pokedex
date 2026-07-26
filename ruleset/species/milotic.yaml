@@ -26,4 +26,5 @@ learnset:
   - { level: 44, move: Rain Dance }
   - { level: 48, move: Coil }
   - { level: 52, move: Hydro Pump }
+  - { level: 64, move: Tsunami }
 evolution: { from: Feebas, method: { item: Prism Scale } }

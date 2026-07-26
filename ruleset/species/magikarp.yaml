@@ -12,3 +12,4 @@ learnset:
   - { level: 36, move: Dragon Hammer }
   - { level: 45, move: Maelstrom }
   - { level: 60, move: Wave Crash }
+  - { level: 64, move: Tsunami }

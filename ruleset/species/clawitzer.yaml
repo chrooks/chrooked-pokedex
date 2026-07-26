@@ -4,3 +4,21 @@ aka: { pokeemerald: SPECIES_CLAWITZER }
 abilities:
   secondary: Hydrate
 stats: { spa: 135 }
+learnset:
+  - { level: 1, move: Vise Grip }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Flail }
+  - { level: 1, move: Dark Pulse }
+  - { level: 1, move: Dragon Pulse }
+  - { level: 1, move: Heal Pulse }
+  - { level: 15, move: Aqua Jet }
+  - { level: 20, move: Smack Down }
+  - { level: 25, move: Hone Claws }
+  - { level: 30, move: Water Pulse }
+  - { level: 35, move: Swords Dance }
+  - { level: 42, move: Aura Sphere }
+  - { level: 49, move: Bounce }
+  - { level: 52, move: Tsunami }
+  - { level: 56, move: Muddy Water }
+  - { level: 63, move: Crabhammer }

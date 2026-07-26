@@ -16,3 +16,4 @@ learnset:
   - { level: 45, move: Trick }
   - { level: 50, move: Discharge }
   - { level: 55, move: Uproar }
+  - { level: 64, move: Tsunami }

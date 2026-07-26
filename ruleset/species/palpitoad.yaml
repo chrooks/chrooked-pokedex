@@ -27,3 +27,5 @@ learnset:
   - { level: 45, move: Quagmire }
   - { level: 48, move: Hydro Pump }
   - { level: 57, move: Sinkhole }
+  - { level: 64, move: Faultbreak }
+  - { level: 64, move: Tsunami }

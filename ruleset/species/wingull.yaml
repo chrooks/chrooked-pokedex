@@ -3,3 +3,18 @@ chrooked_id: wingull
 aka: { pokeemerald: SPECIES_WINGULL }
 abilities:
   secondary: Hydration
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 5, move: Quick Attack }
+  - { level: 10, move: Supersonic }
+  - { level: 15, move: Wing Attack }
+  - { level: 20, move: Water Pulse }
+  - { level: 26, move: Agility }
+  - { level: 30, move: Air Slash }
+  - { level: 32, move: Galeburst }
+  - { level: 35, move: Mist }
+  - { level: 40, move: Roost }
+  - { level: 45, move: Hurricane }
+  - { level: 64, move: Tsunami }
+  - { level: 64, move: Tempest }

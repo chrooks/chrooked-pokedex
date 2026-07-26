@@ -20,5 +20,6 @@ learnset:
   - { level: 44, move: Lunge }
   - { level: 47, move: Wave Crash }
   - { level: 50, move: Liquidation }
+  - { level: 53, move: Tsunami }
   - { level: 56, move: Leech Life }
   - { level: 62, move: Mirror Coat }

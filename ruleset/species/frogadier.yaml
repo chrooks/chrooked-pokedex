@@ -17,4 +17,5 @@ learnset:
   - { level: 45, move: Bounce }
   - { level: 50, move: Double Team }
   - { level: 56, move: Hydro Pump }
+  - { level: 64, move: Tsunami }
   - { level: 65, move: Eclipse }

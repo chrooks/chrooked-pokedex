@@ -3,3 +3,21 @@ chrooked_id: luvdisc
 aka: { pokeemerald: SPECIES_LUVDISC }
 types: [Water, Fairy]
 stats: { hp: 75, def: 60, spa: 75, spd: 75, spe: 120 }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Charm }
+  - { level: 4, move: Water Gun }
+  - { level: 7, move: Agility }
+  - { level: 13, move: Wish }
+  - { level: 17, move: Water Pulse }
+  - { level: 20, move: Attract }
+  - { level: 22, move: Draining Kiss }
+  - { level: 26, move: Flail }
+  - { level: 31, move: Sweet Kiss }
+  - { level: 34, move: Take Down }
+  - { level: 37, move: Baby-Doll Eyes }
+  - { level: 40, move: Aqua Ring }
+  - { level: 42, move: Soak }
+  - { level: 46, move: Hydro Pump }
+  - { level: 49, move: Safeguard }
+  - { level: 64, move: Tsunami }

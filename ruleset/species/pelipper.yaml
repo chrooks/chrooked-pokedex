@@ -4,3 +4,26 @@ aka: { pokeemerald: SPECIES_PELIPPER }
 abilities:
   secondary: Drizzle
 stats: { hp: 80, spa: 95 }
+learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Supersonic }
+  - { level: 1, move: Air Slash }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Tailwind }
+  - { level: 1, move: Agility }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Soak }
+  - { level: 15, move: Wing Attack }
+  - { level: 20, move: Water Pulse }
+  - { level: 28, move: Stockpile }
+  - { level: 28, move: Spit Up }
+  - { level: 28, move: Swallow }
+  - { level: 31, move: Galeburst }
+  - { level: 34, move: Fling }
+  - { level: 41, move: Mist }
+  - { level: 48, move: Roost }
+  - { level: 52, move: Tsunami }
+  - { level: 52, move: Tempest }
+  - { level: 55, move: Hurricane }
+  - { level: 62, move: Hydro Pump }

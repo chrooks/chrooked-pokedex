@@ -23,3 +23,4 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Confuse Ray }
   - { level: 46, move: Mindwarp }
+  - { level: 64, move: Tsunami }

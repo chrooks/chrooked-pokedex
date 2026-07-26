@@ -16,3 +16,4 @@ learnset:
   - { level: 38, move: Zen Headbutt }
   - { level: 43, move: Energy Ball }
   - { level: 46, move: Siphon }
+  - { level: 64, move: Tsunami }

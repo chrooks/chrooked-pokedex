@@ -16,3 +16,4 @@ learnset:
   - { level: 47, move: Mirror Coat }
   - { level: 52, move: Dragon Pulse }
   - { level: 60, move: Draco Meteor }
+  - { level: 64, move: Tsunami }
