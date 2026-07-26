@@ -1,6 +1,6 @@
 # Behavior spec — human-owned. The seed never touches this folder.
 name: Nematocyst
-chrooked_id: toxictide
+chrooked_id: nematocyst
 applies_to: ability
 aka: {  }
 effects:
