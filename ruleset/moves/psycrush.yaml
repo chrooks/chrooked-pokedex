@@ -1,0 +1,10 @@
+name: Psycrush
+chrooked_id: psycrush
+aka: { pokeemerald: MOVE_PSYCRUSH }
+type: Psychic
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: A reckless psychokinetic ram that batters the target at a cost to itself.
+effect: recoil

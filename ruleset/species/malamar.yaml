@@ -20,6 +20,8 @@ learnset:
   - { level: 33, move: Switcheroo }
   - { level: 35, move: Backstab }
   - { level: 37, move: Foul Play }
+  - { level: 39, move: Kinetic Slam }
   - { level: 42, move: Topsy-Turvy }
   - { level: 47, move: Superpower }
   - { level: 60, move: Havoc }
+  - { level: 62, move: Psycrush }

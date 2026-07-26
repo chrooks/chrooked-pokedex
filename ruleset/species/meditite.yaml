@@ -27,5 +27,7 @@ learnset:
   - { level: 41, move: Recover }
   - { level: 44, move: Counter }
   - { level: 46, move: Aura Sphere }
+  - { level: 46, move: Kinetic Slam }
   - { level: 48, move: One-Inch Punch }
   - { level: 62, move: Focus Blast }
+  - { level: 62, move: Psycrush }

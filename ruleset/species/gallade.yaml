@@ -35,8 +35,10 @@ learnset:
   - { level: 31, move: Astral Hand }
   - { level: 35, move: Swords Dance }
   - { level: 38, move: One-Inch Punch }
+  - { level: 38, move: Kinetic Slam }
   - { level: 42, move: Psycho Cut }
   - { level: 45, move: Pixie Slash }
+  - { level: 46, move: Psycrush }
   - { level: 49, move: Heal Pulse }
   - { level: 52, move: Secret Sword }
   - { level: 56, move: Wide Guard }

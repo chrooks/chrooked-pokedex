@@ -17,7 +17,9 @@ learnset:
   - { level: 33, move: Calm Mind }
   - { level: 35, move: One-Inch Punch }
   - { level: 38, move: Psychic }
+  - { level: 40, move: Kinetic Slam }
   - { level: 41, move: Pixie Slash }
   - { level: 43, move: Heal Pulse }
   - { level: 48, move: Dream Eater }
   - { level: 53, move: Future Sight }
+  - { level: 62, move: Psycrush }

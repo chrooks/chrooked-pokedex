@@ -7,3 +7,5 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 42, move: Astral Hand }
+  - { level: 46, move: Kinetic Slam }
+  - { level: 62, move: Psycrush }

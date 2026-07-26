@@ -21,8 +21,10 @@ learnset:
   - { level: 24, move: Play Rough }
   - { level: 30, move: Zen Headbutt }
   - { level: 36, move: Take Down }
+  - { level: 39, move: Kinetic Slam }
   - { level: 42, move: Swords Dance }
   - { level: 45, move: Body Slam }
+  - { level: 46, move: Psycrush }
   - { level: 48, move: High Horsepower }
   - { level: 54, move: Double-Edge }
   - { level: 60, move: Healing Wish }

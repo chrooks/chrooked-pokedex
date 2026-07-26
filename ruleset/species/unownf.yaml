@@ -1,0 +1,6 @@
+name: Unown F
+chrooked_id: unownf
+aka: {  }
+learnset:
+  - { level: 38, move: Kinetic Slam }
+  - { level: 46, move: Psycrush }

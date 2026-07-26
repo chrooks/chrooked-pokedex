@@ -2,3 +2,18 @@ name: Wobbuffet
 chrooked_id: wobbuffet
 aka: { pokeemerald: SPECIES_WOBBUFFET }
 stats: { def: 65, spd: 65 }
+learnset:
+  - { level: 0, move: Safeguard }
+  - { level: 0, move: Mirror Coat }
+  - { level: 0, move: Destiny Bond }
+  - { level: 0, move: Counter }
+  - { level: 1, move: Splash }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Encore }
+  - { level: 1, move: Amnesia }
+  - { level: 1, move: Counter }
+  - { level: 1, move: Mirror Coat }
+  - { level: 1, move: Safeguard }
+  - { level: 1, move: Destiny Bond }
+  - { level: 46, move: Kinetic Slam }
+  - { level: 62, move: Psycrush }

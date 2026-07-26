@@ -17,7 +17,9 @@ learnset:
   - { level: 30, move: Surf }
   - { level: 33, move: Slack Off }
   - { level: 36, move: Psychic }
+  - { level: 38, move: Kinetic Slam }
   - { level: 39, move: Psych Up }
   - { level: 42, move: Rain Dance }
   - { level: 45, move: Heal Pulse }
   - { level: 48, move: Miasma }
+  - { level: 62, move: Psycrush }

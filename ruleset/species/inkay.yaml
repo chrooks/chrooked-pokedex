@@ -20,4 +20,6 @@ learnset:
   - { level: 39, move: Superpower }
   - { level: 42, move: Astral Hand }
   - { level: 45, move: Backstab }
+  - { level: 46, move: Kinetic Slam }
   - { level: 60, move: Havoc }
+  - { level: 62, move: Psycrush }

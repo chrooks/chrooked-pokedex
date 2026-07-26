@@ -19,6 +19,8 @@ learnset:
   - { level: 32, move: Role Play }
   - { level: 37, move: Zen Headbutt }
   - { level: 40, move: Bail Out }
+  - { level: 43, move: Kinetic Slam }
+  - { level: 46, move: Psycrush }
   - { level: 49, move: Imprison }
   - { level: 55, move: Double-Edge }
   - { level: 62, move: Megahorn }

@@ -29,9 +29,11 @@ learnset:
   - { level: 38, move: Aura Sphere }
   - { level: 41, move: Astral Hand }
   - { level: 41, move: Ki Blast }
+  - { level: 41, move: Kinetic Slam }
   - { level: 44, move: One-Inch Punch }
   - { level: 47, move: Recover }
   - { level: 53, move: Counter }
   - { level: 53, move: Axe Kick }
   - { level: 62, move: Focus Blast }
+  - { level: 62, move: Psycrush }
 evolution: { from: Meditite, method: { level: 34 } }

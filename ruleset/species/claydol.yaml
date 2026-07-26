@@ -24,5 +24,7 @@ learnset:
   - { level: 33, move: Self-Destruct }
   - { level: 38, move: Guard Split }
   - { level: 38, move: Power Split }
+  - { level: 40, move: Kinetic Slam }
   - { level: 43, move: Sandstorm }
   - { level: 48, move: Explosion }
+  - { level: 62, move: Psycrush }
