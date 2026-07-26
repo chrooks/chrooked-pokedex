@@ -27,4 +27,4 @@ notes:
   - Magic Bounce does NOT block Bioturbation's relocation — the ability is not a move, it is an ability trigger.
   - In doubles, 'user's side' and 'foe's side' refer to the respective team's full field side as normal.
   - If multiple Pokémon with Bioturbation switch in simultaneously (doubles), only one relocation resolves (last to be processed wins; implementation detail for engine pass).
-  - STUB — engine_hints ungrounded, needs human grounding pass
+  - Rejuv impl: references/rejuv-harness/chrooked_bioturbation.rb — neutralize via a PBTypes.typesEff wrapper flagged during the holder's pbOnActiveOne; relocate via CHROOKED_SWITCH_IN (fires after hazard damage).
