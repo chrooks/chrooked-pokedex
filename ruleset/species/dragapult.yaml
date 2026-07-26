@@ -17,10 +17,12 @@ learnset:
   - { level: 30, move: Double Hit }
   - { level: 36, move: U-turn }
   - { level: 39, move: Wraithstrike }
+  - { level: 39, move: Interment }
   - { level: 42, move: Dragon Dance }
   - { level: 45, move: Dragon Hammer }
   - { level: 48, move: Phantom Force }
   - { level: 54, move: Take Down }
+  - { level: 58, move: Necrosis }
   - { level: 63, move: Dragon Rush }
   - { level: 70, move: Double-Edge }
   - { level: 78, move: Last Resort }

@@ -17,7 +17,9 @@ learnset:
   - { level: 26, move: Curse }
   - { level: 30, move: Shadow Ball }
   - { level: 34, move: Role Play }
+  - { level: 36, move: Interment }
   - { level: 38, move: Sucker Punch }
   - { level: 42, move: Trick }
   - { level: 45, move: Wraithstrike }
   - { level: 48, move: Phantom Force }
+  - { level: 62, move: Necrosis }

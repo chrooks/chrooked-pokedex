@@ -18,7 +18,9 @@ learnset:
   - { level: 33, move: Close Combat }
   - { level: 36, move: Screech }
   - { level: 38, move: One-Inch Punch }
+  - { level: 38, move: Interment }
   - { level: 40, move: Stomping Tantrum }
   - { level: 42, move: Wraithstrike }
   - { level: 44, move: Outrage }
   - { level: 48, move: Final Gambit }
+  - { level: 62, move: Necrosis }

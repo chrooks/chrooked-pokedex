@@ -13,10 +13,12 @@ learnset:
   - { level: 28, move: Giga Drain }
   - { level: 32, move: Whirlpool }
   - { level: 36, move: Heavy Slam }
+  - { level: 38, move: Interment }
   - { level: 40, move: Body Slam }
   - { level: 42, move: Wraithstrike }
   - { level: 44, move: Shadow Ball }
   - { level: 48, move: Metal Sound }
+  - { level: 50, move: Necrosis }
   - { level: 52, move: Anchor Shot }
   - { level: 56, move: Energy Ball }
   - { level: 60, move: Phantom Force }

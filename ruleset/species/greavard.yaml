@@ -22,6 +22,8 @@ learnset:
   - { level: 32, move: Play Rough }
   - { level: 37, move: Helping Hand }
   - { level: 39, move: Wraithstrike }
+  - { level: 39, move: Interment }
   - { level: 41, move: Phantom Force }
   - { level: 46, move: Charm }
   - { level: 52, move: Double-Edge }
+  - { level: 62, move: Necrosis }

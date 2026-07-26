@@ -19,7 +19,9 @@ learnset:
   - { level: 31, move: Bone Rush }
   - { level: 36, move: Knock Off }
   - { level: 39, move: Wraithstrike }
+  - { level: 39, move: Interment }
   - { level: 42, move: Swords Dance }
   - { level: 48, move: Bonemerang }
+  - { level: 51, move: Necrosis }
   - { level: 54, move: Iron Head }
   - { level: 60, move: Flare Blitz }
