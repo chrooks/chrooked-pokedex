@@ -22,3 +22,4 @@ learnset:
   - { level: 51, move: Necrosis }
   - { level: 54, move: Play Rough }
   - { level: 60, move: Pain Split }
+  - { level: 64, move: Faeblitz }

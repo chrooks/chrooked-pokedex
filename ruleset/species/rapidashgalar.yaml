@@ -27,5 +27,6 @@ learnset:
   - { level: 45, move: Body Slam }
   - { level: 46, move: Psycrush }
   - { level: 48, move: High Horsepower }
+  - { level: 52, move: Faeblitz }
   - { level: 54, move: Double-Edge }
   - { level: 60, move: Healing Wish }

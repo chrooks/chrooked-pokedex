@@ -28,3 +28,4 @@ learnset:
   - { level: 35, move: Cutsie Slap }
   - { level: 46, move: Rampage }
   - { level: 46, move: Starfall Slam }
+  - { level: 64, move: Faeblitz }

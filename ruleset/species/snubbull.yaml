@@ -25,3 +25,4 @@ learnset:
   - { level: 40, move: Starfall Slam }
   - { level: 43, move: Payback }
   - { level: 49, move: Crunch }
+  - { level: 64, move: Faeblitz }

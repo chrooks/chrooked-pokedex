@@ -21,3 +21,4 @@ learnset:
   - { level: 44, move: Explosion }
   - { level: 48, move: Memento }
   - { level: 52, move: Destiny Bond }
+  - { level: 64, move: Faeblitz }

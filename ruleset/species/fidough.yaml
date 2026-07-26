@@ -19,3 +19,4 @@ learnset:
   - { level: 38, move: Starfall Slam }
   - { level: 40, move: Crunch }
   - { level: 45, move: Last Resort }
+  - { level: 64, move: Faeblitz }

@@ -1,0 +1,10 @@
+name: Faeblitz
+chrooked_id: faeblitz
+aka: { pokeemerald: MOVE_FAEBLITZ }
+type: Fairy
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: A headlong blitz of fae force that rebounds on the user.
+effect: recoil

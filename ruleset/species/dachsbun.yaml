@@ -20,3 +20,4 @@ learnset:
   - { level: 42, move: Charm }
   - { level: 47, move: Crunch }
   - { level: 53, move: Last Resort }
+  - { level: 64, move: Faeblitz }

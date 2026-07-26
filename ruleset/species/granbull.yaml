@@ -27,4 +27,5 @@ learnset:
   - { level: 43, move: Play Rough }
   - { level: 51, move: Payback }
   - { level: 59, move: Crunch }
+  - { level: 64, move: Faeblitz }
 evolution: { from: Snubbull, method: { level: 23 } }

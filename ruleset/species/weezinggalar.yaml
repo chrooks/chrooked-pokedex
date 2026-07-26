@@ -24,6 +24,7 @@ learnset:
   - { level: 41, move: Starfall Slam }
   - { level: 44, move: Belch }
   - { level: 50, move: Explosion }
+  - { level: 53, move: Faeblitz }
   - { level: 56, move: Memento }
   - { level: 62, move: Destiny Bond }
   - { level: 68, move: Misty Terrain }
