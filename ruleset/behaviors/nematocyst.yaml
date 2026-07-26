@@ -25,4 +25,4 @@ notes:
   - The ability does NOT grant immunity to being poisoned by the opponent — it only governs poison the bearer inflicts on others.
   - In doubles, the Water-move proc can trigger on spread moves (e.g. Surf, Muddy Water) against all targets hit, rolling independently for each.
   - Poison-type targets and Steel-type targets are immune to the proc despite the type-bypass clause (the bypass only waives the 'Poison/Steel users only' restriction on the user side, not the target's type-based immunity).
-  - STUB — engine_hints ungrounded, needs human grounding pass
+  - Rejuv impl: references/rejuv-harness/chrooked_nematocyst.rb — 30% Water-move proc via CHROOKED_ON_DEAL; upgrade-to-toxic via a pbPoison prepend keyed on the source's ability.
