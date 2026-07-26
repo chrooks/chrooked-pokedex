@@ -22,6 +22,8 @@ learnset:
   - { level: 35, move: Incinerate }
   - { level: 37, move: Cinder Smash }
   - { level: 39, move: Tailwind }
+  - { level: 39, move: Combust }
+  - { level: 39, move: Nosedive }
   - { level: 41, move: Dive Bomb }
   - { level: 43, move: Steel Wing }
   - { level: 47, move: Flamethrower }

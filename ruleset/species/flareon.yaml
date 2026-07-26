@@ -19,6 +19,7 @@ learnset:
   - { level: 30, move: Crunch }
   - { level: 33, move: Bail Out }
   - { level: 36, move: Cinder Smash }
+  - { level: 37, move: Combust }
   - { level: 40, move: Lava Plume }
   - { level: 46, move: Double-Edge }
   - { level: 52, move: Flare Blitz }

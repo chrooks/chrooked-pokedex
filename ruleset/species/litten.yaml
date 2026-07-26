@@ -20,5 +20,6 @@ learnset:
   - { level: 39, move: Cinder Smash }
   - { level: 42, move: One-Inch Punch }
   - { level: 45, move: Backstab }
+  - { level: 46, move: Combust }
   - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }

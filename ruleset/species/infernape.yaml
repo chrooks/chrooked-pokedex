@@ -21,6 +21,8 @@ learnset:
   - { level: 32, move: Thunder Punch }
   - { level: 35, move: Ki Blast }
   - { level: 36, move: Ice Punch }
+  - { level: 36, move: Combust }
+  - { level: 36, move: Cross Chop }
   - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Slack Off }
   - { level: 45, move: Cinder Smash }

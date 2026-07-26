@@ -1,0 +1,11 @@
+name: Combust
+chrooked_id: combust
+aka: { pokeemerald: MOVE_COMBUST }
+type: Fire
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user detonates in a burst of flame. May leave the target with a burn.
+additional_effects:
+  - { effect: burn, chance: 10 }

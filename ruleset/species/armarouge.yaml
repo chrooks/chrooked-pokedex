@@ -22,6 +22,7 @@ learnset:
   - { level: 40, move: Wraithstrike }
   - { level: 42, move: Ally Switch }
   - { level: 45, move: Cinder Smash }
+  - { level: 45, move: Combust }
   - { level: 48, move: Flamethrower }
   - { level: 56, move: Expanding Force }
   - { level: 62, move: Armor Cannon }

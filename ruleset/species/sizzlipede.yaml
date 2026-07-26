@@ -14,6 +14,8 @@ learnset:
   - { level: 30, move: Body Slam }
   - { level: 35, move: Fire Spin }
   - { level: 37, move: Cinder Smash }
+  - { level: 37, move: Combust }
+  - { level: 37, move: Moltstrike }
   - { level: 40, move: Crunch }
   - { level: 45, move: Fire Lash }
   - { level: 50, move: Lunge }

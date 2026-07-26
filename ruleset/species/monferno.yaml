@@ -21,6 +21,8 @@ learnset:
   - { level: 36, move: Ice Punch }
   - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Slack Off }
+  - { level: 42, move: Combust }
+  - { level: 42, move: Cross Chop }
   - { level: 45, move: Cinder Smash }
   - { level: 48, move: Blaze Kick }
   - { level: 53, move: Focus Punch }

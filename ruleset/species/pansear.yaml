@@ -2,3 +2,21 @@ name: Pansear
 chrooked_id: pansear
 aka: { pokeemerald: SPECIES_PANSEAR }
 stats: { spa: 60 }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Play Nice }
+  - { level: 4, move: Leer }
+  - { level: 7, move: Lick }
+  - { level: 10, move: Incinerate }
+  - { level: 13, move: Fury Swipes }
+  - { level: 16, move: Yawn }
+  - { level: 19, move: Bite }
+  - { level: 22, move: Flame Burst }
+  - { level: 25, move: Amnesia }
+  - { level: 28, move: Fling }
+  - { level: 31, move: Acrobatics }
+  - { level: 34, move: Fire Blast }
+  - { level: 37, move: Recycle }
+  - { level: 40, move: Natural Gift }
+  - { level: 43, move: Crunch }
+  - { level: 46, move: Combust }

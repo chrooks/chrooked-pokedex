@@ -22,6 +22,8 @@ learnset:
   - { level: 32, move: Ki Blast }
   - { level: 35, move: Focus Energy }
   - { level: 37, move: One-Inch Punch }
+  - { level: 37, move: Combust }
+  - { level: 37, move: Cross Chop }
   - { level: 40, move: Blaze Kick }
   - { level: 42, move: Cinder Smash }
   - { level: 45, move: Bulk Up }

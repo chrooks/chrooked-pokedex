@@ -24,6 +24,8 @@ learnset:
   - { level: 36, move: Dive Bomb }
   - { level: 38, move: Tailwind }
   - { level: 41, move: Steel Wing }
+  - { level: 42, move: Combust }
+  - { level: 42, move: Nosedive }
   - { level: 44, move: Heat Wave }
   - { level: 46, move: Cinder Smash }
   - { level: 48, move: U-turn }

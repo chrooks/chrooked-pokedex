@@ -18,5 +18,6 @@ learnset:
   - { level: 38, move: Wraithstrike }
   - { level: 42, move: Interment }
   - { level: 43, move: Cinder Smash }
+  - { level: 46, move: Combust }
   - { level: 55, move: Pixie Slash }
   - { level: 62, move: Necrosis }

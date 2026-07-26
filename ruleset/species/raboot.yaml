@@ -14,5 +14,6 @@ learnset:
   - { level: 30, move: Headbutt }
   - { level: 36, move: Counter }
   - { level: 39, move: Cinder Smash }
+  - { level: 39, move: Combust }
   - { level: 42, move: Bounce }
   - { level: 48, move: Double-Edge }

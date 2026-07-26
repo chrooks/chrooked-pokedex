@@ -9,3 +9,4 @@ learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Fury Swipes }
   - { level: 1, move: Flame Burst }
+  - { level: 46, move: Combust }

@@ -19,4 +19,5 @@ learnset:
   - { level: 39, move: Roar }
   - { level: 41, move: Cinder Smash }
   - { level: 43, move: Flare Blitz }
+  - { level: 46, move: Combust }
   - { level: 48, move: Heel Drop }

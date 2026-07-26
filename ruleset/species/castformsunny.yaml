@@ -3,3 +3,18 @@ chrooked_id: castformsunny
 aka: { dex: 351 }
 abilities:
   primary: Drought
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 10, move: Water Gun }
+  - { level: 10, move: Ember }
+  - { level: 10, move: Powder Snow }
+  - { level: 15, move: Headbutt }
+  - { level: 20, move: Rain Dance }
+  - { level: 20, move: Sunny Day }
+  - { level: 20, move: Hail }
+  - { level: 25, move: Weather Ball }
+  - { level: 35, move: Hydro Pump }
+  - { level: 35, move: Fire Blast }
+  - { level: 35, move: Blizzard }
+  - { level: 40, move: Combust }
+  - { level: 45, move: Hurricane }

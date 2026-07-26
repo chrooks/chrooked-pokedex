@@ -21,6 +21,7 @@ learnset:
   - { level: 38, move: Assurance }
   - { level: 43, move: Flamethrower }
   - { level: 46, move: Heel Drop }
+  - { level: 46, move: Combust }
   - { level: 50, move: Head Smash }
   - { level: 55, move: Roar }
   - { level: 62, move: Flare Blitz }
