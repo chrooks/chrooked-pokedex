@@ -15,6 +15,7 @@ from chrooked_pokedex.model import Ruleset
 from chrooked_pokedex.model.behavior_spec import BehaviorSpec
 from chrooked_pokedex.model.schema import (
     AbilitiesOverride,
+    AdditionalEffect,
     AbilityDef,
     EvolutionOverride,
     LearnsetMove,
@@ -987,3 +988,24 @@ def test_scan_monhash_keys_accepts_mixed_case_symbols(tmp_path):
     keys = dr.scan_monhash_keys(path)
     assert keys["NIDORANfE"] == ["Normal Form"]
     assert keys["BULBASAUR"] == ["Normal Form"]
+
+
+def test_new_move_emits_over110_drawbacks():
+    """>110 rungs emit their self-cost: recoil as a data field, -2 SpA as 0x03F."""
+    from chrooked_pokedex.appliers.rejuv.apply import _function_for, _new_move_block
+
+    recoil = MoveDef(name="Testquake", chrooked_id="testquake", type="Dark",
+                     category="physical", power=120, accuracy=90, pp=5,
+                     effect="recoil", additional_effects=())
+    block = _new_move_block(recoil, "TESTQUAKE", 998)
+    assert ":recoil => 0.33" in block
+    assert ":function => 0x000" in block
+
+    spec = MoveDef(name="Testburst", chrooked_id="testburst", type="Bug",
+                   category="special", power=120, accuracy=90, pp=5,
+                   effect="hit",
+                   additional_effects=(AdditionalEffect(effect="sp_atk_minus_2", chance=100),))
+    function, chance, leftover = _function_for(spec)
+    assert (function, chance, leftover) == (0x03F, 100, [])
+    block = _new_move_block(spec, "TESTBURST", 999, function, chance)
+    assert ":function => 0x03F" in block and ":effect => 100" in block

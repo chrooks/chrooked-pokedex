@@ -405,6 +405,13 @@ def audit_move(mid: str, move: Mapping) -> list[str]:
     if move.get("pp") != conv["pp"]:
         deviations.append(f"{mid}: pp expected {conv['pp']} got {move.get('pp')}")
 
+    # At >110 the drawback IS the secondary (D21): a top-band nuke carries its
+    # self-cost (phys recoil / spec -2 SpA) instead of the type's target effect,
+    # matching canon (Overheat, Head Smash, Double-Edge carry no target effect).
+    if band == ">110":
+        deviations.extend(_drawback_deviations(mid, split, move))
+        return deviations
+
     expected = _expected_effect(move_type, split)
     present = {ae.get("effect"): ae.get("chance") for ae in (move.get("additional_effects") or [])}
     if expected is None:
@@ -423,8 +430,6 @@ def audit_move(mid: str, move: Mapping) -> list[str]:
             if present[expected] != want:
                 deviations.append(f"{mid}: chance expected {want} got {present[expected]}")
 
-    if band == ">110":
-        deviations.extend(_drawback_deviations(mid, split, move))
     return deviations
 
 

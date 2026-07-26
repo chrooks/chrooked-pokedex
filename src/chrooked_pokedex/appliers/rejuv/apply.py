@@ -509,6 +509,9 @@ _SINGLE_EFFECT_CODES = {
     "flinch": 0x00F, "atk_minus_1": 0x042, "def_minus_1": 0x043,
     "sp_atk_minus_1": 0x045, "sp_def_minus_1": 0x046, "acc_minus_1": 0x047,
     "confusion": 0x013,
+    # The >110 special drawback: user's Sp. Atk falls two steps after use
+    # (Overheat / Draco Meteor / Leaf Storm all share 0x03F, :effect 100).
+    "sp_atk_minus_2": 0x03F,
 }
 
 
@@ -562,7 +565,12 @@ def _build_movetext(
             # effects left it free; otherwise it joins the leftover so it is
             # reported, never silently dropped (Bail Out shipped as plain 0x000).
             primary = move.effect if move.effect != DEFAULT_EFFECT else ""
-            if primary:
+            if primary == "recoil":
+                # The >110 physical drawback rides the :recoil data field the
+                # engine already reads (Double-Edge carries :recoil => 0.33), not
+                # a :function code — emitted in _new_move_block, not a leftover.
+                primary = ""
+            elif primary:
                 primary_code = _PRIMARY_EFFECT_CODES.get(primary)
                 if primary_code is not None and function == 0x000:
                     function, chance = primary_code
@@ -641,6 +649,9 @@ def _new_move_block(
     ]
     if effect_chance is not None:
         fields.append(f":effect => {effect_chance}")
+    if move.effect == "recoil":
+        # >110 physical drawback: 1/3 recoil (D3), the field the engine reads.
+        fields.append(":recoil => 0.33")
     for flag in move.flags:
         key = _FLAG.get(flag)
         if key:

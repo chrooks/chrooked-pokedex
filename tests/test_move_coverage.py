@@ -111,3 +111,26 @@ def test_check_flags_wrong_band_accuracy_and_pp() -> None:
 
     assert any("accuracy expected 100 got 90" in d for d in deviations)
     assert any("pp expected 15 got 5" in d for d in deviations)
+
+
+@pytest.mark.unit
+def test_over110_requires_drawback_not_target_effect() -> None:
+    # D21: a >110 rung carries its self-cost, not the type's target secondary.
+    # Physical nuke with 1/3 recoil (effect: recoil) is compliant...
+    phys_ok = {
+        "type": "Dark", "category": "physical", "power": 120,
+        "accuracy": 90, "pp": 5, "effect": "recoil", "additional_effects": [],
+    }
+    assert mc.audit_move("phys", phys_ok) == []
+
+    # ...special nuke with the -2 SpA self-drop is compliant...
+    spec_ok = {
+        "type": "Bug", "category": "special", "power": 120,
+        "accuracy": 90, "pp": 5, "effect": "hit",
+        "additional_effects": [{"effect": "sp_atk_minus_2", "chance": 100}],
+    }
+    assert mc.audit_move("spec", spec_ok) == []
+
+    # ...but a drawback-less >110 nuke is rejected (no free lunch).
+    phys_bad = {**phys_ok, "effect": "hit"}
+    assert any("drawback expected recoil" in d for d in mc.audit_move("bad", phys_bad))
