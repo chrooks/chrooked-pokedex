@@ -1,11 +1,10 @@
-name: Oricorio Sensu
-chrooked_id: oricoriosensu
+name: Oricorio Baile
+chrooked_id: oricoriobaile
 aka: {  }
 learnset:
   - { level: 1, move: Pound }
   - { level: 4, move: Growl }
   - { level: 6, move: Peck }
-  - { level: 8, move: Knell }
   - { level: 10, move: Helping Hand }
   - { level: 13, move: Air Cutter }
   - { level: 16, move: Baton Pass }
@@ -19,5 +18,4 @@ learnset:
   - { level: 40, move: Revelation Dance }
   - { level: 43, move: Agility }
   - { level: 47, move: Hurricane }
-  - { level: 64, move: Netherstorm }
   - { level: 64, move: Tempest }

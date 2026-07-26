@@ -11,6 +11,7 @@ learnset:
   - { level: 20, move: Yawn }
   - { level: 24, move: Metronome }
   - { level: 28, move: After You }
+  - { level: 30, move: Galeburst }
   - { level: 32, move: Double-Edge }
   - { level: 36, move: Safeguard }
   - { level: 40, move: Follow Me }
@@ -18,3 +19,4 @@ learnset:
   - { level: 48, move: Last Resort }
   - { level: 52, move: Wish }
   - { level: 64, move: Oblivion Wing }
+  - { level: 64, move: Tempest }

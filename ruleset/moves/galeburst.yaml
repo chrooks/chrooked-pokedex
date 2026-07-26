@@ -1,0 +1,9 @@
+name: Galeburst
+chrooked_id: galeburst
+aka: { pokeemerald: MOVE_GALEBURST }
+type: Flying
+category: special
+power: 85
+accuracy: 100
+pp: 15
+description: A bursting blast of gale-force wind.

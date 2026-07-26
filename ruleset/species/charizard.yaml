@@ -17,11 +17,13 @@ learnset:
   - { level: 19, move: Fire Fang }
   - { level: 24, move: Acrobatics }
   - { level: 30, move: Flamethrower }
+  - { level: 34, move: Galeburst }
   - { level: 36, move: Air Cutter }
   - { level: 39, move: Scary Face }
   - { level: 44, move: Dragon Claw }
   - { level: 46, move: Heat Wave }
   - { level: 50, move: Hurricane }
   - { level: 54, move: Inferno }
+  - { level: 58, move: Tempest }
   - { level: 62, move: Bleakwind Storm }
   - { level: 68, move: Flare Blitz }

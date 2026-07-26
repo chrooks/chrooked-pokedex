@@ -16,9 +16,11 @@ learnset:
   - { level: 16, move: Magical Leaf }
   - { level: 21, move: Whirlwind }
   - { level: 30, move: Wide Guard }
+  - { level: 33, move: Galeburst }
   - { level: 36, move: Air Slash }
   - { level: 38, move: Reap }
   - { level: 41, move: Body Slam }
   - { level: 46, move: Outrage }
   - { level: 50, move: Synthesis }
   - { level: 56, move: Solar Beam }
+  - { level: 64, move: Tempest }

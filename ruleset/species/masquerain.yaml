@@ -18,7 +18,9 @@ learnset:
   - { level: 29, move: Signal Beam }
   - { level: 32, move: Air Slash }
   - { level: 35, move: Antennae Blast }
+  - { level: 35, move: Galeburst }
   - { level: 38, move: Giga Drain }
   - { level: 44, move: Bug Buzz }
   - { level: 52, move: Quiver Dance }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Tempest }

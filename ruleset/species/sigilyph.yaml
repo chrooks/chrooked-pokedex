@@ -10,6 +10,7 @@ learnset:
   - { level: 20, move: Psybeam }
   - { level: 25, move: Whirlwind }
   - { level: 30, move: Cosmic Power }
+  - { level: 32, move: Galeburst }
   - { level: 35, move: Air Slash }
   - { level: 37, move: Mindwarp }
   - { level: 40, move: Psychic }
@@ -19,3 +20,4 @@ learnset:
   - { level: 55, move: Sky Attack }
   - { level: 60, move: Skill Swap }
   - { level: 64, move: Oblivion Wing }
+  - { level: 64, move: Tempest }

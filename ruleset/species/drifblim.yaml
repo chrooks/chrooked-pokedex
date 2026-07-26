@@ -17,7 +17,9 @@ learnset:
   - { level: 24, move: Stockpile }
   - { level: 31, move: Self-Destruct }
   - { level: 36, move: Destiny Bond }
+  - { level: 39, move: Galeburst }
   - { level: 42, move: Baton Pass }
   - { level: 48, move: Tailwind }
   - { level: 54, move: Explosion }
   - { level: 64, move: Netherstorm }
+  - { level: 64, move: Tempest }

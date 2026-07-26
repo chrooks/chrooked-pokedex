@@ -5,6 +5,8 @@ learnset:
   - { level: 0, move: Harden }
   - { level: 1, move: Harden }
   - { level: 30, move: Signal Beam }
+  - { level: 42, move: Galeburst }
   - { level: 45, move: Antennae Blast }
   - { level: 46, move: Moltstrike }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Tempest }

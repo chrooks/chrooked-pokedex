@@ -10,8 +10,10 @@ learnset:
   - { level: 20, move: Night Shade }
   - { level: 26, move: Psycho Shift }
   - { level: 30, move: Power Swap }
+  - { level: 32, move: Galeburst }
   - { level: 35, move: Guard Swap }
   - { level: 35, move: Psychic }
   - { level: 37, move: Mindwarp }
   - { level: 40, move: Wish }
   - { level: 45, move: Future Sight }
+  - { level: 64, move: Tempest }

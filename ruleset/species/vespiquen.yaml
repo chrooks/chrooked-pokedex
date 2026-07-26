@@ -21,6 +21,7 @@ learnset:
   - { level: 20, move: Swagger }
   - { level: 24, move: Roost }
   - { level: 28, move: Air Slash }
+  - { level: 30, move: Galeburst }
   - { level: 32, move: Power Gem }
   - { level: 36, move: Toxic }
   - { level: 38, move: Nosedive }
@@ -29,3 +30,4 @@ learnset:
   - { level: 40, move: Defend Order }
   - { level: 44, move: Destiny Bond }
   - { level: 48, move: Dive Bomb }
+  - { level: 64, move: Tempest }

@@ -19,7 +19,9 @@ learnset:
   - { level: 34, move: Dragon Claw }
   - { level: 36, move: Inferno }
   - { level: 42, move: Crunch }
+  - { level: 42, move: Galeburst }
   - { level: 48, move: Heat Wave }
   - { level: 54, move: Flare Blitz }
   - { level: 60, move: Overheat }
+  - { level: 64, move: Tempest }
 evolution: { from: Charmander, method: { level: 16 } }

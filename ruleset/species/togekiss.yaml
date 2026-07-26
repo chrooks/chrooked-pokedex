@@ -27,4 +27,6 @@ learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Sweet Kiss }
   - { level: 1, move: Life Dew }
+  - { level: 42, move: Galeburst }
   - { level: 64, move: Oblivion Wing }
+  - { level: 64, move: Tempest }

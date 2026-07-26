@@ -1,0 +1,11 @@
+name: Tempest
+chrooked_id: tempest
+aka: { pokeemerald: MOVE_TEMPEST }
+type: Flying
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: A raging tempest engulfs the target. The user's Sp. Atk falls sharply.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

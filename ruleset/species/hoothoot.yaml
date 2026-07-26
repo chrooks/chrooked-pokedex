@@ -19,4 +19,6 @@ learnset:
   - { level: 33, move: Moonblast }
   - { level: 36, move: Hypnosis }
   - { level: 39, move: Dream Eater }
+  - { level: 42, move: Galeburst }
   - { level: 46, move: Resonance }
+  - { level: 64, move: Tempest }

@@ -13,8 +13,10 @@ learnset:
   - { level: 22, move: Struggle Bug }
   - { level: 26, move: Baton Pass }
   - { level: 29, move: Agility }
+  - { level: 31, move: Galeburst }
   - { level: 33, move: Bug Buzz }
   - { level: 36, move: Air Slash }
   - { level: 40, move: Double-Edge }
   - { level: 46, move: Moltstrike }
   - { level: 46, move: Cross Chop }
+  - { level: 64, move: Tempest }

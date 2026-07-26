@@ -15,7 +15,9 @@ learnset:
   - { level: 24, move: Swallow }
   - { level: 29, move: Self-Destruct }
   - { level: 32, move: Destiny Bond }
+  - { level: 34, move: Galeburst }
   - { level: 36, move: Baton Pass }
   - { level: 40, move: Tailwind }
   - { level: 44, move: Explosion }
   - { level: 64, move: Netherstorm }
+  - { level: 64, move: Tempest }

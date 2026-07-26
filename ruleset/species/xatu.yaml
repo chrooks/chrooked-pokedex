@@ -13,9 +13,11 @@ learnset:
   - { level: 15, move: Confuse Ray }
   - { level: 20, move: Night Shade }
   - { level: 28, move: Psycho Shift }
+  - { level: 31, move: Galeburst }
   - { level: 34, move: Power Swap }
   - { level: 34, move: Guard Swap }
   - { level: 37, move: Mindwarp }
   - { level: 41, move: Psychic }
   - { level: 48, move: Wish }
   - { level: 55, move: Future Sight }
+  - { level: 64, move: Tempest }

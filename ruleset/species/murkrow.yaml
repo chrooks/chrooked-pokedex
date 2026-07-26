@@ -18,6 +18,7 @@ learnset:
   - { level: 20, move: Roost }
   - { level: 25, move: Focus Energy }
   - { level: 30, move: Foul Play }
+  - { level: 33, move: Galeburst }
   - { level: 35, move: Tailwind }
   - { level: 42, move: Dive Bomb }
   - { level: 45, move: Backstab }
@@ -25,5 +26,6 @@ learnset:
   - { level: 48, move: Havoc }
   - { level: 50, move: Kowtow Cleave }
   - { level: 58, move: Throat Chop }
+  - { level: 64, move: Tempest }
   - { level: 65, move: Comeuppance }
   - { level: 75, move: Brave Bird }

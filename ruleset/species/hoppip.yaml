@@ -23,5 +23,7 @@ learnset:
   - { level: 35, move: Bounce }
   - { level: 38, move: Memento }
   - { level: 42, move: Reap }
+  - { level: 42, move: Galeburst }
   - { level: 46, move: Nosedive }
   - { level: 48, move: Dive Bomb }
+  - { level: 64, move: Tempest }

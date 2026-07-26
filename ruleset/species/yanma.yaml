@@ -16,6 +16,7 @@ learnset:
   - { level: 30, move: Bug Bite }
   - { level: 33, move: Ancient Power }
   - { level: 35, move: Antennae Blast }
+  - { level: 35, move: Galeburst }
   - { level: 38, move: Hypnosis }
   - { level: 43, move: Wing Attack }
   - { level: 46, move: Screech }
@@ -23,3 +24,4 @@ learnset:
   - { level: 54, move: Air Slash }
   - { level: 57, move: Bug Buzz }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Tempest }

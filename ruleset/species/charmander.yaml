@@ -3,3 +3,18 @@ chrooked_id: charmander
 aka: { pokeemerald: SPECIES_CHARMANDER }
 abilities:
   secondary: Flash Fire
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Growl }
+  - { level: 4, move: Ember }
+  - { level: 8, move: Smokescreen }
+  - { level: 12, move: Dragon Breath }
+  - { level: 17, move: Fire Fang }
+  - { level: 20, move: Slash }
+  - { level: 24, move: Flamethrower }
+  - { level: 28, move: Scary Face }
+  - { level: 30, move: Galeburst }
+  - { level: 32, move: Fire Spin }
+  - { level: 36, move: Inferno }
+  - { level: 40, move: Flare Blitz }
+  - { level: 64, move: Tempest }

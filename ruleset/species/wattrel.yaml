@@ -15,4 +15,6 @@ learnset:
   - { level: 27, move: Agility }
   - { level: 31, move: Volt Switch }
   - { level: 36, move: Discharge }
+  - { level: 40, move: Galeburst }
   - { level: 64, move: Oblivion Wing }
+  - { level: 64, move: Tempest }

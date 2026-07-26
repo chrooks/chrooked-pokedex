@@ -6,5 +6,7 @@ learnset:
   - { level: 1, move: String Shot }
   - { level: 9, move: Bug Bite }
   - { level: 30, move: Signal Beam }
+  - { level: 42, move: Galeburst }
   - { level: 45, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Tempest }
