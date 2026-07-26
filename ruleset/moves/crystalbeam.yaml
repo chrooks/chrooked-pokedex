@@ -1,0 +1,11 @@
+name: Crystal Beam
+chrooked_id: crystalbeam
+aka: { pokeemerald: MOVE_CRYSTAL_BEAM }
+type: Rock
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: A concentrated beam of crystalline energy. May lower the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 20 }

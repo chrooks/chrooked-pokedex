@@ -1,0 +1,11 @@
+name: Jewel Glow
+chrooked_id: jewelglow
+aka: { pokeemerald: MOVE_JEWEL_GLOW }
+type: Rock
+category: special
+power: 40
+accuracy: 100
+pp: 30
+description: A dazzling flare of refracted mineral light. Lowers the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 100 }

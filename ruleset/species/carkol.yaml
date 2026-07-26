@@ -7,12 +7,15 @@ learnset:
   - { level: 1, move: Smokescreen }
   - { level: 1, move: Rapid Spin }
   - { level: 1, move: Smack Down }
+  - { level: 8, move: Jewel Glow }
   - { level: 15, move: Rock Polish }
   - { level: 20, move: Ancient Power }
   - { level: 27, move: Incinerate }
   - { level: 31, move: Geo Pulse }
   - { level: 35, move: Stealth Rock }
   - { level: 38, move: Power Gem }
+  - { level: 38, move: Crystal Beam }
   - { level: 41, move: Heat Crash }
   - { level: 48, move: Rock Blast }
   - { level: 55, move: Stone Edge }
+  - { level: 62, move: Meteor Surge }

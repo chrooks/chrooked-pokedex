@@ -4,6 +4,7 @@ aka: { dex: 299 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 4, move: Harden }
+  - { level: 5, move: Jewel Glow }
   - { level: 6, move: Glint }
   - { level: 7, move: Block }
   - { level: 10, move: Rock Throw }
@@ -17,9 +18,11 @@ learnset:
   - { level: 28, move: Rock Blast }
   - { level: 31, move: Discharge }
   - { level: 34, move: Sandstorm }
+  - { level: 35, move: Crystal Beam }
   - { level: 37, move: Earth Power }
   - { level: 40, move: Stone Edge }
   - { level: 43, move: Zap Cannon }
   - { level: 43, move: Lock-On }
   - { level: 48, move: Luster Cannon }
   - { level: 62, move: Steel Beam }
+  - { level: 62, move: Meteor Surge }

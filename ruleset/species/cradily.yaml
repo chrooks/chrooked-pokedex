@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Acid }
   - { level: 1, move: Confuse Ray }
+  - { level: 6, move: Jewel Glow }
   - { level: 12, move: Ingrain }
   - { level: 16, move: Ancient Power }
   - { level: 20, move: Mega Drain }
@@ -18,8 +19,10 @@ learnset:
   - { level: 28, move: Amnesia }
   - { level: 32, move: Gastro Acid }
   - { level: 36, move: Giga Drain }
+  - { level: 39, move: Crystal Beam }
   - { level: 40, move: Power Gem }
   - { level: 43, move: Stockpile }
   - { level: 43, move: Spit Up }
   - { level: 43, move: Swallow }
   - { level: 48, move: Energy Ball }
+  - { level: 62, move: Meteor Surge }

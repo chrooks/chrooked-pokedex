@@ -8,6 +8,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Encore }
   - { level: 1, move: Ancient Power }
+  - { level: 6, move: Jewel Glow }
   - { level: 12, move: Icy Wind }
   - { level: 16, move: Round }
   - { level: 20, move: Mist }
@@ -19,8 +20,10 @@ learnset:
   - { level: 32, move: Nature Power }
   - { level: 36, move: Freeze-Dry }
   - { level: 39, move: Power Gem }
+  - { level: 39, move: Crystal Beam }
   - { level: 42, move: Ice Beam }
   - { level: 48, move: Light Screen }
+  - { level: 51, move: Meteor Surge }
   - { level: 54, move: Hail }
   - { level: 60, move: Blizzard }
   - { level: 66, move: Hyper Beam }

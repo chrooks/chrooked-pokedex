@@ -5,6 +5,7 @@ learnset:
   - { level: 1, move: Rock Throw }
   - { level: 1, move: Harden }
   - { level: 1, move: Smack Down }
+  - { level: 5, move: Jewel Glow }
   - { level: 7, move: Acid Spray }
   - { level: 11, move: Ancient Power }
   - { level: 15, move: Rock Polish }
@@ -15,6 +16,8 @@ learnset:
   - { level: 29, move: Self-Destruct }
   - { level: 31, move: Miasma }
   - { level: 33, move: Rock Slide }
+  - { level: 35, move: Crystal Beam }
   - { level: 37, move: Power Gem }
   - { level: 41, move: Acid Armor }
   - { level: 46, move: Sludge Wave }
+  - { level: 62, move: Meteor Surge }

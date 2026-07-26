@@ -1,0 +1,11 @@
+name: Meteor Surge
+chrooked_id: meteorsurge
+aka: { pokeemerald: MOVE_METEOR_SURGE }
+type: Rock
+category: special
+power: 120
+accuracy: 90
+pp: 5
+description: A surging fall of meteoric energy. The user's Sp. Atk falls sharply.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

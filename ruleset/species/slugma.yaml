@@ -8,6 +8,7 @@ stats: { def: 50, spd: 50 }
 learnset:
   - { level: 1, move: Smog }
   - { level: 1, move: Yawn }
+  - { level: 5, move: Jewel Glow }
   - { level: 6, move: Ember }
   - { level: 8, move: Rock Throw }
   - { level: 13, move: Harden }
@@ -18,8 +19,10 @@ learnset:
   - { level: 29, move: Rock Slide }
   - { level: 34, move: Lava Plume }
   - { level: 36, move: Amnesia }
+  - { level: 38, move: Crystal Beam }
   - { level: 39, move: Power Gem }
   - { level: 41, move: Body Slam }
   - { level: 43, move: Recover }
   - { level: 48, move: Flamethrower }
   - { level: 50, move: Earth Power }
+  - { level: 62, move: Meteor Surge }

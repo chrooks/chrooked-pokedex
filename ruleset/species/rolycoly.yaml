@@ -5,6 +5,7 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Smokescreen }
   - { level: 5, move: Rapid Spin }
+  - { level: 7, move: Jewel Glow }
   - { level: 10, move: Smack Down }
   - { level: 15, move: Rock Polish }
   - { level: 20, move: Ancient Power }
@@ -12,5 +13,7 @@ learnset:
   - { level: 25, move: Incinerate }
   - { level: 30, move: Stealth Rock }
   - { level: 35, move: Heat Crash }
+  - { level: 37, move: Crystal Beam }
   - { level: 40, move: Rock Blast }
   - { level: 48, move: Power Gem }
+  - { level: 62, move: Meteor Surge }

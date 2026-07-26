@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Withdraw }
   - { level: 1, move: Wrap }
   - { level: 5, move: Rollout }
+  - { level: 7, move: Jewel Glow }
   - { level: 10, move: Struggle Bug }
   - { level: 15, move: Rock Throw }
   - { level: 20, move: Safeguard }
@@ -17,10 +18,12 @@ learnset:
   - { level: 35, move: Power Split }
   - { level: 35, move: Guard Split }
   - { level: 37, move: Antennae Blast }
+  - { level: 37, move: Crystal Beam }
   - { level: 40, move: Rock Slide }
   - { level: 42, move: Power Gem }
   - { level: 45, move: Gastro Acid }
   - { level: 48, move: Drone Chorus }
+  - { level: 48, move: Meteor Surge }
   - { level: 50, move: Sticky Web }
   - { level: 55, move: Power Trick }
   - { level: 60, move: Stone Edge }
