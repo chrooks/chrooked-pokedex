@@ -1,0 +1,20 @@
+name: Froakie
+chrooked_id: froakie
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Water Gun }
+  - { level: 8, move: Quick Attack }
+  - { level: 10, move: Lick }
+  - { level: 12, move: Slander }
+  - { level: 14, move: Water Pulse }
+  - { level: 18, move: Smokescreen }
+  - { level: 21, move: Round }
+  - { level: 25, move: Fling }
+  - { level: 29, move: Smack Down }
+  - { level: 35, move: Substitute }
+  - { level: 39, move: Bounce }
+  - { level: 43, move: Double Team }
+  - { level: 48, move: Hydro Pump }
+  - { level: 65, move: Eclipse }

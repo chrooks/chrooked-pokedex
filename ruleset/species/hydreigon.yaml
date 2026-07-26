@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Tri Attack }
   - { level: 1, move: Double Hit }
+  - { level: 6, move: Slander }
   - { level: 12, move: Roar }
   - { level: 16, move: Assurance }
   - { level: 20, move: Headbutt }
@@ -26,5 +27,6 @@ learnset:
   - { level: 51, move: Draco Meteor }
   - { level: 54, move: Dragon Rush }
   - { level: 60, move: Nasty Plot }
+  - { level: 64, move: Eclipse }
   - { level: 68, move: Outrage }
   - { level: 76, move: Hyper Beam }

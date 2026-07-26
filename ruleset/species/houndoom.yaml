@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Thunder Fang }
   - { level: 1, move: Howl }
   - { level: 1, move: Nasty Plot }
+  - { level: 7, move: Slander }
   - { level: 13, move: Roar }
   - { level: 16, move: Bite }
   - { level: 20, move: Incinerate }
@@ -21,5 +22,6 @@ learnset:
   - { level: 45, move: Foul Play }
   - { level: 50, move: Flamethrower }
   - { level: 56, move: Crunch }
+  - { level: 59, move: Eclipse }
   - { level: 62, move: Inferno }
 evolution: { from: Houndour, method: { level: 32 } }

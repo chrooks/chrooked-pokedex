@@ -3,3 +3,22 @@ chrooked_id: houndour
 aka: { pokeemerald: SPECIES_HOUNDOUR }
 abilities:
   hidden: Infernal Maw
+learnset:
+  - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
+  - { level: 4, move: Howl }
+  - { level: 6, move: Slander }
+  - { level: 8, move: Smog }
+  - { level: 13, move: Roar }
+  - { level: 16, move: Bite }
+  - { level: 20, move: Incinerate }
+  - { level: 25, move: Beat Up }
+  - { level: 28, move: Fire Fang }
+  - { level: 32, move: Torment }
+  - { level: 37, move: Comeuppance }
+  - { level: 40, move: Foul Play }
+  - { level: 44, move: Flamethrower }
+  - { level: 49, move: Crunch }
+  - { level: 52, move: Nasty Plot }
+  - { level: 56, move: Inferno }
+  - { level: 65, move: Eclipse }

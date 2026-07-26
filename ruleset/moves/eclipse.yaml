@@ -1,0 +1,11 @@
+name: Eclipse
+chrooked_id: eclipse
+aka: { pokeemerald: MOVE_ECLIPSE }
+type: Dark
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: The user swallows the light in a total eclipse. Sharply lowers the user's Sp. Atk.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

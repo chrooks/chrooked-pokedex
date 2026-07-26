@@ -1,0 +1,11 @@
+name: Slander
+chrooked_id: slander
+aka: { pokeemerald: MOVE_SLANDER }
+type: Dark
+category: special
+power: 40
+accuracy: 100
+pp: 30
+description: A cutting whisper that rattles the target. May cause flinching.
+additional_effects:
+  - { effect: flinch, chance: 10 }

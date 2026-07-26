@@ -1,0 +1,20 @@
+name: Frogadier
+chrooked_id: frogadier
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Water Gun }
+  - { level: 6, move: Slander }
+  - { level: 8, move: Quick Attack }
+  - { level: 10, move: Lick }
+  - { level: 14, move: Water Pulse }
+  - { level: 19, move: Smokescreen }
+  - { level: 23, move: Round }
+  - { level: 28, move: Fling }
+  - { level: 33, move: Smack Down }
+  - { level: 40, move: Substitute }
+  - { level: 45, move: Bounce }
+  - { level: 50, move: Double Team }
+  - { level: 56, move: Hydro Pump }
+  - { level: 65, move: Eclipse }

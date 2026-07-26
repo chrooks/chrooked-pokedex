@@ -2,3 +2,17 @@ name: Nickit
 chrooked_id: nickit
 aka: { pokeemerald: SPECIES_NICKIT }
 stats: { spa: 48 }
+learnset:
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Tail Whip }
+  - { level: 4, move: Beat Up }
+  - { level: 6, move: Slander }
+  - { level: 8, move: Hone Claws }
+  - { level: 12, move: Snarl }
+  - { level: 16, move: Assurance }
+  - { level: 20, move: Nasty Plot }
+  - { level: 24, move: Sucker Punch }
+  - { level: 28, move: Night Slash }
+  - { level: 32, move: Tail Slap }
+  - { level: 36, move: Foul Play }
+  - { level: 65, move: Eclipse }

@@ -1,7 +1,6 @@
-name: Greninja
-chrooked_id: greninja
-aka: { pokeemerald: SPECIES_GRENINJA }
-stats: { hp: 70, atk: 100, def: 70, spa: 105, spd: 70, spe: 125 }
+name: Greninja Battle Bond
+chrooked_id: greninjabattlebond
+aka: {  }
 learnset:
   - { level: 0, move: Water Shuriken }
   - { level: 1, move: Night Slash }
