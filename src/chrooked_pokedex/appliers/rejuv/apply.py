@@ -499,6 +499,10 @@ _PRIMARY_EFFECT_CODES = {
     "first_turn_only": (0x012, 100),
     "u-turn": (0x0EE, None),
     "triple_kick": (0x0BF, None),
+    # HP-drain move: heals the user half the damage dealt (0x0DD). A
+    # quarter-drain variant (Reap/Siphon) keeps this funccode and halves the
+    # heal via the chrooked_quarterdrain behavior (CHROOKED_MOVE_ABSORB_MODS).
+    "absorb": (0x0DD, None),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance

@@ -55,6 +55,10 @@ CHROOKED_TYPEMOD_FLOOR = {}
 CHROOKED_IMMUNITY_BYPASS = {}
 # ability => ->(battler, hpgain, agent) { adjusted hpgain } — drain/absorb heals
 CHROOKED_ABSORB_MODS = {}
+# move symbol => Float multiplier on the drain/absorb heal — the move-keyed twin
+# of CHROOKED_ABSORB_MODS (a move whose OWN drain fraction differs from its
+# funccode default, e.g. Reap/Siphon halve 0x0DD's 50% to a quarter drain).
+CHROOKED_MOVE_ABSORB_MODS = {}
 # [ability, move symbol] => Float fraction of max HP — fixed self-heal override
 CHROOKED_HEAL_OVERRIDE = {}
 # ability => ->(move, battler, target_kind) { new target kind or nil }
@@ -322,6 +326,9 @@ module ChrookedBattlerHooks
   def absorbHP(hpgain, opponent, agent, move = nil)
     mod = CHROOKED_ABSORB_MODS[self.ability]
     hpgain = mod.call(self, hpgain, agent) if mod
+    # move-keyed drain fraction (the drain funccode passes the move as `move`).
+    mmod = move ? CHROOKED_MOVE_ABSORB_MODS[move.move] : nil
+    hpgain = (hpgain * mmod).round if mmod
     super
   end
 

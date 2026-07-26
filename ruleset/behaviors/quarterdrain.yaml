@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# Reap and Siphon are the Grass 91-110 drain rungs. A 100 BP drain healing the
+# standard 50% is oppressive, so they recover only a QUARTER of the damage dealt.
+# Rejuv bakes drain fractions into funccodes (0x0DD = 50%, 0x139 = 75%) with no
+# 25% code, so the moves ship on the 50% funccode and this behavior halves the
+# heal for their move ids only.
+name: Quarter Drain
+chrooked_id: quarterdrain
+applies_to: move
+effects:
+  - summary: "Reap and Siphon recover only a quarter of the damage they deal (not the usual half)."
+    trigger: on-hit
+    when: "Reap or Siphon (Grass drain moves) deals damage"
+    effect: >-
+      halve the drain heal the vanilla drain funccode grants, so the user
+      recovers 25% of the damage dealt instead of 50%
+test_cases:
+  - given: "Reap deals 100 damage"
+    expect: "the user recovers 25 HP (not 50)"
+  - given: "a standard drain move (Giga Drain) deals 100 damage"
+    expect: "unchanged — recovers 50 HP (behavior is gated to the Reap/Siphon ids)"
+notes:
+  - "Reap and Siphon also carry argument.absorb_percentage: 25 for the neutral model and the pokeemerald applier; Rejuv ignores that field (drain % is funccode-based), so this behavior enforces the quarter for the Rejuv target."
+engine_hints:
+  pokeemerald: "Native — set absorb_percentage 25 in the move's argument."
+  essentials: >-
+    Plugin: CHROOKED_MOVE_ABSORB_MODS[:REAP]/[:SIPHON] = 0.5, applied in the
+    absorbHP wrapper (the drain funccode 0x0DD passes the move as the 4th arg).

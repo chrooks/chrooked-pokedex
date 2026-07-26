@@ -1009,3 +1009,18 @@ def test_new_move_emits_over110_drawbacks():
     assert (function, chance, leftover) == (0x03F, 100, [])
     block = _new_move_block(spec, "TESTBURST", 999, function, chance)
     assert ":function => 0x03F" in block and ":effect => 100" in block
+
+
+def test_new_drain_move_maps_to_absorb_funccode():
+    """A new HP-drain move (effect: absorb) emits the 0x0DD drain funccode."""
+    from chrooked_pokedex.appliers.rejuv.apply import (
+        DEFAULT_EFFECT, _PRIMARY_EFFECT_CODES, _function_for, _new_move_block,
+    )
+    reap = MoveDef(name="Reap", chrooked_id="reap", type="Grass",
+                   category="physical", power=100, accuracy=90, pp=10, effect="absorb")
+    function, chance, _ = _function_for(reap)
+    primary = reap.effect if reap.effect != DEFAULT_EFFECT else ""
+    if primary in _PRIMARY_EFFECT_CODES and function == 0x000:
+        function, chance = _PRIMARY_EFFECT_CODES[primary]
+    assert function == 0x0DD
+    assert ":function => 0x0DD" in _new_move_block(reap, "REAP", 900, function, chance)
