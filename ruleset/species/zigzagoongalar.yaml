@@ -8,6 +8,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Sand Attack }
   - { level: 6, move: Lick }
   - { level: 9, move: Snarl }
@@ -21,4 +22,6 @@ learnset:
   - { level: 32, move: Taunt }
   - { level: 35, move: Double-Edge }
   - { level: 38, move: Bail Out }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

@@ -8,6 +8,7 @@ learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Reversal }
+  - { level: 5, move: Cheap Shot }
   - { level: 9, move: Payback }
   - { level: 12, move: Pluck }
   - { level: 15, move: Psybeam }
@@ -17,6 +18,8 @@ learnset:
   - { level: 27, move: Psycho Cut }
   - { level: 30, move: Astral Hand }
   - { level: 33, move: Switcheroo }
+  - { level: 35, move: Backstab }
   - { level: 37, move: Foul Play }
   - { level: 42, move: Topsy-Turvy }
   - { level: 47, move: Superpower }
+  - { level: 60, move: Havoc }

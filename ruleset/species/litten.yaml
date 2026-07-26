@@ -4,6 +4,7 @@ aka: { dex: 725 }
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Growl }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Ember }
   - { level: 6, move: Lick }
   - { level: 9, move: Roar }
@@ -18,4 +19,6 @@ learnset:
   - { level: 36, move: Flare Blitz }
   - { level: 39, move: Cinder Smash }
   - { level: 42, move: One-Inch Punch }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

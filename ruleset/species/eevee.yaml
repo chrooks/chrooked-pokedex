@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Covet }
+  - { level: 3, move: Cheap Shot }
   - { level: 5, move: Sand Attack }
   - { level: 10, move: Quick Attack }
   - { level: 15, move: Baby-Doll Eyes }
@@ -17,7 +18,9 @@ learnset:
   - { level: 25, move: Bite }
   - { level: 30, move: Bail Out }
   - { level: 35, move: Baton Pass }
+  - { level: 37, move: Backstab }
   - { level: 40, move: Take Down }
   - { level: 45, move: Charm }
   - { level: 50, move: Double-Edge }
   - { level: 55, move: Last Resort }
+  - { level: 60, move: Havoc }

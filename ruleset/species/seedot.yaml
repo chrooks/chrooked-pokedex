@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Harden }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Absorb }
   - { level: 6, move: Astonish }
   - { level: 9, move: Growth }
@@ -17,4 +18,6 @@ learnset:
   - { level: 27, move: Synthesis }
   - { level: 30, move: Sucker Punch }
   - { level: 33, move: Explosion }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

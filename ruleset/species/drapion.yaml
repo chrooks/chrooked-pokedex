@@ -5,3 +5,28 @@ abilities:
   primary: Coil Up
   hidden: Death Grip
 stats: { atk: 110, def: 120 }
+learnset:
+  - { level: 1, move: Thunder Fang }
+  - { level: 1, move: Ice Fang }
+  - { level: 1, move: Fire Fang }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Hone Claws }
+  - { level: 1, move: Fell Stinger }
+  - { level: 5, move: Cheap Shot }
+  - { level: 9, move: Poison Fang }
+  - { level: 12, move: Bite }
+  - { level: 15, move: Toxic Spikes }
+  - { level: 18, move: Bug Bite }
+  - { level: 21, move: Venoshock }
+  - { level: 24, move: Knock Off }
+  - { level: 27, move: Scary Face }
+  - { level: 30, move: Pin Missile }
+  - { level: 33, move: Toxic }
+  - { level: 36, move: Night Slash }
+  - { level: 39, move: Cross Poison }
+  - { level: 41, move: Backstab }
+  - { level: 44, move: X-Scissor }
+  - { level: 49, move: Acupressure }
+  - { level: 54, move: Crunch }
+  - { level: 60, move: Havoc }

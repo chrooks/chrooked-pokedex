@@ -9,14 +9,17 @@ learnset:
   - { level: 4, move: Lick }
   - { level: 7, move: Snarl }
   - { level: 10, move: Hone Claws }
+  - { level: 12, move: Cheap Shot }
   - { level: 14, move: Bite }
   - { level: 18, move: Roar }
   - { level: 22, move: Headbutt }
   - { level: 26, move: Payback }
   - { level: 34, move: Crunch }
   - { level: 36, move: Heel Drop }
+  - { level: 36, move: Backstab }
   - { level: 39, move: Swagger }
   - { level: 43, move: Reversal }
   - { level: 48, move: Jaw Lock }
+  - { level: 51, move: Havoc }
   - { level: 55, move: Double-Edge }
   - { level: 60, move: Outrage }

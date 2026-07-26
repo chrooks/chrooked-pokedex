@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Hone Claws }
   - { level: 1, move: Power Trip }
   - { level: 1, move: Clod Toss }
+  - { level: 5, move: Cheap Shot }
   - { level: 9, move: Sand Tomb }
   - { level: 12, move: Scary Face }
   - { level: 15, move: Bite }
@@ -22,6 +23,8 @@ learnset:
   - { level: 32, move: Sandstorm }
   - { level: 35, move: Foul Play }
   - { level: 39, move: Heel Drop }
+  - { level: 39, move: Backstab }
   - { level: 44, move: Earthquake }
+  - { level: 48, move: Havoc }
   - { level: 51, move: Thrash }
   - { level: 58, move: Outrage }

@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Soak }
   - { level: 7, move: Undertow }
+  - { level: 7, move: Cheap Shot }
   - { level: 13, move: Focus Energy }
   - { level: 15, move: Water Whip }
   - { level: 18, move: Razor Shell }
@@ -18,6 +19,7 @@ learnset:
   - { level: 31, move: Maelstrom }
   - { level: 34, move: Aqua Jet }
   - { level: 37, move: Encore }
+  - { level: 39, move: Backstab }
   - { level: 40, move: Pixie Slash }
   - { level: 42, move: Aqua Tail }
   - { level: 45, move: Retaliate }
@@ -26,3 +28,4 @@ learnset:
   - { level: 53, move: Hydro Pump }
   - { level: 60, move: Secret Sword }
   - { level: 60, move: Wave Crash }
+  - { level: 60, move: Havoc }

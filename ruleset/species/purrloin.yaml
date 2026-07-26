@@ -6,6 +6,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 4, move: Sand Attack }
   - { level: 5, move: Fake Out }
+  - { level: 8, move: Cheap Shot }
   - { level: 12, move: Fury Swipes }
   - { level: 16, move: Torment }
   - { level: 21, move: Assurance }
@@ -14,4 +15,6 @@ learnset:
   - { level: 32, move: Nasty Plot }
   - { level: 36, move: Night Slash }
   - { level: 40, move: Play Rough }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

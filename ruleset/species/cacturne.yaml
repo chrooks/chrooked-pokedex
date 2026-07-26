@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Growth }
   - { level: 1, move: Destiny Bond }
+  - { level: 5, move: Cheap Shot }
   - { level: 10, move: Leech Seed }
   - { level: 13, move: Sand Attack }
   - { level: 16, move: Bullet Seed }
@@ -19,6 +20,8 @@ learnset:
   - { level: 35, move: Sucker Punch }
   - { level: 38, move: Pin Missile }
   - { level: 41, move: Heel Drop }
+  - { level: 41, move: Backstab }
   - { level: 44, move: Energy Ball }
   - { level: 49, move: Cotton Spore }
   - { level: 54, move: Sandstorm }
+  - { level: 60, move: Havoc }

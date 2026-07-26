@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }
   - { level: 1, move: U-turn }
+  - { level: 2, move: Cheap Shot }
   - { level: 4, move: Struggle Bug }
   - { level: 6, move: Astonish }
   - { level: 9, move: Assurance }
@@ -21,7 +22,9 @@ learnset:
   - { level: 28, move: Leech Life }
   - { level: 32, move: Throat Chop }
   - { level: 36, move: First Impression }
+  - { level: 38, move: Backstab }
   - { level: 40, move: Heel Drop }
   - { level: 44, move: Bounce }
   - { level: 48, move: Axe Kick }
   - { level: 53, move: Guillotine }
+  - { level: 60, move: Havoc }

@@ -6,6 +6,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }
   - { level: 4, move: Payback }
+  - { level: 6, move: Cheap Shot }
   - { level: 8, move: Headbutt }
   - { level: 12, move: Sand Attack }
   - { level: 16, move: Facade }
@@ -16,7 +17,9 @@ learnset:
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Swagger }
   - { level: 38, move: Heel Drop }
+  - { level: 38, move: Backstab }
   - { level: 40, move: Crunch }
   - { level: 44, move: High Jump Kick }
   - { level: 48, move: Focus Punch }
   - { level: 52, move: Head Smash }
+  - { level: 60, move: Havoc }

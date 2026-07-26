@@ -14,6 +14,7 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
   - { level: 7, move: Undertow }
+  - { level: 7, move: Cheap Shot }
   - { level: 13, move: Focus Energy }
   - { level: 15, move: Water Whip }
   - { level: 18, move: Razor Shell }
@@ -25,10 +26,12 @@ learnset:
   - { level: 39, move: Encore }
   - { level: 42, move: Pixie Slash }
   - { level: 42, move: Maelstrom }
+  - { level: 42, move: Backstab }
   - { level: 46, move: Aqua Tail }
   - { level: 51, move: Retaliate }
   - { level: 54, move: Secret Sword }
   - { level: 54, move: Wave Crash }
+  - { level: 54, move: Havoc }
   - { level: 58, move: Swords Dance }
   - { level: 63, move: Hydro Pump }
 evolution: { from: Dewott, method: { level: 36 } }

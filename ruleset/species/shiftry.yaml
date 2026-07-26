@@ -27,4 +27,7 @@ learnset:
   - { level: 1, move: Air Cutter }
   - { level: 1, move: Payback }
   - { level: 1, move: Hurricane }
+  - { level: 15, move: Cheap Shot }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

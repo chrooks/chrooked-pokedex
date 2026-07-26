@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 2, move: Cheap Shot }
   - { level: 4, move: Struggle Bug }
   - { level: 6, move: Astonish }
   - { level: 9, move: Assurance }
@@ -17,4 +18,6 @@ learnset:
   - { level: 27, move: Agility }
   - { level: 30, move: Leech Life }
   - { level: 34, move: Guillotine }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

@@ -2,3 +2,23 @@ name: Skuntank
 chrooked_id: skuntank
 aka: { pokeemerald: SPECIES_SKUNTANK }
 stats: { hp: 105, atk: 105, def: 65, spa: 85, spd: 60, spe: 85 }
+learnset:
+  - { level: 0, move: Flamethrower }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Smokescreen }
+  - { level: 1, move: Poison Gas }
+  - { level: 1, move: Feint }
+  - { level: 6, move: Cheap Shot }
+  - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Focus Energy }
+  - { level: 18, move: Bite }
+  - { level: 21, move: Venoshock }
+  - { level: 24, move: Screech }
+  - { level: 27, move: Toxic }
+  - { level: 30, move: Sucker Punch }
+  - { level: 33, move: Memento }
+  - { level: 35, move: Backstab }
+  - { level: 38, move: Night Slash }
+  - { level: 43, move: Belch }
+  - { level: 48, move: Explosion }
+  - { level: 60, move: Havoc }

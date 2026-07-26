@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Harden }
   - { level: 4, move: Leer }
   - { level: 6, move: Undertow }
+  - { level: 6, move: Cheap Shot }
   - { level: 8, move: Taunt }
   - { level: 12, move: Bubble Beam }
   - { level: 14, move: Water Whip }
@@ -20,9 +21,11 @@ learnset:
   - { level: 30, move: Maelstrom }
   - { level: 32, move: Razor Shell }
   - { level: 36, move: Swords Dance }
+  - { level: 38, move: Backstab }
   - { level: 40, move: Crunch }
   - { level: 44, move: Crabhammer }
   - { level: 48, move: Endeavor }
   - { level: 52, move: Guillotine }
   - { level: 55, move: Pixie Slash }
   - { level: 60, move: Wave Crash }
+  - { level: 60, move: Havoc }

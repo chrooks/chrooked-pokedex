@@ -5,3 +5,23 @@ abilities:
   primary: Venomous
   secondary: Self Sufficient
   hidden: Power Of Alchemy
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Poison Gas }
+  - { level: 4, move: Harden }
+  - { level: 7, move: Bite }
+  - { level: 9, move: Cheap Shot }
+  - { level: 12, move: Disable }
+  - { level: 15, move: Acid Spray }
+  - { level: 18, move: Poison Fang }
+  - { level: 21, move: Minimize }
+  - { level: 26, move: Toxic }
+  - { level: 29, move: Knock Off }
+  - { level: 32, move: Crunch }
+  - { level: 35, move: Backstab }
+  - { level: 37, move: Screech }
+  - { level: 40, move: Gunk Shot }
+  - { level: 43, move: Acid Armor }
+  - { level: 46, move: Belch }
+  - { level: 48, move: Memento }
+  - { level: 60, move: Havoc }

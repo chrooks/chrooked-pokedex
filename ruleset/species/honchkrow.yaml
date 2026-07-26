@@ -13,14 +13,17 @@ learnset:
   - { level: 1, move: Wing Attack }
   - { level: 10, move: Hone Claws }
   - { level: 12, move: Slash }
+  - { level: 13, move: Cheap Shot }
   - { level: 15, move: Drill Peck }
   - { level: 18, move: Night Slash }
   - { level: 20, move: Roost }
   - { level: 25, move: Focus Energy }
   - { level: 30, move: Foul Play }
   - { level: 35, move: Tailwind }
+  - { level: 40, move: Backstab }
   - { level: 42, move: Dive Bomb }
   - { level: 50, move: Kowtow Cleave }
+  - { level: 50, move: Havoc }
   - { level: 58, move: Throat Chop }
   - { level: 65, move: Comeuppance }
   - { level: 75, move: Brave Bird }

@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 4, move: Poison Fang }
   - { level: 6, move: Undertow }
+  - { level: 6, move: Cheap Shot }
   - { level: 8, move: Focus Energy }
   - { level: 12, move: Scary Face }
   - { level: 14, move: Water Whip }
@@ -19,6 +20,8 @@ learnset:
   - { level: 30, move: Maelstrom }
   - { level: 32, move: Crunch }
   - { level: 36, move: Agility }
+  - { level: 38, move: Backstab }
   - { level: 40, move: Liquidation }
   - { level: 44, move: Take Down }
   - { level: 60, move: Wave Crash }
+  - { level: 60, move: Havoc }

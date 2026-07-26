@@ -1,0 +1,10 @@
+name: Havoc
+chrooked_id: havoc
+aka: { pokeemerald: MOVE_HAVOC }
+type: Dark
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: The user unleashes reckless mayhem, battering the target at a cost to itself.
+effect: recoil

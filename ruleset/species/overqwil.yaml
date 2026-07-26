@@ -8,6 +8,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 4, move: Harden }
+  - { level: 6, move: Cheap Shot }
   - { level: 8, move: Bite }
   - { level: 12, move: Fell Stinger }
   - { level: 16, move: Poison Sting }
@@ -16,9 +17,11 @@ learnset:
   - { level: 28, move: Barb Barrage }
   - { level: 32, move: Pin Missile }
   - { level: 36, move: Toxic Spikes }
+  - { level: 38, move: Backstab }
   - { level: 40, move: Stockpile }
   - { level: 40, move: Spit Up }
   - { level: 44, move: Toxic }
   - { level: 48, move: Crunch }
   - { level: 52, move: Acupressure }
   - { level: 56, move: Destiny Bond }
+  - { level: 60, move: Havoc }

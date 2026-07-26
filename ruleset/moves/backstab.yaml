@@ -1,0 +1,11 @@
+name: Backstab
+chrooked_id: backstab
+aka: { pokeemerald: MOVE_BACKSTAB }
+type: Dark
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: A treacherous strike to the target's back. May make it flinch.
+additional_effects:
+  - { effect: flinch, chance: 10 }

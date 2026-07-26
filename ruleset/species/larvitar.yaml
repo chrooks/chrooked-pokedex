@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_LARVITAR }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Rock Throw }
   - { level: 4, move: Clod Toss }
   - { level: 6, move: Payback }
@@ -21,4 +22,6 @@ learnset:
   - { level: 36, move: Thrash }
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Hyper Beam }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Heel Drop }
+  - { level: 60, move: Havoc }

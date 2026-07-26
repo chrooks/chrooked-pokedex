@@ -4,6 +4,7 @@ aka: { dex: 686 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Peck }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Hypnosis }
   - { level: 6, move: Wrap }
   - { level: 9, move: Payback }
@@ -18,3 +19,5 @@ learnset:
   - { level: 36, move: Topsy-Turvy }
   - { level: 39, move: Superpower }
   - { level: 42, move: Astral Hand }
+  - { level: 45, move: Backstab }
+  - { level: 60, move: Havoc }
