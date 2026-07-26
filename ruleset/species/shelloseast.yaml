@@ -1,6 +1,6 @@
 name: Shellos East
 chrooked_id: shelloseast
-aka: { dex: 422 }
+aka: { dex: 422, rejuv: "SHELLOS::East Sea" }
 abilities:
   primary: Sticky Hold
   secondary: Storm Drain

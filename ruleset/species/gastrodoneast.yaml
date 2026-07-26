@@ -1,6 +1,6 @@
 name: Gastrodon East
 chrooked_id: gastrodoneast
-aka: { dex: 423 }
+aka: { dex: 423, rejuv: "GASTRODON::East Sea" }
 abilities:
   primary: Sticky Hold
   secondary: Storm Drain

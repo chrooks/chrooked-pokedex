@@ -1,6 +1,6 @@
 name: Shellos West
 chrooked_id: shelloswest
-aka: { dex: 422 }
+aka: { dex: 422, rejuv: "SHELLOS::West Sea" }
 abilities:
   primary: Sticky Hold
   secondary: Storm Drain
