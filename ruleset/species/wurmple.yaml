@@ -1,0 +1,11 @@
+name: Wurmple
+chrooked_id: wurmple
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 1, move: String Shot }
+  - { level: 5, move: Poison Sting }
+  - { level: 15, move: Bug Bite }
+  - { level: 30, move: Signal Beam }
+  - { level: 45, move: Antennae Blast }
+  - { level: 60, move: Drone Chorus }

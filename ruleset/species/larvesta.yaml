@@ -12,10 +12,13 @@ learnset:
   - { level: 12, move: Struggle Bug }
   - { level: 18, move: Flame Wheel }
   - { level: 24, move: Bug Bite }
+  - { level: 24, move: Signal Beam }
   - { level: 30, move: Screech }
   - { level: 36, move: Leech Life }
+  - { level: 39, move: Antennae Blast }
   - { level: 42, move: Bug Buzz }
   - { level: 48, move: Take Down }
+  - { level: 51, move: Drone Chorus }
   - { level: 54, move: Amnesia }
   - { level: 60, move: Double-Edge }
   - { level: 66, move: Flare Blitz }

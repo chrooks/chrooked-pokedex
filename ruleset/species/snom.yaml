@@ -3,3 +3,9 @@ chrooked_id: snom
 aka: { pokeemerald: SPECIES_SNOM }
 abilities:
   secondary: Permafrost
+learnset:
+  - { level: 1, move: Struggle Bug }
+  - { level: 1, move: Powder Snow }
+  - { level: 30, move: Signal Beam }
+  - { level: 45, move: Antennae Blast }
+  - { level: 60, move: Drone Chorus }

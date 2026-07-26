@@ -1,0 +1,26 @@
+name: Wormadam Plant
+chrooked_id: wormadamplant
+aka: {  }
+learnset:
+  - { level: 0, move: Quiver Dance }
+  - { level: 1, move: Quiver Dance }
+  - { level: 1, move: Sucker Punch }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Protect }
+  - { level: 1, move: Bug Bite }
+  - { level: 10, move: Protect }
+  - { level: 15, move: Bug Bite }
+  - { level: 20, move: String Shot }
+  - { level: 21, move: Signal Beam }
+  - { level: 23, move: Confusion }
+  - { level: 26, move: Razor Leaf }
+  - { level: 29, move: Growth }
+  - { level: 32, move: Psybeam }
+  - { level: 35, move: Infestation }
+  - { level: 36, move: Antennae Blast }
+  - { level: 38, move: Flail }
+  - { level: 41, move: Attract }
+  - { level: 44, move: Psychic }
+  - { level: 47, move: Leaf Storm }
+  - { level: 50, move: Bug Buzz }
+  - { level: 60, move: Drone Chorus }

@@ -18,11 +18,14 @@ learnset:
   - { level: 16, move: Defog }
   - { level: 21, move: Feather Dance }
   - { level: 24, move: Aurora Beam }
+  - { level: 26, move: Signal Beam }
   - { level: 28, move: Hail }
   - { level: 32, move: Bug Buzz }
   - { level: 36, move: Aurora Veil }
+  - { level: 38, move: Antennae Blast }
   - { level: 40, move: Blizzard }
   - { level: 44, move: Tailwind }
   - { level: 48, move: Wide Guard }
   - { level: 52, move: Quiver Dance }
+  - { level: 60, move: Drone Chorus }
 evolution: { from: Snom, method: { level: 24 } }

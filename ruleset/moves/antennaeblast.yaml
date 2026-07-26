@@ -1,0 +1,11 @@
+name: Antennae Blast
+chrooked_id: antennaeblast
+aka: { pokeemerald: MOVE_ANTENNAE_BLAST }
+type: Bug
+category: special
+power: 100
+accuracy: 90
+pp: 10
+description: The user fires a disorienting pulse from its antennae. May lower the target's Sp. Atk.
+additional_effects:
+  - { effect: sp_atk_minus_1, chance: 20 }

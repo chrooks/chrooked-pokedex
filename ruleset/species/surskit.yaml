@@ -4,3 +4,17 @@ aka: { pokeemerald: SPECIES_SURSKIT }
 abilities:
   primary: Intimidate
   secondary: Frighten
+learnset:
+  - { level: 1, move: Water Gun }
+  - { level: 6, move: Quick Attack }
+  - { level: 9, move: Sweet Scent }
+  - { level: 14, move: Soak }
+  - { level: 17, move: Bubble Beam }
+  - { level: 22, move: Agility }
+  - { level: 25, move: Mist }
+  - { level: 25, move: Haze }
+  - { level: 30, move: Signal Beam }
+  - { level: 35, move: Baton Pass }
+  - { level: 38, move: Sticky Web }
+  - { level: 45, move: Antennae Blast }
+  - { level: 60, move: Drone Chorus }

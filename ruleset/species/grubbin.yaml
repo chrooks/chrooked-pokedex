@@ -9,8 +9,11 @@ learnset:
   - { level: 15, move: Bite }
   - { level: 18, move: Short Circuit }
   - { level: 21, move: Spark }
+  - { level: 23, move: Signal Beam }
   - { level: 25, move: Sticky Web }
   - { level: 30, move: X-Scissor }
   - { level: 35, move: Crunch }
   - { level: 40, move: Dig }
+  - { level: 45, move: Antennae Blast }
   - { level: 48, move: Lightning Slam }
+  - { level: 60, move: Drone Chorus }

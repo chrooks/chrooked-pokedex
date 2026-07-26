@@ -1,0 +1,23 @@
+name: Orbeetle
+chrooked_id: orbeetle
+aka: {  }
+learnset:
+  - { level: 1, move: Reflect }
+  - { level: 1, move: Light Screen }
+  - { level: 1, move: Confusion }
+  - { level: 1, move: Struggle Bug }
+  - { level: 4, move: Confuse Ray }
+  - { level: 8, move: Magic Coat }
+  - { level: 12, move: Agility }
+  - { level: 16, move: Psybeam }
+  - { level: 20, move: Hypnosis }
+  - { level: 22, move: Signal Beam }
+  - { level: 24, move: Ally Switch }
+  - { level: 28, move: Bug Buzz }
+  - { level: 32, move: Mirror Coat }
+  - { level: 36, move: Psychic }
+  - { level: 38, move: Antennae Blast }
+  - { level: 40, move: After You }
+  - { level: 44, move: Calm Mind }
+  - { level: 48, move: Psychic Terrain }
+  - { level: 60, move: Drone Chorus }

@@ -2,3 +2,19 @@ name: Ribombee
 chrooked_id: ribombee
 aka: { pokeemerald: SPECIES_RIBOMBEE }
 stats: { spd: 75 }
+learnset:
+  - { level: 0, move: Pollen Puff }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Fairy Wind }
+  - { level: 18, move: Draining Kiss }
+  - { level: 24, move: Struggle Bug }
+  - { level: 28, move: Signal Beam }
+  - { level: 32, move: Covet }
+  - { level: 36, move: Antennae Blast }
+  - { level: 40, move: Switcheroo }
+  - { level: 48, move: Dazzling Gleam }
+  - { level: 52, move: Drone Chorus }
+  - { level: 56, move: Bug Buzz }
+  - { level: 64, move: Quiver Dance }

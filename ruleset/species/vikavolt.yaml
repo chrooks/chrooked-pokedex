@@ -19,11 +19,14 @@ learnset:
   - { level: 1, move: Discharge }
   - { level: 15, move: Bite }
   - { level: 19, move: Short Circuit }
+  - { level: 20, move: Signal Beam }
   - { level: 23, move: Spark }
   - { level: 29, move: Sticky Web }
   - { level: 36, move: Bug Buzz }
   - { level: 39, move: Lightning Slam }
+  - { level: 39, move: Antennae Blast }
   - { level: 43, move: Guillotine }
   - { level: 50, move: Fly }
+  - { level: 53, move: Drone Chorus }
   - { level: 57, move: Agility }
   - { level: 64, move: Zap Cannon }

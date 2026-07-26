@@ -1,0 +1,9 @@
+name: Cascoon
+chrooked_id: cascoon
+aka: {  }
+learnset:
+  - { level: 0, move: Harden }
+  - { level: 1, move: Harden }
+  - { level: 30, move: Signal Beam }
+  - { level: 45, move: Antennae Blast }
+  - { level: 60, move: Drone Chorus }

@@ -18,9 +18,11 @@ learnset:
   - { level: 26, move: Toxic Thread }
   - { level: 30, move: Signal Beam }
   - { level: 33, move: Venoshock }
+  - { level: 35, move: Antennae Blast }
   - { level: 36, move: Short Circuit }
   - { level: 40, move: Discharge }
   - { level: 46, move: Giga Drain }
   - { level: 50, move: Bug Buzz }
+  - { level: 60, move: Drone Chorus }
   - { level: 64, move: Thunder }
 evolution: { from: Joltik, method: { level: 36 } }

@@ -7,3 +7,26 @@ abilities:
   secondary: Levitate
   hidden: Aerodynamic
 stats: { hp: 75, atk: 65, spa: 110, spd: 65, spe: 85 }
+learnset:
+  - { level: 0, move: Gust }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: String Shot }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Poison Sting }
+  - { level: 1, move: Bug Bite }
+  - { level: 12, move: Absorb }
+  - { level: 15, move: Stun Spore }
+  - { level: 17, move: Morning Sun }
+  - { level: 20, move: Air Cutter }
+  - { level: 21, move: Signal Beam }
+  - { level: 22, move: Mega Drain }
+  - { level: 25, move: Leech Life }
+  - { level: 27, move: Attract }
+  - { level: 30, move: Whirlwind }
+  - { level: 32, move: Giga Drain }
+  - { level: 35, move: Bug Buzz }
+  - { level: 37, move: Protect }
+  - { level: 40, move: Quiver Dance }
+  - { level: 45, move: Antennae Blast }
+  - { level: 60, move: Drone Chorus }

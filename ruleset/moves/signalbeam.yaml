@@ -1,0 +1,11 @@
+name: Signal Beam
+chrooked_id: signalbeam
+aka: { pokeemerald: MOVE_SIGNAL_BEAM }
+type: Bug
+category: special
+power: 65
+accuracy: 100
+pp: 15
+description: The user attacks with a sinister beam of light. May confuse the target.
+additional_effects:
+  - { effect: confusion, chance: 10 }

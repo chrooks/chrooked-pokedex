@@ -1,0 +1,20 @@
+name: Spewpa Pokeball
+chrooked_id: spewpapokeball
+aka: {  }
+learnset:
+  - { level: 0, move: Gust }
+  - { level: 1, move: Poison Powder }
+  - { level: 1, move: Stun Spore }
+  - { level: 1, move: Sleep Powder }
+  - { level: 1, move: Struggle Bug }
+  - { level: 12, move: Light Screen }
+  - { level: 17, move: Psybeam }
+  - { level: 21, move: Supersonic }
+  - { level: 25, move: Draining Kiss }
+  - { level: 28, move: Signal Beam }
+  - { level: 31, move: Safeguard }
+  - { level: 35, move: Bug Buzz }
+  - { level: 40, move: Antennae Blast }
+  - { level: 45, move: Quiver Dance }
+  - { level: 50, move: Hurricane }
+  - { level: 60, move: Drone Chorus }

@@ -5,3 +5,20 @@ types: [Bug, Water]
 abilities:
   secondary: Frighten
 stats: { def: 60, spa: 110, spd: 90, spe: 90 }
+learnset:
+  - { level: 1, move: Whirlwind }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Soak }
+  - { level: 17, move: Gust }
+  - { level: 22, move: Scary Face }
+  - { level: 22, move: Air Cutter }
+  - { level: 26, move: Stun Spore }
+  - { level: 29, move: Signal Beam }
+  - { level: 32, move: Air Slash }
+  - { level: 35, move: Antennae Blast }
+  - { level: 38, move: Giga Drain }
+  - { level: 44, move: Bug Buzz }
+  - { level: 52, move: Quiver Dance }
+  - { level: 60, move: Drone Chorus }

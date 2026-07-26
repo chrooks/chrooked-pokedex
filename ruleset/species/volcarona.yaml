@@ -5,4 +5,30 @@ abilities:
   primary: Levitate
   hidden: Drought
 stats: { def: 75 }
+learnset:
+  - { level: 0, move: Quiver Dance }
+  - { level: 1, move: Fiery Dance }
+  - { level: 1, move: Struggle Bug }
+  - { level: 1, move: Flame Charge }
+  - { level: 1, move: Flare Blitz }
+  - { level: 1, move: Fire Spin }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Double-Edge }
+  - { level: 1, move: Take Down }
+  - { level: 1, move: Whirlwind }
+  - { level: 1, move: String Shot }
+  - { level: 18, move: Flame Wheel }
+  - { level: 21, move: Signal Beam }
+  - { level: 24, move: Bug Bite }
+  - { level: 30, move: Screech }
+  - { level: 36, move: Leech Life }
+  - { level: 39, move: Antennae Blast }
+  - { level: 42, move: Bug Buzz }
+  - { level: 48, move: Heat Wave }
+  - { level: 54, move: Amnesia }
+  - { level: 58, move: Drone Chorus }
+  - { level: 62, move: Hurricane }
+  - { level: 70, move: Fire Blast }
+  - { level: 78, move: Rage Powder }
 evolution: { from: Larvesta, method: { level: 40 } }

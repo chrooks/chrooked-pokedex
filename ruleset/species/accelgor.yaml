@@ -2,3 +2,29 @@ name: Accelgor
 chrooked_id: accelgor
 aka: { pokeemerald: SPECIES_ACCELGOR }
 types: [Bug, Dark]
+learnset:
+  - { level: 1, move: Water Shuriken }
+  - { level: 1, move: Acid }
+  - { level: 1, move: Curse }
+  - { level: 1, move: Yawn }
+  - { level: 1, move: Acid Armor }
+  - { level: 1, move: Guard Swap }
+  - { level: 1, move: Body Slam }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Double Team }
+  - { level: 1, move: Acid Spray }
+  - { level: 1, move: Quick Attack }
+  - { level: 12, move: Mega Drain }
+  - { level: 16, move: Struggle Bug }
+  - { level: 20, move: Swift }
+  - { level: 22, move: Signal Beam }
+  - { level: 24, move: Agility }
+  - { level: 28, move: Giga Drain }
+  - { level: 32, move: Power Swap }
+  - { level: 36, move: U-turn }
+  - { level: 38, move: Antennae Blast }
+  - { level: 40, move: Recover }
+  - { level: 44, move: Bug Buzz }
+  - { level: 48, move: Final Gambit }
+  - { level: 52, move: Toxic }
+  - { level: 60, move: Drone Chorus }

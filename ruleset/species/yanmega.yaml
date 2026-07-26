@@ -16,11 +16,14 @@ learnset:
   - { level: 1, move: Bug Buzz }
   - { level: 1, move: Quick Attack }
   - { level: 17, move: Detect }
+  - { level: 20, move: Signal Beam }
   - { level: 22, move: Supersonic }
   - { level: 27, move: Uproar }
   - { level: 30, move: Bug Bite }
   - { level: 33, move: Ancient Power }
+  - { level: 35, move: Antennae Blast }
   - { level: 38, move: Feint }
   - { level: 43, move: Slash }
   - { level: 46, move: Screech }
   - { level: 49, move: U-turn }
+  - { level: 60, move: Drone Chorus }

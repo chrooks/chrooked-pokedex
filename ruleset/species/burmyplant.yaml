@@ -1,0 +1,11 @@
+name: Burmy Plant
+chrooked_id: burmyplant
+aka: {  }
+learnset:
+  - { level: 1, move: Protect }
+  - { level: 10, move: Tackle }
+  - { level: 15, move: Bug Bite }
+  - { level: 20, move: String Shot }
+  - { level: 30, move: Signal Beam }
+  - { level: 45, move: Antennae Blast }
+  - { level: 60, move: Drone Chorus }

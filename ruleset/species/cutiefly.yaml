@@ -1,0 +1,18 @@
+name: Cutiefly
+chrooked_id: cutiefly
+aka: {  }
+learnset:
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Fairy Wind }
+  - { level: 6, move: Stun Spore }
+  - { level: 12, move: Sweet Scent }
+  - { level: 18, move: Draining Kiss }
+  - { level: 21, move: Signal Beam }
+  - { level: 24, move: Struggle Bug }
+  - { level: 30, move: Covet }
+  - { level: 36, move: Switcheroo }
+  - { level: 39, move: Antennae Blast }
+  - { level: 42, move: Dazzling Gleam }
+  - { level: 48, move: Bug Buzz }
+  - { level: 54, move: Quiver Dance }
+  - { level: 60, move: Drone Chorus }

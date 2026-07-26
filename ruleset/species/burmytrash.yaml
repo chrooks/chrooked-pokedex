@@ -8,5 +8,8 @@ learnset:
   - { level: 15, move: Bug Bite }
   - { level: 20, move: String Shot }
   - { level: 30, move: Mirror Shot }
+  - { level: 30, move: Signal Beam }
+  - { level: 45, move: Antennae Blast }
   - { level: 48, move: Luster Cannon }
+  - { level: 60, move: Drone Chorus }
   - { level: 62, move: Steel Beam }

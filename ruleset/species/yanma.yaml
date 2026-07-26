@@ -4,3 +4,22 @@ aka: { pokeemerald: SPECIES_YANMA }
 abilities:
   primary: Aerodynamic
   hidden: Speed Boost
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 6, move: Quick Attack }
+  - { level: 11, move: Double Team }
+  - { level: 14, move: Air Cutter }
+  - { level: 17, move: Detect }
+  - { level: 20, move: Signal Beam }
+  - { level: 22, move: Supersonic }
+  - { level: 27, move: Uproar }
+  - { level: 30, move: Bug Bite }
+  - { level: 33, move: Ancient Power }
+  - { level: 35, move: Antennae Blast }
+  - { level: 38, move: Hypnosis }
+  - { level: 43, move: Wing Attack }
+  - { level: 46, move: Screech }
+  - { level: 49, move: U-turn }
+  - { level: 54, move: Air Slash }
+  - { level: 57, move: Bug Buzz }
+  - { level: 60, move: Drone Chorus }

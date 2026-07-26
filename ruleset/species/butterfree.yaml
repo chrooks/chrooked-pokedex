@@ -5,3 +5,26 @@ types: [Bug, Psychic]
 abilities:
   primary: Levitate
 stats: { spa: 105 }
+learnset:
+  - { level: 0, move: Gust }
+  - { level: 1, move: Gust }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: String Shot }
+  - { level: 1, move: Bug Bite }
+  - { level: 4, move: Supersonic }
+  - { level: 8, move: Confusion }
+  - { level: 12, move: Poison Powder }
+  - { level: 12, move: Stun Spore }
+  - { level: 12, move: Sleep Powder }
+  - { level: 16, move: Psybeam }
+  - { level: 20, move: Whirlwind }
+  - { level: 22, move: Signal Beam }
+  - { level: 24, move: Air Slash }
+  - { level: 28, move: Safeguard }
+  - { level: 32, move: Bug Buzz }
+  - { level: 36, move: Tailwind }
+  - { level: 38, move: Antennae Blast }
+  - { level: 40, move: Rage Powder }
+  - { level: 44, move: Quiver Dance }
+  - { level: 60, move: Drone Chorus }

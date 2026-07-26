@@ -16,11 +16,13 @@ learnset:
   - { level: 15, move: Air Slash }
   - { level: 18, move: Charge Beam }
   - { level: 22, move: Draining Kiss }
+  - { level: 24, move: Signal Beam }
   - { level: 25, move: Silver Wind }
   - { level: 28, move: Encore }
   - { level: 31, move: Wish }
   - { level: 33, move: Dazzling Gleam }
   - { level: 36, move: Bug Buzz }
+  - { level: 38, move: Antennae Blast }
   - { level: 39, move: Mystical Fire }
   - { level: 42, move: Moonblast }
   - { level: 45, move: Energy Ball }
@@ -28,4 +30,5 @@ learnset:
   - { level: 51, move: Scorching Sands }
   - { level: 54, move: Moonlight }
   - { level: 57, move: Extrasensory }
+  - { level: 60, move: Drone Chorus }
   - { level: 62, move: Quiver Dance }
