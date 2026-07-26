@@ -1,6 +1,10 @@
 name: Sandshrew
 chrooked_id: sandshrew
 aka: {  }
+abilities:
+  primary: Sand Veil
+  secondary: Bioturbation
+  hidden: Sand Rush
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Defense Curl }
@@ -20,3 +24,4 @@ learnset:
   - { level: 39, move: Swords Dance }
   - { level: 42, move: Sandstorm }
   - { level: 45, move: Earthquake }
+  - { level: 47, move: Faultbreak }

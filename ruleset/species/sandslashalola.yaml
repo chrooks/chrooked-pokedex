@@ -1,6 +1,9 @@
 name: Sandslash Alola
 chrooked_id: sandslashalola
 aka: { pokeemerald: SPECIES_SANDSLASH_ALOLA }
+abilities:
+  primary: Snow Cloak
+  hidden: Bioturbation
 learnset:
   - { level: 0, move: Icicle Spear }
   - { level: 1, move: Scratch }
@@ -23,3 +26,4 @@ learnset:
   - { level: 1, move: Metal Claw }
   - { level: 1, move: Icicle Crash }
   - { level: 46, move: Glacial Crush }
+  - { level: 48, move: Icebreaker }

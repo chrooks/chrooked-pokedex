@@ -1,6 +1,10 @@
 name: Diglett
 chrooked_id: diglett
 aka: {  }
+abilities:
+  primary: Bioturbation
+  secondary: Arena Trap
+  hidden: Sand Force
 learnset:
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Scratch }
@@ -17,3 +21,4 @@ learnset:
   - { level: 36, move: Stomping Tantrum }
   - { level: 40, move: Earthquake }
   - { level: 44, move: Fissure }
+  - { level: 46, move: Faultbreak }

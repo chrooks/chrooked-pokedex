@@ -1,6 +1,10 @@
 name: Diglett Alola
 chrooked_id: diglettalola
 aka: {  }
+abilities:
+  primary: Bioturbation
+  secondary: Tangling Hair
+  hidden: Sand Force
 learnset:
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Metal Claw }
@@ -16,3 +20,4 @@ learnset:
   - { level: 36, move: Earth Power }
   - { level: 40, move: Earthquake }
   - { level: 44, move: Fissure }
+  - { level: 46, move: Faultbreak }

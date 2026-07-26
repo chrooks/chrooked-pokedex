@@ -1,6 +1,10 @@
 name: Dugtrio
 chrooked_id: dugtrio
 aka: { pokeemerald: SPECIES_DUGTRIO }
+abilities:
+  primary: Bioturbation
+  secondary: Arena Trap
+  hidden: Sand Force
 stats: { atk: 100 }
 learnset:
   - { level: 0, move: Tri Attack }
@@ -22,3 +26,4 @@ learnset:
   - { level: 42, move: Earth Power }
   - { level: 48, move: Earthquake }
   - { level: 54, move: Fissure }
+  - { level: 56, move: Faultbreak }

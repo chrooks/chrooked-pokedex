@@ -2,7 +2,8 @@ name: Sealeo
 chrooked_id: sealeo
 aka: { pokeemerald: SPECIES_SEALEO }
 abilities:
-  secondary: Ice Body
+  primary: Thick Fat
+  secondary: Bioturbation
   hidden: Permafrost
 learnset:
   - { level: 0, move: Swagger }
@@ -24,3 +25,4 @@ learnset:
   - { level: 52, move: Blizzard }
   - { level: 58, move: Hail }
   - { level: 64, move: Sheer Cold }
+  - { level: 66, move: Icebreaker }

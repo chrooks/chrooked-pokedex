@@ -2,6 +2,7 @@ name: Donphan
 chrooked_id: donphan
 aka: { pokeemerald: SPECIES_DONPHAN }
 abilities:
+  primary: Bioturbation
   secondary: Blitz
   hidden: Stampede
 learnset:
@@ -24,3 +25,4 @@ learnset:
   - { level: 37, move: Scary Face }
   - { level: 43, move: Earthquake }
   - { level: 50, move: Giga Impact }
+  - { level: 52, move: Faultbreak }

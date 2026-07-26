@@ -2,7 +2,9 @@ name: Phanpy
 chrooked_id: phanpy
 aka: { pokeemerald: SPECIES_PHANPY }
 abilities:
+  primary: Bioturbation
   secondary: Blitz
+  hidden: Sand Veil
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
@@ -19,3 +21,4 @@ learnset:
   - { level: 33, move: Charm }
   - { level: 37, move: Last Resort }
   - { level: 42, move: Double-Edge }
+  - { level: 44, move: Faultbreak }

@@ -1,6 +1,10 @@
 name: Dugtrio Alola
 chrooked_id: dugtrioalola
 aka: {  }
+abilities:
+  primary: Bioturbation
+  secondary: Tangling Hair
+  hidden: Sand Force
 learnset:
   - { level: 0, move: Sand Tomb }
   - { level: 1, move: Sand Attack }
@@ -19,3 +23,4 @@ learnset:
   - { level: 42, move: Earth Power }
   - { level: 48, move: Earthquake }
   - { level: 54, move: Fissure }
+  - { level: 56, move: Faultbreak }

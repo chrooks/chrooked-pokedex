@@ -3,7 +3,7 @@ chrooked_id: sandslash
 aka: { pokeemerald: SPECIES_SANDSLASH }
 abilities:
   primary: Rough Skin
-  secondary: Sand Rush
+  secondary: Bioturbation
   hidden: Hustle
 stats: { hp: 95, spd: 60 }
 learnset:
@@ -27,3 +27,4 @@ learnset:
   - { level: 51, move: Swords Dance }
   - { level: 56, move: Sandstorm }
   - { level: 61, move: Earthquake }
+  - { level: 63, move: Faultbreak }

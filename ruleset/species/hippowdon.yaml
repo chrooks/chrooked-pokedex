@@ -1,6 +1,10 @@
 name: Hippowdon
 chrooked_id: hippowdon
 aka: { pokeemerald: SPECIES_HIPPOWDON }
+abilities:
+  primary: Sand Stream
+  secondary: Bioturbation
+  hidden: Sand Force
 stats: { hp: 110 }
 learnset:
   - { level: 1, move: Fire Fang }
@@ -24,3 +28,4 @@ learnset:
   - { level: 50, move: Double-Edge }
   - { level: 56, move: Fissure }
   - { level: 62, move: Slack Off }
+  - { level: 64, move: Faultbreak }

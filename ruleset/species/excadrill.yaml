@@ -1,6 +1,10 @@
 name: Excadrill
 chrooked_id: excadrill
 aka: { pokeemerald: SPECIES_EXCADRILL }
+abilities:
+  primary: Sand Rush
+  secondary: Bioturbation
+  hidden: Mold Breaker
 stats: { def: 70, spe: 95 }
 learnset:
   - { level: 0, move: Horn Drill }
@@ -19,3 +23,4 @@ learnset:
   - { level: 46, move: Drill Run }
   - { level: 52, move: Earthquake }
   - { level: 58, move: Fissure }
+  - { level: 60, move: Faultbreak }

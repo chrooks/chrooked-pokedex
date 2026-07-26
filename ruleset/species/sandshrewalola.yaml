@@ -1,6 +1,9 @@
 name: Sandshrew Alola
 chrooked_id: sandshrewalola
 aka: { dex: 27 }
+abilities:
+  primary: Snow Cloak
+  hidden: Bioturbation
 learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Scratch }
@@ -20,3 +23,4 @@ learnset:
   - { level: 39, move: Swords Dance }
   - { level: 42, move: Snowscape }
   - { level: 45, move: Blizzard }
+  - { level: 47, move: Icebreaker }

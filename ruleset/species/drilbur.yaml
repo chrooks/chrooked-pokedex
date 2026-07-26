@@ -1,6 +1,10 @@
 name: Drilbur
 chrooked_id: drilbur
 aka: {  }
+abilities:
+  primary: Sand Rush
+  secondary: Bioturbation
+  hidden: Mold Breaker
 learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Rapid Spin }
@@ -17,3 +21,4 @@ learnset:
   - { level: 40, move: Drill Run }
   - { level: 44, move: Earthquake }
   - { level: 48, move: Fissure }
+  - { level: 50, move: Faultbreak }

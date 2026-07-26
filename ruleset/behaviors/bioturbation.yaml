@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Bioturbation
+chrooked_id: bioturbation
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Neutral hazard damage on entry
+    trigger: switch-in
+    when: Stealth Rock or any type-based entry hazard is present on the user's side
+    effect: When calculating damage from type-based entry hazards (e.g. Stealth Rock), treat the incoming Pokémon's type(s) as having no weakness or resistance to the hazard's type. The hazard deals its base neutral fraction (1/8 max HP for Stealth Rock) regardless of type matchup. Non-type-based hazards (Spikes, Toxic Spikes, Sticky Web) are unaffected by this neutralization and trigger normally before the relocation step.
+  - summary: Relocate all entry hazards to the foe's side
+    trigger: switch-in
+    when: Any entry hazard(s) exist on the user's side after hazard-damage has been applied
+    effect: After all entry-hazard effects resolve on the user's side, every hazard layer present on the user's side (Stealth Rock, Spikes up to 3 layers, Toxic Spikes up to 2 layers, Sticky Web) is removed from the user's side and placed on the foe's side, capped at each hazard's natural maximum layer count on the foe's side. Layers that would exceed the cap on the foe's side are discarded. The relocation occurs once per switch-in and does not trigger the foe's own entry effects.
+test_cases:
+  - given: Walrein (Ice/Water) switches into Stealth Rock. Walrein has Bioturbation.
+    expect: Walrein takes 1/8 max HP damage (neutral rate) instead of 1/4 (2× weakness). Stealth Rock is then removed from Walrein's side and placed on the foe's side.
+  - given: Sealeo switches into 3 layers of Spikes + 1 Stealth Rock. Sealeo has Bioturbation.
+    expect: Sealeo takes 1/4 max HP from Spikes (3-layer flat damage, unchanged) and 1/8 max HP from Stealth Rock (neutralized). All Spikes layers and Stealth Rock then move to the foe's side.
+  - given: Foe's side already has 3 layers of Spikes. Pokémon with Bioturbation switches into 2 layers of Spikes + Stealth Rock on its own side.
+    expect: Hazard damage resolves normally (with SR neutralized). Stealth Rock moves to foe's side. The 2 Spike layers are discarded because foe's side is already at the 3-layer cap.
+notes:
+  - Hazard damage and status application resolve before relocation; a Pokémon afflicted by Toxic Spikes on entry still receives poison before those spikes move.
+  - The neutral-damage modifier applies only to type-based hazards. Spikes (flat % HP), Toxic Spikes (status only), and Sticky Web (Speed drop) are unchanged.
+  - If the foe's side already has the maximum layers of a given hazard, relocated layers of that hazard are silently discarded.
+  - Rapid Spin, Defog, and other hazard-clearing moves interact normally with relocated hazards on the foe's side.
+  - Magic Bounce does NOT block Bioturbation's relocation — the ability is not a move, it is an ability trigger.
+  - In doubles, 'user's side' and 'foe's side' refer to the respective team's full field side as normal.
+  - If multiple Pokémon with Bioturbation switch in simultaneously (doubles), only one relocation resolves (last to be processed wins; implementation detail for engine pass).
+  - STUB — engine_hints ungrounded, needs human grounding pass

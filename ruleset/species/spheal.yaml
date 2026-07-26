@@ -2,7 +2,8 @@ name: Spheal
 chrooked_id: spheal
 aka: { pokeemerald: SPECIES_SPHEAL }
 abilities:
-  secondary: Ice Body
+  primary: Thick Fat
+  secondary: Bioturbation
   hidden: Permafrost
 learnset:
   - { level: 1, move: Rollout }
@@ -22,3 +23,4 @@ learnset:
   - { level: 44, move: Blizzard }
   - { level: 48, move: Hail }
   - { level: 52, move: Sheer Cold }
+  - { level: 54, move: Icebreaker }

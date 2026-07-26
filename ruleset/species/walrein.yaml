@@ -2,7 +2,8 @@ name: Walrein
 chrooked_id: walrein
 aka: { pokeemerald: SPECIES_WALREIN }
 abilities:
-  secondary: Ice Body
+  primary: Thick Fat
+  secondary: Bioturbation
   hidden: Permafrost
 stats: { atk: 100, def: 100, spa: 90, spd: 100, spe: 50 }
 learnset:
@@ -26,3 +27,4 @@ learnset:
   - { level: 56, move: Blizzard }
   - { level: 64, move: Hail }
   - { level: 72, move: Sheer Cold }
+  - { level: 74, move: Icebreaker }
