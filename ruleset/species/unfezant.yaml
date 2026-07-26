@@ -15,6 +15,8 @@ learnset:
   - { level: 36, move: Detect }
   - { level: 42, move: Air Slash }
   - { level: 46, move: Dive Bomb }
+  - { level: 46, move: Rampage }
+  - { level: 46, move: Nosedive }
   - { level: 50, move: Roost }
   - { level: 58, move: Tailwind }
   - { level: 62, move: Oblivion Wing }

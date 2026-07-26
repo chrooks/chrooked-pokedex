@@ -15,4 +15,5 @@ learnset:
   - { level: 36, move: Amnesia }
   - { level: 39, move: Baton Pass }
   - { level: 42, move: Double-Edge }
+  - { level: 44, move: Rampage }
   - { level: 47, move: Hyper Voice }

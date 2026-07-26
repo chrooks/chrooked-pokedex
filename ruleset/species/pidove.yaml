@@ -14,6 +14,8 @@ learnset:
   - { level: 28, move: Bail Out }
   - { level: 32, move: Air Slash }
   - { level: 36, move: Roost }
+  - { level: 38, move: Rampage }
+  - { level: 38, move: Nosedive }
   - { level: 40, move: Tailwind }
   - { level: 44, move: Sky Attack }
   - { level: 48, move: Dive Bomb }

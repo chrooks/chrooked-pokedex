@@ -13,3 +13,4 @@ learnset:
   - { level: 30, move: Bail Out }
   - { level: 33, move: Flail }
   - { level: 38, move: Play Rough }
+  - { level: 46, move: Rampage }

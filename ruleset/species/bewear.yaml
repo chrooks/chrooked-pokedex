@@ -17,6 +17,8 @@ learnset:
   - { level: 33, move: Bail Out }
   - { level: 36, move: Hammer Arm }
   - { level: 39, move: One-Inch Punch }
+  - { level: 39, move: Rampage }
+  - { level: 39, move: Cross Chop }
   - { level: 42, move: Thrash }
   - { level: 48, move: Pain Split }
   - { level: 54, move: Double-Edge }

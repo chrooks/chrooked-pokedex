@@ -1,0 +1,9 @@
+name: Rampage
+chrooked_id: rampage
+aka: { pokeemerald: MOVE_RAMPAGE }
+type: Normal
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user charges in a reckless all-out barrage.

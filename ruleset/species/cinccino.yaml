@@ -20,3 +20,4 @@ learnset:
   - { level: 1, move: Bullet Seed }
   - { level: 10, move: Glitter Tap }
   - { level: 31, move: Bail Out }
+  - { level: 46, move: Rampage }

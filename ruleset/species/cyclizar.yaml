@@ -14,6 +14,7 @@ learnset:
   - { level: 27, move: Bail Out }
   - { level: 31, move: Shed Tail }
   - { level: 36, move: Dragon Claw }
+  - { level: 38, move: Rampage }
   - { level: 40, move: Shift Gear }
   - { level: 45, move: Dragon Pulse }
   - { level: 48, move: Dragon Hammer }

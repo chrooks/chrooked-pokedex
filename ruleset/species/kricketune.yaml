@@ -22,6 +22,8 @@ learnset:
   - { level: 33, move: Dragon Dance }
   - { level: 34, move: Arm Thrust }
   - { level: 38, move: Swords Dance }
+  - { level: 40, move: Rampage }
+  - { level: 40, move: Moltstrike }
   - { level: 42, move: Night Slash }
   - { level: 46, move: Bug Buzz }
   - { level: 50, move: Cross Chop }

@@ -21,5 +21,6 @@ learnset:
   - { level: 38, move: Sucker Punch }
   - { level: 42, move: Trick }
   - { level: 45, move: Wraithstrike }
+  - { level: 45, move: Rampage }
   - { level: 48, move: Phantom Force }
   - { level: 62, move: Necrosis }

@@ -1,0 +1,19 @@
+name: Tandemaus
+chrooked_id: tandemaus
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 5, move: Echoed Voice }
+  - { level: 8, move: Helping Hand }
+  - { level: 11, move: Super Fang }
+  - { level: 14, move: Double Hit }
+  - { level: 18, move: Bullet Seed }
+  - { level: 22, move: Encore }
+  - { level: 26, move: Play Rough }
+  - { level: 30, move: Hyper Voice }
+  - { level: 33, move: Charm }
+  - { level: 37, move: Beat Up }
+  - { level: 39, move: Rampage }
+  - { level: 41, move: Copycat }
+  - { level: 46, move: Population Bomb }

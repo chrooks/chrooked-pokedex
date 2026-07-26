@@ -15,5 +15,6 @@ learnset:
   - { level: 30, move: Bail Out }
   - { level: 34, move: Uproar }
   - { level: 39, move: Double-Edge }
+  - { level: 42, move: Rampage }
   - { level: 45, move: Earth Power }
   - { level: 51, move: Belch }

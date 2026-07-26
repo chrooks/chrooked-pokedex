@@ -1,0 +1,6 @@
+name: Ditto
+chrooked_id: ditto
+aka: {  }
+learnset:
+  - { level: 1, move: Transform }
+  - { level: 46, move: Rampage }

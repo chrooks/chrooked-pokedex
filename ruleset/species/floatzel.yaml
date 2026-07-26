@@ -22,6 +22,7 @@ learnset:
   - { level: 32, move: Bail Out }
   - { level: 32, move: Maelstrom }
   - { level: 35, move: Whirlpool }
+  - { level: 38, move: Rampage }
   - { level: 41, move: Liquidation }
   - { level: 46, move: Aqua Tail }
   - { level: 51, move: Agility }

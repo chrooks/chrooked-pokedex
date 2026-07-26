@@ -16,3 +16,4 @@ learnset:
   - { level: 37, move: Yawn }
   - { level: 40, move: Thrash }
   - { level: 43, move: Rest }
+  - { level: 46, move: Rampage }

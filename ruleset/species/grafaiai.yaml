@@ -19,5 +19,7 @@ learnset:
   - { level: 33, move: Poison Jab }
   - { level: 37, move: Taunt }
   - { level: 40, move: Substitute }
+  - { level: 42, move: Rampage }
+  - { level: 42, move: Venom Slam }
   - { level: 45, move: Knock Off }
   - { level: 51, move: Gunk Shot }

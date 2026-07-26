@@ -1,0 +1,19 @@
+name: Gumshoos Totem
+chrooked_id: gumshoostotem
+aka: {  }
+learnset:
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Payback }
+  - { level: 13, move: Work Up }
+  - { level: 19, move: Bite }
+  - { level: 23, move: Mud-Slap }
+  - { level: 27, move: Super Fang }
+  - { level: 31, move: Take Down }
+  - { level: 35, move: Scary Face }
+  - { level: 37, move: Rampage }
+  - { level: 39, move: Crunch }
+  - { level: 43, move: Yawn }
+  - { level: 47, move: Thrash }
+  - { level: 52, move: Rest }

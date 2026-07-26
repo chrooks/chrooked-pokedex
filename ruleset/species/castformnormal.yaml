@@ -1,0 +1,18 @@
+name: Castform Normal
+chrooked_id: castformnormal
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 10, move: Water Gun }
+  - { level: 10, move: Ember }
+  - { level: 10, move: Powder Snow }
+  - { level: 15, move: Headbutt }
+  - { level: 20, move: Rain Dance }
+  - { level: 20, move: Sunny Day }
+  - { level: 20, move: Hail }
+  - { level: 25, move: Weather Ball }
+  - { level: 35, move: Hydro Pump }
+  - { level: 35, move: Fire Blast }
+  - { level: 35, move: Blizzard }
+  - { level: 40, move: Rampage }
+  - { level: 45, move: Hurricane }

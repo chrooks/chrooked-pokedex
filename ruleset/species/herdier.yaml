@@ -13,6 +13,7 @@ learnset:
   - { level: 30, move: Crunch }
   - { level: 33, move: Bail Out }
   - { level: 36, move: Take Down }
+  - { level: 39, move: Rampage }
   - { level: 42, move: Helping Hand }
   - { level: 48, move: Reversal }
   - { level: 54, move: Roar }

@@ -18,6 +18,8 @@ learnset:
   - { level: 28, move: Cutsie Slap }
   - { level: 31, move: Facade }
   - { level: 34, move: Covet }
+  - { level: 36, move: Rampage }
+  - { level: 36, move: Starfall Slam }
   - { level: 37, move: Heal Bell }
   - { level: 40, move: Double-Edge }
   - { level: 43, move: Baby-Doll Eyes }

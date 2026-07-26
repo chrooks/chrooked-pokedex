@@ -17,5 +17,6 @@ learnset:
   - { level: 31, move: Double-Edge }
   - { level: 34, move: Endeavor }
   - { level: 45, move: Backstab }
+  - { level: 46, move: Rampage }
   - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }

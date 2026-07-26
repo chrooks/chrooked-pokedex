@@ -15,6 +15,7 @@ learnset:
   - { level: 28, move: Slam }
   - { level: 32, move: Rest }
   - { level: 36, move: Sucker Punch }
+  - { level: 39, move: Rampage }
   - { level: 42, move: Amnesia }
   - { level: 46, move: Baton Pass }
   - { level: 50, move: Double-Edge }

@@ -19,5 +19,6 @@ learnset:
   - { level: 24, move: Crunch }
   - { level: 29, move: Sucker Punch }
   - { level: 34, move: Super Fang }
+  - { level: 36, move: Rampage }
   - { level: 39, move: Bail Out }
   - { level: 44, move: Endeavor }

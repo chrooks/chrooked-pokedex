@@ -6,3 +6,22 @@ abilities:
   primary: Liquid Ooze
   secondary: Liquified
   hidden: Gluttony
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 5, move: Yawn }
+  - { level: 8, move: Poison Gas }
+  - { level: 10, move: Sludge }
+  - { level: 12, move: Amnesia }
+  - { level: 17, move: Acid Spray }
+  - { level: 20, move: Encore }
+  - { level: 25, move: Toxic }
+  - { level: 28, move: Stockpile }
+  - { level: 28, move: Spit Up }
+  - { level: 28, move: Swallow }
+  - { level: 33, move: Sludge Bomb }
+  - { level: 36, move: Gastro Acid }
+  - { level: 38, move: Rampage }
+  - { level: 38, move: Venom Slam }
+  - { level: 41, move: Belch }
+  - { level: 44, move: Pain Split }
+  - { level: 49, move: Gunk Shot }

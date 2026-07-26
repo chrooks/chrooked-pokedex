@@ -29,6 +29,7 @@ learnset:
   - { level: 29, move: False Swipe }
   - { level: 33, move: Bail Out }
   - { level: 36, move: Detect }
+  - { level: 38, move: Rampage }
   - { level: 40, move: X-Scissor }
   - { level: 43, move: Taunt }
   - { level: 47, move: Swords Dance }

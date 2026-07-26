@@ -1,0 +1,21 @@
+name: Shroodle
+chrooked_id: shroodle
+aka: {  }
+learnset:
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Acid Spray }
+  - { level: 8, move: Bite }
+  - { level: 8, move: Fury Swipes }
+  - { level: 11, move: Switcheroo }
+  - { level: 14, move: Poison Fang }
+  - { level: 18, move: Flatter }
+  - { level: 21, move: Slash }
+  - { level: 25, move: U-turn }
+  - { level: 29, move: Poison Jab }
+  - { level: 33, move: Taunt }
+  - { level: 36, move: Substitute }
+  - { level: 38, move: Rampage }
+  - { level: 38, move: Venom Slam }
+  - { level: 40, move: Knock Off }
+  - { level: 45, move: Gunk Shot }

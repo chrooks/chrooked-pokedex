@@ -13,6 +13,7 @@ learnset:
   - { level: 27, move: Throat Chop }
   - { level: 30, move: Bail Out }
   - { level: 33, move: Counter }
+  - { level: 36, move: Rampage }
   - { level: 39, move: Flail }
   - { level: 45, move: Fling }
   - { level: 52, move: Mega Kick }

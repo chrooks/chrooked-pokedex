@@ -1,0 +1,22 @@
+name: Patrat
+chrooked_id: patrat
+aka: {  }
+learnset:
+  - { level: 1, move: Tackle }
+  - { level: 3, move: Leer }
+  - { level: 6, move: Bite }
+  - { level: 8, move: Bide }
+  - { level: 11, move: Detect }
+  - { level: 13, move: Sand Attack }
+  - { level: 16, move: Crunch }
+  - { level: 18, move: Hypnosis }
+  - { level: 21, move: Super Fang }
+  - { level: 23, move: After You }
+  - { level: 26, move: Focus Energy }
+  - { level: 28, move: Work Up }
+  - { level: 31, move: Hyper Fang }
+  - { level: 33, move: Nasty Plot }
+  - { level: 36, move: Mean Look }
+  - { level: 38, move: Baton Pass }
+  - { level: 41, move: Slam }
+  - { level: 46, move: Rampage }

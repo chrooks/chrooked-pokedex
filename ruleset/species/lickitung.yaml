@@ -1,0 +1,17 @@
+name: Lickitung
+chrooked_id: lickitung
+aka: {  }
+learnset:
+  - { level: 1, move: Lick }
+  - { level: 1, move: Defense Curl }
+  - { level: 6, move: Rollout }
+  - { level: 12, move: Supersonic }
+  - { level: 18, move: Wrap }
+  - { level: 24, move: Disable }
+  - { level: 30, move: Stomp }
+  - { level: 36, move: Knock Off }
+  - { level: 39, move: Rampage }
+  - { level: 42, move: Screech }
+  - { level: 48, move: Slam }
+  - { level: 54, move: Power Whip }
+  - { level: 60, move: Belly Drum }

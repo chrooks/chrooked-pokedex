@@ -14,5 +14,6 @@ learnset:
   - { level: 26, move: Flail }
   - { level: 31, move: Sucker Punch }
   - { level: 36, move: Bail Out }
+  - { level: 38, move: Rampage }
   - { level: 41, move: Wood Hammer }
   - { level: 46, move: Thrash }

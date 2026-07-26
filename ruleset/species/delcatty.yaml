@@ -26,3 +26,5 @@ learnset:
   - { level: 10, move: Glitter Tap }
   - { level: 31, move: Bail Out }
   - { level: 35, move: Cutsie Slap }
+  - { level: 46, move: Rampage }
+  - { level: 46, move: Starfall Slam }

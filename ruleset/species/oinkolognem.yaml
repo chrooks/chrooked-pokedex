@@ -16,5 +16,6 @@ learnset:
   - { level: 34, move: Work Up }
   - { level: 38, move: Uproar }
   - { level: 42, move: Double-Edge }
+  - { level: 45, move: Rampage }
   - { level: 48, move: Earth Power }
   - { level: 54, move: Belch }

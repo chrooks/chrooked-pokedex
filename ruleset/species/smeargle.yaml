@@ -3,3 +3,15 @@ chrooked_id: smeargle
 aka: { pokeemerald: SPECIES_SMEARGLE }
 abilities:
   secondary: Technician
+learnset:
+  - { level: 1, move: Sketch }
+  - { level: 11, move: Sketch }
+  - { level: 21, move: Sketch }
+  - { level: 31, move: Sketch }
+  - { level: 36, move: Rampage }
+  - { level: 41, move: Sketch }
+  - { level: 51, move: Sketch }
+  - { level: 61, move: Sketch }
+  - { level: 71, move: Sketch }
+  - { level: 81, move: Sketch }
+  - { level: 91, move: Sketch }

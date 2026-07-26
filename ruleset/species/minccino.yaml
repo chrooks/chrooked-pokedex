@@ -13,6 +13,7 @@ learnset:
   - { level: 28, move: Bail Out }
   - { level: 32, move: Tail Slap }
   - { level: 36, move: Tickle }
+  - { level: 38, move: Rampage }
   - { level: 40, move: Slam }
   - { level: 44, move: Hyper Voice }
   - { level: 48, move: Last Resort }

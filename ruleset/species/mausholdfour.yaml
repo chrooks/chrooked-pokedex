@@ -1,0 +1,21 @@
+name: Maushold Four
+chrooked_id: mausholdfour
+aka: {  }
+learnset:
+  - { level: 1, move: Pound }
+  - { level: 1, move: Follow Me }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tidy Up }
+  - { level: 5, move: Echoed Voice }
+  - { level: 8, move: Helping Hand }
+  - { level: 11, move: Super Fang }
+  - { level: 14, move: Double Hit }
+  - { level: 18, move: Bullet Seed }
+  - { level: 22, move: Encore }
+  - { level: 29, move: Play Rough }
+  - { level: 33, move: Hyper Voice }
+  - { level: 37, move: Charm }
+  - { level: 39, move: Rampage }
+  - { level: 41, move: Beat Up }
+  - { level: 46, move: Copycat }
+  - { level: 53, move: Population Bomb }

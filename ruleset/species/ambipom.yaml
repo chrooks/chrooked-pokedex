@@ -19,4 +19,5 @@ learnset:
   - { level: 36, move: Fling }
   - { level: 39, move: Nasty Plot }
   - { level: 43, move: Last Resort }
+  - { level: 46, move: Rampage }
   - { level: 48, move: One-Inch Punch }

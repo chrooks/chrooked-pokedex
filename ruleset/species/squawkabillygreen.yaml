@@ -15,6 +15,8 @@ learnset:
   - { level: 30, move: Fly }
   - { level: 34, move: Facade }
   - { level: 36, move: Dive Bomb }
+  - { level: 36, move: Rampage }
+  - { level: 36, move: Nosedive }
   - { level: 38, move: Swagger }
   - { level: 42, move: Brave Bird }
   - { level: 47, move: Roost }

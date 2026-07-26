@@ -23,5 +23,6 @@ learnset:
   - { level: 35, move: Double-Edge }
   - { level: 38, move: Bail Out }
   - { level: 45, move: Backstab }
+  - { level: 46, move: Rampage }
   - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }

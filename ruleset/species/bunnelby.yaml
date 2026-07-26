@@ -2,3 +2,20 @@ name: Bunnelby
 chrooked_id: bunnelby
 aka: { pokeemerald: SPECIES_BUNNELBY }
 stats: { atk: 35 }
+learnset:
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Leer }
+  - { level: 3, move: Tackle }
+  - { level: 6, move: Laser Focus }
+  - { level: 9, move: Quick Attack }
+  - { level: 12, move: Mud Shot }
+  - { level: 15, move: Flail }
+  - { level: 18, move: Double Kick }
+  - { level: 21, move: Bulldoze }
+  - { level: 24, move: Dig }
+  - { level: 27, move: Bounce }
+  - { level: 30, move: Take Down }
+  - { level: 33, move: Swords Dance }
+  - { level: 36, move: Earthquake }
+  - { level: 39, move: Super Fang }
+  - { level: 46, move: Rampage }

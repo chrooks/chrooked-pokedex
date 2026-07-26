@@ -17,6 +17,8 @@ learnset:
   - { level: 30, move: Aerial Ace }
   - { level: 36, move: Slash }
   - { level: 39, move: Dive Bomb }
+  - { level: 39, move: Rampage }
+  - { level: 39, move: Nosedive }
   - { level: 42, move: Whirlwind }
   - { level: 48, move: Crush Claw }
   - { level: 53, move: Oblivion Wing }

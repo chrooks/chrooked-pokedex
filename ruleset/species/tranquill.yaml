@@ -15,6 +15,8 @@ learnset:
   - { level: 34, move: Detect }
   - { level: 38, move: Air Slash }
   - { level: 41, move: Dive Bomb }
+  - { level: 41, move: Rampage }
+  - { level: 41, move: Nosedive }
   - { level: 44, move: Roost }
   - { level: 50, move: Tailwind }
   - { level: 56, move: Sky Attack }

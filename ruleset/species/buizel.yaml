@@ -21,5 +21,6 @@ learnset:
   - { level: 35, move: Liquidation }
   - { level: 38, move: Aqua Tail }
   - { level: 41, move: Agility }
+  - { level: 43, move: Rampage }
   - { level: 45, move: Hydro Pump }
   - { level: 49, move: Wave Crash }
