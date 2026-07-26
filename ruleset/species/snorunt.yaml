@@ -22,3 +22,4 @@ learnset:
   - { level: 55, move: Crunch }
   - { level: 60, move: Blizzard }
   - { level: 64, move: Netherstorm }
+  - { level: 64, move: Cryoblast }

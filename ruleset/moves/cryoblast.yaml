@@ -1,0 +1,11 @@
+name: Cryoblast
+chrooked_id: cryoblast
+aka: { pokeemerald: MOVE_CRYOBLAST }
+type: Ice
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: A blast of absolute cold. The user's Sp. Atk falls sharply.
+additional_effects:
+  - { effect: sp_atk_minus_2, chance: 100 }

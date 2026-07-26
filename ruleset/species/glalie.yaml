@@ -22,5 +22,6 @@ learnset:
   - { level: 43, move: Glacial Crush }
   - { level: 47, move: Snowscape }
   - { level: 54, move: Weather Ball }
+  - { level: 57, move: Cryoblast }
   - { level: 61, move: Crunch }
   - { level: 68, move: Blizzard }

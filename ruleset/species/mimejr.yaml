@@ -22,3 +22,4 @@ learnset:
   - { level: 44, move: Dazzling Gleam }
   - { level: 48, move: Psychic }
   - { level: 52, move: Teeter Dance }
+  - { level: 64, move: Cryoblast }

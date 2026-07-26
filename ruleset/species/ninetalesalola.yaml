@@ -16,7 +16,10 @@ learnset:
   - { level: 1, move: Extrasensory }
   - { level: 1, move: Nasty Plot }
   - { level: 1, move: Aurora Veil }
+  - { level: 28, move: Beguile }
   - { level: 40, move: Freeze-Dry }
   - { level: 48, move: Draining Kiss }
   - { level: 56, move: Blizzard }
   - { level: 64, move: Moonblast }
+  - { level: 64, move: Cryoblast }
+  - { level: 64, move: Rapture }

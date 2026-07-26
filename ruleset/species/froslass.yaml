@@ -27,5 +27,6 @@ learnset:
   - { level: 47, move: Will-O-Wisp }
   - { level: 54, move: Aurora Veil }
   - { level: 57, move: Netherstorm }
+  - { level: 57, move: Cryoblast }
   - { level: 61, move: Shadow Ball }
   - { level: 68, move: Blizzard }

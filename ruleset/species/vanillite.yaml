@@ -4,3 +4,19 @@ aka: { pokeemerald: SPECIES_VANILLITE }
 types: [Ice, Fairy]
 abilities:
   secondary: Snow Cloak
+learnset:
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Harden }
+  - { level: 4, move: Taunt }
+  - { level: 8, move: Mist }
+  - { level: 12, move: Icy Wind }
+  - { level: 16, move: Avalanche }
+  - { level: 20, move: Hail }
+  - { level: 24, move: Icicle Spear }
+  - { level: 28, move: Uproar }
+  - { level: 32, move: Acid Armor }
+  - { level: 36, move: Mirror Coat }
+  - { level: 40, move: Ice Beam }
+  - { level: 44, move: Blizzard }
+  - { level: 48, move: Sheer Cold }
+  - { level: 64, move: Cryoblast }

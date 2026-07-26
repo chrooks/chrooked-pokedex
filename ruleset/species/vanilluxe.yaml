@@ -5,3 +5,22 @@ types: [Ice, Fairy]
 abilities:
   secondary: Snow Warning
 stats: { atk: 75, spa: 130 }
+learnset:
+  - { level: 1, move: Weather Ball }
+  - { level: 1, move: Icicle Crash }
+  - { level: 1, move: Freeze-Dry }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Harden }
+  - { level: 1, move: Taunt }
+  - { level: 1, move: Mist }
+  - { level: 12, move: Icy Wind }
+  - { level: 16, move: Avalanche }
+  - { level: 20, move: Hail }
+  - { level: 24, move: Icicle Spear }
+  - { level: 28, move: Uproar }
+  - { level: 32, move: Acid Armor }
+  - { level: 38, move: Mirror Coat }
+  - { level: 44, move: Ice Beam }
+  - { level: 52, move: Blizzard }
+  - { level: 56, move: Cryoblast }
+  - { level: 60, move: Sheer Cold }

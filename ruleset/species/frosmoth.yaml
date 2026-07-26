@@ -28,4 +28,5 @@ learnset:
   - { level: 48, move: Wide Guard }
   - { level: 52, move: Quiver Dance }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Cryoblast }
 evolution: { from: Snom, method: { level: 24 } }

@@ -9,3 +9,4 @@ learnset:
   - { level: 30, move: Signal Beam }
   - { level: 45, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
+  - { level: 64, move: Cryoblast }

@@ -21,3 +21,4 @@ learnset:
   - { level: 43, move: Wood Hammer }
   - { level: 49, move: Blizzard }
   - { level: 56, move: Sheer Cold }
+  - { level: 64, move: Cryoblast }

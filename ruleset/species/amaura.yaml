@@ -27,3 +27,4 @@ learnset:
   - { level: 52, move: Blizzard }
   - { level: 56, move: Hyper Beam }
   - { level: 62, move: Meteor Surge }
+  - { level: 64, move: Cryoblast }

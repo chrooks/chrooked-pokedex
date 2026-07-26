@@ -22,4 +22,5 @@ learnset:
   - { level: 46, move: Mean Look }
   - { level: 52, move: Perish Song }
   - { level: 58, move: Blizzard }
+  - { level: 64, move: Cryoblast }
 evolution: { from: Smoochum, method: { level: 24 } }

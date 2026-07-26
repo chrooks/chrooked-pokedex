@@ -20,3 +20,4 @@ learnset:
   - { level: 40, move: Mean Look }
   - { level: 44, move: Perish Song }
   - { level: 48, move: Blizzard }
+  - { level: 64, move: Cryoblast }

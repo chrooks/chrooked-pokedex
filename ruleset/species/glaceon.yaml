@@ -29,4 +29,5 @@ learnset:
   - { level: 45, move: Mirror Coat }
   - { level: 50, move: Blizzard }
   - { level: 55, move: Last Resort }
+  - { level: 64, move: Cryoblast }
 evolution: { from: Eevee, method: { item: Ice Stone } }
