@@ -22,30 +22,34 @@
 #   - Foe already at 3 Spikes; enter into 2 Spikes + SR => SR moves, extra Spikes discarded.
 
 # --- Seam 1: neutralize the holder's own entry-hazard type effectiveness -------
-module ChrookedBioturbNeutralize
-  def typesEff(attackType, types, inverse: false)
-    holder = $chrooked_bioturb_neutralize
-    return Typemod.normal if holder && types == holder.types
-    super
-  end
-end
-class << PBTypes
-  prepend ChrookedBioturbNeutralize
-end
-
-module ChrookedBioturbActive
-  def pbOnActiveOne(pkmn)
-    return super unless pkmn && !pkmn.isFainted? && pkmn.ability == :BIOTURBATION
-    prev = $chrooked_bioturb_neutralize
-    $chrooked_bioturb_neutralize = pkmn
-    begin
+# Guarded like the core's PokeBattle_Move_0D8 block so the file loads under the
+# stub harnesses (which don't define PBTypes/Typemod) — a no-op there, live in-game.
+if defined?(PBTypes) && defined?(Typemod)
+  module ChrookedBioturbNeutralize
+    def typesEff(attackType, types, inverse: false)
+      holder = $chrooked_bioturb_neutralize
+      return Typemod.normal if holder && types == holder.types
       super
-    ensure
-      $chrooked_bioturb_neutralize = prev
     end
   end
+  class << PBTypes
+    prepend ChrookedBioturbNeutralize
+  end
+
+  module ChrookedBioturbActive
+    def pbOnActiveOne(pkmn)
+      return super unless pkmn && !pkmn.isFainted? && pkmn.ability == :BIOTURBATION
+      prev = $chrooked_bioturb_neutralize
+      $chrooked_bioturb_neutralize = pkmn
+      begin
+        super
+      ensure
+        $chrooked_bioturb_neutralize = prev
+      end
+    end
+  end
+  PokeBattle_Battle.prepend(ChrookedBioturbActive)
 end
-PokeBattle_Battle.prepend(ChrookedBioturbActive)
 
 # --- Seam 2: fling all own-side hazards to the foe's side (after damage) -------
 CHROOKED_SWITCH_IN[:BIOTURBATION] = lambda { |battler, battle|
