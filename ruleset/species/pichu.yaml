@@ -12,4 +12,5 @@ learnset:
   - { level: 20, move: Charm }
   - { level: 35, move: Cutsie Slap }
   - { level: 35, move: Short Circuit }
+  - { level: 46, move: Arc Strike }
   - { level: 48, move: Lightning Slam }

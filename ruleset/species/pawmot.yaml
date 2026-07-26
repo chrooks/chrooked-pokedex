@@ -17,6 +17,8 @@ learnset:
   - { level: 29, move: Thunder Wave }
   - { level: 33, move: Body Slam }
   - { level: 36, move: Lightning Slam }
+  - { level: 36, move: Arc Strike }
+  - { level: 36, move: Cross Chop }
   - { level: 39, move: Entrainment }
   - { level: 44, move: Close Combat }
   - { level: 49, move: Discharge }

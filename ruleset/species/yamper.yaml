@@ -12,6 +12,7 @@ learnset:
   - { level: 26, move: Charm }
   - { level: 30, move: Crunch }
   - { level: 35, move: Charge }
+  - { level: 37, move: Arc Strike }
   - { level: 40, move: Wild Charge }
   - { level: 45, move: Play Rough }
   - { level: 48, move: Lightning Slam }

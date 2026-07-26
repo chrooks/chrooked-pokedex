@@ -14,4 +14,5 @@ learnset:
   - { level: 33, move: Agility }
   - { level: 35, move: Wild Charge }
   - { level: 40, move: Thrash }
+  - { level: 46, move: Arc Strike }
   - { level: 48, move: Lightning Slam }

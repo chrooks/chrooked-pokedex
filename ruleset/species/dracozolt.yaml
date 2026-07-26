@@ -13,6 +13,7 @@ learnset:
   - { level: 28, move: Pluck }
   - { level: 35, move: Dragon Tail }
   - { level: 38, move: Lightning Slam }
+  - { level: 38, move: Arc Strike }
   - { level: 42, move: Stomp }
   - { level: 45, move: Dragon Hammer }
   - { level: 49, move: Body Slam }

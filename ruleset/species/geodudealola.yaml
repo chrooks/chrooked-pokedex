@@ -18,4 +18,5 @@ learnset:
   - { level: 36, move: Explosion }
   - { level: 40, move: Double-Edge }
   - { level: 42, move: Stone Edge }
+  - { level: 46, move: Arc Strike }
   - { level: 48, move: Lightning Slam }

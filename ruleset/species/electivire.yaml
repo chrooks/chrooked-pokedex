@@ -19,6 +19,8 @@ learnset:
   - { level: 31, move: Short Circuit }
   - { level: 36, move: Bulk Up }
   - { level: 37, move: Aura Sphere }
+  - { level: 37, move: Arc Strike }
+  - { level: 37, move: Cross Chop }
   - { level: 39, move: Lightning Slam }
   - { level: 42, move: Thunderbolt }
   - { level: 45, move: One-Inch Punch }

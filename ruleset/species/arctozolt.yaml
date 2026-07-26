@@ -11,6 +11,7 @@ learnset:
   - { level: 28, move: Pluck }
   - { level: 35, move: Avalanche }
   - { level: 38, move: Glacial Crush }
+  - { level: 38, move: Arc Strike }
   - { level: 42, move: Freeze-Dry }
   - { level: 45, move: Lightning Slam }
   - { level: 49, move: Body Slam }

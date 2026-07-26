@@ -17,4 +17,5 @@ learnset:
   - { level: 1, move: Coil }
   - { level: 5, move: Wild Charge }
   - { level: 26, move: Water Whip }
+  - { level: 46, move: Arc Strike }
   - { level: 48, move: Lightning Slam }
