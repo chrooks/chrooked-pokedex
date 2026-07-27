@@ -1,30 +1,37 @@
 name: Pikachu
 chrooked_id: pikachu
 aka: { pokeemerald: SPECIES_PIKACHU }
+types: [Electric]
+abilities:
+  primary: Static
+  secondary: Galvanize
+  hidden: Lightning Rod
 stats: { def: 40, spd: 50 }
 learnset:
-  - { level: 1, move: Nuzzle }
-  - { level: 1, move: Nasty Plot }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Play Nice }
+  - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Thunder Shock }
-  - { level: 1, move: Growl }
-  - { level: 4, move: Thunder Wave }
-  - { level: 8, move: Double Team }
-  - { level: 12, move: Electro Ball }
-  - { level: 16, move: Feint }
-  - { level: 18, move: Short Circuit }
-  - { level: 20, move: Spark }
-  - { level: 22, move: Cutsie Slap }
-  - { level: 24, move: Agility }
-  - { level: 28, move: Iron Tail }
-  - { level: 32, move: Discharge }
-  - { level: 36, move: Thunderbolt }
-  - { level: 38, move: Arc Strike }
-  - { level: 40, move: Light Screen }
-  - { level: 44, move: Thunder }
-  - { level: 48, move: Lightning Slam }
+  - { level: 4, move: Nuzzle }
+  - { level: 8, move: Charm }
+  - { level: 12, move: Spark }
+  - { level: 16, move: Sweet Kiss }
+  - { level: 20, move: Electro Ball }
+  - { level: 24, move: Iron Tail }
+  - { level: 28, move: Feint }
+  - { level: 29, move: Thunder Wave }
+  - { level: 32, move: Volt Switch }
+  - { level: 34, move: Discharge }
+  - { level: 36, move: Double Team }
+  - { level: 38, move: Nasty Plot }
+  - { level: 40, move: Thunderbolt }
+  - { level: 42, move: Surf }
+  - { level: 44, move: Brick Break }
+  - { level: 46, move: Light Screen }
+  - { level: 48, move: Cutsie Slap }
+  - { level: 54, move: Zing Zap }
+  - { level: 56, move: Arc Strike }
+  - { level: 58, move: Focus Blast }
+  - { level: 60, move: Wild Charge }
+  - { level: 66, move: Thunder }
 evolution: { from: Pichu, method: { level: 16 } }

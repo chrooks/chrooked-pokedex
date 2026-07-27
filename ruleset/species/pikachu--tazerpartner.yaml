@@ -1,0 +1,5 @@
+name: Pikachu (Tazer/Partner)
+chrooked_id: pikachu--tazerpartner
+aka: { dex: 25 }
+abilities:
+  secondary: Galvanize

@@ -1,30 +1,37 @@
 name: Raichu
 chrooked_id: raichu
 aka: { pokeemerald: SPECIES_RAICHU }
-stats: { atk: 100, spa: 100, spe: 115 }
+abilities:
+  primary: Static
+  secondary: Galvanize
+  hidden: Lightning Rod
+stats: { hp: 64, atk: 110, def: 55, spa: 110, spd: 81, spe: 120 }
 learnset:
   - { level: 0, move: Thunder Punch }
-  - { level: 1, move: Electro Ball }
-  - { level: 1, move: Discharge }
-  - { level: 1, move: Nasty Plot }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Iron Tail }
-  - { level: 1, move: Spark }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Play Nice }
-  - { level: 1, move: Nuzzle }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Agility }
-  - { level: 1, move: Thunder }
-  - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Thunder Shock }
   - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Light Screen }
-  - { level: 5, move: Thunderbolt }
-  - { level: 35, move: Cutsie Slap }
-  - { level: 35, move: Short Circuit }
-  - { level: 46, move: Arc Strike }
-  - { level: 48, move: Lightning Slam }
+  - { level: 1, move: Thunder Shock }
+  - { level: 4, move: Nuzzle }
+  - { level: 8, move: Charm }
+  - { level: 12, move: Spark }
+  - { level: 16, move: Sweet Kiss }
+  - { level: 20, move: Electro Ball }
+  - { level: 24, move: Iron Tail }
+  - { level: 28, move: Feint }
+  - { level: 29, move: Thunder Wave }
+  - { level: 32, move: Volt Switch }
+  - { level: 34, move: Discharge }
+  - { level: 36, move: Double Team }
+  - { level: 38, move: Nasty Plot }
+  - { level: 40, move: Thunderbolt }
+  - { level: 42, move: Surf }
+  - { level: 44, move: Brick Break }
+  - { level: 46, move: Light Screen }
+  - { level: 48, move: Cutsie Slap }
+  - { level: 54, move: Zing Zap }
+  - { level: 56, move: Arc Strike }
+  - { level: 58, move: Focus Blast }
+  - { level: 60, move: Wild Charge }
+  - { level: 66, move: Thunder }
+evolution: { from: Pikachu, method: { essentials: Item, param: THUNDERSTONE } }

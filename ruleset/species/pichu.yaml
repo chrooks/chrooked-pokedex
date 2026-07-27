@@ -1,16 +1,35 @@
 name: Pichu
 chrooked_id: pichu
 aka: { pokeemerald: SPECIES_PICHU }
-types: [Electric, Fairy]
+types: [Electric]
+abilities:
+  primary: Static
+  secondary: Galvanize
+  hidden: Lightning Rod
 learnset:
+  - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Thunder Shock }
-  - { level: 4, move: Play Nice }
-  - { level: 8, move: Glitter Tap }
-  - { level: 12, move: Nuzzle }
-  - { level: 16, move: Nasty Plot }
-  - { level: 20, move: Charm }
-  - { level: 35, move: Cutsie Slap }
-  - { level: 35, move: Short Circuit }
-  - { level: 46, move: Arc Strike }
-  - { level: 48, move: Lightning Slam }
+  - { level: 4, move: Nuzzle }
+  - { level: 8, move: Charm }
+  - { level: 12, move: Spark }
+  - { level: 16, move: Sweet Kiss }
+  - { level: 20, move: Electro Ball }
+  - { level: 24, move: Iron Tail }
+  - { level: 28, move: Feint }
+  - { level: 29, move: Thunder Wave }
+  - { level: 32, move: Volt Switch }
+  - { level: 34, move: Discharge }
+  - { level: 36, move: Double Team }
+  - { level: 38, move: Nasty Plot }
+  - { level: 40, move: Thunderbolt }
+  - { level: 42, move: Surf }
+  - { level: 44, move: Brick Break }
+  - { level: 46, move: Light Screen }
+  - { level: 48, move: Cutsie Slap }
+  - { level: 54, move: Zing Zap }
+  - { level: 56, move: Arc Strike }
+  - { level: 58, move: Focus Blast }
+  - { level: 60, move: Wild Charge }
+  - { level: 66, move: Thunder }

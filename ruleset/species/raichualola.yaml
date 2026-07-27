@@ -3,28 +3,24 @@ chrooked_id: raichualola
 aka: { dex: 26 }
 learnset:
   - { level: 0, move: Psychic }
-  - { level: 1, move: Nuzzle }
-  - { level: 1, move: Electro Ball }
-  - { level: 1, move: Discharge }
-  - { level: 1, move: Nasty Plot }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Iron Tail }
-  - { level: 1, move: Spark }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Light Screen }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Agility }
-  - { level: 1, move: Thunder }
-  - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Thunder Shock }
   - { level: 1, move: Growl }
-  - { level: 1, move: Play Nice }
-  - { level: 1, move: Tail Whip }
-  - { level: 5, move: Thunderbolt }
-  - { level: 35, move: Cutsie Slap }
-  - { level: 35, move: Short Circuit }
-  - { level: 46, move: Arc Strike }
-  - { level: 48, move: Lightning Slam }
-evolution: { from: Pikachu, method: { item: SHINYSTONE } }
+  - { level: 1, move: Nuzzle }
+  - { level: 1, move: Quick Attack }
+  - { level: 5, move: Confusion }
+  - { level: 6, move: Thunder Shock }
+  - { level: 15, move: Psybeam }
+  - { level: 20, move: Electro Ball }
+  - { level: 25, move: Chi Wave }
+  - { level: 30, move: Light Screen }
+  - { level: 35, move: Discharge }
+  - { level: 40, move: Nasty Plot }
+  - { level: 43, move: Rising Voltage }
+  - { level: 44, move: Thunder }
+  - { level: 45, move: Psychic }
+  - { level: 48, move: Surf }
+  - { level: 50, move: Thunderclap }
+  - { level: 55, move: Aura Sphere }
+  - { level: 57, move: Mindwarp }
+  - { level: 60, move: Dazzling Gleam }
+  - { level: 65, move: Future Sight }
+  - { level: 70, move: Zap Cannon }
