@@ -11,15 +11,15 @@ learnset:
   - { level: 18, move: Tailwind }
   - { level: 24, move: Scary Face }
   - { level: 30, move: Aerial Ace }
-  - { level: 33, move: Galeburst }
+  - { level: 33, move: Air Slash }
   - { level: 36, move: Slash }
   - { level: 39, move: Dive Bomb }
-  - { level: 39, move: Rampage }
   - { level: 39, move: Nosedive }
+  - { level: 39, move: Crush Claw }
   - { level: 42, move: Whirlwind }
-  - { level: 48, move: Crush Claw }
-  - { level: 52, move: Tempest }
-  - { level: 55, move: Air Slash }
+  - { level: 48, move: Rampage }
+  - { level: 52, move: Galeburst }
+  - { level: 55, move: Tempest }
   - { level: 60, move: Defog }
   - { level: 63, move: Oblivion Wing }
   - { level: 66, move: Thrash }

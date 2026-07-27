@@ -17,11 +17,11 @@ learnset:
   - { level: 20, move: Ice Fang }
   - { level: 24, move: Screech }
   - { level: 28, move: Swagger }
-  - { level: 30, move: Maelstrom }
+  - { level: 30, move: Liquidation }
   - { level: 32, move: Crunch }
   - { level: 36, move: Agility }
   - { level: 38, move: Backstab }
-  - { level: 40, move: Liquidation }
+  - { level: 40, move: Maelstrom }
   - { level: 44, move: Take Down }
   - { level: 60, move: Wave Crash }
   - { level: 60, move: Havoc }

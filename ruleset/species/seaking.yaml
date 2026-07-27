@@ -14,23 +14,20 @@ learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Water Whip }
-  - { level: 5, move: Razor Shell }
-  - { level: 8, move: Undertow }
-  - { level: 10, move: Lovely Bite }
+  - { level: 5, move: Undertow }
+  - { level: 8, move: Razor Shell }
   - { level: 12, move: Soak }
   - { level: 15, move: Agility }
   - { level: 18, move: Aqua Tail }
   - { level: 22, move: Icicle Spear }
   - { level: 26, move: Play Rough }
   - { level: 30, move: Waterfall }
-  - { level: 33, move: Maelstrom }
+  - { level: 33, move: Liquidation }
   - { level: 34, move: Pin Missile }
-  - { level: 38, move: Bail Out }
   - { level: 40, move: Starfall Slam }
-  - { level: 42, move: Liquidation }
+  - { level: 42, move: Maelstrom }
   - { level: 46, move: Swords Dance }
   - { level: 50, move: Megahorn }
-  - { level: 54, move: Pixie Slash }
   - { level: 58, move: Wave Crash }
   - { level: 62, move: Horn Drill }
 evolution: { from: Goldeen, method: { level: 30 } }

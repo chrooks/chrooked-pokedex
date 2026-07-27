@@ -23,7 +23,7 @@ learnset:
   - { level: 34, move: Fling }
   - { level: 41, move: Mist }
   - { level: 48, move: Roost }
-  - { level: 52, move: Tsunami }
-  - { level: 52, move: Tempest }
-  - { level: 55, move: Hurricane }
-  - { level: 62, move: Hydro Pump }
+  - { level: 52, move: Hurricane }
+  - { level: 52, move: Hydro Pump }
+  - { level: 55, move: Tempest }
+  - { level: 62, move: Tsunami }

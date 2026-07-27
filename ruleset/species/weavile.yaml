@@ -20,16 +20,15 @@ learnset:
   - { level: 18, move: Metal Claw }
   - { level: 24, move: Icy Wind }
   - { level: 30, move: Fury Swipes }
-  - { level: 33, move: Bail Out }
   - { level: 36, move: Hone Claws }
-  - { level: 37, move: Heel Drop }
+  - { level: 37, move: Night Slash }
+  - { level: 39, move: Heel Drop }
   - { level: 39, move: Glacial Crush }
-  - { level: 39, move: Backstab }
   - { level: 42, move: Fling }
   - { level: 45, move: Pixie Slash }
   - { level: 48, move: Nasty Plot }
-  - { level: 51, move: Havoc }
+  - { level: 51, move: Backstab }
   - { level: 54, move: Screech }
   - { level: 57, move: Icebreaker }
-  - { level: 60, move: Night Slash }
+  - { level: 60, move: Havoc }
   - { level: 66, move: Dark Pulse }

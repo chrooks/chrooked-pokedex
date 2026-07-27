@@ -14,10 +14,9 @@ learnset:
   - { level: 21, move: Take Down }
   - { level: 23, move: Confuse Ray }
   - { level: 27, move: Calm Mind }
-  - { level: 31, move: Zen Headbutt }
+  - { level: 31, move: Psyshield Bash }
   - { level: 33, move: Role Play }
-  - { level: 37, move: Psyshield Bash }
-  - { level: 40, move: Bail Out }
+  - { level: 37, move: Zen Headbutt }
   - { level: 43, move: Kinetic Slam }
   - { level: 43, move: Rampage }
   - { level: 49, move: Imprison }

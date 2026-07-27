@@ -14,13 +14,12 @@ learnset:
   - { level: 20, move: Synthesis }
   - { level: 25, move: Pluck }
   - { level: 30, move: Bulk Up }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Reap }
+  - { level: 36, move: Leaf Blade }
   - { level: 37, move: Sucker Punch }
   - { level: 39, move: Wraithstrike }
   - { level: 40, move: Cross Chop }
   - { level: 41, move: Pixie Slash }
-  - { level: 44, move: Leaf Blade }
+  - { level: 44, move: Reap }
   - { level: 47, move: Dive Bomb }
   - { level: 51, move: Feather Dance }
   - { level: 58, move: Brave Bird }

@@ -16,9 +16,9 @@ learnset:
   - { level: 28, move: Worry Seed }
   - { level: 32, move: Seed Bomb }
   - { level: 36, move: Shadow Ball }
-  - { level: 38, move: Interment }
+  - { level: 38, move: Wraithstrike }
   - { level: 40, move: Trick }
-  - { level: 42, move: Wraithstrike }
+  - { level: 42, move: Interment }
   - { level: 44, move: Pain Split }
   - { level: 46, move: Reap }
   - { level: 48, move: Phantom Force }

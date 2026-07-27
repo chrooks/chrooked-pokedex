@@ -18,4 +18,3 @@ learnset:
   - { level: 42, move: Rampage }
   - { level: 42, move: Nosedive }
   - { level: 45, move: Hyper Voice }
-  - { level: 48, move: Dive Bomb }

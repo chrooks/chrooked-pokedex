@@ -11,7 +11,6 @@ learnset:
   - { level: 17, move: Fury Attack }
   - { level: 20, move: Taunt }
   - { level: 24, move: Uproar }
-  - { level: 27, move: Bail Out }
   - { level: 30, move: Fly }
   - { level: 34, move: Facade }
   - { level: 36, move: Dive Bomb }

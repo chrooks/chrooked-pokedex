@@ -15,8 +15,8 @@ learnset:
   - { level: 29, move: Avalanche }
   - { level: 33, move: Reversal }
   - { level: 35, move: One-Inch Punch }
-  - { level: 37, move: Ice Hammer }
-  - { level: 39, move: Glacial Crush }
+  - { level: 37, move: Glacial Crush }
+  - { level: 39, move: Ice Hammer }
   - { level: 39, move: Cross Chop }
   - { level: 42, move: Iron Defense }
   - { level: 45, move: Dynamic Punch }

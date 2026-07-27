@@ -18,9 +18,9 @@ learnset:
   - { level: 22, move: Magical Leaf }
   - { level: 26, move: Leech Seed }
   - { level: 34, move: Sweet Scent }
-  - { level: 37, move: Siphon }
+  - { level: 37, move: Giga Drain }
   - { level: 40, move: Light Screen }
   - { level: 46, move: Body Slam }
   - { level: 54, move: Safeguard }
-  - { level: 60, move: Giga Drain }
+  - { level: 60, move: Siphon }
   - { level: 65, move: Solar Beam }

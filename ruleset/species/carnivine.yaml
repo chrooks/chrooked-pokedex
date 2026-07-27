@@ -17,6 +17,6 @@ learnset:
   - { level: 37, move: Spit Up }
   - { level: 37, move: Swallow }
   - { level: 41, move: Crunch }
-  - { level: 44, move: Reap }
-  - { level: 47, move: Seed Bomb }
+  - { level: 44, move: Seed Bomb }
+  - { level: 47, move: Reap }
   - { level: 50, move: Power Whip }

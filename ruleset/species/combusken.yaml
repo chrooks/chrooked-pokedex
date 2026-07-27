@@ -19,15 +19,14 @@ learnset:
   - { level: 20, move: Aerial Ace }
   - { level: 25, move: Slash }
   - { level: 30, move: Bounce }
-  - { level: 32, move: Ki Blast }
+  - { level: 32, move: Aura Sphere }
   - { level: 35, move: Focus Energy }
   - { level: 37, move: One-Inch Punch }
-  - { level: 37, move: Combust }
   - { level: 37, move: Cross Chop }
-  - { level: 40, move: Blaze Kick }
-  - { level: 42, move: Cinder Smash }
+  - { level: 37, move: Blaze Kick }
+  - { level: 40, move: Combust }
   - { level: 45, move: Bulk Up }
-  - { level: 47, move: Aura Sphere }
+  - { level: 47, move: Ki Blast }
   - { level: 50, move: Reversal }
   - { level: 55, move: Flare Blitz }
   - { level: 62, move: Focus Blast }

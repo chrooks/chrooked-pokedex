@@ -14,9 +14,9 @@ learnset:
   - { level: 30, move: Extrasensory }
   - { level: 35, move: Dragon Pulse }
   - { level: 37, move: Cataclysm }
-  - { level: 37, move: Resonance }
+  - { level: 37, move: Hyper Voice }
   - { level: 40, move: Light Screen }
   - { level: 45, move: Fly }
-  - { level: 50, move: Hyper Voice }
+  - { level: 50, move: Resonance }
   - { level: 55, move: Outrage }
   - { level: 60, move: Draco Meteor }

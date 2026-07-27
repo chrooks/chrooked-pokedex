@@ -21,11 +21,11 @@ learnset:
   - { level: 30, move: Leech Life }
   - { level: 34, move: Cross Poison }
   - { level: 37, move: Air Slash }
-  - { level: 37, move: Venom Slam }
-  - { level: 37, move: Nosedive }
+  - { level: 37, move: Poison Jab }
+  - { level: 37, move: Dive Bomb }
   - { level: 40, move: U-turn }
-  - { level: 43, move: Poison Jab }
-  - { level: 47, move: Dive Bomb }
+  - { level: 43, move: Venom Slam }
+  - { level: 47, move: Nosedive }
   - { level: 52, move: Hypnosis }
   - { level: 55, move: Confuse Ray }
   - { level: 58, move: Gunk Shot }

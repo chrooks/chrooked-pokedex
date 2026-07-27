@@ -17,8 +17,8 @@ learnset:
   - { level: 25, move: Heal Pulse }
   - { level: 30, move: Dazzling Gleam }
   - { level: 37, move: Calm Mind }
-  - { level: 41, move: Mindwarp }
-  - { level: 46, move: Psychic }
+  - { level: 41, move: Psychic }
+  - { level: 46, move: Mindwarp }
   - { level: 55, move: Healing Wish }
   - { level: 59, move: Rapture }
   - { level: 64, move: Magic Powder }

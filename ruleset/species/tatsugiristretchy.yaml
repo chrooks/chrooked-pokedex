@@ -10,10 +10,10 @@ learnset:
   - { level: 23, move: Soak }
   - { level: 28, move: Taunt }
   - { level: 34, move: Memento }
-  - { level: 36, move: Cataclysm }
+  - { level: 36, move: Dragon Pulse }
   - { level: 39, move: Muddy Water }
   - { level: 43, move: Nasty Plot }
   - { level: 47, move: Mirror Coat }
-  - { level: 52, move: Dragon Pulse }
+  - { level: 52, move: Cataclysm }
   - { level: 60, move: Draco Meteor }
   - { level: 64, move: Tsunami }

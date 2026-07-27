@@ -15,7 +15,6 @@ learnset:
   - { level: 28, move: Crunch }
   - { level: 32, move: Flamethrower }
   - { level: 36, move: Morning Sun }
-  - { level: 38, move: Cinder Smash }
   - { level: 38, move: Combust }
   - { level: 40, move: Stone Edge }
   - { level: 44, move: Wild Charge }

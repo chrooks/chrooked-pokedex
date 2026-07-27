@@ -19,8 +19,8 @@ learnset:
   - { level: 26, move: Body Slam }
   - { level: 30, move: Drain Punch }
   - { level: 30, move: Ki Blast }
-  - { level: 34, move: Dynamic Punch }
-  - { level: 36, move: One-Inch Punch }
+  - { level: 34, move: One-Inch Punch }
+  - { level: 36, move: Dynamic Punch }
   - { level: 38, move: Hammer Arm }
   - { level: 38, move: Cross Chop }
   - { level: 42, move: Stone Edge }

@@ -12,7 +12,6 @@ learnset:
   - { level: 16, move: Shock Wave }
   - { level: 20, move: Bite }
   - { level: 24, move: Thunder Fang }
-  - { level: 27, move: Short Circuit }
   - { level: 30, move: Roar }
   - { level: 36, move: Discharge }
   - { level: 42, move: Charge }

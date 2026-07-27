@@ -21,12 +21,11 @@ learnset:
   - { level: 28, move: Incinerate }
   - { level: 32, move: Lava Plume }
   - { level: 37, move: Swords Dance }
-  - { level: 39, move: Interment }
-  - { level: 40, move: Wraithstrike }
+  - { level: 39, move: Wraithstrike }
+  - { level: 40, move: Interment }
   - { level: 42, move: Ally Switch }
-  - { level: 45, move: Cinder Smash }
-  - { level: 45, move: Combust }
-  - { level: 48, move: Bitter Blade }
+  - { level: 45, move: Bitter Blade }
+  - { level: 48, move: Combust }
   - { level: 52, move: Pixie Slash }
   - { level: 52, move: Necrosis }
   - { level: 56, move: Psycho Cut }

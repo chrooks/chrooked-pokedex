@@ -20,7 +20,7 @@ learnset:
   - { level: 39, move: Future Sight }
   - { level: 42, move: Astral Hand }
   - { level: 46, move: Kinetic Slam }
-  - { level: 46, move: Cross Chop }
-  - { level: 48, move: One-Inch Punch }
+  - { level: 46, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
   - { level: 55, move: Pixie Slash }
   - { level: 62, move: Psycrush }

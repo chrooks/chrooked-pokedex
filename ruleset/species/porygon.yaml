@@ -17,9 +17,9 @@ learnset:
   - { level: 25, move: Conversion 2 }
   - { level: 30, move: Bail Out }
   - { level: 35, move: Recover }
-  - { level: 37, move: Resonance }
+  - { level: 37, move: Tri Attack }
   - { level: 40, move: Discharge }
-  - { level: 45, move: Tri Attack }
+  - { level: 45, move: Resonance }
   - { level: 50, move: Lock-On }
   - { level: 55, move: Zap Cannon }
   - { level: 60, move: Hyper Beam }

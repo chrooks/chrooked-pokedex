@@ -21,8 +21,8 @@ learnset:
   - { level: 32, move: Grav Apple }
   - { level: 36, move: Protect }
   - { level: 38, move: Cataclysm }
-  - { level: 40, move: Wood Hammer }
-  - { level: 42, move: Reap }
+  - { level: 40, move: Reap }
+  - { level: 42, move: Wood Hammer }
   - { level: 44, move: Dragon Rush }
   - { level: 50, move: Outrage }
   - { level: 60, move: Draco Meteor }

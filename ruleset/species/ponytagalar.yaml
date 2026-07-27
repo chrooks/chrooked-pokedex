@@ -16,10 +16,10 @@ learnset:
   - { level: 24, move: Psybeam }
   - { level: 28, move: Take Down }
   - { level: 32, move: Play Rough }
-  - { level: 36, move: Zen Headbutt }
-  - { level: 38, move: Kinetic Slam }
+  - { level: 36, move: Psycho Cut }
+  - { level: 38, move: Zen Headbutt }
   - { level: 38, move: Starfall Slam }
-  - { level: 40, move: Psycho Cut }
+  - { level: 40, move: Kinetic Slam }
   - { level: 44, move: Double-Edge }
   - { level: 55, move: Body Slam }
   - { level: 62, move: Psycrush }

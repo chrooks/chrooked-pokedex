@@ -10,7 +10,6 @@ learnset:
   - { level: 16, move: Bug Bite }
   - { level: 20, move: Bite }
   - { level: 24, move: Agility }
-  - { level: 25, move: Metallic Fang }
   - { level: 28, move: Dig }
   - { level: 32, move: X-Scissor }
   - { level: 36, move: Crunch }

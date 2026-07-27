@@ -18,8 +18,8 @@ learnset:
   - { level: 28, move: Bone Rush }
   - { level: 32, move: Swords Dance }
   - { level: 38, move: Shadow Bone }
-  - { level: 39, move: Interment }
-  - { level: 41, move: Wraithstrike }
+  - { level: 39, move: Wraithstrike }
+  - { level: 41, move: Interment }
   - { level: 44, move: Bonemerang }
   - { level: 50, move: Earthquake }
   - { level: 51, move: Necrosis }

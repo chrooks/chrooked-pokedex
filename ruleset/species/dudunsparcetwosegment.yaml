@@ -15,7 +15,6 @@ learnset:
   - { level: 28, move: Bail Out }
   - { level: 32, move: Hyper Drill }
   - { level: 36, move: Roost }
-  - { level: 38, move: Rampage }
   - { level: 40, move: Dragon Rush }
   - { level: 44, move: Coil }
   - { level: 48, move: Double-Edge }

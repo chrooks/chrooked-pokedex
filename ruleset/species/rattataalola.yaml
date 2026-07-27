@@ -4,19 +4,17 @@ aka: { pokeemerald: SPECIES_RATTATA_ALOLA }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
-  - { level: 2, move: Cheap Shot }
   - { level: 4, move: Quick Attack }
   - { level: 7, move: Focus Energy }
-  - { level: 10, move: Bite }
-  - { level: 13, move: Pursuit }
+  - { level: 10, move: Pursuit }
+  - { level: 13, move: Bite }
   - { level: 16, move: Hyper Fang }
   - { level: 19, move: Assurance }
   - { level: 22, move: Crunch }
   - { level: 25, move: Sucker Punch }
   - { level: 28, move: Super Fang }
-  - { level: 31, move: Double-Edge }
+  - { level: 31, move: Rampage }
   - { level: 34, move: Endeavor }
   - { level: 45, move: Backstab }
-  - { level: 46, move: Rampage }
-  - { level: 48, move: Heel Drop }
+  - { level: 46, move: Double-Edge }
   - { level: 60, move: Havoc }

@@ -14,8 +14,8 @@ learnset:
   - { level: 23, move: Bulldoze }
   - { level: 28, move: Dig }
   - { level: 33, move: Bounce }
-  - { level: 36, move: Rampage }
-  - { level: 38, move: Take Down }
+  - { level: 36, move: Take Down }
+  - { level: 38, move: Rampage }
   - { level: 43, move: Swords Dance }
   - { level: 48, move: Earthquake }
   - { level: 53, move: Super Fang }

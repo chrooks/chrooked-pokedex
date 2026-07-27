@@ -11,6 +11,6 @@ learnset:
   - { level: 15, move: Aura Spark }
   - { level: 28, move: Chi Wave }
   - { level: 45, move: Ki Blast }
-  - { level: 46, move: Cross Chop }
-  - { level: 48, move: One-Inch Punch }
+  - { level: 46, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
   - { level: 62, move: Focus Blast }

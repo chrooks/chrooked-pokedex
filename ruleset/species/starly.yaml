@@ -14,8 +14,8 @@ learnset:
   - { level: 25, move: Aerial Ace }
   - { level: 29, move: Take Down }
   - { level: 33, move: Agility }
-  - { level: 37, move: Brave Bird }
+  - { level: 37, move: Dive Bomb }
   - { level: 41, move: Final Gambit }
   - { level: 46, move: Nosedive }
   - { level: 46, move: Cross Chop }
-  - { level: 48, move: Dive Bomb }
+  - { level: 48, move: Brave Bird }

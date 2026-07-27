@@ -15,11 +15,11 @@ learnset:
   - { level: 24, move: Mud Shot }
   - { level: 28, move: Hex }
   - { level: 34, move: Seed Bomb }
-  - { level: 36, move: Siphon }
-  - { level: 38, move: Quagmire }
+  - { level: 36, move: Giga Drain }
+  - { level: 38, move: Earth Power }
   - { level: 40, move: Spore }
   - { level: 44, move: Growth }
-  - { level: 48, move: Giga Drain }
-  - { level: 54, move: Earth Power }
+  - { level: 48, move: Siphon }
+  - { level: 54, move: Quagmire }
   - { level: 58, move: Power Whip }
   - { level: 62, move: Sinkhole }

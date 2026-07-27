@@ -18,8 +18,8 @@ learnset:
   - { level: 28, move: Focus Energy }
   - { level: 32, move: Agility }
   - { level: 36, move: Rock Slide }
-  - { level: 38, move: Moltstrike }
-  - { level: 40, move: X-Scissor }
+  - { level: 38, move: X-Scissor }
+  - { level: 40, move: Moltstrike }
   - { level: 44, move: Swords Dance }
   - { level: 48, move: Dive Bomb }
   - { level: 55, move: Pixie Slash }

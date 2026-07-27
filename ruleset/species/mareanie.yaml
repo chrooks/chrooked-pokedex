@@ -12,10 +12,10 @@ learnset:
   - { level: 20, move: Recover }
   - { level: 25, move: Pin Missile }
   - { level: 30, move: Toxic Spikes }
-  - { level: 32, move: Maelstrom }
-  - { level: 35, move: Liquidation }
-  - { level: 37, move: Venom Slam }
+  - { level: 32, move: Liquidation }
+  - { level: 35, move: Maelstrom }
+  - { level: 37, move: Poison Jab }
   - { level: 40, move: Acid Spray }
-  - { level: 45, move: Poison Jab }
+  - { level: 45, move: Venom Slam }
   - { level: 50, move: Toxic }
   - { level: 60, move: Wave Crash }

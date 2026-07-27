@@ -23,10 +23,9 @@ learnset:
   - { level: 30, move: Frost Breath }
   - { level: 35, move: Confuse Ray }
   - { level: 40, move: Snowscape }
-  - { level: 43, move: Glacial Crush }
   - { level: 47, move: Will-O-Wisp }
   - { level: 54, move: Aurora Veil }
-  - { level: 57, move: Netherstorm }
-  - { level: 57, move: Cryoblast }
-  - { level: 61, move: Shadow Ball }
-  - { level: 68, move: Blizzard }
+  - { level: 57, move: Shadow Ball }
+  - { level: 57, move: Blizzard }
+  - { level: 61, move: Netherstorm }
+  - { level: 68, move: Cryoblast }

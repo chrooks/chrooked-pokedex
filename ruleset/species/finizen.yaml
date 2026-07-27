@@ -13,9 +13,9 @@ learnset:
   - { level: 21, move: Dive }
   - { level: 25, move: Charm }
   - { level: 29, move: Acrobatics }
-  - { level: 31, move: Maelstrom }
+  - { level: 31, move: Aqua Tail }
   - { level: 34, move: Encore }
-  - { level: 39, move: Aqua Tail }
+  - { level: 39, move: Maelstrom }
   - { level: 44, move: Mist }
   - { level: 50, move: Hydro Pump }
   - { level: 60, move: Wave Crash }

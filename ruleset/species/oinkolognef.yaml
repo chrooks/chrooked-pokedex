@@ -12,9 +12,8 @@ learnset:
   - { level: 17, move: Headbutt }
   - { level: 23, move: Yawn }
   - { level: 28, move: Take Down }
-  - { level: 30, move: Bail Out }
   - { level: 34, move: Uproar }
-  - { level: 39, move: Double-Edge }
-  - { level: 42, move: Rampage }
+  - { level: 39, move: Rampage }
+  - { level: 42, move: Double-Edge }
   - { level: 45, move: Earth Power }
   - { level: 51, move: Belch }

@@ -6,11 +6,10 @@ learnset:
   - { level: 1, move: Yawn }
   - { level: 6, move: Encore }
   - { level: 9, move: Slack Off }
-  - { level: 14, move: Headbutt }
+  - { level: 14, move: Covet }
   - { level: 17, move: Amnesia }
-  - { level: 22, move: Covet }
+  - { level: 22, move: Headbutt }
   - { level: 25, move: Throat Chop }
-  - { level: 30, move: Bail Out }
   - { level: 33, move: Flail }
   - { level: 38, move: Play Rough }
   - { level: 46, move: Rampage }

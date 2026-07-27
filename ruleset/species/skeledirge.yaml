@@ -21,10 +21,10 @@ learnset:
   - { level: 24, move: Snarl }
   - { level: 28, move: Roar }
   - { level: 32, move: Flamethrower }
-  - { level: 38, move: Shadow Ball }
+  - { level: 38, move: Hex }
   - { level: 42, move: Hyper Voice }
+  - { level: 47, move: Shadow Ball }
   - { level: 47, move: Will-O-Wisp }
-  - { level: 47, move: Hex }
   - { level: 55, move: Netherstorm }
   - { level: 58, move: Fire Blast }
   - { level: 64, move: Overheat }

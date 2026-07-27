@@ -20,8 +20,8 @@ learnset:
   - { level: 30, move: Toxic Spikes }
   - { level: 35, move: Liquidation }
   - { level: 38, move: Maelstrom }
-  - { level: 38, move: Venom Slam }
+  - { level: 38, move: Poison Jab }
   - { level: 42, move: Acid Spray }
-  - { level: 49, move: Poison Jab }
+  - { level: 49, move: Venom Slam }
   - { level: 56, move: Toxic }
   - { level: 60, move: Wave Crash }

@@ -21,5 +21,4 @@ learnset:
   - { level: 30, move: Psych Up }
   - { level: 34, move: Amnesia }
   - { level: 39, move: Wonder Room }
-  - { level: 42, move: Astral Hand }
   - { level: 64, move: Tsunami }

@@ -16,7 +16,7 @@ learnset:
   - { level: 28, move: Sweet Scent }
   - { level: 31, move: Light Screen }
   - { level: 34, move: Body Slam }
-  - { level: 36, move: Siphon }
+  - { level: 36, move: Giga Drain }
   - { level: 39, move: Safeguard }
-  - { level: 42, move: Giga Drain }
+  - { level: 42, move: Siphon }
   - { level: 45, move: Solar Beam }

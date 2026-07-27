@@ -10,8 +10,8 @@ learnset:
   - { level: 24, move: Disable }
   - { level: 30, move: Stomp }
   - { level: 36, move: Knock Off }
-  - { level: 39, move: Rampage }
+  - { level: 39, move: Slam }
   - { level: 42, move: Screech }
-  - { level: 48, move: Slam }
+  - { level: 48, move: Rampage }
   - { level: 54, move: Power Whip }
   - { level: 60, move: Belly Drum }

@@ -6,7 +6,6 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Power Trip }
-  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Sand Attack }
   - { level: 4, move: Clod Toss }
   - { level: 6, move: Hone Claws }
@@ -24,6 +23,5 @@ learnset:
   - { level: 36, move: Earthquake }
   - { level: 39, move: Thrash }
   - { level: 45, move: Backstab }
-  - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }
   - { level: 64, move: Faultbreak }

@@ -10,7 +10,6 @@ learnset:
   - { level: 16, move: Headbutt }
   - { level: 20, move: Protect }
   - { level: 24, move: Rock Slide }
-  - { level: 25, move: Metallic Fang }
   - { level: 28, move: Iron Head }
   - { level: 35, move: Metal Sound }
   - { level: 40, move: Take Down }

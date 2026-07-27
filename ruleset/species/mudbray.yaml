@@ -15,7 +15,6 @@ learnset:
   - { level: 16, move: Stomp }
   - { level: 20, move: Strength }
   - { level: 24, move: Counter }
-  - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
   - { level: 28, move: High Horsepower }
   - { level: 32, move: Heavy Slam }

@@ -10,9 +10,9 @@ learnset:
   - { level: 15, move: Stockpile }
   - { level: 15, move: Spit Up }
   - { level: 15, move: Swallow }
-  - { level: 20, move: Body Slam }
+  - { level: 20, move: Bail Out }
   - { level: 27, move: Rest }
-  - { level: 31, move: Bail Out }
+  - { level: 31, move: Body Slam }
   - { level: 34, move: Counter }
   - { level: 37, move: Rampage }
   - { level: 41, move: Bullet Seed }

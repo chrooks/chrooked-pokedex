@@ -18,4 +18,3 @@ learnset:
   - { level: 40, move: Bail Out }
   - { level: 46, move: Rampage }
   - { level: 46, move: Nosedive }
-  - { level: 48, move: Dive Bomb }

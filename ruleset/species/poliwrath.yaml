@@ -22,7 +22,7 @@ learnset:
   - { level: 26, move: Water Whip }
   - { level: 31, move: Bail Out }
   - { level: 45, move: Maelstrom }
-  - { level: 46, move: Cross Chop }
-  - { level: 48, move: One-Inch Punch }
+  - { level: 46, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

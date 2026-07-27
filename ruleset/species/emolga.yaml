@@ -6,25 +6,26 @@ abilities:
 stats: { hp: 75, atk: 60, def: 80, spa: 90, spd: 85, spe: 115 }
 learnset:
   - { level: 1, move: Nuzzle }
+  - { level: 1, move: Quick Attack }
   - { level: 1, move: Tail Whip }
   - { level: 5, move: Double Team }
-  - { level: 10, move: Quick Attack }
+  - { level: 8, move: Thunder Shock }
+  - { level: 10, move: Gust }
   - { level: 12, move: Thunder Wave }
-  - { level: 15, move: Thunder Shock }
-  - { level: 17, move: Short Circuit }
-  - { level: 20, move: Charge }
-  - { level: 23, move: Helping Hand }
-  - { level: 25, move: Acrobatics }
+  - { level: 15, move: Shock Wave }
+  - { level: 18, move: Helping Hand }
+  - { level: 20, move: Acrobatics }
+  - { level: 26, move: Encore }
   - { level: 28, move: U-turn }
   - { level: 30, move: Spark }
   - { level: 33, move: Grass Knot }
-  - { level: 35, move: Encore }
-  - { level: 37, move: Arc Strike }
-  - { level: 37, move: Dive Bomb }
-  - { level: 37, move: Nosedive }
+  - { level: 35, move: Air Slash }
+  - { level: 38, move: Electroweb }
   - { level: 40, move: Volt Switch }
   - { level: 43, move: Energy Ball }
   - { level: 45, move: Light Screen }
-  - { level: 50, move: Discharge }
+  - { level: 48, move: Discharge }
+  - { level: 52, move: Galeburst }
   - { level: 55, move: Thunderbolt }
-  - { level: 60, move: Agility }
+  - { level: 58, move: Nasty Plot }
+  - { level: 62, move: Tempest }

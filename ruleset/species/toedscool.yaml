@@ -15,10 +15,10 @@ learnset:
   - { level: 28, move: Hex }
   - { level: 32, move: Seed Bomb }
   - { level: 36, move: Spore }
-  - { level: 38, move: Quagmire }
+  - { level: 38, move: Earth Power }
   - { level: 40, move: Growth }
-  - { level: 42, move: Siphon }
-  - { level: 44, move: Giga Drain }
-  - { level: 48, move: Earth Power }
+  - { level: 42, move: Giga Drain }
+  - { level: 44, move: Siphon }
+  - { level: 48, move: Quagmire }
   - { level: 52, move: Power Whip }
   - { level: 62, move: Sinkhole }

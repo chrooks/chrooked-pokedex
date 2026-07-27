@@ -20,9 +20,8 @@ learnset:
   - { level: 26, move: Scary Face }
   - { level: 29, move: Counter }
   - { level: 32, move: Taunt }
-  - { level: 35, move: Double-Edge }
-  - { level: 38, move: Bail Out }
-  - { level: 45, move: Backstab }
-  - { level: 46, move: Rampage }
-  - { level: 48, move: Heel Drop }
+  - { level: 35, move: Rampage }
+  - { level: 45, move: Heel Drop }
+  - { level: 46, move: Double-Edge }
+  - { level: 48, move: Backstab }
   - { level: 60, move: Havoc }

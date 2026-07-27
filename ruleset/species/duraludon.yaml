@@ -13,12 +13,12 @@ learnset:
   - { level: 24, move: Breaking Swipe }
   - { level: 30, move: Dragon Tail }
   - { level: 36, move: Iron Defense }
-  - { level: 39, move: Luster Cannon }
   - { level: 39, move: Cataclysm }
+  - { level: 39, move: Flash Cannon }
   - { level: 42, move: Focus Energy }
   - { level: 45, move: Draco Meteor }
   - { level: 48, move: Dragon Claw }
-  - { level: 51, move: Steel Beam }
-  - { level: 54, move: Flash Cannon }
+  - { level: 51, move: Luster Cannon }
+  - { level: 54, move: Steel Beam }
   - { level: 60, move: Metal Burst }
   - { level: 66, move: Hyper Beam }

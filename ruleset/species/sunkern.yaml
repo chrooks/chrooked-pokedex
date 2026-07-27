@@ -20,10 +20,10 @@ learnset:
   - { level: 28, move: Giga Drain }
   - { level: 31, move: Mystical Fire }
   - { level: 34, move: Mud Bomb }
-  - { level: 36, move: Siphon }
-  - { level: 37, move: Matcha Gotcha }
+  - { level: 36, move: Matcha Gotcha }
+  - { level: 37, move: Energy Ball }
   - { level: 40, move: Flamethrower }
-  - { level: 43, move: Energy Ball }
+  - { level: 43, move: Siphon }
   - { level: 46, move: Fire Blast }
   - { level: 50, move: Solar Beam }
   - { level: 55, move: Overheat }

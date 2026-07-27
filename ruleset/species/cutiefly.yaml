@@ -7,14 +7,14 @@ learnset:
   - { level: 6, move: Stun Spore }
   - { level: 12, move: Sweet Scent }
   - { level: 18, move: Draining Kiss }
-  - { level: 21, move: Signal Beam }
-  - { level: 24, move: Struggle Bug }
+  - { level: 21, move: Struggle Bug }
+  - { level: 24, move: Signal Beam }
   - { level: 27, move: Beguile }
   - { level: 30, move: Covet }
   - { level: 36, move: Switcheroo }
-  - { level: 39, move: Antennae Blast }
+  - { level: 39, move: Bug Buzz }
   - { level: 42, move: Dazzling Gleam }
-  - { level: 48, move: Bug Buzz }
+  - { level: 48, move: Antennae Blast }
   - { level: 54, move: Quiver Dance }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Rapture }

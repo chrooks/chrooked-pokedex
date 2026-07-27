@@ -15,11 +15,11 @@ learnset:
   - { level: 20, move: Rock Smash }
   - { level: 24, move: Vacuum Wave }
   - { level: 28, move: Screech }
-  - { level: 30, move: Ki Blast }
+  - { level: 30, move: Aura Sphere }
   - { level: 32, move: Quick Guard }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Force Palm }
-  - { level: 38, move: Aura Sphere }
+  - { level: 34, move: Force Palm }
+  - { level: 36, move: One-Inch Punch }
+  - { level: 38, move: Ki Blast }
   - { level: 38, move: Luster Cannon }
   - { level: 38, move: Cross Chop }
   - { level: 40, move: Swords Dance }

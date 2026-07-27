@@ -22,9 +22,9 @@ learnset:
   - { level: 27, move: Leech Seed }
   - { level: 31, move: Seed Bomb }
   - { level: 36, move: Energy Ball }
-  - { level: 39, move: Siphon }
+  - { level: 39, move: Matcha Gotcha }
   - { level: 42, move: Terrain Pulse }
   - { level: 42, move: Resonance }
-  - { level: 48, move: Matcha Gotcha }
+  - { level: 48, move: Siphon }
   - { level: 54, move: Petal Blizzard }
   - { level: 60, move: Petal Dance }

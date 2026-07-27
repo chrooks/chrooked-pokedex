@@ -15,7 +15,6 @@ learnset:
   - { level: 18, move: Flatter }
   - { level: 21, move: Slash }
   - { level: 25, move: U-turn }
-  - { level: 30, move: Bail Out }
   - { level: 33, move: Poison Jab }
   - { level: 37, move: Taunt }
   - { level: 40, move: Substitute }

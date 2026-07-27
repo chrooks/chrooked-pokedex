@@ -15,13 +15,12 @@ learnset:
   - { level: 20, move: Psybeam }
   - { level: 23, move: Calm Mind }
   - { level: 25, move: Zen Headbutt }
-  - { level: 28, move: High Jump Kick }
+  - { level: 28, move: One-Inch Punch }
   - { level: 31, move: Psych Up }
   - { level: 33, move: Acupressure }
   - { level: 36, move: Power Trick }
   - { level: 38, move: Aura Sphere }
-  - { level: 41, move: Astral Hand }
-  - { level: 44, move: One-Inch Punch }
+  - { level: 44, move: High Jump Kick }
   - { level: 47, move: Recover }
   - { level: 53, move: Axe Kick }
   - { level: 53, move: Counter }

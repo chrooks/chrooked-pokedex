@@ -16,6 +16,6 @@ learnset:
   - { level: 38, move: Liquidation }
   - { level: 46, move: Soak }
   - { level: 54, move: Rain Dance }
-  - { level: 58, move: Tsunami }
-  - { level: 62, move: Hydro Pump }
+  - { level: 58, move: Hydro Pump }
+  - { level: 62, move: Tsunami }
 evolution: { from: Drizzile, method: { level: 35 } }

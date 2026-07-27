@@ -20,9 +20,9 @@ learnset:
   - { level: 28, move: Take Down }
   - { level: 31, move: Roost }
   - { level: 34, move: Tailwind }
-  - { level: 37, move: Combust }
-  - { level: 37, move: Nosedive }
+  - { level: 37, move: Dive Bomb }
+  - { level: 37, move: Cinder Smash }
   - { level: 38, move: Steel Wing }
   - { level: 42, move: Fly }
-  - { level: 45, move: Dive Bomb }
-  - { level: 48, move: Cinder Smash }
+  - { level: 45, move: Nosedive }
+  - { level: 48, move: Combust }

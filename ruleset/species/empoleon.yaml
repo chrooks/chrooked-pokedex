@@ -25,7 +25,7 @@ learnset:
   - { level: 46, move: Mist }
   - { level: 52, move: Drill Peck }
   - { level: 55, move: Steel Beam }
-  - { level: 55, move: Tsunami }
-  - { level: 59, move: Hydro Pump }
+  - { level: 55, move: Hydro Pump }
+  - { level: 59, move: Tsunami }
   - { level: 66, move: Wave Crash }
 evolution: { from: Prinplup, method: { level: 36 } }

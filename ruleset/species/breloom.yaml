@@ -21,9 +21,9 @@ learnset:
   - { level: 28, move: Force Palm }
   - { level: 33, move: Worry Seed }
   - { level: 36, move: One-Inch Punch }
-  - { level: 36, move: Cross Chop }
-  - { level: 39, move: Brick Break }
-  - { level: 41, move: Reap }
-  - { level: 44, move: Seed Bomb }
+  - { level: 36, move: Brick Break }
+  - { level: 39, move: Cross Chop }
+  - { level: 41, move: Seed Bomb }
+  - { level: 44, move: Reap }
   - { level: 50, move: Dynamic Punch }
   - { level: 55, move: Focus Punch }

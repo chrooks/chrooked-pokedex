@@ -12,10 +12,9 @@ learnset:
   - { level: 18, move: Accelerock }
   - { level: 20, move: Slash }
   - { level: 22, move: Breaking Swipe }
-  - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
-  - { level: 30, move: Draconic Fang }
-  - { level: 35, move: Rock Slide }
+  - { level: 25, move: Rock Slide }
+  - { level: 35, move: Lithic Fang }
   - { level: 38, move: Dragon Claw }
   - { level: 40, move: Crunch }
   - { level: 42, move: Dragon Hammer }

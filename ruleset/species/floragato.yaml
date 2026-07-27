@@ -14,11 +14,11 @@ learnset:
   - { level: 24, move: U-turn }
   - { level: 28, move: Worry Seed }
   - { level: 33, move: Slash }
-  - { level: 35, move: Backstab }
+  - { level: 35, move: Night Slash }
   - { level: 36, move: Heel Drop }
   - { level: 38, move: Energy Ball }
   - { level: 40, move: Reap }
   - { level: 42, move: Play Rough }
   - { level: 46, move: Leaf Storm }
-  - { level: 55, move: Night Slash }
+  - { level: 55, move: Backstab }
   - { level: 60, move: Havoc }

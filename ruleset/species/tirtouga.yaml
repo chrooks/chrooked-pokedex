@@ -18,9 +18,9 @@ learnset:
   - { level: 24, move: Rock Slide }
   - { level: 27, move: Crunch }
   - { level: 30, move: Curse }
-  - { level: 31, move: Maelstrom }
+  - { level: 31, move: Aqua Tail }
   - { level: 33, move: Iron Defense }
-  - { level: 36, move: Aqua Tail }
+  - { level: 36, move: Maelstrom }
   - { level: 39, move: Rain Dance }
   - { level: 42, move: Hydro Pump }
   - { level: 45, move: Shell Smash }

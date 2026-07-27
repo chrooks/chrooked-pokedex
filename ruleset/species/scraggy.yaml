@@ -16,10 +16,9 @@ learnset:
   - { level: 32, move: Brick Break }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Swagger }
-  - { level: 38, move: Heel Drop }
-  - { level: 38, move: Backstab }
   - { level: 38, move: Cross Chop }
-  - { level: 40, move: Crunch }
+  - { level: 38, move: Crunch }
+  - { level: 40, move: Backstab }
   - { level: 44, move: High Jump Kick }
   - { level: 48, move: Focus Punch }
   - { level: 52, move: Head Smash }

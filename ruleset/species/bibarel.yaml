@@ -14,7 +14,6 @@ learnset:
   - { level: 13, move: Headbutt }
   - { level: 15, move: Water Whip }
   - { level: 18, move: Taunt }
-  - { level: 23, move: Bail Out }
   - { level: 28, move: Crunch }
   - { level: 30, move: Maelstrom }
   - { level: 33, move: Take Down }

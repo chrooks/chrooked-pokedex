@@ -19,6 +19,6 @@ learnset:
   - { level: 35, move: Swords Dance }
   - { level: 42, move: Aura Sphere }
   - { level: 49, move: Bounce }
-  - { level: 52, move: Tsunami }
-  - { level: 56, move: Muddy Water }
+  - { level: 52, move: Muddy Water }
+  - { level: 56, move: Tsunami }
   - { level: 63, move: Crabhammer }

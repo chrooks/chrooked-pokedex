@@ -23,8 +23,8 @@ learnset:
   - { level: 27, move: Roar }
   - { level: 35, move: Last Resort }
   - { level: 39, move: Crunch }
-  - { level: 39, move: Starfall Slam }
-  - { level: 43, move: Play Rough }
+  - { level: 39, move: Play Rough }
+  - { level: 43, move: Starfall Slam }
   - { level: 51, move: Payback }
   - { level: 59, move: Crunch }
   - { level: 64, move: Faeblitz }

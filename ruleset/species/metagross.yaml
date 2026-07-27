@@ -12,12 +12,11 @@ learnset:
   - { level: 1, move: Confusion }
   - { level: 1, move: Metal Claw }
   - { level: 1, move: Bullet Punch }
-  - { level: 6, move: Zen Headbutt }
-  - { level: 9, move: Mind Flick }
+  - { level: 6, move: Mind Flick }
+  - { level: 9, move: Zen Headbutt }
   - { level: 12, move: Magnet Rise }
   - { level: 16, move: Flash Cannon }
   - { level: 26, move: Take Down }
-  - { level: 30, move: Astral Hand }
   - { level: 34, move: Psychic }
   - { level: 38, move: Kinetic Slam }
   - { level: 42, move: Scary Face }

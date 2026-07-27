@@ -8,7 +8,6 @@ learnset:
   - { level: 8, move: Thunder Shock }
   - { level: 12, move: Quick Attack }
   - { level: 16, move: Charge }
-  - { level: 18, move: Short Circuit }
   - { level: 20, move: Bulldoze }
   - { level: 24, move: Volt Switch }
   - { level: 28, move: Parabolic Charge }

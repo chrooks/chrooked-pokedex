@@ -14,6 +14,6 @@ learnset:
   - { level: 29, move: Sticky Web }
   - { level: 33, move: Gastro Acid }
   - { level: 36, move: Circle Throw }
-  - { level: 38, move: Moltstrike }
+  - { level: 38, move: Skitter Smack }
   - { level: 40, move: Throat Chop }
-  - { level: 44, move: Skitter Smack }
+  - { level: 44, move: Moltstrike }

@@ -22,8 +22,8 @@ learnset:
   - { level: 21, move: Breaking Swipe }
   - { level: 24, move: Crunch }
   - { level: 28, move: Dragon Tail }
-  - { level: 30, move: Maelstrom }
-  - { level: 32, move: Aqua Tail }
+  - { level: 30, move: Aqua Tail }
+  - { level: 32, move: Maelstrom }
   - { level: 36, move: Dragon Dance }
   - { level: 38, move: Dragon Hammer }
   - { level: 40, move: Hydro Pump }

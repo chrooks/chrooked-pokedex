@@ -14,15 +14,13 @@ learnset:
   - { level: 1, move: Metal Claw }
   - { level: 6, move: Undertow }
   - { level: 12, move: Mud Shot }
-  - { level: 14, move: Water Whip }
   - { level: 16, move: Protect }
   - { level: 20, move: Bubble Beam }
   - { level: 24, move: Stomp }
   - { level: 31, move: Flail }
   - { level: 36, move: Razor Shell }
-  - { level: 39, move: Maelstrom }
   - { level: 42, move: Body Slam }
-  - { level: 45, move: Wave Crash }
+  - { level: 45, move: Crabhammer }
   - { level: 48, move: Swords Dance }
-  - { level: 54, move: Crabhammer }
+  - { level: 54, move: Wave Crash }
   - { level: 60, move: Guillotine }

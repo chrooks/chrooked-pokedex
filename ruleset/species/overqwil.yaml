@@ -17,12 +17,12 @@ learnset:
   - { level: 28, move: Barb Barrage }
   - { level: 32, move: Pin Missile }
   - { level: 36, move: Toxic Spikes }
-  - { level: 38, move: Backstab }
   - { level: 38, move: Venom Slam }
+  - { level: 38, move: Crunch }
   - { level: 40, move: Stockpile }
   - { level: 40, move: Spit Up }
   - { level: 44, move: Toxic }
-  - { level: 48, move: Crunch }
+  - { level: 48, move: Backstab }
   - { level: 52, move: Acupressure }
   - { level: 56, move: Destiny Bond }
   - { level: 60, move: Havoc }

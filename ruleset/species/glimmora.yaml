@@ -15,13 +15,12 @@ learnset:
   - { level: 15, move: Rock Polish }
   - { level: 18, move: Stealth Rock }
   - { level: 22, move: Venoshock }
-  - { level: 24, move: Geo Pulse }
   - { level: 26, move: Sandstorm }
   - { level: 29, move: Self-Destruct }
   - { level: 33, move: Rock Slide }
   - { level: 36, move: Miasma }
-  - { level: 36, move: Crystal Beam }
-  - { level: 39, move: Power Gem }
+  - { level: 36, move: Power Gem }
+  - { level: 39, move: Crystal Beam }
   - { level: 44, move: Acid Armor }
   - { level: 50, move: Sludge Wave }
   - { level: 62, move: Meteor Surge }

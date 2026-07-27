@@ -11,8 +11,8 @@ learnset:
   - { level: 19, move: Bite }
   - { level: 23, move: Mud-Slap }
   - { level: 27, move: Super Fang }
-  - { level: 31, move: Take Down }
-  - { level: 35, move: Bail Out }
+  - { level: 31, move: Bail Out }
+  - { level: 35, move: Take Down }
   - { level: 37, move: Rampage }
   - { level: 39, move: Crunch }
   - { level: 43, move: Yawn }

@@ -19,11 +19,11 @@ learnset:
   - { level: 26, move: Acid Spray }
   - { level: 30, move: Seed Bomb }
   - { level: 34, move: Cross Poison }
-  - { level: 36, move: Reap }
+  - { level: 36, move: Leaf Blade }
   - { level: 38, move: Toxic }
-  - { level: 42, move: Gunk Shot }
-  - { level: 44, move: Venom Slam }
-  - { level: 46, move: Leaf Blade }
+  - { level: 42, move: Venom Slam }
+  - { level: 44, move: Gunk Shot }
+  - { level: 46, move: Reap }
   - { level: 52, move: Power Whip }
   - { level: 58, move: Sludge Wave }
   - { level: 63, move: Leaf Storm }

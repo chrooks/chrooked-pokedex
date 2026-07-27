@@ -15,7 +15,7 @@ learnset:
   - { level: 1, move: Gastro Acid }
   - { level: 1, move: Discharge }
   - { level: 1, move: Coil }
-  - { level: 5, move: Wild Charge }
+  - { level: 5, move: Lightning Slam }
   - { level: 26, move: Water Whip }
   - { level: 46, move: Arc Strike }
-  - { level: 48, move: Lightning Slam }
+  - { level: 48, move: Wild Charge }

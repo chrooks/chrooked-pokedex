@@ -18,14 +18,13 @@ learnset:
   - { level: 17, move: Low Sweep }
   - { level: 17, move: Water Pulse }
   - { level: 21, move: Aqua Cutter }
-  - { level: 24, move: Water Whip }
   - { level: 27, move: Air Slash }
   - { level: 32, move: Focus Energy }
-  - { level: 35, move: Maelstrom }
+  - { level: 35, move: Liquidation }
   - { level: 36, move: Cross Chop }
   - { level: 38, move: Mega Kick }
   - { level: 43, move: Acrobatics }
-  - { level: 47, move: Liquidation }
+  - { level: 47, move: Maelstrom }
   - { level: 52, move: Feather Dance }
   - { level: 58, move: Close Combat }
   - { level: 64, move: Wave Crash }

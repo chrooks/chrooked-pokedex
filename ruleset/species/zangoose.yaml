@@ -23,11 +23,10 @@ learnset:
   - { level: 8, move: Fury Cutter }
   - { level: 12, move: Metal Claw }
   - { level: 15, move: Hone Claws }
-  - { level: 19, move: Slash }
+  - { level: 19, move: False Swipe }
   - { level: 22, move: Power Trip }
-  - { level: 26, move: Crush Claw }
-  - { level: 29, move: False Swipe }
-  - { level: 33, move: Bail Out }
+  - { level: 26, move: Slash }
+  - { level: 29, move: Crush Claw }
   - { level: 36, move: Detect }
   - { level: 38, move: Rampage }
   - { level: 40, move: X-Scissor }

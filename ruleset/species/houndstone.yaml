@@ -22,8 +22,8 @@ learnset:
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 36, move: Play Rough }
-  - { level: 38, move: Interment }
-  - { level: 39, move: Wraithstrike }
+  - { level: 38, move: Wraithstrike }
+  - { level: 39, move: Interment }
   - { level: 41, move: Helping Hand }
   - { level: 46, move: Phantom Force }
   - { level: 51, move: Charm }

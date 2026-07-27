@@ -9,9 +9,9 @@ learnset:
   - { level: 8, move: Covet }
   - { level: 11, move: Bite }
   - { level: 15, move: Baby-Doll Eyes }
-  - { level: 18, move: Play Rough }
+  - { level: 18, move: Cutsie Slap }
   - { level: 22, move: Work Up }
-  - { level: 24, move: Cutsie Slap }
+  - { level: 24, move: Play Rough }
   - { level: 26, move: Baton Pass }
   - { level: 30, move: Roar }
   - { level: 33, move: Double-Edge }

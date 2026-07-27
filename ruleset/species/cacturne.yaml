@@ -9,7 +9,6 @@ learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Growth }
   - { level: 1, move: Destiny Bond }
-  - { level: 5, move: Cheap Shot }
   - { level: 6, move: Slander }
   - { level: 10, move: Leech Seed }
   - { level: 13, move: Sand Attack }

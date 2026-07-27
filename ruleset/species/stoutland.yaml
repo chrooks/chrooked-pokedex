@@ -14,7 +14,6 @@ learnset:
   - { level: 19, move: Baby-Doll Eyes }
   - { level: 24, move: Play Rough }
   - { level: 30, move: Crunch }
-  - { level: 33, move: Bail Out }
   - { level: 38, move: Take Down }
   - { level: 42, move: Rampage }
   - { level: 46, move: Helping Hand }

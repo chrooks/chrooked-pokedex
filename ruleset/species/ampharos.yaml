@@ -14,7 +14,6 @@ learnset:
   - { level: 18, move: Cotton Spore }
   - { level: 24, move: Volt Switch }
   - { level: 30, move: Dragon Breath }
-  - { level: 32, move: Short Circuit }
   - { level: 34, move: Power Gem }
   - { level: 38, move: Discharge }
   - { level: 42, move: Milk Drink }

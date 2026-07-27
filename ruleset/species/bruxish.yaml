@@ -13,10 +13,10 @@ learnset:
   - { level: 20, move: Mind Flick }
   - { level: 25, move: Psyshock }
   - { level: 28, move: Crunch }
-  - { level: 30, move: Maelstrom }
-  - { level: 33, move: Aqua Tail }
+  - { level: 30, move: Aqua Tail }
+  - { level: 33, move: Maelstrom }
   - { level: 36, move: Screech }
-  - { level: 38, move: Kinetic Slam }
-  - { level: 41, move: Psychic Fangs }
+  - { level: 38, move: Psychic Fangs }
+  - { level: 41, move: Kinetic Slam }
   - { level: 44, move: Wave Crash }
   - { level: 62, move: Psycrush }

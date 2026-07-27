@@ -12,15 +12,14 @@ learnset:
   - { level: 6, move: Ember }
   - { level: 8, move: Rock Throw }
   - { level: 13, move: Harden }
-  - { level: 17, move: Geo Pulse }
   - { level: 20, move: Clear Smog }
   - { level: 22, move: Ancient Power }
   - { level: 27, move: Incinerate }
   - { level: 29, move: Rock Slide }
   - { level: 34, move: Lava Plume }
   - { level: 36, move: Amnesia }
-  - { level: 38, move: Crystal Beam }
-  - { level: 39, move: Power Gem }
+  - { level: 38, move: Power Gem }
+  - { level: 39, move: Crystal Beam }
   - { level: 41, move: Body Slam }
   - { level: 43, move: Recover }
   - { level: 48, move: Flamethrower }

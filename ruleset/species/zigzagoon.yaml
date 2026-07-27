@@ -17,6 +17,5 @@ learnset:
   - { level: 27, move: Fling }
   - { level: 30, move: Flail }
   - { level: 33, move: Belly Drum }
-  - { level: 36, move: Double-Edge }
-  - { level: 39, move: Bail Out }
-  - { level: 46, move: Rampage }
+  - { level: 36, move: Rampage }
+  - { level: 46, move: Double-Edge }

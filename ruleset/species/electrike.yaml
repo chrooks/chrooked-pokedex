@@ -8,7 +8,6 @@ learnset:
   - { level: 8, move: Howl }
   - { level: 12, move: Quick Attack }
   - { level: 16, move: Shock Wave }
-  - { level: 18, move: Short Circuit }
   - { level: 20, move: Bite }
   - { level: 24, move: Thunder Fang }
   - { level: 28, move: Roar }

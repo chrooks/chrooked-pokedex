@@ -9,6 +9,6 @@ learnset:
   - { level: 15, move: Maul }
   - { level: 24, move: Breaking Swipe }
   - { level: 36, move: Dragon Hammer }
-  - { level: 42, move: Interment }
-  - { level: 48, move: Wraithstrike }
+  - { level: 42, move: Wraithstrike }
+  - { level: 48, move: Interment }
   - { level: 62, move: Necrosis }

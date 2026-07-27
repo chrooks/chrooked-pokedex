@@ -18,8 +18,8 @@ learnset:
   - { level: 28, move: Take Down }
   - { level: 32, move: Crunch }
   - { level: 36, move: Scary Face }
-  - { level: 38, move: Cataclysm }
-  - { level: 40, move: Dragon Pulse }
+  - { level: 38, move: Dragon Pulse }
+  - { level: 40, move: Cataclysm }
   - { level: 44, move: Body Slam }
   - { level: 46, move: Draco Meteor }
   - { level: 48, move: Hyper Voice }

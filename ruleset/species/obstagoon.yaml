@@ -25,12 +25,11 @@ learnset:
   - { level: 18, move: Fury Swipes }
   - { level: 23, move: Rest }
   - { level: 28, move: Take Down }
-  - { level: 31, move: Bail Out }
   - { level: 35, move: Scary Face }
-  - { level: 38, move: Backstab }
   - { level: 38, move: Rampage }
+  - { level: 38, move: Heel Drop }
   - { level: 42, move: Counter }
-  - { level: 46, move: Heel Drop }
+  - { level: 46, move: Backstab }
   - { level: 49, move: Taunt }
   - { level: 53, move: Triple Hit }
   - { level: 56, move: Double-Edge }

@@ -13,11 +13,10 @@ learnset:
   - { level: 20, move: Bug Bite }
   - { level: 25, move: Coil }
   - { level: 32, move: Body Slam }
-  - { level: 36, move: Cinder Smash }
-  - { level: 36, move: Combust }
-  - { level: 36, move: Moltstrike }
+  - { level: 36, move: Fire Lash }
+  - { level: 36, move: Lunge }
   - { level: 39, move: Fire Spin }
   - { level: 46, move: Crunch }
-  - { level: 53, move: Fire Lash }
-  - { level: 60, move: Lunge }
+  - { level: 53, move: Combust }
+  - { level: 60, move: Moltstrike }
   - { level: 67, move: Burn Up }

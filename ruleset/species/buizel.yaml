@@ -17,9 +17,9 @@ learnset:
   - { level: 24, move: Aqua Jet }
   - { level: 27, move: Double Hit }
   - { level: 31, move: Bail Out }
-  - { level: 33, move: Maelstrom }
-  - { level: 35, move: Liquidation }
-  - { level: 38, move: Aqua Tail }
+  - { level: 33, move: Liquidation }
+  - { level: 35, move: Aqua Tail }
+  - { level: 38, move: Maelstrom }
   - { level: 41, move: Agility }
   - { level: 43, move: Rampage }
   - { level: 45, move: Hydro Pump }

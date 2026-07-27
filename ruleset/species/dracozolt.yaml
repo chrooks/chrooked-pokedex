@@ -12,12 +12,11 @@ learnset:
   - { level: 24, move: Breaking Swipe }
   - { level: 28, move: Pluck }
   - { level: 35, move: Dragon Tail }
-  - { level: 38, move: Lightning Slam }
-  - { level: 38, move: Arc Strike }
+  - { level: 38, move: Bolt Beak }
   - { level: 42, move: Stomp }
   - { level: 45, move: Dragon Hammer }
   - { level: 49, move: Body Slam }
   - { level: 56, move: Discharge }
-  - { level: 63, move: Bolt Beak }
+  - { level: 63, move: Arc Strike }
   - { level: 70, move: Dragon Pulse }
   - { level: 77, move: Dragon Rush }

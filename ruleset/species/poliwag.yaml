@@ -12,8 +12,8 @@ learnset:
   - { level: 15, move: Water Whip }
   - { level: 18, move: Bubble Beam }
   - { level: 24, move: Rain Dance }
-  - { level: 30, move: Body Slam }
-  - { level: 33, move: Bail Out }
+  - { level: 30, move: Bail Out }
+  - { level: 33, move: Body Slam }
   - { level: 33, move: Maelstrom }
   - { level: 36, move: Earth Power }
   - { level: 39, move: One-Inch Punch }

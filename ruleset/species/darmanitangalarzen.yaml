@@ -10,15 +10,14 @@ learnset:
   - { level: 1, move: Bite }
   - { level: 12, move: Avalanche }
   - { level: 16, move: Work Up }
-  - { level: 20, move: Ice Fang }
+  - { level: 20, move: Ice Punch }
   - { level: 24, move: Headbutt }
-  - { level: 28, move: Ice Punch }
+  - { level: 28, move: Ice Fang }
   - { level: 32, move: Uproar }
   - { level: 38, move: Belly Drum }
-  - { level: 41, move: Glacial Crush }
-  - { level: 41, move: Combust }
+  - { level: 41, move: Cinder Smash }
   - { level: 44, move: Blizzard }
-  - { level: 47, move: Cinder Smash }
+  - { level: 47, move: Combust }
   - { level: 50, move: Thrash }
   - { level: 56, move: Superpower }
   - { level: 64, move: Icebreaker }

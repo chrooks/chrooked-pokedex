@@ -13,6 +13,6 @@ learnset:
   - { level: 28, move: Slash }
   - { level: 32, move: Crush Claw }
   - { level: 36, move: Rock Blast }
-  - { level: 38, move: Moltstrike }
+  - { level: 38, move: X-Scissor }
   - { level: 41, move: Protect }
-  - { level: 44, move: X-Scissor }
+  - { level: 44, move: Moltstrike }

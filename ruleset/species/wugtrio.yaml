@@ -9,18 +9,16 @@ learnset:
   - { level: 1, move: Wrap }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Mud-Slap }
-  - { level: 6, move: Undertow }
   - { level: 12, move: Aqua Jet }
-  - { level: 14, move: Water Whip }
   - { level: 16, move: Body Slam }
   - { level: 20, move: Water Pulse }
   - { level: 24, move: Headbutt }
   - { level: 30, move: Triple Dive }
-  - { level: 33, move: Maelstrom }
+  - { level: 33, move: Flip Turn }
   - { level: 36, move: Dig }
   - { level: 42, move: Sucker Punch }
   - { level: 48, move: Throat Chop }
-  - { level: 50, move: Flip Turn }
+  - { level: 50, move: Liquidation }
   - { level: 52, move: Aerial Ace }
-  - { level: 54, move: Liquidation }
+  - { level: 54, move: Maelstrom }
   - { level: 60, move: Wave Crash }

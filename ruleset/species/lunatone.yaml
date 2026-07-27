@@ -17,7 +17,6 @@ learnset:
   - { level: 15, move: Disarming Voice }
   - { level: 18, move: Psybeam }
   - { level: 20, move: Snarl }
-  - { level: 22, move: Geo Pulse }
   - { level: 25, move: Draining Kiss }
   - { level: 28, move: Cosmic Power }
   - { level: 30, move: Dark Pulse }

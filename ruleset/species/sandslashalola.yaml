@@ -25,5 +25,4 @@ learnset:
   - { level: 1, move: Slash }
   - { level: 1, move: Metal Claw }
   - { level: 1, move: Icicle Crash }
-  - { level: 46, move: Glacial Crush }
   - { level: 48, move: Icebreaker }

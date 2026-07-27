@@ -13,13 +13,13 @@ learnset:
   - { level: 21, move: Ancient Power }
   - { level: 24, move: Breaking Swipe }
   - { level: 28, move: Bite }
-  - { level: 31, move: Maelstrom }
+  - { level: 31, move: Fishious Rend }
   - { level: 35, move: Dragon Breath }
   - { level: 38, move: Dragon Hammer }
   - { level: 42, move: Stomp }
-  - { level: 45, move: Wave Crash }
+  - { level: 45, move: Maelstrom }
   - { level: 49, move: Super Fang }
   - { level: 56, move: Crunch }
-  - { level: 63, move: Fishious Rend }
+  - { level: 63, move: Wave Crash }
   - { level: 70, move: Dragon Pulse }
   - { level: 77, move: Dragon Rush }

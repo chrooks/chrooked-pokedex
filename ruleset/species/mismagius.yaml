@@ -17,8 +17,8 @@ learnset:
   - { level: 1, move: Spite }
   - { level: 4, move: Fairy Wind }
   - { level: 8, move: Psywave }
-  - { level: 12, move: Hex }
-  - { level: 15, move: Knell }
+  - { level: 12, move: Knell }
+  - { level: 15, move: Hex }
   - { level: 16, move: Mystical Fire }
   - { level: 20, move: Draining Kiss }
   - { level: 24, move: Will-O-Wisp }

@@ -16,10 +16,9 @@ learnset:
   - { level: 24, move: Night Slash }
   - { level: 28, move: Drain Punch }
   - { level: 32, move: Seed Bomb }
-  - { level: 36, move: Crunch }
+  - { level: 36, move: Knock Off }
   - { level: 37, move: One-Inch Punch }
-  - { level: 39, move: Knock Off }
-  - { level: 43, move: Heel Drop }
+  - { level: 39, move: Crunch }
   - { level: 43, move: Backstab }
   - { level: 43, move: Cross Chop }
   - { level: 46, move: Parting Shot }

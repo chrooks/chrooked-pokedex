@@ -19,7 +19,6 @@ learnset:
   - { level: 25, move: Slash }
   - { level: 30, move: Bind }
   - { level: 35, move: Fire Lash }
-  - { level: 37, move: Cinder Smash }
   - { level: 37, move: Combust }
   - { level: 40, move: Hone Claws }
   - { level: 45, move: Amnesia }

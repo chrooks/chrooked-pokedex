@@ -16,9 +16,9 @@ learnset:
   - { level: 24, move: Headbutt }
   - { level: 28, move: Zen Headbutt }
   - { level: 33, move: Worry Seed }
-  - { level: 36, move: Reap }
+  - { level: 36, move: Seed Bomb }
   - { level: 38, move: Crunch }
   - { level: 41, move: Combust }
-  - { level: 44, move: Seed Bomb }
+  - { level: 44, move: Reap }
   - { level: 48, move: Solar Beam }
   - { level: 48, move: Overheat }

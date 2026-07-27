@@ -12,8 +12,8 @@ learnset:
   - { level: 18, move: Agility }
   - { level: 24, move: Dive }
   - { level: 32, move: Focus Energy }
-  - { level: 36, move: Maelstrom }
+  - { level: 36, move: Liquidation }
   - { level: 40, move: Crunch }
-  - { level: 48, move: Liquidation }
+  - { level: 48, move: Maelstrom }
   - { level: 52, move: Wave Crash }
   - { level: 56, move: Double-Edge }

@@ -17,7 +17,6 @@ learnset:
   - { level: 18, move: Psybeam }
   - { level: 21, move: Ancient Power }
   - { level: 25, move: Slash }
-  - { level: 30, move: Bail Out }
   - { level: 33, move: Shadow Claw }
   - { level: 36, move: Rampage }
   - { level: 38, move: Screech }

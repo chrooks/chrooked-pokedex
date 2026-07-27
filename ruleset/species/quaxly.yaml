@@ -9,7 +9,6 @@ learnset:
   - { level: 7, move: Work Up }
   - { level: 10, move: Wing Attack }
   - { level: 13, move: Aqua Jet }
-  - { level: 15, move: Water Whip }
   - { level: 17, move: Double Hit }
   - { level: 21, move: Aqua Cutter }
   - { level: 24, move: Air Slash }

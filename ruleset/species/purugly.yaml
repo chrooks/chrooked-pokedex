@@ -19,8 +19,7 @@ learnset:
   - { level: 29, move: Taunt }
   - { level: 32, move: Retaliate }
   - { level: 37, move: Slash }
-  - { level: 40, move: Bail Out }
-  - { level: 41, move: Rampage }
-  - { level: 45, move: Body Slam }
+  - { level: 41, move: Body Slam }
+  - { level: 45, move: Rampage }
   - { level: 52, move: Attract }
   - { level: 60, move: Hone Claws }

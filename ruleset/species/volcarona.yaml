@@ -23,8 +23,8 @@ learnset:
   - { level: 24, move: Bug Bite }
   - { level: 30, move: Screech }
   - { level: 36, move: Leech Life }
-  - { level: 39, move: Antennae Blast }
-  - { level: 42, move: Bug Buzz }
+  - { level: 39, move: Bug Buzz }
+  - { level: 42, move: Antennae Blast }
   - { level: 48, move: Heat Wave }
   - { level: 54, move: Amnesia }
   - { level: 58, move: Drone Chorus }

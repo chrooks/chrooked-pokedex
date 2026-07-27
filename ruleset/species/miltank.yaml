@@ -12,11 +12,10 @@ learnset:
   - { level: 10, move: Defense Curl }
   - { level: 15, move: Stomp }
   - { level: 20, move: Heal Bell }
-  - { level: 25, move: Bail Out }
   - { level: 30, move: Zen Headbutt }
   - { level: 35, move: Milk Drink }
-  - { level: 37, move: Rampage }
-  - { level: 40, move: Body Slam }
+  - { level: 37, move: Body Slam }
+  - { level: 40, move: Rampage }
   - { level: 45, move: Play Rough }
   - { level: 50, move: Double-Edge }
   - { level: 55, move: High Horsepower }

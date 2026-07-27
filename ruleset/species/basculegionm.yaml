@@ -20,9 +20,9 @@ learnset:
   - { level: 30, move: Maelstrom }
   - { level: 32, move: Crunch }
   - { level: 36, move: Take Down }
-  - { level: 38, move: Interment }
+  - { level: 38, move: Wraithstrike }
   - { level: 40, move: Uproar }
-  - { level: 42, move: Wraithstrike }
+  - { level: 42, move: Interment }
   - { level: 44, move: Wave Crash }
   - { level: 48, move: Thrash }
   - { level: 52, move: Double-Edge }

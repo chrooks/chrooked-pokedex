@@ -13,16 +13,15 @@ learnset:
   - { level: 1, move: Thunder Fang }
   - { level: 9, move: Bite }
   - { level: 12, move: Scary Face }
-  - { level: 15, move: Rock Slide }
+  - { level: 15, move: Smack Down }
   - { level: 18, move: Stomping Tantrum }
   - { level: 21, move: Screech }
-  - { level: 24, move: Smack Down }
+  - { level: 24, move: Rock Slide }
   - { level: 27, move: Crunch }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 33, move: Earthquake }
   - { level: 37, move: Stone Edge }
-  - { level: 39, move: Heel Drop }
   - { level: 42, move: Thrash }
   - { level: 47, move: Sandstorm }
   - { level: 52, move: Hyper Beam }

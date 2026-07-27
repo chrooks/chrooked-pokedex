@@ -13,15 +13,15 @@ learnset:
   - { level: 8, move: Hypnosis }
   - { level: 12, move: Disarming Voice }
   - { level: 16, move: Magic Coat }
-  - { level: 20, move: Dream Mist }
   - { level: 20, move: Imprison }
+  - { level: 20, move: Stored Power }
+  - { level: 24, move: Dream Mist }
   - { level: 24, move: Dazzling Gleam }
-  - { level: 24, move: Stored Power }
   - { level: 28, move: Calm Mind }
   - { level: 32, move: Psychic Terrain }
   - { level: 36, move: Moonlight }
-  - { level: 38, move: Mindwarp }
+  - { level: 38, move: Psychic }
   - { level: 40, move: Dream Eater }
   - { level: 44, move: Wonder Room }
-  - { level: 48, move: Future Sight }
-  - { level: 52, move: Psychic }
+  - { level: 48, move: Mindwarp }
+  - { level: 52, move: Future Sight }

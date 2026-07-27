@@ -10,10 +10,10 @@ learnset:
   - { level: 6, move: Payback }
   - { level: 9, move: Bite }
   - { level: 12, move: Rock Tomb }
-  - { level: 15, move: Rock Slide }
+  - { level: 15, move: Smack Down }
   - { level: 18, move: Stomping Tantrum }
   - { level: 21, move: Screech }
-  - { level: 24, move: Smack Down }
+  - { level: 24, move: Rock Slide }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
   - { level: 27, move: Crunch }
@@ -23,6 +23,5 @@ learnset:
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Hyper Beam }
   - { level: 45, move: Backstab }
-  - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }
   - { level: 64, move: Faultbreak }

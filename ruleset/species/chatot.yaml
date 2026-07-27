@@ -15,14 +15,14 @@ learnset:
   - { level: 17, move: Fury Attack }
   - { level: 21, move: Chatter }
   - { level: 25, move: Taunt }
-  - { level: 29, move: Round }
+  - { level: 29, move: Echoed Voice }
   - { level: 31, move: Galeburst }
   - { level: 33, move: Mimic }
-  - { level: 37, move: Echoed Voice }
-  - { level: 39, move: Resonance }
+  - { level: 37, move: Round }
+  - { level: 39, move: Uproar }
   - { level: 41, move: Roost }
-  - { level: 45, move: Uproar }
+  - { level: 45, move: Hyper Voice }
   - { level: 49, move: Parting Shot }
   - { level: 50, move: Feather Dance }
-  - { level: 57, move: Hyper Voice }
+  - { level: 57, move: Resonance }
   - { level: 64, move: Tempest }

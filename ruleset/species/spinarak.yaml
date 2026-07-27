@@ -14,9 +14,9 @@ learnset:
   - { level: 29, move: Agility }
   - { level: 33, move: Pin Missile }
   - { level: 36, move: Psychic }
-  - { level: 38, move: Venom Slam }
   - { level: 38, move: Moltstrike }
+  - { level: 38, move: Cross Poison }
   - { level: 40, move: Poison Jab }
-  - { level: 44, move: Cross Poison }
+  - { level: 44, move: Venom Slam }
   - { level: 47, move: Sticky Web }
   - { level: 51, move: Toxic Thread }

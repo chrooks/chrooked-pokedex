@@ -18,7 +18,6 @@ learnset:
   - { level: 27, move: Agility }
   - { level: 32, move: Focus Energy }
   - { level: 36, move: Roost }
-  - { level: 38, move: Nosedive }
-  - { level: 41, move: Drill Peck }
+  - { level: 38, move: Drill Peck }
+  - { level: 41, move: Nosedive }
   - { level: 45, move: Drill Run }
-  - { level: 48, move: Dive Bomb }

@@ -24,10 +24,10 @@ learnset:
   - { level: 30, move: Galeburst }
   - { level: 32, move: Power Gem }
   - { level: 36, move: Toxic }
-  - { level: 38, move: Nosedive }
-  - { level: 38, move: Moltstrike }
-  - { level: 40, move: Attack Order }
+  - { level: 38, move: Attack Order }
+  - { level: 38, move: Dive Bomb }
+  - { level: 40, move: Moltstrike }
   - { level: 40, move: Defend Order }
   - { level: 44, move: Destiny Bond }
-  - { level: 48, move: Dive Bomb }
+  - { level: 48, move: Nosedive }
   - { level: 64, move: Tempest }

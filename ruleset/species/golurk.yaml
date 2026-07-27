@@ -19,9 +19,9 @@ learnset:
   - { level: 28, move: Curse }
   - { level: 32, move: Bulldoze }
   - { level: 36, move: Shadow Claw }
-  - { level: 38, move: Interment }
+  - { level: 38, move: Wraithstrike }
   - { level: 40, move: Drain Punch }
-  - { level: 43, move: Wraithstrike }
+  - { level: 43, move: Interment }
   - { level: 46, move: Earthquake }
   - { level: 49, move: Necrosis }
   - { level: 50, move: Phantom Force }

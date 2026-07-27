@@ -15,12 +15,12 @@ learnset:
   - { level: 24, move: Bubble Beam }
   - { level: 26, move: Crunch }
   - { level: 28, move: Soak }
-  - { level: 30, move: Maelstrom }
+  - { level: 30, move: Liquidation }
   - { level: 32, move: Entrainment }
   - { level: 36, move: Lunge }
-  - { level: 38, move: Moltstrike }
-  - { level: 40, move: Liquidation }
-  - { level: 44, move: Leech Life }
+  - { level: 38, move: Leech Life }
+  - { level: 40, move: Maelstrom }
+  - { level: 44, move: Moltstrike }
   - { level: 48, move: Mirror Coat }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

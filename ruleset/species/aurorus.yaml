@@ -12,7 +12,6 @@ learnset:
   - { level: 12, move: Icy Wind }
   - { level: 16, move: Round }
   - { level: 20, move: Mist }
-  - { level: 22, move: Geo Pulse }
   - { level: 24, move: Aurora Beam }
   - { level: 28, move: Thunder Wave }
   - { level: 30, move: Lithic Fang }
@@ -25,6 +24,6 @@ learnset:
   - { level: 48, move: Light Screen }
   - { level: 51, move: Meteor Surge }
   - { level: 54, move: Hail }
-  - { level: 57, move: Cryoblast }
-  - { level: 60, move: Blizzard }
+  - { level: 57, move: Blizzard }
+  - { level: 60, move: Cryoblast }
   - { level: 66, move: Hyper Beam }

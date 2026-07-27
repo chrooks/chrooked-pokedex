@@ -14,10 +14,10 @@ learnset:
   - { level: 22, move: Fire Spin }
   - { level: 28, move: Light Screen }
   - { level: 36, move: Psyshock }
-  - { level: 38, move: Mindwarp }
+  - { level: 38, move: Psychic }
   - { level: 41, move: Flamethrower }
   - { level: 45, move: Will-O-Wisp }
-  - { level: 49, move: Psychic }
+  - { level: 49, move: Mindwarp }
   - { level: 52, move: Sunny Day }
   - { level: 56, move: Magic Room }
   - { level: 59, move: Fire Blast }

@@ -14,11 +14,10 @@ learnset:
   - { level: 5, move: Sand Attack }
   - { level: 10, move: Flame Charge }
   - { level: 15, move: Bite }
-  - { level: 20, move: Fire Fang }
-  - { level: 25, move: Flame Wheel }
+  - { level: 20, move: Flame Wheel }
+  - { level: 25, move: Fire Fang }
   - { level: 30, move: Crunch }
   - { level: 33, move: Bail Out }
-  - { level: 36, move: Cinder Smash }
   - { level: 37, move: Combust }
   - { level: 40, move: Lava Plume }
   - { level: 46, move: Double-Edge }

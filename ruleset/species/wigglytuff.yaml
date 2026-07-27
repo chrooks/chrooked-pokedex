@@ -26,5 +26,5 @@ learnset:
   - { level: 1, move: Double-Edge }
   - { level: 1, move: Body Slam }
   - { level: 1, move: Charm }
-  - { level: 5, move: Play Rough }
-  - { level: 10, move: Glitter Tap }
+  - { level: 5, move: Glitter Tap }
+  - { level: 10, move: Play Rough }

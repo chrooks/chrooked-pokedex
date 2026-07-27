@@ -18,11 +18,11 @@ learnset:
   - { level: 30, move: Flamethrower }
   - { level: 33, move: Feather Dance }
   - { level: 36, move: Reversal }
-  - { level: 39, move: Flare Blitz }
+  - { level: 39, move: Cinder Smash }
   - { level: 41, move: Aura Sphere }
-  - { level: 43, move: Cinder Smash }
+  - { level: 43, move: Combust }
   - { level: 45, move: Ki Blast }
-  - { level: 46, move: Combust }
-  - { level: 46, move: Cross Chop }
-  - { level: 48, move: One-Inch Punch }
+  - { level: 46, move: Flare Blitz }
+  - { level: 46, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
   - { level: 62, move: Focus Blast }

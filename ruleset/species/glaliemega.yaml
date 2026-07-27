@@ -15,7 +15,6 @@ learnset:
   - { level: 30, move: Frost Breath }
   - { level: 35, move: Bite }
   - { level: 40, move: Ice Fang }
-  - { level: 43, move: Glacial Crush }
   - { level: 47, move: Snowscape }
   - { level: 54, move: Weather Ball }
   - { level: 61, move: Crunch }

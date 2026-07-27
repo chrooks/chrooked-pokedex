@@ -18,7 +18,6 @@ learnset:
   - { level: 27, move: Calm Mind }
   - { level: 32, move: Role Play }
   - { level: 37, move: Zen Headbutt }
-  - { level: 40, move: Bail Out }
   - { level: 43, move: Kinetic Slam }
   - { level: 43, move: Rampage }
   - { level: 46, move: Psycrush }

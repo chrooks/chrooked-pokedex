@@ -17,10 +17,10 @@ learnset:
   - { level: 31, move: Roost }
   - { level: 35, move: Air Slash }
   - { level: 37, move: One-Inch Punch }
-  - { level: 37, move: Nosedive }
   - { level: 37, move: Cross Chop }
+  - { level: 37, move: Dive Bomb }
   - { level: 39, move: Mega Kick }
-  - { level: 41, move: Dive Bomb }
+  - { level: 41, move: Nosedive }
   - { level: 44, move: Wide Guard }
   - { level: 48, move: Throat Chop }
   - { level: 54, move: Brave Bird }

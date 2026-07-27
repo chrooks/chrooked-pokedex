@@ -29,6 +29,6 @@ learnset:
   - { level: 1, move: Hurricane }
   - { level: 15, move: Cheap Shot }
   - { level: 36, move: Reap }
-  - { level: 45, move: Backstab }
-  - { level: 48, move: Heel Drop }
+  - { level: 45, move: Heel Drop }
+  - { level: 48, move: Backstab }
   - { level: 60, move: Havoc }

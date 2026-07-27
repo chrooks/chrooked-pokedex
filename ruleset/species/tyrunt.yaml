@@ -16,7 +16,6 @@ learnset:
   - { level: 24, move: Rock Slide }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
-  - { level: 25, move: Draconic Fang }
   - { level: 28, move: Crunch }
   - { level: 32, move: Dragon Claw }
   - { level: 36, move: Ice Fang }

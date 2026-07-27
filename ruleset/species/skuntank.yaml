@@ -17,9 +17,9 @@ learnset:
   - { level: 27, move: Toxic }
   - { level: 30, move: Sucker Punch }
   - { level: 33, move: Memento }
-  - { level: 35, move: Backstab }
+  - { level: 35, move: Night Slash }
   - { level: 36, move: Venom Slam }
-  - { level: 38, move: Night Slash }
+  - { level: 38, move: Backstab }
   - { level: 43, move: Belch }
   - { level: 48, move: Explosion }
   - { level: 60, move: Havoc }

@@ -15,11 +15,10 @@ learnset:
   - { level: 22, move: Headbutt }
   - { level: 26, move: Payback }
   - { level: 34, move: Crunch }
-  - { level: 36, move: Heel Drop }
-  - { level: 36, move: Backstab }
+  - { level: 36, move: Jaw Lock }
   - { level: 39, move: Swagger }
   - { level: 43, move: Reversal }
-  - { level: 48, move: Jaw Lock }
+  - { level: 48, move: Backstab }
   - { level: 51, move: Havoc }
   - { level: 55, move: Double-Edge }
   - { level: 60, move: Outrage }

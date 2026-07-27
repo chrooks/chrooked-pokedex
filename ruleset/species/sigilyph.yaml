@@ -10,10 +10,10 @@ learnset:
   - { level: 20, move: Psybeam }
   - { level: 25, move: Whirlwind }
   - { level: 30, move: Cosmic Power }
-  - { level: 32, move: Galeburst }
-  - { level: 35, move: Air Slash }
-  - { level: 37, move: Mindwarp }
-  - { level: 40, move: Psychic }
+  - { level: 32, move: Air Slash }
+  - { level: 35, move: Galeburst }
+  - { level: 37, move: Psychic }
+  - { level: 40, move: Mindwarp }
   - { level: 45, move: Tailwind }
   - { level: 50, move: Light Screen }
   - { level: 50, move: Reflect }

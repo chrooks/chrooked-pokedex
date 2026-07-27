@@ -11,6 +11,6 @@ learnset:
   - { level: 20, move: Knock Off }
   - { level: 24, move: Slam }
   - { level: 28, move: Uproar }
-  - { level: 32, move: Wood Hammer }
+  - { level: 32, move: Reap }
   - { level: 36, move: Endeavor }
-  - { level: 46, move: Reap }
+  - { level: 46, move: Wood Hammer }

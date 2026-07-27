@@ -13,6 +13,6 @@ learnset:
   - { level: 28, move: Guard Swap }
   - { level: 32, move: Reversal }
   - { level: 36, move: Cotton Guard }
-  - { level: 40, move: Double-Edge }
-  - { level: 46, move: Rampage }
+  - { level: 40, move: Rampage }
+  - { level: 46, move: Double-Edge }
   - { level: 48, move: Milk Drink }

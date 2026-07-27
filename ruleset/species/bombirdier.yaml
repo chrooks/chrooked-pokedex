@@ -20,10 +20,10 @@ learnset:
   - { level: 29, move: Rock Tomb }
   - { level: 36, move: Payback }
   - { level: 39, move: Dive Bomb }
-  - { level: 39, move: Backstab }
   - { level: 39, move: Nosedive }
+  - { level: 39, move: Knock Off }
   - { level: 42, move: Dual Wingbeat }
   - { level: 47, move: Rock Slide }
-  - { level: 50, move: Havoc }
-  - { level: 53, move: Knock Off }
+  - { level: 50, move: Backstab }
+  - { level: 53, move: Havoc }
   - { level: 60, move: Parting Shot }

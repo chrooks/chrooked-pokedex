@@ -18,7 +18,7 @@ learnset:
   - { level: 24, move: Pluck }
   - { level: 29, move: Agility }
   - { level: 34, move: Uproar }
-  - { level: 38, move: Mindwarp }
+  - { level: 38, move: Psychic }
   - { level: 43, move: Dazzling Gleam }
-  - { level: 49, move: Psychic }
+  - { level: 49, move: Mindwarp }
   - { level: 54, move: Last Resort }

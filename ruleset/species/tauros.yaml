@@ -13,7 +13,6 @@ learnset:
   - { level: 10, move: Payback }
   - { level: 15, move: Assurance }
   - { level: 20, move: Horn Attack }
-  - { level: 25, move: Bail Out }
   - { level: 30, move: Zen Headbutt }
   - { level: 35, move: Raging Bull }
   - { level: 37, move: Rampage }

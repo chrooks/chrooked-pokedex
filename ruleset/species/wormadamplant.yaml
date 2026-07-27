@@ -17,11 +17,11 @@ learnset:
   - { level: 29, move: Growth }
   - { level: 32, move: Psybeam }
   - { level: 35, move: Infestation }
-  - { level: 36, move: Antennae Blast }
+  - { level: 36, move: Bug Buzz }
   - { level: 37, move: Siphon }
   - { level: 38, move: Flail }
   - { level: 41, move: Attract }
   - { level: 44, move: Psychic }
   - { level: 47, move: Leaf Storm }
-  - { level: 50, move: Bug Buzz }
+  - { level: 50, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }

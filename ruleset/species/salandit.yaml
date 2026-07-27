@@ -10,8 +10,8 @@ learnset:
   - { level: 20, move: Sweet Scent }
   - { level: 25, move: Nasty Plot }
   - { level: 30, move: Incinerate }
-  - { level: 32, move: Miasma }
-  - { level: 35, move: Venoshock }
+  - { level: 32, move: Venoshock }
+  - { level: 35, move: Miasma }
   - { level: 40, move: Dragon Pulse }
   - { level: 45, move: Flamethrower }
   - { level: 50, move: Toxic }

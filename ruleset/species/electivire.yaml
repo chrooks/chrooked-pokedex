@@ -15,15 +15,15 @@ learnset:
   - { level: 1, move: Fire Punch }
   - { level: 1, move: Brick Break }
   - { level: 24, move: Thunder Wave }
-  - { level: 30, move: Discharge }
-  - { level: 31, move: Short Circuit }
+  - { level: 30, move: Short Circuit }
+  - { level: 31, move: Discharge }
   - { level: 36, move: Bulk Up }
   - { level: 37, move: Aura Sphere }
-  - { level: 37, move: Arc Strike }
-  - { level: 37, move: Cross Chop }
-  - { level: 39, move: Lightning Slam }
+  - { level: 37, move: Lightning Slam }
+  - { level: 37, move: One-Inch Punch }
+  - { level: 39, move: Arc Strike }
   - { level: 42, move: Thunderbolt }
-  - { level: 45, move: One-Inch Punch }
+  - { level: 45, move: Cross Chop }
   - { level: 48, move: Close Combat }
   - { level: 54, move: Thunder }
   - { level: 60, move: Giga Impact }

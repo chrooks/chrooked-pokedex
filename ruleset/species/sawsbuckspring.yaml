@@ -15,9 +15,9 @@ learnset:
   - { level: 6, move: Double Kick }
   - { level: 11, move: Play Rough }
   - { level: 16, move: Zen Headbutt }
-  - { level: 20, move: Take Down }
+  - { level: 20, move: Bail Out }
   - { level: 23, move: Agility }
-  - { level: 26, move: Bail Out }
+  - { level: 26, move: Take Down }
   - { level: 30, move: Season's End }
   - { level: 36, move: Megahorn }
   - { level: 40, move: Horn Leech }

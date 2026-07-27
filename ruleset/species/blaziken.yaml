@@ -24,12 +24,11 @@ learnset:
   - { level: 30, move: Bounce }
   - { level: 35, move: Focus Energy }
   - { level: 38, move: One-Inch Punch }
-  - { level: 38, move: Ki Blast }
   - { level: 38, move: Combust }
   - { level: 38, move: Cross Chop }
-  - { level: 40, move: Aura Sphere }
+  - { level: 38, move: Aura Sphere }
+  - { level: 40, move: Ki Blast }
   - { level: 42, move: Bulk Up }
-  - { level: 45, move: Cinder Smash }
   - { level: 45, move: Focus Blast }
   - { level: 49, move: Reversal }
   - { level: 56, move: Flare Blitz }

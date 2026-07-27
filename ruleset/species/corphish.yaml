@@ -13,16 +13,14 @@ learnset:
   - { level: 6, move: Cheap Shot }
   - { level: 8, move: Taunt }
   - { level: 12, move: Bubble Beam }
-  - { level: 14, move: Water Whip }
   - { level: 16, move: Knock Off }
   - { level: 20, move: Double Hit }
   - { level: 24, move: Protect }
   - { level: 28, move: Night Slash }
-  - { level: 30, move: Maelstrom }
   - { level: 32, move: Razor Shell }
   - { level: 36, move: Swords Dance }
-  - { level: 38, move: Backstab }
-  - { level: 40, move: Crunch }
+  - { level: 38, move: Crunch }
+  - { level: 40, move: Backstab }
   - { level: 44, move: Crabhammer }
   - { level: 48, move: Endeavor }
   - { level: 52, move: Guillotine }

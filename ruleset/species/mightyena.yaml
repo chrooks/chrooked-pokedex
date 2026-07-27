@@ -25,7 +25,6 @@ learnset:
   - { level: 30, move: Tectonic Fang }
   - { level: 30, move: Draconic Fang }
   - { level: 30, move: Metallic Fang }
-  - { level: 30, move: Lovely Bite }
   - { level: 36, move: Taunt }
   - { level: 40, move: Backstab }
   - { level: 44, move: Yawn }

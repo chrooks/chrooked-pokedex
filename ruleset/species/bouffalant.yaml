@@ -11,7 +11,6 @@ learnset:
   - { level: 15, move: Revenge }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Horn Attack }
-  - { level: 30, move: Bail Out }
   - { level: 35, move: Throat Chop }
   - { level: 37, move: Rampage }
   - { level: 40, move: Head Charge }

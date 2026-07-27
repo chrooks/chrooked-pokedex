@@ -11,7 +11,6 @@ learnset:
   - { level: 8, move: Jewel Glow }
   - { level: 15, move: Water Gun }
   - { level: 20, move: Leer }
-  - { level: 22, move: Geo Pulse }
   - { level: 25, move: Mud Shot }
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
@@ -20,7 +19,7 @@ learnset:
   - { level: 43, move: Protect }
   - { level: 49, move: Rock Blast }
   - { level: 52, move: Meteor Surge }
-  - { level: 52, move: Tsunami }
-  - { level: 56, move: Surf }
+  - { level: 52, move: Surf }
+  - { level: 56, move: Hydro Pump }
   - { level: 63, move: Shell Smash }
-  - { level: 70, move: Hydro Pump }
+  - { level: 70, move: Tsunami }

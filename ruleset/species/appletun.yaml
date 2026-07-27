@@ -17,8 +17,8 @@ learnset:
   - { level: 28, move: Bullet Seed }
   - { level: 32, move: Iron Defense }
   - { level: 36, move: Giga Drain }
-  - { level: 38, move: Cataclysm }
-  - { level: 40, move: Dragon Pulse }
+  - { level: 38, move: Dragon Pulse }
+  - { level: 40, move: Cataclysm }
   - { level: 42, move: Reap }
   - { level: 44, move: Earth Power }
   - { level: 48, move: Energy Ball }

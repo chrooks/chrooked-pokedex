@@ -13,9 +13,9 @@ learnset:
   - { level: 18, move: Shadow Punch }
   - { level: 27, move: Force Palm }
   - { level: 36, move: Assurance }
-  - { level: 40, move: One-Inch Punch }
+  - { level: 40, move: Drain Punch }
   - { level: 45, move: Sucker Punch }
-  - { level: 54, move: Drain Punch }
+  - { level: 54, move: One-Inch Punch }
   - { level: 63, move: Psych Up }
   - { level: 72, move: Spectral Thief }
   - { level: 81, move: Laser Focus }

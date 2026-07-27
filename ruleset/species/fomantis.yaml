@@ -11,8 +11,8 @@ learnset:
   - { level: 25, move: Slash }
   - { level: 30, move: X-Scissor }
   - { level: 35, move: Synthesis }
-  - { level: 37, move: Reap }
-  - { level: 40, move: Leaf Blade }
+  - { level: 37, move: Leaf Blade }
+  - { level: 40, move: Reap }
   - { level: 45, move: Sunny Day }
   - { level: 50, move: Solar Beam }
   - { level: 55, move: Pixie Slash }

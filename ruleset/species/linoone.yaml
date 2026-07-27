@@ -18,7 +18,6 @@ learnset:
   - { level: 12, move: Headbutt }
   - { level: 15, move: Hone Claws }
   - { level: 18, move: Fury Swipes }
-  - { level: 23, move: Bail Out }
   - { level: 28, move: Take Down }
   - { level: 33, move: Fling }
   - { level: 36, move: Rampage }

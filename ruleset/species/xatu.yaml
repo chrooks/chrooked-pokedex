@@ -16,8 +16,8 @@ learnset:
   - { level: 31, move: Galeburst }
   - { level: 34, move: Power Swap }
   - { level: 34, move: Guard Swap }
-  - { level: 37, move: Mindwarp }
-  - { level: 41, move: Psychic }
+  - { level: 37, move: Psychic }
+  - { level: 41, move: Mindwarp }
   - { level: 48, move: Wish }
   - { level: 55, move: Future Sight }
   - { level: 64, move: Tempest }

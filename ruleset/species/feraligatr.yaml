@@ -20,11 +20,11 @@ learnset:
   - { level: 28, move: Breaking Swipe }
   - { level: 32, move: Crunch }
   - { level: 37, move: Slash }
-  - { level: 40, move: Maelstrom }
+  - { level: 40, move: Aqua Tail }
   - { level: 44, move: Screech }
   - { level: 47, move: Dragon Hammer }
   - { level: 51, move: Thrash }
-  - { level: 55, move: Wave Crash }
-  - { level: 59, move: Aqua Tail }
+  - { level: 55, move: Maelstrom }
+  - { level: 59, move: Wave Crash }
   - { level: 65, move: Superpower }
   - { level: 70, move: Hydro Pump }

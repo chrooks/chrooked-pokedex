@@ -12,9 +12,9 @@ learnset:
   - { level: 30, move: Nasty Plot }
   - { level: 35, move: Zen Headbutt }
   - { level: 37, move: Resonance }
-  - { level: 37, move: Mindwarp }
+  - { level: 37, move: Psychic }
   - { level: 40, move: Trick Room }
-  - { level: 45, move: Psychic }
+  - { level: 45, move: Mindwarp }
   - { level: 50, move: Instruct }
   - { level: 55, move: Foul Play }
   - { level: 60, move: Future Sight }

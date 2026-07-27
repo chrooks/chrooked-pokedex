@@ -21,5 +21,4 @@ learnset:
   - { level: 44, move: Reap }
   - { level: 47, move: Wood Hammer }
   - { level: 52, move: Head Smash }
-  - { level: 64, move: Faultbreak }
 evolution: { from: Turtwig, method: { level: 18 } }

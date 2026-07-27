@@ -10,7 +10,6 @@ learnset:
   - { level: 17, move: Endure }
   - { level: 23, move: Slash }
   - { level: 27, move: Throat Chop }
-  - { level: 30, move: Bail Out }
   - { level: 33, move: Counter }
   - { level: 37, move: Focus Punch }
   - { level: 40, move: Rampage }

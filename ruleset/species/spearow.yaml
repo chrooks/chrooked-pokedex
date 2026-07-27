@@ -15,4 +15,3 @@ learnset:
   - { level: 32, move: Roost }
   - { level: 36, move: Drill Peck }
   - { level: 46, move: Nosedive }
-  - { level: 48, move: Dive Bomb }

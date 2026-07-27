@@ -22,10 +22,10 @@ learnset:
   - { level: 38, move: Sludge }
   - { level: 40, move: Recover }
   - { level: 44, move: Surf }
-  - { level: 48, move: Miasma }
+  - { level: 48, move: Venoshock }
   - { level: 52, move: Acid Armor }
-  - { level: 56, move: Sludge Wave }
+  - { level: 56, move: Miasma }
+  - { level: 60, move: Sludge Wave }
   - { level: 60, move: Hydro Pump }
-  - { level: 60, move: Venoshock }
   - { level: 64, move: Tsunami }
   - { level: 64, move: Contagion }

@@ -13,7 +13,6 @@ learnset:
   - { level: 18, move: Metal Claw }
   - { level: 24, move: Icy Wind }
   - { level: 30, move: Fury Swipes }
-  - { level: 33, move: Bail Out }
   - { level: 36, move: Hone Claws }
   - { level: 37, move: Heel Drop }
   - { level: 39, move: Glacial Crush }

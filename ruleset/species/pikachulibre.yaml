@@ -20,7 +20,7 @@ learnset:
   - { level: 28, move: Iron Tail }
   - { level: 32, move: Discharge }
   - { level: 36, move: Thunderbolt }
-  - { level: 38, move: Arc Strike }
+  - { level: 38, move: Lightning Slam }
   - { level: 40, move: Light Screen }
   - { level: 44, move: Thunder }
-  - { level: 48, move: Lightning Slam }
+  - { level: 48, move: Arc Strike }

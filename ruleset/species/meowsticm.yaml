@@ -16,9 +16,9 @@ learnset:
   - { level: 29, move: Role Play }
   - { level: 34, move: Light Screen }
   - { level: 34, move: Reflect }
-  - { level: 36, move: Mindwarp }
-  - { level: 39, move: Psyshock }
+  - { level: 36, move: Psyshock }
+  - { level: 39, move: Psychic }
   - { level: 44, move: Imprison }
   - { level: 49, move: Quick Guard }
-  - { level: 54, move: Psychic }
+  - { level: 54, move: Mindwarp }
   - { level: 59, move: Misty Terrain }

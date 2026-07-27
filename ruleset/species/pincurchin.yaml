@@ -11,10 +11,9 @@ learnset:
   - { level: 25, move: Bubble Beam }
   - { level: 30, move: Recover }
   - { level: 35, move: Curse }
-  - { level: 37, move: Lightning Slam }
-  - { level: 37, move: Arc Strike }
+  - { level: 37, move: Zing Zap }
   - { level: 40, move: Electric Terrain }
   - { level: 45, move: Poison Jab }
-  - { level: 50, move: Zing Zap }
+  - { level: 50, move: Arc Strike }
   - { level: 55, move: Acupressure }
   - { level: 60, move: Discharge }

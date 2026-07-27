@@ -19,8 +19,8 @@ learnset:
   - { level: 27, move: Chi Wave }
   - { level: 30, move: Drain Punch }
   - { level: 33, move: Ki Blast }
-  - { level: 36, move: Dynamic Punch }
-  - { level: 39, move: One-Inch Punch }
+  - { level: 36, move: One-Inch Punch }
+  - { level: 39, move: Dynamic Punch }
   - { level: 39, move: Cross Chop }
   - { level: 42, move: Hammer Arm }
   - { level: 45, move: Focus Blast }

@@ -9,7 +9,6 @@ learnset:
   - { level: 9, move: Cotton Spore }
   - { level: 13, move: Charge Beam }
   - { level: 18, move: Confuse Ray }
-  - { level: 18, move: Short Circuit }
   - { level: 22, move: Volt Switch }
   - { level: 27, move: Power Gem }
   - { level: 30, move: Discharge }

@@ -8,12 +8,12 @@ learnset:
   - { level: 7, move: Focus Energy }
   - { level: 10, move: Bite }
   - { level: 13, move: Laser Focus }
-  - { level: 16, move: Take Down }
+  - { level: 16, move: Bail Out }
   - { level: 19, move: Assurance }
   - { level: 22, move: Crunch }
   - { level: 25, move: Sucker Punch }
   - { level: 28, move: Super Fang }
-  - { level: 31, move: Double-Edge }
+  - { level: 31, move: Take Down }
   - { level: 34, move: Endeavor }
-  - { level: 37, move: Bail Out }
-  - { level: 46, move: Rampage }
+  - { level: 37, move: Rampage }
+  - { level: 46, move: Double-Edge }

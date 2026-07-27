@@ -23,8 +23,8 @@ learnset:
   - { level: 30, move: Toxic }
   - { level: 33, move: Belch }
   - { level: 36, move: Body Press }
-  - { level: 36, move: Venom Slam }
-  - { level: 39, move: Mortal Spin }
+  - { level: 36, move: Mortal Spin }
+  - { level: 39, move: Venom Slam }
   - { level: 42, move: Pain Split }
   - { level: 45, move: Gunk Shot }
   - { level: 50, move: Flash Cannon }

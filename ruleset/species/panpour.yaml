@@ -13,11 +13,11 @@ learnset:
   - { level: 14, move: Water Whip }
   - { level: 16, move: Water Sport }
   - { level: 19, move: Bite }
-  - { level: 22, move: Scald }
+  - { level: 22, move: Brine }
   - { level: 25, move: Taunt }
   - { level: 28, move: Fling }
   - { level: 31, move: Acrobatics }
-  - { level: 34, move: Brine }
+  - { level: 34, move: Scald }
   - { level: 37, move: Recycle }
   - { level: 40, move: Natural Gift }
   - { level: 43, move: Crunch }

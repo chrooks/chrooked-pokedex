@@ -12,9 +12,9 @@ learnset:
   - { level: 12, move: Brutal Swing }
   - { level: 16, move: Endure }
   - { level: 20, move: Strength }
-  - { level: 24, move: Take Down }
+  - { level: 24, move: Bail Out }
   - { level: 30, move: Flail }
-  - { level: 33, move: Bail Out }
+  - { level: 33, move: Take Down }
   - { level: 36, move: Hammer Arm }
   - { level: 39, move: One-Inch Punch }
   - { level: 39, move: Rampage }

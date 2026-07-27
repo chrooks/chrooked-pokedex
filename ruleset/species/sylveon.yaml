@@ -20,9 +20,9 @@ learnset:
   - { level: 10, move: Quick Attack }
   - { level: 15, move: Baby-Doll Eyes }
   - { level: 20, move: Swift }
-  - { level: 22, move: Beguile }
+  - { level: 22, move: Draining Kiss }
   - { level: 25, move: Light Screen }
-  - { level: 30, move: Draining Kiss }
+  - { level: 30, move: Beguile }
   - { level: 35, move: Bail Out }
   - { level: 40, move: Skill Swap }
   - { level: 42, move: Pixie Slash }

@@ -8,7 +8,6 @@ learnset:
   - { level: 5, move: Tackle }
   - { level: 10, move: Charge }
   - { level: 15, move: Thunder Shock }
-  - { level: 17, move: Short Circuit }
   - { level: 20, move: Charm }
   - { level: 22, move: Beguile }
   - { level: 25, move: Parabolic Charge }

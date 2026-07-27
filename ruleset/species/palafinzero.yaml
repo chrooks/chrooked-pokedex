@@ -10,14 +10,13 @@ learnset:
   - { level: 7, move: Astonish }
   - { level: 10, move: Focus Energy }
   - { level: 13, move: Aqua Jet }
-  - { level: 15, move: Water Whip }
   - { level: 17, move: Double Hit }
   - { level: 21, move: Dive }
   - { level: 25, move: Charm }
   - { level: 29, move: Acrobatics }
-  - { level: 31, move: Maelstrom }
+  - { level: 31, move: Aqua Tail }
   - { level: 34, move: Encore }
-  - { level: 39, move: Aqua Tail }
+  - { level: 39, move: Maelstrom }
   - { level: 44, move: Mist }
   - { level: 50, move: Hydro Pump }
   - { level: 55, move: Focus Punch }

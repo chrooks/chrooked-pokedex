@@ -10,7 +10,6 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 18, move: Bulldoze }
   - { level: 27, move: Bite }
-  - { level: 30, move: Draconic Fang }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 34, move: Slash }

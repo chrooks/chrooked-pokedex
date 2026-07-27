@@ -22,5 +22,4 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Pound }
   - { level: 1, move: Thunder Shock }
-  - { level: 35, move: Short Circuit }
   - { level: 46, move: Resonance }

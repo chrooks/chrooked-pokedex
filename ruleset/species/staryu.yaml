@@ -16,8 +16,8 @@ learnset:
   - { level: 28, move: Brine }
   - { level: 32, move: Light Screen }
   - { level: 36, move: Power Gem }
-  - { level: 38, move: Mindwarp }
-  - { level: 40, move: Psychic }
+  - { level: 38, move: Psychic }
+  - { level: 40, move: Mindwarp }
   - { level: 44, move: Surf }
   - { level: 48, move: Recover }
   - { level: 52, move: Cosmic Power }

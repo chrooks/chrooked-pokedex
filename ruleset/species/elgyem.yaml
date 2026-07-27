@@ -13,8 +13,8 @@ learnset:
   - { level: 24, move: Guard Split }
   - { level: 30, move: Headbutt }
   - { level: 36, move: Zen Headbutt }
-  - { level: 39, move: Mindwarp }
+  - { level: 39, move: Psychic }
   - { level: 43, move: Recover }
   - { level: 48, move: Calm Mind }
   - { level: 54, move: Wonder Room }
-  - { level: 60, move: Psychic }
+  - { level: 60, move: Mindwarp }

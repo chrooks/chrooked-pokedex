@@ -17,14 +17,14 @@ learnset:
   - { level: 20, move: Spikes }
   - { level: 24, move: Brine }
   - { level: 28, move: Poison Jab }
-  - { level: 30, move: Maelstrom }
+  - { level: 30, move: Aqua Tail }
   - { level: 32, move: Pin Missile }
   - { level: 36, move: Toxic Spikes }
   - { level: 38, move: Venom Slam }
   - { level: 40, move: Stockpile }
   - { level: 40, move: Spit Up }
   - { level: 44, move: Toxic }
-  - { level: 48, move: Aqua Tail }
+  - { level: 48, move: Maelstrom }
   - { level: 52, move: Acupressure }
   - { level: 56, move: Destiny Bond }
   - { level: 60, move: Wave Crash }

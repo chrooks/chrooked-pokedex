@@ -21,9 +21,9 @@ learnset:
   - { level: 33, move: Aqua Tail }
   - { level: 36, move: Dive Bomb }
   - { level: 36, move: Nosedive }
-  - { level: 39, move: Dragon Rush }
-  - { level: 41, move: Outrage }
-  - { level: 43, move: Dragon Hammer }
+  - { level: 39, move: Dragon Hammer }
+  - { level: 41, move: Dragon Rush }
+  - { level: 43, move: Outrage }
   - { level: 46, move: Safeguard }
   - { level: 53, move: Rain Dance }
   - { level: 62, move: Dragon Dance }

@@ -19,16 +19,13 @@ learnset:
   - { level: 22, move: Rock Slide }
   - { level: 25, move: Blaze Kick }
   - { level: 28, move: Cosmic Power }
-  - { level: 30, move: Zen Headbutt }
-  - { level: 33, move: Psyshield Bash }
+  - { level: 30, move: Psyshield Bash }
+  - { level: 33, move: Zen Headbutt }
   - { level: 36, move: Stone Edge }
-  - { level: 37, move: Combust }
-  - { level: 40, move: Cinder Smash }
   - { level: 44, move: Future Sight }
-  - { level: 47, move: Astral Hand }
-  - { level: 50, move: Flare Blitz }
+  - { level: 50, move: Sacred Fire }
   - { level: 54, move: Magic Room }
   - { level: 58, move: Head Smash }
   - { level: 62, move: Swords Dance }
-  - { level: 66, move: Sacred Fire }
+  - { level: 66, move: Flare Blitz }
   - { level: 70, move: Explosion }

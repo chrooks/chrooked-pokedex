@@ -16,7 +16,6 @@ learnset:
   - { level: 7, move: Horn Attack }
   - { level: 10, move: Tail Slap }
   - { level: 13, move: Aqua Cutter }
-  - { level: 16, move: Water Whip }
   - { level: 17, move: Aqua Ring }
   - { level: 19, move: Razor Shell }
   - { level: 22, move: Lovely Bite }

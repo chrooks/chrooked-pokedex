@@ -12,16 +12,15 @@ learnset:
   - { level: 12, move: Ingrain }
   - { level: 16, move: Ancient Power }
   - { level: 20, move: Mega Drain }
-  - { level: 22, move: Geo Pulse }
   - { level: 24, move: Brine }
   - { level: 28, move: Amnesia }
   - { level: 32, move: Gastro Acid }
-  - { level: 34, move: Crystal Beam }
+  - { level: 34, move: Power Gem }
   - { level: 36, move: Giga Drain }
   - { level: 38, move: Reap }
   - { level: 41, move: Stockpile }
   - { level: 41, move: Spit Up }
   - { level: 41, move: Swallow }
   - { level: 44, move: Energy Ball }
-  - { level: 48, move: Power Gem }
+  - { level: 48, move: Crystal Beam }
   - { level: 62, move: Meteor Surge }

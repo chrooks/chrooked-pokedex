@@ -16,9 +16,9 @@ learnset:
   - { level: 29, move: Role Play }
   - { level: 34, move: Light Screen }
   - { level: 34, move: Reflect }
-  - { level: 36, move: Mindwarp }
-  - { level: 39, move: Psyshock }
-  - { level: 44, move: Extrasensory }
+  - { level: 36, move: Psyshock }
+  - { level: 39, move: Extrasensory }
+  - { level: 44, move: Psychic }
   - { level: 49, move: Shadow Ball }
-  - { level: 54, move: Psychic }
+  - { level: 54, move: Mindwarp }
   - { level: 59, move: Future Sight }

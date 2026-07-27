@@ -17,16 +17,21 @@ learnset:
   - { level: 5, move: Leafage }
   - { level: 9, move: Razor Leaf }
   - { level: 12, move: Knock Off }
+  - { level: 15, move: Double Kick }
   - { level: 18, move: Sweet Scent }
+  - { level: 22, move: Stomp }
   - { level: 24, move: Magical Leaf }
   - { level: 28, move: Night Slash }
-  - { level: 32, move: Stomp }
-  - { level: 36, move: Low Sweep }
-  - { level: 38, move: Reap }
-  - { level: 40, move: Trop Kick }
-  - { level: 42, move: Jump Kick }
-  - { level: 44, move: Petal Blizzard }
+  - { level: 30, move: Rolling Kick }
+  - { level: 34, move: Low Sweep }
+  - { level: 36, move: Trop Kick }
+  - { level: 38, move: Petal Blizzard }
+  - { level: 40, move: Petal Blizzard }
+  - { level: 42, move: Heel Drop }
+  - { level: 44, move: Axe Kick }
+  - { level: 46, move: Reap }
   - { level: 48, move: Aromatherapy }
   - { level: 52, move: Power Whip }
   - { level: 56, move: High Jump Kick }
+  - { level: 60, move: Havoc }
   - { level: 62, move: Foul Play }

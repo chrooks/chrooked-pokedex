@@ -15,10 +15,10 @@ learnset:
   - { level: 20, move: Synthesis }
   - { level: 22, move: Take Down }
   - { level: 26, move: Bulldoze }
-  - { level: 30, move: Seed Bomb }
+  - { level: 30, move: Horn Leech }
   - { level: 34, move: Bulk Up }
-  - { level: 36, move: Reap }
+  - { level: 36, move: Seed Bomb }
   - { level: 38, move: Double-Edge }
-  - { level: 42, move: Horn Leech }
-  - { level: 45, move: Leaf Blade }
+  - { level: 42, move: Leaf Blade }
+  - { level: 45, move: Reap }
   - { level: 48, move: Milk Drink }

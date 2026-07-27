@@ -10,12 +10,11 @@ learnset:
   - { level: 1, move: Bite }
   - { level: 12, move: Incinerate }
   - { level: 16, move: Work Up }
-  - { level: 20, move: Fire Fang }
+  - { level: 20, move: Fire Punch }
   - { level: 24, move: Headbutt }
-  - { level: 28, move: Fire Punch }
+  - { level: 28, move: Fire Fang }
   - { level: 32, move: Uproar }
   - { level: 38, move: Belly Drum }
-  - { level: 41, move: Cinder Smash }
   - { level: 41, move: Combust }
   - { level: 44, move: Flare Blitz }
   - { level: 50, move: Thrash }

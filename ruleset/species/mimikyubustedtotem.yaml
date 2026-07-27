@@ -15,11 +15,11 @@ learnset:
   - { level: 30, move: Hone Claws }
   - { level: 36, move: Slash }
   - { level: 39, move: Wraithstrike }
-  - { level: 39, move: Interment }
-  - { level: 39, move: Starfall Slam }
-  - { level: 42, move: Shadow Claw }
+  - { level: 39, move: Shadow Claw }
+  - { level: 39, move: Play Rough }
+  - { level: 42, move: Interment }
   - { level: 48, move: Charm }
   - { level: 51, move: Necrosis }
-  - { level: 54, move: Play Rough }
+  - { level: 54, move: Starfall Slam }
   - { level: 60, move: Pain Split }
   - { level: 64, move: Faeblitz }

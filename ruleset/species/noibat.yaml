@@ -16,8 +16,8 @@ learnset:
   - { level: 22, move: Dragon Breath }
   - { level: 26, move: Air Cutter }
   - { level: 28, move: Snarl }
-  - { level: 30, move: Galeburst }
-  - { level: 32, move: Air Slash }
+  - { level: 30, move: Air Slash }
+  - { level: 32, move: Galeburst }
   - { level: 36, move: Dive Bomb }
   - { level: 38, move: Dragon Pulse }
   - { level: 38, move: Cataclysm }

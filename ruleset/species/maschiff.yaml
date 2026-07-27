@@ -15,9 +15,8 @@ learnset:
   - { level: 26, move: Payback }
   - { level: 31, move: Crunch }
   - { level: 35, move: Swagger }
-  - { level: 37, move: Backstab }
+  - { level: 37, move: Jaw Lock }
   - { level: 39, move: Reversal }
-  - { level: 43, move: Jaw Lock }
-  - { level: 46, move: Heel Drop }
+  - { level: 43, move: Backstab }
   - { level: 49, move: Double-Edge }
   - { level: 60, move: Havoc }

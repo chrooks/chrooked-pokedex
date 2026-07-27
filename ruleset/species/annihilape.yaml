@@ -17,14 +17,14 @@ learnset:
   - { level: 8, move: Low Kick }
   - { level: 12, move: Seismic Toss }
   - { level: 17, move: Swagger }
-  - { level: 22, move: Cross Chop }
+  - { level: 22, move: One-Inch Punch }
   - { level: 26, move: Assurance }
   - { level: 30, move: Thrash }
   - { level: 35, move: Rage Fist }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 37, move: Interment }
+  - { level: 37, move: Cross Chop }
+  - { level: 37, move: Wraithstrike }
   - { level: 39, move: Close Combat }
-  - { level: 41, move: Wraithstrike }
+  - { level: 41, move: Interment }
   - { level: 44, move: Screech }
   - { level: 48, move: Stomping Tantrum }
   - { level: 53, move: Outrage }

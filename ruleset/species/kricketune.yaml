@@ -11,14 +11,14 @@ learnset:
   - { level: 1, move: Bide }
   - { level: 1, move: Aerial Ace }
   - { level: 10, move: Double Kick }
-  - { level: 14, move: Leech Life }
+  - { level: 14, move: Bug Bite }
   - { level: 18, move: Karate Chop }
   - { level: 20, move: Force Palm }
   - { level: 22, move: Reversal }
   - { level: 25, move: Cut }
   - { level: 26, move: Slash }
-  - { level: 30, move: X-Scissor }
-  - { level: 32, move: Bug Bite }
+  - { level: 30, move: Leech Life }
+  - { level: 32, move: X-Scissor }
   - { level: 33, move: Dragon Dance }
   - { level: 34, move: Arm Thrust }
   - { level: 38, move: Swords Dance }

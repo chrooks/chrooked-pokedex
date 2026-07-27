@@ -13,8 +13,8 @@ learnset:
   - { level: 30, move: Metal Sound }
   - { level: 35, move: Slash }
   - { level: 37, move: Heel Drop }
-  - { level: 37, move: Backstab }
-  - { level: 40, move: Night Slash }
+  - { level: 37, move: Night Slash }
+  - { level: 40, move: Backstab }
   - { level: 42, move: Pixie Slash }
   - { level: 45, move: Iron Defense }
   - { level: 48, move: Havoc }

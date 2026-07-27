@@ -9,7 +9,6 @@ learnset:
   - { level: 17, move: Aerial Ace }
   - { level: 20, move: Fury Swipes }
   - { level: 25, move: Charm }
-  - { level: 29, move: Bail Out }
   - { level: 32, move: Retaliate }
   - { level: 37, move: Slash }
   - { level: 39, move: Rampage }

@@ -13,10 +13,10 @@ learnset:
   - { level: 28, move: Signal Beam }
   - { level: 28, move: Beguile }
   - { level: 32, move: Covet }
-  - { level: 36, move: Antennae Blast }
+  - { level: 36, move: Bug Buzz }
   - { level: 40, move: Switcheroo }
   - { level: 48, move: Dazzling Gleam }
-  - { level: 52, move: Drone Chorus }
+  - { level: 52, move: Antennae Blast }
   - { level: 52, move: Rapture }
-  - { level: 56, move: Bug Buzz }
+  - { level: 56, move: Drone Chorus }
   - { level: 64, move: Quiver Dance }

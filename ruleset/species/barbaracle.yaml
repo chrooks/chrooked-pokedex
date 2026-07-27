@@ -10,7 +10,6 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 6, move: Undertow }
   - { level: 12, move: Fury Cutter }
-  - { level: 14, move: Water Whip }
   - { level: 16, move: Fury Swipes }
   - { level: 20, move: Ancient Power }
   - { level: 24, move: Rock Polish }

@@ -12,5 +12,5 @@ learnset:
   - { level: 24, move: Synthesis }
   - { level: 28, move: Hyper Voice }
   - { level: 32, move: Aromatherapy }
-  - { level: 36, move: Leaf Storm }
-  - { level: 46, move: Siphon }
+  - { level: 36, move: Siphon }
+  - { level: 46, move: Leaf Storm }

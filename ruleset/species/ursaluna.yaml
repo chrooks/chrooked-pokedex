@@ -18,18 +18,17 @@ learnset:
   - { level: 25, move: Payback }
   - { level: 30, move: Facade }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 30, move: Stomping Tantrum }
   - { level: 34, move: Bulk Up }
   - { level: 38, move: Crunch }
   - { level: 38, move: Quagmire }
-  - { level: 38, move: Rampage }
+  - { level: 38, move: Body Slam }
   - { level: 42, move: Rest }
-  - { level: 46, move: High Horsepower }
-  - { level: 50, move: Body Slam }
-  - { level: 52, move: Faultbreak }
-  - { level: 55, move: Earthquake }
+  - { level: 46, move: Tectonic Fang }
+  - { level: 50, move: Rampage }
+  - { level: 55, move: High Horsepower }
   - { level: 60, move: Hammer Arm }
   - { level: 60, move: Sinkhole }
   - { level: 65, move: Double-Edge }
-  - { level: 70, move: Stomping Tantrum }
+  - { level: 70, move: Earthquake }
 evolution: { from: Ursaring, method: { item: Peat Block } }

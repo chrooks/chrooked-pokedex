@@ -21,12 +21,11 @@ learnset:
   - { level: 30, move: Foul Play }
   - { level: 30, move: Galeburst }
   - { level: 35, move: Tailwind }
-  - { level: 40, move: Backstab }
   - { level: 40, move: Nosedive }
-  - { level: 42, move: Dive Bomb }
-  - { level: 50, move: Kowtow Cleave }
-  - { level: 50, move: Havoc }
-  - { level: 58, move: Throat Chop }
+  - { level: 40, move: Kowtow Cleave }
+  - { level: 50, move: Backstab }
+  - { level: 50, move: Throat Chop }
+  - { level: 58, move: Havoc }
   - { level: 60, move: Tempest }
   - { level: 65, move: Comeuppance }
   - { level: 75, move: Brave Bird }

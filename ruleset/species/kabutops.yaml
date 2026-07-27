@@ -18,11 +18,11 @@ learnset:
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
   - { level: 39, move: Pixie Slash }
-  - { level: 39, move: Maelstrom }
+  - { level: 39, move: Liquidation }
   - { level: 43, move: Protect }
+  - { level: 46, move: Maelstrom }
   - { level: 46, move: Secret Sword }
-  - { level: 46, move: Wave Crash }
   - { level: 49, move: Leech Life }
-  - { level: 56, move: Liquidation }
+  - { level: 56, move: Wave Crash }
   - { level: 63, move: Metal Sound }
   - { level: 70, move: Stone Edge }

@@ -14,8 +14,8 @@ learnset:
   - { level: 28, move: Hone Claws }
   - { level: 34, move: Sucker Punch }
   - { level: 37, move: Heel Drop }
-  - { level: 37, move: Backstab }
+  - { level: 37, move: Night Slash }
   - { level: 40, move: Nasty Plot }
-  - { level: 46, move: Night Slash }
+  - { level: 46, move: Backstab }
   - { level: 52, move: Play Rough }
   - { level: 60, move: Havoc }

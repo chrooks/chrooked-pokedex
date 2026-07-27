@@ -10,11 +10,10 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Focus Energy }
-  - { level: 2, move: Cheap Shot }
   - { level: 4, move: Quick Attack }
   - { level: 7, move: Focus Energy }
-  - { level: 10, move: Bite }
-  - { level: 13, move: Pursuit }
+  - { level: 10, move: Pursuit }
+  - { level: 13, move: Bite }
   - { level: 16, move: Hyper Fang }
   - { level: 19, move: Assurance }
   - { level: 24, move: Crunch }
@@ -24,6 +23,5 @@ learnset:
   - { level: 36, move: Rampage }
   - { level: 39, move: Double-Edge }
   - { level: 44, move: Endeavor }
-  - { level: 48, move: Heel Drop }
   - { level: 60, move: Havoc }
 evolution: { from: Rattata Alola, method: { level: 20 } }

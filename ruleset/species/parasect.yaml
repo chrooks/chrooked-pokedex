@@ -19,8 +19,8 @@ learnset:
   - { level: 29, move: Slash }
   - { level: 37, move: Growth }
   - { level: 40, move: Wraithstrike }
-  - { level: 40, move: Moltstrike }
+  - { level: 40, move: X-Scissor }
   - { level: 44, move: Giga Drain }
   - { level: 51, move: Aromatherapy }
   - { level: 59, move: Rage Powder }
-  - { level: 66, move: X-Scissor }
+  - { level: 66, move: Moltstrike }

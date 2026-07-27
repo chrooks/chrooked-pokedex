@@ -14,6 +14,5 @@ learnset:
   - { level: 27, move: Take Down }
   - { level: 30, move: Work Up }
   - { level: 32, move: Uproar }
-  - { level: 35, move: Double-Edge }
-  - { level: 38, move: Bail Out }
-  - { level: 46, move: Rampage }
+  - { level: 35, move: Rampage }
+  - { level: 46, move: Double-Edge }

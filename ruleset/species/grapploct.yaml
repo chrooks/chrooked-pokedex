@@ -14,7 +14,6 @@ learnset:
   - { level: 25, move: Bulk Up }
   - { level: 30, move: Submission }
   - { level: 35, move: Taunt }
-  - { level: 37, move: One-Inch Punch }
   - { level: 37, move: Cross Chop }
   - { level: 40, move: Reversal }
   - { level: 45, move: Superpower }

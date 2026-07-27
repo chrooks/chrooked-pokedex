@@ -11,15 +11,14 @@ learnset:
   - { level: 7, move: Water Gun }
   - { level: 11, move: Soak }
   - { level: 13, move: Focus Energy }
-  - { level: 15, move: Water Whip }
   - { level: 17, move: Razor Shell }
   - { level: 19, move: Fury Cutter }
   - { level: 23, move: Water Pulse }
   - { level: 25, move: Aerial Ace }
   - { level: 29, move: Aqua Jet }
   - { level: 31, move: Encore }
-  - { level: 33, move: Maelstrom }
-  - { level: 35, move: Aqua Tail }
+  - { level: 33, move: Aqua Tail }
+  - { level: 35, move: Maelstrom }
   - { level: 37, move: Retaliate }
   - { level: 39, move: Backstab }
   - { level: 41, move: Swords Dance }

@@ -13,8 +13,8 @@ learnset:
   - { level: 20, move: Dive }
   - { level: 24, move: Soak }
   - { level: 28, move: Uproar }
-  - { level: 30, move: Maelstrom }
-  - { level: 32, move: Aqua Tail }
+  - { level: 30, move: Aqua Tail }
+  - { level: 32, move: Maelstrom }
   - { level: 36, move: Aqua Ring }
   - { level: 40, move: Endeavor }
   - { level: 44, move: Hydro Pump }

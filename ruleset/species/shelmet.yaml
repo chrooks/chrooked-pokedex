@@ -14,8 +14,8 @@ learnset:
   - { level: 28, move: Giga Drain }
   - { level: 32, move: Guard Swap }
   - { level: 36, move: Body Slam }
-  - { level: 38, move: Antennae Blast }
+  - { level: 38, move: Bug Buzz }
   - { level: 40, move: Recover }
-  - { level: 44, move: Bug Buzz }
+  - { level: 44, move: Antennae Blast }
   - { level: 48, move: Final Gambit }
   - { level: 60, move: Drone Chorus }

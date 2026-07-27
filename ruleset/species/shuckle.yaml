@@ -18,10 +18,10 @@ learnset:
   - { level: 35, move: Power Split }
   - { level: 35, move: Guard Split }
   - { level: 37, move: Antennae Blast }
-  - { level: 37, move: Crystal Beam }
   - { level: 37, move: Moltstrike }
+  - { level: 37, move: Power Gem }
   - { level: 40, move: Rock Slide }
-  - { level: 42, move: Power Gem }
+  - { level: 42, move: Crystal Beam }
   - { level: 45, move: Gastro Acid }
   - { level: 48, move: Drone Chorus }
   - { level: 48, move: Meteor Surge }

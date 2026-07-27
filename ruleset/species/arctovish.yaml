@@ -11,14 +11,13 @@ learnset:
   - { level: 17, move: Water Whip }
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Bite }
-  - { level: 31, move: Maelstrom }
+  - { level: 31, move: Fishious Rend }
   - { level: 35, move: Aurora Veil }
-  - { level: 38, move: Glacial Crush }
   - { level: 42, move: Freeze-Dry }
-  - { level: 45, move: Wave Crash }
+  - { level: 45, move: Maelstrom }
   - { level: 49, move: Super Fang }
-  - { level: 52, move: Icebreaker }
+  - { level: 52, move: Icicle Crash }
   - { level: 56, move: Crunch }
-  - { level: 63, move: Fishious Rend }
-  - { level: 70, move: Icicle Crash }
+  - { level: 63, move: Wave Crash }
+  - { level: 70, move: Icebreaker }
   - { level: 77, move: Blizzard }

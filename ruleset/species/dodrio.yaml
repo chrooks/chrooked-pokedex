@@ -20,7 +20,6 @@ learnset:
   - { level: 34, move: Swords Dance }
   - { level: 38, move: Drill Peck }
   - { level: 43, move: Endeavor }
-  - { level: 46, move: Dive Bomb }
   - { level: 46, move: Rampage }
   - { level: 46, move: Nosedive }
   - { level: 50, move: Thrash }

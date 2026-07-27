@@ -14,8 +14,8 @@ learnset:
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
   - { level: 28, move: Counter }
-  - { level: 31, move: Maelstrom }
+  - { level: 31, move: Liquidation }
   - { level: 35, move: Jaw Lock }
-  - { level: 42, move: Liquidation }
+  - { level: 42, move: Maelstrom }
   - { level: 49, move: Body Slam }
   - { level: 60, move: Wave Crash }

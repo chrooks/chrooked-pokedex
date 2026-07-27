@@ -16,8 +16,8 @@ learnset:
   - { level: 25, move: Bite }
   - { level: 30, move: Copycat }
   - { level: 35, move: Baton Pass }
-  - { level: 37, move: Rampage }
-  - { level: 40, move: Take Down }
+  - { level: 37, move: Take Down }
+  - { level: 40, move: Rampage }
   - { level: 45, move: Charm }
   - { level: 50, move: Double-Edge }
   - { level: 55, move: Last Resort }

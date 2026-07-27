@@ -14,10 +14,9 @@ learnset:
   - { level: 27, move: Bite }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Draconic Fang }
   - { level: 34, move: Slash }
-  - { level: 38, move: Dragon Hammer }
-  - { level: 42, move: Dragon Claw }
+  - { level: 38, move: Dragon Claw }
+  - { level: 42, move: Dragon Hammer }
   - { level: 47, move: Pixie Slash }
   - { level: 52, move: Dig }
   - { level: 57, move: Faultbreak }

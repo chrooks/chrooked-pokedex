@@ -22,7 +22,6 @@ learnset:
   - { level: 28, move: Aurora Beam }
   - { level: 35, move: Encore }
   - { level: 40, move: Body Slam }
-  - { level: 44, move: Glacial Crush }
   - { level: 48, move: Surf }
   - { level: 56, move: Blizzard }
   - { level: 64, move: Hail }

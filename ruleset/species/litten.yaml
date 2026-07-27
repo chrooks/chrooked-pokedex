@@ -16,10 +16,9 @@ learnset:
   - { level: 27, move: Swagger }
   - { level: 30, move: Flamethrower }
   - { level: 33, move: Thrash }
-  - { level: 36, move: Flare Blitz }
-  - { level: 39, move: Cinder Smash }
+  - { level: 36, move: Combust }
   - { level: 42, move: One-Inch Punch }
-  - { level: 45, move: Backstab }
-  - { level: 46, move: Combust }
-  - { level: 48, move: Heel Drop }
+  - { level: 45, move: Heel Drop }
+  - { level: 46, move: Flare Blitz }
+  - { level: 48, move: Backstab }
   - { level: 60, move: Havoc }

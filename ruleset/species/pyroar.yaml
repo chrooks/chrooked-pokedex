@@ -20,7 +20,7 @@ learnset:
   - { level: 33, move: Echoed Voice }
   - { level: 38, move: Flamethrower }
   - { level: 42, move: Crunch }
-  - { level: 45, move: Resonance }
-  - { level: 48, move: Hyper Voice }
+  - { level: 45, move: Hyper Voice }
+  - { level: 48, move: Resonance }
   - { level: 51, move: Incinerate }
   - { level: 57, move: Overheat }

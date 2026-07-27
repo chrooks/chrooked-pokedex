@@ -14,7 +14,6 @@ learnset:
   - { level: 21, move: Headbutt }
   - { level: 24, move: Zen Headbutt }
   - { level: 27, move: Amnesia }
-  - { level: 29, move: Astral Hand }
   - { level: 30, move: Surf }
   - { level: 33, move: Slack Off }
   - { level: 36, move: Psychic }

@@ -13,7 +13,6 @@ learnset:
   - { level: 15, move: Headbutt }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Crunch }
-  - { level: 25, move: Draconic Fang }
   - { level: 28, move: Breaking Swipe }
   - { level: 31, move: Dragon Claw }
   - { level: 35, move: Zen Headbutt }

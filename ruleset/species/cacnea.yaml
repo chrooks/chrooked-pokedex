@@ -4,7 +4,6 @@ aka: { dex: 331 }
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Leer }
-  - { level: 2, move: Cheap Shot }
   - { level: 4, move: Absorb }
   - { level: 6, move: Slander }
   - { level: 7, move: Growth }

@@ -7,7 +7,6 @@ learnset:
   - { level: 5, move: Thunder Shock }
   - { level: 10, move: Confuse Ray }
   - { level: 15, move: Charge }
-  - { level: 17, move: Short Circuit }
   - { level: 20, move: Electro Ball }
   - { level: 25, move: Thunder Wave }
   - { level: 30, move: Shock Wave }

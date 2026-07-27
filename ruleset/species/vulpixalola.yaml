@@ -9,13 +9,13 @@ learnset:
   - { level: 12, move: Icy Wind }
   - { level: 16, move: Confuse Ray }
   - { level: 20, move: Aurora Beam }
-  - { level: 22, move: Beguile }
-  - { level: 24, move: Disarming Voice }
+  - { level: 22, move: Disarming Voice }
+  - { level: 24, move: Draining Kiss }
   - { level: 28, move: Extrasensory }
-  - { level: 32, move: Ice Beam }
+  - { level: 32, move: Freeze-Dry }
   - { level: 36, move: Aurora Veil }
-  - { level: 40, move: Freeze-Dry }
-  - { level: 44, move: Draining Kiss }
+  - { level: 40, move: Ice Beam }
+  - { level: 44, move: Beguile }
   - { level: 48, move: Blizzard }
   - { level: 64, move: Cryoblast }
   - { level: 64, move: Rapture }
