@@ -24,7 +24,7 @@ learnset:
   - { level: 56, move: Reversal }
   - { level: 57, move: Psycrush }
   - { level: 63, move: Searing Shot }
+  - { level: 67, move: Final Gambit }
+  - { level: 68, move: Overheat }
+  - { level: 69, move: Flare Blitz }
   - { level: 70, move: Double-Edge }
-  - { level: 70, move: Flare Blitz }
-  - { level: 70, move: Overheat }
-  - { level: 70, move: Final Gambit }

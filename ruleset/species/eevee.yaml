@@ -27,6 +27,6 @@ learnset:
   - { level: 50, move: Double-Edge }
   - { level: 55, move: Last Resort }
   - { level: 60, move: Havoc }
+  - { level: 63, move: Rapture }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Cryoblast }
-  - { level: 64, move: Rapture }
+  - { level: 65, move: Cryoblast }

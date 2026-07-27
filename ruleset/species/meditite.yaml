@@ -27,9 +27,9 @@ learnset:
   - { level: 39, move: Reversal }
   - { level: 41, move: Recover }
   - { level: 44, move: Counter }
+  - { level: 45, move: Cross Chop }
   - { level: 46, move: Ki Blast }
-  - { level: 46, move: Kinetic Slam }
-  - { level: 46, move: Cross Chop }
+  - { level: 47, move: Kinetic Slam }
   - { level: 48, move: High Jump Kick }
   - { level: 62, move: Focus Blast }
-  - { level: 62, move: Psycrush }
+  - { level: 63, move: Psycrush }

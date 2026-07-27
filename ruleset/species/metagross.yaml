@@ -27,5 +27,5 @@ learnset:
   - { level: 52, move: Iron Tail }
   - { level: 57, move: Excalibur }
   - { level: 62, move: Iron Defense }
+  - { level: 69, move: Hyper Beam }
   - { level: 70, move: Agility }
-  - { level: 70, move: Hyper Beam }

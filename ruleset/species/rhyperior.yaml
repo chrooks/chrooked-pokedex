@@ -17,7 +17,7 @@ learnset:
   - { level: 20, move: Scary Face }
   - { level: 25, move: Stomp }
   - { level: 30, move: Rock Blast }
-  - { level: 30, move: Lithic Fang }
+  - { level: 31, move: Lithic Fang }
   - { level: 35, move: Drill Run }
   - { level: 40, move: Take Down }
   - { level: 47, move: Earthquake }

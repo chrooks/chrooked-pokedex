@@ -21,7 +21,7 @@ learnset:
   - { level: 24, move: Crunch }
   - { level: 27, move: Dragon Dance }
   - { level: 30, move: Dragon Claw }
-  - { level: 30, move: Metal Claw }
+  - { level: 31, move: Metal Claw }
   - { level: 33, move: Focus Energy }
   - { level: 37, move: Psycho Cut }
   - { level: 39, move: Dragon Hammer }

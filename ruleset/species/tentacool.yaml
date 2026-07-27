@@ -26,6 +26,6 @@ learnset:
   - { level: 52, move: Acid Armor }
   - { level: 56, move: Miasma }
   - { level: 60, move: Sludge Wave }
-  - { level: 60, move: Hydro Pump }
+  - { level: 61, move: Hydro Pump }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Contagion }
+  - { level: 65, move: Contagion }

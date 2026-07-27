@@ -14,7 +14,7 @@ learnset:
   - { level: 20, move: Mist }
   - { level: 24, move: Aurora Beam }
   - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 26, move: Tectonic Fang }
   - { level: 28, move: Thunder Wave }
   - { level: 32, move: Nature Power }
   - { level: 34, move: Power Gem }

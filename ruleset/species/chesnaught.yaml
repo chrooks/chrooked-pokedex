@@ -19,7 +19,7 @@ learnset:
   - { level: 29, move: Take Down }
   - { level: 35, move: Seed Bomb }
   - { level: 38, move: One-Inch Punch }
-  - { level: 38, move: Cross Chop }
+  - { level: 39, move: Cross Chop }
   - { level: 41, move: Mud Shot }
   - { level: 44, move: Reap }
   - { level: 48, move: Bulk Up }

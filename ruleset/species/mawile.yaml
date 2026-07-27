@@ -8,9 +8,9 @@ learnset:
   - { level: 4, move: Fairy Wind }
   - { level: 8, move: Baton Pass }
   - { level: 12, move: Bite }
+  - { level: 15, move: Spit Up }
   - { level: 16, move: Stockpile }
-  - { level: 16, move: Swallow }
-  - { level: 16, move: Spit Up }
+  - { level: 17, move: Swallow }
   - { level: 20, move: Sucker Punch }
   - { level: 24, move: Iron Defense }
   - { level: 28, move: Crunch }

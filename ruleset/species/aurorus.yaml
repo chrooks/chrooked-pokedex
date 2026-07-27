@@ -15,11 +15,11 @@ learnset:
   - { level: 24, move: Aurora Beam }
   - { level: 28, move: Thunder Wave }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 31, move: Tectonic Fang }
   - { level: 32, move: Nature Power }
   - { level: 36, move: Freeze-Dry }
   - { level: 39, move: Power Gem }
-  - { level: 39, move: Crystal Beam }
+  - { level: 40, move: Crystal Beam }
   - { level: 42, move: Ice Beam }
   - { level: 48, move: Light Screen }
   - { level: 51, move: Meteor Surge }

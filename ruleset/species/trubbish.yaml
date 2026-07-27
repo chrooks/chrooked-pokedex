@@ -18,7 +18,7 @@ learnset:
   - { level: 17, move: Smart Strike }
   - { level: 18, move: Sludge }
   - { level: 21, move: Stockpile }
-  - { level: 21, move: Swallow }
+  - { level: 22, move: Swallow }
   - { level: 24, move: Iron Defense }
   - { level: 27, move: Sludge Bomb }
   - { level: 29, move: Cross Poison }

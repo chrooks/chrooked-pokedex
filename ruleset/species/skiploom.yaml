@@ -12,9 +12,9 @@ learnset:
   - { level: 3, move: Peck }
   - { level: 8, move: Tackle }
   - { level: 10, move: Fairy Wind }
+  - { level: 11, move: Sleep Powder }
   - { level: 12, move: Poison Powder }
-  - { level: 12, move: Stun Spore }
-  - { level: 12, move: Sleep Powder }
+  - { level: 13, move: Stun Spore }
   - { level: 15, move: Bullet Seed }
   - { level: 16, move: Razor Leaf }
   - { level: 20, move: Leech Seed }
@@ -25,7 +25,7 @@ learnset:
   - { level: 34, move: U-turn }
   - { level: 37, move: Giga Drain }
   - { level: 39, move: Galeburst }
-  - { level: 39, move: Dive Bomb }
+  - { level: 40, move: Dive Bomb }
   - { level: 41, move: Bounce }
   - { level: 44, move: Memento }
   - { level: 46, move: Reap }

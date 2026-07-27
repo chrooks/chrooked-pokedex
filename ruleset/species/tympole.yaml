@@ -18,11 +18,11 @@ learnset:
   - { level: 25, move: Mud Bomb }
   - { level: 29, move: Aqua Tail }
   - { level: 30, move: Round }
-  - { level: 30, move: Maelstrom }
+  - { level: 31, move: Maelstrom }
   - { level: 34, move: Muddy Water }
   - { level: 38, move: Quagmire }
   - { level: 40, move: Hydro Pump }
   - { level: 60, move: Wave Crash }
   - { level: 62, move: Sinkhole }
   - { level: 64, move: Faultbreak }
-  - { level: 64, move: Tsunami }
+  - { level: 65, move: Tsunami }

@@ -19,10 +19,10 @@ learnset:
   - { level: 29, move: Extrasensory }
   - { level: 35, move: Lunge }
   - { level: 37, move: Bug Buzz }
-  - { level: 37, move: Psychic }
+  - { level: 38, move: Psychic }
+  - { level: 39, move: Guard Swap }
   - { level: 40, move: Speed Swap }
-  - { level: 40, move: Power Swap }
-  - { level: 40, move: Guard Swap }
+  - { level: 41, move: Power Swap }
   - { level: 45, move: Antennae Blast }
   - { level: 50, move: Mindwarp }
   - { level: 57, move: Future Sight }

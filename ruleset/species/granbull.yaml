@@ -27,7 +27,7 @@ learnset:
   - { level: 29, move: Tectonic Fang }
   - { level: 35, move: Last Resort }
   - { level: 39, move: Crunch }
-  - { level: 39, move: Play Rough }
+  - { level: 40, move: Play Rough }
   - { level: 43, move: Starfall Slam }
   - { level: 44, move: Earthquake }
   - { level: 51, move: Payback }

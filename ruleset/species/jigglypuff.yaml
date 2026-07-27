@@ -15,9 +15,9 @@ learnset:
   - { level: 5, move: Disarming Voice }
   - { level: 6, move: Pound }
   - { level: 8, move: Covet }
+  - { level: 11, move: Swallow }
   - { level: 12, move: Glitter Tap }
-  - { level: 12, move: Spit Up }
-  - { level: 12, move: Swallow }
+  - { level: 13, move: Spit Up }
   - { level: 15, move: Bail Out }
   - { level: 16, move: Round }
   - { level: 17, move: Cutsie Slap }

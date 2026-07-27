@@ -15,7 +15,7 @@ learnset:
   - { level: 24, move: Sucker Punch }
   - { level: 29, move: Role Play }
   - { level: 34, move: Light Screen }
-  - { level: 34, move: Reflect }
+  - { level: 35, move: Reflect }
   - { level: 36, move: Psyshock }
   - { level: 39, move: Extrasensory }
   - { level: 44, move: Psychic }

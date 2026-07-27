@@ -25,8 +25,8 @@ learnset:
   - { level: 42, move: Ally Switch }
   - { level: 43, move: Fire Blast }
   - { level: 45, move: Cinder Smash }
-  - { level: 45, move: Combust }
-  - { level: 46, move: Expanding Force }
+  - { level: 46, move: Combust }
+  - { level: 47, move: Expanding Force }
   - { level: 48, move: Flamethrower }
   - { level: 56, move: Mindwarp }
   - { level: 57, move: Future Sight }

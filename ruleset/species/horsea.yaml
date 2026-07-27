@@ -23,5 +23,5 @@ learnset:
   - { level: 50, move: Dragon Dance }
   - { level: 55, move: Rain Dance }
   - { level: 60, move: Wave Crash }
-  - { level: 60, move: Draco Meteor }
+  - { level: 61, move: Draco Meteor }
   - { level: 64, move: Tsunami }

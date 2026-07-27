@@ -16,16 +16,16 @@ learnset:
   - { level: 4, move: Screech }
   - { level: 5, move: Quick Attack }
   - { level: 6, move: Glint }
-  - { level: 6, move: Aura Spark }
-  - { level: 7, move: Final Gambit }
-  - { level: 8, move: Life Dew }
-  - { level: 9, move: Rock Smash }
-  - { level: 10, move: Metal Claw }
+  - { level: 7, move: Aura Spark }
+  - { level: 8, move: Final Gambit }
+  - { level: 9, move: Life Dew }
+  - { level: 10, move: Rock Smash }
+  - { level: 11, move: Metal Claw }
   - { level: 12, move: Counter }
   - { level: 15, move: Smart Strike }
   - { level: 16, move: Work Up }
   - { level: 18, move: Mirror Shot }
-  - { level: 18, move: Chi Wave }
+  - { level: 19, move: Chi Wave }
   - { level: 20, move: Force Palm }
   - { level: 24, move: Calm Mind }
   - { level: 28, move: Metal Sound }
@@ -34,7 +34,7 @@ learnset:
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Bone Rush }
   - { level: 38, move: Luster Cannon }
-  - { level: 38, move: Cross Chop }
+  - { level: 39, move: Cross Chop }
   - { level: 40, move: Swords Dance }
   - { level: 43, move: Meteor Mash }
   - { level: 44, move: Heal Pulse }

@@ -15,8 +15,8 @@ learnset:
   - { level: 35, move: Sucker Punch }
   - { level: 36, move: Leaf Blade }
   - { level: 37, move: One-Inch Punch }
-  - { level: 37, move: Cross Chop }
-  - { level: 37, move: Wraithstrike }
+  - { level: 38, move: Cross Chop }
+  - { level: 39, move: Wraithstrike }
   - { level: 40, move: Reap }
   - { level: 42, move: Dive Bomb }
   - { level: 43, move: Nosedive }

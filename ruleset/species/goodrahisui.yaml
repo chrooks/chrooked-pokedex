@@ -21,12 +21,12 @@ learnset:
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
   - { level: 39, move: Luster Cannon }
-  - { level: 39, move: Cataclysm }
+  - { level: 40, move: Cataclysm }
   - { level: 43, move: Curse }
   - { level: 49, move: Iron Head }
-  - { level: 49, move: Body Slam }
+  - { level: 50, move: Body Slam }
   - { level: 53, move: Steel Beam }
-  - { level: 53, move: Draco Meteor }
+  - { level: 54, move: Draco Meteor }
   - { level: 58, move: Muddy Water }
   - { level: 67, move: Heavy Slam }
 evolution: { from: Sliggoo Hisui, method: { level: 45 } }

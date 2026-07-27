@@ -23,4 +23,4 @@ learnset:
   - { level: 49, move: Thrash }
   - { level: 56, move: Hydro Pump }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

@@ -20,7 +20,7 @@ learnset:
   - { level: 29, move: Sucker Punch }
   - { level: 34, move: Super Fang }
   - { level: 36, move: Backstab }
-  - { level: 36, move: Rampage }
+  - { level: 37, move: Rampage }
   - { level: 39, move: Double-Edge }
   - { level: 44, move: Endeavor }
   - { level: 60, move: Havoc }

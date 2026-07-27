@@ -18,7 +18,7 @@ learnset:
   - { level: 32, move: Swords Dance }
   - { level: 36, move: Body Slam }
   - { level: 38, move: Combust }
-  - { level: 38, move: Wraithstrike }
+  - { level: 39, move: Wraithstrike }
   - { level: 40, move: Bonemerang }
   - { level: 42, move: Interment }
   - { level: 44, move: Earthquake }

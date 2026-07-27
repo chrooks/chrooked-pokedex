@@ -22,4 +22,4 @@ learnset:
   - { level: 57, move: Zap Cannon }
   - { level: 58, move: Hurricane }
   - { level: 64, move: Oblivion Wing }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

@@ -16,9 +16,9 @@ learnset:
   - { level: 9, move: Leech Seed }
   - { level: 12, move: Razor Leaf }
   - { level: 15, move: Sleep Powder }
-  - { level: 15, move: Poison Powder }
-  - { level: 16, move: Energy Ball }
-  - { level: 17, move: Venoshock }
+  - { level: 16, move: Poison Powder }
+  - { level: 17, move: Energy Ball }
+  - { level: 18, move: Venoshock }
   - { level: 20, move: Seed Bomb }
   - { level: 25, move: Take Down }
   - { level: 29, move: Siphon }

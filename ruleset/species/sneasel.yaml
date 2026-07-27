@@ -19,7 +19,7 @@ learnset:
   - { level: 36, move: Hone Claws }
   - { level: 37, move: Heel Drop }
   - { level: 39, move: Glacial Crush }
-  - { level: 39, move: Backstab }
+  - { level: 40, move: Backstab }
   - { level: 42, move: Beat Up }
   - { level: 43, move: Ice Hammer }
   - { level: 45, move: Pixie Slash }

@@ -10,8 +10,8 @@ learnset:
   - { level: 1, move: Echoed Voice }
   - { level: 2, move: Pound }
   - { level: 15, move: Rest }
-  - { level: 15, move: Sleep Talk }
-  - { level: 16, move: Bail Out }
+  - { level: 16, move: Sleep Talk }
+  - { level: 17, move: Bail Out }
   - { level: 23, move: Round }
   - { level: 29, move: Uproar }
   - { level: 30, move: Take Down }
@@ -23,5 +23,5 @@ learnset:
   - { level: 57, move: Double-Edge }
   - { level: 58, move: Nasty Plot }
   - { level: 66, move: Roar }
+  - { level: 69, move: Hyper Beam }
   - { level: 70, move: Boomburst }
-  - { level: 70, move: Hyper Beam }

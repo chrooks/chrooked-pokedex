@@ -16,9 +16,9 @@ learnset:
   - { level: 16, move: Ice Punch }
   - { level: 17, move: Bulldoze }
   - { level: 20, move: Mist }
+  - { level: 24, move: Tectonic Fang }
   - { level: 25, move: Endure }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 26, move: Lithic Fang }
   - { level: 30, move: Icy Wind }
   - { level: 35, move: Amnesia }
   - { level: 37, move: Glacial Crush }
@@ -27,4 +27,4 @@ learnset:
   - { level: 45, move: Earthquake }
   - { level: 50, move: Blizzard }
   - { level: 64, move: Icebreaker }
-  - { level: 64, move: Faultbreak }
+  - { level: 65, move: Faultbreak }

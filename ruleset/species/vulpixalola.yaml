@@ -18,4 +18,4 @@ learnset:
   - { level: 44, move: Beguile }
   - { level: 48, move: Blizzard }
   - { level: 64, move: Cryoblast }
-  - { level: 64, move: Rapture }
+  - { level: 65, move: Rapture }

@@ -15,8 +15,8 @@ learnset:
   - { level: 40, move: Aura Sphere }
   - { level: 48, move: Psychic }
   - { level: 56, move: Guard Swap }
-  - { level: 56, move: Power Swap }
+  - { level: 57, move: Power Swap }
   - { level: 64, move: Mist }
-  - { level: 70, move: Psystrike }
-  - { level: 70, move: Recover }
+  - { level: 68, move: Psystrike }
+  - { level: 69, move: Recover }
   - { level: 70, move: Future Sight }

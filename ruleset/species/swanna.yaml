@@ -21,6 +21,6 @@ learnset:
   - { level: 43, move: Hydro Pump }
   - { level: 47, move: Brave Bird }
   - { level: 55, move: Hurricane }
+  - { level: 63, move: Tempest }
   - { level: 64, move: Oblivion Wing }
-  - { level: 64, move: Tsunami }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tsunami }

@@ -19,9 +19,9 @@ learnset:
   - { level: 16, move: Bullet Punch }
   - { level: 18, move: Chi Wave }
   - { level: 21, move: Quick Guard }
+  - { level: 23, move: Fire Punch }
   - { level: 24, move: Thunder Punch }
-  - { level: 24, move: Ice Punch }
-  - { level: 24, move: Fire Punch }
+  - { level: 25, move: Ice Punch }
   - { level: 28, move: Agility }
   - { level: 30, move: Ki Blast }
   - { level: 32, move: Mega Punch }

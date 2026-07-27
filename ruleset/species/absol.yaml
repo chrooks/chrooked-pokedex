@@ -19,7 +19,7 @@ learnset:
   - { level: 30, move: Heel Drop }
   - { level: 35, move: Focus Energy }
   - { level: 37, move: Backstab }
-  - { level: 37, move: Pixie Slash }
+  - { level: 38, move: Pixie Slash }
   - { level: 40, move: Sucker Punch }
   - { level: 42, move: Starfall Slam }
   - { level: 45, move: Swords Dance }
@@ -27,4 +27,4 @@ learnset:
   - { level: 55, move: Perish Song }
   - { level: 57, move: Faeblitz }
   - { level: 60, move: Secret Sword }
-  - { level: 60, move: Havoc }
+  - { level: 61, move: Havoc }

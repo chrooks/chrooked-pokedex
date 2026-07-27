@@ -19,4 +19,4 @@ learnset:
   - { level: 48, move: Last Resort }
   - { level: 52, move: Wish }
   - { level: 64, move: Oblivion Wing }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

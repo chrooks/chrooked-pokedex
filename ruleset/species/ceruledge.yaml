@@ -29,6 +29,6 @@ learnset:
   - { level: 45, move: Bitter Blade }
   - { level: 48, move: Combust }
   - { level: 52, move: Pixie Slash }
-  - { level: 52, move: Necrosis }
+  - { level: 53, move: Necrosis }
   - { level: 56, move: Psycho Cut }
   - { level: 62, move: Flare Blitz }

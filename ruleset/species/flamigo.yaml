@@ -18,9 +18,9 @@ learnset:
   - { level: 27, move: Payback }
   - { level: 31, move: Roost }
   - { level: 35, move: Air Slash }
+  - { level: 36, move: Dive Bomb }
   - { level: 37, move: One-Inch Punch }
-  - { level: 37, move: Cross Chop }
-  - { level: 37, move: Dive Bomb }
+  - { level: 38, move: Cross Chop }
   - { level: 39, move: Mega Kick }
   - { level: 41, move: Nosedive }
   - { level: 44, move: Wide Guard }

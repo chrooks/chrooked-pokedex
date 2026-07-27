@@ -22,7 +22,7 @@ learnset:
   - { level: 54, move: Cross Chop }
   - { level: 57, move: Interment }
   - { level: 63, move: Psych Up }
+  - { level: 67, move: Close Combat }
+  - { level: 68, move: Endeavor }
+  - { level: 69, move: Laser Focus }
   - { level: 70, move: Necrosis }
-  - { level: 70, move: Laser Focus }
-  - { level: 70, move: Endeavor }
-  - { level: 70, move: Close Combat }

@@ -14,7 +14,7 @@ learnset:
   - { level: 30, move: Bullet Seed }
   - { level: 35, move: Energy Ball }
   - { level: 37, move: Cataclysm }
-  - { level: 37, move: Extrasensory }
+  - { level: 38, move: Extrasensory }
   - { level: 40, move: Mindwarp }
   - { level: 42, move: Siphon }
   - { level: 45, move: Uproar }

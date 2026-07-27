@@ -55,6 +55,22 @@ def test_normalize_caps_l1_and_level70() -> None:
 
 
 @pytest.mark.unit
+def test_spread_gives_one_move_per_earned_level() -> None:
+    """Collisions at level >= 2 spread to nearby free levels; L0/L1 may stack."""
+    ctx = ll.Ctx()
+    rows = [
+        (1, "Growl"), (1, "Tackle"),          # L1 kit may share
+        (39, "Wraithstrike"), (39, "Interment"),  # collision -> spread
+        (70, "Double-Edge"), (70, "Last Resort"),  # collision at the cap
+    ]
+    out = sp.normalize(rows, ctx)
+    earned = [lvl for lvl, _ in out if lvl >= 2]
+    assert len(earned) == len(set(earned))  # all distinct
+    assert max(lvl for lvl, _ in out) <= 70
+    assert sum(1 for lvl, _ in out if lvl == 1) == 2  # L1 untouched
+
+
+@pytest.mark.unit
 def test_plan_fills_missing_band() -> None:
     """A Fire physical attacker missing its ≤50 rung gets one added in-window."""
     ctx = ll.Ctx()

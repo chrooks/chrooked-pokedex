@@ -11,7 +11,7 @@ learnset:
   - { level: 3, move: Cheap Shot }
   - { level: 5, move: Shadow Sneak }
   - { level: 7, move: Knell }
-  - { level: 7, move: Slander }
+  - { level: 8, move: Slander }
   - { level: 10, move: Spite }
   - { level: 15, move: Payback }
   - { level: 16, move: Shadow Claw }

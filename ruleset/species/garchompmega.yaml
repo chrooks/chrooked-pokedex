@@ -13,7 +13,7 @@ learnset:
   - { level: 18, move: Bulldoze }
   - { level: 27, move: Bite }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 31, move: Tectonic Fang }
   - { level: 34, move: Slash }
   - { level: 42, move: Dragon Claw }
   - { level: 43, move: Dragon Hammer }
@@ -22,5 +22,5 @@ learnset:
   - { level: 52, move: Dig }
   - { level: 57, move: Faultbreak }
   - { level: 62, move: Sandstorm }
+  - { level: 69, move: Dragon Rush }
   - { level: 70, move: Take Down }
-  - { level: 70, move: Dragon Rush }

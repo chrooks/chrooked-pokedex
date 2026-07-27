@@ -13,7 +13,7 @@ learnset:
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
   - { level: 38, move: Power Gem }
-  - { level: 38, move: Crystal Beam }
+  - { level: 39, move: Crystal Beam }
   - { level: 41, move: Protect }
   - { level: 45, move: Rock Blast }
   - { level: 48, move: Meteor Surge }

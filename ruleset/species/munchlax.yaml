@@ -13,7 +13,7 @@ learnset:
   - { level: 12, move: Covet }
   - { level: 16, move: Bite }
   - { level: 20, move: Stockpile }
-  - { level: 20, move: Swallow }
+  - { level: 21, move: Swallow }
   - { level: 24, move: Screech }
   - { level: 28, move: Bail Out }
   - { level: 32, move: Fling }

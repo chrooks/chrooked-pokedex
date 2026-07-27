@@ -25,4 +25,4 @@ learnset:
   - { level: 57, move: Icebreaker }
   - { level: 60, move: Blizzard }
   - { level: 64, move: Netherstorm }
-  - { level: 64, move: Cryoblast }
+  - { level: 65, move: Cryoblast }

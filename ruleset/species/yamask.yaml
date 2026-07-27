@@ -18,6 +18,6 @@ learnset:
   - { level: 43, move: Specter Bomb }
   - { level: 44, move: Dark Pulse }
   - { level: 48, move: Power Split }
-  - { level: 48, move: Guard Split }
+  - { level: 49, move: Guard Split }
   - { level: 52, move: Destiny Bond }
   - { level: 64, move: Netherstorm }

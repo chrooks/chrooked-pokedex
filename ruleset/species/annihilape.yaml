@@ -24,7 +24,7 @@ learnset:
   - { level: 30, move: Thrash }
   - { level: 35, move: Rage Fist }
   - { level: 37, move: Cross Chop }
-  - { level: 37, move: Wraithstrike }
+  - { level: 38, move: Wraithstrike }
   - { level: 39, move: Close Combat }
   - { level: 41, move: Interment }
   - { level: 44, move: Screech }

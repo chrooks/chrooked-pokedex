@@ -22,5 +22,5 @@ learnset:
   - { level: 49, move: Super Fang }
   - { level: 56, move: Crunch }
   - { level: 63, move: Wave Crash }
+  - { level: 69, move: Dragon Rush }
   - { level: 70, move: Dragon Pulse }
-  - { level: 70, move: Dragon Rush }

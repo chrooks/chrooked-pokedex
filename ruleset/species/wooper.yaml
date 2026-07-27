@@ -6,10 +6,10 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 4, move: Rain Dance }
   - { level: 6, move: Clod Toss }
-  - { level: 6, move: Undertow }
+  - { level: 7, move: Undertow }
   - { level: 8, move: Mud Shot }
   - { level: 12, move: Mist }
-  - { level: 12, move: Haze }
+  - { level: 13, move: Haze }
   - { level: 14, move: Water Whip }
   - { level: 15, move: Bulldoze }
   - { level: 16, move: Body Slam }

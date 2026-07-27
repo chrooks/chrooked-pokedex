@@ -37,12 +37,12 @@ learnset:
   - { level: 31, move: Psycho Cut }
   - { level: 35, move: Swords Dance }
   - { level: 38, move: Astral Hand }
-  - { level: 38, move: Cross Chop }
+  - { level: 39, move: Cross Chop }
   - { level: 42, move: Kinetic Slam }
   - { level: 45, move: Pixie Slash }
   - { level: 46, move: Psycrush }
   - { level: 49, move: Heal Pulse }
   - { level: 52, move: Secret Sword }
   - { level: 56, move: Wide Guard }
-  - { level: 56, move: Quick Guard }
+  - { level: 57, move: Quick Guard }
   - { level: 63, move: Close Combat }

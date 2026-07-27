@@ -23,7 +23,7 @@ learnset:
   - { level: 33, move: Agility }
   - { level: 36, move: Tailwind }
   - { level: 38, move: Dive Bomb }
-  - { level: 38, move: Nosedive }
+  - { level: 39, move: Nosedive }
   - { level: 41, move: Dragon Claw }
   - { level: 43, move: Stone Edge }
   - { level: 46, move: Thrash }

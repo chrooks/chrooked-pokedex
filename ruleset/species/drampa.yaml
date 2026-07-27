@@ -11,11 +11,11 @@ learnset:
   - { level: 16, move: Swift }
   - { level: 20, move: Safeguard }
   - { level: 25, move: Dragon Breath }
-  - { level: 25, move: Draconic Fang }
+  - { level: 26, move: Draconic Fang }
   - { level: 30, move: Extrasensory }
   - { level: 35, move: Dragon Pulse }
   - { level: 37, move: Cataclysm }
-  - { level: 37, move: Hyper Voice }
+  - { level: 38, move: Hyper Voice }
   - { level: 40, move: Light Screen }
   - { level: 45, move: Fly }
   - { level: 50, move: Resonance }

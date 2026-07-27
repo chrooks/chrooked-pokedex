@@ -20,10 +20,10 @@ learnset:
   - { level: 45, move: Cross Chop }
   - { level: 48, move: Psychic }
   - { level: 56, move: Power Swap }
-  - { level: 56, move: Guard Swap }
-  - { level: 57, move: Psycrush }
+  - { level: 57, move: Guard Swap }
+  - { level: 58, move: Psycrush }
   - { level: 59, move: Close Combat }
   - { level: 64, move: Mist }
+  - { level: 68, move: Future Sight }
+  - { level: 69, move: Recover }
   - { level: 70, move: Psystrike }
-  - { level: 70, move: Recover }
-  - { level: 70, move: Future Sight }

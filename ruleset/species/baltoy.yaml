@@ -24,12 +24,12 @@ learnset:
   - { level: 31, move: Astral Hand }
   - { level: 33, move: Self-Destruct }
   - { level: 36, move: Guard Split }
-  - { level: 36, move: Power Split }
+  - { level: 37, move: Power Split }
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Explosion }
   - { level: 43, move: Earthquake }
   - { level: 46, move: Kinetic Slam }
-  - { level: 46, move: Quagmire }
+  - { level: 47, move: Quagmire }
   - { level: 57, move: Faultbreak }
   - { level: 62, move: Psycrush }
-  - { level: 62, move: Sinkhole }
+  - { level: 63, move: Sinkhole }

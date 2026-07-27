@@ -22,5 +22,5 @@ learnset:
   - { level: 52, move: Ice Hammer }
   - { level: 56, move: Crunch }
   - { level: 63, move: Wave Crash }
+  - { level: 69, move: Blizzard }
   - { level: 70, move: Icebreaker }
-  - { level: 70, move: Blizzard }

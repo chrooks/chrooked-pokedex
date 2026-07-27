@@ -17,7 +17,7 @@ learnset:
   - { level: 30, move: Dragon Tail }
   - { level: 36, move: Iron Defense }
   - { level: 39, move: Cataclysm }
-  - { level: 39, move: Flash Cannon }
+  - { level: 40, move: Flash Cannon }
   - { level: 42, move: Focus Energy }
   - { level: 45, move: Draco Meteor }
   - { level: 48, move: Dragon Claw }

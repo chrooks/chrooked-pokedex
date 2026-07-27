@@ -19,7 +19,7 @@ learnset:
   - { level: 32, move: Galeburst }
   - { level: 36, move: Roost }
   - { level: 38, move: Rampage }
-  - { level: 38, move: Dive Bomb }
+  - { level: 39, move: Dive Bomb }
   - { level: 40, move: Tailwind }
   - { level: 43, move: Resonance }
   - { level: 44, move: Sky Attack }

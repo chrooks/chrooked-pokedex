@@ -26,7 +26,7 @@ learnset:
   - { level: 36, move: Night Slash }
   - { level: 39, move: Poison Fang }
   - { level: 41, move: Venom Slam }
-  - { level: 41, move: Crunch }
+  - { level: 42, move: Crunch }
   - { level: 44, move: X-Scissor }
   - { level: 49, move: Acupressure }
   - { level: 54, move: Backstab }

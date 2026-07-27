@@ -18,7 +18,7 @@ learnset:
   - { level: 30, move: Bug Bite }
   - { level: 33, move: Ancient Power }
   - { level: 35, move: Air Slash }
-  - { level: 35, move: Bug Buzz }
+  - { level: 36, move: Bug Buzz }
   - { level: 38, move: Hypnosis }
   - { level: 43, move: Wing Attack }
   - { level: 44, move: Galeburst }

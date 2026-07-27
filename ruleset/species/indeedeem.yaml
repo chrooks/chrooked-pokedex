@@ -15,7 +15,7 @@ learnset:
   - { level: 30, move: Healing Wish }
   - { level: 35, move: Psychic }
   - { level: 37, move: Resonance }
-  - { level: 37, move: Mindwarp }
+  - { level: 38, move: Mindwarp }
   - { level: 40, move: Calm Mind }
   - { level: 45, move: Power Split }
   - { level: 50, move: Psychic Terrain }

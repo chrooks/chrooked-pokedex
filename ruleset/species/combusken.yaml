@@ -24,9 +24,9 @@ learnset:
   - { level: 30, move: Bounce }
   - { level: 32, move: Aura Sphere }
   - { level: 35, move: Focus Energy }
+  - { level: 36, move: Blaze Kick }
   - { level: 37, move: One-Inch Punch }
-  - { level: 37, move: Cross Chop }
-  - { level: 37, move: Blaze Kick }
+  - { level: 38, move: Cross Chop }
   - { level: 40, move: Combust }
   - { level: 45, move: Bulk Up }
   - { level: 47, move: Ki Blast }

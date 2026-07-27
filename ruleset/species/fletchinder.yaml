@@ -21,9 +21,9 @@ learnset:
   - { level: 29, move: Roost }
   - { level: 32, move: Take Down }
   - { level: 35, move: Incinerate }
+  - { level: 38, move: Dive Bomb }
   - { level: 39, move: Tailwind }
-  - { level: 39, move: Combust }
-  - { level: 39, move: Dive Bomb }
+  - { level: 40, move: Combust }
   - { level: 41, move: Nosedive }
   - { level: 43, move: Steel Wing }
   - { level: 47, move: Flamethrower }

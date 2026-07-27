@@ -19,7 +19,7 @@ learnset:
   - { level: 16, move: Rapid Spin }
   - { level: 18, move: Chi Wave }
   - { level: 21, move: Wide Guard }
-  - { level: 21, move: Quick Guard }
+  - { level: 22, move: Quick Guard }
   - { level: 24, move: Sucker Punch }
   - { level: 28, move: Agility }
   - { level: 30, move: Ki Blast }

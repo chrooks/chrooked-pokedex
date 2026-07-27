@@ -19,13 +19,13 @@ learnset:
   - { level: 29, move: Heel Drop }
   - { level: 30, move: Iron Defense }
   - { level: 36, move: Whirlwind }
-  - { level: 39, move: Dive Bomb }
-  - { level: 39, move: Backstab }
+  - { level: 38, move: Dive Bomb }
   - { level: 39, move: Nosedive }
+  - { level: 40, move: Backstab }
   - { level: 42, move: Air Slash }
   - { level: 48, move: Dark Pulse }
   - { level: 52, move: Havoc }
   - { level: 57, move: Nasty Plot }
   - { level: 64, move: Defog }
+  - { level: 69, move: Brave Bird }
   - { level: 70, move: Attract }
-  - { level: 70, move: Brave Bird }

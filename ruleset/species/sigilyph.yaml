@@ -17,9 +17,9 @@ learnset:
   - { level: 43, move: Hurricane }
   - { level: 45, move: Tailwind }
   - { level: 50, move: Light Screen }
-  - { level: 50, move: Reflect }
+  - { level: 51, move: Reflect }
   - { level: 55, move: Sky Attack }
   - { level: 57, move: Future Sight }
   - { level: 60, move: Skill Swap }
   - { level: 64, move: Oblivion Wing }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

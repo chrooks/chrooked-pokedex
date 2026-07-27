@@ -15,13 +15,13 @@ learnset:
   - { level: 15, move: Water Pulse }
   - { level: 17, move: Gust }
   - { level: 22, move: Scary Face }
-  - { level: 22, move: Air Cutter }
+  - { level: 23, move: Air Cutter }
   - { level: 26, move: Stun Spore }
   - { level: 29, move: Signal Beam }
   - { level: 30, move: Muddy Water }
   - { level: 32, move: Air Slash }
   - { level: 35, move: Galeburst }
-  - { level: 35, move: Bug Buzz }
+  - { level: 36, move: Bug Buzz }
   - { level: 38, move: Giga Drain }
   - { level: 43, move: Hydro Pump }
   - { level: 44, move: Antennae Blast }

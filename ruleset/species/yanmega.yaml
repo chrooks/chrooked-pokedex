@@ -26,7 +26,7 @@ learnset:
   - { level: 30, move: Bug Bite }
   - { level: 33, move: Ancient Power }
   - { level: 35, move: Antennae Blast }
-  - { level: 35, move: Galeburst }
+  - { level: 36, move: Galeburst }
   - { level: 38, move: Feint }
   - { level: 43, move: Slash }
   - { level: 44, move: Cataclysm }

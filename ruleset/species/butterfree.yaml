@@ -15,9 +15,9 @@ learnset:
   - { level: 3, move: Bug Bite }
   - { level: 4, move: Supersonic }
   - { level: 8, move: Confusion }
+  - { level: 11, move: Sleep Powder }
   - { level: 12, move: Poison Powder }
-  - { level: 12, move: Stun Spore }
-  - { level: 12, move: Sleep Powder }
+  - { level: 13, move: Stun Spore }
   - { level: 16, move: Psybeam }
   - { level: 20, move: Whirlwind }
   - { level: 22, move: Signal Beam }

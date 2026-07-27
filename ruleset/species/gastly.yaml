@@ -23,4 +23,4 @@ learnset:
   - { level: 45, move: Sludge Wave }
   - { level: 48, move: Dream Eater }
   - { level: 64, move: Netherstorm }
-  - { level: 64, move: Contagion }
+  - { level: 65, move: Contagion }

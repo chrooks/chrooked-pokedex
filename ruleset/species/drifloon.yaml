@@ -11,9 +11,9 @@ learnset:
   - { level: 15, move: Air Slash }
   - { level: 16, move: Hex }
   - { level: 20, move: Shadow Ball }
+  - { level: 23, move: Swallow }
   - { level: 24, move: Stockpile }
-  - { level: 24, move: Spit Up }
-  - { level: 24, move: Swallow }
+  - { level: 25, move: Spit Up }
   - { level: 29, move: Self-Destruct }
   - { level: 32, move: Destiny Bond }
   - { level: 34, move: Galeburst }
@@ -23,4 +23,4 @@ learnset:
   - { level: 44, move: Explosion }
   - { level: 45, move: Hurricane }
   - { level: 64, move: Netherstorm }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

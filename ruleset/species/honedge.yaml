@@ -8,7 +8,7 @@ learnset:
   - { level: 3, move: Lick }
   - { level: 5, move: Shadow Sneak }
   - { level: 6, move: Glint }
-  - { level: 6, move: Knell }
+  - { level: 7, move: Knell }
   - { level: 9, move: Metal Sound }
   - { level: 13, move: Aerial Ace }
   - { level: 15, move: Smart Strike }

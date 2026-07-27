@@ -21,9 +21,9 @@ learnset:
   - { level: 31, move: Discharge }
   - { level: 36, move: Bulk Up }
   - { level: 37, move: Aura Sphere }
-  - { level: 37, move: Lightning Slam }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 39, move: Arc Strike }
+  - { level: 38, move: Lightning Slam }
+  - { level: 39, move: One-Inch Punch }
+  - { level: 40, move: Arc Strike }
   - { level: 42, move: Thunderbolt }
   - { level: 45, move: Cross Chop }
   - { level: 48, move: Close Combat }

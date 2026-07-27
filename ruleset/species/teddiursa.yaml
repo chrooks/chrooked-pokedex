@@ -14,15 +14,15 @@ learnset:
   - { level: 20, move: Slash }
   - { level: 23, move: Play Nice }
   - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
-  - { level: 26, move: Charm }
+  - { level: 26, move: Tectonic Fang }
+  - { level: 27, move: Charm }
   - { level: 29, move: Play Rough }
   - { level: 30, move: Facade }
   - { level: 33, move: Rest }
-  - { level: 33, move: Snore }
+  - { level: 34, move: Snore }
   - { level: 37, move: Take Down }
   - { level: 41, move: Rampage }
   - { level: 46, move: Thrash }
-  - { level: 46, move: Quagmire }
+  - { level: 47, move: Quagmire }
   - { level: 62, move: Sinkhole }
   - { level: 64, move: Faultbreak }

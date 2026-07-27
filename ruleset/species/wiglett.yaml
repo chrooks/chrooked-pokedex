@@ -10,7 +10,7 @@ learnset:
   - { level: 15, move: Undertow }
   - { level: 16, move: Water Whip }
   - { level: 20, move: Body Slam }
-  - { level: 20, move: Water Pulse }
+  - { level: 21, move: Water Pulse }
   - { level: 24, move: Headbutt }
   - { level: 28, move: Dig }
   - { level: 32, move: Sucker Punch }

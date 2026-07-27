@@ -25,12 +25,12 @@ learnset:
   - { level: 29, move: Pixie Slash }
   - { level: 31, move: Draconic Fang }
   - { level: 32, move: Cotton Guard }
+  - { level: 34, move: Galeburst }
   - { level: 35, move: Bail Out }
-  - { level: 35, move: Cataclysm }
-  - { level: 35, move: Galeburst }
+  - { level: 36, move: Cataclysm }
   - { level: 38, move: Take Down }
   - { level: 41, move: Dive Bomb }
-  - { level: 41, move: Starfall Slam }
+  - { level: 42, move: Starfall Slam }
   - { level: 43, move: Dragon Hammer }
   - { level: 44, move: Moonblast }
   - { level: 50, move: Perish Song }

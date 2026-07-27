@@ -24,4 +24,4 @@ learnset:
   - { level: 44, move: Specter Bomb }
   - { level: 47, move: Hurricane }
   - { level: 64, move: Netherstorm }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

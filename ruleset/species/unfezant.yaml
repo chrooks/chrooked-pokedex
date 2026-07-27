@@ -18,9 +18,9 @@ learnset:
   - { level: 31, move: Take Down }
   - { level: 36, move: Detect }
   - { level: 42, move: Air Slash }
-  - { level: 46, move: Dive Bomb }
-  - { level: 46, move: Rampage }
+  - { level: 45, move: Dive Bomb }
   - { level: 46, move: Nosedive }
+  - { level: 47, move: Rampage }
   - { level: 50, move: Roost }
   - { level: 57, move: Double-Edge }
   - { level: 58, move: Tailwind }

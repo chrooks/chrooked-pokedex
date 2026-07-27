@@ -25,9 +25,9 @@ learnset:
   - { level: 32, move: Psybeam }
   - { level: 35, move: Infestation }
   - { level: 36, move: Luster Cannon }
-  - { level: 36, move: Moltstrike }
-  - { level: 36, move: Bug Buzz }
-  - { level: 38, move: Flail }
+  - { level: 37, move: Moltstrike }
+  - { level: 38, move: Bug Buzz }
+  - { level: 39, move: Flail }
   - { level: 41, move: Attract }
   - { level: 43, move: Iron Head }
   - { level: 44, move: Psychic }

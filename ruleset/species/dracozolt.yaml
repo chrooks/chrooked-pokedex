@@ -22,5 +22,5 @@ learnset:
   - { level: 56, move: Discharge }
   - { level: 57, move: Arc Strike }
   - { level: 63, move: Wild Charge }
+  - { level: 69, move: Dragon Rush }
   - { level: 70, move: Dragon Pulse }
-  - { level: 70, move: Dragon Rush }

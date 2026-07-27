@@ -24,7 +24,7 @@ learnset:
   - { level: 32, move: Throat Chop }
   - { level: 36, move: First Impression }
   - { level: 38, move: Backstab }
-  - { level: 38, move: Moltstrike }
+  - { level: 39, move: Moltstrike }
   - { level: 44, move: Bounce }
   - { level: 48, move: Axe Kick }
   - { level: 53, move: Guillotine }

@@ -13,10 +13,10 @@ learnset:
   - { level: 9, move: Leech Seed }
   - { level: 12, move: Razor Leaf }
   - { level: 15, move: Poison Powder }
-  - { level: 15, move: Sleep Powder }
-  - { level: 16, move: Giga Drain }
-  - { level: 17, move: Venoshock }
-  - { level: 18, move: Seed Bomb }
+  - { level: 16, move: Sleep Powder }
+  - { level: 17, move: Giga Drain }
+  - { level: 18, move: Venoshock }
+  - { level: 19, move: Seed Bomb }
   - { level: 21, move: Take Down }
   - { level: 24, move: Sweet Scent }
   - { level: 27, move: Synthesis }

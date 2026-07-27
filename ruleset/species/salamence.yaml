@@ -22,7 +22,7 @@ learnset:
   - { level: 25, move: Crunch }
   - { level: 33, move: Dragon Claw }
   - { level: 36, move: Dive Bomb }
-  - { level: 36, move: Nosedive }
+  - { level: 37, move: Nosedive }
   - { level: 39, move: Zen Headbutt }
   - { level: 42, move: Dragon Hammer }
   - { level: 46, move: Focus Energy }

@@ -26,11 +26,11 @@ learnset:
   - { level: 36, move: Giga Drain }
   - { level: 39, move: Power Gem }
   - { level: 40, move: Crystal Beam }
+  - { level: 42, move: Swallow }
   - { level: 43, move: Stockpile }
-  - { level: 43, move: Spit Up }
-  - { level: 43, move: Swallow }
-  - { level: 44, move: Stone Edge }
-  - { level: 45, move: Reap }
+  - { level: 44, move: Spit Up }
+  - { level: 45, move: Stone Edge }
+  - { level: 46, move: Reap }
   - { level: 48, move: Energy Ball }
   - { level: 57, move: Head Smash }
   - { level: 59, move: Power Whip }

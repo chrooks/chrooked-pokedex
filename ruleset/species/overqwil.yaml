@@ -19,9 +19,9 @@ learnset:
   - { level: 32, move: Pin Missile }
   - { level: 36, move: Toxic Spikes }
   - { level: 38, move: Venom Slam }
-  - { level: 38, move: Crunch }
+  - { level: 39, move: Crunch }
   - { level: 40, move: Stockpile }
-  - { level: 40, move: Spit Up }
+  - { level: 41, move: Spit Up }
   - { level: 44, move: Toxic }
   - { level: 48, move: Backstab }
   - { level: 52, move: Acupressure }

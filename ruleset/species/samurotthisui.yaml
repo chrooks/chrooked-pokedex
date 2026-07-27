@@ -14,7 +14,7 @@ learnset:
   - { level: 2, move: Slash }
   - { level: 3, move: Megahorn }
   - { level: 7, move: Undertow }
-  - { level: 7, move: Cheap Shot }
+  - { level: 8, move: Cheap Shot }
   - { level: 13, move: Focus Energy }
   - { level: 18, move: Razor Shell }
   - { level: 21, move: Fury Cutter }
@@ -24,15 +24,15 @@ learnset:
   - { level: 34, move: Aqua Jet }
   - { level: 36, move: Aura Sphere }
   - { level: 39, move: Encore }
+  - { level: 41, move: Aqua Tail }
   - { level: 42, move: Pixie Slash }
-  - { level: 42, move: Backstab }
-  - { level: 42, move: Aqua Tail }
+  - { level: 43, move: Backstab }
   - { level: 46, move: Maelstrom }
   - { level: 51, move: Retaliate }
+  - { level: 53, move: Havoc }
   - { level: 54, move: Secret Sword }
-  - { level: 54, move: Wave Crash }
-  - { level: 54, move: Havoc }
-  - { level: 54, move: Hydro Pump }
+  - { level: 55, move: Wave Crash }
+  - { level: 56, move: Hydro Pump }
   - { level: 58, move: Swords Dance }
   - { level: 63, move: Tsunami }
 evolution: { from: Dewott, method: { level: 36 } }

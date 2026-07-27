@@ -23,7 +23,7 @@ learnset:
   - { level: 36, move: Toxic Spikes }
   - { level: 38, move: Venom Slam }
   - { level: 40, move: Stockpile }
-  - { level: 40, move: Spit Up }
+  - { level: 41, move: Spit Up }
   - { level: 44, move: Toxic }
   - { level: 48, move: Maelstrom }
   - { level: 52, move: Acupressure }

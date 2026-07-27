@@ -20,6 +20,6 @@ learnset:
   - { level: 41, move: Final Gambit }
   - { level: 43, move: Rampage }
   - { level: 46, move: Nosedive }
-  - { level: 46, move: Cross Chop }
+  - { level: 47, move: Cross Chop }
   - { level: 48, move: Brave Bird }
   - { level: 57, move: Double-Edge }

@@ -20,7 +20,7 @@ learnset:
   - { level: 31, move: Strength }
   - { level: 36, move: Dual Chop }
   - { level: 39, move: One-Inch Punch }
-  - { level: 39, move: Ki Blast }
+  - { level: 40, move: Ki Blast }
   - { level: 42, move: Bulk Up }
   - { level: 45, move: Focus Blast }
   - { level: 48, move: Seismic Toss }

@@ -18,6 +18,6 @@ learnset:
   - { level: 56, move: Iron Tail }
   - { level: 57, move: Excalibur }
   - { level: 64, move: Iron Defense }
+  - { level: 68, move: Metal Burst }
+  - { level: 69, move: Double-Edge }
   - { level: 70, move: Heavy Slam }
-  - { level: 70, move: Double-Edge }
-  - { level: 70, move: Metal Burst }

@@ -18,7 +18,7 @@ learnset:
   - { level: 24, move: Assurance }
   - { level: 28, move: Body Slam }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 31, move: Tectonic Fang }
   - { level: 36, move: Ancient Power }
   - { level: 43, move: Zen Headbutt }
   - { level: 44, move: Stone Edge }

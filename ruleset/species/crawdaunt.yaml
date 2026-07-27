@@ -12,7 +12,7 @@ learnset:
   - { level: 1, move: Harden }
   - { level: 1, move: Taunt }
   - { level: 6, move: Undertow }
-  - { level: 6, move: Cheap Shot }
+  - { level: 7, move: Cheap Shot }
   - { level: 12, move: Bubble Beam }
   - { level: 16, move: Knock Off }
   - { level: 20, move: Double Hit }
@@ -25,7 +25,7 @@ learnset:
   - { level: 43, move: Pixie Slash }
   - { level: 46, move: Backstab }
   - { level: 49, move: Havoc }
-  - { level: 49, move: Crabhammer }
+  - { level: 50, move: Crabhammer }
   - { level: 52, move: Wave Crash }
   - { level: 58, move: Endeavor }
   - { level: 64, move: Guillotine }

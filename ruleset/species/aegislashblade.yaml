@@ -20,8 +20,8 @@ learnset:
   - { level: 12, move: Smart Strike }
   - { level: 13, move: Iron Head }
   - { level: 15, move: Glint }
-  - { level: 15, move: Knell }
-  - { level: 16, move: Iron Tail }
+  - { level: 16, move: Knell }
+  - { level: 17, move: Iron Tail }
   - { level: 30, move: Mirror Shot }
   - { level: 36, move: Secret Sword }
   - { level: 43, move: Excalibur }

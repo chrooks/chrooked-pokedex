@@ -17,9 +17,9 @@ learnset:
   - { level: 16, move: Howl }
   - { level: 20, move: Bite }
   - { level: 24, move: Rock Tomb }
+  - { level: 29, move: Rock Slide }
   - { level: 30, move: Roar }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Rock Slide }
+  - { level: 31, move: Tectonic Fang }
   - { level: 36, move: Lithic Fang }
   - { level: 39, move: One-Inch Punch }
   - { level: 42, move: Crunch }

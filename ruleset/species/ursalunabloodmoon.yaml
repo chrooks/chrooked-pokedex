@@ -18,9 +18,9 @@ learnset:
   - { level: 26, move: Calm Mind }
   - { level: 30, move: Hyper Voice }
   - { level: 34, move: Shadow Ball }
+  - { level: 37, move: Rampage }
   - { level: 38, move: Dark Pulse }
-  - { level: 38, move: Quagmire }
-  - { level: 38, move: Rampage }
+  - { level: 39, move: Quagmire }
   - { level: 42, move: Rest }
   - { level: 43, move: Tri Attack }
   - { level: 46, move: Focus Blast }
@@ -28,6 +28,6 @@ learnset:
   - { level: 55, move: Lunar Blessing }
   - { level: 57, move: Resonance }
   - { level: 60, move: Hyper Beam }
-  - { level: 60, move: Sinkhole }
+  - { level: 61, move: Sinkhole }
   - { level: 66, move: Blood Moon }
 evolution: { from: Ursaluna, method: { item: Moon Stone } }

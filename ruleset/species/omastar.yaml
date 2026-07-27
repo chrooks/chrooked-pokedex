@@ -15,11 +15,11 @@ learnset:
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
   - { level: 39, move: Power Gem }
-  - { level: 39, move: Crystal Beam }
+  - { level: 40, move: Crystal Beam }
   - { level: 43, move: Protect }
   - { level: 49, move: Rock Blast }
   - { level: 52, move: Meteor Surge }
-  - { level: 52, move: Surf }
+  - { level: 53, move: Surf }
   - { level: 56, move: Hydro Pump }
   - { level: 63, move: Shell Smash }
   - { level: 70, move: Tsunami }

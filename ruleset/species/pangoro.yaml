@@ -9,7 +9,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Taunt }
   - { level: 6, move: Karate Chop }
-  - { level: 6, move: Cheap Shot }
+  - { level: 7, move: Cheap Shot }
   - { level: 10, move: Bite }
   - { level: 15, move: Circle Throw }
   - { level: 20, move: Low Sweep }
@@ -20,7 +20,7 @@ learnset:
   - { level: 37, move: One-Inch Punch }
   - { level: 39, move: Crunch }
   - { level: 43, move: Backstab }
-  - { level: 43, move: Cross Chop }
+  - { level: 44, move: Cross Chop }
   - { level: 46, move: Parting Shot }
   - { level: 49, move: Havoc }
   - { level: 50, move: Close Combat }

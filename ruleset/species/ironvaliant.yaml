@@ -24,8 +24,8 @@ learnset:
   - { level: 56, move: Moonblast }
   - { level: 57, move: Starfall Slam }
   - { level: 63, move: Close Combat }
+  - { level: 66, move: Quick Guard }
+  - { level: 67, move: Wide Guard }
+  - { level: 68, move: Destiny Bond }
+  - { level: 69, move: Knock Off }
   - { level: 70, move: Faeblitz }
-  - { level: 70, move: Knock Off }
-  - { level: 70, move: Destiny Bond }
-  - { level: 70, move: Wide Guard }
-  - { level: 70, move: Quick Guard }

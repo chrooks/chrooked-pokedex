@@ -17,7 +17,7 @@ learnset:
   - { level: 32, move: Mirror Coat }
   - { level: 36, move: Psychic }
   - { level: 38, move: Antennae Blast }
-  - { level: 38, move: Mindwarp }
+  - { level: 39, move: Mindwarp }
   - { level: 40, move: After You }
   - { level: 44, move: Calm Mind }
   - { level: 48, move: Psychic Terrain }

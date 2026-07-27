@@ -27,5 +27,5 @@ learnset:
   - { level: 29, move: Rampage }
   - { level: 35, move: Play Rough }
   - { level: 46, move: Double-Edge }
-  - { level: 46, move: Starfall Slam }
+  - { level: 47, move: Starfall Slam }
   - { level: 64, move: Faeblitz }

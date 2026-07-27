@@ -18,7 +18,7 @@ learnset:
   - { level: 31, move: Pixie Slash }
   - { level: 35, move: Lithic Fang }
   - { level: 37, move: Starfall Slam }
-  - { level: 37, move: Power Gem }
+  - { level: 38, move: Power Gem }
   - { level: 40, move: Skill Swap }
   - { level: 45, move: Crystal Beam }
   - { level: 48, move: Meteor Surge }

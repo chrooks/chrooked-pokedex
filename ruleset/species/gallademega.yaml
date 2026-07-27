@@ -41,6 +41,6 @@ learnset:
   - { level: 49, move: Heal Pulse }
   - { level: 52, move: Secret Sword }
   - { level: 56, move: Quick Guard }
-  - { level: 56, move: Wide Guard }
-  - { level: 57, move: Psycrush }
+  - { level: 57, move: Wide Guard }
+  - { level: 58, move: Psycrush }
   - { level: 63, move: Close Combat }

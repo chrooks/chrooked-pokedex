@@ -10,7 +10,7 @@ learnset:
   - { level: 12, move: Teleport }
   - { level: 18, move: Psybeam }
   - { level: 24, move: Power Split }
-  - { level: 24, move: Guard Split }
+  - { level: 25, move: Guard Split }
   - { level: 30, move: Headbutt }
   - { level: 36, move: Zen Headbutt }
   - { level: 39, move: Psychic }

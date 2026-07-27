@@ -15,7 +15,7 @@ learnset:
   - { level: 19, move: Scary Face }
   - { level: 24, move: Assurance }
   - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 26, move: Tectonic Fang }
   - { level: 28, move: Body Slam }
   - { level: 33, move: Ancient Power }
   - { level: 37, move: Zen Headbutt }

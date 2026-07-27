@@ -23,6 +23,6 @@ learnset:
   - { level: 41, move: Combust }
   - { level: 44, move: Reap }
   - { level: 48, move: Solar Beam }
-  - { level: 48, move: Overheat }
+  - { level: 49, move: Overheat }
   - { level: 57, move: Power Whip }
   - { level: 59, move: Flare Blitz }

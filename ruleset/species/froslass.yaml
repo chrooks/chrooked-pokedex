@@ -28,6 +28,6 @@ learnset:
   - { level: 47, move: Will-O-Wisp }
   - { level: 54, move: Aurora Veil }
   - { level: 57, move: Specter Bomb }
-  - { level: 57, move: Blizzard }
+  - { level: 58, move: Blizzard }
   - { level: 61, move: Netherstorm }
   - { level: 68, move: Cryoblast }

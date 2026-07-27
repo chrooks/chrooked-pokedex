@@ -4,20 +4,20 @@ aka: { dex: 351 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 5, move: Undertow }
+  - { level: 9, move: Powder Snow }
   - { level: 10, move: Water Gun }
-  - { level: 10, move: Ember }
-  - { level: 10, move: Powder Snow }
+  - { level: 11, move: Ember }
   - { level: 15, move: Headbutt }
   - { level: 17, move: Water Whip }
+  - { level: 19, move: Hail }
   - { level: 20, move: Rain Dance }
-  - { level: 20, move: Sunny Day }
-  - { level: 20, move: Hail }
+  - { level: 21, move: Sunny Day }
   - { level: 25, move: Weather Ball }
   - { level: 29, move: Aqua Tail }
   - { level: 30, move: Maelstrom }
+  - { level: 34, move: Blizzard }
   - { level: 35, move: Hydro Pump }
-  - { level: 35, move: Fire Blast }
-  - { level: 35, move: Blizzard }
+  - { level: 36, move: Fire Blast }
   - { level: 45, move: Hurricane }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

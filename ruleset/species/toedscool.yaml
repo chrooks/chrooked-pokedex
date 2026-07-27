@@ -6,7 +6,7 @@ learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 4, move: Absorb }
   - { level: 8, move: Poison Powder }
-  - { level: 8, move: Stun Spore }
+  - { level: 9, move: Stun Spore }
   - { level: 12, move: Supersonic }
   - { level: 15, move: Tackle }
   - { level: 16, move: Mega Drain }

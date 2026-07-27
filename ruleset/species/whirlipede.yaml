@@ -22,7 +22,7 @@ learnset:
   - { level: 32, move: Take Down }
   - { level: 38, move: Agility }
   - { level: 41, move: Venom Slam }
-  - { level: 41, move: Moltstrike }
+  - { level: 42, move: Moltstrike }
   - { level: 44, move: Toxic }
   - { level: 50, move: Venom Drench }
   - { level: 56, move: Double-Edge }

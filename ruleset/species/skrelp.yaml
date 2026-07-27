@@ -29,4 +29,4 @@ learnset:
   - { level: 59, move: Wave Crash }
   - { level: 60, move: Draco Meteor }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Contagion }
+  - { level: 65, move: Contagion }

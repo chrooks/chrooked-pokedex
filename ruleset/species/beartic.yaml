@@ -28,7 +28,7 @@ learnset:
   - { level: 33, move: Thrash }
   - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Glacial Crush }
-  - { level: 38, move: Cross Chop }
+  - { level: 39, move: Cross Chop }
   - { level: 41, move: Blizzard }
   - { level: 43, move: Ice Hammer }
   - { level: 46, move: Sheer Cold }

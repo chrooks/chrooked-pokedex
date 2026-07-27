@@ -11,7 +11,7 @@ learnset:
   - { level: 18, move: Psych Up }
   - { level: 22, move: Confuse Ray }
   - { level: 29, move: Rest }
-  - { level: 29, move: Power Gem }
+  - { level: 30, move: Power Gem }
   - { level: 33, move: Snore }
   - { level: 36, move: Psyshock }
   - { level: 38, move: Psychic }

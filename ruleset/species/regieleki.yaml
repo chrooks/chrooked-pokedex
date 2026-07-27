@@ -20,5 +20,5 @@ learnset:
   - { level: 57, move: Wild Charge }
   - { level: 60, move: Lock-On }
   - { level: 66, move: Zap Cannon }
+  - { level: 69, move: Explosion }
   - { level: 70, move: Hyper Beam }
-  - { level: 70, move: Explosion }

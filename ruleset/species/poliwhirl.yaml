@@ -15,9 +15,9 @@ learnset:
   - { level: 29, move: Bail Out }
   - { level: 30, move: Aqua Tail }
   - { level: 32, move: Body Slam }
-  - { level: 36, move: One-Inch Punch }
-  - { level: 36, move: Maelstrom }
+  - { level: 35, move: One-Inch Punch }
   - { level: 36, move: Cross Chop }
+  - { level: 37, move: Maelstrom }
   - { level: 40, move: Earth Power }
   - { level: 48, move: Hydro Pump }
   - { level: 52, move: Wave Crash }

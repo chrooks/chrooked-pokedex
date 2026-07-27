@@ -17,15 +17,15 @@ learnset:
   - { level: 7, move: Air Slash }
   - { level: 15, move: Wing Attack }
   - { level: 20, move: Water Pulse }
+  - { level: 27, move: Swallow }
   - { level: 28, move: Stockpile }
-  - { level: 28, move: Spit Up }
-  - { level: 28, move: Swallow }
-  - { level: 29, move: Muddy Water }
+  - { level: 29, move: Spit Up }
+  - { level: 30, move: Muddy Water }
   - { level: 31, move: Galeburst }
   - { level: 34, move: Fling }
   - { level: 41, move: Mist }
   - { level: 48, move: Roost }
   - { level: 52, move: Hurricane }
-  - { level: 52, move: Hydro Pump }
+  - { level: 53, move: Hydro Pump }
   - { level: 55, move: Tempest }
   - { level: 62, move: Tsunami }

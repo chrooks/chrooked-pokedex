@@ -14,7 +14,7 @@ learnset:
   - { level: 3, move: Iron Defense }
   - { level: 4, move: Tackle }
   - { level: 7, move: Glint }
-  - { level: 7, move: Jewel Glow }
+  - { level: 8, move: Jewel Glow }
   - { level: 13, move: Thunder Wave }
   - { level: 16, move: Rest }
   - { level: 18, move: Mirror Shot }
@@ -30,7 +30,7 @@ learnset:
   - { level: 37, move: Earth Power }
   - { level: 40, move: Stone Edge }
   - { level: 43, move: Zap Cannon }
-  - { level: 43, move: Lock-On }
+  - { level: 44, move: Lock-On }
   - { level: 48, move: Luster Cannon }
   - { level: 62, move: Steel Beam }
-  - { level: 62, move: Meteor Surge }
+  - { level: 63, move: Meteor Surge }

@@ -19,11 +19,11 @@ learnset:
   - { level: 18, move: Mirror Shot }
   - { level: 20, move: Flail }
   - { level: 25, move: Water Pulse }
-  - { level: 25, move: Draconic Fang }
+  - { level: 26, move: Draconic Fang }
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
   - { level: 39, move: Luster Cannon }
-  - { level: 39, move: Cataclysm }
+  - { level: 40, move: Cataclysm }
   - { level: 43, move: Curse }
   - { level: 44, move: Muddy Water }
   - { level: 49, move: Body Slam }

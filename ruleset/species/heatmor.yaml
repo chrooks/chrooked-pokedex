@@ -17,9 +17,9 @@ learnset:
   - { level: 15, move: Bug Bite }
   - { level: 16, move: Flame Wheel }
   - { level: 17, move: Smart Strike }
+  - { level: 19, move: Spit Up }
   - { level: 20, move: Stockpile }
-  - { level: 20, move: Swallow }
-  - { level: 20, move: Spit Up }
+  - { level: 21, move: Swallow }
   - { level: 25, move: Slash }
   - { level: 29, move: Metallic Fang }
   - { level: 30, move: Bind }

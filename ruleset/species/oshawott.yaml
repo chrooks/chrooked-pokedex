@@ -6,7 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 3, move: Undertow }
-  - { level: 3, move: Cheap Shot }
+  - { level: 4, move: Cheap Shot }
   - { level: 5, move: Tail Whip }
   - { level: 7, move: Water Gun }
   - { level: 11, move: Soak }
@@ -27,7 +27,7 @@ learnset:
   - { level: 46, move: Cross Chop }
   - { level: 48, move: Aura Sphere }
   - { level: 55, move: Pixie Slash }
+  - { level: 59, move: Havoc }
   - { level: 60, move: Secret Sword }
-  - { level: 60, move: Wave Crash }
-  - { level: 60, move: Havoc }
+  - { level: 61, move: Wave Crash }
   - { level: 64, move: Tsunami }

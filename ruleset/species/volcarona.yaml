@@ -31,6 +31,6 @@ learnset:
   - { level: 57, move: Overheat }
   - { level: 58, move: Drone Chorus }
   - { level: 62, move: Hurricane }
+  - { level: 69, move: Rage Powder }
   - { level: 70, move: Fire Blast }
-  - { level: 70, move: Rage Powder }
 evolution: { from: Larvesta, method: { level: 40 } }

@@ -10,9 +10,9 @@ learnset:
   - { level: 15, move: Bulldoze }
   - { level: 20, move: Headbutt }
   - { level: 25, move: Glare }
+  - { level: 29, move: Tectonic Fang }
   - { level: 30, move: Dig }
-  - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 31, move: Lithic Fang }
   - { level: 35, move: Sandstorm }
   - { level: 42, move: Body Slam }
   - { level: 43, move: Earthquake }

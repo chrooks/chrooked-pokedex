@@ -16,15 +16,15 @@ learnset:
   - { level: 5, move: Thunder Fang }
   - { level: 7, move: Assurance }
   - { level: 13, move: Howl }
-  - { level: 13, move: Leer }
+  - { level: 14, move: Leer }
   - { level: 16, move: Roar }
   - { level: 20, move: Swagger }
   - { level: 24, move: Crunch }
   - { level: 28, move: Scary Face }
+  - { level: 29, move: Draconic Fang }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 30, move: Draconic Fang }
-  - { level: 30, move: Metallic Fang }
+  - { level: 31, move: Tectonic Fang }
+  - { level: 32, move: Metallic Fang }
   - { level: 36, move: Taunt }
   - { level: 40, move: Backstab }
   - { level: 44, move: Yawn }

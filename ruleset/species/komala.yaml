@@ -5,9 +5,9 @@ stats: { hp: 75 }
 learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Rollout }
+  - { level: 5, move: Swallow }
   - { level: 6, move: Stockpile }
-  - { level: 6, move: Spit Up }
-  - { level: 6, move: Swallow }
+  - { level: 7, move: Spit Up }
   - { level: 11, move: Rapid Spin }
   - { level: 16, move: Yawn }
   - { level: 21, move: Bail Out }

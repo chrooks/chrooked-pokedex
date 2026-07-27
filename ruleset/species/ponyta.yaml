@@ -15,7 +15,7 @@ learnset:
   - { level: 30, move: Stomp }
   - { level: 35, move: Fire Spin }
   - { level: 38, move: Cinder Smash }
-  - { level: 38, move: Combust }
+  - { level: 39, move: Combust }
   - { level: 41, move: Take Down }
   - { level: 45, move: Inferno }
   - { level: 50, move: Fire Blast }

@@ -21,8 +21,8 @@ learnset:
   - { level: 34, move: Dragon Claw }
   - { level: 36, move: Inferno }
   - { level: 42, move: Crunch }
-  - { level: 42, move: Galeburst }
-  - { level: 43, move: Cataclysm }
+  - { level: 43, move: Galeburst }
+  - { level: 44, move: Cataclysm }
   - { level: 48, move: Heat Wave }
   - { level: 54, move: Flare Blitz }
   - { level: 57, move: Draco Meteor }

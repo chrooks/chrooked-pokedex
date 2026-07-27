@@ -22,4 +22,4 @@ learnset:
   - { level: 44, move: Destiny Bond }
   - { level: 48, move: Water Spout }
   - { level: 64, move: Netherstorm }
-  - { level: 64, move: Tsunami }
+  - { level: 65, move: Tsunami }

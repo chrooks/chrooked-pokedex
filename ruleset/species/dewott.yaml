@@ -9,7 +9,7 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Soak }
   - { level: 7, move: Undertow }
-  - { level: 7, move: Cheap Shot }
+  - { level: 8, move: Cheap Shot }
   - { level: 13, move: Focus Energy }
   - { level: 18, move: Razor Shell }
   - { level: 21, move: Fury Cutter }
@@ -20,14 +20,14 @@ learnset:
   - { level: 34, move: Aqua Jet }
   - { level: 37, move: Encore }
   - { level: 39, move: Backstab }
-  - { level: 39, move: Cross Chop }
-  - { level: 40, move: Pixie Slash }
+  - { level: 40, move: Cross Chop }
+  - { level: 41, move: Pixie Slash }
   - { level: 42, move: Maelstrom }
   - { level: 45, move: Retaliate }
   - { level: 47, move: Aura Sphere }
   - { level: 50, move: Swords Dance }
   - { level: 53, move: Hydro Pump }
+  - { level: 59, move: Havoc }
   - { level: 60, move: Secret Sword }
-  - { level: 60, move: Wave Crash }
-  - { level: 60, move: Havoc }
+  - { level: 61, move: Wave Crash }
   - { level: 64, move: Tsunami }

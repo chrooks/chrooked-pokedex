@@ -14,9 +14,9 @@ learnset:
   - { level: 21, move: Ingrain }
   - { level: 27, move: Grass Knot }
   - { level: 31, move: Leaf Tornado }
+  - { level: 36, move: Swallow }
   - { level: 37, move: Stockpile }
-  - { level: 37, move: Spit Up }
-  - { level: 37, move: Swallow }
+  - { level: 38, move: Spit Up }
   - { level: 41, move: Crunch }
   - { level: 44, move: Seed Bomb }
   - { level: 47, move: Reap }

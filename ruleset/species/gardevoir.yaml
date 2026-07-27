@@ -24,7 +24,7 @@ learnset:
   - { level: 31, move: Astral Hand }
   - { level: 35, move: Calm Mind }
   - { level: 38, move: One-Inch Punch }
-  - { level: 38, move: Kinetic Slam }
+  - { level: 39, move: Kinetic Slam }
   - { level: 42, move: Psychic }
   - { level: 44, move: Mindwarp }
   - { level: 45, move: Pixie Slash }

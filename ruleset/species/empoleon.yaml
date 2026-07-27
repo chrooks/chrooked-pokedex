@@ -31,7 +31,7 @@ learnset:
   - { level: 46, move: Mist }
   - { level: 52, move: Drill Peck }
   - { level: 55, move: Steel Beam }
-  - { level: 55, move: Hydro Pump }
+  - { level: 56, move: Hydro Pump }
   - { level: 57, move: Excalibur }
   - { level: 59, move: Tsunami }
   - { level: 66, move: Wave Crash }

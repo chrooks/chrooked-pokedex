@@ -29,13 +29,13 @@ learnset:
   - { level: 33, move: Acupressure }
   - { level: 36, move: Power Trick }
   - { level: 38, move: Aura Sphere }
+  - { level: 40, move: Cross Chop }
   - { level: 41, move: Ki Blast }
-  - { level: 41, move: Kinetic Slam }
-  - { level: 41, move: Cross Chop }
+  - { level: 42, move: Kinetic Slam }
   - { level: 44, move: High Jump Kick }
   - { level: 47, move: Recover }
   - { level: 53, move: Counter }
-  - { level: 53, move: Axe Kick }
+  - { level: 54, move: Axe Kick }
   - { level: 62, move: Focus Blast }
-  - { level: 62, move: Psycrush }
+  - { level: 63, move: Psycrush }
 evolution: { from: Meditite, method: { level: 34 } }

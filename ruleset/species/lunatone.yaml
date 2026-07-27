@@ -34,6 +34,6 @@ learnset:
   - { level: 58, move: Meteor Beam }
   - { level: 59, move: Night Daze }
   - { level: 62, move: Nasty Plot }
-  - { level: 62, move: Meteor Surge }
+  - { level: 63, move: Meteor Surge }
   - { level: 66, move: Eclipse }
   - { level: 70, move: Explosion }

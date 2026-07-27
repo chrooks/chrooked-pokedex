@@ -22,7 +22,7 @@ learnset:
   - { level: 24, move: Sandstorm }
   - { level: 28, move: Take Down }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 31, move: Tectonic Fang }
   - { level: 32, move: Roar }
   - { level: 38, move: Rest }
   - { level: 44, move: Earthquake }

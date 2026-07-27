@@ -11,12 +11,12 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 5, move: Confuse Ray }
   - { level: 8, move: Helping Hand }
-  - { level: 8, move: Double Team }
+  - { level: 9, move: Double Team }
   - { level: 12, move: Struggle Bug }
   - { level: 15, move: Shock Wave }
   - { level: 16, move: Signal Beam }
   - { level: 19, move: Infestation }
-  - { level: 19, move: Thunder Wave }
+  - { level: 20, move: Thunder Wave }
   - { level: 22, move: Protect }
   - { level: 26, move: Moonlight }
   - { level: 29, move: Electroweb }

@@ -20,9 +20,9 @@ learnset:
   - { level: 29, move: Bail Out }
   - { level: 30, move: Take Down }
   - { level: 33, move: Agility }
+  - { level: 35, move: Nosedive }
   - { level: 36, move: Brave Bird }
-  - { level: 36, move: Rampage }
-  - { level: 36, move: Nosedive }
+  - { level: 37, move: Rampage }
   - { level: 39, move: Air Slash }
   - { level: 45, move: Endeavor }
   - { level: 51, move: Brave Bird }

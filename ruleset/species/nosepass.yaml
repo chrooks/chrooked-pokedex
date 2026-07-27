@@ -23,8 +23,8 @@ learnset:
   - { level: 37, move: Earth Power }
   - { level: 40, move: Stone Edge }
   - { level: 43, move: Zap Cannon }
-  - { level: 43, move: Lock-On }
+  - { level: 44, move: Lock-On }
   - { level: 48, move: Luster Cannon }
   - { level: 57, move: Head Smash }
   - { level: 62, move: Steel Beam }
-  - { level: 62, move: Meteor Surge }
+  - { level: 63, move: Meteor Surge }

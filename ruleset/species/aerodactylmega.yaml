@@ -10,9 +10,9 @@ learnset:
   - { level: 10, move: Wing Attack }
   - { level: 15, move: Scary Face }
   - { level: 20, move: Rock Slide }
+  - { level: 24, move: Tectonic Fang }
   - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Roar }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 26, move: Roar }
   - { level: 30, move: Crunch }
   - { level: 35, move: Iron Head }
   - { level: 37, move: Dive Bomb }

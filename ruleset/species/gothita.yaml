@@ -17,6 +17,6 @@ learnset:
   - { level: 30, move: Shadow Ball }
   - { level: 34, move: Psychic }
   - { level: 38, move: Thunderbolt }
-  - { level: 38, move: Mindwarp }
+  - { level: 39, move: Mindwarp }
   - { level: 42, move: Future Sight }
   - { level: 46, move: Magic Room }

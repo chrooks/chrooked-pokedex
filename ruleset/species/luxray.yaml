@@ -21,10 +21,10 @@ learnset:
   - { level: 40, move: Scary Face }
   - { level: 43, move: Crunch }
   - { level: 44, move: Lightning Slam }
-  - { level: 44, move: Arc Strike }
+  - { level: 45, move: Arc Strike }
   - { level: 48, move: Thunder Wave }
   - { level: 56, move: Backstab }
   - { level: 57, move: Havoc }
   - { level: 64, move: Discharge }
+  - { level: 69, move: Wild Charge }
   - { level: 70, move: Swagger }
-  - { level: 70, move: Wild Charge }

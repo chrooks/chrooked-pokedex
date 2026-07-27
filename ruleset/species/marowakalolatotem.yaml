@@ -22,9 +22,9 @@ learnset:
   - { level: 29, move: Cinder Smash }
   - { level: 31, move: Bone Rush }
   - { level: 36, move: Knock Off }
+  - { level: 38, move: Combust }
   - { level: 39, move: Wraithstrike }
-  - { level: 39, move: Interment }
-  - { level: 39, move: Combust }
+  - { level: 40, move: Interment }
   - { level: 42, move: Swords Dance }
   - { level: 48, move: Bonemerang }
   - { level: 51, move: Necrosis }

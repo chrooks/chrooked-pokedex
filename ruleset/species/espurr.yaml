@@ -10,7 +10,7 @@ learnset:
   - { level: 18, move: Covet }
   - { level: 21, move: Psybeam }
   - { level: 30, move: Light Screen }
-  - { level: 30, move: Reflect }
+  - { level: 31, move: Reflect }
   - { level: 33, move: Psyshock }
   - { level: 46, move: Mindwarp }
   - { level: 57, move: Future Sight }

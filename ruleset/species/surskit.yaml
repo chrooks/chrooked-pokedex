@@ -13,15 +13,15 @@ learnset:
   - { level: 17, move: Bubble Beam }
   - { level: 22, move: Agility }
   - { level: 25, move: Mist }
-  - { level: 25, move: Haze }
+  - { level: 26, move: Haze }
   - { level: 29, move: Signal Beam }
   - { level: 30, move: Bug Buzz }
-  - { level: 30, move: Galeburst }
-  - { level: 31, move: Muddy Water }
+  - { level: 31, move: Galeburst }
+  - { level: 32, move: Muddy Water }
   - { level: 35, move: Baton Pass }
   - { level: 38, move: Sticky Web }
   - { level: 43, move: Hydro Pump }
   - { level: 45, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

@@ -12,7 +12,7 @@ learnset:
   - { level: 17, move: Water Whip }
   - { level: 21, move: Headbutt }
   - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 26, move: Tectonic Fang }
   - { level: 28, move: Counter }
   - { level: 31, move: Liquidation }
   - { level: 35, move: Jaw Lock }

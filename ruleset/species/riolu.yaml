@@ -6,12 +6,12 @@ learnset:
   - { level: 1, move: Endure }
   - { level: 4, move: Feint }
   - { level: 6, move: Glint }
-  - { level: 6, move: Aura Spark }
+  - { level: 7, move: Aura Spark }
   - { level: 8, move: Metal Claw }
   - { level: 12, move: Counter }
   - { level: 16, move: Work Up }
   - { level: 18, move: Mirror Shot }
-  - { level: 18, move: Chi Wave }
+  - { level: 19, move: Chi Wave }
   - { level: 20, move: Rock Smash }
   - { level: 24, move: Vacuum Wave }
   - { level: 28, move: Screech }
@@ -19,9 +19,9 @@ learnset:
   - { level: 32, move: Quick Guard }
   - { level: 34, move: Force Palm }
   - { level: 36, move: One-Inch Punch }
+  - { level: 37, move: Cross Chop }
   - { level: 38, move: Ki Blast }
-  - { level: 38, move: Luster Cannon }
-  - { level: 38, move: Cross Chop }
+  - { level: 39, move: Luster Cannon }
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Helping Hand }
   - { level: 48, move: Copycat }
@@ -29,4 +29,4 @@ learnset:
   - { level: 56, move: Reversal }
   - { level: 57, move: Close Combat }
   - { level: 62, move: Steel Beam }
-  - { level: 62, move: Focus Blast }
+  - { level: 63, move: Focus Blast }

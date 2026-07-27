@@ -164,8 +164,32 @@ def band_key(ctx: ll.Ctx, move: str) -> int:
     return 0 if r is None else BANDS.index(r[2]) + 1
 
 
+def _nearest_free(level: int, used: set[int]) -> int:
+    """Closest level to `level` not in `used`, within [2, 70], preferring later."""
+    for step in range(0, MAX_LEVEL):
+        for cand in (level + step, level - step):
+            if 2 <= cand <= MAX_LEVEL and cand not in used:
+                return cand
+    return level  # unreachable for real learnsets (never 69 slots full)
+
+
+def spread_levels(rows: list[tuple[int, str]]) -> list[tuple[int, str]]:
+    """No two moves share a level >= 2 (L0/L1 kept as-is — the starting kit can
+    stack). Colliding rungs move to the nearest free level in [2, 70]."""
+    anchors = [(lvl, mv) for lvl, mv in rows if lvl <= 1]
+    earned = sorted((r for r in rows if r[0] >= 2), key=lambda t: t[0])
+    used: set[int] = set()
+    out: list[tuple[int, str]] = []
+    for lvl, mv in earned:
+        target = lvl if lvl not in used else _nearest_free(lvl, used)
+        used.add(target)
+        out.append((target, mv))
+    return sorted(anchors + out, key=lambda t: t[0])
+
+
 def normalize(rows: list[tuple[int, str]], ctx: ll.Ctx) -> list[tuple[int, str]]:
-    """Enforce <=4 L1 moves (keep lowest-band, bump rest) and no move past L70."""
+    """Enforce caps: <=4 L1 moves (keep lowest-band, bump rest), no move past
+    L70, and one move per level >= 2 (spread collisions)."""
     rows = [(min(lvl, MAX_LEVEL), mv) for lvl, mv in rows]
     l1 = [(lvl, mv) for lvl, mv in rows if lvl == 1]
     if len(l1) > MAX_L1:
@@ -181,7 +205,7 @@ def normalize(rows: list[tuple[int, str]], ctx: ll.Ctx) -> list[tuple[int, str]]
             rows.append((nxt, mv))
             used.add(nxt)
             nxt += 1
-    return sorted(rows, key=lambda t: t[0])
+    return spread_levels(sorted(rows, key=lambda t: t[0]))
 
 
 def cmd(action: str, ids: list[str]) -> int:

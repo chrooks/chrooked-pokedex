@@ -19,4 +19,4 @@ learnset:
   - { level: 33, move: Moonblast }
   - { level: 36, move: Hydro Pump }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Rapture }
+  - { level: 65, move: Rapture }

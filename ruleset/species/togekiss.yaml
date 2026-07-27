@@ -31,4 +31,4 @@ learnset:
   - { level: 42, move: Galeburst }
   - { level: 43, move: Hurricane }
   - { level: 64, move: Oblivion Wing }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

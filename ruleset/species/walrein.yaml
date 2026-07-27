@@ -32,5 +32,5 @@ learnset:
   - { level: 56, move: Blizzard }
   - { level: 57, move: Wave Crash }
   - { level: 64, move: Hail }
+  - { level: 69, move: Icebreaker }
   - { level: 70, move: Sheer Cold }
-  - { level: 70, move: Icebreaker }

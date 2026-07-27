@@ -18,7 +18,7 @@ learnset:
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
   - { level: 39, move: Luster Cannon }
-  - { level: 39, move: Cataclysm }
+  - { level: 40, move: Cataclysm }
   - { level: 43, move: Curse }
   - { level: 49, move: Iron Head }
   - { level: 56, move: Muddy Water }

@@ -14,7 +14,7 @@ learnset:
   - { level: 2, move: Cheap Shot }
   - { level: 3, move: Poison Fang }
   - { level: 6, move: Night Slash }
-  - { level: 6, move: Undertow }
+  - { level: 7, move: Undertow }
   - { level: 12, move: Scary Face }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Bite }
@@ -29,4 +29,4 @@ learnset:
   - { level: 50, move: Maelstrom }
   - { level: 52, move: Take Down }
   - { level: 60, move: Wave Crash }
-  - { level: 60, move: Havoc }
+  - { level: 61, move: Havoc }

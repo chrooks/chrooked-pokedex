@@ -22,6 +22,6 @@ learnset:
   - { level: 47, move: Specter Bomb }
   - { level: 54, move: Quagmire }
   - { level: 57, move: Netherstorm }
-  - { level: 57, move: Sinkhole }
+  - { level: 58, move: Sinkhole }
   - { level: 61, move: Shore Up }
   - { level: 68, move: Sandstorm }

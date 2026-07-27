@@ -22,9 +22,9 @@ learnset:
   - { level: 10, move: Bail Out }
   - { level: 12, move: Yawn }
   - { level: 16, move: Bite }
+  - { level: 19, move: Rest }
   - { level: 20, move: Snore }
-  - { level: 20, move: Sleep Talk }
-  - { level: 20, move: Rest }
+  - { level: 21, move: Sleep Talk }
   - { level: 24, move: Crunch }
   - { level: 28, move: Body Slam }
   - { level: 32, move: Heavy Slam }

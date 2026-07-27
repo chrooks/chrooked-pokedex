@@ -10,8 +10,8 @@ learnset:
   - { level: 5, move: Icy Wind }
   - { level: 10, move: Payback }
   - { level: 15, move: Mist }
-  - { level: 15, move: Haze }
-  - { level: 16, move: Ice Punch }
+  - { level: 16, move: Haze }
+  - { level: 17, move: Ice Punch }
   - { level: 20, move: Ice Shard }
   - { level: 25, move: Swords Dance }
   - { level: 30, move: Snowscape }
@@ -26,5 +26,5 @@ learnset:
   - { level: 59, move: Icebreaker }
   - { level: 60, move: Sacred Sword }
   - { level: 65, move: Recover }
+  - { level: 69, move: Sheer Cold }
   - { level: 70, move: Havoc }
-  - { level: 70, move: Sheer Cold }

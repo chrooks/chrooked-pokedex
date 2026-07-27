@@ -30,8 +30,8 @@ learnset:
   - { level: 46, move: Maelstrom }
   - { level: 50, move: Wave Crash }
   - { level: 52, move: Poison Jab }
-  - { level: 58, move: Earthquake }
-  - { level: 58, move: Sinkhole }
+  - { level: 57, move: Earthquake }
   - { level: 58, move: Faultbreak }
-  - { level: 58, move: Tsunami }
+  - { level: 59, move: Sinkhole }
+  - { level: 60, move: Tsunami }
   - { level: 64, move: Boomburst }

@@ -18,7 +18,7 @@ learnset:
   - { level: 15, move: Morning Sun }
   - { level: 25, move: Body Slam }
   - { level: 30, move: Lithic Fang }
-  - { level: 30, move: Tectonic Fang }
+  - { level: 31, move: Tectonic Fang }
   - { level: 35, move: Stone Edge }
   - { level: 36, move: Combust }
   - { level: 40, move: Wild Charge }

@@ -7,9 +7,9 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Mud-Slap }
   - { level: 6, move: Rest }
-  - { level: 6, move: Snore }
+  - { level: 7, move: Snore }
   - { level: 9, move: Clod Toss }
-  - { level: 9, move: Undertow }
+  - { level: 10, move: Undertow }
   - { level: 12, move: Water Pulse }
   - { level: 15, move: Water Whip }
   - { level: 16, move: Bulldoze }

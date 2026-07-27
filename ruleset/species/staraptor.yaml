@@ -19,9 +19,9 @@ learnset:
   - { level: 28, move: Aerial Ace }
   - { level: 29, move: One-Inch Punch }
   - { level: 33, move: Take Down }
+  - { level: 36, move: Cross Chop }
   - { level: 37, move: Dive Bomb }
-  - { level: 37, move: Nosedive }
-  - { level: 37, move: Cross Chop }
+  - { level: 38, move: Nosedive }
   - { level: 41, move: Agility }
   - { level: 49, move: Brave Bird }
   - { level: 57, move: Final Gambit }

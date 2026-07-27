@@ -21,7 +21,7 @@ learnset:
   - { level: 40, move: Dig }
   - { level: 43, move: Earthquake }
   - { level: 46, move: Moltstrike }
-  - { level: 46, move: Dive Bomb }
+  - { level: 47, move: Dive Bomb }
   - { level: 48, move: Nosedive }
   - { level: 57, move: Megahorn }
   - { level: 62, move: Necrosis }

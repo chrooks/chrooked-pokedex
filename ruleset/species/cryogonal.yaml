@@ -11,14 +11,14 @@ learnset:
   - { level: 8, move: Rapid Spin }
   - { level: 12, move: Icy Wind }
   - { level: 16, move: Mist }
-  - { level: 16, move: Haze }
+  - { level: 17, move: Haze }
   - { level: 20, move: Ancient Power }
   - { level: 24, move: Aurora Beam }
   - { level: 28, move: Slash }
   - { level: 32, move: Night Slash }
   - { level: 36, move: Freeze-Dry }
   - { level: 40, move: Light Screen }
-  - { level: 40, move: Reflect }
+  - { level: 41, move: Reflect }
   - { level: 43, move: Ice Beam }
   - { level: 44, move: Recover }
   - { level: 48, move: Blizzard }

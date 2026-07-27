@@ -7,7 +7,7 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 7, move: Night Shade }
   - { level: 10, move: Glint }
-  - { level: 10, move: Knell }
+  - { level: 11, move: Knell }
   - { level: 14, move: Confuse Ray }
   - { level: 15, move: Hex }
   - { level: 18, move: Mirror Shot }

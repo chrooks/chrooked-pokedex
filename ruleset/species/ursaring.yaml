@@ -13,20 +13,20 @@ learnset:
   - { level: 13, move: Payback }
   - { level: 17, move: Night Slash }
   - { level: 22, move: Slash }
+  - { level: 24, move: Tectonic Fang }
   - { level: 25, move: Shadow Claw }
-  - { level: 25, move: Lithic Fang }
-  - { level: 25, move: Tectonic Fang }
+  - { level: 26, move: Lithic Fang }
   - { level: 29, move: Facade }
   - { level: 30, move: Take Down }
   - { level: 34, move: Bulk Up }
+  - { level: 37, move: Rampage }
   - { level: 38, move: Crunch }
-  - { level: 38, move: Quagmire }
-  - { level: 38, move: Rampage }
+  - { level: 39, move: Quagmire }
   - { level: 42, move: Rest }
-  - { level: 42, move: Snore }
+  - { level: 43, move: Snore }
   - { level: 47, move: Cross Chop }
   - { level: 52, move: Thrash }
-  - { level: 52, move: Faultbreak }
+  - { level: 53, move: Faultbreak }
   - { level: 58, move: Hammer Arm }
   - { level: 60, move: Sinkhole }
   - { level: 64, move: Superpower }

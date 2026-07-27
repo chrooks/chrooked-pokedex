@@ -28,4 +28,4 @@ learnset:
   - { level: 53, move: Hail }
   - { level: 57, move: Wave Crash }
   - { level: 64, move: Tsunami }
-  - { level: 64, move: Cryoblast }
+  - { level: 65, move: Cryoblast }

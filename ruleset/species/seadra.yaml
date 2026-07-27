@@ -21,7 +21,7 @@ learnset:
   - { level: 40, move: Dragon Pulse }
   - { level: 44, move: Cataclysm }
   - { level: 47, move: Wave Crash }
-  - { level: 47, move: Draco Meteor }
+  - { level: 48, move: Draco Meteor }
   - { level: 51, move: Hydro Pump }
   - { level: 54, move: Tsunami }
   - { level: 58, move: Dragon Dance }

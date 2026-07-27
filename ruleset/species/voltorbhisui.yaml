@@ -18,7 +18,7 @@ learnset:
   - { level: 26, move: Self-Destruct }
   - { level: 29, move: Energy Ball }
   - { level: 34, move: Seed Bomb }
-  - { level: 34, move: Discharge }
+  - { level: 35, move: Discharge }
   - { level: 37, move: Siphon }
   - { level: 41, move: Explosion }
   - { level: 43, move: Thunder }

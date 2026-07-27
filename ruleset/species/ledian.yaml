@@ -14,9 +14,9 @@ learnset:
   - { level: 3, move: Rock Smash }
   - { level: 5, move: Supersonic }
   - { level: 8, move: Swift }
+  - { level: 11, move: Safeguard }
   - { level: 12, move: Light Screen }
-  - { level: 12, move: Reflect }
-  - { level: 12, move: Safeguard }
+  - { level: 13, move: Reflect }
   - { level: 15, move: Mach Punch }
   - { level: 16, move: Bug Bite }
   - { level: 17, move: Brick Break }
@@ -28,7 +28,7 @@ learnset:
   - { level: 32, move: One-Inch Punch }
   - { level: 33, move: Agility }
   - { level: 36, move: Moltstrike }
-  - { level: 36, move: Cross Chop }
+  - { level: 37, move: Cross Chop }
   - { level: 38, move: Bug Buzz }
   - { level: 42, move: Galeburst }
   - { level: 47, move: Double-Edge }

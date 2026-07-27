@@ -20,12 +20,12 @@ learnset:
   - { level: 28, move: Torment }
   - { level: 35, move: Dark Pulse }
   - { level: 40, move: Nasty Plot }
+  - { level: 43, move: Play Rough }
   - { level: 44, move: Crunch }
-  - { level: 44, move: Backstab }
-  - { level: 44, move: Play Rough }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Starfall Slam }
+  - { level: 51, move: Faeblitz }
   - { level: 52, move: Havoc }
-  - { level: 52, move: Rapture }
-  - { level: 52, move: Faeblitz }
+  - { level: 53, move: Rapture }
   - { level: 56, move: Foul Play }
   - { level: 64, move: Hammer Arm }

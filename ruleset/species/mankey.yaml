@@ -20,7 +20,7 @@ learnset:
   - { level: 33, move: Cross Chop }
   - { level: 36, move: Screech }
   - { level: 38, move: Close Combat }
-  - { level: 38, move: Wraithstrike }
+  - { level: 39, move: Wraithstrike }
   - { level: 40, move: Stomping Tantrum }
   - { level: 42, move: Interment }
   - { level: 44, move: Outrage }

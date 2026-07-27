@@ -6,19 +6,19 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 2, move: Flame Charge }
+  - { level: 9, move: Powder Snow }
   - { level: 10, move: Water Gun }
-  - { level: 10, move: Ember }
-  - { level: 10, move: Powder Snow }
+  - { level: 11, move: Ember }
   - { level: 15, move: Headbutt }
   - { level: 16, move: Flame Wheel }
+  - { level: 19, move: Hail }
   - { level: 20, move: Rain Dance }
-  - { level: 20, move: Sunny Day }
-  - { level: 20, move: Hail }
+  - { level: 21, move: Sunny Day }
   - { level: 25, move: Weather Ball }
   - { level: 29, move: Cinder Smash }
+  - { level: 34, move: Blizzard }
   - { level: 35, move: Hydro Pump }
-  - { level: 35, move: Fire Blast }
-  - { level: 35, move: Blizzard }
+  - { level: 36, move: Fire Blast }
   - { level: 40, move: Combust }
   - { level: 45, move: Hurricane }
   - { level: 57, move: Flare Blitz }

@@ -27,7 +27,7 @@ learnset:
   - { level: 46, move: Ice Beam }
   - { level: 49, move: Aqua Tail }
   - { level: 52, move: Blizzard }
-  - { level: 52, move: Tsunami }
+  - { level: 53, move: Tsunami }
   - { level: 55, move: Cryoblast }
   - { level: 61, move: Safeguard }
   - { level: 65, move: Snowscape }

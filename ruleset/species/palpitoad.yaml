@@ -23,13 +23,13 @@ learnset:
   - { level: 30, move: Sludge Wave }
   - { level: 31, move: Tectonic Fang }
   - { level: 33, move: Muddy Water }
-  - { level: 33, move: Maelstrom }
+  - { level: 34, move: Maelstrom }
   - { level: 36, move: Earth Power }
   - { level: 42, move: Drain Punch }
   - { level: 43, move: Earthquake }
   - { level: 45, move: Wave Crash }
-  - { level: 45, move: Quagmire }
+  - { level: 46, move: Quagmire }
   - { level: 48, move: Hydro Pump }
   - { level: 57, move: Sinkhole }
   - { level: 64, move: Faultbreak }
-  - { level: 64, move: Tsunami }
+  - { level: 65, move: Tsunami }

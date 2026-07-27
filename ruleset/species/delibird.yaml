@@ -16,4 +16,4 @@ learnset:
   - { level: 57, move: Icebreaker }
   - { level: 59, move: Brave Bird }
   - { level: 64, move: Cryoblast }
-  - { level: 64, move: Tempest }
+  - { level: 65, move: Tempest }

@@ -23,6 +23,6 @@ learnset:
   - { level: 56, move: Blizzard }
   - { level: 57, move: Icebreaker }
   - { level: 64, move: Imprison }
+  - { level: 68, move: Sheer Cold }
+  - { level: 69, move: Glaciate }
   - { level: 70, move: Outrage }
-  - { level: 70, move: Glaciate }
-  - { level: 70, move: Sheer Cold }

@@ -10,12 +10,12 @@ learnset:
   - { level: 15, move: Dragon Tail }
   - { level: 20, move: Agility }
   - { level: 25, move: Body Slam }
-  - { level: 25, move: Breaking Swipe }
+  - { level: 26, move: Breaking Swipe }
   - { level: 28, move: Draconic Fang }
   - { level: 31, move: Aqua Tail }
   - { level: 35, move: Dragon Hammer }
   - { level: 37, move: Dive Bomb }
-  - { level: 37, move: Nosedive }
+  - { level: 38, move: Nosedive }
   - { level: 40, move: Safeguard }
   - { level: 42, move: Dragon Rush }
   - { level: 45, move: Rain Dance }

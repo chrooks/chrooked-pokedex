@@ -22,6 +22,6 @@ learnset:
   - { level: 45, move: Fissure }
   - { level: 54, move: Rest }
   - { level: 57, move: Flare Blitz }
+  - { level: 68, move: Eruption }
+  - { level: 69, move: Solar Beam }
   - { level: 70, move: Fire Blast }
-  - { level: 70, move: Solar Beam }
-  - { level: 70, move: Eruption }

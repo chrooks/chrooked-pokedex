@@ -25,5 +25,5 @@ learnset:
   - { level: 57, move: Faeblitz }
   - { level: 60, move: Wild Charge }
   - { level: 65, move: Brave Bird }
+  - { level: 69, move: Electric Terrain }
   - { level: 70, move: Power Swap }
-  - { level: 70, move: Electric Terrain }

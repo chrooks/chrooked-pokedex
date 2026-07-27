@@ -7,7 +7,7 @@ learnset:
   - { level: 1, move: Scratch }
   - { level: 2, move: Leafage }
   - { level: 6, move: Stun Spore }
-  - { level: 6, move: Poison Powder }
+  - { level: 7, move: Poison Powder }
   - { level: 11, move: Absorb }
   - { level: 15, move: Fury Cutter }
   - { level: 17, move: Bug Bite }
@@ -20,7 +20,7 @@ learnset:
   - { level: 38, move: Giga Drain }
   - { level: 43, move: Aromatherapy }
   - { level: 46, move: Wraithstrike }
-  - { level: 46, move: X-Scissor }
+  - { level: 47, move: X-Scissor }
   - { level: 49, move: Rage Powder }
   - { level: 54, move: Moltstrike }
   - { level: 57, move: Megahorn }

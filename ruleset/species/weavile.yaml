@@ -25,7 +25,7 @@ learnset:
   - { level: 36, move: Hone Claws }
   - { level: 37, move: Night Slash }
   - { level: 39, move: Heel Drop }
-  - { level: 39, move: Glacial Crush }
+  - { level: 40, move: Glacial Crush }
   - { level: 42, move: Fling }
   - { level: 43, move: Ice Hammer }
   - { level: 45, move: Pixie Slash }

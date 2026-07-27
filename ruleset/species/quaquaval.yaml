@@ -17,7 +17,7 @@ learnset:
   - { level: 10, move: Wing Attack }
   - { level: 13, move: Aqua Jet }
   - { level: 17, move: Low Sweep }
-  - { level: 17, move: Water Pulse }
+  - { level: 18, move: Water Pulse }
   - { level: 21, move: Aqua Cutter }
   - { level: 27, move: Air Slash }
   - { level: 29, move: One-Inch Punch }

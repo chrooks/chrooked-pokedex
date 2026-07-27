@@ -7,9 +7,9 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Bite }
   - { level: 1, move: Stuff Cheeks }
+  - { level: 14, move: Swallow }
   - { level: 15, move: Stockpile }
-  - { level: 15, move: Spit Up }
-  - { level: 15, move: Swallow }
+  - { level: 16, move: Spit Up }
   - { level: 20, move: Bail Out }
   - { level: 27, move: Rest }
   - { level: 31, move: Body Slam }

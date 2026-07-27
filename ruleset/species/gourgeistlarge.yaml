@@ -15,7 +15,7 @@ learnset:
   - { level: 16, move: Leech Seed }
   - { level: 20, move: Bullet Seed }
   - { level: 24, move: Trick-or-Treat }
-  - { level: 24, move: Scary Face }
+  - { level: 25, move: Scary Face }
   - { level: 28, move: Worry Seed }
   - { level: 32, move: Seed Bomb }
   - { level: 36, move: Shadow Ball }

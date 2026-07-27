@@ -16,8 +16,8 @@ learnset:
   - { level: 49, move: Flamethrower }
   - { level: 56, move: Collision Course }
   - { level: 63, move: Screech }
+  - { level: 66, move: Giga Impact }
+  - { level: 67, move: Flare Blitz }
+  - { level: 68, move: Close Combat }
+  - { level: 69, move: Outrage }
   - { level: 70, move: Counter }
-  - { level: 70, move: Outrage }
-  - { level: 70, move: Close Combat }
-  - { level: 70, move: Flare Blitz }
-  - { level: 70, move: Giga Impact }

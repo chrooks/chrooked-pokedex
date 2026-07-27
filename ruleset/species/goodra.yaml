@@ -24,14 +24,14 @@ learnset:
   - { level: 25, move: Water Pulse }
   - { level: 29, move: Dragon Pulse }
   - { level: 30, move: Rain Dance }
-  - { level: 30, move: Draconic Fang }
+  - { level: 31, move: Draconic Fang }
   - { level: 36, move: Luster Cannon }
-  - { level: 36, move: Cataclysm }
+  - { level: 37, move: Cataclysm }
   - { level: 43, move: Curse }
   - { level: 44, move: Muddy Water }
   - { level: 49, move: Body Slam }
   - { level: 53, move: Steel Beam }
-  - { level: 53, move: Draco Meteor }
+  - { level: 54, move: Draco Meteor }
   - { level: 57, move: Hydro Pump }
   - { level: 58, move: Tsunami }
   - { level: 67, move: Power Whip }

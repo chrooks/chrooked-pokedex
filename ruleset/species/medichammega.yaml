@@ -27,5 +27,5 @@ learnset:
   - { level: 45, move: Kinetic Slam }
   - { level: 47, move: Recover }
   - { level: 53, move: Axe Kick }
-  - { level: 53, move: Counter }
+  - { level: 54, move: Counter }
   - { level: 57, move: Psycrush }

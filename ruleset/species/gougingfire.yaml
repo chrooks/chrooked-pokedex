@@ -24,7 +24,7 @@ learnset:
   - { level: 49, move: Burning Bulwark }
   - { level: 56, move: Dragon Rush }
   - { level: 63, move: Fire Blast }
+  - { level: 67, move: Raging Fury }
+  - { level: 68, move: Flare Blitz }
+  - { level: 69, move: Outrage }
   - { level: 70, move: Lava Plume }
-  - { level: 70, move: Outrage }
-  - { level: 70, move: Flare Blitz }
-  - { level: 70, move: Raging Fury }
