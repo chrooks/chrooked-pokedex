@@ -4,6 +4,7 @@ aka: {  }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Wave }
+  - { level: 2, move: Thunder Shock }
   - { level: 4, move: Leer }
   - { level: 8, move: Howl }
   - { level: 12, move: Quick Attack }
@@ -15,3 +16,4 @@ learnset:
   - { level: 36, move: Charge }
   - { level: 40, move: Wild Charge }
   - { level: 44, move: Thunder }
+  - { level: 57, move: Zap Cannon }

@@ -5,11 +5,13 @@ types: [Electric, Fighting]
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Thunder Shock }
   - { level: 1, move: Charge }
-  - { level: 1, move: Swift }
   - { level: 1, move: Low Kick }
-  - { level: 1, move: Thunder Punch }
+  - { level: 2, move: Aura Spark }
+  - { level: 3, move: Thunder Shock }
+  - { level: 4, move: Swift }
+  - { level: 5, move: Thunder Punch }
+  - { level: 15, move: Chi Wave }
   - { level: 20, move: Thunder Wave }
   - { level: 24, move: Brick Break }
   - { level: 28, move: Ice Punch }
@@ -21,7 +23,10 @@ learnset:
   - { level: 37, move: Lightning Slam }
   - { level: 38, move: Aura Sphere }
   - { level: 41, move: Arc Strike }
+  - { level: 43, move: Ki Blast }
   - { level: 46, move: Thunderbolt }
   - { level: 52, move: Close Combat }
-  - { level: 58, move: Thunder }
+  - { level: 57, move: Thunder }
+  - { level: 58, move: Zap Cannon }
+  - { level: 59, move: Focus Blast }
 evolution: { from: Elekid, method: { level: 24 } }

@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Helping Hand }
+  - { level: 2, move: Undertow }
   - { level: 4, move: Water Pulse }
   - { level: 8, move: Focus Energy }
   - { level: 12, move: Psybeam }
@@ -14,8 +15,11 @@ learnset:
   - { level: 20, move: Bubble Beam }
   - { level: 24, move: Lock-On }
   - { level: 28, move: Bullet Seed }
+  - { level: 29, move: Aqua Tail }
   - { level: 32, move: Ice Beam }
   - { level: 36, move: Hydro Pump }
   - { level: 40, move: Soak }
+  - { level: 43, move: Maelstrom }
   - { level: 44, move: Hyper Beam }
+  - { level: 57, move: Wave Crash }
   - { level: 64, move: Tsunami }

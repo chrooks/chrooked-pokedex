@@ -12,8 +12,10 @@ learnset:
   - { level: 9, move: Undertow }
   - { level: 12, move: Water Pulse }
   - { level: 15, move: Water Whip }
+  - { level: 16, move: Bulldoze }
   - { level: 18, move: Amnesia }
   - { level: 24, move: Aqua Tail }
+  - { level: 29, move: Tectonic Fang }
   - { level: 31, move: Muddy Water }
   - { level: 36, move: Earthquake }
   - { level: 39, move: Maelstrom }

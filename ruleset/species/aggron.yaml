@@ -8,16 +8,21 @@ learnset:
   - { level: 1, move: Metal Claw }
   - { level: 1, move: Rock Tomb }
   - { level: 12, move: Roar }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Headbutt }
   - { level: 20, move: Protect }
   - { level: 24, move: Rock Slide }
   - { level: 28, move: Iron Head }
+  - { level: 29, move: Lithic Fang }
   - { level: 35, move: Metal Sound }
   - { level: 40, move: Take Down }
+  - { level: 43, move: Stone Edge }
   - { level: 48, move: Autotomize }
   - { level: 56, move: Iron Tail }
+  - { level: 57, move: Excalibur }
+  - { level: 59, move: Head Smash }
   - { level: 64, move: Iron Defense }
-  - { level: 72, move: Heavy Slam }
-  - { level: 80, move: Double-Edge }
-  - { level: 88, move: Metal Burst }
+  - { level: 70, move: Heavy Slam }
+  - { level: 70, move: Double-Edge }
+  - { level: 70, move: Metal Burst }
 evolution: { from: Lairon, method: { level: 38 } }

@@ -7,23 +7,29 @@ learnset:
   - { level: 0, move: Esper Wing }
   - { level: 1, move: Hone Claws }
   - { level: 1, move: Sky Attack }
-  - { level: 1, move: Peck }
-  - { level: 1, move: Superpower }
   - { level: 1, move: Leer }
-  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Peck }
+  - { level: 2, move: Confusion }
+  - { level: 3, move: Gust }
+  - { level: 4, move: Wing Attack }
+  - { level: 5, move: Superpower }
+  - { level: 15, move: Dream Mist }
   - { level: 18, move: Tailwind }
   - { level: 24, move: Scary Face }
+  - { level: 29, move: Psychic }
   - { level: 30, move: Aerial Ace }
   - { level: 33, move: Air Slash }
   - { level: 36, move: Slash }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Nosedive }
   - { level: 42, move: Whirlwind }
+  - { level: 43, move: Mindwarp }
   - { level: 48, move: Crush Claw }
   - { level: 52, move: Galeburst }
   - { level: 53, move: Oblivion Wing }
   - { level: 57, move: Hurricane }
+  - { level: 58, move: Future Sight }
   - { level: 64, move: Defog }
-  - { level: 72, move: Thrash }
-  - { level: 80, move: Tempest }
+  - { level: 70, move: Thrash }
+  - { level: 70, move: Tempest }
 evolution: { from: Rufflet, method: { level: 54 } }

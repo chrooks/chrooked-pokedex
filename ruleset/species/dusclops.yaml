@@ -5,15 +5,16 @@ abilities:
   hidden: Frisk
 learnset:
   - { level: 0, move: Shadow Punch }
-  - { level: 1, move: Fire Punch }
-  - { level: 1, move: Ice Punch }
-  - { level: 1, move: Thunder Punch }
   - { level: 1, move: Bind }
   - { level: 1, move: Leer }
   - { level: 1, move: Disable }
   - { level: 1, move: Shadow Sneak }
-  - { level: 1, move: Gravity }
-  - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Gravity }
+  - { level: 4, move: Astonish }
+  - { level: 5, move: Fire Punch }
+  - { level: 6, move: Ice Punch }
+  - { level: 7, move: Thunder Punch }
   - { level: 12, move: Confuse Ray }
   - { level: 16, move: Night Shade }
   - { level: 20, move: Payback }

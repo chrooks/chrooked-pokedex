@@ -16,3 +16,4 @@ learnset:
   - { level: 40, move: Mystical Fire }
   - { level: 44, move: Draining Kiss }
   - { level: 48, move: Fire Blast }
+  - { level: 57, move: Overheat }

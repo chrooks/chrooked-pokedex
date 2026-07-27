@@ -3,14 +3,18 @@ chrooked_id: oricoriopau
 aka: {  }
 learnset:
   - { level: 1, move: Pound }
+  - { level: 2, move: Confusion }
+  - { level: 3, move: Gust }
   - { level: 4, move: Growl }
   - { level: 6, move: Peck }
   - { level: 10, move: Helping Hand }
   - { level: 13, move: Air Cutter }
+  - { level: 15, move: Dream Mist }
   - { level: 16, move: Baton Pass }
   - { level: 20, move: Feather Dance }
   - { level: 23, move: Acrobatics }
   - { level: 26, move: Teeter Dance }
+  - { level: 29, move: Psychic }
   - { level: 30, move: Roost }
   - { level: 33, move: Flatter }
   - { level: 36, move: Air Slash }
@@ -19,4 +23,5 @@ learnset:
   - { level: 40, move: Revelation Dance }
   - { level: 43, move: Agility }
   - { level: 47, move: Hurricane }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Tempest }

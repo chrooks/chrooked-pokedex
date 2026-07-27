@@ -11,24 +11,26 @@ learnset:
   - { level: 0, move: Shadow Ball }
   - { level: 1, move: Astonish }
   - { level: 1, move: Confuse Ray }
-  - { level: 1, move: Disarming Voice }
   - { level: 1, move: Growl }
-  - { level: 1, move: Magical Leaf }
   - { level: 1, move: Spite }
+  - { level: 2, move: Disarming Voice }
+  - { level: 3, move: Magical Leaf }
   - { level: 4, move: Fairy Wind }
   - { level: 8, move: Psywave }
   - { level: 12, move: Knell }
   - { level: 15, move: Hex }
   - { level: 16, move: Mystical Fire }
+  - { level: 17, move: Draining Kiss }
   - { level: 20, move: Draining Kiss }
   - { level: 24, move: Will-O-Wisp }
   - { level: 28, move: Phantom Force }
-  - { level: 32, move: Draining Kiss }
+  - { level: 32, move: Beguile }
   - { level: 36, move: Extrasensory }
   - { level: 40, move: Nasty Plot }
   - { level: 44, move: Dazzling Gleam }
   - { level: 48, move: Dark Pulse }
   - { level: 52, move: Hyper Voice }
   - { level: 56, move: Moonblast }
+  - { level: 57, move: Rapture }
   - { level: 60, move: Specter Bomb }
   - { level: 64, move: Netherstorm }

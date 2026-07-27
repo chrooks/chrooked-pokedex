@@ -6,6 +6,8 @@ abilities:
 learnset:
   - { level: 1, move: Splash }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Peck }
   - { level: 4, move: Tail Whip }
   - { level: 6, move: Absorb }
   - { level: 8, move: Fairy Wind }
@@ -14,11 +16,13 @@ learnset:
   - { level: 10, move: Sleep Powder }
   - { level: 12, move: Bullet Seed }
   - { level: 15, move: Synthesis }
+  - { level: 16, move: Razor Leaf }
   - { level: 19, move: Leech Seed }
   - { level: 22, move: Mega Drain }
   - { level: 24, move: Acrobatics }
   - { level: 27, move: Cotton Spore }
   - { level: 29, move: U-turn }
+  - { level: 30, move: Seed Bomb }
   - { level: 32, move: Giga Drain }
   - { level: 35, move: Bounce }
   - { level: 38, move: Memento }
@@ -26,4 +30,6 @@ learnset:
   - { level: 42, move: Galeburst }
   - { level: 46, move: Dive Bomb }
   - { level: 48, move: Nosedive }
+  - { level: 57, move: Power Whip }
+  - { level: 59, move: Brave Bird }
   - { level: 64, move: Tempest }

@@ -13,7 +13,10 @@ learnset:
   - { level: 32, move: Venoshock }
   - { level: 35, move: Miasma }
   - { level: 40, move: Dragon Pulse }
+  - { level: 43, move: Sludge Wave }
   - { level: 45, move: Flamethrower }
+  - { level: 46, move: Fire Blast }
   - { level: 50, move: Toxic }
   - { level: 55, move: Endeavor }
+  - { level: 57, move: Overheat }
   - { level: 64, move: Contagion }

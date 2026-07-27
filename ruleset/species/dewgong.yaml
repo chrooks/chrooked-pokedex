@@ -10,19 +10,24 @@ learnset:
   - { level: 1, move: Headbutt }
   - { level: 1, move: Growl }
   - { level: 1, move: Icy Wind }
+  - { level: 2, move: Water Gun }
+  - { level: 3, move: Powder Snow }
   - { level: 13, move: Encore }
   - { level: 15, move: Water Whip }
   - { level: 17, move: Ice Shard }
   - { level: 21, move: Rest }
   - { level: 23, move: Aqua Ring }
   - { level: 27, move: Aurora Beam }
+  - { level: 29, move: Brine }
   - { level: 31, move: Aqua Jet }
-  - { level: 33, move: Brine }
+  - { level: 33, move: Muddy Water }
   - { level: 39, move: Take Down }
+  - { level: 43, move: Hydro Pump }
   - { level: 45, move: Dive }
+  - { level: 46, move: Ice Beam }
   - { level: 49, move: Aqua Tail }
+  - { level: 52, move: Blizzard }
   - { level: 52, move: Tsunami }
-  - { level: 52, move: Ice Beam }
   - { level: 55, move: Cryoblast }
   - { level: 61, move: Safeguard }
   - { level: 65, move: Snowscape }

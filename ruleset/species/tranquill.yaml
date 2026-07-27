@@ -7,17 +7,25 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Echoed Voice }
   - { level: 12, move: Taunt }
+  - { level: 15, move: Swift }
   - { level: 16, move: Air Cutter }
   - { level: 20, move: Swagger }
   - { level: 26, move: Feather Dance }
+  - { level: 29, move: Uproar }
   - { level: 31, move: Bail Out }
+  - { level: 32, move: Air Slash }
   - { level: 34, move: Detect }
-  - { level: 38, move: Air Slash }
+  - { level: 38, move: Galeburst }
   - { level: 41, move: Dive Bomb }
   - { level: 41, move: Rampage }
   - { level: 41, move: Nosedive }
+  - { level: 43, move: Resonance }
   - { level: 44, move: Roost }
+  - { level: 45, move: Hurricane }
   - { level: 50, move: Tailwind }
   - { level: 56, move: Sky Attack }
+  - { level: 57, move: Hyper Beam }
+  - { level: 59, move: Tempest }
   - { level: 64, move: Oblivion Wing }

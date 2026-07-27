@@ -12,12 +12,16 @@ learnset:
   - { level: 4, move: Toxic Spikes }
   - { level: 8, move: Mud Shot }
   - { level: 12, move: Poison Tail }
+  - { level: 15, move: Cross Poison }
   - { level: 16, move: Body Slam }
+  - { level: 17, move: Bulldoze }
   - { level: 21, move: Yawn }
   - { level: 24, move: Poison Jab }
+  - { level: 29, move: Tectonic Fang }
   - { level: 30, move: Sludge Wave }
   - { level: 36, move: Megahorn }
   - { level: 40, move: Toxic }
   - { level: 44, move: Venom Slam }
   - { level: 48, move: Earthquake }
+  - { level: 57, move: Gunk Shot }
   - { level: 64, move: Faultbreak }

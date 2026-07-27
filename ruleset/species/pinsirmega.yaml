@@ -5,17 +5,25 @@ learnset:
   - { level: 1, move: Vise Grip }
   - { level: 1, move: Harden }
   - { level: 1, move: Bite }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Peck }
   - { level: 4, move: Focus Energy }
   - { level: 8, move: Bug Bite }
   - { level: 12, move: Pursuit }
+  - { level: 15, move: Aerial Ace }
   - { level: 16, move: Seismic Toss }
   - { level: 20, move: Storm Throw }
   - { level: 24, move: Knock Off }
   - { level: 28, move: X-Scissor }
+  - { level: 29, move: Dive Bomb }
   - { level: 32, move: Throat Chop }
   - { level: 36, move: Swords Dance }
   - { level: 40, move: Strength }
+  - { level: 43, move: Moltstrike }
   - { level: 44, move: Crunch }
+  - { level: 45, move: Nosedive }
   - { level: 48, move: Superpower }
   - { level: 52, move: Guillotine }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Brave Bird }

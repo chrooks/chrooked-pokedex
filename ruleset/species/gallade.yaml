@@ -6,31 +6,33 @@ abilities:
 stats: { hp: 70, spa: 60, spd: 110, spe: 95 }
 learnset:
   - { level: 0, move: Slash }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Imprison }
   - { level: 1, move: Life Dew }
-  - { level: 1, move: Future Sight }
-  - { level: 1, move: Fury Cutter }
-  - { level: 1, move: Sacred Sword }
   - { level: 1, move: Charm }
-  - { level: 1, move: Disarming Voice }
   - { level: 1, move: Calm Mind }
-  - { level: 1, move: Leaf Blade }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Draining Kiss }
-  - { level: 1, move: Hypnosis }
-  - { level: 1, move: Psychic }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Psybeam }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Dream Eater }
-  - { level: 1, move: Aqua Cutter }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Double Team }
+  - { level: 4, move: Hypnosis }
+  - { level: 5, move: Growl }
+  - { level: 6, move: Leer }
+  - { level: 7, move: Dream Eater }
+  - { level: 8, move: Fury Cutter }
   - { level: 9, move: Helping Hand }
+  - { level: 10, move: Disarming Voice }
+  - { level: 11, move: Draining Kiss }
   - { level: 12, move: Feint }
+  - { level: 13, move: Confusion }
+  - { level: 14, move: Night Slash }
   - { level: 15, move: Mind Flick }
+  - { level: 16, move: Brick Break }
+  - { level: 17, move: Psybeam }
   - { level: 18, move: Aerial Ace }
+  - { level: 19, move: Aqua Cutter }
+  - { level: 20, move: Sacred Sword }
+  - { level: 21, move: Leaf Blade }
+  - { level: 22, move: Psychic }
   - { level: 23, move: False Swipe }
+  - { level: 24, move: Future Sight }
   - { level: 28, move: Protect }
   - { level: 31, move: Psycho Cut }
   - { level: 35, move: Swords Dance }

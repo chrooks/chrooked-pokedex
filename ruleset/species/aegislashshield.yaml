@@ -4,25 +4,31 @@ aka: { pokeemerald: SPECIES_AEGISLASH_SHIELD }
 learnset:
   - { level: 0, move: King's Shield }
   - { level: 1, move: King's Shield }
-  - { level: 1, move: Excalibur }
-  - { level: 1, move: Sacred Sword }
-  - { level: 1, move: Iron Head }
-  - { level: 1, move: Shadow Claw }
   - { level: 1, move: Shadow Sneak }
-  - { level: 1, move: Night Slash }
-  - { level: 1, move: Slash }
-  - { level: 1, move: Aerial Ace }
   - { level: 1, move: Swords Dance }
   - { level: 1, move: Iron Defense }
-  - { level: 1, move: Metal Sound }
-  - { level: 1, move: Fury Cutter }
-  - { level: 1, move: Tackle }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Lick }
+  - { level: 4, move: Metal Sound }
+  - { level: 5, move: Fury Cutter }
+  - { level: 6, move: Tackle }
+  - { level: 7, move: Shadow Claw }
+  - { level: 8, move: Night Slash }
+  - { level: 9, move: Slash }
+  - { level: 10, move: Aerial Ace }
+  - { level: 11, move: Sacred Sword }
+  - { level: 12, move: Smart Strike }
+  - { level: 13, move: Iron Head }
   - { level: 15, move: Glint }
   - { level: 15, move: Knell }
+  - { level: 16, move: Iron Tail }
   - { level: 30, move: Mirror Shot }
   - { level: 36, move: Secret Sword }
+  - { level: 43, move: Excalibur }
   - { level: 45, move: Wraithstrike }
+  - { level: 46, move: Interment }
   - { level: 48, move: Luster Cannon }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Necrosis }
   - { level: 62, move: Steel Beam }
   - { level: 64, move: Netherstorm }

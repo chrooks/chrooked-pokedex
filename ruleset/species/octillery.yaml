@@ -7,19 +7,20 @@ abilities:
 stats: { hp: 80, atk: 95, def: 80, spa: 125 }
 learnset:
   - { level: 0, move: Octazooka }
-  - { level: 1, move: Octazooka }
-  - { level: 1, move: Gunk Shot }
   - { level: 1, move: Rock Blast }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Wrap }
-  - { level: 1, move: Water Pulse }
   - { level: 1, move: Focus Energy }
+  - { level: 2, move: Water Gun }
+  - { level: 3, move: Water Pulse }
+  - { level: 4, move: Bubble Beam }
+  - { level: 5, move: Gunk Shot }
   - { level: 12, move: Psybeam }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Aurora Beam }
-  - { level: 20, move: Bubble Beam }
+  - { level: 20, move: Muddy Water }
   - { level: 24, move: Lock-On }
+  - { level: 29, move: Octazooka }
   - { level: 30, move: Bullet Seed }
   - { level: 36, move: Ice Beam }
   - { level: 42, move: Hydro Pump }

@@ -5,17 +5,23 @@ abilities:
   hidden: Anticipation
 learnset:
   - { level: 0, move: Power Whip }
-  - { level: 1, move: Power Whip }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Harden }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Pin Missile }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Metal Claw }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Razor Leaf }
   - { level: 15, move: Ingrain }
+  - { level: 16, move: Seed Bomb }
+  - { level: 17, move: Smart Strike }
   - { level: 20, move: Flash Cannon }
   - { level: 25, move: Iron Head }
+  - { level: 29, move: Reap }
   - { level: 30, move: Self-Destruct }
   - { level: 35, move: Iron Defense }
-  - { level: 39, move: Reap }
+  - { level: 39, move: Power Whip }
   - { level: 43, move: Curse }
+  - { level: 44, move: Iron Tail }
   - { level: 49, move: Gyro Ball }
   - { level: 56, move: Explosion }
+  - { level: 57, move: Excalibur }

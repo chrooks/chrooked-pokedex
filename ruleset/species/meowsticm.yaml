@@ -3,10 +3,10 @@ chrooked_id: meowsticm
 aka: {  }
 learnset:
   - { level: 1, move: Mean Look }
+  - { level: 1, move: Leer }
   - { level: 1, move: Disarming Voice }
   - { level: 1, move: Fake Out }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
+  - { level: 2, move: Scratch }
   - { level: 9, move: Confusion }
   - { level: 12, move: Helping Hand }
   - { level: 15, move: Charm }
@@ -21,4 +21,5 @@ learnset:
   - { level: 44, move: Imprison }
   - { level: 49, move: Quick Guard }
   - { level: 54, move: Mindwarp }
+  - { level: 57, move: Future Sight }
   - { level: 59, move: Misty Terrain }

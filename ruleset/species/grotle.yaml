@@ -3,12 +3,14 @@ chrooked_id: grotle
 aka: { pokeemerald: SPECIES_GROTLE }
 types: [Grass, Ground]
 learnset:
+  - { level: 1, move: Withdraw }
   - { level: 1, move: Absorb }
   - { level: 1, move: Clod Toss }
-  - { level: 1, move: Razor Leaf }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Withdraw }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Razor Leaf }
   - { level: 13, move: Curse }
+  - { level: 15, move: Bulldoze }
   - { level: 17, move: Bite }
   - { level: 22, move: Mega Drain }
   - { level: 25, move: Lithic Fang }
@@ -17,7 +19,8 @@ learnset:
   - { level: 32, move: Synthesis }
   - { level: 37, move: Crunch }
   - { level: 40, move: Grav Apple }
-  - { level: 42, move: Headlong Rush }
+  - { level: 42, move: Earthquake }
+  - { level: 43, move: Headlong Rush }
   - { level: 44, move: Reap }
   - { level: 47, move: Wood Hammer }
   - { level: 52, move: Head Smash }

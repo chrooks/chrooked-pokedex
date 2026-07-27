@@ -8,12 +8,15 @@ learnset:
   - { level: 8, move: Helping Hand }
   - { level: 11, move: Super Fang }
   - { level: 14, move: Double Hit }
+  - { level: 15, move: Population Bomb }
   - { level: 18, move: Bullet Seed }
   - { level: 22, move: Encore }
   - { level: 26, move: Play Rough }
+  - { level: 29, move: Bail Out }
   - { level: 30, move: Hyper Voice }
   - { level: 33, move: Charm }
   - { level: 37, move: Beat Up }
-  - { level: 39, move: Population Bomb }
+  - { level: 39, move: Take Down }
   - { level: 41, move: Copycat }
   - { level: 46, move: Rampage }
+  - { level: 57, move: Double-Edge }

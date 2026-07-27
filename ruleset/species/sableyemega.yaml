@@ -4,7 +4,9 @@ aka: {  }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Astonish }
+  - { level: 4, move: Lick }
   - { level: 9, move: Shadow Sneak }
   - { level: 12, move: Fake Out }
   - { level: 15, move: Disable }
@@ -12,11 +14,16 @@ learnset:
   - { level: 21, move: Night Shade }
   - { level: 24, move: Fury Swipes }
   - { level: 27, move: Knock Off }
+  - { level: 29, move: Heel Drop }
   - { level: 30, move: Quash }
   - { level: 33, move: Shadow Claw }
   - { level: 36, move: Mean Look }
   - { level: 39, move: Power Gem }
   - { level: 40, move: Wraithstrike }
   - { level: 42, move: Zen Headbutt }
+  - { level: 43, move: Backstab }
   - { level: 45, move: Shadow Ball }
+  - { level: 46, move: Interment }
   - { level: 48, move: Foul Play }
+  - { level: 57, move: Havoc }
+  - { level: 59, move: Necrosis }

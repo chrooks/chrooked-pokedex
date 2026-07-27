@@ -4,15 +4,17 @@ aka: { dex: 733 }
 learnset:
   - { level: 0, move: Beak Blast }
   - { level: 1, move: Growl }
+  - { level: 1, move: Rock Blast }
   - { level: 1, move: Peck }
   - { level: 1, move: Rock Smash }
-  - { level: 1, move: Rock Blast }
-  - { level: 1, move: Echoed Voice }
+  - { level: 2, move: Tackle }
+  - { level: 3, move: Echoed Voice }
   - { level: 13, move: Supersonic }
   - { level: 16, move: Pluck }
   - { level: 21, move: Roost }
   - { level: 24, move: Fury Attack }
   - { level: 27, move: Bail Out }
+  - { level: 29, move: Take Down }
   - { level: 30, move: Screech }
   - { level: 34, move: Drill Peck }
   - { level: 37, move: Rampage }
@@ -20,3 +22,5 @@ learnset:
   - { level: 40, move: Bullet Seed }
   - { level: 44, move: Feather Dance }
   - { level: 50, move: Hyper Voice }
+  - { level: 57, move: Double-Edge }
+  - { level: 59, move: Brave Bird }

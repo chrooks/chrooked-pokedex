@@ -4,11 +4,11 @@ aka: { pokeemerald: SPECIES_URSARING }
 abilities:
   secondary: Quick Feet
 learnset:
-  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
-  - { level: 1, move: Lick }
-  - { level: 1, move: Covet }
   - { level: 1, move: Fake Tears }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Lick }
+  - { level: 2, move: Covet }
   - { level: 8, move: Fury Swipes }
   - { level: 13, move: Payback }
   - { level: 17, move: Night Slash }
@@ -16,7 +16,8 @@ learnset:
   - { level: 25, move: Shadow Claw }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
-  - { level: 30, move: Facade }
+  - { level: 29, move: Facade }
+  - { level: 30, move: Take Down }
   - { level: 34, move: Bulk Up }
   - { level: 38, move: Crunch }
   - { level: 38, move: Quagmire }

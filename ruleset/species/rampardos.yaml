@@ -10,8 +10,10 @@ learnset:
   - { level: 1, move: Headbutt }
   - { level: 1, move: Leer }
   - { level: 1, move: Focus Energy }
+  - { level: 2, move: Rollout }
   - { level: 10, move: Rock Smash }
   - { level: 15, move: Take Down }
+  - { level: 16, move: Rock Slide }
   - { level: 19, move: Scary Face }
   - { level: 24, move: Assurance }
   - { level: 28, move: Body Slam }
@@ -19,5 +21,6 @@ learnset:
   - { level: 30, move: Tectonic Fang }
   - { level: 36, move: Ancient Power }
   - { level: 43, move: Zen Headbutt }
+  - { level: 44, move: Stone Edge }
   - { level: 51, move: Screech }
   - { level: 58, move: Head Smash }

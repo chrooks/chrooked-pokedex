@@ -5,12 +5,15 @@ learnset:
   - { level: 0, move: Electro Shot }
   - { level: 1, move: Leer }
   - { level: 1, move: Metal Claw }
+  - { level: 2, move: Twister }
   - { level: 6, move: Rock Smash }
   - { level: 9, move: Glint }
   - { level: 12, move: Hone Claws }
+  - { level: 15, move: Dragon Breath }
   - { level: 18, move: Metal Sound }
   - { level: 21, move: Mirror Shot }
   - { level: 24, move: Breaking Swipe }
+  - { level: 29, move: Dragon Pulse }
   - { level: 30, move: Dragon Tail }
   - { level: 36, move: Iron Defense }
   - { level: 39, move: Cataclysm }

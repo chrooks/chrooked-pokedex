@@ -5,16 +5,18 @@ stats: { spe: 105 }
 learnset:
   - { level: 0, move: Blaze Kick }
   - { level: 1, move: Double Kick }
-  - { level: 1, move: Ember }
   - { level: 1, move: Feather Dance }
-  - { level: 1, move: Fire Punch }
-  - { level: 1, move: Flamethrower }
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Scratch }
-  - { level: 9, move: Flame Charge }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Ember }
+  - { level: 4, move: Scratch }
+  - { level: 5, move: Flame Charge }
+  - { level: 6, move: Flamethrower }
+  - { level: 9, move: Fire Punch }
   - { level: 12, move: Detect }
   - { level: 15, move: Sand Attack }
+  - { level: 16, move: Brick Break }
   - { level: 20, move: Aerial Ace }
   - { level: 25, move: Slash }
   - { level: 30, move: Bounce }
@@ -22,6 +24,9 @@ learnset:
   - { level: 38, move: One-Inch Punch }
   - { level: 40, move: Aura Sphere }
   - { level: 42, move: Bulk Up }
+  - { level: 43, move: Combust }
+  - { level: 45, move: Cross Chop }
   - { level: 49, move: Reversal }
   - { level: 56, move: Flare Blitz }
+  - { level: 57, move: Close Combat }
   - { level: 63, move: Brave Bird }

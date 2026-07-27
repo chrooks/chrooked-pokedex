@@ -7,11 +7,11 @@ abilities:
   secondary: Merciless
   hidden: Nematocyst
 learnset:
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: Reflect Type }
   - { level: 1, move: Toxic Spikes }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Wrap }
+  - { level: 1, move: Poison Sting }
+  - { level: 2, move: Water Gun }
   - { level: 12, move: Supersonic }
   - { level: 16, move: Bubble Beam }
   - { level: 20, move: Acid }

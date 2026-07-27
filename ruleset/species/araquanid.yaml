@@ -4,11 +4,12 @@ aka: { pokeemerald: SPECIES_ARAQUANID }
 abilities:
   hidden: Carnivore
 learnset:
-  - { level: 1, move: Bite }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Bug Bite }
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Infestation }
+  - { level: 1, move: Water Gun }
+  - { level: 1, move: Bite }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Bug Bite }
   - { level: 6, move: Undertow }
   - { level: 12, move: Bubble Beam }
   - { level: 16, move: Aqua Ring }
@@ -24,4 +25,5 @@ learnset:
   - { level: 50, move: Wave Crash }
   - { level: 53, move: Tsunami }
   - { level: 56, move: Moltstrike }
+  - { level: 57, move: Megahorn }
   - { level: 62, move: Mirror Coat }

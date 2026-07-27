@@ -11,9 +11,10 @@ learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Ember }
   - { level: 1, move: Quick Attack }
-  - { level: 5, move: Fire Fang }
+  - { level: 5, move: Flame Wheel }
   - { level: 10, move: Wing Attack }
   - { level: 14, move: Fire Spin }
+  - { level: 15, move: Fire Fang }
   - { level: 17, move: Acrobatics }
   - { level: 21, move: Agility }
   - { level: 25, move: Aerial Ace }
@@ -28,3 +29,5 @@ learnset:
   - { level: 47, move: Flamethrower }
   - { level: 51, move: Fly }
   - { level: 55, move: Double-Edge }
+  - { level: 57, move: Flare Blitz }
+  - { level: 59, move: Brave Bird }

@@ -7,11 +7,11 @@ abilities:
 stats: { def: 80, spe: 85 }
 learnset:
   - { level: 0, move: Bite }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Twister }
   - { level: 1, move: Splash }
   - { level: 1, move: Flail }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Twister }
   - { level: 4, move: Whirlpool }
   - { level: 6, move: Undertow }
   - { level: 8, move: Ice Fang }
@@ -22,6 +22,7 @@ learnset:
   - { level: 21, move: Breaking Swipe }
   - { level: 24, move: Crunch }
   - { level: 28, move: Dragon Tail }
+  - { level: 29, move: Draconic Fang }
   - { level: 30, move: Aqua Tail }
   - { level: 32, move: Maelstrom }
   - { level: 36, move: Dragon Dance }

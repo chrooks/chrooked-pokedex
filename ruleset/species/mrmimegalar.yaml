@@ -6,28 +6,32 @@ learnset:
   - { level: 1, move: Encore }
   - { level: 1, move: Role Play }
   - { level: 1, move: Protect }
-  - { level: 1, move: Recycle }
-  - { level: 1, move: Mimic }
-  - { level: 1, move: Light Screen }
-  - { level: 1, move: Reflect }
-  - { level: 1, move: Safeguard }
-  - { level: 1, move: Dazzling Gleam }
-  - { level: 1, move: Misty Terrain }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Rapid Spin }
-  - { level: 1, move: Baton Pass }
-  - { level: 1, move: Ice Shard }
+  - { level: 2, move: Powder Snow }
+  - { level: 3, move: Recycle }
+  - { level: 4, move: Mimic }
+  - { level: 5, move: Light Screen }
+  - { level: 6, move: Reflect }
+  - { level: 7, move: Safeguard }
+  - { level: 8, move: Misty Terrain }
+  - { level: 9, move: Baton Pass }
+  - { level: 10, move: Ice Shard }
+  - { level: 11, move: Pound }
   - { level: 12, move: Confusion }
+  - { level: 13, move: Rapid Spin }
+  - { level: 14, move: Dazzling Gleam }
   - { level: 16, move: Ally Switch }
   - { level: 20, move: Icy Wind }
   - { level: 24, move: Double Kick }
   - { level: 28, move: Psybeam }
+  - { level: 29, move: Freeze-Dry }
   - { level: 32, move: Hypnosis }
   - { level: 36, move: Mirror Coat }
   - { level: 38, move: Psychic }
   - { level: 40, move: Sucker Punch }
-  - { level: 44, move: Freeze-Dry }
+  - { level: 43, move: Ice Beam }
+  - { level: 44, move: Blizzard }
   - { level: 48, move: Mindwarp }
   - { level: 52, move: Teeter Dance }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Cryoblast }
 evolution: { from: Mime Jr, method: { pokeemerald: EVO_MOVE, param: MOVE_MIMIC } }

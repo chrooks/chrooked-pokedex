@@ -5,24 +5,30 @@ types: [Normal, Fairy]
 abilities:
   secondary: Competitive
 learnset:
-  - { level: 1, move: Disarming Voice }
   - { level: 1, move: Copycat }
   - { level: 1, move: Sweet Kiss }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Charm }
-  - { level: 1, move: Sing }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Pound }
+  - { level: 2, move: Sing }
+  - { level: 3, move: Disable }
   - { level: 4, move: Echoed Voice }
+  - { level: 5, move: Disarming Voice }
+  - { level: 6, move: Pound }
   - { level: 8, move: Covet }
   - { level: 12, move: Glitter Tap }
   - { level: 12, move: Spit Up }
   - { level: 12, move: Swallow }
+  - { level: 15, move: Bail Out }
   - { level: 16, move: Round }
+  - { level: 17, move: Cutsie Slap }
   - { level: 20, move: Rest }
   - { level: 24, move: Body Slam }
   - { level: 28, move: Mimic }
+  - { level: 29, move: Pixie Slash }
   - { level: 32, move: Gyro Ball }
   - { level: 36, move: Hyper Voice }
+  - { level: 43, move: Rampage }
   - { level: 44, move: Double-Edge }
+  - { level: 45, move: Starfall Slam }
+  - { level: 57, move: Faeblitz }
 evolution: { from: Igglybuff, method: { level: 16 } }

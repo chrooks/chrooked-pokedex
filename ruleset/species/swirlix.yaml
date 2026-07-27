@@ -14,8 +14,10 @@ learnset:
   - { level: 22, move: Beguile }
   - { level: 24, move: Cotton Spore }
   - { level: 27, move: Energy Ball }
+  - { level: 29, move: Dazzling Gleam }
   - { level: 30, move: Wish }
   - { level: 33, move: Play Rough }
   - { level: 36, move: Cotton Guard }
   - { level: 39, move: Endeavor }
+  - { level: 43, move: Moonblast }
   - { level: 64, move: Rapture }

@@ -7,20 +7,24 @@ abilities:
   secondary: Carnivore
 stats: { def: 75, spa: 75, spd: 75, spe: 100 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Thunder Shock }
   - { level: 1, move: Charge }
   - { level: 1, move: Electric Terrain }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Nuzzle }
+  - { level: 3, move: Cheap Shot }
+  - { level: 4, move: Thunder Shock }
   - { level: 12, move: Bite }
   - { level: 18, move: Spark }
   - { level: 24, move: Roar }
   - { level: 33, move: Volt Switch }
   - { level: 40, move: Scary Face }
+  - { level: 43, move: Crunch }
   - { level: 44, move: Lightning Slam }
   - { level: 44, move: Arc Strike }
   - { level: 48, move: Thunder Wave }
-  - { level: 56, move: Crunch }
+  - { level: 56, move: Backstab }
+  - { level: 57, move: Havoc }
   - { level: 64, move: Discharge }
-  - { level: 72, move: Swagger }
-  - { level: 80, move: Wild Charge }
+  - { level: 70, move: Swagger }
+  - { level: 70, move: Wild Charge }

@@ -9,7 +9,11 @@ learnset:
   - { level: 1, move: Light Screen }
   - { level: 1, move: Confusion }
   - { level: 1, move: Struggle Bug }
-  - { level: 30, move: Signal Beam }
+  - { level: 15, move: Dream Mist }
+  - { level: 29, move: Signal Beam }
+  - { level: 30, move: Bug Buzz }
+  - { level: 31, move: Psychic }
   - { level: 45, move: Antennae Blast }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Future Sight }
   - { level: 60, move: Drone Chorus }

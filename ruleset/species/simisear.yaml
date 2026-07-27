@@ -9,4 +9,8 @@ learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Fury Swipes }
   - { level: 1, move: Flame Burst }
+  - { level: 2, move: Flame Charge }
+  - { level: 15, move: Flame Wheel }
+  - { level: 29, move: Cinder Smash }
   - { level: 46, move: Combust }
+  - { level: 57, move: Flare Blitz }

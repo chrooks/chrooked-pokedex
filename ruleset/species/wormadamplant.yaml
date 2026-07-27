@@ -5,16 +5,20 @@ learnset:
   - { level: 0, move: Quiver Dance }
   - { level: 1, move: Quiver Dance }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Protect }
-  - { level: 1, move: Bug Bite }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Struggle Bug }
+  - { level: 3, move: Absorb }
+  - { level: 4, move: Bug Bite }
   - { level: 10, move: Protect }
   - { level: 15, move: Bug Bite }
+  - { level: 16, move: Giga Drain }
   - { level: 20, move: String Shot }
   - { level: 21, move: Signal Beam }
   - { level: 23, move: Confusion }
   - { level: 26, move: Razor Leaf }
   - { level: 29, move: Growth }
+  - { level: 30, move: Energy Ball }
   - { level: 32, move: Psybeam }
   - { level: 35, move: Infestation }
   - { level: 36, move: Bug Buzz }

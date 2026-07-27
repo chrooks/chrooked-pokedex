@@ -8,16 +8,21 @@ abilities:
   hidden: Gluttony
 learnset:
   - { level: 1, move: Pound }
+  - { level: 2, move: Poison Sting }
   - { level: 5, move: Yawn }
   - { level: 8, move: Poison Gas }
   - { level: 10, move: Acid Spray }
   - { level: 12, move: Amnesia }
+  - { level: 15, move: Cross Poison }
   - { level: 17, move: Sludge }
+  - { level: 18, move: Bail Out }
   - { level: 20, move: Encore }
   - { level: 25, move: Toxic }
   - { level: 28, move: Stockpile }
   - { level: 28, move: Spit Up }
   - { level: 28, move: Swallow }
+  - { level: 29, move: Gastric Snare }
+  - { level: 31, move: Take Down }
   - { level: 33, move: Sludge Bomb }
   - { level: 36, move: Gastro Acid }
   - { level: 38, move: Rampage }
@@ -25,4 +30,5 @@ learnset:
   - { level: 41, move: Belch }
   - { level: 44, move: Pain Split }
   - { level: 49, move: Gunk Shot }
+  - { level: 57, move: Double-Edge }
   - { level: 64, move: Contagion }

@@ -3,10 +3,10 @@ chrooked_id: barraskewda
 aka: { dex: 847 }
 learnset:
   - { level: 1, move: Fury Attack }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Peck }
   - { level: 1, move: Aqua Jet }
-  - { level: 1, move: Throat Chop }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Bite }
+  - { level: 2, move: Throat Chop }
   - { level: 9, move: Undertow }
   - { level: 14, move: Water Whip }
   - { level: 18, move: Agility }

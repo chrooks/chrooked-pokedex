@@ -6,16 +6,17 @@ learnset:
   - { level: 1, move: Copycat }
   - { level: 1, move: Feint }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Rock Smash }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Vacuum Wave }
-  - { level: 1, move: Detect }
-  - { level: 1, move: Reversal }
-  - { level: 1, move: Screech }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Final Gambit }
-  - { level: 1, move: Life Dew }
+  - { level: 2, move: Detect }
+  - { level: 3, move: Reversal }
+  - { level: 4, move: Screech }
+  - { level: 5, move: Quick Attack }
+  - { level: 6, move: Final Gambit }
+  - { level: 7, move: Life Dew }
+  - { level: 8, move: Rock Smash }
+  - { level: 9, move: Metal Claw }
   - { level: 12, move: Counter }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Work Up }
   - { level: 20, move: Force Palm }
   - { level: 24, move: Calm Mind }
@@ -24,8 +25,11 @@ learnset:
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Bone Rush }
   - { level: 40, move: Swords Dance }
+  - { level: 43, move: Cross Chop }
   - { level: 44, move: Heal Pulse }
-  - { level: 48, move: Meteor Mash }
+  - { level: 45, move: Meteor Mash }
+  - { level: 48, move: Iron Tail }
   - { level: 52, move: Dragon Pulse }
   - { level: 56, move: Extreme Speed }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Close Combat }

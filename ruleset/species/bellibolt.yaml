@@ -16,5 +16,6 @@ learnset:
   - { level: 32, move: Discharge }
   - { level: 36, move: Weather Ball }
   - { level: 40, move: Electric Terrain }
+  - { level: 43, move: Thunder }
   - { level: 45, move: Sucker Punch }
   - { level: 50, move: Zap Cannon }

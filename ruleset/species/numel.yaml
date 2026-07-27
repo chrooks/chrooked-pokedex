@@ -6,10 +6,12 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 2, move: Mud-Slap }
   - { level: 5, move: Ember }
   - { level: 8, move: Focus Energy }
   - { level: 12, move: Bulldoze }
   - { level: 15, move: Incinerate }
+  - { level: 16, move: Mud Shot }
   - { level: 19, move: Amnesia }
   - { level: 22, move: Lava Plume }
   - { level: 26, move: Earth Power }
@@ -18,5 +20,7 @@ learnset:
   - { level: 38, move: Quagmire }
   - { level: 40, move: Earthquake }
   - { level: 43, move: Flamethrower }
+  - { level: 44, move: Fire Blast }
   - { level: 47, move: Double-Edge }
+  - { level: 57, move: Overheat }
   - { level: 62, move: Sinkhole }

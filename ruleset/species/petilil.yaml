@@ -20,5 +20,6 @@ learnset:
   - { level: 33, move: Synthesis }
   - { level: 36, move: Sunny Day }
   - { level: 39, move: Entrainment }
-  - { level: 42, move: Leaf Storm }
+  - { level: 42, move: Siphon }
+  - { level: 43, move: Leaf Storm }
   - { level: 46, move: Reap }

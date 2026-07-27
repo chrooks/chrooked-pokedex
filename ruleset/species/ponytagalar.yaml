@@ -11,7 +11,8 @@ learnset:
   - { level: 4, move: Quick Attack }
   - { level: 8, move: Disarming Voice }
   - { level: 12, move: Mind Flick }
-  - { level: 16, move: Glitter Tap }
+  - { level: 15, move: Glitter Tap }
+  - { level: 16, move: Cutsie Slap }
   - { level: 20, move: Stomp }
   - { level: 24, move: Psybeam }
   - { level: 28, move: Take Down }

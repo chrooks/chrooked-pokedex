@@ -10,16 +10,17 @@ learnset:
   - { level: 0, move: Double Team }
   - { level: 1, move: Double Team }
   - { level: 1, move: Screech }
-  - { level: 1, move: Fury Cutter }
   - { level: 1, move: Baton Pass }
-  - { level: 1, move: Aerial Ace }
-  - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Dig }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Harden }
-  - { level: 1, move: False Swipe }
+  - { level: 2, move: Peck }
+  - { level: 3, move: Sand Attack }
+  - { level: 4, move: Harden }
+  - { level: 5, move: Fury Cutter }
+  - { level: 6, move: Mud-Slap }
+  - { level: 7, move: Metal Claw }
+  - { level: 8, move: Scratch }
+  - { level: 9, move: False Swipe }
+  - { level: 10, move: Aerial Ace }
   - { level: 15, move: Agility }
   - { level: 23, move: Absorb }
   - { level: 29, move: Bug Bite }
@@ -30,4 +31,6 @@ learnset:
   - { level: 43, move: Mind Reader }
   - { level: 50, move: Slash }
   - { level: 57, move: Swords Dance }
-  - { level: 64, move: Moltstrike }
+  - { level: 58, move: Moltstrike }
+  - { level: 59, move: Brave Bird }
+  - { level: 64, move: Megahorn }

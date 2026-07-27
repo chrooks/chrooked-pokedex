@@ -13,7 +13,8 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Glitter Tap }
   - { level: 6, move: Double Kick }
-  - { level: 11, move: Play Rough }
+  - { level: 11, move: Cutsie Slap }
+  - { level: 15, move: Play Rough }
   - { level: 16, move: Zen Headbutt }
   - { level: 20, move: Bail Out }
   - { level: 23, move: Agility }
@@ -26,3 +27,4 @@ learnset:
   - { level: 44, move: Swords Dance }
   - { level: 48, move: Double-Edge }
   - { level: 50, move: Jump Kick }
+  - { level: 57, move: Faeblitz }

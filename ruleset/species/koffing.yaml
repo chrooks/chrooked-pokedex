@@ -7,13 +7,16 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Poison Gas }
+  - { level: 2, move: Poison Sting }
   - { level: 4, move: Smog }
   - { level: 8, move: Smokescreen }
   - { level: 12, move: Clear Smog }
+  - { level: 15, move: Cross Poison }
   - { level: 16, move: Assurance }
   - { level: 20, move: Sludge }
   - { level: 24, move: Haze }
   - { level: 28, move: Self-Destruct }
+  - { level: 29, move: Gastric Snare }
   - { level: 32, move: Sludge Bomb }
   - { level: 36, move: Toxic }
   - { level: 38, move: Venom Slam }
@@ -21,4 +24,5 @@ learnset:
   - { level: 44, move: Explosion }
   - { level: 48, move: Memento }
   - { level: 52, move: Destiny Bond }
+  - { level: 57, move: Gunk Shot }
   - { level: 64, move: Faeblitz }

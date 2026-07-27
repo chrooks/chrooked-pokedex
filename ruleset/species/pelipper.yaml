@@ -7,18 +7,20 @@ stats: { hp: 80, spa: 95 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Supersonic }
-  - { level: 1, move: Air Slash }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Tailwind }
   - { level: 1, move: Agility }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Protect }
-  - { level: 1, move: Soak }
+  - { level: 2, move: Gust }
+  - { level: 3, move: Quick Attack }
+  - { level: 4, move: Protect }
+  - { level: 5, move: Soak }
+  - { level: 6, move: Water Gun }
+  - { level: 7, move: Air Slash }
   - { level: 15, move: Wing Attack }
   - { level: 20, move: Water Pulse }
   - { level: 28, move: Stockpile }
   - { level: 28, move: Spit Up }
   - { level: 28, move: Swallow }
+  - { level: 29, move: Muddy Water }
   - { level: 31, move: Galeburst }
   - { level: 34, move: Fling }
   - { level: 41, move: Mist }

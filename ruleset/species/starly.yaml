@@ -6,9 +6,11 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 2, move: Peck }
   - { level: 5, move: Quick Attack }
   - { level: 9, move: Wing Attack }
   - { level: 13, move: Double Team }
+  - { level: 15, move: Bail Out }
   - { level: 17, move: Endeavor }
   - { level: 21, move: Whirlwind }
   - { level: 25, move: Aerial Ace }
@@ -16,6 +18,8 @@ learnset:
   - { level: 33, move: Agility }
   - { level: 37, move: Dive Bomb }
   - { level: 41, move: Final Gambit }
+  - { level: 43, move: Rampage }
   - { level: 46, move: Nosedive }
   - { level: 46, move: Cross Chop }
   - { level: 48, move: Brave Bird }
+  - { level: 57, move: Double-Edge }

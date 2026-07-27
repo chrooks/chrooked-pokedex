@@ -18,4 +18,5 @@ learnset:
   - { level: 40, move: Psychic }
   - { level: 44, move: Mindwarp }
   - { level: 51, move: Healing Wish }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Rapture }

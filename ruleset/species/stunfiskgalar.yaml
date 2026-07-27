@@ -10,12 +10,19 @@ learnset:
   - { level: 7, move: Clod Toss }
   - { level: 10, move: Mud Shot }
   - { level: 15, move: Revenge }
+  - { level: 16, move: Bulldoze }
+  - { level: 17, move: Smart Strike }
   - { level: 20, move: Metal Sound }
   - { level: 25, move: Sucker Punch }
+  - { level: 29, move: Tectonic Fang }
   - { level: 30, move: Iron Defense }
+  - { level: 31, move: Metallic Fang }
   - { level: 35, move: Bounce }
   - { level: 40, move: Muddy Water }
+  - { level: 43, move: Earthquake }
   - { level: 45, move: Snap Trap }
+  - { level: 46, move: Iron Tail }
   - { level: 50, move: Flail }
   - { level: 55, move: Fissure }
+  - { level: 57, move: Excalibur }
   - { level: 64, move: Faultbreak }

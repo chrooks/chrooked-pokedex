@@ -17,10 +17,12 @@ learnset:
   - { level: 33, move: Feather Dance }
   - { level: 36, move: Dive Bomb }
   - { level: 38, move: Reap }
-  - { level: 40, move: Brave Bird }
+  - { level: 40, move: Nosedive }
   - { level: 42, move: Wraithstrike }
+  - { level: 43, move: Brave Bird }
   - { level: 45, move: One-Inch Punch }
   - { level: 46, move: Cross Chop }
   - { level: 48, move: Interment }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Power Whip }
   - { level: 62, move: Necrosis }

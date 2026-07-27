@@ -15,4 +15,5 @@ learnset:
   - { level: 28, move: Flamethrower }
   - { level: 32, move: Hyper Voice }
   - { level: 36, move: Fire Blast }
+  - { level: 57, move: Overheat }
   - { level: 64, move: Netherstorm }

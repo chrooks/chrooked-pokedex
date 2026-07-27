@@ -2,22 +2,29 @@ name: Victini
 chrooked_id: victini
 aka: { pokeemerald: SPECIES_VICTINI }
 learnset:
-  - { level: 1, move: V-create }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Flame Charge }
-  - { level: 1, move: Confusion }
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Victory Dance }
+  - { level: 1, move: Flame Charge }
+  - { level: 2, move: Mind Flick }
+  - { level: 3, move: Confusion }
+  - { level: 4, move: Flame Wheel }
   - { level: 7, move: Work Up }
   - { level: 14, move: Incinerate }
+  - { level: 15, move: Psycho Cut }
+  - { level: 17, move: Cinder Smash }
   - { level: 21, move: Stored Power }
   - { level: 28, move: Headbutt }
+  - { level: 29, move: Combust }
   - { level: 35, move: Endure }
   - { level: 42, move: Zen Headbutt }
+  - { level: 43, move: Kinetic Slam }
+  - { level: 45, move: V-create }
   - { level: 49, move: Inferno }
   - { level: 56, move: Reversal }
+  - { level: 57, move: Psycrush }
   - { level: 63, move: Searing Shot }
   - { level: 70, move: Double-Edge }
-  - { level: 77, move: Flare Blitz }
-  - { level: 84, move: Overheat }
-  - { level: 91, move: Final Gambit }
+  - { level: 70, move: Flare Blitz }
+  - { level: 70, move: Overheat }
+  - { level: 70, move: Final Gambit }

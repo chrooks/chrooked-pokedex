@@ -8,10 +8,12 @@ learnset:
   - { level: 1, move: Double Hit }
   - { level: 1, move: Infestation }
   - { level: 1, move: Withdraw }
-  - { level: 1, move: Sweet Scent }
-  - { level: 1, move: Recycle }
-  - { level: 1, move: Astonish }
+  - { level: 2, move: Absorb }
+  - { level: 3, move: Twister }
   - { level: 4, move: Dragon Tail }
+  - { level: 5, move: Sweet Scent }
+  - { level: 6, move: Recycle }
+  - { level: 7, move: Astonish }
   - { level: 8, move: Growth }
   - { level: 12, move: Dragon Breath }
   - { level: 16, move: Protect }
@@ -21,6 +23,8 @@ learnset:
   - { level: 36, move: Recover }
   - { level: 38, move: Cataclysm }
   - { level: 40, move: Earth Power }
-  - { level: 44, move: Energy Ball }
+  - { level: 43, move: Energy Ball }
+  - { level: 44, move: Siphon }
   - { level: 48, move: Draco Meteor }
   - { level: 54, move: Power Whip }
+  - { level: 57, move: Leaf Storm }

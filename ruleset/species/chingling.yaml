@@ -6,11 +6,19 @@ abilities:
   primary: Sacred Toll
 learnset:
   - { level: 1, move: Wrap }
+  - { level: 2, move: Glint }
   - { level: 4, move: Growl }
   - { level: 7, move: Astonish }
   - { level: 10, move: Confusion }
   - { level: 13, move: Yawn }
+  - { level: 15, move: Mirror Shot }
   - { level: 16, move: Last Resort }
+  - { level: 17, move: Dream Mist }
   - { level: 19, move: Entrainment }
+  - { level: 29, move: Flash Cannon }
+  - { level: 31, move: Psychic }
   - { level: 32, move: Uproar }
+  - { level: 43, move: Luster Cannon }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Steel Beam }
+  - { level: 59, move: Future Sight }

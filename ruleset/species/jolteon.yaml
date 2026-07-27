@@ -7,27 +7,28 @@ abilities:
 learnset:
   - { level: 0, move: Thunder Shock }
   - { level: 1, move: Baton Pass }
-  - { level: 1, move: Swift }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Covet }
   - { level: 1, move: Charm }
-  - { level: 1, move: Bite }
   - { level: 1, move: Growl }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Take Down }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Copycat }
+  - { level: 2, move: Tail Whip }
+  - { level: 3, move: Copycat }
+  - { level: 4, move: Covet }
   - { level: 5, move: Sand Attack }
+  - { level: 6, move: Tackle }
+  - { level: 7, move: Swift }
+  - { level: 8, move: Bite }
+  - { level: 9, move: Bail Out }
   - { level: 10, move: Quick Attack }
+  - { level: 11, move: Take Down }
   - { level: 15, move: Baby-Doll Eyes }
   - { level: 17, move: Short Circuit }
   - { level: 20, move: Thunder Wave }
   - { level: 25, move: Double Kick }
-  - { level: 30, move: Bail Out }
+  - { level: 30, move: Double-Edge }
   - { level: 35, move: Pin Missile }
   - { level: 40, move: Discharge }
   - { level: 45, move: Agility }
   - { level: 50, move: Thunder }
   - { level: 55, move: Last Resort }
+  - { level: 57, move: Zap Cannon }
 evolution: { from: Eevee, method: { item: Thunder Stone } }

@@ -8,10 +8,10 @@ abilities:
 stats: { spd: 90 }
 learnset:
   - { level: 1, move: Double Kick }
+  - { level: 1, move: Iron Defense }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Rock Smash }
-  - { level: 1, move: Iron Defense }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Clod Toss }
   - { level: 12, move: Bulldoze }
   - { level: 16, move: Stomp }
   - { level: 20, move: Strength }

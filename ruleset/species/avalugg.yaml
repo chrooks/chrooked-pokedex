@@ -7,14 +7,16 @@ abilities:
 stats: { def: 164, spd: 66 }
 learnset:
   - { level: 0, move: Body Slam }
-  - { level: 1, move: Powder Snow }
-  - { level: 1, move: Rapid Spin }
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Harden }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Rapid Spin }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Tackle }
   - { level: 9, move: Curse }
   - { level: 12, move: Icy Wind }
   - { level: 15, move: Protect }
+  - { level: 16, move: Ice Punch }
   - { level: 18, move: Avalanche }
   - { level: 21, move: Bite }
   - { level: 24, move: Ice Fang }
@@ -23,6 +25,7 @@ learnset:
   - { level: 33, move: Crunch }
   - { level: 36, move: Take Down }
   - { level: 41, move: Blizzard }
+  - { level: 43, move: Icicle Crash }
   - { level: 46, move: Double-Edge }
-  - { level: 51, move: Icicle Crash }
+  - { level: 51, move: Ice Hammer }
   - { level: 64, move: Icebreaker }

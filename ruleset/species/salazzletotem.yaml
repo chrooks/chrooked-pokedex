@@ -4,23 +4,26 @@ aka: { dex: 758 }
 learnset:
   - { level: 0, move: Fire Lash }
   - { level: 1, move: Endeavor }
-  - { level: 1, move: Knock Off }
   - { level: 1, move: Torment }
   - { level: 1, move: Swagger }
   - { level: 1, move: Poison Gas }
-  - { level: 1, move: Encore }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Smog }
-  - { level: 1, move: Pound }
+  - { level: 2, move: Encore }
+  - { level: 3, move: Disable }
+  - { level: 4, move: Ember }
+  - { level: 5, move: Scratch }
+  - { level: 6, move: Smog }
+  - { level: 7, move: Pound }
+  - { level: 8, move: Knock Off }
   - { level: 15, move: Poison Fang }
   - { level: 20, move: Sweet Scent }
   - { level: 25, move: Nasty Plot }
   - { level: 30, move: Incinerate }
   - { level: 33, move: Venoshock }
   - { level: 37, move: Miasma }
+  - { level: 43, move: Sludge Wave }
   - { level: 44, move: Dragon Pulse }
+  - { level: 45, move: Fire Blast }
   - { level: 51, move: Flamethrower }
+  - { level: 57, move: Overheat }
   - { level: 58, move: Toxic }
   - { level: 64, move: Contagion }

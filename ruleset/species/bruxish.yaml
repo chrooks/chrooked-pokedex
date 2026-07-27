@@ -9,8 +9,9 @@ learnset:
   - { level: 9, move: Confusion }
   - { level: 12, move: Bite }
   - { level: 14, move: Water Whip }
+  - { level: 15, move: Mind Flick }
   - { level: 17, move: Aqua Jet }
-  - { level: 20, move: Mind Flick }
+  - { level: 20, move: Psycho Cut }
   - { level: 25, move: Psyshock }
   - { level: 28, move: Crunch }
   - { level: 30, move: Aqua Tail }

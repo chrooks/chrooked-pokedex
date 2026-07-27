@@ -4,16 +4,21 @@ aka: {  }
 learnset:
   - { level: 1, move: Double Team }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Gust }
   - { level: 5, move: Thunder Shock }
   - { level: 10, move: Confuse Ray }
   - { level: 15, move: Charge }
+  - { level: 16, move: Air Slash }
   - { level: 20, move: Electro Ball }
   - { level: 25, move: Thunder Wave }
   - { level: 30, move: Shock Wave }
   - { level: 32, move: Galeburst }
   - { level: 35, move: Hex }
   - { level: 40, move: Substitute }
+  - { level: 43, move: Thunder }
   - { level: 45, move: Trick }
+  - { level: 46, move: Hurricane }
   - { level: 50, move: Discharge }
   - { level: 55, move: Uproar }
+  - { level: 57, move: Zap Cannon }
   - { level: 64, move: Tempest }

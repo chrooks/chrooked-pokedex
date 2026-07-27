@@ -14,11 +14,13 @@ learnset:
   - { level: 22, move: Beguile }
   - { level: 24, move: Grass Knot }
   - { level: 27, move: Sweet Kiss }
+  - { level: 29, move: Dazzling Gleam }
   - { level: 30, move: Floral Healing }
   - { level: 33, move: Petal Blizzard }
   - { level: 36, move: Bind }
   - { level: 39, move: Play Rough }
   - { level: 42, move: Sweet Scent }
+  - { level: 43, move: Moonblast }
   - { level: 45, move: Petal Dance }
   - { level: 48, move: Grassy Terrain }
   - { level: 64, move: Rapture }

@@ -7,24 +7,30 @@ abilities:
 stats: { spa: 85 }
 learnset:
   - { level: 1, move: Stockpile }
-  - { level: 1, move: Echoed Voice }
-  - { level: 1, move: Round }
   - { level: 1, move: Copycat }
   - { level: 1, move: Gyro Ball }
-  - { level: 1, move: Covet }
-  - { level: 1, move: Hyper Voice }
   - { level: 1, move: Swallow }
-  - { level: 1, move: Spit Up }
-  - { level: 1, move: Disarming Voice }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Rest }
-  - { level: 1, move: Defense Curl }
-  - { level: 1, move: Mimic }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Sing }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Body Slam }
-  - { level: 1, move: Charm }
+  - { level: 2, move: Spit Up }
+  - { level: 3, move: Sweet Kiss }
+  - { level: 4, move: Rest }
   - { level: 5, move: Glitter Tap }
+  - { level: 6, move: Defense Curl }
+  - { level: 7, move: Mimic }
+  - { level: 8, move: Disable }
+  - { level: 9, move: Sing }
   - { level: 10, move: Play Rough }
+  - { level: 11, move: Charm }
+  - { level: 12, move: Echoed Voice }
+  - { level: 13, move: Covet }
+  - { level: 14, move: Disarming Voice }
+  - { level: 15, move: Beguile }
+  - { level: 16, move: Pound }
+  - { level: 17, move: Round }
+  - { level: 18, move: Hyper Voice }
+  - { level: 19, move: Body Slam }
+  - { level: 20, move: Double-Edge }
+  - { level: 29, move: Dazzling Gleam }
+  - { level: 43, move: Resonance }
+  - { level: 45, move: Moonblast }
+  - { level: 57, move: Hyper Beam }
+  - { level: 59, move: Rapture }

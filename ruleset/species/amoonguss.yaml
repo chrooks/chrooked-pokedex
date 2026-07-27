@@ -8,15 +8,19 @@ learnset:
   - { level: 1, move: Stun Spore }
   - { level: 1, move: Astonish }
   - { level: 12, move: Mega Drain }
+  - { level: 15, move: Clear Smog }
   - { level: 16, move: Synthesis }
-  - { level: 20, move: Clear Smog }
+  - { level: 20, move: Venoshock }
   - { level: 24, move: Sweet Scent }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: Energy Ball }
   - { level: 32, move: Ingrain }
   - { level: 36, move: Toxic }
   - { level: 39, move: Miasma }
   - { level: 42, move: Rage Powder }
+  - { level: 43, move: Sludge Wave }
   - { level: 45, move: Siphon }
   - { level: 48, move: Solar Beam }
   - { level: 54, move: Spore }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Contagion }

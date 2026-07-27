@@ -11,9 +11,12 @@ learnset:
   - { level: 20, move: Slash }
   - { level: 24, move: Rock Slide }
   - { level: 28, move: Stealth Rock }
+  - { level: 29, move: Lithic Fang }
   - { level: 32, move: Rock Blast }
   - { level: 36, move: X-Scissor }
   - { level: 38, move: Moltstrike }
   - { level: 40, move: Rock Polish }
+  - { level: 43, move: Stone Edge }
   - { level: 44, move: Shell Smash }
   - { level: 48, move: Rock Wrecker }
+  - { level: 57, move: Megahorn }

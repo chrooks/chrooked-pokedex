@@ -6,13 +6,14 @@ abilities:
   secondary: Rock Head
   hidden: Stampede
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Hammer Arm }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Smack Down }
-  - { level: 1, move: Bulldoze }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Clod Toss }
+  - { level: 3, move: Bulldoze }
   - { level: 15, move: Horn Attack }
+  - { level: 16, move: Rock Slide }
   - { level: 20, move: Scary Face }
   - { level: 25, move: Stomp }
   - { level: 30, move: Rock Blast }
@@ -24,4 +25,4 @@ learnset:
   - { level: 57, move: Faultbreak }
   - { level: 61, move: Megahorn }
   - { level: 68, move: Horn Drill }
-  - { level: 75, move: Rock Wrecker }
+  - { level: 70, move: Rock Wrecker }

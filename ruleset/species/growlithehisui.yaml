@@ -4,6 +4,8 @@ aka: { pokeemerald: SPECIES_GROWLITHE_HISUI }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Rollout }
   - { level: 4, move: Howl }
   - { level: 8, move: Bite }
   - { level: 12, move: Flame Wheel }

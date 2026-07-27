@@ -10,6 +10,7 @@ learnset:
   - { level: 9, move: Quick Attack }
   - { level: 12, move: Mud Shot }
   - { level: 15, move: Flail }
+  - { level: 16, move: Bail Out }
   - { level: 18, move: Double Kick }
   - { level: 21, move: Bulldoze }
   - { level: 24, move: Dig }
@@ -19,4 +20,5 @@ learnset:
   - { level: 36, move: Earthquake }
   - { level: 39, move: Super Fang }
   - { level: 46, move: Rampage }
+  - { level: 57, move: Double-Edge }
   - { level: 64, move: Faultbreak }

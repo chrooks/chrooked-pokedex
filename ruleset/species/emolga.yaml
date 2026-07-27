@@ -23,9 +23,12 @@ learnset:
   - { level: 38, move: Electroweb }
   - { level: 40, move: Volt Switch }
   - { level: 43, move: Energy Ball }
+  - { level: 44, move: Thunder }
   - { level: 45, move: Light Screen }
+  - { level: 46, move: Galeburst }
   - { level: 48, move: Discharge }
-  - { level: 52, move: Galeburst }
+  - { level: 52, move: Hurricane }
   - { level: 55, move: Thunderbolt }
+  - { level: 57, move: Zap Cannon }
   - { level: 58, move: Nasty Plot }
   - { level: 62, move: Tempest }

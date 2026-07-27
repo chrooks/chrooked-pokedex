@@ -9,20 +9,23 @@ learnset:
   - { level: 1, move: Gyro Ball }
   - { level: 1, move: Eruption }
   - { level: 1, move: Smokescreen }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Ember }
   - { level: 1, move: Leer }
-  - { level: 1, move: Double-Edge }
+  - { level: 2, move: Tackle }
+  - { level: 3, move: Ember }
+  - { level: 4, move: Double-Edge }
   - { level: 7, move: Knell }
   - { level: 13, move: Quick Attack }
+  - { level: 15, move: Incinerate }
   - { level: 20, move: Flame Wheel }
   - { level: 24, move: Defense Curl }
+  - { level: 29, move: Shadow Ball }
   - { level: 31, move: Swift }
   - { level: 35, move: Flame Charge }
   - { level: 43, move: Lava Plume }
+  - { level: 44, move: Specter Bomb }
   - { level: 48, move: Flamethrower }
   - { level: 56, move: Inferno }
   - { level: 61, move: Rollout }
   - { level: 64, move: Netherstorm }
-  - { level: 74, move: Overheat }
+  - { level: 70, move: Overheat }
 evolution: { from: Quilava, method: { level: 36 } }

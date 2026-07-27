@@ -7,19 +7,28 @@ stats: { hp: 75, atk: 50, def: 170, spa: 45, spd: 140 }
 learnset:
   - { level: 0, move: Block }
   - { level: 1, move: Wide Guard }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Protect }
   - { level: 1, move: Taunt }
   - { level: 1, move: Metal Sound }
+  - { level: 2, move: Rollout }
+  - { level: 3, move: Metal Claw }
+  - { level: 4, move: Tackle }
   - { level: 8, move: Glint }
   - { level: 15, move: Take Down }
+  - { level: 16, move: Rock Slide }
+  - { level: 17, move: Smart Strike }
   - { level: 19, move: Iron Defense }
   - { level: 21, move: Mirror Shot }
   - { level: 24, move: Swagger }
   - { level: 28, move: Ancient Power }
+  - { level: 29, move: Lithic Fang }
   - { level: 36, move: Endure }
   - { level: 43, move: Metal Burst }
+  - { level: 44, move: Stone Edge }
+  - { level: 45, move: Iron Head }
   - { level: 47, move: Luster Cannon }
-  - { level: 51, move: Iron Head }
+  - { level: 51, move: Iron Tail }
+  - { level: 57, move: Head Smash }
   - { level: 58, move: Heavy Slam }
+  - { level: 59, move: Excalibur }
   - { level: 62, move: Steel Beam }

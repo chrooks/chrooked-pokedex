@@ -21,7 +21,8 @@ learnset:
   - { level: 30, move: Energy Ball }
   - { level: 33, move: X-Scissor }
   - { level: 36, move: Dragon Claw }
-  - { level: 39, move: Leaf Storm }
+  - { level: 39, move: Siphon }
   - { level: 41, move: Reap }
+  - { level: 43, move: Leaf Storm }
   - { level: 44, move: Breaking Swipe }
   - { level: 48, move: Solar Blade }

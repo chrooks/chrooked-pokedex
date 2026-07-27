@@ -8,20 +8,25 @@ abilities:
 stats: { hp: 90, atk: 60, def: 105, spa: 110, spe: 70 }
 learnset:
   - { level: 0, move: Petal Blizzard }
-  - { level: 1, move: Acid }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Mega Drain }
   - { level: 1, move: Growth }
   - { level: 1, move: Poison Powder }
   - { level: 1, move: Stun Spore }
   - { level: 1, move: Sleep Powder }
-  - { level: 1, move: Petal Dance }
-  - { level: 1, move: Toxic }
-  - { level: 1, move: Giga Drain }
-  - { level: 1, move: Sweet Scent }
-  - { level: 1, move: Moonlight }
-  - { level: 1, move: Quiver Dance }
-  - { level: 1, move: Grassy Terrain }
-  - { level: 1, move: Moonblast }
-  - { level: 36, move: Siphon }
+  - { level: 2, move: Disarming Voice }
+  - { level: 3, move: Toxic }
+  - { level: 4, move: Sweet Scent }
+  - { level: 5, move: Moonlight }
+  - { level: 6, move: Quiver Dance }
+  - { level: 7, move: Grassy Terrain }
+  - { level: 8, move: Acid }
+  - { level: 9, move: Absorb }
+  - { level: 10, move: Mega Drain }
+  - { level: 11, move: Giga Drain }
+  - { level: 12, move: Beguile }
+  - { level: 13, move: Energy Ball }
+  - { level: 15, move: Dazzling Gleam }
+  - { level: 29, move: Siphon }
+  - { level: 31, move: Moonblast }
+  - { level: 36, move: Petal Dance }
   - { level: 48, move: Miasma }
+  - { level: 57, move: Rapture }

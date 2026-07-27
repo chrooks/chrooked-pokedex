@@ -11,13 +11,16 @@ learnset:
   - { level: 6, move: Knell }
   - { level: 8, move: Minimize }
   - { level: 12, move: Confuse Ray }
+  - { level: 15, move: Incinerate }
   - { level: 16, move: Hex }
   - { level: 20, move: Will-O-Wisp }
   - { level: 24, move: Fire Spin }
   - { level: 28, move: Night Shade }
+  - { level: 29, move: Flamethrower }
   - { level: 32, move: Curse }
   - { level: 36, move: Shadow Ball }
   - { level: 40, move: Inferno }
+  - { level: 43, move: Specter Bomb }
   - { level: 44, move: Imprison }
   - { level: 48, move: Pain Split }
   - { level: 52, move: Overheat }

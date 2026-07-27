@@ -9,7 +9,8 @@ learnset:
   - { level: 16, move: Quick Attack }
   - { level: 20, move: Double Kick }
   - { level: 24, move: Charm }
-  - { level: 32, move: Headbutt }
+  - { level: 29, move: Headbutt }
+  - { level: 32, move: Take Down }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Agility }
   - { level: 38, move: Rampage }
@@ -17,3 +18,4 @@ learnset:
   - { level: 44, move: Flatter }
   - { level: 48, move: Bounce }
   - { level: 52, move: Healing Wish }
+  - { level: 57, move: Double-Edge }

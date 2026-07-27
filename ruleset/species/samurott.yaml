@@ -7,18 +7,21 @@ abilities:
 stats: { atk: 110, spa: 110 }
 learnset:
   - { level: 0, move: Slash }
-  - { level: 1, move: Megahorn }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Soak }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Megahorn }
   - { level: 7, move: Undertow }
   - { level: 7, move: Cheap Shot }
   - { level: 13, move: Focus Energy }
+  - { level: 15, move: Brick Break }
   - { level: 18, move: Razor Shell }
   - { level: 21, move: Fury Cutter }
   - { level: 25, move: Water Pulse }
   - { level: 29, move: Aerial Ace }
+  - { level: 30, move: One-Inch Punch }
   - { level: 34, move: Aqua Jet }
   - { level: 36, move: Aura Sphere }
   - { level: 39, move: Encore }
@@ -32,5 +35,6 @@ learnset:
   - { level: 54, move: Wave Crash }
   - { level: 54, move: Havoc }
   - { level: 54, move: Hydro Pump }
+  - { level: 57, move: Close Combat }
   - { level: 58, move: Swords Dance }
   - { level: 63, move: Tsunami }

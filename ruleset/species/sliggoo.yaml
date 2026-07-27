@@ -8,11 +8,12 @@ abilities:
   hidden: Gooey
 learnset:
   - { level: 0, move: Acid Spray }
+  - { level: 1, move: Acid Armor }
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Absorb }
-  - { level: 1, move: Acid Armor }
-  - { level: 1, move: Dragon Breath }
+  - { level: 2, move: Twister }
+  - { level: 3, move: Dragon Breath }
   - { level: 8, move: Glint }
   - { level: 15, move: Protect }
   - { level: 18, move: Mirror Shot }
@@ -24,8 +25,10 @@ learnset:
   - { level: 39, move: Luster Cannon }
   - { level: 39, move: Cataclysm }
   - { level: 43, move: Curse }
+  - { level: 44, move: Muddy Water }
   - { level: 49, move: Body Slam }
-  - { level: 56, move: Muddy Water }
+  - { level: 56, move: Hydro Pump }
+  - { level: 57, move: Tsunami }
   - { level: 60, move: Draco Meteor }
   - { level: 62, move: Steel Beam }
 evolution: { from: Goomy, method: { pokeemerald: EVO_LEVEL_FOG, param: 35 } }

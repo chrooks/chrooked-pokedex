@@ -3,11 +3,11 @@ chrooked_id: omastar
 aka: { dex: 139 }
 learnset:
   - { level: 0, move: Crunch }
-  - { level: 1, move: Crunch }
   - { level: 1, move: Bind }
   - { level: 1, move: Withdraw }
-  - { level: 1, move: Rollout }
   - { level: 1, move: Sand Attack }
+  - { level: 1, move: Rollout }
+  - { level: 2, move: Crunch }
   - { level: 8, move: Jewel Glow }
   - { level: 15, move: Water Gun }
   - { level: 20, move: Leer }

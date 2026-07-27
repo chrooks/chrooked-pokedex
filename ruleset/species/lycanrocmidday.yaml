@@ -9,9 +9,9 @@ learnset:
   - { level: 1, move: Quick Guard }
   - { level: 1, move: Double Team }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Tackle }
+  - { level: 2, move: Sand Attack }
+  - { level: 3, move: Leer }
+  - { level: 4, move: Tackle }
   - { level: 12, move: Rock Throw }
   - { level: 16, move: Howl }
   - { level: 20, move: Bite }
@@ -24,4 +24,5 @@ learnset:
   - { level: 42, move: Crunch }
   - { level: 48, move: Scary Face }
   - { level: 54, move: Stealth Rock }
-  - { level: 60, move: Stone Edge }
+  - { level: 57, move: Stone Edge }
+  - { level: 60, move: Head Smash }

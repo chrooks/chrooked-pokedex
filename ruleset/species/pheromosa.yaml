@@ -4,18 +4,23 @@ aka: { dex: 795 }
 learnset:
   - { level: 1, move: Feint }
   - { level: 1, move: Rapid Spin }
+  - { level: 2, move: Fury Cutter }
   - { level: 5, move: Leer }
   - { level: 10, move: Quick Guard }
   - { level: 15, move: Bug Bite }
+  - { level: 16, move: Triple Kick }
   - { level: 20, move: Low Kick }
   - { level: 25, move: Double Kick }
-  - { level: 30, move: Triple Kick }
+  - { level: 30, move: Brick Break }
   - { level: 35, move: Stomp }
   - { level: 37, move: One-Inch Punch }
   - { level: 40, move: Agility }
-  - { level: 45, move: Lunge }
+  - { level: 43, move: Lunge }
+  - { level: 45, move: Moltstrike }
+  - { level: 46, move: Cross Chop }
   - { level: 50, move: Bounce }
   - { level: 55, move: Speed Swap }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Bug Buzz }
   - { level: 65, move: Quiver Dance }
   - { level: 70, move: High Jump Kick }

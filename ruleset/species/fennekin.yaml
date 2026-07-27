@@ -10,6 +10,7 @@ learnset:
   - { level: 5, move: Ember }
   - { level: 11, move: Howl }
   - { level: 14, move: Flame Charge }
+  - { level: 15, move: Incinerate }
   - { level: 17, move: Psybeam }
   - { level: 20, move: Fire Spin }
   - { level: 25, move: Light Screen }
@@ -20,3 +21,4 @@ learnset:
   - { level: 43, move: Sunny Day }
   - { level: 45, move: Mindwarp }
   - { level: 48, move: Fire Blast }
+  - { level: 57, move: Overheat }

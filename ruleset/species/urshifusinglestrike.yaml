@@ -5,18 +5,22 @@ learnset:
   - { level: 0, move: Wicked Blow }
   - { level: 1, move: Endure }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Rock Smash }
   - { level: 1, move: Leer }
   - { level: 1, move: Focus Energy }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Rock Smash }
   - { level: 12, move: Aerial Ace }
   - { level: 16, move: Scary Face }
   - { level: 20, move: Headbutt }
   - { level: 24, move: Brick Break }
   - { level: 28, move: Detect }
+  - { level: 29, move: Heel Drop }
   - { level: 32, move: Bulk Up }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Iron Head }
   - { level: 40, move: Dynamic Punch }
+  - { level: 43, move: Backstab }
   - { level: 44, move: Counter }
   - { level: 48, move: Close Combat }
   - { level: 52, move: Focus Punch }
+  - { level: 57, move: Havoc }

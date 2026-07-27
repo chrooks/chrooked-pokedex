@@ -7,8 +7,10 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Peck }
   - { level: 9, move: Wing Attack }
   - { level: 13, move: Double Team }
+  - { level: 15, move: Bail Out }
   - { level: 18, move: Endeavor }
   - { level: 23, move: Whirlwind }
   - { level: 28, move: Aerial Ace }
@@ -18,4 +20,6 @@ learnset:
   - { level: 36, move: Cross Chop }
   - { level: 38, move: Agility }
   - { level: 43, move: Brave Bird }
+  - { level: 44, move: Rampage }
   - { level: 48, move: Final Gambit }
+  - { level: 57, move: Double-Edge }

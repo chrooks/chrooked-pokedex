@@ -10,16 +10,21 @@ learnset:
   - { level: 1, move: Thunder Wave }
   - { level: 1, move: Spark }
   - { level: 1, move: Charge Beam }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Nuzzle }
   - { level: 9, move: Bind }
   - { level: 14, move: Water Whip }
   - { level: 19, move: Acid }
   - { level: 29, move: Discharge }
+  - { level: 30, move: Aqua Tail }
   - { level: 36, move: Lightning Slam }
   - { level: 36, move: Arc Strike }
+  - { level: 43, move: Maelstrom }
   - { level: 44, move: Thunderbolt }
   - { level: 49, move: Acid Spray }
   - { level: 54, move: Coil }
+  - { level: 57, move: Wave Crash }
   - { level: 59, move: Wild Charge }
   - { level: 64, move: Gastro Acid }
   - { level: 69, move: Zap Cannon }
-  - { level: 74, move: Thrash }
+  - { level: 70, move: Thrash }

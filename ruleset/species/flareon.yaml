@@ -6,11 +6,11 @@ abilities:
   secondary: Kindle
   hidden: Immolate
 learnset:
-  - { level: 1, move: Ember }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Quick Attack }
+  - { level: 1, move: Ember }
+  - { level: 2, move: Tackle }
   - { level: 5, move: Sand Attack }
   - { level: 10, move: Flame Charge }
   - { level: 15, move: Bite }

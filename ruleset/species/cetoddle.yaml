@@ -4,17 +4,20 @@ aka: { dex: 974 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Powder Snow }
+  - { level: 2, move: Ice Ball }
   - { level: 6, move: Growl }
   - { level: 9, move: Echoed Voice }
   - { level: 12, move: Ice Shard }
   - { level: 15, move: Rest }
+  - { level: 16, move: Ice Punch }
   - { level: 19, move: Take Down }
   - { level: 25, move: Flail }
   - { level: 27, move: Avalanche }
   - { level: 31, move: Bounce }
   - { level: 36, move: Body Slam }
   - { level: 40, move: Amnesia }
-  - { level: 44, move: Ice Spinner }
+  - { level: 43, move: Ice Spinner }
+  - { level: 44, move: Ice Hammer }
   - { level: 49, move: Double-Edge }
   - { level: 53, move: Blizzard }
   - { level: 64, move: Icebreaker }

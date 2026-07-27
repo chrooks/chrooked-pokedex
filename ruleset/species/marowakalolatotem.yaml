@@ -4,18 +4,22 @@ aka: { pokeemerald: SPECIES_MAROWAK_ALOLA_TOTEM }
 learnset:
   - { level: 0, move: Shadow Bone }
   - { level: 1, move: Shadow Bone }
-  - { level: 1, move: Bone Club }
-  - { level: 1, move: Headbutt }
   - { level: 1, move: Focus Energy }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Mud-Slap }
   - { level: 1, move: Growl }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Fire Spin }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Lick }
+  - { level: 4, move: Fire Spin }
+  - { level: 5, move: Mud-Slap }
+  - { level: 6, move: Bone Club }
+  - { level: 7, move: Headbutt }
+  - { level: 8, move: Double-Edge }
   - { level: 12, move: Flame Wheel }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Hex }
   - { level: 20, move: Will-O-Wisp }
   - { level: 24, move: Stomping Tantrum }
+  - { level: 29, move: Cinder Smash }
   - { level: 31, move: Bone Rush }
   - { level: 36, move: Knock Off }
   - { level: 39, move: Wraithstrike }

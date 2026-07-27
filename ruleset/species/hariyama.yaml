@@ -4,10 +4,11 @@ aka: { pokeemerald: SPECIES_HARIYAMA }
 stats: { hp: 145, spd: 80 }
 learnset:
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Focus Energy }
-  - { level: 1, move: Brine }
   - { level: 1, move: Arm Thrust }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Brine }
   - { level: 5, move: Aura Spark }
   - { level: 10, move: Fake Out }
   - { level: 13, move: Force Palm }

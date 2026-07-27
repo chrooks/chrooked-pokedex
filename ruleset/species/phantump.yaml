@@ -7,13 +7,16 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
   - { level: 4, move: Branch Poke }
   - { level: 8, move: Leech Seed }
   - { level: 12, move: Confuse Ray }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Will-O-Wisp }
   - { level: 20, move: Hex }
   - { level: 24, move: Growth }
   - { level: 28, move: Horn Leech }
+  - { level: 29, move: Seed Bomb }
   - { level: 32, move: Curse }
   - { level: 36, move: Phantom Force }
   - { level: 38, move: Wraithstrike }

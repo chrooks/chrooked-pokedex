@@ -10,14 +10,18 @@ learnset:
   - { level: 4, move: Powder Snow }
   - { level: 8, move: Copycat }
   - { level: 12, move: Confusion }
+  - { level: 15, move: Dream Mist }
   - { level: 16, move: Covet }
+  - { level: 17, move: Icy Wind }
   - { level: 20, move: Sing }
   - { level: 24, move: Fake Tears }
   - { level: 28, move: Ice Punch }
+  - { level: 29, move: Ice Beam }
   - { level: 32, move: Psychic }
   - { level: 36, move: Sweet Kiss }
   - { level: 38, move: Mindwarp }
   - { level: 40, move: Mean Look }
   - { level: 44, move: Perish Song }
   - { level: 48, move: Blizzard }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Cryoblast }

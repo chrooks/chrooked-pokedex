@@ -11,11 +11,13 @@ learnset:
   - { level: 1, move: Harden }
   - { level: 1, move: Mud-Slap }
   - { level: 15, move: Water Pulse }
+  - { level: 16, move: Mud Shot }
   - { level: 20, move: Ancient Power }
   - { level: 25, move: Body Slam }
   - { level: 33, move: Muddy Water }
   - { level: 39, move: Earth Power }
   - { level: 42, move: Quagmire }
+  - { level: 43, move: Hydro Pump }
   - { level: 46, move: Rain Dance }
   - { level: 53, move: Memento }
   - { level: 62, move: Sinkhole }

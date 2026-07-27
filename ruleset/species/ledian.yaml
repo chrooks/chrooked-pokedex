@@ -10,20 +10,28 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Supersonic }
   - { level: 1, move: Swift }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Rock Smash }
   - { level: 5, move: Supersonic }
   - { level: 8, move: Swift }
   - { level: 12, move: Light Screen }
   - { level: 12, move: Reflect }
   - { level: 12, move: Safeguard }
   - { level: 15, move: Mach Punch }
+  - { level: 16, move: Bug Bite }
+  - { level: 17, move: Brick Break }
   - { level: 20, move: Roost }
   - { level: 24, move: Struggle Bug }
   - { level: 29, move: Baton Pass }
+  - { level: 30, move: X-Scissor }
   - { level: 31, move: Air Slash }
+  - { level: 32, move: One-Inch Punch }
   - { level: 33, move: Agility }
   - { level: 36, move: Moltstrike }
   - { level: 36, move: Cross Chop }
   - { level: 38, move: Bug Buzz }
   - { level: 42, move: Galeburst }
   - { level: 47, move: Double-Edge }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Close Combat }
   - { level: 64, move: Tempest }

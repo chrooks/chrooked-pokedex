@@ -5,14 +5,14 @@ stats: { hp: 70, spd: 140 }
 learnset:
   - { level: 0, move: Dazzling Gleam }
   - { level: 1, move: Charm }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Disarming Voice }
   - { level: 1, move: Double Team }
   - { level: 1, move: Growl }
   - { level: 1, move: Heal Pulse }
-  - { level: 1, move: Healing Wish }
-  - { level: 1, move: Misty Terrain }
-  - { level: 1, move: Mystical Fire }
+  - { level: 2, move: Healing Wish }
+  - { level: 3, move: Misty Terrain }
+  - { level: 4, move: Confusion }
+  - { level: 5, move: Disarming Voice }
+  - { level: 6, move: Mystical Fire }
   - { level: 9, move: Hypnosis }
   - { level: 12, move: Draining Kiss }
   - { level: 15, move: Teleport }
@@ -23,6 +23,7 @@ learnset:
   - { level: 35, move: Calm Mind }
   - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Psychic }
+  - { level: 43, move: Mindwarp }
   - { level: 45, move: Pixie Slash }
   - { level: 49, move: Moonblast }
   - { level: 56, move: Dream Eater }

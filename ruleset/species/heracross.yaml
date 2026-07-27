@@ -6,11 +6,15 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
   - { level: 1, move: Arm Thrust }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Rock Smash }
   - { level: 5, move: Fury Attack }
   - { level: 10, move: Endure }
   - { level: 15, move: Aerial Ace }
+  - { level: 16, move: Bug Bite }
   - { level: 20, move: Horn Attack }
   - { level: 25, move: Counter }
+  - { level: 29, move: X-Scissor }
   - { level: 30, move: Brick Break }
   - { level: 35, move: Pin Missile }
   - { level: 37, move: One-Inch Punch }

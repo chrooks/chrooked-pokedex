@@ -2,15 +2,16 @@ name: Tyranitar Mega
 chrooked_id: tyranitarmega
 aka: { pokeemerald: SPECIES_TYRANITAR_MEGA }
 learnset:
-  - { level: 1, move: Dark Pulse }
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Ice Fang }
   - { level: 1, move: Iron Defense }
   - { level: 1, move: Leer }
   - { level: 1, move: Payback }
   - { level: 1, move: Rock Throw }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Thunder Fang }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Dark Pulse }
+  - { level: 5, move: Fire Fang }
+  - { level: 6, move: Ice Fang }
+  - { level: 7, move: Thunder Fang }
   - { level: 9, move: Bite }
   - { level: 12, move: Scary Face }
   - { level: 15, move: Smack Down }
@@ -23,6 +24,9 @@ learnset:
   - { level: 33, move: Earthquake }
   - { level: 37, move: Stone Edge }
   - { level: 42, move: Thrash }
+  - { level: 43, move: Backstab }
   - { level: 47, move: Sandstorm }
   - { level: 52, move: Hyper Beam }
+  - { level: 57, move: Head Smash }
   - { level: 59, move: Giga Impact }
+  - { level: 60, move: Havoc }

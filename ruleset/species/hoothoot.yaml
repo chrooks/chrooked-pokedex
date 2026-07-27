@@ -6,11 +6,13 @@ abilities:
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Peck }
+  - { level: 2, move: Gust }
   - { level: 3, move: Tackle }
   - { level: 6, move: Echoed Voice }
   - { level: 9, move: Confusion }
   - { level: 12, move: Reflect }
   - { level: 15, move: Defog }
+  - { level: 16, move: Swift }
   - { level: 18, move: Air Slash }
   - { level: 21, move: Extrasensory }
   - { level: 24, move: Take Down }
@@ -20,5 +22,7 @@ learnset:
   - { level: 36, move: Hypnosis }
   - { level: 39, move: Dream Eater }
   - { level: 42, move: Galeburst }
+  - { level: 43, move: Hurricane }
   - { level: 46, move: Resonance }
+  - { level: 57, move: Hyper Beam }
   - { level: 64, move: Tempest }

@@ -8,12 +8,14 @@ abilities:
 learnset:
   - { level: 1, move: Confusion }
   - { level: 1, move: Work Up }
+  - { level: 2, move: Rock Smash }
   - { level: 5, move: Aura Spark }
   - { level: 9, move: Detect }
   - { level: 12, move: Mind Flick }
   - { level: 15, move: Feint }
   - { level: 16, move: Chi Wave }
   - { level: 17, move: Force Palm }
+  - { level: 18, move: Psycho Cut }
   - { level: 20, move: Psybeam }
   - { level: 23, move: Calm Mind }
   - { level: 25, move: Zen Headbutt }

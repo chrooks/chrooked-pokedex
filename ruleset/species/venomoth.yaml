@@ -9,8 +9,11 @@ learnset:
   - { level: 1, move: Supersonic }
   - { level: 1, move: Disable }
   - { level: 1, move: Quiver Dance }
+  - { level: 2, move: Struggle Bug }
+  - { level: 3, move: Acid Spray }
   - { level: 11, move: Confusion }
   - { level: 13, move: Poison Powder }
+  - { level: 15, move: Venoshock }
   - { level: 17, move: Psybeam }
   - { level: 20, move: Signal Beam }
   - { level: 23, move: Stun Spore }
@@ -19,6 +22,7 @@ learnset:
   - { level: 33, move: Miasma }
   - { level: 37, move: Leech Life }
   - { level: 41, move: Zen Headbutt }
+  - { level: 43, move: Sludge Wave }
   - { level: 44, move: Antennae Blast }
   - { level: 47, move: Poison Fang }
   - { level: 55, move: Psychic }

@@ -7,23 +7,29 @@ stats: { hp: 60, atk: 100, def: 110, spa: 100, spd: 110 }
 learnset:
   - { level: 1, move: Night Shade }
   - { level: 1, move: Confuse Ray }
+  - { level: 2, move: Lick }
   - { level: 3, move: Cheap Shot }
   - { level: 5, move: Shadow Sneak }
   - { level: 7, move: Knell }
   - { level: 7, move: Slander }
   - { level: 10, move: Spite }
   - { level: 15, move: Payback }
+  - { level: 16, move: Shadow Claw }
+  - { level: 17, move: Bite }
   - { level: 20, move: Nasty Plot }
   - { level: 25, move: Hex }
+  - { level: 29, move: Heel Drop }
   - { level: 30, move: Memento }
   - { level: 35, move: Sucker Punch }
   - { level: 37, move: Backstab }
   - { level: 40, move: Curse }
   - { level: 42, move: Wraithstrike }
+  - { level: 43, move: Interment }
   - { level: 45, move: Shadow Ball }
   - { level: 48, move: Havoc }
   - { level: 50, move: Dark Pulse }
   - { level: 55, move: Hypnosis }
+  - { level: 57, move: Necrosis }
   - { level: 60, move: Dream Eater }
   - { level: 64, move: Netherstorm }
   - { level: 65, move: Eclipse }

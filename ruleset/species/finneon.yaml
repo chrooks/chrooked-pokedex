@@ -10,9 +10,11 @@ learnset:
   - { level: 22, move: Water Pulse }
   - { level: 26, move: Attract }
   - { level: 29, move: Safeguard }
+  - { level: 30, move: Muddy Water }
   - { level: 33, move: Aqua Ring }
   - { level: 38, move: Whirlpool }
   - { level: 42, move: U-turn }
+  - { level: 43, move: Hydro Pump }
   - { level: 45, move: Bounce }
   - { level: 49, move: Tailwind }
   - { level: 54, move: Soak }

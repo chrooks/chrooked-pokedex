@@ -5,19 +5,21 @@ abilities:
   hidden: Nematocyst
 learnset:
   - { level: 1, move: Acid Armor }
+  - { level: 1, move: Night Shade }
   - { level: 1, move: Absorb }
   - { level: 1, move: Water Gun }
-  - { level: 1, move: Poison Sting }
-  - { level: 1, move: Night Shade }
+  - { level: 2, move: Poison Sting }
   - { level: 6, move: Knell }
   - { level: 12, move: Water Pulse }
   - { level: 16, move: Rain Dance }
   - { level: 20, move: Hex }
   - { level: 24, move: Brine }
   - { level: 28, move: Recover }
+  - { level: 29, move: Muddy Water }
   - { level: 32, move: Shadow Ball }
   - { level: 36, move: Whirlpool }
   - { level: 43, move: Hydro Pump }
+  - { level: 44, move: Specter Bomb }
   - { level: 48, move: Destiny Bond }
   - { level: 54, move: Water Spout }
   - { level: 64, move: Netherstorm }

@@ -7,8 +7,10 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }
   - { level: 1, move: Payback }
+  - { level: 2, move: Rock Smash }
   - { level: 6, move: Cheap Shot }
   - { level: 12, move: Sand Attack }
+  - { level: 15, move: Bite }
   - { level: 16, move: Facade }
   - { level: 20, move: Torment }
   - { level: 24, move: Beat Up }

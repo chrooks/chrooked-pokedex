@@ -7,6 +7,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 2, move: Leafage }
   - { level: 6, move: Razor Leaf }
   - { level: 9, move: Poison Powder }
   - { level: 12, move: Synthesis }
@@ -14,9 +15,12 @@ learnset:
   - { level: 20, move: Magical Leaf }
   - { level: 23, move: Leech Seed }
   - { level: 28, move: Sweet Scent }
+  - { level: 29, move: Seed Bomb }
   - { level: 31, move: Light Screen }
   - { level: 34, move: Body Slam }
   - { level: 36, move: Giga Drain }
   - { level: 39, move: Safeguard }
   - { level: 42, move: Siphon }
+  - { level: 43, move: Reap }
   - { level: 45, move: Solar Beam }
+  - { level: 57, move: Power Whip }

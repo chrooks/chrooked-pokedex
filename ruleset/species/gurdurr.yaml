@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }
   - { level: 1, move: Rock Throw }
+  - { level: 2, move: Rock Smash }
   - { level: 6, move: Aura Spark }
   - { level: 12, move: Focus Energy }
   - { level: 16, move: Bulk Up }

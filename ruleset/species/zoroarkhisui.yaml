@@ -3,21 +3,26 @@ chrooked_id: zoroarkhisui
 aka: {  }
 learnset:
   - { level: 0, move: Shadow Claw }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
   - { level: 1, move: Torment }
-  - { level: 1, move: U-turn }
   - { level: 1, move: Hone Claws }
+  - { level: 1, move: Scratch }
+  - { level: 2, move: Echoed Voice }
+  - { level: 3, move: U-turn }
   - { level: 6, move: Knell }
   - { level: 12, move: Shadow Sneak }
+  - { level: 15, move: Swift }
   - { level: 16, move: Curse }
   - { level: 20, move: Taunt }
   - { level: 24, move: Knock Off }
   - { level: 28, move: Spite }
+  - { level: 29, move: Uproar }
   - { level: 34, move: Agility }
   - { level: 37, move: Resonance }
   - { level: 40, move: Bitter Malice }
-  - { level: 46, move: Shadow Ball }
+  - { level: 43, move: Shadow Ball }
+  - { level: 46, move: Specter Bomb }
   - { level: 52, move: Nasty Plot }
+  - { level: 57, move: Hyper Beam }
   - { level: 58, move: Foul Play }
   - { level: 64, move: Netherstorm }

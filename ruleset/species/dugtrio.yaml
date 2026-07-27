@@ -10,17 +10,18 @@ learnset:
   - { level: 0, move: Tri Attack }
   - { level: 1, move: Astonish }
   - { level: 1, move: Growl }
-  - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Clod Toss }
+  - { level: 1, move: Mud-Slap }
+  - { level: 2, move: Scratch }
+  - { level: 3, move: Clod Toss }
+  - { level: 4, move: Night Slash }
   - { level: 12, move: Bulldoze }
   - { level: 16, move: Sucker Punch }
   - { level: 20, move: Slash }
   - { level: 24, move: Sandstorm }
   - { level: 28, move: Sand Tomb }
-  - { level: 30, move: Stomping Tantrum }
+  - { level: 29, move: Stomping Tantrum }
+  - { level: 30, move: Tectonic Fang }
   - { level: 34, move: Dig }
   - { level: 38, move: Scorching Sands }
   - { level: 42, move: Earth Power }

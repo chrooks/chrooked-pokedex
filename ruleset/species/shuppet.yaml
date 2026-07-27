@@ -8,13 +8,18 @@ abilities:
   hidden: Insidious
 learnset:
   - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Tackle }
   - { level: 4, move: Screech }
   - { level: 7, move: Night Shade }
   - { level: 10, move: Spite }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Will-O-Wisp }
+  - { level: 17, move: Bail Out }
   - { level: 19, move: Shadow Sneak }
   - { level: 22, move: Hex }
   - { level: 26, move: Curse }
+  - { level: 29, move: Take Down }
   - { level: 30, move: Shadow Ball }
   - { level: 34, move: Role Play }
   - { level: 36, move: Wraithstrike }
@@ -23,4 +28,5 @@ learnset:
   - { level: 45, move: Interment }
   - { level: 45, move: Rampage }
   - { level: 48, move: Phantom Force }
+  - { level: 57, move: Double-Edge }
   - { level: 62, move: Necrosis }

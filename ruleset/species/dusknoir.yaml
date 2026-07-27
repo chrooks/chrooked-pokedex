@@ -8,17 +8,20 @@ abilities:
   hidden: Frisk
 stats: { hp: 65 }
 learnset:
-  - { level: 1, move: Fire Punch }
-  - { level: 1, move: Ice Punch }
-  - { level: 1, move: Thunder Punch }
   - { level: 1, move: Bind }
   - { level: 1, move: Leer }
   - { level: 1, move: Disable }
   - { level: 1, move: Shadow Sneak }
-  - { level: 1, move: Gravity }
-  - { level: 1, move: Shadow Punch }
-  - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Rock Smash }
+  - { level: 4, move: Gravity }
+  - { level: 5, move: Astonish }
+  - { level: 6, move: Fire Punch }
+  - { level: 7, move: Ice Punch }
+  - { level: 8, move: Thunder Punch }
+  - { level: 9, move: Shadow Punch }
   - { level: 12, move: Confuse Ray }
+  - { level: 15, move: Brick Break }
   - { level: 16, move: Night Shade }
   - { level: 20, move: Payback }
   - { level: 24, move: Will-O-Wisp }
@@ -32,5 +35,6 @@ learnset:
   - { level: 45, move: Interment }
   - { level: 48, move: Future Sight }
   - { level: 54, move: Destiny Bond }
+  - { level: 57, move: Close Combat }
   - { level: 62, move: Necrosis }
 evolution: { from: Dusclops, method: { level: 45 } }

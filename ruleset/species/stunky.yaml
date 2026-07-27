@@ -6,19 +6,24 @@ learnset:
   - { level: 1, move: Poison Gas }
   - { level: 2, move: Cheap Shot }
   - { level: 3, move: Feint }
+  - { level: 4, move: Poison Sting }
   - { level: 6, move: Smokescreen }
   - { level: 9, move: Acid Spray }
   - { level: 12, move: Fury Swipes }
   - { level: 15, move: Focus Energy }
+  - { level: 16, move: Cross Poison }
   - { level: 18, move: Bite }
   - { level: 21, move: Venoshock }
   - { level: 24, move: Screech }
   - { level: 27, move: Toxic }
+  - { level: 29, move: Gastric Snare }
   - { level: 30, move: Sucker Punch }
+  - { level: 31, move: Night Slash }
   - { level: 33, move: Memento }
-  - { level: 36, move: Night Slash }
+  - { level: 36, move: Heel Drop }
   - { level: 39, move: Belch }
   - { level: 42, move: Explosion }
   - { level: 45, move: Backstab }
   - { level: 46, move: Venom Slam }
+  - { level: 57, move: Gunk Shot }
   - { level: 60, move: Havoc }

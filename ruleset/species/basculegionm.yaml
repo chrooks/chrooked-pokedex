@@ -8,15 +8,18 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Phantom Force }
+  - { level: 2, move: Lick }
   - { level: 4, move: Tackle }
   - { level: 6, move: Undertow }
   - { level: 8, move: Flail }
   - { level: 12, move: Aqua Jet }
   - { level: 14, move: Water Whip }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Bite }
   - { level: 20, move: Scary Face }
   - { level: 24, move: Headbutt }
   - { level: 28, move: Soak }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Maelstrom }
   - { level: 32, move: Crunch }
   - { level: 36, move: Take Down }

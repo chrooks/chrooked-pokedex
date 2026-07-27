@@ -7,15 +7,17 @@ abilities:
 stats: { def: 105 }
 learnset:
   - { level: 0, move: Bullet Punch }
-  - { level: 1, move: False Swipe }
-  - { level: 1, move: Wing Attack }
   - { level: 1, move: Leer }
   - { level: 1, move: Agility }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Air Slash }
-  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: False Swipe }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Wing Attack }
+  - { level: 4, move: Air Slash }
   - { level: 12, move: Metal Claw }
+  - { level: 15, move: Bug Bite }
   - { level: 16, move: Double Team }
+  - { level: 17, move: Smart Strike }
   - { level: 20, move: Double Hit }
   - { level: 24, move: Slash }
   - { level: 28, move: Focus Energy }
@@ -23,7 +25,10 @@ learnset:
   - { level: 36, move: Iron Head }
   - { level: 38, move: X-Scissor }
   - { level: 40, move: Moltstrike }
+  - { level: 43, move: Iron Tail }
   - { level: 44, move: Swords Dance }
   - { level: 48, move: Dive Bomb }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Excalibur }
 evolution: { from: Scyther, method: { item: Metal Coat } }

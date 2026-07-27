@@ -10,18 +10,19 @@ learnset:
   - { level: 1, move: Copycat }
   - { level: 1, move: Feint }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Rock Smash }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Vacuum Wave }
-  - { level: 1, move: Detect }
-  - { level: 1, move: Reversal }
-  - { level: 1, move: Screech }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Final Gambit }
-  - { level: 1, move: Life Dew }
+  - { level: 2, move: Detect }
+  - { level: 3, move: Reversal }
+  - { level: 4, move: Screech }
+  - { level: 5, move: Quick Attack }
   - { level: 6, move: Glint }
   - { level: 6, move: Aura Spark }
+  - { level: 7, move: Final Gambit }
+  - { level: 8, move: Life Dew }
+  - { level: 9, move: Rock Smash }
+  - { level: 10, move: Metal Claw }
   - { level: 12, move: Counter }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Work Up }
   - { level: 18, move: Mirror Shot }
   - { level: 18, move: Chi Wave }
@@ -35,11 +36,13 @@ learnset:
   - { level: 38, move: Luster Cannon }
   - { level: 38, move: Cross Chop }
   - { level: 40, move: Swords Dance }
+  - { level: 43, move: Meteor Mash }
   - { level: 44, move: Heal Pulse }
   - { level: 46, move: Focus Blast }
-  - { level: 48, move: Meteor Mash }
+  - { level: 48, move: Iron Tail }
   - { level: 50, move: Steel Beam }
   - { level: 52, move: Dragon Pulse }
   - { level: 56, move: Extreme Speed }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Close Combat }
 evolution: { from: Riolu, method: { level: 36 } }

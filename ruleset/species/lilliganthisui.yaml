@@ -5,26 +5,33 @@ learnset:
   - { level: 0, move: Victory Dance }
   - { level: 1, move: Teeter Dance }
   - { level: 1, move: Solar Blade }
-  - { level: 1, move: Petal Blizzard }
   - { level: 1, move: After You }
   - { level: 1, move: Entrainment }
-  - { level: 1, move: Leaf Storm }
-  - { level: 1, move: Defog }
-  - { level: 1, move: Energy Ball }
-  - { level: 1, move: Leaf Blade }
-  - { level: 1, move: Magical Leaf }
-  - { level: 1, move: Mega Kick }
-  - { level: 1, move: Sunny Day }
-  - { level: 1, move: Synthesis }
-  - { level: 1, move: Giga Drain }
-  - { level: 1, move: Sleep Powder }
-  - { level: 1, move: Stun Spore }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Leech Seed }
-  - { level: 1, move: Mega Drain }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Helping Hand }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Rock Smash }
+  - { level: 4, move: Defog }
   - { level: 5, move: Axe Kick }
+  - { level: 6, move: Sunny Day }
+  - { level: 7, move: Synthesis }
+  - { level: 8, move: Sleep Powder }
+  - { level: 9, move: Stun Spore }
+  - { level: 10, move: Growth }
+  - { level: 11, move: Leech Seed }
+  - { level: 12, move: Helping Hand }
+  - { level: 13, move: Mega Drain }
+  - { level: 14, move: Absorb }
+  - { level: 15, move: Razor Leaf }
+  - { level: 16, move: Magical Leaf }
+  - { level: 17, move: Brick Break }
+  - { level: 18, move: Giga Drain }
+  - { level: 19, move: Petal Blizzard }
+  - { level: 20, move: Energy Ball }
+  - { level: 21, move: Leaf Blade }
+  - { level: 22, move: Leaf Storm }
+  - { level: 23, move: Mega Kick }
+  - { level: 29, move: One-Inch Punch }
   - { level: 36, move: Reap }
   - { level: 46, move: Cross Chop }
+  - { level: 57, move: Power Whip }
+  - { level: 59, move: Close Combat }
 evolution: { from: Petilil, method: { item: Sun Stone } }

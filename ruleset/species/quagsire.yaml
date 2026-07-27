@@ -6,17 +6,19 @@ abilities:
 stats: { hp: 100, def: 95, spa: 80, spd: 95 }
 learnset:
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Rain Dance }
-  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Water Gun }
   - { level: 1, move: Clod Toss }
+  - { level: 2, move: Mud Shot }
   - { level: 6, move: Undertow }
   - { level: 12, move: Mist }
   - { level: 12, move: Haze }
+  - { level: 15, move: Bulldoze }
   - { level: 16, move: Body Slam }
   - { level: 19, move: Water Whip }
   - { level: 23, move: Yawn }
   - { level: 28, move: Aqua Tail }
+  - { level: 29, move: Tectonic Fang }
   - { level: 31, move: Maelstrom }
   - { level: 34, move: Muddy Water }
   - { level: 40, move: Amnesia }

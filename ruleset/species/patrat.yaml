@@ -8,6 +8,7 @@ learnset:
   - { level: 8, move: Bide }
   - { level: 11, move: Detect }
   - { level: 13, move: Sand Attack }
+  - { level: 15, move: Bail Out }
   - { level: 16, move: Crunch }
   - { level: 18, move: Hypnosis }
   - { level: 21, move: Super Fang }
@@ -20,3 +21,4 @@ learnset:
   - { level: 38, move: Baton Pass }
   - { level: 41, move: Slam }
   - { level: 46, move: Rampage }
+  - { level: 57, move: Double-Edge }

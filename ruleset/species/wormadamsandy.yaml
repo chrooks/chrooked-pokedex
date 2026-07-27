@@ -5,22 +5,28 @@ learnset:
   - { level: 0, move: Quiver Dance }
   - { level: 1, move: Quiver Dance }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Protect }
-  - { level: 1, move: Bug Bite }
-  - { level: 1, move: Clod Toss }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Clod Toss }
+  - { level: 4, move: Bug Bite }
   - { level: 10, move: Protect }
   - { level: 15, move: Bug Bite }
+  - { level: 16, move: Bulldoze }
   - { level: 20, move: String Shot }
   - { level: 23, move: Confusion }
   - { level: 26, move: Rock Blast }
   - { level: 29, move: Harden }
+  - { level: 30, move: X-Scissor }
+  - { level: 31, move: Tectonic Fang }
   - { level: 32, move: Psybeam }
   - { level: 35, move: Infestation }
   - { level: 36, move: Moltstrike }
   - { level: 38, move: Flail }
   - { level: 41, move: Attract }
+  - { level: 43, move: Earthquake }
   - { level: 44, move: Psychic }
   - { level: 47, move: Fissure }
   - { level: 50, move: Bug Buzz }
+  - { level: 57, move: Megahorn }
   - { level: 64, move: Faultbreak }

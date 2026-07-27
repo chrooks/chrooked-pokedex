@@ -13,6 +13,7 @@ learnset:
   - { level: 8, move: Bite }
   - { level: 11, move: Clod Toss }
   - { level: 14, move: Poison Tail }
+  - { level: 15, move: Cross Poison }
   - { level: 18, move: Helping Hand }
   - { level: 22, move: Bulldoze }
   - { level: 27, move: Poison Jab }
@@ -25,5 +26,6 @@ learnset:
   - { level: 46, move: Body Press }
   - { level: 48, move: Sludge Wave }
   - { level: 52, move: Earthquake }
+  - { level: 57, move: Gunk Shot }
   - { level: 58, move: Superpower }
   - { level: 64, move: Faultbreak }

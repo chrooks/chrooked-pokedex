@@ -5,11 +5,12 @@ learnset:
   - { level: 0, move: Phantom Force }
   - { level: 1, move: Astonish }
   - { level: 1, move: Strength Sap }
-  - { level: 1, move: Gust }
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Minimize }
+  - { level: 2, move: Gust }
   - { level: 6, move: Knell }
   - { level: 12, move: Payback }
+  - { level: 15, move: Air Slash }
   - { level: 16, move: Hex }
   - { level: 20, move: Shadow Ball }
   - { level: 24, move: Spit Up }
@@ -19,6 +20,8 @@ learnset:
   - { level: 36, move: Destiny Bond }
   - { level: 39, move: Galeburst }
   - { level: 42, move: Baton Pass }
+  - { level: 43, move: Specter Bomb }
+  - { level: 45, move: Hurricane }
   - { level: 48, move: Tailwind }
   - { level: 54, move: Explosion }
   - { level: 64, move: Netherstorm }

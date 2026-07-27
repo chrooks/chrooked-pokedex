@@ -6,11 +6,11 @@ learnset:
   - { level: 0, move: Confuse Ray }
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Rototiller }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Bite }
   - { level: 1, move: Low Kick }
+  - { level: 2, move: Tackle }
   - { level: 3, move: Leer }
+  - { level: 4, move: Bite }
   - { level: 6, move: Bite }
   - { level: 8, move: Bide }
   - { level: 11, move: Detect }
@@ -27,3 +27,4 @@ learnset:
   - { level: 43, move: Mean Look }
   - { level: 46, move: Baton Pass }
   - { level: 50, move: Rampage }
+  - { level: 57, move: Double-Edge }

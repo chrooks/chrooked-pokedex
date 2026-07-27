@@ -7,15 +7,16 @@ abilities:
   hidden: Sand Force
 stats: { hp: 110 }
 learnset:
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Thunder Fang }
   - { level: 1, move: Yawn }
-  - { level: 1, move: Ice Fang }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Bite }
   - { level: 1, move: Clod Toss }
+  - { level: 2, move: Bite }
+  - { level: 3, move: Fire Fang }
+  - { level: 4, move: Thunder Fang }
+  - { level: 5, move: Ice Fang }
   - { level: 12, move: Sand Tomb }
+  - { level: 15, move: Bulldoze }
   - { level: 16, move: Dig }
   - { level: 20, move: Crunch }
   - { level: 24, move: Sandstorm }

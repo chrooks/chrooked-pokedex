@@ -8,17 +8,21 @@ learnset:
   - { level: 1, move: Harden }
   - { level: 2, move: Cheap Shot }
   - { level: 3, move: Absorb }
+  - { level: 4, move: Leafage }
   - { level: 6, move: Astonish }
   - { level: 9, move: Growth }
   - { level: 12, move: Rollout }
   - { level: 15, move: Mega Drain }
+  - { level: 16, move: Razor Leaf }
   - { level: 18, move: Payback }
   - { level: 21, move: Headbutt }
   - { level: 24, move: Sunny Day }
   - { level: 27, move: Synthesis }
+  - { level: 29, move: Seed Bomb }
   - { level: 30, move: Sucker Punch }
   - { level: 33, move: Explosion }
   - { level: 39, move: Reap }
   - { level: 45, move: Heel Drop }
   - { level: 48, move: Backstab }
+  - { level: 57, move: Power Whip }
   - { level: 60, move: Havoc }

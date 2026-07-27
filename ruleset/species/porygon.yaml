@@ -9,9 +9,11 @@ stats: { hp: 70, atk: 55, spd: 80 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Conversion }
+  - { level: 2, move: Echoed Voice }
   - { level: 5, move: Recycle }
   - { level: 9, move: Thunder Wave }
   - { level: 13, move: Magnet Rise }
+  - { level: 15, move: Swift }
   - { level: 17, move: Thunder Shock }
   - { level: 21, move: Psybeam }
   - { level: 25, move: Conversion 2 }

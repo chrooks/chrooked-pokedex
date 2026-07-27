@@ -9,21 +9,26 @@ abilities:
 stats: { hp: 115, atk: 75, def: 85, spa: 75, spd: 85 }
 learnset:
   - { level: 0, move: Body Slam }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Sludge }
   - { level: 1, move: Poison Gas }
   - { level: 1, move: Yawn }
-  - { level: 1, move: Gunk Shot }
+  - { level: 1, move: Pound }
+  - { level: 1, move: Sludge }
+  - { level: 2, move: Poison Sting }
+  - { level: 3, move: Cross Poison }
   - { level: 12, move: Amnesia }
+  - { level: 15, move: Gastric Snare }
   - { level: 17, move: Acid Spray }
+  - { level: 18, move: Bail Out }
   - { level: 20, move: Encore }
   - { level: 25, move: Toxic }
+  - { level: 29, move: Venom Slam }
   - { level: 30, move: Stockpile }
   - { level: 30, move: Spit Up }
   - { level: 30, move: Swallow }
   - { level: 37, move: Sludge Bomb }
   - { level: 42, move: Gastro Acid }
+  - { level: 45, move: Gunk Shot }
   - { level: 45, move: Rampage }
-  - { level: 45, move: Venom Slam }
   - { level: 49, move: Belch }
+  - { level: 57, move: Double-Edge }
   - { level: 64, move: Contagion }

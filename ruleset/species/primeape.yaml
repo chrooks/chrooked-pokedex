@@ -8,9 +8,11 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Fling }
   - { level: 1, move: Focus Energy }
+  - { level: 2, move: Rock Smash }
   - { level: 5, move: Fury Swipes }
   - { level: 8, move: Low Kick }
   - { level: 15, move: Seismic Toss }
+  - { level: 16, move: Brick Break }
   - { level: 17, move: Swagger }
   - { level: 22, move: One-Inch Punch }
   - { level: 26, move: Assurance }

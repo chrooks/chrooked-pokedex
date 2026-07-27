@@ -4,9 +4,12 @@ aka: { dex: 710 }
 learnset:
   - { level: 1, move: Trick-or-Treat }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Leafage }
   - { level: 4, move: Shadow Sneak }
   - { level: 8, move: Confuse Ray }
   - { level: 12, move: Razor Leaf }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Leech Seed }
   - { level: 20, move: Bullet Seed }
   - { level: 24, move: Trick-or-Treat }
@@ -19,4 +22,5 @@ learnset:
   - { level: 42, move: Reap }
   - { level: 44, move: Pain Split }
   - { level: 48, move: Interment }
+  - { level: 57, move: Power Whip }
   - { level: 62, move: Necrosis }

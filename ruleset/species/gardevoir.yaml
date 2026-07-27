@@ -6,17 +6,18 @@ stats: { hp: 70, spe: 85 }
 learnset:
   - { level: 0, move: Dazzling Gleam }
   - { level: 1, move: Growl }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Mystical Fire }
   - { level: 1, move: Double Team }
   - { level: 1, move: Misty Terrain }
   - { level: 1, move: Charm }
-  - { level: 1, move: Disarming Voice }
-  - { level: 1, move: Healing Wish }
-  - { level: 1, move: Heal Pulse }
+  - { level: 2, move: Healing Wish }
+  - { level: 3, move: Heal Pulse }
+  - { level: 4, move: Confusion }
+  - { level: 5, move: Disarming Voice }
+  - { level: 6, move: Mystical Fire }
   - { level: 9, move: Hypnosis }
   - { level: 12, move: Draining Kiss }
   - { level: 15, move: Teleport }
+  - { level: 16, move: Beguile }
   - { level: 18, move: Psybeam }
   - { level: 23, move: Life Dew }
   - { level: 28, move: Wish }
@@ -30,5 +31,6 @@ learnset:
   - { level: 46, move: Psycrush }
   - { level: 49, move: Moonblast }
   - { level: 56, move: Dream Eater }
+  - { level: 57, move: Rapture }
   - { level: 63, move: Future Sight }
 evolution: { from: Kirlia, method: { level: 30 } }

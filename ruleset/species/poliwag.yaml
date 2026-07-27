@@ -12,6 +12,7 @@ learnset:
   - { level: 15, move: Water Whip }
   - { level: 18, move: Bubble Beam }
   - { level: 24, move: Rain Dance }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Bail Out }
   - { level: 33, move: Body Slam }
   - { level: 33, move: Maelstrom }

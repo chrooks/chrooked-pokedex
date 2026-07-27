@@ -6,10 +6,14 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Disable }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Poison Sting }
   - { level: 5, move: Supersonic }
   - { level: 11, move: Confusion }
   - { level: 13, move: Poison Powder }
+  - { level: 15, move: Bug Bite }
   - { level: 17, move: Psybeam }
+  - { level: 18, move: Cross Poison }
   - { level: 20, move: Signal Beam }
   - { level: 23, move: Stun Spore }
   - { level: 25, move: Bug Buzz }
@@ -18,7 +22,11 @@ learnset:
   - { level: 35, move: Leech Life }
   - { level: 37, move: Zen Headbutt }
   - { level: 41, move: Poison Fang }
+  - { level: 43, move: Moltstrike }
   - { level: 44, move: Antennae Blast }
+  - { level: 45, move: Venom Slam }
   - { level: 47, move: Psychic }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Gunk Shot }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Contagion }

@@ -5,24 +5,28 @@ abilities:
   secondary: Skill Link
 learnset:
   - { level: 0, move: Icicle Spear }
-  - { level: 1, move: Icicle Crash }
   - { level: 1, move: Shell Smash }
   - { level: 1, move: Ice Shard }
   - { level: 1, move: Toxic Spikes }
   - { level: 1, move: Iron Defense }
-  - { level: 1, move: Whirlpool }
-  - { level: 1, move: Spikes }
-  - { level: 1, move: Protect }
-  - { level: 1, move: Withdraw }
-  - { level: 1, move: Aurora Beam }
-  - { level: 1, move: Ice Beam }
-  - { level: 1, move: Hydro Pump }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Supersonic }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Tackle }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Whirlpool }
+  - { level: 4, move: Spikes }
   - { level: 5, move: Undertow }
+  - { level: 6, move: Protect }
+  - { level: 7, move: Withdraw }
+  - { level: 8, move: Supersonic }
+  - { level: 9, move: Leer }
+  - { level: 10, move: Water Gun }
+  - { level: 11, move: Tackle }
+  - { level: 12, move: Aurora Beam }
+  - { level: 13, move: Ice Punch }
+  - { level: 14, move: Ice Beam }
   - { level: 15, move: Razor Shell }
+  - { level: 16, move: Icicle Crash }
+  - { level: 17, move: Hydro Pump }
+  - { level: 29, move: Aqua Tail }
+  - { level: 43, move: Ice Hammer }
   - { level: 45, move: Maelstrom }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Icebreaker }

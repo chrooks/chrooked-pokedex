@@ -3,21 +3,25 @@ chrooked_id: greninjaash
 aka: {  }
 learnset:
   - { level: 0, move: Water Shuriken }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Role Play }
   - { level: 1, move: Haze }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Pound }
+  - { level: 3, move: Water Gun }
+  - { level: 4, move: Night Slash }
   - { level: 6, move: Slander }
   - { level: 10, move: Lick }
   - { level: 14, move: Water Pulse }
+  - { level: 15, move: Snarl }
   - { level: 19, move: Smokescreen }
   - { level: 23, move: Shadow Sneak }
   - { level: 28, move: Spikes }
+  - { level: 29, move: Muddy Water }
+  - { level: 31, move: Dark Pulse }
   - { level: 33, move: Aerial Ace }
   - { level: 42, move: Substitute }
+  - { level: 43, move: Night Daze }
   - { level: 49, move: Extrasensory }
   - { level: 56, move: Double Team }
   - { level: 62, move: Eclipse }

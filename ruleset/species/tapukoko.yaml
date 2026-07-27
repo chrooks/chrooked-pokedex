@@ -4,18 +4,26 @@ aka: { pokeemerald: SPECIES_TAPU_KOKO }
 learnset:
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Thunder Shock }
+  - { level: 2, move: Nuzzle }
+  - { level: 3, move: Glitter Tap }
   - { level: 5, move: Withdraw }
   - { level: 10, move: Fairy Wind }
   - { level: 15, move: False Swipe }
+  - { level: 16, move: Cutsie Slap }
   - { level: 20, move: Spark }
   - { level: 25, move: Shock Wave }
+  - { level: 29, move: Lightning Slam }
   - { level: 30, move: Charge }
+  - { level: 31, move: Pixie Slash }
   - { level: 35, move: Agility }
   - { level: 40, move: Screech }
+  - { level: 43, move: Arc Strike }
   - { level: 45, move: Discharge }
+  - { level: 46, move: Starfall Slam }
   - { level: 50, move: Mean Look }
   - { level: 55, move: Nature's Madness }
+  - { level: 57, move: Faeblitz }
   - { level: 60, move: Wild Charge }
   - { level: 65, move: Brave Bird }
   - { level: 70, move: Power Swap }
-  - { level: 75, move: Electric Terrain }
+  - { level: 70, move: Electric Terrain }

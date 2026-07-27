@@ -14,7 +14,8 @@ learnset:
   - { level: 20, move: Supersonic }
   - { level: 24, move: Aurora Beam }
   - { level: 28, move: Protect }
-  - { level: 30, move: Razor Shell }
+  - { level: 29, move: Razor Shell }
+  - { level: 30, move: Aqua Tail }
   - { level: 32, move: Maelstrom }
   - { level: 36, move: Iron Defense }
   - { level: 38, move: Glacial Crush }

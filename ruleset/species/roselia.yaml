@@ -6,21 +6,25 @@ abilities:
   hidden: Bloom
 learnset:
   - { level: 0, move: Poison Sting }
-  - { level: 1, move: Poison Sting }
-  - { level: 1, move: Absorb }
   - { level: 1, move: Growth }
   - { level: 1, move: Stun Spore }
   - { level: 1, move: Worry Seed }
+  - { level: 1, move: Poison Sting }
+  - { level: 2, move: Acid Spray }
+  - { level: 3, move: Absorb }
   - { level: 5, move: Mega Drain }
   - { level: 10, move: Leech Seed }
   - { level: 15, move: Magical Leaf }
+  - { level: 16, move: Venoshock }
   - { level: 20, move: Toxic Spikes }
   - { level: 25, move: Sweet Scent }
-  - { level: 30, move: Giga Drain }
+  - { level: 29, move: Giga Drain }
+  - { level: 30, move: Energy Ball }
   - { level: 32, move: Miasma }
   - { level: 35, move: Synthesis }
   - { level: 37, move: Siphon }
   - { level: 40, move: Toxic }
+  - { level: 43, move: Sludge Wave }
   - { level: 45, move: Petal Blizzard }
   - { level: 50, move: Aromatherapy }
   - { level: 55, move: Ingrain }

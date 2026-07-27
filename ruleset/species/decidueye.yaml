@@ -7,17 +7,19 @@ abilities:
 stats: { hp: 80, atk: 120, spa: 80, spd: 75, spe: 110 }
 learnset:
   - { level: 0, move: Spirit Shackle }
-  - { level: 1, move: Leafage }
   - { level: 1, move: Phantom Force }
-  - { level: 1, move: Leaf Storm }
-  - { level: 1, move: U-turn }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Spite }
   - { level: 1, move: Growl }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Leafage }
+  - { level: 4, move: Tackle }
+  - { level: 5, move: U-turn }
+  - { level: 6, move: Leaf Storm }
   - { level: 9, move: Peck }
   - { level: 12, move: Shadow Sneak }
   - { level: 15, move: Razor Leaf }
+  - { level: 16, move: Shadow Claw }
   - { level: 20, move: Synthesis }
   - { level: 25, move: Pluck }
   - { level: 30, move: Nasty Plot }
@@ -29,5 +31,6 @@ learnset:
   - { level: 44, move: Reap }
   - { level: 47, move: Dive Bomb }
   - { level: 51, move: Feather Dance }
+  - { level: 57, move: Power Whip }
   - { level: 58, move: Brave Bird }
   - { level: 62, move: Necrosis }

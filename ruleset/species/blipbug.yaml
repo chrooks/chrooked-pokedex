@@ -3,7 +3,8 @@ chrooked_id: blipbug
 aka: {  }
 learnset:
   - { level: 1, move: Struggle Bug }
-  - { level: 30, move: Signal Beam }
+  - { level: 29, move: Signal Beam }
+  - { level: 30, move: Bug Buzz }
   - { level: 45, move: Antennae Blast }
   - { level: 46, move: Mindwarp }
   - { level: 60, move: Drone Chorus }

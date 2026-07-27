@@ -7,20 +7,26 @@ stats: { hp: 90, spa: 105 }
 learnset:
   - { level: 0, move: Petal Blizzard }
   - { level: 1, move: Growth }
-  - { level: 1, move: Petal Dance }
+  - { level: 1, move: Growl }
   - { level: 1, move: Vine Whip }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Growl }
+  - { level: 2, move: Absorb }
+  - { level: 3, move: Acid Spray }
+  - { level: 4, move: Giga Drain }
   - { level: 9, move: Leech Seed }
   - { level: 12, move: Razor Leaf }
   - { level: 15, move: Sleep Powder }
   - { level: 15, move: Poison Powder }
+  - { level: 16, move: Energy Ball }
+  - { level: 17, move: Venoshock }
   - { level: 20, move: Seed Bomb }
   - { level: 25, move: Take Down }
+  - { level: 29, move: Siphon }
   - { level: 30, move: Sweet Scent }
   - { level: 33, move: Miasma }
   - { level: 37, move: Synthesis }
-  - { level: 40, move: Siphon }
+  - { level: 40, move: Petal Dance }
+  - { level: 43, move: Sludge Wave }
   - { level: 44, move: Worry Seed }
   - { level: 51, move: Power Whip }
   - { level: 58, move: Solar Beam }

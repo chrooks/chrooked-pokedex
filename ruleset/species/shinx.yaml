@@ -8,6 +8,7 @@ stats: { spe: 65 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 2, move: Nuzzle }
   - { level: 4, move: Thunder Shock }
   - { level: 8, move: Charge }
   - { level: 12, move: Bite }

@@ -7,28 +7,31 @@ stats: { spe: 90 }
 learnset:
   - { level: 0, move: Leaf Blade }
   - { level: 1, move: Whirlwind }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Mega Drain }
   - { level: 1, move: Growth }
-  - { level: 1, move: Razor Leaf }
   - { level: 1, move: Harden }
   - { level: 1, move: Explosion }
-  - { level: 1, move: Rollout }
-  - { level: 1, move: Swagger }
-  - { level: 1, move: Synthesis }
-  - { level: 1, move: Beat Up }
-  - { level: 1, move: Fake Out }
-  - { level: 1, move: Torment }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Extrasensory }
-  - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Sunny Day }
-  - { level: 1, move: Air Cutter }
-  - { level: 1, move: Payback }
-  - { level: 1, move: Hurricane }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Swagger }
+  - { level: 4, move: Synthesis }
+  - { level: 5, move: Beat Up }
+  - { level: 6, move: Torment }
+  - { level: 7, move: Astonish }
+  - { level: 8, move: Sucker Punch }
+  - { level: 9, move: Sunny Day }
+  - { level: 10, move: Payback }
+  - { level: 11, move: Tackle }
+  - { level: 12, move: Absorb }
+  - { level: 13, move: Mega Drain }
+  - { level: 14, move: Rollout }
   - { level: 15, move: Cheap Shot }
+  - { level: 16, move: Bite }
+  - { level: 17, move: Fake Out }
+  - { level: 18, move: Razor Leaf }
+  - { level: 19, move: Air Cutter }
+  - { level: 20, move: Extrasensory }
+  - { level: 21, move: Hurricane }
   - { level: 36, move: Reap }
   - { level: 45, move: Heel Drop }
   - { level: 48, move: Backstab }
+  - { level: 57, move: Power Whip }
   - { level: 60, move: Havoc }

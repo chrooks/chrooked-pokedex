@@ -4,10 +4,10 @@ aka: { pokeemerald: SPECIES_BOLTUND }
 stats: { hp: 80, spe: 125 }
 learnset:
   - { level: 1, move: Electrify }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Nuzzle }
-  - { level: 1, move: Bite }
+  - { level: 2, move: Bite }
   - { level: 15, move: Roar }
   - { level: 20, move: Spark }
   - { level: 24, move: Short Circuit }

@@ -5,22 +5,27 @@ types: [Water, Normal]
 stats: { hp: 110, def: 80, spa: 100 }
 learnset:
   - { level: 0, move: Bounce }
-  - { level: 1, move: Body Slam }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Bubble Beam }
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Perish Song }
   - { level: 1, move: Swagger }
-  - { level: 1, move: Hyper Voice }
-  - { level: 1, move: Mud Shot }
-  - { level: 1, move: Earth Power }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Hydro Pump }
   - { level: 1, move: Belly Drum }
-  - { level: 1, move: Rain Dance }
+  - { level: 2, move: Echoed Voice }
+  - { level: 3, move: Rain Dance }
+  - { level: 4, move: Water Gun }
+  - { level: 5, move: Pound }
+  - { level: 6, move: Bubble Beam }
+  - { level: 7, move: Mud Shot }
+  - { level: 8, move: Body Slam }
+  - { level: 9, move: Swift }
+  - { level: 10, move: Earth Power }
+  - { level: 11, move: Muddy Water }
+  - { level: 12, move: Double-Edge }
   - { level: 15, move: Undertow }
+  - { level: 16, move: Hyper Voice }
   - { level: 26, move: Water Whip }
+  - { level: 29, move: Hydro Pump }
+  - { level: 43, move: Resonance }
   - { level: 45, move: Maelstrom }
+  - { level: 57, move: Hyper Beam }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

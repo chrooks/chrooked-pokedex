@@ -8,11 +8,15 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
+  - { level: 2, move: Rock Smash }
   - { level: 5, move: Work Up }
   - { level: 10, move: Double Kick }
   - { level: 15, move: Flame Charge }
+  - { level: 16, move: Brick Break }
+  - { level: 17, move: Flame Wheel }
   - { level: 20, move: Headbutt }
   - { level: 25, move: Scary Face }
+  - { level: 29, move: One-Inch Punch }
   - { level: 30, move: Zen Headbutt }
   - { level: 35, move: Raging Bull }
   - { level: 37, move: Cinder Smash }

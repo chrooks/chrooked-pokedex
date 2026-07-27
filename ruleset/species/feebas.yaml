@@ -5,7 +5,11 @@ abilities:
   secondary: Oblivious
 learnset:
   - { level: 1, move: Splash }
+  - { level: 2, move: Undertow }
   - { level: 15, move: Tackle }
   - { level: 20, move: Water Whip }
   - { level: 25, move: Flail }
+  - { level: 29, move: Aqua Tail }
+  - { level: 43, move: Maelstrom }
+  - { level: 57, move: Wave Crash }
   - { level: 64, move: Tsunami }

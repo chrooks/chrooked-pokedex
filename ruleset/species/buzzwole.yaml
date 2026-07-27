@@ -7,15 +7,19 @@ learnset:
   - { level: 5, move: Taunt }
   - { level: 10, move: Fell Stinger }
   - { level: 15, move: Vital Throw }
+  - { level: 16, move: Bug Bite }
+  - { level: 17, move: Brick Break }
   - { level: 20, move: Bulk Up }
   - { level: 25, move: Endure }
   - { level: 30, move: Reversal }
   - { level: 35, move: Mega Punch }
   - { level: 37, move: One-Inch Punch }
   - { level: 40, move: Lunge }
+  - { level: 43, move: Moltstrike }
   - { level: 45, move: Focus Energy }
   - { level: 50, move: Dynamic Punch }
   - { level: 55, move: Counter }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Hammer Arm }
   - { level: 65, move: Superpower }
   - { level: 70, move: Focus Punch }

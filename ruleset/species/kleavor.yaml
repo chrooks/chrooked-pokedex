@@ -12,15 +12,20 @@ learnset:
   - { level: 4, move: Fury Cutter }
   - { level: 8, move: False Swipe }
   - { level: 12, move: Smack Down }
+  - { level: 15, move: Bug Bite }
   - { level: 16, move: Double Team }
   - { level: 20, move: Double Hit }
   - { level: 24, move: Slash }
   - { level: 28, move: Focus Energy }
+  - { level: 29, move: Rock Slide }
   - { level: 32, move: Agility }
-  - { level: 36, move: Rock Slide }
+  - { level: 36, move: Lithic Fang }
   - { level: 38, move: X-Scissor }
   - { level: 40, move: Moltstrike }
+  - { level: 43, move: Stone Edge }
   - { level: 44, move: Swords Dance }
   - { level: 48, move: Dive Bomb }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Head Smash }
 evolution: { from: Scyther, method: { item: Black Augurite } }

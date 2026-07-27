@@ -3,11 +3,12 @@ chrooked_id: manectric
 aka: { pokeemerald: SPECIES_MANECTRIC }
 stats: { spa: 115, spe: 115 }
 learnset:
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Wave }
   - { level: 1, move: Leer }
   - { level: 1, move: Howl }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Thunder Shock }
+  - { level: 3, move: Fire Fang }
   - { level: 12, move: Quick Attack }
   - { level: 16, move: Shock Wave }
   - { level: 20, move: Bite }
@@ -17,4 +18,5 @@ learnset:
   - { level: 42, move: Charge }
   - { level: 48, move: Wild Charge }
   - { level: 54, move: Thunder }
+  - { level: 57, move: Zap Cannon }
   - { level: 60, move: Electric Terrain }

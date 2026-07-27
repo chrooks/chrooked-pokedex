@@ -4,13 +4,16 @@ aka: { dex: 140 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Harden }
+  - { level: 2, move: Rollout }
   - { level: 3, move: Undertow }
   - { level: 5, move: Scratch }
   - { level: 10, move: Sand Attack }
   - { level: 15, move: Aqua Jet }
+  - { level: 16, move: Rock Slide }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Leer }
   - { level: 25, move: Mud Shot }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
   - { level: 38, move: Pixie Slash }
@@ -21,4 +24,5 @@ learnset:
   - { level: 47, move: Maelstrom }
   - { level: 50, move: Wave Crash }
   - { level: 55, move: Metal Sound }
-  - { level: 60, move: Stone Edge }
+  - { level: 57, move: Stone Edge }
+  - { level: 60, move: Head Smash }

@@ -16,7 +16,8 @@ learnset:
   - { level: 20, move: Bubble Beam }
   - { level: 24, move: Stomp }
   - { level: 29, move: Flail }
-  - { level: 32, move: Razor Shell }
+  - { level: 30, move: Razor Shell }
+  - { level: 32, move: Aqua Tail }
   - { level: 36, move: Body Slam }
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Crabhammer }

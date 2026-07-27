@@ -4,18 +4,21 @@ aka: { pokeemerald: SPECIES_RUNERIGUS }
 types: [Ghost, Ground]
 learnset:
   - { level: 0, move: Shadow Claw }
-  - { level: 1, move: Shadow Claw }
   - { level: 1, move: Scary Face }
   - { level: 1, move: Astonish }
   - { level: 1, move: Protect }
   - { level: 1, move: Haze }
-  - { level: 1, move: Night Shade }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Night Shade }
+  - { level: 4, move: Clod Toss }
+  - { level: 5, move: Shadow Claw }
   - { level: 12, move: Disable }
+  - { level: 15, move: Bulldoze }
   - { level: 16, move: Brutal Swing }
   - { level: 20, move: Crafty Shield }
   - { level: 24, move: Hex }
   - { level: 28, move: Mean Look }
+  - { level: 29, move: Tectonic Fang }
   - { level: 32, move: Body Slam }
   - { level: 38, move: Curse }
   - { level: 41, move: Wraithstrike }

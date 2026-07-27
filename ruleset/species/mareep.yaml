@@ -16,4 +16,6 @@ learnset:
   - { level: 38, move: Dazzling Gleam }
   - { level: 40, move: Milk Drink }
   - { level: 42, move: Light Screen }
+  - { level: 43, move: Thunder }
   - { level: 46, move: Thunderbolt }
+  - { level: 57, move: Zap Cannon }

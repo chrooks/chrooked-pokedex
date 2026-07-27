@@ -7,19 +7,20 @@ abilities:
   hidden: Hustle
 stats: { hp: 95, spd: 60 }
 learnset:
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Crush Claw }
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Spiky Shield }
-  - { level: 1, move: Clod Toss }
+  - { level: 1, move: Scratch }
+  - { level: 2, move: Poison Sting }
+  - { level: 3, move: Clod Toss }
+  - { level: 4, move: Crush Claw }
   - { level: 9, move: Rollout }
   - { level: 12, move: Fury Cutter }
   - { level: 15, move: Rapid Spin }
   - { level: 18, move: Bulldoze }
   - { level: 21, move: Swift }
   - { level: 26, move: Fury Swipes }
+  - { level: 29, move: Tectonic Fang }
   - { level: 31, move: Sand Tomb }
   - { level: 36, move: Slash }
   - { level: 41, move: Dig }

@@ -7,6 +7,7 @@ learnset:
   - { level: 8, move: Rollout }
   - { level: 11, move: Bite }
   - { level: 15, move: Leech Seed }
+  - { level: 16, move: Razor Leaf }
   - { level: 18, move: Pin Missile }
   - { level: 27, move: Take Down }
   - { level: 32, move: Seed Bomb }

@@ -7,15 +7,21 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Powder Snow }
+  - { level: 2, move: Ice Ball }
   - { level: 5, move: Leafage }
   - { level: 10, move: Mist }
   - { level: 15, move: Ice Shard }
+  - { level: 16, move: Ice Punch }
   - { level: 20, move: Razor Leaf }
   - { level: 25, move: Icy Wind }
+  - { level: 29, move: Seed Bomb }
   - { level: 30, move: Swagger }
+  - { level: 31, move: Glacial Crush }
   - { level: 35, move: Ingrain }
   - { level: 38, move: Reap }
   - { level: 41, move: Wood Hammer }
+  - { level: 43, move: Ice Hammer }
   - { level: 45, move: Blizzard }
   - { level: 50, move: Sheer Cold }
+  - { level: 57, move: Icebreaker }
   - { level: 64, move: Cryoblast }

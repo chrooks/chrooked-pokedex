@@ -3,18 +3,23 @@ chrooked_id: shedinja
 aka: { pokeemerald: SPECIES_SHEDINJA }
 stats: { atk: 95 }
 learnset:
-  - { level: 1, move: Shadow Claw }
   - { level: 1, move: Grudge }
-  - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Dig }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Harden }
-  - { level: 1, move: False Swipe }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Lick }
+  - { level: 4, move: Mud-Slap }
+  - { level: 5, move: Metal Claw }
+  - { level: 6, move: Scratch }
+  - { level: 7, move: False Swipe }
+  - { level: 8, move: Shadow Claw }
   - { level: 15, move: Confuse Ray }
+  - { level: 16, move: Bug Bite }
   - { level: 23, move: Absorb }
   - { level: 29, move: Shadow Sneak }
+  - { level: 30, move: X-Scissor }
+  - { level: 31, move: Wraithstrike }
   - { level: 36, move: Fury Swipes }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Interment }
@@ -23,4 +28,5 @@ learnset:
   - { level: 50, move: Shadow Ball }
   - { level: 53, move: Necrosis }
   - { level: 57, move: Spite }
+  - { level: 58, move: Megahorn }
   - { level: 64, move: Phantom Force }

@@ -11,9 +11,12 @@ learnset:
   - { level: 1, move: Charm }
   - { level: 1, move: Encore }
   - { level: 1, move: Amnesia }
-  - { level: 1, move: Counter }
-  - { level: 1, move: Mirror Coat }
-  - { level: 1, move: Safeguard }
-  - { level: 1, move: Destiny Bond }
+  - { level: 2, move: Mind Flick }
+  - { level: 3, move: Counter }
+  - { level: 4, move: Mirror Coat }
+  - { level: 5, move: Safeguard }
+  - { level: 6, move: Destiny Bond }
+  - { level: 15, move: Psycho Cut }
+  - { level: 29, move: Astral Hand }
   - { level: 46, move: Kinetic Slam }
   - { level: 62, move: Psycrush }

@@ -8,17 +8,24 @@ stats: { hp: 95, def: 90, spa: 105, spd: 90, spe: 80 }
 learnset:
   - { level: 1, move: Wrap }
   - { level: 1, move: Growl }
-  - { level: 1, move: Confusion }
   - { level: 1, move: Astonish }
   - { level: 1, move: Healing Wish }
+  - { level: 2, move: Glint }
+  - { level: 3, move: Confusion }
   - { level: 13, move: Yawn }
+  - { level: 15, move: Mirror Shot }
   - { level: 16, move: Stored Power }
+  - { level: 17, move: Dream Mist }
   - { level: 19, move: Take Down }
   - { level: 22, move: Extrasensory }
   - { level: 27, move: Heal Bell }
+  - { level: 29, move: Flash Cannon }
   - { level: 32, move: Uproar }
   - { level: 37, move: Safeguard }
   - { level: 39, move: Mindwarp }
   - { level: 42, move: Double-Edge }
+  - { level: 43, move: Luster Cannon }
   - { level: 47, move: Heal Pulse }
+  - { level: 57, move: Steel Beam }
+  - { level: 59, move: Future Sight }
 evolution: { from: Chingling, method: { level: 30 } }

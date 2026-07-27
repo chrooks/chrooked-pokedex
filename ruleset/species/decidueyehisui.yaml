@@ -3,14 +3,16 @@ chrooked_id: decidueyehisui
 aka: { dex: 724 }
 learnset:
   - { level: 0, move: Triple Arrows }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: U-turn }
-  - { level: 1, move: Leaf Storm }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Leafage }
+  - { level: 1, move: U-turn }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Leaf Storm }
   - { level: 9, move: Peck }
   - { level: 12, move: Shadow Sneak }
   - { level: 15, move: Razor Leaf }
+  - { level: 16, move: Brick Break }
   - { level: 20, move: Synthesis }
   - { level: 25, move: Pluck }
   - { level: 30, move: Bulk Up }
@@ -22,4 +24,6 @@ learnset:
   - { level: 44, move: Reap }
   - { level: 47, move: Dive Bomb }
   - { level: 51, move: Feather Dance }
+  - { level: 57, move: Power Whip }
   - { level: 58, move: Brave Bird }
+  - { level: 59, move: Close Combat }

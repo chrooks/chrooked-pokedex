@@ -5,4 +5,8 @@ abilities:
   primary: Mystic Power
 learnset:
   - { level: 1, move: Teleport }
+  - { level: 2, move: Confusion }
+  - { level: 15, move: Dream Mist }
+  - { level: 29, move: Psychic }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Future Sight }

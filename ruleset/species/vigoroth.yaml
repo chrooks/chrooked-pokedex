@@ -10,7 +10,9 @@ learnset:
   - { level: 17, move: Endure }
   - { level: 23, move: Slash }
   - { level: 27, move: Throat Chop }
+  - { level: 29, move: Take Down }
   - { level: 33, move: Counter }
   - { level: 37, move: Focus Punch }
   - { level: 40, move: Rampage }
   - { level: 43, move: Reversal }
+  - { level: 57, move: Double-Edge }

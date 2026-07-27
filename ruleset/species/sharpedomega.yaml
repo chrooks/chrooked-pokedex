@@ -8,8 +8,10 @@ learnset:
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Leer }
   - { level: 1, move: Night Slash }
-  - { level: 1, move: Poison Fang }
-  - { level: 1, move: Slash }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Cheap Shot }
+  - { level: 4, move: Slash }
+  - { level: 5, move: Poison Fang }
   - { level: 12, move: Scary Face }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Bite }
@@ -18,6 +20,10 @@ learnset:
   - { level: 28, move: Swagger }
   - { level: 34, move: Crunch }
   - { level: 40, move: Agility }
-  - { level: 46, move: Liquidation }
-  - { level: 50, move: Fishious Rend }
+  - { level: 43, move: Liquidation }
+  - { level: 45, move: Backstab }
+  - { level: 46, move: Fishious Rend }
+  - { level: 50, move: Maelstrom }
   - { level: 52, move: Take Down }
+  - { level: 57, move: Wave Crash }
+  - { level: 59, move: Havoc }

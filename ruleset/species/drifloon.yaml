@@ -8,6 +8,7 @@ learnset:
   - { level: 6, move: Knell }
   - { level: 8, move: Focus Energy }
   - { level: 12, move: Payback }
+  - { level: 15, move: Air Slash }
   - { level: 16, move: Hex }
   - { level: 20, move: Shadow Ball }
   - { level: 24, move: Stockpile }
@@ -18,6 +19,8 @@ learnset:
   - { level: 34, move: Galeburst }
   - { level: 36, move: Baton Pass }
   - { level: 40, move: Tailwind }
+  - { level: 43, move: Specter Bomb }
   - { level: 44, move: Explosion }
+  - { level: 45, move: Hurricane }
   - { level: 64, move: Netherstorm }
   - { level: 64, move: Tempest }

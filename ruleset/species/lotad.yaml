@@ -12,8 +12,11 @@ learnset:
   - { level: 20, move: Bubble Beam }
   - { level: 24, move: Leech Seed }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: Muddy Water }
   - { level: 33, move: Rain Dance }
   - { level: 38, move: Zen Headbutt }
   - { level: 43, move: Energy Ball }
+  - { level: 44, move: Hydro Pump }
   - { level: 46, move: Siphon }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Tsunami }

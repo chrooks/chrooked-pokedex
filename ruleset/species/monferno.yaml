@@ -7,6 +7,8 @@ learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Rock Smash }
   - { level: 5, move: Aura Spark }
   - { level: 9, move: Taunt }
   - { level: 14, move: Mach Punch }
@@ -25,6 +27,7 @@ learnset:
   - { level: 42, move: Blaze Kick }
   - { level: 48, move: Combust }
   - { level: 53, move: Focus Punch }
+  - { level: 57, move: Close Combat }
   - { level: 58, move: Flare Blitz }
   - { level: 62, move: Ki Blast }
   - { level: 65, move: Focus Blast }

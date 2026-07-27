@@ -4,6 +4,7 @@ aka: { dex: 877 }
 learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Thunder Shock }
+  - { level: 2, move: Nuzzle }
   - { level: 5, move: Leer }
   - { level: 10, move: Power Trip }
   - { level: 15, move: Quick Attack }
@@ -18,4 +19,5 @@ learnset:
   - { level: 48, move: Backstab }
   - { level: 50, move: Havoc }
   - { level: 55, move: Aura Wheel }
+  - { level: 57, move: Wild Charge }
   - { level: 60, move: Thrash }

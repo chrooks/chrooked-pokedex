@@ -4,17 +4,23 @@ aka: { dex: 688 }
 learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Scratch }
+  - { level: 2, move: Rollout }
   - { level: 4, move: Withdraw }
   - { level: 6, move: Undertow }
   - { level: 8, move: Water Gun }
   - { level: 12, move: Fury Cutter }
+  - { level: 15, move: Rock Slide }
   - { level: 16, move: Fury Swipes }
   - { level: 20, move: Ancient Power }
   - { level: 24, move: Rock Polish }
   - { level: 28, move: Slash }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Razor Shell }
+  - { level: 31, move: Aqua Tail }
   - { level: 32, move: Hone Claws }
   - { level: 36, move: Maelstrom }
   - { level: 40, move: Shell Smash }
+  - { level: 43, move: Stone Edge }
   - { level: 44, move: Cross Chop }
+  - { level: 57, move: Head Smash }
   - { level: 60, move: Wave Crash }

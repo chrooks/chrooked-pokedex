@@ -9,6 +9,12 @@ learnset:
   - { level: 1, move: Thunder Wave }
   - { level: 1, move: Spark }
   - { level: 1, move: Charge Beam }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Nuzzle }
   - { level: 26, move: Water Whip }
+  - { level: 29, move: Aqua Tail }
+  - { level: 43, move: Maelstrom }
   - { level: 46, move: Lightning Slam }
   - { level: 48, move: Arc Strike }
+  - { level: 57, move: Wave Crash }
+  - { level: 59, move: Wild Charge }

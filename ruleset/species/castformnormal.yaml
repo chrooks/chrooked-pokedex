@@ -11,8 +11,10 @@ learnset:
   - { level: 20, move: Sunny Day }
   - { level: 20, move: Hail }
   - { level: 25, move: Weather Ball }
+  - { level: 29, move: Take Down }
   - { level: 35, move: Hydro Pump }
   - { level: 35, move: Fire Blast }
   - { level: 35, move: Blizzard }
   - { level: 40, move: Rampage }
   - { level: 45, move: Hurricane }
+  - { level: 57, move: Double-Edge }

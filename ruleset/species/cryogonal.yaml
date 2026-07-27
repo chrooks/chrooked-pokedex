@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Bind }
   - { level: 1, move: Ice Shard }
+  - { level: 2, move: Powder Snow }
   - { level: 4, move: Confuse Ray }
   - { level: 8, move: Rapid Spin }
   - { level: 12, move: Icy Wind }
@@ -18,8 +19,9 @@ learnset:
   - { level: 36, move: Freeze-Dry }
   - { level: 40, move: Light Screen }
   - { level: 40, move: Reflect }
+  - { level: 43, move: Ice Beam }
   - { level: 44, move: Recover }
-  - { level: 48, move: Ice Beam }
+  - { level: 48, move: Blizzard }
   - { level: 52, move: Acid Armor }
   - { level: 56, move: Solar Beam }
   - { level: 60, move: Sheer Cold }

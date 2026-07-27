@@ -10,19 +10,27 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Undertow }
   - { level: 8, move: Glint }
   - { level: 15, move: Peck }
+  - { level: 16, move: Smart Strike }
   - { level: 17, move: Water Whip }
   - { level: 19, move: Bubble Beam }
   - { level: 21, move: Mirror Shot }
   - { level: 24, move: Swagger }
   - { level: 28, move: Fury Attack }
+  - { level: 29, move: Aqua Tail }
+  - { level: 31, move: Metallic Fang }
   - { level: 33, move: Brine }
   - { level: 37, move: Whirlpool }
   - { level: 39, move: Luster Cannon }
   - { level: 42, move: Mist }
+  - { level: 43, move: Maelstrom }
+  - { level: 45, move: Iron Tail }
   - { level: 46, move: Drill Peck }
   - { level: 50, move: Hydro Pump }
+  - { level: 57, move: Wave Crash }
+  - { level: 59, move: Excalibur }
   - { level: 62, move: Steel Beam }
   - { level: 64, move: Tsunami }
 evolution: { from: Piplup, method: { level: 16 } }

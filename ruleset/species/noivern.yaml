@@ -8,12 +8,13 @@ abilities:
 learnset:
   - { level: 0, move: Dragon Breath }
   - { level: 1, move: Tailwind }
-  - { level: 1, move: Gust }
   - { level: 1, move: Moonlight }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Absorb }
   - { level: 1, move: Supersonic }
-  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Gust }
+  - { level: 2, move: Twister }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Absorb }
+  - { level: 5, move: Echoed Voice }
   - { level: 20, move: Bite }
   - { level: 24, move: Air Cutter }
   - { level: 28, move: Snarl }

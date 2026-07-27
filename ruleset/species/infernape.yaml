@@ -9,6 +9,8 @@ learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Rock Smash }
   - { level: 8, move: Aura Spark }
   - { level: 9, move: Taunt }
   - { level: 14, move: Mach Punch }

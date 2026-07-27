@@ -8,17 +8,24 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
   - { level: 1, move: Growth }
+  - { level: 2, move: Absorb }
+  - { level: 3, move: Acid Spray }
   - { level: 9, move: Leech Seed }
   - { level: 12, move: Razor Leaf }
   - { level: 15, move: Poison Powder }
   - { level: 15, move: Sleep Powder }
+  - { level: 16, move: Giga Drain }
+  - { level: 17, move: Venoshock }
   - { level: 20, move: Seed Bomb }
   - { level: 25, move: Take Down }
+  - { level: 29, move: Energy Ball }
   - { level: 30, move: Sweet Scent }
   - { level: 32, move: Miasma }
   - { level: 35, move: Synthesis }
   - { level: 37, move: Siphon }
   - { level: 40, move: Worry Seed }
+  - { level: 43, move: Sludge Wave }
   - { level: 45, move: Power Whip }
   - { level: 50, move: Solar Beam }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Contagion }

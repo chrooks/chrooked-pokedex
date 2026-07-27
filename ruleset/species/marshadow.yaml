@@ -2,22 +2,27 @@ name: Marshadow
 chrooked_id: marshadow
 aka: { dex: 802 }
 learnset:
-  - { level: 1, move: Thunder Punch }
-  - { level: 1, move: Fire Punch }
-  - { level: 1, move: Ice Punch }
   - { level: 1, move: Copycat }
   - { level: 1, move: Shadow Sneak }
   - { level: 1, move: Feint }
   - { level: 1, move: Counter }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Lick }
+  - { level: 4, move: Thunder Punch }
+  - { level: 5, move: Fire Punch }
+  - { level: 6, move: Ice Punch }
   - { level: 9, move: Role Play }
   - { level: 18, move: Shadow Punch }
   - { level: 27, move: Force Palm }
   - { level: 36, move: Assurance }
   - { level: 40, move: Drain Punch }
+  - { level: 43, move: One-Inch Punch }
   - { level: 45, move: Sucker Punch }
-  - { level: 54, move: One-Inch Punch }
+  - { level: 46, move: Spectral Thief }
+  - { level: 54, move: Cross Chop }
+  - { level: 57, move: Interment }
   - { level: 63, move: Psych Up }
-  - { level: 72, move: Spectral Thief }
-  - { level: 81, move: Laser Focus }
-  - { level: 90, move: Endeavor }
-  - { level: 99, move: Close Combat }
+  - { level: 70, move: Necrosis }
+  - { level: 70, move: Laser Focus }
+  - { level: 70, move: Endeavor }
+  - { level: 70, move: Close Combat }

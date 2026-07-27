@@ -3,4 +3,8 @@ chrooked_id: ditto
 aka: {  }
 learnset:
   - { level: 1, move: Transform }
+  - { level: 2, move: Tackle }
+  - { level: 15, move: Bail Out }
+  - { level: 29, move: Take Down }
   - { level: 46, move: Rampage }
+  - { level: 57, move: Double-Edge }

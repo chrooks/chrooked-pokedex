@@ -2,11 +2,12 @@ name: Mimikyu Busted
 chrooked_id: mimikyubusted
 aka: { dex: 778 }
 learnset:
-  - { level: 1, move: Scratch }
   - { level: 1, move: Splash }
   - { level: 1, move: Astonish }
   - { level: 1, move: Copycat }
-  - { level: 1, move: Wood Hammer }
+  - { level: 1, move: Scratch }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Wood Hammer }
   - { level: 6, move: Shadow Sneak }
   - { level: 9, move: Glitter Tap }
   - { level: 12, move: Double Team }

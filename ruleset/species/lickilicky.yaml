@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Rollout }
   - { level: 1, move: Supersonic }
+  - { level: 2, move: Tackle }
   - { level: 18, move: Wrap }
   - { level: 24, move: Disable }
   - { level: 30, move: Stomp }
@@ -15,4 +16,5 @@ learnset:
   - { level: 42, move: Screech }
   - { level: 48, move: Rampage }
   - { level: 54, move: Power Whip }
+  - { level: 57, move: Double-Edge }
   - { level: 60, move: Belly Drum }

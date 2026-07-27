@@ -6,23 +6,30 @@ abilities:
 learnset:
   - { level: 1, move: Harden }
   - { level: 1, move: Mud-Slap }
+  - { level: 2, move: Mind Flick }
   - { level: 3, move: Rapid Spin }
   - { level: 4, move: Clod Toss }
   - { level: 6, move: Confusion }
   - { level: 9, move: Rock Tomb }
   - { level: 12, move: Power Trick }
   - { level: 15, move: Psybeam }
+  - { level: 16, move: Bulldoze }
+  - { level: 17, move: Psycho Cut }
   - { level: 18, move: Ancient Power }
   - { level: 21, move: Imprison }
   - { level: 24, move: Cosmic Power }
   - { level: 27, move: Extrasensory }
+  - { level: 29, move: Tectonic Fang }
   - { level: 30, move: Earth Power }
+  - { level: 31, move: Astral Hand }
   - { level: 33, move: Self-Destruct }
   - { level: 36, move: Guard Split }
   - { level: 36, move: Power Split }
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Explosion }
+  - { level: 43, move: Earthquake }
   - { level: 46, move: Kinetic Slam }
   - { level: 46, move: Quagmire }
+  - { level: 57, move: Faultbreak }
   - { level: 62, move: Psycrush }
   - { level: 62, move: Sinkhole }

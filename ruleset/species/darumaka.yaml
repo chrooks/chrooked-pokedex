@@ -4,6 +4,7 @@ aka: { dex: 554 }
 learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Flame Charge }
   - { level: 4, move: Taunt }
   - { level: 8, move: Bite }
   - { level: 12, move: Incinerate }

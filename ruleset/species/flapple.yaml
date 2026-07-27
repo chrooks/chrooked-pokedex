@@ -11,18 +11,24 @@ learnset:
   - { level: 1, move: Withdraw }
   - { level: 1, move: Recycle }
   - { level: 1, move: Growth }
-  - { level: 1, move: Tackle }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Maul }
+  - { level: 4, move: Tackle }
   - { level: 8, move: Acrobatics }
   - { level: 12, move: Leech Seed }
+  - { level: 15, move: Razor Leaf }
   - { level: 16, move: Bullet Seed }
+  - { level: 17, move: Breaking Swipe }
   - { level: 20, move: Dragon Breath }
   - { level: 24, move: Dragon Dance }
   - { level: 28, move: Iron Head }
+  - { level: 29, move: Draconic Fang }
   - { level: 32, move: Grav Apple }
   - { level: 36, move: Protect }
   - { level: 38, move: Cataclysm }
   - { level: 40, move: Reap }
   - { level: 42, move: Wood Hammer }
+  - { level: 43, move: Dragon Hammer }
   - { level: 44, move: Dragon Rush }
   - { level: 50, move: Outrage }
   - { level: 60, move: Draco Meteor }

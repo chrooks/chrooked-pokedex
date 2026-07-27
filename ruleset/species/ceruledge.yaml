@@ -6,18 +6,20 @@ abilities:
 stats: { hp: 80, atk: 130 }
 learnset:
   - { level: 0, move: Shadow Claw }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Shadow Sneak }
   - { level: 1, move: Quick Guard }
   - { level: 1, move: Solar Blade }
   - { level: 1, move: Leer }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Astonish }
+  - { level: 4, move: Ember }
+  - { level: 5, move: Night Slash }
   - { level: 8, move: Clear Smog }
   - { level: 12, move: Fire Spin }
+  - { level: 15, move: Flame Charge }
   - { level: 16, move: Will-O-Wisp }
   - { level: 20, move: Night Shade }
-  - { level: 24, move: Flame Charge }
+  - { level: 24, move: Flame Wheel }
   - { level: 28, move: Incinerate }
   - { level: 32, move: Lava Plume }
   - { level: 37, move: Swords Dance }

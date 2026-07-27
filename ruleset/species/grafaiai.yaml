@@ -8,13 +8,16 @@ learnset:
   - { level: 0, move: Doodle }
   - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
+  - { level: 2, move: Poison Sting }
   - { level: 5, move: Acid Spray }
   - { level: 8, move: Fury Swipes }
   - { level: 11, move: Switcheroo }
-  - { level: 14, move: Poison Fang }
+  - { level: 14, move: Cross Poison }
+  - { level: 15, move: Poison Fang }
   - { level: 18, move: Flatter }
   - { level: 21, move: Slash }
   - { level: 25, move: U-turn }
+  - { level: 29, move: Take Down }
   - { level: 33, move: Poison Jab }
   - { level: 37, move: Taunt }
   - { level: 40, move: Substitute }
@@ -22,3 +25,4 @@ learnset:
   - { level: 42, move: Venom Slam }
   - { level: 45, move: Knock Off }
   - { level: 51, move: Gunk Shot }
+  - { level: 57, move: Double-Edge }

@@ -14,6 +14,7 @@ learnset:
   - { level: 9, move: Snarl }
   - { level: 12, move: Headbutt }
   - { level: 15, move: Baby-Doll Eyes }
+  - { level: 16, move: Bite }
   - { level: 18, move: Pin Missile }
   - { level: 20, move: Take Down }
   - { level: 23, move: Rest }

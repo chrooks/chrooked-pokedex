@@ -4,15 +4,20 @@ aka: {  }
 learnset:
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Tail Whip }
+  - { level: 2, move: Echoed Voice }
   - { level: 4, move: Pound }
   - { level: 8, move: Thunder Shock }
   - { level: 12, move: Quick Attack }
+  - { level: 15, move: Swift }
   - { level: 16, move: Charge }
   - { level: 20, move: Bulldoze }
   - { level: 24, move: Volt Switch }
   - { level: 28, move: Parabolic Charge }
+  - { level: 29, move: Uproar }
   - { level: 32, move: Thunder Wave }
   - { level: 36, move: Thunderbolt }
   - { level: 38, move: Resonance }
   - { level: 40, move: Electrify }
   - { level: 44, move: Thunder }
+  - { level: 57, move: Zap Cannon }
+  - { level: 59, move: Hyper Beam }

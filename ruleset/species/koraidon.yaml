@@ -4,6 +4,7 @@ aka: { dex: 1007 }
 learnset:
   - { level: 1, move: Sunny Day }
   - { level: 1, move: Breaking Swipe }
+  - { level: 2, move: Maul }
   - { level: 7, move: Rock Smash }
   - { level: 14, move: Ancient Power }
   - { level: 21, move: Drain Punch }
@@ -11,11 +12,12 @@ learnset:
   - { level: 35, move: Agility }
   - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Dragon Claw }
+  - { level: 43, move: Dragon Hammer }
   - { level: 49, move: Flamethrower }
   - { level: 56, move: Collision Course }
   - { level: 63, move: Screech }
   - { level: 70, move: Counter }
-  - { level: 77, move: Outrage }
-  - { level: 84, move: Close Combat }
-  - { level: 91, move: Flare Blitz }
-  - { level: 98, move: Giga Impact }
+  - { level: 70, move: Outrage }
+  - { level: 70, move: Close Combat }
+  - { level: 70, move: Flare Blitz }
+  - { level: 70, move: Giga Impact }

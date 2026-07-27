@@ -4,10 +4,12 @@ aka: { dex: 92 }
 learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Lick }
+  - { level: 2, move: Acid Spray }
   - { level: 4, move: Hypnosis }
   - { level: 6, move: Knell }
   - { level: 8, move: Mean Look }
   - { level: 12, move: Payback }
+  - { level: 15, move: Venoshock }
   - { level: 16, move: Spite }
   - { level: 20, move: Curse }
   - { level: 24, move: Hex }
@@ -16,7 +18,9 @@ learnset:
   - { level: 32, move: Sucker Punch }
   - { level: 36, move: Dark Pulse }
   - { level: 40, move: Shadow Ball }
+  - { level: 43, move: Specter Bomb }
   - { level: 44, move: Destiny Bond }
+  - { level: 45, move: Sludge Wave }
   - { level: 48, move: Dream Eater }
   - { level: 64, move: Netherstorm }
   - { level: 64, move: Contagion }

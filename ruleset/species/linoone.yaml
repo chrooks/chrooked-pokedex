@@ -6,15 +6,15 @@ abilities:
 stats: { hp: 80, atk: 80, def: 65, spd: 60, spe: 125 }
 learnset:
   - { level: 0, move: Slash }
-  - { level: 1, move: Slash }
   - { level: 1, move: Switcheroo }
   - { level: 1, move: Pin Missile }
   - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Tail Whip }
-  - { level: 9, move: Covet }
+  - { level: 2, move: Sand Attack }
+  - { level: 3, move: Tail Whip }
+  - { level: 4, move: Tackle }
+  - { level: 5, move: Covet }
+  - { level: 9, move: Slash }
   - { level: 12, move: Headbutt }
   - { level: 15, move: Hone Claws }
   - { level: 18, move: Fury Swipes }

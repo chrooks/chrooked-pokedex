@@ -7,8 +7,10 @@ learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Lick }
   - { level: 1, move: Mean Look }
+  - { level: 2, move: Acid Spray }
   - { level: 6, move: Knell }
   - { level: 12, move: Payback }
+  - { level: 15, move: Venoshock }
   - { level: 16, move: Spite }
   - { level: 20, move: Curse }
   - { level: 24, move: Hex }
@@ -16,7 +18,9 @@ learnset:
   - { level: 33, move: Miasma }
   - { level: 36, move: Sucker Punch }
   - { level: 42, move: Dark Pulse }
-  - { level: 48, move: Shadow Ball }
+  - { level: 43, move: Shadow Ball }
+  - { level: 45, move: Sludge Wave }
+  - { level: 48, move: Specter Bomb }
   - { level: 54, move: Destiny Bond }
   - { level: 60, move: Dream Eater }
   - { level: 64, move: Netherstorm }

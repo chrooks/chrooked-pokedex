@@ -16,15 +16,18 @@ learnset:
   - { level: 7, move: Growth }
   - { level: 10, move: Razor Leaf }
   - { level: 13, move: Helping Hand }
+  - { level: 15, move: Terrain Pulse }
   - { level: 16, move: Flail }
   - { level: 20, move: Mega Drain }
   - { level: 23, move: Grassy Terrain }
   - { level: 27, move: Leech Seed }
+  - { level: 29, move: Swift }
   - { level: 31, move: Seed Bomb }
   - { level: 36, move: Energy Ball }
   - { level: 39, move: Matcha Gotcha }
-  - { level: 42, move: Terrain Pulse }
+  - { level: 42, move: Uproar }
   - { level: 42, move: Resonance }
   - { level: 48, move: Siphon }
   - { level: 54, move: Petal Blizzard }
+  - { level: 57, move: Hyper Beam }
   - { level: 60, move: Petal Dance }

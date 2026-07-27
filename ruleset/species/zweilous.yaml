@@ -5,13 +5,16 @@ abilities:
   primary: Intimidate
   hidden: Carnivore
 learnset:
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Double Hit }
   - { level: 1, move: Tackle }
   - { level: 1, move: Bite }
-  - { level: 1, move: Focus Energy }
-  - { level: 1, move: Dragon Breath }
-  - { level: 1, move: Double Hit }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Maul }
+  - { level: 4, move: Dragon Breath }
   - { level: 6, move: Slander }
   - { level: 12, move: Roar }
+  - { level: 15, move: Breaking Swipe }
   - { level: 16, move: Assurance }
   - { level: 20, move: Headbutt }
   - { level: 24, move: Work Up }
@@ -21,10 +24,13 @@ learnset:
   - { level: 36, move: Scary Face }
   - { level: 38, move: Dragon Pulse }
   - { level: 40, move: Cataclysm }
+  - { level: 43, move: Backstab }
   - { level: 44, move: Body Slam }
+  - { level: 45, move: Dragon Hammer }
   - { level: 48, move: Hyper Voice }
   - { level: 51, move: Draco Meteor }
   - { level: 54, move: Dragon Rush }
   - { level: 57, move: Eclipse }
+  - { level: 58, move: Havoc }
   - { level: 60, move: Nasty Plot }
   - { level: 66, move: Outrage }

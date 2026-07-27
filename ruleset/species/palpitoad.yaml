@@ -4,25 +4,29 @@ aka: { pokeemerald: SPECIES_PALPITOAD }
 abilities:
   secondary: Venomous
 learnset:
-  - { level: 1, move: Bubble }
   - { level: 1, move: Growl }
   - { level: 1, move: Supersonic }
+  - { level: 1, move: Bubble }
   - { level: 1, move: Water Gun }
-  - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Acid Spray }
-  - { level: 1, move: Bubble Beam }
-  - { level: 1, move: Mud Shot }
-  - { level: 1, move: Mud Bomb }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Mud-Slap }
+  - { level: 3, move: Acid Spray }
+  - { level: 4, move: Clod Toss }
+  - { level: 5, move: Bubble Beam }
   - { level: 6, move: Undertow }
+  - { level: 7, move: Mud Shot }
+  - { level: 8, move: Mud Bomb }
   - { level: 14, move: Water Whip }
+  - { level: 15, move: Bulldoze }
   - { level: 23, move: Echoed Voice }
   - { level: 26, move: Rain Dance }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Sludge Wave }
+  - { level: 31, move: Tectonic Fang }
   - { level: 33, move: Muddy Water }
   - { level: 33, move: Maelstrom }
   - { level: 36, move: Earth Power }
   - { level: 42, move: Drain Punch }
+  - { level: 43, move: Earthquake }
   - { level: 45, move: Wave Crash }
   - { level: 45, move: Quagmire }
   - { level: 48, move: Hydro Pump }

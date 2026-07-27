@@ -3,16 +3,21 @@ chrooked_id: castformsnowy
 aka: {  }
 learnset:
   - { level: 1, move: Tackle }
+  - { level: 2, move: Ice Ball }
   - { level: 10, move: Water Gun }
   - { level: 10, move: Ember }
   - { level: 10, move: Powder Snow }
   - { level: 15, move: Headbutt }
+  - { level: 16, move: Ice Punch }
   - { level: 20, move: Rain Dance }
   - { level: 20, move: Sunny Day }
   - { level: 20, move: Hail }
   - { level: 25, move: Weather Ball }
+  - { level: 29, move: Glacial Crush }
   - { level: 35, move: Hydro Pump }
   - { level: 35, move: Fire Blast }
   - { level: 35, move: Blizzard }
+  - { level: 43, move: Ice Hammer }
   - { level: 45, move: Hurricane }
+  - { level: 57, move: Icebreaker }
   - { level: 64, move: Cryoblast }

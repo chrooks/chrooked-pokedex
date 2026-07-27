@@ -7,8 +7,10 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Splash }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Twister }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Cheap Shot }
   - { level: 4, move: Whirlpool }
+  - { level: 5, move: Twister }
   - { level: 8, move: Ice Fang }
   - { level: 12, move: Brine }
   - { level: 14, move: Water Whip }
@@ -19,6 +21,10 @@ learnset:
   - { level: 32, move: Aqua Tail }
   - { level: 36, move: Dragon Dance }
   - { level: 40, move: Hydro Pump }
+  - { level: 43, move: Maelstrom }
   - { level: 44, move: Hurricane }
+  - { level: 45, move: Backstab }
   - { level: 48, move: Outrage }
   - { level: 52, move: Hyper Beam }
+  - { level: 57, move: Wave Crash }
+  - { level: 59, move: Havoc }

@@ -5,18 +5,22 @@ abilities:
   secondary: Permafrost
 learnset:
   - { level: 0, move: Rock Slide }
-  - { level: 1, move: Powder Snow }
-  - { level: 1, move: Rapid Spin }
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Harden }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Rapid Spin }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Rollout }
+  - { level: 4, move: Tackle }
   - { level: 9, move: Curse }
   - { level: 12, move: Icy Wind }
   - { level: 15, move: Protect }
+  - { level: 16, move: Ice Punch }
   - { level: 18, move: Avalanche }
   - { level: 21, move: Bite }
   - { level: 24, move: Ice Fang }
   - { level: 27, move: Iron Defense }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Recover }
   - { level: 33, move: Crunch }
   - { level: 36, move: Take Down }
@@ -24,5 +28,6 @@ learnset:
   - { level: 46, move: Double-Edge }
   - { level: 51, move: Stone Edge }
   - { level: 56, move: Mountain Gale }
+  - { level: 57, move: Head Smash }
   - { level: 61, move: Icebreaker }
 evolution: { from: Bergmite, method: { level: 37 } }

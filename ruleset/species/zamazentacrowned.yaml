@@ -2,17 +2,23 @@ name: Zamazenta Crowned
 chrooked_id: zamazentacrowned
 aka: { dex: 889 }
 learnset:
-  - { level: 1, move: Bite }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Howl }
   - { level: 1, move: Wide Guard }
+  - { level: 1, move: Metal Claw }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Bite }
   - { level: 11, move: Slash }
+  - { level: 15, move: Brick Break }
+  - { level: 17, move: Smart Strike }
   - { level: 22, move: Iron Defense }
   - { level: 33, move: Iron Head }
   - { level: 38, move: One-Inch Punch }
+  - { level: 43, move: Cross Chop }
   - { level: 44, move: Metal Burst }
+  - { level: 45, move: Iron Tail }
   - { level: 55, move: Crunch }
+  - { level: 57, move: Excalibur }
   - { level: 66, move: Moonblast }
-  - { level: 77, move: Close Combat }
-  - { level: 88, move: Giga Impact }
+  - { level: 70, move: Close Combat }
+  - { level: 70, move: Giga Impact }

@@ -8,6 +8,8 @@ stats: { atk: 100 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Hone Claws }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Peck }
   - { level: 4, move: Wing Attack }
   - { level: 8, move: Detect }
   - { level: 12, move: Aerial Ace }
@@ -26,3 +28,4 @@ learnset:
   - { level: 48, move: High Jump Kick }
   - { level: 52, move: Endeavor }
   - { level: 56, move: Sky Attack }
+  - { level: 57, move: Brave Bird }

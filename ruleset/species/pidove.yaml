@@ -5,18 +5,26 @@ stats: { atk: 36, spa: 55 }
 learnset:
   - { level: 1, move: Gust }
   - { level: 1, move: Growl }
+  - { level: 2, move: Echoed Voice }
   - { level: 4, move: Leer }
   - { level: 8, move: Quick Attack }
   - { level: 12, move: Taunt }
+  - { level: 15, move: Swift }
   - { level: 16, move: Air Cutter }
   - { level: 20, move: Swagger }
   - { level: 24, move: Feather Dance }
   - { level: 28, move: Bail Out }
-  - { level: 32, move: Air Slash }
+  - { level: 29, move: Uproar }
+  - { level: 31, move: Air Slash }
+  - { level: 32, move: Galeburst }
   - { level: 36, move: Roost }
   - { level: 38, move: Rampage }
   - { level: 38, move: Dive Bomb }
   - { level: 40, move: Tailwind }
+  - { level: 43, move: Resonance }
   - { level: 44, move: Sky Attack }
+  - { level: 45, move: Hurricane }
   - { level: 48, move: Nosedive }
+  - { level: 57, move: Hyper Beam }
+  - { level: 59, move: Tempest }
   - { level: 64, move: Oblivion Wing }

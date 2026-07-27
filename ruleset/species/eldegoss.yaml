@@ -5,14 +5,16 @@ stats: { spa: 90 }
 learnset:
   - { level: 0, move: Cotton Spore }
   - { level: 1, move: Cotton Spore }
-  - { level: 1, move: Leafage }
   - { level: 1, move: Sing }
-  - { level: 1, move: Rapid Spin }
   - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Leafage }
+  - { level: 2, move: Absorb }
+  - { level: 3, move: Rapid Spin }
   - { level: 12, move: Razor Leaf }
   - { level: 16, move: Round }
   - { level: 23, move: Leaf Tornado }
   - { level: 28, move: Synthesis }
+  - { level: 29, move: Energy Ball }
   - { level: 34, move: Hyper Voice }
   - { level: 37, move: Siphon }
   - { level: 40, move: Aromatherapy }

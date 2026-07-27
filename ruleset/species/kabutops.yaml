@@ -3,18 +3,21 @@ chrooked_id: kabutops
 aka: { dex: 141 }
 learnset:
   - { level: 0, move: Slash }
-  - { level: 1, move: Slash }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Feint }
-  - { level: 1, move: Absorb }
   - { level: 1, move: Harden }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Sand Attack }
+  - { level: 1, move: Absorb }
+  - { level: 2, move: Rollout }
+  - { level: 3, move: Scratch }
+  - { level: 4, move: Slash }
+  - { level: 5, move: Night Slash }
   - { level: 8, move: Undertow }
   - { level: 15, move: Aqua Jet }
+  - { level: 16, move: Rock Slide }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Leer }
   - { level: 25, move: Mud Shot }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Ancient Power }
   - { level: 35, move: Brine }
   - { level: 39, move: Pixie Slash }
@@ -24,5 +27,6 @@ learnset:
   - { level: 46, move: Secret Sword }
   - { level: 49, move: Leech Life }
   - { level: 56, move: Wave Crash }
+  - { level: 57, move: Stone Edge }
   - { level: 63, move: Metal Sound }
-  - { level: 70, move: Stone Edge }
+  - { level: 70, move: Head Smash }

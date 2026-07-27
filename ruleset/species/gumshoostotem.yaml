@@ -7,6 +7,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Payback }
   - { level: 13, move: Work Up }
+  - { level: 15, move: Bail Out }
   - { level: 19, move: Bite }
   - { level: 23, move: Mud-Slap }
   - { level: 27, move: Super Fang }

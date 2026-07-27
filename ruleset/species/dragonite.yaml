@@ -4,14 +4,15 @@ aka: { pokeemerald: SPECIES_DRAGONITE }
 learnset:
   - { level: 0, move: Hurricane }
   - { level: 1, move: Roost }
-  - { level: 1, move: Extreme Speed }
-  - { level: 1, move: Twister }
   - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Fire Punch }
   - { level: 1, move: Wrap }
-  - { level: 1, move: Wing Attack }
-  - { level: 1, move: Thunder Punch }
   - { level: 1, move: Leer }
+  - { level: 2, move: Peck }
+  - { level: 3, move: Twister }
+  - { level: 4, move: Fire Punch }
+  - { level: 5, move: Wing Attack }
+  - { level: 6, move: Thunder Punch }
+  - { level: 7, move: Extreme Speed }
   - { level: 8, move: Maul }
   - { level: 15, move: Dragon Tail }
   - { level: 20, move: Agility }
@@ -26,5 +27,6 @@ learnset:
   - { level: 43, move: Outrage }
   - { level: 46, move: Safeguard }
   - { level: 53, move: Rain Dance }
+  - { level: 57, move: Brave Bird }
   - { level: 62, move: Dragon Dance }
-  - { level: 80, move: Hyper Beam }
+  - { level: 70, move: Hyper Beam }

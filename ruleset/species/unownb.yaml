@@ -2,5 +2,8 @@ name: Unown B
 chrooked_id: unownb
 aka: {  }
 learnset:
+  - { level: 1, move: Mind Flick }
+  - { level: 15, move: Psycho Cut }
+  - { level: 29, move: Astral Hand }
   - { level: 38, move: Kinetic Slam }
   - { level: 46, move: Psycrush }

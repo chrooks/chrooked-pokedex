@@ -22,6 +22,8 @@ learnset:
   - { level: 39, move: Crystal Beam }
   - { level: 41, move: Body Slam }
   - { level: 43, move: Recover }
+  - { level: 44, move: Fire Blast }
   - { level: 48, move: Flamethrower }
   - { level: 50, move: Earth Power }
+  - { level: 57, move: Overheat }
   - { level: 62, move: Meteor Surge }

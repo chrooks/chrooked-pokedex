@@ -2,24 +2,31 @@ name: Swampert Mega
 chrooked_id: swampertmega
 aka: {  }
 learnset:
-  - { level: 1, move: Clod Toss }
-  - { level: 1, move: Earthquake }
   - { level: 1, move: Growl }
   - { level: 1, move: Hammer Arm }
-  - { level: 1, move: Mud Shot }
+  - { level: 1, move: Clod Toss }
   - { level: 1, move: Rock Smash }
-  - { level: 1, move: Surf }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Water Gun }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Water Gun }
+  - { level: 5, move: Mud Shot }
+  - { level: 6, move: Surf }
+  - { level: 7, move: Bulldoze }
   - { level: 9, move: Rock Throw }
   - { level: 12, move: Protect }
   - { level: 15, move: Supersonic }
+  - { level: 16, move: Tectonic Fang }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Water Pulse }
   - { level: 25, move: Rock Slide }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Take Down }
+  - { level: 31, move: Earthquake }
   - { level: 35, move: Amnesia }
   - { level: 42, move: Muddy Water }
+  - { level: 43, move: Maelstrom }
   - { level: 49, move: Screech }
   - { level: 56, move: Endeavor }
+  - { level: 57, move: Wave Crash }
+  - { level: 59, move: Faultbreak }
   - { level: 63, move: Hydro Pump }

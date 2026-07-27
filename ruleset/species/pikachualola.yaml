@@ -2,16 +2,16 @@ name: Pikachu Alola
 chrooked_id: pikachualola
 aka: { dex: 25 }
 learnset:
-  - { level: 1, move: Nuzzle }
   - { level: 1, move: Nasty Plot }
   - { level: 1, move: Charm }
   - { level: 1, move: Sweet Kiss }
   - { level: 1, move: Play Nice }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Thunder Shock }
-  - { level: 1, move: Growl }
+  - { level: 2, move: Quick Attack }
+  - { level: 3, move: Tail Whip }
   - { level: 4, move: Thunder Wave }
+  - { level: 5, move: Growl }
+  - { level: 6, move: Nuzzle }
+  - { level: 7, move: Thunder Shock }
   - { level: 8, move: Double Team }
   - { level: 12, move: Electro Ball }
   - { level: 16, move: Feint }
@@ -24,3 +24,4 @@ learnset:
   - { level: 40, move: Light Screen }
   - { level: 44, move: Thunder }
   - { level: 48, move: Arc Strike }
+  - { level: 57, move: Wild Charge }

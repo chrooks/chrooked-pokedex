@@ -8,17 +8,23 @@ learnset:
   - { level: 4, move: Disarming Voice }
   - { level: 8, move: Glitter Tap }
   - { level: 12, move: Fury Attack }
+  - { level: 15, move: Cutsie Slap }
   - { level: 16, move: Round }
+  - { level: 17, move: Aerial Ace }
   - { level: 20, move: Dragon Breath }
   - { level: 24, move: Safeguard }
   - { level: 28, move: Sing }
+  - { level: 29, move: Pixie Slash }
   - { level: 30, move: Galeburst }
   - { level: 32, move: Cotton Guard }
   - { level: 36, move: Take Down }
   - { level: 38, move: Cataclysm }
   - { level: 38, move: Starfall Slam }
   - { level: 40, move: Moonblast }
+  - { level: 43, move: Dive Bomb }
   - { level: 44, move: Perish Song }
-  - { level: 48, move: Dive Bomb }
+  - { level: 48, move: Nosedive }
+  - { level: 57, move: Faeblitz }
+  - { level: 59, move: Brave Bird }
   - { level: 60, move: Draco Meteor }
   - { level: 64, move: Tempest }

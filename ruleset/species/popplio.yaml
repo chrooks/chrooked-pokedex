@@ -14,6 +14,7 @@ learnset:
   - { level: 22, move: Beguile }
   - { level: 24, move: Encore }
   - { level: 27, move: Misty Terrain }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Hyper Voice }
   - { level: 33, move: Moonblast }
   - { level: 36, move: Hydro Pump }

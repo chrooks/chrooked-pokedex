@@ -5,6 +5,7 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Focus Energy }
   - { level: 2, move: Aura Spark }
+  - { level: 3, move: Rock Smash }
   - { level: 4, move: Sand Attack }
   - { level: 7, move: Arm Thrust }
   - { level: 10, move: Fake Out }

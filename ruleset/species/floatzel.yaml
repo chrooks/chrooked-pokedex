@@ -9,9 +9,10 @@ stats: { atk: 115, spa: 100 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Ice Fang }
   - { level: 1, move: Soak }
+  - { level: 1, move: Crunch }
+  - { level: 2, move: Tackle }
+  - { level: 3, move: Ice Fang }
   - { level: 8, move: Undertow }
   - { level: 15, move: Water Gun }
   - { level: 18, move: Bite }
@@ -19,7 +20,8 @@ learnset:
   - { level: 24, move: Aqua Jet }
   - { level: 26, move: Water Whip }
   - { level: 29, move: Double Hit }
-  - { level: 32, move: Bail Out }
+  - { level: 30, move: Bail Out }
+  - { level: 32, move: Take Down }
   - { level: 32, move: Liquidation }
   - { level: 35, move: Whirlpool }
   - { level: 38, move: Rampage }
@@ -27,4 +29,5 @@ learnset:
   - { level: 46, move: Maelstrom }
   - { level: 51, move: Agility }
   - { level: 57, move: Hydro Pump }
+  - { level: 58, move: Double-Edge }
   - { level: 62, move: Wave Crash }

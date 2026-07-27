@@ -5,20 +5,21 @@ abilities:
   secondary: Hydrate
 stats: { spa: 135 }
 learnset:
-  - { level: 1, move: Vise Grip }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Splash }
   - { level: 1, move: Flail }
-  - { level: 1, move: Dark Pulse }
-  - { level: 1, move: Dragon Pulse }
   - { level: 1, move: Heal Pulse }
+  - { level: 1, move: Water Gun }
+  - { level: 2, move: Vise Grip }
+  - { level: 3, move: Dark Pulse }
+  - { level: 4, move: Dragon Pulse }
   - { level: 15, move: Aqua Jet }
   - { level: 20, move: Smack Down }
   - { level: 25, move: Hone Claws }
   - { level: 30, move: Water Pulse }
   - { level: 35, move: Swords Dance }
   - { level: 42, move: Aura Sphere }
+  - { level: 43, move: Muddy Water }
   - { level: 49, move: Bounce }
-  - { level: 52, move: Muddy Water }
+  - { level: 52, move: Hydro Pump }
   - { level: 56, move: Tsunami }
   - { level: 63, move: Crabhammer }

@@ -7,6 +7,7 @@ stats: { hp: 80, spa: 75 }
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
+  - { level: 2, move: Lick }
   - { level: 3, move: Astonish }
   - { level: 6, move: Cheap Shot }
   - { level: 9, move: Shadow Sneak }
@@ -16,6 +17,7 @@ learnset:
   - { level: 21, move: Night Shade }
   - { level: 24, move: Fury Swipes }
   - { level: 27, move: Knock Off }
+  - { level: 29, move: Heel Drop }
   - { level: 30, move: Quash }
   - { level: 33, move: Shadow Claw }
   - { level: 35, move: Backstab }
@@ -23,6 +25,8 @@ learnset:
   - { level: 39, move: Power Gem }
   - { level: 40, move: Wraithstrike }
   - { level: 42, move: Zen Headbutt }
+  - { level: 43, move: Interment }
   - { level: 45, move: Shadow Ball }
   - { level: 48, move: Foul Play }
+  - { level: 57, move: Necrosis }
   - { level: 60, move: Havoc }

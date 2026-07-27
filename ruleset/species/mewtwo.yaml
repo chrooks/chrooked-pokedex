@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Swift }
   - { level: 1, move: Life Dew }
   - { level: 8, move: Ancient Power }
+  - { level: 15, move: Dream Mist }
   - { level: 16, move: Psycho Cut }
   - { level: 24, move: Safeguard }
   - { level: 32, move: Amnesia }
@@ -18,6 +19,6 @@ learnset:
   - { level: 56, move: Power Swap }
   - { level: 56, move: Guard Swap }
   - { level: 64, move: Mist }
-  - { level: 72, move: Psystrike }
-  - { level: 80, move: Recover }
-  - { level: 88, move: Future Sight }
+  - { level: 70, move: Psystrike }
+  - { level: 70, move: Recover }
+  - { level: 70, move: Future Sight }

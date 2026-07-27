@@ -14,6 +14,7 @@ learnset:
   - { level: 36, move: Switcheroo }
   - { level: 39, move: Bug Buzz }
   - { level: 42, move: Dazzling Gleam }
+  - { level: 43, move: Moonblast }
   - { level: 48, move: Antennae Blast }
   - { level: 54, move: Quiver Dance }
   - { level: 60, move: Drone Chorus }

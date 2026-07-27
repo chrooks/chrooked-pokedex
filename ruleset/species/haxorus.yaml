@@ -30,5 +30,6 @@ learnset:
   - { level: 47, move: Leaf Blade }
   - { level: 51, move: Smart Strike }
   - { level: 55, move: Ceaseless Edge }
+  - { level: 57, move: Behemoth Blade }
   - { level: 60, move: Outrage }
-  - { level: 65, move: Behemoth Blade }
+  - { level: 65, move: Excalibur }

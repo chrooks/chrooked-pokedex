@@ -8,6 +8,8 @@ stats: { atk: 115 }
 learnset:
   - { level: 1, move: Bite }
   - { level: 1, move: Ancient Power }
+  - { level: 2, move: Rollout }
+  - { level: 3, move: Peck }
   - { level: 5, move: Supersonic }
   - { level: 10, move: Wing Attack }
   - { level: 15, move: Scary Face }

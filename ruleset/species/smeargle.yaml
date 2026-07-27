@@ -5,13 +5,17 @@ abilities:
   secondary: Technician
 learnset:
   - { level: 1, move: Sketch }
+  - { level: 2, move: Tackle }
   - { level: 11, move: Sketch }
+  - { level: 15, move: Bail Out }
   - { level: 21, move: Sketch }
+  - { level: 29, move: Take Down }
   - { level: 31, move: Sketch }
   - { level: 36, move: Rampage }
   - { level: 41, move: Sketch }
   - { level: 51, move: Sketch }
+  - { level: 57, move: Double-Edge }
   - { level: 61, move: Sketch }
-  - { level: 71, move: Sketch }
-  - { level: 81, move: Sketch }
-  - { level: 91, move: Sketch }
+  - { level: 70, move: Sketch }
+  - { level: 70, move: Sketch }
+  - { level: 70, move: Sketch }

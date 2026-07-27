@@ -4,18 +4,28 @@ aka: { dex: 590 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Poison Sting }
   - { level: 4, move: Growth }
   - { level: 8, move: Stun Spore }
   - { level: 12, move: Mega Drain }
+  - { level: 15, move: Razor Leaf }
   - { level: 16, move: Synthesis }
+  - { level: 17, move: Cross Poison }
   - { level: 20, move: Clear Smog }
   - { level: 24, move: Sweet Scent }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: Seed Bomb }
   - { level: 30, move: Miasma }
+  - { level: 31, move: Gastric Snare }
   - { level: 32, move: Ingrain }
   - { level: 36, move: Toxic }
   - { level: 38, move: Siphon }
   - { level: 40, move: Rage Powder }
+  - { level: 43, move: Reap }
   - { level: 44, move: Solar Beam }
+  - { level: 45, move: Venom Slam }
   - { level: 48, move: Spore }
+  - { level: 57, move: Power Whip }
+  - { level: 59, move: Gunk Shot }
   - { level: 64, move: Contagion }

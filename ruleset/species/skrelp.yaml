@@ -7,19 +7,26 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Smokescreen }
+  - { level: 2, move: Undertow }
   - { level: 5, move: Acid }
   - { level: 10, move: Water Gun }
   - { level: 15, move: Tail Whip }
+  - { level: 16, move: Poison Tail }
   - { level: 17, move: Water Whip }
   - { level: 20, move: Double Team }
-  - { level: 25, move: Poison Tail }
+  - { level: 25, move: Cross Poison }
+  - { level: 29, move: Gastric Snare }
   - { level: 30, move: Water Pulse }
   - { level: 35, move: Toxic }
   - { level: 37, move: Dragon Pulse }
   - { level: 40, move: Cataclysm }
+  - { level: 43, move: Venom Slam }
   - { level: 45, move: Aqua Tail }
+  - { level: 46, move: Maelstrom }
   - { level: 50, move: Sludge Bomb }
   - { level: 55, move: Hydro Pump }
+  - { level: 57, move: Gunk Shot }
+  - { level: 59, move: Wave Crash }
   - { level: 60, move: Draco Meteor }
   - { level: 64, move: Tsunami }
   - { level: 64, move: Contagion }

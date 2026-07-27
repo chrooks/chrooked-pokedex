@@ -8,14 +8,14 @@ abilities:
 stats: { spa: 75, spe: 120 }
 learnset:
   - { level: 0, move: Smart Strike }
-  - { level: 1, move: Smart Strike }
-  - { level: 1, move: Megahorn }
-  - { level: 1, move: Poison Jab }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Growl }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Ember }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Ember }
+  - { level: 3, move: Smart Strike }
+  - { level: 4, move: Poison Jab }
+  - { level: 5, move: Megahorn }
   - { level: 15, move: Flame Charge }
   - { level: 20, move: Agility }
   - { level: 25, move: Flame Wheel }

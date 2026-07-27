@@ -5,16 +5,22 @@ stats: { atk: 115 }
 learnset:
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Thunder Shock }
+  - { level: 2, move: Nuzzle }
+  - { level: 3, move: Ice Ball }
   - { level: 7, move: Charge }
   - { level: 14, move: Echoed Voice }
+  - { level: 15, move: Spark }
+  - { level: 17, move: Ice Punch }
   - { level: 21, move: Ancient Power }
   - { level: 28, move: Pluck }
   - { level: 35, move: Avalanche }
   - { level: 38, move: Bolt Beak }
   - { level: 42, move: Freeze-Dry }
+  - { level: 43, move: Icicle Crash }
   - { level: 49, move: Body Slam }
-  - { level: 52, move: Icicle Crash }
+  - { level: 52, move: Ice Hammer }
   - { level: 56, move: Discharge }
-  - { level: 63, move: Arc Strike }
+  - { level: 57, move: Arc Strike }
+  - { level: 63, move: Wild Charge }
   - { level: 70, move: Icebreaker }
-  - { level: 77, move: Blizzard }
+  - { level: 70, move: Blizzard }

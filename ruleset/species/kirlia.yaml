@@ -10,9 +10,11 @@ learnset:
   - { level: 9, move: Hypnosis }
   - { level: 12, move: Draining Kiss }
   - { level: 15, move: Teleport }
+  - { level: 16, move: Beguile }
   - { level: 18, move: Psybeam }
   - { level: 23, move: Life Dew }
   - { level: 28, move: Charm }
+  - { level: 29, move: Dazzling Gleam }
   - { level: 30, move: Astral Hand }
   - { level: 33, move: Calm Mind }
   - { level: 35, move: One-Inch Punch }
@@ -21,6 +23,9 @@ learnset:
   - { level: 40, move: Kinetic Slam }
   - { level: 41, move: Pixie Slash }
   - { level: 43, move: Heal Pulse }
+  - { level: 44, move: Mindwarp }
+  - { level: 45, move: Moonblast }
   - { level: 48, move: Dream Eater }
   - { level: 53, move: Future Sight }
+  - { level: 57, move: Rapture }
   - { level: 62, move: Psycrush }

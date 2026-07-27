@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Wrap }
   - { level: 1, move: Leer }
   - { level: 13, move: Growth }
+  - { level: 15, move: Razor Leaf }
   - { level: 16, move: Magical Leaf }
   - { level: 20, move: Leech Seed }
   - { level: 24, move: Mega Drain }
@@ -20,3 +21,4 @@ learnset:
   - { level: 40, move: Giga Drain }
   - { level: 44, move: Gastro Acid }
   - { level: 48, move: Leaf Storm }
+  - { level: 57, move: Power Whip }

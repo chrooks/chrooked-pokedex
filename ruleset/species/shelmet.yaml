@@ -4,18 +4,23 @@ aka: {  }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Protect }
+  - { level: 2, move: Fury Cutter }
   - { level: 4, move: Acid }
   - { level: 8, move: Curse }
   - { level: 12, move: Mega Drain }
+  - { level: 15, move: Bug Bite }
   - { level: 16, move: Struggle Bug }
   - { level: 20, move: Yawn }
   - { level: 22, move: Signal Beam }
   - { level: 24, move: Acid Armor }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: X-Scissor }
   - { level: 32, move: Guard Swap }
   - { level: 36, move: Body Slam }
   - { level: 38, move: Bug Buzz }
   - { level: 40, move: Recover }
+  - { level: 43, move: Moltstrike }
   - { level: 44, move: Antennae Blast }
   - { level: 48, move: Final Gambit }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Drone Chorus }

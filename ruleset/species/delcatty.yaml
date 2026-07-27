@@ -6,25 +6,26 @@ abilities:
   secondary: Normalize
 stats: { hp: 90, spd: 65, spe: 100 }
 learnset:
-  - { level: 1, move: Fake Out }
   - { level: 1, move: Sing }
   - { level: 1, move: Attract }
   - { level: 1, move: Growl }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Disarming Voice }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Payback }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Facade }
-  - { level: 1, move: Covet }
-  - { level: 1, move: Heal Bell }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Play Rough }
+  - { level: 2, move: Fury Swipes }
+  - { level: 3, move: Copycat }
+  - { level: 4, move: Payback }
+  - { level: 5, move: Charm }
+  - { level: 6, move: Heal Bell }
+  - { level: 7, move: Baby-Doll Eyes }
+  - { level: 8, move: Fake Out }
+  - { level: 9, move: Tackle }
   - { level: 10, move: Glitter Tap }
-  - { level: 35, move: Cutsie Slap }
-  - { level: 46, move: Rampage }
+  - { level: 11, move: Disarming Voice }
+  - { level: 12, move: Covet }
+  - { level: 13, move: Facade }
+  - { level: 14, move: Cutsie Slap }
+  - { level: 15, move: Take Down }
+  - { level: 29, move: Rampage }
+  - { level: 35, move: Play Rough }
+  - { level: 46, move: Double-Edge }
   - { level: 46, move: Starfall Slam }
   - { level: 64, move: Faeblitz }

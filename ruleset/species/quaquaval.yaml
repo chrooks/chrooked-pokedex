@@ -7,10 +7,11 @@ stats: { spe: 95 }
 learnset:
   - { level: 0, move: Aqua Step }
   - { level: 1, move: Counter }
-  - { level: 1, move: Pound }
   - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Double Hit }
+  - { level: 1, move: Pound }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Water Gun }
   - { level: 4, move: Undertow }
   - { level: 7, move: Work Up }
   - { level: 10, move: Wing Attack }
@@ -19,6 +20,7 @@ learnset:
   - { level: 17, move: Water Pulse }
   - { level: 21, move: Aqua Cutter }
   - { level: 27, move: Air Slash }
+  - { level: 29, move: One-Inch Punch }
   - { level: 32, move: Focus Energy }
   - { level: 35, move: Liquidation }
   - { level: 36, move: Cross Chop }

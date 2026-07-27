@@ -10,12 +10,14 @@ stats: { atk: 80, spe: 65, spd: 65, hp: 70 }
 learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Tail Whip }
+  - { level: 2, move: Glitter Tap }
   - { level: 3, move: Aqua Jet }
   - { level: 3, move: Undertow }
   - { level: 5, move: Baby-Doll Eyes }
   - { level: 7, move: Horn Attack }
   - { level: 10, move: Tail Slap }
   - { level: 13, move: Aqua Cutter }
+  - { level: 15, move: Cutsie Slap }
   - { level: 17, move: Aqua Ring }
   - { level: 19, move: Razor Shell }
   - { level: 22, move: Lovely Bite }
@@ -25,4 +27,5 @@ learnset:
   - { level: 30, move: Waterfall }
   - { level: 32, move: Maelstrom }
   - { level: 37, move: Starfall Slam }
+  - { level: 57, move: Faeblitz }
   - { level: 60, move: Wave Crash }

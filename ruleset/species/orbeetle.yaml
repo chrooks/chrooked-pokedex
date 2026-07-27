@@ -21,4 +21,5 @@ learnset:
   - { level: 40, move: After You }
   - { level: 44, move: Calm Mind }
   - { level: 48, move: Psychic Terrain }
+  - { level: 57, move: Future Sight }
   - { level: 60, move: Drone Chorus }

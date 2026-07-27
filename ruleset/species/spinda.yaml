@@ -8,6 +8,7 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 5, move: Copycat }
   - { level: 14, move: Psybeam }
+  - { level: 15, move: Bail Out }
   - { level: 19, move: Hypnosis }
   - { level: 21, move: Teeter Dance }
   - { level: 23, move: Body Slam }

@@ -6,20 +6,20 @@ abilities:
 stats: { atk: 115, spa: 65, spd: 65, spe: 80 }
 learnset:
   - { level: 0, move: Snarl }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Ice Fang }
-  - { level: 1, move: Thunder Fang }
-  - { level: 1, move: Thief }
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Bite }
   - { level: 1, move: Tackle }
-  - { level: 7, move: Cheap Shot }
+  - { level: 1, move: Thief }
+  - { level: 1, move: Bite }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Fire Fang }
+  - { level: 4, move: Ice Fang }
+  - { level: 5, move: Thunder Fang }
+  - { level: 7, move: Assurance }
   - { level: 13, move: Howl }
   - { level: 13, move: Leer }
   - { level: 16, move: Roar }
   - { level: 20, move: Swagger }
-  - { level: 24, move: Assurance }
+  - { level: 24, move: Crunch }
   - { level: 28, move: Scary Face }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }

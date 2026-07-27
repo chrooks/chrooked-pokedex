@@ -18,3 +18,4 @@ learnset:
   - { level: 41, move: Bullet Seed }
   - { level: 48, move: Super Fang }
   - { level: 55, move: Belch }
+  - { level: 57, move: Double-Edge }

@@ -6,7 +6,10 @@ learnset:
   - { level: 1, move: Tackle }
   - { level: 15, move: Glint }
   - { level: 15, move: Knell }
+  - { level: 16, move: Hex }
+  - { level: 29, move: Shadow Ball }
   - { level: 30, move: Mirror Shot }
+  - { level: 43, move: Specter Bomb }
   - { level: 48, move: Luster Cannon }
   - { level: 62, move: Steel Beam }
   - { level: 64, move: Netherstorm }

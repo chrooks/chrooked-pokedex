@@ -8,14 +8,17 @@ abilities:
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Poison Gas }
+  - { level: 2, move: Poison Sting }
   - { level: 4, move: Harden }
   - { level: 7, move: Mud-Slap }
   - { level: 12, move: Disable }
   - { level: 15, move: Sludge }
+  - { level: 16, move: Cross Poison }
   - { level: 18, move: Mud Shot }
   - { level: 21, move: Minimize }
   - { level: 26, move: Toxic }
   - { level: 29, move: Sludge Bomb }
+  - { level: 30, move: Gastric Snare }
   - { level: 32, move: Sludge Wave }
   - { level: 36, move: Venom Slam }
   - { level: 37, move: Screech }

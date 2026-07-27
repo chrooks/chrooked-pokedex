@@ -6,27 +6,34 @@ abilities:
 stats: { spe: 85 }
 learnset:
   - { level: 0, move: Hyper Beam }
-  - { level: 1, move: Hyper Beam }
   - { level: 1, move: Teleport }
   - { level: 1, move: Harden }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Rapid Spin }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Mind Flick }
+  - { level: 3, move: Confusion }
+  - { level: 4, move: Clod Toss }
+  - { level: 5, move: Hyper Beam }
   - { level: 9, move: Rock Tomb }
   - { level: 12, move: Power Trick }
   - { level: 15, move: Psybeam }
+  - { level: 16, move: Bulldoze }
+  - { level: 17, move: Psycho Cut }
   - { level: 18, move: Ancient Power }
   - { level: 21, move: Imprison }
   - { level: 24, move: Cosmic Power }
   - { level: 27, move: Extrasensory }
+  - { level: 29, move: Tectonic Fang }
   - { level: 30, move: Earth Power }
+  - { level: 31, move: Astral Hand }
   - { level: 33, move: Self-Destruct }
   - { level: 38, move: Guard Split }
   - { level: 38, move: Power Split }
   - { level: 40, move: Kinetic Slam }
   - { level: 40, move: Quagmire }
   - { level: 43, move: Sandstorm }
+  - { level: 44, move: Earthquake }
   - { level: 48, move: Explosion }
+  - { level: 57, move: Faultbreak }
   - { level: 62, move: Psycrush }
   - { level: 62, move: Sinkhole }

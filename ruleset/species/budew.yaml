@@ -9,6 +9,12 @@ learnset:
   - { level: 1, move: Growth }
   - { level: 1, move: Stun Spore }
   - { level: 1, move: Worry Seed }
+  - { level: 2, move: Acid Spray }
+  - { level: 15, move: Giga Drain }
+  - { level: 17, move: Venoshock }
+  - { level: 29, move: Energy Ball }
   - { level: 36, move: Siphon }
-  - { level: 48, move: Miasma }
+  - { level: 43, move: Miasma }
+  - { level: 48, move: Sludge Wave }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Contagion }

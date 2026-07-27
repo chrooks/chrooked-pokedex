@@ -21,4 +21,4 @@ learnset:
   - { level: 53, move: Rain Dance }
   - { level: 60, move: Dragon Dance }
   - { level: 67, move: Outrage }
-  - { level: 74, move: Hyper Beam }
+  - { level: 70, move: Hyper Beam }

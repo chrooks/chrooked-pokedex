@@ -20,4 +20,5 @@ learnset:
   - { level: 41, move: Amnesia }
   - { level: 45, move: Superpower }
   - { level: 49, move: Curse }
+  - { level: 57, move: Double-Edge }
   - { level: 60, move: Wave Crash }

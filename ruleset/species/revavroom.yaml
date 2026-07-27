@@ -11,11 +11,15 @@ learnset:
   - { level: 1, move: Magnet Rise }
   - { level: 1, move: Lick }
   - { level: 1, move: Poison Gas }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Poison Sting }
   - { level: 4, move: Smog }
   - { level: 7, move: Taunt }
   - { level: 10, move: Assurance }
   - { level: 13, move: Sludge }
+  - { level: 15, move: Smart Strike }
   - { level: 17, move: Gyro Ball }
+  - { level: 18, move: Cross Poison }
   - { level: 21, move: Headbutt }
   - { level: 25, move: Screech }
   - { level: 28, move: Iron Head }
@@ -24,4 +28,5 @@ learnset:
   - { level: 41, move: Venom Slam }
   - { level: 46, move: Uproar }
   - { level: 52, move: Spin Out }
+  - { level: 57, move: Excalibur }
   - { level: 58, move: Gunk Shot }

@@ -10,14 +10,17 @@ learnset:
   - { level: 1, move: Sweet Scent }
   - { level: 12, move: Mega Drain }
   - { level: 14, move: Poison Powder }
+  - { level: 15, move: Venoshock }
   - { level: 16, move: Stun Spore }
   - { level: 18, move: Sleep Powder }
   - { level: 20, move: Giga Drain }
   - { level: 26, move: Toxic }
+  - { level: 29, move: Energy Ball }
   - { level: 32, move: Moonblast }
   - { level: 35, move: Miasma }
   - { level: 38, move: Grassy Terrain }
   - { level: 41, move: Siphon }
+  - { level: 43, move: Sludge Wave }
   - { level: 44, move: Moonlight }
   - { level: 50, move: Petal Dance }
   - { level: 64, move: Contagion }

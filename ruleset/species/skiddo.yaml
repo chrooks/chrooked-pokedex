@@ -22,3 +22,4 @@ learnset:
   - { level: 42, move: Leaf Blade }
   - { level: 45, move: Reap }
   - { level: 48, move: Milk Drink }
+  - { level: 57, move: Power Whip }

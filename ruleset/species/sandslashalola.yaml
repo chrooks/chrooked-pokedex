@@ -6,23 +6,29 @@ abilities:
   hidden: Bioturbation
 learnset:
   - { level: 0, move: Icicle Spear }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Mist }
-  - { level: 1, move: Blizzard }
   - { level: 1, move: Defense Curl }
-  - { level: 1, move: Swift }
   - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Powder Snow }
-  - { level: 1, move: Rollout }
-  - { level: 1, move: Fury Cutter }
-  - { level: 1, move: Rapid Spin }
   - { level: 1, move: Iron Defense }
-  - { level: 1, move: Gyro Ball }
-  - { level: 1, move: Metal Burst }
-  - { level: 1, move: Iron Head }
-  - { level: 1, move: Snowscape }
-  - { level: 1, move: Swords Dance }
-  - { level: 1, move: Slash }
-  - { level: 1, move: Metal Claw }
-  - { level: 1, move: Icicle Crash }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Gyro Ball }
+  - { level: 4, move: Metal Burst }
+  - { level: 5, move: Snowscape }
+  - { level: 6, move: Swords Dance }
+  - { level: 7, move: Scratch }
+  - { level: 8, move: Powder Snow }
+  - { level: 9, move: Rollout }
+  - { level: 10, move: Fury Cutter }
+  - { level: 11, move: Rapid Spin }
+  - { level: 12, move: Metal Claw }
+  - { level: 13, move: Swift }
+  - { level: 14, move: Slash }
+  - { level: 15, move: Ice Punch }
+  - { level: 16, move: Smart Strike }
+  - { level: 17, move: Iron Head }
+  - { level: 18, move: Icicle Crash }
+  - { level: 19, move: Blizzard }
+  - { level: 43, move: Ice Hammer }
+  - { level: 45, move: Iron Tail }
   - { level: 48, move: Icebreaker }
+  - { level: 57, move: Excalibur }

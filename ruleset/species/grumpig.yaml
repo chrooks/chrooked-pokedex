@@ -21,4 +21,5 @@ learnset:
   - { level: 42, move: Psychic }
   - { level: 46, move: Payback }
   - { level: 52, move: Mindwarp }
+  - { level: 57, move: Future Sight }
   - { level: 60, move: Bounce }

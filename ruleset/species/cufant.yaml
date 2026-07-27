@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Rock Smash }
   - { level: 1, move: Rollout }
   - { level: 12, move: Metal Claw }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Bulldoze }
   - { level: 20, move: Stomp }
   - { level: 24, move: Iron Defense }
@@ -19,13 +20,15 @@ learnset:
   - { level: 34, move: Body Slam }
   - { level: 38, move: Curse }
   - { level: 42, move: Rock Slide }
+  - { level: 43, move: Iron Tail }
   - { level: 44, move: Gyro Ball }
   - { level: 47, move: Recover }
   - { level: 50, move: Trick Room }
   - { level: 53, move: Play Rough }
   - { level: 56, move: Fire Punch }
+  - { level: 57, move: Excalibur }
   - { level: 59, move: Hard Press }
   - { level: 62, move: Crunch }
   - { level: 66, move: High Horsepower }
   - { level: 70, move: Superpower }
-  - { level: 75, move: Gigaton Hammer }
+  - { level: 70, move: Gigaton Hammer }

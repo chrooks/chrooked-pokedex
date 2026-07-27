@@ -6,25 +6,25 @@ abilities:
   hidden: Hydrate
 learnset:
   - { level: 0, move: Water Gun }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Take Down }
-  - { level: 1, move: Double-Edge }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Bite }
   - { level: 1, move: Growl }
   - { level: 1, move: Copycat }
-  - { level: 1, move: Covet }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Swift }
-  - { level: 1, move: Baton Pass }
-  - { level: 1, move: Charm }
+  - { level: 2, move: Baton Pass }
+  - { level: 3, move: Charm }
+  - { level: 4, move: Tackle }
   - { level: 5, move: Sand Attack }
+  - { level: 6, move: Covet }
+  - { level: 7, move: Bite }
+  - { level: 8, move: Swift }
+  - { level: 9, move: Bail Out }
   - { level: 10, move: Quick Attack }
+  - { level: 11, move: Take Down }
   - { level: 15, move: Baby-Doll Eyes }
   - { level: 20, move: Haze }
   - { level: 25, move: Water Pulse }
   - { level: 30, move: Aurora Beam }
-  - { level: 35, move: Bail Out }
+  - { level: 35, move: Double-Edge }
   - { level: 40, move: Surf }
   - { level: 45, move: Acid Armor }
   - { level: 50, move: Hydro Pump }

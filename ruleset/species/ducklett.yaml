@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_DUCKLETT }
 stats: { spa: 64 }
 learnset:
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Gust }
   - { level: 6, move: Defog }
   - { level: 9, move: Wing Attack }
   - { level: 13, move: Water Pulse }
@@ -12,11 +13,13 @@ learnset:
   - { level: 21, move: Feather Dance }
   - { level: 24, move: Aqua Ring }
   - { level: 27, move: Air Slash }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Roost }
   - { level: 32, move: Galeburst }
   - { level: 34, move: Rain Dance }
   - { level: 37, move: Tailwind }
   - { level: 41, move: Brave Bird }
+  - { level: 43, move: Hydro Pump }
   - { level: 46, move: Hurricane }
   - { level: 64, move: Oblivion Wing }
   - { level: 64, move: Tsunami }

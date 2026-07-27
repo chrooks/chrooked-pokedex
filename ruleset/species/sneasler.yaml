@@ -10,8 +10,10 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Rock Smash }
   - { level: 1, move: Fling }
+  - { level: 2, move: Poison Sting }
   - { level: 6, move: Taunt }
   - { level: 12, move: Quick Attack }
+  - { level: 15, move: Cross Poison }
   - { level: 18, move: Metal Claw }
   - { level: 24, move: Poison Jab }
   - { level: 30, move: Brick Break }
@@ -23,5 +25,6 @@ learnset:
   - { level: 45, move: Pixie Slash }
   - { level: 48, move: Agility }
   - { level: 54, move: Screech }
+  - { level: 57, move: Gunk Shot }
   - { level: 60, move: Close Combat }
 evolution: { from: Sneasel Hisui, method: { item: Razor Claw } }

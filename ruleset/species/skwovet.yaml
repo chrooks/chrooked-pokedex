@@ -16,3 +16,4 @@ learnset:
   - { level: 37, move: Rampage }
   - { level: 40, move: Super Fang }
   - { level: 45, move: Belch }
+  - { level: 57, move: Double-Edge }

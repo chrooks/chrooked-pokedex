@@ -8,8 +8,17 @@ learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Sing }
   - { level: 1, move: Copycat }
+  - { level: 2, move: Echoed Voice }
   - { level: 4, move: Defense Curl }
   - { level: 8, move: Glitter Tap }
   - { level: 12, move: Disarming Voice }
+  - { level: 15, move: Swift }
   - { level: 16, move: Disable }
+  - { level: 17, move: Beguile }
   - { level: 20, move: Charm }
+  - { level: 29, move: Uproar }
+  - { level: 31, move: Dazzling Gleam }
+  - { level: 43, move: Resonance }
+  - { level: 45, move: Moonblast }
+  - { level: 57, move: Hyper Beam }
+  - { level: 59, move: Rapture }

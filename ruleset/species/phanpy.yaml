@@ -21,4 +21,5 @@ learnset:
   - { level: 33, move: Charm }
   - { level: 37, move: Last Resort }
   - { level: 42, move: Double-Edge }
+  - { level: 43, move: Earthquake }
   - { level: 44, move: Faultbreak }

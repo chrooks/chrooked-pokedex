@@ -9,6 +9,7 @@ learnset:
   - { level: 7, move: Lick }
   - { level: 10, move: Vine Whip }
   - { level: 13, move: Fury Swipes }
+  - { level: 15, move: Razor Leaf }
   - { level: 16, move: Leech Seed }
   - { level: 19, move: Bite }
   - { level: 22, move: Seed Bomb }
@@ -20,3 +21,4 @@ learnset:
   - { level: 40, move: Natural Gift }
   - { level: 43, move: Crunch }
   - { level: 46, move: Reap }
+  - { level: 57, move: Power Whip }

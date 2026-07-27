@@ -16,7 +16,8 @@ learnset:
   - { level: 16, move: Bite }
   - { level: 20, move: Protect }
   - { level: 25, move: Flip Turn }
-  - { level: 30, move: Bubble Beam }
+  - { level: 29, move: Bubble Beam }
+  - { level: 30, move: Muddy Water }
   - { level: 35, move: Recover }
   - { level: 40, move: Shell Smash }
   - { level: 44, move: Dark Pulse }

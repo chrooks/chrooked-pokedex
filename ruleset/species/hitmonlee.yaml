@@ -6,11 +6,12 @@ abilities:
 stats: { def: 65, spe: 90 }
 learnset:
   - { level: 0, move: Brick Break }
-  - { level: 1, move: Fake Out }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Focus Energy }
-  - { level: 1, move: Low Sweep }
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Low Sweep }
   - { level: 4, move: Double Kick }
   - { level: 6, move: Aura Spark }
   - { level: 8, move: Low Kick }

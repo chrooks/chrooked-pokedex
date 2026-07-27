@@ -8,19 +8,24 @@ abilities:
 learnset:
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Hammer Arm }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Leer }
   - { level: 1, move: Harden }
-  - { level: 1, move: Metal Claw }
+  - { level: 2, move: Water Gun }
+  - { level: 3, move: Metal Claw }
   - { level: 6, move: Undertow }
   - { level: 12, move: Mud Shot }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Protect }
   - { level: 20, move: Bubble Beam }
   - { level: 24, move: Stomp }
+  - { level: 29, move: Razor Shell }
   - { level: 31, move: Flail }
-  - { level: 36, move: Razor Shell }
+  - { level: 32, move: Metallic Fang }
+  - { level: 36, move: Aqua Tail }
   - { level: 42, move: Body Slam }
+  - { level: 43, move: Iron Tail }
   - { level: 45, move: Crabhammer }
   - { level: 48, move: Swords Dance }
   - { level: 54, move: Wave Crash }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Guillotine }

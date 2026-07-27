@@ -7,18 +7,20 @@ abilities:
   hidden: Cursed Body
 learnset:
   - { level: 0, move: Teatime }
-  - { level: 1, move: Mega Drain }
   - { level: 1, move: Withdraw }
   - { level: 1, move: Astonish }
   - { level: 1, move: Aromatic Mist }
   - { level: 1, move: Strength Sap }
+  - { level: 2, move: Mega Drain }
   - { level: 9, move: Knell }
+  - { level: 15, move: Hex }
   - { level: 18, move: Protect }
   - { level: 24, move: Sucker Punch }
   - { level: 30, move: Sweet Scent }
   - { level: 36, move: Giga Drain }
   - { level: 42, move: Nasty Plot }
-  - { level: 48, move: Shadow Ball }
+  - { level: 43, move: Shadow Ball }
+  - { level: 48, move: Specter Bomb }
   - { level: 54, move: Memento }
   - { level: 57, move: Netherstorm }
   - { level: 60, move: Shell Smash }

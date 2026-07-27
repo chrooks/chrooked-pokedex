@@ -6,9 +6,11 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Lick }
   - { level: 4, move: Disable }
   - { level: 8, move: Shadow Sneak }
   - { level: 12, move: Confuse Ray }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Night Shade }
   - { level: 20, move: Payback }
   - { level: 24, move: Will-O-Wisp }

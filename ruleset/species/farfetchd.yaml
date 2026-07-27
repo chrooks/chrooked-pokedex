@@ -9,11 +9,14 @@ stats: { atk: 90, spe: 100 }
 learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Sand Attack }
+  - { level: 2, move: Rock Smash }
   - { level: 5, move: Leer }
   - { level: 10, move: Fury Cutter }
   - { level: 15, move: Cut }
+  - { level: 16, move: Brick Break }
   - { level: 20, move: Aerial Ace }
   - { level: 25, move: Air Cutter }
+  - { level: 29, move: One-Inch Punch }
   - { level: 30, move: Knock Off }
   - { level: 35, move: False Swipe }
   - { level: 37, move: Dive Bomb }
@@ -23,5 +26,6 @@ learnset:
   - { level: 45, move: Swords Dance }
   - { level: 50, move: Air Slash }
   - { level: 55, move: Leaf Blade }
+  - { level: 57, move: Close Combat }
   - { level: 60, move: Agility }
   - { level: 65, move: Brave Bird }

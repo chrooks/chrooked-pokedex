@@ -12,14 +12,18 @@ learnset:
   - { level: 1, move: Hone Claws }
   - { level: 6, move: Mind Flick }
   - { level: 12, move: Magnet Rise }
-  - { level: 15, move: Zen Headbutt }
+  - { level: 15, move: Psycho Cut }
+  - { level: 16, move: Smart Strike }
+  - { level: 17, move: Zen Headbutt }
   - { level: 18, move: Flash Cannon }
   - { level: 26, move: Take Down }
   - { level: 34, move: Psychic }
   - { level: 38, move: Kinetic Slam }
   - { level: 42, move: Scary Face }
+  - { level: 43, move: Meteor Mash }
   - { level: 46, move: Psycrush }
-  - { level: 50, move: Meteor Mash }
+  - { level: 50, move: Iron Tail }
+  - { level: 57, move: Excalibur }
   - { level: 58, move: Iron Defense }
   - { level: 66, move: Agility }
-  - { level: 74, move: Hyper Beam }
+  - { level: 70, move: Hyper Beam }

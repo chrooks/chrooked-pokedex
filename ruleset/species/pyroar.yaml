@@ -7,20 +7,22 @@ abilities:
   hidden: Amplifier
 stats: { spa: 115 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Hyper Beam }
   - { level: 1, move: Work Up }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Ember }
+  - { level: 2, move: Echoed Voice }
   - { level: 11, move: Headbutt }
   - { level: 15, move: Noble Roar }
+  - { level: 16, move: Swift }
   - { level: 20, move: Take Down }
   - { level: 23, move: Fire Fang }
   - { level: 28, move: Endeavor }
-  - { level: 33, move: Echoed Voice }
+  - { level: 33, move: Hyper Voice }
   - { level: 38, move: Flamethrower }
   - { level: 42, move: Crunch }
-  - { level: 45, move: Hyper Voice }
-  - { level: 48, move: Resonance }
+  - { level: 43, move: Fire Blast }
+  - { level: 45, move: Resonance }
+  - { level: 48, move: Hyper Beam }
   - { level: 51, move: Incinerate }
   - { level: 57, move: Overheat }

@@ -11,9 +11,10 @@ learnset:
   - { level: 0, move: Trop Kick }
   - { level: 1, move: Flail }
   - { level: 1, move: Play Nice }
-  - { level: 1, move: Rapid Spin }
   - { level: 1, move: Splash }
   - { level: 1, move: Swagger }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Rapid Spin }
   - { level: 5, move: Leafage }
   - { level: 9, move: Razor Leaf }
   - { level: 12, move: Knock Off }
@@ -28,6 +29,7 @@ learnset:
   - { level: 38, move: Petal Blizzard }
   - { level: 40, move: Petal Blizzard }
   - { level: 42, move: Heel Drop }
+  - { level: 43, move: Backstab }
   - { level: 44, move: Axe Kick }
   - { level: 46, move: Reap }
   - { level: 48, move: Aromatherapy }

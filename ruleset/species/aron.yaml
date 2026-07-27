@@ -7,15 +7,20 @@ learnset:
   - { level: 4, move: Metal Claw }
   - { level: 8, move: Rock Tomb }
   - { level: 12, move: Roar }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Headbutt }
   - { level: 20, move: Protect }
   - { level: 24, move: Rock Slide }
   - { level: 28, move: Iron Head }
+  - { level: 29, move: Lithic Fang }
   - { level: 33, move: Metal Sound }
   - { level: 36, move: Take Down }
   - { level: 40, move: Autotomize }
+  - { level: 43, move: Stone Edge }
   - { level: 44, move: Iron Tail }
   - { level: 48, move: Iron Defense }
   - { level: 52, move: Heavy Slam }
   - { level: 56, move: Double-Edge }
+  - { level: 57, move: Excalibur }
+  - { level: 59, move: Head Smash }
   - { level: 60, move: Metal Burst }

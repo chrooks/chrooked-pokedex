@@ -4,11 +4,11 @@ aka: { dex: 853 }
 learnset:
   - { level: 0, move: Octolock }
   - { level: 1, move: Octolock }
-  - { level: 1, move: Octazooka }
-  - { level: 1, move: Rock Smash }
   - { level: 1, move: Leer }
   - { level: 1, move: Feint }
   - { level: 1, move: Bind }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Octazooka }
   - { level: 15, move: Detect }
   - { level: 20, move: Brick Break }
   - { level: 25, move: Bulk Up }

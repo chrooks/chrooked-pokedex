@@ -14,8 +14,9 @@ learnset:
   - { level: 9, move: Struggle Bug }
   - { level: 12, move: Charm }
   - { level: 15, move: Air Slash }
+  - { level: 16, move: Draining Kiss }
   - { level: 18, move: Charge Beam }
-  - { level: 22, move: Draining Kiss }
+  - { level: 22, move: Beguile }
   - { level: 24, move: Signal Beam }
   - { level: 25, move: Silver Wind }
   - { level: 28, move: Encore }
@@ -30,5 +31,6 @@ learnset:
   - { level: 51, move: Scorching Sands }
   - { level: 54, move: Moonlight }
   - { level: 57, move: Extrasensory }
+  - { level: 58, move: Rapture }
   - { level: 60, move: Drone Chorus }
   - { level: 62, move: Quiver Dance }

@@ -7,7 +7,9 @@ learnset:
   - { level: 4, move: Play Nice }
   - { level: 8, move: Sweet Kiss }
   - { level: 12, move: Nuzzle }
+  - { level: 15, move: Spark }
   - { level: 16, move: Nasty Plot }
   - { level: 20, move: Charm }
   - { level: 46, move: Lightning Slam }
   - { level: 48, move: Arc Strike }
+  - { level: 57, move: Wild Charge }

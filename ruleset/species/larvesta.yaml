@@ -8,17 +8,22 @@ stats: { hp: 75, spa: 85, spe: 70 }
 learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: String Shot }
+  - { level: 2, move: Fury Cutter }
   - { level: 6, move: Flame Charge }
   - { level: 12, move: Struggle Bug }
   - { level: 18, move: Flame Wheel }
   - { level: 24, move: Bug Bite }
   - { level: 24, move: Signal Beam }
+  - { level: 29, move: Cinder Smash }
   - { level: 30, move: Screech }
   - { level: 36, move: Leech Life }
   - { level: 39, move: Bug Buzz }
   - { level: 42, move: Antennae Blast }
+  - { level: 43, move: Moltstrike }
+  - { level: 45, move: Combust }
   - { level: 48, move: Take Down }
   - { level: 51, move: Drone Chorus }
   - { level: 54, move: Amnesia }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Double-Edge }
   - { level: 66, move: Flare Blitz }

@@ -9,17 +9,18 @@ learnset:
   - { level: 0, move: Iron Defense }
   - { level: 1, move: Iron Defense }
   - { level: 1, move: First Impression }
-  - { level: 1, move: Peck }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Leer }
-  - { level: 1, move: Fury Cutter }
+  - { level: 2, move: Peck }
+  - { level: 3, move: Fury Cutter }
   - { level: 15, move: Rock Smash }
   - { level: 20, move: Brutal Swing }
   - { level: 25, move: Detect }
+  - { level: 29, move: Brick Break }
   - { level: 30, move: Knock Off }
   - { level: 35, move: Defog }
-  - { level: 37, move: Cross Chop }
-  - { level: 40, move: Brick Break }
+  - { level: 37, move: One-Inch Punch }
+  - { level: 40, move: Cross Chop }
   - { level: 42, move: Pixie Slash }
   - { level: 45, move: Swords Dance }
   - { level: 50, move: Body Slam }

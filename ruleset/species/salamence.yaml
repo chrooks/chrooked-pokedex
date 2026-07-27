@@ -6,15 +6,17 @@ abilities:
 learnset:
   - { level: 0, move: Fly }
   - { level: 1, move: Roost }
-  - { level: 1, move: Dragon Breath }
   - { level: 1, move: Dragon Tail }
-  - { level: 1, move: Ember }
   - { level: 1, move: Dual Wingbeat }
   - { level: 1, move: Leer }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Protect }
+  - { level: 2, move: Peck }
+  - { level: 3, move: Protect }
+  - { level: 4, move: Ember }
+  - { level: 5, move: Dragon Breath }
+  - { level: 6, move: Bite }
   - { level: 8, move: Maul }
   - { level: 15, move: Headbutt }
+  - { level: 16, move: Aerial Ace }
   - { level: 20, move: Scary Face }
   - { level: 22, move: Breaking Swipe }
   - { level: 25, move: Crunch }
@@ -25,4 +27,6 @@ learnset:
   - { level: 42, move: Dragon Hammer }
   - { level: 46, move: Focus Energy }
   - { level: 55, move: Flamethrower }
-  - { level: 73, move: Double-Edge }
+  - { level: 57, move: Outrage }
+  - { level: 59, move: Brave Bird }
+  - { level: 70, move: Double-Edge }

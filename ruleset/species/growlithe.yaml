@@ -7,11 +7,12 @@ abilities:
   secondary: Flash Fire
   hidden: Immolate
 learnset:
-  - { level: 1, move: Bite }
-  - { level: 1, move: Ember }
   - { level: 1, move: Howl }
   - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Bite }
   - { level: 5, move: Flame Wheel }
   - { level: 10, move: Roar }
   - { level: 15, move: Fire Fang }

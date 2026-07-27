@@ -13,5 +13,7 @@ learnset:
   - { level: 19, move: Psybeam }
   - { level: 24, move: Pluck }
   - { level: 29, move: Agility }
+  - { level: 30, move: Psychic }
   - { level: 34, move: Uproar }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Future Sight }

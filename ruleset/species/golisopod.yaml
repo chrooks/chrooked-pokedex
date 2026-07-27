@@ -5,10 +5,10 @@ stats: { def: 110 }
 learnset:
   - { level: 0, move: First Impression }
   - { level: 1, move: First Impression }
-  - { level: 1, move: Struggle Bug }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Spite }
+  - { level: 2, move: Struggle Bug }
   - { level: 4, move: Rock Smash }
   - { level: 6, move: Undertow }
   - { level: 8, move: Fury Cutter }
@@ -17,6 +17,7 @@ learnset:
   - { level: 20, move: Iron Defense }
   - { level: 24, move: Sucker Punch }
   - { level: 28, move: Slash }
+  - { level: 29, move: X-Scissor }
   - { level: 30, move: Razor Shell }
   - { level: 32, move: Liquidation }
   - { level: 36, move: Pin Missile }
@@ -24,4 +25,5 @@ learnset:
   - { level: 40, move: Swords Dance }
   - { level: 44, move: Maelstrom }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Wave Crash }

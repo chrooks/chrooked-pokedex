@@ -10,14 +10,14 @@ learnset:
   - { level: 1, move: Sucker Punch }
   - { level: 1, move: Taunt }
   - { level: 1, move: Endure }
-  - { level: 1, move: Quick Guard }
-  - { level: 1, move: Reversal }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Counter }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Quick Attack }
+  - { level: 2, move: Quick Guard }
+  - { level: 3, move: Reversal }
+  - { level: 4, move: Double Team }
+  - { level: 5, move: Sand Attack }
+  - { level: 6, move: Counter }
+  - { level: 7, move: Leer }
+  - { level: 8, move: Quick Attack }
+  - { level: 9, move: Tackle }
   - { level: 12, move: Rock Throw }
   - { level: 16, move: Howl }
   - { level: 20, move: Bite }
@@ -30,5 +30,6 @@ learnset:
   - { level: 42, move: Crunch }
   - { level: 48, move: Scary Face }
   - { level: 54, move: Stealth Rock }
-  - { level: 60, move: Stone Edge }
+  - { level: 57, move: Stone Edge }
+  - { level: 60, move: Head Smash }
 evolution: { from: Rockruff Own Tempo, method: { level: 25 } }

@@ -7,18 +7,20 @@ abilities:
   hidden: Psyonize
 stats: { atk: 70, spe: 100 }
 learnset:
-  - { level: 1, move: Fire Punch }
-  - { level: 1, move: Ice Punch }
-  - { level: 1, move: Thunder Punch }
   - { level: 1, move: Work Up }
   - { level: 1, move: Detect }
   - { level: 1, move: Confusion }
+  - { level: 1, move: Fire Punch }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Ice Punch }
+  - { level: 4, move: Thunder Punch }
   - { level: 6, move: Aura Spark }
   - { level: 9, move: Mind Flick }
   - { level: 12, move: Endure }
   - { level: 15, move: Feint }
   - { level: 16, move: Chi Wave }
   - { level: 17, move: Force Palm }
+  - { level: 18, move: Psycho Cut }
   - { level: 20, move: Psybeam }
   - { level: 23, move: Calm Mind }
   - { level: 25, move: Zen Headbutt }

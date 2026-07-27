@@ -15,8 +15,9 @@ learnset:
   - { level: 19, move: Copycat }
   - { level: 22, move: Payback }
   - { level: 28, move: Cutsie Slap }
-  - { level: 31, move: Covet }
-  - { level: 34, move: Facade }
+  - { level: 29, move: Covet }
+  - { level: 31, move: Facade }
+  - { level: 34, move: Take Down }
   - { level: 36, move: Rampage }
   - { level: 36, move: Play Rough }
   - { level: 37, move: Heal Bell }

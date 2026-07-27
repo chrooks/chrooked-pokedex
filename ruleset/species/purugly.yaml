@@ -5,11 +5,11 @@ stats: { hp: 85, atk: 105, def: 70, spa: 65, spd: 65, spe: 115 }
 learnset:
   - { level: 0, move: Swagger }
   - { level: 1, move: Swagger }
-  - { level: 1, move: Fake Out }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Growl }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Play Rough }
+  - { level: 1, move: Fake Out }
+  - { level: 2, move: Scratch }
+  - { level: 3, move: Play Rough }
   - { level: 5, move: Scratch }
   - { level: 8, move: Growl }
   - { level: 13, move: Hypnosis }
@@ -22,4 +22,5 @@ learnset:
   - { level: 41, move: Body Slam }
   - { level: 45, move: Rampage }
   - { level: 52, move: Attract }
+  - { level: 57, move: Double-Edge }
   - { level: 60, move: Hone Claws }

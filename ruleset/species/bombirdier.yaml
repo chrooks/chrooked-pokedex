@@ -6,11 +6,11 @@ abilities:
   hidden: Mountaineer
 stats: { atk: 115, def: 95 }
 learnset:
-  - { level: 1, move: Wing Attack }
   - { level: 1, move: Leer }
-  - { level: 1, move: Peck }
   - { level: 1, move: Memento }
   - { level: 1, move: Hone Claws }
+  - { level: 1, move: Peck }
+  - { level: 2, move: Wing Attack }
   - { level: 4, move: Cheap Shot }
   - { level: 7, move: Thief }
   - { level: 11, move: Rock Throw }
@@ -18,12 +18,14 @@ learnset:
   - { level: 20, move: Pluck }
   - { level: 24, move: Torment }
   - { level: 29, move: Rock Tomb }
+  - { level: 30, move: Knock Off }
   - { level: 36, move: Payback }
+  - { level: 39, move: Heel Drop }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Nosedive }
-  - { level: 39, move: Knock Off }
   - { level: 42, move: Dual Wingbeat }
   - { level: 47, move: Rock Slide }
   - { level: 50, move: Backstab }
   - { level: 53, move: Havoc }
+  - { level: 57, move: Brave Bird }
   - { level: 60, move: Parting Shot }

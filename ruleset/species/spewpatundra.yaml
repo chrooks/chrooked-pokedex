@@ -2,6 +2,8 @@ name: Spewpa Tundra
 chrooked_id: spewpatundra
 aka: {  }
 learnset:
+  - { level: 1, move: Struggle Bug }
   - { level: 20, move: Signal Beam }
+  - { level: 29, move: Bug Buzz }
   - { level: 35, move: Antennae Blast }
   - { level: 48, move: Drone Chorus }

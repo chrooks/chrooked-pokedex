@@ -7,22 +7,25 @@ stats: { atk: 120 }
 learnset:
   - { level: 0, move: Gigaton Hammer }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Fairy Wind }
-  - { level: 1, move: Metal Claw }
-  - { level: 1, move: Covet }
   - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Draining Kiss }
   - { level: 1, move: Iron Defense }
-  - { level: 1, move: Body Slam }
-  - { level: 1, move: Cutsie Slap }
-  - { level: 1, move: Iron Head }
-  - { level: 10, move: Glitter Tap }
+  - { level: 1, move: Fairy Wind }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Covet }
+  - { level: 4, move: Draining Kiss }
+  - { level: 5, move: Glitter Tap }
+  - { level: 6, move: Body Slam }
+  - { level: 7, move: Smart Strike }
+  - { level: 10, move: Cutsie Slap }
+  - { level: 15, move: Iron Head }
   - { level: 30, move: Play Rough }
   - { level: 34, move: Knock Off }
   - { level: 37, move: Starfall Slam }
   - { level: 38, move: Heavy Slam }
   - { level: 42, move: Swords Dance }
+  - { level: 43, move: Iron Tail }
   - { level: 46, move: Hammer Arm }
   - { level: 49, move: Rock Slide }
   - { level: 52, move: Stomping Tantrum }
+  - { level: 57, move: Excalibur }
   - { level: 64, move: Faeblitz }

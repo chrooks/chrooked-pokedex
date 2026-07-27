@@ -7,15 +7,18 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Ingrain }
+  - { level: 2, move: Disarming Voice }
   - { level: 12, move: Mega Drain }
   - { level: 16, move: Sleep Powder }
   - { level: 20, move: Moonlight }
   - { level: 23, move: Beguile }
   - { level: 27, move: Strength Sap }
-  - { level: 32, move: Giga Drain }
+  - { level: 29, move: Giga Drain }
+  - { level: 32, move: Energy Ball }
   - { level: 38, move: Dazzling Gleam }
   - { level: 41, move: Siphon }
   - { level: 44, move: Spore }
   - { level: 50, move: Moonblast }
   - { level: 56, move: Dream Eater }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Rapture }

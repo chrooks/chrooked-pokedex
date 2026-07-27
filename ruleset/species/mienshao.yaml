@@ -5,11 +5,12 @@ abilities:
   primary: Reckless
   hidden: Martial Artist
 learnset:
-  - { level: 1, move: Pound }
   - { level: 1, move: Reversal }
   - { level: 1, move: Detect }
-  - { level: 1, move: Fake Out }
   - { level: 1, move: Quick Guard }
+  - { level: 1, move: Pound }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Fake Out }
   - { level: 15, move: Fury Swipes }
   - { level: 20, move: Wide Guard }
   - { level: 25, move: Force Palm }

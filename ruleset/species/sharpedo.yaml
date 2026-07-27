@@ -7,14 +7,14 @@ abilities:
 stats: { spe: 115 }
 learnset:
   - { level: 0, move: Slash }
-  - { level: 1, move: Slash }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Aqua Jet }
   - { level: 1, move: Leer }
-  - { level: 1, move: Poison Fang }
   - { level: 1, move: Focus Energy }
+  - { level: 1, move: Slash }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Poison Fang }
+  - { level: 6, move: Night Slash }
   - { level: 6, move: Undertow }
-  - { level: 6, move: Cheap Shot }
   - { level: 12, move: Scary Face }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Bite }

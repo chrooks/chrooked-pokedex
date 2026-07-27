@@ -24,5 +24,6 @@ learnset:
   - { level: 40, move: Discharge }
   - { level: 46, move: Giga Drain }
   - { level: 50, move: Antennae Blast }
+  - { level: 57, move: Zap Cannon }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Thunder }

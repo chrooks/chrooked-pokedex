@@ -10,18 +10,22 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Scratch }
   - { level: 1, move: Smokescreen }
+  - { level: 2, move: Twister }
   - { level: 7, move: Fire Spin }
   - { level: 12, move: Bite }
   - { level: 17, move: Fire Fang }
   - { level: 20, move: Slash }
   - { level: 24, move: flame burst }
   - { level: 28, move: Flamethrower }
+  - { level: 29, move: Dragon Pulse }
   - { level: 34, move: Dragon Claw }
   - { level: 36, move: Inferno }
   - { level: 42, move: Crunch }
   - { level: 42, move: Galeburst }
+  - { level: 43, move: Cataclysm }
   - { level: 48, move: Heat Wave }
   - { level: 54, move: Flare Blitz }
+  - { level: 57, move: Draco Meteor }
   - { level: 60, move: Overheat }
   - { level: 64, move: Tempest }
 evolution: { from: Charmander, method: { level: 16 } }

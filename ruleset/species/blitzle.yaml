@@ -3,6 +3,7 @@ chrooked_id: blitzle
 aka: { dex: 522 }
 learnset:
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Nuzzle }
   - { level: 4, move: Tail Whip }
   - { level: 8, move: Charge }
   - { level: 11, move: Shock Wave }

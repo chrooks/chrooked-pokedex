@@ -4,16 +4,21 @@ aka: { pokeemerald: SPECIES_REGIELEKI }
 learnset:
   - { level: 1, move: Thunder Shock }
   - { level: 1, move: Rapid Spin }
+  - { level: 2, move: Nuzzle }
   - { level: 6, move: Electroweb }
   - { level: 12, move: Ancient Power }
+  - { level: 15, move: Spark }
   - { level: 18, move: Shock Wave }
   - { level: 24, move: Thunder Wave }
+  - { level: 29, move: Lightning Slam }
   - { level: 30, move: Extreme Speed }
   - { level: 36, move: Thunder Cage }
   - { level: 42, move: Thunderbolt }
+  - { level: 43, move: Arc Strike }
   - { level: 48, move: Magnet Rise }
   - { level: 54, move: Thrash }
+  - { level: 57, move: Wild Charge }
   - { level: 60, move: Lock-On }
   - { level: 66, move: Zap Cannon }
-  - { level: 72, move: Hyper Beam }
-  - { level: 78, move: Explosion }
+  - { level: 70, move: Hyper Beam }
+  - { level: 70, move: Explosion }

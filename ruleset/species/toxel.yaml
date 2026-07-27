@@ -4,12 +4,20 @@ aka: { pokeemerald: SPECIES_TOXEL }
 stats: { spa: 35, spd: 40 }
 learnset:
   - { level: 1, move: Growl }
-  - { level: 1, move: Acid }
   - { level: 1, move: Flail }
   - { level: 1, move: Belch }
-  - { level: 1, move: Nuzzle }
   - { level: 1, move: Tearful Look }
+  - { level: 2, move: Poison Sting }
+  - { level: 3, move: Acid }
+  - { level: 4, move: Nuzzle }
+  - { level: 15, move: Spark }
+  - { level: 17, move: Cross Poison }
+  - { level: 29, move: Gastric Snare }
   - { level: 35, move: Short Circuit }
   - { level: 36, move: Lightning Slam }
+  - { level: 43, move: Arc Strike }
+  - { level: 45, move: Venom Slam }
   - { level: 48, move: Miasma }
+  - { level: 57, move: Wild Charge }
+  - { level: 59, move: Gunk Shot }
   - { level: 64, move: Contagion }

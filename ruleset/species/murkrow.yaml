@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Sucker Punch }
   - { level: 1, move: Taunt }
   - { level: 1, move: Wing Attack }
+  - { level: 2, move: Peck }
   - { level: 8, move: Cheap Shot }
   - { level: 10, move: Hone Claws }
   - { level: 12, move: Slash }
@@ -27,4 +28,4 @@ learnset:
   - { level: 58, move: Havoc }
   - { level: 64, move: Tempest }
   - { level: 65, move: Comeuppance }
-  - { level: 75, move: Brave Bird }
+  - { level: 70, move: Brave Bird }

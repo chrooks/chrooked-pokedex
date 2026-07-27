@@ -4,19 +4,23 @@ aka: { pokeemerald: SPECIES_COALOSSAL }
 stats: { spa: 95 }
 learnset:
   - { level: 0, move: Tar Shot }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Smokescreen }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Rapid Spin }
   - { level: 1, move: Smack Down }
-  - { level: 1, move: Flame Charge }
+  - { level: 2, move: Ember }
+  - { level: 3, move: Flame Charge }
   - { level: 8, move: Jewel Glow }
   - { level: 15, move: Rock Polish }
   - { level: 20, move: Ancient Power }
   - { level: 27, move: Incinerate }
+  - { level: 29, move: Flamethrower }
   - { level: 37, move: Stealth Rock }
   - { level: 41, move: Power Gem }
   - { level: 41, move: Crystal Beam }
+  - { level: 43, move: Fire Blast }
   - { level: 45, move: Heat Crash }
   - { level: 49, move: Meteor Surge }
   - { level: 54, move: Rock Blast }
+  - { level: 57, move: Overheat }
   - { level: 63, move: Stone Edge }

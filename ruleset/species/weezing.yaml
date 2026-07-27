@@ -7,20 +7,24 @@ abilities:
 stats: { hp: 70, spa: 90, spd: 75 }
 learnset:
   - { level: 0, move: Double Hit }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Smokescreen }
-  - { level: 1, move: Smog }
   - { level: 1, move: Poison Gas }
-  - { level: 1, move: Heat Wave }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Smog }
+  - { level: 2, move: Poison Sting }
+  - { level: 3, move: Heat Wave }
   - { level: 12, move: Clear Smog }
+  - { level: 15, move: Cross Poison }
   - { level: 16, move: Assurance }
   - { level: 20, move: Sludge }
   - { level: 24, move: Haze }
   - { level: 28, move: Self-Destruct }
+  - { level: 29, move: Gastric Snare }
   - { level: 32, move: Sludge Bomb }
   - { level: 38, move: Toxic }
   - { level: 41, move: Venom Slam }
   - { level: 44, move: Belch }
   - { level: 50, move: Explosion }
   - { level: 56, move: Memento }
+  - { level: 57, move: Gunk Shot }
   - { level: 62, move: Destiny Bond }

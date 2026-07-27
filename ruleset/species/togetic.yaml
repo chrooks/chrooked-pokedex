@@ -5,12 +5,14 @@ abilities:
   primary: Aerodynamic
 learnset:
   - { level: 0, move: Fairy Wind }
-  - { level: 1, move: Fairy Wind }
   - { level: 1, move: Growl }
-  - { level: 1, move: Pound }
   - { level: 1, move: Sweet Kiss }
   - { level: 1, move: Life Dew }
+  - { level: 1, move: Fairy Wind }
+  - { level: 2, move: Gust }
+  - { level: 3, move: Pound }
   - { level: 12, move: Charm }
+  - { level: 15, move: Air Slash }
   - { level: 16, move: Ancient Power }
   - { level: 20, move: Yawn }
   - { level: 24, move: Metronome }
@@ -19,6 +21,7 @@ learnset:
   - { level: 32, move: Double-Edge }
   - { level: 36, move: Safeguard }
   - { level: 40, move: Follow Me }
+  - { level: 43, move: Hurricane }
   - { level: 44, move: Baton Pass }
   - { level: 48, move: Last Resort }
   - { level: 52, move: Wish }

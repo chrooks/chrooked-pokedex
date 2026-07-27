@@ -6,16 +6,24 @@ learnset:
   - { level: 1, move: Confusion }
   - { level: 1, move: Swift }
   - { level: 1, move: Life Dew }
+  - { level: 2, move: Mind Flick }
+  - { level: 3, move: Rock Smash }
   - { level: 8, move: Ancient Power }
+  - { level: 15, move: Brick Break }
   - { level: 16, move: Psycho Cut }
   - { level: 24, move: Safeguard }
+  - { level: 29, move: Astral Hand }
   - { level: 32, move: Amnesia }
   - { level: 36, move: One-Inch Punch }
   - { level: 40, move: Aura Sphere }
+  - { level: 43, move: Kinetic Slam }
+  - { level: 45, move: Cross Chop }
   - { level: 48, move: Psychic }
   - { level: 56, move: Power Swap }
   - { level: 56, move: Guard Swap }
+  - { level: 57, move: Psycrush }
+  - { level: 59, move: Close Combat }
   - { level: 64, move: Mist }
-  - { level: 72, move: Psystrike }
-  - { level: 80, move: Recover }
-  - { level: 88, move: Future Sight }
+  - { level: 70, move: Psystrike }
+  - { level: 70, move: Recover }
+  - { level: 70, move: Future Sight }

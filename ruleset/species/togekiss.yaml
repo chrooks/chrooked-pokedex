@@ -6,27 +6,29 @@ abilities:
   hidden: Regenerator
 learnset:
   - { level: 0, move: Air Slash }
-  - { level: 1, move: Air Slash }
-  - { level: 1, move: Fairy Wind }
   - { level: 1, move: Sky Attack }
-  - { level: 1, move: Aura Sphere }
-  - { level: 1, move: Extreme Speed }
-  - { level: 1, move: Tri Attack }
   - { level: 1, move: Charm }
-  - { level: 1, move: Ancient Power }
   - { level: 1, move: Yawn }
   - { level: 1, move: Metronome }
-  - { level: 1, move: After You }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Safeguard }
-  - { level: 1, move: Follow Me }
-  - { level: 1, move: Baton Pass }
-  - { level: 1, move: Last Resort }
-  - { level: 1, move: Wish }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Life Dew }
+  - { level: 2, move: Gust }
+  - { level: 3, move: After You }
+  - { level: 4, move: Safeguard }
+  - { level: 5, move: Follow Me }
+  - { level: 6, move: Baton Pass }
+  - { level: 7, move: Wish }
+  - { level: 8, move: Growl }
+  - { level: 9, move: Sweet Kiss }
+  - { level: 10, move: Life Dew }
+  - { level: 11, move: Fairy Wind }
+  - { level: 12, move: Pound }
+  - { level: 13, move: Air Slash }
+  - { level: 14, move: Ancient Power }
+  - { level: 15, move: Aura Sphere }
+  - { level: 16, move: Extreme Speed }
+  - { level: 17, move: Tri Attack }
+  - { level: 18, move: Double-Edge }
+  - { level: 19, move: Last Resort }
   - { level: 42, move: Galeburst }
+  - { level: 43, move: Hurricane }
   - { level: 64, move: Oblivion Wing }
   - { level: 64, move: Tempest }

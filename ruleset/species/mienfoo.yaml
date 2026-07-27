@@ -7,6 +7,7 @@ abilities:
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Detect }
+  - { level: 2, move: Rock Smash }
   - { level: 5, move: Fake Out }
   - { level: 10, move: Reversal }
   - { level: 15, move: Fury Swipes }

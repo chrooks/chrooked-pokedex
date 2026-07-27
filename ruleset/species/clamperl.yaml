@@ -6,8 +6,11 @@ learnset:
   - { level: 1, move: Whirlpool }
   - { level: 1, move: Iron Defense }
   - { level: 15, move: Undertow }
+  - { level: 16, move: Water Pulse }
   - { level: 25, move: Water Whip }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Maelstrom }
+  - { level: 43, move: Hydro Pump }
   - { level: 50, move: Shell Smash }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

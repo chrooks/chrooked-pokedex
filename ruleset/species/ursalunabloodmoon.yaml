@@ -5,12 +5,14 @@ abilities:
   primary: Guts
 learnset:
   - { level: 1, move: Moonlight }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
   - { level: 1, move: Lick }
-  - { level: 1, move: Headlong Rush }
+  - { level: 2, move: Echoed Voice }
+  - { level: 3, move: Headlong Rush }
   - { level: 8, move: Mud-Slap }
   - { level: 13, move: Swift }
+  - { level: 15, move: Mud Shot }
   - { level: 17, move: Snarl }
   - { level: 22, move: Earth Power }
   - { level: 26, move: Calm Mind }
@@ -20,10 +22,12 @@ learnset:
   - { level: 38, move: Quagmire }
   - { level: 38, move: Rampage }
   - { level: 42, move: Rest }
+  - { level: 43, move: Tri Attack }
   - { level: 46, move: Focus Blast }
   - { level: 50, move: Moonblast }
   - { level: 55, move: Lunar Blessing }
-  - { level: 60, move: Tri Attack }
+  - { level: 57, move: Resonance }
+  - { level: 60, move: Hyper Beam }
   - { level: 60, move: Sinkhole }
   - { level: 66, move: Blood Moon }
 evolution: { from: Ursaluna, method: { item: Moon Stone } }

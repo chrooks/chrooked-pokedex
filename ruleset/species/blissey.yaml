@@ -8,18 +8,20 @@ abilities:
 learnset:
   - { level: 1, move: Charm }
   - { level: 1, move: Copycat }
-  - { level: 1, move: Covet }
-  - { level: 1, move: Disarming Voice }
   - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Pound }
   - { level: 1, move: Defense Curl }
+  - { level: 2, move: Covet }
+  - { level: 3, move: Disarming Voice }
   - { level: 4, move: Tail Whip }
+  - { level: 5, move: Pound }
   - { level: 8, move: Echoed Voice }
   - { level: 12, move: Life Dew }
+  - { level: 15, move: Swift }
   - { level: 16, move: Sing }
   - { level: 20, move: Fling }
   - { level: 24, move: Take Down }
   - { level: 28, move: Heal Pulse }
+  - { level: 29, move: Uproar }
   - { level: 32, move: Helping Hand }
   - { level: 36, move: Light Screen }
   - { level: 38, move: Resonance }
@@ -27,4 +29,5 @@ learnset:
   - { level: 44, move: Soft-Boiled }
   - { level: 48, move: Last Resort }
   - { level: 52, move: Healing Wish }
+  - { level: 57, move: Hyper Beam }
 evolution: { from: Chansey, method: { level: 36 } }

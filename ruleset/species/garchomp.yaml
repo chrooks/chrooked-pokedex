@@ -4,10 +4,10 @@ aka: { pokeemerald: SPECIES_GARCHOMP }
 learnset:
   - { level: 0, move: Crunch }
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Dragon Breath }
   - { level: 1, move: Sand Tomb }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Clod Toss }
+  - { level: 2, move: Dragon Breath }
   - { level: 9, move: Maul }
   - { level: 18, move: Bulldoze }
   - { level: 22, move: Breaking Swipe }
@@ -17,9 +17,10 @@ learnset:
   - { level: 34, move: Slash }
   - { level: 38, move: Dragon Claw }
   - { level: 42, move: Dragon Hammer }
+  - { level: 43, move: Earthquake }
   - { level: 47, move: Pixie Slash }
   - { level: 52, move: Dig }
   - { level: 57, move: Faultbreak }
   - { level: 62, move: Sandstorm }
-  - { level: 72, move: Take Down }
-  - { level: 82, move: Dragon Rush }
+  - { level: 70, move: Take Down }
+  - { level: 70, move: Dragon Rush }

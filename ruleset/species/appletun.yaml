@@ -7,19 +7,24 @@ learnset:
   - { level: 1, move: Growth }
   - { level: 1, move: Recycle }
   - { level: 1, move: Withdraw }
-  - { level: 1, move: Sweet Scent }
+  - { level: 2, move: Absorb }
+  - { level: 3, move: Twister }
   - { level: 4, move: Curse }
+  - { level: 5, move: Sweet Scent }
   - { level: 8, move: Stomp }
   - { level: 12, move: Leech Seed }
+  - { level: 15, move: Dragon Breath }
   - { level: 16, move: Protect }
-  - { level: 20, move: Apple Acid }
+  - { level: 20, move: Giga Drain }
   - { level: 24, move: Recover }
   - { level: 28, move: Bullet Seed }
   - { level: 32, move: Iron Defense }
-  - { level: 36, move: Giga Drain }
+  - { level: 36, move: Apple Acid }
   - { level: 38, move: Dragon Pulse }
   - { level: 40, move: Cataclysm }
   - { level: 42, move: Reap }
+  - { level: 43, move: Energy Ball }
   - { level: 44, move: Earth Power }
-  - { level: 48, move: Energy Ball }
+  - { level: 48, move: Siphon }
+  - { level: 57, move: Leaf Storm }
   - { level: 60, move: Draco Meteor }

@@ -8,19 +8,24 @@ abilities:
 stats: { def: 70, spe: 95 }
 learnset:
   - { level: 0, move: Horn Drill }
+  - { level: 1, move: Hone Claws }
   - { level: 1, move: Scratch }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Rapid Spin }
-  - { level: 1, move: Hone Claws }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Clod Toss }
   - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Bulldoze }
   - { level: 16, move: Metal Claw }
+  - { level: 17, move: Smart Strike }
   - { level: 20, move: Sandstorm }
   - { level: 24, move: Crush Claw }
   - { level: 28, move: Rock Slide }
+  - { level: 29, move: Metallic Fang }
   - { level: 34, move: Dig }
   - { level: 40, move: Swords Dance }
+  - { level: 43, move: Iron Tail }
   - { level: 46, move: Drill Run }
   - { level: 52, move: Earthquake }
+  - { level: 57, move: Excalibur }
   - { level: 58, move: Fissure }
   - { level: 60, move: Faultbreak }

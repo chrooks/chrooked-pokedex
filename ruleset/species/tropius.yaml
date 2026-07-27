@@ -6,21 +6,28 @@ abilities:
   secondary: Solar Power
 stats: { hp: 100, atk: 90, def: 95, spa: 90, spd: 100, spe: 50 }
 learnset:
-  - { level: 1, move: Gust }
   - { level: 1, move: Leer }
   - { level: 1, move: Growth }
+  - { level: 1, move: Gust }
   - { level: 1, move: Razor Leaf }
-  - { level: 1, move: Leaf Storm }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Maul }
+  - { level: 4, move: Leaf Storm }
   - { level: 6, move: Sweet Scent }
   - { level: 10, move: Stomp }
+  - { level: 15, move: Breaking Swipe }
   - { level: 16, move: Magical Leaf }
   - { level: 21, move: Whirlwind }
+  - { level: 29, move: Seed Bomb }
   - { level: 30, move: Wide Guard }
+  - { level: 31, move: Draconic Fang }
   - { level: 33, move: Air Slash }
   - { level: 36, move: Galeburst }
   - { level: 38, move: Reap }
   - { level: 41, move: Body Slam }
+  - { level: 43, move: Dragon Hammer }
   - { level: 46, move: Outrage }
   - { level: 50, move: Synthesis }
   - { level: 56, move: Solar Beam }
+  - { level: 57, move: Power Whip }
   - { level: 64, move: Tempest }

@@ -10,18 +10,25 @@ stats: { atk: 110, def: 86, spa: 95, spd: 86 }
 learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Metal Claw }
   - { level: 5, move: Fury Swipes }
   - { level: 10, move: Incinerate }
   - { level: 15, move: Bug Bite }
+  - { level: 16, move: Flame Wheel }
+  - { level: 17, move: Smart Strike }
   - { level: 20, move: Stockpile }
   - { level: 20, move: Swallow }
   - { level: 20, move: Spit Up }
   - { level: 25, move: Slash }
+  - { level: 29, move: Metallic Fang }
   - { level: 30, move: Bind }
   - { level: 35, move: Fire Lash }
   - { level: 37, move: Combust }
   - { level: 40, move: Hone Claws }
+  - { level: 43, move: Iron Tail }
   - { level: 45, move: Amnesia }
   - { level: 50, move: Fire Spin }
   - { level: 55, move: Inferno }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Flare Blitz }

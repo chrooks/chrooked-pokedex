@@ -5,12 +5,12 @@ abilities:
   hidden: Carnivore
 learnset:
   - { level: 0, move: Headlong Rush }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
-  - { level: 1, move: Lick }
-  - { level: 1, move: Covet }
   - { level: 1, move: Fake Tears }
-  - { level: 1, move: Clod Toss }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Lick }
+  - { level: 2, move: Covet }
+  - { level: 3, move: Clod Toss }
   - { level: 8, move: Fury Swipes }
   - { level: 13, move: Mud-Slap }
   - { level: 17, move: Bulldoze }

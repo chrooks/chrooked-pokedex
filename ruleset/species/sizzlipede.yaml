@@ -6,6 +6,8 @@ abilities:
 learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Smokescreen }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Fury Cutter }
   - { level: 5, move: Wrap }
   - { level: 10, move: Bite }
   - { level: 15, move: Flame Wheel }
@@ -19,3 +21,5 @@ learnset:
   - { level: 45, move: Combust }
   - { level: 50, move: Moltstrike }
   - { level: 55, move: Burn Up }
+  - { level: 57, move: Flare Blitz }
+  - { level: 59, move: Megahorn }

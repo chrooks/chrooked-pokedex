@@ -8,25 +8,30 @@ abilities:
 stats: { hp: 100, spa: 85, spe: 55 }
 learnset:
   - { level: 0, move: Iron Head }
+  - { level: 1, move: Poison Gas }
+  - { level: 1, move: Recycle }
   - { level: 1, move: Acid Spray }
   - { level: 1, move: Metal Claw }
-  - { level: 1, move: Poison Gas }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Recycle }
+  - { level: 2, move: Pound }
   - { level: 12, move: Clear Smog }
   - { level: 15, move: Toxic Spikes }
+  - { level: 16, move: Mortal Spin }
+  - { level: 17, move: Smart Strike }
   - { level: 18, move: Sludge }
   - { level: 21, move: Stockpile }
   - { level: 21, move: Swallow }
   - { level: 24, move: Iron Defense }
   - { level: 27, move: Sludge Bomb }
+  - { level: 29, move: Cross Poison }
   - { level: 30, move: Toxic }
   - { level: 33, move: Belch }
+  - { level: 36, move: Gastric Snare }
   - { level: 36, move: Body Press }
-  - { level: 36, move: Mortal Spin }
   - { level: 39, move: Venom Slam }
   - { level: 42, move: Pain Split }
+  - { level: 43, move: Iron Tail }
   - { level: 45, move: Gunk Shot }
   - { level: 50, move: Flash Cannon }
   - { level: 56, move: Sludge Wave }
+  - { level: 57, move: Excalibur }
   - { level: 62, move: Explosion }

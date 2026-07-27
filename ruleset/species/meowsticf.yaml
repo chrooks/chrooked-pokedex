@@ -2,11 +2,11 @@ name: Meowstic F
 chrooked_id: meowsticf
 aka: {  }
 learnset:
-  - { level: 1, move: Magical Leaf }
+  - { level: 1, move: Leer }
   - { level: 1, move: Disarming Voice }
   - { level: 1, move: Fake Out }
-  - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
+  - { level: 2, move: Magical Leaf }
   - { level: 9, move: Confusion }
   - { level: 12, move: Stored Power }
   - { level: 15, move: Charge Beam }

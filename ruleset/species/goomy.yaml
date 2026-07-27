@@ -8,6 +8,7 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Absorb }
+  - { level: 2, move: Twister }
   - { level: 5, move: Water Gun }
   - { level: 7, move: Glint }
   - { level: 10, move: Dragon Breath }

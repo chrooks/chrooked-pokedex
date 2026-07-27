@@ -6,9 +6,12 @@ learnset:
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Shadow Sneak }
   - { level: 1, move: Metal Sound }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Lick }
   - { level: 6, move: Glint }
   - { level: 6, move: Knell }
   - { level: 13, move: Aerial Ace }
+  - { level: 15, move: Smart Strike }
   - { level: 17, move: Iron Defense }
   - { level: 18, move: Mirror Shot }
   - { level: 21, move: Slash }
@@ -18,9 +21,12 @@ learnset:
   - { level: 38, move: Wraithstrike }
   - { level: 41, move: Swords Dance }
   - { level: 41, move: Luster Cannon }
+  - { level: 43, move: Iron Tail }
   - { level: 44, move: Pixie Slash }
+  - { level: 45, move: Interment }
   - { level: 47, move: Sacred Sword }
   - { level: 53, move: Excalibur }
+  - { level: 57, move: Necrosis }
   - { level: 60, move: Secret Sword }
   - { level: 62, move: Steel Beam }
   - { level: 64, move: Netherstorm }

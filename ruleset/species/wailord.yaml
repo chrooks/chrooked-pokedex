@@ -7,14 +7,15 @@ learnset:
   - { level: 1, move: Noble Roar }
   - { level: 1, move: Splash }
   - { level: 1, move: Growl }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Water Gun }
+  - { level: 2, move: Astonish }
+  - { level: 3, move: Water Gun }
   - { level: 14, move: Water Whip }
   - { level: 15, move: Mist }
   - { level: 18, move: Water Pulse }
   - { level: 21, move: Heavy Slam }
   - { level: 24, move: Brine }
   - { level: 27, move: Whirlpool }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Dive }
   - { level: 33, move: Bounce }
   - { level: 36, move: Body Slam }

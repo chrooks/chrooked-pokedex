@@ -6,23 +6,27 @@ abilities:
 stats: { atk: 95, def: 100, spd: 95 }
 learnset:
   - { level: 0, move: Dynamic Punch }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Hydro Pump }
   - { level: 1, move: Belly Drum }
   - { level: 1, move: Rain Dance }
-  - { level: 1, move: Mud Shot }
-  - { level: 1, move: Earth Power }
   - { level: 1, move: Circle Throw }
-  - { level: 1, move: Body Slam }
-  - { level: 1, move: Bubble Beam }
   - { level: 1, move: Hypnosis }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Pound }
+  - { level: 4, move: Water Gun }
+  - { level: 5, move: Mud Shot }
+  - { level: 6, move: Bubble Beam }
+  - { level: 7, move: Earth Power }
+  - { level: 8, move: Bail Out }
+  - { level: 9, move: Hydro Pump }
+  - { level: 10, move: Body Slam }
   - { level: 15, move: Undertow }
+  - { level: 16, move: Brick Break }
   - { level: 26, move: Water Whip }
-  - { level: 31, move: Bail Out }
+  - { level: 29, move: Aqua Tail }
+  - { level: 31, move: Double-Edge }
   - { level: 45, move: Maelstrom }
   - { level: 46, move: One-Inch Punch }
   - { level: 48, move: Cross Chop }
+  - { level: 57, move: Close Combat }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

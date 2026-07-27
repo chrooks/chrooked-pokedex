@@ -4,14 +4,19 @@ aka: {  }
 learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Defense Curl }
+  - { level: 2, move: Echoed Voice }
   - { level: 6, move: Rollout }
   - { level: 12, move: Supersonic }
+  - { level: 15, move: Swift }
   - { level: 18, move: Wrap }
   - { level: 24, move: Disable }
+  - { level: 29, move: Uproar }
   - { level: 30, move: Stomp }
   - { level: 36, move: Knock Off }
   - { level: 39, move: Slam }
   - { level: 42, move: Screech }
+  - { level: 43, move: Resonance }
   - { level: 48, move: Rampage }
   - { level: 54, move: Power Whip }
+  - { level: 57, move: Hyper Beam }
   - { level: 60, move: Belly Drum }

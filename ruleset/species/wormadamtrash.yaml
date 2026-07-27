@@ -6,18 +6,22 @@ learnset:
   - { level: 1, move: Quiver Dance }
   - { level: 1, move: Metal Burst }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Protect }
-  - { level: 1, move: Bug Bite }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Metal Claw }
+  - { level: 4, move: Tackle }
+  - { level: 5, move: Bug Bite }
   - { level: 6, move: Glint }
   - { level: 10, move: Protect }
   - { level: 15, move: Bug Bite }
+  - { level: 16, move: Smart Strike }
   - { level: 18, move: Mirror Shot }
   - { level: 20, move: String Shot }
   - { level: 21, move: Signal Beam }
   - { level: 23, move: Confusion }
   - { level: 26, move: Metal Burst }
   - { level: 29, move: Metal Sound }
+  - { level: 30, move: X-Scissor }
   - { level: 32, move: Psybeam }
   - { level: 35, move: Infestation }
   - { level: 36, move: Luster Cannon }
@@ -25,8 +29,11 @@ learnset:
   - { level: 36, move: Bug Buzz }
   - { level: 38, move: Flail }
   - { level: 41, move: Attract }
+  - { level: 43, move: Iron Head }
   - { level: 44, move: Psychic }
-  - { level: 47, move: Iron Head }
+  - { level: 47, move: Iron Tail }
   - { level: 50, move: Antennae Blast }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Excalibur }
   - { level: 60, move: Drone Chorus }
   - { level: 62, move: Steel Beam }

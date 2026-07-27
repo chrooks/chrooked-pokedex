@@ -15,10 +15,12 @@ learnset:
   - { level: 22, move: Seed Bomb }
   - { level: 26, move: Sucker Punch }
   - { level: 28, move: Rock Slide }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Mimic }
   - { level: 34, move: Hammer Arm }
   - { level: 36, move: Reap }
   - { level: 38, move: Earthquake }
   - { level: 42, move: Wood Hammer }
+  - { level: 43, move: Stone Edge }
   - { level: 46, move: Double-Edge }
   - { level: 50, move: Head Smash }

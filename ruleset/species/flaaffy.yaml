@@ -15,5 +15,7 @@ learnset:
   - { level: 35, move: Cotton Guard }
   - { level: 38, move: Milk Drink }
   - { level: 40, move: Dazzling Gleam }
+  - { level: 43, move: Thunder }
   - { level: 45, move: Light Screen }
   - { level: 50, move: Thunderbolt }
+  - { level: 57, move: Zap Cannon }

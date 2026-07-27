@@ -5,6 +5,7 @@ stats: { hp: 55 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Disarming Voice }
   - { level: 4, move: Confuse Ray }
   - { level: 8, move: Ingrain }
   - { level: 12, move: Mega Drain }
@@ -13,9 +14,11 @@ learnset:
   - { level: 22, move: Beguile }
   - { level: 25, move: Strength Sap }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: Energy Ball }
   - { level: 32, move: Dazzling Gleam }
   - { level: 36, move: Spore }
   - { level: 38, move: Siphon }
   - { level: 40, move: Moonblast }
   - { level: 44, move: Dream Eater }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Rapture }

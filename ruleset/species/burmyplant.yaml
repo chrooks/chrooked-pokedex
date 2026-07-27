@@ -3,10 +3,14 @@ chrooked_id: burmyplant
 aka: {  }
 learnset:
   - { level: 1, move: Protect }
+  - { level: 2, move: Fury Cutter }
   - { level: 10, move: Tackle }
   - { level: 15, move: Bug Bite }
   - { level: 20, move: String Shot }
+  - { level: 29, move: X-Scissor }
   - { level: 30, move: Signal Beam }
   - { level: 37, move: Siphon }
+  - { level: 43, move: Moltstrike }
   - { level: 45, move: Antennae Blast }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Drone Chorus }

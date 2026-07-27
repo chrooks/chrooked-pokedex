@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Supersonic }
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Thunder Shock }
   - { level: 4, move: Electro Ball }
   - { level: 8, move: Thunder Wave }
   - { level: 12, move: Bubble Beam }
@@ -14,8 +15,11 @@ learnset:
   - { level: 20, move: Spark }
   - { level: 24, move: Charge }
   - { level: 28, move: Discharge }
+  - { level: 29, move: Muddy Water }
   - { level: 32, move: Aqua Ring }
   - { level: 36, move: Flail }
   - { level: 40, move: Take Down }
+  - { level: 43, move: Thunder }
   - { level: 44, move: Hydro Pump }
+  - { level: 57, move: Zap Cannon }
   - { level: 64, move: Tsunami }

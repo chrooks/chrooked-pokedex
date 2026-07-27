@@ -6,15 +6,16 @@ abilities:
 stats: { atk: 100, def: 100, spe: 75 }
 learnset:
   - { level: 0, move: Triple Kick }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Feint }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Focus Energy }
-  - { level: 1, move: Fake Out }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Fake Out }
   - { level: 4, move: Quick Attack }
   - { level: 6, move: Aura Spark }
   - { level: 8, move: Gyro Ball }
   - { level: 12, move: Detect }
+  - { level: 15, move: Brick Break }
   - { level: 16, move: Rapid Spin }
   - { level: 18, move: Chi Wave }
   - { level: 21, move: Wide Guard }

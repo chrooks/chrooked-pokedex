@@ -9,4 +9,7 @@ learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Fury Swipes }
   - { level: 1, move: Seed Bomb }
+  - { level: 2, move: Leafage }
+  - { level: 15, move: Razor Leaf }
   - { level: 46, move: Reap }
+  - { level: 57, move: Power Whip }

@@ -7,16 +7,19 @@ abilities:
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Peck }
+  - { level: 2, move: Tackle }
   - { level: 5, move: Quick Attack }
   - { level: 9, move: Fury Attack }
   - { level: 14, move: Pluck }
   - { level: 19, move: Double Hit }
   - { level: 23, move: Agility }
   - { level: 27, move: Uproar }
-  - { level: 30, move: Bail Out }
+  - { level: 29, move: Bail Out }
+  - { level: 30, move: Take Down }
   - { level: 33, move: Swords Dance }
   - { level: 36, move: Drill Peck }
   - { level: 39, move: Endeavor }
   - { level: 43, move: Rampage }
   - { level: 46, move: Thrash }
   - { level: 46, move: Nosedive }
+  - { level: 57, move: Brave Bird }

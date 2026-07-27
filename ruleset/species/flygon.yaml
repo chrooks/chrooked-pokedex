@@ -8,28 +8,36 @@ abilities:
 stats: { hp: 90, atk: 105, def: 85, spa: 115, spd: 100, spe: 105 }
 learnset:
   - { level: 0, move: Dragon Claw }
-  - { level: 1, move: Bite }
   - { level: 1, move: Fissure }
   - { level: 1, move: Dig }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Superpower }
   - { level: 1, move: Astonish }
   - { level: 1, move: Dragon Dance }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Supersonic }
-  - { level: 1, move: Dragon Breath }
-  - { level: 1, move: Bulldoze }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Struggle Bug }
+  - { level: 3, move: Twister }
+  - { level: 4, move: Feint }
+  - { level: 5, move: Sand Attack }
+  - { level: 6, move: Supersonic }
+  - { level: 7, move: Clod Toss }
+  - { level: 8, move: Bite }
+  - { level: 9, move: Dragon Breath }
+  - { level: 10, move: Bulldoze }
+  - { level: 11, move: Crunch }
   - { level: 12, move: Mud-Slap }
+  - { level: 13, move: Superpower }
+  - { level: 15, move: Signal Beam }
   - { level: 16, move: Sand Tomb }
   - { level: 20, move: Dragon Tail }
   - { level: 24, move: Screech }
   - { level: 28, move: Bug Buzz }
+  - { level: 29, move: Dragon Pulse }
   - { level: 32, move: Sandstorm }
   - { level: 38, move: Earth Power }
+  - { level: 43, move: Antennae Blast }
   - { level: 44, move: Earthquake }
+  - { level: 45, move: Cataclysm }
   - { level: 52, move: Uproar }
   - { level: 56, move: Faultbreak }
+  - { level: 57, move: Drone Chorus }
+  - { level: 59, move: Draco Meteor }
   - { level: 60, move: Dragon Rush }
   - { level: 68, move: Boomburst }

@@ -13,6 +13,7 @@ learnset:
   - { level: 20, move: Sunny Day }
   - { level: 20, move: Hail }
   - { level: 25, move: Weather Ball }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Maelstrom }
   - { level: 35, move: Hydro Pump }
   - { level: 35, move: Fire Blast }

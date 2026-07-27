@@ -4,9 +4,11 @@ aka: { dex: 759 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 2, move: Rock Smash }
   - { level: 4, move: Baby-Doll Eyes }
   - { level: 8, move: Payback }
   - { level: 12, move: Brutal Swing }
+  - { level: 15, move: Brick Break }
   - { level: 16, move: Endure }
   - { level: 20, move: Strength }
   - { level: 24, move: Bail Out }

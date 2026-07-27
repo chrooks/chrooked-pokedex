@@ -10,6 +10,7 @@ learnset:
   - { level: 10, move: Hone Claws }
   - { level: 13, move: Magical Leaf }
   - { level: 15, move: Quick Attack }
+  - { level: 16, move: Razor Leaf }
   - { level: 17, move: Seed Bomb }
   - { level: 21, move: U-turn }
   - { level: 25, move: Worry Seed }
@@ -20,4 +21,5 @@ learnset:
   - { level: 45, move: Heel Drop }
   - { level: 45, move: Night Slash }
   - { level: 55, move: Backstab }
+  - { level: 57, move: Power Whip }
   - { level: 60, move: Havoc }

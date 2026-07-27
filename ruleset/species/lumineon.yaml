@@ -11,13 +11,20 @@ learnset:
   - { level: 1, move: Gust }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Soak }
+  - { level: 2, move: Disarming Voice }
   - { level: 13, move: Rain Dance }
+  - { level: 15, move: Beguile }
   - { level: 22, move: Water Pulse }
   - { level: 26, move: Attract }
   - { level: 29, move: Safeguard }
+  - { level: 30, move: Muddy Water }
+  - { level: 31, move: Dazzling Gleam }
   - { level: 35, move: Aqua Ring }
   - { level: 42, move: Whirlpool }
+  - { level: 43, move: Hydro Pump }
+  - { level: 45, move: Moonblast }
   - { level: 48, move: U-turn }
   - { level: 53, move: Bounce }
+  - { level: 57, move: Rapture }
   - { level: 59, move: Tailwind }
   - { level: 64, move: Tsunami }

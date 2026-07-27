@@ -7,10 +7,11 @@ stats: { atk: 120, def: 80, spe: 75 }
 learnset:
   - { level: 0, move: Drain Punch }
   - { level: 1, move: Feint }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Fake Out }
   - { level: 1, move: Focus Energy }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Fake Out }
   - { level: 4, move: Mach Punch }
   - { level: 6, move: Aura Spark }
   - { level: 8, move: Vacuum Wave }

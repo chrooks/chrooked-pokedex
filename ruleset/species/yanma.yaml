@@ -6,6 +6,8 @@ abilities:
   hidden: Speed Boost
 learnset:
   - { level: 1, move: Tackle }
+  - { level: 2, move: Struggle Bug }
+  - { level: 3, move: Gust }
   - { level: 6, move: Quick Attack }
   - { level: 11, move: Double Team }
   - { level: 14, move: Air Cutter }
@@ -19,9 +21,10 @@ learnset:
   - { level: 35, move: Bug Buzz }
   - { level: 38, move: Hypnosis }
   - { level: 43, move: Wing Attack }
+  - { level: 44, move: Galeburst }
   - { level: 46, move: Screech }
   - { level: 49, move: U-turn }
-  - { level: 54, move: Galeburst }
+  - { level: 54, move: Hurricane }
   - { level: 57, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Tempest }

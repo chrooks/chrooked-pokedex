@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Thunder Shock }
   - { level: 1, move: Charge }
+  - { level: 2, move: Nuzzle }
   - { level: 12, move: Bite }
   - { level: 18, move: Spark }
   - { level: 24, move: Roar }

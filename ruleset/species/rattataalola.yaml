@@ -8,6 +8,7 @@ learnset:
   - { level: 7, move: Focus Energy }
   - { level: 10, move: Pursuit }
   - { level: 13, move: Bite }
+  - { level: 15, move: Bail Out }
   - { level: 16, move: Hyper Fang }
   - { level: 19, move: Assurance }
   - { level: 22, move: Crunch }

@@ -5,16 +5,17 @@ abilities:
   secondary: Effect Spore
 learnset:
   - { level: 1, move: Block }
-  - { level: 1, move: Absorb }
   - { level: 1, move: Bind }
   - { level: 1, move: Stun Spore }
   - { level: 1, move: Growth }
+  - { level: 2, move: Absorb }
   - { level: 12, move: Mega Drain }
   - { level: 16, move: Vine Whip }
   - { level: 20, move: Poison Powder }
   - { level: 24, move: Ancient Power }
   - { level: 28, move: Knock Off }
-  - { level: 32, move: Giga Drain }
+  - { level: 29, move: Giga Drain }
+  - { level: 32, move: Energy Ball }
   - { level: 36, move: Sleep Powder }
   - { level: 38, move: Siphon }
   - { level: 40, move: Slam }
@@ -22,3 +23,4 @@ learnset:
   - { level: 48, move: Power Whip }
   - { level: 52, move: Ingrain }
   - { level: 56, move: Grassy Terrain }
+  - { level: 57, move: Leaf Storm }

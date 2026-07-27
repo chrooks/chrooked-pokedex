@@ -7,17 +7,21 @@ stats: { def: 110, spd: 95 }
 learnset:
   - { level: 0, move: Steel Wing }
   - { level: 1, move: Leer }
-  - { level: 1, move: Peck }
   - { level: 1, move: Screech }
   - { level: 1, move: Metal Sound }
   - { level: 1, move: Iron Defense }
-  - { level: 1, move: Hone Claws }
-  - { level: 1, move: Power Trip }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Hone Claws }
+  - { level: 4, move: Peck }
+  - { level: 5, move: Power Trip }
   - { level: 12, move: Fury Attack }
   - { level: 16, move: Pluck }
   - { level: 22, move: Taunt }
   - { level: 28, move: Scary Face }
+  - { level: 29, move: Metallic Fang }
   - { level: 34, move: Drill Peck }
   - { level: 38, move: Nosedive }
   - { level: 42, move: Swagger }
+  - { level: 43, move: Iron Tail }
   - { level: 50, move: Brave Bird }
+  - { level: 57, move: Excalibur }

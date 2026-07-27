@@ -7,17 +7,23 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Tackle }
+  - { level: 3, move: Peck }
   - { level: 12, move: Taunt }
+  - { level: 15, move: Aerial Ace }
   - { level: 16, move: Air Cutter }
   - { level: 20, move: Swagger }
   - { level: 26, move: Feather Dance }
-  - { level: 31, move: Bail Out }
+  - { level: 29, move: Bail Out }
+  - { level: 31, move: Take Down }
   - { level: 36, move: Detect }
   - { level: 42, move: Air Slash }
   - { level: 46, move: Dive Bomb }
   - { level: 46, move: Rampage }
   - { level: 46, move: Nosedive }
   - { level: 50, move: Roost }
+  - { level: 57, move: Double-Edge }
   - { level: 58, move: Tailwind }
+  - { level: 59, move: Brave Bird }
   - { level: 62, move: Oblivion Wing }
   - { level: 66, move: Sky Attack }

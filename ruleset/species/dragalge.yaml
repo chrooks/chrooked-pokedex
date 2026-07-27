@@ -11,17 +11,21 @@ learnset:
   - { level: 1, move: Acid }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Smokescreen }
+  - { level: 2, move: Twister }
   - { level: 15, move: Tail Whip }
+  - { level: 16, move: Venoshock }
   - { level: 17, move: Water Whip }
+  - { level: 18, move: Dragon Breath }
   - { level: 20, move: Double Team }
   - { level: 25, move: Poison Tail }
   - { level: 30, move: Water Pulse }
   - { level: 35, move: Toxic }
   - { level: 37, move: Dragon Pulse }
   - { level: 40, move: Cataclysm }
+  - { level: 43, move: Sludge Bomb }
   - { level: 45, move: Aqua Tail }
   - { level: 48, move: Draco Meteor }
-  - { level: 52, move: Sludge Bomb }
+  - { level: 52, move: Sludge Wave }
   - { level: 55, move: Contagion }
   - { level: 59, move: Hydro Pump }
   - { level: 66, move: Outrage }

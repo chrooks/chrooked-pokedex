@@ -13,3 +13,4 @@ learnset:
   - { level: 30, move: Reflect }
   - { level: 33, move: Psyshock }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Future Sight }

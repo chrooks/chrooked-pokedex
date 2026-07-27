@@ -6,14 +6,20 @@ learnset:
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Work Up }
+  - { level: 2, move: Rock Smash }
   - { level: 7, move: Metal Claw }
   - { level: 14, move: Quick Guard }
+  - { level: 15, move: Smart Strike }
+  - { level: 17, move: Brick Break }
   - { level: 21, move: Double Kick }
   - { level: 28, move: Retaliate }
   - { level: 35, move: Metal Burst }
   - { level: 42, move: Take Down }
+  - { level: 43, move: Iron Head }
   - { level: 45, move: Pixie Slash }
+  - { level: 46, move: Cross Chop }
   - { level: 49, move: Sacred Sword }
   - { level: 56, move: Swords Dance }
-  - { level: 63, move: Iron Head }
+  - { level: 57, move: Iron Tail }
+  - { level: 63, move: Excalibur }
   - { level: 70, move: Close Combat }

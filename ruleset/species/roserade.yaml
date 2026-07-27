@@ -7,24 +7,28 @@ abilities:
 stats: { hp: 65, atk: 85, def: 65, spe: 95 }
 learnset:
   - { level: 1, move: Grassy Terrain }
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: Venom Drench }
-  - { level: 1, move: Mega Drain }
   - { level: 1, move: Leech Seed }
-  - { level: 1, move: Magical Leaf }
   - { level: 1, move: Toxic Spikes }
-  - { level: 1, move: Sweet Scent }
-  - { level: 1, move: Giga Drain }
-  - { level: 1, move: Synthesis }
-  - { level: 1, move: Toxic }
-  - { level: 1, move: Petal Blizzard }
-  - { level: 1, move: Aromatherapy }
-  - { level: 1, move: Ingrain }
-  - { level: 1, move: Petal Dance }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Stun Spore }
-  - { level: 1, move: Worry Seed }
-  - { level: 36, move: Siphon }
-  - { level: 48, move: Miasma }
+  - { level: 2, move: Acid Spray }
+  - { level: 3, move: Sweet Scent }
+  - { level: 4, move: Synthesis }
+  - { level: 5, move: Toxic }
+  - { level: 6, move: Aromatherapy }
+  - { level: 7, move: Ingrain }
+  - { level: 8, move: Growth }
+  - { level: 9, move: Stun Spore }
+  - { level: 10, move: Worry Seed }
+  - { level: 11, move: Poison Sting }
+  - { level: 12, move: Mega Drain }
+  - { level: 13, move: Absorb }
+  - { level: 14, move: Magical Leaf }
+  - { level: 15, move: Venoshock }
+  - { level: 16, move: Giga Drain }
+  - { level: 17, move: Petal Blizzard }
+  - { level: 18, move: Energy Ball }
+  - { level: 29, move: Siphon }
+  - { level: 36, move: Petal Dance }
+  - { level: 43, move: Miasma }
+  - { level: 48, move: Sludge Wave }
   - { level: 64, move: Contagion }

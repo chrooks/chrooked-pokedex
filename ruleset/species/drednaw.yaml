@@ -5,20 +5,22 @@ abilities:
   hidden: Carnivore
 learnset:
   - { level: 0, move: Rock Tomb }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Protect }
-  - { level: 1, move: Crunch }
   - { level: 1, move: Rock Polish }
-  - { level: 1, move: Razor Shell }
-  - { level: 11, move: Undertow }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 2, move: Bite }
+  - { level: 3, move: Undertow }
+  - { level: 4, move: Crunch }
+  - { level: 11, move: Razor Shell }
+  - { level: 15, move: Rock Slide }
   - { level: 21, move: Headbutt }
   - { level: 30, move: Counter }
   - { level: 30, move: Lithic Fang }
   - { level: 30, move: Tectonic Fang }
   - { level: 34, move: Liquidation }
   - { level: 39, move: Jaw Lock }
+  - { level: 43, move: Stone Edge }
   - { level: 48, move: Maelstrom }
   - { level: 52, move: Wave Crash }
   - { level: 57, move: Body Slam }

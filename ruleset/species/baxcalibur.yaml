@@ -4,22 +4,25 @@ aka: { pokeemerald: SPECIES_BAXCALIBUR }
 learnset:
   - { level: 0, move: Glaive Rush }
   - { level: 1, move: Snowscape }
-  - { level: 1, move: Breaking Swipe }
   - { level: 1, move: Dragon Tail }
   - { level: 1, move: Ice Shard }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Maul }
   - { level: 6, move: Icy Wind }
-  - { level: 9, move: Maul }
+  - { level: 9, move: Breaking Swipe }
   - { level: 12, move: Dragon Breath }
+  - { level: 15, move: Ice Punch }
   - { level: 18, move: Focus Energy }
   - { level: 24, move: Bite }
   - { level: 29, move: Ice Fang }
   - { level: 35, move: Dragon Claw }
   - { level: 40, move: Dragon Hammer }
   - { level: 42, move: Take Down }
+  - { level: 43, move: Icicle Crash }
   - { level: 45, move: Pixie Slash }
   - { level: 48, move: Ice Beam }
-  - { level: 52, move: Icicle Crash }
+  - { level: 52, move: Ice Hammer }
   - { level: 55, move: Crunch }
   - { level: 62, move: Icebreaker }

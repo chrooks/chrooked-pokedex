@@ -9,12 +9,15 @@ learnset:
   - { level: 10, move: Glint }
   - { level: 10, move: Knell }
   - { level: 14, move: Confuse Ray }
+  - { level: 15, move: Hex }
   - { level: 18, move: Mirror Shot }
   - { level: 21, move: Substitute }
   - { level: 28, move: Metal Sound }
+  - { level: 29, move: Flash Cannon }
   - { level: 35, move: Shadow Ball }
   - { level: 38, move: Luster Cannon }
   - { level: 42, move: Recover }
+  - { level: 43, move: Specter Bomb }
   - { level: 49, move: Power Gem }
   - { level: 52, move: Steel Beam }
   - { level: 56, move: Make It Rain }

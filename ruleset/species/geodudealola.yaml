@@ -4,15 +4,18 @@ aka: { dex: 74 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Defense Curl }
+  - { level: 2, move: Nuzzle }
   - { level: 4, move: Charge }
   - { level: 6, move: Rock Polish }
   - { level: 10, move: Rollout }
   - { level: 12, move: Spark }
-  - { level: 16, move: Rock Throw }
-  - { level: 18, move: Smack Down }
+  - { level: 15, move: Rock Throw }
+  - { level: 16, move: Smack Down }
+  - { level: 18, move: Rock Slide }
   - { level: 22, move: Thunder Punch }
   - { level: 24, move: Self-Destruct }
   - { level: 28, move: Bail Out }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Rock Blast }
   - { level: 34, move: Discharge }
   - { level: 36, move: Explosion }
@@ -20,3 +23,5 @@ learnset:
   - { level: 42, move: Stone Edge }
   - { level: 46, move: Lightning Slam }
   - { level: 48, move: Arc Strike }
+  - { level: 57, move: Head Smash }
+  - { level: 59, move: Wild Charge }

@@ -12,6 +12,7 @@ learnset:
   - { level: 1, move: Growth }
   - { level: 1, move: Leafage }
   - { level: 1, move: Morning Sun }
+  - { level: 2, move: Absorb }
   - { level: 10, move: Ember }
   - { level: 15, move: Magical Leaf }
   - { level: 18, move: Disarming Voice }

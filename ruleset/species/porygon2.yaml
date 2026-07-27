@@ -8,21 +8,25 @@ abilities:
   hidden: Virtualized
 stats: { atk: 70, hp: 90, spd: 100, def: 95 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Conversion }
   - { level: 1, move: Recycle }
   - { level: 1, move: Magnet Rise }
   - { level: 1, move: Thunder Wave }
+  - { level: 2, move: Echoed Voice }
+  - { level: 3, move: Tackle }
   - { level: 9, move: Thunder Shock }
   - { level: 14, move: Charge Beam }
+  - { level: 15, move: Swift }
+  - { level: 17, move: Short Circuit }
   - { level: 20, move: Psybeam }
   - { level: 25, move: Conversion 2 }
   - { level: 30, move: Bail Out }
   - { level: 35, move: Recover }
   - { level: 37, move: Tri Attack }
   - { level: 40, move: Discharge }
+  - { level: 43, move: Thunderbolt }
   - { level: 45, move: Resonance }
-  - { level: 50, move: Thunderbolt }
+  - { level: 50, move: Thunder }
   - { level: 55, move: Lock-On }
   - { level: 60, move: Zap Cannon }
   - { level: 65, move: Hyper Beam }

@@ -6,9 +6,11 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Peck }
   - { level: 4, move: Fury Cutter }
   - { level: 8, move: False Swipe }
   - { level: 12, move: Wing Attack }
+  - { level: 15, move: Bug Bite }
   - { level: 16, move: Double Team }
   - { level: 20, move: Double Hit }
   - { level: 24, move: Slash }
@@ -17,6 +19,9 @@ learnset:
   - { level: 36, move: Air Slash }
   - { level: 38, move: X-Scissor }
   - { level: 40, move: Moltstrike }
+  - { level: 43, move: Dive Bomb }
   - { level: 44, move: Swords Dance }
-  - { level: 48, move: Dive Bomb }
+  - { level: 48, move: Nosedive }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Brave Bird }

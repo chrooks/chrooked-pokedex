@@ -14,6 +14,7 @@ learnset:
   - { level: 21, move: Protect }
   - { level: 25, move: Water Pulse }
   - { level: 29, move: Healing Wish }
+  - { level: 30, move: Aqua Tail }
   - { level: 31, move: Maelstrom }
   - { level: 33, move: Soak }
   - { level: 37, move: Wish }

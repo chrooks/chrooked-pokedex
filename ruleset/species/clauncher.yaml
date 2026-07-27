@@ -14,7 +14,8 @@ learnset:
   - { level: 30, move: Water Pulse }
   - { level: 35, move: Swords Dance }
   - { level: 40, move: Aura Sphere }
+  - { level: 43, move: Muddy Water }
   - { level: 45, move: Bounce }
-  - { level: 50, move: Muddy Water }
+  - { level: 50, move: Hydro Pump }
   - { level: 55, move: Crabhammer }
   - { level: 64, move: Tsunami }

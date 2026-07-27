@@ -7,15 +7,17 @@ abilities:
   hidden: Psyonize
 stats: { atk: 105, spa: 80 }
 learnset:
-  - { level: 1, move: Scratch }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Confusion }
   - { level: 1, move: Aqua Jet }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Water Gun }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Confusion }
   - { level: 9, move: Fury Swipes }
   - { level: 12, move: Water Pulse }
   - { level: 14, move: Water Whip }
   - { level: 15, move: Mind Flick }
+  - { level: 16, move: Psycho Cut }
   - { level: 18, move: Zen Headbutt }
   - { level: 21, move: Screech }
   - { level: 24, move: Aqua Tail }
@@ -23,5 +25,9 @@ learnset:
   - { level: 30, move: Psych Up }
   - { level: 36, move: Amnesia }
   - { level: 40, move: Hydro Pump }
+  - { level: 43, move: Maelstrom }
   - { level: 45, move: Wonder Room }
+  - { level: 46, move: Kinetic Slam }
+  - { level: 57, move: Wave Crash }
+  - { level: 59, move: Psycrush }
   - { level: 64, move: Tsunami }

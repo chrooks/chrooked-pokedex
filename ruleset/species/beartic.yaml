@@ -10,22 +10,27 @@ learnset:
   - { level: 1, move: Endure }
   - { level: 1, move: Growl }
   - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Powder Snow }
   - { level: 1, move: Charm }
-  - { level: 1, move: Aqua Jet }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Rock Smash }
+  - { level: 4, move: Aqua Jet }
+  - { level: 5, move: Powder Snow }
   - { level: 9, move: Icy Wind }
   - { level: 12, move: Play Nice }
   - { level: 15, move: Brine }
+  - { level: 16, move: Ice Punch }
   - { level: 18, move: Frost Breath }
   - { level: 21, move: Slash }
   - { level: 24, move: Flail }
   - { level: 27, move: Swagger }
+  - { level: 29, move: Brick Break }
   - { level: 30, move: Snowscape }
   - { level: 33, move: Thrash }
-  - { level: 36, move: Brick Break }
+  - { level: 36, move: One-Inch Punch }
   - { level: 38, move: Glacial Crush }
   - { level: 38, move: Cross Chop }
   - { level: 41, move: Blizzard }
+  - { level: 43, move: Ice Hammer }
   - { level: 46, move: Sheer Cold }
   - { level: 51, move: Superpower }
   - { level: 64, move: Icebreaker }

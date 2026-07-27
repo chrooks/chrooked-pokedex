@@ -7,17 +7,18 @@ abilities:
 stats: { def: 75 }
 learnset:
   - { level: 0, move: Quiver Dance }
-  - { level: 1, move: Fiery Dance }
-  - { level: 1, move: Struggle Bug }
-  - { level: 1, move: Flame Charge }
-  - { level: 1, move: Flare Blitz }
   - { level: 1, move: Fire Spin }
-  - { level: 1, move: Gust }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Double-Edge }
-  - { level: 1, move: Take Down }
   - { level: 1, move: Whirlwind }
   - { level: 1, move: String Shot }
+  - { level: 1, move: Struggle Bug }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Gust }
+  - { level: 4, move: Ember }
+  - { level: 5, move: Fiery Dance }
+  - { level: 6, move: Take Down }
+  - { level: 7, move: Flare Blitz }
+  - { level: 8, move: Double-Edge }
+  - { level: 15, move: Incinerate }
   - { level: 18, move: Flame Wheel }
   - { level: 21, move: Signal Beam }
   - { level: 24, move: Bug Bite }
@@ -27,8 +28,9 @@ learnset:
   - { level: 42, move: Antennae Blast }
   - { level: 48, move: Heat Wave }
   - { level: 54, move: Amnesia }
+  - { level: 57, move: Overheat }
   - { level: 58, move: Drone Chorus }
   - { level: 62, move: Hurricane }
   - { level: 70, move: Fire Blast }
-  - { level: 78, move: Rage Powder }
+  - { level: 70, move: Rage Powder }
 evolution: { from: Larvesta, method: { level: 40 } }

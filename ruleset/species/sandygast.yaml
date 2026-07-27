@@ -4,17 +4,21 @@ aka: {  }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Harden }
+  - { level: 2, move: Mud-Slap }
   - { level: 5, move: Astonish }
   - { level: 7, move: Knell }
   - { level: 10, move: Sand Tomb }
   - { level: 15, move: Mega Drain }
+  - { level: 16, move: Hex }
+  - { level: 17, move: Mud Shot }
   - { level: 20, move: Sand Attack }
   - { level: 25, move: Bulldoze }
   - { level: 30, move: Hypnosis }
   - { level: 35, move: Giga Drain }
   - { level: 38, move: Earth Power }
   - { level: 40, move: Iron Defense }
-  - { level: 45, move: Shadow Ball }
+  - { level: 43, move: Shadow Ball }
+  - { level: 45, move: Specter Bomb }
   - { level: 50, move: Quagmire }
   - { level: 55, move: Shore Up }
   - { level: 57, move: Sinkhole }

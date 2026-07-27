@@ -6,20 +6,26 @@ learnset:
   - { level: 1, move: Disable }
   - { level: 1, move: Double Team }
   - { level: 1, move: Shadow Sneak }
-  - { level: 1, move: Fury Cutter }
+  - { level: 2, move: Glitter Tap }
+  - { level: 3, move: Rock Smash }
+  - { level: 4, move: Fury Cutter }
   - { level: 7, move: Hypnosis }
   - { level: 14, move: Feint }
+  - { level: 15, move: Brick Break }
   - { level: 21, move: Future Sight }
   - { level: 28, move: Dazzling Gleam }
   - { level: 35, move: Psycho Cut }
   - { level: 38, move: One-Inch Punch }
   - { level: 42, move: Night Slash }
-  - { level: 45, move: Spirit Break }
+  - { level: 43, move: Spirit Break }
+  - { level: 45, move: Pixie Slash }
+  - { level: 46, move: Cross Chop }
   - { level: 49, move: Leaf Blade }
   - { level: 56, move: Moonblast }
+  - { level: 57, move: Starfall Slam }
   - { level: 63, move: Close Combat }
+  - { level: 70, move: Faeblitz }
   - { level: 70, move: Knock Off }
-  - { level: 77, move: Destiny Bond }
-  - { level: 84, move: Wide Guard }
-  - { level: 84, move: Quick Guard }
-  - { level: 91, move: Pixie Slash }
+  - { level: 70, move: Destiny Bond }
+  - { level: 70, move: Wide Guard }
+  - { level: 70, move: Quick Guard }

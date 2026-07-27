@@ -6,19 +6,27 @@ learnset:
   - { level: 0, move: Heavy Slam }
   - { level: 1, move: Magnet Rise }
   - { level: 1, move: Toxic Spikes }
-  - { level: 1, move: Bug Bite }
   - { level: 1, move: Protect }
-  - { level: 1, move: Zap Cannon }
   - { level: 1, move: Self-Destruct }
-  - { level: 1, move: Tackle }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Metal Claw }
+  - { level: 4, move: Tackle }
+  - { level: 5, move: Bug Bite }
+  - { level: 6, move: Zap Cannon }
   - { level: 12, move: Take Down }
+  - { level: 15, move: Smart Strike }
   - { level: 17, move: Rapid Spin }
   - { level: 20, move: Rollout }
   - { level: 23, move: Curse }
   - { level: 28, move: Spikes }
+  - { level: 29, move: X-Scissor }
+  - { level: 31, move: Metallic Fang }
   - { level: 32, move: Payback }
   - { level: 36, move: Explosion }
   - { level: 39, move: Moltstrike }
   - { level: 42, move: Iron Defense }
+  - { level: 43, move: Iron Tail }
   - { level: 46, move: Gyro Ball }
   - { level: 50, move: Double-Edge }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Excalibur }

@@ -18,11 +18,14 @@ learnset:
   - { level: 21, move: Brine }
   - { level: 24, move: Rock Slide }
   - { level: 27, move: Crunch }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Curse }
   - { level: 33, move: Iron Defense }
   - { level: 36, move: Aqua Tail }
   - { level: 38, move: Maelstrom }
   - { level: 41, move: Rain Dance }
+  - { level: 43, move: Stone Edge }
   - { level: 46, move: Hydro Pump }
   - { level: 51, move: Shell Smash }
+  - { level: 57, move: Head Smash }
   - { level: 60, move: Wave Crash }

@@ -7,11 +7,11 @@ abilities:
 stats: { hp: 60, spa: 90, spd: 100 }
 learnset:
   - { level: 0, move: Shell Smash }
+  - { level: 1, move: Yawn }
   - { level: 1, move: Ember }
   - { level: 1, move: Rock Throw }
   - { level: 1, move: Smog }
-  - { level: 1, move: Yawn }
-  - { level: 1, move: Earth Power }
+  - { level: 2, move: Earth Power }
   - { level: 7, move: Jewel Glow }
   - { level: 13, move: Harden }
   - { level: 20, move: Clear Smog }
@@ -23,6 +23,8 @@ learnset:
   - { level: 39, move: Power Gem }
   - { level: 40, move: Crystal Beam }
   - { level: 43, move: Body Slam }
+  - { level: 44, move: Fire Blast }
   - { level: 47, move: Recover }
   - { level: 54, move: Flamethrower }
+  - { level: 57, move: Overheat }
   - { level: 62, move: Meteor Surge }

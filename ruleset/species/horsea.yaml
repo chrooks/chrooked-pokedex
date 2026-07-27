@@ -13,9 +13,10 @@ learnset:
   - { level: 17, move: Water Whip }
   - { level: 20, move: Dragon Breath }
   - { level: 25, move: Bubble Beam }
+  - { level: 29, move: Water Pulse }
   - { level: 30, move: Agility }
   - { level: 32, move: Maelstrom }
-  - { level: 35, move: Water Pulse }
+  - { level: 35, move: Muddy Water }
   - { level: 37, move: Dragon Pulse }
   - { level: 40, move: Cataclysm }
   - { level: 45, move: Hydro Pump }

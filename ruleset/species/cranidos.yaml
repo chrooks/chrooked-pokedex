@@ -7,9 +7,11 @@ abilities:
 learnset:
   - { level: 1, move: Headbutt }
   - { level: 1, move: Leer }
+  - { level: 2, move: Rollout }
   - { level: 6, move: Focus Energy }
   - { level: 10, move: Rock Smash }
   - { level: 15, move: Take Down }
+  - { level: 16, move: Rock Slide }
   - { level: 19, move: Scary Face }
   - { level: 24, move: Assurance }
   - { level: 25, move: Lithic Fang }
@@ -18,4 +20,5 @@ learnset:
   - { level: 33, move: Ancient Power }
   - { level: 37, move: Zen Headbutt }
   - { level: 42, move: Screech }
+  - { level: 43, move: Stone Edge }
   - { level: 46, move: Head Smash }

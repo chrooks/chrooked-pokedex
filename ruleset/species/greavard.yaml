@@ -9,12 +9,15 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 2, move: Clod Toss }
   - { level: 3, move: Lick }
   - { level: 6, move: Tail Whip }
   - { level: 6, move: Bite }
   - { level: 9, move: Roar }
   - { level: 12, move: Headbutt }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Dig }
+  - { level: 17, move: Bulldoze }
   - { level: 24, move: Rest }
   - { level: 25, move: Lithic Fang }
   - { level: 25, move: Tectonic Fang }
@@ -24,6 +27,8 @@ learnset:
   - { level: 39, move: Wraithstrike }
   - { level: 39, move: Interment }
   - { level: 41, move: Phantom Force }
+  - { level: 43, move: Earthquake }
   - { level: 46, move: Charm }
   - { level: 52, move: Double-Edge }
+  - { level: 57, move: Faultbreak }
   - { level: 62, move: Necrosis }

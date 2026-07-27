@@ -7,23 +7,26 @@ abilities:
 stats: { atk: 130 }
 learnset:
   - { level: 0, move: Superpower }
-  - { level: 1, move: Wing Attack }
   - { level: 1, move: Leer }
-  - { level: 1, move: Peck }
   - { level: 1, move: Sky Attack }
   - { level: 1, move: Hone Claws }
+  - { level: 1, move: Peck }
+  - { level: 2, move: Tackle }
+  - { level: 3, move: Wing Attack }
   - { level: 18, move: Tailwind }
   - { level: 24, move: Scary Face }
+  - { level: 29, move: Slash }
   - { level: 30, move: Aerial Ace }
   - { level: 33, move: Air Slash }
-  - { level: 36, move: Slash }
+  - { level: 36, move: Crush Claw }
+  - { level: 39, move: Take Down }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Nosedive }
-  - { level: 39, move: Crush Claw }
   - { level: 42, move: Whirlwind }
   - { level: 48, move: Rampage }
   - { level: 52, move: Galeburst }
   - { level: 53, move: Oblivion Wing }
   - { level: 57, move: Tempest }
+  - { level: 58, move: Brave Bird }
   - { level: 64, move: Defog }
-  - { level: 72, move: Thrash }
+  - { level: 70, move: Thrash }

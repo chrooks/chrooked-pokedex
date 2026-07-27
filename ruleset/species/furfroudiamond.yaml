@@ -2,4 +2,8 @@ name: Furfrou Diamond
 chrooked_id: furfroudiamond
 aka: {  }
 learnset:
+  - { level: 1, move: Tackle }
+  - { level: 15, move: Bail Out }
+  - { level: 29, move: Take Down }
   - { level: 36, move: Rampage }
+  - { level: 57, move: Double-Edge }

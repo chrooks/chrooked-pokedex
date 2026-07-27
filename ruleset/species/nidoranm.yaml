@@ -13,6 +13,7 @@ learnset:
   - { level: 8, move: Double Kick }
   - { level: 10, move: Poison Tail }
   - { level: 13, move: Clod Toss }
+  - { level: 15, move: Cross Poison }
   - { level: 16, move: Fury Attack }
   - { level: 18, move: Toxic Spikes }
   - { level: 20, move: Sludge }

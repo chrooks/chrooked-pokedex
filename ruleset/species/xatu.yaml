@@ -4,13 +4,15 @@ aka: { pokeemerald: SPECIES_XATU }
 stats: { spa: 110, spe: 85 }
 learnset:
   - { level: 0, move: Air Slash }
-  - { level: 1, move: Air Slash }
   - { level: 1, move: Tailwind }
-  - { level: 1, move: Peck }
   - { level: 1, move: Leer }
-  - { level: 1, move: Stored Power }
   - { level: 1, move: Teleport }
+  - { level: 1, move: Peck }
+  - { level: 2, move: Gust }
+  - { level: 3, move: Stored Power }
+  - { level: 4, move: Air Slash }
   - { level: 15, move: Confuse Ray }
+  - { level: 16, move: Dream Mist }
   - { level: 20, move: Night Shade }
   - { level: 28, move: Psycho Shift }
   - { level: 31, move: Galeburst }
@@ -18,6 +20,7 @@ learnset:
   - { level: 34, move: Guard Swap }
   - { level: 37, move: Psychic }
   - { level: 41, move: Mindwarp }
+  - { level: 43, move: Hurricane }
   - { level: 48, move: Wish }
   - { level: 55, move: Future Sight }
   - { level: 64, move: Tempest }

@@ -21,5 +21,7 @@ learnset:
   - { level: 36, move: Ice Fang }
   - { level: 39, move: Psychic Fangs }
   - { level: 41, move: Dragon Hammer }
+  - { level: 43, move: Stone Edge }
   - { level: 44, move: Earthquake }
   - { level: 48, move: Head Smash }
+  - { level: 57, move: Outrage }

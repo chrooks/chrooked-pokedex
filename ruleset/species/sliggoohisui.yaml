@@ -3,16 +3,18 @@ chrooked_id: sliggoohisui
 aka: { pokeemerald: SPECIES_SLIGGOO_HISUI }
 learnset:
   - { level: 0, move: Shelter }
+  - { level: 1, move: Acid Armor }
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Absorb }
-  - { level: 1, move: Acid Armor }
-  - { level: 1, move: Dragon Breath }
+  - { level: 2, move: Twister }
+  - { level: 3, move: Dragon Breath }
   - { level: 8, move: Glint }
   - { level: 15, move: Protect }
   - { level: 18, move: Mirror Shot }
   - { level: 20, move: Flail }
   - { level: 25, move: Water Pulse }
+  - { level: 29, move: Flash Cannon }
   - { level: 30, move: Rain Dance }
   - { level: 35, move: Dragon Pulse }
   - { level: 39, move: Luster Cannon }

@@ -4,11 +4,15 @@ aka: {  }
 learnset:
   - { level: 1, move: Confusion }
   - { level: 1, move: Taunt }
+  - { level: 2, move: Echoed Voice }
   - { level: 5, move: After You }
   - { level: 10, move: Calm Mind }
   - { level: 15, move: Stored Power }
+  - { level: 16, move: Swift }
+  - { level: 17, move: Dream Mist }
   - { level: 20, move: Psych Up }
   - { level: 25, move: Quash }
+  - { level: 29, move: Uproar }
   - { level: 30, move: Nasty Plot }
   - { level: 35, move: Zen Headbutt }
   - { level: 37, move: Resonance }
@@ -17,4 +21,5 @@ learnset:
   - { level: 45, move: Mindwarp }
   - { level: 50, move: Instruct }
   - { level: 55, move: Foul Play }
+  - { level: 57, move: Hyper Beam }
   - { level: 60, move: Future Sight }

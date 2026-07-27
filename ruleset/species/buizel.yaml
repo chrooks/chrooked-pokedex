@@ -16,7 +16,8 @@ learnset:
   - { level: 21, move: Swift }
   - { level: 24, move: Aqua Jet }
   - { level: 27, move: Double Hit }
-  - { level: 31, move: Bail Out }
+  - { level: 29, move: Bail Out }
+  - { level: 31, move: Take Down }
   - { level: 33, move: Liquidation }
   - { level: 35, move: Aqua Tail }
   - { level: 38, move: Maelstrom }
@@ -24,3 +25,4 @@ learnset:
   - { level: 43, move: Rampage }
   - { level: 45, move: Hydro Pump }
   - { level: 49, move: Wave Crash }
+  - { level: 57, move: Double-Edge }

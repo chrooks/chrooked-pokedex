@@ -8,20 +8,24 @@ learnset:
   - { level: 0, move: Hammer Arm }
   - { level: 1, move: Explosion }
   - { level: 1, move: Hone Claws }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Bullet Punch }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Confusion }
+  - { level: 3, move: Metal Claw }
   - { level: 6, move: Mind Flick }
-  - { level: 9, move: Zen Headbutt }
+  - { level: 9, move: Psycho Cut }
   - { level: 12, move: Magnet Rise }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Flash Cannon }
+  - { level: 17, move: Zen Headbutt }
   - { level: 26, move: Take Down }
   - { level: 34, move: Psychic }
   - { level: 38, move: Kinetic Slam }
   - { level: 42, move: Scary Face }
+  - { level: 43, move: Meteor Mash }
   - { level: 47, move: Psycrush }
-  - { level: 52, move: Meteor Mash }
+  - { level: 52, move: Iron Tail }
+  - { level: 57, move: Excalibur }
   - { level: 62, move: Iron Defense }
-  - { level: 72, move: Agility }
-  - { level: 82, move: Hyper Beam }
+  - { level: 70, move: Agility }
+  - { level: 70, move: Hyper Beam }

@@ -5,17 +5,23 @@ types: [Dark, Fairy]
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
+  - { level: 2, move: Cheap Shot }
   - { level: 5, move: Double Team }
   - { level: 10, move: Knock Off }
   - { level: 15, move: Glitter Tap }
   - { level: 20, move: Taunt }
   - { level: 22, move: Cutsie Slap }
   - { level: 25, move: Slash }
-  - { level: 30, move: Night Slash }
+  - { level: 29, move: Night Slash }
+  - { level: 30, move: Heel Drop }
   - { level: 35, move: Focus Energy }
   - { level: 40, move: Sucker Punch }
   - { level: 42, move: Pixie Slash }
+  - { level: 43, move: Backstab }
   - { level: 45, move: Swords Dance }
+  - { level: 46, move: Starfall Slam }
   - { level: 50, move: Future Sight }
   - { level: 55, move: Perish Song }
+  - { level: 57, move: Havoc }
+  - { level: 59, move: Faeblitz }
   - { level: 60, move: Secret Sword }

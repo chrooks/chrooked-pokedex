@@ -3,25 +3,28 @@ chrooked_id: swellow
 aka: { pokeemerald: SPECIES_SWELLOW }
 stats: { atk: 95, spa: 80 }
 learnset:
-  - { level: 1, move: Brave Bird }
-  - { level: 1, move: Air Slash }
-  - { level: 1, move: Pluck }
-  - { level: 1, move: Peck }
   - { level: 1, move: Growl }
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Quick Attack }
+  - { level: 1, move: Peck }
+  - { level: 2, move: Tackle }
+  - { level: 3, move: Air Slash }
+  - { level: 4, move: Pluck }
   - { level: 5, move: Focus Energy }
+  - { level: 6, move: Wing Attack }
   - { level: 9, move: Quick Attack }
-  - { level: 13, move: Wing Attack }
+  - { level: 13, move: Aerial Ace }
   - { level: 17, move: Double Team }
-  - { level: 21, move: Aerial Ace }
+  - { level: 21, move: Dive Bomb }
   - { level: 27, move: Quick Guard }
-  - { level: 30, move: Bail Out }
+  - { level: 29, move: Bail Out }
+  - { level: 30, move: Take Down }
   - { level: 33, move: Agility }
-  - { level: 36, move: Dive Bomb }
+  - { level: 36, move: Brave Bird }
   - { level: 36, move: Rampage }
   - { level: 36, move: Nosedive }
   - { level: 39, move: Air Slash }
   - { level: 45, move: Endeavor }
   - { level: 51, move: Brave Bird }
   - { level: 57, move: Reversal }
+  - { level: 58, move: Double-Edge }

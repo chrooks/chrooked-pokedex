@@ -7,20 +7,24 @@ abilities:
 stats: { spa: 130 }
 learnset:
   - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Copycat }
   - { level: 1, move: Lick }
   - { level: 1, move: Pound }
-  - { level: 1, move: Powder Snow }
-  - { level: 1, move: Copycat }
+  - { level: 2, move: Powder Snow }
   - { level: 12, move: Confusion }
+  - { level: 15, move: Dream Mist }
   - { level: 16, move: Covet }
+  - { level: 17, move: Icy Wind }
   - { level: 20, move: Sing }
   - { level: 24, move: Fake Tears }
   - { level: 28, move: Ice Punch }
+  - { level: 29, move: Ice Beam }
   - { level: 34, move: Psychic }
   - { level: 37, move: Mindwarp }
   - { level: 40, move: Lovely Kiss }
   - { level: 46, move: Mean Look }
   - { level: 52, move: Perish Song }
+  - { level: 57, move: Future Sight }
   - { level: 58, move: Blizzard }
   - { level: 64, move: Cryoblast }
 evolution: { from: Smoochum, method: { level: 24 } }

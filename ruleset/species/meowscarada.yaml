@@ -6,9 +6,9 @@ learnset:
   - { level: 0, move: Flower Trick }
   - { level: 1, move: Double Team }
   - { level: 1, move: Trick }
-  - { level: 1, move: Leafage }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Tail Whip }
+  - { level: 1, move: Leafage }
+  - { level: 2, move: Scratch }
   - { level: 4, move: Cheap Shot }
   - { level: 7, move: Bite }
   - { level: 10, move: Hone Claws }
@@ -27,5 +27,6 @@ learnset:
   - { level: 52, move: Backstab }
   - { level: 55, move: Sucker Punch }
   - { level: 55, move: Havoc }
+  - { level: 57, move: Power Whip }
   - { level: 58, move: Grassy Terrain }
   - { level: 64, move: Leaf Storm }

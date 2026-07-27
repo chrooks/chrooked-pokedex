@@ -8,11 +8,15 @@ learnset:
   - { level: 7, move: Jewel Glow }
   - { level: 10, move: Smack Down }
   - { level: 15, move: Rock Polish }
+  - { level: 16, move: Rock Slide }
   - { level: 20, move: Ancient Power }
   - { level: 25, move: Incinerate }
+  - { level: 29, move: Lithic Fang }
   - { level: 30, move: Stealth Rock }
   - { level: 35, move: Heat Crash }
   - { level: 37, move: Power Gem }
   - { level: 40, move: Rock Blast }
+  - { level: 43, move: Stone Edge }
   - { level: 48, move: Crystal Beam }
+  - { level: 57, move: Head Smash }
   - { level: 62, move: Meteor Surge }

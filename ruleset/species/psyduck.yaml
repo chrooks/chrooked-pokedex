@@ -14,11 +14,17 @@ learnset:
   - { level: 12, move: Water Pulse }
   - { level: 14, move: Water Whip }
   - { level: 15, move: Mind Flick }
+  - { level: 16, move: Dream Mist }
   - { level: 18, move: Zen Headbutt }
   - { level: 21, move: Screech }
   - { level: 24, move: Aqua Tail }
   - { level: 27, move: Soak }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Psych Up }
+  - { level: 31, move: Psychic }
   - { level: 34, move: Amnesia }
   - { level: 39, move: Wonder Room }
+  - { level: 43, move: Hydro Pump }
+  - { level: 45, move: Mindwarp }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Tsunami }

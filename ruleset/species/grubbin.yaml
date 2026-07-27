@@ -4,6 +4,7 @@ aka: { dex: 736 }
 learnset:
   - { level: 1, move: Vise Grip }
   - { level: 1, move: Mud-Slap }
+  - { level: 2, move: Fury Cutter }
   - { level: 5, move: String Shot }
   - { level: 10, move: Bug Bite }
   - { level: 15, move: Bite }
@@ -14,6 +15,8 @@ learnset:
   - { level: 30, move: X-Scissor }
   - { level: 35, move: Crunch }
   - { level: 40, move: Dig }
+  - { level: 43, move: Moltstrike }
   - { level: 45, move: Antennae Blast }
   - { level: 48, move: Lightning Slam }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Drone Chorus }

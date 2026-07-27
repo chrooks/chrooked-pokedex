@@ -6,24 +6,25 @@ abilities:
 learnset:
   - { level: 0, move: Disarming Voice }
   - { level: 1, move: Baton Pass }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Take Down }
-  - { level: 1, move: Double-Edge }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Bite }
   - { level: 1, move: Growl }
   - { level: 1, move: Copycat }
-  - { level: 1, move: Covet }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Helping Hand }
+  - { level: 2, move: Charm }
+  - { level: 3, move: Helping Hand }
+  - { level: 4, move: Tackle }
   - { level: 5, move: Sand Attack }
+  - { level: 6, move: Covet }
+  - { level: 7, move: Bite }
+  - { level: 8, move: Bail Out }
+  - { level: 9, move: Take Down }
   - { level: 10, move: Quick Attack }
   - { level: 15, move: Baby-Doll Eyes }
   - { level: 20, move: Swift }
   - { level: 22, move: Draining Kiss }
   - { level: 25, move: Light Screen }
-  - { level: 30, move: Beguile }
-  - { level: 35, move: Bail Out }
+  - { level: 29, move: Beguile }
+  - { level: 30, move: Dazzling Gleam }
+  - { level: 35, move: Double-Edge }
   - { level: 40, move: Skill Swap }
   - { level: 42, move: Pixie Slash }
   - { level: 45, move: Psych Up }

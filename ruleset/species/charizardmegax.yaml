@@ -4,21 +4,28 @@ aka: { pokeemerald: SPECIES_CHARIZARD_MEGA_X }
 stats: { spe: 101 }
 learnset:
   - { level: 0, move: Air Slash }
-  - { level: 1, move: Dragon Breath }
-  - { level: 1, move: Ember }
   - { level: 1, move: Growl }
-  - { level: 1, move: Gust }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Smokescreen }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Gust }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Maul }
+  - { level: 4, move: Scratch }
+  - { level: 5, move: Dragon Breath }
   - { level: 12, move: Wing Attack }
+  - { level: 15, move: Flame Wheel }
+  - { level: 17, move: Breaking Swipe }
   - { level: 19, move: Fire Fang }
   - { level: 24, move: Acrobatics }
   - { level: 30, move: Flamethrower }
   - { level: 36, move: Air Cutter }
   - { level: 39, move: Scary Face }
+  - { level: 43, move: Combust }
   - { level: 44, move: Dragon Claw }
+  - { level: 45, move: Dragon Hammer }
   - { level: 46, move: Heat Wave }
   - { level: 50, move: Hurricane }
   - { level: 54, move: Inferno }
+  - { level: 57, move: Outrage }
   - { level: 62, move: Bleakwind Storm }
   - { level: 68, move: Flare Blitz }

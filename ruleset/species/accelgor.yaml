@@ -4,27 +4,32 @@ aka: { pokeemerald: SPECIES_ACCELGOR }
 types: [Bug, Dark]
 learnset:
   - { level: 1, move: Water Shuriken }
-  - { level: 1, move: Acid }
   - { level: 1, move: Curse }
   - { level: 1, move: Yawn }
   - { level: 1, move: Acid Armor }
-  - { level: 1, move: Guard Swap }
-  - { level: 1, move: Body Slam }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Acid Spray }
-  - { level: 1, move: Quick Attack }
+  - { level: 2, move: Slander }
+  - { level: 3, move: Guard Swap }
+  - { level: 4, move: Double Team }
+  - { level: 5, move: Quick Attack }
+  - { level: 6, move: Acid }
+  - { level: 7, move: Absorb }
+  - { level: 8, move: Acid Spray }
+  - { level: 9, move: Body Slam }
   - { level: 12, move: Mega Drain }
+  - { level: 15, move: Snarl }
   - { level: 16, move: Struggle Bug }
   - { level: 20, move: Swift }
   - { level: 22, move: Signal Beam }
   - { level: 24, move: Agility }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: Dark Pulse }
   - { level: 32, move: Power Swap }
   - { level: 36, move: U-turn }
   - { level: 38, move: Bug Buzz }
   - { level: 40, move: Recover }
+  - { level: 43, move: Night Daze }
   - { level: 44, move: Antennae Blast }
   - { level: 48, move: Final Gambit }
   - { level: 52, move: Toxic }
+  - { level: 57, move: Eclipse }
   - { level: 60, move: Drone Chorus }

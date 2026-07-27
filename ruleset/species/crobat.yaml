@@ -12,6 +12,7 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Screech }
   - { level: 1, move: Supersonic }
+  - { level: 2, move: Peck }
   - { level: 5, move: Poison Sting }
   - { level: 10, move: Wing Attack }
   - { level: 15, move: Toxic }

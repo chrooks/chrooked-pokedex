@@ -9,24 +9,25 @@ learnset:
   - { level: 1, move: Disable }
   - { level: 1, move: Counter }
   - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Curse }
-  - { level: 1, move: Flail }
-  - { level: 1, move: Belly Drum }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Night Slash }
-  - { level: 1, move: Double Hit }
-  - { level: 1, move: Quick Guard }
-  - { level: 1, move: Final Gambit }
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
+  - { level: 2, move: Curse }
+  - { level: 3, move: Flail }
+  - { level: 4, move: Belly Drum }
   - { level: 5, move: Quick Attack }
+  - { level: 6, move: Feint }
+  - { level: 7, move: Double Hit }
   - { level: 8, move: Fury Cutter }
+  - { level: 9, move: Quick Guard }
+  - { level: 10, move: Final Gambit }
+  - { level: 11, move: Leer }
   - { level: 12, move: Metal Claw }
+  - { level: 13, move: Scratch }
+  - { level: 14, move: Night Slash }
   - { level: 15, move: Hone Claws }
   - { level: 19, move: False Swipe }
   - { level: 22, move: Power Trip }
   - { level: 26, move: Slash }
   - { level: 29, move: Crush Claw }
+  - { level: 30, move: Take Down }
   - { level: 36, move: Detect }
   - { level: 38, move: Rampage }
   - { level: 40, move: X-Scissor }
@@ -34,3 +35,4 @@ learnset:
   - { level: 47, move: Swords Dance }
   - { level: 50, move: Close Combat }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Double-Edge }

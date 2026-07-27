@@ -3,18 +3,20 @@ chrooked_id: darmanitangalarstandard
 aka: { pokeemerald: SPECIES_DARMANITAN_GALAR_STANDARD }
 learnset:
   - { level: 0, move: Icicle Crash }
-  - { level: 1, move: Icicle Crash }
+  - { level: 1, move: Taunt }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Taunt }
   - { level: 1, move: Bite }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Ice Punch }
   - { level: 12, move: Avalanche }
   - { level: 16, move: Work Up }
-  - { level: 20, move: Ice Punch }
+  - { level: 20, move: Icicle Crash }
   - { level: 24, move: Headbutt }
   - { level: 28, move: Ice Fang }
   - { level: 32, move: Uproar }
   - { level: 38, move: Belly Drum }
+  - { level: 43, move: Ice Hammer }
   - { level: 44, move: Blizzard }
   - { level: 50, move: Thrash }
   - { level: 56, move: Superpower }

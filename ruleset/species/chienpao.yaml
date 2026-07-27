@@ -5,19 +5,26 @@ learnset:
   - { level: 1, move: Spite }
   - { level: 1, move: Powder Snow }
   - { level: 1, move: Mean Look }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Ice Ball }
   - { level: 5, move: Icy Wind }
   - { level: 10, move: Payback }
   - { level: 15, move: Mist }
   - { level: 15, move: Haze }
+  - { level: 16, move: Ice Punch }
   - { level: 20, move: Ice Shard }
   - { level: 25, move: Swords Dance }
   - { level: 30, move: Snowscape }
   - { level: 35, move: Night Slash }
   - { level: 40, move: Dark Pulse }
+  - { level: 43, move: Throat Chop }
   - { level: 45, move: Icicle Crash }
+  - { level: 46, move: Ice Hammer }
   - { level: 50, move: Ruination }
   - { level: 55, move: Sucker Punch }
+  - { level: 57, move: Backstab }
+  - { level: 59, move: Icebreaker }
   - { level: 60, move: Sacred Sword }
   - { level: 65, move: Recover }
-  - { level: 70, move: Throat Chop }
-  - { level: 75, move: Sheer Cold }
+  - { level: 70, move: Havoc }
+  - { level: 70, move: Sheer Cold }

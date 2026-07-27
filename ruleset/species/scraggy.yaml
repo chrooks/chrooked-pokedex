@@ -5,10 +5,12 @@ stats: { atk: 80, hp: 55, spe: 50 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }
+  - { level: 2, move: Rock Smash }
   - { level: 4, move: Payback }
   - { level: 6, move: Cheap Shot }
   - { level: 8, move: Headbutt }
   - { level: 12, move: Sand Attack }
+  - { level: 15, move: Bite }
   - { level: 16, move: Facade }
   - { level: 20, move: Torment }
   - { level: 24, move: Beat Up }

@@ -4,14 +4,19 @@ aka: { dex: 21 }
 learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Growl }
+  - { level: 2, move: Tackle }
   - { level: 4, move: Leer }
   - { level: 8, move: Assurance }
   - { level: 11, move: Fury Attack }
   - { level: 15, move: Aerial Ace }
+  - { level: 16, move: Bail Out }
   - { level: 18, move: Wing Attack }
   - { level: 22, move: Take Down }
   - { level: 25, move: Agility }
   - { level: 29, move: Focus Energy }
   - { level: 32, move: Roost }
   - { level: 36, move: Drill Peck }
+  - { level: 43, move: Rampage }
   - { level: 46, move: Nosedive }
+  - { level: 57, move: Double-Edge }
+  - { level: 59, move: Brave Bird }

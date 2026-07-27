@@ -9,7 +9,8 @@ learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Quick Attack }
   - { level: 12, move: Double Kick }
-  - { level: 19, move: Flame Charge }
+  - { level: 15, move: Flame Charge }
+  - { level: 19, move: Flame Wheel }
   - { level: 24, move: Agility }
   - { level: 30, move: Headbutt }
   - { level: 36, move: Counter }
@@ -17,3 +18,4 @@ learnset:
   - { level: 39, move: Combust }
   - { level: 42, move: Bounce }
   - { level: 48, move: Double-Edge }
+  - { level: 57, move: Flare Blitz }

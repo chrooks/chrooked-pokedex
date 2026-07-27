@@ -11,13 +11,15 @@ learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Pound }
+  - { level: 2, move: Lick }
   - { level: 8, move: Shadow Sneak }
   - { level: 12, move: Shadow Punch }
   - { level: 16, move: Clod Toss }
   - { level: 20, move: Night Shade }
   - { level: 24, move: Stomping Tantrum }
   - { level: 28, move: Curse }
-  - { level: 32, move: Bulldoze }
+  - { level: 29, move: Bulldoze }
+  - { level: 32, move: Tectonic Fang }
   - { level: 36, move: Shadow Claw }
   - { level: 38, move: Wraithstrike }
   - { level: 40, move: Drain Punch }

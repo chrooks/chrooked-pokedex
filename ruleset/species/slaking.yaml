@@ -3,15 +3,16 @@ chrooked_id: slaking
 aka: {  }
 learnset:
   - { level: 0, move: Swagger }
-  - { level: 1, move: Scratch }
   - { level: 1, move: Encore }
   - { level: 1, move: Yawn }
   - { level: 1, move: Slack Off }
   - { level: 1, move: Sucker Punch }
+  - { level: 2, move: Scratch }
   - { level: 17, move: Amnesia }
   - { level: 23, move: Covet }
   - { level: 27, move: Throat Chop }
-  - { level: 30, move: Bail Out }
+  - { level: 29, move: Bail Out }
+  - { level: 30, move: Take Down }
   - { level: 33, move: Counter }
   - { level: 36, move: Rampage }
   - { level: 39, move: Flail }

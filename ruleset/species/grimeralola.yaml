@@ -8,11 +8,13 @@ abilities:
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Poison Gas }
+  - { level: 2, move: Poison Sting }
   - { level: 4, move: Harden }
   - { level: 7, move: Cheap Shot }
   - { level: 9, move: Bite }
   - { level: 12, move: Disable }
   - { level: 15, move: Acid Spray }
+  - { level: 16, move: Cross Poison }
   - { level: 18, move: Poison Fang }
   - { level: 21, move: Minimize }
   - { level: 26, move: Toxic }

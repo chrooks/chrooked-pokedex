@@ -7,19 +7,22 @@ stats: { spa: 100, spe: 80 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Mist }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Hydro Pump }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Mega Drain }
   - { level: 1, move: Fury Swipes }
   - { level: 1, move: Flail }
-  - { level: 1, move: Knock Off }
-  - { level: 1, move: Teeter Dance }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Energy Ball }
-  - { level: 1, move: Zen Headbutt }
-  - { level: 1, move: Fake Out }
-  - { level: 1, move: Rain Dance }
-  - { level: 1, move: Bubble Beam }
+  - { level: 2, move: Teeter Dance }
+  - { level: 3, move: Astonish }
+  - { level: 4, move: Rain Dance }
+  - { level: 5, move: Water Gun }
+  - { level: 6, move: Absorb }
+  - { level: 7, move: Mega Drain }
+  - { level: 8, move: Fake Out }
+  - { level: 9, move: Knock Off }
+  - { level: 10, move: Bubble Beam }
+  - { level: 11, move: Giga Drain }
+  - { level: 12, move: Zen Headbutt }
+  - { level: 13, move: Muddy Water }
+  - { level: 15, move: Energy Ball }
+  - { level: 29, move: Hydro Pump }
   - { level: 46, move: Siphon }
+  - { level: 57, move: Leaf Storm }
   - { level: 64, move: Tsunami }

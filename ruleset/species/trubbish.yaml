@@ -14,15 +14,21 @@ learnset:
   - { level: 9, move: Metal Claw }
   - { level: 12, move: Clear Smog }
   - { level: 15, move: Toxic Spikes }
+  - { level: 16, move: Mortal Spin }
+  - { level: 17, move: Smart Strike }
   - { level: 18, move: Sludge }
   - { level: 21, move: Stockpile }
   - { level: 21, move: Swallow }
   - { level: 24, move: Iron Defense }
   - { level: 27, move: Sludge Bomb }
+  - { level: 29, move: Cross Poison }
   - { level: 30, move: Toxic }
+  - { level: 31, move: Metallic Fang }
   - { level: 33, move: Belch }
-  - { level: 35, move: Mortal Spin }
+  - { level: 35, move: Gastric Snare }
   - { level: 37, move: Pain Split }
   - { level: 39, move: Venom Slam }
   - { level: 42, move: Explosion }
+  - { level: 43, move: Iron Tail }
   - { level: 46, move: Gunk Shot }
+  - { level: 57, move: Excalibur }

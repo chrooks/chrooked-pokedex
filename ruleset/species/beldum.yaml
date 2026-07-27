@@ -6,6 +6,13 @@ abilities:
   hidden: Battle Armor
 learnset:
   - { level: 1, move: Tackle }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Mind Flick }
+  - { level: 15, move: Smart Strike }
+  - { level: 17, move: Psycho Cut }
+  - { level: 29, move: Metallic Fang }
   - { level: 42, move: Astral Hand }
+  - { level: 43, move: Iron Tail }
   - { level: 46, move: Kinetic Slam }
+  - { level: 57, move: Excalibur }
   - { level: 62, move: Psycrush }

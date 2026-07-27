@@ -22,4 +22,5 @@ learnset:
   - { level: 44, move: Dazzling Gleam }
   - { level: 48, move: Mindwarp }
   - { level: 52, move: Teeter Dance }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Cryoblast }

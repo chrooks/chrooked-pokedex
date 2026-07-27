@@ -3,16 +3,18 @@ chrooked_id: arcaninehisui
 aka: { pokeemerald: SPECIES_ARCANINE_HISUI }
 learnset:
   - { level: 0, move: Extreme Speed }
-  - { level: 1, move: Extreme Speed }
-  - { level: 1, move: Flame Wheel }
-  - { level: 1, move: Fire Fang }
   - { level: 1, move: Howl }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Ember }
   - { level: 1, move: Leer }
-  - { level: 1, move: Rock Slide }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Flame Wheel }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Rollout }
+  - { level: 4, move: Bite }
   - { level: 5, move: Flamethrower }
+  - { level: 6, move: Rock Slide }
+  - { level: 7, move: Extreme Speed }
+  - { level: 8, move: Fire Fang }
+  - { level: 9, move: Crunch }
   - { level: 15, move: Morning Sun }
   - { level: 25, move: Body Slam }
   - { level: 30, move: Lithic Fang }

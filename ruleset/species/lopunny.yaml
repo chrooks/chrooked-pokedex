@@ -10,15 +10,18 @@ learnset:
   - { level: 1, move: Mirror Coat }
   - { level: 1, move: Magic Coat }
   - { level: 1, move: Splash }
-  - { level: 1, move: Pound }
   - { level: 1, move: Defense Curl }
-  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 2, move: Rock Smash }
+  - { level: 3, move: Baby-Doll Eyes }
+  - { level: 4, move: Pound }
   - { level: 9, move: Glitter Tap }
   - { level: 12, move: After You }
+  - { level: 15, move: Brick Break }
   - { level: 16, move: Quick Attack }
   - { level: 20, move: Double Kick }
   - { level: 24, move: Charm }
-  - { level: 32, move: Headbutt }
+  - { level: 29, move: Headbutt }
+  - { level: 32, move: Take Down }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Agility }
   - { level: 38, move: Rampage }
@@ -28,4 +31,5 @@ learnset:
   - { level: 48, move: Bounce }
   - { level: 52, move: Healing Wish }
   - { level: 56, move: High Jump Kick }
+  - { level: 57, move: Double-Edge }
 evolution: { from: Buneary, method: { level: 34 } }

@@ -12,9 +12,12 @@ learnset:
   - { level: 1, move: Nasty Plot }
   - { level: 1, move: Magnet Rise }
   - { level: 1, move: Recycle }
-  - { level: 1, move: Trick Room }
-  - { level: 1, move: Thunder Wave }
+  - { level: 2, move: Echoed Voice }
+  - { level: 3, move: Knell }
+  - { level: 4, move: Trick Room }
+  - { level: 5, move: Thunder Wave }
   - { level: 9, move: Hex }
+  - { level: 15, move: Swift }
   - { level: 16, move: Shadow Ball }
   - { level: 25, move: Conversion 2 }
   - { level: 30, move: Bail Out }
@@ -23,7 +26,8 @@ learnset:
   - { level: 42, move: Thunderbolt }
   - { level: 48, move: Resonance }
   - { level: 54, move: Lock-On }
+  - { level: 57, move: Specter Bomb }
   - { level: 58, move: Zap Cannon }
-  - { level: 64, move: Specter Bomb }
+  - { level: 64, move: Netherstorm }
   - { level: 70, move: Hyper Beam }
 evolution: { from: Porygon2, method: { item: DUBIOUSDISC } }

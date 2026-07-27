@@ -21,6 +21,8 @@ learnset:
   - { level: 41, move: Stockpile }
   - { level: 41, move: Spit Up }
   - { level: 41, move: Swallow }
-  - { level: 44, move: Energy Ball }
+  - { level: 43, move: Energy Ball }
+  - { level: 44, move: Siphon }
   - { level: 48, move: Crystal Beam }
+  - { level: 57, move: Leaf Storm }
   - { level: 62, move: Meteor Surge }

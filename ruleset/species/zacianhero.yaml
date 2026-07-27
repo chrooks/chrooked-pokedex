@@ -2,19 +2,23 @@ name: Zacian Hero
 chrooked_id: zacianhero
 aka: { dex: 888 }
 learnset:
-  - { level: 1, move: Bite }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Howl }
   - { level: 1, move: Quick Guard }
-  - { level: 1, move: Sacred Sword }
+  - { level: 1, move: Metal Claw }
+  - { level: 2, move: Glitter Tap }
+  - { level: 3, move: Bite }
+  - { level: 4, move: Sacred Sword }
   - { level: 11, move: Slash }
+  - { level: 15, move: Cutsie Slap }
   - { level: 22, move: Swords Dance }
   - { level: 33, move: Iron Head }
   - { level: 39, move: Pixie Slash }
+  - { level: 43, move: Starfall Slam }
   - { level: 44, move: Noble Roar }
   - { level: 49, move: Secret Sword }
   - { level: 55, move: Crunch }
+  - { level: 57, move: Faeblitz }
   - { level: 66, move: Moonblast }
-  - { level: 77, move: Close Combat }
-  - { level: 88, move: Giga Impact }
+  - { level: 70, move: Close Combat }
+  - { level: 70, move: Giga Impact }

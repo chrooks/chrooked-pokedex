@@ -6,14 +6,23 @@ learnset:
   - { level: 1, move: Ancient Power }
   - { level: 1, move: Noble Roar }
   - { level: 1, move: Freeze-Dry }
+  - { level: 2, move: Maul }
+  - { level: 3, move: Ice Ball }
   - { level: 8, move: Slash }
+  - { level: 15, move: Breaking Swipe }
   - { level: 16, move: Endeavor }
+  - { level: 17, move: Ice Punch }
   - { level: 24, move: Dragon Pulse }
+  - { level: 29, move: Draconic Fang }
+  - { level: 31, move: Glacial Crush }
   - { level: 32, move: Ice Beam }
   - { level: 40, move: Hyper Voice }
+  - { level: 43, move: Dragon Hammer }
+  - { level: 45, move: Ice Hammer }
   - { level: 48, move: Fusion Bolt }
   - { level: 56, move: Blizzard }
+  - { level: 57, move: Icebreaker }
   - { level: 64, move: Imprison }
-  - { level: 72, move: Outrage }
-  - { level: 80, move: Freeze Shock }
-  - { level: 88, move: Sheer Cold }
+  - { level: 70, move: Outrage }
+  - { level: 70, move: Freeze Shock }
+  - { level: 70, move: Sheer Cold }

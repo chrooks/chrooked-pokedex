@@ -5,9 +5,14 @@ learnset:
   - { level: 1, move: Struggle Bug }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Defense Curl }
+  - { level: 2, move: Fury Cutter }
   - { level: 15, move: Undertow }
+  - { level: 16, move: Bug Bite }
   - { level: 26, move: Water Whip }
+  - { level: 29, move: X-Scissor }
+  - { level: 31, move: Aqua Tail }
   - { level: 45, move: Maelstrom }
   - { level: 46, move: Moltstrike }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Wave Crash }

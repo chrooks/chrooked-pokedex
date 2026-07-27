@@ -4,14 +4,15 @@ aka: { dex: 133 }
 abilities:
   hidden: Normalize
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Growl }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Covet }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Covet }
   - { level: 5, move: Sand Attack }
   - { level: 10, move: Quick Attack }
   - { level: 15, move: Baby-Doll Eyes }
+  - { level: 16, move: Bail Out }
   - { level: 20, move: Swift }
   - { level: 25, move: Bite }
   - { level: 30, move: Copycat }

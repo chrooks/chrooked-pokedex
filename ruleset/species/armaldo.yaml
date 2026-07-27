@@ -8,12 +8,17 @@ learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Smack Down }
   - { level: 12, move: Metal Claw }
+  - { level: 15, move: Rock Slide }
   - { level: 16, move: Ancient Power }
   - { level: 20, move: Bug Bite }
   - { level: 24, move: Brine }
   - { level: 28, move: Slash }
+  - { level: 29, move: Lithic Fang }
   - { level: 32, move: Crush Claw }
   - { level: 36, move: Rock Blast }
   - { level: 39, move: X-Scissor }
   - { level: 43, move: Protect }
+  - { level: 44, move: Stone Edge }
   - { level: 48, move: Moltstrike }
+  - { level: 57, move: Head Smash }
+  - { level: 59, move: Megahorn }

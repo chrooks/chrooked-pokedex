@@ -9,23 +9,30 @@ stats: { hp: 75, atk: 90, def: 115, spa: 80, spd: 115, spe: 30 }
 learnset:
   - { level: 0, move: Block }
   - { level: 1, move: Confuse Ray }
-  - { level: 1, move: Confusion }
   - { level: 1, move: Gyro Ball }
   - { level: 1, move: Payback }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Confusion }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Mind Flick }
+  - { level: 4, move: Tackle }
   - { level: 6, move: Glint }
   - { level: 12, move: Metal Sound }
+  - { level: 15, move: Smart Strike }
+  - { level: 17, move: Psycho Cut }
   - { level: 18, move: Mirror Shot }
   - { level: 20, move: Hypnosis }
   - { level: 24, move: Iron Defense }
   - { level: 28, move: Extrasensory }
+  - { level: 29, move: Metallic Fang }
   - { level: 32, move: Heavy Slam }
   - { level: 38, move: Recover }
   - { level: 41, move: Luster Cannon }
   - { level: 41, move: Zen Headbutt }
   - { level: 42, move: Kinetic Slam }
+  - { level: 43, move: Iron Tail }
   - { level: 44, move: Cosmic Power }
   - { level: 50, move: Future Sight }
   - { level: 56, move: Trick Room }
+  - { level: 57, move: Excalibur }
   - { level: 62, move: Steel Beam }
   - { level: 62, move: Psycrush }

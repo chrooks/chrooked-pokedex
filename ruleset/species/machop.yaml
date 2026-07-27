@@ -6,6 +6,7 @@ abilities:
 learnset:
   - { level: 1, move: Low Kick }
   - { level: 1, move: Leer }
+  - { level: 2, move: Rock Smash }
   - { level: 4, move: Focus Energy }
   - { level: 6, move: Aura Spark }
   - { level: 8, move: Revenge }
@@ -23,4 +24,5 @@ learnset:
   - { level: 44, move: Dynamic Punch }
   - { level: 48, move: Cross Chop }
   - { level: 52, move: Double-Edge }
+  - { level: 57, move: Close Combat }
   - { level: 62, move: Focus Blast }

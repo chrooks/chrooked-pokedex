@@ -7,11 +7,13 @@ abilities:
 learnset:
   - { level: 1, move: Gust }
   - { level: 1, move: Leer }
+  - { level: 2, move: Peck }
   - { level: 6, move: Flatter }
   - { level: 9, move: Cheap Shot }
   - { level: 12, move: Pluck }
   - { level: 18, move: Tailwind }
   - { level: 24, move: Knock Off }
+  - { level: 29, move: Heel Drop }
   - { level: 30, move: Iron Defense }
   - { level: 36, move: Whirlwind }
   - { level: 39, move: Dive Bomb }
@@ -23,4 +25,4 @@ learnset:
   - { level: 54, move: Nasty Plot }
   - { level: 60, move: Defog }
   - { level: 66, move: Attract }
-  - { level: 72, move: Brave Bird }
+  - { level: 70, move: Brave Bird }

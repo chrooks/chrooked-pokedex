@@ -3,12 +3,15 @@ chrooked_id: gourgeistsmall
 aka: { dex: 711 }
 learnset:
   - { level: 1, move: Explosion }
-  - { level: 1, move: Moonblast }
   - { level: 1, move: Trick-or-Treat }
   - { level: 1, move: Astonish }
   - { level: 1, move: Shadow Sneak }
-  - { level: 1, move: Confuse Ray }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Leafage }
+  - { level: 4, move: Confuse Ray }
+  - { level: 5, move: Moonblast }
   - { level: 12, move: Razor Leaf }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Leech Seed }
   - { level: 20, move: Bullet Seed }
   - { level: 24, move: Trick-or-Treat }
@@ -22,4 +25,5 @@ learnset:
   - { level: 44, move: Pain Split }
   - { level: 46, move: Reap }
   - { level: 48, move: Phantom Force }
+  - { level: 57, move: Power Whip }
   - { level: 62, move: Necrosis }

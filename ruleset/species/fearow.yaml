@@ -4,11 +4,12 @@ aka: { pokeemerald: SPECIES_FEAROW }
 types: [Dark, Flying]
 stats: { hp: 77 }
 learnset:
-  - { level: 1, move: Drill Run }
-  - { level: 1, move: Pluck }
-  - { level: 1, move: Peck }
   - { level: 1, move: Growl }
   - { level: 1, move: Leer }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Pluck }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Drill Run }
   - { level: 4, move: Leer }
   - { level: 8, move: Assurance }
   - { level: 11, move: Fury Attack }
@@ -16,8 +17,12 @@ learnset:
   - { level: 18, move: Wing Attack }
   - { level: 23, move: Take Down }
   - { level: 27, move: Agility }
+  - { level: 29, move: Heel Drop }
   - { level: 32, move: Focus Energy }
   - { level: 36, move: Roost }
   - { level: 38, move: Drill Peck }
   - { level: 41, move: Nosedive }
+  - { level: 43, move: Backstab }
   - { level: 45, move: Drill Run }
+  - { level: 57, move: Havoc }
+  - { level: 59, move: Brave Bird }

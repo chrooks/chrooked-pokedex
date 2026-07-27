@@ -4,10 +4,11 @@ aka: { pokeemerald: SPECIES_DARMANITAN_STANDARD }
 learnset:
   - { level: 0, move: Hammer Arm }
   - { level: 1, move: Hammer Arm }
+  - { level: 1, move: Taunt }
   - { level: 1, move: Ember }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Taunt }
-  - { level: 1, move: Bite }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Bite }
   - { level: 12, move: Incinerate }
   - { level: 16, move: Work Up }
   - { level: 20, move: Fire Punch }

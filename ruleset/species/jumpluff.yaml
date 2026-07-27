@@ -9,14 +9,18 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Absorb }
   - { level: 1, move: Synthesis }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Peck }
   - { level: 8, move: Tackle }
   - { level: 10, move: Fairy Wind }
   - { level: 12, move: Poison Powder }
   - { level: 12, move: Stun Spore }
   - { level: 12, move: Sleep Powder }
   - { level: 15, move: Bullet Seed }
+  - { level: 16, move: Razor Leaf }
   - { level: 20, move: Leech Seed }
   - { level: 24, move: Mega Drain }
+  - { level: 29, move: Seed Bomb }
   - { level: 30, move: Acrobatics }
   - { level: 32, move: Galeburst }
   - { level: 35, move: Cotton Spore }
@@ -27,4 +31,6 @@ learnset:
   - { level: 46, move: Nosedive }
   - { level: 49, move: Bounce }
   - { level: 55, move: Memento }
+  - { level: 57, move: Power Whip }
+  - { level: 59, move: Brave Bird }
   - { level: 64, move: Tempest }

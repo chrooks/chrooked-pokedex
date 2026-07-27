@@ -8,11 +8,12 @@ abilities:
 stats: { atk: 115, spa: 95, spd: 80, spe: 50 }
 learnset:
   - { level: 1, move: Whirlpool }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Iron Defense }
   - { level: 1, move: Shell Smash }
+  - { level: 1, move: Water Gun }
+  - { level: 2, move: Cheap Shot }
   - { level: 3, move: Undertow }
+  - { level: 4, move: Bite }
   - { level: 5, move: Screech }
   - { level: 9, move: Scary Face }
   - { level: 11, move: Rain Dance }
@@ -26,7 +27,9 @@ learnset:
   - { level: 34, move: Crunch }
   - { level: 39, move: Aqua Tail }
   - { level: 42, move: Maelstrom }
+  - { level: 43, move: Backstab }
   - { level: 45, move: Coil }
   - { level: 50, move: Hydro Pump }
+  - { level: 57, move: Havoc }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

@@ -6,7 +6,11 @@ abilities:
 learnset:
   - { level: 1, move: Struggle Bug }
   - { level: 1, move: Powder Snow }
+  - { level: 15, move: Icy Wind }
+  - { level: 29, move: Ice Beam }
   - { level: 30, move: Signal Beam }
+  - { level: 31, move: Bug Buzz }
+  - { level: 43, move: Blizzard }
   - { level: 45, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Cryoblast }

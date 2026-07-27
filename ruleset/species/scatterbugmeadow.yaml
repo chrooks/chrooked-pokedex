@@ -2,4 +2,8 @@ name: Scatterbug Meadow
 chrooked_id: scatterbugmeadow
 aka: {  }
 learnset:
+  - { level: 1, move: Fury Cutter }
+  - { level: 15, move: Bug Bite }
+  - { level: 29, move: X-Scissor }
   - { level: 36, move: Moltstrike }
+  - { level: 57, move: Megahorn }

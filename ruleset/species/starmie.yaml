@@ -6,21 +6,23 @@ abilities:
   hidden: Victory Star
 stats: { spa: 110 }
 learnset:
-  - { level: 1, move: Rapid Spin }
   - { level: 1, move: Minimize }
-  - { level: 1, move: Swift }
-  - { level: 1, move: Psybeam }
-  - { level: 1, move: Brine }
   - { level: 1, move: Light Screen }
-  - { level: 1, move: Power Gem }
-  - { level: 1, move: Psychic }
-  - { level: 1, move: Surf }
   - { level: 1, move: Recover }
   - { level: 1, move: Cosmic Power }
-  - { level: 1, move: Hydro Pump }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Harden }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Confuse Ray }
+  - { level: 2, move: Confusion }
+  - { level: 3, move: Harden }
+  - { level: 4, move: Confuse Ray }
+  - { level: 5, move: Rapid Spin }
+  - { level: 6, move: Tackle }
+  - { level: 7, move: Water Gun }
+  - { level: 8, move: Swift }
+  - { level: 9, move: Psybeam }
+  - { level: 10, move: Brine }
+  - { level: 11, move: Power Gem }
+  - { level: 12, move: Psychic }
+  - { level: 13, move: Surf }
+  - { level: 14, move: Hydro Pump }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Tsunami }

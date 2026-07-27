@@ -13,6 +13,7 @@ learnset:
   - { level: 7, move: Quick Attack }
   - { level: 10, move: Flame Charge }
   - { level: 13, move: Wing Attack }
+  - { level: 15, move: Flame Wheel }
   - { level: 16, move: Fire Spin }
   - { level: 19, move: Acrobatics }
   - { level: 22, move: Agility }
@@ -26,3 +27,5 @@ learnset:
   - { level: 42, move: Fly }
   - { level: 45, move: Nosedive }
   - { level: 48, move: Combust }
+  - { level: 57, move: Flare Blitz }
+  - { level: 59, move: Brave Bird }

@@ -6,16 +6,19 @@ abilities:
   secondary: Bone Breaker
 stats: { hp: 60, atk: 95, def: 110, spa: 35, spd: 80, spe: 45 }
 learnset:
-  - { level: 1, move: Mud-Slap }
   - { level: 1, move: Growl }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Bone Club }
+  - { level: 1, move: Mud-Slap }
   - { level: 1, move: Clod Toss }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Bone Club }
   - { level: 12, move: Headbutt }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Rock Slide }
   - { level: 20, move: Stomping Tantrum }
   - { level: 24, move: Knock Off }
   - { level: 28, move: Bone Rush }
+  - { level: 29, move: Tectonic Fang }
   - { level: 32, move: Swords Dance }
   - { level: 38, move: Shadow Bone }
   - { level: 39, move: Wraithstrike }

@@ -8,22 +8,32 @@ abilities:
   hidden: Daydreamer
 stats: { spa: 48 }
 learnset:
-  - { level: 1, move: Confusion }
   - { level: 1, move: Disable }
   - { level: 1, move: Hypnosis }
   - { level: 1, move: Leer }
-  - { level: 1, move: Pound }
+  - { level: 1, move: Confusion }
+  - { level: 2, move: Mind Flick }
+  - { level: 3, move: Cheap Shot }
+  - { level: 4, move: Pound }
   - { level: 6, move: Nightmare }
   - { level: 10, move: Snarl }
   - { level: 14, move: Psybeam }
+  - { level: 15, move: Psycho Cut }
+  - { level: 17, move: Bite }
   - { level: 18, move: Nasty Plot }
   - { level: 22, move: Hex }
   - { level: 26, move: Dream Eater }
+  - { level: 29, move: Astral Hand }
   - { level: 30, move: Dark Pulse }
+  - { level: 31, move: Heel Drop }
   - { level: 34, move: Extrasensory }
   - { level: 38, move: Psychic Noise }
   - { level: 42, move: Foul Play }
+  - { level: 43, move: Kinetic Slam }
+  - { level: 45, move: Backstab }
   - { level: 46, move: Psyshock }
   - { level: 50, move: Psychic }
   - { level: 54, move: Dark Void }
+  - { level: 57, move: Psycrush }
+  - { level: 59, move: Havoc }
   - { level: 60, move: Future Sight }

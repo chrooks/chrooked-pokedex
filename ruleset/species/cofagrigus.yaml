@@ -4,23 +4,29 @@ aka: { pokeemerald: SPECIES_COFAGRIGUS }
 types: [Ghost, Steel]
 learnset:
   - { level: 0, move: Shadow Claw }
-  - { level: 1, move: Shadow Claw }
   - { level: 1, move: Scary Face }
   - { level: 1, move: Astonish }
   - { level: 1, move: Protect }
   - { level: 1, move: Haze }
-  - { level: 1, move: Night Shade }
+  - { level: 2, move: Glint }
+  - { level: 3, move: Night Shade }
+  - { level: 4, move: Shadow Claw }
   - { level: 6, move: Knell }
   - { level: 12, move: Disable }
+  - { level: 15, move: Mirror Shot }
   - { level: 16, move: Will-O-Wisp }
   - { level: 20, move: Crafty Shield }
   - { level: 24, move: Hex }
   - { level: 28, move: Mean Look }
+  - { level: 29, move: Flash Cannon }
   - { level: 32, move: Grudge }
   - { level: 38, move: Curse }
-  - { level: 44, move: Shadow Ball }
+  - { level: 43, move: Shadow Ball }
+  - { level: 44, move: Specter Bomb }
+  - { level: 45, move: Luster Cannon }
   - { level: 50, move: Dark Pulse }
   - { level: 56, move: Power Split }
   - { level: 56, move: Guard Split }
+  - { level: 57, move: Steel Beam }
   - { level: 59, move: Netherstorm }
   - { level: 62, move: Destiny Bond }

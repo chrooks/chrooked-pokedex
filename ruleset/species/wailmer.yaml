@@ -3,6 +3,7 @@ chrooked_id: wailmer
 aka: { dex: 320 }
 learnset:
   - { level: 1, move: Splash }
+  - { level: 2, move: Undertow }
   - { level: 3, move: Growl }
   - { level: 6, move: Astonish }
   - { level: 12, move: Water Gun }
@@ -12,11 +13,14 @@ learnset:
   - { level: 21, move: Heavy Slam }
   - { level: 24, move: Brine }
   - { level: 27, move: Whirlpool }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Dive }
   - { level: 33, move: Bounce }
   - { level: 36, move: Body Slam }
   - { level: 39, move: Rest }
   - { level: 42, move: Amnesia }
+  - { level: 43, move: Maelstrom }
   - { level: 45, move: Hydro Pump }
   - { level: 48, move: Water Spout }
+  - { level: 57, move: Wave Crash }
   - { level: 64, move: Tsunami }

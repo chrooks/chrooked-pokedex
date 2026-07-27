@@ -20,4 +20,6 @@ learnset:
   - { level: 37, move: Psyshock }
   - { level: 37, move: Mindwarp }
   - { level: 40, move: Charge Beam }
+  - { level: 43, move: Hurricane }
+  - { level: 57, move: Future Sight }
   - { level: 64, move: Tempest }

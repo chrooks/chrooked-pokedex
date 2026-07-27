@@ -7,7 +7,7 @@ learnset:
   - { level: 1, move: Charge }
   - { level: 1, move: Magnetic Flux }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Thunder Shock }
+  - { level: 2, move: Thunder Shock }
   - { level: 9, move: Spark }
   - { level: 11, move: Rollout }
   - { level: 13, move: Screech }
@@ -19,6 +19,8 @@ learnset:
   - { level: 32, move: Short Circuit }
   - { level: 36, move: Magnet Rise }
   - { level: 41, move: Discharge }
+  - { level: 43, move: Thunder }
   - { level: 47, move: Explosion }
   - { level: 54, move: Gyro Ball }
+  - { level: 57, move: Zap Cannon }
   - { level: 58, move: Mirror Coat }

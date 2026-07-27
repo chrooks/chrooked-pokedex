@@ -9,12 +9,19 @@ learnset:
   - { level: 1, move: Smack Down }
   - { level: 8, move: Jewel Glow }
   - { level: 15, move: Rock Polish }
+  - { level: 16, move: Rock Slide }
+  - { level: 17, move: Flame Wheel }
   - { level: 20, move: Ancient Power }
   - { level: 27, move: Incinerate }
+  - { level: 29, move: Lithic Fang }
+  - { level: 31, move: Cinder Smash }
   - { level: 35, move: Stealth Rock }
   - { level: 38, move: Power Gem }
   - { level: 38, move: Crystal Beam }
   - { level: 41, move: Heat Crash }
+  - { level: 43, move: Combust }
   - { level: 48, move: Rock Blast }
   - { level: 55, move: Stone Edge }
+  - { level: 57, move: Head Smash }
+  - { level: 59, move: Flare Blitz }
   - { level: 62, move: Meteor Surge }

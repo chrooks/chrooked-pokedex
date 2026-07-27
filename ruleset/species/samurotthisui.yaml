@@ -7,12 +7,12 @@ abilities:
 stats: { hp: 95, atk: 115 }
 learnset:
   - { level: 0, move: Ceaseless Edge }
-  - { level: 1, move: Slash }
   - { level: 1, move: Sucker Punch }
-  - { level: 1, move: Megahorn }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Slash }
+  - { level: 3, move: Megahorn }
   - { level: 7, move: Undertow }
   - { level: 7, move: Cheap Shot }
   - { level: 13, move: Focus Energy }
@@ -20,6 +20,7 @@ learnset:
   - { level: 21, move: Fury Cutter }
   - { level: 25, move: Water Pulse }
   - { level: 29, move: Aerial Ace }
+  - { level: 30, move: Heel Drop }
   - { level: 34, move: Aqua Jet }
   - { level: 36, move: Aura Sphere }
   - { level: 39, move: Encore }

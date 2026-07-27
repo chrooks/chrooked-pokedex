@@ -6,16 +6,21 @@ abilities:
   secondary: Coil Up
 stats: { def: 90, spa: 110, spd: 90 }
 learnset:
-  - { level: 1, move: Headbutt }
-  - { level: 1, move: Aqua Tail }
-  - { level: 1, move: Acid }
-  - { level: 1, move: Zap Cannon }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Crush Claw }
   - { level: 1, move: Gastro Acid }
-  - { level: 1, move: Discharge }
   - { level: 1, move: Coil }
-  - { level: 5, move: Lightning Slam }
-  - { level: 26, move: Water Whip }
+  - { level: 1, move: Acid }
+  - { level: 1, move: Headbutt }
+  - { level: 2, move: Undertow }
+  - { level: 3, move: Nuzzle }
+  - { level: 4, move: Crush Claw }
+  - { level: 5, move: Spark }
+  - { level: 6, move: Water Whip }
+  - { level: 7, move: Crunch }
+  - { level: 8, move: Discharge }
+  - { level: 9, move: Zap Cannon }
+  - { level: 15, move: Lightning Slam }
+  - { level: 26, move: Aqua Tail }
+  - { level: 43, move: Maelstrom }
   - { level: 46, move: Arc Strike }
   - { level: 48, move: Wild Charge }
+  - { level: 57, move: Wave Crash }

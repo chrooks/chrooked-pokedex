@@ -5,14 +5,16 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Peck }
   - { level: 1, move: Mimic }
+  - { level: 2, move: Tackle }
   - { level: 6, move: Quick Attack }
   - { level: 10, move: Torment }
   - { level: 13, move: Aerial Ace }
   - { level: 17, move: Fury Attack }
   - { level: 20, move: Taunt }
   - { level: 24, move: Uproar }
+  - { level: 29, move: Facade }
   - { level: 30, move: Fly }
-  - { level: 34, move: Facade }
+  - { level: 34, move: Take Down }
   - { level: 36, move: Dive Bomb }
   - { level: 36, move: Rampage }
   - { level: 36, move: Nosedive }
@@ -20,3 +22,4 @@ learnset:
   - { level: 42, move: Brave Bird }
   - { level: 47, move: Roost }
   - { level: 52, move: Reversal }
+  - { level: 57, move: Double-Edge }

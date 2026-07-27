@@ -6,15 +6,18 @@ learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Growl }
   - { level: 1, move: Wild Charge }
+  - { level: 2, move: Rock Smash }
   - { level: 3, move: Thunder Shock }
   - { level: 6, move: Quick Attack }
   - { level: 8, move: Charge }
   - { level: 12, move: Nuzzle }
   - { level: 15, move: Dig }
+  - { level: 16, move: Brick Break }
   - { level: 19, move: Bite }
   - { level: 23, move: Spark }
   - { level: 25, move: Arm Thrust }
   - { level: 29, move: Thunder Wave }
+  - { level: 30, move: One-Inch Punch }
   - { level: 33, move: Body Slam }
   - { level: 36, move: Lightning Slam }
   - { level: 36, move: Arc Strike }

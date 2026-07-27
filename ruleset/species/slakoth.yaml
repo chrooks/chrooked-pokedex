@@ -10,6 +10,8 @@ learnset:
   - { level: 17, move: Amnesia }
   - { level: 22, move: Headbutt }
   - { level: 25, move: Throat Chop }
+  - { level: 29, move: Take Down }
   - { level: 33, move: Flail }
   - { level: 38, move: Play Rough }
   - { level: 46, move: Rampage }
+  - { level: 57, move: Double-Edge }

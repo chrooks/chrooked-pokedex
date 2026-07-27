@@ -11,12 +11,15 @@ learnset:
   - { level: 0, move: Last Respects }
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 2, move: Clod Toss }
   - { level: 3, move: Lick }
   - { level: 6, move: Tail Whip }
   - { level: 6, move: Bite }
   - { level: 9, move: Roar }
   - { level: 12, move: Headbutt }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Dig }
+  - { level: 17, move: Bulldoze }
   - { level: 24, move: Rest }
   - { level: 28, move: Crunch }
   - { level: 30, move: Lithic Fang }
@@ -25,8 +28,10 @@ learnset:
   - { level: 38, move: Wraithstrike }
   - { level: 39, move: Interment }
   - { level: 41, move: Helping Hand }
+  - { level: 43, move: Earthquake }
   - { level: 46, move: Phantom Force }
   - { level: 51, move: Charm }
+  - { level: 57, move: Faultbreak }
   - { level: 58, move: Double-Edge }
   - { level: 62, move: Necrosis }
 evolution: { from: Greavard, method: { level: 32 } }

@@ -5,16 +5,16 @@ abilities:
   hidden: Carnivore
 stats: { atk: 135, spe: 60 }
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Fire Fang }
   - { level: 1, move: Leer }
-  - { level: 1, move: Ice Fang }
-  - { level: 1, move: Rock Throw }
-  - { level: 1, move: Thunder Fang }
-  - { level: 1, move: Dark Pulse }
   - { level: 1, move: Payback }
   - { level: 1, move: Iron Defense }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Rock Throw }
+  - { level: 3, move: Fire Fang }
+  - { level: 4, move: Ice Fang }
   - { level: 5, move: Cheap Shot }
+  - { level: 6, move: Thunder Fang }
+  - { level: 7, move: Dark Pulse }
   - { level: 9, move: Bite }
   - { level: 12, move: Scary Face }
   - { level: 15, move: Smack Down }
@@ -31,4 +31,5 @@ learnset:
   - { level: 47, move: Sandstorm }
   - { level: 52, move: Hyper Beam }
   - { level: 55, move: Havoc }
+  - { level: 57, move: Head Smash }
   - { level: 59, move: Giga Impact }

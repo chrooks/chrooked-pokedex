@@ -8,18 +8,18 @@ stats: { atk: 95, def: 106 }
 learnset:
   - { level: 0, move: Obstruct }
   - { level: 1, move: Obstruct }
-  - { level: 1, move: Cross Chop }
-  - { level: 1, move: Submission }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Switcheroo }
   - { level: 1, move: Pin Missile }
   - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Lick }
+  - { level: 2, move: Leer }
+  - { level: 3, move: Sand Attack }
+  - { level: 4, move: Tackle }
   - { level: 5, move: Cheap Shot }
+  - { level: 6, move: Lick }
+  - { level: 7, move: Night Slash }
+  - { level: 8, move: Submission }
   - { level: 9, move: Snarl }
+  - { level: 10, move: Cross Chop }
   - { level: 12, move: Headbutt }
   - { level: 15, move: Hone Claws }
   - { level: 18, move: Fury Swipes }

@@ -19,3 +19,4 @@ learnset:
   - { level: 41, move: Discharge }
   - { level: 45, move: Last Resort }
   - { level: 49, move: Thunder }
+  - { level: 57, move: Zap Cannon }

@@ -14,9 +14,11 @@ learnset:
   - { level: 20, move: Hex }
   - { level: 24, move: Brine }
   - { level: 28, move: Recover }
+  - { level: 29, move: Muddy Water }
   - { level: 32, move: Shadow Ball }
   - { level: 36, move: Whirlpool }
   - { level: 41, move: Hydro Pump }
+  - { level: 43, move: Specter Bomb }
   - { level: 44, move: Destiny Bond }
   - { level: 48, move: Water Spout }
   - { level: 64, move: Netherstorm }

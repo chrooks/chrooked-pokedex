@@ -4,13 +4,13 @@ aka: { pokeemerald: SPECIES_MARILL }
 abilities:
   primary: Huge Power
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Rollout }
   - { level: 1, move: Defense Curl }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Water Gun }
   - { level: 3, move: Undertow }
+  - { level: 4, move: Rollout }
   - { level: 6, move: Bubble Beam }
   - { level: 9, move: Charm }
   - { level: 12, move: Body Slam }

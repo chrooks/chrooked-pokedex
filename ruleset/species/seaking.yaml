@@ -8,16 +8,17 @@ abilities:
 stats: { atk: 120, spa: 75, spe: 75, def: 75 }
 learnset:
   - { level: 0, move: Aqua Step }
-  - { level: 1, move: Aqua Cutter }
   - { level: 1, move: Aqua Jet }
-  - { level: 1, move: Horn Attack }
-  - { level: 1, move: Peck }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Whip }
+  - { level: 1, move: Peck }
+  - { level: 1, move: Aqua Cutter }
+  - { level: 2, move: Glitter Tap }
+  - { level: 3, move: Horn Attack }
   - { level: 5, move: Undertow }
   - { level: 8, move: Razor Shell }
   - { level: 12, move: Soak }
   - { level: 15, move: Agility }
+  - { level: 16, move: Cutsie Slap }
   - { level: 18, move: Aqua Tail }
   - { level: 22, move: Icicle Spear }
   - { level: 26, move: Play Rough }
@@ -28,6 +29,7 @@ learnset:
   - { level: 42, move: Maelstrom }
   - { level: 46, move: Swords Dance }
   - { level: 50, move: Megahorn }
+  - { level: 57, move: Faeblitz }
   - { level: 58, move: Wave Crash }
   - { level: 62, move: Horn Drill }
 evolution: { from: Goldeen, method: { level: 30 } }

@@ -3,21 +3,26 @@ chrooked_id: weezinggalar
 aka: { pokeemerald: SPECIES_WEEZING_GALAR }
 learnset:
   - { level: 0, move: Double Hit }
-  - { level: 1, move: Strange Steam }
   - { level: 1, move: Defog }
-  - { level: 1, move: Heat Wave }
   - { level: 1, move: Aromatic Mist }
   - { level: 1, move: Poison Gas }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Smog }
   - { level: 1, move: Haze }
-  - { level: 1, move: Smokescreen }
+  - { level: 2, move: Poison Sting }
+  - { level: 3, move: Smokescreen }
+  - { level: 4, move: Tackle }
+  - { level: 5, move: Smog }
+  - { level: 6, move: Strange Steam }
+  - { level: 7, move: Heat Wave }
   - { level: 9, move: Glitter Tap }
   - { level: 12, move: Clear Smog }
+  - { level: 15, move: Cross Poison }
   - { level: 16, move: Assurance }
+  - { level: 17, move: Cutsie Slap }
   - { level: 20, move: Sludge }
   - { level: 24, move: Fairy Wind }
   - { level: 28, move: Self-Destruct }
+  - { level: 29, move: Gastric Snare }
+  - { level: 31, move: Pixie Slash }
   - { level: 32, move: Sludge Bomb }
   - { level: 38, move: Toxic }
   - { level: 41, move: Venom Slam }
@@ -26,6 +31,7 @@ learnset:
   - { level: 50, move: Explosion }
   - { level: 53, move: Faeblitz }
   - { level: 56, move: Memento }
+  - { level: 57, move: Gunk Shot }
   - { level: 62, move: Destiny Bond }
   - { level: 68, move: Misty Terrain }
 evolution: { from: Koffing, method: { level: 35 } }

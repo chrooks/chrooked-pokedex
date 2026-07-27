@@ -4,14 +4,17 @@ aka: {  }
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: String Shot }
+  - { level: 2, move: Fury Cutter }
   - { level: 5, move: Absorb }
   - { level: 8, move: Infestation }
   - { level: 12, move: Scary Face }
   - { level: 15, move: Night Shade }
+  - { level: 16, move: Bug Bite }
   - { level: 19, move: Shadow Sneak }
   - { level: 22, move: Fury Swipes }
   - { level: 26, move: Sucker Punch }
   - { level: 29, move: Agility }
+  - { level: 30, move: X-Scissor }
   - { level: 33, move: Pin Missile }
   - { level: 36, move: Psychic }
   - { level: 38, move: Moltstrike }
@@ -20,3 +23,5 @@ learnset:
   - { level: 44, move: Venom Slam }
   - { level: 47, move: Sticky Web }
   - { level: 51, move: Toxic Thread }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Gunk Shot }

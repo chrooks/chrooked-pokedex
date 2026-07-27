@@ -4,14 +4,18 @@ aka: {  }
 learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Protect }
+  - { level: 2, move: Lick }
   - { level: 4, move: Haze }
   - { level: 6, move: Clod Toss }
   - { level: 8, move: Night Shade }
   - { level: 12, move: Disable }
+  - { level: 15, move: Bulldoze }
   - { level: 16, move: Brutal Swing }
+  - { level: 17, move: Shadow Claw }
   - { level: 20, move: Crafty Shield }
   - { level: 24, move: Hex }
   - { level: 28, move: Mean Look }
+  - { level: 29, move: Tectonic Fang }
   - { level: 32, move: Body Slam }
   - { level: 36, move: Curse }
   - { level: 38, move: Wraithstrike }

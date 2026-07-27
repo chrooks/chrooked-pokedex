@@ -4,20 +4,25 @@ aka: { pokeemerald: SPECIES_BARBARACLE }
 stats: { atk: 115, spa: 86, spd: 68, spe: 54 }
 learnset:
   - { level: 1, move: Skull Bash }
+  - { level: 1, move: Withdraw }
   - { level: 1, move: Mud-Slap }
   - { level: 1, move: Scratch }
-  - { level: 1, move: Withdraw }
-  - { level: 1, move: Water Gun }
+  - { level: 2, move: Rollout }
+  - { level: 3, move: Water Gun }
   - { level: 6, move: Undertow }
   - { level: 12, move: Fury Cutter }
+  - { level: 15, move: Rock Slide }
   - { level: 16, move: Fury Swipes }
   - { level: 20, move: Ancient Power }
   - { level: 24, move: Rock Polish }
   - { level: 28, move: Slash }
+  - { level: 29, move: Lithic Fang }
+  - { level: 31, move: Razor Shell }
   - { level: 32, move: Hone Claws }
-  - { level: 36, move: Razor Shell }
+  - { level: 36, move: Aqua Tail }
   - { level: 39, move: Maelstrom }
   - { level: 42, move: Shell Smash }
   - { level: 48, move: Cross Chop }
   - { level: 54, move: Stone Edge }
+  - { level: 57, move: Head Smash }
   - { level: 60, move: Wave Crash }

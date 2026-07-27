@@ -6,13 +6,13 @@ abilities:
   hidden: Death Grip
 stats: { atk: 110, def: 120 }
 learnset:
-  - { level: 1, move: Thunder Fang }
-  - { level: 1, move: Ice Fang }
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: Leer }
   - { level: 1, move: Hone Claws }
+  - { level: 1, move: Poison Sting }
   - { level: 1, move: Fell Stinger }
+  - { level: 2, move: Thunder Fang }
+  - { level: 3, move: Ice Fang }
+  - { level: 4, move: Fire Fang }
   - { level: 5, move: Cheap Shot }
   - { level: 9, move: Cross Poison }
   - { level: 12, move: Bite }
@@ -30,4 +30,5 @@ learnset:
   - { level: 44, move: X-Scissor }
   - { level: 49, move: Acupressure }
   - { level: 54, move: Backstab }
+  - { level: 57, move: Gunk Shot }
   - { level: 60, move: Havoc }

@@ -8,14 +8,15 @@ abilities:
 stats: { atk: 100, spa: 75, spd: 70 }
 learnset:
   - { level: 1, move: Growl }
+  - { level: 1, move: Quick Attack }
   - { level: 1, move: Peck }
   - { level: 1, move: Ember }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Flame Charge }
-  - { level: 1, move: Fire Fang }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Flame Wheel }
   - { level: 5, move: Wing Attack }
   - { level: 10, move: Acrobatics }
   - { level: 15, move: Agility }
+  - { level: 16, move: Fire Fang }
   - { level: 20, move: Aerial Ace }
   - { level: 25, move: Roost }
   - { level: 29, move: Swords Dance }

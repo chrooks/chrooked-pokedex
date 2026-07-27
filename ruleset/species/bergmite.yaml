@@ -7,11 +7,13 @@ abilities:
 learnset:
   - { level: 1, move: Harden }
   - { level: 1, move: Rapid Spin }
+  - { level: 2, move: Ice Ball }
   - { level: 3, move: Tackle }
   - { level: 6, move: Powder Snow }
   - { level: 9, move: Curse }
   - { level: 12, move: Icy Wind }
   - { level: 15, move: Protect }
+  - { level: 16, move: Ice Punch }
   - { level: 18, move: Avalanche }
   - { level: 21, move: Bite }
   - { level: 24, move: Ice Fang }
@@ -21,4 +23,5 @@ learnset:
   - { level: 36, move: Take Down }
   - { level: 39, move: Blizzard }
   - { level: 42, move: Double-Edge }
+  - { level: 43, move: Ice Hammer }
   - { level: 64, move: Icebreaker }

@@ -17,4 +17,5 @@ learnset:
   - { level: 38, move: Hyper Voice }
   - { level: 42, move: Will-O-Wisp }
   - { level: 47, move: Fire Blast }
+  - { level: 57, move: Overheat }
   - { level: 64, move: Netherstorm }

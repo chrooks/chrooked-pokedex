@@ -6,6 +6,7 @@ abilities:
   secondary: Frighten
 learnset:
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Struggle Bug }
   - { level: 6, move: Quick Attack }
   - { level: 9, move: Sweet Scent }
   - { level: 14, move: Soak }
@@ -13,10 +14,13 @@ learnset:
   - { level: 22, move: Agility }
   - { level: 25, move: Mist }
   - { level: 25, move: Haze }
-  - { level: 30, move: Signal Beam }
+  - { level: 29, move: Signal Beam }
+  - { level: 30, move: Bug Buzz }
   - { level: 30, move: Galeburst }
+  - { level: 31, move: Muddy Water }
   - { level: 35, move: Baton Pass }
   - { level: 38, move: Sticky Web }
+  - { level: 43, move: Hydro Pump }
   - { level: 45, move: Antennae Blast }
   - { level: 60, move: Drone Chorus }
   - { level: 64, move: Tsunami }

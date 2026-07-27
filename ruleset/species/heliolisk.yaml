@@ -8,18 +8,23 @@ abilities:
 stats: { spa: 115, spe: 112 }
 learnset:
   - { level: 1, move: Eerie Impulse }
-  - { level: 1, move: Discharge }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Charge }
-  - { level: 1, move: Bulldoze }
-  - { level: 1, move: Volt Switch }
-  - { level: 1, move: Parabolic Charge }
   - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Thunderbolt }
-  - { level: 1, move: Electrify }
-  - { level: 1, move: Thunder }
-  - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Thunder Shock }
+  - { level: 2, move: Echoed Voice }
+  - { level: 3, move: Electrify }
+  - { level: 4, move: Tail Whip }
+  - { level: 5, move: Mud-Slap }
+  - { level: 6, move: Pound }
+  - { level: 7, move: Thunder Shock }
+  - { level: 8, move: Bulldoze }
+  - { level: 9, move: Volt Switch }
+  - { level: 10, move: Parabolic Charge }
+  - { level: 11, move: Discharge }
+  - { level: 12, move: Thunderbolt }
+  - { level: 13, move: Thunder }
+  - { level: 15, move: Swift }
+  - { level: 29, move: Uproar }
   - { level: 46, move: Resonance }
+  - { level: 57, move: Zap Cannon }
+  - { level: 59, move: Hyper Beam }

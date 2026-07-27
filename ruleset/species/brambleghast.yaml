@@ -6,13 +6,18 @@ learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Rollout }
   - { level: 1, move: Astonish }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Lick }
   - { level: 5, move: Absorb }
   - { level: 9, move: Rapid Spin }
   - { level: 13, move: Bullet Seed }
+  - { level: 15, move: Razor Leaf }
   - { level: 17, move: Infestation }
+  - { level: 18, move: Shadow Claw }
   - { level: 21, move: Hex }
   - { level: 25, move: Mega Drain }
   - { level: 29, move: Disable }
+  - { level: 30, move: Seed Bomb }
   - { level: 35, move: Phantom Force }
   - { level: 36, move: Reap }
   - { level: 37, move: Wraithstrike }

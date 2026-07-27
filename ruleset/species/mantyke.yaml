@@ -4,6 +4,7 @@ aka: {  }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Gust }
   - { level: 4, move: Supersonic }
   - { level: 8, move: Wing Attack }
   - { level: 12, move: Water Pulse }
@@ -11,10 +12,12 @@ learnset:
   - { level: 20, move: Agility }
   - { level: 24, move: Bubble Beam }
   - { level: 28, move: Headbutt }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Air Slash }
   - { level: 32, move: Galeburst }
   - { level: 36, move: Aqua Ring }
   - { level: 40, move: Bounce }
+  - { level: 43, move: Hurricane }
   - { level: 44, move: Take Down }
   - { level: 48, move: Hydro Pump }
   - { level: 64, move: Tsunami }

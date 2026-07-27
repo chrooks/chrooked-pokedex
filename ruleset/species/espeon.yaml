@@ -7,26 +7,31 @@ abilities:
   hidden: Psyonize
 learnset:
   - { level: 0, move: Confusion }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Take Down }
-  - { level: 1, move: Double-Edge }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Bite }
   - { level: 1, move: Growl }
   - { level: 1, move: Copycat }
-  - { level: 1, move: Covet }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Baton Pass }
+  - { level: 2, move: Ember }
+  - { level: 3, move: Charm }
+  - { level: 4, move: Baton Pass }
   - { level: 5, move: Sand Attack }
+  - { level: 6, move: Tackle }
+  - { level: 7, move: Covet }
+  - { level: 8, move: Bite }
+  - { level: 9, move: Bail Out }
   - { level: 10, move: Quick Attack }
+  - { level: 11, move: Take Down }
   - { level: 15, move: Baby-Doll Eyes }
+  - { level: 16, move: Incinerate }
   - { level: 20, move: Swift }
   - { level: 25, move: Psybeam }
+  - { level: 29, move: Flamethrower }
   - { level: 30, move: Morning Sun }
-  - { level: 35, move: Bail Out }
+  - { level: 35, move: Double-Edge }
   - { level: 40, move: Psychic }
+  - { level: 43, move: Fire Blast }
   - { level: 44, move: Mindwarp }
   - { level: 45, move: Psych Up }
   - { level: 50, move: Future Sight }
   - { level: 55, move: Last Resort }
+  - { level: 57, move: Overheat }

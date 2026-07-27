@@ -22,3 +22,4 @@ learnset:
   - { level: 48, move: Stone Edge }
   - { level: 50, move: Outrage }
   - { level: 55, move: Superpower }
+  - { level: 57, move: Head Smash }

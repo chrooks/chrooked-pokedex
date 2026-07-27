@@ -8,25 +8,28 @@ stats: { hp: 100, spe: 45 }
 learnset:
   - { level: 0, move: Stomp }
   - { level: 1, move: Growth }
-  - { level: 1, move: Leaf Storm }
-  - { level: 1, move: Seed Bomb }
   - { level: 1, move: Worry Seed }
   - { level: 1, move: Bullet Seed }
-  - { level: 1, move: Extrasensory }
-  - { level: 1, move: Uproar }
   - { level: 1, move: Synthesis }
-  - { level: 1, move: Psyshock }
-  - { level: 1, move: Reflect }
-  - { level: 1, move: Hypnosis }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Solar Beam }
-  - { level: 1, move: Leech Seed }
-  - { level: 1, move: Mega Drain }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Wood Hammer }
-  - { level: 1, move: Giga Drain }
-  - { level: 36, move: Siphon }
+  - { level: 2, move: Reflect }
+  - { level: 3, move: Hypnosis }
+  - { level: 4, move: Solar Beam }
+  - { level: 5, move: Leech Seed }
+  - { level: 6, move: Confusion }
+  - { level: 7, move: Mega Drain }
+  - { level: 8, move: Absorb }
+  - { level: 9, move: Giga Drain }
+  - { level: 10, move: Seed Bomb }
+  - { level: 11, move: Dream Mist }
+  - { level: 12, move: Uproar }
+  - { level: 13, move: Extrasensory }
+  - { level: 14, move: Energy Ball }
+  - { level: 15, move: Psyshock }
+  - { level: 16, move: Wood Hammer }
+  - { level: 29, move: Siphon }
+  - { level: 36, move: Leaf Storm }
   - { level: 45, move: Cataclysm }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Future Sight }
   - { level: 60, move: Draco Meteor }
 evolution: { from: Exeggcute, method: { item: LEAFSTONE } }

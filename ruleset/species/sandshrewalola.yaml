@@ -7,12 +7,15 @@ abilities:
 learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Scratch }
+  - { level: 2, move: Ice Ball }
   - { level: 3, move: Mist }
   - { level: 6, move: Powder Snow }
   - { level: 9, move: Rollout }
   - { level: 12, move: Fury Cutter }
   - { level: 15, move: Rapid Spin }
-  - { level: 18, move: Metal Claw }
+  - { level: 16, move: Ice Punch }
+  - { level: 17, move: Metal Claw }
+  - { level: 18, move: Smart Strike }
   - { level: 21, move: Swift }
   - { level: 24, move: Fury Swipes }
   - { level: 27, move: Iron Defense }
@@ -22,5 +25,8 @@ learnset:
   - { level: 37, move: Glacial Crush }
   - { level: 39, move: Swords Dance }
   - { level: 42, move: Snowscape }
+  - { level: 43, move: Ice Hammer }
   - { level: 45, move: Blizzard }
+  - { level: 46, move: Iron Tail }
   - { level: 47, move: Icebreaker }
+  - { level: 57, move: Excalibur }

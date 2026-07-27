@@ -3,18 +3,22 @@ chrooked_id: slowbrogalar
 aka: { dex: 80 }
 learnset:
   - { level: 0, move: Shell Side Arm }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Acid }
   - { level: 1, move: Withdraw }
   - { level: 1, move: Curse }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Poison Sting }
+  - { level: 3, move: Acid }
   - { level: 9, move: Yawn }
   - { level: 12, move: Confusion }
   - { level: 15, move: Mind Flick }
+  - { level: 16, move: Cross Poison }
+  - { level: 17, move: Psycho Cut }
   - { level: 18, move: Water Pulse }
   - { level: 21, move: Headbutt }
   - { level: 24, move: Zen Headbutt }
   - { level: 27, move: Amnesia }
+  - { level: 29, move: Gastric Snare }
   - { level: 30, move: Surf }
   - { level: 33, move: Slack Off }
   - { level: 36, move: Psychic }
@@ -23,5 +27,6 @@ learnset:
   - { level: 39, move: Psych Up }
   - { level: 42, move: Rain Dance }
   - { level: 45, move: Heal Pulse }
+  - { level: 57, move: Gunk Shot }
   - { level: 62, move: Psycrush }
   - { level: 64, move: Contagion }

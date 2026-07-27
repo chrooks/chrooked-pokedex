@@ -9,18 +9,22 @@ learnset:
   - { level: 0, move: Sand Tomb }
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Growl }
-  - { level: 1, move: Tri Attack }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Night Slash }
-  - { level: 1, move: Clod Toss }
+  - { level: 1, move: Metal Claw }
+  - { level: 2, move: Clod Toss }
+  - { level: 3, move: Night Slash }
+  - { level: 4, move: Tri Attack }
   - { level: 12, move: Mud-Slap }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Bulldoze }
   - { level: 20, move: Sucker Punch }
   - { level: 24, move: Iron Head }
+  - { level: 29, move: Tectonic Fang }
   - { level: 30, move: Sandstorm }
   - { level: 36, move: Dig }
   - { level: 42, move: Earth Power }
+  - { level: 43, move: Iron Tail }
   - { level: 48, move: Earthquake }
   - { level: 54, move: Fissure }
   - { level: 56, move: Faultbreak }
+  - { level: 57, move: Excalibur }

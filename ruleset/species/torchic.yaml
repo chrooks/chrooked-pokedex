@@ -11,6 +11,7 @@ learnset:
   - { level: 12, move: Detect }
   - { level: 15, move: Sand Attack }
   - { level: 16, move: Chi Wave }
+  - { level: 17, move: Incinerate }
   - { level: 18, move: Aerial Ace }
   - { level: 21, move: Slash }
   - { level: 24, move: Bounce }
@@ -21,8 +22,10 @@ learnset:
   - { level: 39, move: Cinder Smash }
   - { level: 41, move: Aura Sphere }
   - { level: 43, move: Combust }
+  - { level: 44, move: Fire Blast }
   - { level: 45, move: Ki Blast }
   - { level: 46, move: Flare Blitz }
   - { level: 46, move: One-Inch Punch }
   - { level: 48, move: Cross Chop }
+  - { level: 57, move: Overheat }
   - { level: 62, move: Focus Blast }

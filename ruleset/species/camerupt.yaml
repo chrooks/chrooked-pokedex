@@ -6,14 +6,16 @@ abilities:
 stats: { hp: 80, atk: 95, def: 75, spa: 120 }
 learnset:
   - { level: 0, move: Rock Slide }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Ember }
   - { level: 1, move: Fissure }
   - { level: 1, move: Focus Energy }
   - { level: 1, move: Eruption }
+  - { level: 2, move: Mud-Slap }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Ember }
   - { level: 12, move: Bulldoze }
   - { level: 15, move: Incinerate }
+  - { level: 16, move: Mud Shot }
   - { level: 19, move: Amnesia }
   - { level: 22, move: Lava Plume }
   - { level: 26, move: Earth Power }
@@ -21,5 +23,7 @@ learnset:
   - { level: 31, move: Take Down }
   - { level: 39, move: Yawn }
   - { level: 42, move: Quagmire }
+  - { level: 43, move: Fire Blast }
   - { level: 46, move: Earthquake }
+  - { level: 57, move: Overheat }
   - { level: 62, move: Sinkhole }

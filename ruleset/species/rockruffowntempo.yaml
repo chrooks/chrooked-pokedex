@@ -19,3 +19,4 @@ learnset:
   - { level: 40, move: Scary Face }
   - { level: 44, move: Stealth Rock }
   - { level: 48, move: Stone Edge }
+  - { level: 57, move: Head Smash }

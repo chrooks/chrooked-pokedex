@@ -8,14 +8,20 @@ learnset:
   - { level: 1, move: Leech Seed }
   - { level: 1, move: Wrap }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Acid }
   - { level: 1, move: Confuse Ray }
+  - { level: 2, move: Rollout }
+  - { level: 3, move: Leafage }
+  - { level: 4, move: Acid }
   - { level: 6, move: Jewel Glow }
   - { level: 12, move: Ingrain }
+  - { level: 15, move: Rock Slide }
   - { level: 16, move: Ancient Power }
+  - { level: 17, move: Razor Leaf }
   - { level: 20, move: Mega Drain }
   - { level: 24, move: Brine }
   - { level: 28, move: Amnesia }
+  - { level: 29, move: Lithic Fang }
+  - { level: 31, move: Seed Bomb }
   - { level: 32, move: Gastro Acid }
   - { level: 36, move: Giga Drain }
   - { level: 39, move: Power Gem }
@@ -23,6 +29,9 @@ learnset:
   - { level: 43, move: Stockpile }
   - { level: 43, move: Spit Up }
   - { level: 43, move: Swallow }
+  - { level: 44, move: Stone Edge }
   - { level: 45, move: Reap }
   - { level: 48, move: Energy Ball }
+  - { level: 57, move: Head Smash }
+  - { level: 59, move: Power Whip }
   - { level: 62, move: Meteor Surge }

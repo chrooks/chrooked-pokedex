@@ -4,13 +4,18 @@ aka: { dex: 781 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Rapid Spin }
+  - { level: 2, move: Lick }
+  - { level: 3, move: Leafage }
   - { level: 4, move: Astonish }
   - { level: 8, move: Wrap }
   - { level: 12, move: Mega Drain }
+  - { level: 15, move: Shadow Claw }
   - { level: 16, move: Growth }
+  - { level: 17, move: Razor Leaf }
   - { level: 20, move: Gyro Ball }
   - { level: 24, move: Switcheroo }
   - { level: 28, move: Giga Drain }
+  - { level: 29, move: Seed Bomb }
   - { level: 32, move: Whirlpool }
   - { level: 36, move: Heavy Slam }
   - { level: 38, move: Wraithstrike }

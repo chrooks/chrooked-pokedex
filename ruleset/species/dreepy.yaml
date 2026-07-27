@@ -6,9 +6,13 @@ learnset:
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Astonish }
   - { level: 1, move: Infestation }
+  - { level: 2, move: Lick }
   - { level: 15, move: Maul }
+  - { level: 16, move: Shadow Claw }
   - { level: 24, move: Breaking Swipe }
+  - { level: 29, move: Draconic Fang }
   - { level: 36, move: Dragon Hammer }
   - { level: 42, move: Wraithstrike }
   - { level: 48, move: Interment }
+  - { level: 57, move: Outrage }
   - { level: 62, move: Necrosis }

@@ -3,20 +3,25 @@ chrooked_id: ironthorns
 aka: { pokeemerald: SPECIES_IRON_THORNS }
 learnset:
   - { level: 1, move: Electric Terrain }
+  - { level: 1, move: Iron Defense }
   - { level: 1, move: Rock Throw }
   - { level: 1, move: Fire Fang }
-  - { level: 1, move: Ice Fang }
-  - { level: 1, move: Iron Defense }
-  - { level: 1, move: Thunder Fang }
+  - { level: 2, move: Nuzzle }
+  - { level: 3, move: Ice Fang }
+  - { level: 4, move: Spark }
   - { level: 7, move: Screech }
+  - { level: 15, move: Thunder Fang }
   - { level: 21, move: Rock Tomb }
   - { level: 28, move: Bite }
+  - { level: 29, move: Rock Slide }
   - { level: 35, move: Charge }
-  - { level: 42, move: Rock Slide }
+  - { level: 42, move: Lithic Fang }
+  - { level: 43, move: Arc Strike }
   - { level: 49, move: Sandstorm }
   - { level: 56, move: Wild Charge }
+  - { level: 57, move: Stone Edge }
   - { level: 63, move: Pin Missile }
+  - { level: 70, move: Head Smash }
   - { level: 70, move: Earthquake }
-  - { level: 77, move: Stealth Rock }
-  - { level: 84, move: Stone Edge }
-  - { level: 91, move: Giga Impact }
+  - { level: 70, move: Stealth Rock }
+  - { level: 70, move: Giga Impact }

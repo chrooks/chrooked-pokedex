@@ -4,11 +4,14 @@ aka: {  }
 learnset:
   - { level: 1, move: Stored Power }
   - { level: 1, move: Play Nice }
+  - { level: 2, move: Echoed Voice }
   - { level: 5, move: Encore }
   - { level: 10, move: Disarming Voice }
   - { level: 15, move: Psybeam }
+  - { level: 16, move: Swift }
   - { level: 20, move: Helping Hand }
   - { level: 25, move: After You }
+  - { level: 29, move: Uproar }
   - { level: 30, move: Healing Wish }
   - { level: 35, move: Psychic }
   - { level: 37, move: Resonance }
@@ -17,3 +20,5 @@ learnset:
   - { level: 45, move: Power Split }
   - { level: 50, move: Psychic Terrain }
   - { level: 55, move: Last Resort }
+  - { level: 57, move: Future Sight }
+  - { level: 59, move: Hyper Beam }

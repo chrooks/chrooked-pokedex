@@ -6,11 +6,11 @@ abilities:
 stats: { hp: 80, atk: 90, spd: 75, spe: 40 }
 learnset:
   - { level: 0, move: Iron Head }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Harden }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Fire Fang }
   - { level: 1, move: Thunder Fang }
-  - { level: 1, move: Ice Fang }
+  - { level: 2, move: Ice Fang }
   - { level: 5, move: Metal Claw }
   - { level: 9, move: Clod Toss }
   - { level: 11, move: Bite }
@@ -28,5 +28,6 @@ learnset:
   - { level: 48, move: Body Press }
   - { level: 52, move: Head Smash }
   - { level: 56, move: Double-Edge }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Earthquake }
   - { level: 64, move: Faultbreak }

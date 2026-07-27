@@ -7,10 +7,12 @@ stats: { atk: 65 }
 learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Fairy Wind }
+  - { level: 2, move: Glitter Tap }
   - { level: 4, move: Baby-Doll Eyes }
   - { level: 7, move: Metal Claw }
   - { level: 10, move: Covet }
   - { level: 13, move: Draining Kiss }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Iron Defense }
   - { level: 19, move: Body Slam }
   - { level: 22, move: Cutsie Slap }
@@ -20,6 +22,8 @@ learnset:
   - { level: 35, move: Heavy Slam }
   - { level: 37, move: Starfall Slam }
   - { level: 40, move: Swords Dance }
+  - { level: 43, move: Iron Tail }
   - { level: 45, move: Hammer Arm }
   - { level: 55, move: Rock Slide }
+  - { level: 57, move: Excalibur }
   - { level: 64, move: Faeblitz }

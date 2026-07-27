@@ -7,15 +7,15 @@ abilities:
   hidden: Defiant
 learnset:
   - { level: 0, move: Night Slash }
-  - { level: 1, move: Night Slash }
   - { level: 1, move: Switcheroo }
   - { level: 1, move: Pin Missile }
   - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Lick }
+  - { level: 2, move: Sand Attack }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Lick }
   - { level: 5, move: Cheap Shot }
+  - { level: 6, move: Night Slash }
   - { level: 9, move: Snarl }
   - { level: 12, move: Headbutt }
   - { level: 15, move: Hone Claws }

@@ -10,6 +10,7 @@ learnset:
   - { level: 1, move: Smokescreen }
   - { level: 1, move: Smog }
   - { level: 12, move: Clear Smog }
+  - { level: 15, move: Incinerate }
   - { level: 16, move: Flame Wheel }
   - { level: 20, move: Confuse Ray }
   - { level: 24, move: Scary Face }
@@ -20,6 +21,7 @@ learnset:
   - { level: 43, move: Cinder Smash }
   - { level: 46, move: Flamethrower }
   - { level: 52, move: Sunny Day }
+  - { level: 57, move: Overheat }
   - { level: 58, move: Fire Blast }
   - { level: 64, move: Hyper Beam }
 evolution: { from: Magby, method: { level: 24 } }

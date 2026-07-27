@@ -15,5 +15,8 @@ learnset:
   - { level: 31, move: Volt Switch }
   - { level: 36, move: Discharge }
   - { level: 40, move: Galeburst }
+  - { level: 43, move: Thunder }
+  - { level: 45, move: Hurricane }
+  - { level: 57, move: Zap Cannon }
   - { level: 64, move: Oblivion Wing }
   - { level: 64, move: Tempest }

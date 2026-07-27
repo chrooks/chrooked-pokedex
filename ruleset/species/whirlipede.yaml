@@ -7,14 +7,18 @@ abilities:
 learnset:
   - { level: 0, move: Iron Defense }
   - { level: 1, move: Iron Defense }
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: Defense Curl }
-  - { level: 1, move: Rollout }
   - { level: 1, move: Protect }
+  - { level: 1, move: Poison Sting }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Rollout }
   - { level: 12, move: Poison Tail }
+  - { level: 15, move: Cross Poison }
   - { level: 16, move: Screech }
   - { level: 20, move: Bug Bite }
   - { level: 26, move: Venoshock }
+  - { level: 29, move: X-Scissor }
+  - { level: 31, move: Gastric Snare }
   - { level: 32, move: Take Down }
   - { level: 38, move: Agility }
   - { level: 41, move: Venom Slam }
@@ -22,3 +26,5 @@ learnset:
   - { level: 44, move: Toxic }
   - { level: 50, move: Venom Drench }
   - { level: 56, move: Double-Edge }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Gunk Shot }

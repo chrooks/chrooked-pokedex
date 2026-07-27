@@ -5,6 +5,7 @@ abilities:
   hidden: Carnivore
 learnset:
   - { level: 1, move: Infestation }
+  - { level: 2, move: Fury Cutter }
   - { level: 4, move: Bug Bite }
   - { level: 6, move: Undertow }
   - { level: 8, move: Bite }
@@ -22,5 +23,6 @@ learnset:
   - { level: 40, move: Maelstrom }
   - { level: 44, move: Moltstrike }
   - { level: 48, move: Mirror Coat }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }

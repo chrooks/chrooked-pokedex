@@ -17,4 +17,5 @@ learnset:
   - { level: 43, move: Recover }
   - { level: 48, move: Calm Mind }
   - { level: 54, move: Wonder Room }
-  - { level: 60, move: Mindwarp }
+  - { level: 57, move: Mindwarp }
+  - { level: 60, move: Future Sight }

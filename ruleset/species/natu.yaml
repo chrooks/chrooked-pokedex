@@ -4,9 +4,12 @@ aka: {  }
 learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Leer }
+  - { level: 2, move: Gust }
   - { level: 5, move: Stored Power }
   - { level: 10, move: Teleport }
   - { level: 15, move: Confuse Ray }
+  - { level: 16, move: Dream Mist }
+  - { level: 17, move: Air Slash }
   - { level: 20, move: Night Shade }
   - { level: 26, move: Psycho Shift }
   - { level: 30, move: Power Swap }
@@ -15,5 +18,6 @@ learnset:
   - { level: 35, move: Psychic }
   - { level: 37, move: Mindwarp }
   - { level: 40, move: Wish }
+  - { level: 43, move: Hurricane }
   - { level: 45, move: Future Sight }
   - { level: 64, move: Tempest }

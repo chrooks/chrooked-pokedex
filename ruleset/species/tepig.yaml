@@ -8,6 +8,7 @@ learnset:
   - { level: 9, move: Endure }
   - { level: 13, move: Defense Curl }
   - { level: 15, move: Flame Charge }
+  - { level: 16, move: Flame Wheel }
   - { level: 19, move: Smog }
   - { level: 21, move: Rollout }
   - { level: 25, move: Take Down }

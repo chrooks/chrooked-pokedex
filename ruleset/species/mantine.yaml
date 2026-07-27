@@ -3,22 +3,25 @@ chrooked_id: mantine
 aka: { pokeemerald: SPECIES_MANTINE }
 stats: { hp: 85 }
 learnset:
-  - { level: 1, move: Psybeam }
   - { level: 1, move: Bullet Seed }
   - { level: 1, move: Roost }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Supersonic }
-  - { level: 1, move: Wing Attack }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Gust }
+  - { level: 3, move: Water Gun }
+  - { level: 4, move: Psybeam }
+  - { level: 5, move: Wing Attack }
   - { level: 12, move: Water Pulse }
   - { level: 16, move: Wide Guard }
   - { level: 20, move: Agility }
   - { level: 24, move: Bubble Beam }
   - { level: 28, move: Headbutt }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Air Slash }
   - { level: 32, move: Galeburst }
   - { level: 36, move: Aqua Ring }
   - { level: 40, move: Bounce }
+  - { level: 43, move: Hurricane }
   - { level: 44, move: Take Down }
   - { level: 48, move: Hydro Pump }
   - { level: 64, move: Tsunami }

@@ -4,17 +4,22 @@ aka: { pokeemerald: SPECIES_CRAMORANT }
 stats: { spa: 95, spd: 85 }
 learnset:
   - { level: 1, move: Belch }
-  - { level: 1, move: Peck }
   - { level: 1, move: Stockpile }
   - { level: 1, move: Spit Up }
   - { level: 1, move: Swallow }
+  - { level: 2, move: Gust }
+  - { level: 3, move: Peck }
   - { level: 7, move: Water Gun }
   - { level: 14, move: Fury Attack }
+  - { level: 15, move: Air Slash }
+  - { level: 17, move: Water Pulse }
   - { level: 21, move: Pluck }
   - { level: 28, move: Dive }
+  - { level: 29, move: Muddy Water }
   - { level: 31, move: Galeburst }
   - { level: 35, move: Drill Peck }
   - { level: 42, move: Amnesia }
+  - { level: 43, move: Hurricane }
   - { level: 49, move: Thrash }
   - { level: 56, move: Hydro Pump }
   - { level: 64, move: Tsunami }

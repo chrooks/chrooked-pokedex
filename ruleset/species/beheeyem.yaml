@@ -6,10 +6,10 @@ abilities:
 stats: { def: 85 }
 learnset:
   - { level: 1, move: Psychic Terrain }
-  - { level: 1, move: Confusion }
   - { level: 1, move: Growl }
   - { level: 1, move: Imprison }
   - { level: 1, move: Teleport }
+  - { level: 2, move: Confusion }
   - { level: 18, move: Psybeam }
   - { level: 24, move: Power Split }
   - { level: 24, move: Guard Split }
@@ -18,5 +18,6 @@ learnset:
   - { level: 40, move: Psychic }
   - { level: 45, move: Recover }
   - { level: 52, move: Calm Mind }
+  - { level: 57, move: Mindwarp }
   - { level: 60, move: Wonder Room }
-  - { level: 68, move: Mindwarp }
+  - { level: 68, move: Future Sight }

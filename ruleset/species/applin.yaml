@@ -5,11 +5,20 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Withdraw }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Maul }
   - { level: 4, move: Sweet Scent }
   - { level: 8, move: Bullet Seed }
   - { level: 12, move: Acid Spray }
+  - { level: 15, move: Razor Leaf }
   - { level: 16, move: Dragon Tail }
+  - { level: 17, move: Breaking Swipe }
   - { level: 20, move: Recover }
+  - { level: 29, move: Seed Bomb }
+  - { level: 31, move: Draconic Fang }
   - { level: 36, move: Reap }
+  - { level: 43, move: Dragon Hammer }
   - { level: 45, move: Cataclysm }
+  - { level: 57, move: Power Whip }
+  - { level: 59, move: Outrage }
   - { level: 60, move: Draco Meteor }

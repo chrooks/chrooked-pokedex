@@ -5,8 +5,8 @@ learnset:
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Wrap }
   - { level: 1, move: Minimize }
-  - { level: 1, move: Brutal Swing }
   - { level: 1, move: Clod Toss }
+  - { level: 2, move: Brutal Swing }
   - { level: 15, move: Bulldoze }
   - { level: 20, move: Headbutt }
   - { level: 25, move: Glare }
@@ -15,6 +15,7 @@ learnset:
   - { level: 30, move: Tectonic Fang }
   - { level: 35, move: Sandstorm }
   - { level: 42, move: Body Slam }
+  - { level: 43, move: Earthquake }
   - { level: 49, move: Coil }
   - { level: 51, move: Sand Tomb }
   - { level: 64, move: Faultbreak }

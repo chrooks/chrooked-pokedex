@@ -10,9 +10,10 @@ learnset:
   - { level: 1, move: Astonish }
   - { level: 8, move: Clear Smog }
   - { level: 12, move: Fire Spin }
+  - { level: 15, move: Flame Charge }
   - { level: 16, move: Will-O-Wisp }
   - { level: 20, move: Night Shade }
-  - { level: 24, move: Flame Charge }
+  - { level: 24, move: Flame Wheel }
   - { level: 28, move: Incinerate }
   - { level: 32, move: Lava Plume }
   - { level: 38, move: Wraithstrike }
@@ -20,4 +21,5 @@ learnset:
   - { level: 43, move: Cinder Smash }
   - { level: 46, move: Combust }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Flare Blitz }
   - { level: 62, move: Necrosis }

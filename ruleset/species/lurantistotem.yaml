@@ -5,10 +5,10 @@ learnset:
   - { level: 0, move: Petal Blizzard }
   - { level: 1, move: Growth }
   - { level: 1, move: Solar Beam }
-  - { level: 1, move: Fury Cutter }
   - { level: 1, move: Ingrain }
-  - { level: 1, move: Night Slash }
-  - { level: 1, move: Leafage }
+  - { level: 1, move: Fury Cutter }
+  - { level: 2, move: Leafage }
+  - { level: 3, move: Night Slash }
   - { level: 15, move: Razor Leaf }
   - { level: 20, move: Sweet Scent }
   - { level: 25, move: Slash }
@@ -18,4 +18,5 @@ learnset:
   - { level: 44, move: Reap }
   - { level: 51, move: Sunny Day }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Power Whip }
   - { level: 63, move: Solar Blade }

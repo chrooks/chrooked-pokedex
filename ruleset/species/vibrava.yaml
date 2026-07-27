@@ -9,23 +9,32 @@ learnset:
   - { level: 0, move: Dragon Breath }
   - { level: 1, move: Supersonic }
   - { level: 1, move: Fissure }
-  - { level: 1, move: Crunch }
-  - { level: 1, move: Superpower }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Bulldoze }
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Dig }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Maul }
+  - { level: 4, move: Dig }
+  - { level: 5, move: Clod Toss }
+  - { level: 6, move: Bulldoze }
+  - { level: 7, move: Bite }
+  - { level: 8, move: Crunch }
+  - { level: 9, move: Superpower }
   - { level: 12, move: Mud-Slap }
+  - { level: 15, move: Bug Bite }
   - { level: 16, move: Sand Tomb }
+  - { level: 17, move: Breaking Swipe }
   - { level: 20, move: Dragon Tail }
   - { level: 24, move: Screech }
   - { level: 28, move: Bug Buzz }
+  - { level: 29, move: X-Scissor }
+  - { level: 31, move: Draconic Fang }
   - { level: 32, move: Sandstorm }
   - { level: 38, move: Earth Power }
+  - { level: 43, move: Moltstrike }
   - { level: 44, move: Earthquake }
+  - { level: 45, move: Dragon Hammer }
   - { level: 50, move: Uproar }
   - { level: 53, move: Faultbreak }
   - { level: 56, move: Dragon Rush }
+  - { level: 57, move: Megahorn }
   - { level: 62, move: Boomburst }

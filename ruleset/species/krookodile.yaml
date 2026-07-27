@@ -9,10 +9,11 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Hone Claws }
   - { level: 1, move: Power Trip }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Clod Toss }
   - { level: 9, move: Sand Tomb }
   - { level: 12, move: Scary Face }
   - { level: 15, move: Bite }
+  - { level: 16, move: Bulldoze }
   - { level: 18, move: Torment }
   - { level: 21, move: Dig }
   - { level: 24, move: Swagger }

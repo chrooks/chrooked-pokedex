@@ -7,11 +7,11 @@ abilities:
   hidden: Ice Body
 stats: { hp: 80, def: 70, spd: 95 }
 learnset:
-  - { level: 1, move: Icy Wind }
-  - { level: 1, move: Powder Snow }
-  - { level: 1, move: Struggle Bug }
   - { level: 1, move: Helping Hand }
   - { level: 1, move: Attract }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Struggle Bug }
+  - { level: 2, move: Icy Wind }
   - { level: 4, move: Stun Spore }
   - { level: 8, move: Infestation }
   - { level: 12, move: Mist }
@@ -20,6 +20,7 @@ learnset:
   - { level: 24, move: Aurora Beam }
   - { level: 26, move: Signal Beam }
   - { level: 28, move: Hail }
+  - { level: 29, move: Ice Beam }
   - { level: 32, move: Bug Buzz }
   - { level: 36, move: Aurora Veil }
   - { level: 38, move: Antennae Blast }

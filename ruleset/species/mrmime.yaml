@@ -7,10 +7,10 @@ learnset:
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Power Swap }
   - { level: 1, move: Guard Swap }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Baton Pass }
-  - { level: 1, move: Encore }
+  - { level: 2, move: Copycat }
+  - { level: 3, move: Baton Pass }
+  - { level: 4, move: Encore }
+  - { level: 5, move: Pound }
   - { level: 12, move: Confusion }
   - { level: 16, move: Role Play }
   - { level: 20, move: Protect }
@@ -25,3 +25,4 @@ learnset:
   - { level: 44, move: Dazzling Gleam }
   - { level: 48, move: Mindwarp }
   - { level: 52, move: Teeter Dance }
+  - { level: 57, move: Future Sight }

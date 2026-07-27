@@ -12,23 +12,27 @@ learnset:
   - { level: 1, move: Feint }
   - { level: 1, move: Poison Tail }
   - { level: 1, move: Acid Spray }
-  - { level: 1, move: Dragon Breath }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Water Gun }
+  - { level: 2, move: Twister }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Absorb }
+  - { level: 5, move: Water Gun }
+  - { level: 6, move: Dragon Breath }
   - { level: 8, move: Glint }
   - { level: 15, move: Protect }
   - { level: 18, move: Mirror Shot }
   - { level: 20, move: Flail }
   - { level: 25, move: Water Pulse }
+  - { level: 29, move: Dragon Pulse }
   - { level: 30, move: Rain Dance }
   - { level: 30, move: Draconic Fang }
   - { level: 36, move: Luster Cannon }
   - { level: 36, move: Cataclysm }
   - { level: 43, move: Curse }
+  - { level: 44, move: Muddy Water }
   - { level: 49, move: Body Slam }
   - { level: 53, move: Steel Beam }
   - { level: 53, move: Draco Meteor }
-  - { level: 58, move: Muddy Water }
+  - { level: 57, move: Hydro Pump }
+  - { level: 58, move: Tsunami }
   - { level: 67, move: Power Whip }
 evolution: { from: Sliggoo, method: { level: 45 } }

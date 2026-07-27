@@ -5,23 +5,27 @@ abilities:
   secondary: Mega Launcher
   hidden: Carnivore
 learnset:
+  - { level: 1, move: Focus Energy }
+  - { level: 1, move: Double Hit }
   - { level: 1, move: Tackle }
   - { level: 1, move: Bite }
-  - { level: 1, move: Dragon Breath }
-  - { level: 1, move: Focus Energy }
-  - { level: 1, move: Tri Attack }
-  - { level: 1, move: Double Hit }
+  - { level: 2, move: Twister }
+  - { level: 3, move: Dragon Breath }
+  - { level: 4, move: Tri Attack }
   - { level: 6, move: Slander }
   - { level: 12, move: Roar }
+  - { level: 15, move: Snarl }
   - { level: 16, move: Assurance }
   - { level: 20, move: Headbutt }
   - { level: 24, move: Work Up }
   - { level: 28, move: Take Down }
+  - { level: 29, move: Dark Pulse }
   - { level: 30, move: Draconic Fang }
   - { level: 32, move: Crunch }
   - { level: 36, move: Scary Face }
   - { level: 38, move: Dragon Pulse }
   - { level: 40, move: Cataclysm }
+  - { level: 43, move: Night Daze }
   - { level: 44, move: Body Slam }
   - { level: 48, move: Hyper Voice }
   - { level: 51, move: Draco Meteor }
@@ -29,4 +33,4 @@ learnset:
   - { level: 60, move: Nasty Plot }
   - { level: 64, move: Eclipse }
   - { level: 68, move: Outrage }
-  - { level: 76, move: Hyper Beam }
+  - { level: 70, move: Hyper Beam }

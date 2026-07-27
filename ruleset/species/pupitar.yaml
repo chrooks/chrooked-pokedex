@@ -3,11 +3,11 @@ chrooked_id: pupitar
 aka: { pokeemerald: SPECIES_PUPITAR }
 learnset:
   - { level: 0, move: Iron Defense }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Payback }
   - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Rock Throw }
-  - { level: 1, move: Clod Toss }
+  - { level: 2, move: Clod Toss }
   - { level: 5, move: Cheap Shot }
   - { level: 9, move: Bite }
   - { level: 12, move: Scary Face }
@@ -24,5 +24,6 @@ learnset:
   - { level: 42, move: Thrash }
   - { level: 47, move: Sandstorm }
   - { level: 52, move: Hyper Beam }
+  - { level: 57, move: Head Smash }
   - { level: 60, move: Havoc }
   - { level: 64, move: Faultbreak }

@@ -12,6 +12,7 @@ learnset:
   - { level: 19, move: Smokescreen }
   - { level: 23, move: Round }
   - { level: 28, move: Fling }
+  - { level: 29, move: Muddy Water }
   - { level: 33, move: Smack Down }
   - { level: 40, move: Substitute }
   - { level: 45, move: Bounce }

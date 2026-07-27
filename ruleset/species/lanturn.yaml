@@ -11,17 +11,21 @@ learnset:
   - { level: 0, move: Stockpile }
   - { level: 1, move: Eerie Impulse }
   - { level: 1, move: Supersonic }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Thunder Wave }
   - { level: 1, move: Electro Ball }
+  - { level: 2, move: Thunder Shock }
+  - { level: 3, move: Water Gun }
   - { level: 12, move: Bubble Beam }
   - { level: 16, move: Confuse Ray }
   - { level: 20, move: Spark }
   - { level: 24, move: Charge }
   - { level: 27, move: Short Circuit }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Discharge }
   - { level: 36, move: Aqua Ring }
   - { level: 42, move: Flail }
+  - { level: 43, move: Thunder }
   - { level: 48, move: Take Down }
   - { level: 54, move: Hydro Pump }
+  - { level: 57, move: Zap Cannon }
   - { level: 64, move: Tsunami }

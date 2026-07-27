@@ -3,22 +3,26 @@ chrooked_id: slowbromega
 aka: {  }
 learnset:
   - { level: 1, move: Curse }
-  - { level: 1, move: Future Sight }
   - { level: 1, move: Growl }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Withdraw }
+  - { level: 1, move: Tackle }
+  - { level: 2, move: Water Gun }
+  - { level: 3, move: Confusion }
   - { level: 9, move: Yawn }
-  - { level: 12, move: Confusion }
+  - { level: 12, move: Dream Mist }
   - { level: 14, move: Water Whip }
   - { level: 15, move: Disable }
+  - { level: 16, move: Psychic }
   - { level: 18, move: Water Pulse }
   - { level: 21, move: Headbutt }
   - { level: 24, move: Zen Headbutt }
   - { level: 27, move: Amnesia }
   - { level: 30, move: Surf }
   - { level: 33, move: Slack Off }
-  - { level: 36, move: Psychic }
+  - { level: 36, move: Mindwarp }
   - { level: 41, move: Psych Up }
+  - { level: 43, move: Hydro Pump }
+  - { level: 45, move: Future Sight }
   - { level: 46, move: Rain Dance }
   - { level: 51, move: Heal Pulse }
+  - { level: 57, move: Tsunami }

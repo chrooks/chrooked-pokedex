@@ -8,11 +8,18 @@ learnset:
   - { level: 1, move: Bind }
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
+  - { level: 2, move: Slander }
   - { level: 12, move: Water Pulse }
+  - { level: 15, move: Snarl }
   - { level: 19, move: Tearful Look }
   - { level: 24, move: Sucker Punch }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: U-turn }
+  - { level: 31, move: Dark Pulse }
   - { level: 36, move: Liquidation }
   - { level: 42, move: Soak }
+  - { level: 43, move: Hydro Pump }
+  - { level: 45, move: Night Daze }
   - { level: 48, move: Rain Dance }
+  - { level: 57, move: Eclipse }
   - { level: 64, move: Tsunami }

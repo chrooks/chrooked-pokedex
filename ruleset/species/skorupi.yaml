@@ -24,6 +24,9 @@ learnset:
   - { level: 37, move: Poison Fang }
   - { level: 39, move: Venom Slam }
   - { level: 42, move: X-Scissor }
+  - { level: 43, move: Moltstrike }
   - { level: 45, move: Acupressure }
   - { level: 48, move: Backstab }
+  - { level: 57, move: Gunk Shot }
+  - { level: 59, move: Megahorn }
   - { level: 60, move: Havoc }

@@ -6,16 +6,18 @@ abilities:
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }
+  - { level: 2, move: Tackle }
   - { level: 6, move: Hone Claws }
   - { level: 12, move: Wing Attack }
   - { level: 18, move: Tailwind }
   - { level: 24, move: Scary Face }
+  - { level: 29, move: Slash }
   - { level: 30, move: Aerial Ace }
   - { level: 33, move: Air Slash }
-  - { level: 36, move: Slash }
+  - { level: 36, move: Crush Claw }
+  - { level: 39, move: Take Down }
   - { level: 39, move: Dive Bomb }
   - { level: 39, move: Nosedive }
-  - { level: 39, move: Crush Claw }
   - { level: 42, move: Whirlwind }
   - { level: 48, move: Rampage }
   - { level: 52, move: Galeburst }
@@ -23,4 +25,4 @@ learnset:
   - { level: 60, move: Defog }
   - { level: 63, move: Oblivion Wing }
   - { level: 66, move: Thrash }
-  - { level: 72, move: Brave Bird }
+  - { level: 70, move: Brave Bird }

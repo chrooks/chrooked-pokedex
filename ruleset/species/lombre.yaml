@@ -3,21 +3,23 @@ chrooked_id: lombre
 aka: {  }
 learnset:
   - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Astonish }
   - { level: 1, move: Teeter Dance }
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Knock Off }
-  - { level: 1, move: Fake Out }
   - { level: 1, move: Flail }
+  - { level: 2, move: Water Gun }
+  - { level: 3, move: Absorb }
+  - { level: 4, move: Fake Out }
+  - { level: 5, move: Knock Off }
   - { level: 9, move: Mist }
   - { level: 12, move: Mega Drain }
   - { level: 18, move: Fury Swipes }
   - { level: 24, move: Bubble Beam }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Leech Seed }
   - { level: 36, move: Giga Drain }
   - { level: 43, move: Energy Ball }
   - { level: 50, move: Zen Headbutt }
   - { level: 53, move: Hydro Pump }
   - { level: 57, move: Siphon }
+  - { level: 58, move: Leaf Storm }
   - { level: 64, move: Tsunami }

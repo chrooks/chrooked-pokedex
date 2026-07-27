@@ -5,11 +5,12 @@ abilities:
   hidden: Volt Absorb
 stats: { spd: 95, spe: 100 }
 learnset:
-  - { level: 1, move: Nuzzle }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Play Nice }
   - { level: 1, move: Growl }
   - { level: 1, move: Thunder Wave }
+  - { level: 2, move: Thunder Shock }
+  - { level: 3, move: Nuzzle }
   - { level: 4, move: Helping Hand }
   - { level: 7, move: Spark }
   - { level: 10, move: Encore }
@@ -26,3 +27,4 @@ learnset:
   - { level: 43, move: Thunder }
   - { level: 46, move: Nasty Plot }
   - { level: 49, move: Entrainment }
+  - { level: 57, move: Zap Cannon }

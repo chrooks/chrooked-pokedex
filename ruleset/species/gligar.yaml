@@ -3,11 +3,13 @@ chrooked_id: gligar
 aka: { pokeemerald: SPECIES_GLIGAR }
 learnset:
   - { level: 1, move: Poison Sting }
+  - { level: 2, move: Peck }
   - { level: 4, move: Sand Attack }
   - { level: 5, move: Clod Toss }
   - { level: 7, move: Harden }
   - { level: 10, move: Knock Off }
   - { level: 13, move: Quick Attack }
+  - { level: 15, move: Bulldoze }
   - { level: 16, move: Fury Cutter }
   - { level: 19, move: Poison Tail }
   - { level: 22, move: Acrobatics }
@@ -21,4 +23,5 @@ learnset:
   - { level: 40, move: X-Scissor }
   - { level: 45, move: Earthquake }
   - { level: 50, move: Swords Dance }
+  - { level: 57, move: Brave Bird }
   - { level: 64, move: Faultbreak }

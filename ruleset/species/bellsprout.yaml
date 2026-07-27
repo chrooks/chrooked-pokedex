@@ -17,8 +17,9 @@ learnset:
   - { level: 22, move: Poison Tail }
   - { level: 24, move: Gastro Acid }
   - { level: 26, move: Acid Spray }
+  - { level: 29, move: Cross Poison }
   - { level: 30, move: Seed Bomb }
-  - { level: 34, move: Cross Poison }
+  - { level: 34, move: Gastric Snare }
   - { level: 36, move: Leaf Blade }
   - { level: 38, move: Toxic }
   - { level: 42, move: Venom Slam }

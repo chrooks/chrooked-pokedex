@@ -7,10 +7,10 @@ stats: { hp: 105, atk: 95, def: 65, spa: 130, spd: 75, spe: 80 }
 learnset:
   - { level: 0, move: Boomburst }
   - { level: 1, move: Astonish }
+  - { level: 1, move: Growl }
   - { level: 1, move: Disarming Voice }
   - { level: 1, move: Echoed Voice }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Pound }
+  - { level: 2, move: Pound }
   - { level: 15, move: Rest }
   - { level: 15, move: Sleep Talk }
   - { level: 23, move: Round }
@@ -18,8 +18,9 @@ learnset:
   - { level: 32, move: Snarl }
   - { level: 36, move: Overdrive }
   - { level: 42, move: Hyper Voice }
+  - { level: 43, move: Resonance }
   - { level: 50, move: Screech }
   - { level: 58, move: Nasty Plot }
   - { level: 66, move: Roar }
-  - { level: 72, move: Boomburst }
-  - { level: 81, move: Hyper Beam }
+  - { level: 70, move: Boomburst }
+  - { level: 70, move: Hyper Beam }

@@ -2,18 +2,19 @@ name: Slowking
 chrooked_id: slowking
 aka: { dex: 199 }
 learnset:
-  - { level: 1, move: Future Sight }
   - { level: 1, move: Chilly Reception }
   - { level: 1, move: Curse }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Power Gem }
   - { level: 1, move: Nasty Plot }
-  - { level: 1, move: Swagger }
+  - { level: 2, move: Swagger }
+  - { level: 3, move: Tackle }
+  - { level: 4, move: Water Gun }
+  - { level: 5, move: Power Gem }
+  - { level: 6, move: Confusion }
   - { level: 9, move: Yawn }
-  - { level: 12, move: Confusion }
+  - { level: 12, move: Dream Mist }
   - { level: 15, move: Disable }
+  - { level: 16, move: Psychic }
   - { level: 18, move: Water Pulse }
   - { level: 21, move: Headbutt }
   - { level: 24, move: Water Whip }
@@ -21,9 +22,10 @@ learnset:
   - { level: 29, move: Astral Hand }
   - { level: 30, move: Surf }
   - { level: 33, move: Slack Off }
-  - { level: 36, move: Psychic }
-  - { level: 37, move: Mindwarp }
+  - { level: 36, move: Mindwarp }
+  - { level: 37, move: Future Sight }
   - { level: 39, move: Psych Up }
   - { level: 42, move: Rain Dance }
+  - { level: 43, move: Hydro Pump }
   - { level: 45, move: Heal Pulse }
   - { level: 64, move: Tsunami }

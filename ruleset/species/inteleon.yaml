@@ -4,11 +4,11 @@ aka: { pokeemerald: SPECIES_INTELEON }
 stats: { spa: 135 }
 learnset:
   - { level: 0, move: Snipe Shot }
-  - { level: 1, move: Pound }
   - { level: 1, move: Bind }
   - { level: 1, move: Growl }
+  - { level: 1, move: Pound }
   - { level: 1, move: Water Gun }
-  - { level: 1, move: Acrobatics }
+  - { level: 2, move: Acrobatics }
   - { level: 12, move: Water Pulse }
   - { level: 19, move: Tearful Look }
   - { level: 24, move: Sucker Punch }

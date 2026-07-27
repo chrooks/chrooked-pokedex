@@ -11,16 +11,22 @@ learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Water Gun }
   - { level: 1, move: Withdraw }
+  - { level: 2, move: Glint }
   - { level: 9, move: Rapid Spin }
   - { level: 12, move: Water Pulse }
+  - { level: 15, move: Mirror Shot }
   - { level: 16, move: Bite }
   - { level: 20, move: Protect }
   - { level: 25, move: Flip Turn }
-  - { level: 30, move: Bubble Beam }
+  - { level: 29, move: Bubble Beam }
+  - { level: 30, move: Muddy Water }
+  - { level: 31, move: Flash Cannon }
   - { level: 35, move: Recover }
   - { level: 40, move: Shell Smash }
+  - { level: 43, move: Luster Cannon }
   - { level: 44, move: Dark Pulse }
   - { level: 49, move: Aura Sphere }
   - { level: 54, move: Hydro Pump }
+  - { level: 57, move: Steel Beam }
   - { level: 60, move: Origin Pulse }
   - { level: 64, move: Tsunami }

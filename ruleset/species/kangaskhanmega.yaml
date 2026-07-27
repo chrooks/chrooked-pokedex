@@ -12,8 +12,10 @@ learnset:
   - { level: 20, move: Focus Energy }
   - { level: 24, move: Headbutt }
   - { level: 28, move: Sucker Punch }
+  - { level: 29, move: Take Down }
   - { level: 32, move: Double Hit }
   - { level: 36, move: Crunch }
+  - { level: 43, move: Rampage }
   - { level: 44, move: Reversal }
   - { level: 48, move: Outrage }
   - { level: 52, move: Last Resort }

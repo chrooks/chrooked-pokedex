@@ -11,6 +11,7 @@ learnset:
   - { level: 6, move: Knell }
   - { level: 10, move: Ember }
   - { level: 13, move: Quick Attack }
+  - { level: 15, move: Incinerate }
   - { level: 20, move: Flame Wheel }
   - { level: 24, move: Defense Curl }
   - { level: 31, move: Swift }
@@ -22,4 +23,4 @@ learnset:
   - { level: 60, move: Netherstorm }
   - { level: 64, move: Double-Edge }
   - { level: 68, move: Overheat }
-  - { level: 75, move: Eruption }
+  - { level: 70, move: Eruption }

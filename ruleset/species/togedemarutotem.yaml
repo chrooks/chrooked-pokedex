@@ -4,16 +4,21 @@ aka: { pokeemerald: SPECIES_TOGEDEMARU_TOTEM }
 learnset:
   - { level: 1, move: Nuzzle }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Metal Claw }
   - { level: 5, move: Defense Curl }
   - { level: 10, move: Charge }
   - { level: 15, move: Thunder Shock }
+  - { level: 16, move: Smart Strike }
   - { level: 20, move: Fell Stinger }
   - { level: 25, move: Spark }
+  - { level: 29, move: Metallic Fang }
   - { level: 30, move: Pin Missile }
   - { level: 35, move: Magnet Rise }
   - { level: 37, move: Zing Zap }
   - { level: 40, move: Arc Strike }
+  - { level: 43, move: Iron Tail }
   - { level: 45, move: Discharge }
   - { level: 50, move: Electric Terrain }
   - { level: 55, move: Wild Charge }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Spiky Shield }

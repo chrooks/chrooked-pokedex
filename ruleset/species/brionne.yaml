@@ -12,6 +12,7 @@ learnset:
   - { level: 20, move: Sing }
   - { level: 22, move: Beguile }
   - { level: 25, move: Bubble Beam }
+  - { level: 29, move: Muddy Water }
   - { level: 30, move: Encore }
   - { level: 35, move: Misty Terrain }
   - { level: 40, move: Hyper Voice }

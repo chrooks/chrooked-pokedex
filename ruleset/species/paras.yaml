@@ -5,12 +5,16 @@ abilities:
   secondary: Dry Skin
 learnset:
   - { level: 1, move: Scratch }
+  - { level: 2, move: Leafage }
   - { level: 6, move: Stun Spore }
   - { level: 6, move: Poison Powder }
   - { level: 11, move: Absorb }
-  - { level: 17, move: Fury Cutter }
+  - { level: 15, move: Fury Cutter }
+  - { level: 17, move: Bug Bite }
+  - { level: 18, move: Razor Leaf }
   - { level: 22, move: Spore }
   - { level: 27, move: Slash }
+  - { level: 29, move: Seed Bomb }
   - { level: 33, move: Growth }
   - { level: 36, move: Reap }
   - { level: 38, move: Giga Drain }
@@ -19,3 +23,5 @@ learnset:
   - { level: 46, move: X-Scissor }
   - { level: 49, move: Rage Powder }
   - { level: 54, move: Moltstrike }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Power Whip }

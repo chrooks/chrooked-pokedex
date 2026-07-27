@@ -4,11 +4,14 @@ aka: { pokeemerald: SPECIES_HONEDGE }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Fury Cutter }
+  - { level: 2, move: Metal Claw }
+  - { level: 3, move: Lick }
   - { level: 5, move: Shadow Sneak }
   - { level: 6, move: Glint }
   - { level: 6, move: Knell }
   - { level: 9, move: Metal Sound }
   - { level: 13, move: Aerial Ace }
+  - { level: 15, move: Smart Strike }
   - { level: 17, move: Iron Defense }
   - { level: 18, move: Mirror Shot }
   - { level: 21, move: Slash }
@@ -18,8 +21,12 @@ learnset:
   - { level: 37, move: Swords Dance }
   - { level: 38, move: Luster Cannon }
   - { level: 41, move: Sacred Sword }
+  - { level: 43, move: Iron Tail }
   - { level: 44, move: Wraithstrike }
+  - { level: 45, move: Interment }
   - { level: 48, move: Secret Sword }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Excalibur }
+  - { level: 59, move: Necrosis }
   - { level: 62, move: Steel Beam }
   - { level: 64, move: Netherstorm }

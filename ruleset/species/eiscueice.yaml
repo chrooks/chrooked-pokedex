@@ -4,14 +4,17 @@ aka: { pokeemerald: SPECIES_EISCUE_ICE }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Powder Snow }
+  - { level: 2, move: Ice Ball }
   - { level: 6, move: Mist }
   - { level: 12, move: Weather Ball }
+  - { level: 15, move: Ice Punch }
   - { level: 18, move: Icy Wind }
   - { level: 24, move: Headbutt }
   - { level: 30, move: Amnesia }
   - { level: 36, move: Freeze-Dry }
   - { level: 39, move: Glacial Crush }
   - { level: 42, move: Snowscape }
+  - { level: 43, move: Ice Hammer }
   - { level: 48, move: Aurora Veil }
   - { level: 54, move: Surf }
   - { level: 60, move: Blizzard }

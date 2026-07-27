@@ -7,20 +7,27 @@ abilities:
 stats: { atk: 100 }
 learnset:
   - { level: 0, move: Freeze-Dry }
-  - { level: 1, move: Headbutt }
   - { level: 1, move: Leer }
   - { level: 1, move: Double Team }
-  - { level: 1, move: Powder Snow }
   - { level: 1, move: Astonish }
   - { level: 1, move: Sheer Cold }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Cheap Shot }
+  - { level: 4, move: Powder Snow }
+  - { level: 5, move: Headbutt }
   - { level: 15, move: Ice Shard }
+  - { level: 16, move: Ice Punch }
   - { level: 20, move: Protect }
   - { level: 25, move: Icy Wind }
   - { level: 30, move: Frost Breath }
   - { level: 35, move: Bite }
   - { level: 40, move: Ice Fang }
+  - { level: 43, move: Ice Hammer }
+  - { level: 45, move: Crunch }
   - { level: 47, move: Snowscape }
   - { level: 54, move: Weather Ball }
   - { level: 57, move: Blizzard }
-  - { level: 61, move: Crunch }
+  - { level: 58, move: Icebreaker }
+  - { level: 59, move: Backstab }
+  - { level: 61, move: Havoc }
   - { level: 68, move: Cryoblast }

@@ -9,15 +9,20 @@ learnset:
   - { level: 0, move: Giga Drain }
   - { level: 1, move: Sweet Scent }
   - { level: 1, move: Tackle }
+  - { level: 2, move: Echoed Voice }
   - { level: 5, move: Absorb }
   - { level: 7, move: Growth }
   - { level: 10, move: Razor Leaf }
   - { level: 13, move: Helping Hand }
+  - { level: 15, move: Swift }
   - { level: 16, move: Flail }
   - { level: 20, move: Mega Drain }
   - { level: 23, move: Grassy Terrain }
   - { level: 27, move: Leech Seed }
+  - { level: 29, move: Uproar }
   - { level: 31, move: Seed Bomb }
   - { level: 34, move: Energy Ball }
   - { level: 40, move: Siphon }
   - { level: 46, move: Resonance }
+  - { level: 57, move: Leaf Storm }
+  - { level: 59, move: Hyper Beam }

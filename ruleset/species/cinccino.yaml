@@ -3,21 +3,21 @@ chrooked_id: cinccino
 aka: {  }
 learnset:
   - { level: 0, move: Tail Slap }
-  - { level: 1, move: Slam }
-  - { level: 1, move: Swift }
   - { level: 1, move: Encore }
   - { level: 1, move: Helping Hand }
-  - { level: 1, move: Hyper Voice }
   - { level: 1, move: Tickle }
   - { level: 1, move: Rock Blast }
-  - { level: 1, move: Last Resort }
-  - { level: 1, move: After You }
-  - { level: 1, move: Echoed Voice }
-  - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Sing }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Bullet Seed }
+  - { level: 2, move: After You }
+  - { level: 3, move: Baby-Doll Eyes }
+  - { level: 4, move: Sing }
+  - { level: 5, move: Charm }
+  - { level: 6, move: Bullet Seed }
+  - { level: 7, move: Echoed Voice }
+  - { level: 8, move: Pound }
+  - { level: 9, move: Swift }
   - { level: 10, move: Glitter Tap }
-  - { level: 31, move: Bail Out }
-  - { level: 46, move: Rampage }
+  - { level: 11, move: Bail Out }
+  - { level: 12, move: Hyper Voice }
+  - { level: 13, move: Slam }
+  - { level: 31, move: Rampage }
+  - { level: 46, move: Last Resort }

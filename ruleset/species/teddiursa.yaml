@@ -17,9 +17,10 @@ learnset:
   - { level: 25, move: Tectonic Fang }
   - { level: 26, move: Charm }
   - { level: 29, move: Play Rough }
+  - { level: 30, move: Facade }
   - { level: 33, move: Rest }
   - { level: 33, move: Snore }
-  - { level: 37, move: Facade }
+  - { level: 37, move: Take Down }
   - { level: 41, move: Rampage }
   - { level: 46, move: Thrash }
   - { level: 46, move: Quagmire }

@@ -9,16 +9,21 @@ learnset:
   - { level: 0, move: Ice Punch }
   - { level: 1, move: Leer }
   - { level: 1, move: Mist }
-  - { level: 1, move: Powder Snow }
-  - { level: 1, move: Leafage }
   - { level: 1, move: Aurora Veil }
+  - { level: 1, move: Powder Snow }
+  - { level: 2, move: Ice Ball }
+  - { level: 3, move: Leafage }
   - { level: 15, move: Ice Shard }
   - { level: 20, move: Razor Leaf }
   - { level: 25, move: Icy Wind }
+  - { level: 29, move: Seed Bomb }
   - { level: 30, move: Swagger }
+  - { level: 31, move: Glacial Crush }
   - { level: 35, move: Ingrain }
   - { level: 39, move: Reap }
   - { level: 43, move: Wood Hammer }
+  - { level: 44, move: Ice Hammer }
   - { level: 49, move: Blizzard }
   - { level: 56, move: Sheer Cold }
+  - { level: 57, move: Icebreaker }
   - { level: 64, move: Cryoblast }

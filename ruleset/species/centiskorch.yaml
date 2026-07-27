@@ -4,11 +4,13 @@ aka: { pokeemerald: SPECIES_CENTISKORCH }
 abilities:
   secondary: Coil Up
 learnset:
-  - { level: 1, move: Inferno }
-  - { level: 1, move: Ember }
   - { level: 1, move: Smokescreen }
   - { level: 1, move: Wrap }
+  - { level: 1, move: Ember }
   - { level: 1, move: Bite }
+  - { level: 2, move: Flame Charge }
+  - { level: 3, move: Fury Cutter }
+  - { level: 4, move: Inferno }
   - { level: 15, move: Flame Wheel }
   - { level: 20, move: Bug Bite }
   - { level: 25, move: Coil }
@@ -18,5 +20,7 @@ learnset:
   - { level: 39, move: Fire Spin }
   - { level: 46, move: Crunch }
   - { level: 53, move: Combust }
-  - { level: 60, move: Moltstrike }
+  - { level: 57, move: Flare Blitz }
+  - { level: 59, move: Moltstrike }
+  - { level: 60, move: Megahorn }
   - { level: 67, move: Burn Up }

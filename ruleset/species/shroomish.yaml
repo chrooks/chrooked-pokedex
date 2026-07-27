@@ -6,10 +6,12 @@ abilities:
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Absorb }
+  - { level: 2, move: Leafage }
   - { level: 5, move: Stun Spore }
   - { level: 8, move: Leech Seed }
   - { level: 12, move: Mega Drain }
   - { level: 15, move: Headbutt }
+  - { level: 16, move: Razor Leaf }
   - { level: 19, move: Poison Powder }
   - { level: 26, move: Giga Drain }
   - { level: 29, move: Growth }
@@ -19,3 +21,4 @@ learnset:
   - { level: 43, move: Reap }
   - { level: 46, move: One-Inch Punch }
   - { level: 48, move: Cross Chop }
+  - { level: 57, move: Power Whip }

@@ -11,6 +11,7 @@ learnset:
   - { level: 17, move: Water Whip }
   - { level: 20, move: Counter }
   - { level: 25, move: Purify }
+  - { level: 29, move: Aqua Tail }
   - { level: 30, move: Curse }
   - { level: 32, move: Maelstrom }
   - { level: 35, move: Gastro Acid }

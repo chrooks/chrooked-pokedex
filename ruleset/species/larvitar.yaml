@@ -23,5 +23,6 @@ learnset:
   - { level: 39, move: Sandstorm }
   - { level: 42, move: Hyper Beam }
   - { level: 45, move: Backstab }
+  - { level: 57, move: Head Smash }
   - { level: 60, move: Havoc }
   - { level: 64, move: Faultbreak }

@@ -13,6 +13,7 @@ learnset:
   - { level: 30, move: Acid Armor }
   - { level: 35, move: Dazzling Gleam }
   - { level: 40, move: Recover }
+  - { level: 43, move: Moonblast }
   - { level: 45, move: Misty Terrain }
   - { level: 50, move: Entrainment }
   - { level: 64, move: Rapture }

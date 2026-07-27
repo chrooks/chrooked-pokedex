@@ -7,6 +7,7 @@ abilities:
   hidden: Ice Body
 learnset:
   - { level: 1, move: Headbutt }
+  - { level: 2, move: Undertow }
   - { level: 3, move: Growl }
   - { level: 7, move: Water Gun }
   - { level: 11, move: Icy Wind }
@@ -21,8 +22,10 @@ learnset:
   - { level: 37, move: Take Down }
   - { level: 41, move: Dive }
   - { level: 43, move: Aqua Tail }
+  - { level: 44, move: Maelstrom }
   - { level: 47, move: Ice Beam }
   - { level: 51, move: Safeguard }
   - { level: 53, move: Hail }
+  - { level: 57, move: Wave Crash }
   - { level: 64, move: Tsunami }
   - { level: 64, move: Cryoblast }

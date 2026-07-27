@@ -6,6 +6,7 @@ learnset:
   - { level: 1, move: Razor Leaf }
   - { level: 1, move: Tackle }
   - { level: 1, move: Withdraw }
+  - { level: 2, move: Leafage }
   - { level: 5, move: Clod Toss }
   - { level: 9, move: Curse }
   - { level: 13, move: Bite }

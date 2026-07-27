@@ -12,12 +12,16 @@ learnset:
   - { level: 6, move: Clod Toss }
   - { level: 8, move: Astonish }
   - { level: 12, move: Mud-Slap }
+  - { level: 15, move: Smart Strike }
   - { level: 16, move: Bulldoze }
   - { level: 20, move: Sucker Punch }
   - { level: 24, move: Iron Head }
   - { level: 28, move: Sandstorm }
+  - { level: 29, move: Tectonic Fang }
   - { level: 32, move: Dig }
   - { level: 36, move: Earth Power }
   - { level: 40, move: Earthquake }
+  - { level: 43, move: Iron Tail }
   - { level: 44, move: Fissure }
   - { level: 46, move: Faultbreak }
+  - { level: 57, move: Excalibur }

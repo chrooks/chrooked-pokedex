@@ -4,16 +4,16 @@ aka: { pokeemerald: SPECIES_GRIMMSNARL }
 stats: { spe: 65 }
 learnset:
   - { level: 0, move: Spirit Break }
-  - { level: 1, move: False Surrender }
   - { level: 1, move: Confide }
   - { level: 1, move: Bulk Up }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Fake Out }
   - { level: 1, move: Flatter }
-  - { level: 6, move: Cheap Shot }
+  - { level: 1, move: Fake Out }
+  - { level: 2, move: Cheap Shot }
+  - { level: 3, move: Bite }
+  - { level: 6, move: Assurance }
   - { level: 9, move: Glitter Tap }
   - { level: 12, move: Fake Tears }
-  - { level: 16, move: Assurance }
+  - { level: 16, move: False Surrender }
   - { level: 20, move: Swagger }
   - { level: 22, move: Beguile }
   - { level: 24, move: Sucker Punch }

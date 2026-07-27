@@ -6,10 +6,10 @@ learnset:
   - { level: 0, move: Scary Face }
   - { level: 1, move: Scary Face }
   - { level: 1, move: Swords Dance }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Focus Energy }
+  - { level: 2, move: Focus Energy }
+  - { level: 3, move: Tackle }
   - { level: 4, move: Quick Attack }
   - { level: 7, move: Focus Energy }
   - { level: 10, move: Bite }
@@ -22,3 +22,4 @@ learnset:
   - { level: 36, move: Take Down }
   - { level: 39, move: Rampage }
   - { level: 44, move: Endeavor }
+  - { level: 57, move: Double-Edge }

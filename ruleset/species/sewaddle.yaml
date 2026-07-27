@@ -4,13 +4,19 @@ aka: { dex: 540 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: String Shot }
+  - { level: 2, move: Fury Cutter }
+  - { level: 3, move: Leafage }
   - { level: 8, move: Bug Bite }
   - { level: 15, move: Razor Leaf }
   - { level: 22, move: Struggle Bug }
   - { level: 29, move: Endure }
+  - { level: 30, move: X-Scissor }
   - { level: 31, move: Sticky Web }
+  - { level: 32, move: Seed Bomb }
   - { level: 36, move: Bug Buzz }
   - { level: 39, move: Moltstrike }
   - { level: 43, move: Flail }
   - { level: 46, move: Reap }
   - { level: 55, move: Pixie Slash }
+  - { level: 57, move: Megahorn }
+  - { level: 59, move: Power Whip }

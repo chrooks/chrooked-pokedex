@@ -4,8 +4,10 @@ aka: {  }
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Splash }
+  - { level: 2, move: Twister }
   - { level: 6, move: Harden }
   - { level: 12, move: Helping Hand }
+  - { level: 15, move: Dragon Breath }
   - { level: 17, move: Water Pulse }
   - { level: 23, move: Soak }
   - { level: 28, move: Taunt }
@@ -13,6 +15,7 @@ learnset:
   - { level: 36, move: Dragon Pulse }
   - { level: 39, move: Muddy Water }
   - { level: 43, move: Nasty Plot }
+  - { level: 44, move: Hydro Pump }
   - { level: 47, move: Mirror Coat }
   - { level: 52, move: Cataclysm }
   - { level: 60, move: Draco Meteor }

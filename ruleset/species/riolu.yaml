@@ -27,5 +27,6 @@ learnset:
   - { level: 48, move: Copycat }
   - { level: 52, move: Final Gambit }
   - { level: 56, move: Reversal }
+  - { level: 57, move: Close Combat }
   - { level: 62, move: Steel Beam }
   - { level: 62, move: Focus Blast }

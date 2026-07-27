@@ -8,6 +8,7 @@ stats: { spa: 35 }
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Leer }
+  - { level: 2, move: Rock Smash }
   - { level: 4, move: Low Kick }
   - { level: 6, move: Aura Spark }
   - { level: 8, move: Rock Throw }

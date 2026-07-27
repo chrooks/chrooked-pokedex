@@ -5,6 +5,7 @@ stats: { hp: 51, spe: 40 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Defense Curl }
+  - { level: 2, move: Fury Cutter }
   - { level: 4, move: Sand Attack }
   - { level: 7, move: Struggle Bug }
   - { level: 11, move: Rollout }
@@ -14,6 +15,8 @@ learnset:
   - { level: 24, move: Take Down }
   - { level: 29, move: Dig }
   - { level: 35, move: Lunge }
+  - { level: 43, move: Moltstrike }
   - { level: 45, move: Antennae Blast }
   - { level: 46, move: Mindwarp }
+  - { level: 57, move: Megahorn }
   - { level: 60, move: Drone Chorus }
