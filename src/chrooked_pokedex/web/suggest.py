@@ -45,6 +45,18 @@ LEARNSET_MAX_TOKENS = 8192
 # they should retry harder than other modes (which default to one extra attempt).
 _LEARNSET_MAX_RETRIES = 3
 
+# Learnset shape bounds — the tunable knobs for suggested-learnset consistency.
+# Derived from a July 2026 audit of all 1,162 curated ruleset learnsets:
+# median 21 rows, mean 20.5, p10–p90 spread 14–27; max level ≤70 everywhere;
+# moves at L5-or-below median 5 (worst case 12 — the early-packing problem).
+# The rubric states these and validation enforces them (FULL mode only —
+# surgical edits inherit the current learnset's shape and must not fail on it).
+LEARNSET_SIZE_MIN = 16  # floor scales down when the move pool is smaller
+LEARNSET_SIZE_MAX = 26
+LEARNSET_MAX_LEVEL = 70  # no level-up move above this level
+LEARNSET_MAX_MOVES_THROUGH_L5 = 6  # rows with level ≤5, counting the L0/L1 kit
+LEARNSET_MAX_MOVES_THROUGH_L10 = 8  # rows with level ≤10
+
 # The ability slots an Override may set, in display order. The draft is a partial
 # Override: only the slots the model proposes appear.
 _ABILITY_SLOTS = ("primary", "secondary", "hidden")
@@ -1101,6 +1113,10 @@ def _build_learnset_rubric() -> str:
     near the evo level for pre-evos. Every row must carry a one-line `reasoning`.
     In surgical mode the model changes ONLY what the instruction names and returns
     the whole learnset otherwise byte-identical to the current one.
+
+    Also states the learnset shape bounds (size range, level ceiling, early-level
+    caps — the ``LEARNSET_*`` constants) so drafts land inside them on the first
+    try; ``_validate_learnset_result`` is the enforcement gate.
     """
     return (
         "You are a Pokémon game-design assistant. Given one species and the full "
@@ -1116,6 +1132,12 @@ def _build_learnset_rubric() -> str:
         "Pixilate/Refrigerate → Normal moves hit harder as that type).\n"
         "- Maintain a sensible level progression: weaker/basic moves early, "
         "stronger/signature moves late.\n"
+        f"- Size: {LEARNSET_SIZE_MIN}–{LEARNSET_SIZE_MAX} rows total "
+        f"(aim for about {(LEARNSET_SIZE_MIN + LEARNSET_SIZE_MAX) // 2}).\n"
+        f"- No move may be learned above level {LEARNSET_MAX_LEVEL}.\n"
+        f"- Keep early levels lean: at most {LEARNSET_MAX_MOVES_THROUGH_L5} rows "
+        f"at level 5 or below (counting the L0/L1 starting kit) and at most "
+        f"{LEARNSET_MAX_MOVES_THROUGH_L10} at level 10 or below.\n"
         "- For evolved forms (when 'Evolved from' is shown): place an "
         "evolution-reward move at level 0 ('learned on evolution').\n"
         "- For pre-evolutionary forms (when 'Evolves into' at a specific level is "
@@ -1299,15 +1321,22 @@ def _validate_learnset_result(
     1. Shape: result must carry the contract keys and a non-empty learnset list.
     2. Pool (AC3): every `move` in the draft must exist in the merged move pool
        (case-insensitive); a miss is a SuggestError. Normalize to canonical name.
-    3. Level (AC5/D4): each level must be an int in [0, 100].
+    3. Level (AC5/D4): each level must be an int in [0, LEARNSET_MAX_LEVEL] in
+       full mode ([0, 100] in surgical mode — base learnsets legitimately exceed
+       the ceiling and untouched rows must survive).
     4. Repeat-move B rule (AC5/D4): a move may appear at most once at a non-zero
        level, and optionally once at L0. Two non-zero levels, >2 rows, or a
        duplicated L0 are rejected.
     5. Dedup exact (level, move) pairs silently.
     6. Sort by (level, name) — normalizes storage order.
-    7. Surgical untouched-rows guard (AC2/D1): every (level, move) row NOT
+    7. Shape bounds (full mode only): row count inside
+       [min(LEARNSET_SIZE_MIN, pool size), LEARNSET_SIZE_MAX] and the early-level
+       packing caps (LEARNSET_MAX_MOVES_THROUGH_L5/_L10). Not deterministically
+       repairable (no principled way to invent or cut rows), so a violation
+       raises and rides the eager retry loop.
+    8. Surgical untouched-rows guard (AC2/D1): every (level, move) row NOT
        implicated by the instruction must be byte-identical to current_learnset.
-    8. Alternatives: drop hallucinated move names; keep valid ones.
+    9. Alternatives: drop hallucinated move names; keep valid ones.
 
     Returns the validated {draft, rationale, alternatives} contract.
     """
@@ -1335,6 +1364,7 @@ def _validate_learnset_result(
     # Step 2+3: pool check + level range + normalize move name. A row whose move
     # isn't in the pool, or whose level is malformed, is DROPPED with a warning
     # (rather than sinking the whole draft) as long as the list stays viable.
+    max_level = LEARNSET_MAX_LEVEL if mode == "full" else 100
     validated_rows: list[dict[str, Any]] = []
     for row in raw_rows:
         if not isinstance(row, dict):
@@ -1356,9 +1386,9 @@ def _validate_learnset_result(
                 f"dropped {canonical} — its level {level!r} was not an integer"
             )
             continue
-        if not (0 <= level <= 100):
+        if not (0 <= level <= max_level):
             warnings.append(
-                f"dropped {canonical} — its level {level} is outside [0, 100]"
+                f"dropped {canonical} — its level {level} is outside [0, {max_level}]"
             )
             continue
         validated_rows.append(
@@ -1413,11 +1443,33 @@ def _validate_learnset_result(
     # Step 6: sort by (level, move name).
     deduped.sort(key=lambda r: (r["level"], r["move"]))
 
-    # Step 7: surgical untouched-rows guard.
+    # Step 7: shape bounds, full mode only. The size floor scales down to the
+    # pool size (a pool smaller than the floor cannot yield that many rows).
+    if mode == "full":
+        size_min = min(LEARNSET_SIZE_MIN, len(move_pool))
+        count = len(deduped)
+        if not (size_min <= count <= LEARNSET_SIZE_MAX):
+            raise SuggestError(
+                f"The learnset has {count} rows after validation; propose "
+                f"between {size_min} and {LEARNSET_SIZE_MAX}."
+            )
+        early_caps = (
+            (5, LEARNSET_MAX_MOVES_THROUGH_L5),
+            (10, LEARNSET_MAX_MOVES_THROUGH_L10),
+        )
+        for cutoff, cap in early_caps:
+            early = sum(1 for row in deduped if row["level"] <= cutoff)
+            if early > cap:
+                raise SuggestError(
+                    f"{early} moves are learned at level {cutoff} or below; at "
+                    f"most {cap} are allowed — move the rest to later levels."
+                )
+
+    # Step 8: surgical untouched-rows guard.
     if mode == "surgical":
         _check_untouched_rows(deduped, current_learnset, instruction)
 
-    # Step 8: alternatives — drop any whose extracted move name is hallucinated.
+    # Step 9: alternatives — drop any whose extracted move name is hallucinated.
     alternatives = []
     for alt in result.get("alternatives") or []:
         if not isinstance(alt, dict):

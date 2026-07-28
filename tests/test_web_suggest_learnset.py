@@ -193,6 +193,7 @@ _GOOD_LEARNSET_RESULT = {
         "learnset": [
             {"level": 1, "move": "Tackle", "reasoning": "basic Normal STAB start"},
             {"level": 5, "move": "Dragon Pulse", "reasoning": "Dragon STAB online early"},
+            {"level": 30, "move": "Excalibur", "reasoning": "signature payoff"},
         ]
     },
     "rationale": {"learnset": "Standard physical-then-special progression for Goodra."},
@@ -390,6 +391,7 @@ def test_validate_learnset_drops_hallucinated_move_with_warning() -> None:
             "learnset": [
                 {"level": 1, "move": "Tackle", "reasoning": "basic"},
                 {"level": 5, "move": "FakeMove", "reasoning": "invented"},
+                {"level": 20, "move": "Dragon Pulse", "reasoning": "STAB"},
             ]
         },
         "rationale": {"learnset": "Mostly OK."},
@@ -399,7 +401,7 @@ def test_validate_learnset_drops_hallucinated_move_with_warning() -> None:
         result, _make_pool(), mode="full", current_learnset=[]
     )
     moves = [r["move"] for r in out["draft"]["learnset"]]
-    assert moves == ["Tackle"]
+    assert moves == ["Tackle", "Dragon Pulse"]
     assert any("FakeMove" in w for w in out["warnings"])
 
 
@@ -424,6 +426,7 @@ def test_validate_learnset_drops_out_of_range_level_with_warning() -> None:
                 {"level": 1, "move": "Tackle", "reasoning": "ok"},
                 {"level": 101, "move": "Dragon Pulse", "reasoning": "too high"},
                 {"level": -1, "move": "Dragon Pulse", "reasoning": "negative"},
+                {"level": 20, "move": "Dragon Pulse", "reasoning": "valid"},
             ]
         },
         "rationale": {"learnset": "Mixed."},
@@ -433,8 +436,8 @@ def test_validate_learnset_drops_out_of_range_level_with_warning() -> None:
         result, _make_pool(), mode="full", current_learnset=[]
     )
     moves = [r["move"] for r in out["draft"]["learnset"]]
-    assert moves == ["Tackle"]
-    assert sum("Dragon Pulse" in w for w in out["warnings"]) == 2
+    assert moves == ["Tackle", "Dragon Pulse"]
+    assert sum("outside" in w for w in out["warnings"]) == 2
 
 
 def test_validate_learnset_accepts_level_zero() -> None:
@@ -483,6 +486,7 @@ def test_validate_learnset_repairs_two_nonzero_levels_keeping_lowest() -> None:
             "learnset": [
                 {"level": 20, "move": "Tackle", "reasoning": "second"},
                 {"level": 5, "move": "Tackle", "reasoning": "first"},
+                {"level": 25, "move": "Dragon Pulse", "reasoning": "STAB"},
             ]
         },
         "rationale": {"learnset": "Fixable."},
@@ -492,7 +496,10 @@ def test_validate_learnset_repairs_two_nonzero_levels_keeping_lowest() -> None:
         result, _make_pool(), mode="full", current_learnset=[]
     )
     rows = out["draft"]["learnset"]
-    assert [(r["level"], r["move"]) for r in rows] == [(5, "Tackle")]
+    assert [(r["level"], r["move"]) for r in rows] == [
+        (5, "Tackle"),
+        (25, "Dragon Pulse"),
+    ]
     assert any("Tackle" in w and "@20" in w for w in out["warnings"])
 
 
@@ -524,6 +531,7 @@ def test_validate_learnset_deduplicates_exact_pairs() -> None:
             "learnset": [
                 {"level": 1, "move": "Tackle", "reasoning": "a"},
                 {"level": 1, "move": "Tackle", "reasoning": "a"},  # exact dup
+                {"level": 20, "move": "Dragon Pulse", "reasoning": "b"},
             ]
         },
         "rationale": {"learnset": "OK."},
@@ -532,7 +540,7 @@ def test_validate_learnset_deduplicates_exact_pairs() -> None:
     out = suggestmod._validate_learnset_result(
         result, _make_pool(), mode="full", current_learnset=[]
     )
-    assert len(out["draft"]["learnset"]) == 1
+    assert len(out["draft"]["learnset"]) == 2
 
 
 def test_validate_learnset_sorts_by_level_then_name() -> None:
@@ -561,6 +569,7 @@ def test_validate_learnset_normalizes_case_to_canonical() -> None:
         "draft": {
             "learnset": [
                 {"level": 1, "move": "TACKLE", "reasoning": "all caps"},
+                {"level": 20, "move": "Dragon Pulse", "reasoning": "STAB"},
             ]
         },
         "rationale": {"learnset": "OK."},
@@ -570,6 +579,110 @@ def test_validate_learnset_normalizes_case_to_canonical() -> None:
         result, _make_pool(), mode="full", current_learnset=[]
     )
     assert out["draft"]["learnset"][0]["move"] == "Tackle"
+
+
+# ===========================================================================
+# Unit tests — shape bounds (size range, level ceiling, early-level caps)
+# ===========================================================================
+
+
+def _wide_pool(n: int) -> list[dict[str, Any]]:
+    """A pool of n distinct moves, so drafts can reach the real size floor."""
+    return [
+        {"move": f"Move {i:02d}", "type": "Normal", "category": "Physical",
+         "power": 40, "effect": "hit"}
+        for i in range(n)
+    ]
+
+
+def _draft(rows: list[tuple[int, str]]) -> dict[str, Any]:
+    return {
+        "draft": {
+            "learnset": [
+                {"level": lvl, "move": mv, "reasoning": "x"} for lvl, mv in rows
+            ]
+        },
+        "rationale": {"learnset": "Shape test."},
+        "alternatives": [],
+    }
+
+
+def test_full_mode_rejects_too_few_rows_for_large_pool() -> None:
+    """With a pool past the floor, a draft under LEARNSET_SIZE_MIN raises."""
+    pool = _wide_pool(30)
+    rows = [(10 + 5 * i, f"Move {i:02d}") for i in range(5)]
+    with pytest.raises(suggestmod.SuggestError, match="rows after validation"):
+        suggestmod._validate_learnset_result(
+            _draft(rows), pool, mode="full", current_learnset=[]
+        )
+
+
+def test_full_mode_rejects_too_many_rows() -> None:
+    """A draft over LEARNSET_SIZE_MAX raises."""
+    count = suggestmod.LEARNSET_SIZE_MAX + 1
+    pool = _wide_pool(count)
+    rows = [(11 + 2 * i, f"Move {i:02d}") for i in range(count)]
+    with pytest.raises(suggestmod.SuggestError, match="rows after validation"):
+        suggestmod._validate_learnset_result(
+            _draft(rows), pool, mode="full", current_learnset=[]
+        )
+
+
+def test_full_mode_size_floor_scales_to_small_pool() -> None:
+    """A pool smaller than LEARNSET_SIZE_MIN lowers the floor to the pool size."""
+    out = suggestmod._validate_learnset_result(
+        _draft([(1, "Tackle"), (20, "Dragon Pulse")]),
+        _make_pool(),
+        mode="full",
+        current_learnset=[],
+    )
+    assert len(out["draft"]["learnset"]) == 2
+
+
+def test_full_mode_drops_rows_above_level_ceiling() -> None:
+    """A row above LEARNSET_MAX_LEVEL is dropped with a warning in full mode."""
+    ceiling = suggestmod.LEARNSET_MAX_LEVEL
+    out = suggestmod._validate_learnset_result(
+        _draft([(1, "Tackle"), (20, "Dragon Pulse"), (ceiling + 1, "Dragon Pulse")]),
+        _make_pool(),
+        mode="full",
+        current_learnset=[],
+    )
+    levels = [r["level"] for r in out["draft"]["learnset"]]
+    assert levels == [1, 20]
+    assert any(str(ceiling + 1) in w for w in out["warnings"])
+
+
+def test_full_mode_rejects_early_level_packing() -> None:
+    """More rows at L5-or-below than the cap raises with a spread-out nudge."""
+    pool = _wide_pool(30)
+    over_cap = suggestmod.LEARNSET_MAX_MOVES_THROUGH_L5 + 1
+    early = [(1, f"Move {i:02d}") for i in range(over_cap)]
+    late = [
+        (20 + 3 * i, f"Move {i + over_cap:02d}")
+        for i in range(suggestmod.LEARNSET_SIZE_MIN - over_cap + 2)
+    ]
+    with pytest.raises(suggestmod.SuggestError, match="level 5 or below"):
+        suggestmod._validate_learnset_result(
+            _draft(early + late), pool, mode="full", current_learnset=[]
+        )
+
+
+def test_surgical_mode_tolerates_rows_above_level_ceiling() -> None:
+    """Surgical mode keeps untouched rows above the ceiling (base learnsets do)."""
+    current = [
+        {"level": 1, "move": "Tackle"},
+        {"level": 80, "move": "Dragon Pulse"},
+    ]
+    out = suggestmod._validate_learnset_result(
+        _draft([(5, "Tackle"), (80, "Dragon Pulse")]),
+        _make_pool(),
+        mode="surgical",
+        current_learnset=current,
+        instruction="move Tackle to level 5",
+    )
+    levels = [r["level"] for r in out["draft"]["learnset"]]
+    assert 80 in levels
 
 
 # ===========================================================================
@@ -1037,6 +1150,8 @@ def test_suggest_learnset_hallucinated_move_dropped_among_valid(
             "learnset": [
                 {"level": 1, "move": "Tackle", "reasoning": "basic"},
                 {"level": 5, "move": "FakeMoveXYZ", "reasoning": "invented"},
+                {"level": 20, "move": "Dragon Pulse", "reasoning": "STAB"},
+                {"level": 30, "move": "Excalibur", "reasoning": "signature"},
             ]
         },
         "rationale": {"learnset": "Mostly OK."},
@@ -1094,6 +1209,8 @@ def test_suggest_learnset_out_of_range_level_dropped_among_valid(
             "learnset": [
                 {"level": 1, "move": "Tackle", "reasoning": "ok"},
                 {"level": 101, "move": "Dragon Pulse", "reasoning": "too high"},
+                {"level": 20, "move": "Dragon Pulse", "reasoning": "valid"},
+                {"level": 30, "move": "Excalibur", "reasoning": "signature"},
             ]
         },
         "rationale": {"learnset": "Mixed."},
@@ -1106,8 +1223,8 @@ def test_suggest_learnset_out_of_range_level_dropped_among_valid(
     assert response.status_code == 200
     body = response.json()
     moves = [r["move"] for r in body["draft"]["learnset"]]
-    assert moves == ["Tackle"]
-    assert any("Dragon Pulse" in w for w in body["warnings"])
+    assert moves == ["Tackle", "Dragon Pulse", "Excalibur"]
+    assert any("101" in w for w in body["warnings"])
 
 
 def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
@@ -1120,6 +1237,8 @@ def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
             "learnset": [
                 {"level": 5, "move": "Tackle", "reasoning": "first"},
                 {"level": 20, "move": "Tackle", "reasoning": "second"},
+                {"level": 25, "move": "Dragon Pulse", "reasoning": "STAB"},
+                {"level": 30, "move": "Excalibur", "reasoning": "signature"},
             ]
         },
         "rationale": {"learnset": "Fixable."},
@@ -1132,7 +1251,7 @@ def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
     assert response.status_code == 200
     body = response.json()
     rows = [(r["level"], r["move"]) for r in body["draft"]["learnset"]]
-    assert rows == [(5, "Tackle")]
+    assert rows == [(5, "Tackle"), (25, "Dragon Pulse"), (30, "Excalibur")]
     assert any("@20" in w for w in body["warnings"])
 
 
@@ -1145,6 +1264,7 @@ def test_suggest_learnset_l0_plus_nonzero_accepted(
             "learnset": [
                 {"level": 0, "move": "Dragon Pulse", "reasoning": "on-evo"},
                 {"level": 20, "move": "Dragon Pulse", "reasoning": "relearn"},
+                {"level": 1, "move": "Tackle", "reasoning": "basic"},
             ]
         },
         "rationale": {"learnset": "B carve-out."},
@@ -1166,6 +1286,7 @@ def test_suggest_learnset_unsorted_input_sorted_on_output(
     unsorted = {
         "draft": {
             "learnset": [
+                {"level": 30, "move": "Excalibur", "reasoning": "signature"},
                 {"level": 5, "move": "Dragon Pulse", "reasoning": "STAB"},
                 {"level": 1, "move": "Tackle", "reasoning": "basic"},
             ]
