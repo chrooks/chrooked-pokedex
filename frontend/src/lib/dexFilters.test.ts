@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { DexEntry } from "../types";
+import type { DexEntry, TypeChartCell } from "../types";
 import {
   appendNameFilter,
   applyFilter,
@@ -8,6 +8,7 @@ import {
   type FilterDef,
   type FilterEntry,
 } from "./dexFilters";
+import { cellMap } from "./typeChartGrid";
 
 function makeEntry(overrides: Partial<DexEntry> = {}): DexEntry {
   return {
@@ -112,6 +113,108 @@ describe("applyFilter — Class by national dex (ac4)", () => {
   it("rejects an unclassed species", () => {
     const pidgey = makeEntry({ dex: 16 });
     expect(applyFilter(cls, pidgey, "Legendary")).toBe(false);
+  });
+});
+
+describe("Type matchup operators (weak to / SE against / …)", () => {
+  // A Fire/Flying species (Charizard). The chart below only carries the cells
+  // these cases read; a helper keeps each pair terse.
+  const cell = (attacker: string, defender: string, multiplier: number): TypeChartCell => ({
+    attacker,
+    defender,
+    multiplier,
+    overridden: false,
+    base_multiplier: null,
+  });
+  const chart: TypeChartCell[] = [
+    // Defense — attackers hitting Fire and Flying:
+    cell("Water", "Fire", 2), cell("Water", "Flying", 1), //  combined ×2  → weak
+    cell("Grass", "Fire", 0.5), cell("Grass", "Flying", 0.5), // ×0.25 → resists
+    cell("Ground", "Fire", 2), cell("Ground", "Flying", 0), //  ×0    → immune
+    cell("Ground", "Steel", 2), //  a Steel mon is ×2 weak to Ground (ability test)
+    cell("Fire", "Dragon", 1), cell("Water", "Dragon", 1), // neutral (Dry Skin test)
+    // Offense — Fire and Flying hitting defenders (best STAB wins):
+    cell("Fire", "Grass", 2), cell("Flying", "Grass", 2), //  best 2   → SE
+    cell("Fire", "Rock", 0.5), cell("Flying", "Rock", 0.5), // best 0.5 → NVE
+    cell("Fire", "Steel", 0), cell("Flying", "Steel", 0), //  best 0   → can't effect
+  ];
+  const byKey = cellMap(chart);
+  const zard = makeEntry({ types: ["Fire", "Flying"] });
+  const match = (value: string) => evalEntries(zard, [filter("type", value)], byKey);
+
+  it("`is` is a plain membership test (no chart needed)", () => {
+    expect(evalEntries(zard, [filter("type", "is|Fire")])).toBe(true);
+    expect(evalEntries(zard, [filter("type", "Fire")])).toBe(true); // bare = is
+    expect(evalEntries(zard, [filter("type", "is|Water")])).toBe(false);
+  });
+  it("defensive operators read the combined multiplier", () => {
+    expect(match("weak|Water")).toBe(true); //   ×2
+    expect(match("weak|Grass")).toBe(false); //  resisted, not weak
+    expect(match("resists|Grass")).toBe(true); // ×0.25
+    expect(match("resists|Ground")).toBe(false); // immune, not a resist
+    expect(match("immune|Ground")).toBe(true); //  ×0
+    expect(match("immune|Water")).toBe(false);
+  });
+  it("offensive operators read the best-STAB multiplier", () => {
+    expect(match("se|Grass")).toBe(true); //     best ×2
+    expect(match("se|Rock")).toBe(false);
+    expect(match("nve|Rock")).toBe(true); //     best ×0.5
+    expect(match("nve|Steel")).toBe(false); //   no-effect, not NVE
+    expect(match("noeffect|Steel")).toBe(true); // best ×0
+    expect(match("noeffect|Grass")).toBe(false);
+  });
+  it("matches nothing for a matchup operator when the chart hasn't loaded", () => {
+    expect(evalEntries(zard, [filter("type", "weak|Water")])).toBe(false);
+    expect(evalEntries(zard, [filter("type", "weak|Water")], null)).toBe(false);
+  });
+
+  it("folds in an ability immunity — a Levitate mon is immune to Ground, not weak", () => {
+    const steel = makeEntry({
+      types: ["Steel"],
+      abilities: { primary: "Sturdy", secondary: null, hidden: null },
+    });
+    const levitator = makeEntry({
+      types: ["Steel"],
+      abilities: { primary: "Levitate", secondary: null, hidden: null },
+    });
+    const m = (e: DexEntry, v: string) => evalEntries(e, [filter("type", v)], byKey);
+    // Without Levitate the Steel mon is ×2 weak to Ground.
+    expect(m(steel, "weak|Ground")).toBe(true);
+    expect(m(steel, "immune|Ground")).toBe(false);
+    // Levitate flips it: immune to Ground, and no longer weak.
+    expect(m(levitator, "immune|Ground")).toBe(true);
+    expect(m(levitator, "weak|Ground")).toBe(false);
+  });
+
+  it("folds in an ability weakness — a Dry Skin mon is weak to Fire despite neutral typing", () => {
+    // A Dragon mon: neutral to Fire (×1) and Water (×1) by typing.
+    const plain = makeEntry({
+      types: ["Dragon"],
+      abilities: { primary: "Sturdy", secondary: null, hidden: null },
+    });
+    const drySkin = makeEntry({
+      types: ["Dragon"],
+      abilities: { primary: "Dry Skin", secondary: null, hidden: null },
+    });
+    const m = (e: DexEntry, v: string) => evalEntries(e, [filter("type", v)], byKey);
+    // Typing alone: neutral to both, so neither weak nor immune.
+    expect(m(plain, "weak|Fire")).toBe(false);
+    expect(m(plain, "immune|Water")).toBe(false);
+    // Dry Skin: Fire ×1.25 → weak; Water → healed → immune.
+    expect(m(drySkin, "weak|Fire")).toBe(true);
+    expect(m(drySkin, "immune|Water")).toBe(true);
+  });
+
+  it("matches weak via a non-negating alternate ability (any ability qualifies)", () => {
+    // A Steel mon (×2 weak to Ground) with Levitate AND a plain second ability:
+    // Levitate can negate it, but Sturdy leaves it weak, so both match.
+    const dual = makeEntry({
+      types: ["Steel"],
+      abilities: { primary: "Levitate", secondary: "Sturdy", hidden: null },
+    });
+    const m = (v: string) => evalEntries(dual, [filter("type", v)], byKey);
+    expect(m("immune|Ground")).toBe(true); // via Levitate
+    expect(m("weak|Ground")).toBe(true); //   via Sturdy
   });
 });
 

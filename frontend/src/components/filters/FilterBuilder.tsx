@@ -5,6 +5,23 @@ import {
   type FilterEntry,
   type NumericOperator,
 } from "../../lib/filterEngine";
+import { TypeChip } from "../TypeChip";
+import { TypeSelect } from "../TypeSelect";
+
+/** Split a select value into its relation operator + value for an `operators`
+    field. A value with no `"op|"` prefix (bare, or a non-operator select) reads
+    as no operator. Returns the operator's human label (or null). */
+function splitOperator(
+  def: FilterDef | undefined,
+  value: string,
+): { label: string | null; value: string } {
+  if (!def?.operators) return { label: null, value };
+  const bar = value.indexOf("|");
+  if (bar === -1) return { label: null, value };
+  const op = value.slice(0, bar);
+  const found = def.operators.find((o) => o.op === op);
+  return { label: found?.label ?? op, value: value.slice(bar + 1) };
+}
 
 type Props = {
   /** The active entity's filterable fields (dex / move / ability). */
@@ -21,7 +38,7 @@ function uid(): string {
   return crypto.randomUUID();
 }
 
-/** Human label for a pill, e.g. "ATK ≥ 100", "Type: Fire", "Name: char". */
+/** Human label for a pill, e.g. "ATK ≥ 100", "Type is weak to Fire", "Name: char". */
 function describe(def: FilterDef | undefined, value: string): string {
   if (!def) return value;
   if (def.method === "numeric") {
@@ -32,6 +49,10 @@ function describe(def: FilterDef | undefined, value: string): string {
     const [selected, op, num] = value.split("|");
     const clause = op && num ? ` ${op} ${num}` : "";
     return `${def.label}: ${selected}${clause}`;
+  }
+  if (def.field === "type") {
+    const { label, value: type } = splitOperator(def, value);
+    return label ? `${def.label} ${label} ${type}` : `${def.label}: ${type}`;
   }
   return `${def.label}: ${value}`;
 }
@@ -49,6 +70,8 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   const defaultField = defs.find((d) => d.field === "name")?.field ?? defs[0].field;
   const [field, setField] = useState(defaultField);
   const [op, setOp] = useState<NumericOperator>("≥");
+  // The Type field's relation operator (is / weak to / SE against / …).
+  const [typeOp, setTypeOp] = useState<string>("is");
   const [value, setValue] = useState("");
   // The optional numeric clause of a `selectnum` field (blank = category only).
   const [num, setNum] = useState("");
@@ -98,6 +121,7 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
     // Seed select fields with their first option so "Add" is one click.
     const isSelect = nextDef?.method === "select" || nextDef?.method === "selectnum";
     setValue(isSelect ? (nextDef?.values?.[0] ?? "") : "");
+    setTypeOp("is");
     setNum("");
   }
 
@@ -117,8 +141,11 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
       if (num === "" || Number.isNaN(Number(num))) return;
       stored = `${op}|${num}`;
     } else if (def.method === "select") {
-      stored = value || (def.values?.[0] ?? "");
-      if (stored === "") return;
+      const selected = value || (def.values?.[0] ?? "");
+      if (selected === "") return;
+      // An operators field prepends its relation operator ("weak|Water"); a
+      // plain select stores the bare value.
+      stored = def.operators ? `${typeOp}|${selected}` : selected;
     } else if (def.method === "selectnum") {
       const selected = value || (def.values?.[0] ?? "");
       if (selected === "") return;
@@ -215,7 +242,33 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
             />
           </>
         )}
-        {def?.method === "select" && (
+        {def?.method === "select" && def.field === "type" && (
+          <>
+            {def.operators && (
+              <select
+                id={`${idPrefix}-type-op`}
+                className="dexc-select"
+                aria-label="Type relation"
+                value={typeOp}
+                onChange={(e) => setTypeOp(e.target.value)}
+              >
+                {def.operators.map((o) => (
+                  <option key={o.op} value={o.op}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            )}
+            <TypeSelect
+              id={`${idPrefix}-value-type`}
+              label={`${def.label} value`}
+              value={value || def.values?.[0] || ""}
+              variant="code"
+              onChange={setValue}
+            />
+          </>
+        )}
+        {def?.method === "select" && def.field !== "type" && (
           <select
             id={`${idPrefix}-value-select`}
             className="dexc-select"
@@ -382,6 +435,20 @@ function PillItem({
 
   const isParen = entry.kind === "paren";
   const body = isParen ? entry.paren : describe(def, entry.value);
+  // A type filter shows the relation operator + the franchise chip in place of
+  // the bare "op|type" value text.
+  const isTypeFilter = !isParen && entry.kind === "filter" && def?.field === "type";
+  let bodyNode: React.ReactNode = body;
+  if (isTypeFilter && entry.kind === "filter") {
+    const { label, value: type } = splitOperator(def, entry.value);
+    bodyNode = (
+      <>
+        {def?.label}
+        {label ? ` ${label} ` : ": "}
+        <TypeChip type={type} variant="code" />
+      </>
+    );
+  }
 
   return (
     <li
@@ -428,7 +495,7 @@ function PillItem({
             not
           </button>
         )}
-        <span className="dexc-pill__body">{body}</span>
+        <span className="dexc-pill__body">{bodyNode}</span>
         <button
           type="button"
           className="dexc-pill__x"

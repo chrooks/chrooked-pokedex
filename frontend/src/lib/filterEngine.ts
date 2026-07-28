@@ -41,6 +41,10 @@ export interface FilterDef {
   /** `selectnum` only: the values whose numeric clause is offered. Others are
       category-only. */
   numericValues?: string[];
+  /** `select` only: an optional relation-operator menu shown before the value
+      (e.g. the dex Type field's is / weak to / SE against). When present, a pill
+      stores `"<op>|<value>"`; the registry's selectMatch owns interpreting it. */
+  operators?: { op: string; label: string }[];
 }
 
 /** The seam that makes the engine entity-generic. A registry bundles the field
