@@ -54,8 +54,8 @@ _LEARNSET_MAX_RETRIES = 3
 LEARNSET_SIZE_MIN = 16  # floor scales down when the move pool is smaller
 LEARNSET_SIZE_MAX = 26
 LEARNSET_MAX_LEVEL = 70  # no level-up move above this level
-LEARNSET_MAX_MOVES_THROUGH_L5 = 6  # rows with level ≤5, counting the L0/L1 kit
-LEARNSET_MAX_MOVES_THROUGH_L10 = 8  # rows with level ≤10
+LEARNSET_MAX_MOVES_THROUGH_L5 = 5  # rows with level ≤5, counting the L0/L1 kit
+LEARNSET_MAX_MOVES_THROUGH_L10 = 7  # rows with level ≤10
 
 # The ability slots an Override may set, in display order. The draft is a partial
 # Override: only the slots the model proposes appear.
@@ -1138,6 +1138,12 @@ def _build_learnset_rubric() -> str:
         f"- Keep early levels lean: at most {LEARNSET_MAX_MOVES_THROUGH_L5} rows "
         f"at level 5 or below (counting the L0/L1 starting kit) and at most "
         f"{LEARNSET_MAX_MOVES_THROUGH_L10} at level 10 or below.\n"
+        "- Moves tagged [CUSTOM] are bespoke to this game — invented for this "
+        "dex, never seen in the base games. Actively weigh them: when a [CUSTOM] "
+        "move fits the species' type, stats, or identity as well as a canon "
+        "pick, prefer the [CUSTOM] move. They are especially strong candidates "
+        "for the L0 evolution reward and late signature slots. Judge them by "
+        "their listed type/category/power/effect, not familiarity.\n"
         "- For evolved forms (when 'Evolved from' is shown): place an "
         "evolution-reward move at level 0 ('learned on evolution').\n"
         "- For pre-evolutionary forms (when 'Evolves into' at a specific level is "
@@ -1153,12 +1159,19 @@ def _build_learnset_rubric() -> str:
 
 
 def _format_move_pool(pool: list[dict[str, Any]]) -> str:
-    """Render the move pool as a compact, cache-stable text block."""
+    """Render the move pool as a compact, cache-stable text block.
+
+    Net-new created moves get a ``[CUSTOM]`` tag — the model has no training
+    prior pulling toward them (canon learnsets dominate what it "knows"), so
+    without the tag they read as noise among ~900 canon names and go unpicked.
+    """
     lines = []
     for row in pool:
         pwr = f" {row['power']}bp" if row.get("power") is not None else ""
+        tag = " [CUSTOM]" if row.get("custom") else ""
         lines.append(
             f"- {row['move']} ({row['type']} {row['category']}{pwr}; {row['effect']})"
+            f"{tag}"
         )
     return "\n".join(lines)
 

@@ -608,10 +608,13 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
     Built from the merged moves collection (``build_moves``) so it is the real,
     current set (base ⊕ Ruleset): an edited move shows its new type/power, and a
     created move is present. Each row carries only the fields the learnset rubric
-    needs — name, type, category, power, and a short effect string. Sorted by name
-    for a deterministic, cache-stable prefix. Rows without a name are dropped.
+    needs — name, type, category, power, a short effect string, and a `custom`
+    flag marking net-new created moves (a Ruleset id with no base entry; a merely
+    rebalanced canon move is NOT custom). Sorted by name for a deterministic,
+    cache-stable prefix. Rows without a name are dropped.
     """
     all_moves = build_moves(snapshot, ruleset)
+    created_ids = set(ruleset.moves) - set(snapshot.get("moves", {}))
     pool = [
         {
             "move": entry["name"],
@@ -619,6 +622,7 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
             "category": entry.get("category") or "",
             "power": entry.get("power"),
             "effect": entry.get("effect") or "",
+            "custom": entry["chrooked_id"] in created_ids,
         }
         for entry in all_moves
         if entry.get("name")

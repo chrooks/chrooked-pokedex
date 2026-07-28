@@ -319,6 +319,8 @@ def test_build_move_pool_edited_move_shows_current_values(tmp_path: Path) -> Non
     tackle_row = next(r for r in pool if r["move"] == "Tackle")
     assert tackle_row["type"] == "Dragon"
     assert tackle_row["power"] == 60
+    # A rebalanced canon move is NOT custom — it exists in the base.
+    assert tackle_row["custom"] is False
 
 
 def test_build_move_pool_created_move_present(tmp_path: Path) -> None:
@@ -345,6 +347,30 @@ def test_build_move_pool_created_move_present(tmp_path: Path) -> None:
     pool = dexmod.build_move_pool(_SNAPSHOT, ruleset)
     names = [r["move"] for r in pool]
     assert "Slime Blast" in names
+    # Created moves are flagged custom; base moves are not.
+    by_name = {r["move"]: r for r in pool}
+    assert by_name["Slime Blast"]["custom"] is True
+    assert by_name["Dragon Pulse"]["custom"] is False
+
+
+def test_format_move_pool_tags_custom_moves_only() -> None:
+    """[CUSTOM] appears on flagged rows and nowhere else."""
+    pool = [
+        {"move": "Tackle", "type": "Normal", "category": "Physical",
+         "power": 40, "effect": "hit", "custom": False},
+        {"move": "Tsunami", "type": "Water", "category": "Special",
+         "power": 95, "effect": "hit", "custom": True},
+    ]
+    text = suggestmod._format_move_pool(pool)
+    tackle_line, tsunami_line = text.splitlines()
+    assert "[CUSTOM]" not in tackle_line
+    assert tsunami_line.endswith("[CUSTOM]")
+
+
+def test_learnset_rubric_directs_custom_move_consideration() -> None:
+    """The rubric tells the model to actively weigh [CUSTOM] moves."""
+    rubric = suggestmod._build_learnset_rubric()
+    assert "[CUSTOM]" in rubric
 
 
 # ===========================================================================
