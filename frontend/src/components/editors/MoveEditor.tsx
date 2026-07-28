@@ -14,6 +14,7 @@ import type { Move, MoveField, MoveWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
 import { isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
+import { TypeSelect } from "../TypeSelect";
 import { EditorDialog } from "./EditorDialog";
 import { NumberField, SelectField, TextAreaField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
@@ -187,12 +188,10 @@ export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) 
             readOnly={!isNew}
             onChange={(v) => set("chrooked_id", v)}
           />
-          <TextField
-            id="move-type"
-            label="Type"
-            value={form.type}
-            onChange={(v) => set("type", v)}
-          />
+          <div className="field">
+            <label className="field__label" htmlFor="move-type">Type</label>
+            <TypeSelect id="move-type" label="Type" value={form.type} onChange={(v) => set("type", v)} />
+          </div>
           <SelectField
             id="move-category"
             label="Category"

@@ -1,0 +1,60 @@
+/* A type picker that shows the TypeChip for every option. The trigger is a
+   button styled like the app's other form controls; the list mirrors the
+   party-picker listbox (absolute panel, active-row highlight). */
+
+.type-select {
+  position: relative;
+  min-width: 7rem;
+}
+
+.type-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.type-select__trigger .dexc-caret {
+  margin-left: auto;
+}
+
+.type-select__none {
+  color: var(--text-dim);
+  font-size: var(--text-sm);
+}
+
+.type-select__list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  right: 0;
+  max-height: 20rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px -8px oklch(0% 0 0 / 0.45);
+}
+
+.type-select__option {
+  display: flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.type-select__option[data-active="true"] {
+  background: color-mix(in oklch, var(--chrome) 16%, var(--surface-3));
+}

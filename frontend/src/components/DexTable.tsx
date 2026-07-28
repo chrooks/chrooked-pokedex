@@ -7,11 +7,12 @@ import {
   seedMethodForm,
   serializeMethod,
 } from "./editors/evolutionMethod";
-import { bst, dexLabel, isEdited, STAT_LABEL, TYPES, type StatKey } from "../lib/format";
+import { bst, dexLabel, isEdited, STAT_LABEL, type StatKey } from "../lib/format";
 import type { InlineEdit, AbilitySlot } from "../lib/inlineEdit";
 import { COLUMNS, evoMethodText, type Column, type ColumnKey } from "../lib/dexColumns";
 import type { SortKey } from "../lib/dexSort";
 import { TypeChip } from "./TypeChip";
+import { TypeSelect } from "./TypeSelect";
 import { EditedLed } from "./EditedLed";
 import { DexSprite } from "./DexSprite";
 import "./dex-table.css";
@@ -499,17 +500,8 @@ function InlineEditMenu({ x, y, entry, field, abilityOptions, speciesOptions, ev
 
         {field.kind === "types" && (
           <div className="dex-edit__row">
-            <select className="dex-edit__select" autoFocus value={type1} onChange={(e) => setType1(e.target.value)}>
-              {TYPES.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-            <select className="dex-edit__select" value={type2} onChange={(e) => setType2(e.target.value)}>
-              <option value="">— none —</option>
-              {TYPES.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
+            <TypeSelect id="dex-edit-type1" label="Type 1" value={type1} onChange={setType1} variant="code" />
+            <TypeSelect id="dex-edit-type2" label="Type 2" value={type2} onChange={setType2} variant="code" allowNone />
           </div>
         )}
 

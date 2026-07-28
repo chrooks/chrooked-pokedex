@@ -16,7 +16,7 @@ import {
   faFloppyDisk,
 } from "@fortawesome/free-solid-svg-icons";
 import { api, ApiError } from "../../api";
-import { STAT_ORDER, STAT_LABEL, TYPES, isEdited } from "../../lib/format";
+import { STAT_ORDER, STAT_LABEL, isEdited } from "../../lib/format";
 import type {
   AbilitySlots,
   CanonicalMethod,
@@ -29,6 +29,7 @@ import type {
   TargetNamespace,
 } from "../../types";
 import { DexSprite } from "../DexSprite";
+import { TypeSelect } from "../TypeSelect";
 import { ScopeToggle } from "./ScopeToggle";
 import { useSubmit } from "../../hooks/useSubmit";
 import { rowId } from "../../lib/rowId";
@@ -330,23 +331,25 @@ export function SpeciesEditor({ entry, onDone, onSaved, abilityOptions, moveOpti
           {targetFields.has("types") && <TargetFieldBadge label={namespace?.label} />}
         </h3>
         <div className="editor-form__grid">
-          <ComboField
-            id="species-type1"
-            label="Type 1"
-            options={TYPES}
-            value={type1}
-            changed={type1.trim() !== (baseTypes(entry)[0] ?? "")}
-            onChange={setType1}
-          />
-          <ComboField
-            id="species-type2"
-            label="Type 2"
-            hint="blank = single-type"
-            options={TYPES}
-            value={type2}
-            changed={type2.trim() !== (baseTypes(entry)[1] ?? "")}
-            onChange={setType2}
-          />
+          <div className="field">
+            <label className="field__label" htmlFor="species-type1">
+              Type 1
+              {type1.trim() !== (baseTypes(entry)[0] ?? "") && (
+                <span className="sr-only"> (changed from base)</span>
+              )}
+            </label>
+            <TypeSelect id="species-type1" label="Type 1" value={type1} onChange={setType1} />
+          </div>
+          <div className="field">
+            <label className="field__label" htmlFor="species-type2">
+              Type 2
+              <span className="field__hint"> · blank = single-type</span>
+              {type2.trim() !== (baseTypes(entry)[1] ?? "") && (
+                <span className="sr-only"> (changed from base)</span>
+              )}
+            </label>
+            <TypeSelect id="species-type2" label="Type 2" value={type2} onChange={setType2} allowNone />
+          </div>
         </div>
       </section>
 
