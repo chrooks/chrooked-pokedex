@@ -1159,9 +1159,17 @@ def _build_learnset_rubric() -> str:
         "- Provide STAB on the species' types wherever possible.\n"
         "- Match move category (Physical/Special/Status) to the base stats: "
         "high ATK → Physical leaning; high SPA → Special leaning; balanced → mix.\n"
-        "- Synergize with the species' abilities (e.g. Iron Fist ability → prefer "
-        "punching-flag moves; Sheer Force → prefer moves with secondary effects; "
-        "Pixilate/Refrigerate → Normal moves hit harder as that type).\n"
+        "- Treat the species' ability descriptions (provided below) as DESIGN "
+        "CONSTRAINTS, not flavor. For EACH ability, work out which moves it "
+        "rewards or requires and deliberately bias the learnset toward them. The "
+        "reasoning generalizes — reason from the actual description text, these "
+        "are only examples: a Normal-conversion ability (turns Normal moves into "
+        "another type) NEEDS Normal-type attacking moves or it does nothing; a "
+        "punch/bite/kick booster wants those moves; Sheer Force wants moves with "
+        "secondary effects; an ability that rewards using status moves wants good "
+        "status moves; an ability that cancels a move's drawback (e.g. accuracy) "
+        "makes that move worth teaching. A loud ABILITY-DRIVEN MOVE REQUIREMENT "
+        "line may appear below with an exact candidate shortlist — obey it.\n"
         "- Maintain a sensible level progression: weaker/basic moves early, "
         "stronger/signature moves late.\n"
         f"- Size: {LEARNSET_SIZE_MIN}–{LEARNSET_SIZE_MAX} rows total "
@@ -1234,6 +1242,134 @@ def _format_abilities_with_effects(
     return " / ".join(parts) if parts else "(none)"
 
 
+# Ability→move synergy. The GENERAL engine is the rubric, which makes the model
+# reason move-relevance from each ability's description (all of them are already
+# in the prompt). This table is only the extra push for cases where the pool can
+# be QUERIED by a rock-solid STRUCTURED filter — no per-ability name-hacking — so
+# the model gets a concrete candidate shortlist, not just a nudge. Append a row
+# to cover a new case; never a bespoke detector per ability.
+#
+# Each rule: a description regex, and a builder(name, match, pool) → directive.
+# The -ate case is the only HARD requirement (the ability is null without Normal
+# moves); the rest are "lean toward". Everything not in this table is still
+# handled — by the model reasoning over the description, per the rubric.
+_ATE_RE = re.compile(
+    r"normal(?:-type)? moves become (?:the )?([A-Za-z]+)", re.IGNORECASE
+)
+_STATUS_SYNERGY_RE = re.compile(r"status move", re.IGNORECASE)
+
+# How many ability-relevant candidate moves to surface. Enough to choose from,
+# few enough to stay a nudge rather than a second pool dump.
+_ABILITY_SHORTLIST_SIZE = 8
+
+# Shortlist power ceiling: a proxy to keep gimmick nukes (Explosion 250, Z-moves,
+# Hyper/Giga Impact) out of the "strong attacker" shortlist — the pool rows carry
+# no self-KO/recharge/Z flag to filter on directly. Boomburst (140) still makes
+# it; nothing above is a real level-up teach. ponytail: power proxy, swap for a
+# real eligibility flag if the pool ever carries move flags.
+_SHORTLIST_POWER_CEILING = 140
+
+
+def _ate_directive(name: str, match: re.Match[str], pool: list[dict[str, Any]]) -> str:
+    converted = match.group(1).capitalize()
+    shortlist = _shortlist(pool, move_type="Normal", attacking=True)
+    candidates = (
+        f" Strong Normal-type attackers in the pool: {shortlist}." if shortlist else ""
+    )
+    return (
+        f"{name} converts this species' Normal-type moves into {converted}-type "
+        f"with a power boost. You MUST include at least 2-3 strong Normal-type "
+        f"ATTACKING moves — the ability is dead weight otherwise. They function as "
+        f"boosted {converted}-type STAB, so treat them as primary offense, not "
+        f"filler.{candidates}"
+    )
+
+
+def _status_synergy_directive(
+    name: str, _match: re.Match[str], pool: list[dict[str, Any]]
+) -> str:
+    shortlist = _shortlist(pool, category="status")
+    candidates = f" Status moves in the pool: {shortlist}." if shortlist else ""
+    return (
+        f"{name} rewards using STATUS moves (see its effect). Lean the learnset "
+        f"toward several useful status moves so the ability pays off.{candidates}"
+    )
+
+
+# (pattern, builder). Ordered; a builder fires once per matching ability.
+_SYNERGY_RULES: tuple[tuple[re.Pattern[str], Any], ...] = (
+    (_ATE_RE, _ate_directive),
+    (_STATUS_SYNERGY_RE, _status_synergy_directive),
+)
+
+
+def _ability_move_requirements(
+    ability_slots: dict[str, Any],
+    all_abilities: list[dict[str, Any]],
+    move_pool: list[dict[str, Any]],
+) -> str:
+    """Per-species move directives implied by the species' abilities.
+
+    Runs the structured-filter synergy table over each ability's description and
+    QUERIES the move pool for relevant candidates — the in-process relevance
+    lookup, no agentic tool round-trip. Returns a directive string, or "" when no
+    tabled ability applies (the rubric still drives general per-ability reasoning).
+    """
+    ability_by_name: dict[str, str] = {
+        entry["name"].strip().casefold(): entry.get("description", "")
+        for entry in all_abilities
+        if entry.get("name")
+    }
+    directives: list[str] = []
+    for slot in _ABILITY_SLOTS:
+        name = ability_slots.get(slot)
+        if not name:
+            continue
+        desc = ability_by_name.get(name.strip().casefold(), "")
+        for pattern, builder in _SYNERGY_RULES:
+            match = pattern.search(desc)
+            if match:
+                directives.append(builder(name, match, move_pool))
+    return " ".join(directives)
+
+
+def _shortlist(
+    move_pool: list[dict[str, Any]],
+    *,
+    move_type: str | None = None,
+    category: str | None = None,
+    attacking: bool = False,
+) -> str:
+    """Matching pool moves as a compact list — the ability-relevance query.
+
+    Filters the already-loaded pool by structured fields only (type, category).
+    Attacking matches sort by power and show ``Name (Npbp)``; status matches keep
+    pool (name) order and show just the name. Capped at ``_ABILITY_SHORTLIST_SIZE``.
+    """
+    def keep(row: dict[str, Any]) -> bool:
+        cat = (row.get("category") or "").casefold()
+        if move_type is not None and (row.get("type") or "").casefold() != move_type.casefold():
+            return False
+        if category is not None and cat != category.casefold():
+            return False
+        if attacking and cat == "status":
+            return False
+        return True
+
+    matches = [row for row in move_pool if keep(row)]
+    if attacking:
+        matches = [
+            r for r in matches
+            if isinstance(r.get("power"), int)
+            and 1 < r["power"] <= _SHORTLIST_POWER_CEILING
+        ]
+        matches.sort(key=lambda r: r["power"], reverse=True)
+        top = matches[:_ABILITY_SHORTLIST_SIZE]
+        return ", ".join(f"{r['move']} ({r['power']}bp)" for r in top)
+    top = matches[:_ABILITY_SHORTLIST_SIZE]
+    return ", ".join(r["move"] for r in top)
+
+
 def _format_evo_context(entry: dict[str, Any]) -> str:
     """Format the evolution context for the learnset rubric.
 
@@ -1259,6 +1395,7 @@ def _format_evo_context(entry: dict[str, Any]) -> str:
 def _build_learnset_user_context(
     entry: dict[str, Any],
     all_abilities: list[dict[str, Any]],
+    move_pool: list[dict[str, Any]],
     mode: str,
     instruction: str | None,
     direction: str | None,
@@ -1268,21 +1405,28 @@ def _build_learnset_user_context(
     Extends `_build_user_context` with ability-effect text + evo context (D3).
     The ability descriptions come from the merged abilities pool so a Ruleset
     retune of an ability shifts move picks (not names-only like the base context).
+    When an ability imposes a hard move requirement (an -ate conversion), a loud
+    per-species directive plus a pool-queried candidate shortlist is added on its
+    own line so the model can't skim past it.
     """
     stats = entry.get("stats", {})
     stat_line = " ".join(
         f"{key.upper()} {stats[key]}" for key in _STAT_KEYS if key in stats
     ) or "(unknown)"
+    ability_slots = entry.get("abilities", {})
     lines = [
         f"Species: {entry.get('name', entry['chrooked_id'])}",
         f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
         f"Base stats: {stat_line}",
         f"Current abilities (with effects): "
-        f"{_format_abilities_with_effects(entry.get('abilities', {}), all_abilities)}",
+        f"{_format_abilities_with_effects(ability_slots, all_abilities)}",
         f"Current learnset: {_format_learnset(entry.get('learnset', []))}",
         f"Evolution: {_format_evo_context(entry)}",
         f"Mode: {mode.upper()}",
     ]
+    requirements = _ability_move_requirements(ability_slots, all_abilities, move_pool)
+    if requirements:
+        lines.append(f"ABILITY-DRIVEN MOVE REQUIREMENT: {requirements}")
     if instruction and instruction.strip():
         lines.append(f"Surgical instruction: {instruction.strip()}")
     if direction and direction.strip():
@@ -1658,7 +1802,7 @@ def suggest_learnset(
         "Move pool (pick ONLY from these moves):\n" + _format_move_pool(move_pool)
     )
     user_context = _build_learnset_user_context(
-        entry, abilities, mode, instruction, direction
+        entry, abilities, move_pool, mode, instruction, direction
     )
     current_learnset = list(entry.get("learnset") or [])
 

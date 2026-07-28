@@ -395,6 +395,107 @@ def test_pacing_violation_warns_but_does_not_reject() -> None:
                for w in out["warnings"])
 
 
+def _ate_pool() -> list[dict[str, Any]]:
+    """A pool with strong Normal attackers, so the -ate shortlist has content."""
+    return [
+        {"move": "Body Slam", "type": "Normal", "category": "physical",
+         "power": 85, "effect": "hit", "custom": False},
+        {"move": "Double-Edge", "type": "Normal", "category": "physical",
+         "power": 120, "effect": "hit", "custom": False},
+        {"move": "Hyper Voice", "type": "Normal", "category": "special",
+         "power": 90, "effect": "hit", "custom": False},
+        {"move": "Growl", "type": "Normal", "category": "status",
+         "power": None, "effect": "hit", "custom": False},
+        {"move": "Dragon Pulse", "type": "Dragon", "category": "special",
+         "power": 85, "effect": "hit", "custom": False},
+    ]
+
+
+def _abilities_with(desc_by_name: dict[str, str]) -> list[dict[str, Any]]:
+    return [
+        {"name": name, "description": desc, "aka": {}}
+        for name, desc in desc_by_name.items()
+    ]
+
+
+def test_ate_ability_forces_normal_move_requirement_with_shortlist() -> None:
+    """An -ate ability yields a hard requirement naming the converted type and a
+    pool-queried Normal-attacker shortlist, strongest first."""
+    req = suggestmod._ability_move_requirements(
+        {"primary": "Spectralize", "secondary": None, "hidden": None},
+        _abilities_with({"Spectralize": "Normal moves become Ghost-type. +20% power."}),
+        _ate_pool(),
+    )
+    assert "MUST" in req
+    assert "Ghost-type" in req
+    # Shortlist present, attackers only, strongest first, status excluded.
+    assert "Double-Edge (120bp)" in req
+    assert req.index("Double-Edge") < req.index("Body Slam")
+    assert "Growl" not in req
+
+
+def test_ate_shortlist_excludes_gimmick_nukes() -> None:
+    """The attacker shortlist drops moves above the gimmick-nuke power ceiling."""
+    pool = _ate_pool() + [
+        {"move": "Explosion", "type": "Normal", "category": "physical",
+         "power": 250, "effect": "hit", "custom": False},
+    ]
+    req = suggestmod._ability_move_requirements(
+        {"primary": "Spectralize", "secondary": None, "hidden": None},
+        _abilities_with({"Spectralize": "Normal moves become Ghost-type. +20% power."}),
+        pool,
+    )
+    assert "Explosion" not in req
+    assert "Double-Edge" in req  # 120bp, under the ceiling, kept
+
+
+def test_status_synergy_ability_leans_toward_status_moves() -> None:
+    """An ability rewarding status moves surfaces a status-move shortlist (soft)."""
+    pool = _ate_pool()  # carries one status move, Growl
+    req = suggestmod._ability_move_requirements(
+        {"primary": "Insidious", "secondary": None, "hidden": None},
+        _abilities_with({"Insidious": "Raises Speed one stage when using a status move."}),
+        pool,
+    )
+    assert "status" in req.lower()
+    assert "Growl" in req
+    assert "MUST" not in req  # soft lean, not a hard requirement
+
+
+def test_no_synergy_ability_yields_no_requirement_line() -> None:
+    """An ability with no tabled synergy adds no requirement (rubric still drives)."""
+    req = suggestmod._ability_move_requirements(
+        {"primary": "Sap Sipper", "secondary": None, "hidden": None},
+        _abilities_with({"Sap Sipper": "Boosts Attack when hit by a Grass move."}),
+        _ate_pool(),
+    )
+    assert req == ""
+
+
+def test_ate_requirement_appears_in_assembled_context() -> None:
+    """The requirement lands on its own loud line in the suggest user context."""
+    entry = {
+        "chrooked_id": "vaporate",
+        "name": "Vaporate",
+        "types": ["Water"],
+        "stats": {"hp": 80, "atk": 110, "def": 70, "spa": 60, "spd": 70, "spe": 90},
+        "abilities": {"primary": "Hydrate", "secondary": None, "hidden": None},
+        "learnset": [{"level": 1, "move": "Tackle"}],
+        "evolution": {},
+        "evolves_into": [],
+    }
+    user_ctx = suggestmod._build_learnset_user_context(
+        entry,
+        _abilities_with({"Hydrate": "Normal moves become Water-type. +20% power."}),
+        _ate_pool(),
+        "full",
+        None,
+        None,
+    )
+    assert "ABILITY-DRIVEN MOVE REQUIREMENT" in user_ctx
+    assert "Water-type" in user_ctx
+
+
 def test_pacing_exempts_l0_and_in_band_rows() -> None:
     """L0 rows and in-band attacks draw no pacing warning."""
     # Dragon Pulse 85bp at L0 (exempt) and Tackle 40bp at L8 (under the 60 cap).
