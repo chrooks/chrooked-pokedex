@@ -573,46 +573,6 @@ def create_app(
         except llmmod.LlmError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error
 
-    @app.post("/api/species/{chrooked_id}/suggest/learnset/line")
-    def suggest_species_learnset_line(
-        chrooked_id: str, payload: dict[str, Any] | None = None
-    ) -> dict[str, Any]:
-        """Propose a full learnset for every member of this species' evolution line.
-
-        Resolves the linear chain through ``chrooked_id`` and runs one learnset
-        proposal per member in base→tip order, threading each accepted draft into
-        the next member's prompt for family coherence. Returns
-        ``{chain_label, stages}``; each stage carries the member's identity, its
-        current learnset (for the diff), and either a ``{draft, rationale,
-        alternatives}`` proposal or a per-member ``error``. The accept path stays
-        the existing ``PUT /api/species/{id}`` — one PUT per applied stage.
-
-        Honest errors: a missing key / upstream failure (`LlmError`) → 503; an
-        unknown anchor species → 404. A per-member `SuggestError` is captured on
-        that stage (never fails the whole run), so this route does not 422.
-        """
-        snapshot = _load_snapshot_or_503()
-        ruleset = _load_ruleset_or_503()
-        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
-        if dexmod.build_dex_entry(snapshot, ruleset, chrooked_id) is None:
-            raise HTTPException(
-                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
-            )
-        move_pool = dexmod.build_move_pool(snapshot, ruleset)
-        abilities = dexmod.build_abilities(snapshot, ruleset)
-        direction = (payload or {}).get("direction")
-        try:
-            return suggestmod.suggest_learnset_line(
-                provider=_llm_provider(),
-                chrooked_id=chrooked_id,
-                entries=dexmod.build_dex(snapshot, ruleset),
-                move_pool=move_pool,
-                abilities=abilities,
-                direction=direction,
-            )
-        except llmmod.LlmError as error:
-            raise HTTPException(status_code=503, detail=str(error)) from error
-
     @app.post("/api/species/{chrooked_id}/suggest/stats")
     def suggest_species_stats(
         chrooked_id: str, payload: dict[str, Any] | None = None
