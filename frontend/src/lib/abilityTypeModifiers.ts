@@ -21,13 +21,20 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
   "flash fire": { immuneTo: ["Fire"] },
   "water absorb": { immuneTo: ["Water"] },
   "storm drain": { immuneTo: ["Water"] },
-  "dry skin": { immuneTo: ["Water"] },
+  "dry skin": { immuneTo: ["Water"], multiplier: { Fire: 1.25 } },
   "volt absorb": { immuneTo: ["Electric"] },
   "lightning rod": { immuneTo: ["Electric"] },
   "motor drive": { immuneTo: ["Electric"] },
   "sap sipper": { immuneTo: ["Grass"] },
   "earth eater": { immuneTo: ["Ground"] },
   "well-baked body": { immuneTo: ["Fire"] },
+  // Custom Ruleset abilities that grant a type immunity (immunity encoded only
+  // in the ability's prose description, so it's mirrored here by hand). Add a new
+  // one whenever the Ruleset introduces another type-immunity ability.
+  aerodynamic: { immuneTo: ["Flying"] }, // "Draws Flying moves"
+  flytrap: { immuneTo: ["Bug"] }, // "Bug immune"
+  mountaineer: { immuneTo: ["Rock"] }, // "Immune to Rock moves and Stealth Rock"
+  updraft: { immuneTo: ["Ground"] }, // "Ground immune"
   "thick fat": { multiplier: { Fire: 0.5, Ice: 0.5 } },
   heatproof: { multiplier: { Fire: 0.5 } },
   "water bubble": { multiplier: { Fire: 0.5 } },
