@@ -7,7 +7,11 @@
 
 import { api } from "../../api";
 import type { SpeciesOverride } from "../../types";
-import type { MirrorRow } from "../../lib/mirrorDown";
+import {
+  DEFAULT_MIRROR_FACETS,
+  type MirrorFacet,
+  type MirrorRow,
+} from "../../lib/mirrorDown";
 
 function seedOverride(row: MirrorRow): SpeciesOverride {
   return {
@@ -22,9 +26,14 @@ function seedOverride(row: MirrorRow): SpeciesOverride {
   };
 }
 
-/** Write each pre-evo copy; returns the chrooked_ids actually written so the
-    read-back tail checks exactly the species this session touched. */
-export async function writeMirror(rows: readonly MirrorRow[]): Promise<string[]> {
+/** Write each recipient copy, restricted to the selected facets (default: the
+    classic types + abilities + learnset mirror-down). Returns the chrooked_ids
+    actually written so the read-back tail checks exactly the species this
+    session touched. */
+export async function writeMirror(
+  rows: readonly MirrorRow[],
+  facets: ReadonlySet<MirrorFacet> = DEFAULT_MIRROR_FACETS,
+): Promise<string[]> {
   const written: string[] = [];
   for (const row of rows) {
     let raw: SpeciesOverride;
@@ -35,7 +44,13 @@ export async function writeMirror(rows: readonly MirrorRow[]): Promise<string[]>
     }
     await api.putSpecies(
       row.chrooked_id,
-      { ...raw, types: row.types, abilities: row.abilities, learnset: row.learnset },
+      {
+        ...raw,
+        ...(facets.has("types") ? { types: row.types } : {}),
+        ...(facets.has("abilities") ? { abilities: row.abilities } : {}),
+        ...(facets.has("stats") && row.stats ? { stats: row.stats } : {}),
+        ...(facets.has("learnset") ? { learnset: row.learnset } : {}),
+      },
       undefined,
       { silent: true },
     );

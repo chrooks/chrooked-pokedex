@@ -1,14 +1,23 @@
-/* The MIRROR step — the mirror-only journey (ac8). When no design stage is
-   selected, the workbench lands here: preview the final evo's CURRENT kit (types
-   + abilities + learnset − L0) copied onto its pre-evos, then LOCK IN writes ONLY
-   the pre-evos (the final evo's own fields are never touched). Reuses
-   mirrorDownPreview + the shared writeMirror helper; the tail follows. */
+/* The MIRROR wizard — the mirror-only journey (ac8), reachable from a profile's
+   Mirror button or a workbench with zero design stages selected. Pick the ANCHOR
+   (any member of the evolution line), the FACETS to copy (typing / stats /
+   abilities / learnset − L0), and the RECIPIENTS (any other line member; the
+   anchor's pre-evos start included, evolved stages start skipped). LOCK IN
+   writes ONLY the recipients — the anchor is never touched. Stats is opt-in:
+   the line default SCALES stats rather than copying them (CLAUDE.md), so
+   mirroring them verbatim is a deliberate exception. */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ApiError } from "../../api";
 import type { DexEntry } from "../../types";
 import type { StageFacts } from "../../lib/makeoverApi";
-import { mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
+import {
+  DEFAULT_MIRROR_FACETS,
+  MIRROR_FACETS,
+  lineMembers,
+  mirrorRows,
+  type MirrorFacet,
+} from "../../lib/mirrorDown";
 import { writeMirror } from "./mirrorWrite";
 import { MirrorRowList } from "./MirrorRowList";
 import type { StageActions } from "./StagePanel";
@@ -22,27 +31,76 @@ interface Props {
 
 type Phase = "ready" | "writing" | "error";
 
+const FACET_LABEL: Record<MirrorFacet, string> = {
+  types: "typing",
+  stats: "stats",
+  abilities: "abilities",
+  learnset: "learnset − L0",
+};
+
 export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
   const [phase, setPhase] = useState<Phase>("ready");
   const [error, setError] = useState<string | null>(null);
-  const [excluded, setExcluded] = useState<ReadonlySet<string>>(new Set());
 
+  const line = useMemo(() => lineMembers(entry, byId), [entry, byId]);
+  const [anchorId, setAnchorId] = useState(entry.chrooked_id);
+  const anchor =
+    line.find((member) => member.chrooked_id === anchorId) ?? entry;
+
+  const [facets, setFacets] = useState<ReadonlySet<MirrorFacet>>(
+    DEFAULT_MIRROR_FACETS,
+  );
+  // Evolved stages (relative to the anchor) start skipped: mirroring UP is
+  // allowed but deliberate. Positional (line is base→tip ordered) rather than a
+  // second graph walk, so a branch stopping the walk can't miss a skip.
+  const laterThan = (id: string): Set<string> => {
+    const index = line.findIndex((member) => member.chrooked_id === id);
+    return new Set(
+      line.filter((_, i) => i > index).map((member) => member.chrooked_id),
+    );
+  };
+  const [excluded, setExcluded] = useState<ReadonlySet<string>>(() =>
+    laterThan(entry.chrooked_id),
+  );
+
+  const recipients = useMemo(
+    () => line.filter((member) => member.chrooked_id !== anchor.chrooked_id),
+    [line, anchor.chrooked_id],
+  );
   const rows = useMemo(
     () =>
-      mirrorDownPreview(entry, byId, {
-        types: entry.types,
-        abilities: entry.abilities,
-        learnset: entry.learnset,
-      }),
-    [entry, byId],
+      mirrorRows(
+        {
+          types: anchor.types,
+          abilities: anchor.abilities,
+          stats: anchor.stats,
+          learnset: anchor.learnset,
+        },
+        recipients,
+      ),
+    [anchor, recipients],
   );
   const included = useMemo(
     () => rows.filter((row) => !excluded.has(row.chrooked_id)),
     [rows, excluded],
   );
-  const hasLine = preEvos(entry, byId).length > 0;
-  // Nothing to lock if every pre-evo is skipped.
-  const canWrite = included.length > 0;
+  const hasLine = line.length > 1;
+  // Nothing to lock if every recipient is skipped or no facet is picked.
+  const canWrite = included.length > 0 && facets.size > 0;
+
+  function pickAnchor(nextId: string) {
+    setAnchorId(nextId);
+    setExcluded(laterThan(nextId));
+  }
+
+  function toggleFacet(facet: MirrorFacet) {
+    setFacets((prev) => {
+      const next = new Set(prev);
+      if (next.has(facet)) next.delete(facet);
+      else next.add(facet);
+      return next;
+    });
+  }
 
   function toggle(chrookedId: string) {
     setExcluded((prev) => {
@@ -60,7 +118,7 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
       setPhase("writing");
       setError(null);
       try {
-        const written = await writeMirror(included);
+        const written = await writeMirror(included, facets);
         onLocked({}, written);
       } catch (caught: unknown) {
         setError(
@@ -88,22 +146,67 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
   return (
     <div className="mk-stage" data-phase={phase} id="mk-stage-mirror">
       <p className="mk-direction__lead">
-        Mirror <strong>{entry.name}</strong>'s current kit onto its pre-evolutions — same typing +
-        abilities, learnset minus the L0 on-evolution rows. The final evo is left untouched.
+        Mirror <strong>{anchor.name}</strong>'s current kit onto the rest of its
+        line. Pick the anchor, the facets, and the recipients — the anchor itself
+        is never touched.
       </p>
 
-      {!hasLine && <p className="mk-empty mono">no pre-evolutions to mirror to.</p>}
+      {!hasLine && <p className="mk-empty mono">no evolution line to mirror across.</p>}
+
+      {hasLine && (
+        <div className="mk-mirror__controls">
+          <label className="mk-mirror__anchor mono" htmlFor="mk-mirror-anchor">
+            anchor
+            <select
+              id="mk-mirror-anchor"
+              className="mk-select"
+              value={anchor.chrooked_id}
+              onChange={(e) => pickAnchor(e.target.value)}
+            >
+              {line.map((member) => (
+                <option key={member.chrooked_id} value={member.chrooked_id}>
+                  {member.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <fieldset className="mk-mirror__facets" id="mk-mirror-facets">
+            <legend className="mono">facets</legend>
+            {MIRROR_FACETS.map((facet) => (
+              <label key={facet} className="mk-mirror__facet mono">
+                <input
+                  type="checkbox"
+                  id={`mk-mirror-facet-${facet}`}
+                  checked={facets.has(facet)}
+                  onChange={() => toggleFacet(facet)}
+                />
+                {FACET_LABEL[facet]}
+              </label>
+            ))}
+            {facets.has("stats") && (
+              <p className="mk-mirror__facet-note mono">
+                stats copy verbatim — the line default scales them instead.
+              </p>
+            )}
+          </fieldset>
+        </div>
+      )}
 
       {hasLine && (
         <MirrorRowList
           rows={rows}
           excluded={excluded}
           onToggle={toggle}
+          facets={facets}
           id="mk-mirror-only-list"
         />
       )}
-      {hasLine && !canWrite && (
-        <p className="mk-empty mono">every pre-evo skipped — nothing to mirror.</p>
+      {hasLine && included.length === 0 && (
+        <p className="mk-empty mono">every recipient skipped — nothing to mirror.</p>
+      )}
+      {hasLine && facets.size === 0 && (
+        <p className="mk-empty mono">no facet picked — nothing to mirror.</p>
       )}
 
       {error !== null && (

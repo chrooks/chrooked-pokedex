@@ -1,43 +1,14 @@
 /* The makeover-specific API calls, layered over the SAME backend Seams the chat
    skills use (One Seam): the species-suggest endpoints, the apply/read-back
-   targets machinery, and the two small makeover routes (rubric, design-log). Kept
-   in its own module so the shared api.ts stays untouched; reuses ApiError for
-   honest, verbatim server messages (422/503 surfaced as-is). */
+   targets machinery, and the two small makeover routes (rubric, design-log).
+   Fetch + error mapping come from api.ts — one ApiError shape everywhere. */
 
-import { ApiError } from "../api";
+import { getJson, sendJson } from "../api";
 import type { AbilitySlots, AdditionalEffect, ApplyReportSummary, Behavior } from "../types";
 import type { LearnsetRubric } from "./learnsetBands";
 
-async function postJson<T>(path: string, payload?: unknown): Promise<T> {
-  const response = await fetch(path, {
-    method: "POST",
-    headers: payload !== undefined ? { "Content-Type": "application/json" } : undefined,
-    body: payload !== undefined ? JSON.stringify(payload) : undefined,
-  });
-  if (!response.ok) throw await toError(response);
-  return (await response.json()) as T;
-}
-
-async function getJson<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(path, { signal });
-  if (!response.ok) throw await toError(response);
-  return (await response.json()) as T;
-}
-
-async function toError(response: Response): Promise<ApiError> {
-  let detail: unknown = null;
-  try {
-    const body = (await response.json()) as { detail?: unknown };
-    detail = body.detail ?? null;
-  } catch {
-    // Non-JSON error body; fall through to the status line.
-  }
-  const message =
-    typeof detail === "string"
-      ? detail
-      : `Request failed (${response.status} ${response.statusText})`;
-  return new ApiError(response.status, message, detail);
-}
+const postJson = <T,>(path: string, payload?: unknown): Promise<T> =>
+  sendJson<T>("POST", path, payload);
 
 /** One lore-grounded makeover direction: a typing + a short role label. */
 export interface LoreOption {

@@ -45,6 +45,10 @@ interface Props {
   allEntries: DexEntry[];
   moves: readonly Move[];
   stage: Stage | null;
+  /** An explicit à-la-carte seed (a profile section's suggest deep link), or
+      null/undefined for the Ruleset-derived smart defaults. Seed-only: rail
+      toggles after entry stay session state. */
+  initialSelected?: readonly DesignStage[] | null;
   onStage: (stage: Stage | null) => void;
   onExit: () => void;
   onSaved: () => void;
@@ -60,6 +64,7 @@ export function MakeoverWorkbench({
   allEntries,
   moves,
   stage,
+  initialSelected,
   onStage,
   onExit,
   onSaved,
@@ -72,8 +77,12 @@ export function MakeoverWorkbench({
   // The à la carte selection — seeded once from the Ruleset (smart defaults), then
   // toggled by the rail. Session state: a lock+reload does not reset it (the same
   // mount), but a fresh page reload re-derives (resume).
+  // An explicit deep-link seed wins over the smart defaults — including the
+  // EMPTY seed, which is the mirror-only journey ("Mirror" on a profile).
   const [selected, setSelected] = useState<Set<DesignStage>>(() =>
-    defaultSelected(entry.overridden_fields),
+    initialSelected != null
+      ? new Set(initialSelected)
+      : defaultSelected(entry.overridden_fields),
   );
   const [sessionLocked, setSessionLocked] = useState<Set<Stage>>(new Set());
   const [writtenIds, setWrittenIds] = useState<Set<string>>(new Set());

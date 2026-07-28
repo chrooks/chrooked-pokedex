@@ -25,27 +25,3 @@ export interface CommonStageProps {
   /** Called on a re-roll with the composed redirect, so the session harvests it. */
   onRedirect: (text: string) => void;
 }
-
-/** The 18 canonical types — the picker pool for the typing stage. The backend
-    still validates a locked typing against the real merged pool (the loader is
-    the gate); offering the standard set keeps the picker offline + stable. */
-export const TYPE_POOL: readonly string[] = [
-  "Normal",
-  "Fire",
-  "Water",
-  "Electric",
-  "Grass",
-  "Ice",
-  "Fighting",
-  "Poison",
-  "Ground",
-  "Flying",
-  "Psychic",
-  "Bug",
-  "Rock",
-  "Ghost",
-  "Dragon",
-  "Dark",
-  "Steel",
-  "Fairy",
-];

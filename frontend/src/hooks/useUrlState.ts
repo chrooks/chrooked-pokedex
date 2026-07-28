@@ -16,8 +16,8 @@ import {
   encodeSort,
 } from "../lib/dexViewCodec";
 import { decodeParty, encodeParty, type PartyMember } from "../lib/teamViewCodec";
-import { decodeMakeover, encodeMakeover } from "../lib/makeoverUrlCodec";
-import type { Stage } from "../lib/makeoverStages";
+import { decodeMakeover, encodeMakeover, MAKEOVER_PARAMS } from "../lib/makeoverUrlCodec";
+import type { DesignStage, Stage } from "../lib/makeoverStages";
 
 export type DexLayout = "grid" | "table";
 
@@ -48,6 +48,9 @@ export interface ViewState {
   makeover: string | null;
   /** The active makeover stage, or null to derive it from the Ruleset state. */
   makeoverStage: Stage | null;
+  /** An explicit à-la-carte stage seed for the workbench (deep links from a
+      profile section's suggest button), or null for smart defaults. */
+  makeoverSelect: DesignStage[] | null;
 }
 
 const KINDS: readonly KindKey[] = [
@@ -78,6 +81,7 @@ function readState(): ViewState {
     ? (rawKind as KindKey)
     : "dex";
   cachedSearch = search;
+  const mk = decodeMakeover(params);
   cachedState = {
     kind,
     query: params.get("q") ?? "",
@@ -91,8 +95,9 @@ function readState(): ViewState {
     hidden: decodeHidden(params.get("hide")),
     backdrop: params.get("backdrop"),
     party: decodeParty(params.get("team")),
-    makeover: decodeMakeover(params).species,
-    makeoverStage: decodeMakeover(params).stage,
+    makeover: mk.species,
+    makeoverStage: mk.stage,
+    makeoverSelect: mk.selected,
   };
   return cachedState;
 }
@@ -122,8 +127,7 @@ const OWNED_PARAMS = [
   "hide",
   "backdrop",
   "team",
-  "mk",
-  "mkstage",
+  ...MAKEOVER_PARAMS,
 ] as const;
 
 function writeState(next: ViewState): void {
@@ -142,7 +146,11 @@ function writeState(next: ViewState): void {
   if (next.hidden.length) params.set("hide", encodeHidden(next.hidden));
   if (next.backdrop) params.set("backdrop", next.backdrop);
   if (next.party.length) params.set("team", encodeParty(next.party));
-  encodeMakeover(params, { species: next.makeover, stage: next.makeoverStage });
+  encodeMakeover(params, {
+    species: next.makeover,
+    stage: next.makeoverStage,
+    selected: next.makeoverSelect,
+  });
 
   const search = params.toString();
   const url = search ? `?${search}` : window.location.pathname;

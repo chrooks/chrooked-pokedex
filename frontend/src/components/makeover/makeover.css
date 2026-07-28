@@ -764,6 +764,54 @@ textarea.mk-stage__redirect-input {
   text-decoration-color: var(--line-strong);
 }
 
+/* Mirror wizard controls: anchor picker + facet checkboxes. */
+.mk-mirror__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+.mk-mirror__anchor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+.mk-mirror__facets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0 var(--space-3) var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.mk-mirror__facets legend {
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: 0 var(--space-1);
+}
+.mk-mirror__facet {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.mk-mirror__facet-note {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+}
+
 /* --- Line strip ----------------------------------------------------------- */
 
 .mk-line {

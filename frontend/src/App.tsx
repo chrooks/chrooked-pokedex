@@ -401,8 +401,11 @@ export default function App() {
           allEntries={all}
           moves={moves.data ?? []}
           stage={view.makeoverStage}
+          initialSelected={view.makeoverSelect}
           onStage={(stage) => update({ makeoverStage: stage })}
-          onExit={() => update({ makeover: null, makeoverStage: null })}
+          onExit={() =>
+            update({ makeover: null, makeoverStage: null, makeoverSelect: null })
+          }
           onSaved={reloadDex}
           moveOptions={moveOptions}
           abilityOptions={abilityOptions}

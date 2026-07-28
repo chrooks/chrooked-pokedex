@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { copyDownLearnset, mirrorDownPreview, preEvos } from "./mirrorDown";
+import {
+  copyDownLearnset,
+  lineMembers,
+  mirrorDownPreview,
+  mirrorRows,
+  postEvos,
+  preEvos,
+} from "./mirrorDown";
 import type { AbilitySlots, DexEntry } from "../types";
 
 const ABILITIES: AbilitySlots = { primary: "Sap Sipper", secondary: null, hidden: "Gooey" };
@@ -51,6 +58,31 @@ describe("preEvos", () => {
       [joltik, joltikRift, galvantula].map((m) => [m.chrooked_id, m]),
     );
     expect(preEvos(galvantula, line).map((m) => m.chrooked_id)).toEqual(["joltik"]);
+  });
+});
+
+describe("postEvos", () => {
+  it("walks forward to the tip in order", () => {
+    expect(postEvos(goomy, byId).map((m) => m.chrooked_id)).toEqual([
+      "sliggoo",
+      "goodra",
+    ]);
+  });
+
+  it("is empty for a fully-evolved species", () => {
+    expect(postEvos(goodra, byId)).toEqual([]);
+  });
+});
+
+describe("lineMembers", () => {
+  it("returns the whole line base→tip from any member", () => {
+    for (const member of [goomy, sliggoo, goodra]) {
+      expect(lineMembers(member, byId).map((m) => m.chrooked_id)).toEqual([
+        "goomy",
+        "sliggoo",
+        "goodra",
+      ]);
+    }
   });
 });
 
@@ -106,5 +138,23 @@ describe("mirrorDownPreview — the whole-line write plan", () => {
     expect(rows.map((r) => r.chrooked_id)).toEqual(["goomy", "sliggoo"]);
     expect(rows.map((r) => r.chrooked_id)).not.toContain("goodra");
     expect(rows[0].learnset).toEqual([{ level: 30, move: "Dragon Breath" }]);
+  });
+});
+
+describe("mirrorRows — arbitrary recipients (the mirror wizard)", () => {
+  it("carries the kit (stats included) to any recipient set", () => {
+    const stats = { hp: 90, atk: 100, def: 70, spa: 110, spd: 150, spe: 80 };
+    const rows = mirrorRows(
+      {
+        types: ["Dragon"],
+        abilities: ABILITIES,
+        stats,
+        learnset: [{ level: 5, move: "Rain Dance" }],
+      },
+      [goomy, goodra],
+    );
+    expect(rows.map((r) => r.chrooked_id)).toEqual(["goomy", "goodra"]);
+    expect(rows[0].stats).toEqual(stats);
+    expect(rows[1].learnset).toEqual([{ level: 5, move: "Rain Dance" }]);
   });
 });

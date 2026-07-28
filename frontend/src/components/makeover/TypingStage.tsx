@@ -4,12 +4,13 @@
    existing CRUD route. */
 
 import { TypeChip } from "../TypeChip";
+import { TypeSelect } from "../TypeSelect";
 import type { ProposalAlternative } from "../../types";
 import { makeoverApi } from "../../lib/makeoverApi";
 import type { TypingDraft } from "../../lib/makeoverTweak";
 import { StagePanel } from "./StagePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
-import { TYPE_POOL, type CommonStageProps } from "./stageProps";
+import type { CommonStageProps } from "./stageProps";
 
 function typingAltLabel(value: unknown): string {
   return typeof value === "string" ? value : String(value);
@@ -95,20 +96,14 @@ export function TypingStage(props: CommonStageProps) {
           </div>
           <div className="mk-typing__editors">
             {[0, 1].map((index) => (
-              <select
+              <TypeSelect
                 key={index}
-                className="mk-select mono"
-                aria-label={`Type ${index + 1}`}
+                id={`mk-typing-slot-${index + 1}`}
+                label={`Type ${index + 1}`}
                 value={proposed[index] ?? ""}
-                onChange={(event) => setSlot(index, event.target.value)}
-              >
-                <option value="">{index === 0 ? "— (required)" : "— (none)"}</option>
-                {TYPE_POOL.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setSlot(index, value)}
+                allowNone={index === 1}
+              />
             ))}
           </div>
         </div>

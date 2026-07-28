@@ -32,15 +32,6 @@
   box-shadow: -16px 0 40px -20px color-mix(in oklch, var(--surface-0) 90%, black);
   padding: var(--space-5);
   animation: ledger-in var(--dur-mid) var(--ease-out);
-  transition: width var(--dur-mid) var(--ease-out);
-}
-
-/* ac8 / P1 — the ledger AUTO-EXPANDS to a roomy layout while a proposal is
-   active so current │ proposed + reasoning have room (the root crowding fix).
-   Manually collapsible (#ledger-width-toggle drops this class); restores the
-   narrow width on discard / apply / species change. */
-.ledger--wide {
-  width: min(760px, 100%);
 }
 
 .ledger:focus {
@@ -698,8 +689,7 @@
 }
 
 @media (max-width: 720px) {
-  .ledger,
-  .ledger--wide {
+  .ledger {
     width: 100%;
   }
 }

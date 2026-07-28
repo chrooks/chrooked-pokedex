@@ -13,9 +13,11 @@ import {
   faPlus,
   faCheck,
   faWandMagicSparkles,
+  faClone,
 } from "@fortawesome/free-solid-svg-icons";
 import type { CanonicalMethod, DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
+import type { DesignStage } from "../lib/makeoverStages";
 import { appendNameFilter } from "../lib/dexFilters";
 import { MAX_PARTY, replacePartyMember } from "../lib/teamViewCodec";
 import { ReplaceDialog } from "./team/ReplaceDialog";
@@ -30,14 +32,7 @@ import { EvolutionSection } from "./ledger/EvolutionSection";
 import { TypesRow } from "./ledger/TypesRow";
 import { TypeMatchupsSection } from "./ledger/TypeMatchupsSection";
 import { SpeciesEditor } from "./editors/SpeciesEditor";
-import { ProposedColumn } from "./proposal/ProposedColumn";
-import { LearnsetProposal } from "./proposal/LearnsetLineProposal";
-import { abilitiesRenderer } from "./proposal/abilitiesRenderer";
-import { suggestAbilityCall } from "./proposal/suggestCalls";
-import {
-  shouldExpandLedger,
-  updateActiveSet,
-} from "./proposal/activeProposals";
+import "./proposal/proposal.css";
 import "./detail-ledger.css";
 import "./editors/editors.css";
 
@@ -108,26 +103,22 @@ export function DetailLedger({
   const [editing, setEditing] = useState(false);
   // Open when a full-team add needs a swap decision (ac10).
   const [replacing, setReplacing] = useState(false);
-  // Which proposal sections are mid-flow + whether the author manually collapsed
-  // the panel — together decide the auto-expand (ac8 / P1). Logic in
-  // activeProposals.ts (pure, unit-guarded).
-  const [activeProposals, setActiveProposals] = useState<ReadonlySet<string>>(
-    new Set(),
-  );
-  const [manuallyCollapsed, setManuallyCollapsed] = useState(false);
   const edited = isEdited(entry);
   const panelRef = useRef<HTMLElement>(null);
   const [view, update] = useUrlState();
 
-  const handleProposalActive = useCallback(
-    (sectionId: string, isActive: boolean) => {
-      setActiveProposals((prev) => updateActiveSet(prev, sectionId, isActive));
-    },
-    [],
+  // A section's ✦ suggest deep-links into the Makeover Workbench pre-selected
+  // to just that stage — one suggest UX everywhere (the workbench's), instead
+  // of a parallel inline flow. An EMPTY seed is the mirror-only wizard.
+  const handleSuggest = useCallback(
+    (stages: readonly DesignStage[]) =>
+      update({
+        makeover: entry.chrooked_id,
+        makeoverStage: null,
+        makeoverSelect: [...stages],
+      }),
+    [update, entry.chrooked_id],
   );
-
-  const hasActiveProposal = activeProposals.size > 0;
-  const expanded = shouldExpandLedger(activeProposals, manuallyCollapsed);
 
   // "Add to filter": append a Name pill for this species to the dex filter and
   // drop back to the (now filtered) dex list. Dedup-safe via appendNameFilter, so
@@ -178,8 +169,6 @@ export function DetailLedger({
   useEffect(() => {
     setShowDiff(false);
     setEditing(false);
-    setActiveProposals(new Set());
-    setManuallyCollapsed(false);
     setReplacing(false);
     panelRef.current?.focus();
   }, [entry.chrooked_id]);
@@ -233,25 +222,6 @@ export function DetailLedger({
             <div className="ledger__head-actions">
               {!editing && (
                 <div className="ledger__tools" role="group" aria-label="Species actions">
-                  {hasActiveProposal && (
-                    <button
-                      type="button"
-                      id="ledger-width-toggle"
-                      className="ledger__tool"
-                      aria-pressed={expanded}
-                      title={
-                        expanded
-                          ? "Collapse the proposal panel"
-                          : "Expand the proposal panel"
-                      }
-                      onClick={() => setManuallyCollapsed((v) => !v)}
-                    >
-                      <span aria-hidden="true">{expanded ? "⇥" : "⇤"}</span>
-                      <span className="ledger__tool-label">
-                        {expanded ? "Collapse" : "Expand"}
-                      </span>
-                    </button>
-                  )}
                   <button
                     type="button"
                     id="ledger-add-to-filter"
@@ -317,9 +287,25 @@ export function DetailLedger({
                   </button>
                   <button
                     type="button"
+                    id="ledger-mirror"
+                    className="ledger__tool"
+                    onClick={() => handleSuggest([])}
+                    title={`Mirror ${entry.name}'s kit across its evolution line`}
+                  >
+                    <FontAwesomeIcon icon={faClone} aria-hidden="true" />
+                    <span className="ledger__tool-label">Mirror</span>
+                  </button>
+                  <button
+                    type="button"
                     id="ledger-makeover"
                     className="ledger__tool ledger__tool--accent"
-                    onClick={() => update({ makeover: entry.chrooked_id, makeoverStage: null })}
+                    onClick={() =>
+                      update({
+                        makeover: entry.chrooked_id,
+                        makeoverStage: null,
+                        makeoverSelect: null,
+                      })
+                    }
                     title={`Open the makeover workbench for ${entry.name}`}
                   >
                     <FontAwesomeIcon icon={faWandMagicSparkles} aria-hidden="true" />
@@ -400,11 +386,8 @@ export function DetailLedger({
       showDiff={showDiff}
       columns={full}
       onNavigate={onNavigate}
-      onSaved={onSaved}
-      abilityOptions={abilityOptions}
-      moveOptions={moveOptions}
       moveMeta={moveMeta}
-      onProposalActive={handleProposalActive}
+      onSuggest={handleSuggest}
       backdropTargetId={backdropTargetId}
     />
   );
@@ -454,9 +437,8 @@ export function DetailLedger({
         onClick={onClose}
       />
       <aside
-        className={`ledger${expanded ? " ledger--wide" : ""}`}
+        className="ledger"
         id="dex-detail"
-        data-expanded={expanded}
         ref={panelRef}
         tabIndex={-1}
         role="dialog"
@@ -476,16 +458,11 @@ type BodyProps = {
   showDiff: boolean;
   /** Read-only-only cross-links out to types / moves / abilities (#28). */
   onNavigate: NavHandler;
-  /** Refetch the dex after an Apply so the merged view reflects the change. */
-  onSaved: () => void;
-  /** Known ability names for the proposed-abilities slot selects. */
-  abilityOptions: readonly string[];
-  /** Known move names for the learnset proposal editor. */
-  moveOptions: readonly string[];
   /** Move name (lowercased) → type + category, used to tint/bold/italicize rows. */
   moveMeta: MoveMeta;
-  /** Report a section's active/idle proposal state up to the ledger (ac8). */
-  onProposalActive: (sectionId: string, isActive: boolean) => void;
+  /** Deep-link into the Makeover Workbench seeded to exactly these stages. */
+  onSuggest: (stages: readonly DesignStage[]) => void;
+  /** Active backdrop target id — the evolution strip's target-sprite fallback. */
   backdropTargetId?: string | null;
   /** Full-page layout: split the sections into two columns instead of stacking. */
   columns: boolean;
@@ -499,7 +476,7 @@ function attackCategory(stats: Record<string, number>): "physical" | "special" |
   return null;
 }
 
-/** Press `s` on a focused proposal section to open its `✦ suggest` input —
+/** Press `s` on a focused section to fire its `✦ suggest` deep link —
     keyboard-first (PRODUCT.md). Ignores `s` typed into a field. */
 function handleSectionKey(
   event: KeyboardEvent<HTMLElement>,
@@ -525,17 +502,36 @@ function DetailBody({
   entry,
   showDiff,
   onNavigate,
-  onSaved,
-  abilityOptions,
-  moveOptions,
   moveMeta,
-  onProposalActive,
+  onSuggest,
   backdropTargetId,
   columns,
 }: BodyProps) {
+  // A section heading with the ✦ suggest affordance: click (or `s` on the
+  // focused section) deep-links into the workbench seeded to that one stage.
+  const suggestHead = (label: string, stage: DesignStage) => (
+    <div className="proposal__head">
+      <h3 className="ledger__heading">{label}</h3>
+      <button
+        type="button"
+        id={`ledger-suggest-${stage}`}
+        className="proposal__suggest"
+        onClick={() => onSuggest([stage])}
+        aria-label={`Suggest ${label.toLowerCase()} for ${entry.name} in the makeover workbench`}
+      >
+        <span aria-hidden="true">✦</span> suggest
+      </button>
+    </div>
+  );
+
   const statsSection = (
-    <section className="ledger__section" aria-label="Base stats">
-      <h3 className="ledger__heading">Base stats</h3>
+    <section
+      className="ledger__section"
+      aria-label="Base stats"
+      tabIndex={0}
+      onKeyDown={(e) => handleSectionKey(e, "ledger-suggest-stats")}
+    >
+      {suggestHead("Base stats", "stats")}
       <div className="ledger__stats">
         {STAT_ORDER.map((key) => (
           <StatRow
@@ -560,28 +556,21 @@ function DetailBody({
       className="ledger__section"
       aria-label="Abilities"
       tabIndex={0}
-      onKeyDown={(e) => handleSectionKey(e, "proposal-abilities-suggest")}
+      onKeyDown={(e) => handleSectionKey(e, "ledger-suggest-abilities")}
     >
-      <ProposedColumn
-        entry={entry}
-        renderer={abilitiesRenderer(abilityOptions, entry)}
-        suggest={suggestAbilityCall}
-        onApplied={onSaved}
-        onActiveChange={onProposalActive}
-      >
-        <div className="ledger__abilities">
-          {(["primary", "secondary", "hidden"] as const).map((slot) => (
-            <AbilityRow
-              key={slot}
-              slot={slot}
-              now={entry.abilities[slot]}
-              was={entry.base.abilities?.[slot]}
-              showDiff={showDiff}
-              onNavigate={onNavigate}
-            />
-          ))}
-        </div>
-      </ProposedColumn>
+      {suggestHead("Abilities", "abilities")}
+      <div className="ledger__abilities">
+        {(["primary", "secondary", "hidden"] as const).map((slot) => (
+          <AbilityRow
+            key={slot}
+            slot={slot}
+            now={entry.abilities[slot]}
+            was={entry.base.abilities?.[slot]}
+            showDiff={showDiff}
+            onNavigate={onNavigate}
+          />
+        ))}
+      </div>
     </section>
   );
 
@@ -590,26 +579,19 @@ function DetailBody({
       className="ledger__section"
       aria-label="Learnset"
       tabIndex={0}
-      onKeyDown={(e) => handleSectionKey(e, "proposal-learnset-suggest")}
+      onKeyDown={(e) => handleSectionKey(e, "ledger-suggest-learnset")}
     >
-      <LearnsetProposal
-        entry={entry}
-        moveOptions={moveOptions}
-        onSaved={onSaved}
-        onProposalActive={onProposalActive}
-        backdropTargetId={backdropTargetId}
-      >
-        <LearnsetSection
-          now={entry.learnset}
-          was={entry.base.learnset}
-          showDiff={showDiff}
-          onNavigate={onNavigate}
-          moveMeta={moveMeta}
-          speciesTypes={entry.types}
-          attackCategory={attackCategory(entry.stats)}
-          bare
-        />
-      </LearnsetProposal>
+      {suggestHead("Learnset", "learnset")}
+      <LearnsetSection
+        now={entry.learnset}
+        was={entry.base.learnset}
+        showDiff={showDiff}
+        onNavigate={onNavigate}
+        moveMeta={moveMeta}
+        speciesTypes={entry.types}
+        attackCategory={attackCategory(entry.stats)}
+        bare
+      />
     </section>
   );
 

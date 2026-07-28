@@ -56,6 +56,41 @@ export function preEvos(
   return chain.reverse();
 }
 
+/** The evolutions AFTER `anchor`, (anchor+1)→tip, by the same linear-walk rules
+    as {@link preEvos}: form-stem collapse, a genuine branch or cycle stops the
+    walk. Forward edges are reliable (`evolves_into[].to` is a chrooked_id). */
+export function postEvos(
+  anchor: DexEntry,
+  byId: ReadonlyMap<string, DexEntry>,
+): DexEntry[] {
+  const chain: DexEntry[] = [];
+  const seen = new Set<string>([baseStem(anchor.chrooked_id), anchor.chrooked_id]);
+  let current = anchor;
+  while (true) {
+    const edges = (current.evolves_into ?? []).filter((edge) => edge.to);
+    const stems = new Set(edges.map((edge) => baseStem(edge.to)));
+    if (stems.size !== 1) break;
+    const stem = [...stems][0];
+    if (seen.has(stem)) break;
+    const child = byId.get(stem) ?? byId.get(edges[0].to);
+    if (child === undefined) break;
+    chain.push(child);
+    seen.add(child.chrooked_id);
+    seen.add(stem);
+    current = child;
+  }
+  return chain;
+}
+
+/** The whole linear line containing `entry`, base→tip (entry included). The
+    mirror wizard's anchor/recipient pool. */
+export function lineMembers(
+  entry: DexEntry,
+  byId: ReadonlyMap<string, DexEntry>,
+): DexEntry[] {
+  return [...preEvos(entry, byId), entry, ...postEvos(entry, byId)];
+}
+
 /** The learnset a pre-evo inherits: the anchor's rows with every L0 row dropped
     (the L0 on-evolution reward stays on the evolved stage only). Levels are
     otherwise untouched; sorted level-ascending for a stable preview/write. */
@@ -66,7 +101,25 @@ export function copyDownLearnset(anchorLearnset: readonly LearnsetMove[]): Learn
     .sort((a, b) => a.level - b.level || a.move.localeCompare(b.move));
 }
 
-/** What one pre-evo receives at the final lock. `strippedL0` lists the L0 moves
+/** The facets a mirror can copy. Stats is the deliberate exception: the line
+    default SCALES stats rather than copying them, so it is opt-in only. */
+export type MirrorFacet = "types" | "stats" | "abilities" | "learnset";
+
+export const MIRROR_FACETS: readonly MirrorFacet[] = [
+  "types",
+  "stats",
+  "abilities",
+  "learnset",
+];
+
+/** The classic mirror-down facets (stats excluded — it scales, not copies). */
+export const DEFAULT_MIRROR_FACETS: ReadonlySet<MirrorFacet> = new Set([
+  "types",
+  "abilities",
+  "learnset",
+]);
+
+/** What one recipient receives at the write. `strippedL0` lists the L0 moves
     left behind, for the preview's "minus L0" annotation. */
 export interface MirrorRow {
   chrooked_id: string;
@@ -74,36 +127,48 @@ export interface MirrorRow {
   dex: number | null;
   types: string[];
   abilities: AbilitySlots;
+  stats?: Record<string, number>;
   learnset: LearnsetMove[];
   strippedL0: string[];
 }
 
-/** The locked anchor kit that mirrors down to the line. */
+/** The locked anchor kit that mirrors down to the line. `stats` is only carried
+    when the wizard offers the stats facet. */
 export interface AnchorKit {
   types: string[];
   abilities: AbilitySlots;
+  stats?: Record<string, number>;
   learnset: LearnsetMove[];
 }
 
-/** The whole-line mirror-down preview: one row per pre-evo carrying the anchor's
-    typing + abilities and the copy-down learnset (anchor minus L0). Rendered
-    before any write so the author sees the entire line first (ac5). */
-export function mirrorDownPreview(
-  anchor: DexEntry,
-  byId: ReadonlyMap<string, DexEntry>,
+/** One row per recipient carrying the anchor kit: typing + abilities (+ stats
+    when the kit carries them) and the copy-down learnset (anchor minus L0). */
+export function mirrorRows(
   kit: AnchorKit,
+  recipients: readonly DexEntry[],
 ): MirrorRow[] {
   const learnset = copyDownLearnset(kit.learnset);
   const strippedL0 = kit.learnset
     .filter((row) => row.level === 0)
     .map((row) => row.move);
-  return preEvos(anchor, byId).map((pre) => ({
-    chrooked_id: pre.chrooked_id,
-    name: pre.name,
-    dex: pre.dex,
+  return recipients.map((recipient) => ({
+    chrooked_id: recipient.chrooked_id,
+    name: recipient.name,
+    dex: recipient.dex,
     types: kit.types,
     abilities: kit.abilities,
+    stats: kit.stats,
     learnset,
     strippedL0,
   }));
+}
+
+/** The whole-line mirror-down preview: one row per pre-evo carrying the anchor's
+    kit. Rendered before any write so the author sees the entire line first (ac5). */
+export function mirrorDownPreview(
+  anchor: DexEntry,
+  byId: ReadonlyMap<string, DexEntry>,
+  kit: AnchorKit,
+): MirrorRow[] {
+  return mirrorRows(kit, preEvos(anchor, byId));
 }
