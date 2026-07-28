@@ -23,6 +23,7 @@ import {
 } from "../../lib/mirrorDown";
 import { writeMirror } from "./mirrorWrite";
 import { MirrorRowList } from "./MirrorRowList";
+import { PokeballSpinner } from "../PokeballSpinner";
 import type { StageActions } from "./StagePanel";
 
 interface Props {
@@ -239,6 +240,13 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
         >
           {phase === "writing" ? "WRITING…" : canWrite ? "LOCK IN" : "SKIP →"}
         </button>
+        {phase === "writing" && (
+          <PokeballSpinner
+            id="mk-mirror-spinner"
+            size={20}
+            label="Writing the recipients…"
+          />
+        )}
       </div>
     </div>
   );

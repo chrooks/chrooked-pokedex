@@ -7,6 +7,7 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
 import type { ProposalAlternative } from "../../types";
+import { PokeballSpinner } from "../PokeballSpinner";
 import type { UseMakeoverStage } from "./useMakeoverStage";
 
 /** The imperative handle the workbench keyboard drives (Enter = LOCK IN, t =
@@ -204,6 +205,9 @@ export function StagePanel<Draft>({
           >
             {isLocking ? "LOCKING…" : "LOCK IN"}
           </button>
+          {isLocking && (
+            <PokeballSpinner id="mk-lock-spinner" size={20} label="Writing the Ruleset…" />
+          )}
         </div>
       )}
     </div>

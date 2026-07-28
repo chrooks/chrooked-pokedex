@@ -73,7 +73,6 @@
      content-filling stage stretches exactly as before. */
   display: flex;
   flex-direction: column;
-  animation: mk-stage-slide var(--mk-slide) var(--mk-ease);
   /* Sparse call-free READY states (direction idle, abilities ready, the create
      panels) underfill the column and read as empty in the lower half; center them.
      `safe` reverts to start-alignment once content overflows, so tall proposed
@@ -83,15 +82,35 @@
   justify-content: safe center;
 }
 
+/* The stage-entry slide lives on the INNER stage node (.mk-stage / .mk-done /
+   .mk-tail), which remounts on every stage change — so the slide replays on each
+   transition and a lock visibly hands off to the next screen. (On the container
+   it played only once, at workbench mount — transitions read as a hard swap.) */
+.mk-stage,
+.mk-done,
+.mk-tail {
+  animation: mk-stage-slide var(--mk-slide) var(--mk-ease);
+}
+
 @keyframes mk-stage-slide {
   from {
     opacity: 0;
-    transform: translateX(8px);
+    transform: translateX(16px);
   }
   to {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Locking / writing: the panel visibly steps back while the write is in flight
+   (dim + inert), so the wait between LOCK IN and the next stage reads as work
+   happening, not a freeze. The actions row (button + spinner) stays full-strength. */
+.mk-stage[data-phase="locking"] > *:not(.mk-stage__actions),
+.mk-stage[data-phase="writing"] > *:not(.mk-stage__actions) {
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
 
 /* --- Rail ----------------------------------------------------------------- */
@@ -258,6 +277,7 @@ textarea.mk-stage__redirect-input {
 .mk-stage__actions {
   margin-top: var(--space-5);
   display: flex;
+  align-items: center;
   gap: var(--space-3);
 }
 
@@ -1860,7 +1880,9 @@ textarea.mk-stage__redirect-input {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mk-workbench__stage,
+  .mk-stage,
+  .mk-done,
+  .mk-tail,
   .mk-line__fact,
   .mk-line__fact-led,
   .mk-skel-row,
