@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Short Circuit — Distribution Set (51 species)</title>
+<style>
+  :root {
+    --bg: oklch(98% 0.004 250);
+    --surface: oklch(100% 0 0);
+    --muted: oklch(96.5% 0.004 260);
+    --text: oklch(22% 0.01 260);
+    --subtle: oklch(50% 0.02 260);
+    --line: oklch(90% 0.01 260);
+    --accent: #7c3aed;
+    --accent-soft: oklch(95% 0.035 300);
+    --zebra: oklch(98.7% 0.003 260);
+    --and: #1d4ed8;       --and-bd: #3b82f6;
+    --or:  #0d9488;       --or-bd:  #2dd4bf;
+    --not: #dc2626;       --not-bd: #f87171;
+    --paren-bg: oklch(94% 0.04 300); --paren-bd: oklch(82% 0.08 300); --paren-fg: oklch(40% 0.12 300);
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 13px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text); background: var(--bg);
+    padding: clamp(0.75rem, 0.5rem + 1.5vw, 2rem);
+  }
+  h1 { margin: 0 0 0.15rem; font-size: clamp(1.3rem, 1.1rem + 1vw, 1.9rem); letter-spacing: -0.02em; }
+  #row-count { color: var(--subtle); font-size: 0.8rem; margin-bottom: 0.9rem; }
+  .bar { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.55rem 0.65rem; margin-bottom: 0.7rem; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+  select, input, button { font: inherit; font-size: 0.8rem; }
+  select, input[type=text], input[type=search] {
+    border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+    color: var(--text); padding: 0.3rem 0.45rem;
+  }
+  input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+  .btn { cursor: pointer; border-radius: 6px; padding: 0.32rem 0.6rem; border: 1px solid var(--line); background: var(--surface); color: var(--text); transition: all .12s; }
+  .btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .btn-primary:hover:not(:disabled) { opacity: 0.85; color: #fff; }
+  .btn-paren { background: var(--paren-bg); border-color: var(--paren-bd); color: var(--paren-fg); font-weight: 700; }
+  .badge { padding: 0.12rem 0.5rem; border-radius: 5px; font-size: 0.7rem; font-weight: 700; color: #fff; border: 1px solid; cursor: pointer; user-select: none; }
+  .badge.AND { background: var(--and); border-color: var(--and-bd); }
+  .badge.OR  { background: var(--or);  border-color: var(--or-bd); }
+  .count-hint { font-size: 0.7rem; color: var(--subtle); }
+
+  /* pills */
+  #pills { margin-top: 0.5rem; }
+  .pill-wrap { display: inline-flex; align-items: center; gap: 0.3rem; }
+  .pill { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.22rem 0.45rem 0.22rem 0.28rem; border-radius: 6px; border: 1px solid var(--line); background: var(--muted); font-size: 0.76rem; font-weight: 600; cursor: grab; }
+  .pill.negated { background: oklch(95% 0.04 25); border-color: var(--not-bd); color: var(--not); }
+  .pill.dragging { opacity: 0.4; }
+  .pill .lbl { font-weight: 600; } .pill .val { font-weight: 400; color: var(--subtle); }
+  .pill.paren { background: var(--paren-bg); border-color: var(--paren-bd); color: var(--paren-fg); font-weight: 700; }
+  .mini { border: 1px solid var(--line); background: var(--surface); border-radius: 5px; padding: 0 0.32rem; cursor: pointer; font-size: 0.72rem; line-height: 1.4; }
+  .mini:hover { background: var(--not); color: #fff; border-color: var(--not); }
+  .not-toggle { border-radius: 5px; padding: 0 0.3rem; font-size: 0.62rem; font-weight: 700; border: 1px solid var(--line); background: var(--surface); color: var(--subtle); cursor: pointer; }
+  .not-toggle.on { background: var(--not); border-color: var(--not-bd); color: #fff; }
+
+  /* sort row */
+  #sort-row { gap: 0.35rem; margin-bottom: 0.7rem; }
+  .sort-chip { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.12rem 0.45rem; border-radius: 5px; border: 1px solid var(--line); background: var(--muted); font-size: 0.74rem; font-weight: 600; }
+  .sort-chip .ord { font-size: 0.62rem; color: var(--subtle); }
+  .sort-chip button { border: none; background: none; cursor: pointer; color: var(--subtle); padding: 0; }
+  .sort-chip button:hover { color: var(--text); }
+  .dashed { border: 1px dashed var(--line); border-radius: 5px; background: none; color: var(--subtle); cursor: pointer; padding: 0.12rem 0.5rem; font-size: 0.74rem; }
+  .dashed:hover { color: var(--accent); border-color: var(--accent); }
+  .menu { position: relative; display: inline-block; }
+  .menu-list { position: absolute; top: 100%; left: 0; margin-top: 3px; z-index: 50; min-width: 11rem; max-height: 15rem; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 24px oklch(0% 0 0 / 0.12); }
+  .menu-list button { display: block; width: 100%; text-align: left; padding: 0.32rem 0.6rem; border: none; background: none; cursor: pointer; font-size: 0.76rem; color: var(--text); }
+  .menu-list button:hover { background: var(--muted); }
+  .hidden { display: none !important; }
+
+  /* column toggles */
+  #col-toggles { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; padding: 0.6rem 0.7rem; }
+  #col-toggles label { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.76rem; cursor: pointer; }
+
+  /* table */
+  .table-wrap { overflow: auto; max-height: 70vh; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  thead th { position: sticky; top: 0; z-index: 2; background: var(--surface); text-align: left; padding: 0.45rem 0.7rem; border-bottom: 2px solid var(--line); white-space: nowrap; cursor: pointer; user-select: none; font-weight: 600; }
+  thead th:hover { color: var(--accent); }
+  thead th .arrow { color: var(--accent); font-size: 0.7rem; margin-left: 0.2rem; }
+  th.numeric, td.numeric { text-align: right; }
+  tbody td { padding: 0.4rem 0.7rem; border-bottom: 1px solid var(--line); }
+  tbody tr:nth-child(even) { background: var(--zebra); }
+  tbody tr:hover { background: var(--accent-soft); }
+  #empty { display: none; padding: 2.5rem 1rem; text-align: center; color: var(--subtle); }
+  #empty.show { display: block; }
+
+  /* pagination */
+  #pager { display: flex; align-items: center; justify-content: space-between; margin-top: 0.6rem; font-size: 0.78rem; color: var(--subtle); }
+  #pager .ctrls { display: flex; align-items: center; gap: 0.6rem; }
+  #pager button { padding: 0.15rem 0.5rem; }
+</style>
+</head>
+<body>
+  <h1>Short Circuit — Distribution Set (51 species)</h1>
+  <div id="row-count"></div>
+
+  <!-- Filter builder -->
+  <div class="bar" id="filter-bar">
+    <div class="row" id="filter-controls"></div>
+    <div class="row" id="pills"></div>
+  </div>
+
+  <!-- Sort + view controls -->
+  <div class="row" id="sort-row"></div>
+  <div class="row" id="toolbar" style="margin-bottom:0.7rem;">
+    <input id="global-search" type="search" placeholder="Search all columns…" aria-label="Search all columns" style="flex:1 1 16rem;min-width:11rem;" />
+    <button class="btn" id="columns-btn" type="button">Columns</button>
+    <button class="btn" id="reset-btn" type="button">Reset all</button>
+  </div>
+  <div class="bar hidden" id="col-toggles-wrap"><div id="col-toggles"></div></div>
+
+  <div class="table-wrap">
+    <table id="data-table"><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    <div id="empty">No rows match the current filters.</div>
+  </div>
+  <div id="pager"></div>
+
+<script>
+  // ===== Injected by the /table skill =====
+  const COLUMNS = [{"key": "dex", "label": "Dex", "type": "number"}, {"key": "species", "label": "Species", "type": "string"}, {"key": "level", "label": "Level", "type": "number"}, {"key": "stage", "label": "Stage", "type": "string"}, {"key": "via", "label": "Via", "type": "string"}];
+  const DATA = [{"dex": 25, "species": "pikachu", "level": 18, "stage": "evolved", "via": "line"}, {"dex": 26, "species": "raichu", "level": 35, "stage": "evolved", "via": "match"}, {"dex": 26, "species": "raichualola", "level": 35, "stage": "evolved", "via": "match"}, {"dex": 81, "species": "magnemite", "level": 18, "stage": "first", "via": "match"}, {"dex": 82, "species": "magneton", "level": 31, "stage": "evolved", "via": "match"}, {"dex": 100, "species": "voltorb", "level": 18, "stage": "first", "via": "match"}, {"dex": 100, "species": "voltorbhisui", "level": 18, "stage": "first", "via": "match"}, {"dex": 101, "species": "electrode", "level": 32, "stage": "evolved", "via": "match"}, {"dex": 101, "species": "electrodehisui", "level": 18, "stage": "evolved", "via": "match"}, {"dex": 125, "species": "electabuzz", "level": 31, "stage": "evolved", "via": "match"}, {"dex": 135, "species": "jolteon", "level": 17, "stage": "evolved", "via": "match"}, {"dex": 170, "species": "chinchou", "level": 18, "stage": "first", "via": "match"}, {"dex": 171, "species": "lanturn", "level": 27, "stage": "evolved", "via": "match"}, {"dex": 172, "species": "pichu", "level": 35, "stage": "first", "via": "line"}, {"dex": 179, "species": "mareep", "level": 20, "stage": "first", "via": "match"}, {"dex": 180, "species": "flaaffy", "level": 18, "stage": "evolved", "via": "match"}, {"dex": 181, "species": "ampharos", "level": 32, "stage": "evolved", "via": "match"}, {"dex": 239, "species": "elekid", "level": 18, "stage": "first", "via": "match"}, {"dex": 309, "species": "electrike", "level": 18, "stage": "first", "via": "match"}, {"dex": 310, "species": "manectric", "level": 27, "stage": "evolved", "via": "match"}, {"dex": 311, "species": "plusle", "level": 24, "stage": "first", "via": "match"}, {"dex": 312, "species": "minun", "level": 24, "stage": "first", "via": "match"}, {"dex": 417, "species": "pachirisu", "level": 23, "stage": "first", "via": "match"}, {"dex": 462, "species": "magnezone", "level": 31, "stage": "evolved", "via": "match"}, {"dex": 466, "species": "electivire", "level": 31, "stage": "evolved", "via": "line"}, {"dex": 479, "species": "rotom", "level": 17, "stage": "first", "via": "match"}, {"dex": 479, "species": "rotomfan", "level": 17, "stage": "first", "via": "match"}, {"dex": 479, "species": "rotomfrost", "level": 17, "stage": "first", "via": "match"}, {"dex": 479, "species": "rotomheat", "level": 17, "stage": "first", "via": "match"}, {"dex": 479, "species": "rotommow", "level": 17, "stage": "first", "via": "match"}, {"dex": 479, "species": "rotomwash", "level": 17, "stage": "first", "via": "match"}, {"dex": 587, "species": "emolga", "level": 17, "stage": "first", "via": "match"}, {"dex": 595, "species": "joltik", "level": 18, "stage": "first", "via": "match"}, {"dex": 596, "species": "galvantula", "level": 35, "stage": "evolved", "via": "match"}, {"dex": 618, "species": "stunfisk", "level": 17, "stage": "first", "via": "match"}, {"dex": 694, "species": "helioptile", "level": 18, "stage": "first", "via": "match"}, {"dex": 695, "species": "heliolisk", "level": 35, "stage": "evolved", "via": "match"}, {"dex": 702, "species": "dedenne", "level": 17, "stage": "first", "via": "match"}, {"dex": 736, "species": "grubbin", "level": 18, "stage": "first", "via": "line"}, {"dex": 737, "species": "charjabug", "level": 19, "stage": "evolved", "via": "line"}, {"dex": 738, "species": "vikavolt", "level": 19, "stage": "evolved", "via": "match"}, {"dex": 741, "species": "oricoriopompom", "level": 18, "stage": "first", "via": "match"}, {"dex": 835, "species": "yamper", "level": 23, "stage": "first", "via": "line"}, {"dex": 836, "species": "boltund", "level": 24, "stage": "evolved", "via": "match"}, {"dex": 848, "species": "toxel", "level": 35, "stage": "first", "via": "match"}, {"dex": 849, "species": "toxtricityamped", "level": 20, "stage": "evolved", "via": "match"}, {"dex": 849, "species": "toxtricitylowkey", "level": 20, "stage": "evolved", "via": "match"}, {"dex": 938, "species": "tadbulb", "level": 28, "stage": "first", "via": "match"}, {"dex": 939, "species": "bellibolt", "level": 28, "stage": "evolved", "via": "match"}, {"dex": 940, "species": "wattrel", "level": 17, "stage": "first", "via": "match"}, {"dex": 941, "species": "kilowattrel", "level": 27, "stage": "evolved", "via": "match"}];
+
+  // ===== Config (ported from Cornerstone playerFilters / SortControls) =====
+  const MAX_ACTIVE_FILTERS = 10;
+  const MAX_SORT_KEYS = 3;
+  const NUMERIC_OPERATORS = ["≥", "≤", "=", ">", "<"];
+  const SELECT_MAX_CARDINALITY = 25;   // string cols with ≤ this many distinct values become select filters
+  const PAGE_SIZES = [25, 50, 100, 200];
+
+  const colByKey = Object.fromEntries(COLUMNS.map((c) => [c.key, c]));
+  const isNum = (c) => c && c.type === "number";
+  const cell = (row, key) => (row[key] === null || row[key] === undefined ? "" : String(row[key]));
+  const strip = (s) => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+  // Derive a filter definition per column from its type + cardinality.
+  function buildFilterDefs() {
+    return COLUMNS.map((col) => {
+      if (isNum(col)) return { key: col.key, label: col.label, method: "numeric" };
+      const distinct = Array.from(new Set(DATA.map((r) => cell(r, col.key)).filter((v) => v !== ""))).sort();
+      if (distinct.length > 0 && distinct.length <= SELECT_MAX_CARDINALITY) {
+        return { key: col.key, label: col.label, method: "select", values: distinct };
+      }
+      return { key: col.key, label: col.label, method: "text" };
+    });
+  }
+  const FILTER_DEFS = buildFilterDefs();
+  const defByLabel = Object.fromEntries(FILTER_DEFS.map((d) => [d.label, d]));
+
+  function applyNumericOp(v, op, t) {
+    switch (op) { case "≥": return v>=t; case "≤": return v<=t; case "=": return v===t; case ">": return v>t; case "<": return v<t; default: return false; }
+  }
+  // Does a single row pass one filter def + encoded value?
+  function applyFilter(def, row, value) {
+    if (def.method === "numeric") {
+      const [op, raw] = value.split("|"); const n = parseFloat(raw); const v = parseFloat(cell(row, def.key));
+      return !isNaN(n) && !isNaN(v) && applyNumericOp(v, op, n);
+    }
+    if (def.method === "select") return cell(row, def.key) === value;
+    return strip(cell(row, def.key)).includes(strip(value)); // text
+  }
+
+  // ===== State =====
+  const state = {
+    entries: [],            // {id, kind:'filter', def, value, connector, negated} | {id, kind:'paren', paren:'('|')', connector}
+    nextConnector: "AND",
+    sortKeys: [],           // {field, direction}
+    hidden: new Set(),
+    search: "",
+    page: 1,
+    pageSize: 50,
+    // compose-row working values
+    curLabel: FILTER_DEFS[0] ? FILTER_DEFS[0].label : "",
+    curText: "",
+    curOp: "≥",
+    curSelect: "",
+  };
+  let idSeq = 0;
+  const nextId = () => "e" + (idSeq++);
+  const isParen = (e) => e.kind === "paren";
+
+  // ===== Recursive boolean evaluator (ported from evalFilterEntries) =====
+  function evalEntries(row, entries) {
+    if (entries.length === 0) return true;
+    const segments = [];
+    let i = 0;
+    while (i < entries.length) {
+      const entry = entries[i];
+      if (isParen(entry)) {
+        if (entry.paren === "(") {
+          let depth = 1, j = i + 1;
+          while (j < entries.length && depth > 0) {
+            const inner = entries[j];
+            if (isParen(inner)) { if (inner.paren === "(") depth++; else if (inner.paren === ")") depth--; }
+            j++;
+          }
+          const contentEnd = depth === 0 ? j - 1 : j;
+          segments.push({ connector: entry.connector, kind: "group", items: entries.slice(i + 1, contentEnd) });
+          i = j;
+        } else { i++; }
+      } else {
+        segments.push({ connector: entry.connector, kind: "leaf", entry });
+        i++;
+      }
+    }
+    const groups = []; let cur = [];
+    for (const seg of segments) { if (seg.connector === "OR" && cur.length > 0) { groups.push(cur); cur = []; } cur.push(seg); }
+    groups.push(cur);
+    return groups.some((group) => group.every((seg) => {
+      if (seg.kind === "leaf") { const r = applyFilter(seg.entry.def, row, seg.entry.value); return seg.entry.negated ? !r : r; }
+      return evalEntries(row, seg.items);
+    }));
+  }
+
+  // ===== Pipeline =====
+  function visibleRows() {
+    const q = state.search;
+    return DATA.filter((row) => {
+      if (q) { const hay = COLUMNS.map((c) => cell(row, c.key)).join(" ").toLowerCase(); if (!hay.includes(q)) return false; }
+      return evalEntries(row, state.entries);
+    });
+  }
+  function compareVals(a, b, type) {
+    if (type === "number") {
+      const na = parseFloat(a), nb = parseFloat(b);
+      // Non-numeric cells sort to the end instead of collapsing to 0.
+      if (isNaN(na) && isNaN(nb)) return 0;
+      if (isNaN(na)) return 1;
+      if (isNaN(nb)) return -1;
+      return na - nb;
+    }
+    return String(a ?? "").localeCompare(String(b ?? ""), undefined, { numeric: true });
+  }
+  function stableMultiSort(rows) {
+    if (!state.sortKeys.length) return rows;
+    return rows.map((r, i) => [r, i]).sort((x, y) => {
+      for (const k of state.sortKeys) {
+        const col = colByKey[k.field];
+        let c = compareVals(x[0][k.field], y[0][k.field], col ? col.type : "string");
+        if (k.direction === "desc") c = -c;
+        if (c) return c;
+      }
+      return x[1] - y[1];
+    }).map((p) => p[0]);
+  }
+
+  // ===== Compose-row rendering =====
+  function curDef() { return defByLabel[state.curLabel]; }
+  function renderControls() {
+    const c = document.getElementById("filter-controls");
+    const def = curDef();
+    const atMax = state.entries.length >= MAX_ACTIVE_FILTERS;
+    let valueHtml = "";
+    if (def && def.method === "numeric") {
+      valueHtml =
+        `<select id="f-op">${NUMERIC_OPERATORS.map((o) => `<option ${o===state.curOp?"selected":""}>${o}</option>`).join("")}</select>` +
+        `<input id="f-text" type="text" style="width:6rem" placeholder="Value…" value="${escapeHtml(state.curText)}">`;
+    } else if (def && def.method === "select") {
+      valueHtml = `<select id="f-select"><option value="">Value…</option>` +
+        def.values.map((v) => `<option ${v===state.curSelect?"selected":""} value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("") + `</select>`;
+    } else {
+      valueHtml = `<input id="f-text" type="text" style="width:8rem" placeholder="Value…" value="${escapeHtml(state.curText)}">`;
+    }
+    c.innerHTML =
+      `<select id="f-type">${FILTER_DEFS.map((d) => `<option ${d.label===state.curLabel?"selected":""}>${escapeHtml(d.label)}</option>`).join("")}</select>` +
+      valueHtml +
+      (state.entries.length > 0 ? `<button class="badge ${state.nextConnector}" id="f-conn" title="Toggle AND/OR for the next filter">${state.nextConnector}</button>` : "") +
+      `<button class="btn btn-primary" id="f-add" ${atMax?"disabled":""}>Add Filter</button>` +
+      `<button class="btn btn-paren" id="f-parens" ${atMax?"disabled":""} title="Insert ( ) — drag to reposition">( )</button>` +
+      `<button class="btn" id="f-clear" ${state.entries.length?"":"disabled"}>Clear All</button>` +
+      (state.entries.length ? `<span class="count-hint">${state.entries.length}/${MAX_ACTIVE_FILTERS} filters</span>` : "");
+
+    document.getElementById("f-type").onchange = (e) => { state.curLabel = e.target.value; state.curText=""; state.curSelect=""; renderControls(); };
+    const op = document.getElementById("f-op"); if (op) op.onchange = (e) => state.curOp = e.target.value;
+    const tx = document.getElementById("f-text"); if (tx) { tx.oninput = (e) => state.curText = e.target.value; tx.onkeydown = (e) => { if (e.key==="Enter") addFilter(); }; }
+    const sel = document.getElementById("f-select"); if (sel) sel.onchange = (e) => state.curSelect = e.target.value;
+    const conn = document.getElementById("f-conn"); if (conn) conn.onclick = () => { state.nextConnector = state.nextConnector==="AND"?"OR":"AND"; renderControls(); };
+    document.getElementById("f-add").onclick = addFilter;
+    document.getElementById("f-parens").onclick = addParens;
+    document.getElementById("f-clear").onclick = () => { state.entries = []; afterChange(); };
+  }
+  function addFilter() {
+    const def = curDef(); if (!def || state.entries.length >= MAX_ACTIVE_FILTERS) return;
+    let value;
+    if (def.method === "numeric") { if (!state.curText.trim()) return; value = `${state.curOp}|${state.curText.trim()}`; }
+    else if (def.method === "select") { if (!state.curSelect) return; value = state.curSelect; }
+    else { if (!state.curText.trim()) return; value = state.curText.trim(); }
+    state.entries.push({ id: nextId(), kind: "filter", def, value, connector: state.nextConnector, negated: false });
+    state.curText = ""; state.curSelect = "";
+    afterChange();
+  }
+  function addParens() {
+    if (state.entries.length + 2 > MAX_ACTIVE_FILTERS) return;
+    state.entries.push({ id: nextId(), kind: "paren", paren: "(", connector: state.nextConnector });
+    state.entries.push({ id: nextId(), kind: "paren", paren: ")", connector: "AND" });
+    afterChange();
+  }
+
+  // ===== Pills =====
+  function pillDisplay(e) {
+    if (e.def.method === "numeric") { const [op, raw] = e.value.split("|"); return `${op} ${raw}`; }
+    return `"${e.value}"`;
+  }
+  function renderPills() {
+    const host = document.getElementById("pills");
+    host.innerHTML = "";
+    state.entries.forEach((entry, index) => {
+      const wrap = document.createElement("div");
+      wrap.className = "pill-wrap"; wrap.dataset.id = entry.id;
+      const showConn = index > 0 && !(isParen(entry) && entry.paren === ")");
+      if (showConn) {
+        const b = document.createElement("button");
+        b.className = "badge " + entry.connector; b.textContent = entry.connector; b.title = "Toggle AND/OR";
+        b.onclick = () => { entry.connector = entry.connector === "AND" ? "OR" : "AND"; afterChange(); };
+        wrap.appendChild(b);
+      }
+      const pill = document.createElement("div");
+      pill.draggable = true;
+      pill.className = "pill" + (isParen(entry) ? " paren" : "") + (!isParen(entry) && entry.negated ? " negated" : "");
+      const rm = document.createElement("span"); rm.className = "mini"; rm.textContent = "×"; rm.title = "Remove";
+      rm.onpointerdown = (ev) => ev.stopPropagation();
+      rm.onclick = () => { state.entries.splice(index, 1); afterChange(); };
+      pill.appendChild(rm);
+      if (!isParen(entry)) {
+        const not = document.createElement("span"); not.className = "not-toggle" + (entry.negated ? " on" : ""); not.textContent = "NOT"; not.title = "Toggle NOT";
+        not.onpointerdown = (ev) => ev.stopPropagation();
+        not.onclick = () => { entry.negated = !entry.negated; afterChange(); };
+        pill.appendChild(not);
+        const lab = document.createElement("span");
+        lab.innerHTML = `<span class="lbl">${escapeHtml(entry.def.label)}:</span> <span class="val">${escapeHtml(pillDisplay(entry))}</span>`;
+        pill.appendChild(lab);
+      } else {
+        const p = document.createElement("span"); p.textContent = entry.paren; pill.appendChild(p);
+      }
+      // native drag-to-reorder
+      pill.addEventListener("dragstart", (ev) => { ev.dataTransfer.setData("text/plain", entry.id); pill.classList.add("dragging"); });
+      pill.addEventListener("dragend", () => pill.classList.remove("dragging"));
+      wrap.addEventListener("dragover", (ev) => ev.preventDefault());
+      wrap.addEventListener("drop", (ev) => {
+        ev.preventDefault();
+        const fromId = ev.dataTransfer.getData("text/plain");
+        const from = state.entries.findIndex((x) => x.id === fromId);
+        const to = state.entries.findIndex((x) => x.id === entry.id);
+        if (from === -1 || to === -1 || from === to) return;
+        const [moved] = state.entries.splice(from, 1);
+        // `to` was computed before removal; shift left by one when moving rightward.
+        state.entries.splice(from < to ? to - 1 : to, 0, moved);
+        afterChange();
+      });
+      wrap.appendChild(pill);
+      host.appendChild(wrap);
+    });
+  }
+
+  // ===== Sort row (ported from SortControls) =====
+  const SORT_LABELS = Object.fromEntries(COLUMNS.map((c) => [c.key, c.label]));
+  function renderSort() {
+    const host = document.getElementById("sort-row");
+    host.innerHTML = "";
+    const lbl = document.createElement("span"); lbl.textContent = "Sort:"; lbl.style.cssText = "font-size:0.74rem;font-weight:600;color:var(--subtle)"; host.appendChild(lbl);
+    state.sortKeys.forEach((k, index) => {
+      const chip = document.createElement("div"); chip.className = "sort-chip";
+      if (state.sortKeys.length > 1) { const o = document.createElement("span"); o.className = "ord"; o.textContent = (index+1)+"."; chip.appendChild(o); }
+      const f = document.createElement("span"); f.textContent = SORT_LABELS[k.field] ?? k.field; chip.appendChild(f);
+      const dir = document.createElement("button"); dir.textContent = k.direction === "asc" ? "▲" : "▼"; dir.title = "Toggle direction";
+      dir.onclick = () => { k.direction = k.direction === "asc" ? "desc" : "asc"; afterChange(); };
+      chip.appendChild(dir);
+      const rm = document.createElement("button"); rm.textContent = "×"; rm.title = "Remove sort";
+      rm.onclick = () => { state.sortKeys.splice(index, 1); afterChange(); };
+      chip.appendChild(rm);
+      host.appendChild(chip);
+    });
+    const active = new Set(state.sortKeys.map((k) => k.field));
+    const available = COLUMNS.filter((c) => !state.hidden.has(c.key) && !active.has(c.key));
+    if (state.sortKeys.length < MAX_SORT_KEYS && available.length) {
+      const menu = document.createElement("div"); menu.className = "menu";
+      const add = document.createElement("button"); add.className = "dashed"; add.textContent = "+ Add sort";
+      const list = document.createElement("div"); list.className = "menu-list hidden";
+      available.forEach((c) => { const b = document.createElement("button"); b.textContent = c.label; b.onclick = () => { state.sortKeys.push({ field: c.key, direction: "desc" }); afterChange(); }; list.appendChild(b); });
+      add.onclick = (ev) => { ev.stopPropagation(); list.classList.toggle("hidden"); };
+      document.addEventListener("click", () => list.classList.add("hidden"), { once: true });
+      menu.appendChild(add); menu.appendChild(list); host.appendChild(menu);
+    }
+    if (state.sortKeys.length) { const clr = document.createElement("button"); clr.className = "dashed"; clr.style.border = "none"; clr.textContent = "Clear sorts"; clr.onclick = () => { state.sortKeys = []; afterChange(); }; host.appendChild(clr); }
+  }
+
+  // ===== Column toggles =====
+  function renderToggles() {
+    const host = document.getElementById("col-toggles"); host.innerHTML = "";
+    COLUMNS.forEach((col) => {
+      const l = document.createElement("label");
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !state.hidden.has(col.key);
+      cb.onchange = () => { if (cb.checked) state.hidden.delete(col.key); else { state.hidden.add(col.key); state.sortKeys = state.sortKeys.filter((k) => k.field !== col.key); } afterChange(); };
+      l.appendChild(cb); l.appendChild(document.createTextNode(col.label)); host.appendChild(l);
+    });
+  }
+
+  // ===== Table =====
+  function onHeaderSort(key) {
+    const existing = state.sortKeys.find((k) => k.field === key);
+    if (state.sortKeys.length === 1 && existing) existing.direction = existing.direction === "asc" ? "desc" : "asc";
+    else state.sortKeys = [{ field: key, direction: existing && existing.direction === "desc" ? "asc" : "desc" }];
+    afterChange();
+  }
+  function renderTable(rows) {
+    const thead = document.getElementById("thead"), tbody = document.getElementById("tbody");
+    const tr = document.createElement("tr");
+    COLUMNS.forEach((col) => {
+      if (state.hidden.has(col.key)) return;
+      const th = document.createElement("th"); if (isNum(col)) th.className = "numeric";
+      const sk = state.sortKeys.find((k) => k.field === col.key);
+      th.innerHTML = `${escapeHtml(col.label)}${sk ? `<span class="arrow">${sk.direction==="asc"?"▲":"▼"}</span>` : ""}`;
+      th.onclick = () => onHeaderSort(col.key);
+      tr.appendChild(th);
+    });
+    thead.innerHTML = ""; thead.appendChild(tr);
+
+    const start = (state.page - 1) * state.pageSize;
+    const pageRows = rows.slice(start, start + state.pageSize);
+    tbody.innerHTML = "";
+    pageRows.forEach((row) => {
+      const r = document.createElement("tr");
+      COLUMNS.forEach((col) => { if (state.hidden.has(col.key)) return; const td = document.createElement("td"); if (isNum(col)) td.className = "numeric"; td.textContent = cell(row, col.key); r.appendChild(td); });
+      tbody.appendChild(r);
+    });
+    document.getElementById("empty").classList.toggle("show", rows.length === 0);
+  }
+  function renderPager(total) {
+    const host = document.getElementById("pager");
+    const totalPages = Math.max(1, Math.ceil(total / state.pageSize));
+    if (state.page > totalPages) state.page = totalPages;
+    const start = total === 0 ? 0 : (state.page - 1) * state.pageSize + 1;
+    const end = Math.min(state.page * state.pageSize, total);
+    host.innerHTML = `<span>${total === 0 ? "No results" : `${start}–${end} of ${total}`}</span>`;
+    const ctrls = document.createElement("div"); ctrls.className = "ctrls";
+    const pp = document.createElement("label"); pp.style.cssText = "display:flex;align-items:center;gap:0.3rem";
+    pp.innerHTML = `Per page: <select id="pg-size">${PAGE_SIZES.map((s) => `<option ${s===state.pageSize?"selected":""}>${s}</option>`).join("")}</select>`;
+    ctrls.appendChild(pp);
+    const nav = document.createElement("div"); nav.style.cssText = "display:flex;align-items:center;gap:0.4rem";
+    nav.innerHTML = `<button class="btn" id="pg-prev" ${state.page<=1?"disabled":""}>‹</button><span class="tabular">${state.page} / ${totalPages}</span><button class="btn" id="pg-next" ${state.page>=totalPages?"disabled":""}>›</button>`;
+    ctrls.appendChild(nav); host.appendChild(ctrls);
+    document.getElementById("pg-size").onchange = (e) => { state.pageSize = Number(e.target.value); state.page = 1; render(); };
+    document.getElementById("pg-prev").onclick = () => { state.page = Math.max(1, state.page - 1); render(); };
+    document.getElementById("pg-next").onclick = () => { state.page = Math.min(totalPages, state.page + 1); render(); };
+  }
+
+  // ===== Orchestration =====
+  function render() {
+    const rows = stableMultiSort(visibleRows());
+    document.getElementById("row-count").textContent = `${rows.length} of ${DATA.length} rows`;
+    renderControls(); renderPills(); renderSort(); renderTable(rows); renderPager(rows.length);
+  }
+  // Recompute from a structural change (resets to page 1).
+  function afterChange() { state.page = 1; render(); }
+
+  document.getElementById("global-search").oninput = (e) => { state.search = e.target.value.toLowerCase(); afterChange(); };
+  document.getElementById("columns-btn").onclick = () => document.getElementById("col-toggles-wrap").classList.toggle("hidden");
+  document.getElementById("reset-btn").onclick = () => {
+    state.entries = []; state.nextConnector = "AND"; state.sortKeys = []; state.hidden = new Set(); state.search = ""; state.page = 1;
+    state.curText = ""; state.curSelect = ""; state.curOp = "≥"; state.curLabel = FILTER_DEFS[0] ? FILTER_DEFS[0].label : "";
+    document.getElementById("global-search").value = "";
+    renderToggles(); render();
+  };
+
+  renderToggles();
+  render();
+</script>
+</body>
+</html>

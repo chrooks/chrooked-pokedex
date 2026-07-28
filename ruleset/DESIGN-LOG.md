@@ -50,3 +50,19 @@ direction picked, options rejected, and corrections given along the way. Appende
 ## 2026-07-25 — Toxicroak line
 
 - **Direction:** fast mixed attacker w well paced STABs, good water, ground, and dark coverage
+
+## 2026-07-26 — Emolga line
+
+- **Direction:** Fast special attacking bulky utility. gets volt-switch, nuzzle, short circuit, encore helping hand, good stab moves, some grass coverage, search new custom moves too
+
+## 2026-07-26 — Raichu line
+
+- **Direction:** stats + abilities + learnset repass
+
+## 2026-07-26 — Raichu Alola line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-26 — Tsareena line
+
+- **Direction:** learnset-only repass
