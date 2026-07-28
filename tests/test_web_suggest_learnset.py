@@ -442,6 +442,9 @@ def _abilities_with(desc_by_name: dict[str, str]) -> list[dict[str, Any]]:
     ]
 
 
+_MIXED = {"atk": 100, "spa": 100}  # tie → category-blind shortlist
+
+
 def test_ate_ability_forces_normal_move_requirement_with_shortlist() -> None:
     """An -ate ability yields a hard requirement naming the converted type and a
     pool-queried Normal-attacker shortlist, strongest first."""
@@ -449,6 +452,7 @@ def test_ate_ability_forces_normal_move_requirement_with_shortlist() -> None:
         {"primary": "Spectralize", "secondary": None, "hidden": None},
         _abilities_with({"Spectralize": "Normal moves become Ghost-type. +20% power."}),
         _ate_pool(),
+        _MIXED,
     )
     assert "MUST" in req
     assert "Ghost-type" in req
@@ -456,6 +460,25 @@ def test_ate_ability_forces_normal_move_requirement_with_shortlist() -> None:
     assert "Double-Edge (120bp)" in req
     assert req.index("Double-Edge") < req.index("Body Slam")
     assert "Growl" not in req
+
+
+def test_ate_shortlist_respects_offensive_bias() -> None:
+    """A special attacker's -ate fuel is SPECIAL Normal moves, not physical.
+
+    This is the Typhlosion-Hisui bug: SpA > Atk but the shortlist handed over
+    physical Double-Edge/Head Charge. The bias-aware shortlist must exclude them
+    and surface the special Normal attacker (Hyper Voice) instead."""
+    special_attacker = {"atk": 84, "spa": 122}
+    req = suggestmod._ability_move_requirements(
+        {"primary": "Spectralize", "secondary": None, "hidden": None},
+        _abilities_with({"Spectralize": "Normal moves become Ghost-type. +20% power."}),
+        _ate_pool(),
+        special_attacker,
+    )
+    assert "SPECIAL" in req
+    assert "Hyper Voice" in req  # special Normal attacker, kept
+    assert "Double-Edge" not in req  # physical, excluded for a special attacker
+    assert "Body Slam" not in req
 
 
 def test_ate_shortlist_excludes_gimmick_nukes() -> None:
@@ -468,6 +491,7 @@ def test_ate_shortlist_excludes_gimmick_nukes() -> None:
         {"primary": "Spectralize", "secondary": None, "hidden": None},
         _abilities_with({"Spectralize": "Normal moves become Ghost-type. +20% power."}),
         pool,
+        _MIXED,
     )
     assert "Explosion" not in req
     assert "Double-Edge" in req  # 120bp, under the ceiling, kept
@@ -480,6 +504,7 @@ def test_status_synergy_ability_leans_toward_status_moves() -> None:
         {"primary": "Insidious", "secondary": None, "hidden": None},
         _abilities_with({"Insidious": "Raises Speed one stage when using a status move."}),
         pool,
+        _MIXED,
     )
     assert "status" in req.lower()
     assert "Growl" in req
@@ -492,8 +517,28 @@ def test_no_synergy_ability_yields_no_requirement_line() -> None:
         {"primary": "Sap Sipper", "secondary": None, "hidden": None},
         _abilities_with({"Sap Sipper": "Boosts Attack when hit by a Grass move."}),
         _ate_pool(),
+        _MIXED,
     )
     assert req == ""
+
+
+def test_offensive_bias_line_in_context_for_special_attacker() -> None:
+    """A special attacker gets a loud OFFENSIVE BIAS line steering moves special."""
+    entry = {
+        "chrooked_id": "typhlosionhisui",
+        "name": "Typhlosion Hisui",
+        "types": ["Fire", "Ghost"],
+        "stats": {"hp": 73, "atk": 84, "def": 78, "spa": 122, "spd": 88, "spe": 95},
+        "abilities": {"primary": "Blaze", "secondary": "Pyre", "hidden": None},
+        "learnset": [{"level": 1, "move": "Tackle"}],
+        "evolution": {},
+        "evolves_into": [],
+    }
+    ctx = suggestmod._build_learnset_user_context(
+        entry, [], _ate_pool(), "full", None, None
+    )
+    assert "OFFENSIVE BIAS" in ctx
+    assert "SPECIAL" in ctx
 
 
 def test_ate_requirement_appears_in_assembled_context() -> None:

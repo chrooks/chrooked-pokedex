@@ -1157,8 +1157,13 @@ def _build_learnset_rubric() -> str:
         "You MUST pick only moves from the provided move pool — never invent a "
         "move name. Design the learnset to:\n"
         "- Provide STAB on the species' types wherever possible.\n"
-        "- Match move category (Physical/Special/Status) to the base stats: "
-        "high ATK → Physical leaning; high SPA → Special leaning; balanced → mix.\n"
+        "- Match move category to the base stats — this is a HARD rule, not a "
+        "lean. If Atk > SpA the attacking moves must be predominantly PHYSICAL; if "
+        "SpA > Atk they must be predominantly SPECIAL; only a genuine tie is a "
+        "mix. Never load a special attacker with physical attacks (or vice versa) "
+        "— use the off-stat category solely for coverage the on-stat movepool "
+        "lacks. A loud OFFENSIVE BIAS line below states the species' side; obey "
+        "it, and it governs ability-fuel moves too.\n"
         "- Treat the species' ability descriptions (provided below) as DESIGN "
         "CONSTRAINTS, not flavor. For EACH ability, work out which moves it "
         "rewards or requires and deliberately bias the learnset toward them. The "
@@ -1270,23 +1275,45 @@ _ABILITY_SHORTLIST_SIZE = 8
 _SHORTLIST_POWER_CEILING = 140
 
 
-def _ate_directive(name: str, match: re.Match[str], pool: list[dict[str, Any]]) -> str:
+def _offensive_bias(stats: dict[str, Any]) -> str | None:
+    """"physical" / "special" for a species leaning one way, else None (mixed).
+
+    Compares Atk vs SpA; a tie (or missing stats) is mixed. Drives both the
+    -ate fuel category and the loud per-species offensive-bias line — so a
+    special attacker never gets handed physical Normal moves as its fuel.
+    """
+    atk, spa = stats.get("atk"), stats.get("spa")
+    if not isinstance(atk, int) or not isinstance(spa, int) or atk == spa:
+        return None
+    return "physical" if atk > spa else "special"
+
+
+def _ate_directive(
+    name: str, match: re.Match[str], pool: list[dict[str, Any]], stats: dict[str, Any]
+) -> str:
     converted = match.group(1).capitalize()
-    shortlist = _shortlist(pool, move_type="Normal", attacking=True)
+    bias = _offensive_bias(stats)
+    # A special attacker's Normal fuel must be SPECIAL Normal moves (Boomburst,
+    # Hyper Voice), not physical (Double-Edge) — that mismatch is exactly the bug
+    # this fixes. Mixed → offer both.
+    cat_word = f"{bias.upper()} " if bias else ""
+    shortlist = _shortlist(pool, move_type="Normal", category=bias, attacking=True)
     candidates = (
-        f" Strong Normal-type attackers in the pool: {shortlist}." if shortlist else ""
+        f" Strong {cat_word}Normal-type attackers in the pool: {shortlist}."
+        if shortlist
+        else ""
     )
     return (
         f"{name} converts this species' Normal-type moves into {converted}-type "
-        f"with a power boost. You MUST include at least 2-3 strong Normal-type "
-        f"ATTACKING moves — the ability is dead weight otherwise. They function as "
-        f"boosted {converted}-type STAB, so treat them as primary offense, not "
-        f"filler.{candidates}"
+        f"with a power boost. You MUST include at least 2-3 strong {cat_word}"
+        f"Normal-type ATTACKING moves — the ability is dead weight otherwise. They "
+        f"function as boosted {converted}-type STAB, so treat them as primary "
+        f"offense, not filler.{candidates}"
     )
 
 
 def _status_synergy_directive(
-    name: str, _match: re.Match[str], pool: list[dict[str, Any]]
+    name: str, _match: re.Match[str], pool: list[dict[str, Any]], _stats: dict[str, Any]
 ) -> str:
     shortlist = _shortlist(pool, category="status")
     candidates = f" Status moves in the pool: {shortlist}." if shortlist else ""
@@ -1297,6 +1324,7 @@ def _status_synergy_directive(
 
 
 # (pattern, builder). Ordered; a builder fires once per matching ability.
+# builder(name, match, pool, stats) → directive.
 _SYNERGY_RULES: tuple[tuple[re.Pattern[str], Any], ...] = (
     (_ATE_RE, _ate_directive),
     (_STATUS_SYNERGY_RE, _status_synergy_directive),
@@ -1307,13 +1335,16 @@ def _ability_move_requirements(
     ability_slots: dict[str, Any],
     all_abilities: list[dict[str, Any]],
     move_pool: list[dict[str, Any]],
+    stats: dict[str, Any],
 ) -> str:
     """Per-species move directives implied by the species' abilities.
 
     Runs the structured-filter synergy table over each ability's description and
     QUERIES the move pool for relevant candidates — the in-process relevance
-    lookup, no agentic tool round-trip. Returns a directive string, or "" when no
-    tabled ability applies (the rubric still drives general per-ability reasoning).
+    lookup, no agentic tool round-trip. Candidate shortlists honor the species'
+    offensive bias (a special attacker gets special fuel). Returns a directive
+    string, or "" when no tabled ability applies (the rubric still drives general
+    per-ability reasoning).
     """
     ability_by_name: dict[str, str] = {
         entry["name"].strip().casefold(): entry.get("description", "")
@@ -1329,7 +1360,7 @@ def _ability_move_requirements(
         for pattern, builder in _SYNERGY_RULES:
             match = pattern.search(desc)
             if match:
-                directives.append(builder(name, match, move_pool))
+                directives.append(builder(name, match, move_pool, stats))
     return " ".join(directives)
 
 
@@ -1424,7 +1455,20 @@ def _build_learnset_user_context(
         f"Evolution: {_format_evo_context(entry)}",
         f"Mode: {mode.upper()}",
     ]
-    requirements = _ability_move_requirements(ability_slots, all_abilities, move_pool)
+    bias = _offensive_bias(stats)
+    if bias:
+        atk, spa = stats.get("atk"), stats.get("spa")
+        lines.append(
+            f"OFFENSIVE BIAS: {'SpA' if bias == 'special' else 'Atk'} "
+            f"({spa if bias == 'special' else atk}) exceeds "
+            f"{'Atk' if bias == 'special' else 'SpA'} "
+            f"({atk if bias == 'special' else spa}) — its ATTACKING moves must be "
+            f"predominantly {bias.upper()}. Use the off-stat category only for "
+            f"coverage the {bias} movepool genuinely lacks."
+        )
+    requirements = _ability_move_requirements(
+        ability_slots, all_abilities, move_pool, stats
+    )
     if requirements:
         lines.append(f"ABILITY-DRIVEN MOVE REQUIREMENT: {requirements}")
     if instruction and instruction.strip():
