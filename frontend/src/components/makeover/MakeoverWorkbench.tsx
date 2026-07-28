@@ -133,7 +133,11 @@ export function MakeoverWorkbench({
   }, []);
 
   const handleRedirect = useCallback((text: string) => {
-    setCorrections((prev) => [...prev, text]);
+    // Dedupe an identical consecutive steer (e.g. a retry after a propose error)
+    // so the design log doesn't repeat itself.
+    setCorrections((prev) =>
+      prev[prev.length - 1] === text ? prev : [...prev, text],
+    );
   }, []);
 
   // A mid-flow create persisted to the Ruleset; record it + refresh the dex so the
@@ -276,7 +280,6 @@ export function MakeoverWorkbench({
           moveOptions={moveOptions}
           movePower={movePower}
           rubric={rubric}
-          byId={byId}
           onSubSurface={setSubSurface}
           onCreated={handleCreated}
         />

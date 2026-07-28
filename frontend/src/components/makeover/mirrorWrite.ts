@@ -1,9 +1,8 @@
-/* The write half of mirror-down: given the whole-line preview rows (pre-evos),
-   copy the anchor kit onto each pre-evo through the existing CRUD route
-   (read raw Override → merge types + abilities + learnset − L0 → PUT, silent so
-   the workbench flushes one dex refresh). Shared by the learnset lock's
-   extraWrites and the standalone mirror-only stage. Never touches the anchor —
-   `mirrorDownPreview` only ever returns pre-evos. Returns the written ids. */
+/* The write half of the MIRROR stage: given the preview rows, copy the anchor
+   kit onto each recipient through the existing CRUD route (read raw Override →
+   merge the selected facets → PUT, silent so the workbench flushes one dex
+   refresh). Never touches the anchor — the caller's rows never include it.
+   Returns the written ids. */
 
 import { api } from "../../api";
 import type { SpeciesOverride } from "../../types";

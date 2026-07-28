@@ -102,7 +102,7 @@ export interface UseMakeoverStage<Draft> {
   propose: () => Promise<void>;
   /** Replace the working draft after an inline edit or an alternative swap. */
   editDraft: (draft: Draft) => void;
-  /** Write the locked draft through CRUD, plus any extra writes (mirror-down). */
+  /** Write the locked draft through CRUD (the anchor only). */
   lockIn: () => Promise<boolean>;
 }
 
@@ -115,11 +115,10 @@ interface Args<Draft extends SectionDraft> {
   propose: (id: string, direction: string) => Promise<StageProposal<Draft>>;
   /** Merge the locked draft into the raw Override (this section's field only). */
   merge: (raw: SpeciesOverride, draft: Draft) => SpeciesOverride;
-  /** Extra writes at lock (the learnset stage's whole-line mirror-down). */
-  extraWrites?: (draft: Draft) => Promise<void>;
   /** Called once the lock lands cleanly, with the locked draft (record facts). */
   onLocked: (draft: Draft) => void;
-  /** Called on a re-roll with the composed redirect, so the session harvests it. */
+  /** Called with every author-typed steer (first-propose direction or re-roll
+      redirect), so the session harvests it into the design log's corrections. */
   onRedirect?: (text: string) => void;
 }
 
@@ -142,7 +141,6 @@ export function useMakeoverStage<Draft extends SectionDraft>({
   initialDirection,
   propose,
   merge,
-  extraWrites,
   onLocked,
   onRedirect,
 }: Args<Draft>): UseMakeoverStage<Draft> {
@@ -176,7 +174,13 @@ export function useMakeoverStage<Draft extends SectionDraft>({
     const composed = isReroll
       ? rerollDirection(section, state.direction, state.baseline, state.draft)
       : state.direction;
-    if (isReroll && composed.trim() !== "") onRedirect?.(composed);
+    // Harvest every author-typed steer so it lands in the design log: all re-roll
+    // redirects, AND a first-propose direction the author wrote or edited. The
+    // injected initialDirection is excluded — it is already the log's `direction`.
+    const isAuthorSteer = isReroll
+      ? composed.trim() !== ""
+      : composed.trim() !== "" && composed !== (initialDirection ?? "");
+    if (isAuthorSteer) onRedirect?.(composed);
     dispatch({ type: "proposing" });
     try {
       const proposal = await propose(entry.chrooked_id, composed);
@@ -184,7 +188,7 @@ export function useMakeoverStage<Draft extends SectionDraft>({
     } catch (caught: unknown) {
       dispatch({ type: "failed", kind: "propose", message: messageOf(caught) });
     }
-  }, [section, state.direction, state.baseline, state.draft, propose, entry.chrooked_id, onRedirect]);
+  }, [section, state.direction, state.baseline, state.draft, propose, entry.chrooked_id, onRedirect, initialDirection]);
 
   const lockIn = useCallback(async (): Promise<boolean> => {
     if (state.draft === null) return false;
@@ -198,14 +202,13 @@ export function useMakeoverStage<Draft extends SectionDraft>({
         raw = seedOverride(entry);
       }
       await api.putSpecies(entry.chrooked_id, merge(raw, draft));
-      if (extraWrites) await extraWrites(draft);
       onLocked(draft);
       return true;
     } catch (caught: unknown) {
       dispatch({ type: "failed", kind: "lock", message: messageOf(caught) });
       return false;
     }
-  }, [state.draft, entry, merge, extraWrites, onLocked]);
+  }, [state.draft, entry, merge, onLocked]);
 
   return {
     phase: state.phase,

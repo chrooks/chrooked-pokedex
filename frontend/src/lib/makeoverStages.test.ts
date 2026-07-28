@@ -76,10 +76,11 @@ describe("firstUnlocked — active stage across journeys", () => {
     expect(firstUnlocked(ALL, done("direction", "typing"))).toBe("stats");
   });
 
-  it("learnset-only journey activates learnset, then the tail", () => {
+  it("learnset-only journey activates learnset, then MIRROR, then the tail", () => {
     const only = sel("learnset");
     expect(firstUnlocked(only, done())).toBe("learnset");
-    expect(firstUnlocked(only, done("learnset"))).toBe("apply");
+    expect(firstUnlocked(only, done("learnset"))).toBe("mirror");
+    expect(firstUnlocked(only, done("learnset", "mirror"))).toBe("apply");
   });
 
   it("mirror-only journey (nothing selected) runs the mirror step, then the tail", () => {
@@ -87,8 +88,12 @@ describe("firstUnlocked — active stage across journeys", () => {
     expect(firstUnlocked(sel(), done("mirror"))).toBe("apply");
   });
 
-  it("goes straight to the tail once every selected stage is locked", () => {
-    expect(firstUnlocked(sel("typing", "stats"), done("typing", "stats"))).toBe("apply");
+  it("MIRROR is a standing stop in every journey — after the last design lock", () => {
+    expect(firstUnlocked(ALL, done(...DESIGN_STAGES))).toBe("mirror");
+    expect(firstUnlocked(sel("typing", "stats"), done("typing", "stats"))).toBe("mirror");
+    expect(firstUnlocked(sel("typing", "stats"), done("typing", "stats", "mirror"))).toBe(
+      "apply",
+    );
   });
 });
 

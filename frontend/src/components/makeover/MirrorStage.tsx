@@ -1,11 +1,14 @@
-/* The MIRROR wizard — the mirror-only journey (ac8), reachable from a profile's
-   Mirror button or a workbench with zero design stages selected. Pick the ANCHOR
-   (any member of the evolution line), the FACETS to copy (typing / stats /
+/* The MIRROR wizard — a standing stop in EVERY makeover journey, after the last
+   design lock and before the auto tail (also reachable directly: the profile's
+   Mirror button, or a workbench with zero design stages selected). Pick the
+   ANCHOR (any member of the evolution line), the FACETS to copy (typing / stats /
    abilities / learnset − L0), and the RECIPIENTS (any other line member; the
    anchor's pre-evos start included, evolved stages start skipped). LOCK IN
-   writes ONLY the recipients — the anchor is never touched. Stats is opt-in:
-   the line default SCALES stats rather than copying them (CLAUDE.md), so
-   mirroring them verbatim is a deliberate exception. */
+   writes ONLY the recipients — the anchor is never touched. With nothing to
+   write (no line, every recipient skipped, or no facet picked) the button
+   becomes SKIP and the flow continues to the tail. Stats is opt-in: the line
+   default SCALES stats rather than copying them (CLAUDE.md), so mirroring them
+   verbatim is a deliberate exception. */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ApiError } from "../../api";
@@ -85,8 +88,9 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
     [rows, excluded],
   );
   const hasLine = line.length > 1;
-  // Nothing to lock if every recipient is skipped or no facet is picked.
-  const canWrite = included.length > 0 && facets.size > 0;
+  // Nothing selected to write → the lock becomes a SKIP (the stage never blocks
+  // the tail; a species with no line just passes through).
+  const canWrite = hasLine && included.length > 0 && facets.size > 0;
 
   function pickAnchor(nextId: string) {
     setAnchorId(nextId);
@@ -113,7 +117,12 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
 
   const writeRef = useRef<() => void>(() => {});
   writeRef.current = () => {
-    if (phase === "writing" || !hasLine || !canWrite) return;
+    if (phase === "writing") return;
+    if (!canWrite) {
+      // SKIP: nothing to mirror — lock the stage with zero writes.
+      onLocked({}, []);
+      return;
+    }
     void (async () => {
       setPhase("writing");
       setError(null);
@@ -137,11 +146,11 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
     registerActions({
       lockIn: () => writeRef.current(),
       focusRedirect: () => undefined,
-      canLock: hasLine && canWrite && phase !== "writing",
+      canLock: phase !== "writing",
       phase,
     });
     return () => registerActions(null);
-  }, [registerActions, hasLine, canWrite, phase]);
+  }, [registerActions, phase]);
 
   return (
     <div className="mk-stage" data-phase={phase} id="mk-stage-mirror">
@@ -151,7 +160,9 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
         is never touched.
       </p>
 
-      {!hasLine && <p className="mk-empty mono">no evolution line to mirror across.</p>}
+      {!hasLine && (
+        <p className="mk-empty mono">no evolution line to mirror across — skip ahead.</p>
+      )}
 
       {hasLine && (
         <div className="mk-mirror__controls">
@@ -218,19 +229,17 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
         </p>
       )}
 
-      {hasLine && (
-        <div className="mk-stage__actions">
-          <button
-            type="button"
-            id="mk-mirror-lock"
-            className="mk-btn mk-btn--lock"
-            disabled={phase === "writing" || !canWrite}
-            onClick={() => writeRef.current()}
-          >
-            {phase === "writing" ? "WRITING…" : "LOCK IN"}
-          </button>
-        </div>
-      )}
+      <div className="mk-stage__actions">
+        <button
+          type="button"
+          id="mk-mirror-lock"
+          className="mk-btn mk-btn--lock"
+          disabled={phase === "writing"}
+          onClick={() => writeRef.current()}
+        >
+          {phase === "writing" ? "WRITING…" : canWrite ? "LOCK IN" : "SKIP →"}
+        </button>
+      </div>
     </div>
   );
 }

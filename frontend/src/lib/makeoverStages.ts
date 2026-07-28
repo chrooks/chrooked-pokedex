@@ -112,9 +112,10 @@ export function toggleSelected(
 }
 
 /** The active stage: the first SELECTED design stage not yet locked this session,
-    in heartbeat order. With nothing selected, the mirror-only journey — `mirror`
-    until it is done, then the tail (`apply`). Once every selected stage is locked,
-    the tail. */
+    in heartbeat order. MIRROR is a standing stop in EVERY journey — after the last
+    design lock (or immediately, when nothing is selected) the mirror wizard runs
+    (skippable in-panel), then the tail (`apply`). One mirror Seam: the learnset
+    lock no longer mirrors down silently. */
 export function firstUnlocked(
   selected: ReadonlySet<DesignStage>,
   sessionLocked: ReadonlySet<Stage>,
@@ -122,7 +123,7 @@ export function firstUnlocked(
   for (const stage of DESIGN_STAGES) {
     if (selected.has(stage) && !sessionLocked.has(stage)) return stage;
   }
-  if (selected.size === 0 && !sessionLocked.has("mirror")) return "mirror";
+  if (!sessionLocked.has("mirror")) return "mirror";
   return "apply";
 }
 

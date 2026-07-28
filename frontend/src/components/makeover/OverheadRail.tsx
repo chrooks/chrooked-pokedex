@@ -75,7 +75,7 @@ export function OverheadRail({ selected, sessionLocked, active, subLabel }: Prop
         );
       })}
       <li className="mk-overhead__tail" data-open={inAuto || undefined} aria-hidden={!inAuto}>
-        {AUTO_STAGES.map((stage, index) => (
+        {(["mirror", ...AUTO_STAGES] as Stage[]).map((stage, index) => (
           <span
             key={stage}
             className="mk-overhead__auto mono"

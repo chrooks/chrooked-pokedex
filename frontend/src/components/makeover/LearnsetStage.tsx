@@ -1,14 +1,13 @@
 /* The LEARNSET design stage — the hero diff. Proposes a full learnset via the
    existing suggest Seam, renders current → proposed level-sorted rows with the
    pacing-band annotation behind each proposed row (ac4: a row over its BP band
-   gets a mono BAND flag), lets the author edit a row inline or re-roll (edits ride
-   along), and shows the WHOLE-LINE mirror-down preview (pre-evos = anchor minus
-   L0) before any write (ac5). LOCK IN writes the anchor's learnset AND mirrors the
-   kit down to every pre-evo through the existing CRUD route.
+   gets a mono BAND flag), and lets the author edit a row inline or re-roll (edits
+   ride along). LOCK IN writes the anchor's learnset only — the whole-line copy is
+   the MIRROR stage's job, the standing wizard stop right after this one (one
+   mirror Seam).
 
    Reuses the pure learnsetDraft machinery (classify, edit, merge) and the
-   learnsetBands + mirrorDown logic — extends the proposal machinery, never forks
-   it. */
+   learnsetBands logic — extends the proposal machinery, never forks it. */
 
 import { useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
@@ -25,14 +24,10 @@ import {
   removeRow,
 } from "../proposal/learnsetDraft";
 import { bandViolation, type LearnsetRubric } from "../../lib/learnsetBands";
-import { mirrorDownPreview, preEvos } from "../../lib/mirrorDown";
-import { writeMirror } from "./mirrorWrite";
-import { MirrorRowList } from "./MirrorRowList";
 import { StagePanel } from "./StagePanel";
 import { MoveCreatePanel } from "./MoveCreatePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
 import type { CommonStageProps } from "./stageProps";
-import type { DexEntry } from "../../types";
 
 interface Props extends CommonStageProps {
   moveOptions: readonly string[];
@@ -40,8 +35,6 @@ interface Props extends CommonStageProps {
   movePower: ReadonlyMap<string, number | null>;
   /** The rubric bands (backend-served); null until loaded. */
   rubric: LearnsetRubric | null;
-  /** The whole dex by chrooked_id, for the mirror-down line resolution. */
-  byId: ReadonlyMap<string, DexEntry>;
   /** Report the open sub-surface to the overhead rail: "new move" when the inline
       CREATE MOVE panel is open, null otherwise. */
   onSubSurface?: (label: string | null) => void;
@@ -61,7 +54,6 @@ export function LearnsetStage(props: Props) {
     moveOptions,
     movePower,
     rubric,
-    byId,
     onSubSurface,
     onCreated,
   } = props;
@@ -73,20 +65,6 @@ export function LearnsetStage(props: Props) {
     onSubSurface?.(moveCreateOpen ? "new move" : null);
     return () => onSubSurface?.(null);
   }, [moveCreateOpen, onSubSurface]);
-
-  const line = useMemo(() => preEvos(entry, byId), [entry, byId]);
-  // Pre-evos the author has opted OUT of mirroring to (by chrooked_id). Declared
-  // before the hook so extraWrites / onLocked close over the current set.
-  const [excludedPreEvos, setExcludedPreEvos] = useState<ReadonlySet<string>>(new Set());
-
-  function togglePreEvo(chrookedId: string) {
-    setExcludedPreEvos((prev) => {
-      const next = new Set(prev);
-      if (next.has(chrookedId)) next.delete(chrookedId);
-      else next.add(chrookedId);
-      return next;
-    });
-  }
 
   const hook = useMakeoverStage<LearnsetDraft>({
     section: "learnset",
@@ -101,24 +79,8 @@ export function LearnsetStage(props: Props) {
       };
     },
     merge: (raw, draft) => mergeDraft(raw, draft),
-    extraWrites: async (draft) => {
-      // Mirror the anchor kit down to every INCLUDED pre-evo: same typing +
-      // abilities, the anchor learnset minus L0. A pre-evo the author skipped is
-      // left untouched. Silent so the workbench flushes ONE dex refresh.
-      const learnset: LearnsetMove[] = draft.learnset.map((r) => ({ level: r.level, move: r.move }));
-      const kit = { types: entry.types, abilities: entry.abilities, learnset };
-      const targets = mirrorDownPreview(entry, byId, kit).filter(
-        (row) => !excludedPreEvos.has(row.chrooked_id),
-      );
-      await writeMirror(targets);
-    },
-    // The learnset lock writes the anchor's learnset AND every INCLUDED pre-evo
-    // copy — the read-back tail checks exactly what was written.
-    onLocked: () =>
-      onLocked({}, [
-        entry.chrooked_id,
-        ...line.map((m) => m.chrooked_id).filter((id) => !excludedPreEvos.has(id)),
-      ]),
+    // Writes the anchor only — the whole-line copy is the MIRROR stage's job.
+    onLocked: () => onLocked({}),
     onRedirect,
   });
 
@@ -340,24 +302,6 @@ export function LearnsetStage(props: Props) {
             </li>
           ))}
         </ul>
-      )}
-
-      {draft !== null && line.length > 0 && (
-        <details className="mk-mirror" id="mk-mirror-down" open>
-          <summary className="mk-mirror__summary mono">
-            mirror-down · {line.length - excludedPreEvos.size}/{line.length} pre-evo
-            {line.length === 1 ? "" : "s"} (types + abilities + learnset − L0) · toggle to skip
-          </summary>
-          <MirrorRowList
-            rows={mirrorDownPreview(entry, byId, {
-              types: entry.types,
-              abilities: entry.abilities,
-              learnset: proposed.map((r) => ({ level: r.level, move: r.move })),
-            })}
-            excluded={excludedPreEvos}
-            onToggle={togglePreEvo}
-          />
-        </details>
       )}
     </StagePanel>
   );

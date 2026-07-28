@@ -1,10 +1,10 @@
 /* The left rail — the à la carte picker (ac8). The five design stages are each
    SELECTED (in the journey) or KEEP (skipped untouched). A row not yet locked this
    session is a TOGGLE (click or space flips SELECTED ⇄ KEEP); a row locked this
-   session is a nav button (revisit). Below sits the AUTO block (MIRROR when it is
-   the mirror-only journey, then APPLY → PROOF → LOG). States render with the
-   design tokens only: --chrome marks the active rail position, --edited the locked
-   ✓, --text-dim the rest. */
+   session is a nav button (revisit). Below sits the AUTO block: MIRROR (a standing
+   wizard stop in every journey, skippable in-panel), then APPLY → PROOF → LOG.
+   States render with the design tokens only: --chrome marks the active rail
+   position, --edited the locked ✓, --text-dim the rest. */
 
 import {
   AUTO_STAGES,
@@ -57,8 +57,7 @@ const MARK: Record<RowState, string> = {
 };
 
 export function StageRail({ selected, sessionLocked, active, onNavigate, onToggle }: Props) {
-  const mirrorOnly = selected.size === 0;
-  const autoStages: Stage[] = mirrorOnly ? ["mirror", ...AUTO_STAGES] : [...AUTO_STAGES];
+  const autoStages: Stage[] = ["mirror", ...AUTO_STAGES];
 
   return (
     <nav className="mk-rail" aria-label="Makeover stages" id="mk-rail">
