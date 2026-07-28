@@ -557,6 +557,10 @@ textarea.mk-stage__redirect-input {
 /* --- Learnset diff -------------------------------------------------------- */
 
 .mk-cols--learnset {
+  /* Only ever renders one column now ("current" moved out); the inherited
+     1fr 1fr from .mk-cols squeezed the editor into the left half and clipped
+     the remove ✕. Full width. */
+  grid-template-columns: 1fr;
   gap: var(--space-5);
 }
 .mk-learnset {
@@ -646,6 +650,7 @@ textarea.mk-stage__redirect-input {
   align-items: center;
   gap: var(--space-2);
   width: 100%;
+  min-width: 0;
 }
 /* The "＋ add move" control under the proposed learnset list. */
 .mk-lrow-add {
@@ -658,9 +663,6 @@ textarea.mk-stage__redirect-input {
 }
 .mk-lrow-add .mk-btn {
   white-space: nowrap;
-}
-.mk-lrow__lv-input {
-  width: 4ch;
 }
 .mk-lrow__move-input {
   flex: 1;
@@ -675,6 +677,12 @@ textarea.mk-stage__redirect-input {
   padding: var(--space-1);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
+}
+.mk-lrow__lv-input {
+  /* Wide enough + right padding so 3-digit levels clear the native spin
+     buttons instead of sitting under the arrows. Matches .mk-stats__input. */
+  width: 6ch;
+  padding-right: 1.5em;
 }
 .mk-lrow__error {
   color: var(--chrome);
