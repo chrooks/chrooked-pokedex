@@ -367,6 +367,25 @@
   filter: brightness(0.85) saturate(0.9);
 }
 
+/* Keep-alive tab host: every visited kind stays mounted, inactive ones hidden.
+   Mirrors .device__layer's flex sizing so the active grid/table gets full size
+   (min-content would collapse the dex grid to one column). */
+.device__tabpane {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.device__tabpane > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.device__tabpane[hidden] {
+  display: none;
+}
+
 /* Responsive: collapse the rail to a top strip on narrow screens. */
 @media (max-width: 720px) {
   .device__body {

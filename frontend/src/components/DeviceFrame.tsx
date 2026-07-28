@@ -12,6 +12,7 @@ const KIND_TABS: { key: KindKey; label: string }[] = [
   { key: "moves", label: "Moves" },
   { key: "abilities", label: "Abilities" },
   { key: "type-chart", label: "Type Chart" },
+  { key: "team", label: "Team" },
   { key: "behaviors", label: "Behaviors" },
 ];
 

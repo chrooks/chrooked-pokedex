@@ -1,0 +1,1023 @@
+/* The Team tab. Two faithful copies of tectonic-tools' matchup grids — one
+   defensive, one offensive — reskinned onto this app's design tokens (OKLCH
+   custom props, light AND dark) instead of hardcoded Tailwind grays. The cell
+   language is preserved exactly: warm wash = the attack lands hard, cool wash =
+   it's resisted, grey = no effect, blank = neutral ×1, with tectonic's fraction
+   glyphs and per-cell tooltips. */
+
+.tab--team {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+
+.team__toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.team__toolbar-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.team__heading {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.team__count {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+  padding: 2px var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+}
+
+.team__count[data-full="true"] {
+  color: var(--chrome);
+  border-color: color-mix(in oklch, var(--chrome) 45%, var(--line));
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-1));
+}
+
+.team__hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+
+/* ── Party picker (combobox) ─────────────────────────────────────────────── */
+
+.party-picker {
+  position: relative;
+  max-width: 34rem;
+}
+
+.party-picker__field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.party-picker__field:focus-within {
+  border-color: color-mix(in oklch, var(--chrome) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--chrome) 22%, transparent);
+}
+
+.party-picker__field[data-disabled="true"] {
+  opacity: 0.6;
+}
+
+.party-picker__icon {
+  color: var(--text-faint);
+  font-size: var(--text-md);
+  line-height: 1;
+}
+
+.party-picker__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-3) 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+}
+
+.party-picker__input:focus {
+  outline: none;
+}
+
+.party-picker__input::placeholder {
+  color: var(--text-faint);
+}
+
+.party-picker__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-faint);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.party-picker__clear:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.party-picker__list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  right: 0;
+  max-height: 20rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px -8px oklch(0% 0 0 / 0.45);
+}
+
+.party-picker__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.party-picker__option[data-active="true"] {
+  background: color-mix(in oklch, var(--chrome) 16%, var(--surface-3));
+}
+
+.party-picker__option-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.party-picker__option-types {
+  display: inline-flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+/* ── Saved teams (localStorage) ──────────────────────────────────────────── */
+
+/* A subdued strip under the picker: the picker is the loud "add a Pokémon"
+   surface, so save/load/delete sits quieter and smaller beneath it. */
+.saved-teams {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.saved-teams__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.saved-teams__field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 1 22rem;
+  min-width: 12rem;
+}
+
+.saved-teams__label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.saved-teams__input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-0);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+}
+
+.saved-teams__input::placeholder {
+  color: var(--text-faint);
+}
+
+/* The load dropdown wears the input's skin so the strip reads as one control
+   family; a disabled (empty) one recedes rather than inviting a dead click. */
+.saved-teams__select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.saved-teams__select:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+/* A blank pick shows placeholder-toned text until a real team is chosen. */
+.saved-teams__select:has(option[value=""]:checked) {
+  color: var(--text-faint);
+}
+
+.saved-teams__input:focus-visible {
+  outline: none;
+  border-color: color-mix(in oklch, var(--chrome) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--chrome) 20%, transparent);
+}
+
+.saved-teams__actions {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.saved-teams__btn {
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-1);
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.saved-teams__btn:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+
+.saved-teams__btn:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.saved-teams__btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.saved-teams__btn--danger:hover:not(:disabled) {
+  color: color-mix(in oklch, var(--chrome) 80%, var(--text));
+  border-color: color-mix(in oklch, var(--chrome) 55%, var(--line));
+  background: color-mix(in oklch, var(--chrome) 14%, var(--surface-1));
+}
+
+/* Armed for deletion: the button goes loud so the second click is deliberate. */
+.saved-teams__btn--danger[data-confirming="true"]:not(:disabled) {
+  color: color-mix(in oklch, var(--chrome) 88%, var(--text));
+  border-color: var(--chrome);
+  background: color-mix(in oklch, var(--chrome) 20%, var(--surface-1));
+}
+
+/* Quiet, fading confirmation — reserves its line so nothing jumps when it shows. */
+.saved-teams__feedback {
+  min-height: 1.1rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: color-mix(in oklch, var(--type-grass) 60%, var(--text-dim));
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.saved-teams__feedback[data-show="true"] {
+  opacity: 1;
+}
+
+.saved-teams__feedback[data-kind="deleted"] {
+  color: var(--text-dim);
+}
+
+/* ── Party slots ─────────────────────────────────────────────────────────── */
+
+.team__party {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.party-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 9.5rem;
+  padding: var(--space-3) var(--space-2) var(--space-2);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.party-slot__remove {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-0);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.party-slot__remove:hover {
+  color: var(--text);
+  background: color-mix(in oklch, var(--chrome) 20%, var(--surface-2));
+  border-color: color-mix(in oklch, var(--chrome) 45%, var(--line));
+}
+
+.party-slot__remove:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--surface-1), 0 0 0 4px var(--chrome);
+}
+
+.party-slot__sprite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.party-slot__name {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: center;
+  color: var(--text);
+}
+
+.party-slot__types {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.party-slot__ability {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  margin-top: var(--space-1);
+}
+
+.party-slot__ability-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.party-slot__ability-select {
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-0);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.party-slot__ability-select:focus-visible {
+  outline: none;
+  border-color: color-mix(in oklch, var(--chrome) 55%, var(--line));
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--chrome) 22%, transparent);
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+
+.team__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  background: var(--surface-1);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+
+.team__empty-mark {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.team__empty-slot {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px dashed color-mix(in oklch, var(--chrome) 40%, var(--line));
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--chrome) 10%, transparent),
+    transparent 70%
+  );
+}
+
+.team__empty-title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.team__empty-body {
+  max-width: 32rem;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+/* ── Tables layout ───────────────────────────────────────────────────────── */
+
+.team__tables {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 1600px) {
+  .team__tables {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.matchup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.matchup__head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.matchup__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.matchup__subtitle {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+}
+
+/* The one place a horizontal scrollbar is allowed — inside the table's own box,
+   never the page. */
+.matchup__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-0);
+}
+
+.matchup__scroll:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--chrome);
+}
+
+.matchup__table {
+  border-collapse: separate;
+  border-spacing: 0;
+  /* Content-sized (not stretched) so the type-badge column stays compact and the
+     member cells sit right beside it, like tectonic's grid — left-aligned so a
+     small team reads flush, not floating in a centered void. overflow-x scrolls
+     only when a full party outgrows the box. */
+  width: auto;
+}
+
+/* ── Header cells ────────────────────────────────────────────────────────── */
+
+.matchup__corner,
+.matchup__memberhead,
+.matchup__totalhead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--line-strong);
+  border-right: 1px solid var(--line);
+}
+
+.matchup__corner {
+  left: 0;
+  z-index: 3;
+  min-width: 6.5rem;
+  padding: var(--space-2);
+  text-align: left;
+  vertical-align: bottom;
+  border-right: 1px solid var(--line-strong);
+}
+
+.matchup__corner-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Locked width: the column must not stretch to its widest name, or one long
+   name (Charizard Mega Y) widens its column, un-wraps its type chips, and
+   breaks the shared line every other header sits on. Long names wrap to two
+   centered lines inside the fixed box instead. */
+.matchup__memberhead {
+  padding: var(--space-2) var(--space-1);
+  width: 4.5rem;
+  min-width: 4.5rem;
+  max-width: 4.5rem;
+  vertical-align: bottom;
+}
+
+.matchup__memberhead > * {
+  display: flex;
+  justify-content: center;
+  /* The sprite box is the one fixed-width child (44px in a 72px column);
+     auto inline margins center it. Full-width children (name, chips) are
+     unaffected. */
+  margin-inline: auto;
+}
+
+.matchup__memberhead > .matchup__memberhead-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-top: 2px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-dim);
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  text-align: center;
+  white-space: normal;
+}
+
+.matchup__memberhead-types {
+  gap: 2px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.matchup__totalhead {
+  padding: var(--space-2) var(--space-1);
+  min-width: 3rem;
+  font-size: var(--text-xs);
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  color: var(--text-dim);
+  vertical-align: bottom;
+}
+
+.matchup__totalhead[data-kind="weak"],
+.matchup__totalhead[data-kind="super"] {
+  color: color-mix(in oklch, var(--type-fire) 55%, var(--text-dim));
+}
+
+.matchup__totalhead[data-kind="resist"],
+.matchup__totalhead[data-kind="immune"] {
+  color: color-mix(in oklch, var(--type-water) 55%, var(--text-dim));
+}
+
+/* ── Row header (type badge) ─────────────────────────────────────────────── */
+
+.matchup__rowhead {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  padding: var(--space-1) var(--space-2);
+  text-align: left;
+  background: var(--surface-1);
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line);
+}
+
+.matchup__rowhead-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in oklch, var(--type) 45%, transparent);
+  border-left: 3px solid var(--type);
+  background: color-mix(in oklch, var(--type) 22%, var(--surface-1));
+  color: color-mix(in oklch, var(--type) 74%, var(--text));
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Body cells: the effectiveness language ──────────────────────────────── */
+
+.matchup__cell {
+  width: 2.75rem;
+  height: 2.5rem;
+  text-align: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-0);
+}
+
+.matchup__cell-glyph {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: color-mix(in oklch, var(--type-fire) 20%, var(--text));
+  line-height: 1;
+}
+
+/* Neutral ×1 renders blank with no fill — the row-hover wash shows through it. */
+.matchup__cell[data-neutral="true"] {
+  background: transparent;
+}
+
+.matchup__cell--nodata {
+  width: 2.75rem;
+  height: 2.5rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--surface-0),
+    var(--surface-0) 4px,
+    var(--surface-1) 4px,
+    var(--surface-1) 8px
+  );
+}
+
+/* hyper (>2): the loudest warm cell — solid warm edge, extra-bold glyph. */
+.matchup__cell[data-bucket="hyper"] {
+  background: color-mix(in oklch, var(--type-fire) 30%, var(--surface-0));
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklch, var(--type-fire) 60%, transparent);
+}
+.matchup__cell[data-bucket="hyper"] .matchup__cell-glyph {
+  font-weight: 800;
+  color: color-mix(in oklch, var(--type-fire) 34%, var(--text));
+}
+
+/* super (>1): warm wash, solid edge. */
+.matchup__cell[data-bucket="super"] {
+  background: color-mix(in oklch, var(--type-fire) 16%, var(--surface-0));
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--type-fire) 48%, transparent);
+}
+.matchup__cell[data-bucket="super"] .matchup__cell-glyph {
+  font-weight: 800;
+}
+
+/* not-very (<1, ≥0.5): faint cool wash. */
+.matchup__cell[data-bucket="not-very"] {
+  background: color-mix(in oklch, var(--type-water) 11%, var(--surface-0));
+}
+.matchup__cell[data-bucket="not-very"] .matchup__cell-glyph {
+  font-weight: 500;
+  color: color-mix(in oklch, var(--type-water) 26%, var(--text));
+}
+
+/* barely (<0.5, >0): deeper cool wash, light ring. */
+.matchup__cell[data-bucket="barely"] {
+  background: color-mix(in oklch, var(--type-water) 20%, var(--surface-0));
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--type-water) 30%, transparent);
+}
+.matchup__cell[data-bucket="barely"] .matchup__cell-glyph {
+  font-weight: 600;
+  color: color-mix(in oklch, var(--type-water) 30%, var(--text));
+}
+
+/* immune (0): "dead" grey — heavy inset ring, muted glyph. Reads as inert. */
+.matchup__cell[data-bucket="immune"] {
+  background: color-mix(in oklch, var(--line-strong) 45%, var(--surface-0));
+  box-shadow: inset 0 0 0 2px color-mix(in oklch, var(--line-strong) 55%, transparent);
+}
+.matchup__cell[data-bucket="immune"] .matchup__cell-glyph {
+  font-weight: 800;
+  color: var(--text-faint);
+}
+
+/* ── Total columns ───────────────────────────────────────────────────────── */
+
+.matchup__total {
+  width: 3rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  background: var(--surface-1);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.matchup__total[data-empty="true"] {
+  color: transparent;
+}
+
+.matchup__total[data-kind="weak"],
+.matchup__total[data-kind="super"] {
+  color: color-mix(in oklch, var(--type-fire) 45%, var(--text));
+}
+.matchup__total[data-kind="weak"][data-empty="true"],
+.matchup__total[data-kind="super"][data-empty="true"],
+.matchup__total[data-kind="resist"][data-empty="true"],
+.matchup__total[data-kind="immune"][data-empty="true"] {
+  color: transparent;
+}
+.matchup__total[data-kind="resist"],
+.matchup__total[data-kind="immune"] {
+  color: color-mix(in oklch, var(--type-water) 45%, var(--text));
+}
+
+/* Unbalanced weakness: more members weak to this type than have an answer.
+   The Weak total goes loud — filled danger tint — so lopsided exposures pop
+   while scanning the column. */
+.matchup__total[data-kind="weak"][data-unbalanced] {
+  color: color-mix(in oklch, var(--type-fire) 78%, var(--text));
+  background: color-mix(in oklch, var(--type-fire) 16%, var(--surface-1));
+  box-shadow: inset 3px 0 0 color-mix(in oklch, var(--type-fire) 65%, transparent);
+}
+
+/* ── Row hover: tint the whole row with the row type's color ──────────────── */
+
+.matchup__row:hover .matchup__cell,
+.matchup__row:hover .matchup__total,
+.matchup__row:hover .matchup__rowhead {
+  background-image: linear-gradient(
+    color-mix(in oklch, var(--type) 15%, transparent),
+    color-mix(in oklch, var(--type) 15%, transparent)
+  );
+}
+
+.matchup__row:hover .matchup__rowhead-badge {
+  background: color-mix(in oklch, var(--type) 34%, var(--surface-1));
+}
+
+/* ── Picker duplicate option (already on the team) ───────────────────────── */
+
+/* A species already in the party can't be added again — its option greys out and
+   carries an "On team" tag instead of the type chips, so the picker never offers
+   a duplicate (matches the detail add button's dedup). */
+.party-picker__option[data-duplicate="true"] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.party-picker__option[data-duplicate="true"][data-active="true"] {
+  background: transparent;
+}
+
+.party-picker__option-tag {
+  flex-shrink: 0;
+  padding: 1px var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── Full-team replace dialog (ac10) ─────────────────────────────────────── */
+
+/* Centered modal — portaled to <body>, so it clears the detail ledger overlay
+   (z-index 20) and the patch drawer (25) when opened from either surface. */
+.replace-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+}
+
+.replace-overlay__scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: oklch(0% 0 0 / 0.58);
+  cursor: pointer;
+  animation: replace-scrim-in var(--dur-fast) var(--ease-out);
+}
+
+.replace-dialog {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(34rem, 100%);
+  max-height: min(90vh, 42rem);
+  overflow-y: auto;
+  padding: var(--space-5);
+  background: var(--surface-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px -16px oklch(0% 0 0 / 0.6);
+  animation: replace-dialog-in var(--dur-mid) var(--ease-out);
+}
+
+.replace-dialog:focus {
+  outline: none;
+}
+
+.replace-dialog__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.replace-dialog__title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.replace-dialog__subtitle {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+
+.replace-dialog__incoming {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.replace-dialog__incoming strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Six members, two-up on the smallest widths, three-up once there's room. */
+.replace-dialog__members {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 30rem) {
+  .replace-dialog__members {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.replace-dialog__member-item {
+  display: flex;
+}
+
+.replace-dialog__member {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.replace-dialog__member:hover {
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-2));
+  border-color: color-mix(in oklch, var(--chrome) 45%, var(--line));
+  transform: translateY(-2px);
+}
+
+.replace-dialog__member:focus-visible {
+  outline: none;
+  border-color: var(--chrome);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--chrome) 30%, transparent);
+}
+
+.replace-dialog__member-name {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: center;
+  color: var(--text);
+}
+
+.replace-dialog__member-types {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+}
+
+.replace-dialog__foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.replace-dialog__cancel {
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.replace-dialog__cancel:hover {
+  color: var(--text);
+  background: var(--surface-3);
+  border-color: var(--line-strong);
+}
+
+.replace-dialog__cancel:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+@keyframes replace-scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes replace-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .party-picker__field,
+  .party-slot__remove,
+  .saved-teams__btn,
+  .saved-teams__feedback,
+  .replace-dialog__member {
+    transition: none;
+  }
+
+  .replace-overlay__scrim,
+  .replace-dialog {
+    animation: none;
+  }
+}

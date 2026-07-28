@@ -407,6 +407,7 @@ export type KindKey =
   | "moves"
   | "abilities"
   | "type-chart"
+  | "team"
   | "behaviors"
   | "targets"
   | "ledger";

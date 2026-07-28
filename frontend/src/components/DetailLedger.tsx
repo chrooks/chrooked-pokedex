@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,10 +10,15 @@ import {
   faCompress,
   faChevronLeft,
   faChevronRight,
+  faPlus,
+  faCheck,
+  faWandMagicSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import type { CanonicalMethod, DexEntry, KindKey } from "../types";
 import { useUrlState } from "../hooks/useUrlState";
 import { appendNameFilter } from "../lib/dexFilters";
+import { MAX_PARTY, replacePartyMember } from "../lib/teamViewCodec";
+import { ReplaceDialog } from "./team/ReplaceDialog";
 import { STAT_ORDER, STAT_LABEL, bst, dexLabel, isEdited } from "../lib/format";
 import { EditedLed } from "./EditedLed";
 import { DexSprite } from "./DexSprite";
@@ -41,6 +46,10 @@ import "./editors/editors.css";
     move/ability display name (the tab resolves it to its record). */
 export type NavHandler = (kind: KindKey, key: string) => void;
 
+/** Move name (lowercased) → its type + damage category, so the profile learnset
+    can color by type, bold STAB, and italicize the mon's attacking category. */
+export type MoveMeta = ReadonlyMap<string, { type: string; category: string }>;
+
 type Props = {
   entry: DexEntry;
   onClose: () => void;
@@ -55,12 +64,17 @@ type Props = {
   abilityOptions: readonly string[];
   /** Known move names for the learnset comboboxes. */
   moveOptions: readonly string[];
+  /** Move name (lowercased) → type + category, used to tint/bold/italicize learnset rows. */
+  moveMeta: MoveMeta;
   /** Known species names for the evo-from combobox. */
   speciesOptions: readonly string[];
   /** Canonical evolution methods for the editor's Method dropdown. */
   evolutionMethods: readonly CanonicalMethod[];
   /** Active backdrop target id — passed to DexSprite for the target-sprite fallback. */
   backdropTargetId?: string | null;
+  /** The full merged dex — used to resolve the current party's ids to entries for
+      the full-team replace dialog (ac10). */
+  dexEntries: readonly DexEntry[];
   /** True when this species renders as the full-page ledger (vs the side panel). */
   full: boolean;
   /** Flip between the side panel and full-page ledger (also bound to `f`). */
@@ -82,14 +96,18 @@ export function DetailLedger({
   onNavigate,
   abilityOptions,
   moveOptions,
+  moveMeta,
   speciesOptions,
   evolutionMethods,
   backdropTargetId,
+  dexEntries,
   full,
   onToggleFull,
 }: Props) {
   const [showDiff, setShowDiff] = useState(false);
   const [editing, setEditing] = useState(false);
+  // Open when a full-team add needs a swap decision (ac10).
+  const [replacing, setReplacing] = useState(false);
   // Which proposal sections are mid-flow + whether the author manually collapsed
   // the panel — together decide the auto-expand (ac8 / P1). Logic in
   // activeProposals.ts (pure, unit-guarded).
@@ -119,6 +137,42 @@ export function DetailLedger({
     update({ kind: "dex", filter: next, selected: null });
   }
 
+  // "Add to team" (ac9): append this species to the Team tab's party. Identity
+  // is the same chrooked_id the team codec uses, so `onTeam` also drives the
+  // button's confirmed state — clicking add flips it to "On the team ✓" and the
+  // control disables, no separate transient needed.
+  const onTeam = view.party.some((member) => member.id === entry.chrooked_id);
+  const teamFull = view.party.length >= MAX_PARTY;
+  // Only a duplicate hard-disables the button now. A full team no longer dead-ends
+  // a fresh species — the click opens the replace dialog (ac10) instead.
+  const addToTeamDisabled = onTeam;
+
+  // Resolve the current party's ids to entries for the replace dialog's member
+  // buttons (sprite + name), keeping each member's true party slot index.
+  const partyMembers = useMemo(() => {
+    const byId = new Map(dexEntries.map((e) => [e.chrooked_id, e]));
+    return view.party
+      .map((member, partyIndex) => {
+        const memberEntry = byId.get(member.id);
+        return memberEntry ? { partyIndex, entry: memberEntry } : null;
+      })
+      .filter((m): m is { partyIndex: number; entry: DexEntry } => m !== null);
+  }, [dexEntries, view.party]);
+
+  function handleAddToTeam() {
+    if (onTeam) return;
+    if (teamFull) {
+      setReplacing(true);
+      return;
+    }
+    update({ party: [...view.party, { id: entry.chrooked_id, ability: null }] });
+  }
+
+  function handleReplace(partyIndex: number) {
+    update({ party: replacePartyMember(view.party, partyIndex, entry.chrooked_id) });
+    setReplacing(false);
+  }
+
   // On a species change (and first open): reset the diff/edit mode and move
   // focus into the dialog. One effect, all "react to the open species".
   useEffect(() => {
@@ -126,6 +180,7 @@ export function DetailLedger({
     setEditing(false);
     setActiveProposals(new Set());
     setManuallyCollapsed(false);
+    setReplacing(false);
     panelRef.current?.focus();
   }, [entry.chrooked_id]);
 
@@ -238,6 +293,40 @@ export function DetailLedger({
                   </button>
                   <button
                     type="button"
+                    id="ledger-add-to-team"
+                    className="ledger__tool"
+                    onClick={handleAddToTeam}
+                    disabled={addToTeamDisabled}
+                    data-on-team={onTeam}
+                    aria-pressed={onTeam}
+                    title={
+                      onTeam
+                        ? `${entry.name} is on your team`
+                        : teamFull
+                          ? `Team is full — swap ${entry.name} in for a member`
+                          : `Add ${entry.name} to your team`
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={onTeam ? faCheck : faPlus}
+                      aria-hidden="true"
+                    />
+                    <span className="ledger__tool-label">
+                      {onTeam ? "On the team" : teamFull ? "Swap into team…" : "Add to team"}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    id="ledger-makeover"
+                    className="ledger__tool ledger__tool--accent"
+                    onClick={() => update({ makeover: entry.chrooked_id, makeoverStage: null })}
+                    title={`Open the makeover workbench for ${entry.name}`}
+                  >
+                    <FontAwesomeIcon icon={faWandMagicSparkles} aria-hidden="true" />
+                    <span className="ledger__tool-label">Makeover</span>
+                  </button>
+                  <button
+                    type="button"
                     id="ledger-edit"
                     className="ledger__tool ledger__tool--accent"
                     onClick={() => setEditing(true)}
@@ -314,26 +403,44 @@ export function DetailLedger({
       onSaved={onSaved}
       abilityOptions={abilityOptions}
       moveOptions={moveOptions}
+      moveMeta={moveMeta}
       onProposalActive={handleProposalActive}
       backdropTargetId={backdropTargetId}
     />
   );
 
+  // The full-team replace dialog (ac10). Portals to <body>, so it renders the
+  // same from either the full-page or side-panel branch and clears this ledger's
+  // own overlay when open.
+  const replaceDialogEl =
+    replacing && partyMembers.length > 0 ? (
+      <ReplaceDialog
+        incoming={entry}
+        members={partyMembers}
+        onReplace={handleReplace}
+        onClose={() => setReplacing(false)}
+        backdropTargetId={backdropTargetId ?? null}
+      />
+    ) : null;
+
   // Full page: a pane docked over the dex main area (the rail stays), body laid
   // out in responsive columns. Side panel: the overlay + scrim + narrow aside.
   if (full) {
     return (
-      <aside
-        className="ledger ledger--full"
-        id="dex-detail"
-        ref={panelRef}
-        tabIndex={-1}
-        role="region"
-        aria-labelledby="ledger-title"
-      >
-        {head}
-        <div className="ledger__body ledger__body--cols">{body}</div>
-      </aside>
+      <>
+        <aside
+          className="ledger ledger--full"
+          id="dex-detail"
+          ref={panelRef}
+          tabIndex={-1}
+          role="region"
+          aria-labelledby="ledger-title"
+        >
+          {head}
+          <div className="ledger__body ledger__body--cols">{body}</div>
+        </aside>
+        {replaceDialogEl}
+      </>
     );
   }
 
@@ -359,6 +466,7 @@ export function DetailLedger({
         {head}
         {body}
       </aside>
+      {replaceDialogEl}
     </div>
   );
 }
@@ -374,12 +482,22 @@ type BodyProps = {
   abilityOptions: readonly string[];
   /** Known move names for the learnset proposal editor. */
   moveOptions: readonly string[];
+  /** Move name (lowercased) → type + category, used to tint/bold/italicize rows. */
+  moveMeta: MoveMeta;
   /** Report a section's active/idle proposal state up to the ledger (ac8). */
   onProposalActive: (sectionId: string, isActive: boolean) => void;
   backdropTargetId?: string | null;
   /** Full-page layout: split the sections into two columns instead of stacking. */
   columns: boolean;
 };
+
+/** The mon's attacking category: "physical" if Atk beats SpA, "special" if SpA
+    beats Atk, null on a tie (no clear attacking side to italicize). */
+function attackCategory(stats: Record<string, number>): "physical" | "special" | null {
+  if (stats.atk > stats.spa) return "physical";
+  if (stats.spa > stats.atk) return "special";
+  return null;
+}
 
 /** Press `s` on a focused proposal section to open its `✦ suggest` input —
     keyboard-first (PRODUCT.md). Ignores `s` typed into a field. */
@@ -410,6 +528,7 @@ function DetailBody({
   onSaved,
   abilityOptions,
   moveOptions,
+  moveMeta,
   onProposalActive,
   backdropTargetId,
   columns,
@@ -485,6 +604,9 @@ function DetailBody({
           was={entry.base.learnset}
           showDiff={showDiff}
           onNavigate={onNavigate}
+          moveMeta={moveMeta}
+          speciesTypes={entry.types}
+          attackCategory={attackCategory(entry.stats)}
           bare
         />
       </LearnsetProposal>

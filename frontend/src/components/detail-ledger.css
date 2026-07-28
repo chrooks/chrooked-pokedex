@@ -118,17 +118,21 @@
 
 .ledger__head-actions {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
   gap: var(--space-2);
 }
 
-/* Three discrete, evenly-spaced icon+label actions. No shared well and no
-   separators: each is its own quiet ghost button, separated by a real gap, so
-   nothing reads as a touching or overlapping box. */
+/* Discrete, evenly-spaced icon+label actions. No shared well and no separators:
+   each is its own quiet ghost button, separated by a real gap, so nothing reads
+   as a touching or overlapping box. Wraps to a second row when the cluster
+   outgrows the side panel's width (e.g. Add-to-team as a fifth action) so the
+   primary Edit action and the close button never clip. */
 .ledger__tools {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--space-1);
 }
 
@@ -169,6 +173,30 @@
 .ledger__tool:focus-visible {
   outline: 2px solid var(--chrome);
   outline-offset: 1px;
+}
+
+/* Disabled tool (e.g. Add-to-team at 6/6): muted, no hover affordance. */
+.ledger__tool:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.ledger__tool:disabled:hover {
+  color: var(--text-dim);
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Add-to-team, once the species is on the team: a confirmed "✓ On the team"
+   read — full opacity, grass-green ink — not a greyed-out dead control. */
+.ledger__tool[data-on-team="true"]:disabled {
+  opacity: 1;
+  color: color-mix(in oklch, var(--type-grass) 62%, var(--text));
+}
+
+.ledger__tool[data-on-team="true"]:disabled svg {
+  opacity: 1;
+  color: color-mix(in oklch, var(--type-grass) 62%, var(--text));
 }
 
 /* Edit is the primary move, kept uniform with its siblings so the trio reads as
@@ -392,6 +420,22 @@
 
 .ledger__move-name {
   font-size: var(--text-sm);
+}
+
+/* Tint the move name in its type color. Same label mix as TypeChip so it stays
+   AA-legible on the surface; --type is set inline per row from the move's type. */
+.ledger__move-name[data-typed] {
+  color: color-mix(in oklch, var(--type) 62%, var(--text));
+}
+
+/* STAB (move type ∈ the mon's types) reads bold; the mon's stronger attacking
+   category (Atk vs SpA) reads italic. Both are additive to the type tint. */
+.ledger__move-name[data-stab] {
+  font-weight: 700;
+}
+
+.ledger__move-name[data-offense] {
+  font-style: italic;
 }
 
 .ledger__move-new {

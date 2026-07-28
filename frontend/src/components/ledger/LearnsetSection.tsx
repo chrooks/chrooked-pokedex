@@ -1,5 +1,6 @@
 import type { LearnsetMove } from "../../types";
-import type { NavHandler } from "../DetailLedger";
+import type { NavHandler, MoveMeta } from "../DetailLedger";
+import { typeSlug } from "../../lib/format";
 import "./ledger-rows.css";
 
 type Props = {
@@ -8,6 +9,12 @@ type Props = {
   showDiff: boolean;
   /** When present (read-only mode), each move name links to its detail (#28). */
   onNavigate?: NavHandler;
+  /** Move name (lowercased) → type + category, for type color / STAB / italic. */
+  moveMeta?: MoveMeta;
+  /** The species' own types — a move matching one is STAB and renders bold. */
+  speciesTypes?: readonly string[];
+  /** The mon's attacking category — matching moves render italic (its best offense). */
+  attackCategory?: "physical" | "special" | null;
   /** Drop the own `<section>` + heading and render only the list body. The
       proposal shell owns the single section heading; this avoids a duplicate. */
   bare?: boolean;
@@ -21,10 +28,14 @@ export function LearnsetSection({
   was,
   showDiff,
   onNavigate,
+  moveMeta,
+  speciesTypes,
+  attackCategory,
   bare = false,
 }: Props) {
   const replaced = was !== undefined;
   const baseMoves = new Set((was ?? []).map((m) => m.move.toLowerCase()));
+  const stab = new Set((speciesTypes ?? []).map(typeSlug));
 
   const body = (
     <>
@@ -39,6 +50,14 @@ export function LearnsetSection({
         <ol className="ledger__learnset">
           {now.map((entry, index) => {
             const isNew = replaced && !baseMoves.has(entry.move.toLowerCase());
+            const meta = moveMeta?.get(entry.move.toLowerCase());
+            const moveType = meta?.type;
+            const isStab = moveType ? stab.has(typeSlug(moveType)) : false;
+            const isBestOffense =
+              !!attackCategory && meta?.category === attackCategory;
+            const tint = moveType
+              ? ({ "--type": `var(--type-${typeSlug(moveType)})` } as React.CSSProperties)
+              : undefined;
             return (
               <li
                 key={`${entry.level}-${entry.move}-${index}`}
@@ -53,13 +72,25 @@ export function LearnsetSection({
                     type="button"
                     id={`ledger-move-link-${index}`}
                     className="lrow__link ledger__move-name"
-                    aria-label={`Open ${entry.move}`}
+                    style={tint}
+                    data-typed={moveType ? true : undefined}
+                    data-stab={isStab ? true : undefined}
+                    data-offense={isBestOffense ? true : undefined}
+                    aria-label={`Open ${entry.move}${isStab ? " (STAB)" : ""}`}
                     onClick={() => onNavigate("moves", entry.move)}
                   >
                     {entry.move}
                   </button>
                 ) : (
-                  <span className="ledger__move-name">{entry.move}</span>
+                  <span
+                    className="ledger__move-name"
+                    style={tint}
+                    data-typed={moveType ? true : undefined}
+                    data-stab={isStab ? true : undefined}
+                    data-offense={isBestOffense ? true : undefined}
+                  >
+                    {entry.move}
+                  </span>
                 )}
                 {showDiff && isNew && (
                   <span className="ledger__move-new mono">new</span>

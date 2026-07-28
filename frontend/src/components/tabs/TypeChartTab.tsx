@@ -97,11 +97,14 @@ export function TypeChartTab() {
   // alone, so clicking a header and Escape keep working. The single dispatch is
   // the URL query, shared with the rail input.
   useEffect(() => {
+    // Keep-alive: this tab stays mounted when another kind is active, and the
+    // query is shared across tabs — only react to it while we own the screen.
+    if (view.kind !== "type-chart") return;
     const match = matchType(axis, view.query);
     if (match !== null) {
       setSelectedType(match);
     }
-  }, [axis, view.query]);
+  }, [axis, view.query, view.kind]);
 
   // The breakdown lists for the open type, recomputed whenever the type, the
   // cells, or the working edits change. Built off the SAME valueOf the grid
@@ -126,7 +129,9 @@ export function TypeChartTab() {
   // We swallow the event only while a type is selected, so the global handler
   // keeps working for the dialog the rest of the time.
   useEffect(() => {
-    if (selectedType === null) return;
+    // Keep-alive: never attach while hidden behind another tab — a capture-phase
+    // listener here would steal Escape from the active tab's dialogs.
+    if (selectedType === null || view.kind !== "type-chart") return;
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         event.stopPropagation();
@@ -136,7 +141,7 @@ export function TypeChartTab() {
     // Capture phase so we run before the app's window-level handler.
     window.addEventListener("keydown", onKeyDown, true);
     return () => window.removeEventListener("keydown", onKeyDown, true);
-  }, [selectedType]);
+  }, [selectedType, view.kind]);
 
   const overrides = useMemo(
     () => toOverrides(working, cells),

@@ -15,6 +15,9 @@ import {
   encodeHidden,
   encodeSort,
 } from "../lib/dexViewCodec";
+import { decodeParty, encodeParty, type PartyMember } from "../lib/teamViewCodec";
+import { decodeMakeover, encodeMakeover } from "../lib/makeoverUrlCodec";
+import type { Stage } from "../lib/makeoverStages";
 
 export type DexLayout = "grid" | "table";
 
@@ -37,6 +40,14 @@ export interface ViewState {
   /** A Target id whose backdrop the dex is showing (target ⊕ Ruleset), or null
       for the base ⊕ Ruleset canon. Set from the Targets panel after a preview. */
   backdrop: string | null;
+  /** The Team tab's party: up to six species (+ optional ability), shareable via
+      the URL like every other view state. */
+  party: PartyMember[];
+  /** The Makeover Workbench anchor species (its chrooked_id), or null when the
+      workbench is closed. URL-persisted so a reload restores it. */
+  makeover: string | null;
+  /** The active makeover stage, or null to derive it from the Ruleset state. */
+  makeoverStage: Stage | null;
 }
 
 const KINDS: readonly KindKey[] = [
@@ -44,6 +55,7 @@ const KINDS: readonly KindKey[] = [
   "moves",
   "abilities",
   "type-chart",
+  "team",
   "behaviors",
   "targets",
   "ledger",
@@ -78,6 +90,9 @@ function readState(): ViewState {
     sort: decodeSort(params.get("sort")),
     hidden: decodeHidden(params.get("hide")),
     backdrop: params.get("backdrop"),
+    party: decodeParty(params.get("team")),
+    makeover: decodeMakeover(params).species,
+    makeoverStage: decodeMakeover(params).stage,
   };
   return cachedState;
 }
@@ -106,6 +121,9 @@ const OWNED_PARAMS = [
   "sort",
   "hide",
   "backdrop",
+  "team",
+  "mk",
+  "mkstage",
 ] as const;
 
 function writeState(next: ViewState): void {
@@ -123,6 +141,8 @@ function writeState(next: ViewState): void {
   if (next.sort.length) params.set("sort", encodeSort(next.sort));
   if (next.hidden.length) params.set("hide", encodeHidden(next.hidden));
   if (next.backdrop) params.set("backdrop", next.backdrop);
+  if (next.party.length) params.set("team", encodeParty(next.party));
+  encodeMakeover(params, { species: next.makeover, stage: next.makeoverStage });
 
   const search = params.toString();
   const url = search ? `?${search}` : window.location.pathname;

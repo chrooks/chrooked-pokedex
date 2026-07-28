@@ -6,10 +6,11 @@ import { useTheme } from "./hooks/useTheme";
 import { isEdited } from "./lib/format";
 import { onDataChange } from "./lib/dataChange";
 import { evalEntries, appendNameFilter } from "./lib/dexFilters";
+import { cellMap } from "./lib/typeChartGrid";
 import { stableMultiSort } from "./lib/dexSort";
 import { expandEvoLines } from "./lib/evoLine";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace } from "./types";
+import type { CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace, TypeChartCell } from "./types";
 import { applyInlineEdit, previewInlineEdit, type InlineEdit } from "./lib/inlineEdit";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
@@ -18,11 +19,13 @@ import { DetailLedger } from "./components/DetailLedger";
 import { MovesTab } from "./components/tabs/MovesTab";
 import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
 import { TypeChartTab } from "./components/tabs/TypeChartTab";
+import { TeamTab } from "./components/tabs/TeamTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
 import { LedgerTab } from "./components/tabs/LedgerTab";
 import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
 import { PatchDrawer } from "./components/targets/PatchDrawer";
+import { MakeoverWorkbench } from "./components/makeover/MakeoverWorkbench";
 
 /**
  * The Canon dex app shell. Owns the dex fetch, the URL-persisted view state, and
@@ -41,6 +44,18 @@ export default function App() {
   );
   const dex = useResource<DexEntry[]>(dexFetcher);
   const moves = useResource<Move[]>(api.moves);
+  // The active type chart (backdrop's fork ⊕ Ruleset, else base ⊕ Ruleset) —
+  // powers the Type filter's matchup operators (weak to / SE against / …), so
+  // they reflect the SAME chart the Type Chart and Team tabs show.
+  const chartFetcher = useMemo(
+    () => (view.backdrop ? api.targetTypeChart(view.backdrop) : api.typeChart),
+    [view.backdrop],
+  );
+  const typeChart = useResource<TypeChartCell[]>(chartFetcher);
+  const chartByKey = useMemo(
+    () => (typeChart.data ? cellMap(typeChart.data) : null),
+    [typeChart.data],
+  );
   const targets = useResource<Target[]>(api.targets);
   // The canonical evolution-method catalog drives the editor's Method dropdown.
   // Static config — fetched once and threaded down like the option lists.
@@ -54,6 +69,21 @@ export default function App() {
   const [patch, setPatch] = useState<{ trigger: "preview" | "apply" } | null>(
     null,
   );
+  // Keep-alive tab host: once a kind is visited it stays mounted (hidden when
+  // inactive), so switching back is instant — no remount, no re-running every
+  // tab's useMemos or rebuilding its DOM. Lazy: a kind mounts only on first
+  // visit. Adjusted during render (not an effect) so a new tab mounts in the
+  // same pass instead of one commit later.
+  // ponytail: hidden tabs still re-render on URL writes (they self-subscribe to
+  // useUrlState); heavy work is useMemo'd so it's reconcile-only. If keystroke
+  // lag ever shows up, thread an `active` prop and skip render work when hidden.
+  const [visited, setVisited] = useState<Set<ViewSnapshot["kind"]>>(
+    () => new Set([view.kind]),
+  );
+  if (!visited.has(view.kind)) {
+    setVisited(new Set(visited).add(view.kind));
+  }
+
   const activeTarget = useMemo(
     () => (targets.data ?? []).find((t) => t.id === view.backdrop) ?? null,
     [targets.data, view.backdrop],
@@ -76,6 +106,15 @@ export default function App() {
     const names = new Set<string>();
     for (const m of moves.data ?? []) names.add(m.name);
     return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [moves.data]);
+
+  // move name (lowercased) → type + category, so the profile learnset can tint
+  // each row (type color), bold STAB, and italicize the mon's attacking category.
+  const moveMeta = useMemo(() => {
+    const byName = new Map<string, { type: string; category: string }>();
+    for (const m of moves.data ?? [])
+      byName.set(m.name.toLowerCase(), { type: m.type, category: m.category });
+    return byName;
   }, [moves.data]);
 
   const speciesOptions = useMemo(
@@ -117,7 +156,7 @@ export default function App() {
       );
     }
     if (view.filter.length) {
-      list = list.filter((entry) => evalEntries(entry, view.filter));
+      list = list.filter((entry) => evalEntries(entry, view.filter, chartByKey));
     }
     // Evo-line expansion runs last so it widens the final match set, not an
     // intermediate one — a line-mate is kept even if it fails the filters.
@@ -125,7 +164,7 @@ export default function App() {
       list = expandEvoLines(list, all);
     }
     return list;
-  }, [all, view.editedOnly, view.query, view.filter, view.evoLine]);
+  }, [all, view.editedOnly, view.query, view.filter, view.evoLine, chartByKey]);
 
   // The table additionally sorts by the multi-key sort spec; the grid stays in
   // dex order. Only the visible view's list is consumed, so this is cheap.
@@ -140,6 +179,12 @@ export default function App() {
   const selectedEntry =
     isDex && view.selected !== null
       ? all.find((entry) => entry.chrooked_id === view.selected) ?? null
+      : null;
+  // The Makeover Workbench takes over the screen when an anchor species is set in
+  // the URL and it resolves in the loaded dex.
+  const makeoverEntry =
+    view.makeover !== null
+      ? all.find((entry) => entry.chrooked_id === view.makeover) ?? null
       : null;
 
   // Stable so memo(DexCell) holds across the 1451-cell grid (`update` is stable).
@@ -350,6 +395,23 @@ export default function App() {
         <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
       }
     >
+      {makeoverEntry !== null ? (
+        <MakeoverWorkbench
+          entry={makeoverEntry}
+          allEntries={all}
+          moves={moves.data ?? []}
+          stage={view.makeoverStage}
+          onStage={(stage) => update({ makeoverStage: stage })}
+          onExit={() => update({ makeover: null, makeoverStage: null })}
+          onSaved={reloadDex}
+          moveOptions={moveOptions}
+          abilityOptions={abilityOptions}
+          targets={targets.data ?? []}
+          activeTargetId={view.backdrop}
+          backdropTargetId={view.backdrop}
+        />
+      ) : (
+      <>
       {/* Background is inert while a species is open — in both modes. In panel
           mode it's the modal focus trap; in full mode the opaque pane fully
           covers the grid, so inert keeps focus/AT out of the invisible list
@@ -361,26 +423,34 @@ export default function App() {
           ? ({ inert: "" } as Record<string, string>)
           : {})}
       >
-        <KindScreen
-          kind={view.kind}
-          dexResource={dex}
-          entries={dexEntries}
-          editedOnly={view.editedOnly}
-          selected={view.selected}
-          layout={view.layout}
-          filter={view.filter}
-          sort={view.sort}
-          hidden={view.hidden}
-          onChange={update}
-          onOpen={handleOpen}
-          onViewBackdrop={handleViewBackdrop}
-          backdropTargetId={view.backdrop}
-          abilityOptions={abilityOptions}
-          speciesOptions={speciesOptions}
-          evolutionMethods={evolutionMethods.data ?? []}
-          onInlineEdit={handleInlineEdit}
-          inlineScopeTarget={inlineNamespace}
-        />
+        {[...visited].map((kind) => (
+          <div
+            key={kind}
+            className="device__tabpane"
+            hidden={kind !== view.kind}
+          >
+            <KindScreen
+              kind={kind}
+              dexResource={dex}
+              entries={dexEntries}
+              editedOnly={view.editedOnly}
+              selected={view.selected}
+              layout={view.layout}
+              filter={view.filter}
+              sort={view.sort}
+              hidden={view.hidden}
+              onChange={update}
+              onOpen={handleOpen}
+              onViewBackdrop={handleViewBackdrop}
+              backdropTargetId={view.backdrop}
+              abilityOptions={abilityOptions}
+              speciesOptions={speciesOptions}
+              evolutionMethods={evolutionMethods.data ?? []}
+              onInlineEdit={handleInlineEdit}
+              inlineScopeTarget={inlineNamespace}
+            />
+          </div>
+        ))}
       </div>
       {selectedEntry !== null && (
         <DetailLedger
@@ -393,9 +463,11 @@ export default function App() {
           onToggleFull={() => update({ detail: full ? "panel" : "full" })}
           abilityOptions={abilityOptions}
           moveOptions={moveOptions}
+          moveMeta={moveMeta}
           speciesOptions={speciesOptions}
           evolutionMethods={evolutionMethods.data ?? []}
           backdropTargetId={view.backdrop}
+          dexEntries={all}
         />
       )}
       {patch !== null && activeTarget !== null && (
@@ -405,6 +477,8 @@ export default function App() {
           onClose={() => setPatch(null)}
           onApplied={dex.reload}
         />
+      )}
+      </>
       )}
     </DeviceFrame>
   );
@@ -460,6 +534,8 @@ function KindScreen({
       return <AbilitiesTab backdropTargetId={backdropTargetId} />;
     case "type-chart":
       return <TypeChartTab />;
+    case "team":
+      return <TeamTab />;
     case "behaviors":
       return <BehaviorsTab />;
     case "targets":
@@ -503,6 +579,9 @@ function Readout({
 }) {
   if (kind === "targets") {
     return <span>targets · register &amp; manage</span>;
+  }
+  if (kind === "team") {
+    return <span>team · matchup planner</span>;
   }
   if (kind !== "dex") {
     return <span>{kind.replace("-", " ")} · read-only</span>;
