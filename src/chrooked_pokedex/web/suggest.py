@@ -24,7 +24,9 @@ this ``{draft, rationale, alternatives}`` contract, and the accept-through-CRUD 
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 from typing import Any, Callable
 
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider
@@ -56,6 +58,36 @@ LEARNSET_SIZE_MAX = 26
 LEARNSET_MAX_LEVEL = 70  # no level-up move above this level
 LEARNSET_MAX_MOVES_THROUGH_L5 = 5  # rows with level ≤5, counting the L0/L1 kit
 LEARNSET_MAX_MOVES_THROUGH_L10 = 7  # rows with level ≤10
+
+# The shared band Contract (also the workbench Signifier's data and the
+# coverage-band source for scripts/move_coverage.py). The pacing bands feed the
+# learnset rubric prompt and ADVISORY warnings — never a hard fail: a July 2026
+# audit found 32% of curated attack rows over these caps, so enforcement would
+# reject nearly every draft. Tune the bounds in learnset_rubric.json.
+_BAND_CONTRACT_PATH = Path(__file__).resolve().parent / "learnset_rubric.json"
+
+
+def _pacing_bands() -> list[dict[str, Any]]:
+    """The level→BP pacing bands, read fresh so edits apply without a restart."""
+    return json.loads(_BAND_CONTRACT_PATH.read_text("utf-8"))["bands"]
+
+
+def _format_pacing_bands() -> str:
+    """The pacing bands as one compact rubric clause, e.g. ``L1–19: ≤60BP · …``."""
+    parts = []
+    for band in _pacing_bands():
+        span = (
+            f"L{band['level_min']}–{band['level_max']}"
+            if band["level_max"] < 100
+            else f"L{band['level_min']}+"
+        )
+        cap = band.get("bp_max")
+        parts.append(
+            f"{span}: ≤{cap}BP" if cap is not None
+            else f"{span}: no cap (the 100+BP payoffs live here)"
+        )
+    return " · ".join(parts)
+
 
 # The ability slots an Override may set, in display order. The draft is a partial
 # Override: only the slots the model proposes appear.
@@ -1144,6 +1176,8 @@ def _build_learnset_rubric() -> str:
         "pick, prefer the [CUSTOM] move. They are especially strong candidates "
         "for the L0 evolution reward and late signature slots. Judge them by "
         "their listed type/category/power/effect, not familiarity.\n"
+        f"- Pace attacking-move power to the level bands: {_format_pacing_bands()}. "
+        "L0 rows (on-evolution rewards) and status moves are exempt.\n"
         "- For evolved forms (when 'Evolved from' is shown): place an "
         "evolution-reward move at level 0 ('learned on evolution').\n"
         "- For pre-evolutionary forms (when 'Evolves into' at a specific level is "
@@ -1346,7 +1380,9 @@ def _validate_learnset_result(
        [min(LEARNSET_SIZE_MIN, pool size), LEARNSET_SIZE_MAX] and the early-level
        packing caps (LEARNSET_MAX_MOVES_THROUGH_L5/_L10). Not deterministically
        repairable (no principled way to invent or cut rows), so a violation
-       raises and rides the eager retry loop.
+       raises and rides the eager retry loop. Plus the ADVISORY pacing check:
+       an attacking move over its level band's BP cap (shared band Contract,
+       learnset_rubric.json) warns — never rejects.
     8. Surgical untouched-rows guard (AC2/D1): every (level, move) row NOT
        implicated by the instruction must be byte-identical to current_learnset.
     9. Alternatives: drop hallucinated move names; keep valid ones.
@@ -1476,6 +1512,32 @@ def _validate_learnset_result(
                 raise SuggestError(
                     f"{early} moves are learned at level {cutoff} or below; at "
                     f"most {cap} are allowed — move the rest to later levels."
+                )
+
+        # Pacing check (ADVISORY — mirrors the workbench Signifier, never a
+        # rejection: 32% of curated attack rows sit over these caps, so a hard
+        # fail would fight Chris's own practice). An attacking move whose BP
+        # exceeds its level band's cap gets a visible warning.
+        power_by_move = {row["move"]: row.get("power") for row in move_pool}
+        bands = _pacing_bands()
+        for row in deduped:
+            if row["level"] == 0:
+                continue
+            power = power_by_move.get(row["move"])
+            if not isinstance(power, int) or power <= 1:
+                continue
+            band = next(
+                (
+                    b for b in bands
+                    if b["level_min"] <= row["level"] <= b["level_max"]
+                ),
+                None,
+            )
+            band_cap = band.get("bp_max") if band else None
+            if band_cap is not None and power > band_cap:
+                warnings.append(
+                    f"pacing: {row['move']} @L{row['level']} is {power}bp — "
+                    f"over that level band's {band['label']} cap"
                 )
 
     # Step 8: surgical untouched-rows guard.

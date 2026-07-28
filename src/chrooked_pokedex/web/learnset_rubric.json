@@ -1,11 +1,21 @@
 {
-  "version": 1,
-  "note": "Level-up BP pacing bands for level-up learnsets. Single source of truth: the learnset-suggest skill prose and the Makeover Workbench rubric annotations both derive from this file. A move's power is checked against the band its level falls in; L0 rows (on-evolution rewards) are exempt.",
+  "version": 2,
+  "note": "Single source of truth for BOTH band tables — tune bounds here. `bands`: level-range → BP pacing windows, consumed by the Makeover Workbench Signifier (GET /api/meta/learnset-rubric), the learnset-suggest rubric prompt, and its soft pacing warnings; L0 rows (on-evolution rewards) and status moves are exempt. `coverage_bands`: BP → band edges for the coverage matrix and ladder scripts (scripts/move_coverage.py derives MIN_LADDER_POWER, BAND_EDGES, and BAND_LABELS from it; labels must keep matching its BAND_CONVENTIONS keys). The two tables are deliberately separate mappings: recutting one does not recut the other.",
   "bands": [
     { "level_min": 1, "level_max": 19, "bp_max": 60, "label": "≤60BP" },
     { "level_min": 20, "level_max": 29, "bp_min": 50, "bp_max": 70, "label": "50–70BP" },
     { "level_min": 30, "level_max": 39, "bp_min": 70, "bp_max": 80, "label": "70–80BP" },
     { "level_min": 40, "level_max": 49, "bp_min": 80, "bp_max": 99, "label": "80–99BP" },
     { "level_min": 50, "level_max": 100, "bp_min": 100, "label": "100+BP" }
-  ]
+  ],
+  "coverage_bands": {
+    "min_ladder_power": 2,
+    "edges": [
+      { "min_power": 2, "label": "≤50" },
+      { "min_power": 51, "label": "51-75" },
+      { "min_power": 76, "label": "76-90" },
+      { "min_power": 91, "label": "91-110" },
+      { "min_power": 111, "label": ">110" }
+    ]
+  }
 }

@@ -40,7 +40,17 @@ BASE_SNAPSHOT = RULESET / ".base" / "1.11.2.json"
 # --- Domain constants --------------------------------------------------------
 
 COMMON_THRESHOLD = 18  # a cell is "common" at >= this many level-up learners
-MIN_LADDER_POWER = 2   # 1 = sentinel for variable-power moves; real weak moves count
+
+# Band bounds come from the shared band Contract (learnset_rubric.json) so
+# coverage bands and the pacing rubric are tuned in one file. Reading the app's
+# data file is not an app import — this script stays stdlib+PyYAML.
+_BAND_CONTRACT = json.loads(
+    (ROOT / "src" / "chrooked_pokedex" / "web" / "learnset_rubric.json")
+    .read_text("utf-8")
+)["coverage_bands"]
+
+# 1 = sentinel for variable-power moves; real weak moves count.
+MIN_LADDER_POWER: int = _BAND_CONTRACT["min_ladder_power"]
 
 # Moves Chris ruled too flavor- or effect-specific to be ladder rungs, even
 # though they pass the mechanical filters (2026-07-25 review). Trap-family
@@ -75,12 +85,8 @@ SPLITS: tuple[str, ...] = ("physical", "special")
 # Bands are upper-inclusive. A move's band is the last edge <= its power.
 # First band opens at 2 so weak starter rungs (Poison Sting 15, Mud-Slap 20,
 # Absorb 30) count; power 1 stays out as the variable-power sentinel.
-BAND_EDGES: tuple[tuple[int, str], ...] = (
-    (2, "≤50"),
-    (51, "51-75"),
-    (76, "76-90"),
-    (91, "91-110"),
-    (111, ">110"),
+BAND_EDGES: tuple[tuple[int, str], ...] = tuple(
+    (edge["min_power"], edge["label"]) for edge in _BAND_CONTRACT["edges"]
 )
 BAND_LABELS: tuple[str, ...] = tuple(label for _, label in BAND_EDGES)
 
@@ -187,6 +193,13 @@ STATUS_CHANCE = 10
 STAT_DROP_CHANCE: dict[str, int] = {
     "≤50": 100, "51-75": 100, "76-90": 20, "91-110": 20, ">110": 30,
 }
+
+# Renaming a band label in learnset_rubric.json must fail HERE, loudly, not as
+# a silent KeyError deep in an audit — these tables are keyed by label.
+assert set(BAND_LABELS) == set(BAND_CONVENTIONS) == set(STAT_DROP_CHANCE), (
+    f"band labels in learnset_rubric.json {BAND_LABELS} no longer match "
+    "BAND_CONVENTIONS / STAT_DROP_CHANCE keys — update them together"
+)
 
 
 # --- Pool assembly -----------------------------------------------------------

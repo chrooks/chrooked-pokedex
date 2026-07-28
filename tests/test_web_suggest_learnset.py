@@ -373,6 +373,40 @@ def test_learnset_rubric_directs_custom_move_consideration() -> None:
     assert "[CUSTOM]" in rubric
 
 
+def test_learnset_rubric_states_pacing_bands_from_contract() -> None:
+    """The rubric's pacing clause is rendered from the shared band Contract."""
+    rubric = suggestmod._build_learnset_rubric()
+    for band in suggestmod._pacing_bands():
+        if band.get("bp_max") is not None:
+            assert f"≤{band['bp_max']}BP" in rubric
+
+
+def test_pacing_violation_warns_but_does_not_reject() -> None:
+    """An attacking move over its level band's BP cap warns; the draft passes."""
+    # Dragon Pulse is 85bp in _make_pool; L8 sits in the ≤60BP band.
+    out = suggestmod._validate_learnset_result(
+        _draft([(1, "Tackle"), (8, "Dragon Pulse")]),
+        _make_pool(),
+        mode="full",
+        current_learnset=[],
+    )
+    assert len(out["draft"]["learnset"]) == 2
+    assert any(w.startswith("pacing:") and "Dragon Pulse" in w
+               for w in out["warnings"])
+
+
+def test_pacing_exempts_l0_and_in_band_rows() -> None:
+    """L0 rows and in-band attacks draw no pacing warning."""
+    # Dragon Pulse 85bp at L0 (exempt) and Tackle 40bp at L8 (under the 60 cap).
+    out = suggestmod._validate_learnset_result(
+        _draft([(0, "Dragon Pulse"), (8, "Tackle")]),
+        _make_pool(),
+        mode="full",
+        current_learnset=[],
+    )
+    assert not any(w.startswith("pacing:") for w in out.get("warnings", []))
+
+
 # ===========================================================================
 # Unit tests — _validate_learnset_result (M2 validator)
 # ===========================================================================
