@@ -481,6 +481,25 @@ def test_ate_shortlist_respects_offensive_bias() -> None:
     assert "Body Slam" not in req
 
 
+def test_ate_shortlist_excludes_signature_moves() -> None:
+    """Signature/species-locked moves (Judgment, Techno Blast) stay out of fuel."""
+    pool = _ate_pool() + [
+        {"move": "Judgment", "type": "Normal", "category": "special",
+         "power": 100, "effect": "hit", "custom": False},
+        {"move": "Techno Blast", "type": "Normal", "category": "special",
+         "power": 120, "effect": "hit", "custom": False},
+    ]
+    req = suggestmod._ability_move_requirements(
+        {"primary": "Spectralize", "secondary": None, "hidden": None},
+        _abilities_with({"Spectralize": "Normal moves become Ghost-type. +20% power."}),
+        pool,
+        {"atk": 84, "spa": 122},
+    )
+    assert "Judgment" not in req
+    assert "Techno Blast" not in req
+    assert "Hyper Voice" in req  # a generic special Normal attacker still offered
+
+
 def test_ate_shortlist_excludes_gimmick_nukes() -> None:
     """The attacker shortlist drops moves above the gimmick-nuke power ceiling."""
     pool = _ate_pool() + [

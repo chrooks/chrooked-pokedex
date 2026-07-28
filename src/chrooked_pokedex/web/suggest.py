@@ -1274,6 +1274,17 @@ _ABILITY_SHORTLIST_SIZE = 8
 # real eligibility flag if the pool ever carries move flags.
 _SHORTLIST_POWER_CEILING = 140
 
+# Signature / species-locked moves kept OUT of the candidate shortlist — they are
+# a specific mon's identity move, not generic fuel. The type-changing signatures
+# (Judgment, Techno Blast, Multi-Attack, Tera Blast/Starstorm, Revelation Dance)
+# all DEFAULT to Normal, so they cluster in the -ate Normal shortlist and would be
+# wrongly offered. Casefolded names; extend as new signatures land. Only trims the
+# nudge — the full pool still carries them if a species genuinely owns one.
+_SIGNATURE_MOVES: frozenset[str] = frozenset({
+    "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
+    "blood moon", "revelation dance", "relic song",
+})
+
 
 def _offensive_bias(stats: dict[str, Any]) -> str | None:
     """"physical" / "special" for a species leaning one way, else None (mixed).
@@ -1379,6 +1390,8 @@ def _shortlist(
     """
     def keep(row: dict[str, Any]) -> bool:
         cat = (row.get("category") or "").casefold()
+        if (row.get("move") or "").strip().casefold() in _SIGNATURE_MOVES:
+            return False
         if move_type is not None and (row.get("type") or "").casefold() != move_type.casefold():
             return False
         if category is not None and cat != category.casefold():
