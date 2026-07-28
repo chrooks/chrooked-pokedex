@@ -92,36 +92,13 @@ BAND_LABELS: tuple[str, ...] = tuple(label for _, label in BAND_EDGES)
 
 # Base C source hides these powers behind B_UPDATED_MOVE_DATA gen-config
 # ternaries the vendored parser skips, so the snapshot stores power: null.
-# Gen 6+ canon values, transcribed from the ExecPlan. (0 = variable/no BP.)
-CANON_POWERS: dict[str, int] = {
-    "aircutter": 60, "assurance": 60, "aurasphere": 80, "baddybad": 80,
-    "bittermalice": 75, "bleakwindstorm": 100, "blizzard": 110,
-    "bouncybubble": 60, "bubble": 40, "bulletseed": 25, "buzzybuzz": 60,
-    "chatter": 65, "chloroblast": 150, "covet": 60, "crabhammer": 100,
-    "dig": 80, "direclaw": 80, "dive": 80, "doomdesire": 140,
-    "dracometeor": 130, "dragonpulse": 85, "drainpunch": 75, "energyball": 90,
-    "esperwing": 80, "feint": 30, "fellstinger": 50, "fireblast": 110,
-    "firepledge": 80, "firespin": 35, "flamethrower": 90, "fly": 90,
-    "flyingpress": 100, "freezyfrost": 100, "frostbreath": 60, "gigadrain": 75,
-    "glaciallance": 120, "glitzyglow": 80, "grasspledge": 80,
-    "grassyglide": 55, "headlongrush": 120, "heatwave": 95, "hex": 65,
-    "hiddenpower": 60, "hurricane": 110, "hydropump": 110, "icebeam": 90,
-    "iciclespear": 25, "incinerate": 60, "knockoff": 65, "lastresort": 140,
-    "leafblade": 90, "leafstorm": 130, "leechlife": 80, "lick": 30,
-    "lowsweep": 65, "lusterpurge": 95, "magmastorm": 100, "meteormash": 90,
-    "mistball": 95, "muddywater": 90, "multiattack": 120, "mysticalfire": 75,
-    "outrage": 120, "overheat": 130, "paraboliccharge": 65, "pinmissile": 25,
-    "powergem": 80, "ragingfury": 120, "rapidspin": 50, "rocksmash": 40,
-    "rocktomb": 60, "sandsearstorm": 100, "sandtomb": 35, "sappyseed": 100,
-    "sizzlyslide": 60, "skullbash": 130, "smellingsalts": 70, "smog": 30,
-    "snore": 50, "sparklyswirl": 120, "springtidestorm": 100, "stormthrow": 60,
-    "strugglebug": 50, "suckerpunch": 70, "surf": 90, "synchronoise": 120,
-    "technoblast": 120, "thief": 60, "thrash": 120, "thunder": 110,
-    "thunderbolt": 90, "triplearrows": 90, "uproar": 90, "vinewhip": 45,
-    "wakeupslap": 70, "waterpledge": 80, "wavecrash": 120, "whirlpool": 35,
-    "wickedblow": 75, "wildboltstorm": 100, "zapcannon": 120, "zippyzap": 80,
-    "beatup": 0, "spitup": 0,
-}
+# Gen 6+ canon values. Single source of truth is the shared data file
+# (web/canon_powers.json) so the coverage/ladder scripts and the web suggest
+# pool fill null powers identically. (0 = variable/no BP.)
+CANON_POWERS: dict[str, int] = json.loads(
+    (ROOT / "src" / "chrooked_pokedex" / "web" / "canon_powers.json")
+    .read_text("utf-8")
+)["powers"]
 
 # Move effect names that disqualify a move from being an ordinary ladder rung.
 EXCLUDED_EFFECTS = frozenset({

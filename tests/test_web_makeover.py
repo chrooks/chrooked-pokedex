@@ -279,12 +279,13 @@ def test_learnset_rubric_served(ruleset_dir: Path, tmp_path: Path) -> None:
     assert response.status_code == 200
     body = response.json()
     bands = body["bands"]
-    # The documented anchor: nothing above 60 BP before L20.
-    first = bands[0]
-    assert first["level_min"] == 1 and first["level_max"] == 19
-    assert first["bp_max"] == 60
-    # The late capstone band opens at 100 BP.
-    assert bands[-1]["bp_min"] == 100
+    # Structural invariants that survive band retuning (the values are tunable in
+    # learnset_rubric.json): the ladder starts at L1, the capstone runs to L100
+    # with an open-ended top (no bp_max), and every band carries a label.
+    assert bands[0]["level_min"] == 1
+    assert bands[-1]["level_max"] == 100
+    assert "bp_max" not in bands[-1]  # top band is uncapped
+    assert all("label" in b for b in bands)
 
 
 # --------------------------------------------------------------------------- #

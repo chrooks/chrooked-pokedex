@@ -353,6 +353,30 @@ def test_build_move_pool_created_move_present(tmp_path: Path) -> None:
     assert by_name["Dragon Pulse"]["custom"] is False
 
 
+def test_build_move_pool_backfills_null_power_from_canon() -> None:
+    """A base move the parser left null gets its canon power in the pool."""
+    from chrooked_pokedex.model import Ruleset
+
+    # Craft a snapshot move that is in the canon table (surf) but null-powered.
+    snap = {
+        **_SNAPSHOT,
+        "moves": {
+            **_SNAPSHOT["moves"],
+            "surf": {
+                "chrooked_id": "surf", "name": "Surf", "type": "Water",
+                "category": "special", "power": None, "accuracy": 100, "pp": 15,
+                "description": "", "effect": "hit", "argument": None,
+                "additional_effects": [], "flags": [], "priority": 0,
+                "target": "all", "aka": {},
+            },
+        },
+    }
+    ruleset = Ruleset.load(_SAMPLE)
+    pool = dexmod.build_move_pool(snap, ruleset)
+    surf = next(r for r in pool if r["move"] == "Surf")
+    assert surf["power"] == dexmod._CANON_POWERS["surf"]  # backfilled, not None
+
+
 def test_format_move_pool_tags_custom_moves_only() -> None:
     """[CUSTOM] appears on flagged rows and nowhere else."""
     pool = [
