@@ -299,6 +299,12 @@ textarea.mk-stage__redirect-input {
   margin-right: var(--space-2);
   text-transform: uppercase;
 }
+/* A flagged draft is advisory, not a hard stop (the editable draft sits right
+   below it) — so drop the heavy left rail to the dim border. No new color: the
+   single --chrome accent stays reserved for real severity. */
+.mk-stage__error[data-kind="flagged"] {
+  border-left-color: var(--chrome-dim);
+}
 
 .mk-stage__why,
 .mk-stage__alts {
@@ -598,13 +604,27 @@ textarea.mk-stage__redirect-input {
   text-overflow: ellipsis;
   color: var(--text);
 }
+/* Same move-name treatment as the profile learnset: tint each row in its type
+   color (--type set inline per row), STAB (move type ∈ the mon's types) bold, and
+   the mon's stronger attacking side (Atk vs SpA) italic. */
+.mk-lrow__move[data-typed] {
+  color: color-mix(in oklch, var(--type) 62%, var(--text));
+}
+.mk-lrow__move[data-stab] {
+  font-weight: 700;
+}
+.mk-lrow__move[data-offense] {
+  font-style: italic;
+}
 .mk-lrow[data-removed] {
   opacity: 0.5;
 }
 .mk-lrow[data-removed] .mk-lrow__move {
   text-decoration: line-through;
 }
-.mk-lrow[data-changed] .mk-lrow__move {
+/* A new (added) row keeps its type tint — the "→ new" mark carries the newness
+   signal, mirroring the profile's badge. Only untyped rows fall back to --edited. */
+.mk-lrow[data-changed] .mk-lrow__move:not([data-typed]) {
   color: var(--edited);
 }
 .mk-lrow__mark {
@@ -679,10 +699,18 @@ textarea.mk-stage__redirect-input {
   font-size: var(--text-sm);
 }
 .mk-lrow__lv-input {
-  /* Wide enough + right padding so 3-digit levels clear the native spin
-     buttons instead of sitting under the arrows. Matches .mk-stats__input. */
-  width: 6ch;
-  padding-right: 1.5em;
+  /* No native spin buttons: in this compact inline row the browser's tiny
+     up/down control crowded the digit and read as overlap. Type the level or
+     use ↑/↓ — the field stays type=number for the numeric keyboard. */
+  width: 4.5ch;
+  text-align: center;
+  appearance: textfield;
+  -webkit-appearance: textfield;
+}
+.mk-lrow__lv-input::-webkit-inner-spin-button,
+.mk-lrow__lv-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .mk-lrow__error {
   color: var(--chrome);
