@@ -15,6 +15,7 @@ import {
   mergeDraft,
   proposedSlot,
   slotChanged,
+  type AbilitySlot,
 } from "../proposal/abilitiesDraft";
 import { StagePanel } from "./StagePanel";
 import { AbilityCreatePanel } from "./AbilityCreatePanel";
@@ -75,6 +76,9 @@ export function AbilitiesStage(props: Props) {
   } = props;
 
   const [mode, setMode] = useState<AbilityMode>("swap");
+  // Slots the author has locked: PROPOSE leaves them unchanged (sent to the
+  // server as a constraint AND stripped from the returned draft client-side).
+  const [locked, setLocked] = useState<ReadonlySet<AbilitySlot>>(new Set());
 
   // Tell the overhead rail which sub-surface is open; reset on unmount so the pill
   // never keeps a stale label after the stage closes (ac11).
@@ -88,13 +92,23 @@ export function AbilitiesStage(props: Props) {
     entry,
     initialDirection,
     propose: async (id, direction) => {
-      const result = await api.suggestAbility(id, { direction: direction || undefined });
+      const result = await api.suggestAbility(id, {
+        direction: direction || undefined,
+        locked: locked.size > 0 ? [...locked] : undefined,
+      });
       // The server may partially degrade: valid slots in `draft`, per-slot verbatim
       // `warnings` for a name it couldn't resolve (usually a move). Not in the
       // AbilityProposal type — read it off the runtime response.
       const partial = result as typeof result & { warnings?: string[] };
+      // The server also strips locked slots; filter again so a locked slot can
+      // never show a proposed change even against a stale server.
+      const abilities = Object.fromEntries(
+        Object.entries(result.draft.abilities).filter(
+          ([slot]) => !locked.has(slot as AbilitySlot),
+        ),
+      );
       return {
-        draft: result.draft,
+        draft: { abilities },
         rationale: result.rationale ?? {},
         alternatives: (result.alternatives ?? []) as ProposalAlternative[],
         warnings: partial.warnings,
@@ -113,6 +127,18 @@ export function AbilitiesStage(props: Props) {
   });
 
   const draft = hook.draft;
+
+  const toggleLock = (slot: AbilitySlot) => {
+    const nowLocked = !locked.has(slot);
+    setLocked((prev) => {
+      const next = new Set(prev);
+      if (nowLocked) next.add(slot);
+      else next.delete(slot);
+      return next;
+    });
+    // Locking a slot with a pending proposed change reverts it to current.
+    if (nowLocked && draft) hook.editDraft(editSlot(draft, slot, ""));
+  };
 
   const modeToggle = (
     <div className="mk-mode" role="group" aria-label="Abilities mode" id="mk-abilities-mode">
@@ -187,16 +213,44 @@ export function AbilitiesStage(props: Props) {
         placeholder="steer the abilities (e.g. lean into the trapper role)…"
         redirectRef={redirectRef}
         registerActions={registerActions}
-        applyAlternative={(alt, current) => applyAlternative(current, alt)}
+        applyAlternative={(alt, current) => {
+          // An alternative can never land on a locked slot.
+          const next = applyAlternative(current, alt);
+          return {
+            abilities: Object.fromEntries(
+              Object.entries(next.abilities).filter(
+                ([slot]) => !locked.has(slot as AbilitySlot),
+              ),
+            ),
+          };
+        }}
         altLabel={(value) => (typeof value === "string" ? value : String(value))}
         current={
           <div className="mk-abilities">
-            {ABILITY_SLOTS.map((slot) => (
-              <div key={slot} className="mk-ability">
-                <span className="mk-ability__label mono">{SLOT_LABEL[slot]}</span>
-                <span className="mk-ability__now mono">{currentSlot(entry, slot) ?? "—"}</span>
-              </div>
-            ))}
+            {ABILITY_SLOTS.map((slot) => {
+              const isLocked = locked.has(slot);
+              return (
+                <div key={slot} className="mk-ability" data-locked={isLocked || undefined}>
+                  <span className="mk-ability__label mono">{SLOT_LABEL[slot]}</span>
+                  <span className="mk-ability__now mono">{currentSlot(entry, slot) ?? "—"}</span>
+                  <button
+                    type="button"
+                    id={`mk-ability-lock-${slot}`}
+                    className="mk-ability__lock mono"
+                    aria-pressed={isLocked}
+                    aria-label={`${isLocked ? "Unlock" : "Lock"} ${SLOT_LABEL[slot]} ability`}
+                    title={
+                      isLocked
+                        ? "locked — proposals keep this slot as-is"
+                        : "unlocked — proposals may change this slot"
+                    }
+                    onClick={() => toggleLock(slot)}
+                  >
+                    {isLocked ? "🔒" : "🔓"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         }
       >
@@ -204,14 +258,36 @@ export function AbilitiesStage(props: Props) {
         {ABILITY_SLOTS.map((slot) => {
           const value = proposedSlot(draft, slot) ?? currentSlot(entry, slot) ?? "";
           const changed = slotChanged(entry, draft, slot);
+          const isLocked = locked.has(slot);
           return (
-            <div key={slot} className="mk-ability" data-changed={changed || undefined}>
+            <div
+              key={slot}
+              className="mk-ability"
+              data-changed={changed || undefined}
+              data-locked={isLocked || undefined}
+            >
               <span className="mk-ability__label mono">{SLOT_LABEL[slot]}</span>
               <span className="mk-ability__now mono">{currentSlot(entry, slot) ?? "—"}</span>
+              <button
+                type="button"
+                id={`mk-ability-lock-${slot}`}
+                className="mk-ability__lock mono"
+                aria-pressed={isLocked}
+                aria-label={`${isLocked ? "Unlock" : "Lock"} ${SLOT_LABEL[slot]} ability`}
+                title={
+                  isLocked
+                    ? "locked — proposals keep this slot as-is"
+                    : "unlocked — proposals may change this slot"
+                }
+                onClick={() => toggleLock(slot)}
+              >
+                {isLocked ? "🔒" : "🔓"}
+              </button>
               <select
                 className="mk-select mono"
                 aria-label={`${SLOT_LABEL[slot]} ability`}
                 value={value}
+                disabled={isLocked}
                 onChange={(event) => hook.editDraft(editSlot(draft, slot, event.target.value))}
               >
                 <option value="">—</option>

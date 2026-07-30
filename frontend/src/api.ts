@@ -157,11 +157,11 @@ export const api = {
       action — proposes only, never writes. The `direction` is the author's
       freeform steer ("make it a special attacker"). Errors carry the server's
       own message (503 missing key / upstream, 422 invalid). */
-  suggestAbility: (id: string, opts?: { direction?: string }) =>
+  suggestAbility: (id: string, opts?: { direction?: string; locked?: string[] }) =>
     sendJson<AbilityProposal>(
       "POST",
       `/api/species/${encodeURIComponent(id)}/suggest/ability`,
-      { direction: opts?.direction },
+      { direction: opts?.direction, locked: opts?.locked },
     ),
   /** Ask the LLM to propose a whole learnset for this species (#7). Read-only —
       proposes only, never writes. `mode` defaults to a full-list proposal. */

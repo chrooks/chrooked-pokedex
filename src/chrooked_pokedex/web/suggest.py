@@ -100,7 +100,18 @@ class SuggestError(Exception):
     Distinct from an LLM transport failure (`LlmError`): this is a server-side
     validation problem — an unknown species, or a draft naming an ability that
     isn't in the real pool — that the endpoint surfaces as an honest message.
+
+    ``salvage`` optionally carries a best-effort *editable* draft even though
+    validation failed — set when the draft is fully normalized (pool-checked,
+    deduped, sorted) and only tripped a soft shape bound (e.g. a learnset with
+    too many early-level rows). The web layer may hand it back as a 200 with an
+    ``error`` note so the author can fix it in place, instead of a bare 422.
+    ``None`` when nothing usable survived.
     """
+
+    def __init__(self, *args: Any, salvage: dict[str, Any] | None = None) -> None:
+        super().__init__(*args)
+        self.salvage = salvage
 
 
 # --------------------------------------------------------------------------- #
@@ -181,9 +192,12 @@ def propose_with_repair(
     except SuggestError as final_error:
         attempts = max(1, max_retries)
         plural = "retry" if attempts == 1 else "retries"
+        # Carry any salvageable editable draft through the wrapper so the caller
+        # can offer it for hand-editing rather than only naming the failure.
         raise SuggestError(
             f"{final_error} — after {attempts} automatic {plural}, "
-            f"{_describe_draft(result)}."
+            f"{_describe_draft(result)}.",
+            salvage=getattr(final_error, "salvage", None),
         ) from final_error
 
 
@@ -256,6 +270,26 @@ def _format_learnset(learnset: list[dict[str, Any]]) -> str:
     )
 
 
+def _format_move_names(learnset: list[dict[str, Any]]) -> str:
+    """Render just the move NAMES (no levels) — the full-mode prior-art hint.
+
+    Full mode redesigns the pacing from scratch; showing the current level
+    placement anchors the model into copying it and inheriting its early-level
+    packing. Names-only keeps the move vocabulary (signature/continuity moves)
+    without handing the model levels to copy. De-dups on first-seen order (a move
+    may appear at both L0 and a level-up row)."""
+    if not learnset:
+        return "(no level-up learnset)"
+    seen: set[str] = set()
+    names: list[str] = []
+    for entry in learnset:
+        move = entry.get("move")
+        if move and move not in seen:
+            seen.add(move)
+            names.append(move)
+    return ", ".join(names)
+
+
 def _format_current_abilities(abilities: dict[str, Any]) -> str:
     """Render the species' current ability slots, naming empty ones explicitly."""
     parts = []
@@ -306,7 +340,11 @@ def _build_rubric() -> str:
     )
 
 
-def _build_user_context(entry: dict[str, Any], direction: str | None) -> str:
+def _build_user_context(
+    entry: dict[str, Any],
+    direction: str | None,
+    locked: list[str] | None = None,
+) -> str:
     """The fresh per-species delta: stats/types/abilities/learnset + direction."""
     stats = entry.get("stats", {})
     stat_line = " ".join(
@@ -319,6 +357,13 @@ def _build_user_context(entry: dict[str, Any], direction: str | None) -> str:
         f"Current abilities: {_format_current_abilities(entry.get('abilities', {}))}",
         f"Learnset: {_format_learnset(entry.get('learnset', []))}",
     ]
+    if locked:
+        free = [slot for slot in _ABILITY_SLOTS if slot not in locked]
+        lines.append(
+            "Locked slots (the author has fixed these — keep their current "
+            f"ability, do NOT propose for them): {', '.join(locked)}. "
+            f"Propose only for: {', '.join(free) or '(none)'}."
+        )
     if direction and direction.strip():
         lines.append(f"Direction from the user: {direction.strip()}")
     return "\n".join(lines)
@@ -381,6 +426,7 @@ def suggest_ability(
     entry: dict[str, Any],
     abilities: list[dict[str, Any]],
     direction: str | None = None,
+    locked: list[str] | None = None,
 ) -> dict[str, Any]:
     """Propose best-fit existing abilities for a species; never writes a file.
 
@@ -399,9 +445,13 @@ def suggest_ability(
         raise SuggestError("No abilities are available to suggest from.")
 
     known = _pool_names(pool)
+    # Only real slot names count as locks; anything else in the payload is noise.
+    locked_slots = [slot for slot in _ABILITY_SLOTS if slot in (locked or [])]
+    if len(locked_slots) == len(_ABILITY_SLOTS):
+        raise SuggestError("All ability slots are locked — unlock one to propose.")
     system = _build_rubric()
     cached_context = "Ability pool (pick only from these):\n" + _format_pool(pool)
-    user = _build_user_context(entry, direction)
+    user = _build_user_context(entry, direction, locked_slots)
 
     def _run(user_text: str) -> dict[str, Any]:
         return provider.propose(
@@ -427,6 +477,11 @@ def suggest_ability(
         # a good slot from the first pass is not lost if the retry drops it.
         valid = {**valid, **valid_retry}
         invalid = [(slot, value) for slot, value in invalid if slot not in valid]
+
+    # The prompt asks the model to leave locked slots alone; strip them anyway so
+    # a stubborn response can never surface a change on a slot the author fixed.
+    valid = {slot: value for slot, value in valid.items() if slot not in locked_slots}
+    invalid = [(slot, value) for slot, value in invalid if slot not in locked_slots]
 
     warnings = [_ability_slot_warning(slot, value) for slot, value in invalid]
 
@@ -1265,7 +1320,7 @@ _STATUS_SYNERGY_RE = re.compile(r"status move", re.IGNORECASE)
 
 # How many ability-relevant candidate moves to surface. Enough to choose from,
 # few enough to stay a nudge rather than a second pool dump.
-_ABILITY_SHORTLIST_SIZE = 8
+_ABILITY_SHORTLIST_SIZE = 10
 
 # Shortlist power ceiling: a proxy to keep gimmick nukes (Explosion 250, Z-moves,
 # Hyper/Giga Impact) out of the "strong attacker" shortlist — the pool rows carry
@@ -1458,13 +1513,30 @@ def _build_learnset_user_context(
         f"{key.upper()} {stats[key]}" for key in _STAT_KEYS if key in stats
     ) or "(unknown)"
     ability_slots = entry.get("abilities", {})
+    current_learnset = entry.get("learnset", [])
+    # FULL mode is a redesign: by this stage the entry already carries the NEW
+    # typing/stats/abilities (locked in earlier), so the OLD learnset is stale —
+    # showing its exact level placement just anchors the model into copying it and
+    # inheriting its early-level packing (the reported symptom). Present the moves
+    # as prior-art names only, pacing to be rebuilt fresh under the caps. Surgical
+    # mode edits in place, so it MUST see the exact L<level> rows.
+    if mode == "full":
+        learnset_line = (
+            "Current learnset (PRIOR ART — the moves this line has historically "
+            "learned, NOT a template. Rebuild the LEVEL PACING from scratch under "
+            "the size and early-level caps above; do NOT copy the current level "
+            "placement, which may over-pack the early levels): "
+            f"{_format_move_names(current_learnset)}"
+        )
+    else:
+        learnset_line = f"Current learnset: {_format_learnset(current_learnset)}"
     lines = [
         f"Species: {entry.get('name', entry['chrooked_id'])}",
         f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
         f"Base stats: {stat_line}",
         f"Current abilities (with effects): "
         f"{_format_abilities_with_effects(ability_slots, all_abilities)}",
-        f"Current learnset: {_format_learnset(entry.get('learnset', []))}",
+        learnset_line,
         f"Evolution: {_format_evo_context(entry)}",
         f"Mode: {mode.upper()}",
     ]
@@ -1699,9 +1771,14 @@ def _validate_learnset_result(
         size_min = min(LEARNSET_SIZE_MIN, len(move_pool))
         count = len(deduped)
         if not (size_min <= count <= LEARNSET_SIZE_MAX):
-            raise SuggestError(
+            # The rows are fully normalized — only the size bound failed, so the
+            # draft is still editable. Carry it as salvage for hand-editing.
+            raise _flagged_learnset(
                 f"The learnset has {count} rows after validation; propose "
-                f"between {size_min} and {LEARNSET_SIZE_MAX}."
+                f"between {size_min} and {LEARNSET_SIZE_MAX}.",
+                deduped,
+                result,
+                warnings,
             )
         early_caps = (
             (5, LEARNSET_MAX_MOVES_THROUGH_L5),
@@ -1710,9 +1787,12 @@ def _validate_learnset_result(
         for cutoff, cap in early_caps:
             early = sum(1 for row in deduped if row["level"] <= cutoff)
             if early > cap:
-                raise SuggestError(
+                raise _flagged_learnset(
                     f"{early} moves are learned at level {cutoff} or below; at "
-                    f"most {cap} are allowed — move the rest to later levels."
+                    f"most {cap} are allowed — move the rest to later levels.",
+                    deduped,
+                    result,
+                    warnings,
                 )
 
         # Pacing check (ADVISORY — mirrors the workbench Signifier, never a
@@ -1745,7 +1825,21 @@ def _validate_learnset_result(
     if mode == "surgical":
         _check_untouched_rows(deduped, current_learnset, instruction)
 
-    # Step 9: alternatives — drop any whose extracted move name is hallucinated.
+    # Step 9: assemble the reusable contract from the normalized rows.
+    return _assemble_learnset_contract(deduped, result, warnings)
+
+
+def _assemble_learnset_contract(
+    deduped: list[dict[str, Any]],
+    result: dict[str, Any],
+    warnings: list[str],
+) -> dict[str, Any]:
+    """The ``{draft, rationale, alternatives, warnings?}`` contract from the
+    already-normalized rows. Shared by the success return and the salvage payload
+    a shape-bound failure carries, so a flagged-but-editable draft is shaped
+    identically to an accepted one."""
+    # Alternatives are free-text like "Aqua Jet @ L24 — priority STAB option";
+    # they're advisory, so keep any well-shaped entry as-is.
     alternatives = []
     for alt in result.get("alternatives") or []:
         if not isinstance(alt, dict):
@@ -1753,9 +1847,6 @@ def _validate_learnset_result(
         value = alt.get("value")
         if not value or not isinstance(value, str):
             continue
-        # Alternatives are free-text like "Aqua Jet @ L24 — priority STAB option".
-        # We only drop them if they contain a move name that isn't in the pool — but
-        # since the format is freeform we just keep them as-is (they're advisory).
         alternatives.append({"value": value, "rationale": alt.get("rationale", "")})
 
     rationale_text = _rationale_map(result, "learnset").get("learnset")
@@ -1771,6 +1862,20 @@ def _validate_learnset_result(
     if warnings:
         contract["warnings"] = warnings
     return contract
+
+
+def _flagged_learnset(
+    message: str,
+    deduped: list[dict[str, Any]],
+    result: dict[str, Any],
+    warnings: list[str],
+) -> SuggestError:
+    """A shape-bound ``SuggestError`` that still carries the normalized draft as
+    salvage (with the reason under ``error``) so the web layer can hand it back
+    for hand-editing rather than only naming the failure."""
+    salvage = _assemble_learnset_contract(deduped, result, warnings)
+    salvage["error"] = message
+    return SuggestError(message, salvage=salvage)
 
 
 def _check_untouched_rows(

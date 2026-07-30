@@ -441,12 +441,17 @@ def create_app(
             )
         abilities = dexmod.build_abilities(snapshot, ruleset)
         direction = (payload or {}).get("direction")
+        # Slots the author has locked in the workbench: proposals must leave them
+        # unchanged. Non-list / non-string payloads are ignored, not a 422.
+        raw_locked = (payload or {}).get("locked")
+        locked = [s for s in raw_locked if isinstance(s, str)] if isinstance(raw_locked, list) else None
         try:
             return suggestmod.suggest_ability(
                 provider=_llm_provider(),
                 entry=entry,
                 abilities=abilities,
                 direction=direction,
+                locked=locked,
             )
         except suggestmod.SuggestError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
@@ -569,6 +574,11 @@ def create_app(
                 direction=direction,
             )
         except suggestmod.SuggestError as error:
+            # A draft that only tripped a soft shape bound is fully editable — hand
+            # it back as a 200 (with an `error` note) so the author can fix it in
+            # place. Only an unsalvageable failure is a bare 422.
+            if error.salvage is not None:
+                return error.salvage
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:
             raise HTTPException(status_code=503, detail=str(error)) from error

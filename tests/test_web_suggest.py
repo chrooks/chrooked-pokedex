@@ -382,3 +382,61 @@ def test_all_invalid_twice_is_no_proposal(ruleset_dir: Path, tmp_path: Path) -> 
     assert response.status_code == 422
     assert "existing" in response.json()["detail"].lower()
     assert len(provider.calls) == 2  # tried the repair, then gave up
+
+
+# --------------------------------------------------------------------------- #
+# locked slots — proposals leave author-fixed slots unchanged
+# --------------------------------------------------------------------------- #
+
+
+def test_locked_slots_reach_prompt_and_are_stripped(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    # The model ignores the constraint and proposes for a locked slot anyway.
+    provider = _FakeProvider(
+        {
+            "draft": {"abilities": {"primary": "Sap Sipper", "hidden": "Rough Skin"}},
+            "rationale": {},
+            "alternatives": [],
+        }
+    )
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/ability",
+        json={"locked": ["primary"]},
+    )
+
+    assert response.status_code == 200
+    # The constraint reached the prompt…
+    assert "Locked slots" in provider.calls[0]["user"]
+    assert "primary" in provider.calls[0]["user"]
+    # …and the locked slot is stripped from the returned draft regardless.
+    assert response.json()["draft"]["abilities"] == {"hidden": "Rough Skin"}
+
+
+def test_all_slots_locked_is_422(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _FakeProvider(_GOOD_RESULT)
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/ability",
+        json={"locked": ["primary", "secondary", "hidden"]},
+    )
+
+    assert response.status_code == 422
+    assert "locked" in response.json()["detail"].lower()
+    assert provider.calls == []  # no wasted Port call
+
+
+def test_garbage_locked_payload_is_ignored(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _FakeProvider(_GOOD_RESULT)
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/ability",
+        json={"locked": "primary"},  # not a list — ignored, not a 422
+    )
+
+    assert response.status_code == 200
+    assert response.json()["draft"]["abilities"] == {"hidden": "Rough Skin"}

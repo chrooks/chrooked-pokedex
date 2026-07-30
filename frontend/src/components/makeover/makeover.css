@@ -528,9 +528,32 @@ textarea.mk-stage__redirect-input {
 }
 .mk-ability {
   display: grid;
-  grid-template-columns: 5.5rem 1fr auto;
+  grid-template-columns: 5.5rem 1fr auto auto auto;
   align-items: center;
   gap: var(--space-3);
+}
+/* The per-slot lock toggle: locked slots survive a PROPOSE unchanged. */
+.mk-ability__lock {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 var(--space-1);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  opacity: 0.45;
+}
+.mk-ability__lock:hover,
+.mk-ability__lock:focus-visible {
+  opacity: 1;
+  border-color: var(--text-faint);
+}
+.mk-ability[data-locked] .mk-ability__lock {
+  opacity: 1;
+}
+.mk-ability[data-locked] .mk-select,
+.mk-ability[data-locked] .mk-ability__now {
+  opacity: 0.6;
 }
 .mk-ability__label {
   color: var(--text-faint);
