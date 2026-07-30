@@ -1,30 +1,29 @@
 name: Marshtomp
 chrooked_id: marshtomp
 aka: {  }
+types: [Water, Ground]
+abilities:
+  primary: Torrent
+  secondary: Regenerator
+  hidden: Swift Swim
 learnset:
-  - { level: 0, move: Mud Shot }
   - { level: 1, move: Growl }
-  - { level: 1, move: Rock Smash }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Water Gun }
-  - { level: 2, move: Clod Toss }
-  - { level: 5, move: Undertow }
-  - { level: 9, move: Rock Throw }
-  - { level: 12, move: Protect }
-  - { level: 15, move: Supersonic }
+  - { level: 4, move: Water Gun }
+  - { level: 8, move: Clod Toss }
+  - { level: 12, move: Undertow }
   - { level: 16, move: Bulldoze }
-  - { level: 17, move: Water Whip }
-  - { level: 20, move: Water Pulse }
-  - { level: 25, move: Rock Slide }
-  - { level: 29, move: Aqua Tail }
-  - { level: 30, move: Take Down }
-  - { level: 31, move: Tectonic Fang }
-  - { level: 32, move: Maelstrom }
-  - { level: 35, move: Amnesia }
-  - { level: 40, move: Muddy Water }
-  - { level: 43, move: Earthquake }
-  - { level: 45, move: Screech }
-  - { level: 50, move: Endeavor }
-  - { level: 55, move: Hydro Pump }
-  - { level: 60, move: Wave Crash }
+  - { level: 20, move: Rock Smash }
+  - { level: 24, move: Water Whip }
+  - { level: 28, move: Stomping Tantrum }
+  - { level: 32, move: Rock Slide }
+  - { level: 36, move: Muddy Water }
+  - { level: 40, move: Ice Punch }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Hammer Arm }
+  - { level: 52, move: Maelstrom }
+  - { level: 56, move: Strength }
+  - { level: 60, move: Superpower }
   - { level: 64, move: Faultbreak }
+  - { level: 68, move: Wave Crash }
+  - { level: 70, move: Hydro Cannon }

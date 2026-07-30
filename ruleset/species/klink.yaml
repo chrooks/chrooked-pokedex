@@ -1,13 +1,12 @@
-name: Klinklang
-chrooked_id: klinklang
-aka: { pokeemerald: SPECIES_KLINKLANG }
+name: Klink
+chrooked_id: klink
+aka: { dex: 599 }
+types: [Steel]
 abilities:
   primary: Steelworker
   secondary: Magnet Pull
   hidden: Motor Drive
-stats: { hp: 70, atk: 110, def: 125 }
 learnset:
-  - { level: 0, move: Shift Gear }
   - { level: 1, move: Bind }
   - { level: 1, move: Charge }
   - { level: 1, move: Vise Grip }

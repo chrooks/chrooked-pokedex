@@ -6,33 +6,29 @@ abilities:
   hidden: Intimidate
 stats: { hp: 85, atk: 105, def: 90, spa: 105, spd: 90, spe: 65 }
 learnset:
-  - { level: 0, move: Aqua Jet }
-  - { level: 1, move: Tackle }
+  - { level: 0, move: Maelstrom }
   - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Metal Claw }
-  - { level: 2, move: Undertow }
-  - { level: 6, move: Glint }
-  - { level: 11, move: Swords Dance }
-  - { level: 15, move: Peck }
-  - { level: 16, move: Smart Strike }
-  - { level: 17, move: Water Whip }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 7, move: Aqua Jet }
+  - { level: 10, move: Peck }
+  - { level: 13, move: Undertow }
+  - { level: 16, move: Glint }
   - { level: 19, move: Bubble Beam }
-  - { level: 21, move: Mirror Shot }
-  - { level: 24, move: Swagger }
-  - { level: 28, move: Fury Attack }
-  - { level: 29, move: Aqua Tail }
-  - { level: 31, move: Metallic Fang }
-  - { level: 33, move: Brine }
-  - { level: 36, move: Luster Cannon }
-  - { level: 39, move: Whirlpool }
-  - { level: 43, move: Maelstrom }
-  - { level: 45, move: Iron Tail }
-  - { level: 46, move: Mist }
+  - { level: 22, move: Smart Strike }
+  - { level: 25, move: Flip Turn }
+  - { level: 28, move: Water Whip }
+  - { level: 31, move: Mirror Shot }
+  - { level: 34, move: Aerial Ace }
+  - { level: 37, move: Liquidation }
+  - { level: 40, move: Swagger }
+  - { level: 44, move: Metallic Fang }
+  - { level: 48, move: Luster Cannon }
   - { level: 52, move: Drill Peck }
-  - { level: 55, move: Steel Beam }
-  - { level: 56, move: Hydro Pump }
-  - { level: 57, move: Excalibur }
-  - { level: 59, move: Tsunami }
-  - { level: 66, move: Wave Crash }
+  - { level: 56, move: Wave Crash }
+  - { level: 58, move: Hydro Pump }
+  - { level: 62, move: Excalibur }
+  - { level: 66, move: Steel Beam }
+  - { level: 70, move: Tsunami }
 evolution: { from: Prinplup, method: { level: 36 } }

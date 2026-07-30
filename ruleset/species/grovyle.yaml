@@ -3,38 +3,35 @@ chrooked_id: grovyle
 aka: { pokeemerald: SPECIES_GROVYLE }
 types: [Grass, Dragon]
 abilities:
-  primary: Forestry
-  secondary: Chloroplast
+  primary: Overgrow
+  secondary: Forestry
   hidden: Sharpness
 stats: { atk: 70, def: 40 }
 learnset:
+  - { level: 1, move: Fury Cutter }
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Fury Cutter }
-  - { level: 1, move: Leafage }
-  - { level: 2, move: Twister }
-  - { level: 3, move: Pound }
-  - { level: 6, move: Absorb }
-  - { level: 9, move: Mega Drain }
-  - { level: 12, move: Detect }
-  - { level: 15, move: Quick Guard }
-  - { level: 18, move: Razor Leaf }
-  - { level: 20, move: Assurance }
-  - { level: 23, move: Dragon Breath }
+  - { level: 1, move: Shed Tail }
+  - { level: 2, move: Maul }
+  - { level: 3, move: Leafage }
+  - { level: 4, move: Pound }
+  - { level: 5, move: Mega Drain }
+  - { level: 6, move: Razor Leaf }
+  - { level: 12, move: Slash }
+  - { level: 15, move: Leaf Blade }
+  - { level: 18, move: Detect }
+  - { level: 20, move: Night Slash }
+  - { level: 24, move: Assurance }
   - { level: 25, move: Giga Drain }
-  - { level: 28, move: Leaf Tornado }
-  - { level: 29, move: Energy Ball }
-  - { level: 30, move: Body Slam }
-  - { level: 31, move: Dragon Pulse }
-  - { level: 33, move: Dragon Claw }
-  - { level: 35, move: Double Team }
-  - { level: 36, move: Dual Chop }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 40, move: Leaf Blade }
-  - { level: 42, move: Reap }
-  - { level: 43, move: Siphon }
-  - { level: 45, move: Screech }
-  - { level: 46, move: Cataclysm }
-  - { level: 50, move: Endeavor }
-  - { level: 55, move: Leaf Storm }
-  - { level: 57, move: Draco Meteor }
+  - { level: 28, move: Psycho Cut }
+  - { level: 32, move: X-Scissor }
+  - { level: 36, move: Breaking Swipe }
+  - { level: 38, move: Reap }
+  - { level: 40, move: Dragon Claw }
+  - { level: 43, move: Dragon Hammer }
+  - { level: 44, move: Screech }
+  - { level: 48, move: Leaf Storm }
+  - { level: 52, move: Solar Blade }
+  - { level: 56, move: Dragon Rush }
+  - { level: 57, move: Power Whip }
+  - { level: 62, move: Glaive Rush }

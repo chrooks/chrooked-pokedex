@@ -4,21 +4,37 @@ aka: { pokeemerald: SPECIES_CHINGLING }
 types: [Steel, Psychic]
 abilities:
   primary: Sacred Toll
+  secondary: Levitate
+  hidden: Magic Guard
 learnset:
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Healing Wish }
   - { level: 1, move: Wrap }
   - { level: 2, move: Glint }
-  - { level: 4, move: Growl }
-  - { level: 7, move: Astonish }
-  - { level: 10, move: Confusion }
+  - { level: 3, move: Confusion }
+  - { level: 6, move: Fairy Wind }
+  - { level: 8, move: Disarming Voice }
+  - { level: 10, move: Echoed Voice }
   - { level: 13, move: Yawn }
   - { level: 15, move: Mirror Shot }
-  - { level: 16, move: Last Resort }
+  - { level: 16, move: Stored Power }
   - { level: 17, move: Dream Mist }
-  - { level: 19, move: Entrainment }
+  - { level: 19, move: Round }
+  - { level: 22, move: Extrasensory }
+  - { level: 25, move: Draining Kiss }
+  - { level: 27, move: Misty Terrain }
   - { level: 29, move: Flash Cannon }
-  - { level: 31, move: Psychic }
   - { level: 32, move: Uproar }
-  - { level: 43, move: Luster Cannon }
-  - { level: 46, move: Mindwarp }
+  - { level: 35, move: Dazzling Gleam }
+  - { level: 37, move: Safeguard }
+  - { level: 39, move: Mindwarp }
+  - { level: 41, move: Calm Mind }
+  - { level: 43, move: Alluring Voice }
+  - { level: 44, move: Luster Cannon }
+  - { level: 47, move: Synchronoise }
+  - { level: 50, move: Moonblast }
+  - { level: 54, move: Hyper Voice }
   - { level: 57, move: Steel Beam }
   - { level: 59, move: Future Sight }
+  - { level: 63, move: Boomburst }

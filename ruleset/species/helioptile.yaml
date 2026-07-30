@@ -1,23 +1,29 @@
 name: Helioptile
 chrooked_id: helioptile
 aka: {  }
+types: [Electric, Normal]
+abilities:
+  primary: Solar Dynamo
+  secondary: Sand Veil
+  hidden: Solar Power
 learnset:
-  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Quick Attack }
   - { level: 1, move: Tail Whip }
-  - { level: 2, move: Echoed Voice }
-  - { level: 4, move: Pound }
-  - { level: 8, move: Thunder Shock }
-  - { level: 12, move: Quick Attack }
-  - { level: 15, move: Swift }
-  - { level: 16, move: Charge }
-  - { level: 20, move: Bulldoze }
-  - { level: 24, move: Volt Switch }
-  - { level: 28, move: Parabolic Charge }
-  - { level: 29, move: Uproar }
-  - { level: 32, move: Thunder Wave }
-  - { level: 36, move: Thunderbolt }
-  - { level: 38, move: Resonance }
-  - { level: 40, move: Electrify }
-  - { level: 44, move: Thunder }
-  - { level: 57, move: Zap Cannon }
-  - { level: 59, move: Hyper Beam }
+  - { level: 1, move: Thunder Shock }
+  - { level: 4, move: Echoed Voice }
+  - { level: 7, move: Mud-Slap }
+  - { level: 10, move: Eerie Impulse }
+  - { level: 13, move: Parabolic Charge }
+  - { level: 16, move: Volt Switch }
+  - { level: 19, move: Mud Shot }
+  - { level: 22, move: Round }
+  - { level: 26, move: Scorching Sands }
+  - { level: 30, move: Discharge }
+  - { level: 34, move: Hyper Voice }
+  - { level: 38, move: Sunny Day }
+  - { level: 42, move: Heat Wave }
+  - { level: 46, move: Thunderclap }
+  - { level: 50, move: Thunder }
+  - { level: 56, move: Solar Beam }
+  - { level: 62, move: Hyper Beam }

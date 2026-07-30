@@ -1,28 +1,32 @@
 name: Mantine
 chrooked_id: mantine
 aka: { pokeemerald: SPECIES_MANTINE }
-stats: { hp: 85 }
+abilities:
+  primary: Swift Swim
+  secondary: Water Absorb
+  hidden: Regenerator
+stats: { hp: 100, def: 65, spa: 90, spd: 145, spe: 65 }
 learnset:
-  - { level: 1, move: Bullet Seed }
-  - { level: 1, move: Roost }
+  - { level: 0, move: Roost }
+  - { level: 1, move: Gust }
   - { level: 1, move: Supersonic }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Gust }
-  - { level: 3, move: Water Gun }
-  - { level: 4, move: Psybeam }
-  - { level: 5, move: Wing Attack }
+  - { level: 1, move: Water Gun }
+  - { level: 5, move: Aqua Ring }
+  - { level: 8, move: Confusion }
   - { level: 12, move: Water Pulse }
   - { level: 16, move: Wide Guard }
-  - { level: 20, move: Agility }
-  - { level: 24, move: Bubble Beam }
-  - { level: 28, move: Headbutt }
-  - { level: 29, move: Muddy Water }
-  - { level: 30, move: Air Slash }
-  - { level: 32, move: Galeburst }
-  - { level: 36, move: Aqua Ring }
-  - { level: 40, move: Bounce }
-  - { level: 43, move: Hurricane }
-  - { level: 44, move: Take Down }
-  - { level: 48, move: Hydro Pump }
+  - { level: 20, move: Air Cutter }
+  - { level: 24, move: Flip Turn }
+  - { level: 28, move: Bubble Beam }
+  - { level: 32, move: Air Slash }
+  - { level: 36, move: Muddy Water }
+  - { level: 40, move: Haze }
+  - { level: 44, move: Galeburst }
+  - { level: 48, move: Heal Bell }
+  - { level: 52, move: Tailwind }
+  - { level: 56, move: Hurricane }
+  - { level: 60, move: Hydro Pump }
   - { level: 64, move: Tsunami }
-  - { level: 65, move: Tempest }
+  - { level: 68, move: Tempest }
+evolution: { from: Mantyke, method: { level: 32 } }

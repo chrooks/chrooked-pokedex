@@ -3,8 +3,10 @@ chrooked_id: serperior
 aka: { pokeemerald: SPECIES_SERPERIOR }
 types: [Grass, Dragon]
 abilities:
-  primary: Chloroplast
-stats: { atk: 85, def: 90, spa: 85, spe: 110 }
+  primary: Overgrow
+  secondary: Chloroplast
+  hidden: Contrary
+stats: { atk: 75, spa: 90, spe: 115 }
 learnset:
   - { level: 1, move: Vine Whip }
   - { level: 1, move: Tackle }
@@ -28,3 +30,4 @@ learnset:
   - { level: 56, move: Leaf Storm }
   - { level: 57, move: Power Whip }
   - { level: 59, move: Outrage }
+evolution: { from: Servine, method: { level: 36 } }

@@ -1,27 +1,31 @@
 name: Totodile
 chrooked_id: totodile
 aka: { pokeemerald: SPECIES_TOTODILE }
+types: [Water, Dragon]
 abilities:
+  primary: Torrent
   secondary: Carnivore
+  hidden: Sheer Force
 learnset:
-  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
-  - { level: 3, move: Undertow }
-  - { level: 6, move: Water Gun }
-  - { level: 9, move: Bite }
-  - { level: 11, move: Maul }
-  - { level: 13, move: Scary Face }
-  - { level: 16, move: Water Whip }
-  - { level: 19, move: Ice Fang }
-  - { level: 22, move: Flail }
-  - { level: 24, move: Breaking Swipe }
-  - { level: 27, move: Crunch }
-  - { level: 30, move: Slash }
-  - { level: 33, move: Screech }
-  - { level: 35, move: Aqua Tail }
-  - { level: 37, move: Thrash }
-  - { level: 39, move: Dragon Hammer }
-  - { level: 41, move: Maelstrom }
-  - { level: 45, move: Superpower }
-  - { level: 50, move: Hydro Pump }
-  - { level: 60, move: Wave Crash }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Water Gun }
+  - { level: 4, move: Maul }
+  - { level: 7, move: Undertow }
+  - { level: 13, move: Bite }
+  - { level: 15, move: Scary Face }
+  - { level: 18, move: Water Whip }
+  - { level: 21, move: Ice Fang }
+  - { level: 24, move: Flail }
+  - { level: 29, move: Draconic Fang }
+  - { level: 32, move: Crunch }
+  - { level: 37, move: Slash }
+  - { level: 40, move: Breaking Swipe }
+  - { level: 44, move: Screech }
+  - { level: 47, move: Dragon Hammer }
+  - { level: 51, move: Liquidation }
+  - { level: 55, move: Superpower }
+  - { level: 57, move: Outrage }
+  - { level: 59, move: Wave Crash }
+  - { level: 65, move: Maelstrom }
+  - { level: 70, move: Hydro Pump }

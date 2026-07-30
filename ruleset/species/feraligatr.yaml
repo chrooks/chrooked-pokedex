@@ -6,10 +6,10 @@ abilities:
   secondary: Carnivore
 stats: { atk: 115, spa: 70, spd: 85, spe: 85 }
 learnset:
-  - { level: 1, move: Scratch }
+  - { level: 0, move: Aqua Tail }
   - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
   - { level: 1, move: Water Gun }
-  - { level: 1, move: Agility }
   - { level: 4, move: Maul }
   - { level: 7, move: Undertow }
   - { level: 13, move: Bite }
@@ -17,16 +17,15 @@ learnset:
   - { level: 18, move: Water Whip }
   - { level: 21, move: Ice Fang }
   - { level: 24, move: Flail }
-  - { level: 28, move: Breaking Swipe }
   - { level: 29, move: Draconic Fang }
   - { level: 32, move: Crunch }
   - { level: 37, move: Slash }
-  - { level: 40, move: Aqua Tail }
+  - { level: 40, move: Breaking Swipe }
   - { level: 44, move: Screech }
   - { level: 47, move: Dragon Hammer }
-  - { level: 51, move: Thrash }
-  - { level: 55, move: Maelstrom }
+  - { level: 51, move: Liquidation }
+  - { level: 55, move: Superpower }
   - { level: 57, move: Outrage }
   - { level: 59, move: Wave Crash }
-  - { level: 65, move: Superpower }
+  - { level: 65, move: Maelstrom }
   - { level: 70, move: Hydro Pump }

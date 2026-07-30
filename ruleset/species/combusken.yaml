@@ -1,36 +1,30 @@
 name: Combusken
 chrooked_id: combusken
 aka: { pokeemerald: SPECIES_COMBUSKEN }
+types: [Fire, Fighting]
 abilities:
+  primary: Blaze
   secondary: Striker
+  hidden: Speed Boost
 learnset:
-  - { level: 0, move: Double Kick }
-  - { level: 1, move: Feather Dance }
+  - { level: 1, move: Double Kick }
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Scratch }
-  - { level: 2, move: Rock Smash }
   - { level: 3, move: Ember }
-  - { level: 4, move: Flamethrower }
-  - { level: 5, move: Aura Spark }
+  - { level: 5, move: Feather Dance }
+  - { level: 7, move: Rock Smash }
   - { level: 9, move: Flame Charge }
-  - { level: 12, move: Detect }
-  - { level: 15, move: Sand Attack }
-  - { level: 16, move: Flame Wheel }
-  - { level: 17, move: Chi Wave }
-  - { level: 18, move: Brick Break }
-  - { level: 20, move: Aerial Ace }
-  - { level: 25, move: Slash }
-  - { level: 30, move: Bounce }
-  - { level: 32, move: Aura Sphere }
-  - { level: 35, move: Focus Energy }
-  - { level: 36, move: Blaze Kick }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 38, move: Cross Chop }
-  - { level: 40, move: Combust }
-  - { level: 45, move: Bulk Up }
-  - { level: 47, move: Ki Blast }
-  - { level: 50, move: Reversal }
-  - { level: 55, move: Flare Blitz }
-  - { level: 57, move: Close Combat }
-  - { level: 62, move: Focus Blast }
+  - { level: 12, move: Double Kick }
+  - { level: 15, move: Flame Wheel }
+  - { level: 19, move: Aerial Ace }
+  - { level: 22, move: Fire Punch }
+  - { level: 27, move: Low Sweep }
+  - { level: 30, move: Jump Kick }
+  - { level: 35, move: Bulk Up }
+  - { level: 37, move: Acrobatics }
+  - { level: 41, move: Cinder Smash }
+  - { level: 45, move: High Jump Kick }
+  - { level: 50, move: Combust }
+  - { level: 56, move: Flare Blitz }
+  - { level: 63, move: Brave Bird }

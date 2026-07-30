@@ -2,34 +2,29 @@ name: Swampert
 chrooked_id: swampert
 aka: { pokeemerald: SPECIES_SWAMPERT }
 abilities:
+  primary: Torrent
   secondary: Regenerator
+  hidden: Swift Swim
 stats: { hp: 105, def: 95, spa: 80 }
 learnset:
-  - { level: 1, move: Hammer Arm }
+  - { level: 0, move: Aqua Tail }
   - { level: 1, move: Growl }
-  - { level: 1, move: Rock Smash }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Water Gun }
-  - { level: 3, move: Clod Toss }
-  - { level: 4, move: Mud Shot }
-  - { level: 5, move: Undertow }
-  - { level: 6, move: Surf }
-  - { level: 7, move: Bulldoze }
-  - { level: 9, move: Rock Throw }
-  - { level: 12, move: Protect }
-  - { level: 15, move: Supersonic }
-  - { level: 16, move: Tectonic Fang }
-  - { level: 17, move: Water Whip }
-  - { level: 20, move: Water Pulse }
-  - { level: 25, move: Rock Slide }
-  - { level: 29, move: Aqua Tail }
-  - { level: 30, move: Take Down }
-  - { level: 31, move: Earthquake }
-  - { level: 35, move: Amnesia }
-  - { level: 38, move: Maelstrom }
-  - { level: 42, move: Muddy Water }
-  - { level: 45, move: Wave Crash }
-  - { level: 49, move: Screech }
-  - { level: 52, move: Faultbreak }
-  - { level: 56, move: Endeavor }
-  - { level: 63, move: Hydro Pump }
+  - { level: 4, move: Water Gun }
+  - { level: 8, move: Clod Toss }
+  - { level: 12, move: Undertow }
+  - { level: 16, move: Bulldoze }
+  - { level: 20, move: Rock Smash }
+  - { level: 24, move: Water Whip }
+  - { level: 28, move: Stomping Tantrum }
+  - { level: 32, move: Rock Slide }
+  - { level: 36, move: Muddy Water }
+  - { level: 40, move: Ice Punch }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Hammer Arm }
+  - { level: 52, move: Maelstrom }
+  - { level: 56, move: Strength }
+  - { level: 60, move: Superpower }
+  - { level: 64, move: Faultbreak }
+  - { level: 68, move: Wave Crash }
+  - { level: 70, move: Hydro Cannon }

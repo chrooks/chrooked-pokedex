@@ -1,30 +1,30 @@
 name: Salazzle
 chrooked_id: salazzle
 aka: { pokeemerald: SPECIES_SALAZZLE }
-stats: { spa: 120, spe: 120 }
+abilities:
+  primary: Corrosion
+  secondary: Oblivious
+  hidden: Serene Grace
+stats: { hp: 70, atk: 70, def: 50, spa: 125, spd: 65, spe: 120 }
 learnset:
-  - { level: 0, move: Fire Lash }
-  - { level: 1, move: Endeavor }
-  - { level: 1, move: Torment }
-  - { level: 1, move: Swagger }
+  - { level: 0, move: Miasma }
+  - { level: 1, move: Ember }
   - { level: 1, move: Poison Gas }
-  - { level: 2, move: Encore }
-  - { level: 3, move: Disable }
-  - { level: 4, move: Ember }
-  - { level: 5, move: Scratch }
+  - { level: 1, move: Scratch }
   - { level: 6, move: Smog }
-  - { level: 7, move: Pound }
-  - { level: 8, move: Knock Off }
-  - { level: 15, move: Poison Fang }
-  - { level: 20, move: Sweet Scent }
-  - { level: 25, move: Nasty Plot }
-  - { level: 30, move: Incinerate }
-  - { level: 33, move: Venoshock }
-  - { level: 37, move: Miasma }
-  - { level: 43, move: Sludge Wave }
-  - { level: 44, move: Dragon Pulse }
-  - { level: 45, move: Fire Blast }
-  - { level: 51, move: Flamethrower }
-  - { level: 57, move: Overheat }
-  - { level: 58, move: Toxic }
-  - { level: 64, move: Contagion }
+  - { level: 10, move: Incinerate }
+  - { level: 12, move: Encore }
+  - { level: 15, move: Clear Smog }
+  - { level: 18, move: Dragon Breath }
+  - { level: 22, move: Flame Burst }
+  - { level: 26, move: Venoshock }
+  - { level: 30, move: Snarl }
+  - { level: 34, move: Flamethrower }
+  - { level: 38, move: Sludge Bomb }
+  - { level: 42, move: Toxic }
+  - { level: 46, move: Dark Pulse }
+  - { level: 50, move: Fire Blast }
+  - { level: 55, move: Sludge Wave }
+  - { level: 60, move: Contagion }
+  - { level: 65, move: Overheat }
+  - { level: 70, move: Cataclysm }

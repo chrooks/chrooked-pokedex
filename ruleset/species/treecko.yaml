@@ -1,28 +1,37 @@
 name: Treecko
 chrooked_id: treecko
 aka: { pokeemerald: SPECIES_TREECKO }
+types: [Grass, Dragon]
 abilities:
-  secondary: Chloroplast
-  hidden: Forestry
+  primary: Overgrow
+  secondary: Forestry
+  hidden: Sharpness
 stats: { atk: 50, def: 30 }
 learnset:
+  - { level: 1, move: Fury Cutter }
   - { level: 1, move: Leer }
-  - { level: 1, move: Pound }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Shed Tail }
+  - { level: 2, move: Maul }
   - { level: 3, move: Leafage }
-  - { level: 6, move: Quick Attack }
-  - { level: 9, move: Mega Drain }
+  - { level: 4, move: Pound }
+  - { level: 5, move: Mega Drain }
+  - { level: 6, move: Razor Leaf }
   - { level: 12, move: Slash }
-  - { level: 15, move: Fury Cutter }
-  - { level: 16, move: Razor Leaf }
-  - { level: 18, move: Assurance }
-  - { level: 21, move: Giga Drain }
-  - { level: 24, move: Night Slash }
-  - { level: 27, move: Psycho Cut }
-  - { level: 30, move: Energy Ball }
-  - { level: 33, move: X-Scissor }
-  - { level: 36, move: Dragon Claw }
-  - { level: 39, move: Siphon }
-  - { level: 41, move: Reap }
-  - { level: 43, move: Leaf Storm }
-  - { level: 44, move: Breaking Swipe }
-  - { level: 48, move: Solar Blade }
+  - { level: 15, move: Leaf Blade }
+  - { level: 18, move: Detect }
+  - { level: 20, move: Night Slash }
+  - { level: 24, move: Assurance }
+  - { level: 25, move: Giga Drain }
+  - { level: 28, move: Psycho Cut }
+  - { level: 32, move: X-Scissor }
+  - { level: 36, move: Breaking Swipe }
+  - { level: 38, move: Reap }
+  - { level: 40, move: Dragon Claw }
+  - { level: 43, move: Dragon Hammer }
+  - { level: 44, move: Screech }
+  - { level: 48, move: Leaf Storm }
+  - { level: 52, move: Solar Blade }
+  - { level: 56, move: Dragon Rush }
+  - { level: 57, move: Power Whip }
+  - { level: 62, move: Glaive Rush }

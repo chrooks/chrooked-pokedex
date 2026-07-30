@@ -8,26 +8,25 @@ abilities:
 stats: { hp: 85, atk: 80, def: 105, spa: 85, spd: 105 }
 learnset:
   - { level: 0, move: Petal Dance }
+  - { level: 1, move: Absorb }
   - { level: 1, move: Growl }
-  - { level: 1, move: Poison Powder }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Razor Leaf }
-  - { level: 2, move: Absorb }
-  - { level: 3, move: Disarming Voice }
-  - { level: 4, move: Petal Blizzard }
-  - { level: 12, move: Synthesis }
+  - { level: 6, move: Disarming Voice }
+  - { level: 9, move: Poison Powder }
+  - { level: 12, move: Mega Drain }
   - { level: 15, move: Beguile }
   - { level: 18, move: Reflect }
+  - { level: 22, move: Draining Kiss }
   - { level: 22, move: Magical Leaf }
   - { level: 26, move: Leech Seed }
   - { level: 29, move: Giga Drain }
   - { level: 31, move: Dazzling Gleam }
-  - { level: 34, move: Sweet Scent }
+  - { level: 34, move: Synthesis }
   - { level: 37, move: Energy Ball }
   - { level: 40, move: Light Screen }
   - { level: 43, move: Moonblast }
   - { level: 46, move: Body Slam }
-  - { level: 54, move: Safeguard }
+  - { level: 54, move: Recover }
   - { level: 57, move: Rapture }
   - { level: 60, move: Siphon }
   - { level: 65, move: Solar Beam }

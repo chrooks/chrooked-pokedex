@@ -8,31 +8,26 @@ abilities:
 stats: { atk: 105, def: 60, spd: 80 }
 learnset:
   - { level: 0, move: Dragon Claw }
+  - { level: 1, move: Fury Cutter }
+  - { level: 1, move: Leafage }
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Shed Tail }
-  - { level: 1, move: Fury Cutter }
-  - { level: 2, move: Maul }
-  - { level: 3, move: Leafage }
-  - { level: 4, move: Pound }
-  - { level: 5, move: Mega Drain }
-  - { level: 6, move: Razor Leaf }
+  - { level: 6, move: Dual Chop }
+  - { level: 8, move: Razor Leaf }
   - { level: 12, move: Slash }
-  - { level: 15, move: Leaf Blade }
-  - { level: 18, move: Detect }
-  - { level: 20, move: Night Slash }
-  - { level: 24, move: Assurance }
-  - { level: 25, move: Giga Drain }
-  - { level: 28, move: Psycho Cut }
+  - { level: 15, move: Mega Drain }
+  - { level: 18, move: Maul }
+  - { level: 20, move: Detect }
+  - { level: 22, move: Night Slash }
+  - { level: 26, move: Psycho Cut }
+  - { level: 28, move: Leaf Blade }
   - { level: 32, move: X-Scissor }
-  - { level: 36, move: Breaking Swipe }
-  - { level: 38, move: Reap }
-  - { level: 40, move: Dragon Claw }
-  - { level: 43, move: Dragon Hammer }
-  - { level: 44, move: Screech }
-  - { level: 48, move: Leaf Storm }
-  - { level: 52, move: Solar Blade }
-  - { level: 56, move: Dragon Rush }
-  - { level: 57, move: Power Whip }
+  - { level: 36, move: Screech }
+  - { level: 38, move: Dragon Claw }
+  - { level: 40, move: Reap }
+  - { level: 44, move: Shed Tail }
+  - { level: 48, move: Solar Blade }
+  - { level: 52, move: Dragon Rush }
+  - { level: 56, move: Power Whip }
   - { level: 62, move: Glaive Rush }
 evolution: { from: Grovyle, method: { level: 36 } }

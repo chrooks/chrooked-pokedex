@@ -1,22 +1,29 @@
 name: Salandit
 chrooked_id: salandit
 aka: { dex: 757 }
+types: [Poison, Fire]
+abilities:
+  primary: Corrosion
+  secondary: Oblivious
+  hidden: Serene Grace
 learnset:
-  - { level: 1, move: Scratch }
+  - { level: 1, move: Ember }
   - { level: 1, move: Poison Gas }
-  - { level: 5, move: Smog }
-  - { level: 10, move: Ember }
-  - { level: 15, move: Poison Fang }
-  - { level: 20, move: Sweet Scent }
-  - { level: 25, move: Nasty Plot }
-  - { level: 30, move: Incinerate }
-  - { level: 32, move: Venoshock }
-  - { level: 35, move: Miasma }
-  - { level: 40, move: Dragon Pulse }
-  - { level: 43, move: Sludge Wave }
-  - { level: 45, move: Flamethrower }
-  - { level: 46, move: Fire Blast }
-  - { level: 50, move: Toxic }
-  - { level: 55, move: Endeavor }
-  - { level: 57, move: Overheat }
-  - { level: 64, move: Contagion }
+  - { level: 1, move: Scratch }
+  - { level: 6, move: Smog }
+  - { level: 10, move: Incinerate }
+  - { level: 12, move: Encore }
+  - { level: 15, move: Clear Smog }
+  - { level: 18, move: Dragon Breath }
+  - { level: 22, move: Flame Burst }
+  - { level: 26, move: Venoshock }
+  - { level: 30, move: Snarl }
+  - { level: 34, move: Flamethrower }
+  - { level: 38, move: Sludge Bomb }
+  - { level: 42, move: Toxic }
+  - { level: 46, move: Dark Pulse }
+  - { level: 50, move: Fire Blast }
+  - { level: 55, move: Sludge Wave }
+  - { level: 60, move: Contagion }
+  - { level: 65, move: Overheat }
+  - { level: 70, move: Cataclysm }

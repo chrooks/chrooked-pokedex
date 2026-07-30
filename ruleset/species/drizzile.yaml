@@ -1,7 +1,6 @@
 name: Drizzile
 chrooked_id: drizzile
 aka: { pokeemerald: SPECIES_DRIZZILE }
-types: [Water, Dark]
 stats: { atk: 50, spd: 50 }
 learnset:
   - { level: 1, move: Pound }

@@ -1,28 +1,31 @@
 name: Makuhita
 chrooked_id: makuhita
 aka: { dex: 296 }
+types: [Fighting]
+abilities:
+  primary: Thick Fat
+  secondary: Iron Fist
+  hidden: Sheer Force
 learnset:
+  - { level: 1, move: Fake Out }
+  - { level: 1, move: Sand Attack }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Focus Energy }
-  - { level: 2, move: Aura Spark }
-  - { level: 3, move: Rock Smash }
-  - { level: 4, move: Sand Attack }
-  - { level: 7, move: Arm Thrust }
-  - { level: 10, move: Fake Out }
-  - { level: 13, move: Force Palm }
-  - { level: 15, move: Chi Wave }
-  - { level: 16, move: Whirlwind }
-  - { level: 19, move: Knock Off }
+  - { level: 5, move: Focus Energy }
+  - { level: 8, move: Arm Thrust }
+  - { level: 12, move: Rock Smash }
+  - { level: 15, move: Force Palm }
+  - { level: 18, move: Knock Off }
+  - { level: 20, move: Whirlwind }
   - { level: 22, move: Bulk Up }
-  - { level: 25, move: Belly Drum }
-  - { level: 28, move: Detect }
-  - { level: 30, move: Ki Blast }
-  - { level: 31, move: Seismic Toss }
-  - { level: 34, move: Focus Punch }
-  - { level: 36, move: One-Inch Punch }
-  - { level: 37, move: Endure }
-  - { level: 40, move: Cross Chop }
-  - { level: 43, move: Reversal }
-  - { level: 46, move: Heavy Slam }
-  - { level: 48, move: Close Combat }
-  - { level: 62, move: Focus Blast }
+  - { level: 25, move: Seismic Toss }
+  - { level: 28, move: Aura Spark }
+  - { level: 30, move: Ice Punch }
+  - { level: 33, move: Thunder Punch }
+  - { level: 36, move: Fire Punch }
+  - { level: 40, move: Belly Drum }
+  - { level: 44, move: Detect }
+  - { level: 48, move: One-Inch Punch }
+  - { level: 53, move: Cross Chop }
+  - { level: 58, move: Close Combat }
+  - { level: 63, move: Focus Punch }
+  - { level: 68, move: Headlong Rush }

@@ -1,25 +1,29 @@
 name: Mudkip
 chrooked_id: mudkip
 aka: { dex: 258 }
+types: [Water, Ground]
+abilities:
+  primary: Torrent
+  secondary: Regenerator
+  hidden: Swift Swim
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 2, move: Undertow }
-  - { level: 3, move: Water Gun }
-  - { level: 6, move: Rock Smash }
-  - { level: 9, move: Rock Throw }
-  - { level: 12, move: Protect }
-  - { level: 14, move: Water Whip }
-  - { level: 15, move: Supersonic }
-  - { level: 18, move: Water Pulse }
-  - { level: 21, move: Rock Slide }
-  - { level: 24, move: Take Down }
-  - { level: 27, move: Amnesia }
-  - { level: 29, move: Aqua Tail }
-  - { level: 30, move: Surf }
-  - { level: 33, move: Screech }
-  - { level: 36, move: Endeavor }
-  - { level: 39, move: Hydro Pump }
-  - { level: 45, move: Maelstrom }
-  - { level: 60, move: Wave Crash }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Water Gun }
+  - { level: 8, move: Clod Toss }
+  - { level: 12, move: Undertow }
+  - { level: 16, move: Bulldoze }
+  - { level: 20, move: Rock Smash }
+  - { level: 24, move: Water Whip }
+  - { level: 28, move: Stomping Tantrum }
+  - { level: 32, move: Rock Slide }
+  - { level: 36, move: Muddy Water }
+  - { level: 40, move: Ice Punch }
+  - { level: 44, move: Earthquake }
+  - { level: 48, move: Hammer Arm }
+  - { level: 52, move: Maelstrom }
+  - { level: 56, move: Strength }
+  - { level: 60, move: Superpower }
   - { level: 64, move: Faultbreak }
+  - { level: 68, move: Wave Crash }
+  - { level: 70, move: Hydro Cannon }

@@ -1,31 +1,30 @@
 name: Torchic
 chrooked_id: torchic
 aka: { dex: 255 }
+types: [Fire, Fighting]
+abilities:
+  primary: Blaze
+  secondary: Striker
+  hidden: Speed Boost
 learnset:
-  - { level: 1, move: Scratch }
+  - { level: 1, move: Double Kick }
   - { level: 1, move: Growl }
-  - { level: 2, move: Aura Spark }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Scratch }
   - { level: 3, move: Ember }
-  - { level: 6, move: Quick Attack }
+  - { level: 5, move: Feather Dance }
+  - { level: 7, move: Rock Smash }
   - { level: 9, move: Flame Charge }
-  - { level: 12, move: Detect }
-  - { level: 15, move: Sand Attack }
-  - { level: 16, move: Chi Wave }
-  - { level: 17, move: Incinerate }
-  - { level: 18, move: Aerial Ace }
-  - { level: 21, move: Slash }
-  - { level: 24, move: Bounce }
-  - { level: 27, move: Focus Energy }
-  - { level: 30, move: Flamethrower }
-  - { level: 33, move: Feather Dance }
-  - { level: 36, move: Reversal }
-  - { level: 39, move: Cinder Smash }
-  - { level: 41, move: Aura Sphere }
-  - { level: 43, move: Combust }
-  - { level: 44, move: Fire Blast }
-  - { level: 45, move: Ki Blast }
-  - { level: 46, move: Flare Blitz }
-  - { level: 47, move: One-Inch Punch }
-  - { level: 48, move: Cross Chop }
-  - { level: 57, move: Overheat }
-  - { level: 62, move: Focus Blast }
+  - { level: 12, move: Double Kick }
+  - { level: 15, move: Flame Wheel }
+  - { level: 19, move: Aerial Ace }
+  - { level: 22, move: Fire Punch }
+  - { level: 27, move: Low Sweep }
+  - { level: 30, move: Jump Kick }
+  - { level: 35, move: Bulk Up }
+  - { level: 37, move: Acrobatics }
+  - { level: 41, move: Cinder Smash }
+  - { level: 45, move: High Jump Kick }
+  - { level: 50, move: Combust }
+  - { level: 56, move: Flare Blitz }
+  - { level: 63, move: Brave Bird }

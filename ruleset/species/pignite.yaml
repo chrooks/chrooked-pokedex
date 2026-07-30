@@ -1,29 +1,30 @@
 name: Pignite
 chrooked_id: pignite
 aka: { pokeemerald: SPECIES_PIGNITE }
-types: [Fire, Dark]
+types: [Fire, Ground]
+abilities:
+  primary: Blaze
+  secondary: Regenerator
+stats: { hp: 92, atk: 102, def: 70, spa: 34, spd: 70, spe: 62 }
 learnset:
-  - { level: 0, move: Arm Thrust }
+  - { level: 1, move: Ember }
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Endure }
-  - { level: 2, move: Cheap Shot }
-  - { level: 13, move: Defense Curl }
-  - { level: 15, move: Flame Charge }
-  - { level: 16, move: Flame Wheel }
-  - { level: 20, move: Smog }
-  - { level: 23, move: Rollout }
-  - { level: 28, move: Take Down }
-  - { level: 31, move: Heat Crash }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Assurance }
-  - { level: 37, move: Cinder Smash }
-  - { level: 39, move: Flamethrower }
-  - { level: 41, move: Heel Drop }
-  - { level: 42, move: Combust }
-  - { level: 43, move: Backstab }
-  - { level: 44, move: Head Smash }
-  - { level: 47, move: Roar }
-  - { level: 52, move: Flare Blitz }
-  - { level: 57, move: Havoc }
+  - { level: 5, move: Arm Thrust }
+  - { level: 8, move: Clod Toss }
+  - { level: 10, move: Flame Charge }
+  - { level: 14, move: Rollout }
+  - { level: 16, move: Bulldoze }
+  - { level: 20, move: Flame Wheel }
+  - { level: 24, move: U-turn }
+  - { level: 26, move: Take Down }
+  - { level: 28, move: Will-O-Wisp }
+  - { level: 32, move: Earthquake }
+  - { level: 36, move: Heat Crash }
+  - { level: 44, move: Cinder Smash }
+  - { level: 48, move: Combust }
+  - { level: 50, move: Wild Charge }
+  - { level: 54, move: Head Smash }
+  - { level: 58, move: Faultbreak }
+  - { level: 64, move: Havoc }
+  - { level: 70, move: Flare Blitz }

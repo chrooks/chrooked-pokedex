@@ -7,3 +7,4 @@ power: 100
 accuracy: 90
 pp: 10
 description: A resonant pulse of raw force.
+flags: [sound]

@@ -1,24 +1,30 @@
 name: Mantyke
 chrooked_id: mantyke
 aka: {  }
+types: [Water, Flying]
+abilities:
+  primary: Swift Swim
+  secondary: Water Absorb
+  hidden: Regenerator
 learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Supersonic }
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
-  - { level: 2, move: Gust }
-  - { level: 4, move: Supersonic }
-  - { level: 8, move: Wing Attack }
+  - { level: 5, move: Aqua Ring }
+  - { level: 8, move: Confusion }
   - { level: 12, move: Water Pulse }
   - { level: 16, move: Wide Guard }
-  - { level: 20, move: Agility }
-  - { level: 24, move: Bubble Beam }
-  - { level: 28, move: Headbutt }
-  - { level: 29, move: Muddy Water }
-  - { level: 30, move: Air Slash }
-  - { level: 32, move: Galeburst }
-  - { level: 36, move: Aqua Ring }
-  - { level: 40, move: Bounce }
-  - { level: 43, move: Hurricane }
-  - { level: 44, move: Take Down }
-  - { level: 48, move: Hydro Pump }
+  - { level: 20, move: Air Cutter }
+  - { level: 24, move: Flip Turn }
+  - { level: 28, move: Bubble Beam }
+  - { level: 32, move: Air Slash }
+  - { level: 36, move: Muddy Water }
+  - { level: 40, move: Haze }
+  - { level: 44, move: Galeburst }
+  - { level: 48, move: Heal Bell }
+  - { level: 52, move: Tailwind }
+  - { level: 56, move: Hurricane }
+  - { level: 60, move: Hydro Pump }
   - { level: 64, move: Tsunami }
-  - { level: 65, move: Tempest }
+  - { level: 68, move: Tempest }

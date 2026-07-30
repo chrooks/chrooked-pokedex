@@ -1,11 +1,14 @@
 name: Croconaw
 chrooked_id: croconaw
 aka: { pokeemerald: SPECIES_CROCONAW }
+types: [Water, Dragon]
 abilities:
+  primary: Torrent
   secondary: Carnivore
+  hidden: Sheer Force
 learnset:
-  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
   - { level: 1, move: Water Gun }
   - { level: 4, move: Maul }
   - { level: 7, move: Undertow }
@@ -14,14 +17,15 @@ learnset:
   - { level: 18, move: Water Whip }
   - { level: 21, move: Ice Fang }
   - { level: 24, move: Flail }
-  - { level: 27, move: Breaking Swipe }
-  - { level: 30, move: Crunch }
-  - { level: 32, move: Aqua Tail }
-  - { level: 34, move: Slash }
-  - { level: 37, move: Screech }
-  - { level: 39, move: Dragon Hammer }
-  - { level: 42, move: Thrash }
-  - { level: 47, move: Maelstrom }
-  - { level: 50, move: Superpower }
-  - { level: 55, move: Hydro Pump }
-  - { level: 60, move: Wave Crash }
+  - { level: 29, move: Draconic Fang }
+  - { level: 32, move: Crunch }
+  - { level: 37, move: Slash }
+  - { level: 40, move: Breaking Swipe }
+  - { level: 44, move: Screech }
+  - { level: 47, move: Dragon Hammer }
+  - { level: 51, move: Liquidation }
+  - { level: 55, move: Superpower }
+  - { level: 57, move: Outrage }
+  - { level: 59, move: Wave Crash }
+  - { level: 65, move: Maelstrom }
+  - { level: 70, move: Hydro Pump }

@@ -1,26 +1,33 @@
 name: Piplup
 chrooked_id: piplup
 aka: { pokeemerald: SPECIES_PIPLUP }
+types: [Water, Steel]
 abilities:
+  primary: Torrent
+  secondary: Frighten
   hidden: Intimidate
 learnset:
-  - { level: 1, move: Pound }
-  - { level: 4, move: Growl }
-  - { level: 6, move: Glint }
-  - { level: 8, move: Water Gun }
-  - { level: 11, move: Charm }
-  - { level: 15, move: Peck }
-  - { level: 18, move: Bubble Beam }
-  - { level: 20, move: Water Whip }
-  - { level: 21, move: Mirror Shot }
-  - { level: 22, move: Swagger }
-  - { level: 25, move: Fury Attack }
-  - { level: 29, move: Brine }
-  - { level: 30, move: Muddy Water }
-  - { level: 32, move: Whirlpool }
-  - { level: 36, move: Mist }
-  - { level: 39, move: Drill Peck }
-  - { level: 43, move: Hydro Pump }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 7, move: Aqua Jet }
+  - { level: 10, move: Peck }
+  - { level: 13, move: Undertow }
+  - { level: 16, move: Glint }
+  - { level: 19, move: Bubble Beam }
+  - { level: 22, move: Smart Strike }
+  - { level: 25, move: Flip Turn }
+  - { level: 28, move: Water Whip }
+  - { level: 31, move: Mirror Shot }
+  - { level: 34, move: Aerial Ace }
+  - { level: 37, move: Liquidation }
+  - { level: 40, move: Swagger }
+  - { level: 44, move: Metallic Fang }
   - { level: 48, move: Luster Cannon }
-  - { level: 62, move: Steel Beam }
-  - { level: 64, move: Tsunami }
+  - { level: 52, move: Drill Peck }
+  - { level: 56, move: Wave Crash }
+  - { level: 58, move: Hydro Pump }
+  - { level: 62, move: Excalibur }
+  - { level: 66, move: Steel Beam }
+  - { level: 70, move: Tsunami }

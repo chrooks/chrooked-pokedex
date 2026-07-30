@@ -3,34 +3,33 @@ chrooked_id: prinplup
 aka: { pokeemerald: SPECIES_PRINPLUP }
 types: [Water, Steel]
 abilities:
+  primary: Torrent
+  secondary: Frighten
   hidden: Intimidate
 stats: { hp: 65, atk: 75, def: 70, spa: 75, spd: 75 }
 learnset:
-  - { level: 0, move: Metal Claw }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
+  - { level: 1, move: Metal Claw }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
-  - { level: 2, move: Undertow }
-  - { level: 8, move: Glint }
-  - { level: 15, move: Peck }
-  - { level: 16, move: Smart Strike }
-  - { level: 17, move: Water Whip }
+  - { level: 7, move: Aqua Jet }
+  - { level: 10, move: Peck }
+  - { level: 13, move: Undertow }
+  - { level: 16, move: Glint }
   - { level: 19, move: Bubble Beam }
-  - { level: 21, move: Mirror Shot }
-  - { level: 24, move: Swagger }
-  - { level: 28, move: Fury Attack }
-  - { level: 29, move: Aqua Tail }
-  - { level: 31, move: Metallic Fang }
-  - { level: 33, move: Brine }
-  - { level: 37, move: Whirlpool }
-  - { level: 39, move: Luster Cannon }
-  - { level: 42, move: Mist }
-  - { level: 43, move: Maelstrom }
-  - { level: 45, move: Iron Tail }
-  - { level: 46, move: Drill Peck }
-  - { level: 50, move: Hydro Pump }
-  - { level: 57, move: Wave Crash }
-  - { level: 59, move: Excalibur }
-  - { level: 62, move: Steel Beam }
-  - { level: 64, move: Tsunami }
+  - { level: 22, move: Smart Strike }
+  - { level: 25, move: Flip Turn }
+  - { level: 28, move: Water Whip }
+  - { level: 31, move: Mirror Shot }
+  - { level: 34, move: Aerial Ace }
+  - { level: 37, move: Liquidation }
+  - { level: 40, move: Swagger }
+  - { level: 44, move: Metallic Fang }
+  - { level: 48, move: Luster Cannon }
+  - { level: 52, move: Drill Peck }
+  - { level: 56, move: Wave Crash }
+  - { level: 58, move: Hydro Pump }
+  - { level: 62, move: Excalibur }
+  - { level: 66, move: Steel Beam }
+  - { level: 70, move: Tsunami }
 evolution: { from: Piplup, method: { level: 16 } }

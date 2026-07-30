@@ -5,23 +5,23 @@ abilities:
   hidden: Mineralize
 stats: { hp: 90, atk: 120, spa: 45, spd: 85 }
 learnset:
+  - { level: 0, move: Head Smash }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Rock Polish }
-  - { level: 1, move: Heavy Slam }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Clod Toss }
-  - { level: 15, move: Rock Throw }
-  - { level: 16, move: Smack Down }
-  - { level: 18, move: Rock Slide }
+  - { level: 8, move: Clod Toss }
+  - { level: 12, move: Rock Throw }
+  - { level: 15, move: Smack Down }
+  - { level: 18, move: Rollout }
   - { level: 22, move: Bulldoze }
-  - { level: 24, move: Self-Destruct }
-  - { level: 29, move: Lithic Fang }
+  - { level: 24, move: Headbutt }
+  - { level: 27, move: Rock Slide }
   - { level: 30, move: Stealth Rock }
-  - { level: 31, move: Tectonic Fang }
-  - { level: 34, move: Rock Blast }
+  - { level: 34, move: Stone Axe }
+  - { level: 38, move: Body Slam }
   - { level: 40, move: Earthquake }
-  - { level: 44, move: Explosion }
+  - { level: 44, move: Stone Edge }
   - { level: 50, move: Double-Edge }
-  - { level: 54, move: Stone Edge }
+  - { level: 54, move: Wild Charge }
   - { level: 57, move: Head Smash }
   - { level: 64, move: Faultbreak }

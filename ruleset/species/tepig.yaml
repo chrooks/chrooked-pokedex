@@ -1,24 +1,30 @@
 name: Tepig
 chrooked_id: tepig
 aka: { dex: 498 }
+types: [Fire, Ground]
+abilities:
+  primary: Blaze
+  secondary: Regenerator
+stats: { hp: 68, atk: 72, def: 52, spa: 26, spd: 52, spe: 50 }
 learnset:
+  - { level: 1, move: Ember }
   - { level: 1, move: Tackle }
-  - { level: 3, move: Tail Whip }
-  - { level: 7, move: Ember }
-  - { level: 9, move: Endure }
-  - { level: 13, move: Defense Curl }
-  - { level: 15, move: Flame Charge }
-  - { level: 16, move: Flame Wheel }
-  - { level: 19, move: Smog }
-  - { level: 21, move: Rollout }
-  - { level: 25, move: Take Down }
-  - { level: 27, move: Heat Crash }
-  - { level: 31, move: Assurance }
-  - { level: 33, move: Flamethrower }
-  - { level: 35, move: One-Inch Punch }
-  - { level: 37, move: Head Smash }
-  - { level: 39, move: Roar }
-  - { level: 41, move: Cinder Smash }
-  - { level: 43, move: Combust }
-  - { level: 46, move: Flare Blitz }
-  - { level: 48, move: Heel Drop }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Arm Thrust }
+  - { level: 8, move: Clod Toss }
+  - { level: 10, move: Flame Charge }
+  - { level: 14, move: Rollout }
+  - { level: 16, move: Bulldoze }
+  - { level: 20, move: Flame Wheel }
+  - { level: 24, move: U-turn }
+  - { level: 26, move: Take Down }
+  - { level: 28, move: Will-O-Wisp }
+  - { level: 32, move: Earthquake }
+  - { level: 36, move: Heat Crash }
+  - { level: 44, move: Cinder Smash }
+  - { level: 48, move: Combust }
+  - { level: 50, move: Wild Charge }
+  - { level: 54, move: Head Smash }
+  - { level: 58, move: Faultbreak }
+  - { level: 64, move: Havoc }
+  - { level: 70, move: Flare Blitz }

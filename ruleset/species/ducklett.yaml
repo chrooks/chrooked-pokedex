@@ -1,26 +1,32 @@
 name: Ducklett
 chrooked_id: ducklett
 aka: { pokeemerald: SPECIES_DUCKLETT }
+types: [Water, Flying]
+abilities:
+  primary: Keen Eye
+  secondary: Hydration
+  hidden: Liquid Voice
 stats: { spa: 64 }
 learnset:
+  - { level: 1, move: Defog }
+  - { level: 1, move: Gust }
   - { level: 1, move: Water Gun }
-  - { level: 2, move: Gust }
-  - { level: 6, move: Defog }
-  - { level: 9, move: Wing Attack }
-  - { level: 13, move: Water Pulse }
-  - { level: 15, move: Aerial Ace }
+  - { level: 5, move: Growl }
+  - { level: 10, move: Water Pulse }
+  - { level: 13, move: Echoed Voice }
+  - { level: 15, move: Air Cutter }
   - { level: 19, move: Bubble Beam }
   - { level: 21, move: Feather Dance }
   - { level: 24, move: Aqua Ring }
   - { level: 27, move: Air Slash }
-  - { level: 29, move: Muddy Water }
+  - { level: 29, move: Sparkling Aria }
   - { level: 30, move: Roost }
-  - { level: 32, move: Galeburst }
   - { level: 34, move: Rain Dance }
-  - { level: 37, move: Tailwind }
-  - { level: 41, move: Brave Bird }
+  - { level: 37, move: Galeburst }
+  - { level: 40, move: Tailwind }
   - { level: 43, move: Hydro Pump }
-  - { level: 46, move: Hurricane }
-  - { level: 63, move: Tempest }
-  - { level: 64, move: Oblivion Wing }
+  - { level: 47, move: Perish Song }
+  - { level: 55, move: Oblivion Wing }
+  - { level: 63, move: Hurricane }
   - { level: 65, move: Tsunami }
+  - { level: 70, move: Boomburst }

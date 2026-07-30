@@ -66,3 +66,119 @@ direction picked, options rejected, and corrections given along the way. Appende
 ## 2026-07-26 — Tsareena line
 
 - **Direction:** learnset-only repass
+
+## 2026-07-28 — Chimecho line
+
+- **Direction:** abilities + learnset repass
+
+## 2026-07-28 — Mantine line
+
+- **Direction:** special wall / cleric — typing Water/Flying
+
+## 2026-07-28 — Heliolisk line
+
+- **Direction:** learnset-only repass
+- **Corrections:** fire & ground coverage + solar beam. better pacing. not too many moves before L10
+
+## 2026-07-28 — Typhlosion line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-28 — Typhlosion Hisui line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-28 — Meganium line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-28 — Feraligatr line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-28 — Sceptile line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Keep shed tail and give good slicing move variety
+
+## 2026-07-28 — Swanna line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Prioritize sound moves
+
+## 2026-07-28 — Swanna line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-07-28 — Blaziken line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-28 — Swampert line
+
+- **Direction:** abilities + learnset repass
+- **Corrections:** Keep these author edits fixed on the re-roll:
+- the hidden ability swift swim; stay on physical side, space out moves so that nothign is within 3 levels, place down the stabs first water gun -> undertow -> water whip -> liquidation/aqua tail -> maelstrom -> wave crash
+cldo toss -> bulldoze -> stomping tantrum -> earthquake -> faultbreak
+
+then place coverage: fighting type moves like rock smash, hammer arm, super power; rock like rock throw rock slide strength
+
+give it some status moves that are pure flavor for the type of creature this line is
+
+## 2026-07-29 — Torterra line
+
+- **Direction:** learnset-only repass
+- **Corrections:** stay on physical side,
+ space out moves so that nothign is learned within 3 levels,
+place down the stabs first:
+leafge -> razor leaf -> seed bomb -> grav apple -> reap -> wood hammer -> solar blade
+cldo toss -> bulldoze -> stomping tantrum -> earthquake -> faultbreak & headlong rush
+
+then place coverage:
+bite, crunch,  rock like rock throw rock slide, stone edge
+
+give it some status moves that are pure flavor for the type of creature this line is
+leech seed, curse, withdraw, sythesis, etc.
+
+## 2026-07-29 — Golem line
+
+- **Direction:** learnset-only repass
+- **Corrections:** recoil moves are encouraged
+
+## 2026-07-29 — Golem Alola line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-29 — Infernape line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Give good punching move coverage
+
+## 2026-07-29 — Empoleon line
+
+- **Direction:** learnset-only repass
+
+## 2026-07-29 — Empoleon line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-07-29 — Emboar line (full makeover)
+
+- **Direction picked:** "Firestarter × Guardian" hybrid — a bulky Fire/Ground physical **Regenerator pivot**. Ecology throughline: the ecosystem-engineer that churns earth (Ground) and the loyal guardian that endures (Regenerator).
+- **Options rejected:** (1) Fire/Ground + **Drought** sun-wallbreaker — team-warping, higher ceiling but commits the teambuilder; (3) pure **Fire** + Regenerator tank — tankiest, fewest weaknesses, but loses Earthquake coverage. Chris was between 1 and 3; the hybrid took Fire/Ground's coverage + Regenerator's self-sustain, dropping the sun engine.
+- **Constraints (Chris):** 540 BST, Fire primary, Blaze primary ability, high Atk.
+- **Typing:** Fire/Ground (unchanged from prior override).
+- **Stats (Emboar 528→540, +12):** 110 / 125 / 85 / 40 / 85 / 95 (HP/Atk/Def/SpA/SpD/Spe). Same +12 delta scaled down: Pignite 418→430 (92/102/70/34/70/62), Tepig 308→320 (68/72/52/26/52/50), role emphasis preserved (dump SpA).
+- **Abilities:** Blaze (primary) / **Regenerator** (secondary). Dropped Thick Fat + Reckless (hidden) across the line.
+- **Learnset:** kept the existing Fire+Ground physical STAB ramp; two swaps for the pivot identity — **Smog → U-turn @24** (the Regenerator retreat-and-heal enabler) and **Slack Off → Will-O-Wisp @28** (Regenerator makes Slack Off redundant; Will-O-Wisp is on-flavor and burns the physical attackers it walls). Copied down to pre-evos minus the L0 Flare Blitz.
+- **Corrections (Chris):** "remove slack off it doesnt need it w regenerator, give it some other flavor or utility status move" → Will-O-Wisp chosen (Stealth Rock was runner-up).
+- **Apply/verify:** applied to Rejuv (`--engine rejuv --category species`); read back montext.rb patch for all three — types, stats (index order [HP,Atk,Def,SpA,SpD,Spe] confirmed vs Bulbasaur), abilities, and moveset rows all match.
+
+## 2026-07-29 — Emboar line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-07-30 — Klinklang line
+
+- **Direction:** abilities + learnset repass
+- **Corrections:** Magnet Pull + something else; keep movepool physical. Should get good utiltity status moves + good electric coverage

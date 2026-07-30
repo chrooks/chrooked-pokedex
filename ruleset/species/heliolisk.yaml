@@ -7,24 +7,24 @@ abilities:
   hidden: Solar Power
 stats: { spa: 115, spe: 112 }
 learnset:
-  - { level: 1, move: Eerie Impulse }
-  - { level: 1, move: Quick Attack }
+  - { level: 0, move: Thunderbolt }
   - { level: 1, move: Charge }
-  - { level: 1, move: Thunder Wave }
-  - { level: 2, move: Echoed Voice }
-  - { level: 3, move: Electrify }
-  - { level: 4, move: Tail Whip }
-  - { level: 5, move: Mud-Slap }
-  - { level: 6, move: Pound }
-  - { level: 7, move: Thunder Shock }
-  - { level: 8, move: Bulldoze }
-  - { level: 9, move: Volt Switch }
-  - { level: 10, move: Parabolic Charge }
-  - { level: 11, move: Discharge }
-  - { level: 12, move: Thunderbolt }
-  - { level: 13, move: Thunder }
-  - { level: 15, move: Swift }
-  - { level: 29, move: Uproar }
-  - { level: 46, move: Resonance }
-  - { level: 57, move: Zap Cannon }
-  - { level: 59, move: Hyper Beam }
+  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Tail Whip }
+  - { level: 1, move: Thunder Shock }
+  - { level: 4, move: Echoed Voice }
+  - { level: 7, move: Mud-Slap }
+  - { level: 10, move: Eerie Impulse }
+  - { level: 13, move: Parabolic Charge }
+  - { level: 16, move: Volt Switch }
+  - { level: 19, move: Mud Shot }
+  - { level: 22, move: Round }
+  - { level: 26, move: Scorching Sands }
+  - { level: 30, move: Discharge }
+  - { level: 34, move: Hyper Voice }
+  - { level: 38, move: Sunny Day }
+  - { level: 42, move: Heat Wave }
+  - { level: 46, move: Thunderclap }
+  - { level: 50, move: Thunder }
+  - { level: 56, move: Solar Beam }
+  - { level: 62, move: Hyper Beam }

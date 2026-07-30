@@ -3,29 +3,29 @@ chrooked_id: bayleef
 aka: { pokeemerald: SPECIES_BAYLEEF }
 types: [Grass, Fairy]
 abilities:
+  primary: Overgrow
   secondary: Triage
   hidden: Petal Barrier
 learnset:
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
   - { level: 1, move: Growl }
-  - { level: 1, move: Razor Leaf }
-  - { level: 1, move: Poison Powder }
-  - { level: 2, move: Absorb }
-  - { level: 3, move: Disarming Voice }
-  - { level: 12, move: Synthesis }
+  - { level: 1, move: Tackle }
+  - { level: 6, move: Disarming Voice }
+  - { level: 9, move: Poison Powder }
+  - { level: 12, move: Mega Drain }
   - { level: 15, move: Beguile }
   - { level: 18, move: Reflect }
+  - { level: 22, move: Draining Kiss }
   - { level: 22, move: Magical Leaf }
   - { level: 26, move: Leech Seed }
   - { level: 29, move: Giga Drain }
   - { level: 31, move: Dazzling Gleam }
-  - { level: 32, move: Sweet Scent }
-  - { level: 36, move: Light Screen }
-  - { level: 40, move: Body Slam }
-  - { level: 43, move: Energy Ball }
-  - { level: 44, move: Moonblast }
-  - { level: 46, move: Safeguard }
-  - { level: 50, move: Siphon }
-  - { level: 54, move: Solar Beam }
-  - { level: 57, move: Leaf Storm }
-  - { level: 59, move: Rapture }
+  - { level: 34, move: Synthesis }
+  - { level: 37, move: Energy Ball }
+  - { level: 40, move: Light Screen }
+  - { level: 43, move: Moonblast }
+  - { level: 46, move: Body Slam }
+  - { level: 54, move: Recover }
+  - { level: 57, move: Rapture }
+  - { level: 60, move: Siphon }
+  - { level: 65, move: Solar Beam }

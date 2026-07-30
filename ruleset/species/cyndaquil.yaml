@@ -1,26 +1,28 @@
 name: Cyndaquil
 chrooked_id: cyndaquil
 aka: { pokeemerald: SPECIES_CYNDAQUIL }
+types: [Fire, Ground]
 abilities:
+  primary: Blaze
   secondary: Earth Eater
   hidden: Rapid Combustion
 learnset:
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Ember }
   - { level: 1, move: Leer }
-  - { level: 6, move: Smokescreen }
-  - { level: 8, move: Knell }
-  - { level: 10, move: Ember }
+  - { level: 1, move: Smokescreen }
+  - { level: 1, move: Tackle }
+  - { level: 8, move: Mud Shot }
   - { level: 13, move: Quick Attack }
-  - { level: 15, move: Incinerate }
-  - { level: 19, move: Flame Wheel }
-  - { level: 22, move: Defense Curl }
-  - { level: 28, move: Flame Charge }
-  - { level: 31, move: Swift }
-  - { level: 37, move: Lava Plume }
-  - { level: 40, move: Flamethrower }
-  - { level: 46, move: Inferno }
-  - { level: 49, move: Rollout }
-  - { level: 55, move: Double-Edge }
-  - { level: 58, move: Overheat }
-  - { level: 61, move: Netherstorm }
-  - { level: 64, move: Eruption }
+  - { level: 17, move: Flame Charge }
+  - { level: 20, move: Flame Burst }
+  - { level: 24, move: Defense Curl }
+  - { level: 28, move: Geo Pulse }
+  - { level: 31, move: Scorching Sands }
+  - { level: 35, move: Lava Plume }
+  - { level: 40, move: Earth Power }
+  - { level: 43, move: Flamethrower }
+  - { level: 52, move: Power Gem }
+  - { level: 56, move: Quagmire }
+  - { level: 60, move: Combust }
+  - { level: 65, move: Sinkhole }
+  - { level: 70, move: Overheat }
