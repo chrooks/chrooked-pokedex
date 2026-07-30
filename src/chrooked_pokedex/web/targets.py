@@ -84,6 +84,28 @@ class RestoreError(TargetError):
     """
 
 
+def _validate_target_path(resolved: Path, engine: str) -> None:
+    """Assert a Target dir still looks like the engine it claims. Called at add AND
+    at apply/preview: a registered dir can be wiped or moved after registration, and
+    an unvalidated apply against an empty pokeemerald husk silently blocks every
+    entry (resolution map empty → create-all → every insert fails) instead of
+    failing fast. Re-check the same invariants `add` established, every run."""
+    if not resolved.exists() or not resolved.is_dir():
+        raise TargetError(422, f"Target path does not exist: {resolved}")
+    if engine not in ("pokeemerald", "essentials", "polishedcrystal", "rejuv"):
+        raise TargetError(422, f"Unknown engine {engine!r}.")
+    if engine == "rejuv" and not (resolved / "Scripts" / "Rejuv" / "Definitions").is_dir():
+        raise TargetError(
+            422,
+            f"Target path does not look like a Rejuvenation game "
+            f"(no Scripts/Rejuv/Definitions): {resolved}",
+        )
+    # pokeemerald targets must be git repos (preview-restore is git-based).
+    # essentials targets may be plain directories (non-git Essentials games).
+    if engine == "pokeemerald" and not (resolved / ".git").exists():
+        raise TargetError(422, f"Target path is not a git repo: {resolved}")
+
+
 @dataclass(frozen=True)
 class Target:
     """A registered fork: stable id, human label, absolute path, engine.
@@ -133,20 +155,7 @@ class TargetRegistry:
         self, label: str, path: str, engine: str, namespace: Optional[str] = None
     ) -> Target:
         resolved = Path(path).expanduser().resolve()
-        if not resolved.exists() or not resolved.is_dir():
-            raise TargetError(422, f"Target path does not exist: {resolved}")
-        if engine not in ("pokeemerald", "essentials", "polishedcrystal", "rejuv"):
-            raise TargetError(422, f"Unknown engine {engine!r}.")
-        if engine == "rejuv" and not (resolved / "Scripts" / "Rejuv" / "Definitions").is_dir():
-            raise TargetError(
-                422,
-                f"Target path does not look like a Rejuvenation game "
-                f"(no Scripts/Rejuv/Definitions): {resolved}",
-            )
-        # pokeemerald targets must be git repos (preview-restore is git-based).
-        # essentials targets may be plain directories (non-git Essentials games).
-        if engine == "pokeemerald" and not (resolved / ".git").exists():
-            raise TargetError(422, f"Target path is not a git repo: {resolved}")
+        _validate_target_path(resolved, engine)
         target = Target(
             id=uuid.uuid4().hex[:12],
             label=label,
@@ -591,6 +600,7 @@ def preview_target(
         # apply is idempotent and honest for rejuv, so preview waits for demand.
         raise TargetError(422, "Preview is not supported for Rejuvenation targets yet; use Apply.")
     fork = Path(target.path)
+    _validate_target_path(fork, target.engine)
     lock = state.lock_for(target.path)
     with lock:
         # Preview cache (#63): identical Ruleset + Target inputs → reuse the last
@@ -675,6 +685,7 @@ def apply_target(
     reflects the freshly applied values.
     """
     fork = Path(target.path)
+    _validate_target_path(fork, target.engine)
     lock = state.lock_for(target.path)
     with lock:
         # Clean-tree gate is pokeemerald-only (see preview_target): an Essentials

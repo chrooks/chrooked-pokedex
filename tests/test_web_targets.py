@@ -483,6 +483,23 @@ def test_ac5_apply_matches_preview_and_changes_files(
     assert (fork / "apply-report.md").exists()
 
 
+def test_apply_gutted_pokeemerald_target_422_not_blocked_flood(
+    client: TestClient, fork: Path
+) -> None:
+    """A registered pokeemerald target whose source was wiped after registration
+    (only .git-less files left) must fail fast with 422 — not sail past every guard
+    and emit a report where every ability/move is `blocked` (create-all against a
+    dir that has no files to insert into)."""
+    target_id = _register(client, fork)
+    import shutil
+
+    shutil.rmtree(fork / ".git")  # husk: was a valid repo at register time, now not
+
+    apply = client.post(f"/api/targets/{target_id}/apply", json={})
+    assert apply.status_code == 422, apply.text
+    assert "not a git repo" in apply.json()["detail"]
+
+
 # --- ac6: apply refuses dirty without force; proceeds with force ----------- #
 
 
