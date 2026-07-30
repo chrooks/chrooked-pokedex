@@ -24,6 +24,8 @@ import {
   removeRow,
 } from "../proposal/learnsetDraft";
 import { bandViolation, type LearnsetRubric } from "../../lib/learnsetBands";
+import { typeSlug } from "../../lib/format";
+import { moveNameProps, type MoveMeta } from "../../lib/moveDisplay";
 import { StagePanel } from "./StagePanel";
 import { MoveCreatePanel } from "./MoveCreatePanel";
 import { useMakeoverStage } from "./useMakeoverStage";
@@ -33,6 +35,13 @@ interface Props extends CommonStageProps {
   moveOptions: readonly string[];
   /** Move display name → base power, for the band annotation. */
   movePower: ReadonlyMap<string, number | null>;
+  /** Move name (lowercased) → type + category, for type tint / STAB / italic —
+      the same treatment the profile learnset uses. */
+  moveMeta: MoveMeta;
+  /** The anchor's types — a move matching one is STAB and renders bold. */
+  speciesTypes: readonly string[];
+  /** The anchor's stronger attacking side — matching moves render italic. */
+  attackCategory: "physical" | "special" | null;
   /** The rubric bands (backend-served); null until loaded. */
   rubric: LearnsetRubric | null;
   /** Report the open sub-surface to the overhead rail: "new move" when the inline
@@ -53,10 +62,31 @@ export function LearnsetStage(props: Props) {
     onRedirect,
     moveOptions,
     movePower,
+    moveMeta,
+    speciesTypes,
+    attackCategory,
     rubric,
     onSubSurface,
     onCreated,
   } = props;
+
+  // The mon's type slugs — a move whose type is in this set is STAB (bold).
+  const stab = useMemo(() => new Set(speciesTypes.map(typeSlug)), [speciesTypes]);
+
+  // The at-a-glance BP chip after a move name; status moves (no power) render
+  // none. Case-insensitive: learnset rows and the move pool can differ in casing
+  // (the same reason moveMeta is keyed lowercased).
+  const powerByLower = useMemo(() => {
+    const map = new Map<string, number | null>();
+    for (const [name, power] of movePower) map.set(name.toLowerCase(), power);
+    return map;
+  }, [movePower]);
+  const bpChip = (move: string) => {
+    const bp = movePower.get(move) ?? powerByLower.get(move.toLowerCase());
+    // ≤1 is "no fixed power" in the data (0 = status, 1 = variable e.g. Heat
+    // Crash) — a number there would mislead, so those rows show no chip.
+    return bp != null && bp > 1 ? <span className="mk-lrow__bp mono">{bp}</span> : null;
+  };
 
   // The inline CREATE MOVE panel (the "＋ new move" affordance beside the redirect
   // box). Mutually exclusive with the learnset panel so only one owns the keyboard.
@@ -76,6 +106,10 @@ export function LearnsetStage(props: Props) {
         draft: result.draft,
         rationale: result.rationale ?? {},
         alternatives: (result.alternatives ?? []) as ProposalAlternative[],
+        warnings: result.warnings,
+        // A flagged draft (soft bound tripped) still comes back editable — show it
+        // with the reason banner instead of a bare NO PROPOSAL.
+        error: result.error,
       };
     },
     merge: (raw, draft) => mergeDraft(raw, draft),
@@ -150,7 +184,10 @@ export function LearnsetStage(props: Props) {
             return (
               <li key={`cur-${m.level}-${m.move}-${i}`} className="mk-lrow" data-removed={isDropped || undefined}>
                 <span className="mk-lrow__lv mono">{m.level === 0 ? "—" : `L${m.level}`}</span>
-                <span className="mk-lrow__move">{m.move}</span>
+                <span className="mk-lrow__move" {...moveNameProps(m.move, moveMeta, stab, attackCategory)}>
+                  {m.move}
+                </span>
+                {bpChip(m.move)}
                 {isDropped && <span className="mk-lrow__mark mono">→ removed</span>}
               </li>
             );
@@ -261,7 +298,10 @@ export function LearnsetStage(props: Props) {
                   ) : (
                     <>
                       <span className="mk-lrow__lv mono">{row.level === 0 ? "—" : `L${row.level}`}</span>
-                      <span className="mk-lrow__move">{row.move}</span>
+                      <span className="mk-lrow__move" {...moveNameProps(row.move, moveMeta, stab, attackCategory)}>
+                        {row.move}
+                      </span>
+                      {bpChip(row.move)}
                       {changed && <span className="mk-lrow__mark mono">→ new</span>}
                       {violation && <span className="mk-lrow__band mono">{violation}</span>}
                       <button

@@ -615,6 +615,14 @@ textarea.mk-stage__redirect-input {
   outline: 2px solid var(--chrome);
   outline-offset: -1px;
 }
+/* The at-a-glance base-power chip after a move name (status moves show none). */
+.mk-lrow__bp {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+}
+.mk-lrow[data-removed] .mk-lrow__bp {
+  text-decoration: line-through;
+}
 .mk-lrow__lv {
   min-width: 3ch;
   color: var(--text-dim);
