@@ -102,6 +102,16 @@ export default function App() {
   const all = useMemo(() => dex.data ?? [], [dex.data]);
   const editedCount = useMemo(() => all.filter(isEdited).length, [all]);
 
+  // A party id that no longer resolves against the active dex is a phantom: it
+  // renders no card but still counts toward the six-cap, so a five-mon team
+  // reads "full". Prune once the dex is loaded so the cap matches the screen.
+  useEffect(() => {
+    if (!dex.data || dex.data.length === 0 || view.party.length === 0) return;
+    const known = new Set(dex.data.map((entry) => entry.chrooked_id));
+    const pruned = view.party.filter((member) => known.has(member.id));
+    if (pruned.length !== view.party.length) update({ party: pruned });
+  }, [dex.data, view.party, update]);
+
   const moveOptions = useMemo(() => {
     const names = new Set<string>();
     for (const m of moves.data ?? []) names.add(m.name);
