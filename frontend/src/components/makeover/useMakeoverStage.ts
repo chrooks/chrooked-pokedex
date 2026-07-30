@@ -16,7 +16,9 @@ import {
 import type { ProposalAlternative } from "../../types";
 
 export type StagePhase = "propose" | "proposing" | "proposed" | "locking" | "error";
-export type StageErrorKind = "propose" | "lock";
+// "flagged": a proposal came back but tripped a soft bound — shown for editing
+// with the reason banner above it (distinct from "propose", a hard NO PROPOSAL).
+export type StageErrorKind = "propose" | "lock" | "flagged";
 
 export interface StageProposal<Draft> {
   draft: Draft;
@@ -25,6 +27,9 @@ export interface StageProposal<Draft> {
   /** Per-item verbatim warnings on a PARTIAL proposal (e.g. an ability slot the
       model couldn't fill with a real ability). The stage stays usable. */
   warnings?: string[];
+  /** Set when the draft is flagged (a soft bound tripped) but still editable —
+      surfaced as a banner above the shown draft. */
+  error?: string;
 }
 
 interface State<Draft> {
@@ -66,8 +71,10 @@ function reducer<Draft>(state: State<Draft>, action: Action<Draft>): State<Draft
         rationale: action.proposal.rationale,
         alternatives: action.proposal.alternatives,
         warnings: action.proposal.warnings ?? [],
-        error: null,
-        errorKind: null,
+        // A flagged draft still lands in "proposed" (shown + editable); its reason
+        // rides along as a banner rather than blocking the draft.
+        error: action.proposal.error ?? null,
+        errorKind: action.proposal.error ? "flagged" : null,
       };
     case "edit":
       // Curating a row only makes sense once a draft exists.

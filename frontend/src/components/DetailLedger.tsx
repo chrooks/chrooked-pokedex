@@ -32,6 +32,7 @@ import { EvolutionSection } from "./ledger/EvolutionSection";
 import { TypesRow } from "./ledger/TypesRow";
 import { TypeMatchupsSection } from "./ledger/TypeMatchupsSection";
 import { SpeciesEditor } from "./editors/SpeciesEditor";
+import { attackCategory, type MoveMeta } from "../lib/moveDisplay";
 import "./proposal/proposal.css";
 import "./detail-ledger.css";
 import "./editors/editors.css";
@@ -41,9 +42,7 @@ import "./editors/editors.css";
     move/ability display name (the tab resolves it to its record). */
 export type NavHandler = (kind: KindKey, key: string) => void;
 
-/** Move name (lowercased) → its type + damage category, so the profile learnset
-    can color by type, bold STAB, and italicize the mon's attacking category. */
-export type MoveMeta = ReadonlyMap<string, { type: string; category: string }>;
+export type { MoveMeta };
 
 type Props = {
   entry: DexEntry;
@@ -467,14 +466,6 @@ type BodyProps = {
   /** Full-page layout: split the sections into two columns instead of stacking. */
   columns: boolean;
 };
-
-/** The mon's attacking category: "physical" if Atk beats SpA, "special" if SpA
-    beats Atk, null on a tie (no clear attacking side to italicize). */
-function attackCategory(stats: Record<string, number>): "physical" | "special" | null {
-  if (stats.atk > stats.spa) return "physical";
-  if (stats.spa > stats.atk) return "special";
-  return null;
-}
 
 /** Press `s` on a focused section to fire its `✦ suggest` deep link —
     keyboard-first (PRODUCT.md). Ignores `s` typed into a field. */

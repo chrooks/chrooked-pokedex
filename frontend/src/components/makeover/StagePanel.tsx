@@ -149,9 +149,18 @@ export function StagePanel<Draft>({
       )}
 
       {error !== null && (
-        <p className="mk-stage__error" id="mk-stage-error" role="alert">
+        <p
+          className="mk-stage__error"
+          id="mk-stage-error"
+          role="alert"
+          data-kind={errorKind ?? undefined}
+        >
           <span className="mk-stage__error-tag mono" aria-hidden="true">
-            {errorKind === "lock" ? "rejected" : "no proposal"}
+            {errorKind === "lock"
+              ? "rejected"
+              : errorKind === "flagged"
+                ? "flagged"
+                : "no proposal"}
           </span>
           {error}
           <span className="sr-only"> — nothing was written.</span>

@@ -1,6 +1,7 @@
 import type { LearnsetMove } from "../../types";
-import type { NavHandler, MoveMeta } from "../DetailLedger";
+import type { NavHandler } from "../DetailLedger";
 import { typeSlug } from "../../lib/format";
+import { moveNameProps, type MoveMeta } from "../../lib/moveDisplay";
 import "./ledger-rows.css";
 
 type Props = {
@@ -50,14 +51,8 @@ export function LearnsetSection({
         <ol className="ledger__learnset">
           {now.map((entry, index) => {
             const isNew = replaced && !baseMoves.has(entry.move.toLowerCase());
-            const meta = moveMeta?.get(entry.move.toLowerCase());
-            const moveType = meta?.type;
-            const isStab = moveType ? stab.has(typeSlug(moveType)) : false;
-            const isBestOffense =
-              !!attackCategory && meta?.category === attackCategory;
-            const tint = moveType
-              ? ({ "--type": `var(--type-${typeSlug(moveType)})` } as React.CSSProperties)
-              : undefined;
+            const nameProps = moveNameProps(entry.move, moveMeta, stab, attackCategory ?? null);
+            const isStab = nameProps["data-stab"] === true;
             return (
               <li
                 key={`${entry.level}-${entry.move}-${index}`}
@@ -72,23 +67,14 @@ export function LearnsetSection({
                     type="button"
                     id={`ledger-move-link-${index}`}
                     className="lrow__link ledger__move-name"
-                    style={tint}
-                    data-typed={moveType ? true : undefined}
-                    data-stab={isStab ? true : undefined}
-                    data-offense={isBestOffense ? true : undefined}
+                    {...nameProps}
                     aria-label={`Open ${entry.move}${isStab ? " (STAB)" : ""}`}
                     onClick={() => onNavigate("moves", entry.move)}
                   >
                     {entry.move}
                   </button>
                 ) : (
-                  <span
-                    className="ledger__move-name"
-                    style={tint}
-                    data-typed={moveType ? true : undefined}
-                    data-stab={isStab ? true : undefined}
-                    data-offense={isBestOffense ? true : undefined}
-                  >
+                  <span className="ledger__move-name" {...nameProps}>
                     {entry.move}
                   </span>
                 )}

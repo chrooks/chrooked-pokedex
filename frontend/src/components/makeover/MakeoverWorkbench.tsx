@@ -25,6 +25,7 @@ import {
 import { makeoverApi, type StageFacts } from "../../lib/makeoverApi";
 import type { LearnsetRubric } from "../../lib/learnsetBands";
 import { preEvos } from "../../lib/mirrorDown";
+import { attackCategory } from "../../lib/moveDisplay";
 import { snapshotProfile } from "../../lib/profileDiff";
 import { StageRail } from "./StageRail";
 import { OverheadRail } from "./OverheadRail";
@@ -112,6 +113,13 @@ export function MakeoverWorkbench({
   const movePower = useMemo(() => {
     const map = new Map<string, number | null>();
     for (const move of moves) map.set(move.name, move.power);
+    return map;
+  }, [moves]);
+  // Move name (lowercased) → type + category, so the learnset stage tints/bolds/
+  // italicizes rows exactly like the profile learnset.
+  const moveMeta = useMemo(() => {
+    const map = new Map<string, { type: string; category: string }>();
+    for (const move of moves) map.set(move.name.toLowerCase(), { type: move.type, category: move.category });
     return map;
   }, [moves]);
 
@@ -279,6 +287,9 @@ export function MakeoverWorkbench({
           {...commonProps}
           moveOptions={moveOptions}
           movePower={movePower}
+          moveMeta={moveMeta}
+          speciesTypes={entry.types}
+          attackCategory={attackCategory(entry.stats)}
           rubric={rubric}
           onSubSurface={setSubSurface}
           onCreated={handleCreated}
