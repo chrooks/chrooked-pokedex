@@ -202,6 +202,20 @@ _GOOD_LEARNSET_RESULT = {
     ],
 }
 
+# A pool-valid draft that trips the size floor (only 2 rows; the snapshot pool
+# of 3 sets the floor to 3). Normalized and editable, so it comes back as an
+# editable salvage rather than a hard failure.
+_TOO_FEW_LEARNSET_RESULT = {
+    "draft": {
+        "learnset": [
+            {"level": 1, "move": "Tackle", "reasoning": "basic Normal STAB start"},
+            {"level": 5, "move": "Dragon Pulse", "reasoning": "Dragon STAB early"},
+        ]
+    },
+    "rationale": {"learnset": "Deliberately short to trip the size floor."},
+    "alternatives": [],
+}
+
 # Surgical: move Dragon Pulse from L5 → L0 (on-evo). Only the L5 row changes;
 # L1 Tackle stays untouched. Dragon Pulse at L0 replaces Dragon Pulse at L5.
 _SURGICAL_RESULT = {
@@ -584,6 +598,35 @@ def test_ate_requirement_appears_in_assembled_context() -> None:
     assert "Water-type" in user_ctx
 
 
+def test_full_mode_shows_current_learnset_as_names_only() -> None:
+    """FULL mode must not hand the model the current level placement — that anchor
+    is what makes it copy the old early-level packing. It sees names + a PRIOR ART
+    framing; surgical mode still sees the exact L<level> rows (it edits in place)."""
+    entry = {
+        "chrooked_id": "golem",
+        "name": "Golem",
+        "types": ["Rock", "Electric"],
+        "stats": {"hp": 80, "atk": 120, "def": 130, "spa": 55, "spd": 65, "spe": 45},
+        "abilities": {"primary": "Sturdy", "secondary": None, "hidden": None},
+        "learnset": [
+            {"level": 1, "move": "Charge"},
+            {"level": 1, "move": "Defense Curl"},
+            {"level": 3, "move": "Tackle"},
+        ],
+        "evolution": {},
+        "evolves_into": [],
+    }
+    full = suggestmod._build_learnset_user_context(entry, [], _make_pool(), "full", None, None)
+    assert "PRIOR ART" in full
+    assert "Charge, Defense Curl, Tackle" in full  # names, no levels
+    assert "L1 Charge" not in full  # the anchor is gone
+
+    surgical = suggestmod._build_learnset_user_context(
+        entry, [], _make_pool(), "surgical", "swap Tackle for Rock Throw", None
+    )
+    assert "L1 Charge" in surgical  # in-place edits still need the exact rows
+
+
 def test_pacing_exempts_l0_and_in_band_rows() -> None:
     """L0 rows and in-band attacks draw no pacing warning."""
     # Dragon Pulse 85bp at L0 (exempt) and Tackle 40bp at L8 (under the 60 cap).
@@ -917,6 +960,29 @@ def test_full_mode_rejects_early_level_packing() -> None:
         )
 
 
+def test_early_level_packing_flags_with_editable_salvage() -> None:
+    """The reported symptom: an early-packed draft is flagged but the normalized,
+    editable learnset rides along as salvage so the UI can show it for editing."""
+    pool = _wide_pool(30)
+    over_cap = suggestmod.LEARNSET_MAX_MOVES_THROUGH_L5 + 1
+    early = [(1, f"Move {i:02d}") for i in range(over_cap)]
+    late = [
+        (20 + 3 * i, f"Move {i + over_cap:02d}")
+        for i in range(suggestmod.LEARNSET_SIZE_MIN - over_cap + 2)
+    ]
+    try:
+        suggestmod._validate_learnset_result(
+            _draft(early + late), pool, mode="full", current_learnset=[]
+        )
+        raise AssertionError("expected a SuggestError")
+    except suggestmod.SuggestError as error:
+        assert error.salvage is not None
+        assert "level 5 or below" in error.salvage["error"]
+        # Every proposed row survives in the salvage (pool-checked + sorted),
+        # so nothing is lost — the author edits the flagged draft in place.
+        assert len(error.salvage["draft"]["learnset"]) == len(early + late)
+
+
 def test_surgical_mode_tolerates_rows_above_level_ceiling() -> None:
     """Surgical mode keeps untouched rows above the ceiling (base learnsets do)."""
     current = [
@@ -1223,6 +1289,37 @@ def test_learnset_missing_twice_errors_honestly_naming_what_came_back(
     assert "learnset list" in detail
     assert "after 3 automatic retries" in detail
     assert len(provider.calls) == 4  # first try + 3 eager repairs, then gave up
+
+
+def test_suggest_learnset_flagged_draft_returns_200_with_editable_salvage(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """A draft that only trips a soft shape bound comes back as a 200 carrying the
+    editable draft + an `error` note — the UI shows it for editing instead of a
+    bare NO PROPOSAL. Retries eagerly first, then hands back the salvage."""
+    provider = _SequenceProvider([_TOO_FEW_LEARNSET_RESULT] * 4)
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["draft"]["learnset"]) == 2  # the flagged draft is intact
+    assert "rows after validation" in body["error"]  # the reason to surface
+    assert len(provider.calls) == 4  # first try + 3 eager repairs, then salvaged
+
+
+def test_suggest_learnset_flagged_draft_writes_nothing(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """A flagged salvage is still a proposal — it writes nothing to the Ruleset."""
+    before = _species_files(ruleset_dir)
+    provider = _SequenceProvider([_TOO_FEW_LEARNSET_RESULT] * 4)
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
+
+    assert _species_files(ruleset_dir) == before
 
 
 def test_learnset_token_limit_raised_for_full_draft() -> None:

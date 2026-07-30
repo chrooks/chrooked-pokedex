@@ -123,6 +123,12 @@ export interface SuggestResponse<Draft> {
   draft: Draft;
   rationale: Record<string, string>;
   alternatives: ProposalAlternative[];
+  /** Per-item verbatim warnings (e.g. a dropped learnset row). */
+  warnings?: string[];
+  /** Set when the draft came back flagged — it tripped a soft bound (e.g. too
+      many early-level learnset rows) but is still editable. The draft is shown
+      for hand-editing and this message is surfaced above it. */
+  error?: string;
 }
 
 /** `POST /api/species/{id}/suggest/ability` — a proposed abilities block. Each
