@@ -67,6 +67,10 @@ CHROOKED_TARGET_MODS = {}
 CHROOKED_SURE_HIT = {}
 # attacker ability => ->(move, attacker, opponent) { float } — multiply final accuracy
 CHROOKED_ACCURACY_MODS = {}
+# ability => ->(battler, message) { true to cancel } — veto a vanilla HP tick the
+# holder would otherwise take. The only seam for a drawback hardcoded mid-method
+# (Solar Power's sun drain lives inside pbEndOfRoundPhase, no hook of its own).
+CHROOKED_HP_LOSS_VETO = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
@@ -329,6 +333,12 @@ module ChrookedBattlerHooks
     # move-keyed drain fraction (the drain funccode passes the move as `move`).
     mmod = move ? CHROOKED_MOVE_ABSORB_MODS[move.move] : nil
     hpgain = (hpgain * mmod).round if mmod
+    super
+  end
+
+  def pbReduceHP(amt, anim = false, emercheck = true, message: nil)
+    veto = CHROOKED_HP_LOSS_VETO[self.ability]
+    return 0 if veto && veto.call(self, message)
     super
   end
 

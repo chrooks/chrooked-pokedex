@@ -1,0 +1,35 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# Solar Power rebuilt into Whiteout's shape, for sun: no drawback, and the boost
+# follows the higher attacking stat instead of always Sp. Atk.
+name: Solar Power
+chrooked_id: solarpower
+applies_to: ability
+aka: { pokeemerald: ABILITY_SOLAR_POWER }
+effects:
+  - summary: "In sun, boosts the damage of moves that use this Pokemon's higher attacking stat by 50%."
+    trigger: damage-calc
+    when: "harsh sunlight is active and affects this Pokemon"
+    effect: "if Attack >= Sp. Atk, multiply physical-move damage by 1.5; otherwise multiply special-move damage by 1.5"
+  - summary: "No end-of-turn HP drain."
+    trigger: turn-end
+    when: "always"
+    effect: "the ability never costs the holder HP, in sun or otherwise — the vanilla 1/8-max-HP sunlight drain is removed"
+test_cases:
+  - given: "in sun, a Solar Power Pokemon with Attack >= Sp. Atk uses a physical move"
+    expect: "the move deals 50% more damage"
+  - given: "in sun, a Solar Power Pokemon with Sp. Atk > Attack uses a special move"
+    expect: "the move deals 50% more damage"
+  - given: "in sun, a Solar Power Pokemon whose higher stat is Attack uses a special move"
+    expect: "no boost (only the move category matching the higher stat is boosted)"
+  - given: "a Solar Power Pokemon survives to end of turn in sun"
+    expect: "it loses no HP; the ability has no drawback"
+  - given: "a Solar Power Pokemon holds a Utility Umbrella in sun"
+    expect: "no boost, and still no HP loss"
+notes:
+  - "The higher-stat tie (Attack == Sp. Atk) resolves to the physical branch, matching Whiteout."
+  - "This is the sun member of the weather-attack family: Solar Power (sun), Downpour (rain), Duststorm (sand), Whiteout (hail/snow). All four share one shape."
+  - "Solar Dynamo is deliberately left alone — it stays the summon-your-own-sun, Sp. Atk-only variant."
+  - "Boost only applies while sunlight affects the user: negated by Utility Umbrella, suppressed by Air Lock / Cloud Nine."
+engine_hints:
+  pokeemerald: "Attacker-ability damage modifier alongside the Whiteout case in src/battle_util.c — when IsBattlerWeatherAffected(battlerAtk, B_WEATHER_SUN): if attack >= spAttack boost physical moves x1.5, else boost special moves x1.5 (uq4_12_multiply_half_down). Delete the Solar Power branch from the end-of-turn weather damage routine."
+  essentials: "Rejuv: patch/Mods/chrooked_solarpower.rb (canonical source references/rejuv-harness/). Vanilla already appends x1.5 to atkmult for special moves in sun (Battle_Move.rb:1492), so CHROOKED_DAMAGE_MODS only pays 1.5 on physical moves for a physical user and refunds vanilla's special boost for that same user. The 1/8 sun drain (Battle.rb:5446) has no hook of its own, so it is cancelled through the CHROOKED_HP_LOSS_VETO table added to the core."
