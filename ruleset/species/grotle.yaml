@@ -27,7 +27,6 @@ learnset:
   - { level: 46, move: Reap }
   - { level: 49, move: Stone Edge }
   - { level: 52, move: Wood Hammer }
-  - { level: 57, move: Faultbreak }
   - { level: 61, move: Headlong Rush }
   - { level: 65, move: Solar Blade }
 evolution: { from: Turtwig, method: { level: 18 } }

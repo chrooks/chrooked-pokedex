@@ -17,15 +17,15 @@ learnset:
   - { level: 18, move: Water Whip }
   - { level: 21, move: Ice Fang }
   - { level: 24, move: Flail }
-  - { level: 29, move: Draconic Fang }
+  - { level: 29, move: Breaking Swipe }
   - { level: 32, move: Crunch }
   - { level: 37, move: Slash }
-  - { level: 40, move: Breaking Swipe }
+  - { level: 40, move: Draconic Fang }
   - { level: 44, move: Screech }
   - { level: 47, move: Dragon Hammer }
   - { level: 51, move: Liquidation }
   - { level: 55, move: Superpower }
   - { level: 57, move: Outrage }
-  - { level: 59, move: Wave Crash }
-  - { level: 65, move: Maelstrom }
+  - { level: 59, move: Maelstrom }
+  - { level: 65, move: Wave Crash }
   - { level: 70, move: Hydro Pump }

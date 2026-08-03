@@ -11,6 +11,7 @@ learnset:
   - { level: 1, move: Bind }
   - { level: 1, move: Charge }
   - { level: 1, move: Vise Grip }
+  - { level: 2, move: Clang }
   - { level: 5, move: Thunder Shock }
   - { level: 8, move: Metal Sound }
   - { level: 12, move: Gear Up }
@@ -20,11 +21,13 @@ learnset:
   - { level: 28, move: Spark }
   - { level: 32, move: Gear Grind }
   - { level: 36, move: Lock-On }
-  - { level: 40, move: Iron Head }
+  - { level: 40, move: Double Iron Bash }
+  - { level: 43, move: Iron Head }
   - { level: 44, move: Magnetic Flux }
-  - { level: 48, move: Double Iron Bash }
+  - { level: 48, move: Anvil Slam }
   - { level: 52, move: Electric Terrain }
   - { level: 56, move: Discharge }
+  - { level: 57, move: Excalibur }
   - { level: 60, move: Flash Cannon }
   - { level: 65, move: Zap Cannon }
   - { level: 70, move: Arc Strike }

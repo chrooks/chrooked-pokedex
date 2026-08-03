@@ -18,7 +18,6 @@ learnset:
   - { level: 19, move: Bubble Beam }
   - { level: 22, move: Smart Strike }
   - { level: 25, move: Flip Turn }
-  - { level: 28, move: Water Whip }
   - { level: 31, move: Mirror Shot }
   - { level: 34, move: Aerial Ace }
   - { level: 37, move: Liquidation }
