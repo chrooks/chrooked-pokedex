@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_SEADRA }
 abilities:
   primary: Venomous
   secondary: Sniper
+  hidden: Downpour
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Water Gun }

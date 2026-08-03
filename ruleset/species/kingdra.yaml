@@ -2,8 +2,10 @@ name: Kingdra
 chrooked_id: kingdra
 aka: { pokeemerald: SPECIES_KINGDRA }
 abilities:
+  primary: Swift Swim
   secondary: Sniper
-stats: { atk: 110, def: 75, spa: 110, spd: 75, spe: 95 }
+  hidden: Downpour
+stats: { hp: 75, atk: 110, def: 75, spa: 120, spd: 75, spe: 95 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Smokescreen }

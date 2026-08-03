@@ -3,6 +3,7 @@ chrooked_id: horsea
 aka: { pokeemerald: SPECIES_HORSEA }
 abilities:
   secondary: Sniper
+  hidden: Downpour
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Water Gun }
