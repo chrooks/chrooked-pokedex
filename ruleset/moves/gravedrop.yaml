@@ -1,0 +1,12 @@
+name: Grave Drop
+chrooked_id: gravedrop
+aka: { pokeemerald: MOVE_GRAVE_DROP }
+type: Ghost
+category: physical
+power: 70
+accuracy: 100
+pp: 25
+description: The user hauls the target down and drops it hard. Lowers Defense.
+additional_effects:
+  - { effect: def_minus_1, chance: 100 }
+flags: [contact]

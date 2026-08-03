@@ -1,0 +1,12 @@
+name: Clang
+chrooked_id: clang
+aka: { pokeemerald: MOVE_CLANG }
+type: Steel
+category: physical
+power: 50
+accuracy: 100
+pp: 30
+description: A ringing metal blow rattles the target. May cause flinching.
+additional_effects:
+  - { effect: flinch, chance: 10 }
+flags: [contact]

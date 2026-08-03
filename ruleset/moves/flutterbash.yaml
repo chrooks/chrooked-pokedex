@@ -1,0 +1,10 @@
+name: Flutter Bash
+chrooked_id: flutterbash
+aka: { pokeemerald: MOVE_FLUTTER_BASH }
+type: Flying
+category: physical
+power: 45
+accuracy: 100
+pp: 30
+description: The user flutters in and bashes the target with quick wingbeats.
+flags: [contact]

@@ -1,0 +1,12 @@
+name: Thousand Stings
+chrooked_id: thousandstings
+aka: { pokeemerald: MOVE_THOUSAND_STINGS }
+type: Bug
+category: physical
+power: 120
+accuracy: 85
+pp: 10
+description: A relentless barrage of stings riddles the target. May poison.
+additional_effects:
+  - { effect: poison, chance: 20 }
+flags: [contact]

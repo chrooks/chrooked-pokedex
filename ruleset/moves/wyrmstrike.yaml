@@ -1,0 +1,10 @@
+name: Wyrmstrike
+chrooked_id: wyrmstrike
+aka: { pokeemerald: MOVE_WYRMSTRIKE }
+type: Dragon
+category: physical
+power: 85
+accuracy: 100
+pp: 15
+description: The user charges the target with raw draconic force.
+flags: [contact]

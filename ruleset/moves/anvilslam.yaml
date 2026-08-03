@@ -1,0 +1,12 @@
+name: Anvil Slam
+chrooked_id: anvilslam
+aka: { pokeemerald: MOVE_ANVIL_SLAM }
+type: Steel
+category: physical
+power: 100
+accuracy: 90
+pp: 10
+description: The user drops its full metal weight onto the target. May cause flinching.
+additional_effects:
+  - { effect: flinch, chance: 10 }
+flags: [contact]
