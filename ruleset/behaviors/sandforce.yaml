@@ -1,0 +1,37 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# The sand member of the weather-attack family. Reworks the vanilla ability rather
+# than adding a new one: Sand Force already sits on the right Pokemon, so no
+# distribution pass is needed.
+name: Sand Force
+chrooked_id: sandforce
+applies_to: ability
+aka: { pokeemerald: ABILITY_SAND_FORCE }
+effects:
+  - summary: "In a sandstorm, boosts the damage of moves that use this Pokemon's higher attacking stat by 50%."
+    trigger: damage-calc
+    when: "a sandstorm is active and affects this Pokemon"
+    effect: "if Attack >= Sp. Atk, multiply physical-move damage by 1.5; otherwise multiply special-move damage by 1.5. The vanilla 1.3x rider on Rock, Ground and Steel moves is removed — move type no longer matters."
+  - summary: "Still immune to sandstorm damage."
+    trigger: turn-end
+    when: "a sandstorm is active"
+    effect: "the holder takes no sandstorm chip damage, exactly as the vanilla ability granted"
+test_cases:
+  - given: "in a sandstorm, a Sand Force Pokemon with Attack >= Sp. Atk uses a physical Ice move"
+    expect: "the move deals 50% more damage — the boost is no longer restricted to Rock, Ground and Steel"
+  - given: "in a sandstorm, a Sand Force Pokemon with Attack >= Sp. Atk uses a special move"
+    expect: "no boost (only the move category matching the higher stat is boosted)"
+  - given: "in a sandstorm, a Sand Force Pokemon with Sp. Atk > Attack uses a special Rock move"
+    expect: "the move deals 50% more damage, not the vanilla 30%"
+  - given: "a Sand Force Pokemon battles on the Desert field with no sandstorm up"
+    expect: "the boost still applies — the field counts as sand, as it did in vanilla"
+  - given: "a Sand Force Pokemon stands in a sandstorm at end of turn"
+    expect: "it takes no sandstorm damage, unchanged from vanilla"
+notes:
+  - "The higher-stat tie (Attack == Sp. Atk) resolves to the physical branch, matching Whiteout."
+  - "One of four: Solar Power (sun), Downpour (rain), Sand Force (sand), Whiteout (hail/snow). Same shape, different weather."
+  - "Reworking the vanilla ability instead of minting a new one means every Pokemon that already carries Sand Force picks the change up for free — no distribution pass."
+  - "Utility Umbrella does not block sand, so it has no effect here. Air Lock / Cloud Nine still suppress it."
+  - "Strictly a buff: it trades a 1.3x on three move types for a 1.5x on every move of the right category."
+engine_hints:
+  pokeemerald: "Replace the Sand Force branch in the attacker-ability damage modifier (src/battle_util.c) — when IsBattlerWeatherAffected(battlerAtk, B_WEATHER_SANDSTORM): drop the Rock/Ground/Steel type gate and the 1.3x, and instead boost x1.5 the move category matching the higher attacking stat (uq4_12_multiply_half_down), alongside the Whiteout case. Leave the sandstorm-damage immunity alone."
+  essentials: "Rejuv: patch/Mods/chrooked_sandforce.rb (canonical source references/rejuv-harness/). Vanilla appends its 1.3 as a base-power rider at Battle_Move.rb:1276, so CHROOKED_DAMAGE_MODS refunds that on Rock/Ground/Steel moves and pays 1.5 on the category matching the user's higher attacking stat. The AI's mirrored rider (Battle_AI.rb:13677) is cancelled for free by the core's pbRoughDamage wrapper."

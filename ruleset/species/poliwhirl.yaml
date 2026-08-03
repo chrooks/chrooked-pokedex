@@ -3,6 +3,7 @@ chrooked_id: poliwhirl
 aka: { pokeemerald: SPECIES_POLIWHIRL }
 abilities:
   secondary: Hydrate
+  hidden: Downpour
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Water Gun }

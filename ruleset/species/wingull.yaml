@@ -3,6 +3,7 @@ chrooked_id: wingull
 aka: { pokeemerald: SPECIES_WINGULL }
 abilities:
   secondary: Hydration
+  hidden: Downpour
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }

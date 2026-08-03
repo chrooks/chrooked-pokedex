@@ -3,6 +3,7 @@ chrooked_id: poliwag
 aka: { pokeemerald: SPECIES_POLIWAG }
 abilities:
   secondary: Hydrate
+  hidden: Downpour
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Hypnosis }

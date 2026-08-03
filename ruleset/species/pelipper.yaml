@@ -2,6 +2,7 @@ name: Pelipper
 chrooked_id: pelipper
 aka: { pokeemerald: SPECIES_PELIPPER }
 abilities:
+  primary: Downpour
   secondary: Drizzle
 stats: { hp: 80, spa: 95 }
 learnset:

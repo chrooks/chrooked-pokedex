@@ -3,6 +3,7 @@ chrooked_id: poliwrath
 aka: { pokeemerald: SPECIES_POLIWRATH }
 abilities:
   secondary: Hydrate
+  hidden: Downpour
 stats: { atk: 95, def: 100, spd: 95 }
 learnset:
   - { level: 0, move: Dynamic Punch }

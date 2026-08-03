@@ -3,7 +3,7 @@ chrooked_id: floatzel
 aka: { pokeemerald: SPECIES_FLOATZEL }
 types: [Water, Normal]
 abilities:
-  secondary: Water Veil
+  secondary: Downpour
   hidden: Hydrate
 stats: { atk: 115, spa: 100 }
 learnset:

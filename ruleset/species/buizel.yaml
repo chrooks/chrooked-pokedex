@@ -3,6 +3,7 @@ chrooked_id: buizel
 aka: { pokeemerald: SPECIES_BUIZEL }
 types: [Water, Normal]
 abilities:
+  secondary: Downpour
   hidden: Hydrate
 learnset:
   - { level: 1, move: Tackle }
