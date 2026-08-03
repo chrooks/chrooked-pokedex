@@ -71,6 +71,10 @@ CHROOKED_ACCURACY_MODS = {}
 # holder would otherwise take. The only seam for a drawback hardcoded mid-method
 # (Solar Power's sun drain lives inside pbEndOfRoundPhase, no hook of its own).
 CHROOKED_HP_LOSS_VETO = {}
+# ability => ->(battler, battle) { Float fraction of max HP } — added back to the
+# AI's hpGainPerTurn. Only needed when a chrooked ability REMOVES a per-turn cost
+# the AI still subtracts by ability symbol (Solar Power's sun drain).
+CHROOKED_AI_HP_REFUND = {}
 
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
@@ -392,6 +396,44 @@ module ChrookedBattleHooks
   end
 end
 PokeBattle_Battle.prepend(ChrookedBattleHooks)
+
+# The AI runs its OWN damage model (pbRoughDamage) instead of calling
+# pbCalcDamage, so every CHROOKED_DAMAGE_MODS / DEFENSE_MODS entry is invisible to
+# it — trainers play as if our abilities did nothing. These two wrappers teach the
+# AI what we changed, so it picks moves and switches on the real numbers.
+if defined?(PokeBattle_AI)
+  module ChrookedAIHooks
+    def pbRoughDamage(move = @move, attacker = @attacker, opponent = @opponent, considersub: true)
+      dmg = super
+      return dmg unless dmg.is_a?(Numeric) && dmg > 0
+
+      begin
+        # Fixed-damage moves override pbCalcDamage on their own subclass, which
+        # wins over our prepend on PokeBattle_Move — they are genuinely unboosted,
+        # so the AI's early returns for them are already right.
+        return dmg if move.pbFixedDamageMove?
+
+        mult = Chrooked.damage_mult(move, attacker, opponent)
+        mult == 1.0 ? dmg : (dmg * mult).round
+      rescue StandardError
+        dmg # a mispredicted score is survivable; a crashed AI turn is not
+      end
+    end
+
+    def hpGainPerTurn(attacker = @attacker, chipdamageCheck = false)
+      healing = super
+      begin
+        refund = attacker && CHROOKED_AI_HP_REFUND[attacker.ability]
+        return healing unless refund && healing.is_a?(Numeric)
+
+        healing + refund.call(attacker, @battle)
+      rescue StandardError
+        healing
+      end
+    end
+  end
+  PokeBattle_AI.prepend(ChrookedAIHooks)
+end
 
 # Fixed-fraction self-heal override for the weather-heal moves
 # (Synthesis / Moonlight / Morning Sun share function code 0x0D8).

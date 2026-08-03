@@ -20,12 +20,16 @@
 # Utility Umbrella and the FROZENDIMENSION field negate it, and Rejuv's harsh sun
 # (Desolate Land / Orichalcum Pulse) still reads as :SUNNYDAY.
 #
+# The AI is taught both halves: the core's pbRoughDamage wrapper runs this same
+# handler over the AI's damage model, and CHROOKED_AI_HP_REFUND below cancels the
+# phantom drain it still subtracts. Trainers now play the real Solar Power.
+#
 # ponytail: the refund divides final damage by 1.5 where vanilla multiplied the
 #   stat by 1.5, so a physical holder clicking a special move can land +-1 damage
 #   off true parity. Exact parity would mean overriding all of pbCalcDamage.
-# ponytail: Rejuv's AI still models Solar Power as spatk-only (Battle_AI.rb:13896)
-#   and still docks 0.125 HP/turn for the drain (Battle_AI.rb:9218), so it
-#   under-rates a physical holder. Cosmetic — it never changes what resolves.
+# ponytail: one AI line is left wrong — Battle_AI.rb:14134 credits a Solar Power
+#   DEFENDER 1.5x, which only fires on the GLITCH field (where SpAtk defends) and
+#   only over-rates a physical holder there. Fix it if Glitch ever matters.
 #
 # Test cases:
 #   - sun, Atk >= SpA, physical move => 1.5x
@@ -49,4 +53,14 @@ CHROOKED_DAMAGE_MODS[:SOLARPOWER] = lambda { |move, attacker, opponent|
 
 CHROOKED_HP_LOSS_VETO[:SOLARPOWER] = lambda { |battler, message|
   message.to_s.include?("sunlight")
+}
+
+# The AI docks 1/8 max HP per turn from a Solar Power holder's projected health
+# (Battle_AI.rb:9218), which is a drawback we just deleted — hand it back so the
+# AI stops treating sun as a reason to switch out or heal early. Conditions mirror
+# that line exactly, so the refund cancels it and never over-pays.
+CHROOKED_AI_HP_REFUND[:SOLARPOWER] = lambda { |battler, battle|
+  next 0.0 unless battle.pbWeather(nil) == :SUNNYDAY
+  next 0.0 if battler.hasWorkingItem(:UTILITYUMBRELLA)
+  0.125
 }

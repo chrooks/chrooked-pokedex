@@ -80,3 +80,17 @@ Target lives at the path in the gitignored `targets.json` (engine `rejuv`). v14 
 | Learn menu shows past level-up moves (free relearn everywhere) | static mod | `chrooked_zz_relearn.rb` (override `canRelearnAll?` → true) |
 | Bad Dreams makes Hypnosis 1.2× accurate | behavior | `ruleset/behaviors/baddreams.yaml`, `chrooked_baddreams.rb`, new `CHROOKED_ACCURACY_MODS` table + `pbCalcAccuracy` wrapper in the core |
 | Pressing B runs from a wild battle | static mod | `chrooked_zz_run.rb` (per-method override of `pbCommandMenuEx`) |
+| Solar Power drops its HP drain and boosts the higher attacking stat | behavior | `ruleset/behaviors/solarpower.yaml`, `chrooked_solarpower.rb`, new `CHROOKED_HP_LOSS_VETO` + `CHROOKED_AI_HP_REFUND` tables in the core |
+
+## The AI has its own damage model
+
+`PokeBattle_AI#pbRoughDamage` reimplements damage instead of calling
+`pbCalcDamage`, so a `CHROOKED_DAMAGE_MODS` entry is invisible to trainers unless
+someone tells the AI. The core now wraps `pbRoughDamage` and runs
+`Chrooked.damage_mult` over its result, so **every** damage/defense mod is modelled
+for free — nothing to do per behavior. Two things still need hand-teaching:
+
+- A drawback we **remove** that the AI subtracts by ability symbol — register a
+  `CHROOKED_AI_HP_REFUND` handler (see Solar Power's sun drain).
+- A scoring heuristic keyed on the ability (`weatherscore`, `miniscore`) — those
+  are in `Battle_AI.rb` by symbol, hand-check them when an ability's role changes.

@@ -5,6 +5,7 @@
 #   ruby references/rejuv-harness/weatheratk_check.rb
 CHROOKED_DAMAGE_MODS = {}
 CHROOKED_HP_LOSS_VETO = {}
+CHROOKED_AI_HP_REFUND = {}
 
 HERE = File.dirname(__FILE__)
 %w[solarpower downpour duststorm whiteout].each { |id| load File.join(HERE, "chrooked_#{id}.rb") }
@@ -49,6 +50,14 @@ check("frozen dimension",          mult(:SOLARPOWER, :SUNNYDAY, PHYS_MON, :physi
 check("utility umbrella",          mult(:SOLARPOWER, :SUNNYDAY, Battler.new(120, 60, :UTILITYUMBRELLA), :physical), 1.0)
 check("drain vetoed",              CHROOKED_HP_LOSS_VETO[:SOLARPOWER].call(PHYS_MON, "Heliolisk was hurt by the sunlight!") ? 1.0 : 0.0, 1.0)
 check("other damage untouched",    CHROOKED_HP_LOSS_VETO[:SOLARPOWER].call(PHYS_MON, "Heliolisk was hurt by poison!") ? 1.0 : 0.0, 0.0)
+
+puts "\n-- Solar Power — the AI's phantom drain is refunded so it stops planning around it"
+def refund(mon, weather)
+  CHROOKED_AI_HP_REFUND[:SOLARPOWER].call(mon, Battle.new(weather, nil))
+end
+check("sun, refunds the 1/8 the AI docked", refund(PHYS_MON, :SUNNYDAY), 0.125)
+check("no sun, nothing to refund",          refund(PHYS_MON, nil), 0.0)
+check("umbrella — AI never docked, so 0",   refund(Battler.new(120, 60, :UTILITYUMBRELLA), :SUNNYDAY), 0.0)
 
 puts "\n-- Downpour (rain), Duststorm (sand), Whiteout (hail) — full boost, both branches ours"
 [[:DOWNPOUR, :RAINDANCE], [:DUSTSTORM, :SANDSTORM], [:WHITEOUT, :HAIL], [:WHITEOUT, :SNOW]].each do |ability, weather|
