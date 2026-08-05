@@ -1,19 +1,31 @@
 name: Wurmple
 chrooked_id: wurmple
 aka: {  }
+types: [Bug, Fairy]
+abilities:
+  primary: Dazzling
+  secondary: Levitate
+  hidden: Aerodynamic
+stats: { hp: 45, atk: 45, def: 35, spa: 20, spd: 30, spe: 20 }
 learnset:
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Gust }
   - { level: 1, move: String Shot }
-  - { level: 2, move: Fury Cutter }
-  - { level: 5, move: Poison Sting }
-  - { level: 15, move: Bug Bite }
-  - { level: 29, move: X-Scissor }
-  - { level: 30, move: Signal Beam }
-  - { level: 42, move: Galeburst }
-  - { level: 45, move: Antennae Blast }
-  - { level: 46, move: Venom Slam }
-  - { level: 47, move: Moltstrike }
-  - { level: 57, move: Megahorn }
-  - { level: 60, move: Drone Chorus }
-  - { level: 64, move: Contagion }
-  - { level: 65, move: Tempest }
+  - { level: 4, move: Disarming Voice }
+  - { level: 8, move: Struggle Bug }
+  - { level: 12, move: Stun Spore }
+  - { level: 15, move: Air Cutter }
+  - { level: 18, move: Mega Drain }
+  - { level: 21, move: Beguile }
+  - { level: 24, move: Signal Beam }
+  - { level: 28, move: Morning Sun }
+  - { level: 31, move: Air Slash }
+  - { level: 34, move: Giga Drain }
+  - { level: 38, move: Dazzling Gleam }
+  - { level: 42, move: Bug Buzz }
+  - { level: 46, move: Galeburst }
+  - { level: 50, move: Antennae Blast }
+  - { level: 54, move: Moonblast }
+  - { level: 58, move: Drone Chorus }
+  - { level: 63, move: Hurricane }
+  - { level: 68, move: Rapture }

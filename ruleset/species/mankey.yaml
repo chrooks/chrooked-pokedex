@@ -1,28 +1,32 @@
 name: Mankey
 chrooked_id: mankey
 aka: { pokeemerald: SPECIES_MANKEY }
+types: [Fighting]
 abilities:
-  secondary: Anger Point
+  primary: Blitz
+  secondary: Iron Fist
+  hidden: Moxie
+stats: { hp: 49, atk: 80, def: 36, spa: 35, spd: 45, spe: 70 }
 learnset:
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
   - { level: 1, move: Focus Energy }
-  - { level: 1, move: Covet }
-  - { level: 2, move: Rock Smash }
-  - { level: 5, move: Fury Swipes }
-  - { level: 8, move: Low Kick }
-  - { level: 12, move: Seismic Toss }
-  - { level: 15, move: Brick Break }
-  - { level: 17, move: Swagger }
-  - { level: 22, move: One-Inch Punch }
-  - { level: 26, move: Assurance }
-  - { level: 29, move: Thrash }
-  - { level: 33, move: Cross Chop }
-  - { level: 36, move: Screech }
-  - { level: 38, move: Close Combat }
-  - { level: 39, move: Wraithstrike }
-  - { level: 40, move: Stomping Tantrum }
-  - { level: 42, move: Interment }
-  - { level: 44, move: Outrage }
-  - { level: 48, move: Final Gambit }
-  - { level: 62, move: Necrosis }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Low Kick }
+  - { level: 8, move: Lick }
+  - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Karate Chop }
+  - { level: 18, move: Counter }
+  - { level: 20, move: Assurance }
+  - { level: 23, move: Grave Drop }
+  - { level: 26, move: Bulk Up }
+  - { level: 29, move: Brick Break }
+  - { level: 32, move: Stomping Tantrum }
+  - { level: 36, move: Shadow Punch }
+  - { level: 40, move: Rage Fist }
+  - { level: 44, move: One-Inch Punch }
+  - { level: 48, move: Throat Chop }
+  - { level: 52, move: Wraithstrike }
+  - { level: 58, move: Close Combat }
+  - { level: 63, move: Interment }
+  - { level: 67, move: Necrosis }
+  - { level: 70, move: Superpower }

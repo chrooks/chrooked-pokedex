@@ -8,34 +8,25 @@ abilities:
   hidden: Aerodynamic
 stats: { hp: 75, atk: 65, spa: 110, spd: 65, spe: 85 }
 learnset:
-  - { level: 0, move: Gust }
-  - { level: 1, move: String Shot }
-  - { level: 1, move: Harden }
+  - { level: 0, move: Quiver Dance }
+  - { level: 1, move: Absorb }
   - { level: 1, move: Gust }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Struggle Bug }
-  - { level: 3, move: Disarming Voice }
-  - { level: 4, move: Poison Sting }
-  - { level: 5, move: Bug Bite }
-  - { level: 12, move: Absorb }
-  - { level: 15, move: Stun Spore }
-  - { level: 16, move: Beguile }
-  - { level: 17, move: Morning Sun }
-  - { level: 20, move: Air Cutter }
-  - { level: 21, move: Signal Beam }
-  - { level: 22, move: Mega Drain }
-  - { level: 25, move: Leech Life }
-  - { level: 27, move: Attract }
-  - { level: 29, move: Dazzling Gleam }
-  - { level: 30, move: Whirlwind }
-  - { level: 32, move: Giga Drain }
-  - { level: 35, move: Bug Buzz }
-  - { level: 37, move: Protect }
-  - { level: 40, move: Quiver Dance }
-  - { level: 42, move: Galeburst }
-  - { level: 43, move: Moonblast }
-  - { level: 45, move: Antennae Blast }
-  - { level: 46, move: Moltstrike }
-  - { level: 57, move: Rapture }
-  - { level: 60, move: Drone Chorus }
-  - { level: 64, move: Tempest }
+  - { level: 1, move: String Shot }
+  - { level: 4, move: Disarming Voice }
+  - { level: 8, move: Struggle Bug }
+  - { level: 12, move: Stun Spore }
+  - { level: 15, move: Air Cutter }
+  - { level: 18, move: Mega Drain }
+  - { level: 21, move: Beguile }
+  - { level: 24, move: Signal Beam }
+  - { level: 28, move: Morning Sun }
+  - { level: 31, move: Air Slash }
+  - { level: 34, move: Giga Drain }
+  - { level: 38, move: Dazzling Gleam }
+  - { level: 42, move: Bug Buzz }
+  - { level: 46, move: Galeburst }
+  - { level: 50, move: Antennae Blast }
+  - { level: 54, move: Moonblast }
+  - { level: 58, move: Drone Chorus }
+  - { level: 63, move: Hurricane }
+  - { level: 68, move: Rapture }

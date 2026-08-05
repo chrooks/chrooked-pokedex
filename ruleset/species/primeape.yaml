@@ -1,29 +1,32 @@
 name: Primeape
 chrooked_id: primeape
 aka: { pokeemerald: SPECIES_PRIMEAPE }
+types: [Fighting]
 abilities:
-  secondary: Anger Point
+  primary: Blitz
+  secondary: Iron Fist
+  hidden: Moxie
+stats: { hp: 75, atk: 105, def: 60, spa: 60, spd: 70, spe: 95 }
 learnset:
-  - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Fling }
   - { level: 1, move: Focus Energy }
-  - { level: 2, move: Rock Smash }
-  - { level: 5, move: Fury Swipes }
-  - { level: 8, move: Low Kick }
-  - { level: 15, move: Seismic Toss }
-  - { level: 16, move: Brick Break }
-  - { level: 17, move: Swagger }
-  - { level: 22, move: One-Inch Punch }
-  - { level: 26, move: Assurance }
-  - { level: 30, move: Thrash }
-  - { level: 35, move: Rage Fist }
-  - { level: 37, move: Cross Chop }
-  - { level: 38, move: Wraithstrike }
-  - { level: 39, move: Close Combat }
-  - { level: 41, move: Interment }
-  - { level: 44, move: Screech }
-  - { level: 48, move: Stomping Tantrum }
-  - { level: 53, move: Outrage }
-  - { level: 57, move: Final Gambit }
-  - { level: 62, move: Necrosis }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Low Kick }
+  - { level: 8, move: Lick }
+  - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Karate Chop }
+  - { level: 18, move: Counter }
+  - { level: 20, move: Assurance }
+  - { level: 23, move: Grave Drop }
+  - { level: 26, move: Bulk Up }
+  - { level: 29, move: Brick Break }
+  - { level: 32, move: Stomping Tantrum }
+  - { level: 36, move: Shadow Punch }
+  - { level: 40, move: Rage Fist }
+  - { level: 44, move: One-Inch Punch }
+  - { level: 48, move: Throat Chop }
+  - { level: 52, move: Wraithstrike }
+  - { level: 58, move: Close Combat }
+  - { level: 63, move: Interment }
+  - { level: 67, move: Necrosis }
+  - { level: 70, move: Superpower }

@@ -1,38 +1,31 @@
 name: Noibat
 chrooked_id: noibat
 aka: { pokeemerald: SPECIES_NOIBAT }
+types: [Flying, Dragon]
 abilities:
   primary: Amplifier
+  secondary: Aerodynamic
   hidden: Mountaineer
-stats: { hp: 60, atk: 65, def: 55, spa: 65, spd: 50, spe: 80 }
+stats: { hp: 60, atk: 65, def: 55, spa: 70, spd: 53, spe: 87 }
 learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Supersonic }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Absorb }
-  - { level: 2, move: Peck }
-  - { level: 3, move: Maul }
-  - { level: 4, move: Supersonic }
-  - { level: 8, move: Echoed Voice }
-  - { level: 12, move: Gust }
-  - { level: 15, move: Aerial Ace }
-  - { level: 16, move: Twister }
-  - { level: 17, move: Breaking Swipe }
-  - { level: 20, move: Bite }
-  - { level: 22, move: Dragon Breath }
-  - { level: 26, move: Air Cutter }
-  - { level: 28, move: Snarl }
-  - { level: 29, move: Draconic Fang }
-  - { level: 30, move: Air Slash }
-  - { level: 32, move: Galeburst }
-  - { level: 36, move: Dive Bomb }
-  - { level: 38, move: Dragon Pulse }
-  - { level: 39, move: Cataclysm }
-  - { level: 42, move: Roost }
-  - { level: 43, move: Nosedive }
-  - { level: 45, move: Dragon Hammer }
-  - { level: 46, move: Hyper Voice }
-  - { level: 50, move: Hurricane }
-  - { level: 57, move: Brave Bird }
-  - { level: 59, move: Outrage }
-  - { level: 60, move: Draco Meteor }
-  - { level: 64, move: Oblivion Wing }
-  - { level: 65, move: Tempest }
+  - { level: 5, move: Twister }
+  - { level: 10, move: Echoed Voice }
+  - { level: 14, move: Dragon Breath }
+  - { level: 18, move: Air Cutter }
+  - { level: 22, move: Snarl }
+  - { level: 25, move: Round }
+  - { level: 28, move: Roost }
+  - { level: 32, move: Air Slash }
+  - { level: 36, move: Dragon Pulse }
+  - { level: 40, move: Psychic Noise }
+  - { level: 44, move: Hyper Voice }
+  - { level: 48, move: Oblivion Wing }
+  - { level: 52, move: Cataclysm }
+  - { level: 55, move: Galeburst }
+  - { level: 58, move: Torch Song }
+  - { level: 62, move: Boomburst }
+  - { level: 66, move: Clanging Scales }
+  - { level: 70, move: Draco Meteor }

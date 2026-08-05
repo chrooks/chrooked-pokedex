@@ -4,31 +4,30 @@ aka: { pokeemerald: SPECIES_ANNIHILAPE }
 abilities:
   primary: Blitz
   secondary: Iron Fist
-  hidden: Anger Point
-stats: { atk: 125 }
+  hidden: Moxie
+stats: { hp: 110, atk: 130, def: 80, spa: 50, spd: 92, spe: 93 }
 learnset:
-  - { level: 0, move: Shadow Punch }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Counter }
-  - { level: 1, move: Fling }
+  - { level: 0, move: Rage Fist }
   - { level: 1, move: Focus Energy }
-  - { level: 2, move: Rock Smash }
-  - { level: 3, move: Scratch }
-  - { level: 5, move: Fury Swipes }
-  - { level: 8, move: Low Kick }
-  - { level: 12, move: Seismic Toss }
-  - { level: 15, move: Brick Break }
-  - { level: 17, move: Swagger }
-  - { level: 22, move: One-Inch Punch }
-  - { level: 26, move: Assurance }
-  - { level: 30, move: Thrash }
-  - { level: 35, move: Rage Fist }
-  - { level: 37, move: Cross Chop }
-  - { level: 38, move: Wraithstrike }
-  - { level: 39, move: Close Combat }
-  - { level: 41, move: Interment }
-  - { level: 44, move: Screech }
-  - { level: 48, move: Stomping Tantrum }
-  - { level: 53, move: Outrage }
-  - { level: 57, move: Final Gambit }
-  - { level: 62, move: Necrosis }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Low Kick }
+  - { level: 8, move: Lick }
+  - { level: 12, move: Fury Swipes }
+  - { level: 15, move: Karate Chop }
+  - { level: 18, move: Counter }
+  - { level: 20, move: Assurance }
+  - { level: 23, move: Grave Drop }
+  - { level: 26, move: Bulk Up }
+  - { level: 29, move: Brick Break }
+  - { level: 32, move: Stomping Tantrum }
+  - { level: 36, move: Shadow Punch }
+  - { level: 40, move: Rage Fist }
+  - { level: 44, move: One-Inch Punch }
+  - { level: 48, move: Throat Chop }
+  - { level: 52, move: Wraithstrike }
+  - { level: 58, move: Close Combat }
+  - { level: 63, move: Interment }
+  - { level: 67, move: Necrosis }
+  - { level: 70, move: Superpower }
+evolution: { from: Primeape, method: { method: knows_move, param: Rage Fist } }

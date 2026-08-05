@@ -1,27 +1,31 @@
 name: Scraggy
 chrooked_id: scraggy
 aka: { dex: 559 }
-stats: { atk: 80, hp: 55, spe: 50 }
+types: [Dark, Fighting]
+abilities:
+  primary: Rock Head
+  secondary: Moxie
+  hidden: Intimidate
+stats: { hp: 55, atk: 80, def: 70, spa: 35, spd: 70, spe: 50 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Low Kick }
-  - { level: 2, move: Rock Smash }
-  - { level: 4, move: Payback }
-  - { level: 6, move: Cheap Shot }
-  - { level: 8, move: Headbutt }
-  - { level: 12, move: Sand Attack }
-  - { level: 15, move: Bite }
-  - { level: 16, move: Facade }
-  - { level: 20, move: Torment }
-  - { level: 24, move: Beat Up }
-  - { level: 28, move: Scary Face }
-  - { level: 32, move: Brick Break }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Swagger }
-  - { level: 38, move: Cross Chop }
-  - { level: 39, move: Crunch }
-  - { level: 40, move: Backstab }
-  - { level: 44, move: High Jump Kick }
-  - { level: 48, move: Focus Punch }
-  - { level: 52, move: Head Smash }
-  - { level: 60, move: Havoc }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Sand Attack }
+  - { level: 8, move: Bite }
+  - { level: 12, move: Payback }
+  - { level: 15, move: Bulk Up }
+  - { level: 18, move: Cheap Shot }
+  - { level: 21, move: Drain Punch }
+  - { level: 24, move: Dragon Tail }
+  - { level: 27, move: Scary Face }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Sucker Punch }
+  - { level: 36, move: One-Inch Punch }
+  - { level: 40, move: Wyrmstrike }
+  - { level: 45, move: High Jump Kick }
+  - { level: 50, move: Beat Up }
+  - { level: 55, move: Cross Chop }
+  - { level: 60, move: Dragon Rush }
+  - { level: 65, move: Head Smash }
+  - { level: 70, move: Havoc }
