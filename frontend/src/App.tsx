@@ -176,13 +176,13 @@ export default function App() {
     return list;
   }, [all, view.editedOnly, view.query, view.filter, view.evoLine, chartByKey]);
 
-  // The table additionally sorts by the multi-key sort spec; the grid stays in
-  // dex order. Only the visible view's list is consumed, so this is cheap.
-  const tableRows = useMemo(
+  // Both grid and table honor the multi-key sort spec (an empty spec is a stable
+  // no-op, so an unsorted view keeps dex order). Only the visible view's list is
+  // consumed, so this is cheap.
+  const dexEntries = useMemo(
     () => stableMultiSort(filtered, view.sort),
     [filtered, view.sort],
   );
-  const dexEntries = view.layout === "table" ? tableRows : filtered;
 
   const isDex = view.kind === "dex";
   const full = view.detail === "full";

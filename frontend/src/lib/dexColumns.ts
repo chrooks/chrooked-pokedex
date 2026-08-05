@@ -2,7 +2,7 @@
    table render, the filter defs, the sort comparators, and the columns panel
    all derive from this single source so they cannot drift. Pure, no React. */
 
-import type { DexEntry, Evolution } from "../types";
+import type { CanonicalMethod, DexEntry, Evolution } from "../types";
 import { STAT_LABEL, bst } from "./format";
 
 export type ColumnKey =
@@ -148,7 +148,10 @@ export const COLUMNS: Column[] = [
     or the structured `method_detail`. The single place that shape-switching
     lives — the column sort, the kind/level extraction, and the table cell label
     all read through it, so no caller can miss a shape. Empty = no method. */
-export function evoMethodText(evolution: Evolution | null): string {
+export function evoMethodText(
+  evolution: Evolution | null,
+  methods?: readonly CanonicalMethod[],
+): string {
   if (!evolution || !evolution.from) return "";
   const method = evolution.method;
   if (typeof method === "string") return method;
@@ -157,7 +160,12 @@ export function evoMethodText(evolution: Evolution | null): string {
     if ("level" in dict) return `Level ${dict.level}`;
     if ("item" in dict) return String(dict.item);
     if ("method" in dict) {
-      return `${dict.method}${"param" in dict ? ` ${dict.param}` : ""}`;
+      // Humanize the canonical id ("knows_move" -> "Knows move") via the fetched
+      // methods when available; the raw id is the fallback for callers (sort,
+      // filter) that don't hold the list.
+      const id = String(dict.method);
+      const label = methods?.find((m) => m.id === id)?.label ?? id;
+      return `${label}${"param" in dict ? ` ${dict.param}` : ""}`;
     }
     const values = Object.values(dict).map(String).join(" ");
     if (values !== "") return values;

@@ -158,6 +158,7 @@ export function DexTable({ entries, selected, sort, hidden, onSort, onOpen, back
                 onOpen={onOpen}
                 onEdit={onInlineEdit ? openEdit : undefined}
                 backdropTargetId={backdropTargetId}
+                evolutionMethods={evolutionMethods}
               />
             );
           })}
@@ -255,9 +256,10 @@ type RowProps = {
   onOpen: (id: string) => void;
   onEdit?: EditOpener;
   backdropTargetId?: string | null;
+  evolutionMethods?: readonly CanonicalMethod[];
 };
 
-function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, onEdit, backdropTargetId }: RowProps) {
+function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, onEdit, backdropTargetId, evolutionMethods }: RowProps) {
   const edited = isEdited(entry);
   const open = useCallback(() => onOpen(entry.chrooked_id), [onOpen, entry.chrooked_id]);
 
@@ -273,7 +275,7 @@ function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, onEdit, bac
     >
       {/* Cells iterate the SAME visible-column list the header uses, so header
           and data can never drift out of alignment. */}
-      {columns.map((col) => renderCell(col, entry, edited, open, backdropTargetId, onEdit))}
+      {columns.map((col) => renderCell(col, entry, edited, open, backdropTargetId, onEdit, evolutionMethods))}
     </div>
   );
 }
@@ -287,6 +289,7 @@ function renderCell(
   open: () => void,
   backdropTargetId?: string | null,
   onEdit?: EditOpener,
+  evolutionMethods?: readonly CanonicalMethod[],
 ) {
   switch (col.key) {
     case "led":
@@ -355,19 +358,24 @@ function renderCell(
           {abilityList(entry)}
         </span>
       );
-    case "evolution":
+    case "evolution": {
+      const evoText = evolutionLabel(entry, evolutionMethods);
       return (
         <span
           key="evolution"
           className="dex-table__c dex-table__evo"
           role="cell"
+          // The cell truncates with an ellipsis; the title makes a cut-off method
+          // (e.g. "Rufflet · Knows Future Sight") recoverable on hover.
+          title={evoText ?? undefined}
           data-changed={entry.overridden_fields.includes("evolution") || undefined}
           data-editable={onEdit ? true : undefined}
           onContextMenu={onEdit ? (e) => onEdit(e, entry, { kind: "evolution" }) : undefined}
         >
-          {evolutionLabel(entry) ?? <span className="dex-table__faint">—</span>}
+          {evoText ?? <span className="dex-table__faint">—</span>}
         </span>
       );
+    }
     default: {
       // one of the six stat columns
       const changed = (entry.base.stats ?? {})[col.key] !== undefined;
@@ -626,11 +634,14 @@ function evoNeedsValue(id: string, methods: readonly CanonicalMethod[]): boolean
 
 /** "Goldeen · Level 30" — pre-evo plus a compact method label. Handles both
     method shapes (backdrop display string vs Override dict). Null = base mon. */
-function evolutionLabel(entry: DexEntry): string | null {
+function evolutionLabel(
+  entry: DexEntry,
+  evolutionMethods?: readonly CanonicalMethod[],
+): string | null {
   const evo = entry.evolution;
   if (!evo || !evo.from) return null;
   const from = evo.from_name ?? evo.from;
-  const label = evoMethodText(evo);
+  const label = evoMethodText(evo, evolutionMethods);
   return label ? `${from} · ${label}` : from;
 }
 
