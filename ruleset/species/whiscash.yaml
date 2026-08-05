@@ -5,26 +5,24 @@ abilities:
   secondary: Anticipation
 stats: { atk: 90, def: 80, spa: 75, spd: 75 }
 learnset:
-  - { level: 0, move: Thrash }
-  - { level: 1, move: Rest }
-  - { level: 1, move: Tickle }
-  - { level: 1, move: Belch }
-  - { level: 1, move: Water Gun }
-  - { level: 2, move: Snore }
-  - { level: 3, move: Mud-Slap }
-  - { level: 4, move: Clod Toss }
-  - { level: 5, move: Zen Headbutt }
-  - { level: 6, move: Undertow }
-  - { level: 12, move: Water Pulse }
-  - { level: 15, move: Water Whip }
-  - { level: 16, move: Bulldoze }
-  - { level: 18, move: Amnesia }
-  - { level: 24, move: Aqua Tail }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 33, move: Muddy Water }
-  - { level: 40, move: Earthquake }
-  - { level: 44, move: Maelstrom }
-  - { level: 48, move: Future Sight }
-  - { level: 52, move: Wave Crash }
-  - { level: 56, move: Fissure }
-  - { level: 64, move: Faultbreak }
+  - { level: 0, move: Muddy Water }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Water Gun }
+  - { level: 10, move: Mud Shot }
+  - { level: 14, move: Confusion }
+  - { level: 18, move: Water Pulse }
+  - { level: 22, move: Mud Bomb }
+  - { level: 26, move: Psybeam }
+  - { level: 32, move: Geo Pulse }
+  - { level: 36, move: Scald }
+  - { level: 40, move: Extrasensory }
+  - { level: 44, move: Earth Power }
+  - { level: 44, move: Power Gem }
+  - { level: 48, move: Surf }
+  - { level: 52, move: Future Sight }
+  - { level: 60, move: Quagmire }
+  - { level: 64, move: Hydro Pump }
+  - { level: 68, move: Mindwarp }
+  - { level: 70, move: Sinkhole }

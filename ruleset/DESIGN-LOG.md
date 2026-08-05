@@ -182,3 +182,84 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** abilities + learnset repass
 - **Corrections:** Magnet Pull + something else; keep movepool physical. Should get good utiltity status moves + good electric coverage
+
+## 2026-07-30 — Braviary line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Purely physical wallbreaker that gets good fighting coverage
+
+## 2026-07-30 — Braviary Hisui line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Special wall breaker, keep Esper wing as L0 reward
+
+## 2026-07-30 — Hydreigon line
+
+- **Direction:** learnset-only repass
+- **Corrections:** should get varied type coverage especially w fire type moves. lean towards spaecial moves. should get tri attack
+
+## 2026-07-31 — Mamoswine line
+
+- **Direction:** learnset-only repass
+
+## 2026-08-01 — Trevenant line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Should get useful status moves like will o wisp, leech seed, destiny bond, curse, moonlight + some dark coverage
+
+## 2026-08-01 — Trevenant line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-01 — Vespiquen line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Bulky physical attacking pivot. Gets good poison coverage & a ton of utility status moves like destiny bond, roost, swagger, toxic. Retains attack, heal, & defend order. Replaces power gem w/ physical rock move
+
+## 2026-08-01 — Garbodor line
+
+- **Direction:** entry hazard laying wall w/ good ground coverage & reliable recovery. should be annoying to kill bc its going to get up hazards. should get spikes, tox spikes, stealth rock
+- **Corrections:** entry hazard laying wall w/ good ground coverage & reliable recovery. should be annoying to kill bc its going to get up hazards. should get spikes, tox spikes, stealth rock. toxic debris
+
+## 2026-08-03 — Kingdra line
+
+- **Direction:** stats + abilities + learnset repass
+- **Corrections:** 550 BST; Special leaning, gets good ice coverage
+
+## 2026-08-03 — Whiscash line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Lean Special Moves, give good psychic coverage
+
+## 2026-08-03 — Kingdra line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special moves plys flip turb. good ice coverage
+
+## 2026-08-04 — Scrafty line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Bulk-Up + good dragon coverage
+
+## 2026-08-04 — Scrafty line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-04 — Annihilape line
+
+- **Direction:** stats + abilities + learnset repass
+- **Corrections:** 550 BST
+
+## 2026-08-04 — Annihilape line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-04 — Beautifly line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special moves. great bug, fairy, flying, and grass (drain move) coverage
+
+## 2026-08-04 — Noivern line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Special mostly, good sound move coverage

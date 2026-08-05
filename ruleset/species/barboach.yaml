@@ -1,25 +1,30 @@
 name: Barboach
 chrooked_id: barboach
 aka: { pokeemerald: SPECIES_BARBOACH }
+types: [Water, Ground]
 abilities:
-  secondary: Anticipation
+  primary: Unaware
+  secondary: Regenerator
+  hidden: Water Absorb
+stats: { hp: 63, atk: 52, def: 46, spd: 43 }
 learnset:
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Mud-Slap }
-  - { level: 6, move: Rest }
-  - { level: 7, move: Snore }
-  - { level: 9, move: Clod Toss }
-  - { level: 10, move: Undertow }
-  - { level: 12, move: Water Pulse }
-  - { level: 15, move: Water Whip }
-  - { level: 16, move: Bulldoze }
-  - { level: 18, move: Amnesia }
-  - { level: 24, move: Aqua Tail }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 31, move: Muddy Water }
-  - { level: 36, move: Earthquake }
-  - { level: 39, move: Maelstrom }
-  - { level: 42, move: Future Sight }
-  - { level: 48, move: Fissure }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Faultbreak }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Water Gun }
+  - { level: 10, move: Mud Shot }
+  - { level: 14, move: Confusion }
+  - { level: 18, move: Water Pulse }
+  - { level: 22, move: Mud Bomb }
+  - { level: 26, move: Psybeam }
+  - { level: 32, move: Geo Pulse }
+  - { level: 36, move: Scald }
+  - { level: 40, move: Extrasensory }
+  - { level: 44, move: Earth Power }
+  - { level: 44, move: Power Gem }
+  - { level: 48, move: Surf }
+  - { level: 52, move: Future Sight }
+  - { level: 60, move: Quagmire }
+  - { level: 64, move: Hydro Pump }
+  - { level: 68, move: Mindwarp }
+  - { level: 70, move: Sinkhole }

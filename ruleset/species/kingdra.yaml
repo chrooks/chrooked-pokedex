@@ -7,31 +7,22 @@ abilities:
   hidden: Downpour
 stats: { hp: 75, atk: 110, def: 75, spa: 120, spd: 75, spe: 95 }
 learnset:
+  - { level: 0, move: Dragon Pulse }
+  - { level: 1, move: Bubble }
   - { level: 1, move: Leer }
-  - { level: 1, move: Smokescreen }
-  - { level: 1, move: Whirlpool }
-  - { level: 1, move: Yawn }
-  - { level: 2, move: Maul }
-  - { level: 3, move: Water Gun }
-  - { level: 4, move: Twister }
-  - { level: 8, move: Undertow }
-  - { level: 15, move: Focus Energy }
-  - { level: 16, move: Breaking Swipe }
-  - { level: 17, move: Water Whip }
-  - { level: 20, move: Dragon Breath }
-  - { level: 25, move: Bubble Beam }
-  - { level: 29, move: Aqua Tail }
-  - { level: 30, move: Agility }
-  - { level: 31, move: Draconic Fang }
-  - { level: 33, move: Maelstrom }
-  - { level: 37, move: Water Pulse }
-  - { level: 40, move: Dragon Pulse }
-  - { level: 43, move: Dragon Hammer }
-  - { level: 44, move: Cataclysm }
-  - { level: 47, move: Draco Meteor }
-  - { level: 51, move: Hydro Pump }
-  - { level: 54, move: Tsunami }
-  - { level: 57, move: Outrage }
-  - { level: 58, move: Dragon Dance }
-  - { level: 65, move: Rain Dance }
-  - { level: 70, move: Wave Crash }
+  - { level: 1, move: Twister }
+  - { level: 5, move: Smokescreen }
+  - { level: 10, move: Water Gun }
+  - { level: 14, move: Icy Wind }
+  - { level: 18, move: Focus Energy }
+  - { level: 20, move: Water Pulse }
+  - { level: 24, move: Dragon Breath }
+  - { level: 28, move: Bubble Beam }
+  - { level: 32, move: Aurora Beam }
+  - { level: 36, move: Flip Turn }
+  - { level: 40, move: Surf }
+  - { level: 44, move: Ice Beam }
+  - { level: 48, move: Snipe Shot }
+  - { level: 52, move: Hydro Pump }
+  - { level: 58, move: Cataclysm }
+  - { level: 64, move: Draco Meteor }

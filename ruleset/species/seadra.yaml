@@ -1,29 +1,28 @@
 name: Seadra
 chrooked_id: seadra
 aka: { pokeemerald: SPECIES_SEADRA }
+types: [Water, Dragon]
 abilities:
-  primary: Venomous
+  primary: Swift Swim
   secondary: Sniper
   hidden: Downpour
+stats: { hp: 55, atk: 65, def: 95, spa: 95, spd: 45, spe: 85 }
 learnset:
+  - { level: 1, move: Bubble }
   - { level: 1, move: Leer }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Smokescreen }
   - { level: 1, move: Twister }
-  - { level: 8, move: Undertow }
-  - { level: 15, move: Focus Energy }
-  - { level: 17, move: Water Whip }
-  - { level: 20, move: Dragon Breath }
-  - { level: 25, move: Bubble Beam }
-  - { level: 29, move: Water Pulse }
-  - { level: 30, move: Agility }
-  - { level: 33, move: Maelstrom }
-  - { level: 37, move: Muddy Water }
-  - { level: 40, move: Dragon Pulse }
-  - { level: 44, move: Cataclysm }
-  - { level: 47, move: Wave Crash }
-  - { level: 48, move: Draco Meteor }
-  - { level: 51, move: Hydro Pump }
-  - { level: 54, move: Tsunami }
-  - { level: 58, move: Dragon Dance }
-  - { level: 65, move: Rain Dance }
+  - { level: 5, move: Smokescreen }
+  - { level: 10, move: Water Gun }
+  - { level: 14, move: Icy Wind }
+  - { level: 18, move: Focus Energy }
+  - { level: 20, move: Water Pulse }
+  - { level: 24, move: Dragon Breath }
+  - { level: 28, move: Bubble Beam }
+  - { level: 32, move: Aurora Beam }
+  - { level: 36, move: Flip Turn }
+  - { level: 40, move: Surf }
+  - { level: 44, move: Ice Beam }
+  - { level: 48, move: Snipe Shot }
+  - { level: 52, move: Hydro Pump }
+  - { level: 58, move: Cataclysm }
+  - { level: 64, move: Draco Meteor }
