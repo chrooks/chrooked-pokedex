@@ -478,6 +478,26 @@ def test_read_back_learnset_move_symbol_matches_but_wrong_move_mismatches() -> N
     )["ok"] is False
 
 
+@pytest.mark.unit
+def test_read_back_learnset_prefers_the_snapshot_move_symbol() -> None:
+    """The engine's display name need not round-trip — the symbol is the truth.
+
+    Rejuv holds ``:STOMPINGTANTRUM`` but renders it "Stomp Tantrum"; deriving the
+    symbol back from that display name yields ``STOMPTANTRUM`` and false-alarms on
+    a learnset the applier wrote correctly. ``move_id`` carries the real symbol.
+    """
+    expected = {
+        "chrooked_id": "x",
+        "name": "X",
+        "learnset": [{"level": 32, "move": "Stomping Tantrum"}],
+    }
+    actual = {"learnset": [{"level": 32, "move": "Stomp Tantrum", "move_id": "stompingtantrum"}]}
+    assert readbackmod.diff_species(expected, actual, fields=["learnset"])["ok"] is True
+    # A genuinely wrong move still mismatches — move_id is trusted, not ignored.
+    wrong = {"learnset": [{"level": 32, "move": "Stomp Tantrum", "move_id": "tackle"}]}
+    assert readbackmod.diff_species(expected, wrong, fields=["learnset"])["ok"] is False
+
+
 # --------------------------------------------------------------------------- #
 # ac9 — referential validation at the species write gate
 # --------------------------------------------------------------------------- #

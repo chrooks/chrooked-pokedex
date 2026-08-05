@@ -142,8 +142,16 @@ def _learnset_level(row: Any) -> int:
 
 
 def _learnset_pairs(rows: Any, sym) -> list[tuple[int, str | None]]:
-    """A learnset as a sorted set of ``(level, move-symbol)`` for comparison."""
-    return sorted((_learnset_level(r), sym(r.get("move", ""))) for r in (rows or []))
+    """A learnset as a sorted set of ``(level, move-symbol)`` for comparison.
+
+    The Target snapshot carries the verbatim engine symbol on ``move_id`` — prefer
+    it over the rendered display name, which does not always round-trip: Rejuv
+    renders ``:STOMPINGTANTRUM`` as "Stomp Tantrum", which re-derives to
+    ``STOMPTANTRUM`` and false-alarms on a learnset the applier wrote correctly.
+    Ruleset rows have no ``move_id`` and fall back to the display name."""
+    return sorted(
+        (_learnset_level(r), sym(r.get("move_id") or r.get("move", ""))) for r in (rows or [])
+    )
 
 
 def _learnset_display(rows: Any) -> list[tuple[int, str]]:
