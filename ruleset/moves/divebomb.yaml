@@ -7,3 +7,4 @@ power: 90
 accuracy: 100
 pp: 15
 description: The user folds its wings and plummets onto the target at terrifying speed. The impact strikes with the full weight of the fall. 10% flinch chance
+flags: [wing]

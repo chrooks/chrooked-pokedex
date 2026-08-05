@@ -7,3 +7,4 @@ power: 100
 accuracy: 90
 pp: 10
 description: The user makes a headlong plunge from above.
+flags: [wing]

@@ -9,3 +9,4 @@ pp: 5
 description: A raging tempest engulfs the target. The user's Sp. Atk falls sharply.
 additional_effects:
   - { effect: sp_atk_minus_2, chance: 100 }
+flags: [wind]

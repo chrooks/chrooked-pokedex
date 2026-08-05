@@ -7,3 +7,4 @@ power: 85
 accuracy: 100
 pp: 15
 description: A bursting blast of gale-force wind.
+flags: [wind, sound]
