@@ -6,8 +6,20 @@ import {
   mirrorRows,
   postEvos,
   preEvos,
+  scaleStats,
 } from "./mirrorDown";
+import { bst } from "./format";
 import type { AbilitySlots, DexEntry } from "../types";
+
+/** A copy of `entry` with a spread — and optionally the canon one the Ruleset
+    overrode, which is what the scale must measure against. */
+function withStats(
+  entry: DexEntry,
+  stats: Record<string, number>,
+  canon?: Record<string, number>,
+): DexEntry {
+  return { ...entry, stats, base: canon ? { stats: canon } : {} } as DexEntry;
+}
 
 const ABILITIES: AbilitySlots = { primary: "Sap Sipper", secondary: null, hidden: "Gooey" };
 
@@ -142,7 +154,7 @@ describe("mirrorDownPreview — the whole-line write plan", () => {
 });
 
 describe("mirrorRows — arbitrary recipients (the mirror wizard)", () => {
-  it("carries the kit (stats included) to any recipient set", () => {
+  it("carries the kit to any recipient set", () => {
     const stats = { hp: 90, atk: 100, def: 70, spa: 110, spd: 150, spe: 80 };
     const rows = mirrorRows(
       {
@@ -154,7 +166,105 @@ describe("mirrorRows — arbitrary recipients (the mirror wizard)", () => {
       [goomy, goodra],
     );
     expect(rows.map((r) => r.chrooked_id)).toEqual(["goomy", "goodra"]);
-    expect(rows[0].stats).toEqual(stats);
+    expect(rows[0].types).toEqual(["Dragon"]);
     expect(rows[1].learnset).toEqual([{ level: 5, move: "Rain Dance" }]);
+  });
+
+  it("scales stats to each recipient rather than copying the anchor's", () => {
+    // Anchor: canon 400 BST reworked to 600 (+200), shape 2:1:1:1:1:1.
+    const shape = { hp: 200, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 };
+    const anchorCanon = { hp: 100, atk: 60, def: 60, spa: 60, spd: 60, spe: 60 };
+    const [row] = mirrorRows(
+      {
+        types: ["Dragon"],
+        abilities: ABILITIES,
+        stats: shape,
+        baseStats: anchorCanon,
+        learnset: [],
+      },
+      [withStats(goomy, { hp: 60, atk: 40, def: 40, spa: 40, spd: 40, spe: 40 })],
+    );
+    // 260 canon + 200 delta = 460, split in the anchor's 2:1:1:1:1:1 shape
+    // (hp 1/3 of 460 = 153, +2 rounding drift; the five others 61 each). Every
+    // stat clears its canon floor here, so the plain proportions stand.
+    expect(bst(row.stats!)).toBe(460);
+    expect(row.stats).not.toEqual(shape);
+    expect(row.stats!.hp).toBe(154);
+    expect(row.stats!.atk).toBe(62);
+  });
+
+  it("measures the delta against canon, so re-mirroring is idempotent", () => {
+    const shape = { hp: 120, atk: 100, def: 80, spa: 80, spd: 60, spe: 60 };
+    const anchorCanon = { hp: 100, atk: 90, def: 70, spa: 70, spd: 50, spe: 50 };
+    const canon = { hp: 50, atk: 45, def: 35, spa: 35, spd: 25, spe: 25 };
+    const kit = {
+      types: ["Dragon"],
+      abilities: ABILITIES,
+      stats: shape,
+      baseStats: anchorCanon,
+      learnset: [],
+    };
+    const first = mirrorRows(kit, [withStats(goomy, canon)])[0].stats!;
+    // Second pass: the recipient now CARRIES the scaled spread as an override,
+    // but `base.stats` still holds canon — so the delta must not compound.
+    const again = mirrorRows(kit, [withStats(goomy, first, canon)])[0].stats!;
+    expect(again).toEqual(first);
+  });
+
+  it("leaves stats off the row when the kit carries none", () => {
+    const rows = mirrorRows(
+      { types: ["Dragon"], abilities: ABILITIES, learnset: [] },
+      [goomy],
+    );
+    expect(rows[0].stats).toBeUndefined();
+  });
+});
+
+describe("scaleStats", () => {
+  const shape = { hp: 100, atk: 50, def: 50, spa: 50, spd: 50, spe: 50 };
+
+  it("hits the target BST exactly after rounding drift", () => {
+    const canon = { hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20 };
+    expect(bst(scaleStats(canon, 30, shape))).toBe(150);
+  });
+
+  it("carries the shape's role emphasis onto the recipient", () => {
+    const canon = { hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20 };
+    const scaled = scaleStats(canon, 60, shape);
+    expect(scaled.hp).toBe(Math.max(...Object.values(scaled)));
+  });
+
+  it("lets a canon floor outrank the shape's emphasis", () => {
+    // A pre-evo already strong where the anchor is weak keeps that stat, even
+    // though the anchor's shape ranks it low.
+    const canon = { hp: 20, atk: 90, def: 20, spa: 20, spd: 20, spe: 20 };
+    expect(scaleStats(canon, 0, shape).atk).toBe(90);
+  });
+
+  it("is a no-op when the shape already IS the canon spread and delta is 0", () => {
+    expect(scaleStats(shape, 0, shape)).toEqual(shape);
+  });
+
+  it("floors every stat at canon — a fast pre-evo keeps its speed", () => {
+    // The Whiscash/Barboach case: a slow bulky final evo would otherwise drag
+    // Barboach's 60 speed down to 20.
+    const whiscash = { hp: 120, atk: 85, def: 80, spa: 105, spd: 95, spe: 30 };
+    const barboach: Record<string, number> = {
+      hp: 50, atk: 48, def: 43, spa: 46, spd: 41, spe: 60,
+    };
+    const scaled = scaleStats(barboach, 47, whiscash);
+    for (const key of Object.keys(barboach)) {
+      expect(scaled[key]).toBeGreaterThanOrEqual(barboach[key]);
+    }
+    expect(bst(scaled)).toBe(bst(barboach)! + 47);
+    // The exact spread `scripts/preevo_stats.py plan whiscash` produces — this
+    // assertion is what keeps the two implementations from drifting apart.
+    expect(scaled).toEqual({ hp: 68, atk: 48, def: 45, spa: 60, spd: 54, spe: 60 });
+  });
+
+  it("degrades to canon when the floors already spend the whole budget", () => {
+    const slow = { hp: 120, atk: 85, def: 80, spa: 105, spd: 95, spe: 30 };
+    const fast = { hp: 50, atk: 48, def: 43, spa: 46, spd: 41, spe: 60 };
+    expect(scaleStats(fast, 0, slow)).toEqual(fast);
   });
 });

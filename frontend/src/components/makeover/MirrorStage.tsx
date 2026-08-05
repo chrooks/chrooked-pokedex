@@ -6,9 +6,10 @@
    anchor's pre-evos start included, evolved stages start skipped). LOCK IN
    writes ONLY the recipients — the anchor is never touched. With nothing to
    write (no line, every recipient skipped, or no facet picked) the button
-   becomes SKIP and the flow continues to the tail. Stats is opt-in: the line
-   default SCALES stats rather than copying them (CLAUDE.md), so mirroring them
-   verbatim is a deliberate exception. */
+   becomes SKIP and the flow continues to the tail. Typing, abilities and the
+   learnset copy verbatim; stats SCALE — each recipient takes the anchor's BST
+   delta against its OWN canon total, in the anchor's shape (CLAUDE.md's
+   Evolution-line default step 3). */
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ApiError } from "../../api";
@@ -17,10 +18,12 @@ import type { StageFacts } from "../../lib/makeoverApi";
 import {
   DEFAULT_MIRROR_FACETS,
   MIRROR_FACETS,
+  canonStats,
   lineMembers,
   mirrorRows,
   type MirrorFacet,
 } from "../../lib/mirrorDown";
+import { bst } from "../../lib/format";
 import { writeMirror } from "./mirrorWrite";
 import { MirrorRowList } from "./MirrorRowList";
 import { PokeballSpinner } from "../PokeballSpinner";
@@ -78,6 +81,7 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
           types: anchor.types,
           abilities: anchor.abilities,
           stats: anchor.stats,
+          baseStats: canonStats(anchor),
           learnset: anchor.learnset,
         },
         recipients,
@@ -88,6 +92,9 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
     () => rows.filter((row) => !excluded.has(row.chrooked_id)),
     [rows, excluded],
   );
+  // The BST the anchor gained over canon — what every recipient inherits.
+  const statsDelta =
+    (bst(anchor.stats) ?? 0) - (bst(canonStats(anchor)) ?? 0);
   const hasLine = line.length > 1;
   // Nothing selected to write → the lock becomes a SKIP (the stage never blocks
   // the tail; a species with no line just passes through).
@@ -198,7 +205,9 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
             ))}
             {facets.has("stats") && (
               <p className="mk-mirror__facet-note mono">
-                stats copy verbatim — the line default scales them instead.
+                stats scale, not copy — each recipient takes{" "}
+                {statsDelta >= 0 ? `+${statsDelta}` : statsDelta} BST on its own
+                canon total, laid out in {anchor.name}'s shape.
               </p>
             )}
           </fieldset>
