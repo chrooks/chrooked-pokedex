@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_WOOBAT }
 abilities:
   primary: Aerodynamic
   secondary: Psyonize
+stats: { spa: 75, spe: 81 }
 learnset:
   - { level: 1, move: Attract }
   - { level: 1, move: Confusion }

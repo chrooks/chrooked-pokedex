@@ -6,6 +6,7 @@ abilities:
   primary: Intimidate
   secondary: Flash Fire
   hidden: Immolate
+stats: { hp: 59, atk: 87, def: 52, spd: 55, spe: 72 }
 learnset:
   - { level: 1, move: Howl }
   - { level: 1, move: Leer }

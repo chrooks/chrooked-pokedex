@@ -6,6 +6,7 @@ abilities:
   primary: Venomous
   secondary: Dry Skin
   hidden: Sheer Force
+stats: { atk: 70, spa: 71, spe: 71 }
 learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Mud-Slap }

@@ -6,6 +6,7 @@ abilities:
   primary: Thick Fat
   secondary: Iron Fist
   hidden: Sheer Force
+stats: { hp: 78, atk: 64, def: 40, spa: 21, spd: 43, spe: 27 }
 learnset:
   - { level: 1, move: Fake Out }
   - { level: 1, move: Sand Attack }

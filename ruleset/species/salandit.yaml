@@ -6,6 +6,7 @@ abilities:
   primary: Corrosion
   secondary: Oblivious
   hidden: Serene Grace
+stats: { atk: 46, spa: 83, spd: 43, spe: 80 }
 learnset:
   - { level: 1, move: Ember }
   - { level: 1, move: Poison Gas }

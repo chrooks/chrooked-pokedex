@@ -6,6 +6,7 @@ abilities:
   primary: Swift Swim
   secondary: Water Absorb
   hidden: Regenerator
+stats: { hp: 61, atk: 24 }
 learnset:
   - { level: 1, move: Gust }
   - { level: 1, move: Supersonic }

@@ -3,7 +3,7 @@ chrooked_id: snivy
 aka: { pokeemerald: SPECIES_SNIVY }
 abilities:
   primary: Chloroplast
-stats: { atk: 50, spa: 50 }
+stats: { def: 57, spa: 54, spd: 57, spe: 67 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 4, move: Leer }

@@ -4,6 +4,7 @@ aka: { dex: 23 }
 abilities:
   secondary: Coil Up
   hidden: Strong Jaw
+stats: { hp: 55, atk: 71, def: 55, spa: 44, spd: 65 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Poison Sting }

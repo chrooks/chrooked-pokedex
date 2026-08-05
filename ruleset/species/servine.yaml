@@ -3,7 +3,7 @@ chrooked_id: servine
 aka: { pokeemerald: SPECIES_SERVINE }
 abilities:
   primary: Chloroplast
-stats: { atk: 70, spa: 70 }
+stats: { spa: 70, spe: 90 }
 learnset:
   - { level: 1, move: Vine Whip }
   - { level: 1, move: Tackle }

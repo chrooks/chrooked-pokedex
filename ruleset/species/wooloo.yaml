@@ -1,6 +1,7 @@
 name: Wooloo
 chrooked_id: wooloo
 aka: { dex: 831 }
+stats: { hp: 46, atk: 46, spd: 53, spe: 50 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }

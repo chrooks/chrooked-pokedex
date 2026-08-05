@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_PHANTUMP }
 abilities:
   secondary: Forestry
   hidden: Insidious
+stats: { hp: 50, def: 51 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Astonish }

@@ -6,7 +6,7 @@ abilities:
   primary: Keen Eye
   secondary: Hydration
   hidden: Liquid Voice
-stats: { spa: 64 }
+stats: { def: 60, spa: 76, spd: 53, spe: 65 }
 learnset:
   - { level: 1, move: Defog }
   - { level: 1, move: Gust }

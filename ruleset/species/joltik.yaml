@@ -6,7 +6,7 @@ abilities:
   primary: Web Weaver
   secondary: Carnivore
   hidden: Swarm
-stats: { hp: 55, atk: 35, def: 55, spa: 72, spd: 55 }
+stats: { atk: 50, spa: 75, spe: 72 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Sticky Web }

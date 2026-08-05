@@ -5,6 +5,7 @@ abilities:
   primary: Chlorophyll
   secondary: Solar Dynamo
   hidden: Chloroplast
+stats: { hp: 37, atk: 33, spa: 68, spd: 37 }
 learnset:
   - { level: 1, move: Growth }
   - { level: 1, move: Pound }

@@ -6,7 +6,7 @@ abilities:
   primary: Static
   secondary: Galvanize
   hidden: Lightning Rod
-stats: { def: 40, spd: 50 }
+stats: { hp: 43, atk: 74, spa: 74, spd: 54 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Quick Attack }

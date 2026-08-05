@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_KOFFING }
 abilities:
   secondary: Neutralizing Gas
   hidden: Exhaust
+stats: { hp: 46, spd: 49, spe: 40 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Poison Gas }
