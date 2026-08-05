@@ -238,6 +238,57 @@ def test_pre_evo_forward_edge_reflects_evolution_override_on_child() -> None:
     assert floatzel["evolution"]["method"] == {"level": 38}
 
 
+def test_override_for_species_absent_from_snapshot_adds_no_forward_edge() -> None:
+    # Regression: the Rejuv/Essentials form rekey ADDS a form id
+    # (`braviary--hisuianform`) to the ruleset without dropping the original
+    # canon id (`braviaryhisui`). Both then carry the same child override, and
+    # the shared pre-evo index spliced a PHANTOM forward edge keyed by the canon
+    # id — which isn't in the target snapshot — so Rufflet showed two identical
+    # "Braviary Hisui" cards. An override whose own species is absent from the
+    # snapshot must contribute no forward edge.
+    ruleset = Ruleset(
+        species={
+            # The real, rekeyed override — its id IS in the snapshot.
+            "floatzel--form": SpeciesOverride(
+                name="Floatzel",
+                chrooked_id="floatzel--form",
+                evolution=EvolutionOverride(from_species="Buizel", method={"level": 38}),
+            ),
+            # The leftover canon id — NOT in the snapshot; must be ignored.
+            "floatzelcanon": SpeciesOverride(
+                name="Floatzel",
+                chrooked_id="floatzelcanon",
+                evolution=EvolutionOverride(from_species="Buizel", method={"level": 38}),
+            ),
+        }
+    )
+    snapshot = {
+        "version": "1.11.2",
+        "species": {
+            "buizel": {
+                **_SNAPSHOT["species"]["pikachu"],
+                "chrooked_id": "buizel",
+                "name": "Buizel",
+                "evolves_into": [],
+                "evolution": None,
+            },
+            "floatzel--form": {
+                **_SNAPSHOT["species"]["pikachu"],
+                "chrooked_id": "floatzel--form",
+                "name": "Floatzel",
+                "evolves_into": [],
+                "evolution": None,
+            },
+        },
+        "moves": {},
+        "abilities": {},
+        "type_chart": [],
+    }
+    buizel = _entry(dexmod.build_dex(snapshot, ruleset), "buizel")
+    # Exactly one forward edge — to the real snapshot species, not the phantom.
+    assert [e["to"] for e in buizel["evolves_into"]] == ["floatzel--form"]
+
+
 def test_untouched_species_has_empty_base() -> None:
     ruleset = Ruleset.load(_SAMPLE)
     pikachu = _entry(dexmod.build_dex(_SNAPSHOT, ruleset), "pikachu")

@@ -34,6 +34,23 @@ describe("expandEvoLines", () => {
   it("leaves a lineless mon alone", () => {
     expect(expandEvoLines([all[6]], all).map((e) => e.chrooked_id)).toEqual(["ditto"]);
   });
+
+  it("resolves a pre-evo named by display name, not chrooked_id", () => {
+    // A Ruleset-override evolution stores `from` as the display NAME ("Rufflet")
+    // rather than the id ("rufflet"). Regression: the byId-only lookup dropped
+    // the pre-evo from the whole-evo-line expansion.
+    const lineByName = [
+      { chrooked_id: "rufflet", name: "Rufflet", evolution: null, evolves_into: [] },
+      {
+        chrooked_id: "braviary",
+        name: "Braviary",
+        evolution: { from: "Rufflet", method: "Level 36" },
+        evolves_into: [],
+      },
+    ] as unknown as DexEntry[];
+    const got = expandEvoLines([lineByName[1]], lineByName).map((e) => e.chrooked_id);
+    expect(got).toEqual(["rufflet", "braviary"]);
+  });
 });
 
 describe("evoLine", () => {

@@ -7,12 +7,18 @@ import type { DexEntry } from "../types";
  */
 export function expandEvoLines(matches: DexEntry[], all: DexEntry[]): DexEntry[] {
   const byId = new Map(all.map((entry) => [entry.chrooked_id, entry]));
+  // A Ruleset-override evolution stores its pre-evo as the display NAME
+  // ("Rufflet"), while a base evolution stores the chrooked_id ("rufflet").
+  // Resolve either — without the name fallback, every override-evolution line
+  // silently dropped its pre-evo from the whole-evo-line expansion.
+  const byName = new Map(all.map((entry) => [entry.name, entry]));
   const keep = new Set<string>();
 
   function walk(entry: DexEntry): void {
     if (keep.has(entry.chrooked_id)) return;
     keep.add(entry.chrooked_id);
-    const parent = entry.evolution?.from ? byId.get(entry.evolution.from) : undefined;
+    const from = entry.evolution?.from;
+    const parent = from ? byId.get(from) ?? byName.get(from) : undefined;
     if (parent) walk(parent);
     for (const edge of entry.evolves_into ?? []) {
       const child = byId.get(edge.to);

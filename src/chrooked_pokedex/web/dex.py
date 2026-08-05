@@ -143,6 +143,14 @@ def _index_overrides_by_pre_evo(
     for target_id, override in ruleset.species.items():
         if override.evolution is None or override.evolution.from_species is None:
             continue
+        # An override whose own species isn't in this snapshot can't produce a
+        # real forward edge — skip it. The Rejuv/Essentials form rekey ADDS a form
+        # id (`braviary--hisuianform`) without dropping the original canon id
+        # (`braviaryhisui`), so both survive in `ruleset.species`; without this
+        # guard the shared pre-evo splices a phantom duplicate edge keyed by the
+        # dead canon id (to_dex null) — two "Braviary Hisui" cards on Rufflet.
+        if target_id not in snapshot["species"]:
+            continue
         from_id = name_to_id.get(override.evolution.from_species)
         if from_id is None:
             continue
