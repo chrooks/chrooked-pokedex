@@ -1,25 +1,31 @@
 name: Bagon
 chrooked_id: bagon
 aka: { pokeemerald: SPECIES_BAGON }
+types: [Dragon]
 abilities:
+  primary: Intimidate
   secondary: Carnivore
   hidden: Moxie
+stats: { hp: 45, atk: 75, def: 60, spa: 40, spd: 30, spe: 50 }
 learnset:
   - { level: 1, move: Leer }
-  - { level: 1, move: Ember }
-  - { level: 3, move: Maul }
+  - { level: 1, move: Maul }
+  - { level: 1, move: Tackle }
   - { level: 5, move: Bite }
-  - { level: 10, move: Dragon Breath }
-  - { level: 15, move: Headbutt }
-  - { level: 20, move: Scary Face }
-  - { level: 25, move: Crunch }
-  - { level: 28, move: Breaking Swipe }
-  - { level: 31, move: Dragon Claw }
-  - { level: 35, move: Zen Headbutt }
-  - { level: 37, move: Dive Bomb }
-  - { level: 38, move: Nosedive }
-  - { level: 40, move: Focus Energy }
-  - { level: 42, move: Dragon Hammer }
-  - { level: 45, move: Flamethrower }
-  - { level: 50, move: Outrage }
-  - { level: 55, move: Double-Edge }
+  - { level: 10, move: Rock Smash }
+  - { level: 15, move: Scary Face }
+  - { level: 18, move: Headbutt }
+  - { level: 22, move: Breaking Swipe }
+  - { level: 24, move: Crunch }
+  - { level: 28, move: Fire Fang }
+  - { level: 30, move: Dragon Tail }
+  - { level: 33, move: Iron Defense }
+  - { level: 36, move: Zen Headbutt }
+  - { level: 40, move: Wyrmstrike }
+  - { level: 45, move: Dragon Claw }
+  - { level: 48, move: Cinder Smash }
+  - { level: 52, move: Earthquake }
+  - { level: 55, move: Nosedive }
+  - { level: 58, move: Outrage }
+  - { level: 65, move: Brave Bird }
+  - { level: 70, move: Dragon Rush }

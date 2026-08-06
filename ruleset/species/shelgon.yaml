@@ -1,26 +1,31 @@
 name: Shelgon
 chrooked_id: shelgon
 aka: { pokeemerald: SPECIES_SHELGON }
+types: [Dragon]
 abilities:
+  primary: Intimidate
   secondary: Carnivore
   hidden: Moxie
+stats: { hp: 65, atk: 95, def: 100, spa: 60, spd: 50, spe: 50 }
 learnset:
-  - { level: 0, move: Protect }
   - { level: 1, move: Leer }
-  - { level: 1, move: Bite }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Dragon Breath }
-  - { level: 8, move: Maul }
-  - { level: 15, move: Headbutt }
-  - { level: 20, move: Scary Face }
-  - { level: 25, move: Crunch }
-  - { level: 29, move: Breaking Swipe }
-  - { level: 33, move: Dragon Claw }
-  - { level: 36, move: Dive Bomb }
-  - { level: 37, move: Nosedive }
-  - { level: 39, move: Zen Headbutt }
-  - { level: 42, move: Dragon Hammer }
-  - { level: 46, move: Focus Energy }
-  - { level: 53, move: Flamethrower }
-  - { level: 60, move: Outrage }
-  - { level: 67, move: Double-Edge }
+  - { level: 1, move: Maul }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Bite }
+  - { level: 10, move: Rock Smash }
+  - { level: 15, move: Scary Face }
+  - { level: 18, move: Headbutt }
+  - { level: 22, move: Breaking Swipe }
+  - { level: 24, move: Crunch }
+  - { level: 28, move: Fire Fang }
+  - { level: 30, move: Dragon Tail }
+  - { level: 33, move: Iron Defense }
+  - { level: 36, move: Zen Headbutt }
+  - { level: 40, move: Wyrmstrike }
+  - { level: 45, move: Dragon Claw }
+  - { level: 48, move: Cinder Smash }
+  - { level: 52, move: Earthquake }
+  - { level: 55, move: Nosedive }
+  - { level: 58, move: Outrage }
+  - { level: 65, move: Brave Bird }
+  - { level: 70, move: Dragon Rush }
