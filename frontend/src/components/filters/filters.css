@@ -363,6 +363,251 @@ button.dexc-tok__body:hover {
   cursor: not-allowed;
 }
 
+/* --- Mode toggle: tokens ⇄ typed query --- */
+
+.dexc-mode {
+  padding: 1px var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.dexc-mode:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+.dexc-mode[aria-pressed="true"] {
+  color: var(--chrome);
+  border-color: var(--chrome-dim);
+  background: color-mix(in oklch, var(--chrome) 12%, var(--surface-0));
+}
+
+/* --- Command bar: the same expression, typed --- */
+
+.cmdbar {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.cmdbar__field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 2rem;
+  padding: 3px var(--space-2);
+  background: var(--surface-0);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  cursor: text;
+}
+
+.cmdbar__field:focus-within {
+  border-color: var(--chrome);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--chrome) 20%, transparent);
+}
+
+.cmdbar__slash {
+  flex: none;
+  color: var(--text-faint);
+  font-weight: 700;
+}
+
+.cmdbar__input {
+  flex: 1 1 10ch;
+  min-width: 10ch;
+  padding: 1px 0;
+  background: none;
+  border: 0;
+  color: var(--text);
+  font: inherit;
+  caret-color: var(--chrome);
+}
+
+.cmdbar__input:focus {
+  outline: none;
+}
+
+.cmdbar__input::placeholder {
+  color: var(--text-faint);
+}
+
+.cmdbar__tok {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 1px var(--space-1) 1px var(--space-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.cmdbar__tok b {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
+.cmdbar__tok em {
+  font-style: normal;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Exclusion and a bad term both carry a glyph or a border style as well as the
+   color, so neither depends on hue alone. */
+.cmdbar__tok[data-neg] {
+  background: color-mix(in oklch, var(--chrome) 13%, var(--surface-0));
+  border-color: var(--chrome-dim);
+}
+
+.cmdbar__tok-neg {
+  color: var(--chrome);
+  font-weight: 700;
+}
+
+.cmdbar__tok[data-bad] {
+  background: none;
+  border-style: dashed;
+  border-color: var(--chrome);
+}
+
+.cmdbar__tok[data-bad] em {
+  color: var(--chrome);
+}
+
+.cmdbar__tok-x {
+  background: none;
+  border: 0;
+  padding: 0 2px;
+  color: var(--text-faint);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cmdbar__tok-x:hover {
+  color: var(--chrome);
+}
+
+.cmdbar__join {
+  padding: 0 var(--space-1);
+  color: var(--text-faint);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cmdbar__join[data-or] {
+  color: var(--chrome);
+}
+
+.cmdbar__drop {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 16rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 26px -10px oklch(0% 0 0 / 0.6);
+}
+
+.cmdbar__row {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-2);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cmdbar__row[data-active] {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.cmdbar__row code {
+  flex: none;
+  min-width: 12ch;
+  font-family: var(--font-mono);
+  color: var(--chrome);
+}
+
+.cmdbar__hint {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmdbar__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+  padding: var(--space-2) var(--space-2) var(--space-1);
+  border-top: 1px solid var(--line);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.cmdbar__foot kbd {
+  font-family: var(--font-mono);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 0 4px;
+}
+
+/* A term that cannot resolve is named with its reason, never silently dropped. */
+.cmdbar__problems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--chrome);
+}
+
+.cmdbar__problem code {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dexc-mode,
+  .cmdbar__field {
+    transition: none;
+  }
+}
+
 .dexc-row {
   display: flex;
   flex-wrap: wrap;

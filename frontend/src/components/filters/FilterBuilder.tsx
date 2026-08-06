@@ -15,6 +15,7 @@ import {
 import { CategoryChip, type Category } from "../CategoryChip";
 import { TypeChip } from "../TypeChip";
 import { TypeSelect } from "../TypeSelect";
+import { CommandBar } from "./CommandBar";
 
 type Props = {
   /** The active entity's filterable fields (dex / move / ability). */
@@ -139,6 +140,10 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   const [saved, setSaved] = useState<SavedExpressions>(() =>
     expressionsFor(window.localStorage, idPrefix),
   );
+  /** "line" is the default readable face; "command" is the typed power mode.
+      Both edit the same FilterEntry[] — filterQuery.ts parses and formats
+      between them, so switching is a re-render, not a conversion. */
+  const [mode, setMode] = useState<"line" | "command">("line");
   const lineRef = useRef<HTMLDivElement>(null);
 
   const filterCount = filter.filter((e) => e.kind === "filter").length;
@@ -235,6 +240,15 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   return (
     <div className="dexc-filter" id={`${idPrefix}-filter-builder`}>
       <div className="dexc-query" ref={lineRef}>
+        {mode === "command" ? (
+          <CommandBar
+            defs={defs}
+            idPrefix={idPrefix}
+            filter={filter}
+            onChange={onChange}
+            onExit={() => setMode("line")}
+          />
+        ) : (
         <div
           className="dexc-line"
           id={`${idPrefix}-query`}
@@ -285,8 +299,29 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
             {open === "add" && <FieldMenu defs={defs} idPrefix={idPrefix} onPick={addFilter} />}
           </span>
         </div>
+        )}
 
         <div className="dexc-query__side">
+          <button
+            type="button"
+            className="dexc-mode"
+            id={`${idPrefix}-mode`}
+            aria-pressed={mode === "command"}
+            title={
+              mode === "command"
+                ? "Back to tokens"
+                : "Type the query instead (Escape returns)"
+            }
+            onClick={() => {
+              setMode((m) => (m === "line" ? "command" : "line"));
+              setOpen(null);
+            }}
+          >
+            <span aria-hidden="true">/</span>
+            <span className="sr-only">
+              {mode === "command" ? "Edit filters as tokens" : "Edit filters as a typed query"}
+            </span>
+          </button>
           <button
             type="button"
             className="dexc-clear"
