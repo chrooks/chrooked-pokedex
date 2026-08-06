@@ -1,27 +1,29 @@
 name: Archaludon
 chrooked_id: archaludon
 aka: {  }
+abilities:
+  primary: Stamina
+  secondary: Analytic
+  hidden: Transistor
 learnset:
-  - { level: 0, move: Electro Shot }
+  - { level: 0, move: Luster Cannon }
   - { level: 1, move: Leer }
   - { level: 1, move: Metal Claw }
-  - { level: 2, move: Twister }
-  - { level: 6, move: Rock Smash }
-  - { level: 9, move: Glint }
-  - { level: 12, move: Hone Claws }
-  - { level: 15, move: Dragon Breath }
-  - { level: 18, move: Metal Sound }
-  - { level: 21, move: Mirror Shot }
-  - { level: 24, move: Breaking Swipe }
-  - { level: 29, move: Dragon Pulse }
-  - { level: 30, move: Dragon Tail }
-  - { level: 36, move: Iron Defense }
-  - { level: 39, move: Cataclysm }
-  - { level: 40, move: Flash Cannon }
-  - { level: 42, move: Focus Energy }
-  - { level: 45, move: Draco Meteor }
-  - { level: 48, move: Dragon Claw }
-  - { level: 51, move: Luster Cannon }
-  - { level: 54, move: Steel Beam }
-  - { level: 60, move: Metal Burst }
-  - { level: 66, move: Hyper Beam }
+  - { level: 1, move: Twister }
+  - { level: 5, move: Glint }
+  - { level: 10, move: Dragon Breath }
+  - { level: 14, move: Mirror Shot }
+  - { level: 18, move: Charge Beam }
+  - { level: 22, move: Metal Sound }
+  - { level: 26, move: Wyrmstrike }
+  - { level: 30, move: Short Circuit }
+  - { level: 34, move: Flash Cannon }
+  - { level: 38, move: Dragon Pulse }
+  - { level: 42, move: Discharge }
+  - { level: 46, move: Earth Power }
+  - { level: 50, move: Dragon Pulse }
+  - { level: 54, move: Thunderclap }
+  - { level: 58, move: Draco Meteor }
+  - { level: 62, move: Steel Beam }
+  - { level: 66, move: Make It Rain }
+  - { level: 70, move: Zap Cannon }
