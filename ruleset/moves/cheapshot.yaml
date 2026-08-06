@@ -9,3 +9,4 @@ pp: 30
 description: An underhanded blow struck without warning. May make the target flinch.
 additional_effects:
   - { effect: flinch, chance: 10 }
+flags: [contact]

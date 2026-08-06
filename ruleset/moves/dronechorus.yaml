@@ -9,3 +9,4 @@ pp: 5
 description: A deafening swarm-drone batters everything. The user's Sp. Atk falls sharply.
 additional_effects:
   - { effect: sp_atk_minus_2, chance: 100 }
+flags: [sound]

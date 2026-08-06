@@ -9,3 +9,4 @@ pp: 10
 description: A treacherous strike to the target's back. May make it flinch.
 additional_effects:
   - { effect: flinch, chance: 10 }
+flags: [contact]
