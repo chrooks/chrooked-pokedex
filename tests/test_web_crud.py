@@ -110,6 +110,71 @@ def test_get_species_override_404_when_no_override(client: TestClient) -> None:
     assert response.status_code == 404
 
 
+def test_get_and_put_agree_on_a_backdrop_form_id(tmp_path: Path) -> None:
+    """A read and a write of the same species must resolve to the same record.
+
+    Under a Target backdrop a regional form is re-slugged `<base>--<form>`. The
+    PUT bridges that back to canon; the GET used not to, so every editor's
+    GET-modify-PUT read a 404, fabricated a blank Override, and wrote it over
+    the real file — silently clearing every field it did not set. That is how
+    `goodra--hisuianform` wiped goodrahisui's abilities and then its stats.
+    """
+    snapshot = {
+        **_SNAPSHOT,
+        "species": {
+            **_SNAPSHOT["species"],
+            "goodrahisui": {
+                "dex": 706,
+                "chrooked_id": "goodrahisui",
+                "name": "Goodra Hisui",
+                "types": ["Steel", "Dragon"],
+                "abilities": {"primary": "Sap Sipper", "secondary": None, "hidden": "Gooey"},
+                "stats": {"hp": 80, "atk": 100, "def": 100, "spa": 110, "spd": 150, "spe": 60},
+                "learnset": [{"level": 1, "move": "Tackle"}],
+            },
+        },
+    }
+    ruleset_dir = tmp_path / "ruleset"
+    shutil.copytree(_SAMPLE, ruleset_dir)
+    (ruleset_dir / "species" / "goodrahisui.yaml").write_text(
+        "name: Goodra Hisui\n"
+        "chrooked_id: goodrahisui\n"
+        "aka: { dex: 706 }\n"
+        "abilities:\n"
+        "  primary: Gooey\n"
+        "stats: { hp: 95, atk: 85 }\n",
+        encoding="utf-8",
+    )
+    snap_path = tmp_path / "1.11.2.json"
+    snap_path.write_text(json.dumps(snapshot), encoding="utf-8")
+    client = TestClient(
+        create_app(ruleset_dir=ruleset_dir, snapshot_path=snap_path),
+        raise_server_exceptions=False,
+    )
+
+    backdrop_id = "goodra--hisuianform"
+
+    # The read resolves, so an editor sees the Override it is about to rewrite.
+    response = client.get(f"/api/species/{backdrop_id}")
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["chrooked_id"] == "goodrahisui"
+    assert body["stats"] == {"hp": 95, "atk": 85}
+    assert body["abilities"]["primary"] == "Gooey"
+
+    # And the write lands on that same record.
+    body["stats"] = {"hp": 95, "atk": 85, "spe": 77}
+    assert client.put(f"/api/species/{backdrop_id}", json=body).status_code == 200
+    after = client.get("/api/species/goodrahisui").json()
+    assert after["stats"] == {"hp": 95, "atk": 85, "spe": 77}
+    assert after["abilities"]["primary"] == "Gooey"  # untouched field survived
+
+
+def test_get_species_override_still_404s_for_an_unknown_form(client: TestClient) -> None:
+    """Bridging must not invent a match — an unknown form id still 404s."""
+    assert client.get("/api/species/pikachu--fakeform").status_code == 404
+
+
 def test_put_species_writes_yaml_and_validates(
     client: TestClient, ruleset_dir: Path
 ) -> None:

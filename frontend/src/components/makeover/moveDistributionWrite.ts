@@ -6,7 +6,7 @@
    name). Silent so the caller flushes ONE dex refresh. The learnset twin of
    distributionWrite.ts. */
 
-import { api } from "../../api";
+import { api, ApiError } from "../../api";
 import type { DexEntry, LearnsetMove, SpeciesOverride } from "../../types";
 import type { MoveDistRow } from "./moveDistribution";
 
@@ -50,7 +50,11 @@ export async function writeMoveDistribution(
     let raw: SpeciesOverride;
     try {
       raw = await api.speciesOverride(row.species);
-    } catch {
+    } catch (caught: unknown) {
+      // Seed a blank Override only when the species genuinely has none. Any
+      // other read failure means we cannot see what we are about to overwrite,
+      // and a seed's explicit nulls would clear it.
+      if (!(caught instanceof ApiError) || caught.status !== 404) throw caught;
       raw = seedOverride(row.species, byId);
     }
     // The merge base: the Override's whole learnset if it already overrides one,

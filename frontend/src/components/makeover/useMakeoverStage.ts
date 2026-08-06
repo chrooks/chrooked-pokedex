@@ -202,10 +202,15 @@ export function useMakeoverStage<Draft extends SectionDraft>({
     const draft = state.draft;
     dispatch({ type: "locking" });
     try {
+      // A blank seed is only safe when the species genuinely has no Override
+      // yet. On any OTHER failure, seeding would send explicit nulls for every
+      // field this stage does not set, and the write would clear them — so
+      // fail the lock instead of silently discarding the author's other work.
       let raw: SpeciesOverride;
       try {
         raw = await api.speciesOverride(entry.chrooked_id);
-      } catch {
+      } catch (caught: unknown) {
+        if (!(caught instanceof ApiError) || caught.status !== 404) throw caught;
         raw = seedOverride(entry);
       }
       await api.putSpecies(entry.chrooked_id, merge(raw, draft));

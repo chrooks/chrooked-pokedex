@@ -88,10 +88,15 @@ async function writeCreation(
   // slots). Silent so the workbench flushes ONE dex refresh.
   const written: string[] = [];
   for (const row of draft.distribution) {
+    // Seed a blank Override only for a species that genuinely has none. Any
+    // other read failure means we cannot see what we are about to overwrite,
+    // and a seed's explicit nulls would clear it — this is how a distribution
+    // wiped a species' stat Override seconds after it was authored.
     let raw: SpeciesOverride;
     try {
       raw = await api.speciesOverride(row.species);
-    } catch {
+    } catch (caught: unknown) {
+      if (!(caught instanceof ApiError) || caught.status !== 404) throw caught;
       raw = seedOverride(row.species, byId);
     }
     const current = byId.get(row.species)?.abilities ?? {

@@ -360,6 +360,13 @@ def create_app(
         # entry — the species editor needs exactly the changed fields so a save
         # round-trips them without writing base values back as Overrides.
         ruleset = _load_ruleset_or_503()
+        # Bridge a backdrop-launched form id to canon exactly as the PUT below
+        # does. Read and write MUST agree on identity: every editor and accept
+        # path is a GET-modify-PUT, so an id the write resolves but the read
+        # 404s on makes the client fabricate a blank Override and clobber every
+        # field it did not set. Under a Rejuv backdrop that is how
+        # `goodra--hisuianform` wiped goodrahisui's abilities and then its stats.
+        chrooked_id = dexmod.resolve_form_id(_load_snapshot_or_503(), chrooked_id)
         override = ruleset.species.get(chrooked_id)
         if override is None:
             raise HTTPException(

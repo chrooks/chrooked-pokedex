@@ -4,7 +4,7 @@
    refresh). Never touches the anchor — the caller's rows never include it.
    Returns the written ids. */
 
-import { api } from "../../api";
+import { api, ApiError } from "../../api";
 import type { SpeciesOverride } from "../../types";
 import {
   DEFAULT_MIRROR_FACETS,
@@ -38,7 +38,11 @@ export async function writeMirror(
     let raw: SpeciesOverride;
     try {
       raw = await api.speciesOverride(row.chrooked_id);
-    } catch {
+    } catch (caught: unknown) {
+      // Seed a blank Override only when the species genuinely has none. Any
+      // other read failure means we cannot see what we are about to overwrite,
+      // and a seed's explicit nulls would clear it.
+      if (!(caught instanceof ApiError) || caught.status !== 404) throw caught;
       raw = seedOverride(row);
     }
     await api.putSpecies(
