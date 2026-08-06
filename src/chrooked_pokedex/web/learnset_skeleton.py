@@ -67,8 +67,17 @@ SIGNATURE_MOVES: frozenset[str] = frozenset({
 _SECONDARY_RUNGS = 3
 _GRANTED_RUNGS = 3
 _FLAVOR_RUNGS = 2
+_DIRECTION_RUNGS = 3  # a type the user's direction names gets a real ladder
 _STATUS_SLOTS = 4
-_STATUS_LEVELS = (8, 20, 30, 40, 50, 60, 64)  # anchors; k slots take an even spread
+# Anchors start past the pinned early-filler slots (L5/L12) — a status-only
+# slot in the single digits invites the model to file a weak attack there.
+_STATUS_LEVELS = (16, 20, 30, 40, 50, 60, 64)  # k slots take an even spread
+# Density target: the July 2026 audit put curated learnsets at median 21 rows
+# (~3-4 level gaps). A skeleton landing under this widens with extra status
+# slots and duplicate mid/late STAB rungs before giving up — a 14-row spread
+# over 70 levels reads sparse.
+_TARGET_SLOTS = 20
+_STATUS_EXTRA = 2  # widening may add at most this many status slots
 _MAX_PROMPT_CANDIDATES = 14  # names shown per slot line; validation uses the full set
 
 # Trim priority when the skeleton overflows LEARNSET_SIZE_MAX — higher drops first.
@@ -201,6 +210,7 @@ def build_skeleton(
     entry: dict[str, Any],
     all_abilities: list[dict[str, Any]],
     move_pool: list[dict[str, Any]],
+    direction: str | None = None,
 ) -> dict[str, Any]:
     """Build the slot skeleton for one species.
 
@@ -208,6 +218,10 @@ def build_skeleton(
     ``{level, role, label, candidates, required}`` — candidates are exact pool
     move names; the model must pick one per slot. Leans are the soft-fuel
     directive lines; dropped records slots the pool could not fill.
+
+    ``direction`` is the user's free-text steer; any pool type it names grows a
+    real coverage ladder — a redirect asking for "flying and grass coverage"
+    must change the structure, not just the prose the model reads.
     """
     from .suggest import LEARNSET_SIZE_MAX  # constants only; no call cycle
 
@@ -245,13 +259,22 @@ def build_skeleton(
             laddered.add(name)
             rung_filter = dict(spec["filter"]) if spec.get("filter") else stab_filter(t)
             ladders.append((t, rung_filter, _GRANTED_RUNGS, _PRIORITY["stab"]))
+    # Direction-named coverage first (survives trimming longer than generic
+    # flavor): any pool type the user's steer mentions grows a real ladder.
+    pool_types = {r.get("type") for r in move_pool if r.get("type")}
+    direction_words = (direction or "").casefold()
+    for t in sorted(pool_types):
+        if t.casefold() in granted_types or t.casefold() not in direction_words:
+            continue
+        granted_types.add(t.casefold())
+        ladders.append((t, stab_filter(t), _DIRECTION_RUNGS, _PRIORITY["flavor"]))
     for t in entry.get("flavor_types") or []:
         if t.casefold() in granted_types:
             continue
         ladders.append((t, stab_filter(t), _FLAVOR_RUNGS, _FLAVOR_PRIORITY))
 
     for lad_i, (t, rung_filter, rungs, prio) in enumerate(ladders):
-        is_flavor = prio == _FLAVOR_PRIORITY
+        is_flavor = prio in (_FLAVOR_PRIORITY, _PRIORITY["flavor"])
         role = "flavor" if is_flavor else "stab"
         # Flavor ladders climb the mid/late bands; STAB ladders climb from the
         # bottom. Rungs = one per band, taken from the top down for short ladders
@@ -297,6 +320,7 @@ def build_skeleton(
                     "priority": _PRIORITY["fuel"], "band": band, "role": "fuel",
                     "label": f"FUEL for {name}{note}",
                     "filter": None, "candidates": [r["move"] for r in chunk],
+                    "powers": {r["move"]: r.get("power") for r in chunk},
                     "required": True,
                 })
         for mv in spec.get("named_moves") or []:
@@ -346,6 +370,17 @@ def build_skeleton(
         "label": "KIT — utility or weak attack", "filter": None,
         "candidates": kit_util, "required": True,
     })
+    # Early-game fillers: the curated learnsets carry a row every ~4 levels
+    # through the teens (Acid Spray L5, Glint L10, Water Gun L14 in the hand
+    # edits); without these the skeleton jumps L1 → L8 → L19 and reads sparse
+    # exactly where the player spends the most time.
+    for early_level in (5, 12):
+        specs.append({
+            "priority": _PRIORITY["status"], "band": None, "role": "status",
+            "level": early_level,
+            "label": "EARLY — weak attack or utility", "filter": None,
+            "candidates": kit_util, "required": True,
+        })
     if is_evolved:
         specs.append({
             "priority": _PRIORITY["reward"], "band": None, "role": "reward", "level": 0,
@@ -354,6 +389,27 @@ def build_skeleton(
             "filter": None, "candidates": [r["move"] for r in move_pool],
             "required": True,
         })
+
+    # --- widening pass: a sparse skeleton (mono-type, thin ladders) reads as
+    # "very little moves, very spaced out". Pad toward the density target with
+    # extra status slots, then duplicate mid/late rungs of the own-type ladders.
+    wideners: list[dict[str, Any]] = []
+    if status_moves:
+        for _ in range(_STATUS_EXTRA):
+            wideners.append({
+                "priority": _PRIORITY["status"], "band": None, "role": "status",
+                "label": "STATUS / utility", "filter": None,
+                "candidates": status_moves, "required": True,
+            })
+    for t in types:
+        for band in reversed(bands[1:4]):  # 51-75 · 76-90 · 91-110, payoff first
+            wideners.append({
+                "priority": _STAB_EXTRA_PRIORITY, "band": band, "role": "stab",
+                "label": f"STAB {t} rung ({band['label']}BP)",
+                "filter": {**stab_filter(t), "_band": band}, "required": True,
+            })
+    while len(specs) < _TARGET_SLOTS and wideners:
+        specs.append(wideners.pop(0))
 
     # --- resolve candidates for band rungs, drop unfillable slots
     resolved: list[dict[str, Any]] = []
@@ -371,7 +427,11 @@ def build_skeleton(
                 dropped.append(f"{spec['label']}: no pool move fits — slot dropped")
                 continue
             rows.sort(key=lambda r: (-(r.get("power") or 0), r["move"]))
-            spec = {**spec, "candidates": [r["move"] for r in rows]}
+            spec = {
+                **spec,
+                "candidates": [r["move"] for r in rows],
+                "powers": {r["move"]: r.get("power") for r in rows},
+            }
         resolved.append(spec)
 
     # Singleton-collision guard: a move a singleton slot claims outright is
@@ -433,13 +493,50 @@ def build_skeleton(
     return {"slots": slots, "leans": leans, "dropped": dropped}
 
 
+def _pacing_bands() -> list[dict[str, Any]]:
+    """The level→BP pacing table (the UI badge source), read fresh."""
+    return json.loads(_BAND_PATH.read_text("utf-8"))["bands"]
+
+
+def _pacing_allows(level: int, power: int, pacing: list[dict[str, Any]]) -> bool:
+    """True when a move of ``power`` at ``level`` draws no pacing badge.
+
+    Mirrors the advisory check in suggest.py: the FIRST pacing band containing
+    the level decides, and a band with no ``bp_max`` allows anything.
+    """
+    band = next(
+        (b for b in pacing if b["level_min"] <= level <= b["level_max"]), None
+    )
+    cap = band.get("bp_max") if band else None
+    return cap is None or power <= cap
+
+
+def _legal_candidates(
+    spec: dict[str, Any],
+    powers: dict[str, Any],
+    level: int,
+    pacing: list[dict[str, Any]],
+) -> list[str]:
+    """The slot's candidates whose BP the pacing table allows at ``level``."""
+    return [
+        c for c in spec["candidates"]
+        if not isinstance(powers.get(c), int) or powers[c] <= 1
+        or _pacing_allows(level, powers[c], pacing)
+    ]
+
+
 def _assign_levels(specs: list[dict[str, Any]]) -> None:
     """Give every slot a deterministic level, in place.
 
-    Banded slots spread evenly inside their band's level window; status/named
-    slots take an even spread of the fixed anchors; kit/reward levels are already
-    pinned. Duplicate levels (beyond the L1 kit pair) bump upward to stay unique.
+    Banded slots spread inside their band's level window — but only across
+    levels the pacing table also allows for the slot's strongest candidate, so
+    the workbench's BP badges cannot fire whatever the model picks (the two
+    band tables used to disagree: a 65BP rung at the window's start sat in a
+    ≤60BP pacing band). Status/named slots take an even spread of the fixed
+    anchors; kit/reward levels are already pinned. Duplicate levels (beyond
+    the L1 kit pair) bump upward to stay unique.
     """
+    pacing = _pacing_bands()
     by_band: dict[str, list[dict[str, Any]]] = {}
     free: list[dict[str, Any]] = []
     for spec in specs:
@@ -452,11 +549,54 @@ def _assign_levels(specs: list[dict[str, Any]]) -> None:
     for group in by_band.values():
         lo, hi = group[0]["band"]["window"]
         lo = max(lo, 5)  # L1-4 belongs to the kit
+        # Within a band, flavor coverage lands early and STAB/fuel late — the
+        # highest-priority-number (most trimmable) slots take the window's
+        # start, so the payoff rungs keep the loosest pacing cap.
+        group.sort(key=lambda s: -s["priority"])
         for i, spec in enumerate(group):
-            spec["level"] = lo + (i * (hi - lo)) // max(len(group), 1)
+            # Climb toward the window's END: a lone rung sits at `hi`, where
+            # the pacing cap is loosest and the band's iconic top picks
+            # (Dragon Pulse 85 in 76-90) stay offerable; a multi-rung group
+            # spreads up the window and its early rungs trim to weaker picks.
+            spec["level"] = lo + ((i + 1) * (hi - lo)) // max(len(group), 1)
     anchors = _STATUS_LEVELS
     for i, spec in enumerate(free):
         spec["level"] = anchors[(i * len(anchors)) // max(len(free), 1)]
+
+    # Pacing-conformance pass: at the assigned level, offer only candidates the
+    # level→BP pacing table allows — the slot keeps its window placement and
+    # the candidate list conforms, so the workbench badge cannot fire whatever
+    # the model picks (the two band tables used to disagree: a 65BP candidate
+    # at the window's start sat in a ≤60BP pacing band). A slot whose whole
+    # list violates the cap slides later until one candidate is legal.
+    for spec in specs:
+        powers = spec.get("powers")
+        if not powers or spec.get("level") is None or spec["level"] == 0:
+            continue
+        # Prefer a small forward slide that keeps the WHOLE list legal — the
+        # band's iconic top pick (Dragon Pulse 85 in 76-90) must not fall out
+        # just because the window's edge sits one pacing notch early. This is
+        # the same move Chris makes by hand (Dragon Pulse at L44).
+        full_at = next(
+            (
+                lvl for lvl in range(spec["level"], min(spec["level"] + 7, 71))
+                if len(_legal_candidates(spec, powers, lvl, pacing))
+                == len(spec["candidates"])
+            ),
+            None,
+        )
+        if full_at is not None:
+            spec["level"] = full_at
+            continue
+        level = spec["level"]
+        while level < 70:
+            legal = _legal_candidates(spec, powers, level, pacing)
+            if legal:
+                spec["level"] = level
+                spec["candidates"] = legal
+                break
+            level += 1
+
     # dedupe (kit L1 pair and the L0 reward stay put)
     taken: set[int] = set()
     for spec in sorted(specs, key=lambda s: s["level"]):
@@ -476,7 +616,11 @@ def format_skeleton(skeleton: dict[str, Any]) -> str:
     lines = [
         "SLOT SKELETON — the learnset's structure is FIXED. Produce EXACTLY one "
         "row per slot below, at the stated level, choosing a move from that "
-        "slot's allowed list. No other rows, no other levels.",
+        "slot's allowed list. No other rows, no other levels. Every pick must "
+        "be a DIFFERENT move — a repeated move is dropped and its slot fails; "
+        "in particular each STATUS slot needs its own distinct status move. "
+        "Sole exception: the L0 reward move may also appear once at a later "
+        "level.",
     ]
     for slot in skeleton["slots"]:
         cands = slot["candidates"]
@@ -530,6 +674,75 @@ def validate_against_skeleton(
                 f"level {level}: row(s) {', '.join(moves)} at a level with no slot"
             )
     return errors
+
+
+def autofill(
+    rows: list[dict[str, Any]], skeleton: dict[str, Any]
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Deterministically finish a draft that almost fills the skeleton.
+
+    The backstop behind the retry loop: when the model keeps misplacing a row
+    or two (an attack in a status slot, a rung at the wrong level), the server
+    can complete the draft itself — drop the off-slot row, seat each unfilled
+    slot with its first unused candidate — instead of surfacing a salvage
+    banner. Returns ``(rows, notes)``; the caller re-validates and only uses
+    the result when it comes back clean.
+    """
+    slots_by_level: dict[int, list[dict[str, Any]]] = {}
+    for slot in skeleton["slots"]:
+        slots_by_level.setdefault(slot["level"], []).append(slot)
+
+    kept: list[dict[str, Any]] = []
+    notes: list[str] = []
+    used_nonzero: set[str] = set()
+    used_zero: set[str] = set()
+    unfilled: list[dict[str, Any]] = []
+
+    for level, slots in sorted(slots_by_level.items()):
+        at_level = [r for r in rows if int(r.get("level", -1)) == level]
+        for slot in sorted(slots, key=lambda s: len(s["candidates"])):
+            allowed = {c.casefold() for c in slot["candidates"]}
+            hit = next(
+                (r for r in at_level if (r.get("move") or "").casefold() in allowed),
+                None,
+            )
+            if hit is None:
+                unfilled.append(slot)
+                continue
+            at_level.remove(hit)
+            kept.append(hit)
+            (used_zero if level == 0 else used_nonzero).add(hit["move"].casefold())
+        for stray in at_level:
+            notes.append(
+                f"auto-repair: dropped {stray.get('move')} @L{level} — it fits "
+                "no slot at that level"
+            )
+    # Rows at levels with no slot are dropped too (the validator rejects them).
+    for row in rows:
+        if int(row.get("level", -1)) not in slots_by_level:
+            notes.append(
+                f"auto-repair: dropped {row.get('move')} @L{row.get('level')} — "
+                "no slot at that level"
+            )
+
+    for slot in unfilled:
+        used = used_zero if slot["level"] == 0 else used_nonzero
+        pick = next(
+            (c for c in slot["candidates"] if c.casefold() not in used), None
+        )
+        if pick is None:
+            continue  # nothing unused — re-validation will fail honestly
+        used.add(pick.casefold())
+        kept.append({
+            "level": slot["level"],
+            "move": pick,
+            "reasoning": "auto-filled by the server — the draft left this "
+                         f"slot ({slot['label']}) empty",
+        })
+        notes.append(f"auto-repair: filled {slot['label']} with {pick}")
+
+    kept.sort(key=lambda r: (r["level"], r["move"]))
+    return kept, notes
 
 
 def validate_fuel_table() -> list[str]:

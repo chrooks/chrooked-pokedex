@@ -1352,12 +1352,10 @@ def test_learnset_missing_twice_errors_honestly_naming_what_came_back(
 def test_suggest_learnset_flagged_draft_returns_200_with_editable_salvage(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    """A draft that only trips a soft shape bound comes back as a 200 carrying the
-    editable draft + an `error` note — the UI shows it for editing instead of a
-    bare NO PROPOSAL. Retries eagerly first, then hands back the salvage.
-
-    Since the slot skeleton became the FULL-mode gate, an under-sized draft trips
-    the skeleton check (unfilled slots), which flags the same editable salvage."""
+    """A draft the model never completes comes back as a 200 anyway: after the
+    eager retries exhaust, the server's skeleton auto-repair finishes the
+    draft deterministically (each unfilled slot seated with an unused
+    candidate) — the UI gets a full proposal, not a salvage banner."""
     provider = _SequenceProvider([_TOO_FEW_LEARNSET_RESULT] * 4)
     client = _make_client(ruleset_dir, tmp_path, provider)
 
@@ -1365,9 +1363,10 @@ def test_suggest_learnset_flagged_draft_returns_200_with_editable_salvage(
 
     assert response.status_code == 200
     body = response.json()
-    assert len(body["draft"]["learnset"]) == 2  # the flagged draft is intact
-    assert "slot skeleton" in body["error"]  # the reason to surface
-    assert len(provider.calls) == 4  # first try + 3 eager repairs, then salvaged
+    assert "error" not in body  # repaired, not flagged
+    assert any("auto-repair" in w for w in body["warnings"])
+    assert len(body["draft"]["learnset"]) > 2  # the two model rows got completed
+    assert len(provider.calls) == 4  # first try + 3 eager repairs, then repaired
 
 
 def test_suggest_learnset_flagged_draft_writes_nothing(
@@ -1629,9 +1628,11 @@ def test_suggest_learnset_out_of_range_level_dropped_among_valid(
 
     assert response.status_code == 200
     body = response.json()
-    moves = [r["move"] for r in body["draft"]["learnset"]]
-    assert moves == ["Tackle", "Dragon Pulse", "Excalibur"]
+    # The out-of-range row is gone (with a warning); the server's skeleton
+    # auto-repair then completes the draft, so more rows may ride along.
+    assert not any(r["level"] == 101 for r in body["draft"]["learnset"])
     assert any("101" in w for w in body["warnings"])
+    assert "error" not in body
 
 
 def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
@@ -1658,7 +1659,11 @@ def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
     assert response.status_code == 200
     body = response.json()
     rows = [(r["level"], r["move"]) for r in body["draft"]["learnset"]]
-    assert rows == [(5, "Tackle"), (25, "Dragon Pulse"), (30, "Excalibur")]
+    # The duplicate was dropped (keep-lowest, with a warning); the skeleton
+    # auto-repair then completes the draft, so Tackle appears at most once
+    # at a non-zero level.
+    nonzero_tackle = [lvl for lvl, mv in rows if mv == "Tackle" and lvl > 0]
+    assert len(nonzero_tackle) <= 1
     assert any("@20" in w for w in body["warnings"])
 
 
@@ -1707,8 +1712,8 @@ def test_suggest_learnset_unsorted_input_sorted_on_output(
 
     assert response.status_code == 200
     rows = response.json()["draft"]["learnset"]
-    assert rows[0]["level"] == 1
-    assert rows[1]["level"] == 5
+    keys = [(r["level"], r["move"]) for r in rows]
+    assert keys == sorted(keys)
 
 
 # ===========================================================================

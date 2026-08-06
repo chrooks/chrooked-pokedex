@@ -2006,26 +2006,47 @@ def suggest_learnset(
     # the reasoning. Surgical mode edits in place and gets no skeleton.
     skeleton = None
     if mode == "full":
-        skeleton = learnset_skeleton.build_skeleton(entry, abilities, move_pool)
+        skeleton = learnset_skeleton.build_skeleton(
+            entry, abilities, move_pool, direction=direction
+        )
         user_context += "\n" + learnset_skeleton.format_skeleton(skeleton)
 
-    return propose_with_repair(
-        provider=provider,
-        system=_build_learnset_rubric(),
-        cached_context=cached_context,
-        user=user_context,
-        schema=_learnset_draft_schema(),
-        max_tokens=LEARNSET_MAX_TOKENS,
-        validate=lambda draft: _validate_learnset_result(
-            draft,
-            move_pool,
-            mode=mode,
-            current_learnset=current_learnset,
-            instruction=instruction,
-            skeleton=skeleton,
-        ),
-        max_retries=_LEARNSET_MAX_RETRIES,
-    )
+    try:
+        return propose_with_repair(
+            provider=provider,
+            system=_build_learnset_rubric(),
+            cached_context=cached_context,
+            user=user_context,
+            schema=_learnset_draft_schema(),
+            max_tokens=LEARNSET_MAX_TOKENS,
+            validate=lambda draft: _validate_learnset_result(
+                draft,
+                move_pool,
+                mode=mode,
+                current_learnset=current_learnset,
+                instruction=instruction,
+                skeleton=skeleton,
+            ),
+            max_retries=_LEARNSET_MAX_RETRIES,
+        )
+    except SuggestError as error:
+        # Auto-repair backstop: when the retries exhaust with the model still
+        # misplacing a row or two, the server finishes the draft itself —
+        # deterministically seating each unfilled slot — rather than handing
+        # back a salvage banner. Only a clean re-validation uses the result.
+        salvage = getattr(error, "salvage", None)
+        if skeleton is None or not salvage:
+            raise
+        rows, notes = learnset_skeleton.autofill(
+            salvage["draft"]["learnset"], skeleton
+        )
+        if learnset_skeleton.validate_against_skeleton(rows, skeleton):
+            raise  # auto-repair could not finish either — stay honest
+        repaired = dict(salvage)
+        repaired["draft"] = {**salvage["draft"], "learnset": rows}
+        repaired["warnings"] = list(salvage.get("warnings") or []) + notes
+        repaired.pop("error", None)
+        return repaired
 
 
 # =========================================================================== #
