@@ -367,28 +367,38 @@ def test_build_move_pool_created_move_present(tmp_path: Path) -> None:
     assert by_name["Dragon Pulse"]["custom"] is False
 
 
-def test_build_move_pool_backfills_null_power_from_canon() -> None:
-    """A base move the parser left null gets its canon power in the pool."""
+def test_build_move_pool_reports_power_honestly() -> None:
+    """The pool carries the base's own power, and a genuine null stays null.
+
+    This used to backfill from a hand-kept canon table, because the move parser
+    read only a bare literal and left every gen-gated power null. The parser now
+    resolves those ternaries, so the base is the single source — inventing a
+    number here would hide the next parse gap instead of surfacing it.
+    """
     from chrooked_pokedex.model import Ruleset
 
-    # Craft a snapshot move that is in the canon table (surf) but null-powered.
+    def _move(chrooked_id: str, name: str, power: int | None) -> dict:
+        return {
+            "chrooked_id": chrooked_id, "name": name, "type": "Water",
+            "category": "special", "power": power, "accuracy": 100, "pp": 15,
+            "description": "", "effect": "hit", "argument": None,
+            "additional_effects": [], "flags": [], "priority": 0,
+            "target": "all", "aka": {},
+        }
+
     snap = {
         **_SNAPSHOT,
         "moves": {
             **_SNAPSHOT["moves"],
-            "surf": {
-                "chrooked_id": "surf", "name": "Surf", "type": "Water",
-                "category": "special", "power": None, "accuracy": 100, "pp": 15,
-                "description": "", "effect": "hit", "argument": None,
-                "additional_effects": [], "flags": [], "priority": 0,
-                "target": "all", "aka": {},
-            },
+            "surf": _move("surf", "Surf", 90),
+            "mystery": _move("mystery", "Mystery", None),
         },
     }
     ruleset = Ruleset.load(_SAMPLE)
     pool = dexmod.build_move_pool(snap, ruleset)
-    surf = next(r for r in pool if r["move"] == "Surf")
-    assert surf["power"] == dexmod._CANON_POWERS["surf"]  # backfilled, not None
+
+    assert next(r for r in pool if r["move"] == "Surf")["power"] == 90
+    assert next(r for r in pool if r["move"] == "Mystery")["power"] is None
 
 
 def test_format_move_pool_tags_custom_moves_only() -> None:

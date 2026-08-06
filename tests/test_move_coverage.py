@@ -48,13 +48,25 @@ def test_flamethrower_resolves_and_fills_fire_special_76_90() -> None:
 
 
 @pytest.mark.unit
-def test_drain_family_eligible_despite_null_pp() -> None:
-    # The base snapshot hides drain-family pp behind gen-config ternaries
-    # (pp: null); unknown pp must not disqualify (only a literal 1 does).
+def test_gen_gated_numbers_reach_the_pool() -> None:
+    # The drain family's power and pp are gen-config ternaries in the base C
+    # source. The parser resolves them, so the pool sees real numbers — this
+    # test used to assert `pp is None`, encoding that parse gap as expected.
     pool = mc.build_pool()
 
-    assert pool.moves["megadrain"]["pp"] is None
+    assert pool.moves["megadrain"]["pp"] == 15
+    assert pool.moves["megadrain"]["power"] == 40
     assert mc.is_ladder_eligible(pool.moves["megadrain"])
+
+
+@pytest.mark.unit
+def test_unknown_pp_does_not_disqualify_a_rung() -> None:
+    # Eligibility must not depend on pp being known: only a literal 1 (a
+    # variable/no-BP sentinel) disqualifies. Kept as a guard now that no real
+    # move reaches it.
+    known = dict(mc.build_pool().moves["megadrain"])
+    assert mc.is_ladder_eligible({**known, "pp": None})
+    assert not mc.is_ladder_eligible({**known, "power": 1})
 
 
 @pytest.mark.unit

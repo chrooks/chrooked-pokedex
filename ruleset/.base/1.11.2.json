@@ -2485,7 +2485,7 @@
       "flags": [],
       "name": "Absorb",
       "power": 20,
-      "pp": null,
+      "pp": 25,
       "priority": 0,
       "target": "selected",
       "type": "Grass"
@@ -2544,7 +2544,7 @@
       "flags": [],
       "name": "Acid Armor",
       "power": 0,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "user",
       "type": "Poison"
@@ -2731,7 +2731,7 @@
         "wind"
       ],
       "name": "Air Cutter",
-      "power": null,
+      "power": 60,
       "pp": 25,
       "priority": 0,
       "target": "both",
@@ -2758,7 +2758,7 @@
       ],
       "name": "Air Slash",
       "power": 75,
-      "pp": null,
+      "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Flying"
@@ -2823,7 +2823,7 @@
       "name": "Ally Switch",
       "power": 0,
       "pp": 15,
-      "priority": 0,
+      "priority": 2,
       "target": "user",
       "type": "Psychic"
     },
@@ -3140,7 +3140,7 @@
         "contact"
       ],
       "name": "Assurance",
-      "power": null,
+      "power": 60,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -3244,7 +3244,7 @@
         "ballistic"
       ],
       "name": "Aura Sphere",
-      "power": null,
+      "power": 80,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -3403,7 +3403,7 @@
       "type": "Fairy"
     },
     "baddybad": {
-      "accuracy": null,
+      "accuracy": 95,
       "additional_effects": [
         {
           "chance": 100,
@@ -3420,7 +3420,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Baddy Bad",
-      "power": null,
+      "power": 80,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -3466,7 +3466,7 @@
       "flags": [],
       "name": "Barb Barrage",
       "power": 60,
-      "pp": null,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Poison"
@@ -3506,7 +3506,7 @@
       "flags": [],
       "name": "Barrier",
       "power": 0,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "user",
       "type": "Psychic"
@@ -3564,7 +3564,7 @@
       "effect": "beat_up",
       "flags": [],
       "name": "Beat Up",
-      "power": null,
+      "power": 1,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -3671,7 +3671,7 @@
       "type": "Normal"
     },
     "bide": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_BIDE"
@@ -3687,12 +3687,12 @@
       "name": "Bide",
       "power": 1,
       "pp": 10,
-      "priority": 0,
+      "priority": 1,
       "target": "user",
       "type": "Normal"
     },
     "bind": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_BIND"
@@ -3781,7 +3781,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Bitter Malice",
-      "power": null,
+      "power": 75,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -3895,8 +3895,8 @@
         "wind"
       ],
       "name": "Bleakwind Storm",
-      "power": null,
-      "pp": null,
+      "power": 100,
+      "pp": 10,
       "priority": 0,
       "target": "both",
       "type": "Flying"
@@ -3921,7 +3921,7 @@
         "wind"
       ],
       "name": "Blizzard",
-      "power": null,
+      "power": 110,
       "pp": 5,
       "priority": 0,
       "target": "both",
@@ -4146,7 +4146,7 @@
       "type": "Ground"
     },
     "bonerush": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_BONE_RUSH"
@@ -4226,8 +4226,8 @@
       "effect": "absorb",
       "flags": [],
       "name": "Bouncy Bubble",
-      "power": null,
-      "pp": null,
+      "power": 60,
+      "pp": 20,
       "priority": 0,
       "target": "selected",
       "type": "Water"
@@ -4398,7 +4398,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Bubble",
-      "power": null,
+      "power": 40,
       "pp": 30,
       "priority": 0,
       "target": "both",
@@ -4555,7 +4555,7 @@
         "ballistic"
       ],
       "name": "Bullet Seed",
-      "power": null,
+      "power": 25,
       "pp": 30,
       "priority": 0,
       "target": "selected",
@@ -4643,8 +4643,8 @@
       "effect": "hit",
       "flags": [],
       "name": "Buzzy Buzz",
-      "power": null,
-      "pp": null,
+      "power": 60,
+      "pp": 20,
       "priority": 0,
       "target": "selected",
       "type": "Electric"
@@ -4853,7 +4853,7 @@
         "sound"
       ],
       "name": "Chatter",
-      "power": null,
+      "power": 65,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -4936,7 +4936,7 @@
       "effect": "max_hp_50_recoil",
       "flags": [],
       "name": "Chloroblast",
-      "power": null,
+      "power": 150,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -4964,7 +4964,7 @@
       "type": "Fighting"
     },
     "clamp": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_CLAMP"
@@ -4979,7 +4979,7 @@
       ],
       "name": "Clamp",
       "power": 35,
-      "pp": null,
+      "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Water"
@@ -5480,7 +5480,7 @@
       "type": "Grass"
     },
     "cottonspore": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_COTTON_SPORE"
@@ -5551,14 +5551,14 @@
       "effect": "hit",
       "flags": [],
       "name": "Covet",
-      "power": null,
-      "pp": null,
+      "power": 60,
+      "pp": 25,
       "priority": 0,
       "target": "selected",
       "type": "Normal"
     },
     "crabhammer": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_CRABHAMMER"
@@ -5572,7 +5572,7 @@
         "contact"
       ],
       "name": "Crabhammer",
-      "power": null,
+      "power": 100,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -5808,7 +5808,7 @@
       "type": "Dark"
     },
     "darkvoid": {
-      "accuracy": null,
+      "accuracy": 50,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_DARK_VOID"
@@ -5955,7 +5955,7 @@
       "name": "Detect",
       "power": 0,
       "pp": 5,
-      "priority": 0,
+      "priority": 4,
       "target": "user",
       "type": "Fighting"
     },
@@ -6012,7 +6012,7 @@
         "contact"
       ],
       "name": "Dig",
-      "power": null,
+      "power": 80,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -6038,7 +6038,7 @@
         "contact"
       ],
       "name": "Dire Claw",
-      "power": null,
+      "power": 80,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -6123,7 +6123,7 @@
         "contact"
       ],
       "name": "Dive",
-      "power": null,
+      "power": 80,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -6176,7 +6176,7 @@
       "type": "Normal"
     },
     "doomdesire": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_DOOM_DESIRE"
@@ -6188,7 +6188,7 @@
       "effect": "future_sight",
       "flags": [],
       "name": "Doom Desire",
-      "power": null,
+      "power": 140,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -6360,7 +6360,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Draco Meteor",
-      "power": null,
+      "power": 130,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -6542,7 +6542,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Dragon Pulse",
-      "power": null,
+      "power": 85,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -6657,8 +6657,8 @@
         "punching"
       ],
       "name": "Drain Punch",
-      "power": null,
-      "pp": null,
+      "power": 75,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Fighting"
@@ -7187,7 +7187,7 @@
       "name": "Endure",
       "power": 0,
       "pp": 10,
-      "priority": 0,
+      "priority": 4,
       "target": "user",
       "type": "Normal"
     },
@@ -7211,7 +7211,7 @@
         "ballistic"
       ],
       "name": "Energy Ball",
-      "power": null,
+      "power": 90,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -7256,7 +7256,7 @@
       "type": "Fire"
     },
     "esperwing": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [
         {
           "chance": 100,
@@ -7273,7 +7273,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Esper Wing",
-      "power": null,
+      "power": 80,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -7355,7 +7355,7 @@
       "flags": [],
       "name": "Extrasensory",
       "power": 80,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "selected",
       "type": "Psychic"
@@ -7396,7 +7396,7 @@
       "name": "Extreme Speed",
       "power": 80,
       "pp": 5,
-      "priority": 0,
+      "priority": 2,
       "target": "selected",
       "type": "Normal"
     },
@@ -7481,7 +7481,7 @@
       "name": "Fake Out",
       "power": 40,
       "pp": 10,
-      "priority": 0,
+      "priority": 3,
       "target": "selected",
       "type": "Normal"
     },
@@ -7578,7 +7578,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Feint",
-      "power": null,
+      "power": 30,
       "pp": 10,
       "priority": 2,
       "target": "selected",
@@ -7618,7 +7618,7 @@
         "contact"
       ],
       "name": "Fell Stinger",
-      "power": null,
+      "power": 50,
       "pp": 25,
       "priority": 0,
       "target": "selected",
@@ -7747,7 +7747,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Fire Blast",
-      "power": null,
+      "power": 110,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -7823,7 +7823,7 @@
       "effect": "pledge",
       "flags": [],
       "name": "Fire Pledge",
-      "power": null,
+      "power": 80,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -7857,7 +7857,7 @@
       "type": "Fire"
     },
     "firespin": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_FIRE_SPIN"
@@ -7869,7 +7869,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Fire Spin",
-      "power": null,
+      "power": 35,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -8023,7 +8023,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Flamethrower",
-      "power": null,
+      "power": 90,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -8082,7 +8082,7 @@
       "type": "Fire"
     },
     "flash": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_FLASH"
@@ -8302,7 +8302,7 @@
         "contact"
       ],
       "name": "Fly",
-      "power": null,
+      "power": 90,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -8325,7 +8325,7 @@
         "contact"
       ],
       "name": "Flying Press",
-      "power": null,
+      "power": 100,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -8415,7 +8415,7 @@
       "name": "Follow Me",
       "power": 0,
       "pp": 20,
-      "priority": 0,
+      "priority": 2,
       "target": "user",
       "type": "Normal"
     },
@@ -8446,7 +8446,7 @@
       "type": "Fighting"
     },
     "foresight": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_FORESIGHT"
@@ -8581,7 +8581,7 @@
       "type": "Psychic"
     },
     "freezyfrost": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [
         {
           "chance": 100,
@@ -8598,8 +8598,8 @@
       "effect": "hit",
       "flags": [],
       "name": "Freezy Frost",
-      "power": null,
-      "pp": null,
+      "power": 100,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Ice"
@@ -8636,7 +8636,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Frost Breath",
-      "power": null,
+      "power": 60,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -8766,7 +8766,7 @@
       "type": "Fire"
     },
     "futuresight": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_FUTURE_SIGHT"
@@ -8779,7 +8779,7 @@
       "flags": [],
       "name": "Future Sight",
       "power": 120,
-      "pp": null,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Psychic"
@@ -8898,8 +8898,8 @@
       "effect": "absorb",
       "flags": [],
       "name": "Giga Drain",
-      "power": null,
-      "pp": null,
+      "power": 75,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Grass"
@@ -8976,7 +8976,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Glacial Lance",
-      "power": null,
+      "power": 120,
       "pp": 5,
       "priority": 0,
       "target": "both",
@@ -9047,7 +9047,7 @@
       "type": "Normal"
     },
     "glitzyglow": {
-      "accuracy": null,
+      "accuracy": 95,
       "additional_effects": [
         {
           "chance": 100,
@@ -9064,7 +9064,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Glitzy Glow",
-      "power": null,
+      "power": 80,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -9886,7 +9886,7 @@
       "effect": "pledge",
       "flags": [],
       "name": "Grass Pledge",
-      "power": null,
+      "power": 80,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -9928,7 +9928,7 @@
         "contact"
       ],
       "name": "Grassy Glide",
-      "power": null,
+      "power": 55,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -10031,7 +10031,7 @@
       "flags": [],
       "name": "Growth",
       "power": 0,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -10134,7 +10134,7 @@
       "type": "Normal"
     },
     "gunkshot": {
-      "accuracy": null,
+      "accuracy": 80,
       "additional_effects": [
         {
           "chance": 30,
@@ -10382,7 +10382,7 @@
         "punching"
       ],
       "name": "Headlong Rush",
-      "power": null,
+      "power": 120,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -10590,7 +10590,7 @@
         "wind"
       ],
       "name": "Heat Wave",
-      "power": null,
+      "power": 95,
       "pp": 10,
       "priority": 0,
       "target": "both",
@@ -10651,7 +10651,7 @@
       "effect": "double_power_on_arg_status",
       "flags": [],
       "name": "Hex",
-      "power": null,
+      "power": 65,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -10670,7 +10670,7 @@
       "effect": "hidden_power",
       "flags": [],
       "name": "Hidden Power",
-      "power": null,
+      "power": 60,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -10713,7 +10713,7 @@
       ],
       "name": "High Jump Kick",
       "power": 130,
-      "pp": null,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Fighting"
@@ -10881,7 +10881,7 @@
         "wind"
       ],
       "name": "Hurricane",
-      "power": null,
+      "power": 110,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -10919,7 +10919,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Hydro Pump",
-      "power": null,
+      "power": 110,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -11148,7 +11148,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Ice Beam",
-      "power": null,
+      "power": 90,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -11337,7 +11337,7 @@
       "effect": "multi_hit",
       "flags": [],
       "name": "Icicle Spear",
-      "power": null,
+      "power": 25,
       "pp": 30,
       "priority": 0,
       "target": "selected",
@@ -11401,7 +11401,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Incinerate",
-      "power": null,
+      "power": 60,
       "pp": 15,
       "priority": 0,
       "target": "both",
@@ -11725,7 +11725,7 @@
       ],
       "name": "Jump Kick",
       "power": 100,
-      "pp": null,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Fighting"
@@ -11823,7 +11823,7 @@
         "contact"
       ],
       "name": "Knock Off",
-      "power": null,
+      "power": 65,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -11925,7 +11925,7 @@
         "contact"
       ],
       "name": "Last Resort",
-      "power": null,
+      "power": 140,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -12009,7 +12009,7 @@
         "slicing"
       ],
       "name": "Leaf Blade",
-      "power": null,
+      "power": 90,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -12028,7 +12028,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Leaf Storm",
-      "power": null,
+      "power": 130,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -12075,8 +12075,8 @@
         "contact"
       ],
       "name": "Leech Life",
-      "power": null,
-      "pp": null,
+      "power": 80,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Bug"
@@ -12158,7 +12158,7 @@
         "contact"
       ],
       "name": "Lick",
-      "power": null,
+      "power": 30,
       "pp": 30,
       "priority": 0,
       "target": "selected",
@@ -12267,7 +12267,7 @@
       "type": "Water"
     },
     "lockon": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_LOCK_ON"
@@ -12345,7 +12345,7 @@
         "contact"
       ],
       "name": "Low Sweep",
-      "power": null,
+      "power": 65,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -12476,7 +12476,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Luster Purge",
-      "power": null,
+      "power": 95,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -12607,7 +12607,7 @@
       "type": "Psychic"
     },
     "magmastorm": {
-      "accuracy": null,
+      "accuracy": 75,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_MAGMA_STORM"
@@ -12619,7 +12619,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Magma Storm",
-      "power": null,
+      "power": 100,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -13336,7 +13336,7 @@
       "flags": [],
       "name": "Mega Drain",
       "power": 40,
-      "pp": null,
+      "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Grass"
@@ -13548,7 +13548,7 @@
       "type": "Rock"
     },
     "meteormash": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [
         {
           "chance": 20,
@@ -13568,7 +13568,7 @@
         "punching"
       ],
       "name": "Meteor Mash",
-      "power": null,
+      "power": 90,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -13629,7 +13629,7 @@
       "flags": [],
       "name": "Milk Drink",
       "power": 0,
-      "pp": null,
+      "pp": 5,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -13673,7 +13673,7 @@
       "type": "Fire"
     },
     "mindreader": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_MIND_READER"
@@ -13705,7 +13705,7 @@
       "flags": [],
       "name": "Minimize",
       "power": 0,
-      "pp": null,
+      "pp": 10,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -13830,7 +13830,7 @@
         "ballistic"
       ],
       "name": "Mist Ball",
-      "power": null,
+      "power": 95,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -14049,7 +14049,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Muddy Water",
-      "power": null,
+      "power": 90,
       "pp": 10,
       "priority": 0,
       "target": "both",
@@ -14139,7 +14139,7 @@
         "contact"
       ],
       "name": "Multi-Attack",
-      "power": null,
+      "power": 120,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -14163,7 +14163,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Mystical Fire",
-      "power": null,
+      "power": 75,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -14339,7 +14339,7 @@
       "type": "Dark"
     },
     "nightmare": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_NIGHTMARE"
@@ -14593,7 +14593,7 @@
       "type": "Fighting"
     },
     "odorsleuth": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_ODOR_SLEUTH"
@@ -14693,8 +14693,8 @@
         "contact"
       ],
       "name": "Outrage",
-      "power": null,
-      "pp": null,
+      "power": 120,
+      "pp": 10,
       "priority": 0,
       "target": "random",
       "type": "Dragon"
@@ -14733,7 +14733,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Overheat",
-      "power": null,
+      "power": 130,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -14773,7 +14773,7 @@
       "effect": "absorb",
       "flags": [],
       "name": "Parabolic Charge",
-      "power": null,
+      "power": 65,
       "pp": 20,
       "priority": 0,
       "target": "foes_and_ally",
@@ -14919,7 +14919,7 @@
       ],
       "name": "Petal Dance",
       "power": 120,
-      "pp": null,
+      "pp": 10,
       "priority": 0,
       "target": "random",
       "type": "Grass"
@@ -14984,7 +14984,7 @@
       "type": "Electric"
     },
     "pinmissile": {
-      "accuracy": null,
+      "accuracy": 95,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_PIN_MISSILE"
@@ -14996,7 +14996,7 @@
       "effect": "multi_hit",
       "flags": [],
       "name": "Pin Missile",
-      "power": null,
+      "power": 25,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -15396,7 +15396,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Power Gem",
-      "power": null,
+      "power": 80,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -15619,7 +15619,7 @@
       "name": "Protect",
       "power": 0,
       "pp": 10,
-      "priority": 0,
+      "priority": 4,
       "target": "user",
       "type": "Normal"
     },
@@ -15801,7 +15801,7 @@
       "type": "Psychic"
     },
     "psychoshift": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_PSYCHO_SHIFT"
@@ -15903,7 +15903,7 @@
       "type": "Psychic"
     },
     "psywave": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_PSYWAVE"
@@ -16165,7 +16165,7 @@
       "name": "Rage Powder",
       "power": 0,
       "pp": 20,
-      "priority": 0,
+      "priority": 2,
       "target": "user",
       "type": "Bug"
     },
@@ -16203,7 +16203,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Raging Fury",
-      "power": null,
+      "power": 120,
       "pp": 10,
       "priority": 0,
       "target": "random",
@@ -16248,7 +16248,7 @@
         "contact"
       ],
       "name": "Rapid Spin",
-      "power": null,
+      "power": 50,
       "pp": 40,
       "priority": 0,
       "target": "selected",
@@ -16458,7 +16458,7 @@
       "flags": [],
       "name": "Rest",
       "power": 0,
-      "pp": null,
+      "pp": 5,
       "priority": 0,
       "target": "user",
       "type": "Psychic"
@@ -16605,7 +16605,7 @@
       "type": "Electric"
     },
     "roar": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_ROAR"
@@ -16645,7 +16645,7 @@
       "type": "Dragon"
     },
     "rockblast": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_ROCK_BLAST"
@@ -16752,7 +16752,7 @@
         "contact"
       ],
       "name": "Rock Smash",
-      "power": null,
+      "power": 40,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -16778,7 +16778,7 @@
       "type": "Rock"
     },
     "rocktomb": {
-      "accuracy": null,
+      "accuracy": 95,
       "additional_effects": [
         {
           "chance": 100,
@@ -16795,8 +16795,8 @@
       "effect": "hit",
       "flags": [],
       "name": "Rock Tomb",
-      "power": null,
-      "pp": null,
+      "power": 60,
+      "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Rock"
@@ -16902,7 +16902,7 @@
       "flags": [],
       "name": "Roost",
       "power": 0,
-      "pp": null,
+      "pp": 5,
       "priority": 0,
       "target": "user",
       "type": "Flying"
@@ -17007,7 +17007,7 @@
       ],
       "name": "Sacred Sword",
       "power": 90,
-      "pp": null,
+      "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Fighting"
@@ -17094,8 +17094,8 @@
         "wind"
       ],
       "name": "Sandsear Storm",
-      "power": null,
-      "pp": null,
+      "power": 100,
+      "pp": 10,
       "priority": 0,
       "target": "both",
       "type": "Ground"
@@ -17122,7 +17122,7 @@
       "type": "Rock"
     },
     "sandtomb": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_SAND_TOMB"
@@ -17134,14 +17134,14 @@
       "effect": "hit",
       "flags": [],
       "name": "Sand Tomb",
-      "power": null,
+      "power": 35,
       "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Ground"
     },
     "sappyseed": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [
         {
           "chance": 100,
@@ -17158,8 +17158,8 @@
       "effect": "hit",
       "flags": [],
       "name": "Sappy Seed",
-      "power": null,
-      "pp": null,
+      "power": 100,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Grass"
@@ -17229,7 +17229,7 @@
       "type": "Dragon"
     },
     "scaryface": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_SCARY_FACE"
@@ -17832,7 +17832,7 @@
       "flags": [],
       "name": "Shore Up",
       "power": 0,
-      "pp": null,
+      "pp": 5,
       "priority": 0,
       "target": "user",
       "type": "Ground"
@@ -17983,8 +17983,8 @@
         "contact"
       ],
       "name": "Sizzly Slide",
-      "power": null,
-      "pp": null,
+      "power": 60,
+      "pp": 20,
       "priority": 0,
       "target": "selected",
       "type": "Fire"
@@ -18068,8 +18068,8 @@
         "contact"
       ],
       "name": "Skull Bash",
-      "power": null,
-      "pp": null,
+      "power": 130,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Normal"
@@ -18155,7 +18155,7 @@
       "flags": [],
       "name": "Slack Off",
       "power": 0,
-      "pp": null,
+      "pp": 5,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -18372,7 +18372,7 @@
         "contact"
       ],
       "name": "Smelling Salts",
-      "power": null,
+      "power": 70,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -18396,7 +18396,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Smog",
-      "power": null,
+      "power": 30,
       "pp": 20,
       "priority": 0,
       "target": "selected",
@@ -18526,7 +18526,7 @@
         "sound"
       ],
       "name": "Snore",
-      "power": null,
+      "power": 50,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -18584,7 +18584,7 @@
       "flags": [],
       "name": "Soft-Boiled",
       "power": 0,
-      "pp": null,
+      "pp": 5,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -18744,7 +18744,7 @@
       "type": "Water"
     },
     "sparklyswirl": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [
         {
           "chance": 100,
@@ -18761,8 +18761,8 @@
       "effect": "hit",
       "flags": [],
       "name": "Sparkly Swirl",
-      "power": null,
-      "pp": null,
+      "power": 120,
+      "pp": 5,
       "priority": 0,
       "target": "selected",
       "type": "Fairy"
@@ -19005,7 +19005,7 @@
       "effect": "spit_up",
       "flags": [],
       "name": "Spit Up",
-      "power": null,
+      "power": 1,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -19133,7 +19133,7 @@
         "wind"
       ],
       "name": "Springtide Storm",
-      "power": null,
+      "power": 100,
       "pp": 5,
       "priority": 0,
       "target": "both",
@@ -19309,7 +19309,7 @@
       "flags": [],
       "name": "Stockpile",
       "power": 0,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -19465,7 +19465,7 @@
         "contact"
       ],
       "name": "Storm Throw",
-      "power": null,
+      "power": 60,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -19593,7 +19593,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Struggle Bug",
-      "power": null,
+      "power": 50,
       "pp": 20,
       "priority": 0,
       "target": "both",
@@ -19653,7 +19653,7 @@
       ],
       "name": "Submission",
       "power": 80,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "selected",
       "type": "Fighting"
@@ -19711,7 +19711,7 @@
         "contact"
       ],
       "name": "Sucker Punch",
-      "power": null,
+      "power": 70,
       "pp": 5,
       "priority": 1,
       "target": "selected",
@@ -19873,7 +19873,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Surf",
-      "power": null,
+      "power": 90,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -19902,7 +19902,7 @@
       "type": "Water"
     },
     "swagger": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_SWAGGER"
@@ -20029,7 +20029,7 @@
       "flags": [],
       "name": "Swords Dance",
       "power": 0,
-      "pp": null,
+      "pp": 20,
       "priority": 0,
       "target": "user",
       "type": "Normal"
@@ -20047,8 +20047,8 @@
       "effect": "synchronoise",
       "flags": [],
       "name": "Synchronoise",
-      "power": null,
-      "pp": null,
+      "power": 120,
+      "pp": 10,
       "priority": 0,
       "target": "foes_and_ally",
       "type": "Psychic"
@@ -20120,7 +20120,7 @@
       "type": "Steel"
     },
     "tackle": {
-      "accuracy": null,
+      "accuracy": 100,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_TACKLE"
@@ -20215,7 +20215,7 @@
       ],
       "name": "Tailwind",
       "power": 0,
-      "pp": null,
+      "pp": 15,
       "priority": 0,
       "target": "user",
       "type": "Flying"
@@ -20351,7 +20351,7 @@
       "effect": "change_type_on_item",
       "flags": [],
       "name": "Techno Blast",
-      "power": null,
+      "power": 120,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -20526,8 +20526,8 @@
         "contact"
       ],
       "name": "Thief",
-      "power": null,
-      "pp": null,
+      "power": 60,
+      "pp": 25,
       "priority": 0,
       "target": "selected",
       "type": "Dark"
@@ -20585,8 +20585,8 @@
         "contact"
       ],
       "name": "Thrash",
-      "power": null,
-      "pp": null,
+      "power": 120,
+      "pp": 10,
       "priority": 0,
       "target": "random",
       "type": "Normal"
@@ -20635,7 +20635,7 @@
       "effect": "thunder",
       "flags": [],
       "name": "Thunder",
-      "power": null,
+      "power": 110,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -20659,7 +20659,7 @@
       "effect": "hit",
       "flags": [],
       "name": "Thunderbolt",
-      "power": null,
+      "power": 90,
       "pp": 15,
       "priority": 0,
       "target": "selected",
@@ -20812,7 +20812,7 @@
       "type": "Electric"
     },
     "thunderwave": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_THUNDER_WAVE"
@@ -20869,7 +20869,7 @@
       "type": "Normal"
     },
     "topsyturvy": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_TOPSY_TURVY"
@@ -20933,7 +20933,7 @@
       "type": "Dark"
     },
     "toxic": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_TOXIC"
@@ -21139,8 +21139,8 @@
       "effect": "hit",
       "flags": [],
       "name": "Triple Arrows",
-      "power": null,
-      "pp": null,
+      "power": 90,
+      "pp": 10,
       "priority": 0,
       "target": "selected",
       "type": "Fighting"
@@ -21384,7 +21384,7 @@
         "sound"
       ],
       "name": "Uproar",
-      "power": null,
+      "power": 90,
       "pp": 10,
       "priority": 0,
       "target": "random",
@@ -21546,7 +21546,7 @@
         "contact"
       ],
       "name": "Vine Whip",
-      "power": null,
+      "power": 45,
       "pp": 25,
       "priority": 0,
       "target": "selected",
@@ -21656,7 +21656,7 @@
         "contact"
       ],
       "name": "Wake-Up Slap",
-      "power": null,
+      "power": 70,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -21720,7 +21720,7 @@
       "effect": "pledge",
       "flags": [],
       "name": "Water Pledge",
-      "power": null,
+      "power": 80,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -21822,7 +21822,7 @@
         "contact"
       ],
       "name": "Wave Crash",
-      "power": null,
+      "power": 120,
       "pp": 10,
       "priority": 0,
       "target": "selected",
@@ -21850,7 +21850,7 @@
       "type": "Normal"
     },
     "whirlpool": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_WHIRLPOOL"
@@ -21862,14 +21862,14 @@
       "effect": "hit",
       "flags": [],
       "name": "Whirlpool",
-      "power": null,
+      "power": 35,
       "pp": 15,
       "priority": 0,
       "target": "selected",
       "type": "Water"
     },
     "whirlwind": {
-      "accuracy": null,
+      "accuracy": 0,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_WHIRLWIND"
@@ -21905,7 +21905,7 @@
         "punching"
       ],
       "name": "Wicked Blow",
-      "power": null,
+      "power": 75,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -21976,8 +21976,8 @@
         "wind"
       ],
       "name": "Wildbolt Storm",
-      "power": null,
-      "pp": null,
+      "power": 100,
+      "pp": 10,
       "priority": 0,
       "target": "both",
       "type": "Electric"
@@ -22004,7 +22004,7 @@
       "type": "Electric"
     },
     "willowisp": {
-      "accuracy": null,
+      "accuracy": 85,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_WILL_O_WISP"
@@ -22160,7 +22160,7 @@
       "type": "Grass"
     },
     "wrap": {
-      "accuracy": null,
+      "accuracy": 90,
       "additional_effects": [],
       "aka": {
         "pokeemerald": "MOVE_WRAP"
@@ -22262,7 +22262,7 @@
         "ballistic"
       ],
       "name": "Zap Cannon",
-      "power": null,
+      "power": 120,
       "pp": 5,
       "priority": 0,
       "target": "selected",
@@ -22340,8 +22340,8 @@
         "contact"
       ],
       "name": "Zippy Zap",
-      "power": null,
-      "pp": null,
+      "power": 80,
+      "pp": 10,
       "priority": 2,
       "target": "selected",
       "type": "Electric"

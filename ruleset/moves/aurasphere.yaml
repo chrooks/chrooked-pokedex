@@ -3,6 +3,7 @@ chrooked_id: aurasphere
 aka: { pokeemerald: MOVE_AURA_SPHERE }
 type: Fighting
 category: special
+power: 80
 accuracy: 0
 pp: 20
 description: Attacks with an aura blast that cannot be evaded.

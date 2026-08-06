@@ -28,12 +28,46 @@ _MOVE_ENTRY = re.compile(r"\[\s*(MOVE_\w+)\s*\]\s*=\s*\{")
 _FIELD_NAME = re.compile(r'\.name\s*=\s*COMPOUND_STRING\("([^"]+)"\)')
 _FIELD_TYPE = re.compile(r"\.type\s*=\s*(TYPE_\w+)")
 _FIELD_CATEGORY = re.compile(r"\.category\s*=\s*(DAMAGE_CATEGORY_\w+)")
-_FIELD_POWER = re.compile(r"\.power\s*=\s*(\d+)")
-_FIELD_ACCURACY = re.compile(r"\.accuracy\s*=\s*(\d+)")
-_FIELD_PP = re.compile(r"\.pp\s*=\s*(\d+)")
+_FIELD_POWER = re.compile(r"\.power\s*=\s*([^,\n]+)")
+_FIELD_ACCURACY = re.compile(r"\.accuracy\s*=\s*([^,\n]+)")
+_FIELD_PP = re.compile(r"\.pp\s*=\s*([^,\n]+)")
 _FIELD_DESC = re.compile(r'\.description\s*=\s*(?:COMPOUND_STRING|s\w+Description)\s*\(\s*"(.+?)"\s*\)', re.DOTALL)
 _FIELD_EFFECT = re.compile(r"\.effect\s*=\s*(EFFECT_\w+)")
-_FIELD_PRIORITY = re.compile(r"\.priority\s*=\s*(-?\d+)")
+_FIELD_PRIORITY = re.compile(r"\.priority\s*=\s*([^,\n]+)")
+
+# The expansion writes every generation-dependent number as a config ternary:
+#
+#     .power    = B_UPDATED_MOVE_DATA >= GEN_6 ? 90 : 95,
+#     .accuracy = (B_UPDATED_MOVE_DATA >= GEN_9) ? 100 : 95,
+#     .priority = B_UPDATED_MOVE_DATA >= GEN_6 ? 0 : -7,
+#     .power    = B_HIDDEN_POWER_DMG >= GEN_6 ? 60 : 1,
+#
+# Reading only a bare literal left 104 damaging moves with no power at all —
+# Flamethrower, Blizzard, Dragon Pulse, Draco Meteor — plus 42 accuracies, 46
+# PPs and 11 priorities. Both gating macros default to GEN_LATEST (GEN_9), so
+# every `>= GEN_n` test holds and the FIRST branch is what a default build
+# ships; that is the value taken here.
+#
+# ponytail: the true branch is assumed rather than evaluated. A fork that lowers
+# B_UPDATED_MOVE_DATA below one of these gens would read a value it does not
+# actually build with. Read include/config/battle.h and evaluate the comparison
+# if a target ever needs that.
+_GEN_TERNARY = re.compile(
+    r"^\(?\s*B_\w+\s*>=\s*GEN_\d+\s*\)?\s*\?\s*(-?\d+)\s*:\s*(-?\d+)\s*$"
+)
+_LITERAL = re.compile(r"^-?\d+$")
+
+
+def _number(match: re.Match[str] | None) -> int | None:
+    """One numeric move field: a literal, or the shipped branch of a gen ternary.
+    Anything else reads as absent rather than as a wrong number."""
+    if match is None:
+        return None
+    raw = match.group(1).strip()
+    if _LITERAL.match(raw):
+        return int(raw)
+    ternary = _GEN_TERNARY.match(raw)
+    return int(ternary.group(1)) if ternary else None
 _FIELD_TARGET = re.compile(r"\.target\s*=\s*(MOVE_TARGET_\w+)")
 _FIELD_ARGUMENT = re.compile(r"\.argument\s*=\s*\{([^}]*)\}")
 # Balance one level of nested parens so a macro chance like PERCENT(10) inside the
@@ -115,15 +149,15 @@ def parse_moves(repo_path: Path) -> dict[str, MoveInfo]:
             name=name_m.group(1),
             type=type_m.group(1) if type_m else "",
             category=cat_m.group(1).removeprefix("DAMAGE_CATEGORY_") if cat_m else "",
-            power=int(power_m.group(1)) if power_m else None,
-            accuracy=int(acc_m.group(1)) if acc_m else None,
-            pp=int(pp_m.group(1)) if pp_m else None,
+            power=_number(power_m),
+            accuracy=_number(acc_m),
+            pp=_number(pp_m),
             description=description,
             effect=effect_m.group(1) if effect_m else "EFFECT_HIT",
             argument=argument_m.group(1).strip() if argument_m else None,
             additional_effects=_parse_additional_effects(body),
             flags=_parse_flags(body),
-            priority=int(priority_m.group(1)) if priority_m else 0,
+            priority=_number(priority_m) or 0,
             target=target_m.group(1) if target_m else "MOVE_TARGET_SELECTED",
         )
 
