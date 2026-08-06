@@ -236,6 +236,11 @@ def _species_from_payload(payload: dict[str, Any], chrooked_id: str) -> SpeciesO
 
     types = tuple(payload["types"]) if payload.get("types") is not None else None
     stats = dict(payload["stats"]) if payload.get("stats") is not None else None
+    flavor_types = (
+        tuple(payload["flavor_types"])
+        if payload.get("flavor_types") is not None
+        else None
+    )
 
     return SpeciesOverride(
         name=name,
@@ -246,12 +251,13 @@ def _species_from_payload(payload: dict[str, Any], chrooked_id: str) -> SpeciesO
         stats=stats,
         learnset=learnset,
         evolution=evolution,
+        flavor_types=flavor_types,
     )
 
 
 _SPECIES_FIELDS = (
     "name", "chrooked_id", "aka", "types",
-    "abilities", "stats", "learnset", "evolution",
+    "abilities", "stats", "learnset", "evolution", "flavor_types",
 )
 
 _ABILITY_SLOTS = ("primary", "secondary", "hidden")
@@ -369,6 +375,9 @@ def serialize_species(species: SpeciesOverride) -> dict[str, Any]:
             {"from": species.evolution.from_species, "method": dict(species.evolution.method)}
             if species.evolution is not None
             else None
+        ),
+        "flavor_types": (
+            list(species.flavor_types) if species.flavor_types is not None else None
         ),
     }
 

@@ -261,6 +261,11 @@ def _merge_species(
         }
         overridden.append("evolution")
 
+    # Design metadata: flavor coverage types (Ruleset-only — the base never has
+    # them, so no base→now diff row; the learnset skeleton reads them).
+    if override.flavor_types is not None:
+        merged["flavor_types"] = list(override.flavor_types)
+
     merged["overridden_fields"] = [f for f in _FLAGGABLE_FIELDS if f in overridden]
     merged["base"] = {k: base_values[k] for k in _FLAGGABLE_FIELDS if k in base_values}
     return merged
@@ -618,12 +623,15 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
     Built from the merged moves collection (``build_moves``) so it is the real,
     current set (base ⊕ Ruleset): an edited move shows its new type/power, and a
     created move is present. Each row carries only the fields the learnset rubric
-    needs — name, type, category, power, a short effect string, and a `custom`
-    flag marking net-new created moves (a Ruleset id with no base entry; a merely
-    rebalanced canon move is NOT custom). Null base powers the vendored parser
-    skipped are backfilled from the canon table so the model's power/pacing
-    reasoning and ability shortlists see real BP. Sorted by name for a
-    deterministic, cache-stable prefix. Rows without a name are dropped.
+    needs — name, type, category, power, accuracy, a short effect string, the
+    engine-neutral `flags`, a `secondary` bool (any additional effect), and a
+    `custom` flag marking net-new created moves (a Ruleset id with no base entry;
+    a merely rebalanced canon move is NOT custom). Flags/secondary/accuracy feed
+    the ability-fuel slot filters (ability_fuel.json) — an -ate or sound-booster
+    slot gates on them. Null base powers the vendored parser skipped are
+    backfilled from the canon table so the model's power/pacing reasoning and
+    ability shortlists see real BP. Sorted by name for a deterministic,
+    cache-stable prefix. Rows without a name are dropped.
     """
     all_moves = build_moves(snapshot, ruleset)
     created_ids = set(ruleset.moves) - set(snapshot.get("moves", {}))
@@ -633,7 +641,10 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
             "type": entry.get("type") or "",
             "category": entry.get("category") or "",
             "power": _pool_power(entry),
+            "accuracy": entry.get("accuracy"),
             "effect": entry.get("effect") or "",
+            "flags": list(entry.get("flags") or ()),
+            "secondary": bool(entry.get("additional_effects")),
             "custom": entry["chrooked_id"] in created_ids,
         }
         for entry in all_moves

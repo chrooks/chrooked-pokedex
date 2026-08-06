@@ -53,7 +53,7 @@ def _check_keys(data: dict[str, Any], allowed: Iterable[str], where: str) -> Non
 
 _SPECIES_KEYS = (
     "name", "chrooked_id", "aka", "types",
-    "abilities", "stats", "learnset", "evolution",
+    "abilities", "stats", "learnset", "evolution", "flavor_types",
 )
 _ABILITIES_KEYS = ("primary", "secondary", "hidden")
 _LEARNSET_KEYS = ("level", "move")
@@ -106,6 +106,7 @@ def load_species(path: Path) -> SpeciesOverride:
         )
 
     types = tuple(data["types"]) if "types" in data else None
+    flavor_types = tuple(data["flavor_types"]) if "flavor_types" in data else None
 
     stats = None
     if "stats" in data:
@@ -121,6 +122,7 @@ def load_species(path: Path) -> SpeciesOverride:
         stats=stats,
         learnset=learnset,
         evolution=evolution,
+        flavor_types=flavor_types,
     )
 
 

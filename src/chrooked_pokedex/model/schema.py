@@ -73,6 +73,11 @@ class SpeciesOverride:
     stats: Optional[Mapping[str, int]] = None
     learnset: Optional[tuple[LearnsetMove, ...]] = None
     evolution: Optional[EvolutionOverride] = None
+    # Design metadata, not game data: coverage types that fit what the creature
+    # IS (Goodra-Hisui the slug → Water, Poison) — never weakness-patching.
+    # Confirmed once in the makeover lore step; the learnset slot skeleton reads
+    # it to build flavor ladders. Appliers ignore it.
+    flavor_types: Optional[tuple[str, ...]] = None
 
 
 @dataclass(frozen=True)

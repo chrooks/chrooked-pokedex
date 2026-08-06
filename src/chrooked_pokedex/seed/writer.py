@@ -76,6 +76,8 @@ def species_yaml(species: SpeciesOverride) -> str:
     ]
     if species.types:
         lines.append(f"types: [{', '.join(species.types)}]")
+    if species.flavor_types:
+        lines.append(f"flavor_types: [{', '.join(species.flavor_types)}]")
     if species.abilities:
         lines.append("abilities:")
         for slot in ("primary", "secondary", "hidden"):
