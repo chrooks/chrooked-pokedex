@@ -1,32 +1,33 @@
 name: Goodra Hisui
 chrooked_id: goodrahisui
-aka: { pokeemerald: SPECIES_GOODRA_HISUI }
+aka: { dex: 706 }
+types: [Dragon, Steel]
+flavor_types: [Water, Poison]
+abilities:
+  primary: Gooey
+  secondary: Shell Armor
+  hidden: Impenetrable
+stats: { hp: 95, atk: 85, def: 130, spd: 120 }
 learnset:
-  - { level: 0, move: Iron Tail }
-  - { level: 1, move: Shelter }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Tearful Look }
-  - { level: 1, move: Acid Spray }
-  - { level: 2, move: Twister }
-  - { level: 3, move: Tackle }
-  - { level: 4, move: Absorb }
-  - { level: 5, move: Water Gun }
-  - { level: 6, move: Dragon Breath }
-  - { level: 8, move: Glint }
-  - { level: 15, move: Protect }
-  - { level: 18, move: Mirror Shot }
-  - { level: 20, move: Flail }
-  - { level: 25, move: Water Pulse }
-  - { level: 29, move: Flash Cannon }
-  - { level: 30, move: Rain Dance }
-  - { level: 35, move: Dragon Pulse }
-  - { level: 39, move: Luster Cannon }
-  - { level: 40, move: Cataclysm }
-  - { level: 43, move: Curse }
-  - { level: 49, move: Iron Head }
-  - { level: 50, move: Body Slam }
-  - { level: 53, move: Steel Beam }
-  - { level: 54, move: Draco Meteor }
-  - { level: 58, move: Muddy Water }
-  - { level: 67, move: Heavy Slam }
+  - { level: 0, move: Luster Cannon }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Twister }
+  - { level: 5, move: Acid Spray }
+  - { level: 10, move: Glint }
+  - { level: 14, move: Water Gun }
+  - { level: 18, move: Shelter }
+  - { level: 22, move: Dragon Breath }
+  - { level: 26, move: Mirror Shot }
+  - { level: 30, move: Protect }
+  - { level: 34, move: Scald }
+  - { level: 38, move: Flash Cannon }
+  - { level: 40, move: Toxic }
+  - { level: 44, move: Dragon Pulse }
+  - { level: 48, move: Muddy Water }
+  - { level: 52, move: Baneful Bunker }
+  - { level: 56, move: Sludge Wave }
+  - { level: 60, move: Hydro Pump }
+  - { level: 65, move: Draco Meteor }
+  - { level: 70, move: Steel Beam }
 evolution: { from: Sliggoo Hisui, method: { level: 45 } }
