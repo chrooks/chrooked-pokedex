@@ -35,18 +35,38 @@ import move_coverage as mc  # noqa: E402
 import learnset_ladder as ll  # noqa: E402
 
 BANDS = ["≤50", "51-75", "76-90", "91-110", ">110"]
-WINDOWS = {  # Scheme A — even fifths of L1-70
-    "≤50": (1, 14),
-    "51-75": (15, 28),
-    "76-90": (29, 42),
-    "91-110": (43, 56),
-    ">110": (57, 70),
+# Scheme A — even fifths of L1-70, read from the shared band Contract so this
+# script and the web skeleton builder (learnset_skeleton.py) cannot drift.
+WINDOWS = {
+    edge["label"]: tuple(edge["window"]) for edge in mc._BAND_CONTRACT["edges"]
 }
-ABILITY_STAB = {  # ability name -> extra STAB types it grants
-    "Full Moon": ["Dark", "Fairy"],
-    "High Noon": ["Fire", "Psychic"],
-    # "Mystic Power" grants all-move STAB — deliberately omitted (own types only).
-}
+# ability name -> extra STAB types it grants. Derived from the ability-fuel
+# table (ability_fuel.json) so this script and the web slot skeleton share one
+# classification: every stab_grant/-ate entry WITHOUT a filter counts (Full
+# Moon, High Noon, Steelworker, Transistor, Kindle, ... — type boosters ARE
+# STAB per Chris's ruling). Filtered grants (-ate: rungs come from Normal
+# moves) are excluded — this script fills rungs with moves OF the type, which
+# an -ate ladder is not. "Mystic Power" (all-move STAB) stays own-types-only
+# via its empty stab_types.
+def _ability_stab() -> dict:
+    fuel = json.loads(
+        (mc.ROOT / "src" / "chrooked_pokedex" / "web" / "ability_fuel.json")
+        .read_text("utf-8")
+    )["abilities"]
+    base = json.loads(mc.BASE_SNAPSHOT.read_text("utf-8"))["abilities"]
+    names = {aid: (entry.get("name") or "") for aid, entry in base.items()}
+    import yaml as _yaml
+    for path in (mc.RULESET / "abilities").glob("*.yaml"):
+        data = _yaml.safe_load(path.read_text("utf-8"))
+        names[data.get("chrooked_id", path.stem)] = data.get("name") or ""
+    return {
+        names[aid]: list(spec["stab_types"])
+        for aid, spec in fuel.items()
+        if spec.get("stab_types") and not spec.get("filter") and names.get(aid)
+    }
+
+
+ABILITY_STAB = _ability_stab()
 MAX_L1 = 4
 MAX_LEVEL = 70
 BALANCED_DELTA = 10  # |atk - spa| <= this counts as a balanced dual-attacker

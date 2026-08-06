@@ -262,6 +262,52 @@ def _make_client(ruleset_dir: Path, tmp_path: Path, provider: Any) -> TestClient
     return TestClient(app, raise_server_exceptions=False)
 
 
+def _skeleton_result(
+    chrooked_id: str, ruleset_dir: Path
+) -> dict[str, Any]:
+    """A draft that fills the slot skeleton the endpoint will build.
+
+    FULL mode now runs the deterministic slot skeleton (learnset_skeleton) as a
+    HARD gate, so a fixed mock draft no longer validates. This computes the same
+    skeleton the server will and fills each slot with its first unused candidate.
+    """
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web import learnset_skeleton as skmod
+
+    ruleset = Ruleset.load(ruleset_dir)
+    pool = dexmod.build_move_pool(_SNAPSHOT, ruleset)
+    abilities = dexmod.build_abilities(_SNAPSHOT, ruleset)
+    entry = dexmod.build_dex_entry(_SNAPSHOT, ruleset, chrooked_id)
+    return _fill_skeleton(entry, abilities, pool)
+
+
+def _fill_skeleton(
+    entry: dict[str, Any],
+    abilities: list[dict[str, Any]],
+    pool: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Fill each skeleton slot with its first unused candidate."""
+    from chrooked_pokedex.web import learnset_skeleton as skmod
+
+    skeleton = skmod.build_skeleton(entry, abilities, pool)
+    rows, used = [], set()
+    for slot in skeleton["slots"]:
+        pick = next(
+            (c for c in slot["candidates"] if c.casefold() not in used),
+            slot["candidates"][0],
+        )
+        if slot["level"] > 0:
+            # L0 + one non-zero level of the same move is legal — only
+            # non-zero picks consume a move.
+            used.add(pick.casefold())
+        rows.append({"level": slot["level"], "move": pick, "reasoning": "fills slot"})
+    return {
+        "draft": {"learnset": rows},
+        "rationale": {"learnset": "Skeleton-conforming draft."},
+        "alternatives": [],
+    }
+
+
 def _species_files(ruleset_dir: Path) -> set[str]:
     species_dir = ruleset_dir / "species"
     if not species_dir.exists():
@@ -1169,7 +1215,7 @@ def test_context_assembly_includes_ability_effect_text() -> None:
         "evolves_into": [],
     }
 
-    provider = _FakeProvider(_GOOD_LEARNSET_RESULT)
+    provider = _FakeProvider(_fill_skeleton(entry, abilities, pool))
     suggestmod.suggest_learnset(
         provider=provider,
         entry=entry,
@@ -1205,7 +1251,7 @@ def test_context_assembly_includes_evo_level_for_pre_evo() -> None:
         ],
     }
 
-    provider = _FakeProvider(_GOOD_LEARNSET_RESULT)
+    provider = _FakeProvider(_fill_skeleton(entry, [], pool))
     suggestmod.suggest_learnset(
         provider=provider,
         entry=entry,
@@ -1273,7 +1319,9 @@ _MISSING_LEARNSET_RESULT: dict[str, Any] = {}
 def test_learnset_missing_list_repairs_in_one_retry(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    provider = _SequenceProvider([_MISSING_LEARNSET_RESULT, _GOOD_LEARNSET_RESULT])
+    provider = _SequenceProvider(
+        [_MISSING_LEARNSET_RESULT, _skeleton_result("goodra", ruleset_dir)]
+    )
     client = _make_client(ruleset_dir, tmp_path, provider)
 
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
@@ -1306,7 +1354,10 @@ def test_suggest_learnset_flagged_draft_returns_200_with_editable_salvage(
 ) -> None:
     """A draft that only trips a soft shape bound comes back as a 200 carrying the
     editable draft + an `error` note — the UI shows it for editing instead of a
-    bare NO PROPOSAL. Retries eagerly first, then hands back the salvage."""
+    bare NO PROPOSAL. Retries eagerly first, then hands back the salvage.
+
+    Since the slot skeleton became the FULL-mode gate, an under-sized draft trips
+    the skeleton check (unfilled slots), which flags the same editable salvage."""
     provider = _SequenceProvider([_TOO_FEW_LEARNSET_RESULT] * 4)
     client = _make_client(ruleset_dir, tmp_path, provider)
 
@@ -1315,7 +1366,7 @@ def test_suggest_learnset_flagged_draft_returns_200_with_editable_salvage(
     assert response.status_code == 200
     body = response.json()
     assert len(body["draft"]["learnset"]) == 2  # the flagged draft is intact
-    assert "rows after validation" in body["error"]  # the reason to surface
+    assert "slot skeleton" in body["error"]  # the reason to surface
     assert len(provider.calls) == 4  # first try + 3 eager repairs, then salvaged
 
 
@@ -1668,7 +1719,7 @@ def test_suggest_learnset_unsorted_input_sorted_on_output(
 def test_suggest_learnset_calls_provider_exactly_once(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    provider = _FakeProvider(_GOOD_LEARNSET_RESULT)
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
     client = _make_client(ruleset_dir, tmp_path, provider)
 
     client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
@@ -1804,7 +1855,7 @@ def test_suggest_learnset_uses_learnset_max_tokens(
     ability/typing/stats outputs. The mocked provider records the kwarg; assert
     it equals the capability-specific constant, not the shared 1024 default.
     """
-    provider = _FakeProvider(_GOOD_LEARNSET_RESULT)
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
     client = _make_client(ruleset_dir, tmp_path, provider)
 
     client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})

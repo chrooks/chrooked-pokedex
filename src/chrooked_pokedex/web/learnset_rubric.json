@@ -13,11 +13,11 @@
   "coverage_bands": {
     "min_ladder_power": 2,
     "edges": [
-      { "min_power": 2, "label": "≤50" },
-      { "min_power": 51, "label": "51-75" },
-      { "min_power": 76, "label": "76-90" },
-      { "min_power": 91, "label": "91-110" },
-      { "min_power": 111, "label": ">110" }
+      { "min_power": 2, "label": "≤50", "window": [1, 14] },
+      { "min_power": 51, "label": "51-75", "window": [15, 28] },
+      { "min_power": 76, "label": "76-90", "window": [29, 42] },
+      { "min_power": 91, "label": "91-110", "window": [43, 56] },
+      { "min_power": 111, "label": ">110", "window": [57, 70] }
     ]
   }
 }

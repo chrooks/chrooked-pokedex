@@ -20,6 +20,11 @@ Follow the "Makeover opening move" in `species-suggest/SKILL.md`: research the l
 flavor, present **2–3 typing + role options**, let the user pick. Skip only if the user
 already gave a clear direction.
 
+Each option also carries **flavor_types** — 0–2 coverage types from what the creature
+IS (Goodra-Hisui the slug → Water, Poison), never weakness-patching. On pick, write the
+chosen option's `flavor_types` onto every stage's species YAML (same PUT as typing);
+the learnset slot skeleton reads them to build the flavor coverage ladders.
+
 ## 2. Typing
 
 `/species-suggest typing <final-evo> <picked direction>` — final evo first, per the

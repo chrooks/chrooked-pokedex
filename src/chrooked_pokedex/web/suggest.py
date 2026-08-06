@@ -29,6 +29,7 @@ import re
 from pathlib import Path
 from typing import Any, Callable
 
+from . import learnset_skeleton
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider
 
 # Learnset responses return a whole list with per-move reasoning (~15–25 rows,
@@ -809,9 +810,14 @@ def _build_lore_options_rubric(
         "label (e.g. 'physical wall', 'fast special attacker', 'trapper'), "
         "grounded in that lore. You MUST pick types only from the provided type "
         "pool — never invent a type. Keep the directions meaningfully different "
-        "from each other. Return the directions in `draft.options` (each "
-        "{types: [1-2 pool types], role: short label, rationale: one line of why "
-        "this fits the lore}), and a one-line framing in `rationale.options`."
+        "from each other. Each direction ALSO names `flavor_types`: 0-2 pool "
+        "types that fit what the creature IS and become its coverage moves — "
+        "e.g. Goodra-Hisui the Dragon/Steel SLUG gets Water and Poison flavor. "
+        "Flavor comes from the body and lore, NEVER from patching the typing's "
+        "weaknesses; leave it empty when nothing fits naturally. Return the "
+        "directions in `draft.options` (each {types: [1-2 pool types], role: "
+        "short label, flavor_types: [0-2 pool types], rationale: one line of "
+        "why this fits the lore}), and a one-line framing in `rationale.options`."
     )
     constraints = []
     if kept_types:
@@ -858,6 +864,11 @@ def _lore_options_draft_schema() -> dict[str, Any]:
                                     "maxItems": 2,
                                 },
                                 "role": {"type": "string"},
+                                "flavor_types": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                    "maxItems": 2,
+                                },
                                 "rationale": {"type": "string"},
                             },
                             "required": ["types", "role", "rationale"],
@@ -966,10 +977,22 @@ def _validate_lore_options_result(
         if kept_key is not None and {t.strip().casefold() for t in types} != kept_key:
             # A KEPT typing was violated — drop this option (the retry names it).
             continue
+        # Flavor coverage types: pool-checked like the typing, but forgiving —
+        # a bad flavor type is dropped alone, never the whole option. Types
+        # already in the option's typing are redundant as flavor and dropped.
+        raw_flavor = opt.get("flavor_types")
+        type_key = {t.strip().casefold() for t in types}
+        flavor = [
+            t.strip() for t in (raw_flavor if isinstance(raw_flavor, list) else [])
+            if isinstance(t, str)
+            and t.strip().casefold() in known
+            and t.strip().casefold() not in type_key
+        ][:2]
         options.append(
             {
                 "types": list(kept_types) if kept_types else types,
                 "role": str(opt.get("role", "")).strip(),
+                "flavor_types": flavor,
                 "rationale": str(opt.get("rationale", "")).strip(),
             }
         )
@@ -1210,7 +1233,11 @@ def _build_learnset_rubric() -> str:
         "move pool, design a complete level-up learnset. Each row is "
         "{level, move, reasoning}. Level 0 means 'learned on evolution'. "
         "You MUST pick only moves from the provided move pool — never invent a "
-        "move name. Design the learnset to:\n"
+        "move name. In FULL mode a SLOT SKELETON is provided below: the levels "
+        "and the allowed moves per slot are FIXED — emit EXACTLY one row per "
+        "slot, at the slot's stated level, choosing from that slot's allowed "
+        "moves. Your judgment lives in WHICH allowed move each slot gets and in "
+        "the reasoning. Design the learnset to:\n"
         "- Provide STAB on the species' types wherever possible.\n"
         "- Match move category to the base stats — this is a HARD rule, not a "
         "lean. If Atk > SpA the attacking moves must be predominantly PHYSICAL; if "
@@ -1329,29 +1356,16 @@ _ABILITY_SHORTLIST_SIZE = 10
 # real eligibility flag if the pool ever carries move flags.
 _SHORTLIST_POWER_CEILING = 140
 
-# Signature / species-locked moves kept OUT of the candidate shortlist — they are
-# a specific mon's identity move, not generic fuel. The type-changing signatures
-# (Judgment, Techno Blast, Multi-Attack, Tera Blast/Starstorm, Revelation Dance)
-# all DEFAULT to Normal, so they cluster in the -ate Normal shortlist and would be
-# wrongly offered. Casefolded names; extend as new signatures land. Only trims the
-# nudge — the full pool still carries them if a species genuinely owns one.
-_SIGNATURE_MOVES: frozenset[str] = frozenset({
-    "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
-    "blood moon", "revelation dance", "relic song",
-})
+# Signature / species-locked moves kept OUT of the candidate shortlist — the
+# set now lives in learnset_skeleton (the slot builder excludes them too);
+# this alias keeps the existing call sites.
+_SIGNATURE_MOVES = learnset_skeleton.SIGNATURE_MOVES
 
 
-def _offensive_bias(stats: dict[str, Any]) -> str | None:
-    """"physical" / "special" for a species leaning one way, else None (mixed).
-
-    Compares Atk vs SpA; a tie (or missing stats) is mixed. Drives both the
-    -ate fuel category and the loud per-species offensive-bias line — so a
-    special attacker never gets handed physical Normal moves as its fuel.
-    """
-    atk, spa = stats.get("atk"), stats.get("spa")
-    if not isinstance(atk, int) or not isinstance(spa, int) or atk == spa:
-        return None
-    return "physical" if atk > spa else "special"
+# Compares Atk vs SpA; a tie (or missing stats) is mixed. Drives the -ate fuel
+# category, the loud offensive-bias line, and the skeleton's on_stat filters —
+# one implementation, shared with the slot builder.
+_offensive_bias = learnset_skeleton.offensive_bias
 
 
 def _ate_directive(
@@ -1634,6 +1648,7 @@ def _validate_learnset_result(
     mode: str,
     current_learnset: list[dict[str, Any]],
     instruction: str | None = None,
+    skeleton: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Shape, pool, level, and repeat-move checks on the learnset draft.
 
@@ -1765,9 +1780,26 @@ def _validate_learnset_result(
     # Step 6: sort by (level, move name).
     deduped.sort(key=lambda r: (r["level"], r["move"]))
 
-    # Step 7: shape bounds, full mode only. The size floor scales down to the
-    # pool size (a pool smaller than the floor cannot yield that many rows).
-    if mode == "full":
+    # Step 6.5: the SLOT SKELETON gate (full mode with a skeleton). Every slot
+    # must be filled at its level from its candidate list — a band or fuel
+    # violation is a HARD retryable failure here, never an advisory warning.
+    if mode == "full" and skeleton is not None:
+        slot_errors = learnset_skeleton.validate_against_skeleton(deduped, skeleton)
+        if slot_errors:
+            raise _flagged_learnset(
+                "The draft does not fill the slot skeleton: "
+                + " | ".join(slot_errors)
+                + " — re-emit the learnset with EXACTLY one row per skeleton "
+                "slot, at the stated level, from that slot's allowed moves.",
+                deduped,
+                result,
+                warnings,
+            )
+
+    # Step 7: shape bounds, full mode only. Skipped when a skeleton ran — the
+    # skeleton fixes the exact row count and levels by construction, and a
+    # small-pool skeleton may legitimately sit under the generic size floor.
+    if mode == "full" and skeleton is None:
         size_min = min(LEARNSET_SIZE_MIN, len(move_pool))
         count = len(deduped)
         if not (size_min <= count <= LEARNSET_SIZE_MAX):
@@ -1968,6 +2000,15 @@ def suggest_learnset(
     )
     current_learnset = list(entry.get("learnset") or [])
 
+    # FULL mode: code owns placement. The deterministic slot skeleton fixes the
+    # levels, band windows, and per-slot candidates (STAB ladders, ability fuel,
+    # flavor coverage, status); the model only picks a move per slot and writes
+    # the reasoning. Surgical mode edits in place and gets no skeleton.
+    skeleton = None
+    if mode == "full":
+        skeleton = learnset_skeleton.build_skeleton(entry, abilities, move_pool)
+        user_context += "\n" + learnset_skeleton.format_skeleton(skeleton)
+
     return propose_with_repair(
         provider=provider,
         system=_build_learnset_rubric(),
@@ -1981,6 +2022,7 @@ def suggest_learnset(
             mode=mode,
             current_learnset=current_learnset,
             instruction=instruction,
+            skeleton=skeleton,
         ),
         max_retries=_LEARNSET_MAX_RETRIES,
     )
