@@ -2,26 +2,32 @@ name: Trapinch
 chrooked_id: trapinch
 aka: { pokeemerald: SPECIES_TRAPINCH }
 types: [Bug, Ground]
+abilities:
+  primary: Arena Trap
+  secondary: Strong Jaw
+  hidden: Tinted Lens
+stats: { hp: 45, atk: 100, def: 45, spa: 45, spd: 45, spe: 10 }
 learnset:
-  - { level: 1, move: Sand Attack }
   - { level: 1, move: Astonish }
-  - { level: 2, move: Fury Cutter }
-  - { level: 4, move: Clod Toss }
-  - { level: 8, move: Bite }
-  - { level: 12, move: Mud-Slap }
-  - { level: 15, move: Bug Bite }
-  - { level: 16, move: Sand Tomb }
-  - { level: 20, move: Bulldoze }
-  - { level: 24, move: Dig }
-  - { level: 25, move: Lithic Fang }
-  - { level: 26, move: Tectonic Fang }
-  - { level: 28, move: Crunch }
-  - { level: 29, move: X-Scissor }
-  - { level: 32, move: Sandstorm }
-  - { level: 36, move: Earth Power }
-  - { level: 40, move: Earthquake }
-  - { level: 43, move: Moltstrike }
-  - { level: 44, move: Superpower }
-  - { level: 48, move: Fissure }
-  - { level: 57, move: Megahorn }
-  - { level: 64, move: Faultbreak }
+  - { level: 1, move: Bite }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Supersonic }
+  - { level: 7, move: Bug Bite }
+  - { level: 10, move: Echoed Voice }
+  - { level: 13, move: Clod Toss }
+  - { level: 16, move: Maul }
+  - { level: 19, move: Struggle Bug }
+  - { level: 22, move: Round }
+  - { level: 25, move: Bulldoze }
+  - { level: 28, move: U-turn }
+  - { level: 30, move: Dragon Breath }
+  - { level: 33, move: Scorching Sands }
+  - { level: 35, move: Signal Beam }
+  - { level: 37, move: Hyper Voice }
+  - { level: 42, move: Dragon Pulse }
+  - { level: 46, move: Earth Power }
+  - { level: 50, move: Quagmire }
+  - { level: 55, move: Antennae Blast }
+  - { level: 60, move: Boomburst }
+  - { level: 65, move: Drone Chorus }
+  - { level: 70, move: Draco Meteor }
