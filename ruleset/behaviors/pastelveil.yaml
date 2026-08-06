@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Pastel Veil
+chrooked_id: pastelveil
+applies_to: ability
+aka: { pokeemerald: ABILITY_PASTEL_VEIL }
+effects:
+  - summary: The holder and its allies cannot be poisoned
+    trigger: status-apply
+    when: any effect would inflict poison or bad poison on the holder or an ally
+    effect: The poison status is prevented and cured on switch-in for allies. This is the vanilla Pastel Veil clause and is unchanged.
+  - summary: Immune to Poison-type moves
+    trigger: damage-calc
+    when: a Poison-type move targets the holder
+    effect: The move fails ("It doesn't affect...") and deals zero damage, like Levitate against Ground. The holder only — allies are not covered.
+test_cases:
+  - given: A foe uses Sludge Bomb against a Pastel Veil holder
+    expect: The move does not affect the holder; zero damage
+  - given: In a double battle, a foe uses Sludge Bomb against the Pastel Veil holder's ally
+    expect: The ally takes damage normally; only the poison status is prevented for allies
+  - given: A foe uses Toxic against a Pastel Veil holder
+    expect: The move fails; the holder is not poisoned
+notes:
+  - "The Poison-type move immunity is the fork addition and covers the holder only; the ally clause stays status-prevention only."
+  - "Mold Breaker bypasses the move immunity, as with other defender-ability immunities."
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:PASTELVEIL] = { type: :POISON, flag: :Soundproof } — the core's hitflag pass (chrooked_00_core.rb) blocks the hit and zeroes the Typemod for the holder; the table is keyed on the defender's own ability, so allies are naturally excluded. Mold Breaker is respected via opponent.moldbroken. Ally status prevention is native Rejuv behavior, untouched."

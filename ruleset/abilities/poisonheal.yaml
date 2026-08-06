@@ -1,0 +1,4 @@
+name: Poison Heal
+chrooked_id: poisonheal
+aka: { pokeemerald: ABILITY_POISON_HEAL }
+description: Heals when poisoned instead of taking damage. Immune to Poison-type moves.

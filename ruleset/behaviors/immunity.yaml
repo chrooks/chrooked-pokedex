@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Immunity
+chrooked_id: immunity
+applies_to: ability
+aka: { pokeemerald: ABILITY_IMMUNITY }
+effects:
+  - summary: Cannot be poisoned
+    trigger: status-apply
+    when: any effect would inflict poison or bad poison on the holder
+    effect: The poison status is prevented. This is the vanilla Immunity clause and is unchanged.
+  - summary: Immune to Poison-type moves
+    trigger: damage-calc
+    when: a Poison-type move targets the holder
+    effect: The move fails ("It doesn't affect...") and deals zero damage, like Levitate against Ground.
+test_cases:
+  - given: A foe uses Sludge Bomb against an Immunity holder
+    expect: The move does not affect the holder; zero damage
+  - given: A foe uses Toxic against an Immunity holder
+    expect: The move fails; the holder is not poisoned
+  - given: An Immunity holder switches in on Toxic Spikes
+    expect: The holder is not poisoned (vanilla clause; hazards are not moves)
+notes:
+  - "The Poison-type move immunity is the fork addition; the cannot-be-poisoned clause is vanilla."
+  - "Mold Breaker bypasses the move immunity, as with other defender-ability immunities."
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:IMMUNITY] = { type: :POISON, flag: :Soundproof } — the core's hitflag pass (chrooked_00_core.rb) blocks the hit and zeroes the Typemod; Mold Breaker is respected via opponent.moldbroken. Status prevention is native Rejuv behavior, untouched."

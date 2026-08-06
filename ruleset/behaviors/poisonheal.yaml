@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Poison Heal
+chrooked_id: poisonheal
+applies_to: ability
+aka: { pokeemerald: ABILITY_POISON_HEAL }
+effects:
+  - summary: Heals from poison instead of taking damage
+    trigger: turn-end
+    when: the holder is poisoned (regular or bad/toxic poison) at end of turn
+    effect: Restore 1/8 max HP instead of taking poison residual damage. This is the vanilla Poison Heal clause and is unchanged.
+  - summary: Immune to Poison-type moves
+    trigger: damage-calc
+    when: a Poison-type move targets the holder
+    effect: The move fails ("It doesn't affect...") and deals zero damage, like Levitate against Ground.
+test_cases:
+  - given: A Poison Heal holder is badly poisoned via Toxic Orb at end of turn
+    expect: The holder heals 1/8 max HP; no poison damage is taken
+  - given: A foe uses Sludge Bomb against a Poison Heal holder
+    expect: The move does not affect the holder; zero damage
+  - given: A foe uses Toxic (Poison-type status move) against a Poison Heal holder
+    expect: The move fails; the holder is not poisoned by it
+notes:
+  - "The Poison-type move immunity is the fork addition; the heal-while-poisoned clause is vanilla."
+  - "Toxic Orb, Toxic Spikes, and poison from non-Poison-type moves (e.g. Twineedle-style secondary from a Bug move) still poison the holder — the heal loop is intact."
+  - "Foe Toxic is now blocked (it is a Poison-type move); Poison Heal users self-activate via Toxic Orb as usual."
+  - "Mold Breaker bypasses the move immunity, as with other defender-ability immunities."
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:POISONHEAL] = { type: :POISON, flag: :Soundproof } — the core's hitflag pass (chrooked_00_core.rb) blocks the hit and zeroes the Typemod; Mold Breaker is respected via opponent.moldbroken. Heal clause is native Rejuv behavior, untouched."
