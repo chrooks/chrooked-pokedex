@@ -1,6 +1,10 @@
 name: Armaldo
 chrooked_id: armaldo
 aka: { pokeemerald: SPECIES_ARMALDO }
+abilities:
+  primary: Battle Armor
+  secondary: Impenetrable
+  hidden: Swift Swim
 stats: { hp: 80 }
 learnset:
   - { level: 1, move: Fury Cutter }

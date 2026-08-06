@@ -2,7 +2,9 @@ name: Shieldon
 chrooked_id: shieldon
 aka: { pokeemerald: SPECIES_SHIELDON }
 abilities:
+  primary: Sturdy
   secondary: Battle Armor
+  hidden: Impenetrable
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Protect }

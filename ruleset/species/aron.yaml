@@ -1,6 +1,10 @@
 name: Aron
 chrooked_id: aron
 aka: { pokeemerald: SPECIES_ARON }
+abilities:
+  primary: Sturdy
+  secondary: Rock Head
+  hidden: Impenetrable
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Harden }

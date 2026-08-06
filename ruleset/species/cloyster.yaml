@@ -2,7 +2,9 @@ name: Cloyster
 chrooked_id: cloyster
 aka: { pokeemerald: SPECIES_CLOYSTER }
 abilities:
+  primary: Shell Armor
   secondary: Skill Link
+  hidden: Impenetrable
 learnset:
   - { level: 0, move: Icicle Spear }
   - { level: 1, move: Shell Smash }

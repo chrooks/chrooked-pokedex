@@ -1,6 +1,10 @@
 name: Ferroseed
 chrooked_id: ferroseed
 aka: {  }
+abilities:
+  primary: Iron Barbs
+  secondary: Impenetrable
+  hidden: Anticipation
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Harden }

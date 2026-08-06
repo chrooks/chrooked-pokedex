@@ -2,6 +2,8 @@ name: Ferrothorn
 chrooked_id: ferrothorn
 aka: { pokeemerald: SPECIES_FERROTHORN }
 abilities:
+  primary: Iron Barbs
+  secondary: Impenetrable
   hidden: Anticipation
 learnset:
   - { level: 0, move: Power Whip }

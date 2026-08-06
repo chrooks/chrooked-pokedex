@@ -2,7 +2,9 @@ name: Shellder
 chrooked_id: shellder
 aka: { pokeemerald: SPECIES_SHELLDER }
 abilities:
+  primary: Shell Armor
   secondary: Skill Link
+  hidden: Impenetrable
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }

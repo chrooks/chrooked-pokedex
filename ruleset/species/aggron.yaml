@@ -1,6 +1,10 @@
 name: Aggron
 chrooked_id: aggron
 aka: { pokeemerald: SPECIES_AGGRON }
+abilities:
+  primary: Sturdy
+  secondary: Rock Head
+  hidden: Impenetrable
 stats: { hp: 95, atk: 115, spa: 65, spd: 75 }
 learnset:
   - { level: 1, move: Tackle }

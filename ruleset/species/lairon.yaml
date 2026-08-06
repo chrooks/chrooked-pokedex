@@ -1,6 +1,10 @@
 name: Lairon
 chrooked_id: lairon
 aka: { pokeemerald: SPECIES_LAIRON }
+abilities:
+  primary: Sturdy
+  secondary: Rock Head
+  hidden: Impenetrable
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Harden }

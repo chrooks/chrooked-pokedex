@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_PIPLUP }
 types: [Water, Steel]
 abilities:
   primary: Torrent
-  secondary: Frighten
+  secondary: Impenetrable
   hidden: Intimidate
 learnset:
   - { level: 1, move: Growl }
