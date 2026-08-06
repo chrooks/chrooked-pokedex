@@ -27,4 +27,4 @@ notes:
   - "turn-end is the closest neutral trigger for the immunity — the engine simply does not deal the poison residual to a Toxic Boost holder."
 engine_hints:
   pokeemerald: "Damage boost: src/battle_util.c:9565-9568 — UQ_4_12(1.5) when (status1 & STATUS1_PSN_ANY) && IsBattleMovePhysical(move). Poison immunity: src/battle_util.c:2394 (ENDTURN_POISON) and :2423 (ENDTURN_BAD_POISON) both gate residual damage on `ability != ABILITY_TOXIC_BOOST`, so the residual is skipped. Overworld immunity: src/field_poison.c:136 (IsMonImmuneToFieldPoison returns TRUE for ABILITY_TOXIC_BOOST)."
-  essentials: "1.5x physical damage modifier while the user is poisoned, AND skip the end-of-turn poison residual for this Pokemon so it takes no damage from its own poison."
+  essentials: "Rejuv: NATIVE — no mod needed. The 1.5x physical damage while poisoned is Battle_Move.rb:1288-1290 (case :TOXICBOOST in basemult), and the ability is excluded from poison residual at Battle.rb:6588 and field poison at Battle_Field.rb:1156. Both clauses match this spec exactly."

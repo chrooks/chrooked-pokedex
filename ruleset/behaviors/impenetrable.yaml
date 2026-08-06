@@ -1,0 +1,40 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Impenetrable
+chrooked_id: impenetrable
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Blocks entry hazard damage
+    trigger: switch-in
+    when: Stealth Rock, Spikes, or Toxic Spikes would deal damage or inflict poison on entry
+    effect: The damage and poison-on-entry effect from hazards are negated. The Pokémon still triggers Sticky Web speed drops (non-damaging effect).
+  - summary: Blocks weather damage
+    trigger: turn-end
+    when: Active weather (Sandstorm, Hail/Snow) would deal end-of-turn damage to the user
+    effect: The residual HP loss from weather is negated. Weather-based stat boosts/drops are unaffected.
+  - summary: Blocks all other passive/residual damage
+    trigger: turn-end
+    when: "Any end-of-turn passive damage source would deal damage: burn, poison, bad poison, curse, binding moves (Wrap, Fire Spin, etc.), Leech Seed sap, or Nightmare"
+    effect: All such HP reductions are fully negated. Status conditions can still be inflicted; only their damaging tick is blocked.
+  - summary: Blocks indirect damage mid-turn
+    trigger: on-hit
+    when: An effect that is not a direct attack move would deal damage (e.g. recoil from Rough Skin/Iron Barbs on contact, or Liquid Ooze)
+    effect: Indirect contact-recoil damage (Iron Barbs, Rough Skin, etc.) and HP-drain reversal (Liquid Ooze) are negated. Standard move recoil (e.g. Double-Edge) is NOT negated — that is self-inflicted by the user's own move.
+test_cases:
+  - given: User with Impenetrable is afflicted with burn and stands in active Sandstorm at end of turn
+    expect: User takes 0 HP from burn and 0 HP from Sandstorm; both damage ticks are fully negated
+  - given: User with Impenetrable uses Double-Edge (recoil move) against a foe
+    expect: User deals damage normally and still takes the standard 1/3 recoil from Double-Edge; own-move recoil is not negated
+  - given: User with Impenetrable switches in against active Stealth Rock (super-effective)
+    expect: No HP is lost from Stealth Rock on switch-in; the hazard damage is fully negated
+notes:
+  - "Impenetrable is a functional clone of Magic Guard: it negates all damage that does not originate from a direct attack move targeting the user."
+  - Status conditions (burn, poison, paralysis, sleep) can still be inflicted; only their damage ticks are blocked.
+  - Sticky Web speed reduction, Intimidate, and other non-damaging effects are NOT blocked.
+  - Standard move recoil from the user's own attacks (e.g. Double-Edge, Flare Blitz) is NOT negated, consistent with Magic Guard's canon behavior.
+  - Life Orb recoil IS negated, as it is passive item-based damage, not a direct attack.
+  - "Leech Seed: the HP transfer is blocked on the user's side (no HP sapped), but the opponent does NOT receive the sapped HP since none is transferred."
+  - Bad poison still ticks up its counter each turn even though no damage is dealt.
+  - "Rejuv ceiling: message-less pbReduceHP ticks slip through, and Toxic Spikes can still poison on entry (status, not damage) — its gate at Battle.rb:3243 is mid-method."
+engine_hints:
+  essentials: "Rejuv: CHROOKED_HP_LOSS_VETO[:IMPENETRABLE] vetoes every pbReduceHP call that carries a message, except the own-recoil message ('was damaged by the recoil!', Battle_Move.rb:2277). Direct move damage routes through pbReduceHPDamage and is untouched. Leech Seed sap is vetoed, so the seeder heals nothing (0 sapped)."
