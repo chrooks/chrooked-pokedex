@@ -12,6 +12,7 @@ import type { RefObject } from "react";
 import { api, ApiError } from "../../api";
 import type { MoveWrite } from "../../types";
 import { makeoverApi, type MoveCreateDraft, type MoveCreateResponse } from "../../lib/makeoverApi";
+import { CategoryChip } from "../CategoryChip";
 import type { StageActions } from "./StagePanel";
 
 interface Props {
@@ -186,7 +187,9 @@ export function MoveCreatePanel({ redirectRef, registerActions, onCreated, onClo
               </div>
               <div>
                 <dt>category</dt>
-                <dd>{move.category}</dd>
+                <dd>
+                  <CategoryChip category={move.category} variant="full" />
+                </dd>
               </div>
               <div>
                 <dt>power</dt>

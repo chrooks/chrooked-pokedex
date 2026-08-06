@@ -1,6 +1,6 @@
 import "./category-chip.css";
 
-type Category = "physical" | "special" | "status";
+export type Category = "physical" | "special" | "status";
 
 type Props = {
   category: Category;
@@ -33,6 +33,23 @@ const CATEGORY_META: Record<Category, { label: string }> = {
   special: { label: "Special" },
   status: { label: "Status" },
 };
+
+export const CATEGORIES: readonly Category[] = ["physical", "special", "status"];
+
+/** The display label for a category, so no caller re-capitalizes by hand. */
+export function categoryLabel(category: Category): string {
+  return CATEGORY_META[category].label;
+}
+
+/**
+ * The bare glyph, for hosts that carry their own shell (a segmented button, an
+ * editor trigger). Every surface that shows a damage category renders THIS —
+ * the chip, the picker, and the distributor's split buttons all share one shape
+ * set, so physical never means one thing here and another thing there.
+ */
+export function CategoryGlyph({ category }: { category: Category }) {
+  return <Glyph category={category} />;
+}
 
 /** Three shapes that read apart even in grayscale: a fist-impact burst, a
     radiating special starburst, and a quiet status ring. */

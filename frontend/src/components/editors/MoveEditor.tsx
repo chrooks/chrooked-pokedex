@@ -15,8 +15,9 @@ import { useSubmit } from "../../hooks/useSubmit";
 import { isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
 import { TypeSelect } from "../TypeSelect";
+import { CategorySelect } from "../CategorySelect";
 import { EditorDialog } from "./EditorDialog";
-import { NumberField, SelectField, TextAreaField, TextField } from "./fields";
+import { NumberField, TextAreaField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import "./editors.css";
 import "../ledger/ledger-rows.css";
@@ -33,8 +34,6 @@ type Props = {
       already hosted inside a DetailSidebar shell. */
   embedded?: boolean;
 };
-
-const CATEGORIES = ["physical", "special", "status"] as const;
 
 type MoveForm = {
   name: string;
@@ -192,13 +191,15 @@ export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) 
             <label className="field__label" htmlFor="move-type">Type</label>
             <TypeSelect id="move-type" label="Type" value={form.type} onChange={(v) => set("type", v)} />
           </div>
-          <SelectField
-            id="move-category"
-            label="Category"
-            value={form.category}
-            options={CATEGORIES}
-            onChange={(v) => set("category", v)}
-          />
+          <div className="field">
+            <span className="field__label">Category</span>
+            <CategorySelect
+              id="move-category"
+              label="Category"
+              value={form.category}
+              onChange={(v) => set("category", v)}
+            />
+          </div>
           <NumberField
             id="move-power"
             label="Power"

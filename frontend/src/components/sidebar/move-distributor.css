@@ -110,6 +110,9 @@
 }
 
 .dseed__seg {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   padding: var(--space-1) var(--space-3);
   border: none;
   background: transparent;
@@ -119,6 +122,20 @@
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
+}
+
+.dseed__seg svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: var(--cat, var(--text-faint));
+}
+
+.dseed__seg[data-category="physical"] {
+  --cat: var(--cat-physical);
+}
+.dseed__seg[data-category="special"] {
+  --cat: var(--cat-special);
 }
 
 .dseed__seg[data-on] {

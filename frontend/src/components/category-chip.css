@@ -21,15 +21,15 @@
 }
 
 .cat-chip[data-category="physical"] {
-  --cat: oklch(64% 0.19 35); /* impact orange */
+  --cat: var(--cat-physical);
 }
 
 .cat-chip[data-category="special"] {
-  --cat: oklch(62% 0.17 265); /* energy blue */
+  --cat: var(--cat-special);
 }
 
 .cat-chip[data-category="status"] {
-  --cat: oklch(60% 0.03 250); /* neutral slate */
+  --cat: var(--cat-status);
 }
 
 .cat-chip__glyph {

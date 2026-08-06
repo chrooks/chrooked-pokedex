@@ -29,6 +29,14 @@
   --edited: oklch(80% 0.15 80);
   --edited-glow: oklch(80% 0.15 80 / 0.35);
 
+  /* Damage category — the physical / special / status split. One hue per
+     category, paired with one glyph shape (see CategoryChip), so the category
+     reads the same in the moves table, the move editor, the distributor, and a
+     filter token. Shape carries identity in grayscale; the hue is the accent. */
+  --cat-physical: oklch(64% 0.19 35); /* impact orange */
+  --cat-special: oklch(62% 0.17 265); /* energy blue */
+  --cat-status: oklch(60% 0.03 250); /* neutral slate */
+
   /* Typography — system stacks (no external font dependency; fast, offline) */
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
@@ -107,6 +115,12 @@
 
   --edited: oklch(48% 0.096 80);
   --edited-glow: oklch(48% 0.096 80 / 0.25);
+
+  /* Re-solved, not inverted: the chip formulas mix these toward --text and
+     --surface-0, both of which swap meaning between themes. */
+  --cat-physical: oklch(52% 0.170 35);
+  --cat-special: oklch(50% 0.150 265);
+  --cat-status: oklch(48% 0.028 250);
 
   --type-normal: oklch(55% 0.030 95);
   --type-fire: oklch(56% 0.163 45);

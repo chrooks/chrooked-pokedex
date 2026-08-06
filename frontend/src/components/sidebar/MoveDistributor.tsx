@@ -27,6 +27,7 @@ import type {
 import { DexSprite } from "../DexSprite";
 import { PokeballSpinner } from "../PokeballSpinner";
 import { TypeChip } from "../TypeChip";
+import { CategoryGlyph, type Category } from "../CategoryChip";
 import { FormError } from "../editors/FormFeedback";
 import "../editors/editors.css";
 import "../proposal/proposal.css";
@@ -42,12 +43,16 @@ type Props = {
   onSaved: () => void;
 };
 
-const SPLITS: { value: DistributeSplit; label: string }[] = [
-  { value: "physical", label: "Physical" },
-  { value: "special", label: "Special" },
-  { value: "strong-physical", label: "Phys-lean" },
-  { value: "strong-special", label: "Spec-lean" },
-  { value: "any", label: "Any" },
+/* The split buttons carry the same glyph the moves table and the move editor use.
+   `strong-*` is the same physical/special axis read loosely (a lean, not a hard
+   split), so it wears the same shape rather than a second private vocabulary;
+   `any` has no side, so it shows no glyph. */
+const SPLITS: { value: DistributeSplit; label: string; category: Category | null }[] = [
+  { value: "physical", label: "Physical", category: "physical" },
+  { value: "special", label: "Special", category: "special" },
+  { value: "strong-physical", label: "Phys-lean", category: "physical" },
+  { value: "strong-special", label: "Spec-lean", category: "special" },
+  { value: "any", label: "Any", category: null },
 ];
 
 const RARITIES: { value: DistributeRarity; label: string; hint: string }[] = [
@@ -312,9 +317,11 @@ export function MoveDistributor({
                 type="button"
                 id={`dseed-split-${s.value}`}
                 className="dseed__seg"
+                data-category={s.category ?? undefined}
                 data-on={split === s.value || undefined}
                 onClick={() => setSplit(s.value)}
               >
+                {s.category && <CategoryGlyph category={s.category} />}
                 {s.label}
               </button>
             ))}

@@ -45,6 +45,18 @@ All 18, used **wherever a type renders** (grid codes, detail chips, type-chart t
 
 A type chip is the type color as text/keyline on a low-chroma tint of itself (`color-mix` toward `--surface-2`), not a saturated fill. Two-type species show both, ordered as the data gives them.
 
+### Damage category — one shape, one hue, everywhere
+
+A move's physical / special / status split is **one glyph set plus one hue per category**, and every surface that shows a category renders that same pair: the moves table, the move detail, the move editor's picker, the distributor's split buttons, and a filter token. A category rendered as bare lowercase text in one place and a colored badge in another is the same data wearing two faces — the reader has to re-learn it per screen.
+
+| Category | `--cat-*` (OKLCH, dark) | Shape |
+|---|---|---|
+| physical | `64% 0.19 35` — impact orange | impact burst |
+| special | `62% 0.17 265` — energy blue | radiating starburst |
+| status | `60% 0.03 250` — neutral slate | quiet ring |
+
+The **shape carries identity**, so a category still reads in grayscale and never depends on the hue alone; the hue is the accent. `CategoryChip` owns the shapes and exports `CategoryGlyph` for hosts that carry their own shell. The light theme re-solves all three (see the type-color rules above).
+
 ## Typography
 
 - **Mono** (data): dex №, stats, levels, type codes, the diff figures. A real monospace — `"JetBrains Mono", "SF Mono", ui-monospace, monospace`.
