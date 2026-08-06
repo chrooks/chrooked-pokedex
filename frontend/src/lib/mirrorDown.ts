@@ -120,14 +120,21 @@ export function preEvos(
     if (stems.size !== 1) break;
     const stem = [...stems][0];
     if (seen.has(stem)) break;
-    // Mirror onto the base form (forms mirror the base's kit), so prefer the
-    // base-stem entry; fall back to the only edge if the base isn't in the dex.
-    const parent = byId.get(stem) ?? byId.get(ps[0]);
+    // A single distinct parent is taken VERBATIM — a form line stays on its
+    // form (Goodra Hisui's parent is sliggoo--hisuianform, never sliggoo).
+    // Only when several form-variants of one stem all feed this child do they
+    // collapse to the base-stem entry (one logical pre-evo, mirrored onto the
+    // base); fall back to the first edge if the base isn't in the dex.
+    const distinct = new Set(ps);
+    const parent =
+      distinct.size === 1
+        ? byId.get(ps[0])
+        : (byId.get(stem) ?? byId.get(ps[0]));
     if (parent === undefined) break;
     chain.push(parent);
     seen.add(parent.chrooked_id);
     seen.add(stem);
-    currentId = stem;
+    currentId = parent.chrooked_id;
   }
   return chain.reverse();
 }
@@ -148,7 +155,13 @@ export function postEvos(
     if (stems.size !== 1) break;
     const stem = [...stems][0];
     if (seen.has(stem)) break;
-    const child = byId.get(stem) ?? byId.get(edges[0].to);
+    // Same verbatim-vs-collapse rule as preEvos: one distinct target keeps its
+    // form (sliggoo--hisuianform evolves into goodra--hisuianform, not goodra).
+    const targets = new Set(edges.map((edge) => edge.to));
+    const child =
+      targets.size === 1
+        ? byId.get(edges[0].to)
+        : (byId.get(stem) ?? byId.get(edges[0].to));
     if (child === undefined) break;
     chain.push(child);
     seen.add(child.chrooked_id);

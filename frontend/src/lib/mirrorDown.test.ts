@@ -71,6 +71,25 @@ describe("preEvos", () => {
     );
     expect(preEvos(galvantula, line).map((m) => m.chrooked_id)).toEqual(["joltik"]);
   });
+
+  it("keeps a form line on its form — a lone form parent is never collapsed to base", () => {
+    // The rejuv target dex shape: goodra--hisuianform's ONLY parent is
+    // sliggoo--hisuianform. Collapsing that lone parent to the base stem put
+    // regular Sliggoo in Goodra Hisui's mirror list.
+    const line = new Map(
+      [
+        mon("goomy", "Goomy", "sliggoo--hisuianform"),
+        mon("sliggoo", "Sliggoo", "goodra"),
+        mon("sliggoo--hisuianform", "Sliggoo Hisui", "goodra--hisuianform", "Goomy"),
+        mon("goodra", "Goodra", null, "Sliggoo"),
+        mon("goodra--hisuianform", "Goodra Hisui", null, "Sliggoo Hisui"),
+      ].map((m) => [m.chrooked_id, m]),
+    );
+    expect(preEvos(line.get("goodra--hisuianform")!, line).map((m) => m.chrooked_id)).toEqual([
+      "goomy",
+      "sliggoo--hisuianform",
+    ]);
+  });
 });
 
 describe("postEvos", () => {
@@ -83,6 +102,20 @@ describe("postEvos", () => {
 
   it("is empty for a fully-evolved species", () => {
     expect(postEvos(goodra, byId)).toEqual([]);
+  });
+
+  it("keeps a form line on its form — a lone form target is never collapsed to base", () => {
+    const line = new Map(
+      [
+        mon("sliggoo", "Sliggoo", "goodra"),
+        mon("sliggoo--hisuianform", "Sliggoo Hisui", "goodra--hisuianform"),
+        mon("goodra", "Goodra", null, "Sliggoo"),
+        mon("goodra--hisuianform", "Goodra Hisui", null, "Sliggoo Hisui"),
+      ].map((m) => [m.chrooked_id, m]),
+    );
+    expect(
+      postEvos(line.get("sliggoo--hisuianform")!, line).map((m) => m.chrooked_id),
+    ).toEqual(["goodra--hisuianform"]);
   });
 });
 
