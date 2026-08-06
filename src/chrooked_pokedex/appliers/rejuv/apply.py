@@ -538,6 +538,11 @@ def _build_movetext(
             # Existing move — patch its scalars in place.
             lines = [f"MOVEHASH[:{sym}][:type] = :{_type_sym(move.type)}",
                      f"MOVEHASH[:{sym}][:category] = :{move.category}"]
+            if move.second_type:
+                # Dual-damage-type (Flying Press): pure data, the engine reads
+                # :secondtype in its type-mod calc.
+                lines.append(
+                    f"MOVEHASH[:{sym}][:secondtype] = :{_type_sym(move.second_type)}")
             for attr, field in _MOVE_SCALARS:
                 value = getattr(move, attr)
                 if value is not None and value != "":
@@ -551,14 +556,27 @@ def _build_movetext(
             for flag in move.flags:
                 if (key := _FLAG.get(flag)):
                     lines.append(f"MOVEHASH[:{sym}][:{key}] = true")
+            reason = ""
             if move.effect in _PRIMARY_EFFECT_CODES:
                 code, chance = _PRIMARY_EFFECT_CODES[move.effect]
                 lines.append(f"MOVEHASH[:{sym}][:function] = 0x{code:03X}")
                 if chance is not None:
                     lines.append(f"MOVEHASH[:{sym}][:effect] = {chance}")
+            elif move.additional_effects:
+                # Retuned secondary (Muddy Water's speed drop): swap the
+                # funccode + :effect chance; anything unmapped is reported,
+                # never silently dropped.
+                function, chance, leftover = _function_for(move)
+                if function:
+                    lines.append(f"MOVEHASH[:{sym}][:function] = 0x{function:03X}")
+                    if chance is not None:
+                        lines.append(f"MOVEHASH[:{sym}][:effect] = {chance}")
+                if leftover:
+                    reason = f"DATA ONLY: {', '.join(leftover)}"
             blocks.extend(lines)
-            report.add(ReportEntry(status="applied", category="move",
-                                   chrooked_id=move.chrooked_id, symbol=sym))
+            report.add(ReportEntry(
+                status="partial" if reason else "applied", category="move",
+                chrooked_id=move.chrooked_id, symbol=sym, reason=reason))
         else:
             # New move — create a full MOVEHASH entry. Flinch combos map onto a
             # vanilla :function code (pure data); anything the code doesn't cover
@@ -645,6 +663,7 @@ def _new_move_block(
         f":desc => {to_ruby(move.description or move.name)}",
         f":function => 0x{function:03X}",
         f":type => :{_type_sym(move.type)}",
+        *([f":secondtype => :{_type_sym(move.second_type)}"] if move.second_type else []),
         f":category => :{move.category}",
         f":basedamage => {move.power if move.power is not None else _CREATE_DEFAULTS['basedamage']}",
         f":accuracy => {move.accuracy if move.accuracy is not None else _CREATE_DEFAULTS['accuracy']}",

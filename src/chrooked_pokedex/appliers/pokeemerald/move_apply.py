@@ -82,6 +82,8 @@ def apply_moves(
 def _overlay(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str], list[str]]:
     body, changed = _overlay_scalars(body, move, resmap)
     body, behavior_changed, unresolved = _overlay_behavior(body, move, resmap)
+    if move.second_type:
+        unresolved.append(f"second_type:{move.second_type} (no pokeemerald dual-type)")
     return body, changed + behavior_changed, unresolved
 
 

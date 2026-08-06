@@ -108,6 +108,9 @@ class MoveDef:
     chrooked_id: str
     type: str
     category: str
+    # Dual-damage-type move (Flying Press): damage counts BOTH types. Only
+    # engines with native support (Rejuv :secondtype) can express it.
+    second_type: Optional[str] = None
     power: Optional[int] = None
     accuracy: Optional[int] = None
     pp: Optional[int] = None

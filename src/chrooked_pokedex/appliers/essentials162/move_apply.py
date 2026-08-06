@@ -251,6 +251,8 @@ def _scalar_columns(move: MoveDef, resmap: ResolutionMap) -> tuple[dict[str, str
     """The scalar column values the Ruleset specifies, plus any unresolved notes."""
     unresolved: list[str] = []
     desired: dict[str, str] = {"category": vocab.category(move.category)}
+    if move.second_type:
+        unresolved.append(f"second_type:{move.second_type} (no 16.2 dual-type)")
 
     type_internal = resmap.type(move.type)
     if type_internal is None:

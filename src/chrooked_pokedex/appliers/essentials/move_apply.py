@@ -74,6 +74,8 @@ def _overlay(
     unresolved: list[str] = []
 
     desired: dict[str, str] = {"Category": vocab.category(move.category)}
+    if move.second_type:
+        unresolved.append(f"second_type:{move.second_type} (no Essentials dual-type)")
     type_internal = resmap.type(move.type)
     if type_internal is None:
         unresolved.append(f"type:{move.type}")

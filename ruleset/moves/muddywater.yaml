@@ -1,0 +1,12 @@
+name: Muddy Water
+chrooked_id: muddywater
+aka: { pokeemerald: MOVE_MUDDY_WATER }
+type: Water
+second_type: Ground
+category: special
+power: 80
+accuracy: 100
+pp: 10
+description: The user attacks with a surge of muddy water. This move is Water and Ground type simultaneously. May lower Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 50 }

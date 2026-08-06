@@ -59,7 +59,7 @@ _ABILITIES_KEYS = ("primary", "secondary", "hidden")
 _LEARNSET_KEYS = ("level", "move")
 _EVOLUTION_KEYS = ("from", "method")
 _MOVE_KEYS = (
-    "name", "chrooked_id", "aka", "type",
+    "name", "chrooked_id", "aka", "type", "second_type",
     "category", "power", "accuracy", "pp", "description",
     "effect", "argument", "additional_effects", "flags", "priority", "target",
 )
@@ -154,6 +154,7 @@ def load_move(path: Path) -> MoveDef:
         name=data["name"],
         chrooked_id=data["chrooked_id"],
         type=data["type"],
+        second_type=data.get("second_type"),
         category=data["category"],
         power=data.get("power"),
         accuracy=data.get("accuracy"),

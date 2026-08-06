@@ -216,6 +216,22 @@ def test_move_scalars_emit(tmp_path):
     assert "MOVEHASH[:TACKLE][:category] = :physical" in text
 
 
+def test_existing_move_second_type_and_secondary(tmp_path):
+    # Muddy Water shape: dual damage type + retuned secondary on an existing move.
+    r = Ruleset(moves={"tackle": MoveDef(
+        name="Tackle", chrooked_id="tackle", type="Water", second_type="Ground",
+        category="special", power=80, accuracy=100,
+        additional_effects=(AdditionalEffect(effect="spd_minus_1", chance=50),),
+    )})
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert "MOVEHASH[:TACKLE][:secondtype] = :GROUND" in text
+    assert "MOVEHASH[:TACKLE][:function] = 0x044" in text
+    assert "MOVEHASH[:TACKLE][:effect] = 50" in text
+    entry = next(e for e in report.entries if e.chrooked_id == "tackle")
+    assert entry.status == "applied" and entry.reason == ""
+
+
 def test_new_move_created_with_next_id(tmp_path):
     # Base fixture max move ID is 3 (Tackle=1, Vine Whip=2, HiJumpKick=3), so a new move gets 4.
     r = Ruleset(moves={"madeup": MoveDef(

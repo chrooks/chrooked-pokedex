@@ -110,6 +110,8 @@ def move_yaml(move: MoveDef) -> str:
         f"type: {move.type}",
         f"category: {move.category}",
     ]
+    if move.second_type:
+        lines.insert(4, f"second_type: {move.second_type}")
     if move.power is not None:
         lines.append(f"power: {move.power}")
     if move.accuracy is not None:
