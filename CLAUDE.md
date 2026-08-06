@@ -69,6 +69,7 @@ When reworking a species that is part of an evolution line, default to this shap
 3. **Only stats scale down.** Apply the *same BST delta* the final evo received to each pre-evo's canon BST, then redistribute within that total preserving the final evo's role emphasis (keep the dump stat low). Example: Sawsbuck 475 → 520 (**+45**), so Deerling 335 → **380**.
 4. **Multi-form lines**: do all of the above per form, so each form keeps its own typing and stat-role identity across both stages.
 5. **Megas and battle forms mirror the base form's learnset** — never bespoke. Keep the base form's L0 row.
+6. **Branch-shared pre-evos are opt-in.** A pre-evo that also feeds another line (Goomy feeds both Sliggoo forms) is NOT mirrored by default — copying one line's kit onto it desyncs the other, and the next makeover there clobbers it back. The mirror UI starts such rows on skip; pull one in only when you've decided which line owns it.
 
 Divergent typing, abilities, or stat shape between stages is an **exception** — allowed, but state it explicitly rather than doing it silently.
 
