@@ -263,3 +263,54 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** learnset-only repass
 - **Corrections:** Special mostly, good sound move coverage
+
+## 2026-08-05 — Salamence line
+
+- **Direction:** learnset-only repass
+- **Corrections:** physical attacker, strong STABs great type coverage fire, dark, normal, ground
+
+## 2026-08-05 — Salamence line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-05 — Archaludon line
+
+- **Direction:** abilities + learnset repass
+- **Corrections:** pecial attackign tank w/ great electric and ground coverage
+
+## 2026-08-06 — Druddigon line
+
+- **Direction:** stats + learnset repass
+- **Corrections:** 540 BST; should get accelrock, physical moves, good dark , fighting, ground coverage
+
+## 2026-08-06 — Flygon line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Special moves only except for bite, crunch, bug bite, tectonic fangs; emphaisize sound moves, bug buzz at L0 Boomburst at L60 w/ echoed voice, uproar, hyper voice sprinkled throughout; expansve ground coverage (mud slap/shot/bomb, earth power, scorch sands, quagmire)
+
+## 2026-08-06 — Flygon line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+- **Corrections:** updated pre L30 learnset to be more physical to match trapinch stats
+
+## 2026-08-06 — Goodra line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Special, great coverage especially with grass, poison, and ground type moves; good nomral moves for Hydrate
+
+## 2026-08-06 — Goodra Hisui line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special moves; dragon and steel stabs; water, poison coverage; ignore existing learnset
+
+## 2026-08-06 — Goodra Hisui line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-06 — Goodra line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-06 — Goodra Hisui line
+
+- **Direction:** mirror-only: current kit onto pre-evos
