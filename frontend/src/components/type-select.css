@@ -30,14 +30,21 @@
   font-size: var(--text-sm);
 }
 
+/* All 18 types at once: a column-major grid instead of one scrolling column.
+   Column-major matters — it keeps ArrowDown moving to the option visually
+   below, so the linear keyboard order and the visual order agree. --rows is set
+   by the component from the option count, so the last column never ends up
+   holding a single stray option. */
 .type-select__list {
   position: absolute;
   z-index: 20;
   top: calc(100% + var(--space-1));
   left: 0;
-  right: 0;
-  max-height: 20rem;
-  overflow-y: auto;
+  min-width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--rows, 6), auto);
+  gap: 1px var(--space-1);
   margin: 0;
   padding: var(--space-1);
   list-style: none;

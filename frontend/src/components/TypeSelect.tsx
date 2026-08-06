@@ -20,6 +20,10 @@ type Props = {
 
 const NONE = "";
 
+/** Columns in the open list. Three keeps all 18 types on screen at once without
+    the panel growing wider than the narrowest host (the detail sidebar). */
+const COLUMNS = 3;
+
 /**
  * A type picker that renders the franchise TypeChip for every option — the thing
  * a native <select> can't do, since <option> is text-only. Follows the app's
@@ -40,6 +44,10 @@ export function TypeSelect({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(() => Math.max(0, options.indexOf(value)));
+
+  // Balanced columns: 18 types become 6×3, and adding "None" reflows to 7×3
+  // rather than leaving one option alone in a fourth column.
+  const rows = Math.ceil(options.length / COLUMNS);
 
   function commit(next: string) {
     onChange(next);
@@ -105,7 +113,13 @@ export function TypeSelect({
       </button>
 
       {open && (
-        <ul className="type-select__list" id={listboxId} role="listbox" aria-label={label}>
+        <ul
+          className="type-select__list"
+          id={listboxId}
+          role="listbox"
+          aria-label={label}
+          style={{ "--rows": rows } as React.CSSProperties}
+        >
           {options.map((option, index) => (
             <li
               key={option || "none"}
