@@ -190,6 +190,20 @@ export function copyDownLearnset(anchorLearnset: readonly LearnsetMove[]): Learn
     .sort((a, b) => a.level - b.level || a.move.localeCompare(b.move));
 }
 
+/** True when `member` also evolves into a species OUTSIDE `lineIds` — a
+    branch-shared pre-evo (Goomy feeds both Sliggoo forms). Mirroring the
+    anchor's kit onto one would desync it from its OTHER line, and the next
+    makeover over there would clobber it back — so shared members start
+    skipped in the mirror list and the author opts in per makeover. */
+export function sharedOutsideLine(
+  member: DexEntry,
+  lineIds: ReadonlySet<string>,
+): boolean {
+  return (member.evolves_into ?? []).some(
+    (edge) => edge.to && !lineIds.has(edge.to),
+  );
+}
+
 /** The facets a mirror can copy. Stats is the odd one out: typing, abilities and
     the learnset are copied verbatim, stats are SCALED per recipient (see
     {@link scaleStats}) because a pre-evo keeps its own weight class. */

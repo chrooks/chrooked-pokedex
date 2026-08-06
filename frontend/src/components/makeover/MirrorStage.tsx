@@ -21,6 +21,7 @@ import {
   canonStats,
   lineMembers,
   mirrorRows,
+  sharedOutsideLine,
   type MirrorFacet,
 } from "../../lib/mirrorDown";
 import { bst } from "../../lib/format";
@@ -57,6 +58,17 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
   const [facets, setFacets] = useState<ReadonlySet<MirrorFacet>>(
     DEFAULT_MIRROR_FACETS,
   );
+  // Branch-shared members (a pre-evo that also feeds ANOTHER line, e.g. Goomy
+  // feeding both Sliggoo forms) start skipped too: mirroring onto one desyncs
+  // its other line, so pulling it in is opt-in per makeover.
+  const shared = useMemo(() => {
+    const lineIds = new Set(line.map((member) => member.chrooked_id));
+    return new Set(
+      line
+        .filter((member) => sharedOutsideLine(member, lineIds))
+        .map((member) => member.chrooked_id),
+    );
+  }, [line]);
   // Evolved stages (relative to the anchor) start skipped: mirroring UP is
   // allowed but deliberate. Positional (line is base→tip ordered) rather than a
   // second graph walk, so a branch stopping the walk can't miss a skip.
@@ -66,8 +78,8 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
       line.filter((_, i) => i > index).map((member) => member.chrooked_id),
     );
   };
-  const [excluded, setExcluded] = useState<ReadonlySet<string>>(() =>
-    laterThan(entry.chrooked_id),
+  const [excluded, setExcluded] = useState<ReadonlySet<string>>(
+    () => new Set([...laterThan(entry.chrooked_id), ...shared]),
   );
 
   const recipients = useMemo(
@@ -102,7 +114,7 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
 
   function pickAnchor(nextId: string) {
     setAnchorId(nextId);
-    setExcluded(laterThan(nextId));
+    setExcluded(new Set([...laterThan(nextId), ...shared]));
   }
 
   function toggleFacet(facet: MirrorFacet) {
@@ -220,6 +232,7 @@ export function MirrorStage({ entry, byId, registerActions, onLocked }: Props) {
           excluded={excluded}
           onToggle={toggle}
           facets={facets}
+          shared={shared}
           id="mk-mirror-only-list"
         />
       )}

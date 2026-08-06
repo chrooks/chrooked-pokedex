@@ -7,6 +7,7 @@ import {
   postEvos,
   preEvos,
   scaleStats,
+  sharedOutsideLine,
 } from "./mirrorDown";
 import { bst } from "./format";
 import type { AbilitySlots, DexEntry } from "../types";
@@ -116,6 +117,28 @@ describe("postEvos", () => {
     expect(
       postEvos(line.get("sliggoo--hisuianform")!, line).map((m) => m.chrooked_id),
     ).toEqual(["goodra--hisuianform"]);
+  });
+});
+
+describe("sharedOutsideLine", () => {
+  it("flags a pre-evo that also feeds a line outside this one", () => {
+    // Goomy feeds both Sliggoo forms; the Hisui line only contains one of them.
+    const branchedGoomy = {
+      ...mon("goomy", "Goomy", "sliggoo--hisuianform"),
+      evolves_into: [
+        { to: "sliggoo--hisuianform", to_name: "Sliggoo Hisui", to_dex: null, method: "Level 40" },
+        { to: "sliggoo", to_name: "Sliggoo", to_dex: null, method: "Level 40" },
+      ],
+    } as DexEntry;
+    const hisuiLine = new Set(["goomy", "sliggoo--hisuianform", "goodra--hisuianform"]);
+    expect(sharedOutsideLine(branchedGoomy, hisuiLine)).toBe(true);
+  });
+
+  it("does not flag a member whose every edge stays in the line", () => {
+    expect(
+      sharedOutsideLine(goomy, new Set(["goomy", "sliggoo", "goodra"])),
+    ).toBe(false);
+    expect(sharedOutsideLine(goodra, new Set(["goodra"]))).toBe(false);
   });
 });
 

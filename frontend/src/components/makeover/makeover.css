@@ -821,6 +821,17 @@ textarea.mk-stage__redirect-input {
   font-size: var(--text-xs);
   text-align: right;
 }
+/* Branch-shared tag: this member also feeds another evolution line, which is
+   why its row starts on skip. Never struck through — it's a fact, not a state. */
+.mk-mirror__shared {
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  padding: 0 var(--space-2);
+}
 /* mirror/skip toggle: a role="switch" pill. "mirror" reads active (chrome
    keyline), "skip" reads muted; the whole row dims when skipped. */
 .mk-mirror__toggle {

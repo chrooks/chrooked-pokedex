@@ -14,6 +14,9 @@ interface Props {
   onToggle: (chrookedId: string) => void;
   /** The facets being mirrored; omitted = the classic types+abilities+learnset. */
   facets?: ReadonlySet<MirrorFacet>;
+  /** chrooked_ids that also feed ANOTHER evolution line (Goomy → both Sliggoo
+      forms) — flagged so the author knows why the row started on skip. */
+  shared?: ReadonlySet<string>;
   id?: string;
 }
 
@@ -28,7 +31,7 @@ function summary(row: MirrorRow, facets?: ReadonlySet<MirrorFacet>): string {
   return parts.join(" · ");
 }
 
-export function MirrorRowList({ rows, excluded, onToggle, facets, id }: Props) {
+export function MirrorRowList({ rows, excluded, onToggle, facets, shared, id }: Props) {
   return (
     <ul className="mk-mirror__list" id={id}>
       {rows.map((row) => {
@@ -50,6 +53,14 @@ export function MirrorRowList({ rows, excluded, onToggle, facets, id }: Props) {
               {skipped ? "skip" : "mirror"}
             </button>
             <span className="mk-mirror__name">{row.name}</span>
+            {shared?.has(row.chrooked_id) && (
+              <span
+                className="mono mk-mirror__shared"
+                title="Also evolves into another line — mirroring here desyncs that line"
+              >
+                shared line
+              </span>
+            )}
             <span className="mono mk-mirror__count">{summary(row, facets)}</span>
           </li>
         );
