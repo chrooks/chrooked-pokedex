@@ -2,24 +2,27 @@ name: Druddigon
 chrooked_id: druddigon
 aka: { pokeemerald: SPECIES_DRUDDIGON }
 types: [Dragon, Rock]
+stats: { hp: 87, atk: 135, def: 100, spa: 60, spd: 95, spe: 63 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
-  - { level: 3, move: Maul }
-  - { level: 5, move: Bite }
-  - { level: 10, move: Dragon Tail }
-  - { level: 15, move: Rock Tomb }
-  - { level: 18, move: Accelerock }
-  - { level: 20, move: Slash }
+  - { level: 4, move: Maul }
+  - { level: 7, move: Bite }
+  - { level: 10, move: Accelerock }
+  - { level: 13, move: Dragon Tail }
+  - { level: 16, move: Rock Tomb }
+  - { level: 19, move: Slash }
   - { level: 22, move: Breaking Swipe }
-  - { level: 25, move: Tectonic Fang }
-  - { level: 26, move: Rock Slide }
-  - { level: 35, move: Lithic Fang }
-  - { level: 38, move: Dragon Claw }
-  - { level: 40, move: Crunch }
-  - { level: 42, move: Dragon Hammer }
-  - { level: 45, move: Iron Head }
-  - { level: 48, move: Stone Edge }
-  - { level: 50, move: Outrage }
-  - { level: 55, move: Superpower }
-  - { level: 57, move: Head Smash }
+  - { level: 25, move: Brick Break }
+  - { level: 28, move: Bulldoze }
+  - { level: 31, move: Rock Slide }
+  - { level: 34, move: Lithic Fang }
+  - { level: 37, move: Crunch }
+  - { level: 40, move: Dragon Claw }
+  - { level: 44, move: Superpower }
+  - { level: 48, move: Dragon Hammer }
+  - { level: 52, move: Iron Head }
+  - { level: 56, move: Earthquake }
+  - { level: 58, move: Stone Edge }
+  - { level: 62, move: Outrage }
+  - { level: 66, move: Head Smash }
