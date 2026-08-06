@@ -1,28 +1,32 @@
 name: Goomy
 chrooked_id: goomy
 aka: { pokeemerald: SPECIES_GOOMY }
+types: [Dragon, Water]
 abilities:
-  primary: Sap Sipper
+  primary: Gooey
   secondary: Hydrate
-  hidden: Gooey
+  hidden: Poison Heal
+stats: { hp: 45, atk: 50, def: 35, spa: 55, spd: 75, spe: 40 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Absorb }
-  - { level: 2, move: Twister }
-  - { level: 5, move: Water Gun }
-  - { level: 7, move: Glint }
-  - { level: 10, move: Dragon Breath }
-  - { level: 15, move: Protect }
-  - { level: 18, move: Mirror Shot }
-  - { level: 20, move: Flail }
-  - { level: 25, move: Water Pulse }
-  - { level: 26, move: Draconic Fang }
-  - { level: 30, move: Rain Dance }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Water Gun }
+  - { level: 5, move: Twister }
+  - { level: 8, move: Acid Spray }
+  - { level: 12, move: Mega Drain }
+  - { level: 15, move: Swift }
+  - { level: 18, move: Water Pulse }
+  - { level: 20, move: Dragon Breath }
+  - { level: 25, move: Brine }
+  - { level: 28, move: Mud Bomb }
+  - { level: 30, move: Giga Drain }
+  - { level: 32, move: Miasma }
   - { level: 35, move: Dragon Pulse }
-  - { level: 38, move: Luster Cannon }
-  - { level: 39, move: Cataclysm }
-  - { level: 41, move: Curse }
-  - { level: 45, move: Body Slam }
-  - { level: 50, move: Muddy Water }
-  - { level: 60, move: Draco Meteor }
-  - { level: 62, move: Steel Beam }
+  - { level: 40, move: Muddy Water }
+  - { level: 45, move: Earth Power }
+  - { level: 50, move: Hyper Voice }
+  - { level: 55, move: Cataclysm }
+  - { level: 60, move: Sludge Bomb }
+  - { level: 65, move: Draco Meteor }
+  - { level: 68, move: Hydro Pump }
+  - { level: 70, move: Boomburst }

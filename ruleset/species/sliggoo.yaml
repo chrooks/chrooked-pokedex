@@ -3,32 +3,31 @@ chrooked_id: sliggoo
 aka: { pokeemerald: SPECIES_SLIGGOO }
 types: [Dragon, Water]
 abilities:
-  primary: Sap Sipper
+  primary: Gooey
   secondary: Hydrate
-  hidden: Gooey
+  hidden: Poison Heal
+stats: { hp: 68, atk: 75, def: 53, spa: 83, spd: 113, spe: 60 }
 learnset:
-  - { level: 0, move: Acid Spray }
-  - { level: 1, move: Acid Armor }
+  - { level: 1, move: Absorb }
   - { level: 1, move: Tackle }
   - { level: 1, move: Water Gun }
-  - { level: 1, move: Absorb }
-  - { level: 2, move: Twister }
-  - { level: 3, move: Dragon Breath }
-  - { level: 8, move: Glint }
-  - { level: 15, move: Protect }
-  - { level: 18, move: Mirror Shot }
-  - { level: 20, move: Flail }
-  - { level: 25, move: Water Pulse }
-  - { level: 26, move: Draconic Fang }
-  - { level: 30, move: Rain Dance }
+  - { level: 5, move: Twister }
+  - { level: 8, move: Acid Spray }
+  - { level: 12, move: Mega Drain }
+  - { level: 15, move: Swift }
+  - { level: 18, move: Water Pulse }
+  - { level: 20, move: Dragon Breath }
+  - { level: 25, move: Brine }
+  - { level: 28, move: Mud Bomb }
+  - { level: 30, move: Giga Drain }
+  - { level: 32, move: Miasma }
   - { level: 35, move: Dragon Pulse }
-  - { level: 39, move: Luster Cannon }
-  - { level: 40, move: Cataclysm }
-  - { level: 43, move: Curse }
-  - { level: 44, move: Muddy Water }
-  - { level: 49, move: Body Slam }
-  - { level: 56, move: Hydro Pump }
-  - { level: 57, move: Tsunami }
-  - { level: 60, move: Draco Meteor }
-  - { level: 62, move: Steel Beam }
+  - { level: 40, move: Muddy Water }
+  - { level: 45, move: Earth Power }
+  - { level: 50, move: Hyper Voice }
+  - { level: 55, move: Cataclysm }
+  - { level: 60, move: Sludge Bomb }
+  - { level: 65, move: Draco Meteor }
+  - { level: 68, move: Hydro Pump }
+  - { level: 70, move: Boomburst }
 evolution: { from: Goomy, method: { pokeemerald: EVO_LEVEL_FOG, param: 35 } }
