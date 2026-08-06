@@ -8,7 +8,7 @@
    unlocked selected stage and Back returns to the dex exactly as left (ac1).
 
    Keyboard path (ac7/ac8): Enter = LOCK IN, t = focus redirect, space = toggle a
-   focused rail stage (native button), Esc = abandon. ArrowUp/Down + e (row focus /
+   focused rail stage (native button), Esc = park (back to the dex, draft kept). ArrowUp/Down + e (row focus /
    edit) live inside the learnset stage where the rows are. */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -51,6 +51,13 @@ interface Props {
       toggles after entry stay session state. */
   initialSelected?: readonly DesignStage[] | null;
   onStage: (stage: Stage | null) => void;
+  /** True while the workbench is parked (mounted but hidden behind the dex) — the
+      global keyboard path stands down so Esc/Enter/t belong to the dex. */
+  paused?: boolean;
+  /** Dismiss without abandoning — "← dex"/Esc. The workbench stays mounted, so an
+      unlocked draft survives a trip to the dex (look a move up mid-edit). */
+  onPark: () => void;
+  /** Leave for good (the finished run) — the workbench unmounts. */
   onExit: () => void;
   onSaved: () => void;
   moveOptions: readonly string[];
@@ -67,6 +74,8 @@ export function MakeoverWorkbench({
   stage,
   initialSelected,
   onStage,
+  paused = false,
+  onPark,
   onExit,
   onSaved,
   moveOptions,
@@ -204,6 +213,7 @@ export function MakeoverWorkbench({
   // own Enter/space natively — space toggles it), except Escape which always
   // unwinds.
   useEffect(() => {
+    if (paused) return;
     function onKeyDown(event: KeyboardEvent) {
       const target = event.target as HTMLElement | null;
       const inControl =
@@ -215,7 +225,7 @@ export function MakeoverWorkbench({
           target.isContentEditable);
       if (event.key === "Escape") {
         event.preventDefault();
-        onExit();
+        onPark();
         return;
       }
       if (inControl || event.metaKey || event.ctrlKey || event.altKey) return;
@@ -231,7 +241,7 @@ export function MakeoverWorkbench({
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onExit]);
+  }, [paused, onPark]);
 
   const commonProps: CommonStageProps = {
     entry,
@@ -334,7 +344,7 @@ export function MakeoverWorkbench({
   return (
     <div className="mk-workbench" id="makeover-workbench">
       <header className="mk-workbench__head">
-        <button type="button" className="mk-workbench__exit mono" onClick={onExit} aria-label="Close makeover (Esc)">
+        <button type="button" className="mk-workbench__exit mono" onClick={onPark} aria-label="Back to the dex — the makeover stays open (Esc)">
           ← dex
         </button>
         <h2 className="mk-workbench__title">

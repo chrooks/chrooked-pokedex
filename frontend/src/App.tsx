@@ -26,6 +26,8 @@ import { LedgerTab } from "./components/tabs/LedgerTab";
 import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
 import { PatchDrawer } from "./components/targets/PatchDrawer";
 import { MakeoverWorkbench } from "./components/makeover/MakeoverWorkbench";
+import { ParkedMakeover } from "./components/makeover/ParkedMakeover";
+import type { Stage } from "./lib/makeoverStages";
 
 /**
  * The Canon dex app shell. Owns the dex fetch, the URL-persisted view state, and
@@ -192,10 +194,39 @@ export default function App() {
       : null;
   // The Makeover Workbench takes over the screen when an anchor species is set in
   // the URL and it resolves in the loaded dex.
+  // PARKED: "← dex"/Esc dismisses the workbench without abandoning it — the URL
+  // drops back to the dex but the workbench stays MOUNTED (hidden), so an
+  // unlocked draft (a proposed-but-not-locked learnset) survives the detour.
+  // ponytail: mount-scoped only — a page reload still drops the draft.
+  const [parked, setParked] = useState<{ id: string; stage: Stage | null } | null>(null);
+  const makeoverId = view.makeover ?? parked?.id ?? null;
   const makeoverEntry =
-    view.makeover !== null
-      ? all.find((entry) => entry.chrooked_id === view.makeover) ?? null
+    makeoverId !== null
+      ? all.find((entry) => entry.chrooked_id === makeoverId) ?? null
       : null;
+  const makeoverParked = view.makeover === null && makeoverEntry !== null;
+
+  // Any makeover opened from the URL (the same species re-opened from its
+  // profile, or a different one) supersedes the parked one.
+  useEffect(() => {
+    if (view.makeover !== null) setParked(null);
+  }, [view.makeover]);
+
+  const handleParkMakeover = useCallback(() => {
+    if (view.makeover === null) return;
+    setParked({ id: view.makeover, stage: view.makeoverStage });
+    update({ makeover: null, makeoverStage: null, makeoverSelect: null });
+  }, [view.makeover, view.makeoverStage, update]);
+
+  const handleResumeMakeover = useCallback(() => {
+    if (parked === null) return;
+    update({ makeover: parked.id, makeoverStage: parked.stage, makeoverSelect: null });
+  }, [parked, update]);
+
+  const handleCloseMakeover = useCallback(() => {
+    setParked(null);
+    update({ makeover: null, makeoverStage: null, makeoverSelect: null });
+  }, [update]);
 
   // Stable so memo(DexCell) holds across the 1451-cell grid (`update` is stable).
   const handleOpen = useCallback(
@@ -405,26 +436,38 @@ export default function App() {
         <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
       }
     >
-      {makeoverEntry !== null ? (
-        <MakeoverWorkbench
-          entry={makeoverEntry}
-          allEntries={all}
-          moves={moves.data ?? []}
-          stage={view.makeoverStage}
-          initialSelected={view.makeoverSelect}
-          onStage={(stage) => update({ makeoverStage: stage })}
-          onExit={() =>
-            update({ makeover: null, makeoverStage: null, makeoverSelect: null })
-          }
-          onSaved={reloadDex}
-          moveOptions={moveOptions}
-          abilityOptions={abilityOptions}
-          targets={targets.data ?? []}
-          activeTargetId={view.backdrop}
-          backdropTargetId={view.backdrop}
-        />
-      ) : (
+      {/* Kept mounted while parked so unlocked drafts survive; keyed by species so
+          opening a different makeover starts clean. */}
+      {makeoverEntry !== null && (
+        <div className="mk-host" hidden={makeoverParked} key={makeoverEntry.chrooked_id}>
+          <MakeoverWorkbench
+            entry={makeoverEntry}
+            allEntries={all}
+            moves={moves.data ?? []}
+            stage={view.makeoverStage}
+            initialSelected={view.makeoverSelect}
+            onStage={(stage) => update({ makeoverStage: stage })}
+            paused={makeoverParked}
+            onPark={handleParkMakeover}
+            onExit={handleCloseMakeover}
+            onSaved={reloadDex}
+            moveOptions={moveOptions}
+            abilityOptions={abilityOptions}
+            targets={targets.data ?? []}
+            activeTargetId={view.backdrop}
+            backdropTargetId={view.backdrop}
+          />
+        </div>
+      )}
+      {makeoverEntry !== null && !makeoverParked ? null : (
       <>
+      {makeoverParked && makeoverEntry !== null && (
+        <ParkedMakeover
+          name={makeoverEntry.name}
+          onResume={handleResumeMakeover}
+          onDiscard={handleCloseMakeover}
+        />
+      )}
       {/* Background is inert while a species is open — in both modes. In panel
           mode it's the modal focus trap; in full mode the opaque pane fully
           covers the grid, so inert keeps focus/AT out of the invisible list
