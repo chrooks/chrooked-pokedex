@@ -90,16 +90,6 @@ BAND_EDGES: tuple[tuple[int, str], ...] = tuple(
 )
 BAND_LABELS: tuple[str, ...] = tuple(label for _, label in BAND_EDGES)
 
-# Base C source hides these powers behind B_UPDATED_MOVE_DATA gen-config
-# ternaries the vendored parser skips, so the snapshot stores power: null.
-# Gen 6+ canon values. Single source of truth is the shared data file
-# (web/canon_powers.json) so the coverage/ladder scripts and the web suggest
-# pool fill null powers identically. (0 = variable/no BP.)
-CANON_POWERS: dict[str, int] = json.loads(
-    (ROOT / "src" / "chrooked_pokedex" / "web" / "canon_powers.json")
-    .read_text("utf-8")
-)["powers"]
-
 # Move effect names that disqualify a move from being an ordinary ladder rung.
 EXCLUDED_EFFECTS = frozenset({
     "multi_hit", "max_move", "ohko", "explosion", "two_turns_attack",
@@ -201,17 +191,6 @@ def band_of(power: Optional[int]) -> Optional[str]:
     return label
 
 
-def fill_null_powers(base_moves: Mapping[str, dict]) -> dict[str, dict]:
-    """Return a copy of base moves with null powers filled from the canon table."""
-    filled: dict[str, dict] = {}
-    for mid, move in base_moves.items():
-        entry = dict(move)
-        if entry.get("power") is None and mid in CANON_POWERS:
-            entry["power"] = CANON_POWERS[mid]
-        filled[mid] = entry
-    return filled
-
-
 def _load_yaml(path: Path) -> dict:
     with path.open(encoding="utf-8") as handle:
         data = yaml.load(handle, Loader=_SafeLoader)
@@ -288,8 +267,7 @@ def count_learners(
 def build_pool(ruleset_dir: Path = RULESET) -> Pool:
     """Assemble the merged move pool and learner counts from a ruleset tree."""
     base = json.loads((ruleset_dir / ".base" / "1.11.2.json").read_text("utf-8"))
-    filled = fill_null_powers(base["moves"])
-    moves, custom = merge_ruleset_moves(filled, ruleset_dir / "moves")
+    moves, custom = merge_ruleset_moves(base["moves"], ruleset_dir / "moves")
     learnsets = build_learnsets(base["species"], ruleset_dir / "species")
     learners = count_learners(moves, learnsets)
     return Pool(moves=moves, custom=custom, learners=learners)

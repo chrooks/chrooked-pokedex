@@ -20,13 +20,6 @@ from typing import Any, Mapping
 
 from ..model import Ruleset
 from ..model.evolution_methods import CANONICAL
-
-# Canonical gen-6+ powers for moves the vendored parser leaves null in the
-# snapshot. Shared with scripts/move_coverage.py via one data file so the suggest
-# pool and the coverage/ladder audits agree. Loaded once — static data.
-_CANON_POWERS: dict[str, int] = json.loads(
-    (Path(__file__).resolve().parent / "canon_powers.json").read_text("utf-8")
-)["powers"]
 from ..model.schema import (
     AbilitiesOverride,
     AbilityDef,
@@ -650,15 +643,17 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
 
 
 def _pool_power(entry: dict[str, Any]) -> Any:
-    """Resolved power for a pool row: the entry's own power, else the canon
-    backfill for a parser-skipped null. Canon 0 means variable/no BP — left null,
-    not surfaced as ``0bp``."""
-    power = entry.get("power")
-    if power is None:
-        canon = _CANON_POWERS.get(entry.get("chrooked_id", ""))
-        if canon:  # truthy skips 0 (variable-power sentinel)
-            return canon
-    return power
+    """Resolved power for a pool row.
+
+    This used to backfill from a hand-kept canon table, because the move parser
+    read only a bare literal and left 104 gen-gated powers null. The parser now
+    resolves those ternaries, so the base carries the real number and the table
+    is gone — it had already drifted from the source on two entries.
+
+    A variable-power move reads 1 in the source (not 0); callers that must not
+    show a number treat <= 1 as "no fixed BP".
+    """
+    return entry.get("power")
 
 
 def _move_schema_defaults() -> dict[str, Any]:
