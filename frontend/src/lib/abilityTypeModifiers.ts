@@ -35,10 +35,17 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
   flytrap: { immuneTo: ["Bug"] }, // "Bug immune"
   mountaineer: { immuneTo: ["Rock"] }, // "Immune to Rock moves and Stealth Rock"
   updraft: { immuneTo: ["Ground"] }, // "Ground immune"
+  "singing sands": { immuneTo: ["Ground"] }, // "Immune to Ground-type moves"
+  immunity: { immuneTo: ["Poison"] }, // "Immune to Poison-type moves"
+  "pastel veil": { immuneTo: ["Poison"] }, // "Immune to Poison-type moves"
+  "poison heal": { immuneTo: ["Poison"] }, // "Immune to Poison-type moves"
+  "thermal exchange": { immuneTo: ["Fire"] }, // "Immune to Fire moves"
   "thick fat": { multiplier: { Fire: 0.5, Ice: 0.5 } },
   heatproof: { multiplier: { Fire: 0.5 } },
   "water bubble": { multiplier: { Fire: 0.5 } },
   "purifying salt": { multiplier: { Ghost: 0.5 } },
+  // "Super-effective hits are greatly reduced" — a harder cut than Filter's 0.75.
+  permafrost: { supereffectiveMultiplier: 0.5 },
   filter: { supereffectiveMultiplier: 0.75 },
   "solid rock": { supereffectiveMultiplier: 0.75 },
   "prism armor": { supereffectiveMultiplier: 0.75 },

@@ -51,6 +51,17 @@ describe("memberDefense", () => {
     expect(memberDefense(waterFlying, "Fire", BY_KEY)).toBe(0.5);
   });
 
+  it("folds in Permafrost to halve a super-effective hit", () => {
+    // Water → Fire is ×2 by chart; Permafrost cuts super-effective hits in half.
+    const permafrost: TeamMember = { id: "p", name: "P", types: ["Fire"], ability: "Permafrost" };
+    expect(memberDefense(permafrost, "Water", BY_KEY)).toBe(1);
+  });
+
+  it("folds in Thermal Exchange to zero out the Fire column", () => {
+    const baxcalibur: TeamMember = { id: "b", name: "B", types: ["Grass"], ability: "Thermal Exchange" };
+    expect(memberDefense(baxcalibur, "Fire", BY_KEY)).toBe(0);
+  });
+
   it("returns null when the chart has no data for the member's types", () => {
     expect(memberDefense({ id: "x", name: "X", types: ["Bug"], ability: null }, "Fire", BY_KEY)).toBeNull();
   });
