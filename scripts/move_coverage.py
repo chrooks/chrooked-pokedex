@@ -55,14 +55,10 @@ MIN_LADDER_POWER: int = _BAND_CONTRACT["min_ladder_power"]
 # Moves Chris ruled too flavor- or effect-specific to be ladder rungs, even
 # though they pass the mechanical filters (2026-07-25 review). Trap-family
 # moves ride along with Whirlpool — same partial-trapping effect class.
-CURATED_EXCLUSIONS: frozenset[str] = frozenset({
-    "payback", "foulplay", "axekick", "hammerarm", "secretsword", "bonetorch",
-    "oblivionwing", "shadowbone", "seasonsedge", "belch", "dreameater",
-    "esperwing", "whirlpool",
-    # trap family (Whirlpool's effect class)
-    "bind", "wrap", "clamp", "firespin", "sandtomb", "infestation",
-    "snaptrap", "thundercage",
-})
+# Now stored in the shared band Contract (learnset_rubric.json:
+# coverage_bands.rung_exclusions) so the web slot skeleton honors the same
+# curation when it builds rung candidate lists.
+CURATED_EXCLUSIONS: frozenset[str] = frozenset(_BAND_CONTRACT["rung_exclusions"])
 
 # Body-plan-specific moves (fangs, punches, tails, blades...) need a specific
 # anatomy in a way Flamethrower or Acid does not. They still count as ladder

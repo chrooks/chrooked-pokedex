@@ -7,11 +7,18 @@
     { "level_min": 18, "level_max": 32, "bp_min": 50, "bp_max": 70, "label": "50-70BP" },
     { "level_min": 28, "level_max": 42, "bp_min": 70, "bp_max": 80, "label": "70-80BP" },
     { "level_min": 38, "level_max": 52, "bp_min": 80, "bp_max": 99, "label": "80-99BP" },
-    { "level_min": 48, "level_max": 62, "bp_min": 100, "bp_max": 109, "label": "100-109BP" },
+    { "level_min": 48, "level_max": 62, "bp_min": 100, "bp_max": 110, "label": "100-110BP" },
     { "level_min": 58, "level_max": 100, "bp_min": 110, "label": "110+BP" }
   ],
   "coverage_bands": {
     "min_ladder_power": 2,
+    "rung_exclusions": [
+      "payback", "foulplay", "axekick", "hammerarm", "secretsword", "bonetorch",
+      "oblivionwing", "shadowbone", "seasonsedge", "belch", "dreameater",
+      "esperwing", "whirlpool",
+      "bind", "wrap", "clamp", "firespin", "sandtomb", "infestation",
+      "snaptrap", "thundercage"
+    ],
     "edges": [
       { "min_power": 2, "label": "≤50", "window": [1, 14] },
       { "min_power": 51, "label": "51-75", "window": [15, 28] },

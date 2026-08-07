@@ -101,6 +101,23 @@ def _fuel_table() -> dict[str, Any]:
     return json.loads(_FUEL_PATH.read_text("utf-8"))["abilities"]
 
 
+def _rung_exclusions() -> frozenset[str]:
+    """Chris's curated non-rung moves (Foul Play class), as slugs.
+
+    Shared with scripts/move_coverage.py via the band Contract: these pass the
+    mechanical filters but are too flavor- or effect-specific to serve as a
+    generic STAB/flavor rung. Band rung candidates skip them; the L0 reward,
+    kit, and fuel lists still may carry them.
+    """
+    data = json.loads(_BAND_PATH.read_text("utf-8"))["coverage_bands"]
+    return frozenset(data.get("rung_exclusions") or ())
+
+
+def _slug(name: str) -> str:
+    """A move display name as its comparison slug (``Foul Play`` → ``foulplay``)."""
+    return "".join(ch for ch in name.casefold() if ch.isalnum())
+
+
 def _bands() -> list[dict[str, Any]]:
     """Coverage bands as [{label, lo_power, hi_power, window}], upper-inclusive."""
     edges = json.loads(_BAND_PATH.read_text("utf-8"))["coverage_bands"]["edges"]
@@ -421,12 +438,25 @@ def build_skeleton(
         if spec.get("candidates") is None:
             filt = dict(spec["filter"])
             band = filt.pop("_band")
-            rows = _select(move_pool, filt, bias)
-            rows = [
-                r for r in rows
-                if isinstance(r.get("power"), int)
-                and band["lo_power"] <= r["power"] <= band["hi_power"]
-            ]
+
+            exclusions = _rung_exclusions()
+
+            def in_band(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+                return [
+                    r for r in rows
+                    if isinstance(r.get("power"), int)
+                    and band["lo_power"] <= r["power"] <= band["hi_power"]
+                    and _slug(r.get("move") or "") not in exclusions
+                ]
+
+            rows = in_band(_select(move_pool, filt, bias))
+            if not rows and filt.get("on_stat"):
+                # Relax AFTER the band cut, not before: a physical Bug species
+                # whose only 91-110BP Bug move is special still deserves the
+                # rung — the off-stat pick beats a hole in the ladder. The
+                # July sweep found 273 rungs dropped to this ordering bug.
+                relaxed = {k: v for k, v in filt.items() if k != "on_stat"}
+                rows = in_band(_select(move_pool, relaxed, bias))
             if not rows:
                 dropped.append(f"{spec['label']}: no pool move fits — slot dropped")
                 continue
@@ -575,26 +605,36 @@ def _assign_levels(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
     empty: list[dict[str, Any]] = []
     for spec in attacking:
         powers = spec["powers"]
-        placed = False
+        # Earliest position that keeps the WHOLE candidate list; else the
+        # earliest with the most survivors. Plain earliest-any starved lists —
+        # a 91-110 rung grabbed L49 (cap 99) and lost Earthquake to keep only
+        # its 95BP sibling.
+        best_pos: int | None = None
+        best_legal: list[str] = []
         for position in free:
             legal = _cap_and_floor_legal(spec, powers, position, pacing)
-            if legal:
-                spec["level"] = position
-                spec["candidates"] = legal
-                free.remove(position)
-                placed = True
+            if len(legal) == len(spec["candidates"]):
+                best_pos, best_legal = position, legal
                 break
-        if not placed:
+            if len(legal) > len(best_legal):
+                best_pos, best_legal = position, legal
+        if best_pos is None:
             empty.append(spec)
+        else:
+            spec["level"] = best_pos
+            spec["candidates"] = best_legal
+            free.remove(best_pos)
     for spec in utility:
         if free:
             spec["level"] = free.pop(0)
         else:
             empty.append(spec)
 
-    # dedupe (kit L1 pair and the L0 reward stay put)
+    # dedupe (kit L1 pair and the L0 reward stay put; unplaced slots are the
+    # caller's to drop)
     taken: set[int] = set()
-    for spec in sorted(specs, key=lambda s: s["level"]):
+    placed = [s for s in specs if s.get("level") is not None]
+    for spec in sorted(placed, key=lambda s: s["level"]):
         if spec["level"] <= 1:
             continue
         level = spec["level"]
