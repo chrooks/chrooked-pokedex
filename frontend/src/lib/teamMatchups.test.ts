@@ -51,10 +51,10 @@ describe("memberDefense", () => {
     expect(memberDefense(waterFlying, "Fire", BY_KEY)).toBe(0.5);
   });
 
-  it("folds in Permafrost to halve a super-effective hit", () => {
-    // Water → Fire is ×2 by chart; Permafrost cuts super-effective hits in half.
+  it("folds in Permafrost to cut a super-effective hit like Filter", () => {
+    // Water → Fire is ×2 by chart; Permafrost trims super-effective hits to 0.75.
     const permafrost: TeamMember = { id: "p", name: "P", types: ["Fire"], ability: "Permafrost" };
-    expect(memberDefense(permafrost, "Water", BY_KEY)).toBe(1);
+    expect(memberDefense(permafrost, "Water", BY_KEY)).toBe(1.5);
   });
 
   it("folds in Thermal Exchange to zero out the Fire column", () => {

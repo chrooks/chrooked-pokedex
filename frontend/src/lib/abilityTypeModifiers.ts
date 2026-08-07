@@ -44,8 +44,7 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
   heatproof: { multiplier: { Fire: 0.5 } },
   "water bubble": { multiplier: { Fire: 0.5 } },
   "purifying salt": { multiplier: { Ghost: 0.5 } },
-  // "Super-effective hits are greatly reduced" — a harder cut than Filter's 0.75.
-  permafrost: { supereffectiveMultiplier: 0.5 },
+  permafrost: { supereffectiveMultiplier: 0.75 },
   filter: { supereffectiveMultiplier: 0.75 },
   "solid rock": { supereffectiveMultiplier: 0.75 },
   "prism armor": { supereffectiveMultiplier: 0.75 },
