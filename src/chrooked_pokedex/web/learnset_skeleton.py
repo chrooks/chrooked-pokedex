@@ -49,10 +49,12 @@ _SHAPES = frozenset({
 
 # Rung counts per ladder kind. Fuel outranks flavor: a dead ability is a bug,
 # thin flavor is a missed touch — so trimming drops flavor first (see _PRIORITY).
-# The primary ladder starts at band 2: the L1 kit starter IS its ≤50BP rung
-# (a lone weak STAB like Twister must not be demanded by two slots at once —
-# the repeat-move rule would make that unfillable).
-_PRIMARY_RUNGS = 4
+# Both own-type ladders run ALL five bands (Chris's grid: L5 = primary's first
+# rung, L9 = secondary's — a Steel line owes its Metal Claw-class starter too).
+# The L1 kit starter is a weak NORMAL attack (Scratch/Tackle class), so it no
+# longer collides with the primary ladder's ≤50BP rung.
+_PRIMARY_RUNGS = 5
+_SECONDARY_RUNGS = 5
 
 # Signature / species-locked moves kept OUT of generated candidate lists — a
 # specific mon's identity move, not generic fuel. The type-changing signatures
@@ -64,20 +66,25 @@ SIGNATURE_MOVES: frozenset[str] = frozenset({
     "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
     "blood moon", "revelation dance", "relic song",
 })
-_SECONDARY_RUNGS = 3
 _GRANTED_RUNGS = 3
 _FLAVOR_RUNGS = 2
 _DIRECTION_RUNGS = 3  # a type the user's direction names gets a real ladder
 _STATUS_SLOTS = 4
-# Anchors start past the pinned early-filler slots (L5/L12) — a status-only
-# slot in the single digits invites the model to file a weak attack there.
-_STATUS_LEVELS = (16, 20, 30, 40, 50, 60, 64)  # k slots take an even spread
-# Density target: the July 2026 audit put curated learnsets at median 21 rows
-# (~3-4 level gaps). A skeleton landing under this widens with extra status
-# slots and duplicate mid/late STAB rungs before giving up — a 14-row spread
-# over 70 levels reads sparse.
+# Chris's cadence ruling (2026-08-07): L1 is the kit, the first rung lands at
+# L5, and every following row steps 4 levels — 5, 9, 13, … 69 — with a final
+# L70 payoff position. The grid IS the level plan; no window arithmetic.
+_GRID: tuple[int, ...] = tuple(range(5, 70, 4)) + (70,)
+# Late-game BP floors, same ruling: an attacking row at L50+ carries ≥90BP,
+# at L60+ ≥100BP. Enforced by candidate trim, like the pacing caps.
+_LATE_BP_FLOORS: tuple[tuple[int, int], ...] = ((60, 100), (50, 90))
+# Density target: the July 2026 audit put curated learnsets at median 21 rows.
+# A skeleton landing under this widens with extra status slots and duplicate
+# mid/late STAB rungs before giving up.
 _TARGET_SLOTS = 20
 _STATUS_EXTRA = 2  # widening may add at most this many status slots
+# Weave pattern: every third grid position holds a status/utility row, the
+# rest hold attacking rungs in ascending-band order.
+_STATUS_EVERY = 3
 _MAX_PROMPT_CANDIDATES = 14  # names shown per slot line; validation uses the full set
 
 # Trim priority when the skeleton overflows LEARNSET_SIZE_MAX — higher drops first.
@@ -346,41 +353,38 @@ def build_skeleton(
             "candidates": status_moves, "required": True,
         })
 
-    # --- kit + reward
+    # --- kit + reward. The L1 kit is a weak NORMAL starter (Scratch/Tackle
+    # class) plus a basic status row (Leer/Growl class) — the type ladders own
+    # everything from L5 up, so the kit never collides with a rung.
     low_band = bands[0]
-    kit_filter = stab_filter(types[0]) if types else {"attacking": True}
     kit_stab = [
-        r for r in _select(move_pool, kit_filter, bias)
+        r for r in _select(
+            move_pool,
+            {"move_type": "Normal", "attacking": True, "on_stat": True},
+            bias,
+        )
+        if isinstance(r.get("power"), int) and r["power"] <= low_band["hi_power"]
+    ] or [
+        r for r in _select(move_pool, {"attacking": True}, bias)
         if isinstance(r.get("power"), int) and r["power"] <= low_band["hi_power"]
     ]
     specs.append({
         "priority": _PRIORITY["kit"], "band": None, "role": "kit", "level": 1,
-        "label": f"KIT — weak {types[0] if types else ''} STAB starter (≤{low_band['hi_power']}BP)",
+        "label": f"KIT — weak starter attack (≤{low_band['hi_power']}BP, Scratch/Tackle class)",
         "filter": None,
         "candidates": [r["move"] for r in kit_stab] or [r["move"] for r in move_pool],
         "required": True,
     })
-    kit_util = sorted(
+    status_or_weak = sorted(
         r["move"] for r in move_pool
         if (r.get("category") or "").casefold() == "status"
         or (isinstance(r.get("power"), int) and 1 < r["power"] <= low_band["hi_power"])
     )
     specs.append({
         "priority": _PRIORITY["kit"], "band": None, "role": "kit", "level": 1,
-        "label": "KIT — utility or weak attack", "filter": None,
-        "candidates": kit_util, "required": True,
+        "label": "KIT — basic status (Leer/Growl class)", "filter": None,
+        "candidates": status_moves or status_or_weak, "required": True,
     })
-    # Early-game fillers: the curated learnsets carry a row every ~4 levels
-    # through the teens (Acid Spray L5, Glint L10, Water Gun L14 in the hand
-    # edits); without these the skeleton jumps L1 → L8 → L19 and reads sparse
-    # exactly where the player spends the most time.
-    for early_level in (5, 12):
-        specs.append({
-            "priority": _PRIORITY["status"], "band": None, "role": "status",
-            "level": early_level,
-            "label": "EARLY — weak attack or utility", "filter": None,
-            "candidates": kit_util, "required": True,
-        })
     if is_evolved:
         specs.append({
             "priority": _PRIORITY["reward"], "band": None, "role": "reward", "level": 0,
@@ -473,8 +477,11 @@ def build_skeleton(
             spec = {**spec, "candidates": trimmed}
         resolved.append(spec)
 
-    # --- trim to size (drop highest priority number first, last-added first)
-    while len(resolved) > LEARNSET_SIZE_MAX:
+    # --- trim to size: the grid holds len(_GRID) non-pinned rows, and the
+    # overall cap still applies (drop highest priority number, last-added first)
+    pinned = sum(1 for s in resolved if s.get("level") is not None)
+    cap = min(LEARNSET_SIZE_MAX, pinned + len(_GRID))
+    while len(resolved) > cap:
         victim = max(
             reversed(resolved),
             key=lambda s: (s["priority"], resolved.index(s)),
@@ -484,7 +491,13 @@ def build_skeleton(
         dropped.append(f"{victim['label']}: trimmed to fit the size cap")
         resolved.remove(victim)
 
-    _assign_levels(resolved)
+    empty = _assign_levels(resolved)
+    for spec in empty:
+        dropped.append(
+            f"{spec['label']}: no candidate satisfies the pacing cap and "
+            "late-game BP floor at its grid level — slot dropped"
+        )
+        resolved.remove(spec)
     resolved.sort(key=lambda s: (s["level"], s["role"] != "kit", s["label"]))
     slots = [
         {k: s[k] for k in ("level", "role", "label", "candidates", "required")}
@@ -511,91 +524,73 @@ def _pacing_allows(level: int, power: int, pacing: list[dict[str, Any]]) -> bool
     return cap is None or power <= cap
 
 
-def _legal_candidates(
+def _cap_and_floor_legal(
     spec: dict[str, Any],
     powers: dict[str, Any],
     level: int,
     pacing: list[dict[str, Any]],
 ) -> list[str]:
-    """The slot's candidates whose BP the pacing table allows at ``level``."""
+    """Candidates whose BP fits the pacing cap AND late-game floor at ``level``."""
+    floor = next((bp for lvl, bp in _LATE_BP_FLOORS if level >= lvl), 0)
     return [
         c for c in spec["candidates"]
         if not isinstance(powers.get(c), int) or powers[c] <= 1
-        or _pacing_allows(level, powers[c], pacing)
+        or (_pacing_allows(level, powers[c], pacing) and powers[c] >= floor)
     ]
 
 
-def _assign_levels(specs: list[dict[str, Any]]) -> None:
-    """Give every slot a deterministic level, in place.
+def _assign_levels(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Weave every non-pinned slot onto the fixed 4-level grid, in place.
 
-    Banded slots spread inside their band's level window — but only across
-    levels the pacing table also allows for the slot's strongest candidate, so
-    the workbench's BP badges cannot fire whatever the model picks (the two
-    band tables used to disagree: a 65BP rung at the window's start sat in a
-    ≤60BP pacing band). Status/named slots take an even spread of the fixed
-    anchors; kit/reward levels are already pinned. Duplicate levels (beyond
-    the L1 kit pair) bump upward to stay unique.
+    Chris's cadence: L1 is the kit, the first rung lands at L5, and every row
+    after steps 4 levels (5, 9, 13, … 69, 70). Attacking slots take grid
+    positions in ascending-band order (primary's first rung at L5, the
+    secondary's next — Metal Claw class at L9); every third position holds a
+    status/named row. At each assigned level the candidate list trims to what
+    the level→BP pacing cap AND the late-game floors (≥90BP at L50+, ≥100BP
+    at L60+) allow, so the workbench badge cannot fire whatever the model
+    picks. Returns slots left with NO legal candidate (caller drops them).
     """
     pacing = _pacing_bands()
-    by_band: dict[str, list[dict[str, Any]]] = {}
-    free: list[dict[str, Any]] = []
+    attacking: list[dict[str, Any]] = []
+    utility: list[dict[str, Any]] = []
     for spec in specs:
         if spec.get("level") is not None:
             continue
         if spec.get("band"):
-            by_band.setdefault(spec["band"]["label"], []).append(spec)
+            attacking.append(spec)
         else:
-            free.append(spec)
-    for group in by_band.values():
-        lo, hi = group[0]["band"]["window"]
-        lo = max(lo, 5)  # L1-4 belongs to the kit
-        # Within a band, flavor coverage lands early and STAB/fuel late — the
-        # highest-priority-number (most trimmable) slots take the window's
-        # start, so the payoff rungs keep the loosest pacing cap.
-        group.sort(key=lambda s: -s["priority"])
-        for i, spec in enumerate(group):
-            # Climb toward the window's END: a lone rung sits at `hi`, where
-            # the pacing cap is loosest and the band's iconic top picks
-            # (Dragon Pulse 85 in 76-90) stay offerable; a multi-rung group
-            # spreads up the window and its early rungs trim to weaker picks.
-            spec["level"] = lo + ((i + 1) * (hi - lo)) // max(len(group), 1)
-    anchors = _STATUS_LEVELS
-    for i, spec in enumerate(free):
-        spec["level"] = anchors[(i * len(anchors)) // max(len(free), 1)]
+            utility.append(spec)
+    # Ascending bands; within a band the least-trimmable slot (primary STAB,
+    # fuel) goes first so it gets the earlier grid step. Stable on insert
+    # order, which already runs primary → secondary → granted → flavor.
+    attacking.sort(key=lambda s: s["band"]["lo_power"])
 
-    # Pacing-conformance pass: at the assigned level, offer only candidates the
-    # level→BP pacing table allows — the slot keeps its window placement and
-    # the candidate list conforms, so the workbench badge cannot fire whatever
-    # the model picks (the two band tables used to disagree: a 65BP candidate
-    # at the window's start sat in a ≤60BP pacing band). A slot whose whole
-    # list violates the cap slides later until one candidate is legal.
-    for spec in specs:
-        powers = spec.get("powers")
-        if not powers or spec.get("level") is None or spec["level"] == 0:
-            continue
-        # Prefer a small forward slide that keeps the WHOLE list legal — the
-        # band's iconic top pick (Dragon Pulse 85 in 76-90) must not fall out
-        # just because the window's edge sits one pacing notch early. This is
-        # the same move Chris makes by hand (Dragon Pulse at L44).
-        full_at = next(
-            (
-                lvl for lvl in range(spec["level"], min(spec["level"] + 7, 71))
-                if len(_legal_candidates(spec, powers, lvl, pacing))
-                == len(spec["candidates"])
-            ),
-            None,
-        )
-        if full_at is not None:
-            spec["level"] = full_at
-            continue
-        level = spec["level"]
-        while level < 70:
-            legal = _legal_candidates(spec, powers, level, pacing)
+    # Each attacking slot takes the EARLIEST free grid position where it has a
+    # candidate that passes both the pacing cap and the late-game floor — the
+    # grid and the pacing curve disagree when woven blindly (L9 caps at 50BP,
+    # so a 51-75 rung must wait for L13). Utility rows then fill the holes the
+    # attack ladder leaves, which sprinkles them through the list.
+    free = list(_GRID)
+    empty: list[dict[str, Any]] = []
+    for spec in attacking:
+        powers = spec["powers"]
+        placed = False
+        for position in free:
+            legal = _cap_and_floor_legal(spec, powers, position, pacing)
             if legal:
-                spec["level"] = level
+                spec["level"] = position
                 spec["candidates"] = legal
+                free.remove(position)
+                placed = True
                 break
-            level += 1
+        if not placed:
+            empty.append(spec)
+    for spec in utility:
+        if free:
+            spec["level"] = free.pop(0)
+        else:
+            empty.append(spec)
 
     # dedupe (kit L1 pair and the L0 reward stay put)
     taken: set[int] = set()
@@ -609,6 +604,7 @@ def _assign_levels(specs: list[dict[str, Any]]) -> None:
         while spec["level"] in taken:  # clamped collision walks back down
             spec["level"] -= 1
         taken.add(spec["level"])
+    return empty
 
 
 def format_skeleton(skeleton: dict[str, Any]) -> str:

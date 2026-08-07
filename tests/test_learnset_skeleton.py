@@ -172,8 +172,13 @@ def test_validate_flags_missing_slot_and_off_candidate_rows() -> None:
     errors = sk.validate_against_skeleton(rows[:-1], skeleton)
     assert errors and "expected" in errors[0]
     # A row at a level with no slot is reported.
+    stray_level = next(
+        lvl for lvl in range(2, 71)
+        if lvl not in {s["level"] for s in skeleton["slots"]}
+    )
     errors = sk.validate_against_skeleton(
-        rows + [{"level": 69, "move": "Protect", "reasoning": ""}], skeleton
+        rows + [{"level": stray_level, "move": "Protect", "reasoning": ""}],
+        skeleton,
     )
     assert any("no slot" in e for e in errors)
 
