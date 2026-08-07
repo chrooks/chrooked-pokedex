@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Thermal Exchange
+chrooked_id: thermalexchange
+applies_to: ability
+aka: { pokeemerald: ABILITY_THERMAL_EXCHANGE }
+effects:
+  - summary: "Immune to Fire moves; takes no damage from them."
+    trigger: damage-calc
+    when: "an incoming move's type is Fire"
+    effect: "the move is blocked and deals no damage (no stat change, like Soundproof)"
+  - summary: "Cannot be burned."
+    trigger: status-apply
+    when: "burn would be applied to this Pokemon"
+    effect: "the burn is prevented (unchanged from the base ability)"
+test_cases:
+  - given: "a Thermal Exchange Pokemon is hit by Flamethrower"
+    expect: "it takes 0 damage and no stat changes"
+  - given: "Will-O-Wisp targets a Thermal Exchange Pokemon"
+    expect: "the burn is blocked"
+  - given: "a Mold Breaker Pokemon uses a Fire move on it"
+    expect: "the immunity is suppressed and the move connects"
+notes:
+  - "Diverges from canon: base Thermal Exchange only raises Attack on a Fire hit and still takes the damage. Chrooked trades that for a full Fire block, which is what un-does the Frigibax line's 4x Fire problem."
+  - "Pure block (no heal, no stat gain) — same script as Soundproof, matching Flytrap and Updraft."
+engine_hints:
+  pokeemerald: "Fire block in the TryAbsorbMove switch via BattleScript_SoundproofProtected, src/battle_util.c — the Flytrap/Updraft shape, not Flash Fire's boost flag."
+  essentials: "Fire type-immunity hook that blocks the move with no side effect."
