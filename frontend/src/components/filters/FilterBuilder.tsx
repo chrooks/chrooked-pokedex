@@ -240,6 +240,26 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
   return (
     <div className="dexc-filter" id={`${idPrefix}-filter-builder`}>
       <div className="dexc-query" ref={lineRef}>
+        <button
+          type="button"
+          className="dexc-mode"
+          id={`${idPrefix}-mode`}
+          aria-pressed={mode === "command"}
+          title={
+            mode === "command"
+              ? "Back to tokens"
+              : "Type the query instead (Escape returns)"
+          }
+          onClick={() => {
+            setMode((m) => (m === "line" ? "command" : "line"));
+            setOpen(null);
+          }}
+        >
+          <span aria-hidden="true">/</span>
+          <span className="sr-only">
+            {mode === "command" ? "Edit filters as tokens" : "Edit filters as a typed query"}
+          </span>
+        </button>
         {mode === "command" ? (
           <CommandBar
             defs={defs}
@@ -302,26 +322,6 @@ export function FilterBuilder({ defs, idPrefix = "dexc", filter, onChange }: Pro
         )}
 
         <div className="dexc-query__side">
-          <button
-            type="button"
-            className="dexc-mode"
-            id={`${idPrefix}-mode`}
-            aria-pressed={mode === "command"}
-            title={
-              mode === "command"
-                ? "Back to tokens"
-                : "Type the query instead (Escape returns)"
-            }
-            onClick={() => {
-              setMode((m) => (m === "line" ? "command" : "line"));
-              setOpen(null);
-            }}
-          >
-            <span aria-hidden="true">/</span>
-            <span className="sr-only">
-              {mode === "command" ? "Edit filters as tokens" : "Edit filters as a typed query"}
-            </span>
-          </button>
           <button
             type="button"
             className="dexc-clear"
@@ -576,10 +576,14 @@ type EditorProps = {
  */
 function TokenEditor({ entry, def, defs, idPrefix, onPatch, onClose }: EditorProps) {
   const first = useRef<HTMLButtonElement>(null);
+  const root = useRef<HTMLDivElement>(null);
   const parts = readValue(def, entry.value);
 
   useEffect(() => {
-    first.current?.focus();
+    // Land focus on the value input so typing starts immediately; the "not"
+    // button is the fallback for editors with no free-text value.
+    const input = root.current?.querySelector<HTMLInputElement>("input.dexc-input");
+    (input ?? first.current)?.focus();
   }, []);
 
   function setParts(change: Partial<ValueParts>) {
@@ -596,7 +600,7 @@ function TokenEditor({ entry, def, defs, idPrefix, onPatch, onClose }: EditorPro
     def?.method === "selectnum" && (def.numericValues?.includes(parts.choice) ?? false);
 
   return (
-    <div className="dexc-editor" role="group" aria-label="Edit filter">
+    <div className="dexc-editor" role="group" aria-label="Edit filter" ref={root}>
       <button
         ref={first}
         type="button"
