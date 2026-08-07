@@ -8,10 +8,10 @@ effects:
     trigger: accuracy-check
     when: The user is the target of a Ground-type move
     effect: The move misses entirely; the user is immune to Ground-type moves.
-  - summary: Sound moves become Ground-type
+  - summary: Normal-type sound moves become Ground-type
     trigger: damage-calc
-    when: The user selects a sound-based move
-    effect: The move's type is changed to Ground before damage calculation. The move gains a 1.2× power multiplier. STAB applies if the user is Ground-type.
+    when: The user selects a Normal-type sound-based move
+    effect: The move's type is changed to Ground before damage calculation. The converted move gains a 1.2× power multiplier. STAB applies if the user is Ground-type. Non-Normal sound moves are unaffected.
 test_cases:
   - given: A Pokémon with Singing Sands uses Hyper Voice against a target with no Ground resistance
     expect: Hyper Voice becomes Ground-type, deals 1.2× its base power, and can hit Flying-types or Levitating foes only if they lack immunity to Ground (normal Ground immunity rules apply to targets).
@@ -23,7 +23,7 @@ notes:
   - Type conversion happens before STAB; a Ground-type user using Hyper Voice would receive a 1.5× STAB on top of the 1.2× ability bonus.
   - The Ground immunity behaves like Levitate — the user floats above the sand — but is specific to this ability and is not classified as the Levitate ability itself.
   - Soundproof users are still immune to the converted Ground-type sound moves.
-  - Moves that are both sound-based and already Ground-type (if any exist) receive only the 1.2× bonus; no double-typing occurs.
+  - Only Normal-type sound moves convert and receive the 1.2× bonus — the standard "-ate/-ize" shape, gated on the sound flag. Sound moves of any other type are untouched.
   - The immunity does NOT protect against Gravity-forced Ground moves or Smack Down interactions — those require separate engine handling.
 engine_hints:
-  essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:SINGINGSANDS] = { type: :GROUND, flag: :Soundproof } for the immunity (Mold Breaker respected); CHROOKED_TYPE_MODS converts moves with hasFlag?(:soundmove) to :GROUND via the core's pbType hook (STAB composes naturally); CHROOKED_DAMAGE_MODS pays the 1.2x on all sound moves, including already-Ground ones."
+  essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:SINGINGSANDS] = { type: :GROUND, flag: :Soundproof } for the immunity (Mold Breaker respected); CHROOKED_TYPE_MODS converts Normal-type moves with hasFlag?(:soundmove) to :GROUND via the core's pbType hook (STAB composes naturally); CHROOKED_DAMAGE_MODS pays the 1.2x via Chrooked.type_changed? — converted moves only, the register_ize shape."
