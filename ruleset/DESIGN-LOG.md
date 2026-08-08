@@ -334,3 +334,21 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** learnset-only repass
 - **Corrections:** Give water type coverage
+
+## 2026-08-08 — Freeze becomes frostbite; Status becomes a Ruleset kind
+
+- **Direction:** replace freeze with frostbite outright, and make status a
+  first-class Ruleset concept rather than a bare effect string.
+- **Frostbite:** special attacks halved, 1/16 max HP chip each turn, no turn
+  skip, cured by Fire moves, Ice-types immune, Guts cancels the penalty.
+  Mirrors burn deliberately — chip matches burn's 1/16, not Rejuv's 1/8.
+- **Reskin, not rename.** Rejuv keeps its `:FROZEN` symbol; only behavior and
+  text change. Renaming would touch 46 references across 15 script files plus
+  healing items, battle clauses, the AI, and save compatibility.
+- **Discovery:** Rejuv already implements frostbite, gated behind the
+  Nevermelting Hail weather state. The work was removing the gate, not writing
+  the mechanic.
+- **Cryofreeze:** new Ice status move, 85 accuracy, 15 PP, inflicts frostbite.
+  Sits parallel to Will-O-Wisp. It could not have existed while freeze skipped
+  turns; frostbite does not, so a reliable way to inflict it is fair.
+- **Parked:** who learns Cryofreeze — a separate distribution pass.

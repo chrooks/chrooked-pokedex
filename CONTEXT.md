@@ -18,6 +18,21 @@ fields that differ from unmodified pokeemerald — not a full copy of every
 Pokémon. The exception is learnsets, which are stored whole.
 _Avoid_: patch, delta, change.
 
+**Status**:
+A status condition a Pokémon can carry — burn, frostbite, paralysis. A Ruleset
+kind of its own under `ruleset/status/`, owned outright rather than stored as an
+[[Override]]: the base snapshot has no status data to diff against. A Status
+record is data only; its mechanic lives in a behavior spec.
+_Avoid_: condition, ailment, effect.
+
+**Reskin**:
+Replacing what an engine symbol *does* and *says* while leaving the symbol
+itself in place. Frostbite is a reskin of Rejuv's `:FROZEN`: the mechanic and the
+player-facing text change, the symbol does not, so every existing move, item, and
+battle rule that names it keeps working untouched. The alternative — renaming the
+symbol — touches every reference and breaks save compatibility.
+_Avoid_: rename, refactor, swap.
+
 **chrooked_id**:
 A short stable slug Chris owns that identifies a thing across all engines
 (`goodra`, `excalibur`, `striker`). It is the join key. New content he invents
