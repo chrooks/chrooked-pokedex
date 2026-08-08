@@ -266,3 +266,19 @@
     gap: var(--space-1);
   }
 }
+
+/* Statuses reuse the behavior card, but an effect here is one plain sentence
+   with no trigger column — so it takes the full width instead of the 9rem
+   trigger + summary grid, and gets a marker so the list reads as a list. */
+.tab--statuses .behavior__effect {
+  grid-template-columns: 1fr;
+}
+
+.tab--statuses .behavior__effects {
+  list-style: disc;
+  padding-left: var(--space-4);
+}
+
+.tab--statuses .behavior__effects .behavior__summary {
+  color: var(--ink);
+}

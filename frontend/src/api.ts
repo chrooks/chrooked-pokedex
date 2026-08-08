@@ -17,6 +17,7 @@ import type {
   ApplyDistributionResponse,
   ApplyDistributionRow,
   Behavior,
+  Status,
   BehaviorPacket,
   CanonicalMethod,
   DexEntry,
@@ -129,6 +130,7 @@ export const api = {
   typeChart: (signal?: AbortSignal) =>
     getJson<TypeChartCell[]>("/api/type-chart", signal),
   behaviors: (signal?: AbortSignal) => getJson<Behavior[]>("/api/behaviors", signal),
+  statuses: (signal?: AbortSignal) => getJson<Status[]>("/api/statuses", signal),
   evolutionMethods: (signal?: AbortSignal) =>
     getJson<CanonicalMethod[]>("/api/meta/evolution-methods", signal),
 
@@ -234,6 +236,14 @@ export const api = {
   // Type chart (one whole-list file → a write replaces the override set)
   putTypeChart: (entries: TypeChartEntry[], scope?: string) =>
     sendJson<TypeChartEntry[]>("PUT", `/api/type-chart${scopeQuery(scope)}`, entries),
+
+  // Statuses
+  putStatus: (id: string, payload: Status, scope?: string) =>
+    sendJson<Status>(
+      "PUT",
+      `/api/statuses/${encodeURIComponent(id)}${scopeQuery(scope)}`,
+      payload,
+    ),
 
   // Behaviors
   putBehavior: (id: string, payload: Behavior, scope?: string) =>

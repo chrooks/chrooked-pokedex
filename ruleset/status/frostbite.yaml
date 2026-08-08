@@ -1,13 +1,11 @@
 name: Frostbite
 chrooked_id: frostbite
-# Reskin, not rename: the engine keeps its FROZEN symbol. Only the behavior and
-# the player-facing text change. Freeze no longer exists; frostbite took its slot.
 aka: { rejuv: FROZEN }
 description: The target is frostbitten. Its special attacks weaken and it takes damage each turn.
 effects:
-  - "Halves the damage of the holder's special moves."
-  - "Deals 1/16 of the holder's maximum HP at the end of every turn."
-  - "Does not prevent the holder from acting."
-  - "Cured when the holder uses a Fire-type move."
-  - "Ice-type Pokemon cannot be given frostbite."
-  - "Guts cancels the special damage penalty, as it does for burn."
+  - Halves the damage of the holder's special moves.
+  - Deals 1/16 of the holder's maximum HP at the end of every turn.
+  - Does not prevent the holder from acting.
+  - Cured when the holder uses a Fire-type move.
+  - Ice-type Pokemon cannot be given frostbite.
+  - Guts cancels the special damage penalty, as it does for burn.

@@ -12,12 +12,12 @@ import { useState } from "react";
 import { api } from "../../api";
 import type { Move, MoveField, MoveWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
-import { isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS } from "../../lib/format";
+import { isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS, MOVE_TARGETS } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
 import { TypeSelect } from "../TypeSelect";
 import { CategorySelect } from "../CategorySelect";
 import { EditorDialog } from "./EditorDialog";
-import { NumberField, TextAreaField, TextField } from "./fields";
+import { NumberField, SelectField, TextAreaField, TextField } from "./fields";
 import { FormError } from "./FormFeedback";
 import "./editors.css";
 import "../ledger/ledger-rows.css";
@@ -229,10 +229,10 @@ export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) 
             value={form.priority}
             onChange={(v) => set("priority", v)}
           />
-          <TextField
+          <SelectField
             id="move-target"
             label="Target"
-            full
+            options={MOVE_TARGETS}
             value={form.target}
             onChange={(v) => set("target", v)}
           />

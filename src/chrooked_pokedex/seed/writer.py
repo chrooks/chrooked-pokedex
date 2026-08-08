@@ -16,6 +16,7 @@ from ..model.schema import (
     EvolutionOverride,
     MoveDef,
     SpeciesOverride,
+    StatusDef,
     TypeChartOverride,
 )
 from .extractor import SeedData
@@ -146,6 +147,20 @@ def ability_yaml(ability: AbilityDef) -> str:
     ]
     if ability.description:
         lines.append(f"description: {_scalar(ability.description)}")
+    return "\n".join(lines) + "\n"
+
+
+def status_yaml(status: StatusDef) -> str:
+    lines = [
+        f"name: {status.name}",
+        f"chrooked_id: {status.chrooked_id}",
+        f"aka: {_aka_flow(dict(status.aka))}",
+    ]
+    if status.description:
+        lines.append(f"description: {_scalar(status.description)}")
+    if status.effects:
+        lines.append("effects:")
+        lines.extend(f"  - {_scalar(effect)}" for effect in status.effects)
     return "\n".join(lines) + "\n"
 
 

@@ -42,3 +42,6 @@ feature_requests/*
 .cowork/
 chrooked.log
 .diagram-exports/
+
+# DevOS local working state
+.tasks/

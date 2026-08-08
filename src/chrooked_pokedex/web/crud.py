@@ -32,6 +32,7 @@ from ..model.loader import (
     load_behavior,
     load_move,
     load_species,
+    load_status,
     load_type_chart,
 )
 from ..model.schema import (
@@ -42,6 +43,7 @@ from ..model.schema import (
     LearnsetMove,
     MoveDef,
     SpeciesOverride,
+    StatusDef,
     TypeChartOverride,
 )
 from ..seed import writer
@@ -535,6 +537,45 @@ def upsert_ability(
 
 
 _ABILITY_FIELDS = ("name", "chrooked_id", "aka", "description")
+
+
+def upsert_status(
+    ruleset_dir: Path,
+    chrooked_id: str,
+    payload: dict[str, Any],
+    *,
+    ledger_dir: Optional[Path] = None,
+    scope: str = "base",
+) -> dict[str, Any]:
+    """Build, render, and validate-write an owned status condition.
+
+    Mirrors `upsert_ability` exactly — including rejecting unknown keys before the
+    render, so the loader stays the real Boundary and an unknown field is a 422
+    rather than a silent drop.
+    """
+    _reject_unknown(payload, _STATUS_FIELDS, f"{chrooked_id}.yaml")
+    path = Path(ruleset_dir) / "status" / f"{chrooked_id}.yaml"
+    payload = _merge_over_stored(payload, path, load_status, colmod.serialize_status)
+    status = _status_from_payload(payload, chrooked_id)
+    yaml_text = writer.status_yaml(status)
+    stored = ledger_dir and path.exists()
+    before = colmod.serialize_status(load_status(path)) if stored else None
+    after = colmod.serialize_status(_validated_write(path, yaml_text, load_status))
+    _log_write(ledger_dir, scope, "status", chrooked_id, before, after)
+    return after
+
+
+def _status_from_payload(payload: dict[str, Any], chrooked_id: str) -> StatusDef:
+    return StatusDef(
+        name=payload.get("name") or chrooked_id,
+        chrooked_id=chrooked_id,
+        description=payload.get("description") or "",
+        effects=tuple(payload.get("effects") or ()),
+        aka=dict(payload.get("aka") or {}),
+    )
+
+
+_STATUS_FIELDS = ("name", "chrooked_id", "aka", "description", "effects")
 
 
 def _merge_over_stored(

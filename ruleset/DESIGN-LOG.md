@@ -314,3 +314,23 @@ leech seed, curse, withdraw, sythesis, etc.
 ## 2026-08-06 — Goodra Hisui line
 
 - **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-06 — Yanmega line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special moves only; flying coverage, grass drain moves coverage, buzzy sound-releated flavor (think how loud a mega-sized dragonfly would be)
+
+## 2026-08-07 — Haxorus line
+
+- **Direction:** learnset-only repass
+- **Corrections:** give good slicing move coverage, ceaselss edge, bitter blade, sacred sword
+
+## 2026-08-07 — Lucario line
+
+- **Direction:** learnset-only repass
+- **Corrections:** prioritize special moves, only physical moves should be punching moves
+
+## 2026-08-07 — Dragapult line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Give water type coverage

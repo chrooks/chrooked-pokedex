@@ -60,6 +60,7 @@ const KINDS: readonly KindKey[] = [
   "type-chart",
   "team",
   "behaviors",
+  "statuses",
   "targets",
   "ledger",
 ];

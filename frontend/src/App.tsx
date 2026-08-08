@@ -20,6 +20,7 @@ import { MovesTab } from "./components/tabs/MovesTab";
 import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
 import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { TeamTab } from "./components/tabs/TeamTab";
+import { StatusesTab } from "./components/tabs/StatusesTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
 import { LedgerTab } from "./components/tabs/LedgerTab";
@@ -592,6 +593,8 @@ function KindScreen({
       return <TypeChartTab />;
     case "team":
       return <TeamTab />;
+    case "statuses":
+      return <StatusesTab />;
     case "behaviors":
       return <BehaviorsTab />;
     case "targets":

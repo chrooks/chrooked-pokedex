@@ -27,6 +27,7 @@ from ..model.schema import (
     SpeciesOverride,
     TypeChartOverride,
 )
+from . import collections as colmod
 from .evolution import method_label
 
 # Top-level species fields the dex flags as overridden, in display order.
@@ -397,6 +398,20 @@ def _merge_ability(
         "overridden_fields": overridden,
         "base": base_values,
     }
+
+
+def build_statuses(ruleset: Ruleset) -> list[dict[str, Any]]:
+    """The Ruleset's status conditions, sorted by name.
+
+    No merge step and no snapshot argument, unlike `build_abilities` / `build_moves`:
+    statuses are Ruleset-owned outright rather than Overrides, because the base
+    snapshot carries no status data to diff against — upstream has no such concept.
+    Every entry is therefore "created" and nothing can be flagged as changed.
+    """
+    return sorted(
+        (colmod.serialize_status(status) for status in ruleset.statuses.values()),
+        key=lambda e: e["name"],
+    )
 
 
 def build_moves(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:

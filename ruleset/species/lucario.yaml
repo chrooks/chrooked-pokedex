@@ -4,45 +4,27 @@ aka: { pokeemerald: SPECIES_LUCARIO }
 abilities:
   primary: Magical Fists
   hidden: Mega Launcher
-stats: { atk: 120, spa: 120, spe: 100 }
+stats: { atk: 110 }
 learnset:
   - { level: 0, move: Aura Sphere }
-  - { level: 1, move: Copycat }
   - { level: 1, move: Feint }
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Vacuum Wave }
-  - { level: 2, move: Detect }
-  - { level: 3, move: Reversal }
-  - { level: 4, move: Screech }
-  - { level: 5, move: Quick Attack }
-  - { level: 6, move: Glint }
-  - { level: 7, move: Aura Spark }
-  - { level: 8, move: Final Gambit }
-  - { level: 9, move: Life Dew }
-  - { level: 10, move: Rock Smash }
-  - { level: 11, move: Metal Claw }
-  - { level: 12, move: Counter }
-  - { level: 15, move: Smart Strike }
-  - { level: 16, move: Work Up }
-  - { level: 18, move: Mirror Shot }
-  - { level: 19, move: Chi Wave }
-  - { level: 20, move: Force Palm }
-  - { level: 24, move: Calm Mind }
-  - { level: 28, move: Metal Sound }
-  - { level: 30, move: Ki Blast }
-  - { level: 32, move: Quick Guard }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Bone Rush }
-  - { level: 38, move: Luster Cannon }
-  - { level: 39, move: Cross Chop }
-  - { level: 40, move: Swords Dance }
-  - { level: 43, move: Meteor Mash }
-  - { level: 44, move: Heal Pulse }
-  - { level: 46, move: Focus Blast }
-  - { level: 48, move: Iron Tail }
-  - { level: 50, move: Steel Beam }
-  - { level: 52, move: Dragon Pulse }
-  - { level: 56, move: Extreme Speed }
-  - { level: 57, move: Excalibur }
-  - { level: 60, move: Close Combat }
+  - { level: 1, move: Quick Guard }
+  - { level: 5, move: Vacuum Wave }
+  - { level: 9, move: Glint }
+  - { level: 13, move: Calm Mind }
+  - { level: 17, move: Detect }
+  - { level: 21, move: Work Up }
+  - { level: 25, move: Mirror Shot }
+  - { level: 29, move: Bullet Punch }
+  - { level: 33, move: Chi Wave }
+  - { level: 37, move: Drain Punch }
+  - { level: 39, move: Dark Pulse }
+  - { level: 41, move: Flash Cannon }
+  - { level: 45, move: Aura Sphere }
+  - { level: 49, move: Meteor Mash }
+  - { level: 53, move: Ki Blast }
+  - { level: 57, move: Luster Cannon }
+  - { level: 65, move: Focus Blast }
+  - { level: 69, move: Excalibur }
+  - { level: 70, move: Focus Punch }
 evolution: { from: Riolu, method: { level: 36 } }

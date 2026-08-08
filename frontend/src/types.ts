@@ -380,12 +380,24 @@ export interface Behavior {
   engine_hints: Record<string, string>;
 }
 
+/** A status condition (burn, frostbite, ...). Ruleset-owned outright rather than
+    an Override: the base snapshot carries no status data to diff against. */
+export interface Status {
+  name: string;
+  chrooked_id: string;
+  description: string;
+  effects: string[];
+  /** Engine symbol(s); carried through edits so apply keeps resolving. */
+  aka: Record<string, unknown>;
+}
+
 /** The tab keys, also used as URL state. "targets" is the apply panel (M3);
     the rest are the read-only / Ruleset-edit surfaces. */
 export type KindKey =
   | "dex"
   | "moves"
   | "abilities"
+  | "statuses"
   | "type-chart"
   | "team"
   | "behaviors"

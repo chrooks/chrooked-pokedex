@@ -235,6 +235,12 @@ def create_app(
         snapshot = _load_snapshot_or_503()
         return dexmod.build_abilities(snapshot, _load_ruleset_or_503())
 
+    @app.get("/api/statuses")
+    def get_statuses() -> list[dict[str, Any]]:
+        # No snapshot argument: statuses are Ruleset-owned outright, not Overrides,
+        # because the base snapshot carries no status data to diff against.
+        return dexmod.build_statuses(_load_ruleset_or_503())
+
     @app.get("/api/type-chart")
     def get_type_chart() -> list[dict[str, Any]]:
         # Canon type chart reaches parity: the full base matrix ⊕ Ruleset, merged
@@ -963,6 +969,17 @@ def create_app(
     ) -> dict[str, Any]:
         try:
             return crudmod.upsert_ability(
+                _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
+            )
+        except crudmod.ValidationError as error:
+            raise _422(error) from error
+
+    @app.put("/api/statuses/{chrooked_id}")
+    def put_status(
+        chrooked_id: str, payload: dict[str, Any], scope: str = "base"
+    ) -> dict[str, Any]:
+        try:
+            return crudmod.upsert_status(
                 _scope_dir(scope), chrooked_id, payload, ledger_dir=ruleset_dir, scope=scope
             )
         except crudmod.ValidationError as error:

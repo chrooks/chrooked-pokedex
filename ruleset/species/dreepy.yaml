@@ -1,18 +1,29 @@
 name: Dreepy
 chrooked_id: dreepy
 aka: { dex: 885 }
+types: [Dragon, Ghost]
+abilities:
+  primary: Clear Body
+  secondary: Infiltrator
+  hidden: Cursed Body
+stats: { hp: 28, atk: 60, def: 30, spa: 40, spd: 30, spe: 82 }
 learnset:
-  - { level: 1, move: Bite }
+  - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Infestation }
-  - { level: 2, move: Lick }
-  - { level: 15, move: Maul }
-  - { level: 16, move: Shadow Claw }
-  - { level: 24, move: Breaking Swipe }
-  - { level: 29, move: Draconic Fang }
-  - { level: 36, move: Dragon Hammer }
-  - { level: 42, move: Wraithstrike }
-  - { level: 48, move: Interment }
-  - { level: 57, move: Outrage }
-  - { level: 62, move: Necrosis }
+  - { level: 5, move: Maul }
+  - { level: 9, move: Shadow Sneak }
+  - { level: 13, move: Breaking Swipe }
+  - { level: 17, move: Aqua Jet }
+  - { level: 21, move: Lock-On }
+  - { level: 25, move: Shadow Claw }
+  - { level: 29, move: Dragon Dance }
+  - { level: 33, move: U-turn }
+  - { level: 37, move: Waterfall }
+  - { level: 41, move: Substitute }
+  - { level: 45, move: Draconic Fang }
+  - { level: 49, move: Phantom Force }
+  - { level: 53, move: Dragon Hammer }
+  - { level: 57, move: Interment }
+  - { level: 61, move: Maelstrom }
+  - { level: 65, move: Glaive Rush }
+  - { level: 69, move: Necrosis }

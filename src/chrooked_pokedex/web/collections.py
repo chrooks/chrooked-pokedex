@@ -15,7 +15,7 @@ from typing import Any
 
 from ..model import Ruleset
 from ..model.behavior_spec import BehaviorSpec
-from ..model.schema import AbilityDef, MoveDef, TypeChartOverride
+from ..model.schema import AbilityDef, MoveDef, StatusDef, TypeChartOverride
 
 
 def build_moves(ruleset: Ruleset) -> list[dict[str, Any]]:
@@ -71,6 +71,17 @@ def serialize_ability(ability: AbilityDef) -> dict[str, Any]:
         "description": ability.description,
         # see serialize_move: aka rides along so an edit doesn't strip it.
         "aka": dict(ability.aka),
+    }
+
+
+def serialize_status(status: StatusDef) -> dict[str, Any]:
+    return {
+        "name": status.name,
+        "chrooked_id": status.chrooked_id,
+        "description": status.description,
+        "effects": list(status.effects),
+        # see serialize_move: aka rides along so an edit doesn't strip it.
+        "aka": dict(status.aka),
     }
 
 

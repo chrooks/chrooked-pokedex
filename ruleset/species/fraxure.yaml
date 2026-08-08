@@ -4,32 +4,26 @@ aka: { pokeemerald: SPECIES_FRAXURE }
 types: [Dragon, Steel]
 abilities:
   primary: Sharpness
+  secondary: Mold Breaker
   hidden: Carnivore
 stats: { hp: 76, atk: 122, def: 82, spa: 45, spd: 65, spe: 80 }
 learnset:
-  - { level: 0, move: Iron Head }
-  - { level: 1, move: Bite }
-  - { level: 1, move: False Swipe }
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
   - { level: 5, move: Maul }
-  - { level: 9, move: Assurance }
-  - { level: 12, move: Taunt }
-  - { level: 15, move: Slash }
-  - { level: 18, move: Breaking Swipe }
-  - { level: 21, move: Scary Face }
-  - { level: 24, move: Crunch }
-  - { level: 27, move: Dragon Dance }
-  - { level: 30, move: Dragon Claw }
-  - { level: 31, move: Metal Claw }
-  - { level: 33, move: Focus Energy }
-  - { level: 37, move: Psycho Cut }
-  - { level: 39, move: Dragon Hammer }
-  - { level: 41, move: Night Slash }
-  - { level: 44, move: Swords Dance }
-  - { level: 47, move: Leaf Blade }
-  - { level: 51, move: Smart Strike }
-  - { level: 55, move: Ceaseless Edge }
-  - { level: 57, move: Behemoth Blade }
-  - { level: 60, move: Outrage }
-  - { level: 65, move: Excalibur }
+  - { level: 9, move: Metal Claw }
+  - { level: 13, move: Breaking Swipe }
+  - { level: 17, move: Slash }
+  - { level: 21, move: Swords Dance }
+  - { level: 25, move: Cut }
+  - { level: 29, move: Ceaseless Edge }
+  - { level: 33, move: Dragon Claw }
+  - { level: 37, move: Dragon Dance }
+  - { level: 41, move: Iron Head }
+  - { level: 45, move: Wyrmstrike }
+  - { level: 49, move: Anvil Slam }
+  - { level: 53, move: Dragon Hammer }
+  - { level: 57, move: Sacred Sword }
+  - { level: 61, move: Bitter Blade }
+  - { level: 65, move: Outrage }
+  - { level: 69, move: Behemoth Blade }

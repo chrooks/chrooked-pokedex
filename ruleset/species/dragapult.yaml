@@ -3,29 +3,22 @@ chrooked_id: dragapult
 aka: { dex: 887 }
 learnset:
   - { level: 0, move: Dragon Darts }
+  - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Infestation }
-  - { level: 1, move: Bite }
-  - { level: 2, move: Lick }
-  - { level: 3, move: Dragon Breath }
-  - { level: 6, move: Lock-On }
-  - { level: 9, move: Maul }
-  - { level: 12, move: Assurance }
-  - { level: 15, move: Shadow Claw }
-  - { level: 18, move: Hex }
-  - { level: 21, move: Breaking Swipe }
-  - { level: 24, move: Agility }
-  - { level: 29, move: Draconic Fang }
-  - { level: 30, move: Double Hit }
-  - { level: 36, move: U-turn }
-  - { level: 39, move: Wraithstrike }
-  - { level: 40, move: Interment }
-  - { level: 42, move: Dragon Dance }
-  - { level: 45, move: Dragon Hammer }
-  - { level: 48, move: Phantom Force }
-  - { level: 54, move: Take Down }
-  - { level: 58, move: Necrosis }
-  - { level: 63, move: Dragon Rush }
-  - { level: 69, move: Last Resort }
-  - { level: 70, move: Double-Edge }
+  - { level: 5, move: Maul }
+  - { level: 9, move: Shadow Sneak }
+  - { level: 13, move: Breaking Swipe }
+  - { level: 17, move: Aqua Jet }
+  - { level: 21, move: Lock-On }
+  - { level: 25, move: Shadow Claw }
+  - { level: 29, move: Dragon Dance }
+  - { level: 33, move: U-turn }
+  - { level: 37, move: Waterfall }
+  - { level: 41, move: Substitute }
+  - { level: 45, move: Draconic Fang }
+  - { level: 49, move: Phantom Force }
+  - { level: 53, move: Dragon Hammer }
+  - { level: 57, move: Interment }
+  - { level: 61, move: Maelstrom }
+  - { level: 65, move: Glaive Rush }
+  - { level: 69, move: Necrosis }

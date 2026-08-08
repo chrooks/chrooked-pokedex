@@ -61,6 +61,23 @@ export const MOVE_FLAGS = [
   "ballistic",
 ] as const;
 
+/** Neutral move targets the Ruleset models (mirrors schema.MOVE_TARGETS), ordered
+    most-common first for the Move editor's select. */
+export const MOVE_TARGETS = [
+  "selected",
+  "user",
+  "both",
+  "ally",
+  "opponent",
+  "foes_and_ally",
+  "random",
+  "opponents_field",
+  "users_field",
+  "entire_field",
+  "all_battlers",
+  "depends",
+] as const;
+
 /** A three-letter uppercase code for the dense grid, e.g. "Dragon" -> "DRA". */
 export function typeCode(type: string): string {
   return type.trim().slice(0, 3).toUpperCase();

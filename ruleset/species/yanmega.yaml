@@ -8,30 +8,25 @@ abilities:
   hidden: Speed Boost
 stats: { def: 76, spd: 51, spe: 115 }
 learnset:
+  - { level: 0, move: Dragon Breath }
   - { level: 1, move: Hypnosis }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Struggle Bug }
-  - { level: 3, move: Twister }
-  - { level: 4, move: Night Slash }
-  - { level: 5, move: Air Slash }
-  - { level: 6, move: Signal Beam }
-  - { level: 15, move: Dragon Breath }
-  - { level: 17, move: Detect }
-  - { level: 20, move: Bug Buzz }
-  - { level: 22, move: Supersonic }
-  - { level: 27, move: Uproar }
-  - { level: 29, move: Dragon Pulse }
-  - { level: 30, move: Bug Bite }
-  - { level: 33, move: Ancient Power }
-  - { level: 35, move: Antennae Blast }
-  - { level: 36, move: Galeburst }
-  - { level: 38, move: Feint }
-  - { level: 43, move: Slash }
-  - { level: 44, move: Cataclysm }
-  - { level: 46, move: Screech }
-  - { level: 49, move: U-turn }
-  - { level: 57, move: Draco Meteor }
-  - { level: 60, move: Drone Chorus }
-  - { level: 64, move: Tempest }
+  - { level: 1, move: Struggle Bug }
+  - { level: 5, move: Supersonic }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Air Cutter }
+  - { level: 17, move: Tailwind }
+  - { level: 21, move: Mega Drain }
+  - { level: 25, move: Signal Beam }
+  - { level: 29, move: Air Slash }
+  - { level: 34, move: Ancient Power }
+  - { level: 37, move: U-turn }
+  - { level: 41, move: Dragon Pulse }
+  - { level: 45, move: Giga Drain }
+  - { level: 49, move: Oblivion Wing }
+  - { level: 53, move: Antennae Blast }
+  - { level: 56, move: Cataclysm }
+  - { level: 60, move: Quiver Dance }
+  - { level: 63, move: Siphon }
+  - { level: 67, move: Drone Chorus }
+  - { level: 70, move: Draco Meteor }
+evolution: { from: Yanma, method: { level: 34 } }
