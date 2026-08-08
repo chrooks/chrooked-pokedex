@@ -1,0 +1,10 @@
+name: Badly Poisoned
+chrooked_id: badlypoisoned
+# The engine has no separate symbol: badly poisoned is POISON carrying a turn
+# counter. The shared symbol is recorded honestly rather than invented.
+aka: { rejuv: POISON }
+description: The target is badly poisoned. The damage it takes grows every turn.
+effects:
+  - "Deals 1/16 of the holder's maximum HP on the first turn, growing by that much each turn after."
+  - "The counter resets when the holder switches out."
+  - "Poison-type and Steel-type Pokemon cannot be badly poisoned."

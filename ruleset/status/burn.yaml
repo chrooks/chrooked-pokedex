@@ -1,0 +1,9 @@
+name: Burn
+chrooked_id: burn
+aka: { rejuv: BURN }
+description: The target is burned. Its physical attacks weaken and it takes damage each turn.
+effects:
+  - "Halves the damage of the holder's physical moves."
+  - "Deals 1/16 of the holder's maximum HP at the end of every turn."
+  - "Fire-type Pokemon cannot be burned."
+  - "Guts cancels the physical damage penalty."

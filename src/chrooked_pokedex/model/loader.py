@@ -23,6 +23,7 @@ from .behavior_spec import (
 from .schema import (
     MOVE_CATEGORIES,
     MOVE_FLAGS,
+    MOVE_TARGETS,
     STAT_KEYS,
     AbilitiesOverride,
     AbilityDef,
@@ -31,6 +32,7 @@ from .schema import (
     LearnsetMove,
     MoveDef,
     SpeciesOverride,
+    StatusDef,
     TypeChartOverride,
 )
 
@@ -65,6 +67,7 @@ _MOVE_KEYS = (
 )
 _ADDITIONAL_EFFECT_KEYS = ("effect", "chance")
 _ABILITY_KEYS = ("name", "chrooked_id", "aka", "description")
+_STATUS_KEYS = ("name", "chrooked_id", "aka", "description", "effects")
 _TYPE_CHART_ENTRY_KEYS = ("attacker", "defender", "multiplier")
 _BEHAVIOR_KEYS = (
     "name", "chrooked_id", "applies_to", "aka",
@@ -150,6 +153,13 @@ def load_move(path: Path) -> MoveDef:
             f"allowed flags are {', '.join(sorted(MOVE_FLAGS))}"
         )
 
+    target = data.get("target", "selected")
+    if target not in MOVE_TARGETS:
+        raise ValueError(
+            f"{path.name}:target: unknown target {target!r}; "
+            f"allowed targets are {', '.join(sorted(MOVE_TARGETS))}"
+        )
+
     return MoveDef(
         name=data["name"],
         chrooked_id=data["chrooked_id"],
@@ -166,7 +176,7 @@ def load_move(path: Path) -> MoveDef:
         additional_effects=tuple(additional_effects),
         flags=flags,
         priority=int(data.get("priority", 0)),
-        target=data.get("target", "selected"),
+        target=target,
     )
 
 
@@ -177,6 +187,21 @@ def load_ability(path: Path) -> AbilityDef:
         name=data["name"],
         chrooked_id=data["chrooked_id"],
         description=data.get("description", ""),
+        aka=dict(data.get("aka") or {}),
+    )
+
+
+def load_status(path: Path) -> StatusDef:
+    data = _read_yaml(path)
+    _check_keys(data, _STATUS_KEYS, path.name)
+    for required in ("name", "chrooked_id"):
+        if not data.get(required):
+            raise ValueError(f"{path.name}: missing required field {required!r}")
+    return StatusDef(
+        name=data["name"],
+        chrooked_id=data["chrooked_id"],
+        description=data.get("description", ""),
+        effects=tuple(data.get("effects") or ()),
         aka=dict(data.get("aka") or {}),
     )
 

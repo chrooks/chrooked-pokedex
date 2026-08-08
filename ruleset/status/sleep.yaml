@@ -1,0 +1,7 @@
+name: Sleep
+chrooked_id: sleep
+aka: { rejuv: SLEEP }
+description: The target is asleep and cannot act until it wakes.
+effects:
+  - "The holder cannot act for 1 to 3 turns."
+  - "Snore and Sleep Talk can still be used while asleep."

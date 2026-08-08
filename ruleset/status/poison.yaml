@@ -1,0 +1,7 @@
+name: Poison
+chrooked_id: poison
+aka: { rejuv: POISON }
+description: The target is poisoned. It takes damage at the end of every turn.
+effects:
+  - "Deals 1/8 of the holder's maximum HP at the end of every turn."
+  - "Poison-type and Steel-type Pokemon cannot be poisoned."

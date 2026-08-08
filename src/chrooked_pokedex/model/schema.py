@@ -31,6 +31,17 @@ MOVE_FLAGS: frozenset[str] = frozenset({
     "high_crit",
 })
 
+# Neutral move targets the Ruleset models — the union of pokeemerald's neutralized
+# `MOVE_TARGET_*` symbols (per the committed base snapshot) and the Essentials
+# `_TARGET` keys (appliers/essentials/vocab.py). A target with no closed vocabulary
+# silently degrades to a single-target default at apply time, so the loader
+# validates against this set rather than letting a typo through.
+MOVE_TARGETS: frozenset[str] = frozenset({
+    "selected", "user", "ally", "both", "foes_and_ally", "opponent",
+    "opponents_field", "users_field", "entire_field", "all_battlers",
+    "random", "depends",
+})
+
 
 @dataclass(frozen=True)
 class AbilitiesOverride:
@@ -135,6 +146,26 @@ class AbilityDef:
     name: str
     chrooked_id: str
     description: str = ""
+    aka: Mapping[str, object] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class StatusDef:
+    """A Ruleset-owned status condition (burn, frostbite, paralysis, ...).
+
+    Statuses are owned outright, not Overrides: the base snapshot has no status
+    data to diff against, because the concept does not exist upstream. `aka` maps
+    an engine to the symbol that engine already uses — `{rejuv: FROZEN}` is how a
+    reskin is recorded, where the engine keeps its old symbol and only the
+    behavior and player-facing text change.
+
+    Data only. The mechanic lives in a BehaviorSpec under `ruleset/behaviors/`.
+    """
+
+    name: str
+    chrooked_id: str
+    description: str = ""
+    effects: tuple[str, ...] = ()
     aka: Mapping[str, object] = field(default_factory=dict)
 
 

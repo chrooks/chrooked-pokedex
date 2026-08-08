@@ -11,7 +11,7 @@ import yaml
 
 from . import loader
 from .behavior_spec import BehaviorSpec
-from .schema import AbilityDef, MoveDef, SpeciesOverride, TypeChartOverride
+from .schema import AbilityDef, MoveDef, SpeciesOverride, StatusDef, TypeChartOverride
 
 
 @dataclass(frozen=True)
@@ -26,6 +26,9 @@ class Ruleset:
     moves: Mapping[str, MoveDef] = field(default_factory=dict)
     abilities: Mapping[str, AbilityDef] = field(default_factory=dict)
     type_chart: tuple[TypeChartOverride, ...] = ()
+    # Status conditions are Ruleset-owned outright, not Overrides: the base snapshot
+    # carries no status data, because upstream has no such concept to diff against.
+    statuses: Mapping[str, StatusDef] = field(default_factory=dict)
     behaviors: Mapping[str, BehaviorSpec] = field(default_factory=dict)
     meta: Mapping[str, Any] = field(default_factory=dict)
     # Full base species data (stats/types/abilities/...) from the `.base/<version>.json`
@@ -61,6 +64,11 @@ class Ruleset:
         if type_chart_path.exists():
             type_chart = loader.load_type_chart(type_chart_path)
 
+        statuses = {
+            s.chrooked_id: s
+            for s in (loader.load_status(p) for p in _yaml_files(ruleset_dir / "status"))
+        }
+
         behaviors = {
             b.chrooked_id: b
             for b in (loader.load_behavior(p) for p in _yaml_files(ruleset_dir / "behaviors"))
@@ -71,6 +79,7 @@ class Ruleset:
             moves=moves,
             abilities=abilities,
             type_chart=type_chart,
+            statuses=statuses,
             behaviors=behaviors,
             meta=meta,
             base_species=_load_base_species(ruleset_dir),

@@ -1,0 +1,8 @@
+name: Paralysis
+chrooked_id: paralysis
+aka: { rejuv: PARALYSIS }
+description: The target is paralyzed. It moves slower and sometimes cannot act.
+effects:
+  - "Halves the holder's Speed."
+  - "The holder has a 25% chance to lose its turn."
+  - "Electric-type Pokemon cannot be paralyzed."
