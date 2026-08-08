@@ -488,7 +488,7 @@ _CREATE_DEFAULTS = {"basedamage": 0, "accuracy": 100, "maxpp": 5}
 _FLINCH_COMBOS = {
     frozenset({"flinch"}): 0x00F,
     frozenset({"burn", "flinch"}): 0x00B,
-    frozenset({"freeze", "flinch"}): 0x00E,
+    frozenset({"frostbite", "flinch"}): 0x00E,
     frozenset({"paralysis", "flinch"}): 0x009,
 }
 # Primary `effect:` values that map onto a vanilla function code, with the
@@ -509,7 +509,7 @@ _PRIMARY_EFFECT_CODES = {
 # (Ember, Poison Sting, Thunder Shock, Ice Beam, Aurora Beam, Crush Claw,
 # Moonblast, Acid/Psychic, Mud-Slap, Confusion).
 _SINGLE_EFFECT_CODES = {
-    "burn": 0x00A, "poison": 0x005, "paralysis": 0x007, "freeze": 0x00C,
+    "burn": 0x00A, "poison": 0x005, "paralysis": 0x007, "frostbite": 0x00C,
     "flinch": 0x00F, "atk_minus_1": 0x042, "def_minus_1": 0x043,
     "sp_atk_minus_1": 0x045, "sp_def_minus_1": 0x046, "acc_minus_1": 0x047,
     "spd_minus_1": 0x044, "confusion": 0x013,

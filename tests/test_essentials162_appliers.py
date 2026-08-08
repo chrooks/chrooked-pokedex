@@ -1277,7 +1277,7 @@ def test_status_plus_flinch_fang_combo():
     fire = et.resolve_behavior(fang("burn"))
     assert fire.funccode == "00B" and fire.effectchance == "10"
     assert et.resolve_behavior(fang("paralysis")).funccode == "009"
-    assert et.resolve_behavior(fang("freeze")).funccode == "00E"  # plain freeze, Ice Fang
+    assert et.resolve_behavior(fang("frostbite")).funccode == "00E"  # plain frostbite, Ice Fang
     # stat-drop+flinch: engine does the drop (042), plugin adds flinch (reported deferred)
     drac = et.resolve_behavior(fang("atk_minus_1"))
     assert drac.funccode == "042" and drac.effectchance == "10"

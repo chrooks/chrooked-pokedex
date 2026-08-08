@@ -2588,12 +2588,15 @@ def _build_move_design_rubric(*, mode: str) -> str:
     leave behavior absent otherwise. If present, the behavior stub MUST NOT set
     engine_hints.
     """
+    from chrooked_pokedex.model.schema import MOVE_TARGETS
+
     triggers = ", ".join(sorted(_NEUTRAL_TRIGGERS))
     flags_list = (
         "contact, punching, biting, sound, slicing, wind, wing, "
         "kicking, piercing, bone, hammer, ballistic"
     )
     categories = "physical, special, status"
+    targets_list = ", ".join(sorted(MOVE_TARGETS))
     if mode == "create":
         action = (
             "DESIGN ONE brand-new Pokémon move. Return ALL of these fields in `draft.move`:\n"
@@ -2604,8 +2607,7 @@ def _build_move_design_rubric(*, mode: str) -> str:
             "- `accuracy` (integer 1–100, or null for always-hit)\n"
             "- `pp` (integer 1–64)\n"
             "- `priority` (integer, usually 0; +1 for priority moves, -1 for last)\n"
-            "- `target` (usually 'selected'; others: 'all-foes', 'all-allies', 'all', "
-            "'self', 'random-foe', 'all-except-self')\n"
+            f"- `target` (usually 'selected'; one of: {targets_list})\n"
             f"- `flags` (array from: {flags_list}; use [] if none apply)\n"
             "- `effect` (plain effect name; use 'hit' for plain damage; "
             "examples: 'recoil', 'absorb', 'two-hit')\n"
@@ -2649,6 +2651,8 @@ def _move_design_draft_schema() -> dict[str, Any]:
     `draft.move` is the proposed field set (all fields for create, partial for edit).
     `draft.behavior` is optional (only when a custom mechanic is needed).
     """
+    from chrooked_pokedex.model.schema import MOVE_TARGETS
+
     behavior_schema: dict[str, Any] = {
         "type": "object",
         "properties": {
@@ -2698,7 +2702,7 @@ def _move_design_draft_schema() -> dict[str, Any]:
             "accuracy": {"type": ["integer", "null"]},
             "pp": {"type": "integer"},
             "priority": {"type": "integer"},
-            "target": {"type": "string"},
+            "target": {"type": "string", "enum": sorted(MOVE_TARGETS)},
             "flags": {"type": "array", "items": {"type": "string"}},
             "effect": {"type": "string"},
             "additional_effects": {
@@ -2882,7 +2886,7 @@ def _validate_move_result(
     5. Behavior stub (if present, D1): engine_hints MUST be empty.
     6. For EDIT: build before/after delta from existing_move.
     """
-    from chrooked_pokedex.model.schema import MOVE_FLAGS
+    from chrooked_pokedex.model.schema import MOVE_FLAGS, MOVE_TARGETS
 
     if not isinstance(result, dict):
         raise SuggestError("The suggestion came back in an unexpected shape.")
@@ -2990,9 +2994,20 @@ def _validate_move_result(
             )
         validated["priority"] = priority
 
-    # target
+    # target — the JSON-schema enum (D2) should already constrain this, but a
+    # provider can still hand back free text; normalize separators/case, then
+    # fall back to "selected" rather than let an out-of-vocabulary target
+    # reach the writer (the loader would reject it after a would-be write).
     if "target" in move_draft:
-        validated["target"] = str(move_draft["target"])
+        raw_target = str(move_draft["target"])
+        normalized = raw_target.strip().lower().replace("-", "_").replace(" ", "_")
+        if normalized not in MOVE_TARGETS:
+            warnings.append(
+                f"Unknown target {raw_target!r}; falling back to 'selected'. "
+                f"Allowed: {', '.join(sorted(MOVE_TARGETS))}."
+            )
+            normalized = "selected"
+        validated["target"] = normalized
 
     # flags
     if "flags" in move_draft:

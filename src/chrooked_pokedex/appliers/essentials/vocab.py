@@ -65,7 +65,7 @@ _ADDITIONAL_FUNCTION_CODE = {
     "poison": "PoisonTarget",
     "paralysis": "ParalyzeTarget",
     "flinch": "FlinchTarget",
-    "freeze": "FreezeTarget",
+    "frostbite": "FreezeTarget",
     "confusion": "ConfuseTarget",
 }
 

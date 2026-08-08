@@ -1,0 +1,14 @@
+name: Cryofreeze
+chrooked_id: cryofreeze
+aka: {  }
+type: Ice
+category: status
+power: 0
+accuracy: 85
+pp: 15
+description: Bites the target with deep cold, inflicting frostbite.
+# Numbers sit parallel to Will-O-Wisp, the Fire status move that inflicts burn.
+# Rejuv funccode 0x00C is dual-purpose: with base damage it is a chance secondary,
+# with zero base damage it inflicts the status outright. No new funccode needed.
+additional_effects:
+  - { effect: frostbite, chance: 100 }

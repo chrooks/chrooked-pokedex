@@ -151,6 +151,7 @@ def _good_create_result(
     flags: list[str] | None = None,
     engine_hints: dict[str, str] | None = None,
     with_behavior: bool = False,
+    target: str = "selected",
 ) -> dict[str, Any]:
     if flags is None:
         flags = ["contact"]
@@ -163,7 +164,7 @@ def _good_create_result(
         "accuracy": accuracy,
         "pp": pp,
         "priority": 0,
-        "target": "selected",
+        "target": target,
         "flags": flags,
         "effect": "hit",
         "additional_effects": [{"effect": "flinch", "chance": 30}],
@@ -399,6 +400,32 @@ def test_validate_unknown_flags_dropped_with_warning() -> None:
     assert "contact" in out["draft"]["move"]["flags"]
     assert "supersecretflag" not in out["draft"]["move"]["flags"]
     assert any("supersecretflag" in w for w in out["warnings"])
+
+
+def test_validate_out_of_vocabulary_target_falls_back_to_selected() -> None:
+    """ac4: an out-of-vocabulary target (e.g. 'all-foes') never reaches the
+    writer — it normalizes/falls back to 'selected' with a warning instead."""
+    bad = _good_create_result(target="all-foes")
+    out = _validate_create(bad)
+    assert out["draft"]["move"]["target"] == "selected"
+    assert any("all-foes" in w for w in out["warnings"])
+
+
+def test_validate_target_normalizes_separators() -> None:
+    """A valid target with different casing/separators still normalizes in."""
+    result = _good_create_result(target="Foes_And_Ally")
+    out = _validate_create(result)
+    assert out["draft"]["move"]["target"] == "foes_and_ally"
+    assert out["warnings"] == []
+
+
+def test_move_design_draft_schema_target_enum_matches_move_targets() -> None:
+    """ac4: the response schema constrains target to MOVE_TARGETS, not free text."""
+    from chrooked_pokedex.model.schema import MOVE_TARGETS
+
+    schema = suggestmod._move_design_draft_schema()
+    target_schema = schema["properties"]["draft"]["properties"]["move"]["properties"]["target"]
+    assert set(target_schema["enum"]) == MOVE_TARGETS
 
 
 def test_validate_create_no_behavior_ok() -> None:

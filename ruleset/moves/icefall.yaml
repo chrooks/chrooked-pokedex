@@ -6,7 +6,7 @@ category: physical
 power: 75
 accuracy: 100
 pp: 25
-description: A crashing sheet of ice slams the target. May freeze.
+description: A crashing sheet of ice slams the target. May inflict frostbite.
 additional_effects:
-  - { effect: freeze, chance: 10 }
+  - { effect: frostbite, chance: 10 }
 flags: [contact]

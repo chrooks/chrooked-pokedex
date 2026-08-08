@@ -105,7 +105,7 @@ SECONDARY_TO_FUNCCODE: dict[str, str] = {
     "burn": "00A",            # verified via EMBER, FLAMETHROWER (may burn)
     "paralysis": "007",       # verified via THUNDERBOLT(10%), BODYSLAM(30%) — code, %=data
     "poison": "005",          # verified via POISONSTING, SLUDGEBOMB (may poison)
-    "freeze": "00C",          # verified via ICEBEAM, ICEPUNCH, POWDERSNOW (may freeze)
+    "frostbite": "00C",          # verified via ICEBEAM, ICEPUNCH, POWDERSNOW (may freeze)
     "flinch": "00F",          # verified via ROCKSLIDE, AIRSLASH, IRONHEAD (may flinch)
     "confusion": "013",       # verified via CONFUSION (may confuse) — shares the primary code
     "atk_minus_1": "042",     # verified via GROWL, AURORABEAM, PLAYROUGH, TROPKICK (lower Atk)
@@ -125,7 +125,7 @@ SECONDARY_TO_FUNCCODE: dict[str, str] = {
 STATUS_FLINCH_TO_FUNCCODE: dict[str, str] = {
     "burn": "00B",       # verified via FIREFANG (may burn + may flinch)
     "paralysis": "009",  # verified via THUNDERFANG (may paralyze + may flinch)
-    "freeze": "00E",     # verified via ICEFANG (may freeze + may flinch) — plain freeze
+    "frostbite": "00E",     # verified via ICEFANG (may freeze + may flinch) — plain freeze
 }
 
 # Deliberately NOT mapped (resolve unresolved -> #12):

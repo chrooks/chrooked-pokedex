@@ -485,7 +485,7 @@ def test_new_move_flinch_gets_function_code(tmp_path):
                          flags=("contact", "biting")),
         "frostfang": MoveDef(name="Frost Fang", chrooked_id="frostfang", type="Ice",
                              category="physical", power=80, accuracy=95, pp=15,
-                             additional_effects=(AdditionalEffect("freeze", 10),
+                             additional_effects=(AdditionalEffect("frostbite", 10),
                                                  AdditionalEffect("flinch", 10)),
                              flags=("contact", "biting")),
         "dropfang": MoveDef(name="Drop Fang", chrooked_id="dropfang", type="Rock",

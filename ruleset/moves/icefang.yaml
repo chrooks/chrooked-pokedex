@@ -6,7 +6,7 @@ category: physical
 power: 80
 accuracy: 95
 pp: 15
-description: An icy bite that may freeze the foe.
+description: An icy bite that may inflict frostbite.
 additional_effects:
-  - { effect: freeze, chance: 10 }
+  - { effect: frostbite, chance: 10 }
 flags: [contact, biting]

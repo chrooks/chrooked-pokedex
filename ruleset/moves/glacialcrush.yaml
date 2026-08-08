@@ -6,7 +6,7 @@ category: physical
 power: 90
 accuracy: 100
 pp: 15
-description: A frozen body slam. May freeze the target.
+description: A frozen body slam. May inflict frostbite.
 additional_effects:
-  - { effect: freeze, chance: 10 }
+  - { effect: frostbite, chance: 10 }
 flags: [contact]

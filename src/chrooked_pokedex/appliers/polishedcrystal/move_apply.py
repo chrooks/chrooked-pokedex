@@ -43,7 +43,7 @@ _EFFECT_BY_SHAPE = {
     ("hit", None): "EFFECT_NORMAL_HIT",
     ("hit", "flinch"): "EFFECT_FLINCH_HIT",
     ("hit", "burn"): "EFFECT_BURN_HIT",
-    ("hit", "freeze"): "EFFECT_FREEZE_HIT",
+    ("hit", "frostbite"): "EFFECT_FREEZE_HIT",
     ("hit", "paralyze"): "EFFECT_PARALYZE_HIT",
     ("hit", "poison"): "EFFECT_POISON_HIT",
     ("hit", "def_minus_1"): "EFFECT_DEFENSE_DOWN_HIT",

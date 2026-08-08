@@ -7,6 +7,8 @@ them engine-neutrally end to end: read from the fork, write YAML, load back, ren
 
 from pathlib import Path
 
+import pytest
+
 from chrooked_pokedex.appliers.pokeemerald.creation import _move_entry
 from chrooked_pokedex.appliers.pokeemerald.resolution import ResolutionMap
 from chrooked_pokedex.model import Ruleset
@@ -139,6 +141,27 @@ def test_loader_rejects_unknown_flag(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     with pytest.raises(ValueError, match="unknown flag"):
+        Ruleset.load(root)
+
+
+@pytest.mark.unit
+def test_loader_accepts_and_rejects_target(tmp_path: Path) -> None:
+    root = tmp_path / "ruleset"
+    (root / "moves").mkdir(parents=True)
+    (root / "moves" / "x.yaml").write_text(
+        "name: X\nchrooked_id: x\naka: { pokeemerald: MOVE_X }\ntype: Fire\n"
+        "category: physical\ntarget: both\n",
+        encoding="utf-8",
+    )
+    rs = Ruleset.load(root)
+    assert rs.moves["x"].target == "both"
+
+    (root / "moves" / "x.yaml").write_text(
+        "name: X\nchrooked_id: x\naka: { pokeemerald: MOVE_X }\ntype: Fire\n"
+        "category: physical\ntarget: garbage\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="unknown target"):
         Ruleset.load(root)
 
 
