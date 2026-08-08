@@ -44,7 +44,7 @@ TRIGGERS: frozenset[str] = frozenset(
 )
 
 # What a behavior spec attaches to.
-APPLIES_TO: frozenset[str] = frozenset({"ability", "move"})
+APPLIES_TO: frozenset[str] = frozenset({"ability", "move", "status"})
 
 
 @dataclass(frozen=True)

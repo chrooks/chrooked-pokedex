@@ -37,7 +37,7 @@ end
 
 class PokeBattle_Battler
   attr_accessor :ability, :hp, :totalhp, :attack, :spatk, :turncount, :effects,
-                :battle, :index, :moves, :lastMoveUsed, :damagestate, :log
+                :battle, :index, :moves, :lastMoveUsed, :damagestate, :log, :status
   def initialize(ability, battle = nil)
     @ability = ability; @hp = 50; @totalhp = 100; @attack = 100; @spatk = 200
     @turncount = 0; @effects = {}; @battle = battle; @index = 0; @moves = []
@@ -69,6 +69,18 @@ class PokeBattle_Battler
   def pbAbilitiesOnSwitchIn(*a, **kw); end
   def pbSpeed(*a); 100; end
   def pbUseMove(choice, *a, **kw); end
+  def crested; nil; end
+  def pbReduceHP(amount, *a, **kw); @log << [:chip, amount]; @hp -= amount; end
+  def pbFaint(*a); end
+  def pbContinueStatus(showAnim = true); @log << [:continue, @status]; end
+  def pbCureStatus(showMessage = true); @log << [:cure, @status]; @status = nil; end
+  def hasType?(t); types.include?(t); end
+  # The vanilla body our turn-skip prepend wraps. Returns :acted so a test can
+  # tell "the move went through" from "the turn was cancelled".
+  def pbTryUseMove(choice, basemove, flags = {})
+    @log << [:tried, @battle.state.effects[:NeverMeltIce]]
+    :acted
+  end
 end
 
 class PokeBattle_Battle
@@ -76,12 +88,18 @@ class PokeBattle_Battle
   def initialize; @battlers = []; @foes = []; @rand_value = 0; end
   def pbAnySideAllFainted?; false; end
   def pbRandom(x); @rand_value; end
+  def pbCommonAnimation(*a); end
   def pbShowAbilityBox(*a, **kw); end
   def pbHideAbilityBox(*a, **kw); end
-  def pbDisplay(*a); end
+  attr_accessor :shown
+  def pbDisplay(*a); (@shown ||= []) << a[0]; end
   def pbEndOfRoundPhase(*a, **kw); end
   def pbCanChooseMove?(idxPokemon, idxMove, *a, **kw); true; end
   def pbWeather(moveuser); :RAINDANCE; end
+  # state.effects carries the Nevermelting Hail flag frostbite checks; the
+  # frostbite handlers no-op while it is genuinely set, so vanilla keeps that case.
+  def state; @state ||= Struct.new(:effects).new({}); end
+  def magicGuardAbilities; [:MAGICGUARD]; end
 end
 
 class PokeBattle_Move
@@ -336,6 +354,43 @@ def notdeer.pokemon; StubSpecies.new(:KANGASKHAN); end
 def notdeer.form; 0; end
 check(fails, "seasons edge non-seasonal user stays normal", se_move.pbType(notdeer), :NORMAL)
 check(fails, "other move unaffected", PokeBattle_Move.new(:TACKLE, type: :NORMAL).pbType(se), :NORMAL)
+
+# --- frostbite: chip, turn-skip removal, Fire-move thaw --------------------
+fb = PokeBattle_Battler.new(:NONE, battle)
+fb.status = :FROZEN
+CHROOKED_STATUS_TURN_END[:FROZEN].call(fb, battle)
+check(fails, "frostbite chips 1/16", fb.log.include?([:chip, 6]), true)
+check(fails, "frostbite announces itself", battle.shown.to_a.any? { |m| m.include?("frostbite") }, true)
+
+mg = PokeBattle_Battler.new(:MAGICGUARD, battle)
+mg.status = :FROZEN
+CHROOKED_STATUS_TURN_END[:FROZEN].call(mg, battle)
+check(fails, "magic guard takes no chip", mg.log.any? { |e| e[0] == :chip }, false)
+
+# While Nevermelting Hail is really on, vanilla already chipped - ours must not.
+battle.state.effects[:NeverMeltIce] = true
+nm = PokeBattle_Battler.new(:NONE, battle)
+nm.status = :FROZEN
+CHROOKED_STATUS_TURN_END[:FROZEN].call(nm, battle)
+check(fails, "no double chip under nevermelting hail", nm.log.any? { |e| e[0] == :chip }, false)
+battle.state.effects[:NeverMeltIce] = false
+
+# The turn-skip block is guarded by !NeverMeltIce, so the vanilla body must see
+# the flag ON - and the flag must be restored the moment the call returns.
+act = PokeBattle_Battler.new(:NONE, battle)
+act.status = :FROZEN
+plain = PokeBattle_Move.new(:TACKLE)
+check(fails, "frostbitten mon still acts", act.pbTryUseMove(nil, plain), :acted)
+check(fails, "turn-skip block sees the flag on", act.log.include?([:tried, true]), true)
+check(fails, "flag restored after the call", battle.state.effects[:NeverMeltIce], false)
+
+thaw = PokeBattle_Battler.new(:NONE, battle)
+thaw.status = :FROZEN
+fire = PokeBattle_Move.new(:FLAMEWHEEL, type: :FIRE)
+def fire.canThawUser?; true; end
+def fire.name; "Flame Wheel"; end
+thaw.pbTryUseMove(nil, fire)
+check(fails, "fire move thaws the frostbite", thaw.log.include?([:cure, :FROZEN]), true)
 
 fails.each { |f| puts "FAIL #{f}" }
 raise "#{fails.size} failures" unless fails.empty?

@@ -22,14 +22,21 @@ class PokeBattle_Battler; end
 class PokeBattle_Battle; end
 Dir[File.join(ARGV[0], "chrooked_*.rb")].sort.each { |f| eval(File.read(f), TOPLEVEL_BINDING) }
 
-Battler = Struct.new(:ability, :hp, :totalhp, :attack, :spatk, :types, :airborne, :damagestate) do
+Battler = Struct.new(:ability, :hp, :totalhp, :attack, :spatk, :types, :airborne, :damagestate, :status) do
   def hasType?(t); types.include?(t); end
   def isAirborne?; airborne; end
+  # Rejuv's per-Pokemon Crest item. Only Suicune's matters here (it exempts the
+  # holder from the status penalties), so the stub reports "no crest".
+  def crested; nil; end
 end
-Battle = Struct.new(:fe, :ov, :weather) do
+# state.effects carries the Nevermelting Hail flag the frostbite lambdas check.
+BattleState = Struct.new(:effects)
+Battle = Struct.new(:fe, :ov, :weather, :state) do
   def FE; fe; end
   def OV; ov; end
   def pbWeather(u); weather; end
+  def state; self[:state] || BattleState.new({}); end
+  def magicGuardAbilities; [:MAGICGUARD]; end
 end
 DS = Struct.new(:typemod)
 TM = Struct.new(:se) do
@@ -39,17 +46,23 @@ end
 def mv(sym, type: :NORMAL, flags: [], cat: :physical, battle: nil)
   m = PokeBattle_Move.new
   m.move = sym; m.type = type; m.flags = flags; m.basedamage = 80; m.cat = cat
-  m.battle = battle || Battle.new(nil, nil, 0)
+  m.battle = battle || Battle.new(nil, nil, 0, BattleState.new({}))
   m
 end
 
 atk = ->(ab, **kw) {
   Battler.new(ab, kw[:hp] || 100, 100, kw[:atk] || 100, kw[:spa] || 50,
-              kw[:types] || [:NORMAL], kw[:air] || false, DS.new(TM.new(false)))
+              kw[:types] || [:NORMAL], kw[:air] || false, DS.new(TM.new(false)), kw[:status])
 }
 defender = ->(ab, se) { Battler.new(ab, 100, 100, 0, 0, [], false, DS.new(TM.new(se))) }
 
 checks = {
+  # Frostbite: special damage halved, physical untouched, Guts exempt. The
+  # attacker's status drives it, not its ability — so :NONE is the ability here.
+  "frostbite special" => [mv(:X, cat: :special).pbCalcDamage(atk.(:NONE, status: :FROZEN), atk.(:NONE)), 50],
+  "frostbite physical" => [mv(:X, cat: :physical).pbCalcDamage(atk.(:NONE, status: :FROZEN), atk.(:NONE)), 100],
+  "frostbite guts special" => [mv(:X, cat: :special).pbCalcDamage(atk.(:GUTS, status: :FROZEN), atk.(:NONE)), 100],
+  "frostbite unstatused" => [mv(:X, cat: :special).pbCalcDamage(atk.(:NONE, status: nil), atk.(:NONE)), 100],
   "bloom grass" => [mv(:X, type: :GRASS).pbCalcDamage(atk.(:BLOOM), atk.(:NONE)), 150],
   "bloom other" => [mv(:X, type: :FIRE).pbCalcDamage(atk.(:BLOOM), atk.(:NONE)), 100],
   "cryomancer ice" => [mv(:X, type: :ICE).pbCalcDamage(atk.(:CRYOMANCER), atk.(:NONE)), 150],

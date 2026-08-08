@@ -29,6 +29,13 @@ CHROOKED_WHEN_HIT = {}
 CHROOKED_SWITCH_IN = {}
 # ability => ->(battler, battle) — end of round while on the field
 CHROOKED_TURN_END = {}
+# attacker status Symbol => ->(move, attacker, opponent) { Float multiplier }
+# The status-keyed twin of CHROOKED_DAMAGE_MODS, for a penalty carried by a
+# status condition rather than an ability.
+CHROOKED_STATUS_DAMAGE_MODS = {}
+# status Symbol => ->(battler, battle) — end-of-round tick for a status condition,
+# the status-keyed twin of CHROOKED_TURN_END.
+CHROOKED_STATUS_TURN_END = {}
 # ability => ->(battler) { Float multiplier } — effective Speed
 CHROOKED_SPEED_MODS = {}
 # ability => ->(move, attacker) { Integer priority delta }
@@ -145,6 +152,11 @@ module Chrooked
     mult = 1.0
     atk_mod = CHROOKED_DAMAGE_MODS[attacker.ability]
     mult *= atk_mod.call(move, attacker, opponent) if atk_mod
+    # Status-keyed rider — a property of the attacker's status condition, not its
+    # ability (frostbite halving special damage the way burn halves physical).
+    # Attacker-side like the ability mod above, so Mold Breaker never suppresses it.
+    status_mod = attacker.status && CHROOKED_STATUS_DAMAGE_MODS[attacker.status]
+    mult *= status_mod.call(move, attacker, opponent) if status_mod
     # Move-keyed damage rider — a property of the move, so it rides with the
     # attacker side (never suppressed by the target's Mold Breaker).
     move_mod = CHROOKED_MOVE_DAMAGE_MODS[move.move]
@@ -365,6 +377,8 @@ module ChrookedBattleHooks
       next if !battler || battler.isFainted?
       mod = CHROOKED_TURN_END[battler.ability]
       mod&.call(battler, self)
+      status_mod = battler.status && CHROOKED_STATUS_TURN_END[battler.status]
+      status_mod&.call(battler, self)
     end
     ret
   end

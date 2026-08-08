@@ -48,6 +48,10 @@ def triage(
             note = "move mechanic — map to an existing Rejuv :function code (deferred)"
             bucket = BUCKET_FUNCTION_CODE
             kind = "move"
+        elif behavior.applies_to == "status":
+            note = "status mechanic — needs a patch/Mods battle-method override"
+            bucket = BUCKET_CUSTOM_CODE
+            kind = "status"
         elif resolution.ability(behavior.name) is not None:
             note = "Rejuv implements this ability natively; only text/assignment needed"
             bucket = BUCKET_DATA_ONLY

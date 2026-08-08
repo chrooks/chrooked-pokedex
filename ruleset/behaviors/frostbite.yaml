@@ -1,0 +1,51 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the status itself.
+name: Frostbite
+chrooked_id: frostbite
+applies_to: status
+aka: { rejuv: FROZEN }
+effects:
+  - summary: "Frostbite halves the holder's special damage, the way burn halves physical."
+    trigger: damage-calc
+    when: "the holder is frostbitten and uses a special move"
+    effect: "multiply the outgoing damage by 0.5, unless the holder's ability is Guts"
+  - summary: "Frostbite chips the holder each turn, matching burn exactly."
+    trigger: turn-end
+    when: "the holder is frostbitten and its ability is not in the Magic Guard family"
+    effect: "deal 1/16 of the holder's maximum HP"
+  - summary: "Frostbite never costs the holder its turn — this is what separates it from freeze."
+    trigger: turn-order
+    when: "a frostbitten Pokemon tries to act"
+    effect: "let the move proceed; no turn-skip and no random thaw roll"
+  - summary: "A Fire move the holder uses clears the frostbite."
+    trigger: on-hit
+    when: "the frostbitten holder uses a move that can thaw its user"
+    effect: "cure the status before the move resolves"
+test_cases:
+  - given: "a frostbitten Pokemon takes its turn"
+    expect: "it acts normally — it never loses the turn the way freeze made it"
+  - given: "a frostbitten Pokemon uses a special move"
+    expect: "the move deals half its normal damage"
+  - given: "a frostbitten Pokemon uses a physical move"
+    expect: "damage is unchanged — only the special side is penalized"
+  - given: "a frostbitten Pokemon with Guts uses a special move"
+    expect: "no damage penalty, mirroring how Guts cancels burn's physical penalty"
+  - given: "a frostbitten Pokemon ends its turn"
+    expect: "it loses 1/16 of its maximum HP, the same fraction burn deals"
+  - given: "a frostbitten Pokemon with a Magic Guard family ability ends its turn"
+    expect: "no chip damage"
+  - given: "a frostbitten Pokemon uses a Fire-type move"
+    expect: "the frostbite is cured"
+  - given: "an Ice-type Pokemon is hit by Cryofreeze"
+    expect: "nothing happens — Ice-types are immune to frostbite"
+notes:
+  - "This is a reskin, not a rename. The engine keeps its :FROZEN symbol; only behavior and text change. Renaming would touch 46 references across 15 script files plus healing items, battle clauses, the AI, and save compatibility for any currently-frozen Pokemon."
+  - "Freeze ceases to exist. Frostbite occupies its slot, which is why every freeze move now inflicts frostbite instead."
+  - "Rejuv ALREADY implements frostbite — it is gated behind the Nevermelting Hail/Snow weather state (state.effects[:NeverMeltIce]). The work is removing the gate, not writing the mechanic."
+  - "Rejuv's own gated chip is 1/8. This lowers it to 1/16 so it matches burn, per the Ruleset decision that frostbite mirrors burn."
+  - "Guts already grants its x1.5 Attack on any status, so only the damage-penalty exemption is new code."
+  - "The Suicune Crest is exempt from all three effects in Rejuv. Left exactly as found."
+engine_hints:
+  rejuv: "Three sites read state.effects[:NeverMeltIce] and must behave as if it were always on: Battler.rb ~5719 in pbTryUseMove (flag on => the turn-skip block is skipped), Battle_Move.rb ~1179 in pbCalcDamage (flag on => special attacks x0.5), Battle.rb ~6404 in pbEndOfRoundPhase (flag on => 1/8 chip; we use 1/16). All three sit inside very large methods, so chrooked_frostbite.rb does NOT redefine them: the damage penalty and the chip go through the CHROOKED_STATUS_DAMAGE_MODS / CHROOKED_STATUS_TURN_END registries added to the core, and the turn-skip is removed by prepending pbTryUseMove and flipping the flag on for the duration of that one call only (restored in an ensure). Each handler no-ops when the flag is genuinely set, so real Nevermelting Hail keeps vanilla behavior and nothing applies twice. Text lives in prepends of pbFreeze and pbContinueStatus in Battle_Effects.rb."
+  essentials: "Vanilla Essentials has no equivalent. Implement frostbite as its own status, or reskin FREEZE the same way: drop the turn-skip in pbTryUseMove, halve special damage in pbCalcDamage unless the attacker has Guts, and add a 1/16 end-of-round chip alongside the burn one."
