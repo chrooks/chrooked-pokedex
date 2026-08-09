@@ -1660,6 +1660,16 @@ textarea.mk-stage__redirect-input {
   font-size: var(--text-sm);
   padding: var(--space-1) var(--space-2);
   text-align: right;
+  /* The native spinner arrows sit on top of the value in a field this narrow,
+     hiding the level outright. Drop the arrows, keep type="number" so keyboard
+     stepping, min/max, and the numeric mobile keypad all still work. */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.mk-num::-webkit-outer-spin-button,
+.mk-num::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .mk-num:focus-visible {
   outline: 2px solid var(--chrome);
