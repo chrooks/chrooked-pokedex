@@ -600,6 +600,58 @@ textarea.mk-stage__redirect-input {
   flex-direction: column;
   gap: 1px;
 }
+/* The ladder overlay (LADDER toggle): the proposed list deals its rows into the
+   pacing rungs the band check enforces. Structure only — a hairline and a mono
+   readout, no new color job. Off by default; the groups still wrap the rows when
+   it is off, carrying no rung head and no extra spacing. */
+.mk-runggroup {
+  list-style: none;
+}
+.mk-runggroup__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.mk-learnset[data-ladder] .mk-runggroup + .mk-runggroup {
+  margin-top: var(--space-3);
+}
+.mk-rung {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-1);
+  padding: 0 var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+}
+.mk-rung__lv {
+  min-width: 7ch;
+  font-variant-numeric: tabular-nums;
+}
+.mk-rung__rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--line);
+}
+.mk-rung__bp {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+/* An empty rung is the point of the overlay, not a defect: the ladder shows the
+   author which pacing step has no move on it. Recede it rather than flag it. */
+.mk-rung[data-empty] {
+  opacity: 0.55;
+}
+.mk-rung[data-empty] .mk-rung__rule {
+  background: repeating-linear-gradient(
+    to right,
+    var(--line) 0 4px,
+    transparent 4px 8px
+  );
+}
 .mk-lrow {
   display: flex;
   align-items: center;

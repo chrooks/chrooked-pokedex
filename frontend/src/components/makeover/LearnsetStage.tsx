@@ -23,7 +23,12 @@ import {
   removedRows,
   removeRow,
 } from "../proposal/learnsetDraft";
-import { bandViolation, type LearnsetRubric } from "../../lib/learnsetBands";
+import {
+  bandViolation,
+  ladderRungs,
+  type LadderRung,
+  type LearnsetRubric,
+} from "../../lib/learnsetBands";
 import { typeSlug } from "../../lib/format";
 import { moveNameProps, type MoveMeta } from "../../lib/moveDisplay";
 import { StagePanel } from "./StagePanel";
@@ -124,6 +129,27 @@ export function LearnsetStage(props: Props) {
   const dropped = removedRows(entry.learnset, proposed);
 
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  // The ladder overlay: off by default — the list reads calm until the author
+  // asks to see the pacing structure the rows sit in.
+  const [ladderOn, setLadderOn] = useState(false);
+  const rungs = useMemo(() => ladderRungs(rubric), [rubric]);
+
+  // With the overlay on, rows are dealt into their rung so the ladder reads as
+  // structure rather than as a per-row annotation. A rung with no rows still
+  // renders — the gap IS the information. L0 rows sit above the ladder: they are
+  // on-evolution rewards and the bands never governed them.
+  const rungGroups: { rung: LadderRung | null; rows: typeof classified }[] =
+    ladderOn && rungs.length > 0 && classified.length > 0
+      ? [
+          { rung: null, rows: classified.filter(({ row }) => row.level === 0) },
+          ...rungs.map((rung) => ({
+            rung,
+            rows: classified.filter(
+              ({ row }) => row.level >= rung.levelMin && row.level <= rung.levelMax,
+            ),
+          })),
+        ].filter((group) => group.rung !== null || group.rows.length > 0)
+      : [{ rung: null, rows: classified }];
 
   function draftIndexOf(level: number, move: string): number {
     return proposed.findIndex((m) => m.level === level && m.move === move);
@@ -226,15 +252,28 @@ export function LearnsetStage(props: Props) {
       redirectRef={redirectRef}
       registerActions={registerActions}
       extraControl={
-        <button
-          type="button"
-          className="mk-btn mk-btn--ghost mono"
-          id="mk-learnset-new-move"
-          title="Author a new move to use in this learnset"
-          onClick={() => setMoveCreateOpen(true)}
-        >
-          ＋ new move
-        </button>
+        <>
+          <button
+            type="button"
+            className="mk-btn mk-btn--ghost mono"
+            id="mk-learnset-ladder-toggle"
+            aria-pressed={ladderOn}
+            disabled={rungs.length === 0}
+            title="Show the pacing-band rungs the rows sit on"
+            onClick={() => setLadderOn((on) => !on)}
+          >
+            {ladderOn ? "LADDER ON" : "LADDER"}
+          </button>
+          <button
+            type="button"
+            className="mk-btn mk-btn--ghost mono"
+            id="mk-learnset-new-move"
+            title="Author a new move to use in this learnset"
+            onClick={() => setMoveCreateOpen(true)}
+          >
+            ＋ new move
+          </button>
+        </>
       }
       applyAlternative={(alt, current) => applyAlternative(current, alt, moveOptions)}
       altLabel={(value) => (Array.isArray(value) ? `${value.length} moves` : String(value))}
@@ -265,9 +304,21 @@ export function LearnsetStage(props: Props) {
 
         <div className="mk-col">
           <p className="mk-col__head mono">proposed</p>
-          <ol className="mk-learnset" onKeyDown={handleListKey}>
+          <ol className="mk-learnset" data-ladder={ladderOn || undefined} onKeyDown={handleListKey}>
             {classified.length === 0 && <li className="mk-empty mono">no proposed moves</li>}
-            {classified.map(({ row, status }) => {
+            {rungGroups.map(({ rung, rows }) => (
+              <li key={rung ? `rung-${rung.levelMin}` : "rung-none"} className="mk-runggroup">
+                {rung !== null && (
+                  <p className="mk-rung mono" data-empty={rows.length === 0 || undefined}>
+                    <span className="mk-rung__lv">
+                      L{rung.levelMin}–{rung.levelMax}
+                    </span>
+                    <span className="mk-rung__rule" aria-hidden="true" />
+                    <span className="mk-rung__bp">{rungWindow(rung)}</span>
+                  </p>
+                )}
+                <ol className="mk-runggroup__rows">
+                  {rows.map(({ row, status }) => {
               const rowKey = `${row.level}-${row.move}`;
               const changed = status === "added";
               const violation = bandViolation(rubric, row.level, movePower.get(row.move) ?? null);
@@ -325,7 +376,10 @@ export function LearnsetStage(props: Props) {
                   )}
                 </li>
               );
-            })}
+                  })}
+                </ol>
+              </li>
+            ))}
           </ol>
           <AddRow
             moveOptions={moveOptions}
@@ -345,6 +399,15 @@ export function LearnsetStage(props: Props) {
       )}
     </StagePanel>
   );
+}
+
+/** A rung's BP window, spelled from the numbers rather than the band label —
+    the label is prose the flag reuses, the numbers are what the check enforces. */
+function rungWindow(rung: LadderRung): string {
+  if (rung.bpMin !== undefined && rung.bpMax !== undefined) return `${rung.bpMin}–${rung.bpMax}BP`;
+  if (rung.bpMax !== undefined) return `≤${rung.bpMax}BP`;
+  if (rung.bpMin !== undefined) return `${rung.bpMin}+BP`;
+  return rung.label;
 }
 
 interface AddRowProps {

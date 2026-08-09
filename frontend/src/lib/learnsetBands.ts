@@ -28,6 +28,43 @@ export function bandForLevel(rubric: LearnsetRubric | null, level: number): Rubr
   return null;
 }
 
+/** One rung of the ladder: the levels a band actually governs, plus its window. */
+export interface LadderRung {
+  levelMin: number;
+  levelMax: number;
+  /** The band's own label, as the violation flag words it. */
+  label: string;
+  /** The numeric BP window, rendered when the label alone hides it. */
+  bpMin?: number;
+  bpMax?: number;
+}
+
+/** The ladder as the checker sees it: one rung per band, level ranges disjoint.
+
+    The served bands OVERLAP on purpose (L1-12, L10-22, L18-32…) — the extra room
+    is slack for the suggester. `bandForLevel` takes the FIRST match, so the range
+    a band really governs starts after every earlier band's ceiling. Drawing the
+    raw ranges would show rungs the flags do not enforce; these are the enforced
+    ones. A band wholly shadowed by an earlier one is dropped. */
+export function ladderRungs(rubric: LearnsetRubric | null): LadderRung[] {
+  if (rubric === null) return [];
+  const rungs: LadderRung[] = [];
+  let covered = 0;
+  for (const band of rubric.bands) {
+    const levelMin = Math.max(band.level_min, covered + 1);
+    covered = Math.max(covered, band.level_max);
+    if (levelMin > band.level_max) continue;
+    rungs.push({
+      levelMin,
+      levelMax: band.level_max,
+      label: band.label,
+      bpMin: band.bp_min,
+      bpMax: band.bp_max,
+    });
+  }
+  return rungs;
+}
+
 /** A band-violation annotation for one proposal row, or null when the row is in
     band (or exempt). L0 rows are on-evolution rewards — exempt. Status/utility
     moves (no power) are exempt. The flagged case is the documented hard cap: a

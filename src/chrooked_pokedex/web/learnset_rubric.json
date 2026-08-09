@@ -2,7 +2,7 @@
   "version": 2,
   "note": "Single source of truth for BOTH band tables — tune bounds here. `bands`: level-range → BP pacing windows, consumed by the Makeover Workbench Signifier (GET /api/meta/learnset-rubric), the learnset-suggest rubric prompt, and its soft pacing warnings; L0 rows (on-evolution rewards) and status moves are exempt. `coverage_bands`: BP → band edges for the coverage matrix and ladder scripts (scripts/move_coverage.py derives MIN_LADDER_POWER, BAND_EDGES, and BAND_LABELS from it; labels must keep matching its BAND_CONVENTIONS keys). The two tables are deliberately separate mappings: recutting one does not recut the other.",
   "bands": [
-    { "level_min": 1, "level_max": 12, "bp_max": 50, "label": "≤60BP" },
+    { "level_min": 1, "level_max": 12, "bp_max": 50, "label": "≤50BP" },
     { "level_min": 10, "level_max": 22, "bp_max": 60, "label": "≤60BP" },
     { "level_min": 18, "level_max": 32, "bp_min": 50, "bp_max": 70, "label": "50-70BP" },
     { "level_min": 28, "level_max": 42, "bp_min": 70, "bp_max": 80, "label": "70-80BP" },

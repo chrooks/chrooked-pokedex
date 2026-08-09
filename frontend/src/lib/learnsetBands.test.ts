@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { bandForLevel, bandViolation, type LearnsetRubric } from "./learnsetBands";
+import {
+  bandForLevel,
+  bandViolation,
+  ladderRungs,
+  type LearnsetRubric,
+} from "./learnsetBands";
 
 const RUBRIC: LearnsetRubric = {
   version: 1,
@@ -20,6 +25,48 @@ describe("bandForLevel", () => {
   });
   it("returns null for a null rubric", () => {
     expect(bandForLevel(null, 8)).toBeNull();
+  });
+});
+
+describe("ladderRungs — the rungs the checker actually enforces", () => {
+  it("cuts overlapping bands down to the range each one governs", () => {
+    // The served rubric shingles: L1-12, L10-22, L18-32. First match wins, so
+    // the second band really starts at 13 and the third at 23.
+    const overlapping: LearnsetRubric = {
+      version: 2,
+      bands: [
+        { level_min: 1, level_max: 12, bp_max: 50, label: "≤50BP" },
+        { level_min: 10, level_max: 22, bp_max: 60, label: "≤60BP" },
+        { level_min: 18, level_max: 32, bp_min: 50, bp_max: 70, label: "50-70BP" },
+      ],
+    };
+    expect(ladderRungs(overlapping)).toEqual([
+      { levelMin: 1, levelMax: 12, label: "≤50BP", bpMin: undefined, bpMax: 50 },
+      { levelMin: 13, levelMax: 22, label: "≤60BP", bpMin: undefined, bpMax: 60 },
+      { levelMin: 23, levelMax: 32, label: "50-70BP", bpMin: 50, bpMax: 70 },
+    ]);
+  });
+
+  it("drops a band an earlier one fully shadows", () => {
+    const shadowed: LearnsetRubric = {
+      version: 2,
+      bands: [
+        { level_min: 1, level_max: 40, bp_max: 60, label: "≤60BP" },
+        { level_min: 10, level_max: 20, bp_max: 70, label: "never reached" },
+      ],
+    };
+    expect(ladderRungs(shadowed).map((r) => r.label)).toEqual(["≤60BP"]);
+  });
+
+  it("agrees with bandForLevel on every rung edge", () => {
+    for (const rung of ladderRungs(RUBRIC)) {
+      expect(bandForLevel(RUBRIC, rung.levelMin)?.label).toBe(rung.label);
+      expect(bandForLevel(RUBRIC, rung.levelMax)?.label).toBe(rung.label);
+    }
+  });
+
+  it("is empty with no rubric loaded", () => {
+    expect(ladderRungs(null)).toEqual([]);
   });
 });
 
