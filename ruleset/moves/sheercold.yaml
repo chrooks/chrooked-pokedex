@@ -1,0 +1,16 @@
+name: Sheer Cold
+chrooked_id: sheercold
+aka: { rejuv: SHEERCOLD }
+type: Ice
+category: special
+power: 100
+accuracy: 90
+pp: 5
+description: A blast of absolute cold. Super effective on Water types.
+# No longer an OHKO. The 10% frostbite is doing double duty: it mirrors
+# Freeze-Dry's own 10% status chance, AND it is what moves the engine off the
+# OHKO function code 0x070 onto 0x00C — the applier only rewrites :function when
+# an effect maps, so without this the move would keep every OHKO behavior
+# (level gate, Ice immunity, 20 accuracy for non-Ice users).
+additional_effects:
+  - { effect: frostbite, chance: 10 }

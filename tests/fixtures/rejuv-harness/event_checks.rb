@@ -26,7 +26,8 @@ class Typemod
 end
 
 module PBTypes
-  CHART = { [:STEEL, :DRAGON] => [1, 2], [:GROUND, :FLYING] => [0, 1] }
+  CHART = { [:STEEL, :DRAGON] => [1, 2], [:GROUND, :FLYING] => [0, 1],
+            [:ICE, :WATER] => [1, 2], [:ICE, :GROUND] => [2, 1] }
   def self.oneTypeEff(a, o); n, d = CHART.fetch([a, o], [1, 1]); Typemod.new(n, d); end
 end
 
@@ -314,6 +315,23 @@ check(fails, "excalibur vs dragon", tm.to_a, [2, 1])
 nondragon = PokeBattle_Battler.new(:NONE, battle)
 tm2 = PokeBattle_Move.new(:EXCALIBUR, type: :STEEL).pbTypeModifier(:STEEL, exc_user, nondragon)
 check(fails, "excalibur vs nondragon", tm2.to_a, [1, 1])
+
+# sheer cold: forces 2x vs Water (ice chart 0.5 corrected), no longer an OHKO
+sc_user = PokeBattle_Battler.new(:NONE, battle)
+water = PokeBattle_Battler.new(:NONE, battle); water.types_list = [:WATER]
+tm_sc = PokeBattle_Move.new(:SHEERCOLD, type: :ICE).pbTypeModifier(:ICE, sc_user, water)
+check(fails, "sheer cold vs water", tm_sc.to_a, [2, 1])
+# Water/Ground: Water corrected to 2x, Ground already 2x => 4x overall
+waterground = PokeBattle_Battler.new(:NONE, battle)
+waterground.types_list = [:WATER, :GROUND]
+tm_sc2 = PokeBattle_Move.new(:SHEERCOLD, type: :ICE).pbTypeModifier(:ICE, sc_user, waterground)
+check(fails, "sheer cold vs water/ground", tm_sc2.to_a, [4, 1])
+nonwater = PokeBattle_Battler.new(:NONE, battle)
+tm_sc3 = PokeBattle_Move.new(:SHEERCOLD, type: :ICE).pbTypeModifier(:ICE, sc_user, nonwater)
+check(fails, "sheer cold vs nonwater", tm_sc3.to_a, [1, 1])
+# Freeze-Dry keeps its own native doubling; ours must not leak onto other moves.
+tm_sc4 = PokeBattle_Move.new(:ICEBEAM, type: :ICE).pbTypeModifier(:ICE, sc_user, water)
+check(fails, "other ice moves still resisted by water", tm_sc4.to_a, [1, 2])
 
 # bonebreaker: immune ground-vs-flying floored to neutral for bone moves
 bb = PokeBattle_Battler.new(:BONEBREAKER, battle)

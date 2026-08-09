@@ -1,0 +1,40 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the move itself.
+name: Sheer Cold
+chrooked_id: sheercold
+applies_to: move
+aka: { rejuv: SHEERCOLD }
+effects:
+  - summary: "Always counts as super effective against Water-type targets."
+    trigger: damage-calc
+    when: "this move hits a target whose typing includes Water"
+    effect: >-
+      force the move to be super effective (an extra x2) against the Water-type
+      target, regardless of the move's normal type effectiveness against Water
+test_cases:
+  - given: "Sheer Cold (an Ice move) hits a pure Water-type target"
+    expect: "damage uses a super-effective multiplier, not Ice-vs-Water's normal x0.5"
+  - given: "Sheer Cold hits a Water/Ground target"
+    expect: "the Water component lands at x2 and the Ground component stays x2, so the hit is x4"
+  - given: "Sheer Cold hits a non-Water target (e.g. a Grass type)"
+    expect: "normal Ice effectiveness only; no extra multiplier"
+  - given: "Sheer Cold hits an Ice-type target"
+    expect: "it connects for normal resisted damage — the old OHKO immunity is gone with the OHKO"
+notes:
+  - "Sheer Cold is no longer a one-hit KO. It is a 100 BP special Ice move that copies Freeze-Dry's Water matchup — the same shape as Excalibur, which forces x2 on Dragon."
+  - "Ice is normally x0.5 into Water, so without this the move would be resisted by exactly the types it is meant to beat."
+  - "Dropping the OHKO removes the whole OHKO package at once, because all of it lives in the engine's OHKO move class: the fails-if-target-is-higher-level gate, the flat Ice-type immunity, the Sturdy block, and the 20-accuracy penalty for non-Ice users. None of those survive the funccode change, which is intended."
+  - "The 10% frostbite mirrors Freeze-Dry's own 10% status chance. It is also load-bearing: it is what moves the move off the OHKO function code. See ruleset/moves/sheercold.yaml."
+engine_hints:
+  rejuv: >-
+    Copy of chrooked_excalibur.rb with Dragon swapped for Water:
+    CHROOKED_MOVE_TYPEMOD[:SHEERCOLD] multiplies the Water component by
+    (2 / chart) so it lands at exactly x2, leaving every other type component
+    alone. Rejuv hardcodes the same trick for Freeze-Dry at Battle_Move.rb ~542
+    (`mod = Typemod.double if opptype == :WATER`), but that check is keyed on the
+    move symbol, so a second move cannot reuse it — hence the registry entry.
+    The data layer's 10% frostbite moves :function from 0x070 (OHKO) to 0x00C.
+  essentials: >-
+    Give the move a normal damaging function code and, in the type-effectiveness
+    hook, force the Water component to x2 the way Freeze-Dry does natively.
