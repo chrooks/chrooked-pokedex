@@ -1,6 +1,13 @@
 name: Eiscue Ice
 chrooked_id: eiscueice
-aka: { pokeemerald: SPECIES_EISCUE_ICE }
+# The rejuv hint is explicit because suffix matching is ambiguous here: this id
+# ends in "ice", which is contained by BOTH of Rejuv's form names, "Ice Face" and
+# "Noice Face". The applier blocks an ambiguous match rather than guess, so
+# without this the species silently applied nothing.
+aka: { pokeemerald: SPECIES_EISCUE_ICE, rejuv: "EISCUE::Ice Face" }
+abilities:
+  primary: Ice Face
+  secondary: Frost Body
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Powder Snow }

@@ -2,6 +2,8 @@ name: Cryogonal
 chrooked_id: cryogonal
 aka: { pokeemerald: SPECIES_CRYOGONAL }
 abilities:
+  primary: Levitate
+  secondary: Frost Body
   hidden: Whiteout
 learnset:
   - { level: 1, move: Bind }

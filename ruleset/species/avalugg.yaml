@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_AVALUGG }
 abilities:
   primary: Whiteout
   secondary: Permafrost
+  hidden: Frost Body
 stats: { def: 164, spd: 66 }
 learnset:
   - { level: 0, move: Body Slam }

@@ -3,7 +3,9 @@ chrooked_id: beartic
 aka: { pokeemerald: SPECIES_BEARTIC }
 types: [Ice, Fighting]
 abilities:
+  primary: Snow Cloak
   secondary: Slush Rush
+  hidden: Frost Body
 stats: { spe: 70 }
 learnset:
   - { level: 0, move: Hammer Arm }

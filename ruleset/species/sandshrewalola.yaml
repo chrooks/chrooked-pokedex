@@ -3,6 +3,7 @@ chrooked_id: sandshrewalola
 aka: { dex: 27 }
 abilities:
   primary: Snow Cloak
+  secondary: Frost Body
   hidden: Bioturbation
 learnset:
   - { level: 1, move: Defense Curl }

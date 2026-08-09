@@ -2,7 +2,9 @@ name: Snorunt
 chrooked_id: snorunt
 aka: { pokeemerald: SPECIES_SNORUNT }
 abilities:
+  primary: Frost Body
   secondary: Ice Body
+  hidden: Moody
 learnset:
   - { level: 1, move: Headbutt }
   - { level: 1, move: Powder Snow }

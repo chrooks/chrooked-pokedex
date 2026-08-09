@@ -1,0 +1,14 @@
+name: Palossand Icy Aevian
+chrooked_id: palossandicyaevian
+# Rejuv-only content: the Aevian regional forms do not exist in the base dex, so
+# this entry carries an explicit KEY::Form hint rather than relying on suffix
+# matching. Other engines have no such species and will report it blocked, which
+# is honest — it is a Rejuv form and nothing else can hold it.
+#
+# Rejuv set up this parallel itself: the Fiery Aevian form carries Flame Body,
+# so the Icy one carrying Frost Body completes the pattern. The form ships with
+# a single ability (Ice Body), leaving the second slot free.
+aka: { rejuv: "PALOSSAND::Icy Aevian Form" }
+abilities:
+  primary: Ice Body
+  secondary: Frost Body

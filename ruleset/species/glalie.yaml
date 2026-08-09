@@ -3,7 +3,9 @@ chrooked_id: glalie
 aka: { pokeemerald: SPECIES_GLALIE }
 types: [Ice, Dark]
 abilities:
+  primary: Frost Body
   secondary: Ice Body
+  hidden: Moody
 stats: { hp: 90, atk: 105, def: 90, spa: 85, spd: 80, spe: 80 }
 learnset:
   - { level: 0, move: Freeze-Dry }

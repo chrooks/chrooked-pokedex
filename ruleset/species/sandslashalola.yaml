@@ -3,6 +3,7 @@ chrooked_id: sandslashalola
 aka: { pokeemerald: SPECIES_SANDSLASH_ALOLA }
 abilities:
   primary: Snow Cloak
+  secondary: Frost Body
   hidden: Bioturbation
 learnset:
   - { level: 0, move: Icicle Spear }

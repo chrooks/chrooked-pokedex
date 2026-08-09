@@ -2,7 +2,9 @@ name: Cubchoo
 chrooked_id: cubchoo
 aka: { pokeemerald: SPECIES_CUBCHOO }
 abilities:
+  primary: Snow Cloak
   secondary: Slush Rush
+  hidden: Frost Body
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Powder Snow }

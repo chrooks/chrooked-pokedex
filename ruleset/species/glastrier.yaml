@@ -2,7 +2,9 @@ name: Glastrier
 chrooked_id: glastrier
 aka: { pokeemerald: SPECIES_GLASTRIER }
 abilities:
+  primary: Chilling Neigh
   secondary: Permafrost
+  hidden: Frost Body
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }

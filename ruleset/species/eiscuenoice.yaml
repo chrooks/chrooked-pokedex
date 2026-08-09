@@ -1,6 +1,9 @@
 name: Eiscue Noice
 chrooked_id: eiscuenoice
 aka: { pokeemerald: SPECIES_EISCUE_NOICE }
+abilities:
+  primary: Ice Face
+  secondary: Frost Body
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Powder Snow }
