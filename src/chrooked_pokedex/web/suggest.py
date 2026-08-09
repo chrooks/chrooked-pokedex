@@ -367,7 +367,9 @@ def _build_rubric() -> str:
         "help an underserved one.\n"
         "- Avoid redundancy: don't suggest an ability the species already has.\n"
         "Propose the single best ability for the target slot in `draft`, a "
-        "per-slot reason in `rationale`, and up to three runner-up abilities (each "
+        "per-slot reason in `rationale` — EVERY slot you propose gets its own "
+        "reason, and a reason is a sentence explaining the pick, never the "
+        "ability name repeated back — and up to three runner-up abilities (each "
         "with a one-line reason) in `alternatives`. Every ability name you emit "
         "must appear verbatim in the ability pool."
     )
