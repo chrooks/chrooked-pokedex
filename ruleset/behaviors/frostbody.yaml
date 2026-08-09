@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Frost Body
+chrooked_id: frostbody
+applies_to: ability
+aka: {  }
+effects:
+  - summary: "When struck by a contact move, may cause frostbite in the attacker."
+    trigger: status-apply
+    when: "an opposing Pokemon hits this Pokemon with a damaging contact move and this Pokemon survives the hit"
+    effect: "30% chance to inflict frostbite on the attacker"
+  - summary: "When this Pokemon lands a contact move, may cause frostbite in the target."
+    trigger: status-apply
+    when: "this Pokemon hits an opponent with a damaging contact move and the target survives the hit"
+    effect: "30% chance to inflict frostbite on the target"
+test_cases:
+  - given: "a Frost Body Pokemon is hit by an opponent's Tackle (contact) and survives"
+    expect: "30% of the time, the attacker becomes frostbitten"
+  - given: "a Frost Body Pokemon uses Tackle (contact) and the target survives"
+    expect: "30% of the time, the target becomes frostbitten"
+  - given: "a Frost Body Pokemon is hit by Water Gun (non-contact)"
+    expect: "the attacker is never frostbitten by Frost Body (no contact = no trigger)"
+  - given: "a Frost Body Pokemon makes contact with an Ice-type"
+    expect: "nothing happens — Ice-types cannot be frostbitten"
+notes:
+  - "The Ice member of the Static / Flame Body / Poison Point contact-status family, built on the Venomous shape rather than the vanilla one."
+  - "Bidirectional means BOTH directions of contact: frostbites attackers who touch it (defensive, like Flame Body) AND targets it touches (offensive, like Poison Touch). Each direction is an independent 30% roll. Mirrors Venomous exactly — see ruleset/behaviors/venomous.yaml."
+  - "Each direction requires the hit to make contact and the receiving battler to be frostbite-able. Ice-types are immune, which the engine's own can-be-frozen check already enforces."
+  - "Inflicts frostbite, which since the freeze rework is the reskin of the engine's frozen status — see ruleset/behaviors/frostbite.yaml. It does NOT skip the victim's turn; it halves their special damage and chips them 1/16 per turn."
+engine_hints:
+  rejuv: "Copy of chrooked_venomous.rb with the poison calls swapped for the freeze ones: CHROOKED_ON_DEAL and CHROOKED_WHEN_HIT entries keyed :FROSTBODY, gated on makesContact? plus pbCanFreeze?, 30% via battle.pbRandom(100), applying pbFreeze. pbFreeze already prints the frostbite wording through the chrooked_frostbite.rb text prepend, so no message is passed here."
+  essentials: "Combine the Flame Body and Poison Touch handlers on one ability: in the on-being-hit contact hook and the on-dealing-contact hook, roll 30% each to apply the frostbite status to the other battler when the move makes contact."

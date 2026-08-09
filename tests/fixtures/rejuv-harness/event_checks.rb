@@ -56,6 +56,10 @@ class PokeBattle_Battler
   def pbCanBurn?(a, m, **kw); true; end
   def pbPoison(a, *rest); @log << [:poison]; end
   def pbBurn(a, *rest); @log << [:burn]; end
+  # Frostbite reuses the engine's frozen slot; Ice-types are immune, which is the
+  # gate Frost Body relies on rather than checking types itself.
+  def pbCanFreeze?(a, m, **kw); !types.include?(:ICE); end
+  def pbFreeze(message: nil); @log << [:frostbite]; end
   def pbOpposing1; @battle.foes[0]; end
   def pbOpposing2; @battle.foes[1]; end
   def moldbroken; false; end
@@ -181,6 +185,29 @@ vn = PokeBattle_Battler.new(:VENOMOUS, battle)
 tgt = PokeBattle_Battler.new(:NONE, battle)
 vn.pbEffectsOnDealingDamage(PokeBattle_Move.new(:TACKLE, flags: [:contact]), vn, tgt, 30)
 check(fails, "venomous out poison", tgt.log, [[:poison]])
+
+# frost body: the Ice member of the same family, both directions, Ice-types immune
+fbody = PokeBattle_Battler.new(:FROSTBODY, battle)
+fbtgt = PokeBattle_Battler.new(:NONE, battle)
+contact = PokeBattle_Move.new(:TACKLE, flags: [:contact])
+fbody.pbEffectsOnDealingDamage(contact, fbody, fbtgt, 30)
+check(fails, "frost body out frostbite", fbtgt.log, [[:frostbite]])
+
+# Defensive direction goes through the same hook, keyed on the TARGET's ability.
+fbody2 = PokeBattle_Battler.new(:FROSTBODY, battle)
+hitter2 = PokeBattle_Battler.new(:NONE, battle)
+hitter2.pbEffectsOnDealingDamage(contact, hitter2, fbody2, 30)
+check(fails, "frost body in frostbite", hitter2.log, [[:frostbite]])
+
+icetgt = PokeBattle_Battler.new(:NONE, battle)
+icetgt.types_list = [:ICE]
+fbody.pbEffectsOnDealingDamage(contact, fbody, icetgt, 30)
+check(fails, "ice type immune to frost body", icetgt.log, [])
+
+nocontact = PokeBattle_Move.new(:WATERGUN, type: :WATER)
+farr = PokeBattle_Battler.new(:NONE, battle)
+fbody.pbEffectsOnDealingDamage(nocontact, fbody, farr, 30)
+check(fails, "non-contact move never triggers frost body", farr.log, [])
 py = PokeBattle_Battler.new(:PYRE, battle)
 tgt2 = PokeBattle_Battler.new(:NONE, battle)
 py.pbEffectsOnDealingDamage(PokeBattle_Move.new(:SHADOWBALL, type: :GHOST), py, tgt2, 30)

@@ -31,3 +31,4 @@ learnset:
   - { level: 58, move: Blizzard }
   - { level: 61, move: Netherstorm }
   - { level: 68, move: Cryoblast }
+evolution: { from: Snorunt, method: { item: DAWNSTONE } }

@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_GLALIE }
 types: [Ice, Dark]
 abilities:
   secondary: Ice Body
-stats: { atk: 100 }
+stats: { hp: 90, atk: 105, def: 90, spa: 85, spd: 80, spe: 80 }
 learnset:
   - { level: 0, move: Freeze-Dry }
   - { level: 1, move: Leer }
@@ -31,3 +31,4 @@ learnset:
   - { level: 59, move: Backstab }
   - { level: 61, move: Havoc }
   - { level: 68, move: Cryoblast }
+evolution: { from: Snorunt, method: { level: 32 } }
