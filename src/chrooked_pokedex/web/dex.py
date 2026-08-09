@@ -340,6 +340,12 @@ def build_abilities(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
         _merge_ability(None, ruleset.abilities[chrooked_id])
         for chrooked_id in created_ids
     )
+    # `custom` marks net-new abilities (a merely rebalanced canon ability is NOT
+    # custom), mirroring `build_move_pool` — the suggest pool tags them so the
+    # model can see them among ~300 canon names.
+    entries = [
+        {**entry, "custom": entry["chrooked_id"] in created_ids} for entry in entries
+    ]
     return sorted(entries, key=lambda e: e["name"])
 
 

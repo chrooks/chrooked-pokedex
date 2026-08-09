@@ -283,15 +283,26 @@ def test_context_carries_pool_and_species_data(ruleset_dir: Path, tmp_path: Path
 
 def test_build_ability_pool_trims_and_sorts() -> None:
     abilities = [
-        {"name": "Zephyr", "description": "z"},
+        {"name": "Zephyr", "description": "z", "custom": True},
         {"name": "Adrenaline", "description": "a", "extra": "ignored"},
         {"name": "", "description": "dropped — no name"},
     ]
     pool = suggestmod.build_ability_pool(abilities)
     assert pool == [
-        {"name": "Adrenaline", "description": "a"},
-        {"name": "Zephyr", "description": "z"},
+        {"name": "Adrenaline", "description": "a", "custom": False},
+        {"name": "Zephyr", "description": "z", "custom": True},
     ]
+
+
+def test_format_pool_tags_custom_abilities() -> None:
+    # A net-new ability is tagged so the model can see it among the canon names.
+    rendered = suggestmod._format_pool(
+        [
+            {"name": "Adrenaline", "description": "a", "custom": False},
+            {"name": "Zephyr", "description": "z", "custom": True},
+        ]
+    )
+    assert rendered == "- Adrenaline: a\n- Zephyr: z [CUSTOM]"
 
 
 # --------------------------------------------------------------------------- #

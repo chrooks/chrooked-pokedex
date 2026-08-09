@@ -245,7 +245,11 @@ def build_ability_pool(abilities: list[dict[str, Any]]) -> list[dict[str, str]]:
     Sorted by name for a deterministic, cache-stable prefix.
     """
     pool = [
-        {"name": entry["name"], "description": entry.get("description", "")}
+        {
+            "name": entry["name"],
+            "description": entry.get("description", ""),
+            "custom": bool(entry.get("custom")),
+        }
         for entry in abilities
         if entry.get("name")
     ]
@@ -257,9 +261,18 @@ def _pool_names(pool: list[dict[str, str]]) -> set[str]:
     return {entry["name"].strip().casefold() for entry in pool}
 
 
-def _format_pool(pool: list[dict[str, str]]) -> str:
-    """Render the ability pool as a compact, cache-stable text block."""
-    return "\n".join(f"- {entry['name']}: {entry['description']}" for entry in pool)
+def _format_pool(pool: list[dict[str, Any]]) -> str:
+    """Render the ability pool as a compact, cache-stable text block.
+
+    Net-new created abilities get a ``[CUSTOM]`` tag, same as the move pool: the
+    model has no training prior pulling toward them, so untagged they read as
+    noise among the canon names and never get picked.
+    """
+    return "\n".join(
+        f"- {entry['name']}: {entry['description']}"
+        f"{' [CUSTOM]' if entry.get('custom') else ''}"
+        for entry in pool
+    )
 
 
 def _format_learnset(learnset: list[dict[str, Any]]) -> str:
@@ -321,8 +334,27 @@ def _build_rubric() -> str:
         "new ability, and NEVER propose a MOVE. A move is not an ability: names "
         "like 'Nasty Plot', 'Swords Dance', or 'Recover' are MOVES and must never "
         "appear in an ability slot. Every value you emit for a slot must be an "
-        "ability that appears verbatim in the ability pool below. Score candidates "
-        "on:\n"
+        "ability that appears verbatim in the ability pool below.\n"
+        "FIRST, before scoring anything: state the species' IDENTITY in one clause "
+        "— what the creature IS, from its dex flavor, name etymology, real-world "
+        "inspiration, and signature traits — and, when the author gave a "
+        "direction, what that direction asks the species to become. Everything "
+        "below is scored against that identity. A pick that only fits the base "
+        "stats is a FAILED pick: the generic stat-shaped default (Sturdy on a "
+        "wall, a plain -orb/pinch ability on an attacker) is the answer to reject "
+        "unless it genuinely expresses the identity. Prefer the ability that "
+        "makes this species play unlike anything else with the same stat line.\n"
+        "Abilities tagged [CUSTOM] are bespoke to this game — invented for this "
+        "dex, never seen in the base games. Actively weigh them: when a [CUSTOM] "
+        "ability fits the identity as well as a canon one, prefer the [CUSTOM] "
+        "ability.\n"
+        "If NOTHING in the pool expresses the identity, still emit your closest "
+        "pick, and say plainly in that slot's rationale that no existing ability "
+        "captures it and a bespoke one would fit better — the author can create "
+        "one.\n"
+        "Score candidates on:\n"
+        "- Identity fit (WEIGHTED HIGHEST): the ability reads as this creature's "
+        "lore made mechanical, and honors the author's direction.\n"
         "- Type synergy: the ability boosts or interacts with the species' types.\n"
         "- Stat alignment: physical abilities for physical attackers, special for "
         "special, defensive for tanks (judge by the base stats).\n"

@@ -25,9 +25,18 @@ interface Props {
 
 type Phase = "idle" | "loading" | "ready" | "error";
 
-/** The direction string a picked option carries into the typing stage. */
-function optionDirection(option: LoreOption): string {
-  return `${option.role} — typing ${option.types.join("/")}`;
+/** The direction string a picked option carries into the typing stage.
+
+   Carries the WHOLE option — role, typing, flavor coverage, and the lore
+   rationale. The rationale is the only lore any later stage ever sees (stats,
+   abilities and learnset get name/types/stats/learnset plus this string), so
+   dropping it to a one-liner is what made those later picks read generic. */
+export function optionDirection(option: LoreOption): string {
+  const flavor = option.flavor_types?.length
+    ? ` Flavor coverage: ${option.flavor_types.join(", ")}.`
+    : "";
+  const why = option.rationale.trim() ? ` Why this fits: ${option.rationale.trim()}` : "";
+  return `${option.role} — typing ${option.types.join("/")}.${flavor}${why}`;
 }
 
 export function DirectionStage({

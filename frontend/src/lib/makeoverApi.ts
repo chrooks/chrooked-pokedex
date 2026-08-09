@@ -14,6 +14,8 @@ const postJson = <T,>(path: string, payload?: unknown): Promise<T> =>
 export interface LoreOption {
   types: string[];
   role: string;
+  /** 0-2 pool types that fit what the creature IS — its coverage moves. */
+  flavor_types?: string[];
   rationale: string;
 }
 
