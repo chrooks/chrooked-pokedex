@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import { TYPES } from "../lib/format";
 import { TypeChip } from "./TypeChip";
 import "./type-select.css";
@@ -42,8 +42,24 @@ export function TypeSelect({
   const options = allowNone ? [NONE, ...TYPES] : [...TYPES];
   const listboxId = useId();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
   const [open, setOpen] = useState(false);
+  const [flip, setFlip] = useState(false);
   const [active, setActive] = useState(() => Math.max(0, options.indexOf(value)));
+
+  // The panel opens rightward from the trigger, so a trigger near the right edge
+  // pushes half the types off screen. Measure once per open and right-align when
+  // it would overflow.
+  // ponytail: viewport-only check — a scrollable clipping ancestor would need
+  // the panel portalled out, do that if one ever appears.
+  useLayoutEffect(() => {
+    if (!open) {
+      setFlip(false);
+      return;
+    }
+    const rect = listRef.current?.getBoundingClientRect();
+    if (rect && rect.right > window.innerWidth) setFlip(true);
+  }, [open]);
 
   // Balanced columns: 18 types become 6×3, and adding "None" reflows to 7×3
   // rather than leaving one option alone in a fourth column.
@@ -114,7 +130,9 @@ export function TypeSelect({
 
       {open && (
         <ul
+          ref={listRef}
           className="type-select__list"
+          data-flip={flip || undefined}
           id={listboxId}
           role="listbox"
           aria-label={label}

@@ -54,6 +54,12 @@
   box-shadow: 0 12px 32px -8px oklch(0% 0 0 / 0.45);
 }
 
+/* Set by the component when the panel would run off the right edge. */
+.type-select__list[data-flip] {
+  left: auto;
+  right: 0;
+}
+
 .type-select__option {
   display: flex;
   align-items: center;
