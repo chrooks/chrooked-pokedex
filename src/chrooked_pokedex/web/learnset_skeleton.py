@@ -66,6 +66,28 @@ SIGNATURE_MOVES: frozenset[str] = frozenset({
     "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
     "blood moon", "revelation dance", "relic song",
 })
+
+
+def is_battle_gimmick(row: dict[str, Any]) -> bool:
+    """True for a Z-move or a Dynamax/G-Max move — never a level-up learnset row.
+
+    Dynamax moves all carry effect ``max_move``; Max Guard hides behind
+    ``protect``, so the name prefix catches it. Z-moves share no effect or flag —
+    their only tell in the pool row is 1 PP. Struggle, Sketch, and Revival
+    Blessing also carry 1 PP and ride along; none belongs in a generated
+    learnset either (add Revival Blessing by hand if a species ever wants it).
+
+    Applied once where the pool enters ``suggest_learnset``, so the prompt text,
+    the slot skeleton, and the draft validator all see the same trimmed pool.
+    """
+    if (row.get("effect") or "") == "max_move":
+        return True
+    if (row.get("move") or "").startswith(("Max ", "G-Max ")):
+        return True
+    pp = row.get("pp")
+    return isinstance(pp, int) and pp <= 1
+
+
 _GRANTED_RUNGS = 3
 _FLAVOR_RUNGS = 2
 _DIRECTION_RUNGS = 3  # a type the user's direction names gets a real ladder

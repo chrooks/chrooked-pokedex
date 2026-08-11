@@ -221,3 +221,47 @@ def test_singleton_claim_strikes_other_slots() -> None:
     for slot in skeleton["slots"]:
         if len(slot["candidates"]) > 1:
             assert not set(slot["candidates"]) <= set(singles)
+
+
+def test_battle_gimmicks_are_not_learnset_moves() -> None:
+    """Z-moves and Dynamax/G-Max moves never belong in a generated learnset.
+
+    Dynamax moves are tagged by effect (Max Guard hides behind ``protect``, so
+    the name prefix catches it); a Z-move's only tell in a pool row is 1 PP.
+    """
+    gimmicks = [
+        _mv("G-Max Wildfire", "Fire", 10, effect="max_move", pp=10),
+        _mv("Max Flare", "Fire", 1, effect="max_move", pp=10),
+        _mv("Max Guard", "Normal", None, category="Status", effect="protect", pp=10),
+        _mv("Inferno Overdrive", "Fire", 1, pp=1),
+        _mv("Catastropika", "Electric", 210, pp=1),
+    ]
+    for row in gimmicks:
+        assert sk.is_battle_gimmick(row), f"{row['move']} slipped through"
+    for row in _pool():
+        assert not sk.is_battle_gimmick(row), f"{row['move']} wrongly flagged"
+
+
+def test_suggest_learnset_strips_gimmicks_from_the_pool() -> None:
+    """The choke point: a gimmick in the pool reaches neither prompt nor skeleton."""
+    from chrooked_pokedex.web import suggest as suggestmod
+
+    pool = _pool() + [
+        _mv("G-Max Wildfire", "Dragon", 130, effect="max_move", pp=10),
+        _mv("Devastating Drake", "Dragon", 130, pp=1),
+    ]
+    seen: dict[str, str] = {}
+
+    class _Capture:
+        def propose(self, *, system, cached_context, user, schema, max_tokens=0):
+            seen["blob"] = cached_context + user
+            raise RuntimeError("captured")
+
+    with pytest.raises(RuntimeError):
+        suggestmod.suggest_learnset(
+            provider=_Capture(), entry=_entry(), move_pool=pool,
+            abilities=_ABILITIES, mode="full",
+        )
+    assert "G-Max Wildfire" not in seen["blob"]
+    assert "Devastating Drake" not in seen["blob"]
+    assert "Draco Meteor" in seen["blob"], "the real pool must survive the strip"

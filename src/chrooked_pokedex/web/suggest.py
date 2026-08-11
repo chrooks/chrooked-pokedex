@@ -2017,7 +2017,16 @@ def suggest_learnset(
 
     Surgical mode with no instruction raises :class:`SuggestError` before the
     Port call — never wastes a round-trip. An empty pool raises similarly.
+
+    Z-moves and Dynamax/G-Max moves are stripped here, once, so the prompt text,
+    the slot skeleton, and the draft validator all work from the same trimmed
+    pool — see ``learnset_skeleton.is_battle_gimmick``.
     """
+    if not move_pool:
+        raise SuggestError("No moves are available to suggest from.")
+    move_pool = [
+        row for row in move_pool if not learnset_skeleton.is_battle_gimmick(row)
+    ]
     if not move_pool:
         raise SuggestError("No moves are available to suggest from.")
 

@@ -644,8 +644,8 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
     Built from the merged moves collection (``build_moves``) so it is the real,
     current set (base ⊕ Ruleset): an edited move shows its new type/power, and a
     created move is present. Each row carries only the fields the learnset rubric
-    needs — name, type, category, power, accuracy, a short effect string, the
-    engine-neutral `flags`, a `secondary` bool (any additional effect), and a
+    needs — name, type, category, power, accuracy, `pp`, a short effect string,
+    the engine-neutral `flags`, a `secondary` bool (any additional effect), and a
     `custom` flag marking net-new created moves (a Ruleset id with no base entry;
     a merely rebalanced canon move is NOT custom). Flags/secondary/accuracy feed
     the ability-fuel slot filters (ability_fuel.json) — an -ate or sound-booster
@@ -663,6 +663,7 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
             "category": entry.get("category") or "",
             "power": _pool_power(entry),
             "accuracy": entry.get("accuracy"),
+            "pp": entry.get("pp"),
             "effect": entry.get("effect") or "",
             "flags": list(entry.get("flags") or ()),
             "secondary": bool(entry.get("additional_effects")),
