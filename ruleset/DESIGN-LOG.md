@@ -352,3 +352,18 @@ leech seed, curse, withdraw, sythesis, etc.
   Sits parallel to Will-O-Wisp. It could not have existed while freeze skipped
   turns; frostbite does not, so a reliable way to inflict it is fair.
 - **Parked:** who learns Cryofreeze — a separate distribution pass.
+
+## 2026-08-09 — Delibird line
+
+- **Direction:** mixed attacker — typing Ice/Fighting. Flavor coverage: Flying. Why this fits: Delibird's name evokes 'delivery' and its sack-swinging Present move mirrors a martial arts weapon; its high ATK/SPA and Ice Punch/Ice Hammer lean into a brawling gift-courier theme, while Flying covers its signature aerial delivery dives.
+- **Corrections:** mixed attacker — typing Ice/Flying. Flavor coverage: Fire. Why this fits: Delibird's name evokes 'delivery' and its sack-swinging Present move mirrors a martial arts weapon; its high ATK/SPA and Ice Punch/Ice Hammer lean into a brawling gift-courier theme, while Flying covers its signature aerial delivery dives. 510 BST; mixed attacker — typing Ice/Flying. Flavor coverage: Flying. Why this fits: Delibird's name evokes 'delivery' and its sack-swinging Present move mirrors a martial arts weapon; its high ATK/SPA and Ice Punch/Ice Hammer lean into a brawling gift-courier theme, while Flying covers its signature aerial delivery dives. Gets fire, fairy type coverage, and a lot of throwing moves
+
+## 2026-08-11 — Sandslash Alola line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Physical attacks, A ton of utility moves: Aurora Veil, Spiky SHield, Metal Burst, Haze, Snowscape, Rapid Spin, spikes, stealth rock
+
+## 2026-08-11 — Sandslash line
+
+- **Direction:** learnset-only repass
+- **Corrections:** physical; great utility: rapid spin, spiky shielf, stealth rock, spikes,

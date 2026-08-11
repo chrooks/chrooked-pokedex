@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Powder Snow }
   - { level: 2, move: Ice Ball }
   - { level: 6, move: Mist }
+  - { level: 9, move: Cryofreeze }
   - { level: 12, move: Weather Ball }
   - { level: 15, move: Ice Punch }
   - { level: 18, move: Icy Wind }

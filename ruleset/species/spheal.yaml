@@ -9,6 +9,7 @@ learnset:
   - { level: 1, move: Rollout }
   - { level: 1, move: Defense Curl }
   - { level: 4, move: Growl }
+  - { level: 6, move: Cryofreeze }
   - { level: 8, move: Water Gun }
   - { level: 12, move: Powder Snow }
   - { level: 14, move: Water Whip }

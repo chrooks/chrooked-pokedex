@@ -2,34 +2,30 @@ name: Sandslash Alola
 chrooked_id: sandslashalola
 aka: { pokeemerald: SPECIES_SANDSLASH_ALOLA }
 abilities:
-  primary: Snow Cloak
-  secondary: Frost Body
-  hidden: Bioturbation
+  primary: Iron Barbs
+  secondary: Bioturbation
+  hidden: Permafrost
+stats: { hp: 100, spa: 50, spd: 75 }
 learnset:
-  - { level: 0, move: Icicle Spear }
-  - { level: 1, move: Mist }
+  - { level: 0, move: Icebreaker }
   - { level: 1, move: Defense Curl }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Iron Defense }
-  - { level: 2, move: Ice Ball }
-  - { level: 3, move: Gyro Ball }
-  - { level: 4, move: Metal Burst }
-  - { level: 5, move: Snowscape }
-  - { level: 6, move: Swords Dance }
-  - { level: 7, move: Scratch }
-  - { level: 8, move: Powder Snow }
-  - { level: 9, move: Rollout }
-  - { level: 10, move: Fury Cutter }
-  - { level: 11, move: Rapid Spin }
-  - { level: 12, move: Metal Claw }
-  - { level: 13, move: Swift }
-  - { level: 14, move: Slash }
-  - { level: 15, move: Ice Punch }
-  - { level: 16, move: Smart Strike }
-  - { level: 17, move: Iron Head }
-  - { level: 18, move: Icicle Crash }
-  - { level: 19, move: Blizzard }
-  - { level: 43, move: Ice Hammer }
-  - { level: 45, move: Iron Tail }
-  - { level: 48, move: Icebreaker }
-  - { level: 57, move: Excalibur }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Ice Shard }
+  - { level: 9, move: Metal Claw }
+  - { level: 12, move: Snowscape }
+  - { level: 15, move: Rapid Spin }
+  - { level: 17, move: Spikes }
+  - { level: 21, move: Aurora Veil }
+  - { level: 25, move: Smart Strike }
+  - { level: 29, move: Spiky Shield }
+  - { level: 33, move: Ice Punch }
+  - { level: 37, move: Rock Slide }
+  - { level: 41, move: Iron Head }
+  - { level: 45, move: Glacial Crush }
+  - { level: 49, move: Haze }
+  - { level: 53, move: Ice Hammer }
+  - { level: 57, move: Metal Burst }
+  - { level: 61, move: Stone Edge }
+  - { level: 65, move: Glacial Lance }
+  - { level: 69, move: Excalibur }
+evolution: { from: Sandshrew Alola, method: { item: ICESTONE } }

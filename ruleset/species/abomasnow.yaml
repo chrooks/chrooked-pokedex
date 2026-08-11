@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_ABOMASNOW }
 abilities:
   secondary: Ice Scales
   hidden: Mountaineer
-stats: { atk: 102, def: 85, spa: 102, spd: 95 }
+stats: { hp: 91 }
 learnset:
   - { level: 0, move: Ice Punch }
   - { level: 1, move: Leer }
@@ -13,6 +13,7 @@ learnset:
   - { level: 1, move: Powder Snow }
   - { level: 2, move: Ice Ball }
   - { level: 3, move: Leafage }
+  - { level: 7, move: Cryofreeze }
   - { level: 15, move: Ice Shard }
   - { level: 20, move: Razor Leaf }
   - { level: 25, move: Icy Wind }
@@ -27,3 +28,4 @@ learnset:
   - { level: 56, move: Sheer Cold }
   - { level: 57, move: Icebreaker }
   - { level: 64, move: Cryoblast }
+evolution: { from: Snover, method: { level: 35 } }

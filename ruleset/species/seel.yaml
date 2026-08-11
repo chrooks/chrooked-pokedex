@@ -10,6 +10,7 @@ learnset:
   - { level: 2, move: Undertow }
   - { level: 3, move: Growl }
   - { level: 7, move: Water Gun }
+  - { level: 9, move: Cryofreeze }
   - { level: 11, move: Icy Wind }
   - { level: 13, move: Encore }
   - { level: 15, move: Water Whip }

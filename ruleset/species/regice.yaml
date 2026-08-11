@@ -4,3 +4,20 @@ aka: { pokeemerald: SPECIES_REGICE }
 abilities:
   secondary: Permafrost
   hidden: Inner Focus
+learnset:
+  - { level: 1, move: Icy Wind }
+  - { level: 1, move: Charge Beam }
+  - { level: 6, move: Bulldoze }
+  - { level: 9, move: Cryofreeze }
+  - { level: 12, move: Ancient Power }
+  - { level: 18, move: Stomp }
+  - { level: 24, move: Ice Beam }
+  - { level: 30, move: Curse }
+  - { level: 36, move: Amnesia }
+  - { level: 42, move: Hammer Arm }
+  - { level: 48, move: Blizzard }
+  - { level: 54, move: Superpower }
+  - { level: 60, move: Lock-On }
+  - { level: 66, move: Zap Cannon }
+  - { level: 72, move: Hyper Beam }
+  - { level: 78, move: Explosion }

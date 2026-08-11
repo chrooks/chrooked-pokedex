@@ -5,3 +5,21 @@ abilities:
   secondary: Snow Warning
   hidden: Permafrost
 stats: { spa: 105 }
+learnset:
+  - { level: 1, move: Gust }
+  - { level: 1, move: Mist }
+  - { level: 5, move: Powder Snow }
+  - { level: 7, move: Cryofreeze }
+  - { level: 10, move: Reflect }
+  - { level: 15, move: Ice Shard }
+  - { level: 20, move: Agility }
+  - { level: 25, move: Ancient Power }
+  - { level: 30, move: Tailwind }
+  - { level: 35, move: Freeze-Dry }
+  - { level: 40, move: Roost }
+  - { level: 45, move: Ice Beam }
+  - { level: 50, move: Snowscape }
+  - { level: 55, move: Hurricane }
+  - { level: 60, move: Haze }
+  - { level: 65, move: Blizzard }
+  - { level: 70, move: Sheer Cold }

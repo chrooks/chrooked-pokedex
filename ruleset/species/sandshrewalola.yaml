@@ -1,33 +1,30 @@
 name: Sandshrew Alola
 chrooked_id: sandshrewalola
 aka: { dex: 27 }
+types: [Ice, Steel]
 abilities:
-  primary: Snow Cloak
-  secondary: Frost Body
-  hidden: Bioturbation
+  primary: Iron Barbs
+  secondary: Bioturbation
+  hidden: Permafrost
+stats: { hp: 67, atk: 75, def: 90, spa: 34, spd: 50, spe: 44 }
 learnset:
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Scratch }
-  - { level: 2, move: Ice Ball }
-  - { level: 3, move: Mist }
-  - { level: 6, move: Powder Snow }
-  - { level: 9, move: Rollout }
-  - { level: 12, move: Fury Cutter }
+  - { level: 5, move: Ice Shard }
+  - { level: 9, move: Metal Claw }
+  - { level: 12, move: Snowscape }
   - { level: 15, move: Rapid Spin }
-  - { level: 16, move: Ice Punch }
-  - { level: 17, move: Metal Claw }
-  - { level: 18, move: Smart Strike }
-  - { level: 21, move: Swift }
-  - { level: 24, move: Fury Swipes }
-  - { level: 27, move: Iron Defense }
-  - { level: 30, move: Slash }
-  - { level: 33, move: Iron Head }
-  - { level: 36, move: Gyro Ball }
-  - { level: 37, move: Glacial Crush }
-  - { level: 39, move: Swords Dance }
-  - { level: 42, move: Snowscape }
-  - { level: 43, move: Ice Hammer }
-  - { level: 45, move: Blizzard }
-  - { level: 46, move: Iron Tail }
-  - { level: 47, move: Icebreaker }
-  - { level: 57, move: Excalibur }
+  - { level: 17, move: Spikes }
+  - { level: 21, move: Aurora Veil }
+  - { level: 25, move: Smart Strike }
+  - { level: 29, move: Stealth Rock }
+  - { level: 33, move: Ice Punch }
+  - { level: 37, move: Rock Slide }
+  - { level: 41, move: Iron Head }
+  - { level: 45, move: Glacial Crush }
+  - { level: 49, move: Haze }
+  - { level: 53, move: Ice Hammer }
+  - { level: 57, move: Metal Burst }
+  - { level: 61, move: Stone Edge }
+  - { level: 65, move: Glacial Lance }
+  - { level: 69, move: Excalibur }

@@ -20,6 +20,7 @@ learnset:
   - { level: 8, move: Supersonic }
   - { level: 9, move: Leer }
   - { level: 10, move: Water Gun }
+  - { level: 10, move: Cryofreeze }
   - { level: 11, move: Tackle }
   - { level: 12, move: Aurora Beam }
   - { level: 13, move: Ice Punch }

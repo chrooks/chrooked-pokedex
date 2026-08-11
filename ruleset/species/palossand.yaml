@@ -1,7 +1,9 @@
 name: Palossand
 chrooked_id: palossand
 aka: { pokeemerald: SPECIES_PALOSSAND }
-stats: { hp: 90, def: 115 }
+abilities:
+  secondary: Sand Stream
+stats: { hp: 95, def: 120, spa: 105 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Harden }
@@ -25,3 +27,4 @@ learnset:
   - { level: 58, move: Sinkhole }
   - { level: 61, move: Shore Up }
   - { level: 68, move: Sandstorm }
+evolution: { from: Sandygast, method: { level: 42 } }

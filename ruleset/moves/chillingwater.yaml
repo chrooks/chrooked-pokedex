@@ -1,0 +1,14 @@
+name: Chilling Water
+chrooked_id: chillingwater
+aka: { rejuv: CHILLINGWATER }
+type: Water
+category: special
+power: 80
+accuracy: 100
+pp: 15
+description: The user showers the target with frigid water. It may also leave the target frostbitten.
+# Scald's exact kit (80 BP / 100 acc / 15 PP / 30% secondary) with frostbite in
+# the burn's place. Replaces the vanilla 50 BP Attack-drop version outright — the
+# 30% frostbite also moves :function off 0x042 (atk_minus_1) onto 0x00C.
+additional_effects:
+  - { effect: frostbite, chance: 30 }

@@ -1,28 +1,29 @@
 name: Sandshrew
 chrooked_id: sandshrew
 aka: {  }
+types: [Ground]
 abilities:
-  primary: Sand Veil
+  primary: Rough Skin
   secondary: Bioturbation
   hidden: Sand Rush
+stats: { hp: 50, atk: 75, def: 85, spa: 20, spd: 30, spe: 40 }
 learnset:
-  - { level: 1, move: Scratch }
   - { level: 1, move: Defense Curl }
-  - { level: 3, move: Poison Sting }
-  - { level: 4, move: Clod Toss }
-  - { level: 6, move: Sand Attack }
-  - { level: 9, move: Rollout }
-  - { level: 12, move: Fury Cutter }
-  - { level: 15, move: Rapid Spin }
-  - { level: 18, move: Bulldoze }
-  - { level: 21, move: Swift }
-  - { level: 24, move: Fury Swipes }
-  - { level: 27, move: Agility }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 30, move: Slash }
-  - { level: 33, move: Dig }
-  - { level: 36, move: Gyro Ball }
-  - { level: 39, move: Swords Dance }
-  - { level: 42, move: Sandstorm }
-  - { level: 45, move: Earthquake }
-  - { level: 47, move: Faultbreak }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Clod Toss }
+  - { level: 9, move: Sand Attack }
+  - { level: 13, move: Rollout }
+  - { level: 17, move: Bulldoze }
+  - { level: 21, move: Stealth Rock }
+  - { level: 25, move: Spikes }
+  - { level: 29, move: Sandstorm }
+  - { level: 33, move: Rock Slide }
+  - { level: 37, move: Rapid Spin }
+  - { level: 41, move: Cross Poison }
+  - { level: 45, move: Drill Run }
+  - { level: 49, move: Strength }
+  - { level: 53, move: Dire Claw }
+  - { level: 57, move: High Horsepower }
+  - { level: 61, move: Stone Edge }
+  - { level: 65, move: Earthquake }
+  - { level: 69, move: Faultbreak }

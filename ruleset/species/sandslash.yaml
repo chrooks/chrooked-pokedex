@@ -4,28 +4,26 @@ aka: { pokeemerald: SPECIES_SANDSLASH }
 abilities:
   primary: Rough Skin
   secondary: Bioturbation
-  hidden: Hustle
-stats: { hp: 95, spd: 60 }
+  hidden: Sand Rush
+stats: { hp: 90, spd: 60, spe: 85, spa: 60, atk: 105 }
 learnset:
-  - { level: 1, move: Sand Attack }
+  - { level: 0, move: Spiky Shield }
   - { level: 1, move: Defense Curl }
-  - { level: 1, move: Spiky Shield }
   - { level: 1, move: Scratch }
-  - { level: 2, move: Poison Sting }
-  - { level: 3, move: Clod Toss }
-  - { level: 4, move: Crush Claw }
-  - { level: 9, move: Rollout }
-  - { level: 12, move: Fury Cutter }
-  - { level: 15, move: Rapid Spin }
-  - { level: 18, move: Bulldoze }
-  - { level: 21, move: Swift }
-  - { level: 26, move: Fury Swipes }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 31, move: Sand Tomb }
-  - { level: 36, move: Slash }
-  - { level: 41, move: Dig }
-  - { level: 46, move: Gyro Ball }
-  - { level: 51, move: Swords Dance }
-  - { level: 56, move: Sandstorm }
-  - { level: 61, move: Earthquake }
-  - { level: 63, move: Faultbreak }
+  - { level: 5, move: Clod Toss }
+  - { level: 9, move: Sand Attack }
+  - { level: 13, move: Rollout }
+  - { level: 17, move: Bulldoze }
+  - { level: 21, move: Stealth Rock }
+  - { level: 25, move: Spikes }
+  - { level: 29, move: Sandstorm }
+  - { level: 33, move: Rock Slide }
+  - { level: 37, move: Rapid Spin }
+  - { level: 41, move: Cross Poison }
+  - { level: 45, move: Drill Run }
+  - { level: 49, move: Strength }
+  - { level: 53, move: Dire Claw }
+  - { level: 57, move: High Horsepower }
+  - { level: 61, move: Stone Edge }
+  - { level: 65, move: Earthquake }
+  - { level: 69, move: Faultbreak }

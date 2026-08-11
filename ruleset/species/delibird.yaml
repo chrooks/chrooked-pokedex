@@ -1,19 +1,29 @@
 name: Delibird
 chrooked_id: delibird
 aka: { pokeemerald: SPECIES_DELIBIRD }
-stats: { hp: 75, atk: 80, def: 70, spa: 80, spd: 70, spe: 80 }
+abilities:
+  primary: Slush Rush
+  secondary: Technician
+  hidden: No Guard
+stats: { hp: 75, atk: 110, def: 65, spa: 108, spd: 67, spe: 85 }
 learnset:
+  - { level: 1, move: Fake Out }
   - { level: 1, move: Present }
-  - { level: 2, move: Ice Ball }
-  - { level: 3, move: Peck }
-  - { level: 15, move: Ice Punch }
-  - { level: 17, move: Aerial Ace }
-  - { level: 25, move: Drill Peck }
-  - { level: 29, move: Glacial Crush }
-  - { level: 42, move: Galeburst }
-  - { level: 43, move: Ice Hammer }
-  - { level: 46, move: Nosedive }
-  - { level: 57, move: Icebreaker }
-  - { level: 59, move: Brave Bird }
-  - { level: 64, move: Cryoblast }
-  - { level: 65, move: Tempest }
+  - { level: 5, move: Ice Shard }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Flutter Bash }
+  - { level: 17, move: Hail }
+  - { level: 21, move: Avalanche }
+  - { level: 25, move: Aerial Ace }
+  - { level: 29, move: Ice Punch }
+  - { level: 33, move: Drill Peck }
+  - { level: 37, move: Spirit Break }
+  - { level: 41, move: Fire Punch }
+  - { level: 45, move: Glacial Crush }
+  - { level: 49, move: Dive Bomb }
+  - { level: 53, move: Play Rough }
+  - { level: 57, move: Cinder Smash }
+  - { level: 61, move: Sheer Cold }
+  - { level: 65, move: Hurricane }
+  - { level: 69, move: Combust }
+  - { level: 70, move: Icebreaker }
