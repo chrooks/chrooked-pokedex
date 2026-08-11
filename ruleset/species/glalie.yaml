@@ -5,8 +5,8 @@ types: [Ice, Dark]
 abilities:
   primary: Frost Body
   secondary: Ice Body
-  hidden: Moody
-stats: { hp: 90, atk: 105, def: 90, spa: 85, spd: 80, spe: 80 }
+  hidden: Rimefang
+stats: { hp: 90, atk: 105, def: 90, spa: 75, spd: 80, spe: 80 }
 learnset:
   - { level: 0, move: Freeze-Dry }
   - { level: 1, move: Leer }
