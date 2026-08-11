@@ -1,0 +1,55 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# Root Shelter is a HALF shield, so it cannot ride the engine's Protect slot:
+# anything truthy in effects[:Protect] blocks the hit outright. The move sets its
+# own turn flag instead, and this behavior pays the three riders on top of the
+# Spiky Shield function code the data layer ships (0x140 = the fail-on-repeat
+# gate and nothing else).
+name: Root Shelter
+chrooked_id: rootshelter
+applies_to: move
+effects:
+  - summary: "Using Root Shelter shelters the user for the rest of the turn."
+    trigger: turn-order
+    when: "the user successfully uses Root Shelter (+4 priority)"
+    effect: >-
+      the user gains a Root Shelter flag that lasts until the end of the round.
+      The protect-family repeat gate still applies — using it on consecutive
+      turns fails with rising probability, and it fails outright when the user
+      moves last.
+  - summary: "Damaging moves that hit the sheltered user deal half damage."
+    trigger: damage-calc
+    when: "a damaging move resolves against a battler carrying the Root Shelter flag"
+    effect: "halve the damage, floored at 1. Status moves are unaffected — the shelter blocks nothing."
+  - summary: "Anything that damages the sheltered user is seeded."
+    trigger: on-hit
+    when: "a battler damages a target carrying the Root Shelter flag and survives"
+    effect: >-
+      seed the attacker as Leech Seed would, obeying the usual gates — already
+      seeded, Grass-type, or behind a Substitute means no seed. Contact is NOT
+      required; any attacker that lands damage is seeded.
+test_cases:
+  - given: "Root Shelter is used, then the foe uses Earthquake"
+    expect: "Earthquake deals half its normal damage and the foe is seeded"
+  - given: "Root Shelter is used, then a Grass-type foe attacks"
+    expect: "damage is still halved; no seed lands (Grass is immune to Leech Seed)"
+  - given: "Root Shelter is used, then the foe uses Thunder Wave"
+    expect: "the paralysis lands normally — the shelter is not a Protect"
+  - given: "Root Shelter is used on two consecutive turns"
+    expect: "the second use usually fails, on the same rising-failure roll as Spiky Shield"
+  - given: "Root Shelter is used by a battler that moves last in the round"
+    expect: "it fails — the vanilla protect-family rule"
+notes:
+  - "The flag is deliberately NOT effects[:Protect]. The engine treats any truthy value there as a full block (Battler.rb: hitflags[i] = target.effects[:Protect]), which would make Root Shelter a strictly better Protect."
+  - "The repeat gate is free: the data layer ships the move on Spiky Shield's function code, whose pbOnStartUse already carries the RATESHARERS / ProtectRate / movingLast rules. Only pbEffect is replaced."
+  - "The seed fires on damage, not on contact — that is what makes it a shelter for a wall rather than a Spiky Shield reskin."
+  - "The flag clears in the same end-of-round sweep that clears effects[:Protect], so it never carries into the next turn."
+engine_hints:
+  pokeemerald: "Not modeled — no applier support. The move applies as data only there."
+  essentials: >-
+    Rejuv (Scripts/chrooked_rootshelter.rb): prepend PokeBattle_Move_140#pbEffect
+    to set effects[:ChrookedRootShelter] instead of effects[:Protect] when the move
+    is :ROOTSHELTER; prepend PokeBattle_Move#pbCalcDamage to halve damage against a
+    sheltered target; prepend PokeBattle_Battler#pbEffectsOnDealingDamage to set
+    the attacker's effects[:LeechSeed]; prepend PokeBattle_Battle#pbEndOfRoundPhase
+    to clear the flag. Every prepend is defined?()-guarded.

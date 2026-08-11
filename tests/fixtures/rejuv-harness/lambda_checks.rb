@@ -28,6 +28,9 @@ Battler = Struct.new(:ability, :hp, :totalhp, :attack, :spatk, :types, :airborne
   # Rejuv's per-Pokemon Crest item. Only Suicune's matters here (it exempts the
   # holder from the status penalties), so the stub reports "no crest".
   def crested; nil; end
+  # Per-battler volatile effects. Rejuv seeds :LeechSeed to -1 ("not seeded");
+  # every other key starts empty, which is what the chrooked flags expect.
+  def effects; @effects ||= { LeechSeed: -1 }; end
 end
 # state.effects carries the Nevermelting Hail flag the frostbite lambdas check.
 BattleState = Struct.new(:effects)
@@ -55,6 +58,13 @@ atk = ->(ab, **kw) {
               kw[:types] || [:NORMAL], kw[:air] || false, DS.new(TM.new(false)), kw[:status])
 }
 defender = ->(ab, se) { Battler.new(ab, 100, 100, 0, 0, [], false, DS.new(TM.new(se))) }
+# A battler that used Root Shelter this turn — the half-damage flag is a move
+# effect, not an ability, so it is set directly rather than through atk.
+sheltered = -> {
+  b = atk.(:NONE)
+  b.effects[:ChrookedRootShelter] = true
+  b
+}
 
 checks = {
   # Frostbite: special damage halved, physical untouched, Guts exempt. The
@@ -100,6 +110,13 @@ checks = {
   "sacredtoll nonsound" => [mv(:TACKLE, type: :NORMAL).pbType(atk.(:SACREDTOLL)), :NORMAL],
   "bloom sees ize type" => [mv(:BODYSLAM, type: :NORMAL).pbCalcDamage(atk.(:FOLIATE), atk.(:NONE)), 120],
   "sledgehammer punch" => [mv(:MACHPUNCH, flags: [:punchmove]).pbCalcDamage(atk.(:SLEDGEHAMMER), atk.(:NONE)), 100],
+  "arcticariette sound type" => [mv(:HYPERVOICE, type: :NORMAL, flags: [:soundmove]).pbType(atk.(:ARCTICARIETTE)), :ICE],
+  "arcticariette sound dmg" => [mv(:HYPERVOICE, type: :NORMAL, flags: [:soundmove]).pbCalcDamage(atk.(:ARCTICARIETTE), atk.(:NONE)), 130],
+  "arcticariette nonsound" => [mv(:TACKLE, type: :NORMAL).pbType(atk.(:ARCTICARIETTE)), :NORMAL],
+  "arcticariette nonsound dmg" => [mv(:TACKLE, type: :NORMAL).pbCalcDamage(atk.(:ARCTICARIETTE), atk.(:NONE)), 100],
+  "arcticariette offtype sound" => [mv(:BUGBUZZ, type: :BUG, flags: [:soundmove]).pbType(atk.(:ARCTICARIETTE)), :BUG],
+  "root shelter halves" => [mv(:X).pbCalcDamage(atk.(:NONE), sheltered.()), 50],
+  "root shelter unsheltered" => [mv(:X).pbCalcDamage(atk.(:NONE), atk.(:NONE)), 100],
 }
 fails = checks.reject { |k, (got, want)| got == want }
 fails.each { |k, (got, want)| puts "FAIL #{k}: got #{got} want #{want}" }

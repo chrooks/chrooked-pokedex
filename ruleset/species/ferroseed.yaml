@@ -15,6 +15,7 @@ learnset:
   - { level: 16, move: Razor Leaf }
   - { level: 17, move: Smart Strike }
   - { level: 20, move: Flash Cannon }
+  - { level: 21, move: Root Shelter }
   - { level: 25, move: Iron Head }
   - { level: 29, move: Seed Bomb }
   - { level: 30, move: Self-Destruct }

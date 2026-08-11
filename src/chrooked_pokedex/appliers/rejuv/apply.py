@@ -503,6 +503,10 @@ _PRIMARY_EFFECT_CODES = {
     # quarter-drain variant (Reap/Siphon) keeps this funccode and halves the
     # heal via the chrooked_quarterdrain behavior (CHROOKED_MOVE_ABSORB_MODS).
     "absorb": (0x0DD, None),
+    # Protect-family shield (0x140 = Spiky Shield). Taken for its fail-on-repeat
+    # gate only; a shield whose block differs from Spiky Shield's (Root Shelter
+    # halves instead of blocking) replaces pbEffect in its own behavior.
+    "shield": (0x140, None),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance
@@ -669,6 +673,9 @@ def _new_move_block(
         f":accuracy => {move.accuracy if move.accuracy is not None else _CREATE_DEFAULTS['accuracy']}",
         f":maxpp => {move.pp if move.pp is not None else _CREATE_DEFAULTS['maxpp']}",
         f":target => :{_TARGET.get(move.target, 'SingleNonUser')}",
+        # ponytail: priority 0 is the engine default, so only a nonzero one is
+        # written — same rule the existing-move patch above follows.
+        *([f":priority => {move.priority}"] if move.priority else []),
     ]
     if effect_chance is not None:
         fields.append(f":effect => {effect_chance}")

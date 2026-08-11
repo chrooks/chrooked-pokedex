@@ -1,0 +1,16 @@
+name: Root Shelter
+chrooked_id: rootshelter
+aka: {  }
+type: Grass
+category: status
+power: 0
+accuracy: 0
+pp: 10
+priority: 4
+target: user
+description: The user hunkers into its roots. Damage taken this turn is halved, and anything that attacks is seeded.
+# Harvested from another fan game. A half-shield, not a Protect: the hit lands,
+# it just costs half. Ships on the Spiky Shield function code (0x140) purely for
+# the protect-family fail-on-repeat gate; everything the shelter actually does
+# lives in the rootshelter behavior.
+effect: shield

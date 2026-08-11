@@ -1,0 +1,36 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+#
+# The Ice twin of Singing Sands: same "-ate/-ize gated on the sound flag" shape,
+# a bigger rider (1.3x), and no defensive half. Singing Sands earns its Ground
+# immunity from flavour (the singer floats above the sand); an aria has no such
+# excuse, so this ability is offence only.
+name: Arctic Ariette
+chrooked_id: arcticariette
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Normal-type sound moves become Ice-type
+    trigger: damage-calc
+    when: The user selects a Normal-type sound-based move
+    effect: >-
+      The move's type is changed to Ice before damage calculation. The converted
+      move gains a 1.3x power multiplier. STAB applies if the user is Ice-type.
+      Non-Normal sound moves are unaffected.
+test_cases:
+  - given: An Ice-type Pokémon with Arctic Ariette uses Hyper Voice
+    expect: Hyper Voice becomes Ice-type, deals 1.3x its base power, and takes STAB on top.
+  - given: A Pokémon with Arctic Ariette uses Bug Buzz
+    expect: Bug Buzz stays Bug-type with no power rider — only Normal sound moves convert.
+  - given: A Pokémon with Arctic Ariette uses Body Slam
+    expect: Body Slam stays Normal — the sound flag is required, not just the Normal type.
+notes:
+  - "Only Normal-type sound moves convert and receive the 1.3x bonus — the standard -ate/-ize shape gated on the sound flag, identical to Singing Sands."
+  - "Type conversion happens before STAB, so an Ice-type user stacks 1.5x STAB on top of the 1.3x rider."
+  - "Soundproof targets are still immune to the converted Ice-type sound moves."
+  - "No defensive half. Unlike Singing Sands there is no type immunity attached."
+engine_hints:
+  essentials: >-
+    Rejuv: CHROOKED_TYPE_MODS converts Normal-type moves carrying hasFlag?(:soundmove)
+    to :ICE via the core's pbType hook (STAB composes naturally); CHROOKED_DAMAGE_MODS
+    pays the 1.3x through Chrooked.type_changed? so only converted moves are boosted —
+    the same pair Singing Sands uses.

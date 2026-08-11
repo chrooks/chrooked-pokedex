@@ -12,6 +12,7 @@ learnset:
   - { level: 12, move: Mega Drain }
   - { level: 16, move: Vine Whip }
   - { level: 20, move: Poison Powder }
+  - { level: 22, move: Root Shelter }
   - { level: 24, move: Ancient Power }
   - { level: 28, move: Knock Off }
   - { level: 29, move: Giga Drain }

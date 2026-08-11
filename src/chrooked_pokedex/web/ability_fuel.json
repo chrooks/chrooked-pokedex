@@ -20,6 +20,8 @@
     "wyvernize":   { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Dragon"],   "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
     "singingsands": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ground"],  "filter": { "move_type": "Normal", "flags_any": ["sound"], "attacking": true },
                       "note": "Only SOUND-flagged Normal moves convert." },
+    "arcticariette": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ice"],   "filter": { "move_type": "Normal", "flags_any": ["sound"], "attacking": true },
+                      "note": "Only SOUND-flagged Normal moves convert." },
     "liquidvoice": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Water"],    "filter": { "flags_any": ["sound"], "attacking": true },
                      "note": "ALL sound moves become Water, not only Normal ones." },
     "sacredtoll":  { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Psychic"],  "filter": { "flags_any": ["sound"], "attacking": true },

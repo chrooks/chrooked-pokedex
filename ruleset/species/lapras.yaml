@@ -1,11 +1,12 @@
 name: Lapras
 chrooked_id: lapras
 aka: { pokeemerald: SPECIES_LAPRAS }
+types: [Water, Dragon]
 abilities:
   primary: Self Sufficient
   secondary: Shell Armor
-  hidden: Permafrost
-stats: { atk: 75, spa: 105 }
+  hidden: Arctic Ariette
+stats: { hp: 125, atk: 60, def: 100, spd: 100, spa: 100 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Water Gun }
@@ -23,6 +24,7 @@ learnset:
   - { level: 40, move: Body Slam }
   - { level: 43, move: Ice Beam }
   - { level: 45, move: Blizzard }
+  - { level: 47, move: Hyper Voice }
   - { level: 50, move: Rain Dance }
   - { level: 52, move: Cryoblast }
   - { level: 53, move: Hydro Pump }
