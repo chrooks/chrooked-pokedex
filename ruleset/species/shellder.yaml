@@ -11,7 +11,7 @@ learnset:
   - { level: 4, move: Withdraw }
   - { level: 6, move: Undertow }
   - { level: 8, move: Ice Shard }
-  - { level: 10, move: Cryofreeze }
+  - { level: 10, move: Flash Freeze }
   - { level: 12, move: Leer }
   - { level: 16, move: Whirlpool }
   - { level: 20, move: Supersonic }

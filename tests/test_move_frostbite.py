@@ -1,4 +1,4 @@
-"""Cryofreeze, and the freeze-to-frostbite rename of the neutral effect name.
+"""Flash Freeze, and the freeze-to-frostbite rename of the neutral effect name.
 
 Freeze was replaced outright: the neutral vocabulary now says `frostbite`
 everywhere, while each engine keeps its own unchanged symbol (Essentials
@@ -18,9 +18,9 @@ SRC_DIR = Path(__file__).resolve().parents[1] / "src"
 
 
 @pytest.mark.unit
-def test_cryofreeze_exists_with_agreed_numbers() -> None:
-    move = Ruleset.load(RULESET_DIR).moves["cryofreeze"]
-    assert move.name == "Cryofreeze"
+def test_flashfreeze_exists_with_agreed_numbers() -> None:
+    move = Ruleset.load(RULESET_DIR).moves["flashfreeze"]
+    assert move.name == "Flash Freeze"
     assert move.type == "Ice"
     assert move.category == "status"
     assert move.power == 0

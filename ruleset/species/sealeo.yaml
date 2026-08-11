@@ -12,7 +12,7 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Rollout }
   - { level: 2, move: Water Gun }
-  - { level: 6, move: Cryofreeze }
+  - { level: 6, move: Flash Freeze }
   - { level: 12, move: Powder Snow }
   - { level: 14, move: Water Whip }
   - { level: 16, move: Rest }

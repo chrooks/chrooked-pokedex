@@ -9,7 +9,7 @@ learnset:
   - { level: 1, move: Leer }
   - { level: 2, move: Ice Ball }
   - { level: 6, move: Taunt }
-  - { level: 7, move: Cryofreeze }
+  - { level: 7, move: Flash Freeze }
   - { level: 9, move: Cheap Shot }
   - { level: 12, move: Quick Attack }
   - { level: 15, move: Bite }

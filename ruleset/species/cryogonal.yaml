@@ -10,7 +10,7 @@ learnset:
   - { level: 1, move: Ice Shard }
   - { level: 2, move: Powder Snow }
   - { level: 4, move: Confuse Ray }
-  - { level: 6, move: Cryofreeze }
+  - { level: 6, move: Flash Freeze }
   - { level: 8, move: Rapid Spin }
   - { level: 12, move: Icy Wind }
   - { level: 16, move: Mist }

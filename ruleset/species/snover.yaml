@@ -1,28 +1,30 @@
 name: Snover
 chrooked_id: snover
 aka: { pokeemerald: SPECIES_SNOVER }
+types: [Grass, Ice]
 abilities:
+  primary: Snow Warning
   secondary: Ice Scales
   hidden: Mountaineer
+stats: { hp: 60, atk: 62, def: 51, spa: 62, spd: 60, spe: 40 }
 learnset:
   - { level: 1, move: Leer }
-  - { level: 1, move: Powder Snow }
-  - { level: 2, move: Ice Ball }
+  - { level: 1, move: Pound }
   - { level: 5, move: Leafage }
-  - { level: 7, move: Cryofreeze }
-  - { level: 10, move: Mist }
-  - { level: 15, move: Ice Shard }
-  - { level: 16, move: Ice Punch }
-  - { level: 20, move: Razor Leaf }
-  - { level: 25, move: Icy Wind }
-  - { level: 29, move: Seed Bomb }
-  - { level: 30, move: Swagger }
-  - { level: 31, move: Glacial Crush }
-  - { level: 35, move: Ingrain }
-  - { level: 38, move: Reap }
-  - { level: 41, move: Wood Hammer }
-  - { level: 43, move: Ice Hammer }
-  - { level: 45, move: Blizzard }
-  - { level: 50, move: Sheer Cold }
-  - { level: 57, move: Icebreaker }
-  - { level: 64, move: Cryoblast }
+  - { level: 9, move: Ice Shard }
+  - { level: 13, move: Leech Seed }
+  - { level: 17, move: Aurora Veil }
+  - { level: 21, move: Magical Leaf }
+  - { level: 24, move: Freeze-Dry }
+  - { level: 27, move: Flash Freeze }
+  - { level: 33, move: Grassy Glide }
+  - { level: 37, move: Ice Punch }
+  - { level: 41, move: Chilling Water }
+  - { level: 45, move: Seed Bomb }
+  - { level: 49, move: Ice Beam }
+  - { level: 53, move: Earthquake }
+  - { level: 57, move: Reap }
+  - { level: 61, move: Blizzard }
+  - { level: 65, move: Sheer Cold }
+  - { level: 69, move: Wood Hammer }
+  - { level: 70, move: Cryoblast }

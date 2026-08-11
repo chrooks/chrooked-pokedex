@@ -12,7 +12,7 @@ learnset:
   - { level: 1, move: Icy Wind }
   - { level: 2, move: Water Gun }
   - { level: 3, move: Powder Snow }
-  - { level: 9, move: Cryofreeze }
+  - { level: 9, move: Flash Freeze }
   - { level: 13, move: Encore }
   - { level: 15, move: Water Whip }
   - { level: 17, move: Ice Shard }

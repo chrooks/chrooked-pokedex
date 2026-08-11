@@ -37,7 +37,7 @@ test_cases:
     expect: "no chip damage"
   - given: "a frostbitten Pokemon uses a Fire-type move"
     expect: "the frostbite is cured"
-  - given: "an Ice-type Pokemon is hit by Cryofreeze"
+  - given: "an Ice-type Pokemon is hit by Flash Freeze"
     expect: "nothing happens — Ice-types are immune to frostbite"
 notes:
   - "This is a reskin, not a rename. The engine keeps its :FROZEN symbol; only behavior and text change. Renaming would touch 46 references across 15 script files plus healing items, battle clauses, the AI, and save compatibility for any currently-frozen Pokemon."
