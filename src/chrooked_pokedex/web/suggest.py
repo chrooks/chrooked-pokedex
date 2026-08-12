@@ -26,11 +26,14 @@ from __future__ import annotations
 
 import json
 import re
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Mapping
 
 from . import learnset_skeleton
-from .llm import DEFAULT_MAX_TOKENS, LlmProvider
+from .llm import DEFAULT_MAX_TOKENS, LlmProvider, condense_provider
+from .lore import LoreError, LoreProvider
+from .lore_text import render_lore
 
 # Learnset responses return a whole list with per-move reasoning (~15–25 rows,
 # 2–3k tokens in full mode). The shared DEFAULT_MAX_TOKENS (1024) is sized for
@@ -113,6 +116,176 @@ class SuggestError(Exception):
     def __init__(self, *args: Any, salvage: dict[str, Any] | None = None) -> None:
         super().__init__(*args)
         self.salvage = salvage
+
+
+# --------------------------------------------------------------------------- #
+# Lore injection (#77) — shared by the two capabilities that reason from a
+# creature's identity. Off by default and inert until asked for: with the mode
+# off the assembled prompt is byte-identical to what it was before this existed.
+#
+# Why: given no sources, the model answers from training recall, and on
+# 2026-08-12 it justified a Glalie ability with "its name derived from *glace*
+# (French: ice)". The real etymology is glacier + goalie. Fetching first and
+# injecting the text turns recall into reading.
+# --------------------------------------------------------------------------- #
+
+# The three modes a request may ask for. Anything else is off — a typo in the
+# request body is not consent to start making network calls.
+LORE_MODES = ("off", "full", "condensed")
+
+# The condensation is a brief, not a design. A tight cap keeps the extra call
+# cheap and stops it re-expanding the very text it was asked to shrink.
+_CONDENSE_MAX_TOKENS = 700
+
+_CONDENSE_RUBRIC = (
+    "You compress reference text. Given researched lore about one Pokémon, "
+    "return a tight factual brief of it: what the creature IS, its category, "
+    "the recurring facts across its Pokedex entries, its design origin, and its "
+    "name etymology. Keep every concrete noun, place, animal, object, and "
+    "language a name derives from — those specifics are the whole point. Drop "
+    "repetition and game-version chatter. Invent NOTHING: if the source does not "
+    "say it, it does not appear. Aim for under 900 characters of plain prose."
+)
+
+_CONDENSE_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {"lore": {"type": "string"}},
+    "required": ["lore"],
+    "additionalProperties": False,
+}
+
+# Added to the rubric — and ONLY when the lookup found nothing. Without it,
+# turning lore on for a bespoke species makes fabrication more likely, not less:
+# the model reads "no lore" as an invitation. The user-context block states the
+# absence; this makes owning it in the rationale a rule.
+_NO_LORE_RUBRIC_NOTE = (
+    "LORE LOOKUP RAN AND FOUND NOTHING for this species. You must NOT supply "
+    "dex flavor, etymology, or real-world inspiration from memory — say plainly "
+    "in your rationale that no published lore was available, and reason only "
+    "from the concrete data you were given."
+)
+
+
+def normalize_lore_mode(value: Any) -> str:
+    """The requested lore mode, or ``"off"`` for anything unrecognized."""
+    return value if isinstance(value, str) and value in LORE_MODES else "off"
+
+
+@dataclass(frozen=True)
+class LoreInjection:
+    """What one lore lookup contributes to one suggest call.
+
+    ``block`` goes into the USER context, never the rubric: the rubric is the
+    cache-stable prefix shared across species, and varying it per species would
+    defeat prompt caching. ``rubric_note`` is the one exception — a single
+    do-not-invent line, added only on a miss.
+    """
+
+    provenance: Mapping[str, Any]
+    block: str = ""
+    rubric_note: str = ""
+
+
+LORE_OFF = LoreInjection(provenance={"mode": "off"})
+
+
+def build_lore_injection(
+    *,
+    entry: dict[str, Any],
+    lore_mode: str,
+    lore_provider: LoreProvider | None,
+    provider: LlmProvider,
+) -> LoreInjection:
+    """Fetch and render the lore block for one species, or nothing at all.
+
+    Returns :data:`LORE_OFF` — an empty block and a bare ``{"mode": "off"}``
+    provenance — when the mode is off or no provider is attached. A
+    :class:`LoreError` degrades to the same emptiness with the reason recorded:
+    a lore lookup is an enhancement, and a dead network must never cost the
+    author their suggestion.
+    """
+    mode = normalize_lore_mode(lore_mode)
+    if mode == "off" or lore_provider is None:
+        return LORE_OFF
+
+    chrooked_id = str(entry.get("chrooked_id", ""))
+    species_name = str(entry.get("name") or chrooked_id)
+    try:
+        result = lore_provider.fetch(chrooked_id, species_name)
+    except LoreError as error:
+        return LoreInjection(
+            provenance={
+                "mode": mode,
+                "found": False,
+                "sources": [],
+                "chars": 0,
+                "error": str(error),
+            }
+        )
+
+    # render_lore owns the not-found statement, the base-species label, and the
+    # character cap — all of it decided once, in one place.
+    block = render_lore(
+        found=result.found,
+        genus=result.genus,
+        dex_entries=result.dex_entries,
+        origin=result.origin,
+        name_origin=result.name_origin,
+        requested_id=chrooked_id,
+        base_species=result.base_species,
+    )
+
+    ran_as = mode
+    if mode == "condensed" and result.found:
+        condensed = _condense_lore(provider, block)
+        if condensed:
+            block = condensed
+        else:
+            # The condenser is an optimization; its failure costs the author
+            # nothing but a longer prompt. Provenance names what actually ran.
+            ran_as = "full"
+
+    provenance: dict[str, Any] = {
+        "mode": ran_as,
+        "found": result.found,
+        "sources": list(result.sources),
+        "chars": len(block),
+    }
+    if result.base_species and result.base_species != chrooked_id:
+        provenance["base_species"] = result.base_species
+
+    return LoreInjection(
+        provenance=provenance,
+        block=block,
+        rubric_note="" if result.found else _NO_LORE_RUBRIC_NOTE,
+    )
+
+
+def _condense_lore(provider: LlmProvider, block: str) -> str:
+    """One extra bounded call turning the fetched lore into a tight brief.
+
+    Returns ``""`` on any failure, which the caller reads as "keep the raw
+    block". The broad catch is deliberate: every way this call can go wrong — a
+    transport error, a missing key, a malformed draft — has the same right
+    answer, and none of them is worth failing a suggestion over.
+    """
+    try:
+        result = condense_provider(provider).propose(
+            system=_CONDENSE_RUBRIC,
+            cached_context="",
+            user=block,
+            schema=_CONDENSE_SCHEMA,
+            max_tokens=_CONDENSE_MAX_TOKENS,
+        )
+    except Exception:  # noqa: BLE001 — see docstring
+        return ""
+    text = result.get("lore") if isinstance(result, dict) else None
+    return text.strip() if isinstance(text, str) else ""
+
+
+def _with_lore_note(system: str, injection: LoreInjection) -> str:
+    """The rubric, plus the do-not-invent line when the lookup found nothing."""
+    return f"{system}\n{injection.rubric_note}" if injection.rubric_note else system
 
 
 # --------------------------------------------------------------------------- #
@@ -379,8 +552,14 @@ def _build_user_context(
     entry: dict[str, Any],
     direction: str | None,
     locked: list[str] | None = None,
+    lore_block: str = "",
 ) -> str:
-    """The fresh per-species delta: stats/types/abilities/learnset + direction."""
+    """The fresh per-species delta: stats/types/abilities/learnset + direction.
+
+    ``lore_block`` is the researched-lore text when the author asked for it, and
+    empty otherwise — an empty block appends nothing, so a lore-off prompt is
+    byte-identical to what this returned before lore existed.
+    """
     stats = entry.get("stats", {})
     stat_line = " ".join(
         f"{key.upper()} {stats[key]}" for key in stats
@@ -392,6 +571,14 @@ def _build_user_context(
         f"Current abilities: {_format_current_abilities(entry.get('abilities', {}))}",
         f"Learnset: {_format_learnset(entry.get('learnset', []))}",
     ]
+    # Lore sits BEFORE the constraints and the steer, never last. Appended last
+    # it ended the prompt with a page of encyclopedia prose, and the first live
+    # run came back degenerate: all three slots echoed back unchanged with the
+    # ability's own name as its "rationale". Both injection modes did it — the
+    # 1.2k condensed block as readily as the 3k raw one — so it was recency, not
+    # length. The task-shaped lines have to be the last thing read.
+    if lore_block:
+        lines.append(lore_block)
     if locked:
         free = [slot for slot in _ABILITY_SLOTS if slot not in locked]
         lines.append(
@@ -462,6 +649,8 @@ def suggest_ability(
     abilities: list[dict[str, Any]],
     direction: str | None = None,
     locked: list[str] | None = None,
+    lore_mode: str = "off",
+    lore_provider: LoreProvider | None = None,
 ) -> dict[str, Any]:
     """Propose best-fit existing abilities for a species; never writes a file.
 
@@ -473,7 +662,8 @@ def suggest_ability(
     message) rather than nuking the whole proposal. Only when ZERO slots survive
     is it a :class:`SuggestError` (NO PROPOSAL). Returns the reusable
     ``{draft, rationale, alternatives}`` contract, plus ``warnings`` and a
-    ``repaired`` count when a repair ran.
+    ``repaired`` count when a repair ran, and always a ``lore`` provenance object
+    saying what the lookup did (``{"mode": "off"}`` when it did nothing).
     """
     pool = build_ability_pool(abilities)
     if not pool:
@@ -484,9 +674,15 @@ def suggest_ability(
     locked_slots = [slot for slot in _ABILITY_SLOTS if slot in (locked or [])]
     if len(locked_slots) == len(_ABILITY_SLOTS):
         raise SuggestError("All ability slots are locked — unlock one to propose.")
-    system = _build_rubric()
+    injection = build_lore_injection(
+        entry=entry,
+        lore_mode=lore_mode,
+        lore_provider=lore_provider,
+        provider=provider,
+    )
+    system = _with_lore_note(_build_rubric(), injection)
     cached_context = "Ability pool (pick only from these):\n" + _format_pool(pool)
-    user = _build_user_context(entry, direction, locked_slots)
+    user = _build_user_context(entry, direction, locked_slots, injection.block)
 
     def _run(user_text: str) -> dict[str, Any]:
         return provider.propose(
@@ -526,7 +722,10 @@ def suggest_ability(
             warnings[0] if warnings else "The suggestion did not propose any ability."
         )
 
-    return _build_ability_response(result, valid, known, warnings, repaired)
+    return {
+        **_build_ability_response(result, valid, known, warnings, repaired),
+        "lore": dict(injection.provenance),
+    }
 
 
 def _draft_abilities(result: Any) -> dict[str, Any]:
@@ -659,8 +858,14 @@ def _format_type_pool(type_pool: list[str]) -> str:
     return "\n".join(f"- {t}" for t in type_pool)
 
 
-def _build_typing_user_context(entry: dict[str, Any], direction: str | None) -> str:
-    """The fresh per-species delta for typing suggest: stats/current types/learnset."""
+def _build_typing_user_context(
+    entry: dict[str, Any], direction: str | None, lore_block: str = ""
+) -> str:
+    """The fresh per-species delta for typing suggest: stats/current types/learnset.
+
+    ``lore_block`` carries researched lore when the author asked for it. Empty
+    appends nothing, so a lore-off prompt is byte-identical to the old one.
+    """
     stats = entry.get("stats", {})
     stat_line = " ".join(
         f"{key.upper()} {stats[key]}" for key in _STAT_KEYS if key in stats
@@ -671,6 +876,10 @@ def _build_typing_user_context(entry: dict[str, Any], direction: str | None) -> 
         f"Base stats: {stat_line}",
         f"Learnset: {_format_learnset(entry.get('learnset', []))}",
     ]
+    # Lore before the steer, for the reason spelled out in _build_user_context:
+    # ending the prompt with encyclopedia prose degenerates the answer.
+    if lore_block:
+        lines.append(lore_block)
     if direction and direction.strip():
         lines.append(f"Direction from the user: {direction.strip()}")
     return "\n".join(lines)
@@ -944,6 +1153,8 @@ def suggest_lore_options(
     direction: str | None = None,
     kept_types: list[str] | None = None,
     kept_abilities: dict[str, Any] | None = None,
+    lore_mode: str = "off",
+    lore_provider: LoreProvider | None = None,
 ) -> dict[str, Any]:
     """Propose 2-3 lore-grounded typing+role makeover directions; never writes.
 
@@ -953,23 +1164,38 @@ def suggest_lore_options(
     option. À la carte KEPT facets constrain the options: a KEPT typing forces
     every option to keep the current typing verbatim (options differ by role), and
     an option that changes a kept facet is dropped. Returns ``{draft: {options:
-    [...]}, rationale, alternatives}``.
+    [...]}, rationale, alternatives}``, plus a ``lore`` provenance object.
+
+    This capability's whole premise is the creature's lore, so it is the surface
+    where researched sources matter most — but the fetch is still opt-in, and off
+    leaves the prompt exactly as it was.
     """
     if not type_pool:
         raise SuggestError("No types are available to suggest from.")
 
-    cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
-    return propose_with_repair(
+    injection = build_lore_injection(
+        entry=entry,
+        lore_mode=lore_mode,
+        lore_provider=lore_provider,
         provider=provider,
-        system=_build_lore_options_rubric(kept_types, kept_abilities),
-        cached_context=cached_context,
-        user=_build_typing_user_context(entry, direction),
-        schema=_lore_options_draft_schema(),
-        max_tokens=DEFAULT_MAX_TOKENS,
-        validate=lambda draft: _validate_lore_options_result(
-            draft, type_pool, kept_types=kept_types
-        ),
     )
+    cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
+    return {
+        **propose_with_repair(
+            provider=provider,
+            system=_with_lore_note(
+                _build_lore_options_rubric(kept_types, kept_abilities), injection
+            ),
+            cached_context=cached_context,
+            user=_build_typing_user_context(entry, direction, injection.block),
+            schema=_lore_options_draft_schema(),
+            max_tokens=DEFAULT_MAX_TOKENS,
+            validate=lambda draft: _validate_lore_options_result(
+                draft, type_pool, kept_types=kept_types
+            ),
+        ),
+        "lore": dict(injection.provenance),
+    }
 
 
 def _validate_lore_options_result(

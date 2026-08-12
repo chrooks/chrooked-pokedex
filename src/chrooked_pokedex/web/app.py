@@ -37,6 +37,7 @@ from . import design_log as designlogmod
 from . import dex as dexmod
 from . import folder_picker as pickermod
 from . import llm as llmmod
+from . import lore as loremod
 from . import readback as readbackmod
 from . import snapshot as snapmod
 from . import suggest as suggestmod
@@ -105,6 +106,7 @@ def create_app(
     dist_dir: Path | None = None,
     targets_path: Path | None = None,
     llm_provider: llmmod.LlmProvider | None = None,
+    lore_provider: loremod.LoreProvider | None = None,
 ) -> FastAPI:
     # Load a repo-root `.env` so provider keys/config are available to the LLM
     # adapter (read lazily at request time). Covers the non-reload `ui` path that
@@ -119,6 +121,12 @@ def create_app(
     # no key) and the real Adapter is built lazily only when a suggest fires.
     # `None` means "build the configured LiteLLM Adapter on first use".
     app.state.llm_provider = llm_provider
+
+    # The lore Port hangs off app.state the same way, and is replaced the same way
+    # in tests. `None` means "build the real HTTP Adapter on first use" — it needs
+    # the snapshot's species ids to map a form back to its base, and the snapshot
+    # is loaded per request, not here.
+    app.state.lore_provider = lore_provider
 
     # Per-app Target state on app.state for clean test isolation: the registry
     # path, a per-fork lock registry, and the per-Target snapshot cache (D2/D4).
@@ -458,14 +466,21 @@ def create_app(
         # unchanged. Non-list / non-string payloads are ignored, not a 422.
         raw_locked = (payload or {}).get("locked")
         locked = [s for s in raw_locked if isinstance(s, str)] if isinstance(raw_locked, list) else None
+        # Researched lore, opted into per call. Anything unrecognized normalizes
+        # to off, so a typo in the body never starts a network fetch.
+        lore_mode = suggestmod.normalize_lore_mode((payload or {}).get("lore"))
         try:
-            return suggestmod.suggest_ability(
+            response = suggestmod.suggest_ability(
                 provider=_llm_provider(),
                 entry=entry,
                 abilities=abilities,
                 direction=direction,
                 locked=locked,
+                lore_mode=lore_mode,
+                lore_provider=_lore_provider(snapshot, lore_mode),
             )
+            _record_lore(chrooked_id, "ability", response)
+            return response
         except suggestmod.SuggestError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:
@@ -482,6 +497,49 @@ def create_app(
         if app.state.llm_provider is None:
             app.state.llm_provider = llmmod.build_provider()
         return app.state.llm_provider
+
+    def _lore_provider(
+        snapshot: dict[str, Any], lore_mode: str
+    ) -> loremod.LoreProvider | None:
+        """The lore Port, built on demand — and only when a caller asked for lore.
+
+        Returns ``None`` for the off mode so the default path never even
+        constructs a fetcher, let alone calls one. The real Adapter is seeded with
+        the snapshot's species ids: that is how a form id (`marowakalola`) falls
+        back to the base species PokeAPI actually holds (`marowak`).
+        """
+        if lore_mode == "off":
+            return None
+        if app.state.lore_provider is None:
+            app.state.lore_provider = loremod.HttpLoreProvider(
+                known_species=(snapshot.get("species") or {}).keys()
+            )
+        return app.state.lore_provider
+
+    def _record_lore(
+        chrooked_id: str, capability: str, response: dict[str, Any]
+    ) -> None:
+        """Ledger one line per lore-on suggestion, carrying its provenance verbatim.
+
+        The point is attribution over days: the author is comparing full against
+        condensed injection, and a week later the only honest record of which ran
+        for which species is this line. An off suggestion writes nothing — the
+        ledger is a history of what happened, not of what was declined.
+        """
+        provenance = response.get("lore")
+        if not isinstance(provenance, dict) or provenance.get("mode") == "off":
+            return
+        ledgermod.append(
+            ruleset_dir,
+            {
+                "kind": "suggest",
+                "scope": "base",
+                "source": "web-suggest",
+                "chrooked_id": chrooked_id,
+                "capability": capability,
+                "lore": dict(provenance),
+            },
+        )
 
     @app.post("/api/species/{chrooked_id}/suggest/typing")
     def suggest_species_typing(
@@ -515,9 +573,12 @@ def create_app(
         # returns 2-3 lore-grounded typing+role directions (`draft.options`)
         # instead of a single typing draft. Not a second prompt path (One Seam).
         mode = body.get("mode", "typing")
+        # Only the lore-options mode reads real lore today; plain typing suggest is
+        # a later follow-up (#79), so its prompt is untouched.
+        lore_mode = suggestmod.normalize_lore_mode(body.get("lore"))
         try:
             if mode == "lore-options":
-                return suggestmod.suggest_lore_options(
+                response = suggestmod.suggest_lore_options(
                     provider=_llm_provider(),
                     entry=entry,
                     type_pool=type_pool,
@@ -526,7 +587,11 @@ def create_app(
                     # values for facets set to KEEP so the options honor them.
                     kept_types=body.get("kept_types"),
                     kept_abilities=body.get("kept_abilities"),
+                    lore_mode=lore_mode,
+                    lore_provider=_lore_provider(snapshot, lore_mode),
                 )
+                _record_lore(chrooked_id, "lore-options", response)
+                return response
             return suggestmod.suggest_typing(
                 provider=_llm_provider(),
                 entry=entry,

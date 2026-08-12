@@ -271,3 +271,19 @@ def build_provider() -> LlmProvider:
     a future non-LiteLLM Adapter slots in here without touching any caller.
     """
     return LiteLlmProvider()
+
+
+def condense_provider(default: LlmProvider) -> LlmProvider:
+    """The Adapter for a lore-condense call: ``LLM_CONDENSE_MODEL`` or ``default``.
+
+    Condensing a page of encyclopedia prose is grunt work, so a cheaper model can
+    do it without touching the model that designs the species — that is what the
+    env var buys, and testing it takes no code change. Unset (the common case)
+    means reuse the Port the capability already holds, whose model is ``LLM_MODEL``:
+    the documented default, and what keeps a single injected mock counting every
+    call a test makes.
+    """
+    model = os.environ.get("LLM_CONDENSE_MODEL")
+    if not model:
+        return default
+    return LiteLlmProvider(model=model)
