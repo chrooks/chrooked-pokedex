@@ -16,11 +16,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
-    "httpx>=0.27",
 ]
 web = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
+    # Lore lookup (#75) fetches PokeAPI + Bulbapedia so the suggesters read
+    # real sources instead of the model's recall. Also used by the FastAPI
+    # TestClient, so it must be present wherever the web app is.
+    "httpx>=0.27",
     # Provider-agnostic LLM client behind the LlmProvider Port (D-D): one
     # interface over Claude/OpenAI/Bedrock/Ollama/HF, model selected by config.
     "litellm>=1.40",

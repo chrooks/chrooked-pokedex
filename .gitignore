@@ -45,3 +45,6 @@ chrooked.log
 
 # DevOS local working state
 .tasks/
+
+# Fetched third-party lore (#75) — derived, refetchable, never canon.
+.cache/
