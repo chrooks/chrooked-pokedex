@@ -1,10 +1,9 @@
 name: Glalie
 chrooked_id: glalie
 aka: { pokeemerald: SPECIES_GLALIE }
-types: [Ice, Dark]
 abilities:
   primary: Frost Body
-  secondary: Ice Body
+  secondary: Deadlock
   hidden: Rimefang
 stats: { hp: 90, atk: 105, def: 90, spa: 75, spd: 80, spe: 80 }
 learnset:

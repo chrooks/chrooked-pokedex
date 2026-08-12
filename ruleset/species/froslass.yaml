@@ -2,7 +2,7 @@ name: Froslass
 chrooked_id: froslass
 aka: { pokeemerald: SPECIES_FROSLASS }
 abilities:
-  secondary: Whiteout
+  secondary: Deadlock
 stats: { spa: 120 }
 learnset:
   - { level: 0, move: Hex }

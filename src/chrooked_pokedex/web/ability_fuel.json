@@ -34,6 +34,7 @@
     "martialartist": { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["punching", "kicking"], "attacking": true } },
     "strongjaw":     { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["biting"], "attacking": true } },
     "infernalmaw":   { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["biting"], "attacking": true } },
+    "rimefang":      { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["biting"], "attacking": true } },
     "coilup":        { "shape": "flag_boost", "hard": true, "min_moves": 1, "filter": { "flags_any": ["biting"], "attacking": true } },
     "punkrock":      { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["sound"], "attacking": true } },
     "amplifier":     { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["sound"], "attacking": true } },
