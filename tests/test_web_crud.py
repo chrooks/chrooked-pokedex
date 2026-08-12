@@ -483,6 +483,33 @@ def test_delete_ability_with_confirm_succeeds(
     assert not (ruleset_dir / "abilities" / "poisonheal.yaml").exists()
 
 
+def test_delete_ability_whose_filename_differs_from_its_id(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    # A HARVESTED ability keeps the fork's filename while carrying its own
+    # chrooked_id — `penetratingeyes.yaml` holding `ojospetreos`. Deleting it used
+    # to unlink `ojospetreos.yaml`, which does not exist, and 500 on the
+    # FileNotFoundError instead of removing the file.
+    harvested = ruleset_dir / "abilities" / "stonygaze.yaml"
+    harvested.write_text(
+        "name: Penetrating Eyes\nchrooked_id: ojospetreos\ndescription: A stony gaze.\n",
+        encoding="utf-8",
+    )
+    response = client.delete("/api/abilities/ojospetreos")
+    assert response.status_code == 200, response.text
+    assert not harvested.exists()
+
+
+def test_delete_ability_missing_from_disk_is_a_404_not_a_500(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    # The Ruleset knows the ability but no file carries it — an honest 404 beats
+    # an unhandled FileNotFoundError.
+    (ruleset_dir / "abilities" / "poisonheal.yaml").unlink()
+    response = client.delete("/api/abilities/poisonheal?confirm=true")
+    assert response.status_code == 404, response.text
+
+
 def test_editing_ability_round_trips_aka(
     client: TestClient, ruleset_dir: Path
 ) -> None:

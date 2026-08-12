@@ -474,10 +474,37 @@ def delete_move(
             "confirm to delete and leave those references dangling.",
             citing,
         )
-    path = Path(ruleset_dir) / "moves" / f"{chrooked_id}.yaml"
-    before = colmod.serialize_move(load_move(path)) if (ledger_dir and path.exists()) else None
+    path = _owned_file(ruleset_dir, "moves", chrooked_id)
+    if path is None:
+        raise NotFoundError(f"No file on disk holds owned move {chrooked_id!r}.")
+    before = colmod.serialize_move(load_move(path)) if ledger_dir else None
     path.unlink()
     _log_write(ledger_dir, scope, "move", chrooked_id, before, None)
+
+
+def _owned_file(ruleset_dir: Path, kind_dir: str, chrooked_id: str) -> Optional[Path]:
+    """The YAML file holding an owned entity, or None when nothing on disk has it.
+
+    A write names the file after the `chrooked_id`, but a HARVESTED file keeps the
+    fork's own filename — `abilities/penetratingeyes.yaml` carries
+    `chrooked_id: ojospetreos`. The loader keys off the field, not the filename, so
+    a delete that assumed they matched blew up with FileNotFoundError (a 500) on
+    every harvested entity. Try the conventional name first, then scan.
+    """
+    directory = Path(ruleset_dir) / kind_dir
+    conventional = directory / f"{chrooked_id}.yaml"
+    if conventional.exists():
+        return conventional
+    if not directory.exists():
+        return None
+    for path in sorted(directory.glob("*.yaml")):
+        try:
+            data = yaml.safe_load(path.read_text("utf-8")) or {}
+        except yaml.YAMLError:
+            continue  # a malformed sibling must not block deleting a valid file
+        if isinstance(data, dict) and data.get("chrooked_id") == chrooked_id:
+            return path
+    return None
 
 
 def move_citations(ruleset: Ruleset, move: MoveDef) -> list[str]:
@@ -631,8 +658,10 @@ def delete_ability(
             "confirm to delete and leave those slots pointing at a missing ability.",
             citing,
         )
-    path = Path(ruleset_dir) / "abilities" / f"{chrooked_id}.yaml"
-    before = colmod.serialize_ability(load_ability(path)) if (ledger_dir and path.exists()) else None
+    path = _owned_file(ruleset_dir, "abilities", chrooked_id)
+    if path is None:
+        raise NotFoundError(f"No file on disk holds owned ability {chrooked_id!r}.")
+    before = colmod.serialize_ability(load_ability(path)) if ledger_dir else None
     path.unlink()
     _log_write(ledger_dir, scope, "ability", chrooked_id, before, None)
 
