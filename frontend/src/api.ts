@@ -26,6 +26,7 @@ import type {
   EngineKey,
   LearnsetProposal,
   LedgerEntry,
+  LoreMode,
   Move,
   MoveWrite,
   SpeciesOverride,
@@ -159,11 +160,14 @@ export const api = {
       action — proposes only, never writes. The `direction` is the author's
       freeform steer ("make it a special attacker"). Errors carry the server's
       own message (503 missing key / upstream, 422 invalid). */
-  suggestAbility: (id: string, opts?: { direction?: string; locked?: string[] }) =>
+  suggestAbility: (
+    id: string,
+    opts?: { direction?: string; locked?: string[]; lore?: LoreMode },
+  ) =>
     sendJson<AbilityProposal>(
       "POST",
       `/api/species/${encodeURIComponent(id)}/suggest/ability`,
-      { direction: opts?.direction, locked: opts?.locked },
+      { direction: opts?.direction, locked: opts?.locked, lore: opts?.lore },
     ),
   /** Ask the LLM to propose a whole learnset for this species (#7). Read-only —
       proposes only, never writes. `mode` defaults to a full-list proposal. */

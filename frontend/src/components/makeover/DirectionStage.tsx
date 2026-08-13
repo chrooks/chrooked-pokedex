@@ -6,8 +6,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../../api";
-import type { AbilitySlots, DexEntry } from "../../types";
+import type { AbilitySlots, DexEntry, LoreMode, LoreProvenance } from "../../types";
 import { makeoverApi, type LoreOption } from "../../lib/makeoverApi";
+import { LoreControl } from "./LoreControl";
+import { LoreProvenanceLine } from "./LoreProvenanceLine";
 import type { StageActions } from "./StagePanel";
 
 interface Props {
@@ -16,6 +18,9 @@ interface Props {
   registerActions: (actions: StageActions | null) => void;
   /** Chosen direction → advance to typing, carrying the steer forward. */
   onChosen: (direction: string) => void;
+  /** The session's lore-lookup mode, owned by the workbench (survives stages). */
+  loreMode: LoreMode;
+  onLoreMode: (mode: LoreMode) => void;
   /** Current typing when TYPING is KEPT (à la carte) — options keep it verbatim
       and differ only by role. Undefined when typing is in play. */
   keptTypes?: string[];
@@ -44,6 +49,8 @@ export function DirectionStage({
   redirectRef,
   registerActions,
   onChosen,
+  loreMode,
+  onLoreMode,
   keptTypes,
   keptAbilities,
 }: Props) {
@@ -53,6 +60,8 @@ export function DirectionStage({
   const [options, setOptions] = useState<LoreOption[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [free, setFree] = useState("");
+  // What the last options call was built from — shown under the options it produced.
+  const [lore, setLore] = useState<LoreProvenance | null>(null);
   const typingKept = keptTypes != null;
 
   // Read the kept-facet constraints through a ref so the load callback stays stable.
@@ -62,12 +71,15 @@ export function DirectionStage({
   async function loadOptions() {
     setPhase("loading");
     setError(null);
+    setLore(null);
     try {
       const result = await makeoverApi.loreOptions(entry.chrooked_id, {
         keptTypes: keptRef.current.keptTypes,
         keptAbilities: keptRef.current.keptAbilities,
+        lore: loreMode,
       });
       setOptions(result.draft.options);
+      setLore(result.lore ?? null);
       setPhase("ready");
     } catch (caught: unknown) {
       setError(
@@ -112,16 +124,22 @@ export function DirectionStage({
         )}
       </p>
 
-      {(phase === "idle" || phase === "error") && (
-        <button
-          type="button"
-          className="mk-btn mk-btn--ghost"
-          id="mk-suggest-directions"
-          onClick={() => void loadOptions()}
-        >
-          {phase === "error" ? "TRY AGAIN" : "SUGGEST DIRECTIONS"}
-        </button>
-      )}
+      {/* The lore switch sits WITH the button that spends the call, so the author
+          decides what the app reads before they ask it to read. It stays visible
+          after the options land — the choice carries into the later stages. */}
+      <div className="mk-direction__controls">
+        <LoreControl mode={loreMode} onChange={onLoreMode} disabled={phase === "loading"} />
+        {(phase === "idle" || phase === "error") && (
+          <button
+            type="button"
+            className="mk-btn mk-btn--ghost"
+            id="mk-suggest-directions"
+            onClick={() => void loadOptions()}
+          >
+            {phase === "error" ? "TRY AGAIN" : "SUGGEST DIRECTIONS"}
+          </button>
+        )}
+      </div>
 
       {phase === "loading" && (
         <div className="mk-stage__skeleton" aria-busy="true" aria-live="polite">
@@ -163,6 +181,8 @@ export function DirectionStage({
           ))}
         </ul>
       )}
+
+      {phase === "ready" && <LoreProvenanceLine id="mk-direction-lore-prov" lore={lore} />}
 
       <form
         className="mk-direction__free"

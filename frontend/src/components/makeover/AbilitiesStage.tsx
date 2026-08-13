@@ -5,7 +5,14 @@
    logic (merge, edit, alternatives) — the same machinery the ledger uses. */
 
 import { useEffect, useState } from "react";
-import type { AbilityDraft, AbilitySlots, DexEntry, ProposalAlternative } from "../../types";
+import type {
+  AbilityDraft,
+  AbilitySlots,
+  DexEntry,
+  LoreMode,
+  LoreProvenance,
+  ProposalAlternative,
+} from "../../types";
 import { api } from "../../api";
 import {
   ABILITY_SLOTS,
@@ -18,6 +25,8 @@ import {
   type AbilitySlot,
 } from "../proposal/abilitiesDraft";
 import { StagePanel } from "./StagePanel";
+import { LoreControl } from "./LoreControl";
+import { LoreProvenanceLine } from "./LoreProvenanceLine";
 import { AbilityCreatePanel } from "./AbilityCreatePanel";
 import { MoveCreatePanel } from "./MoveCreatePanel";
 import { DistributePanel } from "./DistributePanel";
@@ -34,6 +43,9 @@ interface Props extends CommonStageProps {
   abilityOptions: readonly string[];
   /** The whole dex by chrooked_id, for the create mode's distribution writes. */
   byId: ReadonlyMap<string, DexEntry>;
+  /** The session's lore-lookup mode, owned by the workbench (survives stages). */
+  loreMode: LoreMode;
+  onLoreMode: (mode: LoreMode) => void;
   /** Report the open sub-surface to the overhead rail (ac11): the open panel's
       label ("create new" / "distribute" / "create move"), null on swap/close. */
   onSubSurface?: (label: string | null) => void;
@@ -70,12 +82,16 @@ export function AbilitiesStage(props: Props) {
     onRedirect,
     abilityOptions,
     byId,
+    loreMode,
+    onLoreMode,
     onSubSurface,
     onSaved,
     onCreated,
   } = props;
 
   const [mode, setMode] = useState<AbilityMode>("swap");
+  // What the last proposal was built from — set from every propose response.
+  const [lore, setLore] = useState<LoreProvenance | null>(null);
   // Slots the author has locked: PROPOSE leaves them unchanged (sent to the
   // server as a constraint AND stripped from the returned draft client-side).
   const [locked, setLocked] = useState<ReadonlySet<AbilitySlot>>(new Set());
@@ -95,7 +111,9 @@ export function AbilitiesStage(props: Props) {
       const result = await api.suggestAbility(id, {
         direction: direction || undefined,
         locked: locked.size > 0 ? [...locked] : undefined,
+        lore: loreMode,
       });
+      setLore(result.lore ?? null);
       // The server may partially degrade: valid slots in `draft`, per-slot verbatim
       // `warnings` for a name it couldn't resolve (usually a move). Not in the
       // AbilityProposal type — read it off the runtime response.
@@ -213,6 +231,16 @@ export function AbilitiesStage(props: Props) {
         placeholder="steer the abilities (e.g. lean into the trapper role)…"
         redirectRef={redirectRef}
         registerActions={registerActions}
+        // The stage's own mode buttons live ABOVE the panel (they swap the whole
+        // surface); extraControl is free, so the lore switch rides beside PROPOSE
+        // — the button whose call it shapes.
+        extraControl={
+          <LoreControl
+            mode={loreMode}
+            onChange={onLoreMode}
+            disabled={hook.phase === "proposing"}
+          />
+        }
         applyAlternative={(alt, current) => {
           // An alternative can never land on a locked slot.
           const next = applyAlternative(current, alt);
@@ -254,6 +282,7 @@ export function AbilitiesStage(props: Props) {
           </div>
         }
       >
+      <>
       <div className="mk-abilities">
         {ABILITY_SLOTS.map((slot) => {
           const value = proposedSlot(draft, slot) ?? currentSlot(entry, slot) ?? "";
@@ -314,6 +343,8 @@ export function AbilitiesStage(props: Props) {
           </ul>
         )}
       </div>
+      <LoreProvenanceLine id="mk-abilities-lore-prov" lore={lore} />
+      </>
       </StagePanel>
     </>
   );

@@ -4,7 +4,14 @@
    Fetch + error mapping come from api.ts — one ApiError shape everywhere. */
 
 import { getJson, sendJson } from "../api";
-import type { AbilitySlots, AdditionalEffect, ApplyReportSummary, Behavior } from "../types";
+import type {
+  AbilitySlots,
+  AdditionalEffect,
+  ApplyReportSummary,
+  Behavior,
+  LoreMode,
+  LoreProvenance,
+} from "../types";
 import type { LearnsetRubric } from "./learnsetBands";
 
 const postJson = <T,>(path: string, payload?: unknown): Promise<T> =>
@@ -22,6 +29,8 @@ export interface LoreOption {
 export interface LoreOptionsResponse {
   draft: { options: LoreOption[] };
   rationale: Record<string, string>;
+  /** What the lore lookup did for this call (`{ mode: "off" }` when none ran). */
+  lore?: LoreProvenance;
 }
 
 export interface TypingProposal {
@@ -138,7 +147,13 @@ export const makeoverApi = {
       kept typing is never changed. */
   loreOptions: (
     id: string,
-    opts?: { direction?: string; keptTypes?: string[]; keptAbilities?: AbilitySlots },
+    opts?: {
+      direction?: string;
+      keptTypes?: string[];
+      keptAbilities?: AbilitySlots;
+      /** Researched-lore mode for this call. Omitted or unrecognized = off. */
+      lore?: LoreMode;
+    },
   ) =>
     postJson<LoreOptionsResponse>(
       `/api/species/${encodeURIComponent(id)}/suggest/typing`,
@@ -147,6 +162,7 @@ export const makeoverApi = {
         direction: opts?.direction,
         kept_types: opts?.keptTypes,
         kept_abilities: opts?.keptAbilities,
+        lore: opts?.lore,
       },
     ),
   suggestTyping: (id: string, direction?: string) =>

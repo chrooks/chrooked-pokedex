@@ -1390,6 +1390,107 @@ textarea.mk-stage__redirect-input {
   outline-offset: 1px;
 }
 
+/* --- Lore control + provenance readout ------------------------------------ */
+
+/* The three-way lore switch. Same grammar as .mk-mode and the editors'
+   ScopeToggle — a faint label plus a segmented well, inset one surface step.
+   Deliberately colorless: the on-segment inverts --text-dim over --surface-0
+   (9.9:1 dark, 6.1:1 light) rather than borrowing --chrome (device structure) or
+   --edited ("the Ruleset touched this"). One color, one job. */
+.mk-lore {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.mk-lore__label {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.mk-lore__options {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-0);
+}
+.mk-lore__option {
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.mk-lore__option:hover:not(:disabled):not([data-on="true"]) {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.mk-lore__option:active:not(:disabled) {
+  background: var(--surface-3);
+}
+.mk-lore__option:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+.mk-lore__option[data-on="true"] {
+  background: var(--text-dim);
+  color: var(--surface-0);
+}
+.mk-lore__options:has(:disabled) {
+  opacity: 0.45;
+}
+.mk-lore__option:disabled {
+  cursor: default;
+}
+
+/* The readout under a proposal: what the model actually read first. Faint mono,
+   separated by a hairline — a footnote to the result, never competing with it. */
+.mk-lore-prov {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+}
+.mk-lore-prov__source {
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.mk-lore-prov__source:hover {
+  color: var(--text);
+}
+.mk-lore-prov__source:active {
+  color: var(--text-faint);
+}
+.mk-lore-prov__source:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+/* The direction stage's control row: the lore switch plus the button that spends
+   the call, on one line so the choice is made before the ask. */
+.mk-direction__controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
 /* --- Ability create panel ------------------------------------------------- */
 
 .mk-create__warnings {

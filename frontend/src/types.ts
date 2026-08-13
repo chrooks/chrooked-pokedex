@@ -116,6 +116,28 @@ export interface ProposalAlternative {
   rationale: string;
 }
 
+/** The lore-lookup modes a suggest call can opt into. `off` is the default on
+    every surface, and the server treats anything unrecognized as `off` — a typo
+    must never silently start making network calls. */
+export type LoreMode = "off" | "full" | "condensed";
+
+/** What a suggest response reports about the lore lookup it ran. An `off` call
+    returns exactly `{ mode: "off" }` — no empty fields pretending a fetch
+    happened. `mode` is what ACTUALLY ran, so a condense call that failed and
+    fell back to the capped raw block reports `"full"`. */
+export interface LoreProvenance {
+  mode: LoreMode;
+  found?: boolean;
+  /** The source URLs actually read. */
+  sources?: string[];
+  /** How many characters of lore were injected into the prompt. */
+  chars?: number;
+  /** Set only when the lore came from a base species, not the requested form. */
+  base_species?: string;
+  /** Set when the lookup itself failed (network / upstream) and lore was skipped. */
+  error?: string;
+}
+
 /** The shared envelope every `/suggest/*` endpoint returns: a `draft` (the
     proposed values), per-key `rationale`, and a list of swappable
     `alternatives`. `Draft` and the `rationale` keys are section-specific. */
@@ -123,6 +145,8 @@ export interface SuggestResponse<Draft> {
   draft: Draft;
   rationale: Record<string, string>;
   alternatives: ProposalAlternative[];
+  /** What the lore lookup did for this call. Absent on routes that never run one. */
+  lore?: LoreProvenance;
   /** Per-item verbatim warnings (e.g. a dropped learnset row). */
   warnings?: string[];
   /** Set when the draft came back flagged — it tripped a soft bound (e.g. too

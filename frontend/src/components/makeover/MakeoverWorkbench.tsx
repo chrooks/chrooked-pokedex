@@ -12,7 +12,7 @@
    edit) live inside the learnset stage where the rows are. */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { DexEntry, Move, Target } from "../../types";
+import type { DexEntry, LoreMode, Move, Target } from "../../types";
 import {
   defaultSelected,
   facetSummary,
@@ -113,6 +113,14 @@ export function MakeoverWorkbench({
   const [createdContent, setCreatedContent] = useState<{ name: string; kind: "ability" | "move" }[]>(
     [],
   );
+  // The lore-lookup mode for THIS makeover session. Held here, not in a stage, so
+  // it survives moving between DIRECTION and ABILITIES inside one sitting.
+  //
+  // SESSION MEMORY ONLY — deliberately NOT written to localStorage. Off is the
+  // honest default every time the author sits down; a remembered "on" would make
+  // network calls (and spend an extra model call, in condensed mode) that they
+  // had forgotten enabling three days earlier. Closing the workbench forgets it.
+  const [loreMode, setLoreMode] = useState<LoreMode>("off");
 
   const redirectRef = useRef<HTMLTextAreaElement>(null);
   const actionsRef = useRef<StageActions | null>(null);
@@ -266,6 +274,8 @@ export function MakeoverWorkbench({
           redirectRef={redirectRef}
           registerActions={registerActions}
           onChosen={handleDirectionChosen}
+          loreMode={loreMode}
+          onLoreMode={setLoreMode}
           // KEPT facets constrain the lore options: a facet not in `selected` is
           // KEEP, so its current value is fixed and the options must honor it.
           keptTypes={selected.has("typing") ? undefined : entry.types}
@@ -285,6 +295,8 @@ export function MakeoverWorkbench({
           {...commonProps}
           abilityOptions={abilityOptions}
           byId={byId}
+          loreMode={loreMode}
+          onLoreMode={setLoreMode}
           onSubSurface={setSubSurface}
           onSaved={onSaved}
           onCreated={handleCreated}
