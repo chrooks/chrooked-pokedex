@@ -16,6 +16,8 @@ guessed.
 
 from __future__ import annotations
 
+import re
+from dataclasses import dataclass
 from pathlib import Path
 
 from ...model import Ruleset, evolution_methods
@@ -26,10 +28,59 @@ from . import c_edit
 from .resolution import ResolutionMap
 
 
+@dataclass(frozen=True)
+class _EvoDialect:
+    """What the target's evolution layer declares. Forks prune EVO_* methods
+    (soulgold keeps 9 of expansion's ~30) and item constants must be the target's
+    own — writing an undeclared token breaks the ROM build, not just the apply."""
+
+    # None = constants file not found, don't validate.
+    known_methods: frozenset[str] | None = None
+    # normalized ("LEAFSTONE") -> declared symbol ("ITEM_LEAF_STONE"); None = no file.
+    items_normalized: dict[str, str] | None = None
+
+    def supports_method(self, token: str) -> bool:
+        return self.known_methods is None or token in self.known_methods
+
+    def resolve_item(self, name: str) -> str | None:
+        """Neutral item name -> the target's declared ITEM_* symbol (underscore- and
+        space-insensitive), or the constructed symbol when no item table was found."""
+        constructed = item_symbol(name)
+        if self.items_normalized is None:
+            return constructed
+        return self.items_normalized.get(_squash(constructed.removeprefix("ITEM_")))
+
+
+def _squash(text: str) -> str:
+    return re.sub(r"[^A-Z0-9]", "", text.upper())
+
+
+def _detect_evo_dialect(target: Path) -> _EvoDialect:
+    known_methods = None
+    constants = target / "include" / "constants" / "pokemon.h"
+    if constants.exists():
+        text = constants.read_text(encoding="utf-8", errors="replace")
+        tokens = frozenset(
+            t for t in re.findall(r"\bEVO_[A-Z0-9_]+\b", text)
+            if not t.startswith("EVO_MODE_")
+        )
+        known_methods = tokens or None
+    items_normalized = None
+    items_h = target / "include" / "constants" / "items.h"
+    if items_h.exists():
+        text = items_h.read_text(encoding="utf-8", errors="replace")
+        items_normalized = {
+            _squash(sym.removeprefix("ITEM_")): sym
+            for sym in sorted(set(re.findall(r"\bITEM_[A-Z0-9_]+\b", text)))
+        }
+    return _EvoDialect(known_methods=known_methods, items_normalized=items_normalized)
+
+
 def apply_evolutions(
     target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
 ) -> set[Path]:
-    groups, blocked = _group_by_source(ruleset, resmap, report)
+    dialect = _detect_evo_dialect(target)
+    groups, blocked = _group_by_source(ruleset, resmap, report, dialect)
 
     files = _species_info_files(target)
     texts: dict[Path, str] = {path: path.read_text(encoding="utf-8") for path in files}
@@ -64,7 +115,10 @@ def apply_evolutions(
     return changed
 
 
-def _group_by_source(ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport):
+def _group_by_source(
+    ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
+    dialect: _EvoDialect | None = None,
+):
     """Build {source_symbol: (rendered_EVOLUTION_text, unresolved_notes)}."""
     by_source: dict[str, list[str]] = {}
     partials: dict[str, list[str]] = {}
@@ -90,7 +144,7 @@ def _group_by_source(ruleset: Ruleset, resmap: ResolutionMap, report: ApplyRepor
             ))
             continue
 
-        rendered = _render_triple(evo.method, target_symbol)
+        rendered = _render_triple(evo.method, target_symbol, dialect or _EvoDialect())
         if rendered is None:
             partials.setdefault(source_symbol, []).append(f"{chrooked_id}:method")
             continue
@@ -111,28 +165,40 @@ def _resolve_source(from_species: str, ruleset: Ruleset, resmap: ResolutionMap):
     return resmap.species_by_id.get(source_id)
 
 
-def _render_triple(method: dict, target_symbol: str) -> str | None:
+def _render_triple(
+    method: dict, target_symbol: str, dialect: _EvoDialect = _EvoDialect()
+) -> str | None:
     if "level" in method:
         return f"{{EVO_LEVEL, {method['level']}, {target_symbol}}}"
     if "item" in method:
-        return f"{{EVO_ITEM, {item_symbol(str(method['item']))}, {target_symbol}}}"
+        item = dialect.resolve_item(str(method["item"]))
+        if item is None or not dialect.supports_method("EVO_ITEM"):
+            return None
+        return f"{{EVO_ITEM, {item}, {target_symbol}}}"
     canonical = evolution_methods.to_engine(method, "pokeemerald")
     if canonical is not None:
         token, value_kind, raw = canonical
-        param = _pe_param(value_kind, raw)
+        if not dialect.supports_method(token):
+            return None
+        param = _pe_param(value_kind, raw, dialect)
+        if param is None:
+            return None
         return f"{{{token}, {param}, {target_symbol}}}"
     if "pokeemerald" in method:
+        if not dialect.supports_method(str(method["pokeemerald"])):
+            return None
         param = method.get("param", "0")
         return f"{{{method['pokeemerald']}, {param}, {target_symbol}}}"
     return None
 
 
-def _pe_param(value_kind: str, raw: str) -> str:
-    """Render a canonical method's param as a pokeemerald token."""
+def _pe_param(value_kind: str, raw: str, dialect: _EvoDialect) -> str | None:
+    """Render a canonical method's param as a pokeemerald token; None = the
+    target cannot express it (unknown item)."""
     if value_kind == "none":
         return "0"
     if value_kind == "item":
-        return item_symbol(raw)
+        return dialect.resolve_item(raw)
     if value_kind == "move":
         return move_symbol(raw)
     if value_kind == "map":

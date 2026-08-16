@@ -122,3 +122,22 @@ def test_passthrough_method_round_trips(tmp_path: Path) -> None:
 
     sliggoo = parse_evolutions(target)["SPECIES_SLIGGOO"]
     assert sliggoo == [EvolutionEntry("EVO_LEVEL_RAIN", "0", "SPECIES_GOODRA")]
+
+
+def test_evo_dialect_drops_unknown_methods_and_resolves_items(tmp_path):
+    """A pruned-evolution target (no EVO_MOVE) drops that triple as partial, and a
+    Rejuv-flavored item name (Leafstone) resolves to the target's ITEM_LEAF_STONE."""
+    from chrooked_pokedex.appliers.pokeemerald.evolution_apply import (
+        _EvoDialect,
+        _render_triple,
+    )
+
+    dialect = _EvoDialect(
+        known_methods=frozenset({"EVO_LEVEL", "EVO_ITEM"}),
+        items_normalized={"LEAFSTONE": "ITEM_LEAF_STONE"},
+    )
+
+    assert _render_triple({"item": "Leafstone"}, "SPECIES_X", dialect) == \
+        "{EVO_ITEM, ITEM_LEAF_STONE, SPECIES_X}"
+    assert _render_triple({"knows_move": "Rollout"}, "SPECIES_X", dialect) is None
+    assert _render_triple({"item": "Chrooked Orb"}, "SPECIES_X", dialect) is None
