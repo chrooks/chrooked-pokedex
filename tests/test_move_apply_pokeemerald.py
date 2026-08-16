@@ -237,3 +237,42 @@ def test_argument_overlay(tmp_path):
     entry = _entry(target, "MOVE_TACKLE")
     assert ".effect = EFFECT_SUPER_EFFECTIVE_ON_ARG," in entry
     assert ".argument = { .type = TYPE_DRAGON }," in entry
+
+
+def test_dialect_detection_new_target_prefix_and_flag_filter(tmp_path: Path) -> None:
+    """A 1.14+ target (TARGET_* constants, no hammerMove bitfield) gets TARGET_*
+    rendered and unsupported flags dropped with an unresolved note."""
+    from chrooked_pokedex.appliers.pokeemerald import move_render
+
+    target = tmp_path / "fork"
+    (target / "include").mkdir(parents=True)
+    (target / "include" / "move.h").write_text(
+        """\
+struct MoveInfo
+{
+    u16 effect;
+    bool32 makesContact:1;
+    bool32 punchingMove:1;
+    bool32 windMove:1;
+};
+""",
+        encoding="utf-8",
+    )
+    text = "    [MOVE_POUND] = { .target = TARGET_SELECTED, },\n"
+
+    dialect = move_render.detect_move_dialect(target, text)
+
+    assert dialect.target_prefix == "TARGET_"
+    assert dialect.supports_flag("punchingMove")
+    assert not dialect.supports_flag("hammerMove")
+
+
+def test_dialect_defaults_on_legacy_target(tmp_path: Path) -> None:
+    from chrooked_pokedex.appliers.pokeemerald import move_render
+
+    dialect = move_render.detect_move_dialect(
+        tmp_path, "    [MOVE_POUND] = { .target = MOVE_TARGET_SELECTED, },\n"
+    )
+
+    assert dialect.target_prefix == "MOVE_TARGET_"
+    assert dialect.supported_flags is None  # struct not found -> no filtering

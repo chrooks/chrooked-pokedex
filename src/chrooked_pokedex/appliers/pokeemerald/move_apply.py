@@ -49,6 +49,7 @@ def apply_moves(
         return set()
     text = path.read_text(encoding="utf-8")
     original = text
+    dialect = move_render.detect_move_dialect(target, text)
 
     for chrooked_id in sorted(ruleset.moves):
         move = ruleset.moves[chrooked_id]
@@ -70,7 +71,7 @@ def apply_moves(
             continue
 
         body = text[span[0] + 1 : span[1]]
-        new_body, changed_fields, unresolved = _overlay(body, move, resmap)
+        new_body, changed_fields, unresolved = _overlay(body, move, resmap, dialect)
         if not changed_fields and not unresolved:
             continue  # already matches; nothing to do, nothing to report
 
@@ -88,9 +89,12 @@ def apply_moves(
     return set()
 
 
-def _overlay(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[str, list[str], list[str]]:
+def _overlay(
+    body: str, move: MoveDef, resmap: ResolutionMap,
+    dialect: move_render.MoveDialect,
+) -> tuple[str, list[str], list[str]]:
     body, changed = _overlay_scalars(body, move, resmap)
-    body, behavior_changed, unresolved = _overlay_behavior(body, move, resmap)
+    body, behavior_changed, unresolved = _overlay_behavior(body, move, resmap, dialect)
     if move.second_type:
         unresolved.append(f"second_type:{move.second_type} (no pokeemerald dual-type)")
     return body, changed + behavior_changed, unresolved
@@ -123,7 +127,8 @@ def _overlay_scalars(body: str, move: MoveDef, resmap: ResolutionMap) -> tuple[s
 
 
 def _overlay_behavior(
-    body: str, move: MoveDef, resmap: ResolutionMap
+    body: str, move: MoveDef, resmap: ResolutionMap,
+    dialect: move_render.MoveDialect,
 ) -> tuple[str, list[str], list[str]]:
     """Overlay effect, target, argument, additional_effects, and the modeled flags.
 
@@ -140,7 +145,7 @@ def _overlay_behavior(
         body = c_edit.set_field_all(body, "effect", desired_effect)
         changed.append("effect")
 
-    body, target_changed = _overlay_target(body, move)
+    body, target_changed = _overlay_target(body, move, dialect)
     changed.extend(target_changed)
 
     if move.argument:
@@ -159,15 +164,19 @@ def _overlay_behavior(
     elif c_edit.get_field(body, "additionalEffects") is not None:
         unresolved.append("additionalEffects:target has one the Ruleset dropped (not cleared)")
 
-    body, flag_changed = _overlay_flags(body, move)
+    body, flag_changed = _overlay_flags(body, move, dialect)
     changed.extend(flag_changed)
+    for field in move_render.dropped_flag_fields(move, dialect):
+        unresolved.append(f"flag:{field} not in target struct")
     return body, changed, unresolved
 
 
-def _overlay_target(body: str, move: MoveDef) -> tuple[str, list[str]]:
+def _overlay_target(
+    body: str, move: MoveDef, dialect: move_render.MoveDialect
+) -> tuple[str, list[str]]:
     """Set .target, but don't insert it on a default-target move that omits the field
     (every plain move would otherwise gain a redundant .target line)."""
-    desired = move_render.target_symbol(move)
+    desired = move_render.target_symbol(move, dialect)
     current = c_edit.get_field(body, "target")
     if current is not None:
         if current != desired:
@@ -177,12 +186,16 @@ def _overlay_target(body: str, move: MoveDef) -> tuple[str, list[str]]:
     return body, []
 
 
-def _overlay_flags(body: str, move: MoveDef) -> tuple[str, list[str]]:
+def _overlay_flags(
+    body: str, move: MoveDef, dialect: move_render.MoveDialect
+) -> tuple[str, list[str]]:
     """Reconcile the modeled flag fields: add what the Ruleset sets, remove a modeled
     flag it no longer sets, and never touch the engine's own unmodeled flags."""
     changed: list[str] = []
-    desired = set(move_render.flag_fields(move))
+    desired = set(move_render.flag_fields(move, dialect))
     for field in move_render.MODELED_FLAG_FIELDS:
+        if not dialect.supports_flag(field):
+            continue
         present = c_edit.get_field(body, field) is not None
         if field in desired and not present:
             body = c_edit.set_field(body, field, "TRUE")

@@ -96,6 +96,12 @@ def _creation_reason(ruleset: Ruleset, name: str) -> str:
 def _create_moves(target, ruleset, resmap, report, holds: HoldSet) -> set[Path]:
     constants_path = target / "include" / "constants" / "moves.h"
     data_path = target / "src" / "data" / "moves_info.h"
+    moves_text = (
+        data_path.read_text(encoding="utf-8", errors="replace")
+        if data_path.exists()
+        else ""
+    )
+    dialect = move_render.detect_move_dialect(target, moves_text)
     changed: set[Path] = set()
     for chrooked_id in sorted(ruleset.moves):
         move = ruleset.moves[chrooked_id]
@@ -115,7 +121,7 @@ def _create_moves(target, ruleset, resmap, report, holds: HoldSet) -> set[Path]:
                 symbol=symbol, reason="could not place move constant",
             ))
             continue
-        _insert_entry(data_path, "gMovesInfo", _move_entry(symbol, move, resmap))
+        _insert_entry(data_path, "gMovesInfo", _move_entry(symbol, move, resmap, dialect))
         changed.update({constants_path, data_path})
         resmap.move_by_name[move.name.lower()] = symbol
         report.add(ReportEntry(
@@ -231,7 +237,10 @@ def _ability_entry(symbol: str, ability: AbilityDef) -> str:
     )
 
 
-def _move_entry(symbol: str, move: MoveDef, resmap: ResolutionMap) -> str:
+def _move_entry(
+    symbol: str, move: MoveDef, resmap: ResolutionMap,
+    dialect: "move_render.MoveDialect | None" = None,
+) -> str:
     type_symbol = resmap.type(move.type) or ("TYPE_" + move.type.upper())
     category = _CATEGORY_TO_SYMBOL.get(move.category, "DAMAGE_CATEGORY_PHYSICAL")
     lines = [
@@ -253,10 +262,10 @@ def _move_entry(symbol: str, move: MoveDef, resmap: ResolutionMap) -> str:
         lines.append(f"        .pp = {move.pp},")
     if move.priority:
         lines.append(f"        .priority = {move.priority},")
-    lines.append(f"        .target = {move_render.target_symbol(move)},")
+    lines.append(f"        .target = {move_render.target_symbol(move, dialect)},")
     if move.argument:
         lines.append(f"        .argument = {move_render.argument_braced(move.argument, resmap)},")
-    for symbol_flag in move_render.flag_fields(move):
+    for symbol_flag in move_render.flag_fields(move, dialect):
         lines.append(f"        .{symbol_flag} = TRUE,")
     if move.additional_effects:
         lines.append(f"        .additionalEffects = {move_render.additional_effects_expr(move.additional_effects)},")
