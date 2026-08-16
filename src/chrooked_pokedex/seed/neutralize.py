@@ -88,7 +88,7 @@ def primary_effect_name(token: str) -> str:
 
 
 def primary_effect_symbol(name: str) -> str:
-    return "EFFECT_" + name.upper()
+    return "EFFECT_" + _c_identifier(name)
 
 
 def move_effect_name(token: str) -> str:
@@ -97,7 +97,7 @@ def move_effect_name(token: str) -> str:
 
 
 def move_effect_symbol(name: str) -> str:
-    return "MOVE_EFFECT_" + name.upper()
+    return "MOVE_EFFECT_" + _c_identifier(name)
 
 
 def move_target_name(token: str) -> str:
@@ -106,7 +106,13 @@ def move_target_name(token: str) -> str:
 
 
 def move_target_symbol(name: str) -> str:
-    return "MOVE_TARGET_" + name.upper()
+    return "MOVE_TARGET_" + _c_identifier(name)
+
+
+def _c_identifier(name: str) -> str:
+    """A neutral id as a C symbol chunk: `u-turn` -> `U_TURN` (hyphens and spaces
+    are legal in neutral names but never in a C identifier)."""
+    return re.sub(r"[^A-Z0-9]+", "_", name.upper()).strip("_")
 
 
 def move_flag_name(token: str) -> str | None:

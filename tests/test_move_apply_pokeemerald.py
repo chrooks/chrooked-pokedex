@@ -276,3 +276,29 @@ def test_dialect_defaults_on_legacy_target(tmp_path: Path) -> None:
 
     assert dialect.target_prefix == "MOVE_TARGET_"
     assert dialect.supported_flags is None  # struct not found -> no filtering
+
+
+def test_unknown_effect_kept_not_written(tmp_path: Path) -> None:
+    """An effect symbol the target lacks is not written (build break otherwise);
+    the entry keeps its own effect and the drop is reported unresolved."""
+    from chrooked_pokedex.appliers.pokeemerald import move_render
+    from chrooked_pokedex.appliers.pokeemerald.move_apply import _overlay
+    from chrooked_pokedex.model.schema import MoveDef
+
+    dialect = move_render.MoveDialect(known_effects=frozenset({"EFFECT_HIT"}))
+    move = MoveDef(
+        name="Gastric Snare", chrooked_id="gastricsnare", type="Poison",
+        category="physical", effect="gastric-snare",
+    )
+    body = "\n        .effect = EFFECT_HIT,\n        .type = TYPE_POISON,\n        .category = DAMAGE_CATEGORY_PHYSICAL,\n    "
+
+    new_body, changed, unresolved = _overlay(body, move, _resmap(), dialect)
+
+    assert ".effect = EFFECT_HIT," in new_body
+    assert "EFFECT_GASTRIC_SNARE" not in new_body
+    assert any(u.startswith("effect:EFFECT_GASTRIC_SNARE") for u in unresolved)
+
+
+def _resmap():
+    from chrooked_pokedex.appliers.pokeemerald.resolution import ResolutionMap
+    return ResolutionMap(type_by_name={"poison": "TYPE_POISON"})

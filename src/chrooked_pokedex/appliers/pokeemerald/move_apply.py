@@ -141,7 +141,9 @@ def _overlay_behavior(
     unresolved: list[str] = []
 
     desired_effect = move_render.effect_symbol(move)
-    if c_edit.get_field(body, "effect") != desired_effect:
+    if not dialect.supports_effect(desired_effect):
+        unresolved.append(f"effect:{desired_effect} not in target (kept its own)")
+    elif c_edit.get_field(body, "effect") != desired_effect:
         body = c_edit.set_field_all(body, "effect", desired_effect)
         changed.append("effect")
 

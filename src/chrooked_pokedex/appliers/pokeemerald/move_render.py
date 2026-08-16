@@ -34,9 +34,14 @@ class MoveDialect:
     target_prefix: str = "MOVE_TARGET_"
     # None = struct not found, don't filter (pre-detection behavior).
     supported_flags: frozenset[str] | None = None
+    # None = effect enum not found, don't validate.
+    known_effects: frozenset[str] | None = None
 
     def supports_flag(self, field: str) -> bool:
         return self.supported_flags is None or field in self.supported_flags
+
+    def supports_effect(self, symbol: str) -> bool:
+        return self.known_effects is None or symbol in self.known_effects
 
 
 def detect_move_dialect(target: Path, moves_info_text: str) -> MoveDialect:
@@ -46,8 +51,20 @@ def detect_move_dialect(target: Path, moves_info_text: str) -> MoveDialect:
     ):
         prefix = "TARGET_"
     return MoveDialect(
-        target_prefix=prefix, supported_flags=_struct_move_info_flags(target)
+        target_prefix=prefix,
+        supported_flags=_struct_move_info_flags(target),
+        known_effects=_target_effect_symbols(target),
     )
+
+
+def _target_effect_symbols(target: Path) -> frozenset[str] | None:
+    """Every EFFECT_* the target declares — a symbol outside this set is a build
+    break, not an apply (1.14+ removed/renamed many 1.11 effects)."""
+    path = target / "include" / "constants" / "battle_move_effects.h"
+    if not path.exists():
+        return None
+    text = path.read_text(encoding="utf-8", errors="replace")
+    return frozenset(re.findall(r"\bEFFECT_[A-Z0-9_]+\b", text))
 
 
 def _struct_move_info_flags(target: Path) -> frozenset[str] | None:

@@ -124,10 +124,19 @@ def _create_moves(target, ruleset, resmap, report, holds: HoldSet) -> set[Path]:
         _insert_entry(data_path, "gMovesInfo", _move_entry(symbol, move, resmap, dialect))
         changed.update({constants_path, data_path})
         resmap.move_by_name[move.name.lower()] = symbol
-        report.add(ReportEntry(
-            status="applied", category="move", chrooked_id=chrooked_id,
-            symbol=symbol, reason="created",
-        ))
+        wanted_effect = move_render.effect_symbol(move)
+        if not dialect.supports_effect(wanted_effect):
+            report.add(ReportEntry(
+                status="partial", category="move", chrooked_id=chrooked_id,
+                symbol=symbol,
+                reason="created with EFFECT_HIT — implement the custom effect",
+                partial_fields=(f"effect:{wanted_effect} not in target",),
+            ))
+        else:
+            report.add(ReportEntry(
+                status="applied", category="move", chrooked_id=chrooked_id,
+                symbol=symbol, reason="created",
+            ))
     return changed
 
 
@@ -251,7 +260,10 @@ def _move_entry(
     if move.description:
         safe = normalize_description(move.description)
         lines.append(f'        .description = COMPOUND_STRING("{_escape(safe)}"),')
-    lines.append(f"        .effect = {move_render.effect_symbol(move)},")
+    effect = move_render.effect_symbol(move)
+    if dialect is not None and not dialect.supports_effect(effect):
+        effect = "EFFECT_HIT"  # plain hit until the custom effect lands in C
+    lines.append(f"        .effect = {effect},")
     lines.append(f"        .type = {type_symbol},")
     lines.append(f"        .category = {category},")
     if move.power is not None:
