@@ -15,6 +15,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...model.schema import SpeciesOverride
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import extract_ability_constants
@@ -49,8 +50,14 @@ def apply_species(
     ruleset: Ruleset,
     resmap: ResolutionMap,
     report: ApplyReport,
+    holds: HoldSet | None = None,
 ) -> set[Path]:
-    """Apply every species Override; return the set of files actually changed."""
+    """Apply every species Override; return the set of files actually changed.
+
+    `holds` names species whose `species` category this Target pins to its own
+    data; those are reported `held` and not written.
+    """
+    holds = holds or HoldSet()
     files = _species_info_files(target)
     texts: dict[Path, str] = {path: path.read_text(encoding="utf-8") for path in files}
     changed: set[Path] = set()
@@ -60,6 +67,12 @@ def apply_species(
         # Identity / evolution-only entries carry no scalar fields for this tier;
         # skip them silently — they exist for resolution, not species edits.
         if not (override.types or override.abilities or override.stats):
+            continue
+        if holds.is_held(chrooked_id, "species"):
+            report.add(ReportEntry(
+                status="held", category="species", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
             continue
         symbol = resmap.species(chrooked_id, dict(override.aka))
         if symbol is None:

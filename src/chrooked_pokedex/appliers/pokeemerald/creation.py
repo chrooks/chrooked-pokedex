@@ -19,6 +19,7 @@ import re
 from pathlib import Path
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...model.schema import AbilityDef, MoveDef
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import normalize_description
@@ -37,20 +38,32 @@ def create_owned_content(
     ruleset: Ruleset,
     resmap: ResolutionMap,
     report: ApplyReport,
+    holds: HoldSet | None = None,
 ) -> set[Path]:
-    """Create owned abilities then moves the target lacks; return changed files."""
+    """Create owned abilities then moves the target lacks; return changed files.
+
+    A held ability/move definition is not created — the Target keeps (or simply
+    lacks) its own version, reported `held`.
+    """
+    holds = holds or HoldSet()
     changed: set[Path] = set()
-    changed |= _create_abilities(target, ruleset, resmap, report)
-    changed |= _create_moves(target, ruleset, resmap, report)
+    changed |= _create_abilities(target, ruleset, resmap, report, holds)
+    changed |= _create_moves(target, ruleset, resmap, report, holds)
     return changed
 
 
-def _create_abilities(target, ruleset, resmap, report) -> set[Path]:
+def _create_abilities(target, ruleset, resmap, report, holds: HoldSet) -> set[Path]:
     constants_path = target / "include" / "constants" / "abilities.h"
     data_path = target / "src" / "data" / "abilities.h"
     changed: set[Path] = set()
     for chrooked_id in sorted(ruleset.abilities):
         ability = ruleset.abilities[chrooked_id]
+        if holds.is_held(chrooked_id, "abilities"):
+            report.add(ReportEntry(
+                status="held", category="ability", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
+            continue
         if resmap.ability(ability.name) is not None:
             continue  # already present in target
         symbol = _symbol(ability.aka, "pokeemerald", "ABILITY_", chrooked_id)
@@ -80,12 +93,18 @@ def _creation_reason(ruleset: Ruleset, name: str) -> str:
     return "created"
 
 
-def _create_moves(target, ruleset, resmap, report) -> set[Path]:
+def _create_moves(target, ruleset, resmap, report, holds: HoldSet) -> set[Path]:
     constants_path = target / "include" / "constants" / "moves.h"
     data_path = target / "src" / "data" / "moves_info.h"
     changed: set[Path] = set()
     for chrooked_id in sorted(ruleset.moves):
         move = ruleset.moves[chrooked_id]
+        if holds.is_held(chrooked_id, "moves"):
+            report.add(ReportEntry(
+                status="held", category="move", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
+            continue
         if resmap.move(move.name) is not None:
             continue
         symbol = _symbol(move.aka, "pokeemerald", "MOVE_", chrooked_id)

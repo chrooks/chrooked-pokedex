@@ -26,6 +26,7 @@ import re
 from pathlib import Path
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...model.schema import MoveDef
 from ...report import ApplyReport, ReportEntry
 from . import c_edit, move_render
@@ -39,8 +40,10 @@ _CATEGORY_TO_SYMBOL = {
 
 
 def apply_moves(
-    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
+    target: Path, ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport,
+    holds: "HoldSet | None" = None,
 ) -> set[Path]:
+    holds = holds or HoldSet()
     path = target / "src" / "data" / "moves_info.h"
     if not path.exists():
         return set()
@@ -49,6 +52,12 @@ def apply_moves(
 
     for chrooked_id in sorted(ruleset.moves):
         move = ruleset.moves[chrooked_id]
+        if holds.is_held(chrooked_id, "moves"):
+            report.add(ReportEntry(
+                status="held", category="move", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
+            continue
         symbol = resmap.move(move.name)
         if symbol is None:
             continue  # absent from target -> creation's job, not this tier's

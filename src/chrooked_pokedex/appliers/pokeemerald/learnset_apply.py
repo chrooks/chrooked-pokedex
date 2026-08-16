@@ -21,6 +21,7 @@ import re
 from pathlib import Path
 
 from ...model import Ruleset
+from ...model.holds import HoldSet
 from ...report import ApplyReport, ReportEntry
 from ...readers.pokeemerald.learnset_parser import _build_species_to_variable_map
 from .resolution import ResolutionMap
@@ -45,7 +46,9 @@ def apply_learnsets(
     ruleset: Ruleset,
     resmap: ResolutionMap,
     report: ApplyReport,
+    holds: HoldSet | None = None,
 ) -> set[Path]:
+    holds = holds or HoldSet()
     files = _learnset_files(target)
     texts: dict[Path, str] = {path: path.read_text(encoding="utf-8") for path in files}
     species_to_variable = _build_species_to_variable_map(target)
@@ -54,6 +57,12 @@ def apply_learnsets(
     for chrooked_id in sorted(ruleset.species):
         override = ruleset.species[chrooked_id]
         if override.learnset is None:
+            continue
+        if holds.is_held(chrooked_id, "learnset"):
+            report.add(ReportEntry(
+                status="held", category="learnset", chrooked_id=chrooked_id,
+                reason="target-pinned",
+            ))
             continue
 
         symbol = resmap.species(chrooked_id, dict(override.aka))

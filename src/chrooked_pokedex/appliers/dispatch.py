@@ -49,10 +49,10 @@ def route_apply(
     For engine='pokeemerald' the pokeemerald applier is used directly;
     ``dialect`` is ignored.
 
-    ``holds`` (per-Target category stand-downs) and ``target_edits`` (additive
-    per-Target edits) are honored by the essentials162 applier; for other engines
-    they are accepted but not yet wired. Both default to empty, so an apply with no
-    slug behaves exactly as before.
+    ``holds`` (per-Target category stand-downs) are honored by the essentials162
+    and pokeemerald appliers; ``target_edits`` (additive per-Target edits) by
+    essentials162 only. Elsewhere they are accepted but not yet wired. Both
+    default to empty, so an apply with no slug behaves exactly as before.
 
     Side effects: modifies ``report`` in-place by appending ``ReportEntry``
     objects.  All file I/O is in the applier functions, not here.
@@ -83,8 +83,10 @@ def route_apply(
         # Imported inline to avoid circular: cli → dispatch → cli.
         from ..cli import _apply_pokeemerald
 
-        _warn_unsupported_target_layers(holds, target_edits, "pokeemerald", report)
-        _apply_pokeemerald(target, category, ruleset, report)
+        # Holds are honored here; only additive target_edits remain unwired,
+        # so warn about those alone (empty HoldSet keeps the check edit-only).
+        _warn_unsupported_target_layers(HoldSet(), target_edits, "pokeemerald", report)
+        _apply_pokeemerald(target, category, ruleset, report, holds=holds)
         return
 
     # --- essentials path ----------------------------------------------------
@@ -128,10 +130,12 @@ def _warn_unsupported_target_layers(
 ) -> None:
     """Record a blocked entry when holds/edits are set for an engine that ignores them.
 
-    Per-Target holds and additive edits are honored only by the essentials16 (16.2)
-    applier so far. Without this note, a hold registered against a pokeemerald or
-    essentials21 Target would be silently ignored — and silently clobber the Target's
-    own data. Surfacing it keeps the apply honest (no silent stand-down failure).
+    Per-Target holds are honored by the essentials16 (16.2) and pokeemerald
+    appliers; additive edits by essentials16 only. Callers on a holds-capable
+    engine pass an empty HoldSet so only the unwired layer triggers the warning.
+    Without this note, a hold/edit registered against an engine that ignores it
+    would be silently dropped — and silently clobber the Target's own data.
+    Surfacing it keeps the apply honest (no silent stand-down failure).
     """
     if not holds.held and not target_edits.learnset_add:
         return
@@ -141,10 +145,10 @@ def _warn_unsupported_target_layers(
             category="(holds)",
             chrooked_id="(all)",
             reason=(
-                f"per-Target holds/edits are not yet honored on the {engine} engine "
-                "(supported on essentials16 only); the Target's data was written from "
-                "the base Ruleset without standing down. Apply with an essentials16 "
-                "Target, or remove the holds for this Target."
+                f"per-Target holds/edits are not yet honored on the {engine} engine; "
+                "the Target's data was written from the base Ruleset without "
+                "standing down. Apply with an engine that supports this layer, "
+                "or remove the holds/edits for this Target."
             ),
         )
     )

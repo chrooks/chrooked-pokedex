@@ -259,20 +259,27 @@ def _apply_rejuv(target: Path, category: str, ruleset, report: ApplyReport) -> N
     print(f"rejuv: {len(written)} file(s) written under patch/")
 
 
-def _apply_pokeemerald(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+def _apply_pokeemerald(
+    target: Path, category: str, ruleset, report: ApplyReport,
+    holds: "HoldSet | None" = None,
+) -> None:
+    """`holds` pins chosen categories of chosen entities to the Target's own data
+    (those rows report `held` and are not written). `evolution` and `type-chart`
+    are not holdable — see model/holds.py for why."""
+    holds = holds or HoldSet()
     resmap = build_resolution_map(target, ruleset)
     categories = _APPLY_CATEGORIES if category == "all" else (category,)
     if "moves" in categories:
-        changed = apply_moves(target, ruleset, resmap, report)
+        changed = apply_moves(target, ruleset, resmap, report, holds=holds)
         print(f"moves: {len(changed)} file(s) changed")
     if "create" in categories:
-        changed = create_owned_content(target, ruleset, resmap, report)
+        changed = create_owned_content(target, ruleset, resmap, report, holds=holds)
         print(f"create: {len(changed)} file(s) changed")
     if "species" in categories:
-        changed = apply_species(target, ruleset, resmap, report)
+        changed = apply_species(target, ruleset, resmap, report, holds=holds)
         print(f"species: {len(changed)} file(s) changed")
     if "learnset" in categories:
-        changed = apply_learnsets(target, ruleset, resmap, report)
+        changed = apply_learnsets(target, ruleset, resmap, report, holds=holds)
         print(f"learnset: {len(changed)} file(s) changed")
     if "evolution" in categories:
         changed = apply_evolutions(target, ruleset, resmap, report)
