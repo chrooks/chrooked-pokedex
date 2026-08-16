@@ -7,31 +7,24 @@ abilities:
   hidden: Snow Warning
 stats: { spa: 120 }
 learnset:
-  - { level: 0, move: Hex }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Destiny Bond }
-  - { level: 1, move: Protect }
-  - { level: 1, move: Double Team }
-  - { level: 2, move: Leer }
-  - { level: 3, move: Powder Snow }
-  - { level: 4, move: Headbutt }
-  - { level: 5, move: Bite }
-  - { level: 6, move: Crunch }
-  - { level: 7, move: Ice Fang }
-  - { level: 8, move: Knell }
-  - { level: 12, move: Flash Freeze }
-  - { level: 15, move: Ice Shard }
-  - { level: 20, move: Draining Kiss }
-  - { level: 25, move: Icy Wind }
-  - { level: 29, move: Frost Breath }
-  - { level: 30, move: Ice Beam }
-  - { level: 35, move: Confuse Ray }
-  - { level: 40, move: Snowscape }
-  - { level: 43, move: Shadow Ball }
-  - { level: 47, move: Will-O-Wisp }
-  - { level: 54, move: Aurora Veil }
+  - { level: 0, move: Flash Freeze }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Powder Snow }
+  - { level: 9, move: Knell }
+  - { level: 13, move: Confuse Ray }
+  - { level: 17, move: Icy Wind }
+  - { level: 21, move: Ominous Wind }
+  - { level: 25, move: Frost Breath }
+  - { level: 29, move: Beguile }
+  - { level: 33, move: Hex }
+  - { level: 37, move: Shadow Ball }
+  - { level: 41, move: Will-O-Wisp }
+  - { level: 45, move: Ice Beam }
+  - { level: 49, move: Alluring Voice }
+  - { level: 53, move: Blizzard }
   - { level: 57, move: Specter Bomb }
-  - { level: 58, move: Blizzard }
-  - { level: 61, move: Netherstorm }
-  - { level: 68, move: Cryoblast }
+  - { level: 61, move: Moonblast }
+  - { level: 65, move: Cryoblast }
+  - { level: 69, move: Netherstorm }
 evolution: { from: Snorunt, method: { item: DAWNSTONE } }

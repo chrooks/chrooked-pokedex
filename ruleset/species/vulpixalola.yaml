@@ -1,21 +1,29 @@
 name: Vulpix Alola
 chrooked_id: vulpixalola
 aka: { pokeemerald: SPECIES_VULPIX_ALOLA }
+types: [Ice, Fairy]
+abilities:
+  primary: Whiteout
+  secondary: Snow Cloak
+  hidden: Snow Warning
+stats: { hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65 }
 learnset:
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Powder Snow }
-  - { level: 4, move: Disable }
-  - { level: 8, move: Ice Shard }
-  - { level: 12, move: Icy Wind }
-  - { level: 16, move: Confuse Ray }
-  - { level: 20, move: Aurora Beam }
-  - { level: 22, move: Disarming Voice }
-  - { level: 24, move: Draining Kiss }
-  - { level: 28, move: Extrasensory }
-  - { level: 32, move: Freeze-Dry }
-  - { level: 36, move: Aurora Veil }
-  - { level: 40, move: Ice Beam }
-  - { level: 44, move: Beguile }
-  - { level: 48, move: Blizzard }
-  - { level: 64, move: Cryoblast }
-  - { level: 65, move: Rapture }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Powder Snow }
+  - { level: 9, move: Disarming Voice }
+  - { level: 13, move: Confuse Ray }
+  - { level: 17, move: Knell }
+  - { level: 21, move: Snowscape }
+  - { level: 25, move: Freeze-Dry }
+  - { level: 29, move: Beguile }
+  - { level: 33, move: Hex }
+  - { level: 37, move: Dazzling Gleam }
+  - { level: 41, move: Ice Beam }
+  - { level: 45, move: Moonlight }
+  - { level: 49, move: Shadow Ball }
+  - { level: 53, move: Blizzard }
+  - { level: 57, move: Moonblast }
+  - { level: 61, move: Specter Bomb }
+  - { level: 65, move: Sheer Cold }
+  - { level: 69, move: Rapture }

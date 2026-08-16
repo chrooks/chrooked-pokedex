@@ -1,28 +1,31 @@
 name: Arcanine Hisui
 chrooked_id: arcaninehisui
 aka: { pokeemerald: SPECIES_ARCANINE_HISUI }
+abilities:
+  secondary: Rock Head
+  hidden: Mineralize
+stats: { hp: 100, atk: 130, def: 100, spa: 90, spd: 85, spe: 95 }
 learnset:
-  - { level: 0, move: Extreme Speed }
+  - { level: 0, move: Combust }
   - { level: 1, move: Howl }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Flame Wheel }
-  - { level: 2, move: Flame Charge }
-  - { level: 3, move: Rollout }
-  - { level: 4, move: Bite }
-  - { level: 5, move: Flamethrower }
-  - { level: 6, move: Rock Slide }
-  - { level: 7, move: Extreme Speed }
-  - { level: 8, move: Fire Fang }
-  - { level: 9, move: Crunch }
-  - { level: 15, move: Morning Sun }
-  - { level: 25, move: Body Slam }
-  - { level: 30, move: Lithic Fang }
-  - { level: 31, move: Tectonic Fang }
-  - { level: 35, move: Stone Edge }
-  - { level: 36, move: Combust }
-  - { level: 40, move: Wild Charge }
-  - { level: 45, move: Close Combat }
-  - { level: 50, move: Flare Blitz }
-  - { level: 56, move: Head Smash }
-  - { level: 64, move: Raging Fury }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Flame Charge }
+  - { level: 9, move: Rock Throw }
+  - { level: 13, move: Bite }
+  - { level: 17, move: Morning Sun }
+  - { level: 21, move: Rock Tomb }
+  - { level: 25, move: Flame Wheel }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Fire Lash }
+  - { level: 37, move: Rock Slide }
+  - { level: 41, move: Hyper Fang }
+  - { level: 43, move: Crunch }
+  - { level: 45, move: Cinder Smash }
+  - { level: 49, move: Lithic Fang }
+  - { level: 49, move: Tectonic Fang }
+  - { level: 53, move: Sacred Fire }
+  - { level: 57, move: Stone Edge }
+  - { level: 65, move: Flare Blitz }
+  - { level: 69, move: Head Smash }
+  - { level: 73, move: Double-Edge }
+evolution: { from: Growlithe Hisui, method: { essentials: Item, param: FIRESTONE } }

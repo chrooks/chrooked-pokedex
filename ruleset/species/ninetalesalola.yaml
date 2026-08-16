@@ -1,25 +1,29 @@
 name: Ninetales Alola
 chrooked_id: ninetalesalola
 aka: { pokeemerald: SPECIES_NINETALES_ALOLA }
+abilities:
+  primary: Whiteout
+  secondary: Snow Cloak
 stats: { def: 80, spa: 90, spd: 105, spe: 105 }
 learnset:
-  - { level: 0, move: Dazzling Gleam }
-  - { level: 1, move: Ice Shard }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Confuse Ray }
-  - { level: 2, move: Nasty Plot }
-  - { level: 3, move: Aurora Veil }
-  - { level: 4, move: Powder Snow }
-  - { level: 5, move: Disarming Voice }
-  - { level: 6, move: Icy Wind }
-  - { level: 7, move: Aurora Beam }
-  - { level: 8, move: Freeze-Dry }
-  - { level: 9, move: Extrasensory }
-  - { level: 28, move: Draining Kiss }
-  - { level: 40, move: Ice Beam }
-  - { level: 48, move: Beguile }
-  - { level: 56, move: Blizzard }
-  - { level: 63, move: Moonblast }
-  - { level: 64, move: Rapture }
-  - { level: 65, move: Cryoblast }
+  - { level: 0, move: Aurora Veil }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Powder Snow }
+  - { level: 9, move: Disarming Voice }
+  - { level: 13, move: Confuse Ray }
+  - { level: 17, move: Knell }
+  - { level: 21, move: Snowscape }
+  - { level: 25, move: Freeze-Dry }
+  - { level: 29, move: Beguile }
+  - { level: 33, move: Hex }
+  - { level: 37, move: Dazzling Gleam }
+  - { level: 41, move: Ice Beam }
+  - { level: 45, move: Moonlight }
+  - { level: 49, move: Shadow Ball }
+  - { level: 53, move: Blizzard }
+  - { level: 57, move: Moonblast }
+  - { level: 61, move: Specter Bomb }
+  - { level: 65, move: Sheer Cold }
+  - { level: 69, move: Rapture }
+evolution: { from: Vulpix Alola, method: { essentials: Item, param: ICESTONE } }

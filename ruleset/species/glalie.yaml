@@ -7,30 +7,23 @@ abilities:
   hidden: Rimefang
 stats: { hp: 90, atk: 105, def: 90, spa: 75, spd: 80, spe: 80 }
 learnset:
-  - { level: 0, move: Freeze-Dry }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Double Team }
+  - { level: 0, move: Ice Fang }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Sheer Cold }
-  - { level: 2, move: Ice Ball }
-  - { level: 3, move: Cheap Shot }
-  - { level: 4, move: Powder Snow }
-  - { level: 5, move: Headbutt }
-  - { level: 12, move: Flash Freeze }
-  - { level: 15, move: Ice Shard }
-  - { level: 16, move: Ice Punch }
-  - { level: 20, move: Protect }
-  - { level: 25, move: Icy Wind }
-  - { level: 30, move: Frost Breath }
-  - { level: 35, move: Bite }
-  - { level: 40, move: Ice Fang }
-  - { level: 43, move: Ice Hammer }
-  - { level: 45, move: Crunch }
-  - { level: 47, move: Snowscape }
-  - { level: 54, move: Weather Ball }
-  - { level: 57, move: Blizzard }
-  - { level: 58, move: Icebreaker }
-  - { level: 59, move: Backstab }
-  - { level: 61, move: Havoc }
-  - { level: 68, move: Cryoblast }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Ice Shard }
+  - { level: 9, move: Flash Freeze }
+  - { level: 13, move: Bite }
+  - { level: 17, move: Snowscape }
+  - { level: 21, move: Avalanche }
+  - { level: 25, move: Rapid Spin }
+  - { level: 29, move: Knock Off }
+  - { level: 33, move: Crunch }
+  - { level: 37, move: Rock Slide }
+  - { level: 41, move: Ice Spinner }
+  - { level: 45, move: Glacial Crush }
+  - { level: 49, move: Lithic Fang }
+  - { level: 57, move: Ice Hammer }
+  - { level: 61, move: Backstab }
+  - { level: 65, move: Stone Edge }
+  - { level: 69, move: Icebreaker }
 evolution: { from: Snorunt, method: { level: 32 } }

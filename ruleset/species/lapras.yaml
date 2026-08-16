@@ -8,26 +8,23 @@ abilities:
   hidden: Arctic Ariette
 stats: { hp: 125, atk: 60, def: 100, spd: 100, spa: 100 }
 learnset:
+  - { level: 1, move: Echoed Voice }
   - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
-  - { level: 2, move: Powder Snow }
-  - { level: 5, move: Sing }
-  - { level: 7, move: Cryofreeze }
-  - { level: 10, move: Mist }
-  - { level: 15, move: Life Dew }
-  - { level: 16, move: Icy Wind }
-  - { level: 20, move: Ice Shard }
-  - { level: 25, move: Confuse Ray }
-  - { level: 29, move: Water Pulse }
-  - { level: 30, move: Brine }
-  - { level: 35, move: Muddy Water }
-  - { level: 40, move: Body Slam }
-  - { level: 43, move: Ice Beam }
-  - { level: 45, move: Blizzard }
-  - { level: 47, move: Hyper Voice }
-  - { level: 50, move: Rain Dance }
-  - { level: 52, move: Cryoblast }
-  - { level: 53, move: Hydro Pump }
-  - { level: 55, move: Tsunami }
-  - { level: 60, move: Perish Song }
-  - { level: 65, move: Sheer Cold }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Twister }
+  - { level: 13, move: Dragon Breath }
+  - { level: 17, move: Round }
+  - { level: 21, move: Icy Wind }
+  - { level: 25, move: Bubble Beam }
+  - { level: 29, move: Rain Dance }
+  - { level: 33, move: Chilling Water }
+  - { level: 37, move: Freeze-Dry }
+  - { level: 41, move: Perish Song }
+  - { level: 45, move: Surf }
+  - { level: 49, move: Dragon Pulse }
+  - { level: 53, move: Hyper Voice }
+  - { level: 57, move: Hydro Pump }
+  - { level: 61, move: Cataclysm }
+  - { level: 65, move: Resonance }
+  - { level: 69, move: Water Spout }
+  - { level: 70, move: Draco Meteor }

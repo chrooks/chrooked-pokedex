@@ -367,3 +367,33 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** learnset-only repass
 - **Corrections:** physical; great utility: rapid spin, spiky shielf, stealth rock, spikes,
+
+## 2026-08-11 — Abomasnow line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Mixed attacker; Gets Aurora Veil, Cryofreeze, leech seed, Chilling Water, stomping tantrum, growth, grassy glide
+
+## 2026-08-11 — Lapras line
+
+- **Direction:** learnset-only repass
+- **Corrections:** gets ample ice coverage & normal-type sound move coverage
+
+## 2026-08-13 — Glalie line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Good rock coverage; Learns astonish; Good biting move coverage
+
+## 2026-08-14 — Froslass line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special moves only, good fairy coverage
+
+## 2026-08-14 — Ninetales Alola line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Special moves, ghost coverage, learss extrasensory & aurora veil
+
+## 2026-08-14 — Arcanine Hisui line
+
+- **Direction:** stats + learnset repass
+- **Corrections:** 600 bst
