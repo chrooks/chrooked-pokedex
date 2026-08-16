@@ -1,6 +1,6 @@
 name: Nidoran
 chrooked_id: nidoranma
-aka: { dex: 32 }
+aka: { dex: 32, pokeemerald: SPECIES_NIDORAN_M }
 abilities:
   primary: Venomize
   secondary: Impale

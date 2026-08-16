@@ -132,17 +132,24 @@ def _symbol(aka, key: str, prefix: str, chrooked_id: str) -> str:
 
 
 def _insert_constant(path: Path, count_alias: str, symbol: str) -> bool:
-    """Insert `#define <symbol> N` before the sentinel `<count_alias>` aliases,
-    bumping that sentinel by one. Idempotent: returns True if already present."""
+    """Insert the new constant before the `<count_alias>` sentinel.
+
+    Handles both constant dialects: `#define <symbol> N` with a bumped numeric
+    sentinel (expansion <= 1.13) and a bare enum member before the sentinel line
+    (expansion >= 1.14 turned the constants into enums, which renumber
+    themselves). Idempotent: returns True if already present.
+    """
     if not path.exists():
         return False
     text = path.read_text(encoding="utf-8")
-    if re.search(r"#define\s+" + re.escape(symbol) + r"\b", text):
+    if re.search(r"#define\s+" + re.escape(symbol) + r"\b", text) or re.search(
+        r"^\s*" + re.escape(symbol) + r"\s*[,=]", text, re.M
+    ):
         return True
 
     sentinel = _resolve_count_sentinel(text, count_alias)
     if sentinel is None:
-        return False
+        return _insert_enum_constant(path, text, count_alias, symbol)
     sentinel_name, value = sentinel
     pattern = re.compile(r"(#define\s+" + re.escape(sentinel_name) + r"\s+)(\d+)")
 
@@ -150,6 +157,29 @@ def _insert_constant(path: Path, count_alias: str, symbol: str) -> bool:
         return f"#define {symbol} {value}\n{match.group(1)}{value + 1}"
 
     new_text = pattern.sub(bump, text, count=1)
+    path.write_text(new_text, encoding="utf-8")
+    return True
+
+
+def _insert_enum_constant(path: Path, text: str, count_alias: str, symbol: str) -> bool:
+    """Enum dialect: insert `<symbol>,` before the sentinel enum member.
+
+    The alias may point at a per-gen sentinel (`ABILITIES_COUNT = ABILITIES_COUNT_GEN9,`)
+    — follow one level, like the #define path — or be a bare member (`MOVES_COUNT,`).
+    Enums renumber themselves, so no count bump is needed; anything defined relative
+    to the sentinel (Z-moves, MOVES_COUNT_ALL) shifts consistently.
+    """
+    alias = re.search(
+        r"^\s*" + re.escape(count_alias) + r"\s*=\s*(\w+)\s*,", text, re.M
+    )
+    sentinel_name = alias.group(1) if alias else count_alias
+    line = re.search(
+        r"^([ \t]*)" + re.escape(sentinel_name) + r"\s*,\s*$", text, re.M
+    )
+    if line is None:
+        return False
+    indent = line.group(1)
+    new_text = text[: line.start()] + f"{indent}{symbol},\n" + text[line.start() :]
     path.write_text(new_text, encoding="utf-8")
     return True
 

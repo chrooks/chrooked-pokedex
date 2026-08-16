@@ -163,3 +163,95 @@ def test_creation_is_idempotent(tmp_path: Path) -> None:
 
     assert first == second
     assert changed == set()
+
+
+def _enum_target(tmp_path: Path) -> Path:
+    """Expansion >= 1.14 dialect: constants are enum members, not #defines."""
+    target = tmp_path / "fork"
+    (target / "include" / "constants").mkdir(parents=True)
+    (target / "src" / "data").mkdir(parents=True)
+    (target / "include" / "constants" / "moves.h").write_text(
+        """\
+enum MoveId
+{
+    MOVE_NONE = 0,
+    MOVE_POUND = 1,
+    MOVES_COUNT,
+    FIRST_Z_MOVE = MOVES_COUNT,
+    MOVES_COUNT_ALL,
+};
+""",
+        encoding="utf-8",
+    )
+    (target / "src" / "data" / "moves_info.h").write_text(
+        """\
+const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
+{
+    [MOVE_POUND] =
+    {
+        .name = COMPOUND_STRING("Pound"),
+        .type = TYPE_NORMAL,
+        .category = DAMAGE_CATEGORY_PHYSICAL,
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    (target / "include" / "constants" / "abilities.h").write_text(
+        """\
+enum __attribute__((packed)) Ability
+{
+    ABILITY_NONE = 0,
+    ABILITY_STENCH = 1,
+    ABILITIES_COUNT_GEN9,
+    ABILITIES_COUNT = ABILITIES_COUNT_GEN9,
+};
+""",
+        encoding="utf-8",
+    )
+    (target / "src" / "data" / "abilities.h").write_text(
+        """\
+const struct AbilityInfo gAbilitiesInfo[ABILITIES_COUNT] =
+{
+    [ABILITY_STENCH] =
+    {
+        .name = _("Stench"),
+        .description = COMPOUND_STRING("Repels."),
+    },
+};
+""",
+        encoding="utf-8",
+    )
+    return target
+
+
+def test_create_into_enum_constants(tmp_path: Path) -> None:
+    target = _enum_target(tmp_path)
+    ruleset = _ruleset(tmp_path)
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    changed = create_owned_content(target, ruleset, resmap, report)
+
+    assert changed
+    moves_h = (target / "include" / "constants" / "moves.h").read_text()
+    abilities_h = (target / "include" / "constants" / "abilities.h").read_text()
+    # New members sit immediately before their sentinel, keeping Z-moves shifted.
+    assert "    MOVE_EXCALIBUR,\n    MOVES_COUNT,\n" in moves_h
+    assert "    ABILITY_STRIKER,\n    ABILITIES_COUNT_GEN9,\n" in abilities_h
+    # Data entries landed too.
+    assert "MOVE_EXCALIBUR" in (target / "src" / "data" / "moves_info.h").read_text()
+    assert "ABILITY_STRIKER" in (target / "src" / "data" / "abilities.h").read_text()
+    assert report.counts()["blocked"] == 0
+
+
+def test_create_into_enum_constants_is_idempotent(tmp_path: Path) -> None:
+    target = _enum_target(tmp_path)
+    ruleset = _ruleset(tmp_path)
+    resmap = build_resolution_map(target, ruleset)
+    create_owned_content(target, ruleset, resmap, ApplyReport())
+    before = (target / "include" / "constants" / "moves.h").read_text()
+
+    create_owned_content(target, ruleset, build_resolution_map(target, ruleset), ApplyReport())
+
+    assert (target / "include" / "constants" / "moves.h").read_text() == before

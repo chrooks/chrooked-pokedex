@@ -389,3 +389,38 @@ def test_apply_partial_when_ability_unresolved(tmp_path: Path) -> None:
     # types and stats still landed even though the ability did not
     profiles = species_parser.parse_species_profiles(target)
     assert profiles["SPECIES_GOODRA"].fields["baseSpeed"] == "90"
+
+
+def test_resolution_matches_form_symbols_without_aka(tmp_path: Path) -> None:
+    """`diglettalola` (no aka hint) resolves to the target's real
+    SPECIES_DIGLETT_ALOLA by underscore-insensitive match, not a constructed
+    SPECIES_DIGLETTALOLA."""
+    target = _build_target(tmp_path)
+    pokemon = target / "src" / "data" / "pokemon"
+    (pokemon / "species_info.h").write_text(
+        (pokemon / "species_info.h").read_text().replace(
+            "};",
+            """    [SPECIES_DIGLETT_ALOLA] =
+    {
+        .baseHP = 10,
+    },
+};""",
+        ),
+        encoding="utf-8",
+    )
+    root = tmp_path / "ruleset"
+    (root / "species").mkdir(parents=True)
+    (root / "meta.yaml").write_text("base_version: 1.11.2\nschema_version: 1\n")
+    (root / "species" / "diglettalola.yaml").write_text(
+        """\
+name: Diglett (Alola)
+chrooked_id: diglettalola
+stats: { hp: 20 }
+""",
+        encoding="utf-8",
+    )
+    ruleset = Ruleset.load(root)
+
+    resmap = build_resolution_map(target, ruleset)
+
+    assert resmap.species("diglettalola", {}) == "SPECIES_DIGLETT_ALOLA"

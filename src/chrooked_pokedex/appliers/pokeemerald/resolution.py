@@ -7,6 +7,7 @@ the target genuinely lacks.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -60,11 +61,22 @@ def build_resolution_map(target: Path, ruleset: Ruleset) -> ResolutionMap:
     }
 
     # Resolve from each species' own aka hint (exact, and correct for forms like
-    # SPECIES_RATTATA_ALOLA); fall back to a constructed symbol only when absent.
+    # SPECIES_RATTATA_ALOLA). Without a hint, match the target's real symbols with
+    # underscores ignored — chrooked ids drop them (`diglettalola`), C symbols keep
+    # them (`SPECIES_DIGLETT_ALOLA`). Only then fall back to a constructed symbol.
+    target_symbols = _target_species_symbols(target)
+    normalized = {
+        sym.removeprefix("SPECIES_").replace("_", "").lower(): sym
+        for sym in sorted(target_symbols)
+    }
     species_by_id = {}
     for chrooked_id, override in ruleset.species.items():
         symbol = (override.aka or {}).get("pokeemerald")
-        species_by_id[chrooked_id] = symbol or ("SPECIES_" + chrooked_id.upper())
+        species_by_id[chrooked_id] = (
+            symbol
+            or normalized.get(chrooked_id)
+            or ("SPECIES_" + chrooked_id.upper())
+        )
 
     return ResolutionMap(
         species_by_id=species_by_id,
@@ -72,6 +84,26 @@ def build_resolution_map(target: Path, ruleset: Ruleset) -> ResolutionMap:
         ability_by_name=ability_by_name,
         move_by_name=move_by_name,
     )
+
+
+_SPECIES_ENTRY = re.compile(r"\[(SPECIES_[A-Z0-9_]+)\]\s*=")
+
+
+def _target_species_symbols(target: Path) -> set[str]:
+    """Every SPECIES_* symbol with a data entry in the target's species files."""
+    pokemon_dir = target / "src" / "data" / "pokemon"
+    files = []
+    if (pokemon_dir / "species_info.h").exists():
+        files.append(pokemon_dir / "species_info.h")
+    split_dir = pokemon_dir / "species_info"
+    if split_dir.exists():
+        files.extend(sorted(split_dir.glob("*.h")))
+    symbols: set[str] = set()
+    for path in files:
+        symbols.update(
+            _SPECIES_ENTRY.findall(path.read_text(encoding="utf-8", errors="replace"))
+        )
+    return symbols
 
 
 # Used only if the target's type chart could not be parsed.
