@@ -159,10 +159,16 @@ def _overlay_behavior(
         unresolved.append("argument:target has one the Ruleset dropped (not cleared)")
 
     if move.additional_effects:
-        desired_ae = move_render.additional_effects_expr(move.additional_effects)
-        if _norm(c_edit.get_field(body, "additionalEffects")) != _norm(desired_ae):
+        desired_ae = move_render.additional_effects_expr(move.additional_effects, dialect)
+        if desired_ae != "ADDITIONAL_EFFECTS()" and _norm(
+            c_edit.get_field(body, "additionalEffects")
+        ) != _norm(desired_ae):
             body = c_edit.set_field_all(body, "additionalEffects", desired_ae)
             changed.append("additionalEffects")
+        for symbol in move_render.dropped_additional_effects(
+            move.additional_effects, dialect
+        ):
+            unresolved.append(f"additionalEffect:{symbol} not in target")
     elif c_edit.get_field(body, "additionalEffects") is not None:
         unresolved.append("additionalEffects:target has one the Ruleset dropped (not cleared)")
 

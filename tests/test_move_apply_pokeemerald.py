@@ -302,3 +302,29 @@ def test_unknown_effect_kept_not_written(tmp_path: Path) -> None:
 def _resmap():
     from chrooked_pokedex.appliers.pokeemerald.resolution import ResolutionMap
     return ResolutionMap(type_by_name={"poison": "TYPE_POISON"})
+
+
+def test_unknown_additional_effect_dropped_and_reported(tmp_path: Path) -> None:
+    from chrooked_pokedex.appliers.pokeemerald import move_render
+    from chrooked_pokedex.appliers.pokeemerald.move_apply import _overlay
+    from chrooked_pokedex.model.schema import AdditionalEffect, MoveDef
+
+    dialect = move_render.MoveDialect(
+        known_effects=frozenset({"EFFECT_HIT"}),
+        known_move_effects=frozenset({"MOVE_EFFECT_BURN"}),
+    )
+    move = MoveDef(
+        name="Test Move", chrooked_id="testmove", type="Poison",
+        category="physical", effect="hit",
+        additional_effects=(
+            AdditionalEffect(effect="burn", chance=10),
+            AdditionalEffect(effect="infatuation", chance=30),
+        ),
+    )
+    body = "\n        .effect = EFFECT_HIT,\n        .type = TYPE_POISON,\n        .category = DAMAGE_CATEGORY_PHYSICAL,\n    "
+
+    new_body, changed, unresolved = _overlay(body, move, _resmap(), dialect)
+
+    assert "MOVE_EFFECT_BURN" in new_body
+    assert "MOVE_EFFECT_INFATUATION" not in new_body
+    assert any("MOVE_EFFECT_INFATUATION" in u for u in unresolved)

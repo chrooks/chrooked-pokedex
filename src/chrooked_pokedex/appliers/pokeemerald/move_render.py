@@ -36,12 +36,17 @@ class MoveDialect:
     supported_flags: frozenset[str] | None = None
     # None = effect enum not found, don't validate.
     known_effects: frozenset[str] | None = None
+    # None = battle constants not found, don't validate.
+    known_move_effects: frozenset[str] | None = None
 
     def supports_flag(self, field: str) -> bool:
         return self.supported_flags is None or field in self.supported_flags
 
     def supports_effect(self, symbol: str) -> bool:
         return self.known_effects is None or symbol in self.known_effects
+
+    def supports_move_effect(self, symbol: str) -> bool:
+        return self.known_move_effects is None or symbol in self.known_move_effects
 
 
 def detect_move_dialect(target: Path, moves_info_text: str) -> MoveDialect:
@@ -54,7 +59,22 @@ def detect_move_dialect(target: Path, moves_info_text: str) -> MoveDialect:
         target_prefix=prefix,
         supported_flags=_struct_move_info_flags(target),
         known_effects=_target_effect_symbols(target),
+        known_move_effects=_target_move_effect_symbols(target),
     )
+
+
+def _target_move_effect_symbols(target: Path) -> frozenset[str] | None:
+    """Every MOVE_EFFECT_* the target declares (additionalEffects entries)."""
+    path = target / "include" / "constants" / "battle.h"
+    if not path.exists():
+        return None
+    symbols = frozenset(
+        re.findall(
+            r"\bMOVE_EFFECT_[A-Z0-9_]+\b",
+            path.read_text(encoding="utf-8", errors="replace"),
+        )
+    )
+    return symbols or None
 
 
 def _target_effect_symbols(target: Path) -> frozenset[str] | None:
@@ -124,10 +144,24 @@ def argument_braced(argument, resmap: ResolutionMap) -> str:
     return "{ " + ", ".join(parts) + " }"
 
 
-def additional_effects_expr(additional_effects) -> str:
-    """Single-line `ADDITIONAL_EFFECTS({ .moveEffect = X, .chance = N }, ...)`."""
+def additional_effects_expr(
+    additional_effects, dialect: MoveDialect | None = None
+) -> str:
+    """Single-line `ADDITIONAL_EFFECTS({ .moveEffect = X, .chance = N }, ...)`,
+    silently omitting effects the target does not declare (callers report the
+    drops via `dropped_additional_effects`)."""
     inner = ", ".join(
         "{ .moveEffect = " + nz.move_effect_symbol(ae.effect) + f", .chance = {ae.chance} }}"
         for ae in additional_effects
+        if dialect is None or dialect.supports_move_effect(nz.move_effect_symbol(ae.effect))
     )
     return f"ADDITIONAL_EFFECTS({inner})"
+
+
+def dropped_additional_effects(additional_effects, dialect: MoveDialect) -> list[str]:
+    """MOVE_EFFECT_* symbols the target cannot hold — for honest report rows."""
+    return [
+        symbol
+        for ae in additional_effects
+        if not dialect.supports_move_effect(symbol := nz.move_effect_symbol(ae.effect))
+    ]

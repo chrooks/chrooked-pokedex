@@ -280,7 +280,9 @@ def _move_entry(
     for symbol_flag in move_render.flag_fields(move, dialect):
         lines.append(f"        .{symbol_flag} = TRUE,")
     if move.additional_effects:
-        lines.append(f"        .additionalEffects = {move_render.additional_effects_expr(move.additional_effects)},")
+        expr = move_render.additional_effects_expr(move.additional_effects, dialect)
+        if expr != "ADDITIONAL_EFFECTS()":
+            lines.append(f"        .additionalEffects = {expr},")
     lines.append("    },")
     return "\n".join(lines) + "\n"
 
