@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { MOVE_TARGETS } from "./format";
-import { TARGET_PATTERNS, patternOf, snapTarget } from "./moveTargets";
+import { TARGET_LABEL, TARGET_PATTERNS, patternOf, snapTarget } from "./moveTargets";
 
 describe("TARGET_PATTERNS", () => {
   it("covers every schema target key", () => {
     for (const key of MOVE_TARGETS) {
       expect(TARGET_PATTERNS[key], key).toBeDefined();
+      expect(TARGET_LABEL[key], key).toBeDefined();
     }
   });
 

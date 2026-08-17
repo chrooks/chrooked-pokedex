@@ -34,6 +34,27 @@ export interface TargetPattern {
   caption: string;
 }
 
+/** Display names for the preset dropdown, detail rows, and glyph tooltips.
+    The raw snake_case ids stay in the data and the filter query language. */
+export const TARGET_LABEL: Record<string, string> = {
+  selected: "Chosen Target",
+  user: "Self",
+  both: "Adjacent Foes",
+  ally: "An Ally",
+  foes_and_ally: "All Adjacent",
+  opponent: "Any Foe",
+  random: "Random Foe",
+  opponents_field: "Foes' Side",
+  users_field: "User's Side",
+  entire_field: "Entire Field",
+  all_battlers: "All Battlers",
+  depends: "Varies",
+};
+
+export function targetLabel(target: string): string {
+  return TARGET_LABEL[target] ?? target;
+}
+
 export const TARGET_PATTERNS: Record<string, TargetPattern> = {
   selected: { kind: "choose", slots: ["f0", "f1", "a1"], caption: "one chosen adjacent battler" },
   user: { kind: "each", slots: ["u"], caption: "the user itself" },

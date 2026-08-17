@@ -12,7 +12,8 @@ import { useState } from "react";
 import { api } from "../../api";
 import type { Move, MoveField, MoveWrite } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
-import { isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS } from "../../lib/format";
+import { flagLabel, isMoveEdited, MOVE_FIELD_LABEL, MOVE_FLAGS } from "../../lib/format";
+import { targetLabel } from "../../lib/moveTargets";
 import { EditedLed } from "../EditedLed";
 import { TypeSelect } from "../TypeSelect";
 import { CategorySelect } from "../CategorySelect";
@@ -261,7 +262,7 @@ export function MoveEditor({ move, onClose, onSaved, embedded = false }: Props) 
                       checked={on}
                       onChange={() => set("flags", toggleFlag(form.flags, flag))}
                     />
-                    {flag}
+                    {flagLabel(flag)}
                   </label>
                 );
               })}
@@ -383,9 +384,9 @@ function displayValues(move: Move): Partial<Record<MoveField, string>> {
     effect: move.effect,
     argument: formatValue(move.argument),
     additional_effects: formatValue(move.additional_effects),
-    flags: move.flags.join(", "),
+    flags: move.flags.map(flagLabel).join(", "),
     priority: formatValue(move.priority),
-    target: move.target,
+    target: targetLabel(move.target),
   };
 }
 

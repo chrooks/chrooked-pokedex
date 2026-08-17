@@ -61,6 +61,15 @@ export const MOVE_FLAGS = [
   "ballistic",
 ] as const;
 
+/** A flag id as its display tag: "contact" -> "Contact", "high_crit" ->
+    "High Crit". Display-only — the raw id stays in the data and filters. */
+export function flagLabel(flag: string): string {
+  return flag
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 /** Neutral move targets the Ruleset models (mirrors schema.MOVE_TARGETS), ordered
     most-common first for the Move editor's select. */
 export const MOVE_TARGETS = [

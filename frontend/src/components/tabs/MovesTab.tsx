@@ -6,7 +6,7 @@ import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
 import { useEntityView, type EntityParamKeys } from "../../hooks/useEntityView";
-import { isMoveEdited } from "../../lib/format";
+import { flagLabel, isMoveEdited } from "../../lib/format";
 import { evalEntries } from "../../lib/filterEngine";
 import { MOVE_REGISTRY } from "../../lib/moveRegistry";
 import {
@@ -408,7 +408,7 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
                           <span className="move-tags">
                             {(move.flags ?? []).map((flag) => (
                               <span key={flag} className="move-tag">
-                                {flag}
+                                {flagLabel(flag)}
                               </span>
                             ))}
                           </span>

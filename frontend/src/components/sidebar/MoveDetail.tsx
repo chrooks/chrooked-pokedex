@@ -4,10 +4,11 @@
    primitives from the existing editors. */
 
 import type { Move, MoveField } from "../../types";
-import { isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
+import { flagLabel, isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
 import { TypeChip } from "../TypeChip";
 import { CategoryChip } from "../CategoryChip";
 import { TargetGlyph } from "../TargetGrid";
+import { targetLabel } from "../../lib/moveTargets";
 import "../editors/editors.css";
 import "../ledger/ledger-rows.css";
 
@@ -31,9 +32,9 @@ export function MoveDetail({ move }: Props) {
     additional_effects: move.additional_effects
       .map((ae) => `${ae.effect} (${ae.chance}%)`)
       .join(", "),
-    flags: move.flags.join(", "),
+    flags: move.flags.map(flagLabel).join(", "),
     priority: String(move.priority),
-    target: move.target,
+    target: targetLabel(move.target),
   };
 
   const diffRows = edited
@@ -136,7 +137,7 @@ export function MoveDetail({ move }: Props) {
               {move.target ? (
                 <>
                   <TargetGlyph target={move.target} />
-                  {move.target}
+                  {targetLabel(move.target)}
                 </>
               ) : (
                 <span className="lrow__empty">—</span>
@@ -153,7 +154,7 @@ export function MoveDetail({ move }: Props) {
           aria-label="Move flags"
         >
           <h3 className="editor-section__heading">Flags</h3>
-          <p className="move-detail__flags">{move.flags.join(", ")}</p>
+          <p className="move-detail__flags">{move.flags.map(flagLabel).join(", ")}</p>
         </section>
       )}
 

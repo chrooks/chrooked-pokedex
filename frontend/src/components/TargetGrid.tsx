@@ -14,6 +14,7 @@ import {
   TARGET_SLOTS,
   patternOf,
   snapTarget,
+  targetLabel,
   type TargetSlot,
 } from "../lib/moveTargets";
 import "./target-grid.css";
@@ -88,7 +89,7 @@ export function TargetGridField({ id, value, onChange }: FieldProps) {
         >
           {MOVE_TARGETS.map((t) => (
             <option key={t} value={t}>
-              {t}
+              {targetLabel(t)}
             </option>
           ))}
         </select>
@@ -114,8 +115,8 @@ export function TargetGlyph({ target }: { target: string }) {
       className="tglyph"
       data-kind={pattern.kind}
       role="img"
-      aria-label={`Target: ${target} — ${pattern.caption}`}
-      title={`${target} — ${pattern.caption}`}
+      aria-label={`Target: ${targetLabel(target)} — ${pattern.caption}`}
+      title={`${targetLabel(target)} — ${pattern.caption}`}
     >
       {TARGET_SLOTS.map((slot) => (
         <span
