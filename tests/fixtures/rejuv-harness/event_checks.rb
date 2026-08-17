@@ -98,7 +98,9 @@ class PokeBattle_Battle
   def pbHideAbilityBox(*a, **kw); end
   attr_accessor :shown
   def pbDisplay(*a); (@shown ||= []) << a[0]; end
-  def pbEndOfRoundPhase(*a, **kw); end
+  # Records itself so the ordering check can prove the chrooked handlers run
+  # BEFORE the vanilla body (which replaces fainted battlers inside itself).
+  def pbEndOfRoundPhase(*a, **kw); ($eor_order ||= []) << :vanilla_body; end
   def pbCanChooseMove?(idxPokemon, idxMove, *a, **kw); true; end
   def pbWeather(moveuser); :RAINDANCE; end
   # state.effects carries the Nevermelting Hail flag frostbite checks; the
@@ -436,6 +438,18 @@ def fire.canThawUser?; true; end
 def fire.name; "Flame Wheel"; end
 thaw.pbTryUseMove(nil, fire)
 check(fails, "fire move thaws the frostbite", thaw.log.include?([:cure, :FROZEN]), true)
+
+# --- end-of-round handlers run BEFORE the vanilla body ---------------------
+# Vanilla pbEndOfRoundPhase replaces fainted battlers inside itself (Battle.rb
+# ~7423/7448). A chip dealt after super KO's a mon the engine has already
+# finished replacing for this round, stranding an empty slot until next turn.
+$eor_order = []
+ko = PokeBattle_Battler.new(:NONE, battle)
+ko.status = :FROZEN
+ko.define_singleton_method(:pbContinueStatus) { |*a| $eor_order << :chip }
+battle.battlers = [ko]
+battle.pbEndOfRoundPhase
+check(fails, "status chip precedes vanilla faint-replacement", $eor_order, [:chip, :vanilla_body])
 
 fails.each { |f| puts "FAIL #{f}" }
 raise "#{fails.size} failures" unless fails.empty?

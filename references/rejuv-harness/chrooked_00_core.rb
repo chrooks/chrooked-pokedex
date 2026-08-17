@@ -372,7 +372,9 @@ PokeBattle_Battler.prepend(ChrookedBattlerHooks)
 
 module ChrookedBattleHooks
   def pbEndOfRoundPhase(*args, **kwargs)
-    ret = super
+    # Handlers run BEFORE super: the vanilla body replaces fainted battlers and
+    # grants EXP inside itself (Battle.rb ~7405/7423/7448), so a KO dealt after
+    # super strands an empty slot on the field until the next round's end.
     @battlers.each do |battler|
       next if !battler || battler.isFainted?
       mod = CHROOKED_TURN_END[battler.ability]
@@ -380,7 +382,7 @@ module ChrookedBattleHooks
       status_mod = battler.status && CHROOKED_STATUS_TURN_END[battler.status]
       status_mod&.call(battler, self)
     end
-    ret
+    super
   end
 
   # Sage Power's Gorilla-Tactics-style lock. Vanilla keys its lock checks on
