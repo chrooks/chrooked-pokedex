@@ -7,6 +7,7 @@ import type { Move, MoveField } from "../../types";
 import { isMoveEdited, MOVE_FIELD_LABEL } from "../../lib/format";
 import { TypeChip } from "../TypeChip";
 import { CategoryChip } from "../CategoryChip";
+import { TargetGlyph } from "../TargetGrid";
 import "../editors/editors.css";
 import "../ledger/ledger-rows.css";
 
@@ -131,7 +132,16 @@ export function MoveDetail({ move }: Props) {
           </div>
           <div className="lrow">
             <dt className="lrow__label">Target</dt>
-            <dd className="lrow__value">{move.target || <span className="lrow__empty">—</span>}</dd>
+            <dd className="lrow__value move-detail__target">
+              {move.target ? (
+                <>
+                  <TargetGlyph target={move.target} />
+                  {move.target}
+                </>
+              ) : (
+                <span className="lrow__empty">—</span>
+              )}
+            </dd>
           </div>
         </dl>
       </section>
