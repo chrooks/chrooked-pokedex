@@ -16,11 +16,17 @@ import {
 } from "../../lib/moveColumns";
 import { moveCodec } from "../../lib/moveViewCodec";
 import { stableMultiSort, type SortKey } from "../../lib/sortEngine";
-import type { DexEntry, DistributeSplit, Move } from "../../types";
+import type { DexEntry, DistributeSplit, Move, MoveWrite } from "../../types";
 import type { MoveDistRow } from "../makeover/moveDistribution";
 import { EditedLed } from "../EditedLed";
 import { TypeChip } from "../TypeChip";
 import { CategoryChip } from "../CategoryChip";
+import { TargetGlyph } from "../TargetGrid";
+import {
+  MoveInlineEdit,
+  toMoveWrite,
+  type MoveInlineField,
+} from "./MoveInlineEdit";
 import { ErrorView, EmptyView } from "../StatusView";
 import { EntityControls } from "../filters/EntityControls";
 import { MoveEditor } from "../editors/MoveEditor";
@@ -89,6 +95,35 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
   /** Whether the open sidebar should land in edit mode — set true by the per-row
       pencil so it opens on the [Fields | Distribution] tabs, false by a row click. */
   const [openInEdit, setOpenInEdit] = useState(false);
+  /** Right-click inline edit menu (dex-table parity). Null when closed. */
+  const [inlineMenu, setInlineMenu] = useState<{
+    x: number;
+    y: number;
+    move: Move;
+    field: MoveInlineField;
+  } | null>(null);
+  const openInline = useCallback(
+    (e: React.MouseEvent, move: Move, field: MoveInlineField) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setInlineMenu({
+        x: Math.min(e.clientX, window.innerWidth - 400),
+        y: Math.min(e.clientY, window.innerHeight - 260),
+        move,
+        field,
+      });
+    },
+    [],
+  );
+  /** Save one inline field: the loaded move minus the merge-view flags, with the
+      single edited field replaced — the same PUT the full editor sends. */
+  const saveInline = useCallback(
+    async (move: Move, patch: Partial<MoveWrite>) => {
+      await api.putMove(move.chrooked_id, { ...toMoveWrite(move), ...patch });
+      reload();
+    },
+    [reload],
+  );
 
   const moves = useMemo(() => data ?? [], [data]);
   // Inputs for the distribute panel: the dex keyed by chrooked_id and the known
@@ -314,6 +349,7 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
                   {!hiddenSet.has("power") && <SortHeader col="power" numeric sort={controls.sort} onSort={onHeaderSort} />}
                   {!hiddenSet.has("accuracy") && <SortHeader col="accuracy" numeric sort={controls.sort} onSort={onHeaderSort} />}
                   {!hiddenSet.has("pp") && <SortHeader col="pp" numeric sort={controls.sort} onSort={onHeaderSort} />}
+                  {!hiddenSet.has("target") && <SortHeader col="target" sort={controls.sort} onSort={onHeaderSort} />}
                   {!hiddenSet.has("flags") && <th>Tags</th>}
                   <th aria-label="Edit" />
                 </tr>
@@ -335,18 +371,35 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
                       {move.name}
                     </td>
                     {!hiddenSet.has("type") && (
-                      <td>
+                      <td data-editable onContextMenu={(e) => openInline(e, move, "type")}>
                         <TypeChip type={move.type} variant="code" />
                       </td>
                     )}
                     {!hiddenSet.has("category") && (
-                      <td>
+                      <td data-editable onContextMenu={(e) => openInline(e, move, "category")}>
                         {move.category ? <CategoryChip category={move.category} variant="icon" /> : "—"}
                       </td>
                     )}
-                    {!hiddenSet.has("power") && <td className="tab-num mono">{move.power ?? "—"}</td>}
-                    {!hiddenSet.has("accuracy") && <td className="tab-num mono">{move.accuracy ?? "—"}</td>}
-                    {!hiddenSet.has("pp") && <td className="tab-num mono">{move.pp ?? "—"}</td>}
+                    {!hiddenSet.has("power") && (
+                      <td className="tab-num mono" data-editable onContextMenu={(e) => openInline(e, move, "power")}>
+                        {move.power ?? "—"}
+                      </td>
+                    )}
+                    {!hiddenSet.has("accuracy") && (
+                      <td className="tab-num mono" data-editable onContextMenu={(e) => openInline(e, move, "accuracy")}>
+                        {move.accuracy ?? "—"}
+                      </td>
+                    )}
+                    {!hiddenSet.has("pp") && (
+                      <td className="tab-num mono" data-editable onContextMenu={(e) => openInline(e, move, "pp")}>
+                        {move.pp ?? "—"}
+                      </td>
+                    )}
+                    {!hiddenSet.has("target") && (
+                      <td data-editable onContextMenu={(e) => openInline(e, move, "target")}>
+                        <TargetGlyph target={move.target} />
+                      </td>
+                    )}
                     {!hiddenSet.has("flags") && (
                       <td>
                         {(move.flags ?? []).length === 0 ? (
@@ -383,6 +436,19 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
             </table>
           )}
         </>
+      )}
+
+      {/* Right-click inline edit popover (dex-table parity). */}
+      {inlineMenu && (
+        <MoveInlineEdit
+          key={`${inlineMenu.move.chrooked_id}:${inlineMenu.field}`}
+          x={inlineMenu.x}
+          y={inlineMenu.y}
+          move={inlineMenu.move}
+          field={inlineMenu.field}
+          onSave={saveInline}
+          onClose={() => setInlineMenu(null)}
+        />
       )}
 
       {/* Read-only detail sidebar — opens when a row is clicked. */}
@@ -577,6 +643,7 @@ const HEADER_LABEL: Record<MoveColumnKey, string> = {
   power: "Pow",
   accuracy: "Acc",
   pp: "PP",
+  target: "Tgt",
   flags: "Tags",
 };
 

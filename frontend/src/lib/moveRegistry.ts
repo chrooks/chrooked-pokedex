@@ -4,7 +4,7 @@
    boolean machinery lives in filterEngine.ts. Pure, no React. */
 
 import type { Move } from "../types";
-import { TYPES, MOVE_FLAGS, isMoveEdited } from "./format";
+import { TYPES, MOVE_FLAGS, MOVE_TARGETS, isMoveEdited } from "./format";
 import { MOVE_COLUMNS } from "./moveColumns";
 import type { FieldRegistry, FilterDef } from "./filterEngine";
 
@@ -30,6 +30,7 @@ export function buildMoveFilterDefs(): FilterDef[] {
       values: [...MOVE_CATEGORIES],
     },
     { field: "flags", label: "Flag", method: "select", values: [...MOVE_FLAGS] },
+    { field: "target", label: "Target", method: "select", values: [...MOVE_TARGETS] },
     {
       field: "edited",
       label: "Edited",
@@ -52,6 +53,7 @@ function selectMatch(field: string, move: Move, value: string): boolean {
   if (field === "type") return move.type === value;
   if (field === "category") return move.category === value;
   if (field === "flags") return move.flags.includes(value);
+  if (field === "target") return move.target === value;
   if (field === "edited") {
     return value === "Edited" ? isMoveEdited(move) : !isMoveEdited(move);
   }

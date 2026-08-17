@@ -14,6 +14,7 @@ export type MoveColumnKey =
   | "power"
   | "accuracy"
   | "pp"
+  | "target"
   | "flags";
 
 export interface MoveColumn extends SortColumn<Move> {
@@ -85,6 +86,14 @@ export const MOVE_COLUMNS: MoveColumn[] = [
     locked: false,
     sortable: true,
     sortValue: (move) => move.pp ?? undefined,
+  },
+  {
+    key: "target",
+    label: "Tgt",
+    cellType: "string",
+    locked: false,
+    sortable: true,
+    sortValue: (move) => move.target,
   },
   {
     key: "flags",

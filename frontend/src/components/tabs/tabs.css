@@ -42,6 +42,12 @@
   background: var(--surface-1);
 }
 
+/* Cells the right-click inline menu can edit (mirrors the dex table's
+   data-editable affordance). */
+.tab-table td[data-editable]:hover {
+  background: var(--surface-3);
+}
+
 .tab-num {
   text-align: right;
 }

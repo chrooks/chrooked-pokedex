@@ -261,6 +261,12 @@
   box-shadow: 0 8px 24px oklch(0% 0 0 / 0.45);
 }
 
+/* The moves table's Target popover hosts the battlefield grid + preset select
+   side by side — it needs the wider shell. */
+.dex-edit[data-wide] {
+  width: 24rem;
+}
+
 .dex-edit__head {
   display: flex;
   align-items: baseline;
