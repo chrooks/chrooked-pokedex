@@ -2,9 +2,9 @@ name: Rhyperior
 chrooked_id: rhyperior
 aka: { pokeemerald: SPECIES_RHYPERIOR }
 abilities:
-  primary: True Shot
+  primary: Impale
   secondary: Rock Head
-  hidden: Stampede
+  hidden: True Shot
 learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Hammer Arm }
