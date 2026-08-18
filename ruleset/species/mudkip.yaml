@@ -24,6 +24,7 @@ learnset:
   - { level: 52, move: Maelstrom }
   - { level: 56, move: Strength }
   - { level: 60, move: Superpower }
+  - { level: 60, move: Terra Cannon }
   - { level: 64, move: Faultbreak }
   - { level: 68, move: Wave Crash }
   - { level: 70, move: Hydro Cannon }

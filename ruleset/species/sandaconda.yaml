@@ -18,4 +18,5 @@ learnset:
   - { level: 43, move: Earthquake }
   - { level: 49, move: Coil }
   - { level: 51, move: Sand Tomb }
+  - { level: 60, move: Terra Cannon }
   - { level: 64, move: Faultbreak }

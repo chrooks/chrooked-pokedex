@@ -31,5 +31,6 @@ learnset:
   - { level: 46, move: Kinetic Slam }
   - { level: 47, move: Quagmire }
   - { level: 57, move: Faultbreak }
+  - { level: 60, move: Terra Cannon }
   - { level: 62, move: Psycrush }
   - { level: 63, move: Sinkhole }

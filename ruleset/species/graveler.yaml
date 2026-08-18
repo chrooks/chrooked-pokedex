@@ -25,6 +25,7 @@ learnset:
   - { level: 48, move: Earthquake }
   - { level: 52, move: Body Slam }
   - { level: 56, move: Stone Edge }
+  - { level: 60, move: Terra Cannon }
   - { level: 64, move: Wild Charge }
   - { level: 68, move: Head Smash }
   - { level: 70, move: Explosion }

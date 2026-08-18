@@ -412,3 +412,7 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** harvest True Shot (Rejuv ability 302, 1.3x ball/bomb) as the physical-artillery answer; Mega Launcher stays pulse-only canon
 - **Changes:** Rhyperior primary Mega Launcher → True Shot; Toucannon primary Keen Eye → True Shot; Rock Wrecker reworked 85BP/100acc/10PP, 10% -Def, no recharge; new move Terra Cannon (Ground twin, 10% -Spe); new `pulse` move tag modeled end to end for future custom pulse moves
+
+## 2026-08-18 — Terra Cannon distribution
+
+- **Direction:** curated artillery set, not a type blanket — 7 cannon-plausible Ground lines (Rhyhorn, Geodude, Baltoy, Hippopotas, Mudkip, Silicobra, Golett), 17 species, window 40-60
