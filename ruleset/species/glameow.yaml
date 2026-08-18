@@ -1,20 +1,29 @@
 name: Glameow
 chrooked_id: glameow
 aka: {  }
+flavor_types: [Dark, Fairy]
+abilities:
+  primary: Fur Coat
+  secondary: Thick Fat
+  hidden: Intimidate
+stats: { hp: 61, atk: 79, def: 51, spa: 40, spd: 50, spe: 87 }
 learnset:
   - { level: 1, move: Fake Out }
+  - { level: 1, move: Growl }
   - { level: 5, move: Scratch }
-  - { level: 8, move: Growl }
-  - { level: 13, move: Hypnosis }
-  - { level: 17, move: Aerial Ace }
-  - { level: 20, move: Fury Swipes }
-  - { level: 25, move: Charm }
-  - { level: 29, move: Retaliate }
-  - { level: 32, move: Slash }
-  - { level: 37, move: Take Down }
-  - { level: 39, move: Rampage }
-  - { level: 41, move: Sucker Punch }
-  - { level: 44, move: Attract }
-  - { level: 48, move: Hone Claws }
-  - { level: 50, move: Play Rough }
-  - { level: 57, move: Double-Edge }
+  - { level: 9, move: Taunt }
+  - { level: 13, move: Attract }
+  - { level: 17, move: Hypnosis }
+  - { level: 21, move: Charm }
+  - { level: 25, move: Retaliate }
+  - { level: 29, move: Hone Claws }
+  - { level: 33, move: Slash }
+  - { level: 37, move: Sucker Punch }
+  - { level: 41, move: Spirit Break }
+  - { level: 45, move: Body Slam }
+  - { level: 49, move: Darkest Lariat }
+  - { level: 53, move: Play Rough }
+  - { level: 57, move: Rampage }
+  - { level: 61, move: Backstab }
+  - { level: 65, move: Starfall Slam }
+  - { level: 69, move: Giga Impact }

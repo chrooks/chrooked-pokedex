@@ -435,3 +435,20 @@ leech seed, curse, withdraw, sythesis, etc.
   Vaporeon's L0. Legendary picks: Sacred Fire (Flareon), Psystrike (Espeon),
   Hyperspace Fury (Umbreon, needs Hoopa-gate check), Steam Eruption
   (Vaporeon), Light of Ruin (Sylveon); Jolteon/Leafeon/Glaceon use customs.
+
+## 2026-08-18 — Glameow line makeover
+
+- **Direction:** pure Normal nest-thief bully — fast physical attacker built on
+  cheap shots (Fake Out, Sucker Punch, Taunt, Hypnosis). Options rejected:
+  Dark/Normal bully (mold kept, Dark typing dropped), Normal/Fairy bewitcher,
+  Dark/Fairy double con. flavor_types [Dark, Fairy].
+- **Changes:** Purugly 85/110/70/55/70/120 (BST 510, +58); Glameow 61/79/51/40/50/87
+  (368, same delta/shape). Abilities unified across the line: Fur Coat / Thick Fat /
+  Intimidate (H). Full 20-row learnset; Glameow copy-down minus L0 Swagger.
+- **Corrections:** "I like the mold of the bully one but keep the Normal typing."
+  Stats hand-tuned off the 85/115/65/45/55/125 draft: "110 atk 120 Speed, restore
+  spa to 65", "make def 70 too", then "70 SpD -10 SpA" (final SpA 55 / SpD 70).
+  "Would Fur Coat be broken?" → picked Fur Coat/Thick Fat/Intimidate over the
+  recommended Thick Fat/Own Tempo/Defiant. "Love everything except Magical Torque"
+  → Starfall Slam @65 (only band-fitting physical Fairy). Assistant pacing fix
+  accepted: Retaliate @25, Hone Claws @29, Scary Face dropped.
