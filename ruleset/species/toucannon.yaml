@@ -1,6 +1,10 @@
 name: Toucannon
 chrooked_id: toucannon
 aka: { dex: 733 }
+abilities:
+  primary: True Shot
+  secondary: Skill Link
+  hidden: Sheer Force
 learnset:
   - { level: 0, move: Beak Blast }
   - { level: 1, move: Growl }

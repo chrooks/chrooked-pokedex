@@ -1,0 +1,13 @@
+name: Rock Wrecker
+chrooked_id: rockwrecker
+aka: { pokeemerald: MOVE_ROCK_WRECKER }
+type: Rock
+category: physical
+power: 85
+accuracy: 100
+pp: 10
+description: The user launches a huge boulder from its cannon. May lower the target's Defense.
+additional_effects:
+  - { effect: def_minus_1, chance: 10 }
+flags: [ballistic]
+target: selected

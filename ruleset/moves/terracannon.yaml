@@ -1,0 +1,13 @@
+name: Terra Cannon
+chrooked_id: terracannon
+aka: { pokeemerald: MOVE_TERRA_CANNON }
+type: Ground
+category: physical
+power: 85
+accuracy: 100
+pp: 10
+description: The user fires a compacted mass of earth at the target. May lower the target's Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 10 }
+flags: [ballistic]
+target: selected

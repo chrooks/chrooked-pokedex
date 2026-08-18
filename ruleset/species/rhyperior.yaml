@@ -2,7 +2,7 @@ name: Rhyperior
 chrooked_id: rhyperior
 aka: { pokeemerald: SPECIES_RHYPERIOR }
 abilities:
-  primary: Mega Launcher
+  primary: True Shot
   secondary: Rock Head
   hidden: Stampede
 learnset:
@@ -26,3 +26,4 @@ learnset:
   - { level: 61, move: Megahorn }
   - { level: 68, move: Horn Drill }
   - { level: 70, move: Rock Wrecker }
+evolution: { from: Rhydon, method: { level: 42 } }
