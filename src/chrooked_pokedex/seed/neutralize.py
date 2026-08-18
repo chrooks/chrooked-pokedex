@@ -78,6 +78,7 @@ MOVE_FLAG_TO_NEUTRAL: dict[str, str] = {
     "boneMove": "bone",
     "hammerMove": "hammer",
     "ballisticMove": "ballistic",
+    "pulseMove": "pulse",
 }
 NEUTRAL_TO_MOVE_FLAG: dict[str, str] = {v: k for k, v in MOVE_FLAG_TO_NEUTRAL.items()}
 

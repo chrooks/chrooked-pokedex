@@ -59,6 +59,7 @@ export const MOVE_FLAGS = [
   "bone",
   "hammer",
   "ballistic",
+  "pulse",
 ] as const;
 
 /** A flag id as its display tag: "contact" -> "Contact", "high_crit" ->

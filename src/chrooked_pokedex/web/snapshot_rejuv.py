@@ -165,6 +165,7 @@ _REJUV_FLAG_TO_NEUTRAL = {
     "ballmove": "ballistic",
     "bombmove": "ballistic",
     "windmove": "wind",
+    "pulsemove": "pulse",
 }
 
 

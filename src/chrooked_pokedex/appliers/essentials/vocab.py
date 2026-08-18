@@ -32,6 +32,7 @@ _FLAG = {
     "sound": "Sound",
     "slicing": "Slicing",
     "wind": "Wind",
+    "pulse": "Pulse",
     "high_crit": "HighCriticalHitRate",
 }
 

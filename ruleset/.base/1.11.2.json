@@ -3241,7 +3241,8 @@
       "description": "Attacks with an aura blast that cannot be evaded.",
       "effect": "hit",
       "flags": [
-        "ballistic"
+        "ballistic",
+        "pulse"
       ],
       "name": "Aura Sphere",
       "power": 80,
@@ -5799,7 +5800,9 @@
       "chrooked_id": "darkpulse",
       "description": "Attacks with a horrible aura. May cause flinching.",
       "effect": "hit",
-      "flags": [],
+      "flags": [
+        "pulse"
+      ],
       "name": "Dark Pulse",
       "power": 80,
       "pp": 15,
@@ -6540,7 +6543,9 @@
       "chrooked_id": "dragonpulse",
       "description": "Generates a shock wave to damage the foe.",
       "effect": "hit",
-      "flags": [],
+      "flags": [
+        "pulse"
+      ],
       "name": "Dragon Pulse",
       "power": 85,
       "pp": 10,
@@ -10496,7 +10501,9 @@
       "chrooked_id": "healpulse",
       "description": "Recovers up to half the target's maximum HP.",
       "effect": "heal_pulse",
-      "flags": [],
+      "flags": [
+        "pulse"
+      ],
       "name": "Heal Pulse",
       "power": 0,
       "pp": 10,
@@ -14670,7 +14677,9 @@
       "chrooked_id": "originpulse",
       "description": "Beams of glowing blue light blast both foes.",
       "effect": "hit",
-      "flags": [],
+      "flags": [
+        "pulse"
+      ],
       "name": "Origin Pulse",
       "power": 110,
       "pp": 10,
@@ -20503,7 +20512,9 @@
       "chrooked_id": "terrainpulse",
       "description": "Type and power changes depending on the terrain.",
       "effect": "terrain_pulse",
-      "flags": [],
+      "flags": [
+        "pulse"
+      ],
       "name": "Terrain Pulse",
       "power": 50,
       "pp": 10,
@@ -21742,7 +21753,9 @@
       "chrooked_id": "waterpulse",
       "description": "Attacks with ultrasonic waves. May confuse the foe.",
       "effect": "hit",
-      "flags": [],
+      "flags": [
+        "pulse"
+      ],
       "name": "Water Pulse",
       "power": 60,
       "pp": 20,

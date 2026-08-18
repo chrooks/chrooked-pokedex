@@ -80,7 +80,7 @@ _ADDL_ENTRY = re.compile(r"\.moveEffect\s*=\s*(MOVE_EFFECT_\w+).*?\.chance\s*=\s
 _FLAG_FIELDS = (
     "makesContact", "punchingMove", "bitingMove", "soundMove", "slicingMove",
     "windMove", "wingMove", "kickingMove", "piercingMove", "boneMove",
-    "hammerMove", "ballisticMove",
+    "hammerMove", "ballisticMove", "pulseMove",
 )
 
 _SKIP_MOVES = {"MOVE_NONE", "MOVE_COUNT", "MOVE_UNAVAILABLE"}

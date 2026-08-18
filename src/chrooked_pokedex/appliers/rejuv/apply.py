@@ -475,7 +475,8 @@ _TARGET = {"selected": "SingleNonUser", "user": "User", "both": "AllOpposing"}
 _FLAG = {
     "contact": "contact", "punching": "punchmove", "biting": "bitingmove",
     "sound": "soundmove", "slicing": "sharpmove", "wind": "windmove",
-    "ballistic": "ballmove", "kicking": "kickmove", "high_crit": "highcrit",
+    "ballistic": "ballmove", "kicking": "kickmove", "pulse": "pulsemove",
+    "high_crit": "highcrit",
 }
 # Creation defaults for a scalar a MoveDef leaves as None (all 23 current
 # creation moves carry full numbers; these guard a future sparse def).

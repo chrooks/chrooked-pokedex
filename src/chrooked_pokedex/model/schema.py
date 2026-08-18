@@ -28,7 +28,7 @@ DEFAULT_EFFECT: str = "hit"
 MOVE_FLAGS: frozenset[str] = frozenset({
     "contact", "punching", "biting", "sound", "slicing", "wind",
     "wing", "kicking", "piercing", "bone", "hammer", "ballistic",
-    "high_crit",
+    "pulse", "high_crit",
 })
 
 # Neutral move targets the Ruleset models — the union of pokeemerald's neutralized
