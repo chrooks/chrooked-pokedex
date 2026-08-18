@@ -6,7 +6,7 @@ abilities:
   secondary: Slush Rush
   hidden: Refrigerate
 learnset:
-  - { level: 0, move: Cryoblast }
+  - { level: 0, move: Frost Breath }
   - { level: 1, move: Baby-Doll Eyes }
   - { level: 1, move: Tackle }
   - { level: 5, move: Powder Snow }
@@ -24,6 +24,6 @@ learnset:
   - { level: 53, move: Blizzard }
   - { level: 57, move: Resonance }
   - { level: 61, move: Sheer Cold }
-  - { level: 65, move: Ice Burn }
+  - { level: 65, move: Cryoblast }
   - { level: 69, move: Boomburst }
 evolution: { from: Eevee, method: { item: Ice Stone } }

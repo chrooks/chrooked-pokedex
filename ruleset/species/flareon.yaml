@@ -6,20 +6,24 @@ abilities:
   secondary: Kindle
   hidden: Immolate
 learnset:
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Ember }
-  - { level: 2, move: Tackle }
-  - { level: 5, move: Sand Attack }
-  - { level: 10, move: Flame Charge }
-  - { level: 15, move: Bite }
-  - { level: 20, move: Flame Wheel }
+  - { level: 0, move: Fire Punch }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Ember }
+  - { level: 9, move: Sunny Day }
+  - { level: 13, move: Quick Attack }
+  - { level: 17, move: Flame Wheel }
+  - { level: 21, move: Agility }
   - { level: 25, move: Fire Fang }
-  - { level: 30, move: Crunch }
-  - { level: 33, move: Bail Out }
-  - { level: 37, move: Combust }
-  - { level: 40, move: Lava Plume }
-  - { level: 46, move: Double-Edge }
-  - { level: 52, move: Flare Blitz }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Will-O-Wisp }
+  - { level: 37, move: Morning Sun }
+  - { level: 41, move: Swords Dance }
+  - { level: 45, move: Blaze Kick }
+  - { level: 49, move: Body Slam }
+  - { level: 53, move: Cinder Smash }
+  - { level: 57, move: Rampage }
+  - { level: 61, move: Sacred Fire }
+  - { level: 65, move: Flare Blitz }
+  - { level: 69, move: Double-Edge }
 evolution: { from: Eevee, method: { item: Fire Stone } }

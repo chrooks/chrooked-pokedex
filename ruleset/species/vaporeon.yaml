@@ -5,29 +5,24 @@ abilities:
   secondary: Deluge
   hidden: Hydrate
 learnset:
-  - { level: 0, move: Water Gun }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Helping Hand }
-  - { level: 2, move: Baton Pass }
-  - { level: 3, move: Charm }
-  - { level: 4, move: Tackle }
-  - { level: 5, move: Sand Attack }
-  - { level: 6, move: Covet }
-  - { level: 7, move: Bite }
-  - { level: 8, move: Swift }
-  - { level: 9, move: Bail Out }
-  - { level: 10, move: Quick Attack }
-  - { level: 11, move: Take Down }
-  - { level: 15, move: Baby-Doll Eyes }
-  - { level: 20, move: Haze }
-  - { level: 25, move: Water Pulse }
-  - { level: 30, move: Aurora Beam }
-  - { level: 35, move: Double-Edge }
-  - { level: 40, move: Surf }
-  - { level: 45, move: Acid Armor }
-  - { level: 50, move: Hydro Pump }
-  - { level: 55, move: Last Resort }
-  - { level: 64, move: Tsunami }
+  - { level: 0, move: Chilling Water }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Rain Dance }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Water Pulse }
+  - { level: 21, move: Acid Armor }
+  - { level: 25, move: Brine }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Wish }
+  - { level: 37, move: Haze }
+  - { level: 41, move: Calm Mind }
+  - { level: 45, move: Surf }
+  - { level: 49, move: Hyper Voice }
+  - { level: 53, move: Hydro Pump }
+  - { level: 57, move: Resonance }
+  - { level: 61, move: Steam Eruption }
+  - { level: 65, move: Tsunami }
+  - { level: 69, move: Boomburst }
 evolution: { from: Eevee, method: { item: Water Stone } }

@@ -6,36 +6,23 @@ abilities:
   secondary: Magic Guard
   hidden: Obfuscate
 learnset:
-  - { level: 0, move: Snarl }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Copycat }
-  - { level: 2, move: Glitter Tap }
-  - { level: 3, move: Cheap Shot }
-  - { level: 4, move: Helping Hand }
-  - { level: 5, move: Sand Attack }
-  - { level: 6, move: Baton Pass }
-  - { level: 7, move: Tackle }
-  - { level: 8, move: Covet }
-  - { level: 9, move: Bite }
-  - { level: 10, move: Quick Attack }
-  - { level: 11, move: Swift }
-  - { level: 12, move: Bail Out }
-  - { level: 13, move: Take Down }
-  - { level: 15, move: Baby-Doll Eyes }
-  - { level: 16, move: Cutsie Slap }
-  - { level: 20, move: Confuse Ray }
-  - { level: 25, move: Assurance }
-  - { level: 29, move: Pixie Slash }
-  - { level: 30, move: Moonlight }
-  - { level: 35, move: Double-Edge }
-  - { level: 37, move: Heel Drop }
-  - { level: 38, move: Backstab }
-  - { level: 40, move: Dark Pulse }
-  - { level: 43, move: Starfall Slam }
-  - { level: 45, move: Screech }
-  - { level: 50, move: Mean Look }
-  - { level: 55, move: Last Resort }
-  - { level: 57, move: Faeblitz }
-  - { level: 60, move: Havoc }
+  - { level: 0, move: Crunch }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Cheap Shot }
+  - { level: 9, move: Confuse Ray }
+  - { level: 13, move: Quick Attack }
+  - { level: 17, move: Knock Off }
+  - { level: 21, move: Curse }
+  - { level: 25, move: Sucker Punch }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Moonlight }
+  - { level: 37, move: Pixie Slash }
+  - { level: 41, move: Bulk Up }
+  - { level: 45, move: Heel Drop }
+  - { level: 49, move: Body Slam }
+  - { level: 53, move: Backstab }
+  - { level: 57, move: Rampage }
+  - { level: 61, move: Hyperspace Fury }
+  - { level: 65, move: Faeblitz }
+  - { level: 69, move: Double-Edge }

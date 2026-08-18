@@ -416,3 +416,22 @@ leech seed, curse, withdraw, sythesis, etc.
 ## 2026-08-18 — Terra Cannon distribution
 
 - **Direction:** curated artillery set, not a type blanket — 7 cannon-plausible Ground lines (Rhyhorn, Geodude, Baltoy, Hippopotas, Mudkip, Silicobra, Golett), 17 species, window 40-60
+
+## 2026-08-18 — Eeveelutions ladder mirror
+
+- **Direction:** mirror the Glaceon learnset shape across all seven other
+  Eeveelutions — L0 evo reward, two L1 basics, one rung every 4 levels from
+  5 to 69, 20 rows (Sylveon 21: dual screens at 37).
+- **Slot map:** 5 starter STAB · 9 field/identity setup · 13/29/49/57/69
+  Normal -ate spine (special: Swift/Bail Out/Hyper Voice/Resonance/Boomburst;
+  physical: Quick Attack/Bail Out/Body Slam/Rampage/Double-Edge) · 17 STAB +
+  utility · 21 mon-appropriate setup · 25 tech · 33 status/sustain · 37 flex
+  utility · 41 offense setup (Calm Mind / Swords Dance / Bulk Up) · 45 STAB
+  ~90 · 53 big STAB · 61+65 top pair, at most one legendary signature.
+- **Evo reward rule (new):** L0 is a mid STAB between the L17 and L45 BP, not
+  the nuke. Glaceon retrofit: L0 Cryoblast → Frost Breath, Cryoblast to 65,
+  Ice Burn dropped.
+- **Corrections:** Chilling Water is the frostbite Scald (80 BP), so it is
+  Vaporeon's L0. Legendary picks: Sacred Fire (Flareon), Psystrike (Espeon),
+  Hyperspace Fury (Umbreon, needs Hoopa-gate check), Steam Eruption
+  (Vaporeon), Light of Ruin (Sylveon); Jolteon/Leafeon/Glaceon use customs.

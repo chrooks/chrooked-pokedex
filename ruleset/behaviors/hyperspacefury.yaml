@@ -1,0 +1,34 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the learnset row itself.
+#
+# Not a new move: an unlock. Vanilla Hyperspace Fury refuses any user that is not
+# Hoopa Unbound. The chrooked dex teaches it to Umbreon (L61), so Umbreon joins
+# the allowlist.
+name: Hyperspace Fury unlock
+chrooked_id: hyperspacefury
+applies_to: move
+aka: { rejuv: HYPERSPACEFURY }
+effects:
+  - summary: "Umbreon can use Hyperspace Fury; the Hoopa-only restriction does not apply to it."
+    trigger: accuracy-check
+    when: "the attacker is Umbreon and selects Hyperspace Fury (the gate runs before accuracy, at move start)"
+    effect: "the move executes normally instead of failing the species check"
+test_cases:
+  - given: "Umbreon uses Hyperspace Fury"
+    expect: "the move executes — pierces protection, lowers the user's Defense one stage"
+  - given: "Hoopa in Confined form uses Hyperspace Fury"
+    expect: "vanilla failure message, unchanged"
+  - given: "any other species uses Hyperspace Fury"
+    expect: "vanilla failure message, unchanged"
+notes:
+  - "The unlock is additive: Hoopa Unbound (and Rejuv's Gardevoir 'Angel of Death' form) keep their access."
+engine_hints:
+  rejuv: >-
+    PokeBattle_Move_159#pbOnStartUse (Battle_MoveEffects.rb ~7675) is the gate.
+    Prepend a module that returns true when attacker.species == :UMBREON and
+    otherwise defers to super. Guard the prepend with defined?(PokeBattle_Move_159)
+    so the stub test harness does not NameError.
+  pokeemerald: >-
+    Not applicable while Umbreon's expansion learnset omits the move; the
+    expansion has no species gate on Hyperspace Fury data entries.

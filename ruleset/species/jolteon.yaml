@@ -5,30 +5,24 @@ abilities:
   secondary: Transistor
   hidden: Galvanize
 learnset:
-  - { level: 0, move: Thunder Shock }
-  - { level: 1, move: Baton Pass }
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Growl }
-  - { level: 2, move: Tail Whip }
-  - { level: 3, move: Copycat }
-  - { level: 4, move: Covet }
-  - { level: 5, move: Sand Attack }
-  - { level: 6, move: Tackle }
-  - { level: 7, move: Swift }
-  - { level: 8, move: Bite }
-  - { level: 9, move: Bail Out }
-  - { level: 10, move: Quick Attack }
-  - { level: 11, move: Take Down }
-  - { level: 15, move: Baby-Doll Eyes }
-  - { level: 17, move: Short Circuit }
-  - { level: 20, move: Thunder Wave }
-  - { level: 25, move: Double Kick }
-  - { level: 30, move: Double-Edge }
-  - { level: 35, move: Pin Missile }
-  - { level: 40, move: Discharge }
-  - { level: 45, move: Agility }
-  - { level: 50, move: Thunder }
-  - { level: 55, move: Last Resort }
-  - { level: 57, move: Zap Cannon }
+  - { level: 0, move: Short Circuit }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Electric Terrain }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Shock Wave }
+  - { level: 21, move: Agility }
+  - { level: 25, move: Electro Ball }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Thunder Wave }
+  - { level: 37, move: Volt Switch }
+  - { level: 41, move: Calm Mind }
+  - { level: 45, move: Thunderbolt }
+  - { level: 49, move: Hyper Voice }
+  - { level: 53, move: Thunder }
+  - { level: 57, move: Resonance }
+  - { level: 61, move: Overdrive }
+  - { level: 65, move: Rising Voltage }
+  - { level: 69, move: Boomburst }
 evolution: { from: Eevee, method: { item: Thunder Stone } }

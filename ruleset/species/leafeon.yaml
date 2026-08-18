@@ -6,31 +6,24 @@ abilities:
   secondary: Chloroplast
   hidden: Foliate
 learnset:
-  - { level: 0, move: Razor Leaf }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Helping Hand }
-  - { level: 2, move: Leafage }
-  - { level: 3, move: Charm }
-  - { level: 4, move: Baton Pass }
-  - { level: 5, move: Sand Attack }
-  - { level: 6, move: Tackle }
-  - { level: 7, move: Covet }
-  - { level: 8, move: Swift }
-  - { level: 9, move: Bite }
-  - { level: 10, move: Quick Attack }
-  - { level: 11, move: Bail Out }
-  - { level: 12, move: Take Down }
-  - { level: 15, move: Baby-Doll Eyes }
-  - { level: 20, move: Leech Seed }
-  - { level: 25, move: Magical Leaf }
-  - { level: 30, move: Synthesis }
-  - { level: 35, move: Double-Edge }
-  - { level: 37, move: Leaf Blade }
-  - { level: 40, move: Giga Drain }
-  - { level: 45, move: Swords Dance }
-  - { level: 50, move: Reap }
-  - { level: 55, move: Last Resort }
-  - { level: 57, move: Power Whip }
+  - { level: 0, move: Horn Leech }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Leafage }
+  - { level: 9, move: Grassy Terrain }
+  - { level: 13, move: Quick Attack }
+  - { level: 17, move: Razor Leaf }
+  - { level: 21, move: Agility }
+  - { level: 25, move: Grassy Glide }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Synthesis }
+  - { level: 37, move: Leech Seed }
+  - { level: 41, move: Swords Dance }
+  - { level: 45, move: Leaf Blade }
+  - { level: 49, move: Body Slam }
+  - { level: 53, move: Reap }
+  - { level: 57, move: Rampage }
+  - { level: 61, move: Power Whip }
+  - { level: 65, move: Solar Blade }
+  - { level: 69, move: Double-Edge }
 evolution: { from: Eevee, method: { item: Leaf Stone } }

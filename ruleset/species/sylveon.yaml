@@ -4,30 +4,24 @@ aka: { pokeemerald: SPECIES_SYLVEON }
 abilities:
   primary: Pixilate
 learnset:
-  - { level: 0, move: Disarming Voice }
-  - { level: 1, move: Baton Pass }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Copycat }
-  - { level: 2, move: Charm }
-  - { level: 3, move: Helping Hand }
-  - { level: 4, move: Tackle }
-  - { level: 5, move: Sand Attack }
-  - { level: 6, move: Covet }
-  - { level: 7, move: Bite }
-  - { level: 8, move: Bail Out }
-  - { level: 9, move: Take Down }
-  - { level: 10, move: Quick Attack }
-  - { level: 15, move: Baby-Doll Eyes }
-  - { level: 20, move: Swift }
-  - { level: 22, move: Draining Kiss }
-  - { level: 25, move: Light Screen }
-  - { level: 29, move: Beguile }
-  - { level: 30, move: Dazzling Gleam }
-  - { level: 35, move: Double-Edge }
-  - { level: 40, move: Skill Swap }
-  - { level: 42, move: Pixie Slash }
-  - { level: 45, move: Psych Up }
-  - { level: 50, move: Moonblast }
-  - { level: 55, move: Last Resort }
-  - { level: 64, move: Rapture }
+  - { level: 0, move: Beguile }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Disarming Voice }
+  - { level: 9, move: Misty Terrain }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Draining Kiss }
+  - { level: 21, move: Charm }
+  - { level: 25, move: Stored Power }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Recover }
+  - { level: 37, move: Reflect }
+  - { level: 37, move: Light Screen }
+  - { level: 41, move: Calm Mind }
+  - { level: 45, move: Dazzling Gleam }
+  - { level: 49, move: Hyper Voice }
+  - { level: 53, move: Moonblast }
+  - { level: 57, move: Resonance }
+  - { level: 61, move: Light of Ruin }
+  - { level: 65, move: Rapture }
+  - { level: 69, move: Boomburst }
