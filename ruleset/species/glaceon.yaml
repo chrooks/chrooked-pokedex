@@ -3,33 +3,27 @@ chrooked_id: glaceon
 aka: { pokeemerald: SPECIES_GLACEON }
 abilities:
   primary: Cryomancer
-  secondary: Whiteout
+  secondary: Slush Rush
   hidden: Refrigerate
 learnset:
-  - { level: 0, move: Icy Wind }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Growl }
-  - { level: 2, move: Powder Snow }
-  - { level: 3, move: Helping Hand }
-  - { level: 4, move: Baton Pass }
-  - { level: 5, move: Sand Attack }
-  - { level: 6, move: Tackle }
-  - { level: 7, move: Covet }
-  - { level: 8, move: Swift }
-  - { level: 9, move: Bail Out }
-  - { level: 10, move: Quick Attack }
-  - { level: 11, move: Take Down }
-  - { level: 15, move: Baby-Doll Eyes }
-  - { level: 20, move: Ice Shard }
-  - { level: 25, move: Bite }
-  - { level: 29, move: Freeze-Dry }
-  - { level: 30, move: Ice Fang }
-  - { level: 35, move: Double-Edge }
-  - { level: 40, move: Ice Beam }
-  - { level: 45, move: Mirror Coat }
-  - { level: 50, move: Blizzard }
-  - { level: 55, move: Last Resort }
-  - { level: 64, move: Cryoblast }
+  - { level: 0, move: Cryoblast }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Powder Snow }
+  - { level: 9, move: Hail }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Icy Wind }
+  - { level: 21, move: Agility }
+  - { level: 25, move: Freeze-Dry }
+  - { level: 29, move: Bail Out }
+  - { level: 33, move: Flash Freeze }
+  - { level: 37, move: Weather Ball }
+  - { level: 41, move: Calm Mind }
+  - { level: 45, move: Ice Beam }
+  - { level: 49, move: Hyper Voice }
+  - { level: 53, move: Blizzard }
+  - { level: 57, move: Resonance }
+  - { level: 61, move: Sheer Cold }
+  - { level: 65, move: Ice Burn }
+  - { level: 69, move: Boomburst }
 evolution: { from: Eevee, method: { item: Ice Stone } }

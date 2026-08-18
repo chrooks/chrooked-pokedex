@@ -397,3 +397,13 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** stats + learnset repass
 - **Corrections:** 600 bst
+
+## 2026-08-16 — Walrein line
+
+- **Direction:** learnset-only repass
+- **Corrections:** good utility,biting moves, lean physical, shoudl learn flip turn, chlling water, encore
+
+## 2026-08-17 — Glaceon line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Special moves, good normal coverage

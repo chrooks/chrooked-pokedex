@@ -26,3 +26,4 @@ learnset:
   - { level: 58, move: Head Smash }
   - { level: 61, move: Megahorn }
   - { level: 68, move: Horn Drill }
+evolution: { from: Rhyhorn, method: { level: 30 } }

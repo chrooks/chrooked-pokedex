@@ -1,31 +1,32 @@
 name: Spheal
 chrooked_id: spheal
 aka: { pokeemerald: SPECIES_SPHEAL }
+types: [Ice, Water]
 abilities:
   primary: Thick Fat
   secondary: Bioturbation
   hidden: Permafrost
+stats: { hp: 70, atk: 40, def: 50, spa: 55, spd: 50, spe: 25 }
 learnset:
-  - { level: 1, move: Rollout }
-  - { level: 1, move: Defense Curl }
-  - { level: 4, move: Growl }
-  - { level: 6, move: Flash Freeze }
-  - { level: 8, move: Water Gun }
-  - { level: 12, move: Powder Snow }
-  - { level: 14, move: Water Whip }
-  - { level: 16, move: Rest }
-  - { level: 20, move: Snore }
-  - { level: 24, move: Brine }
-  - { level: 28, move: Aurora Beam }
-  - { level: 29, move: Ice Beam }
-  - { level: 33, move: Encore }
-  - { level: 36, move: Body Slam }
-  - { level: 38, move: Glacial Crush }
-  - { level: 40, move: Surf }
-  - { level: 43, move: Hydro Pump }
-  - { level: 44, move: Blizzard }
-  - { level: 48, move: Hail }
-  - { level: 52, move: Sheer Cold }
-  - { level: 54, move: Icebreaker }
-  - { level: 57, move: Cryoblast }
-  - { level: 59, move: Tsunami }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Ice Ball }
+  - { level: 9, move: Undertow }
+  - { level: 12, move: Fake Out }
+  - { level: 15, move: Bite }
+  - { level: 19, move: Ice Shard }
+  - { level: 22, move: Water Whip }
+  - { level: 24, move: Yawn }
+  - { level: 25, move: Encore }
+  - { level: 29, move: Razor Shell }
+  - { level: 33, move: Icefall }
+  - { level: 37, move: Flip Turn }
+  - { level: 41, move: Aqua Jet }
+  - { level: 43, move: Crunch }
+  - { level: 45, move: Ice Fang }
+  - { level: 49, move: Aqua Tail }
+  - { level: 53, move: Flash Freeze }
+  - { level: 57, move: Maelstrom }
+  - { level: 61, move: Mountain Gale }
+  - { level: 65, move: Icebreaker }
+  - { level: 69, move: Wave Crash }

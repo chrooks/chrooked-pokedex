@@ -5,29 +5,28 @@ abilities:
   primary: Thick Fat
   secondary: Bioturbation
   hidden: Permafrost
+stats: { hp: 90, atk: 60, def: 70, spa: 75, spd: 70, spe: 45 }
 learnset:
-  - { level: 0, move: Swagger }
-  - { level: 1, move: Swagger }
-  - { level: 1, move: Defense Curl }
   - { level: 1, move: Growl }
-  - { level: 1, move: Rollout }
-  - { level: 2, move: Water Gun }
-  - { level: 6, move: Flash Freeze }
-  - { level: 12, move: Powder Snow }
-  - { level: 14, move: Water Whip }
-  - { level: 16, move: Rest }
-  - { level: 20, move: Snore }
-  - { level: 24, move: Brine }
-  - { level: 28, move: Aurora Beam }
-  - { level: 29, move: Ice Beam }
-  - { level: 35, move: Encore }
-  - { level: 40, move: Body Slam }
-  - { level: 43, move: Glacial Crush }
-  - { level: 44, move: Surf }
-  - { level: 46, move: Hydro Pump }
-  - { level: 52, move: Blizzard }
-  - { level: 57, move: Cryoblast }
-  - { level: 58, move: Hail }
-  - { level: 59, move: Tsunami }
-  - { level: 64, move: Sheer Cold }
-  - { level: 66, move: Icebreaker }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Ice Ball }
+  - { level: 9, move: Undertow }
+  - { level: 12, move: Fake Out }
+  - { level: 15, move: Bite }
+  - { level: 19, move: Ice Shard }
+  - { level: 22, move: Water Whip }
+  - { level: 24, move: Yawn }
+  - { level: 25, move: Encore }
+  - { level: 29, move: Razor Shell }
+  - { level: 33, move: Icefall }
+  - { level: 37, move: Flip Turn }
+  - { level: 41, move: Aqua Jet }
+  - { level: 43, move: Crunch }
+  - { level: 45, move: Ice Fang }
+  - { level: 49, move: Aqua Tail }
+  - { level: 53, move: Flash Freeze }
+  - { level: 57, move: Maelstrom }
+  - { level: 61, move: Mountain Gale }
+  - { level: 65, move: Icebreaker }
+  - { level: 69, move: Wave Crash }
+evolution: { from: Spheal, method: { level: 22 } }
