@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# The burn-chip immunity mirrors Toxic Boost's poison-chip immunity, per design.
+name: Flare Boost
+chrooked_id: flareboost
+applies_to: ability
+aka: { pokeemerald: ABILITY_FLARE_BOOST }
+effects:
+  - summary: "Boosts special move damage by 50% while burned."
+    trigger: damage-calc
+    when: "this Pokemon is burned and uses a special move"
+    effect: "multiply the special move's damage by 1.5"
+  - summary: "Immune to its own burn damage."
+    trigger: turn-end
+    when: "this Pokemon is burned at end of turn"
+    effect: "skip the end-of-turn burn residual damage entirely; this Pokemon takes no chip from its own burn"
+test_cases:
+  - given: "a burned Flare Boost Pokemon uses a special move"
+    expect: "the move deals 50% more damage"
+  - given: "a burned Flare Boost Pokemon uses a physical move"
+    expect: "no damage boost applies (special only; burn's Attack penalty still applies)"
+  - given: "a Flare Boost Pokemon is burned and the turn ends"
+    expect: "it takes zero burn damage (immune to its own burn residual), while still keeping the special boost"
+notes:
+  - "The special-damage boost is the mainline-canonical half; both engines already ship it. Only the burn-chip immunity is chrooked."
+  - "The immunity covers the holder's own burn residual only — external fire damage (Fire moves, Burning-field ticks, wildfire) is untouched."
+  - "This is the burn twin of Toxic Boost's poison-chip immunity; the two specs stay in lockstep."
+engine_hints:
+  pokeemerald: "Damage boost is native: soulgold src/battle_util.c:8885 — UQ_4_12(1.5) when (status1 & STATUS1_BURN) && IsBattleMoveSpecial(move). Burn immunity is NOT yet in any pokeemerald fork's C — the end-turn burn residual needs an `ability != ABILITY_FLARE_BOOST` gate, same treatment Dreamstone gave Toxic Boost at ENDTURN_POISON."
+  essentials: "Rejuv: boost is native (Battle_Move.rb:1286 basemult and Battle_Move.rb:374 calcspatk; AI twin Battle_AI.rb:13716). Burn-chip immunity needs the mod — the burn residual at Battle.rb:6550 only exempts magicGuardAbilities, GUTS-on-Crowd, and the Suicune crest. chrooked_flareboost.rb vetoes the tick via the core's status-tick seam (pbContinueStatus marks the status, CHROOKED_HP_LOSS_VETO consumes it). Field-side fire immunities are already native: burningFieldPassiveDamage? excludes FLAREBOOST (Battle_Field.rb:1133) and the Volcano-top eruption immunity list includes it (Battle.rb:6059)."

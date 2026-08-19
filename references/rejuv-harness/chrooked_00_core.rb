@@ -358,6 +358,22 @@ module ChrookedBattlerHooks
     super
   end
 
+  # Status-tick seam. The end-of-round status residuals (Battle.rb ~6503 poison,
+  # ~6555 burn) call pbContinueStatus then a MESSAGE-LESS pbReduceHP, so the
+  # HP-loss veto alone cannot tell that tick from any other silent HP loss.
+  # pbContinueStatus stamps the status; a veto lambda consumes the stamp to
+  # recognize (and skip) the residual that immediately follows.
+  def pbContinueStatus(*args)
+    @chrooked_status_tick = self.status
+    super
+  end
+
+  def chrooked_consume_status_tick
+    tick = @chrooked_status_tick
+    @chrooked_status_tick = nil
+    tick
+  end
+
   def pbTarget(move)
     target = super
     mod = CHROOKED_TARGET_MODS[self.ability]
