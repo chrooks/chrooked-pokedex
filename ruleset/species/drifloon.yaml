@@ -1,26 +1,29 @@
 name: Drifloon
 chrooked_id: drifloon
 aka: {  }
+types: [Ghost, Flying]
+abilities:
+  primary: Kindle
+  secondary: Updraft
+  hidden: Flare Boost
+stats: { hp: 90, atk: 50, def: 40, spa: 60, spd: 55, spe: 70 }
 learnset:
-  - { level: 1, move: Minimize }
+  - { level: 1, move: Acid Armor }
   - { level: 1, move: Astonish }
-  - { level: 4, move: Gust }
-  - { level: 6, move: Knell }
-  - { level: 8, move: Focus Energy }
-  - { level: 12, move: Payback }
-  - { level: 15, move: Air Slash }
-  - { level: 16, move: Hex }
-  - { level: 20, move: Shadow Ball }
-  - { level: 23, move: Swallow }
-  - { level: 24, move: Stockpile }
-  - { level: 25, move: Spit Up }
-  - { level: 29, move: Self-Destruct }
-  - { level: 32, move: Destiny Bond }
-  - { level: 34, move: Galeburst }
-  - { level: 36, move: Baton Pass }
-  - { level: 40, move: Tailwind }
-  - { level: 43, move: Specter Bomb }
-  - { level: 44, move: Explosion }
-  - { level: 45, move: Hurricane }
-  - { level: 64, move: Netherstorm }
-  - { level: 65, move: Tempest }
+  - { level: 5, move: Knell }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Will-O-Wisp }
+  - { level: 17, move: Air Cutter }
+  - { level: 21, move: Tailwind }
+  - { level: 25, move: Hex }
+  - { level: 33, move: Strength Sap }
+  - { level: 37, move: Air Slash }
+  - { level: 41, move: Mystical Fire }
+  - { level: 45, move: Shadow Ball }
+  - { level: 49, move: Galeburst }
+  - { level: 53, move: Flamethrower }
+  - { level: 57, move: Baton Pass }
+  - { level: 61, move: Hurricane }
+  - { level: 65, move: Heat Wave }
+  - { level: 69, move: Specter Bomb }
+  - { level: 70, move: Tempest }

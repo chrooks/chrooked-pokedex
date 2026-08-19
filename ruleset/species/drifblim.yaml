@@ -1,28 +1,30 @@
 name: Drifblim
 chrooked_id: drifblim
 aka: {  }
+abilities:
+  primary: Kindle
+  secondary: Updraft
+  hidden: Flare Boost
+stats: { hp: 130, atk: 50, def: 65, spa: 95, spd: 90, spe: 85 }
 learnset:
-  - { level: 0, move: Phantom Force }
+  - { level: 0, move: Destiny Bond }
+  - { level: 1, move: Acid Armor }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Strength Sap }
-  - { level: 1, move: Focus Energy }
-  - { level: 1, move: Minimize }
-  - { level: 2, move: Gust }
-  - { level: 6, move: Knell }
-  - { level: 12, move: Payback }
-  - { level: 15, move: Air Slash }
-  - { level: 16, move: Hex }
-  - { level: 20, move: Shadow Ball }
-  - { level: 23, move: Stockpile }
-  - { level: 24, move: Spit Up }
-  - { level: 25, move: Swallow }
-  - { level: 31, move: Self-Destruct }
-  - { level: 36, move: Destiny Bond }
-  - { level: 39, move: Galeburst }
-  - { level: 42, move: Baton Pass }
-  - { level: 43, move: Specter Bomb }
-  - { level: 45, move: Hurricane }
-  - { level: 48, move: Tailwind }
-  - { level: 54, move: Explosion }
-  - { level: 64, move: Netherstorm }
-  - { level: 65, move: Tempest }
+  - { level: 5, move: Knell }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Will-O-Wisp }
+  - { level: 17, move: Air Cutter }
+  - { level: 21, move: Tailwind }
+  - { level: 25, move: Hex }
+  - { level: 33, move: Strength Sap }
+  - { level: 37, move: Air Slash }
+  - { level: 41, move: Mystical Fire }
+  - { level: 45, move: Shadow Ball }
+  - { level: 49, move: Galeburst }
+  - { level: 53, move: Flamethrower }
+  - { level: 57, move: Baton Pass }
+  - { level: 61, move: Hurricane }
+  - { level: 65, move: Heat Wave }
+  - { level: 69, move: Specter Bomb }
+  - { level: 70, move: Tempest }
+evolution: { from: Drifloon, method: { level: 32 } }
