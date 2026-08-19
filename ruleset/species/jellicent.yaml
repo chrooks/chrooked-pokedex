@@ -2,7 +2,10 @@ name: Jellicent
 chrooked_id: jellicent
 aka: { dex: 593 }
 abilities:
+  primary: Water Absorb
+  secondary: Regenerator
   hidden: Nematocyst
+stats: { hp: 120, def: 80, spd: 110 }
 learnset:
   - { level: 1, move: Acid Armor }
   - { level: 1, move: Night Shade }
@@ -24,3 +27,4 @@ learnset:
   - { level: 54, move: Water Spout }
   - { level: 64, move: Netherstorm }
   - { level: 65, move: Tsunami }
+evolution: { from: Frillish, method: { level: 32 } }
