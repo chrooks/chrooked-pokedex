@@ -38,6 +38,9 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
   const [terms, setTerms] = useState<string[]>(() => queryTerms(filter, defs));
   const [partial, setPartial] = useState("");
   const [active, setActive] = useState(0);
+  /** The dropdown only means anything while the input owns the keys — a blurred
+      bar showing "↵ accept" is a lie, and Enter/Escape would go to the browser. */
+  const [focused, setFocused] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const dirty = useRef(false);
 
@@ -54,6 +57,19 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Escape leaves command mode from anywhere, not just the input — otherwise a
+  // stray click parks focus on the body and Escape falls through to the browser
+  // (exiting fullscreen on macOS instead of exiting the mode).
+  useEffect(() => {
+    function onDocKey(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onExit();
+    }
+    document.addEventListener("keydown", onDocKey);
+    return () => document.removeEventListener("keydown", onDocKey);
+  }, [onExit]);
 
   const rows = useMemo(() => suggest(partial, defs).slice(0, MAX_ROWS), [partial, defs]);
   const problems = useMemo(
@@ -105,10 +121,9 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
       event.preventDefault();
       setPartial(terms[terms.length - 1]);
       commitTerms(terms.slice(0, -1));
-    } else if (event.key === "Escape") {
-      event.preventDefault();
-      onExit();
     }
+    // Escape is handled at the document level so it works even when the input
+    // has lost focus.
   }
 
   return (
@@ -138,7 +153,7 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
           className="cmdbar__input"
           type="text"
           role="combobox"
-          aria-expanded={rows.length > 0}
+          aria-expanded={focused && rows.length > 0}
           aria-autocomplete="list"
           aria-controls={`${idPrefix}-cmdbar-list`}
           aria-label="Filter query"
@@ -155,10 +170,12 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
             }
           }}
           onKeyDown={onKeyDown}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
       </div>
 
-      {rows.length > 0 && (
+      {focused && rows.length > 0 && (
         <ul className="cmdbar__drop" id={`${idPrefix}-cmdbar-list`} role="listbox">
           {rows.map((row, index) => (
             <li key={row.code} role="option" aria-selected={index === active}>
