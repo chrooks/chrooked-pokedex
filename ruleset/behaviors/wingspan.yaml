@@ -1,26 +1,29 @@
 # Behavior spec — human-owned. The seed never touches this folder.
-# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
-# can compile it into any target engine. The data layer carries the ability itself.
-name: Updraft
+# Grounded in chrooked-patch-source C. Do not guess; the C is cited in engine_hints.
+name: Wingspan
 chrooked_id: wingspan
 applies_to: ability
 aka: { pokeemerald: ABILITY_WINGSPAN }
 effects:
-  - summary: "Wing moves and wind moves deal 30% more damage."
+  - summary: "Immune to Ground moves; takes no damage from them."
     trigger: damage-calc
-    when: "this Pokemon uses a move flagged as a wing move OR a wind move"
+    when: "an incoming move's type is Ground"
+    effect: "the move is blocked and deals no damage (no stat change, like Soundproof)"
+  - summary: "Boosts wing and wind moves by 30%."
+    trigger: damage-calc
+    when: "this Pokemon uses a wing move or a wind move"
     effect: "multiply the move's damage by 1.3"
 test_cases:
-  - given: "Updraft user uses a wing move (e.g. Brave Bird)"
-    expect: "damage is multiplied by 1.3"
-  - given: "Updraft user uses a wind move (e.g. Gust / Hurricane)"
-    expect: "damage is multiplied by 1.3"
-  - given: "Updraft user uses Tackle (neither wing nor wind)"
-    expect: "no boost; normal damage applies"
+  - given: "a Wingspan Pokemon is hit by Earthquake (Ground)"
+    expect: "it takes 0 damage and no stat changes"
+  - given: "a Wingspan Pokemon uses a wind move (e.g. Hurricane / Gust class) "
+    expect: "the move deals ~30% more damage"
+  - given: "a Wingspan Pokemon uses a non-wing/non-wind move"
+    expect: "no damage boost applies"
 notes:
-  - "Two independent flags both qualify: wingMove (custom) and windMove (engine-standard)."
-  - "The boost is not stacked when a move is both wing and wind — it is a single 1.3x multiplier."
-  - "Renamed 2026-08-19: this mechanic was displayed as 'Wingspan' and now displays as 'Updraft'. chrooked_id and the pokeemerald symbol stay ABILITY_WINGSPAN; name-derived Rejuv symbols follow the new name (:UPDRAFT)."
+  - "Ground immunity is a pure block (no heal, no stat gain) — same script as Soundproof."
+  - "The 1.3x boost keys off the engine's IsWingMove / IsWindMove move flags, matching the boost-only twin Updraft."
+  - "Deep-swapped with Updraft 2026-08-19: name, chrooked_id, and engine symbols all moved together, so this record is the ground-immunity kit end to end. Holders were untouched — the ground-immune five already carried the name Wingspan."
 engine_hints:
-  pokeemerald: "src/battle_util.c attacker-ability damage modifier switch (~line 6961): case ABILITY_WINGSPAN gates on (IsWingMove(move) || IsWindMove(move)) → UQ_4_12(1.3). Flags = gMovesInfo[].wingMove (custom, include/move.h:138) and .windMove (engine-standard). Symbol unchanged; only the display-name string in the fork's ability data needs the rename."
-  essentials: "Rejuv symbol is name-derived, so this mechanic now lives on :UPDRAFT — chrooked_wingspan.rb registers the 1.3x wing/wind damage modifier under :UPDRAFT."
+  pokeemerald: "The ground-immunity kit now belongs to ABILITY_WINGSPAN, but existing fork C still implements it under ABILITY_UPDRAFT (Ground block in TryAbsorbMove switch via BattleScript_SoundproofProtected, src/battle_util.c:2451; 1.3x wing/wind boost at :6965) — the two case bodies must be swapped by hand when a pokeemerald target is next touched."
+  essentials: "Rejuv symbols are name-derived, so this mechanic lives on :WINGSPAN — chrooked_wingspan.rb registers the Ground type-immunity hook (block, no effect) plus the 1.3x wing/wind damage modifier under :WINGSPAN."

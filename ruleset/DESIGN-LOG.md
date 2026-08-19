@@ -468,9 +468,16 @@ leech seed, curse, withdraw, sythesis, etc.
 - **Toxic Boost fix:** its spec claimed the poison-chip immunity was native in
   Rejuv — it wasn't (only field poison exempts it). `chrooked_toxicboost.rb`
   now vetoes the status tick the same way.
-- **Rename:** the two flight abilities swapped display names; every holder
-  keeps its mechanic. Ground-immunity + wing/wind boost (chrooked_id `updraft`)
-  is now called **Wingspan** (Charizard, Altaria, Lumineon, Ho-oh, Lugia);
-  boost-only (chrooked_id `wingspan`) is now called **Updraft** (Pidgey /
-  Rookidee / Rufflet lines, Drifloon line). chrooked_ids and pokeemerald
-  symbols stay pinned; Rejuv symbols follow names.
+- **Rename (deep swap):** the two flight abilities swapped identities; every
+  holder keeps its mechanic. **Wingspan** (chrooked_id `wingspan`,
+  ABILITY_WINGSPAN) is now the ground-immunity + wing/wind kit (Charizard,
+  Altaria, Lumineon, Ho-oh, Lugia); **Updraft** (chrooked_id `updraft`,
+  ABILITY_UPDRAFT) is the boost-only twin (Pidgey / Rookidee / Rufflet lines,
+  Drifloon line). Name, chrooked_id, and engine symbols all moved together —
+  existing pokeemerald fork C still has the old case bodies and must swap them
+  by hand on next touch (noted in both behavior specs).
+
+## 2026-08-19 — Jellicent line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special, gets good posion coverage, learns water spout, scald & chilling water, toxic, recover, destiny bond, curse

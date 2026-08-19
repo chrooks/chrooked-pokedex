@@ -21,7 +21,7 @@ test_cases:
     expect: "the immunity is suppressed and the move connects"
 notes:
   - "Diverges from canon: base Thermal Exchange only raises Attack on a Fire hit and still takes the damage. Chrooked trades that for a full Fire block, which is what un-does the Frigibax line's 4x Fire problem."
-  - "Pure block (no heal, no stat gain) — same script as Soundproof, matching Flytrap and Wingspan (chrooked_id updraft)."
+  - "Pure block (no heal, no stat gain) — same script as Soundproof, matching Flytrap and Wingspan."
 engine_hints:
   pokeemerald: "Fire block in the TryAbsorbMove switch via BattleScript_SoundproofProtected, src/battle_util.c — the Flytrap/Updraft shape, not Flash Fire's boost flag."
   essentials: "Fire type-immunity hook that blocks the move with no side effect."

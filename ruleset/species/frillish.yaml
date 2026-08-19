@@ -1,25 +1,31 @@
 name: Frillish
 chrooked_id: frillish
 aka: { dex: 592 }
+types: [Water, Ghost]
 abilities:
+  primary: Water Absorb
+  secondary: Regenerator
   hidden: Nematocyst
+stats: { hp: 83, atk: 41, def: 55, spa: 65, spd: 85, spe: 41 }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Water Gun }
-  - { level: 4, move: Poison Sting }
-  - { level: 6, move: Knell }
-  - { level: 8, move: Night Shade }
-  - { level: 12, move: Water Pulse }
-  - { level: 16, move: Rain Dance }
-  - { level: 20, move: Hex }
-  - { level: 24, move: Brine }
-  - { level: 28, move: Recover }
-  - { level: 29, move: Muddy Water }
-  - { level: 32, move: Shadow Ball }
-  - { level: 36, move: Whirlpool }
-  - { level: 41, move: Hydro Pump }
-  - { level: 43, move: Specter Bomb }
-  - { level: 44, move: Destiny Bond }
-  - { level: 48, move: Water Spout }
-  - { level: 64, move: Netherstorm }
-  - { level: 65, move: Tsunami }
+  - { level: 1, move: Acid Armor }
+  - { level: 1, move: Weather Ball }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Knell }
+  - { level: 13, move: Night Shade }
+  - { level: 17, move: Rain Dance }
+  - { level: 21, move: Clear Smog }
+  - { level: 25, move: Brine }
+  - { level: 29, move: Hex }
+  - { level: 33, move: Sludge }
+  - { level: 35, move: Toxic }
+  - { level: 37, move: Shadow Ball }
+  - { level: 41, move: Destiny Bond }
+  - { level: 45, move: Chilling Water }
+  - { level: 45, move: Scald }
+  - { level: 49, move: Recover }
+  - { level: 53, move: Hydro Pump }
+  - { level: 57, move: Sludge Wave }
+  - { level: 61, move: Specter Bomb }
+  - { level: 65, move: Water Spout }
+  - { level: 69, move: Netherstorm }
