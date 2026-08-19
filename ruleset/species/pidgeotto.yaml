@@ -2,7 +2,7 @@ name: Pidgeotto
 chrooked_id: pidgeotto
 aka: { pokeemerald: SPECIES_PIDGEOTTO }
 abilities:
-  primary: Wingspan
+  primary: Updraft
   secondary: Tangled Feet
 stats: { hp: 68, atk: 45, def: 60, spa: 78, spd: 58, spe: 81 }
 learnset:

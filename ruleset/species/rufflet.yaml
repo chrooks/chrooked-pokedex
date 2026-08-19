@@ -2,7 +2,7 @@ name: Rufflet
 chrooked_id: rufflet
 aka: { pokeemerald: SPECIES_RUFFLET }
 abilities:
-  primary: Wingspan
+  primary: Updraft
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }

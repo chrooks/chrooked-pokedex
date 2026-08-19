@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_ALTARIA }
 types: [Fairy, Dragon]
 abilities:
   primary: Pixilate
-  hidden: Updraft
+  hidden: Wingspan
 stats: { atk: 90, spa: 90 }
 learnset:
   - { level: 0, move: Dragon Pulse }

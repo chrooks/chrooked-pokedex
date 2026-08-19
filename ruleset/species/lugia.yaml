@@ -4,5 +4,5 @@ aka: { pokeemerald: SPECIES_LUGIA }
 types: [Psychic, Water]
 abilities:
   primary: Multiscale
-  hidden: Updraft
+  hidden: Wingspan
 stats: { hp: 105, spd: 155 }

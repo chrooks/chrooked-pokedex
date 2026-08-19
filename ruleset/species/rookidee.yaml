@@ -2,7 +2,7 @@ name: Rookidee
 chrooked_id: rookidee
 aka: { pokeemerald: SPECIES_ROOKIDEE }
 abilities:
-  secondary: Wingspan
+  secondary: Updraft
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }

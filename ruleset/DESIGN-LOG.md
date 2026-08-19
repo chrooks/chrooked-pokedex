@@ -452,3 +452,25 @@ leech seed, curse, withdraw, sythesis, etc.
   recommended Thick Fat/Own Tempo/Defiant. "Love everything except Magical Torque"
   → Starfall Slam @65 (only band-fitting physical Fairy). Assistant pacing fix
   accepted: Retaliate @25, Hone Claws @29, Scary Face dropped.
+
+## 2026-08-19 — Drifblim line
+
+- **Direction:** abilities + learnset repass
+- **Corrections:** SPecial w/ fire coverage. Learns astonish, strength sap, will o wisp, setiny bond, baton pass, tailwind
+
+## 2026-08-19 — Flare Boost immunity + Updraft/Wingspan rename
+
+- **Flare Boost** now skips its own burn chip, mirroring Toxic Boost's poison
+  immunity. New `behaviors/flareboost.yaml` + `abilities/flareboost.yaml`; Rejuv
+  mod vetoes the end-of-round burn tick via a new status-tick seam in the
+  harness core (the tick's `pbReduceHP` is message-less, so `pbContinueStatus`
+  stamps it first).
+- **Toxic Boost fix:** its spec claimed the poison-chip immunity was native in
+  Rejuv — it wasn't (only field poison exempts it). `chrooked_toxicboost.rb`
+  now vetoes the status tick the same way.
+- **Rename:** the two flight abilities swapped display names; every holder
+  keeps its mechanic. Ground-immunity + wing/wind boost (chrooked_id `updraft`)
+  is now called **Wingspan** (Charizard, Altaria, Lumineon, Ho-oh, Lugia);
+  boost-only (chrooked_id `wingspan`) is now called **Updraft** (Pidgey /
+  Rookidee / Rufflet lines, Drifloon line). chrooked_ids and pokeemerald
+  symbols stay pinned; Rejuv symbols follow names.

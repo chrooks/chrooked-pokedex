@@ -2,7 +2,7 @@ name: Pidgey
 chrooked_id: pidgey
 aka: { pokeemerald: SPECIES_PIDGEY }
 abilities:
-  primary: Wingspan
+  primary: Updraft
   secondary: Tangled Feet
 stats: { hp: 45, atk: 32, def: 42, spa: 62, spd: 42, spe: 69 }
 learnset:

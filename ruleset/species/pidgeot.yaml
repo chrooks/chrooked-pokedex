@@ -2,7 +2,7 @@ name: Pidgeot
 chrooked_id: pidgeot
 aka: { pokeemerald: SPECIES_PIDGEOT }
 abilities:
-  primary: Wingspan
+  primary: Updraft
   secondary: Tangled Feet
 stats: { hp: 85, atk: 65, spa: 105, spd: 75, spe: 115 }
 learnset:

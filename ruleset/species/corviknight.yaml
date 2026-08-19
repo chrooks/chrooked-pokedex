@@ -2,7 +2,7 @@ name: Corviknight
 chrooked_id: corviknight
 aka: { pokeemerald: SPECIES_CORVIKNIGHT }
 abilities:
-  secondary: Wingspan
+  secondary: Updraft
 stats: { def: 110, spd: 95 }
 learnset:
   - { level: 0, move: Steel Wing }

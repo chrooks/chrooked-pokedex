@@ -2,7 +2,7 @@ name: Braviary Hisui
 chrooked_id: braviaryhisui
 aka: { pokeemerald: SPECIES_BRAVIARY_HISUI }
 abilities:
-  primary: Wingspan
+  primary: Updraft
 learnset:
   - { level: 0, move: Esper Wing }
   - { level: 1, move: Hone Claws }

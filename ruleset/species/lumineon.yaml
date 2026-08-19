@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_LUMINEON }
 types: [Water, Fairy]
 abilities:
   primary: Dazzling
-  hidden: Updraft
+  hidden: Wingspan
 stats: { hp: 80, atk: 70, def: 75, spa: 105, spd: 85, spe: 90 }
 learnset:
   - { level: 1, move: Pound }

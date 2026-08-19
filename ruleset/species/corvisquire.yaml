@@ -2,7 +2,7 @@ name: Corvisquire
 chrooked_id: corvisquire
 aka: { pokeemerald: SPECIES_CORVISQUIRE }
 abilities:
-  secondary: Wingspan
+  secondary: Updraft
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }
