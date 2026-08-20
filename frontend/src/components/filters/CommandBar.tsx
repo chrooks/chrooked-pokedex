@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { FilterDef, FilterEntry } from "../../lib/filterEngine";
 import {
+  commitTokens,
   formatQuery,
   parseQuery,
   parseTerm,
+  spaceEndsTerm,
   suggest,
   tokenize,
   type Suggestion,
@@ -90,7 +92,7 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
   function commitPartial(text = partial) {
     const trimmed = text.trim();
     if (trimmed === "") return;
-    commitTerms([...terms, ...tokenize(trimmed)]);
+    commitTerms([...terms, ...commitTokens(trimmed, defs)]);
     setPartial("");
     setActive(0);
   }
@@ -162,8 +164,10 @@ export function CommandBar({ defs, idPrefix, filter, onChange, onExit }: Props) 
           autoComplete="off"
           value={partial}
           onChange={(e) => {
-            // A space ends the term, the way it does in a shell.
-            if (/\s$/.test(e.target.value)) commitPartial(e.target.value);
+            // A space ends the term, the way it does in a shell — unless the
+            // grammar says it belongs inside the value being typed.
+            if (/\s$/.test(e.target.value) && spaceEndsTerm(e.target.value.trimEnd(), defs))
+              commitPartial(e.target.value);
             else {
               setPartial(e.target.value);
               setActive(0);

@@ -2,7 +2,14 @@ import { describe, expect, it } from "vitest";
 import { buildFilterDefs } from "./dexFilters";
 import { buildMoveFilterDefs } from "./moveRegistry";
 import type { FilterEntry } from "./filterEngine";
-import { formatQuery, parseQuery, suggest, tokenize } from "./filterQuery";
+import {
+  commitTokens,
+  formatQuery,
+  parseQuery,
+  spaceEndsTerm,
+  suggest,
+  tokenize,
+} from "./filterQuery";
 
 const DEX = buildFilterDefs([]);
 const MOVES = buildMoveFilterDefs();
@@ -217,5 +224,67 @@ describe("suggest", () => {
   it("flags the selectnum kinds that accept a number", () => {
     const level = suggest("evolution:lev", DEX)[0];
     expect(level.hint).toContain("accepts a number");
+  });
+});
+
+describe("spaceEndsTerm", () => {
+  it("ends a bare key or structural word", () => {
+    expect(spaceEndsTerm("or", DEX)).toBe(true);
+    expect(spaceEndsTerm("bst>=100", DEX)).toBe(true);
+  });
+
+  it("ends a select value no canonical value continues past", () => {
+    expect(spaceEndsTerm("type:fire", DEX)).toBe(true);
+    expect(spaceEndsTerm("edited:not edited", DEX)).toBe(true);
+  });
+
+  it("keeps typing inside an open quote", () => {
+    expect(spaceEndsTerm('name:"sand', DEX)).toBe(false);
+  });
+
+  it("keeps typing inside a text value — free text may contain spaces", () => {
+    expect(spaceEndsTerm("name:sand", DEX)).toBe(false);
+    expect(spaceEndsTerm("abilities:sand", DEX)).toBe(false);
+  });
+
+  it("keeps typing when a canonical value continues past the fragment", () => {
+    expect(spaceEndsTerm("edited:not", DEX)).toBe(false);
+  });
+});
+
+describe("commitTokens", () => {
+  it("passes a single term through", () => {
+    expect(commitTokens("type:fire", DEX)).toEqual(["type:fire"]);
+  });
+
+  it("quotes a spaced value into one term", () => {
+    expect(commitTokens("name:sand stream", DEX)).toEqual(['name:"sand stream"']);
+  });
+
+  it("keeps negation on a quoted spaced value", () => {
+    expect(commitTokens("-name:sand stream", DEX)).toEqual(['-name:"sand stream"']);
+  });
+
+  it("splits terms joined by or", () => {
+    expect(commitTokens("type:fire or type:water", DEX)).toEqual([
+      "type:fire",
+      "or",
+      "type:water",
+    ]);
+  });
+
+  it("splits when the tail is its own term", () => {
+    expect(commitTokens("name:sand type:fire", DEX)).toEqual(["name:sand", "type:fire"]);
+  });
+
+  it("leaves unparseable text split as typed", () => {
+    expect(commitTokens("sand stream", DEX)).toEqual(["sand", "stream"]);
+  });
+
+  it("round-trips a quoted committed value through parseQuery", () => {
+    const [term] = commitTokens("name:sand stream", DEX);
+    expect(shape(parse(term).entries)).toEqual([
+      { kind: "filter", field: "name", value: "sand stream", negated: false, connector: "AND" },
+    ]);
   });
 });

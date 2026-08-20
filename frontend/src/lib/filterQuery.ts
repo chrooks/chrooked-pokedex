@@ -136,6 +136,50 @@ export function tokenize(raw: string): string[] {
   return out;
 }
 
+/**
+ * Should a trailing space end the term being typed, or is it part of the value?
+ * Spaces keep typing inside an open quote, inside a text field's value (free
+ * text may contain spaces), and inside a select value that continues past the
+ * fragment ("ability:sand " on the way to "sand stream"). Everywhere else a
+ * space finishes the term, shell-style.
+ */
+export function spaceEndsTerm(partial: string, defs: FilterDef[]): boolean {
+  if (((partial.match(/"/g) ?? []).length & 1) === 1) return false;
+  const body = partial.startsWith("-") ? partial.slice(1) : partial;
+  const colon = body.indexOf(":");
+  if (colon <= 0) return true;
+  const def = queryKeys(defs).find(
+    (k) => k.key.toLowerCase() === body.slice(0, colon).toLowerCase(),
+  )?.def;
+  if (!def) return true;
+  const frag = unquote(body.slice(colon + 1)).toLowerCase();
+  if (frag === "") return true;
+  if (def.method === "text") return false;
+  if (def.method === "select" || def.method === "selectnum") {
+    return !(def.values ?? []).some((v) => v.toLowerCase().startsWith(frag + " "));
+  }
+  return true;
+}
+
+/**
+ * Split committed text into terms. A single term whose value carries spaces
+ * ("name:sand stream") is quoted and kept whole; text that reads as several
+ * terms ("type:fire or type:water") splits as before. The tiebreak: tail
+ * tokens that could stand as terms or structure mean a split, bare words mean
+ * they belong to the value.
+ */
+export function commitTokens(text: string, defs: FilterDef[]): string[] {
+  const tokens = tokenize(text);
+  if (tokens.length <= 1) return tokens;
+  const tailIsTermLike = tokens.slice(1).some((t) => {
+    const low = t.toLowerCase();
+    return low === "or" || low === "and" || t === "(" || t === ")" || /[:><=]/.test(t);
+  });
+  if (tailIsTermLike || !parseTerm(text, defs).ok) return tokens;
+  const colon = text.indexOf(":");
+  return [`${text.slice(0, colon)}:"${text.slice(colon + 1).replace(/"/g, "")}"`];
+}
+
 /** Strip surrounding quotes from a value. */
 function unquote(value: string): string {
   return value.length >= 2 && value.startsWith('"') && value.endsWith('"')
