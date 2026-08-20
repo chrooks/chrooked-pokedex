@@ -481,3 +481,13 @@ leech seed, curse, withdraw, sythesis, etc.
 
 - **Direction:** learnset-only repass
 - **Corrections:** special, gets good posion coverage, learns water spout, scald & chilling water, toxic, recover, destiny bond, curse
+
+## 2026-08-20 — Vampiric (new ability)
+
+- **Vampiric** (chrooked_id `vampiric`, ABILITY_VAMPIRIC): contact moves drain
+  1/4 of the damage dealt. New `abilities/vampiric.yaml` +
+  `behaviors/vampiric.yaml`; Rejuv mod `chrooked_vampiric.rb` routes the heal
+  through `absorbHP` (Big Root, Liquid Ooze, Heal Block respected) via a new
+  damage-aware on-deal seam (`CHROOKED_ON_DEAL_DMG`) in the harness core — the
+  existing on-deal hook never saw the damage amount.
+- No holders yet — assign it when a line wants the kit.

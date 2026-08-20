@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Vampiric
+chrooked_id: vampiric
+applies_to: ability
+aka: { pokeemerald: ABILITY_VAMPIRIC }
+effects:
+  - summary: "Contact moves drain a quarter of the damage dealt."
+    trigger: on-contact
+    when: "this Pokemon damages a target with a contact move"
+    effect: >-
+      heal the user for 25% of the damage dealt, through the standard drain
+      path — Big Root boosts it, Heal Block prevents it, Liquid Ooze reverses it
+test_cases:
+  - given: "a Vampiric Pokemon deals 100 damage with a contact move"
+    expect: "the user recovers 25 HP"
+  - given: "a Vampiric Pokemon uses a non-contact move (e.g. Water Gun)"
+    expect: "no drain (no contact = no trigger)"
+  - given: "a Vampiric Pokemon hits a Liquid Ooze target with a contact move for 100"
+    expect: "the user loses 25 HP instead (drain reversed)"
+notes:
+  - "Hits absorbed by a substitute do not trigger the drain."
+  - "Stacks with drain moves: a Vampiric holder using a contact drain move heals from both effects."
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: >-
+    Rejuv: chrooked_vampiric.rb registers CHROOKED_ON_DEAL_DMG[:VAMPIRIC] — a
+    new damage-aware on-deal table in chrooked_00_core.rb (the existing
+    CHROOKED_ON_DEAL never sees the damage amount). The mod gates on
+    makesContact? and routes damage/4 through absorbHP with agent
+    :HPDrainingMove, so Big Root, Liquid Ooze, and canHeal? are all respected.

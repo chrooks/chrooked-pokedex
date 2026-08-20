@@ -21,6 +21,9 @@ CHROOKED_TYPE_MODS = {}
 CHROOKED_ON_KO = {}
 # attacker ability => ->(move, user, target, battle) — after dealing damage
 CHROOKED_ON_DEAL = {}
+# attacker ability => ->(move, user, target, damage, battle) — the damage-aware
+# twin of CHROOKED_ON_DEAL, for effects scaled by the HP actually dealt.
+CHROOKED_ON_DEAL_DMG = {}
 # move symbol => ->(move, user, target, battle) — after this MOVE deals damage
 CHROOKED_MOVE_ON_DEAL = {}
 # defender ability => ->(move, user, target, battle) — after surviving a damaging hit
@@ -312,6 +315,8 @@ module ChrookedBattlerHooks
     return ret if damage.to_i <= 0 || target.damagestate.substitute
     atk_mod = CHROOKED_ON_DEAL[user.ability]
     atk_mod&.call(move, user, target, @battle) if !user.isFainted?
+    dmg_mod = CHROOKED_ON_DEAL_DMG[user.ability]
+    dmg_mod&.call(move, user, target, damage, @battle) if !user.isFainted?
     move_mod = CHROOKED_MOVE_ON_DEAL[move.move]
     move_mod&.call(move, user, target, @battle) if !user.isFainted?
     # Same Mold Breaker rule as damage_mult: the target's ability is ignored, so its
