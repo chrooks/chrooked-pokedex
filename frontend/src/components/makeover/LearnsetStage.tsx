@@ -65,6 +65,7 @@ export function LearnsetStage(props: Props) {
     registerActions,
     onLocked,
     onRedirect,
+    onPhase,
     moveOptions,
     movePower,
     moveMeta,
@@ -105,6 +106,7 @@ export function LearnsetStage(props: Props) {
     section: "learnset",
     entry,
     initialDirection,
+    onPhase,
     propose: async (id, direction) => {
       const result = await api.suggestLearnset(id, { direction: direction || undefined, mode: "full" });
       return {

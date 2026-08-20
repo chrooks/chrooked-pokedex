@@ -27,7 +27,8 @@ import { LedgerTab } from "./components/tabs/LedgerTab";
 import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
 import { PatchDrawer } from "./components/targets/PatchDrawer";
 import { MakeoverWorkbench } from "./components/makeover/MakeoverWorkbench";
-import { ParkedMakeover } from "./components/makeover/ParkedMakeover";
+import { ParkedMakeoverDock } from "./components/makeover/ParkedMakeover";
+import type { MakeoverActivity } from "./lib/makeoverActivity";
 import type { Stage } from "./lib/makeoverStages";
 
 /**
@@ -197,37 +198,75 @@ export default function App() {
   // the URL and it resolves in the loaded dex.
   // PARKED: "← dex"/Esc dismisses the workbench without abandoning it — the URL
   // drops back to the dex but the workbench stays MOUNTED (hidden), so an
-  // unlocked draft (a proposed-but-not-locked learnset) survives the detour.
-  // ponytail: mount-scoped only — a page reload still drops the draft.
-  const [parked, setParked] = useState<{ id: string; stage: Stage | null } | null>(null);
-  const makeoverId = view.makeover ?? parked?.id ?? null;
-  const makeoverEntry =
-    makeoverId !== null
-      ? all.find((entry) => entry.chrooked_id === makeoverId) ?? null
+  // unlocked draft (a proposed-but-not-locked learnset) survives the detour and
+  // an in-flight suggest keeps processing. Several makeovers can be parked at
+  // once (the dock, oldest first); the URL always names the one on screen.
+  // ponytail: mount-scoped only — a page reload still drops parked runs.
+  const [parked, setParked] = useState<{ id: string; stage: Stage | null }[]>([]);
+  // Per-species propose activity, fed by each mounted workbench — the dock LED.
+  const [makeoverActivity, setMakeoverActivity] = useState<Record<string, MakeoverActivity>>({});
+  const activeMakeoverEntry =
+    view.makeover !== null
+      ? all.find((entry) => entry.chrooked_id === view.makeover) ?? null
       : null;
-  const makeoverParked = view.makeover === null && makeoverEntry !== null;
 
-  // Any makeover opened from the URL (the same species re-opened from its
-  // profile, or a different one) supersedes the parked one.
+  // Every mounted makeover: the parked ones (dock order) plus the URL-active one.
+  // One keyed list, so parking/resuming re-flags a host instead of remounting it.
+  const mountedMakeovers = useMemo(() => {
+    const hosts = parked.flatMap((item) => {
+      const entry = all.find((e) => e.chrooked_id === item.id);
+      return entry ? [{ entry, parkedStage: item.stage, isActive: item.id === view.makeover }] : [];
+    });
+    if (activeMakeoverEntry !== null && !parked.some((p) => p.id === view.makeover)) {
+      hosts.push({ entry: activeMakeoverEntry, parkedStage: null, isActive: true });
+    }
+    return hosts;
+  }, [parked, all, view.makeover, activeMakeoverEntry]);
+
+  // A makeover opened from the URL promotes its parked copy (same mount, now on
+  // screen) — drop it from the dock.
   useEffect(() => {
-    if (view.makeover !== null) setParked(null);
+    if (view.makeover === null) return;
+    setParked((prev) =>
+      prev.some((p) => p.id === view.makeover) ? prev.filter((p) => p.id !== view.makeover) : prev,
+    );
   }, [view.makeover]);
 
   const handleParkMakeover = useCallback(() => {
     if (view.makeover === null) return;
-    setParked({ id: view.makeover, stage: view.makeoverStage });
+    const id = view.makeover;
+    const stage = view.makeoverStage;
+    setParked((prev) => [...prev.filter((p) => p.id !== id), { id, stage }]);
     update({ makeover: null, makeoverStage: null, makeoverSelect: null });
   }, [view.makeover, view.makeoverStage, update]);
 
-  const handleResumeMakeover = useCallback(() => {
-    if (parked === null) return;
-    update({ makeover: parked.id, makeoverStage: parked.stage, makeoverSelect: null });
-  }, [parked, update]);
+  const handleResumeMakeover = useCallback(
+    (id: string) => {
+      const item = parked.find((p) => p.id === id);
+      if (item === undefined) return;
+      update({ makeover: item.id, makeoverStage: item.stage, makeoverSelect: null });
+    },
+    [parked, update],
+  );
 
+  const handleDiscardParked = useCallback((id: string) => {
+    setParked((prev) => prev.filter((p) => p.id !== id));
+    setMakeoverActivity((prev) => {
+      if (!(id in prev)) return prev;
+      const { [id]: _dropped, ...rest } = prev;
+      return rest;
+    });
+  }, []);
+
+  // The finished (or abandoned-for-good) run: unmounts the active workbench.
   const handleCloseMakeover = useCallback(() => {
-    setParked(null);
+    if (view.makeover !== null) handleDiscardParked(view.makeover);
     update({ makeover: null, makeoverStage: null, makeoverSelect: null });
-  }, [update]);
+  }, [view.makeover, handleDiscardParked, update]);
+
+  const handleMakeoverActivity = useCallback((id: string, activity: MakeoverActivity) => {
+    setMakeoverActivity((prev) => (prev[id] === activity ? prev : { ...prev, [id]: activity }));
+  }, []);
 
   // Stable so memo(DexCell) holds across the 1451-cell grid (`update` is stable).
   const handleOpen = useCallback(
@@ -437,20 +476,24 @@ export default function App() {
         <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
       }
     >
-      {/* Kept mounted while parked so unlocked drafts survive; keyed by species so
-          opening a different makeover starts clean. */}
-      {makeoverEntry !== null && (
-        <div className="mk-host" hidden={makeoverParked} key={makeoverEntry.chrooked_id}>
+      {/* Every open makeover stays mounted (hidden while parked) so unlocked
+          drafts and in-flight suggests survive; keyed by species so a resumed
+          host keeps its state and a new species starts clean. */}
+      {mountedMakeovers.map(({ entry, parkedStage, isActive }) => (
+        <div className="mk-host" hidden={!isActive} key={entry.chrooked_id}>
           <MakeoverWorkbench
-            entry={makeoverEntry}
+            entry={entry}
             allEntries={all}
             moves={moves.data ?? []}
-            stage={view.makeoverStage}
-            initialSelected={view.makeoverSelect}
-            onStage={(stage) => update({ makeoverStage: stage })}
-            paused={makeoverParked}
+            stage={isActive ? view.makeoverStage : parkedStage}
+            initialSelected={isActive ? view.makeoverSelect : null}
+            // A parked workbench keeps running (its tail can advance stages) but
+            // must not write the URL while another view owns the screen.
+            onStage={isActive ? (stage) => update({ makeoverStage: stage }) : () => undefined}
+            paused={!isActive}
             onPark={handleParkMakeover}
             onExit={handleCloseMakeover}
+            onActivity={(activity) => handleMakeoverActivity(entry.chrooked_id, activity)}
             onSaved={reloadDex}
             moveOptions={moveOptions}
             abilityOptions={abilityOptions}
@@ -459,16 +502,19 @@ export default function App() {
             backdropTargetId={view.backdrop}
           />
         </div>
-      )}
-      {makeoverEntry !== null && !makeoverParked ? null : (
+      ))}
+      {activeMakeoverEntry !== null ? null : (
       <>
-      {makeoverParked && makeoverEntry !== null && (
-        <ParkedMakeover
-          name={makeoverEntry.name}
-          onResume={handleResumeMakeover}
-          onDiscard={handleCloseMakeover}
-        />
-      )}
+      <ParkedMakeoverDock
+        items={parked.flatMap((item) => {
+          const entry = all.find((e) => e.chrooked_id === item.id);
+          return entry
+            ? [{ id: item.id, name: entry.name, activity: makeoverActivity[item.id] ?? "idle" }]
+            : [];
+        })}
+        onResume={handleResumeMakeover}
+        onDiscard={handleDiscardParked}
+      />
       {/* Background is inert while a species is open — in both modes. In panel
           mode it's the modal focus trap; in full mode the opaque pane fully
           covers the grid, so inert keeps focus/AT out of the invisible list

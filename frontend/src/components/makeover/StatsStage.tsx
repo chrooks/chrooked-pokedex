@@ -15,13 +15,14 @@ const STAT_MIN = 1;
 const STAT_MAX = 255;
 
 export function StatsStage(props: CommonStageProps) {
-  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect } =
+  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase } =
     props;
 
   const hook = useMakeoverStage<StatsDraft>({
     section: "stats",
     entry,
     initialDirection,
+    onPhase,
     propose: async (id, direction) => {
       const result = await makeoverApi.suggestStats(id, direction || undefined);
       return {

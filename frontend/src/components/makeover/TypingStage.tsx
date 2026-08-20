@@ -25,13 +25,14 @@ function applyTypingAlt(alt: ProposalAlternative): TypingDraft {
 }
 
 export function TypingStage(props: CommonStageProps) {
-  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect } =
+  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase } =
     props;
 
   const hook = useMakeoverStage<TypingDraft>({
     section: "typing",
     entry,
     initialDirection,
+    onPhase,
     propose: async (id, direction) => {
       const result = await makeoverApi.suggestTyping(id, direction || undefined);
       return {

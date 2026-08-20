@@ -5,7 +5,7 @@
    explicit LOCK IN (the read-merge-write through the existing CRUD route). The
    pure re-roll rule lives in lib/makeoverTweak.ts and is unit-tested there. */
 
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { api, ApiError } from "../../api";
 import type { DexEntry, SpeciesOverride } from "../../types";
 import {
@@ -127,6 +127,10 @@ interface Args<Draft extends SectionDraft> {
   /** Called with every author-typed steer (first-propose direction or re-roll
       redirect), so the session harvests it into the design log's corrections. */
   onRedirect?: (text: string) => void;
+  /** Reports every phase change upward (the parked-makeover dock LED reads it —
+      a proposal landing while the workbench is parked is exactly the moment the
+      author is looking elsewhere). */
+  onPhase?: (phase: StagePhase) => void;
 }
 
 function seedOverride(entry: DexEntry): SpeciesOverride {
@@ -150,6 +154,7 @@ export function useMakeoverStage<Draft extends SectionDraft>({
   merge,
   onLocked,
   onRedirect,
+  onPhase,
 }: Args<Draft>): UseMakeoverStage<Draft> {
   const [state, dispatch] = useReducer(reducer<Draft>, {
     phase: "propose",
@@ -162,6 +167,12 @@ export function useMakeoverStage<Draft extends SectionDraft>({
     error: null,
     errorKind: null,
   });
+
+  // Fires on mount too (phase "propose"), so a freshly entered stage resets any
+  // stale activity the previous stage left on the dock.
+  useEffect(() => {
+    onPhase?.(state.phase);
+  }, [state.phase, onPhase]);
 
   const setDirection = useCallback(
     (direction: string) => dispatch({ type: "setDirection", direction }),

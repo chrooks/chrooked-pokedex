@@ -80,6 +80,7 @@ export function AbilitiesStage(props: Props) {
     registerActions,
     onLocked,
     onRedirect,
+    onPhase,
     abilityOptions,
     byId,
     loreMode,
@@ -107,6 +108,7 @@ export function AbilitiesStage(props: Props) {
     section: "abilities",
     entry,
     initialDirection,
+    onPhase,
     propose: async (id, direction) => {
       const result = await api.suggestAbility(id, {
         direction: direction || undefined,

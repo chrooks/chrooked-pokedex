@@ -23,10 +23,12 @@ import {
   type Stage,
 } from "../../lib/makeoverStages";
 import { makeoverApi, type StageFacts } from "../../lib/makeoverApi";
+import { activityOf, type MakeoverActivity } from "../../lib/makeoverActivity";
 import type { LearnsetRubric } from "../../lib/learnsetBands";
 import { preEvos } from "../../lib/mirrorDown";
 import { attackCategory } from "../../lib/moveDisplay";
 import { snapshotProfile } from "../../lib/profileDiff";
+import type { StagePhase } from "./useMakeoverStage";
 import { StageRail } from "./StageRail";
 import { OverheadRail } from "./OverheadRail";
 import { LineStrip } from "./LineStrip";
@@ -59,6 +61,9 @@ interface Props {
   onPark: () => void;
   /** Leave for good (the finished run) — the workbench unmounts. */
   onExit: () => void;
+  /** Reports this session's propose activity (idle/proposing/ready/error) so the
+      parked-makeover dock can light its LED while the workbench is hidden. */
+  onActivity?: (activity: MakeoverActivity) => void;
   onSaved: () => void;
   moveOptions: readonly string[];
   abilityOptions: readonly string[];
@@ -77,6 +82,7 @@ export function MakeoverWorkbench({
   paused = false,
   onPark,
   onExit,
+  onActivity,
   onSaved,
   moveOptions,
   abilityOptions,
@@ -156,6 +162,19 @@ export function MakeoverWorkbench({
   const registerActions = useCallback((actions: StageActions | null) => {
     actionsRef.current = actions;
   }, []);
+
+  // The dock LED feed. Design stages report their propose phase on mount and on
+  // every change; stages without a propose loop (direction, mirror, done, the
+  // tail) report nothing, so entering one resets the light to idle here.
+  const handlePhase = useCallback(
+    (phase: StagePhase) => onActivity?.(activityOf(phase)),
+    [onActivity],
+  );
+  useEffect(() => {
+    const reports =
+      active === "typing" || active === "stats" || active === "abilities" || active === "learnset";
+    if (!reports) onActivity?.("idle");
+  }, [active, onActivity]);
 
   const handleRedirect = useCallback((text: string) => {
     // Dedupe an identical consecutive steer (e.g. a retry after a propose error)
@@ -259,6 +278,7 @@ export function MakeoverWorkbench({
     registerActions,
     onLocked: handleLocked,
     onRedirect: handleRedirect,
+    onPhase: handlePhase,
   };
 
   const targetId = activeTargetId ?? targets[0]?.id ?? null;

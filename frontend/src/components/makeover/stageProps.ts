@@ -6,6 +6,7 @@ import type { RefObject } from "react";
 import type { DexEntry } from "../../types";
 import type { StageFacts } from "../../lib/makeoverApi";
 import type { StageActions } from "./StagePanel";
+import type { StagePhase } from "./useMakeoverStage";
 
 export interface CommonStageProps {
   /** The anchor species being made over (live from the dex; reloads after locks). */
@@ -24,4 +25,6 @@ export interface CommonStageProps {
   onLocked: (facts: StageFacts, writtenIds?: string[]) => void;
   /** Called on a re-roll with the composed redirect, so the session harvests it. */
   onRedirect: (text: string) => void;
+  /** Reports the stage's propose phase upward for the parked-makeover dock LED. */
+  onPhase?: (phase: StagePhase) => void;
 }
