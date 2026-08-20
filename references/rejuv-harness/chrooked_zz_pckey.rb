@@ -26,51 +26,53 @@ class Game_Temp
 end
 
 class Scene_Map
-  unless method_defined?(:chrooked_pckey_checkKeyPresses)
+  # Chain only when the base Seam exists — the stub-test harness loads this
+  # file against bare stand-in classes with no key-press methods.
+  if method_defined?(:checkKeyPresses) && !method_defined?(:chrooked_pckey_checkKeyPresses)
     alias chrooked_pckey_checkKeyPresses checkKeyPresses
     alias chrooked_pckey_handleKeyPresses handleKeyPresses
-  end
 
-  def checkKeyPresses
-    chrooked_pckey_checkKeyPresses
-    if Input.triggerex?(:P) && !pbMapInterpreterRunning? &&
-       !$game_switches[:NotPlayerCharacter]
-      $game_temp.chrooked_pc_calling = true
+    def checkKeyPresses
+      chrooked_pckey_checkKeyPresses
+      if Input.triggerex?(:P) && !pbMapInterpreterRunning? &&
+         !$game_switches[:NotPlayerCharacter]
+        $game_temp.chrooked_pc_calling = true
+      end
     end
-  end
 
-  def handleKeyPresses
-    if $game_temp.chrooked_pc_calling
-      $game_temp.chrooked_pc_calling = false
-      $game_player.straighten
-      pbFadeOutIn(99999) {
-        PokemonStorageScreen.new(PokemonStorageScene.new, $PokemonStorage).pbStartScreen(0)
-      }
-    else
-      chrooked_pckey_handleKeyPresses
+    def handleKeyPresses
+      if $game_temp.chrooked_pc_calling
+        $game_temp.chrooked_pc_calling = false
+        $game_player.straighten
+        pbFadeOutIn(99999) {
+          PokemonStorageScreen.new(PokemonStorageScene.new, $PokemonStorage).pbStartScreen(0)
+        }
+      else
+        chrooked_pckey_handleKeyPresses
+      end
     end
   end
 end
 
 class PokemonScreen_Scene
-  unless method_defined?(:chrooked_pckey_update)
+  if method_defined?(:update) && !method_defined?(:chrooked_pckey_update)
     alias chrooked_pckey_update update
-  end
 
-  def update
-    chrooked_pckey_update
-    # busy guard: message loops call self.update reentrantly
-    return if @chrooked_pckey_busy || !Input.triggerex?(:P)
-    return if $game_temp.in_battle || $game_switches[:NotPlayerCharacter]
+    def update
+      chrooked_pckey_update
+      # busy guard: message loops call self.update reentrantly
+      return if @chrooked_pckey_busy || !Input.triggerex?(:P)
+      return if $game_temp.in_battle || $game_switches[:NotPlayerCharacter]
 
-    @chrooked_pckey_busy = true
-    begin
-      pbFadeOutIn(99999) {
-        PokemonStorageScreen.new(PokemonStorageScene.new, $PokemonStorage).pbStartScreen(0)
-      }
-      pbHardRefresh
-    ensure
-      @chrooked_pckey_busy = false
+      @chrooked_pckey_busy = true
+      begin
+        pbFadeOutIn(99999) {
+          PokemonStorageScreen.new(PokemonStorageScene.new, $PokemonStorage).pbStartScreen(0)
+        }
+        pbHardRefresh
+      ensure
+        @chrooked_pckey_busy = false
+      end
     end
   end
 end

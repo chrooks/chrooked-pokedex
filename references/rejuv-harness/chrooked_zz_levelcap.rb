@@ -8,7 +8,9 @@
 # the cap are skipped. F8 is free: F6/F10 are $DEBUG-only, F2 is controls,
 # F3/F4/F5 are item hotkeys.
 class PokemonScreen_Scene
-  unless method_defined?(:chrooked_levelcap_update)
+  # Chain only when the base method exists — the stub-test harness loads this
+  # file against bare stand-in classes with no #update.
+  if method_defined?(:update) && !method_defined?(:chrooked_levelcap_update)
     alias chrooked_levelcap_update update
   end
 
