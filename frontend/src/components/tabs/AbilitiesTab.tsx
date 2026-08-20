@@ -388,6 +388,7 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
             },
           ]}
           initialEditing={openInEdit}
+          readToEditTab={{ "used-by": "distribution" }}
           onClose={() => closeAbility()}
         />
       )}
