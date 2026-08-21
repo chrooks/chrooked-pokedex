@@ -5,7 +5,7 @@ types: [Psychic, Dark]
 abilities:
   primary: Bad Dreams
   secondary: Frighten
-  hidden: Daydreamer
+  hidden: Soul Siphon
 stats: { atk: 70, spa: 95, spe: 65 }
 learnset:
   - { level: 0, move: Nightmare }

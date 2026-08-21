@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Soul Siphon
+chrooked_id: soulsiphon
+applies_to: ability
+aka: { pokeemerald: ABILITY_SOUL_SIPHON }
+effects:
+  - summary: "Non-contact moves drain a quarter of the damage dealt."
+    trigger: on-hit
+    when: "this Pokemon damages a target with a non-contact move"
+    effect: >-
+      heal the user for 25% of the damage dealt, through the standard drain
+      path — Big Root boosts it, Heal Block prevents it, Liquid Ooze reverses it
+test_cases:
+  - given: "a Soul Siphon Pokemon deals 100 damage with a non-contact move"
+    expect: "the user recovers 25 HP"
+  - given: "a Soul Siphon Pokemon uses a contact move (e.g. Tackle)"
+    expect: "no drain (contact = no trigger)"
+  - given: "a Soul Siphon Pokemon hits a Liquid Ooze target with a non-contact move for 100"
+    expect: "the user loses 25 HP instead (drain reversed)"
+notes:
+  - "The exact mirror of Vampiric ([[vampiric]] gates ON contact; this gates on NO contact), so neither ability outclasses the other."
+  - "Hits absorbed by a substitute do not trigger the drain."
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: >-
+    Rejuv: chrooked_soulsiphon.rb registers CHROOKED_ON_DEAL_DMG[:SOULSIPHON]
+    — the same damage-aware on-deal table Vampiric uses — gated on
+    !makesContact?, routing damage/4 through absorbHP with agent
+    :HPDrainingMove (Big Root, Liquid Ooze, canHeal? all respected).

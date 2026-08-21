@@ -491,3 +491,17 @@ leech seed, curse, withdraw, sythesis, etc.
   damage-aware on-deal seam (`CHROOKED_ON_DEAL_DMG`) in the harness core — the
   existing on-deal hook never saw the damage amount.
 - No holders yet — assign it when a line wants the kit.
+
+## 2026-08-20 — Soul Siphon + drain-ability distribution
+
+- **Soul Siphon** (chrooked_id `soulsiphon`, ABILITY_SOUL_SIPHON): the
+  non-contact mirror of Vampiric — non-contact moves drain 1/4 of the damage
+  dealt. Same `CHROOKED_ON_DEAL_DMG` core seam, opposite contact gate, so
+  neither ability outclasses the other.
+- **Vampiric holders** (ecological blood/fluid-feeders): Zubat line slot 2
+  (over Infiltrator), Eelektross line hidden (was empty), Buzzwole slot 2
+  (was empty), Gliscor line slot 2 (over Rough Skin; kit mirrored down to
+  Gligar — Tectonize/Vampiric/Poison Heal), Ariados line slot 1 (over Swarm).
+- **Soul Siphon holders** (life-force feeders): Shiinotic line slot 1 (over
+  Illuminate), Hypno line hidden (over Daydreamer), Drifloon line slot 1
+  (over Kindle).

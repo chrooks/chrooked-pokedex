@@ -1,6 +1,8 @@
 name: Morelull
 chrooked_id: morelull
 aka: { pokeemerald: SPECIES_MORELULL }
+abilities:
+  primary: Soul Siphon
 stats: { hp: 55 }
 learnset:
   - { level: 1, move: Absorb }

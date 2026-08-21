@@ -3,7 +3,7 @@ chrooked_id: drifloon
 aka: {  }
 types: [Ghost, Flying]
 abilities:
-  primary: Kindle
+  primary: Soul Siphon
   secondary: Updraft
   hidden: Flare Boost
 stats: { hp: 90, atk: 50, def: 40, spa: 60, spd: 55, spe: 70 }

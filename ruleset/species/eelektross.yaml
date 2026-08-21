@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_EELEKTROSS }
 types: [Water, Electric]
 abilities:
   secondary: Coil Up
+  hidden: Vampiric
 stats: { def: 90, spa: 110, spd: 90 }
 learnset:
   - { level: 1, move: Gastro Acid }

@@ -1,6 +1,8 @@
 name: Spinarak
 chrooked_id: spinarak
 aka: {  }
+abilities:
+  primary: Vampiric
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: String Shot }

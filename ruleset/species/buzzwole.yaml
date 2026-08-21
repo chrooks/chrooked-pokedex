@@ -1,6 +1,8 @@
 name: Buzzwole
 chrooked_id: buzzwole
 aka: { dex: 794 }
+abilities:
+  secondary: Vampiric
 learnset:
   - { level: 1, move: Power-Up Punch }
   - { level: 1, move: Harden }

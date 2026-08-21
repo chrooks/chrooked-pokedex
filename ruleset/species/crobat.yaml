@@ -3,7 +3,7 @@ chrooked_id: crobat
 aka: { pokeemerald: SPECIES_CROBAT }
 abilities:
   primary: Mountaineer
-  secondary: Infiltrator
+  secondary: Vampiric
   hidden: Tinted Lens
 stats: { spa: 85 }
 learnset:

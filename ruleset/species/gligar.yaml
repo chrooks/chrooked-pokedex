@@ -1,6 +1,10 @@
 name: Gligar
 chrooked_id: gligar
 aka: { pokeemerald: SPECIES_GLIGAR }
+abilities:
+  primary: Tectonize
+  secondary: Vampiric
+  hidden: Poison Heal
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 2, move: Peck }

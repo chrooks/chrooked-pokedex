@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_EELEKTRIK }
 types: [Water, Electric]
 abilities:
   secondary: Coil Up
+  hidden: Vampiric
 learnset:
   - { level: 0, move: Crunch }
   - { level: 1, move: Headbutt }

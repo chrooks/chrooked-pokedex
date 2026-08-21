@@ -3,7 +3,7 @@ chrooked_id: zubat
 aka: { pokeemerald: SPECIES_ZUBAT }
 abilities:
   primary: Mountaineer
-  secondary: Infiltrator
+  secondary: Vampiric
   hidden: Tinted Lens
 learnset:
   - { level: 1, move: Absorb }

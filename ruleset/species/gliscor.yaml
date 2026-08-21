@@ -3,7 +3,7 @@ chrooked_id: gliscor
 aka: { pokeemerald: SPECIES_GLISCOR }
 abilities:
   primary: Tectonize
-  secondary: Rough Skin
+  secondary: Vampiric
 stats: { hp: 80 }
 learnset:
   - { level: 1, move: Sand Attack }

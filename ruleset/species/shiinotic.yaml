@@ -1,6 +1,8 @@
 name: Shiinotic
 chrooked_id: shiinotic
 aka: { pokeemerald: SPECIES_SHIINOTIC }
+abilities:
+  primary: Soul Siphon
 stats: { hp: 75, atk: 55 }
 learnset:
   - { level: 1, move: Absorb }

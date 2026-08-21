@@ -3,7 +3,7 @@ chrooked_id: golbat
 aka: { pokeemerald: SPECIES_GOLBAT }
 abilities:
   primary: Mountaineer
-  secondary: Infiltrator
+  secondary: Vampiric
   hidden: Tinted Lens
 learnset:
   - { level: 1, move: Absorb }
