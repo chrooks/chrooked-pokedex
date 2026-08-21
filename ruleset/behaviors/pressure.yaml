@@ -1,0 +1,32 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: Pressure
+chrooked_id: pressure
+applies_to: ability
+aka: { pokeemerald: ABILITY_PRESSURE }
+effects:
+  - summary: "A foe's move targeting this Pokemon costs double PP."
+    trigger: on-hit
+    when: "an opposing Pokemon uses a move that targets this Pokemon"
+    effect: "deduct one extra PP, so the move costs 2 PP instead of 1 (vanilla Pressure)"
+  - summary: "On entry, every adjacent foe loses its stat boosts."
+    trigger: switch-in
+    effect: "reset each adjacent foe's positive stat stages (Atk/Def/SpA/SpD/Spe/Acc/Eva) to 0; negative stages are left alone"
+test_cases:
+  - given: "a foe at +2 Attack and -1 Speed, then a Pressure Pokemon switches in"
+    expect: "the foe drops to +0 Attack and keeps -1 Speed"
+  - given: "a Pressure Pokemon switches in against two foes with boosts (doubles)"
+    expect: "both foes lose every positive stage"
+  - given: "a Pressure Pokemon switches in against a foe with no boosts"
+    expect: "nothing happens and no message is shown"
+  - given: "a foe uses a 1-PP-cost move against a Pressure Pokemon"
+    expect: "2 PP are deducted (unchanged from vanilla)"
+notes:
+  - "The clear is a Haze, not a stat drop — Clear Body, Mist, and White Smoke do not block it, and it is not an Intimidate-style reduction."
+  - "Negative stages survive; only boosts are erased."
+  - "The PP half is vanilla in both target engines — only the entry clear needs code."
+engine_hints:
+  rejuv: "PP half already lives in Battler.rb applyPressure (~5915) and the Snatch path (~4955) — do not touch. Entry clear: CHROOKED_SWITCH_IN[:PRESSURE], zero each foe's positive `stages[i]` for i in PBStats::All (the Haze pattern at Battle_MoveEffects.rb ~8111). Rejuv's own Dimensional-field Pressure rider (Battler.rb ~2292) stays as-is."
+  pokeemerald: "PP half is vanilla ABILITY_PRESSURE. Entry clear: in the switch-in ability effect, zero every positive stat stage on each opposing battler."
+  essentials: "PP half is vanilla. On switch-in, set each opposing battler's positive stat stages to 0."
