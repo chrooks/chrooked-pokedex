@@ -12,6 +12,8 @@ that removes a form degrades to a console note instead of crashing the compiler.
 
 from __future__ import annotations
 
+import re
+
 # A Symbol wrapper: emit() renders these as ``:NAME`` (bare Ruby symbols),
 # distinct from strings which render quoted.
 class Sym:
@@ -19,6 +21,27 @@ class Sym:
 
     def __init__(self, name: str) -> None:
         self.name = name
+
+
+# A symbol Ruby accepts unquoted: a leading letter or underscore, then word
+# characters. Rejuv's own symbols always qualify (their files would not parse
+# otherwise), but a symbol WE derive from a chrooked_id need not — "10,000,000
+# Volt Thunderbolt" slugs to 10000000VOLTTHUNDERBOLT, and a bare symbol may not
+# start with a digit.
+_BARE_SYMBOL = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
+def ruby_sym(name: str) -> str:
+    """Render ``name`` as a Ruby symbol literal, quoting it when it must be.
+
+    ``GRASS`` -> ``:GRASS``; ``10000000VOLTTHUNDERBOLT`` ->
+    ``:"10000000VOLTTHUNDERBOLT"``. The quoted form is the SAME symbol at
+    runtime, so a quoted key and a bare one address the same hash entry.
+    """
+    if _BARE_SYMBOL.match(name):
+        return f":{name}"
+    escaped = name.replace("\\", "\\\\").replace('"', '\\"')
+    return f':"{escaped}"'
 
 
 def to_ruby(value: object) -> str:
@@ -30,7 +53,7 @@ def to_ruby(value: object) -> str:
     if value is None:
         return "nil"
     if isinstance(value, Sym):
-        return f":{value.name}"
+        return ruby_sym(value.name)
     if isinstance(value, bool):
         return "true" if value else "false"
     if isinstance(value, int):
@@ -50,7 +73,7 @@ _HEADER = (
 
 
 def _mon_ref(key: str, form: str) -> str:
-    return f'MONHASH[:{key}]["{form}"]'
+    return f'MONHASH[{ruby_sym(key)}]["{form}"]'
 
 
 def montext_delta(assignments: list[tuple[str, str, list[str]]]) -> str:
@@ -63,7 +86,7 @@ def montext_delta(assignments: list[tuple[str, str, list[str]]]) -> str:
     """
     out = [_HEADER, 'eval(File.read("Scripts/Rejuv/Definitions/montext.rb"), TOPLEVEL_BINDING)', ""]
     for key, form, statements in assignments:
-        out.append(f'if MONHASH.dig(:{key}, "{form}")')
+        out.append(f'if MONHASH.dig({ruby_sym(key)}, "{form}")')
         for stmt in statements:
             out.append(f"  {stmt}")
         out.append("else")

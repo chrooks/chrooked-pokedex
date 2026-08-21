@@ -9,7 +9,7 @@ import pytest
 
 from chrooked_pokedex.appliers.rejuv import behavior_triage, definitions_read
 from chrooked_pokedex.appliers.rejuv.apply import apply_rejuv
-from chrooked_pokedex.appliers.rejuv.emit import Sym, montext_delta, to_ruby
+from chrooked_pokedex.appliers.rejuv.emit import Sym, montext_delta, ruby_sym, to_ruby
 from chrooked_pokedex.appliers.rejuv.resolution import RejuvResolution
 from chrooked_pokedex.model import Ruleset
 from chrooked_pokedex.model.behavior_spec import BehaviorSpec
@@ -42,6 +42,16 @@ def test_to_ruby_scalars():
 
 def test_to_ruby_escapes_quotes_and_backslash():
     assert to_ruby('a "b" \\c') == '"a \\"b\\" \\\\c"'
+
+
+def test_ruby_sym_quotes_symbols_ruby_cannot_parse_bare():
+    # Rejuv's own symbols are bare identifiers and must stay that way.
+    assert ruby_sym("TACKLE") == ":TACKLE"
+    assert ruby_sym("_HIDDEN") == ":_HIDDEN"
+    # A chrooked_id can open with a digit ("10,000,000 Volt Thunderbolt"), and a
+    # BARE Ruby symbol may not — unquoted, the whole delta file fails to parse.
+    assert ruby_sym("10000000VOLTTHUNDERBOLT") == ':"10000000VOLTTHUNDERBOLT"'
+    assert to_ruby(Sym("10000000VOLTTHUNDERBOLT")) == ':"10000000VOLTTHUNDERBOLT"'
 
 
 def test_to_ruby_nested_moveset():
