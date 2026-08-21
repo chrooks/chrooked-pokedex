@@ -1084,6 +1084,34 @@ def target_abilities(
     return entries
 
 
+# Behavior fields the Essentials / Rejuv readers never parse — those games keep
+# them in engine code (function codes, priority tables), not in the data the
+# snapshot reads. Left unfilled they merge through as `null`, which the moves
+# table then PUTs back verbatim: `int(None)` blows up on save, and a payload that
+# did land would overwrite a real priority/effect with an empty one. Fall back to
+# the canon base entry so the backdrop tells the truth and round-trips.
+_UNPARSED_MOVE_FIELDS = (
+    "effect", "argument", "additional_effects", "flags", "priority", "target",
+)
+
+
+def _fill_unparsed_moves(
+    snapshot: dict[str, Any], base_snapshot: dict[str, Any]
+) -> dict[str, Any]:
+    """A copy of `snapshot` whose moves borrow unparsed fields from canon."""
+    base_moves = base_snapshot.get("moves", {})
+    moves = {}
+    for chrooked_id, entry in snapshot.get("moves", {}).items():
+        canon = base_moves.get(chrooked_id, {})
+        borrowed = {
+            field: canon[field]
+            for field in _UNPARSED_MOVE_FIELDS
+            if entry.get(field) is None and canon.get(field) is not None
+        }
+        moves[chrooked_id] = {**entry, **borrowed} if borrowed else entry
+    return {**snapshot, "moves": moves}
+
+
 def target_moves(
     target: Target,
     ruleset: Ruleset,
@@ -1093,10 +1121,13 @@ def target_moves(
     """Per-Target moves backdrop: ``build_moves(build_snapshot(target), ruleset)``.
 
     For Essentials targets, move display names are relabeled to canonical
-    English using the base snapshot ⊕ Ruleset name map (keyed by chrooked_id).
-    Pass ``base_snapshot`` to enable the relabeling.
+    English using the base snapshot ⊕ Ruleset name map (keyed by chrooked_id),
+    and behavior fields the reader cannot see fall back to canon.
+    Pass ``base_snapshot`` to enable both.
     """
     snapshot = state.snapshot_for(target)
+    if base_snapshot is not None:
+        snapshot = _fill_unparsed_moves(snapshot, base_snapshot)
     entries = dexmod.build_moves(snapshot, ruleset)
     if target.engine in ("essentials", "rejuv") and base_snapshot is not None:
         english_map = _english_moves_map(base_snapshot, ruleset)

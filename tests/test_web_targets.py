@@ -1847,3 +1847,30 @@ def test_rekey_leaves_unmatched_forms_alone():
     rekeyed = targetsmod.rekey_ruleset_to_rejuv(ruleset, snapshot)
     # No Override prefixes "combatbreed" — stays unjoined rather than guessing.
     assert "tauros--combatbreed" not in rekeyed.species
+
+
+# A backdrop whose reader cannot see behavior fields borrows them from canon,
+# so the moves table never PUTs `priority: null` back over a real +1 (int(None)
+# used to 422 with "malformed payload" on any Sucker Punch tag edit).
+def test_backdrop_borrows_unparsed_move_fields_from_canon() -> None:
+    from chrooked_pokedex.model import Ruleset
+    from chrooked_pokedex.web.targets import TargetState, target_moves
+
+    base_snapshot = _make_english_base_snapshot()
+    base_snapshot["moves"]["earthquake"] = {
+        **base_snapshot["moves"]["earthquake"],
+        "effect": "sucker_punch",
+        "priority": 1,
+        "target": "selected",
+        "flags": ["contact"],
+    }
+    ruleset = Ruleset(species={}, moves={}, abilities={})
+    target = _essentials_target_41(_SPANISH_162)
+
+    moves = target_moves(target, ruleset, TargetState(), base_snapshot=base_snapshot)
+    earthquake = next(m for m in moves if m["chrooked_id"] == "earthquake")
+
+    assert earthquake["priority"] == 1
+    assert earthquake["effect"] == "sucker_punch"
+    assert earthquake["target"] == "selected"
+    assert earthquake["flags"] == ["contact"]

@@ -408,14 +408,17 @@ def _move_from_payload(payload: dict[str, Any], chrooked_id: str) -> MoveDef:
         power=payload.get("power"),
         accuracy=payload.get("accuracy"),
         pp=payload.get("pp"),
-        description=payload.get("description", ""),
+        # `or <default>` not `.get(k, default)`: an explicit null means "unset"
+        # here. The moves table PUTs the whole loaded record back, so a field the
+        # merge view could not fill arrives as None, not absent.
+        description=payload.get("description") or "",
         aka=dict(payload.get("aka") or {}),
-        effect=payload.get("effect", "hit"),
+        effect=payload.get("effect") or "hit",
         argument=dict(payload["argument"]) if payload.get("argument") else None,
         additional_effects=additional,
         flags=tuple(payload.get("flags") or ()),
-        priority=int(payload.get("priority", 0)),
-        target=payload.get("target", "selected"),
+        priority=int(payload.get("priority") or 0),
+        target=payload.get("target") or "selected",
     )
 
 
