@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { api } from "../../api";
-import { isKnown } from "../../lib/entityValidation";
+import { canonicalize, isKnown } from "../../lib/entityValidation";
 import type { LearnsetDraft, LearnsetMove, ProposalAlternative } from "../../types";
 import {
   addRow,
@@ -423,13 +423,14 @@ interface AddRowProps {
 function AddRow({ moveOptions, onAdd }: AddRowProps) {
   const [lv, setLv] = useState("1");
   const [mv, setMv] = useState("");
-  const known = mv.trim() !== "" && isKnown(mv, moveOptions);
+  const canon = canonicalize(mv, moveOptions);
+  const known = canon.trim() !== "" && isKnown(canon, moveOptions);
 
   function commit() {
     if (!known) return;
     const parsed = Number(lv);
     const level = Number.isFinite(parsed) ? Math.min(100, Math.max(0, Math.round(parsed))) : 0;
-    onAdd(level, mv.trim());
+    onAdd(level, canon.trim());
     setMv("");
   }
 
@@ -500,14 +501,15 @@ function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: R
   const [error, setError] = useState<string | null>(null);
 
   function commit() {
-    if (mv.trim() !== "" && !isKnown(mv, moveOptions)) {
+    const canon = canonicalize(mv, moveOptions);
+    if (canon.trim() !== "" && !isKnown(canon, moveOptions)) {
       setError("Unknown move");
       return;
     }
     const parsed = Number(lv);
     onCommit({
       level: Number.isFinite(parsed) ? parsed : level,
-      move: mv.trim() === "" ? move : mv,
+      move: canon.trim() === "" ? move : canon,
     });
   }
 

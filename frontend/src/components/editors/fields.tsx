@@ -5,6 +5,8 @@
 
 import type { ChangeEvent, ReactNode } from "react";
 
+import { canonicalize } from "../../lib/entityValidation";
+
 type BaseProps = {
   id: string;
   label: string;
@@ -155,6 +157,10 @@ export function ComboField({ value, onChange, options, placeholder, ...rest }: C
         aria-invalid={rest.error ? "true" : undefined}
         aria-describedby={rest.error ? `${rest.id}-error` : undefined}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+        onBlur={() => {
+          const canon = canonicalize(value, options);
+          if (canon !== value) onChange(canon);
+        }}
       />
       <datalist id={listId}>
         {options.map((option) => (
