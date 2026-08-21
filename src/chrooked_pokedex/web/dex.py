@@ -23,6 +23,7 @@ from ..model.evolution_methods import CANONICAL
 from ..model.schema import (
     AbilitiesOverride,
     AbilityDef,
+    EvolutionOverride,
     MoveDef,
     SpeciesOverride,
     TypeChartOverride,
@@ -59,9 +60,12 @@ _MOVE_DIFF_FIELDS = (
 
 def build_dex(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str, Any]]:
     """Merge the Ruleset onto every base species, sorted by national dex number."""
-    overrides_by_pre_evo = _index_overrides_by_pre_evo(snapshot, ruleset)
+    name_to_id = _name_to_id(snapshot)
+    overrides_by_pre_evo = _index_overrides_by_pre_evo(snapshot, ruleset, name_to_id)
     entries = [
-        _merge_species(base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo)
+        _merge_species(
+            base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo, name_to_id
+        )
         for chrooked_id, base in snapshot["species"].items()
     ]
     return sorted(entries, key=_dex_sort_key)
@@ -78,8 +82,11 @@ def build_dex_entry(
     base = snapshot["species"].get(chrooked_id)
     if base is None:
         return None
-    overrides_by_pre_evo = _index_overrides_by_pre_evo(snapshot, ruleset)
-    return _merge_species(base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo)
+    name_to_id = _name_to_id(snapshot)
+    overrides_by_pre_evo = _index_overrides_by_pre_evo(snapshot, ruleset, name_to_id)
+    return _merge_species(
+        base, ruleset.species.get(chrooked_id), snapshot, overrides_by_pre_evo, name_to_id
+    )
 
 
 def resolve_form_id(snapshot: dict[str, Any], chrooked_id: str) -> str:
@@ -119,8 +126,18 @@ def resolve_form_id(snapshot: dict[str, Any], chrooked_id: str) -> str:
     return best
 
 
+def _name_to_id(snapshot: dict[str, Any]) -> dict[str, str]:
+    """Display name -> `chrooked_id`, the join a Ruleset evolution override needs.
+
+    An `EvolutionOverride` names its pre-evo by display name ("Dusclops"); every
+    other edge in the dex is keyed by `chrooked_id`. Built once per request and
+    handed to both consumers so neither rebuilds it per species.
+    """
+    return {base["name"]: cid for cid, base in snapshot["species"].items()}
+
+
 def _index_overrides_by_pre_evo(
-    snapshot: dict[str, Any], ruleset: Ruleset
+    snapshot: dict[str, Any], ruleset: Ruleset, name_to_id: dict[str, str]
 ) -> dict[str, list[tuple[str, SpeciesOverride]]]:
     """Ruleset `evolution` overrides, indexed by the pre-evo's `chrooked_id`.
 
@@ -132,7 +149,6 @@ def _index_overrides_by_pre_evo(
     evolved species' own backward `evolution`; the pre-evo's forward edge
     keeps showing the frozen base value forever.
     """
-    name_to_id = {base["name"]: cid for cid, base in snapshot["species"].items()}
     index: dict[str, list[tuple[str, SpeciesOverride]]] = {}
     for target_id, override in ruleset.species.items():
         if override.evolution is None or override.evolution.from_species is None:
@@ -189,6 +205,7 @@ def _merge_species(
     override: SpeciesOverride | None,
     snapshot: dict[str, Any],
     overrides_by_pre_evo: dict[str, list[tuple[str, SpeciesOverride]]],
+    name_to_id: dict[str, str],
 ) -> dict[str, Any]:
     merged: dict[str, Any] = {
         "dex": base.get("dex"),
@@ -256,10 +273,7 @@ def _merge_species(
         # base value (if any) rides along under `base` for the diff toggle.
         if merged["evolution"] is not None:
             base_values["evolution"] = _copy_evolution(merged["evolution"])
-        merged["evolution"] = {
-            "from": override.evolution.from_species,
-            "method": dict(override.evolution.method),
-        }
+        merged["evolution"] = _backward_edge(override.evolution, snapshot, name_to_id)
         overridden.append("evolution")
 
     # Design metadata: flavor coverage types (Ruleset-only — the base never has
@@ -270,6 +284,32 @@ def _merge_species(
     merged["overridden_fields"] = [f for f in _FLAGGABLE_FIELDS if f in overridden]
     merged["base"] = {k: base_values[k] for k in _FLAGGABLE_FIELDS if k in base_values}
     return merged
+
+
+def _backward_edge(
+    evolution: EvolutionOverride, snapshot: dict[str, Any], name_to_id: dict[str, str]
+) -> dict[str, Any]:
+    """A Ruleset backward edge in the same shape a base-derived one has.
+
+    The override names its pre-evo by display name and carries a raw method
+    dict; a base edge carries `chrooked_id` + `from_name`/`from_dex` + a
+    readable method. Resolving here (the mirror of `_forward_edges`) is what
+    lets the ledger draw the pre-evo's portrait and cross-link for an
+    override-authored evolution instead of dropping to a bare-name fallback.
+    An unresolvable name (a species outside this snapshot) keeps the raw shape.
+    """
+    from_name = evolution.from_species
+    method, method_detail = _resolved_evolution_method(evolution.method)
+    from_id = name_to_id.get(from_name or "")
+    if from_name is None or from_id is None:
+        return {"from": from_name, "method": dict(evolution.method)}
+    return {
+        "from": from_id,
+        "from_name": from_name,
+        "from_dex": snapshot["species"].get(from_id, {}).get("dex"),
+        "method": method,
+        "method_detail": method_detail,
+    }
 
 
 def _copy_evolution(evolution: dict[str, Any] | None) -> dict[str, Any] | None:

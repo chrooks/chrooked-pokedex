@@ -234,8 +234,15 @@ def test_pre_evo_forward_edge_reflects_evolution_override_on_child() -> None:
             "method_detail": {"kind": "EVO_LEVEL", "param": "38"},
         }
     ]
-    # Both directions of the same edge now agree.
-    assert floatzel["evolution"]["method"] == {"level": 38}
+    # Both directions of the same edge now agree — and the backward edge resolves
+    # its pre-evo the way a base-derived one does, so the ledger can cross-link it.
+    assert floatzel["evolution"] == {
+        "from": "buizel",
+        "from_name": "Buizel",
+        "from_dex": 25,
+        "method": "Level 38",
+        "method_detail": {"kind": "EVO_LEVEL", "param": "38"},
+    }
 
 
 def test_override_for_species_absent_from_snapshot_adds_no_forward_edge() -> None:
