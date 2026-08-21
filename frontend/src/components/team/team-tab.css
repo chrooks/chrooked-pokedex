@@ -67,6 +67,9 @@
 
 .party-picker {
   position: relative;
+  /* Grows to its 34rem ceiling inside the pool-search row rather than
+     collapsing to fit the toggle beside it. */
+  flex: 1 1 24rem;
   max-width: 34rem;
 }
 
@@ -142,6 +145,52 @@
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
   color: var(--text-faint);
+}
+
+/* The search field and its one-click pool toggle share a row; the field keeps
+   its own max-width, the toggle sits beside it rather than under. */
+.team__pool-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* "New types only" — off it reads as a quiet outline like the saved-team
+   buttons; on it takes the amber the app already uses for an active view
+   signal, so an engaged filter is never mistaken for an empty pool. */
+.team__new-types {
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-1);
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.team__new-types:hover {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+
+.team__new-types:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.team__new-types[data-on="true"] {
+  color: color-mix(in oklch, var(--edited) 82%, var(--text));
+  border-color: color-mix(in oklch, var(--edited) 55%, var(--line));
+  background: color-mix(in oklch, var(--edited) 14%, var(--surface-1));
 }
 
 /* ── Species pool (horizontal card strip) ────────────────────────────────── */

@@ -47,6 +47,9 @@ export interface ViewState {
       into the dex rail's `q` — the same no-cross-bleed rule the entity tabs
       follow for their filter params (D3). */
   poolQuery: string;
+  /** Team pool: hide every species already sharing a type with the party, so
+      only the ones widening the team's type coverage remain. */
+  poolNewTypes: boolean;
   /** The Makeover Workbench anchor species (its chrooked_id), or null when the
       workbench is closed. URL-persisted so a reload restores it. */
   makeover: string | null;
@@ -101,6 +104,7 @@ function readState(): ViewState {
     backdrop: params.get("backdrop"),
     party: decodeParty(params.get("team")),
     poolQuery: params.get("tq") ?? "",
+    poolNewTypes: params.get("tnew") === "1",
     makeover: mk.species,
     makeoverStage: mk.stage,
     makeoverSelect: mk.selected,
@@ -134,6 +138,7 @@ const OWNED_PARAMS = [
   "backdrop",
   "team",
   "tq",
+  "tnew",
   ...MAKEOVER_PARAMS,
 ] as const;
 
@@ -154,6 +159,7 @@ function writeState(next: ViewState): void {
   if (next.backdrop) params.set("backdrop", next.backdrop);
   if (next.party.length) params.set("team", encodeParty(next.party));
   if (next.poolQuery) params.set("tq", next.poolQuery);
+  if (next.poolNewTypes) params.set("tnew", "1");
   encodeMakeover(params, {
     species: next.makeover,
     stage: next.makeoverStage,

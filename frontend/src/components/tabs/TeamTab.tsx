@@ -7,6 +7,7 @@ import { DEX_REGISTRY, evalEntries, matchesQuery } from "../../lib/dexFilters";
 import { dexCodec } from "../../lib/dexViewCodec";
 import { cellMap } from "../../lib/typeChartGrid";
 import { teamMatchups, type TeamMember } from "../../lib/teamMatchups";
+import { bringsNewType, teamTypeSet } from "../../lib/teamTypeGap";
 import {
   decodeParty,
   encodeParty,
@@ -51,6 +52,7 @@ export function TeamTab() {
   const party = view.party;
   const backdrop = view.backdrop;
   const poolQuery = view.poolQuery;
+  const newTypesOnly = view.poolNewTypes;
   // The fresh species awaiting a swap decision — set when a pick lands on a full
   // team, cleared when the replace dialog resolves or is dismissed (ac10).
   const [replaceIncoming, setReplaceIncoming] = useState<DexEntry | null>(null);
@@ -74,20 +76,7 @@ export function TeamTab() {
   const entries = useMemo(() => dex.data ?? [], [dex.data]);
   const cells = useMemo(() => chart.data ?? [], [chart.data]);
 
-  // The pool: the whole dex narrowed by the search text and the filter pills —
-  // the SAME predicates the Species tab runs, so a `Type weak to Fire` pill
-  // means here exactly what it means there. The chart map feeds the matchup
-  // operators; without it those pills would silently match nothing.
   const chartByKey = useMemo(() => (cells.length ? cellMap(cells) : null), [cells]);
-  const pool = useMemo(() => {
-    let list: readonly DexEntry[] = entries;
-    const query = poolQuery.trim().toLowerCase();
-    if (query) list = list.filter((entry) => matchesQuery(entry, query));
-    if (controls.filter.length) {
-      list = list.filter((entry) => evalEntries(entry, controls.filter, chartByKey));
-    }
-    return list;
-  }, [entries, poolQuery, controls.filter, chartByKey]);
 
   const byId = useMemo(() => {
     const map = new Map<string, DexEntry>();
@@ -105,6 +94,30 @@ export function TeamTab() {
     });
     return out;
   }, [party, byId]);
+
+  // Every type the party already covers — the "New types only" toggle reads it.
+  const coveredTypes = useMemo(
+    () => teamTypeSet(resolved.map((r) => r.entry)),
+    [resolved],
+  );
+
+  // The pool: the whole dex narrowed by the search text and the filter pills —
+  // the SAME predicates the Species tab runs, so a `Type weak to Fire` pill
+  // means here exactly what it means there. The chart map feeds the matchup
+  // operators; without it those pills would silently match nothing. The
+  // new-types pass runs last, over whatever the other two left.
+  const pool = useMemo(() => {
+    let list: readonly DexEntry[] = entries;
+    const query = poolQuery.trim().toLowerCase();
+    if (query) list = list.filter((entry) => matchesQuery(entry, query));
+    if (controls.filter.length) {
+      list = list.filter((entry) => evalEntries(entry, controls.filter, chartByKey));
+    }
+    if (newTypesOnly) {
+      list = list.filter((entry) => bringsNewType(entry.types, coveredTypes));
+    }
+    return list;
+  }, [entries, poolQuery, controls.filter, chartByKey, newTypesOnly, coveredTypes]);
 
   const members = useMemo<TeamMember[]>(
     () =>
@@ -204,15 +217,30 @@ export function TeamTab() {
         </p>
       </div>
 
-      <PartyPicker
-        query={poolQuery}
-        onQuery={(next) => update({ poolQuery: next })}
-        resultCount={pool.length}
-        onSubmit={() => {
-          const first = pool.find((entry) => !partyIds.has(entry.chrooked_id));
-          if (first) addMember(first.chrooked_id);
-        }}
-      />
+      <div className="team__pool-search">
+        <PartyPicker
+          query={poolQuery}
+          onQuery={(next) => update({ poolQuery: next })}
+          resultCount={pool.length}
+          onSubmit={() => {
+            const first = pool.find((entry) => !partyIds.has(entry.chrooked_id));
+            if (first) addMember(first.chrooked_id);
+          }}
+        />
+        {resolved.length > 0 && (
+          <button
+            type="button"
+            id="team-new-types"
+            className="team__new-types"
+            data-on={newTypesOnly}
+            aria-pressed={newTypesOnly}
+            title={`Hide every species sharing a type with the team (${[...coveredTypes].length} covered)`}
+            onClick={() => update({ poolNewTypes: !newTypesOnly })}
+          >
+            New types only
+          </button>
+        )}
+      </div>
 
       <EntityControls
         idPrefix="teamc"
@@ -228,7 +256,9 @@ export function TeamTab() {
 
       {pool.length === 0 ? (
         <p className="team__pool-empty" id="party-pool-empty">
-          No species match this search.
+          {newTypesOnly
+            ? "No species left that avoids every type your team already covers."
+            : "No species match this search."}
         </p>
       ) : (
         <PartyPool
