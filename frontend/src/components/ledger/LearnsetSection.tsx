@@ -2,6 +2,7 @@ import type { LearnsetMove } from "../../types";
 import type { NavHandler } from "../DetailLedger";
 import { typeSlug } from "../../lib/format";
 import { moveNameProps, type MoveMeta } from "../../lib/moveDisplay";
+import { MoveHover } from "../EntityHover";
 import "./ledger-rows.css";
 
 type Props = {
@@ -62,22 +63,24 @@ export function LearnsetSection({
                 <span className="ledger__move-lv mono">
                   {entry.level === 0 ? "—" : `L${entry.level}`}
                 </span>
-                {onNavigate ? (
-                  <button
-                    type="button"
-                    id={`ledger-move-link-${index}`}
-                    className="lrow__link ledger__move-name"
-                    {...nameProps}
-                    aria-label={`Open ${entry.move}${isStab ? " (STAB)" : ""}`}
-                    onClick={() => onNavigate("moves", entry.move)}
-                  >
-                    {entry.move}
-                  </button>
-                ) : (
-                  <span className="ledger__move-name" {...nameProps}>
-                    {entry.move}
-                  </span>
-                )}
+                <MoveHover name={entry.move}>
+                  {onNavigate ? (
+                    <button
+                      type="button"
+                      id={`ledger-move-link-${index}`}
+                      className="lrow__link ledger__move-name"
+                      {...nameProps}
+                      aria-label={`Open ${entry.move}${isStab ? " (STAB)" : ""}`}
+                      onClick={() => onNavigate("moves", entry.move)}
+                    >
+                      {entry.move}
+                    </button>
+                  ) : (
+                    <span className="ledger__move-name" {...nameProps}>
+                      {entry.move}
+                    </span>
+                  )}
+                </MoveHover>
                 {showDiff && isNew && (
                   <span className="ledger__move-new mono">new</span>
                 )}

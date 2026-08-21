@@ -6,6 +6,7 @@ import { speciesMatchups } from "../../lib/speciesMatchups";
 import type { SpeciesMatchupMember } from "../../lib/speciesMatchups";
 import type { AbilitySlots } from "../../types";
 import { TypeChip } from "../TypeChip";
+import { AbilityHover } from "../EntityHover";
 import { PokeballSpinner } from "../PokeballSpinner";
 import "../tabs/type-chart.css";
 import "./type-matchups.css";
@@ -71,15 +72,16 @@ export function TypeMatchupsSection({ types, abilities }: Props) {
             Base typing
           </button>
           {toggleable.map((name) => (
-            <button
-              key={name}
-              type="button"
-              className="tm-toggle__chip"
-              data-active={activeAbility === name}
-              onClick={() => setSelected(name)}
-            >
-              {name}
-            </button>
+            <AbilityHover key={name} name={name}>
+              <button
+                type="button"
+                className="tm-toggle__chip"
+                data-active={activeAbility === name}
+                onClick={() => setSelected(name)}
+              >
+                {name}
+              </button>
+            </AbilityHover>
           ))}
         </div>
       )}

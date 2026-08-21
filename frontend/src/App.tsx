@@ -10,7 +10,8 @@ import { cellMap } from "./lib/typeChartGrid";
 import { stableMultiSort } from "./lib/dexSort";
 import { expandEvoLines } from "./lib/evoLine";
 import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
-import type { CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace, TypeChartCell } from "./types";
+import type { Ability, CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace, TypeChartCell } from "./types";
+import { EntityInfoProvider } from "./lib/entityInfo";
 import { applyInlineEdit, previewInlineEdit, type InlineEdit } from "./lib/inlineEdit";
 import { DeviceFrame } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
@@ -48,6 +49,9 @@ export default function App() {
   );
   const dex = useResource<DexEntry[]>(dexFetcher);
   const moves = useResource<Move[]>(api.moves);
+  // Full ability records app-wide — powers the ability hover cards the same
+  // way the moves resource powers the move ones.
+  const abilityRecords = useResource<Ability[]>(api.abilities);
   // The active type chart (backdrop's fork ⊕ Ruleset, else base ⊕ Ruleset) —
   // powers the Type filter's matchup operators (weak to / SE against / …), so
   // they reflect the SAME chart the Type Chart and Team tabs show.
@@ -444,6 +448,7 @@ export default function App() {
   });
 
   return (
+    <EntityInfoProvider moves={moves.data} abilities={abilityRecords.data}>
     <DeviceFrame
       kind={view.kind}
       onKind={(kind) => update({ kind, selected: null })}
@@ -584,6 +589,7 @@ export default function App() {
       </>
       )}
     </DeviceFrame>
+    </EntityInfoProvider>
   );
 }
 

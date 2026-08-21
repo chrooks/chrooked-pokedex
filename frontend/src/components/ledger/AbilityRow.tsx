@@ -1,4 +1,5 @@
 import type { NavHandler } from "../DetailLedger";
+import { AbilityHover } from "../EntityHover";
 import "./ledger-rows.css";
 
 type Props = {
@@ -62,16 +63,18 @@ type ValueProps = {
     while editing, an em dash when the slot is empty. */
 function AbilityValue({ slot, name, onNavigate }: ValueProps) {
   if (name === null) return <span className="lrow__empty">—</span>;
-  if (!onNavigate) return <>{name}</>;
+  if (!onNavigate) return <AbilityHover name={name}>{name}</AbilityHover>;
   return (
-    <button
-      type="button"
-      id={`ledger-ability-link-${slot}`}
-      className="lrow__link"
-      aria-label={`Open ${name} ability`}
-      onClick={() => onNavigate("abilities", name)}
-    >
-      {name}
-    </button>
+    <AbilityHover name={name}>
+      <button
+        type="button"
+        id={`ledger-ability-link-${slot}`}
+        className="lrow__link"
+        aria-label={`Open ${name} ability`}
+        onClick={() => onNavigate("abilities", name)}
+      >
+        {name}
+      </button>
+    </AbilityHover>
   );
 }
