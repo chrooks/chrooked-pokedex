@@ -86,8 +86,10 @@ class Symbol
   end
 end
 
-if defined?(PokemonSystem)
-  class PokemonSystem
+# $Settings is a PokemonOptions (Scripts/Options.rb:255) — PokemonSystem in
+# ConversionClasses.rb is only the legacy save-conversion shim.
+if defined?(PokemonOptions)
+  class PokemonOptions
     attr_writer :chrooked_all_abilities
 
     # nil on saves from before this mod → default Off (EnumOption index 1).

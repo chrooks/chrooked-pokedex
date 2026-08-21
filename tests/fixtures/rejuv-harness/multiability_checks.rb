@@ -6,7 +6,7 @@ def assert(cond, msg)
 end
 
 # --- stubs (shapes mirror Rejuv's Scripts) ------------------------------------
-class PokemonSystem; end
+class PokemonOptions; end
 
 class PokeBattle_Battler
   attr_accessor :ability
@@ -43,7 +43,7 @@ Pkmn = Struct.new(:ability) do
 end
 
 # --- option default and Off behavior ------------------------------------------
-$Settings = PokemonSystem.new
+$Settings = PokemonOptions.new
 assert $Settings.chrooked_all_abilities == 1, "default is Off (1)"
 
 b = PokeBattle_Battler.new
