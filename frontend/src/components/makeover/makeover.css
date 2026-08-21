@@ -2154,6 +2154,14 @@ textarea.mk-stage__redirect-input {
   gap: var(--space-2);
 }
 
+/* A docked panel owns the bottom-right corner — its Save/Revert row lands
+   exactly where the dock floats, and the dock (z 40) outranks the ledger
+   overlay (z 20), so the pills swallow the click. Any open dialog or full-page
+   ledger hides the dock; parking is still one Esc away. */
+body:has([aria-modal="true"], .ledger--full) .mk-dock {
+  display: none;
+}
+
 .mk-parked {
   display: flex;
   align-items: stretch;
