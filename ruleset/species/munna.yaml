@@ -3,6 +3,7 @@ chrooked_id: munna
 aka: {  }
 types: [Psychic, Fairy]
 abilities:
+  primary: Soul Siphon
   hidden: Daydreamer
 stats: { hp: 86, atk: 20, def: 40, spa: 72, spd: 65, spe: 24 }
 learnset:

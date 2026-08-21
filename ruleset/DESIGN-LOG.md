@@ -505,3 +505,11 @@ leech seed, curse, withdraw, sythesis, etc.
 - **Soul Siphon holders** (life-force feeders): Shiinotic line slot 1 (over
   Illuminate), Hypno line hidden (over Daydreamer), Drifloon line slot 1
   (over Kindle).
+
+## 2026-08-20 — Soul Siphon wave 2
+
+- **Musharna line** slot 1 (over Forewarn; Daydreamer hidden stays).
+- **Gengar line** slot 2 (was empty).
+- **Froslass** slot 1 (over Cursed Body; branch — Snorunt/Glalie untouched).
+- Considered and left alone: Chandelure line, Mismagius line, Yveltal.
+  Sinistea/Polteageist parked on form-split base data.

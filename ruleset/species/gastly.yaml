@@ -1,6 +1,8 @@
 name: Gastly
 chrooked_id: gastly
 aka: { dex: 92 }
+abilities:
+  secondary: Soul Siphon
 learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Lick }

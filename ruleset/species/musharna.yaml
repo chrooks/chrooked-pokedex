@@ -3,6 +3,7 @@ chrooked_id: musharna
 aka: { pokeemerald: SPECIES_MUSHARNA }
 types: [Psychic, Fairy]
 abilities:
+  primary: Soul Siphon
   hidden: Daydreamer
 stats: { hp: 125, atk: 50, def: 80, spa: 115, spd: 125, spe: 30 }
 learnset:

@@ -1,6 +1,8 @@
 name: Haunter
 chrooked_id: haunter
 aka: { dex: 93 }
+abilities:
+  secondary: Soul Siphon
 learnset:
   - { level: 0, move: Shadow Punch }
   - { level: 1, move: Hypnosis }

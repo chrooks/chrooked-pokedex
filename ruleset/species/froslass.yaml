@@ -2,7 +2,7 @@ name: Froslass
 chrooked_id: froslass
 aka: { pokeemerald: SPECIES_FROSLASS }
 abilities:
-  primary: Cursed Body
+  primary: Soul Siphon
   secondary: Deadlock
   hidden: Snow Warning
 stats: { spa: 120 }
