@@ -647,6 +647,18 @@ def test_harness_event_hooks(tmp_path):
     assert proc.returncode == 0, proc.stdout + proc.stderr
 
 
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_harness_multiability_semantics(tmp_path):
+    """The All Abilities set matches ==/include?/case in both operand orders,
+    resolves hash lookups to the primary, and splices into the options list."""
+    import subprocess
+    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "multiability_checks.rb"
+    proc = subprocess.run(
+        ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
 # --- type chart ----------------------------------------------------------------
 
 def test_type_chart_overrides_emit_typetext(tmp_path):
