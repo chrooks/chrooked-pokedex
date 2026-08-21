@@ -1,34 +1,31 @@
 name: Cacturne
 chrooked_id: cacturne
 aka: { pokeemerald: SPECIES_CACTURNE }
+abilities:
+  primary: Sand Rush
+  secondary: Stakeout
+  hidden: Water Absorb
 stats: { atk: 125, spa: 125 }
 learnset:
   - { level: 0, move: Spiky Shield }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Destiny Bond }
   - { level: 1, move: Poison Sting }
-  - { level: 2, move: Leafage }
-  - { level: 3, move: Absorb }
-  - { level: 6, move: Slander }
-  - { level: 10, move: Leech Seed }
-  - { level: 13, move: Sand Attack }
-  - { level: 15, move: Razor Leaf }
-  - { level: 16, move: Bullet Seed }
-  - { level: 17, move: Power Trip }
-  - { level: 19, move: Bite }
-  - { level: 22, move: Ingrain }
-  - { level: 26, move: Payback }
-  - { level: 29, move: Seed Bomb }
-  - { level: 30, move: Spikes }
-  - { level: 35, move: Sucker Punch }
-  - { level: 38, move: Pin Missile }
-  - { level: 41, move: Heel Drop }
-  - { level: 42, move: Backstab }
-  - { level: 44, move: Energy Ball }
-  - { level: 46, move: Reap }
-  - { level: 49, move: Cotton Spore }
-  - { level: 54, move: Sandstorm }
-  - { level: 57, move: Power Whip }
-  - { level: 60, move: Havoc }
-  - { level: 65, move: Eclipse }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Destiny Bond }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Slander }
+  - { level: 13, move: Leech Seed }
+  - { level: 17, move: Sandstorm }
+  - { level: 20, move: Sand Tomb }
+  - { level: 23, move: Needle Arm }
+  - { level: 26, move: Sucker Punch }
+  - { level: 29, move: Spikes }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Toxic Spikes }
+  - { level: 41, move: Scorching Sands }
+  - { level: 45, move: Seed Bomb }
+  - { level: 49, move: Heel Drop }
+  - { level: 53, move: Dark Pulse }
+  - { level: 57, move: Siphon }
+  - { level: 61, move: Backstab }
+  - { level: 69, move: Leaf Storm }
+  - { level: 70, move: Eclipse }
