@@ -1,0 +1,11 @@
+name: Snipe Shot
+chrooked_id: snipeshot
+aka: { pokeemerald: MOVE_SNIPE_SHOT }
+type: Water
+category: special
+power: 80
+accuracy: 100
+pp: 15
+description: The user ignores effects that draw in moves.
+effect: snipe_shot
+flags: [pulse]

@@ -1,0 +1,11 @@
+name: Steel Beam
+chrooked_id: steelbeam
+aka: { pokeemerald: MOVE_STEEL_BEAM }
+type: Steel
+category: special
+power: 140
+accuracy: 95
+pp: 5
+description: Fires a beam of steel from its body. It hurts the user.
+effect: max_hp_50_recoil
+flags: [pulse]

@@ -9,3 +9,4 @@ pp: 25
 description: A focused wave of inner energy. Lowers the target's Sp. Def.
 additional_effects:
   - { effect: sp_def_minus_1, chance: 100 }
+flags: [pulse]

@@ -9,3 +9,4 @@ pp: 10
 description: Unleashes a concentrated beam of light. May lower the target's accuracy.
 additional_effects:
   - { effect: acc_minus_1, chance: 20 }
+flags: [pulse]

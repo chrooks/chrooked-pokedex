@@ -1,0 +1,10 @@
+name: Flame Burst
+chrooked_id: flameburst
+aka: { pokeemerald: MOVE_FLAME_BURST }
+type: Fire
+category: special
+power: 70
+accuracy: 100
+pp: 15
+description: A bursting flame that does damage to all foes.
+flags: [pulse]

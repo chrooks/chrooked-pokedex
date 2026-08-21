@@ -1,0 +1,12 @@
+name: Mud Shot
+chrooked_id: mudshot
+aka: { pokeemerald: MOVE_MUD_SHOT }
+type: Ground
+category: special
+power: 55
+accuracy: 95
+pp: 15
+description: Hurls mud at the foe and reduces Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 100 }
+flags: [pulse]

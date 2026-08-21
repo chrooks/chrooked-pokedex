@@ -1,0 +1,12 @@
+name: Gunk Shot
+chrooked_id: gunkshot
+aka: { pokeemerald: MOVE_GUNK_SHOT }
+type: Poison
+category: physical
+power: 120
+accuracy: 80
+pp: 5
+description: Shoots filthy garbage at the foe. May also poison.
+additional_effects:
+  - { effect: poison, chance: 30 }
+flags: [pulse]

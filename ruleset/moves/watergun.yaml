@@ -1,0 +1,10 @@
+name: Water Gun
+chrooked_id: watergun
+aka: { pokeemerald: MOVE_WATER_GUN }
+type: Water
+category: special
+power: 40
+accuracy: 100
+pp: 25
+description: Squirts water to attack the foe.
+flags: [pulse]

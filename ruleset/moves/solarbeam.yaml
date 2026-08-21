@@ -1,0 +1,11 @@
+name: Solar Beam
+chrooked_id: solarbeam
+aka: { pokeemerald: MOVE_SOLAR_BEAM }
+type: Grass
+category: special
+power: 120
+accuracy: 100
+pp: 10
+description: Absorbs light in one turn, then attacks next turn.
+effect: solar_beam
+flags: [pulse]

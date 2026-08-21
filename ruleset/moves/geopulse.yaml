@@ -7,3 +7,4 @@ power: 60
 accuracy: 100
 pp: 20
 description: The user releases a pulse of grinding geologic force that ripples through the target.
+flags: [pulse]

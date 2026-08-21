@@ -1,0 +1,12 @@
+name: Flash Cannon
+chrooked_id: flashcannon
+aka: { pokeemerald: MOVE_FLASH_CANNON }
+type: Steel
+category: special
+power: 80
+accuracy: 100
+pp: 10
+description: Releases a blast of light that may lower Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 10 }
+flags: [pulse]

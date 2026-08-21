@@ -1,0 +1,9 @@
+name: Hyper Beam
+chrooked_id: hyperbeam
+aka: { pokeemerald: MOVE_HYPER_BEAM }
+type: Normal
+category: special
+power: 150
+accuracy: 90
+pp: 5
+flags: [pulse]

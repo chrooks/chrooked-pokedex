@@ -1,0 +1,12 @@
+name: Searing Shot
+chrooked_id: searingshot
+aka: { pokeemerald: MOVE_SEARING_SHOT }
+type: Fire
+category: special
+power: 100
+accuracy: 100
+pp: 5
+additional_effects:
+  - { effect: burn, chance: 30 }
+flags: [ballistic, pulse]
+target: foes_and_ally

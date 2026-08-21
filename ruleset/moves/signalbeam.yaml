@@ -9,3 +9,4 @@ pp: 15
 description: The user attacks with a sinister beam of light. May confuse the target.
 additional_effects:
   - { effect: confusion, chance: 10 }
+flags: [pulse]

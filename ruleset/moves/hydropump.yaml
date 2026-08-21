@@ -1,0 +1,10 @@
+name: Hydro Pump
+chrooked_id: hydropump
+aka: { pokeemerald: MOVE_HYDRO_PUMP }
+type: Water
+category: special
+power: 110
+accuracy: 80
+pp: 5
+description: Blasts water at high power to strike the foe.
+flags: [pulse]

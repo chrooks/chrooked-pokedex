@@ -1,0 +1,12 @@
+name: Charge Beam
+chrooked_id: chargebeam
+aka: { pokeemerald: MOVE_CHARGE_BEAM }
+type: Electric
+category: special
+power: 50
+accuracy: 90
+pp: 10
+description: Fires a beam of electricity. May raise Sp. Atk.
+additional_effects:
+  - { effect: sp_atk_plus_1, chance: 70 }
+flags: [pulse]

@@ -1,0 +1,10 @@
+name: Moongeist Beam
+chrooked_id: moongeistbeam
+aka: { pokeemerald: MOVE_MOONGEIST_BEAM }
+type: Ghost
+category: special
+power: 100
+accuracy: 100
+pp: 5
+description: A moon-powered beam that ignores abilities.
+flags: [pulse]

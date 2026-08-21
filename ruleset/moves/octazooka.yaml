@@ -9,4 +9,4 @@ pp: 10
 description: Fires a lump of ink to damage and cut accuracy.
 additional_effects:
   - { effect: acc_minus_1, chance: 50 }
-flags: [ballistic]
+flags: [ballistic, pulse]

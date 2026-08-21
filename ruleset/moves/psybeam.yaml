@@ -1,0 +1,12 @@
+name: Psybeam
+chrooked_id: psybeam
+aka: { pokeemerald: MOVE_PSYBEAM }
+type: Psychic
+category: special
+power: 65
+accuracy: 100
+pp: 20
+description: Fires a peculiar ray that may confuse the foe.
+additional_effects:
+  - { effect: confusion, chance: 10 }
+flags: [pulse]

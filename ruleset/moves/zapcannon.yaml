@@ -1,0 +1,12 @@
+name: Zap Cannon
+chrooked_id: zapcannon
+aka: { pokeemerald: MOVE_ZAP_CANNON }
+type: Electric
+category: special
+power: 120
+accuracy: 50
+pp: 5
+description: Powerful and sure to cause paralysis, but inaccurate.
+additional_effects:
+  - { effect: paralysis, chance: 100 }
+flags: [ballistic, pulse]

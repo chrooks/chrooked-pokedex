@@ -1,0 +1,12 @@
+name: Ice Beam
+chrooked_id: icebeam
+aka: { pokeemerald: MOVE_ICE_BEAM }
+type: Ice
+category: special
+power: 90
+accuracy: 100
+pp: 10
+description: Blasts the foe with an icy beam. May freeze the foe.
+additional_effects:
+  - { effect: freeze_or_frostbite, chance: 10 }
+flags: [pulse]

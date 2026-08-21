@@ -9,3 +9,4 @@ pp: 10
 description: A powerful sphere of channeled ki. May lower the target's Sp. Def.
 additional_effects:
   - { effect: sp_def_minus_1, chance: 20 }
+flags: [pulse]

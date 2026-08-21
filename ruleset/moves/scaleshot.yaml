@@ -1,0 +1,12 @@
+name: Scale Shot
+chrooked_id: scaleshot
+aka: { pokeemerald: MOVE_SCALE_SHOT }
+type: Dragon
+category: physical
+power: 25
+accuracy: 90
+pp: 20
+description: Shoots scales 2 to 5 times. Ups Speed, lowers defense.
+effect: multi_hit
+argument: { move_property: MOVE_EFFECT_SCALE_SHOT }
+flags: [pulse]

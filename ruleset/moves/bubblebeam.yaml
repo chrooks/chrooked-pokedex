@@ -1,0 +1,12 @@
+name: Bubble Beam
+chrooked_id: bubblebeam
+aka: { pokeemerald: MOVE_BUBBLE_BEAM }
+type: Water
+category: special
+power: 65
+accuracy: 100
+pp: 20
+description: Forcefully sprays bubbles that may lower Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 10 }
+flags: [pulse]

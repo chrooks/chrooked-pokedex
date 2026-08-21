@@ -1,0 +1,12 @@
+name: Aurora Beam
+chrooked_id: aurorabeam
+aka: { pokeemerald: MOVE_AURORA_BEAM }
+type: Ice
+category: special
+power: 65
+accuracy: 100
+pp: 20
+description: Fires a rainbow-colored beam that may lower Attack.
+additional_effects:
+  - { effect: atk_minus_1, chance: 10 }
+flags: [pulse]

@@ -1,0 +1,10 @@
+name: Fleur Cannon
+chrooked_id: fleurcannon
+aka: { pokeemerald: MOVE_FLEUR_CANNON }
+type: Fairy
+category: special
+power: 130
+accuracy: 90
+pp: 5
+description: A strong ray that harshly lowers Sp. Attack.
+flags: [pulse]
