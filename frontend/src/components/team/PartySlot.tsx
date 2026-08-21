@@ -10,6 +10,8 @@ type Props = {
   index: number;
   onRemove: () => void;
   onAbility: (ability: string | null) => void;
+  /** Open this mon's profile (the dex detail ledger). */
+  onOpen: () => void;
   backdropTargetId: string | null;
 };
 
@@ -34,7 +36,7 @@ function abilityOptions(entry: DexEntry): { name: string; alters: boolean }[] {
  * selector. All abilities are offered; the matchup-altering ones are marked so
  * the choice's consequence is visible.
  */
-export function PartySlot({ entry, ability, index, onRemove, onAbility, backdropTargetId }: Props) {
+export function PartySlot({ entry, ability, index, onRemove, onAbility, onOpen, backdropTargetId }: Props) {
   const options = useMemo(() => abilityOptions(entry), [entry]);
   const hasAltering = options.some((option) => option.alters);
   const selectId = `party-slot-ability-${index}`;
@@ -52,17 +54,25 @@ export function PartySlot({ entry, ability, index, onRemove, onAbility, backdrop
         ✕
       </button>
 
-      <div className="party-slot__sprite">
-        <DexSprite
-          chrookedId={entry.chrooked_id}
-          dex={entry.dex}
-          name={entry.name}
-          backdropTargetId={backdropTargetId}
-          size={64}
-        />
-      </div>
-
-      <span className="party-slot__name">{entry.name}</span>
+      <button
+        type="button"
+        className="party-slot__open"
+        id={`party-slot-open-${index}`}
+        aria-label={`Open ${entry.name} profile`}
+        title={`Open ${entry.name}`}
+        onClick={onOpen}
+      >
+        <span className="party-slot__sprite">
+          <DexSprite
+            chrookedId={entry.chrooked_id}
+            dex={entry.dex}
+            name={entry.name}
+            backdropTargetId={backdropTargetId}
+            size={64}
+          />
+        </span>
+        <span className="party-slot__name">{entry.name}</span>
+      </button>
 
       <span className="party-slot__types">
         {entry.types.map((type) => (

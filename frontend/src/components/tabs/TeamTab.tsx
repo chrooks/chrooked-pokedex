@@ -37,6 +37,9 @@ export function TeamTab() {
   // The fresh species awaiting a swap decision — set when a pick lands on a full
   // team, cleared when the replace dialog resolves or is dismissed (ac10).
   const [replaceIncoming, setReplaceIncoming] = useState<DexEntry | null>(null);
+  // Clear-team arms on the first click and fires on the second (the SavedTeams
+  // delete pattern) — leaving the button disarms it.
+  const [confirmingClear, setConfirmingClear] = useState(false);
 
   // Backdrop-aware fetchers, memoized by backdrop id so useResource sees a stable
   // reference and refetches only when the fork flips (same pattern as TypeChartTab).
@@ -105,6 +108,19 @@ export function TeamTab() {
   function removeMember(partyIndex: number) {
     update({ party: party.filter((_, i) => i !== partyIndex) });
   }
+  function openProfile(id: string) {
+    // Same jump the profile cross-links take: dex tab + selection opens the
+    // detail ledger. The party is URL state, so Back returns to the team.
+    update({ kind: "dex", selected: id, query: "" });
+  }
+  function clearTeam() {
+    if (!confirmingClear) {
+      setConfirmingClear(true);
+      return;
+    }
+    setConfirmingClear(false);
+    update({ party: [] });
+  }
   function setAbility(partyIndex: number, ability: string | null) {
     update({
       party: party.map((member, i) => (i === partyIndex ? { ...member, ability } : member)),
@@ -131,6 +147,24 @@ export function TeamTab() {
           <span className="team__count mono" data-full={full}>
             {resolved.length}/{MAX_PARTY}
           </span>
+          {party.length > 0 && (
+            <button
+              type="button"
+              id="team-clear"
+              className="saved-teams__btn saved-teams__btn--danger team__clear"
+              data-confirming={confirmingClear}
+              aria-label={
+                confirmingClear
+                  ? "Confirm: remove every team member"
+                  : "Remove every team member"
+              }
+              onClick={clearTeam}
+              onBlur={() => setConfirmingClear(false)}
+              onMouseLeave={() => setConfirmingClear(false)}
+            >
+              {confirmingClear ? "Confirm?" : "Clear"}
+            </button>
+          )}
         </div>
         <p className="team__hint">
           Add species to see how the team stands up defensively and what it covers on offense.
@@ -160,6 +194,7 @@ export function TeamTab() {
               index={r.partyIndex}
               onRemove={() => removeMember(r.partyIndex)}
               onAbility={(ability) => setAbility(r.partyIndex, ability)}
+              onOpen={() => openProfile(r.entry.chrooked_id)}
               backdropTargetId={backdrop}
             />
           ))}

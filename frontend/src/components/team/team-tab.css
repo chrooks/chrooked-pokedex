@@ -25,6 +25,13 @@
   gap: var(--space-3);
 }
 
+/* Wipe-the-party control: rides the title row, pulled in tight to the count. */
+.team__clear {
+  align-self: center;
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+}
+
 .team__heading {
   margin: 0;
   font-size: var(--text-lg);
@@ -364,6 +371,30 @@
 .party-slot__remove:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--surface-1), 0 0 0 4px var(--chrome);
+}
+
+/* Sprite + name as one open-profile hit area: an unstyled button that keeps the
+   card's column layout and signals the link on hover the way ledger names do. */
+.party-slot__open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.party-slot__open:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+.party-slot__open:hover .party-slot__name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .party-slot__sprite {
