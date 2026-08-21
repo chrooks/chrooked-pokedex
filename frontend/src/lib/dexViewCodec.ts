@@ -16,11 +16,16 @@ const HIDEABLE_KEYS = new Set<string>(
   COLUMNS.filter((column) => !column.locked).map((column) => column.key),
 );
 
-const codec = makeViewCodec({
+/** The raw dex codec. Exported for surfaces that filter species under their OWN
+    namespaced params (the Team pool's `tfilter`) via `useEntityView`, which takes
+    a whole ViewCodec rather than the dex-typed re-exports below. */
+export const dexCodec = makeViewCodec({
   filterFields: FILTER_FIELDS,
   sortableKeys: SORTABLE_KEYS,
   hideableKeys: HIDEABLE_KEYS,
 });
+
+const codec = dexCodec;
 
 export function encodeFilter(entries: FilterEntry[]): string {
   return codec.encodeFilter(entries);

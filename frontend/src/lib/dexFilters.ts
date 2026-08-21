@@ -269,3 +269,13 @@ export function evalEntries(
 ): boolean {
   return evalEntriesGeneric(dexRegistry(byKey ?? null), entry, entries);
 }
+
+/** The free-text species search — name substring or dex number. `query` must
+    already be trimmed and lowercased (normalize once per pass, not per entry).
+    Shared by the dex rail's search and the Team pool's, so the two never drift. */
+export function matchesQuery(entry: DexEntry, query: string): boolean {
+  return (
+    entry.name.toLowerCase().includes(query) ||
+    String(entry.dex ?? "").includes(query)
+  );
+}

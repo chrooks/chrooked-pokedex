@@ -43,6 +43,10 @@ export interface ViewState {
   /** The Team tab's party: up to six species (+ optional ability), shareable via
       the URL like every other view state. */
   party: PartyMember[];
+  /** The Team pool's free-text search. Its own param (`tq`) so it never bleeds
+      into the dex rail's `q` — the same no-cross-bleed rule the entity tabs
+      follow for their filter params (D3). */
+  poolQuery: string;
   /** The Makeover Workbench anchor species (its chrooked_id), or null when the
       workbench is closed. URL-persisted so a reload restores it. */
   makeover: string | null;
@@ -96,6 +100,7 @@ function readState(): ViewState {
     hidden: decodeHidden(params.get("hide")),
     backdrop: params.get("backdrop"),
     party: decodeParty(params.get("team")),
+    poolQuery: params.get("tq") ?? "",
     makeover: mk.species,
     makeoverStage: mk.stage,
     makeoverSelect: mk.selected,
@@ -128,6 +133,7 @@ const OWNED_PARAMS = [
   "hide",
   "backdrop",
   "team",
+  "tq",
   ...MAKEOVER_PARAMS,
 ] as const;
 
@@ -147,6 +153,7 @@ function writeState(next: ViewState): void {
   if (next.hidden.length) params.set("hide", encodeHidden(next.hidden));
   if (next.backdrop) params.set("backdrop", next.backdrop);
   if (next.party.length) params.set("team", encodeParty(next.party));
+  if (next.poolQuery) params.set("tq", next.poolQuery);
   encodeMakeover(params, {
     species: next.makeover,
     stage: next.makeoverStage,

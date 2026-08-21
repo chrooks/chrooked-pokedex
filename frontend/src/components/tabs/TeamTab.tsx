@@ -2,6 +2,10 @@ import { useMemo, useState } from "react";
 import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
+import { useEntityView, type EntityParamKeys } from "../../hooks/useEntityView";
+import { DEX_REGISTRY, evalEntries, matchesQuery } from "../../lib/dexFilters";
+import { dexCodec } from "../../lib/dexViewCodec";
+import { cellMap } from "../../lib/typeChartGrid";
 import { teamMatchups, type TeamMember } from "../../lib/teamMatchups";
 import {
   decodeParty,
@@ -12,7 +16,9 @@ import {
 import type { DexEntry, TypeChartCell } from "../../types";
 import { PokeballSpinner } from "../PokeballSpinner";
 import { ErrorView } from "../StatusView";
+import { EntityControls } from "../filters/EntityControls";
 import { PartyPicker } from "../team/PartyPicker";
+import { PartyPool } from "../team/PartyPool";
 import { PartySlot } from "../team/PartySlot";
 import { SavedTeams } from "../team/SavedTeams";
 import { MatchupTable } from "../team/MatchupTable";
@@ -21,6 +27,15 @@ import "./tabs.css";
 import "../team/team-tab.css";
 
 type Resolved = { entry: DexEntry; ability: string | null; partyIndex: number };
+
+/** The Team pool owns its own namespaced filter params so a pill set here never
+    bleeds into the Species tab's `filter` (the same D3 rule Moves/Abilities
+    follow). Sort and columns stay unused — the pool is one dex-ordered line. */
+const TEAM_PARAM_KEYS: EntityParamKeys = {
+  filter: "tfilter",
+  sort: "tsort",
+  hide: "thide",
+};
 
 /**
  * The Team tab: build a party of up to six species and read its type coverage
@@ -32,8 +47,10 @@ type Resolved = { entry: DexEntry; ability: string | null; partyIndex: number };
  */
 export function TeamTab() {
   const [view, update] = useUrlState();
+  const [controls, setControls] = useEntityView(dexCodec, TEAM_PARAM_KEYS);
   const party = view.party;
   const backdrop = view.backdrop;
+  const poolQuery = view.poolQuery;
   // The fresh species awaiting a swap decision — set when a pick lands on a full
   // team, cleared when the replace dialog resolves or is dismissed (ac10).
   const [replaceIncoming, setReplaceIncoming] = useState<DexEntry | null>(null);
@@ -56,6 +73,21 @@ export function TeamTab() {
 
   const entries = useMemo(() => dex.data ?? [], [dex.data]);
   const cells = useMemo(() => chart.data ?? [], [chart.data]);
+
+  // The pool: the whole dex narrowed by the search text and the filter pills —
+  // the SAME predicates the Species tab runs, so a `Type weak to Fire` pill
+  // means here exactly what it means there. The chart map feeds the matchup
+  // operators; without it those pills would silently match nothing.
+  const chartByKey = useMemo(() => (cells.length ? cellMap(cells) : null), [cells]);
+  const pool = useMemo(() => {
+    let list: readonly DexEntry[] = entries;
+    const query = poolQuery.trim().toLowerCase();
+    if (query) list = list.filter((entry) => matchesQuery(entry, query));
+    if (controls.filter.length) {
+      list = list.filter((entry) => evalEntries(entry, controls.filter, chartByKey));
+    }
+    return list;
+  }, [entries, poolQuery, controls.filter, chartByKey]);
 
   const byId = useMemo(() => {
     const map = new Map<string, DexEntry>();
@@ -172,11 +204,39 @@ export function TeamTab() {
       </div>
 
       <PartyPicker
-        entries={entries}
-        partyIds={partyIds}
-        onAdd={addMember}
-        backdropTargetId={backdrop}
+        query={poolQuery}
+        onQuery={(next) => update({ poolQuery: next })}
+        resultCount={pool.length}
+        onSubmit={() => {
+          const first = pool.find((entry) => !partyIds.has(entry.chrooked_id));
+          if (first) addMember(first.chrooked_id);
+        }}
       />
+
+      <EntityControls
+        idPrefix="teamc"
+        ariaLabel="Species pool filters"
+        defs={DEX_REGISTRY.defs}
+        sortable={[]}
+        columns={[]}
+        filter={controls.filter}
+        sort={controls.sort}
+        hidden={controls.hidden}
+        onChange={setControls}
+      />
+
+      {pool.length === 0 ? (
+        <p className="team__pool-empty" id="party-pool-empty">
+          No species match this search.
+        </p>
+      ) : (
+        <PartyPool
+          entries={pool}
+          partyIds={partyIds}
+          onAdd={addMember}
+          backdropTargetId={backdrop}
+        />
+      )}
 
       <SavedTeams
         encodedParty={encodeParty(party)}

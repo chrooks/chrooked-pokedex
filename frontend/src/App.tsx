@@ -5,7 +5,7 @@ import { useUrlState } from "./hooks/useUrlState";
 import { useTheme } from "./hooks/useTheme";
 import { isEdited } from "./lib/format";
 import { onDataChange } from "./lib/dataChange";
-import { evalEntries, appendNameFilter } from "./lib/dexFilters";
+import { evalEntries, appendNameFilter, matchesQuery } from "./lib/dexFilters";
 import { cellMap } from "./lib/typeChartGrid";
 import { stableMultiSort } from "./lib/dexSort";
 import { expandEvoLines } from "./lib/evoLine";
@@ -167,11 +167,7 @@ export default function App() {
     }
     const query = view.query.trim().toLowerCase();
     if (query) {
-      list = list.filter(
-        (entry) =>
-          entry.name.toLowerCase().includes(query) ||
-          String(entry.dex ?? "").includes(query),
-      );
+      list = list.filter((entry) => matchesQuery(entry, query));
     }
     if (view.filter.length) {
       list = list.filter((entry) => evalEntries(entry, view.filter, chartByKey));
