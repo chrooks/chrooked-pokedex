@@ -1062,3 +1062,15 @@ def test_new_drain_move_maps_to_absorb_funccode():
         function, chance = _PRIMARY_EFFECT_CODES[primary]
     assert function == 0x0DD
     assert ":function => 0x0DD" in _new_move_block(reap, "REAP", 900, function, chance)
+
+
+def test_rejuv_dump_selects_every_mapped_flag():
+    """The ruby dump's flag list and the neutral map must not drift.
+
+    The dump forgot `:pulsemove` while the map already knew it, so every Pulse
+    move came back flagless in the backdrop (Mega Launcher filter found none).
+    """
+    from chrooked_pokedex.web import snapshot_rejuv as sr
+
+    missing = [f for f in sr._REJUV_FLAG_TO_NEUTRAL if f not in sr._DUMP_SCRIPT]
+    assert missing == []

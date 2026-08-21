@@ -102,7 +102,7 @@ if defined?(MOVEHASH)
       "name" => m[:name], "type" => m[:type], "category" => m[:category],
       "power" => m[:basedamage], "accuracy" => m[:accuracy], "pp" => m[:maxpp],
       "desc" => m[:desc],
-      "flags" => %i[contact soundmove punchmove bitingmove sharpmove ballmove bombmove windmove]
+      "flags" => %i[contact soundmove punchmove bitingmove sharpmove ballmove bombmove windmove pulsemove]
                    .select { |f| m[f] }.map(&:to_s),
     }
   end

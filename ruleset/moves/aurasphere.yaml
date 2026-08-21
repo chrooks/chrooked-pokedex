@@ -7,4 +7,4 @@ power: 80
 accuracy: 0
 pp: 20
 description: Attacks with an aura blast that cannot be evaded.
-flags: [ballistic]
+flags: [ballistic, pulse]
