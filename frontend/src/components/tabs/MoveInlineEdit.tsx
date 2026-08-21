@@ -8,10 +8,12 @@
 
 import { useState } from "react";
 import type { Move, MoveWrite } from "../../types";
+import { flagLabel, MOVE_FLAGS } from "../../lib/format";
 import { TypeSelect } from "../TypeSelect";
 import { CategorySelect } from "../CategorySelect";
 import { TargetGridField } from "../TargetGrid";
 import "../dex-table.css";
+import "../editors/editors.css";
 
 export type MoveInlineField =
   | "type"
@@ -19,7 +21,8 @@ export type MoveInlineField =
   | "power"
   | "accuracy"
   | "pp"
-  | "target";
+  | "target"
+  | "flags";
 
 export const MOVE_INLINE_LABEL: Record<MoveInlineField, string> = {
   type: "Type",
@@ -28,6 +31,7 @@ export const MOVE_INLINE_LABEL: Record<MoveInlineField, string> = {
   accuracy: "Accuracy",
   pp: "PP",
   target: "Target",
+  flags: "Tags",
 };
 
 /** The loaded merge-view move as its writable PUT shape: drop the two
@@ -51,6 +55,7 @@ export function MoveInlineEdit({ x, y, move, field, onSave, onClose }: Props) {
   const [category, setCategory] = useState<Move["category"]>(move.category);
   const [num, setNum] = useState<number | "">(move[fieldKey(field)] ?? "");
   const [target, setTarget] = useState(move.target || "selected");
+  const [flags, setFlags] = useState<string[]>(move.flags ?? []);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,6 +65,7 @@ export function MoveInlineEdit({ x, y, move, field, onSave, onClose }: Props) {
     if (field === "type") patch = { type };
     else if (field === "category") patch = { category };
     else if (field === "target") patch = { target };
+    else if (field === "flags") patch = { flags };
     else patch = { [field]: num === "" ? null : num };
     setSaving(true);
     setError(null);
@@ -77,7 +83,7 @@ export function MoveInlineEdit({ x, y, move, field, onSave, onClose }: Props) {
       <div className="dex-edit__backdrop" onMouseDown={onClose} />
       <form
         className="dex-edit"
-        data-wide={field === "target" || undefined}
+        data-wide={field === "target" || field === "flags" || undefined}
         role="menu"
         aria-label={`Edit ${MOVE_INLINE_LABEL[field]} for ${move.name}`}
         style={{ left: x, top: y }}
@@ -121,6 +127,28 @@ export function MoveInlineEdit({ x, y, move, field, onSave, onClose }: Props) {
 
         {field === "target" && (
           <TargetGridField id="move-edit-target" value={target} onChange={setTarget} />
+        )}
+
+        {field === "flags" && (
+          <div className="editor-flags__grid">
+            {/* MOVE_FLAGS plus any custom tag already on the move, so a flag the
+                closed set does not know still shows and stays togglable. */}
+            {[...MOVE_FLAGS, ...flags.filter((f) => !MOVE_FLAGS.includes(f as never))].map((flag) => {
+              const on = flags.includes(flag);
+              return (
+                <label key={flag} className="editor-flags__chip" data-on={on}>
+                  <input
+                    type="checkbox"
+                    checked={on}
+                    onChange={() =>
+                      setFlags(on ? flags.filter((f) => f !== flag) : [...flags, flag])
+                    }
+                  />
+                  {flagLabel(flag)}
+                </label>
+              );
+            })}
+          </div>
         )}
 
         {error && <p className="dex-edit__error">{error}</p>}

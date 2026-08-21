@@ -401,7 +401,7 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
                       </td>
                     )}
                     {!hiddenSet.has("flags") && (
-                      <td>
+                      <td data-editable onContextMenu={(e) => openInline(e, move, "flags")}>
                         {(move.flags ?? []).length === 0 ? (
                           <span className="tab-faint">—</span>
                         ) : (
