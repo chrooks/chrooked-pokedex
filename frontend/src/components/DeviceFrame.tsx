@@ -5,16 +5,23 @@ import type { Theme } from "../hooks/useTheme";
 import { ReseedNote } from "./ReseedNote";
 import "./device-frame.css";
 
-// The rail lists the dex-data browsing kinds. Targets (registration) is reached
-// from the header active-target switcher; the Ledger lives in the header navbar.
+// The rail lists the dex-data browsing kinds — the things you look up. Targets
+// (registration) is reached from the header active-target switcher.
 const KIND_TABS: { key: KindKey; label: string }[] = [
   { key: "dex", label: "Species" },
   { key: "moves", label: "Moves" },
   { key: "abilities", label: "Abilities" },
   { key: "type-chart", label: "Type Chart" },
-  { key: "team", label: "Team" },
   { key: "statuses", label: "Statuses" },
   { key: "behaviors", label: "Behaviors" },
+];
+
+// The header navbar carries the two kinds that are NOT dex lookups: a planner
+// you build in (Team) and the change record (Ledger). Keeping them out of the
+// rail stops the rail from mixing "what exists" with "what I'm doing".
+const HEADER_TABS: { key: KindKey; label: string }[] = [
+  { key: "team", label: "Team" },
+  { key: "ledger", label: "Ledger" },
 ];
 
 type Props = {
@@ -90,16 +97,20 @@ export function DeviceFrame({
         </div>
         {targetBar && <div className="device__target-bar">{targetBar}</div>}
         <div className="device__header-right">
-          <nav className="device__header-nav" aria-label="Records">
-            <button
-              type="button"
-              className="device__nav-tab"
-              data-active={kind === "ledger"}
-              aria-current={kind === "ledger" ? "true" : undefined}
-              onClick={() => onKind("ledger")}
-            >
-              Ledger
-            </button>
+          <nav className="device__header-nav" aria-label="Workspaces">
+            {HEADER_TABS.map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                id={`header-tab-${tab.key}`}
+                className="device__nav-tab"
+                data-active={kind === tab.key}
+                aria-current={kind === tab.key ? "true" : undefined}
+                onClick={() => onKind(tab.key)}
+              >
+                {tab.label}
+              </button>
+            ))}
           </nav>
           <div className="device__readout mono" id="dex-summary">
             {readout}

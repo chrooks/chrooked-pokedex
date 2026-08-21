@@ -190,8 +190,13 @@ export default function App() {
 
   const isDex = view.kind === "dex";
   const full = view.detail === "full";
+  // The profile ledger overlays the dex AND the Team tab: opening a party
+  // member's profile should not throw the user out of the team they are
+  // building, so Team opens the same panel in place. Every other kind resolves
+  // `selected` against its own entity, so the ledger stays out of them.
+  const canShowProfile = isDex || view.kind === "team";
   const selectedEntry =
-    isDex && view.selected !== null
+    canShowProfile && view.selected !== null
       ? all.find((entry) => entry.chrooked_id === view.selected) ?? null
       : null;
   // The Makeover Workbench takes over the screen when an anchor species is set in
@@ -280,6 +285,10 @@ export default function App() {
   // header arrows and ←/→ in DetailLedger.
   const handleStep = useCallback(
     (delta: -1 | 1) => {
+      // Stepping walks the DEX's visible order, which means nothing on the Team
+      // tab — a party member's neighbours there are the dex's filter results,
+      // not the team. Off the dex, the arrows simply do nothing.
+      if (!isDex) return;
       if (view.selected === null || dexEntries.length === 0) return;
       const index = dexEntries.findIndex(
         (entry) => entry.chrooked_id === view.selected,
@@ -291,7 +300,7 @@ export default function App() {
           : (index + delta + dexEntries.length) % dexEntries.length;
       update({ selected: dexEntries[next].chrooked_id });
     },
-    [view.selected, dexEntries, update],
+    [isDex, view.selected, dexEntries, update],
   );
 
   // Right-click inline table edit: fetch the species' raw Override (404 → none),

@@ -141,9 +141,10 @@ export function TeamTab() {
     update({ party: party.filter((_, i) => i !== partyIndex) });
   }
   function openProfile(id: string) {
-    // Same jump the profile cross-links take: dex tab + selection opens the
-    // detail ledger. The party is URL state, so Back returns to the team.
-    update({ kind: "dex", selected: id, query: "" });
+    // Selection only — the ledger opens as a panel OVER the Team tab, so the
+    // team you are building stays on screen behind it. Closing returns you to
+    // the party, not to the dex.
+    update({ selected: id });
   }
   function clearTeam() {
     if (!confirmingClear) {
