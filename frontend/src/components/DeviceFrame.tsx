@@ -32,6 +32,11 @@ const KIND_TABS: TabDef[] = [
   { key: "behaviors", label: "Behaviors", Icon: IconBehaviors },
 ];
 
+/** The rail's left-to-right order, for anything that steps through tabs (the
+    controller's shoulder buttons). Exported so the stepping order and the
+    rendered order cannot drift. */
+export const RAIL_KIND_ORDER: readonly KindKey[] = KIND_TABS.map((tab) => tab.key);
+
 // The header navbar carries the two kinds that are NOT dex lookups: a planner
 // you build in (Team) and the change record (Ledger). Keeping them out of the
 // rail stops the rail from mixing "what exists" with "what I'm doing".

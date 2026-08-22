@@ -13,7 +13,7 @@ import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
 import type { Ability, CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace, TypeChartCell } from "./types";
 import { EntityInfoProvider } from "./lib/entityInfo";
 import { applyInlineEdit, previewInlineEdit, type InlineEdit } from "./lib/inlineEdit";
-import { DeviceFrame } from "./components/DeviceFrame";
+import { DeviceFrame, RAIL_KIND_ORDER } from "./components/DeviceFrame";
 import { DexView } from "./components/DexView";
 import type { DexViewPatch } from "./components/filters/DexControls";
 import { DetailLedger } from "./components/DetailLedger";
@@ -25,6 +25,9 @@ import { StatusesTab } from "./components/tabs/StatusesTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
 import { LedgerTab } from "./components/tabs/LedgerTab";
+import { useGamepad, type GamepadAction } from "./hooks/useGamepad";
+import { activateFocused, focusInDirection } from "./lib/spatialNav";
+import { GamepadProbe } from "./components/GamepadProbe";
 import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
 import { PatchDrawer } from "./components/targets/PatchDrawer";
 import { MakeoverWorkbench } from "./components/makeover/MakeoverWorkbench";
@@ -452,6 +455,52 @@ export default function App() {
     if (selectedEntry !== null) update({ selected: null });
   }, [patch, selectedEntry, view.detail, update]);
 
+  // `?gamepad=probe` shows a live controller readout — the only way to confirm
+  // this hardware's button indices, which cannot be checked from a dev machine.
+  // Read once: it is a debugging entry point, not view state.
+  const [isGamepadProbe] = useState(
+    () => new URLSearchParams(window.location.search).get("gamepad") === "probe",
+  );
+
+  // The handheld's physical controls, mapped onto real DOM focus rather than a
+  // bespoke cursor: the D-pad moves focus, A clicks whatever it lands on. That
+  // reuses every existing click handler and focus-visible style, and works on
+  // the grid, the table and the rail without any of them knowing about it.
+  useGamepad(
+    useCallback(
+      (action: GamepadAction) => {
+        switch (action) {
+          case "up":
+          case "down":
+          case "left":
+          case "right":
+            focusInDirection(action);
+            break;
+          case "south": // bottom face button — "A" once the Thor is in Xbox style
+            activateFocused();
+            break;
+          case "east": // right face button — back out of whatever is open
+            handleEscape();
+            break;
+          case "l1":
+          case "r1": {
+            const order = RAIL_KIND_ORDER;
+            const at = order.indexOf(view.kind);
+            // Shoulder buttons only step the rail kinds; from Team/Ledger
+            // (which are not in the rail) they land on the first one.
+            const next =
+              at === -1
+                ? order[0]
+                : order[(at + (action === "r1" ? 1 : -1) + order.length) % order.length];
+            update({ kind: next, selected: null });
+            break;
+          }
+        }
+      },
+      [handleEscape, update, view.kind],
+    ),
+  );
+
   useGlobalKeys({
     onSearch: () => searchRef.current?.focus(),
     onToggleEdited: () =>
@@ -606,6 +655,7 @@ export default function App() {
       </>
       )}
     </DeviceFrame>
+    {isGamepadProbe && <GamepadProbe />}
     </EntityInfoProvider>
   );
 }

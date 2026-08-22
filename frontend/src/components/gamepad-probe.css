@@ -1,0 +1,59 @@
+/* The controller readout, shown only with ?gamepad=probe. Pinned bottom-right
+   so it never covers the rail or the search field being tested. */
+
+.gp-probe {
+  position: fixed;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 90;
+  width: min(360px, calc(100vw - var(--space-6)));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--chrome);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 28px -10px oklch(0% 0 0 / 0.65);
+}
+
+.gp-probe__head {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  color: var(--chrome);
+}
+
+.gp-probe__id {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  overflow-wrap: anywhere;
+}
+
+.gp-probe__row {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.gp-probe__label {
+  flex: none;
+  width: 5.5em;
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+}
+
+.gp-probe__value {
+  color: var(--edited);
+  font-variant-numeric: tabular-nums;
+}
+
+.gp-probe__hint {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  color: var(--text-faint);
+}
