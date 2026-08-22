@@ -142,6 +142,11 @@ module MenuHandlers
   def self.add(*args, &blk); end
 end
 def _INTL(s, *a); s; end
+# Rejuv's overworld sprite class — chrooked_zz_kirincull alias-chains #update,
+# so the method must exist before the shim is eval'd.
+class Sprite_Character
+  def update; end
+end
 
 class PokeBattle_Move_0D8 < PokeBattle_Move
   def pbEffect(attacker, alltargets, hitnum = 0); attacker.pbRecoverHP(50, true); end

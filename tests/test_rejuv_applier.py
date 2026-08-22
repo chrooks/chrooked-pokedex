@@ -612,6 +612,11 @@ end
 def _INTL(s, *a); s; end
 class PokeBattle_Battler; end
 class PokeBattle_Battle; end
+# Rejuv's overworld sprite class — chrooked_zz_kirincull alias-chains #update,
+# so the method must exist before the shim is eval'd.
+class Sprite_Character
+  def update; end
+end
 """
 
 

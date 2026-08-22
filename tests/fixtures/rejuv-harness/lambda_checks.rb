@@ -20,6 +20,11 @@ end
 def _INTL(s, *a); s; end
 class PokeBattle_Battler; end
 class PokeBattle_Battle; end
+# Rejuv's overworld sprite class — chrooked_zz_kirincull alias-chains #update,
+# so the method must exist before the shim is eval'd.
+class Sprite_Character
+  def update; end
+end
 Dir[File.join(ARGV[0], "chrooked_*.rb")].sort.each { |f| eval(File.read(f), TOPLEVEL_BINDING) }
 
 Battler = Struct.new(:ability, :hp, :totalhp, :attack, :spatk, :types, :airborne, :damagestate, :status) do
