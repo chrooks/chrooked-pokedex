@@ -386,17 +386,234 @@
   display: none;
 }
 
-/* Responsive: collapse the rail to a top strip on narrow screens. */
-@media (max-width: 720px) {
+/* Icons ride inside the tab/nav buttons; the roomy shell shows labels only. */
+.device__tab-icon,
+.device__nav-icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  display: none;
+}
+
+.device__tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.device__filters {
+  display: contents; /* roomy shell: filters are direct rail children */
+}
+
+/* The compact shell is hidden on the desk. */
+.device__header-search,
+.device__sheet-wrap {
+  display: none;
+}
+
+/* ===================================================================
+   COMPACT SHELL
+   -------------------------------------------------------------------
+   Keep this condition identical to COMPACT_SHELL_QUERY in
+   hooks/useMediaQuery.ts — that hook moves the two pieces of markup CSS
+   cannot move (the search input, the filter sheet), and the two must
+   agree or the shell renders half-collapsed.
+
+   Height leads the condition. The device this was built for (an AYN Thor
+   in landscape) is 833x468 CSS px: it clears every conventional width
+   breakpoint while having ~400px of usable height once the browser's
+   address bar is subtracted. A width-only rule left it on the desk
+   layout, spending 108px of that 400 on a header. Everything below buys
+   vertical space back.
+   =================================================================== */
+@media (max-height: 620px), (max-width: 860px) {
+  /* Header: three wrapped rows -> one 44px strip. */
+  .device__header {
+    flex-wrap: nowrap;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    min-height: 44px;
+  }
+
+  /* The wordmark is the cheapest thing in the header to lose: the lamp
+     already identifies the app, and nobody needs to be told what they
+     opened. */
+  .device__title {
+    display: none;
+  }
+
+  .device__target-bar {
+    margin-inline: 0;
+    min-width: 0;
+    flex: 0 1 auto;
+  }
+
+  .device__header-search {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 320px;
+  }
+
+  .device__header-right {
+    gap: var(--space-1);
+    margin-left: auto;
+  }
+
+  /* Team/Ledger become icons — the labels cost ~120px of a 833px row. */
+  .device__nav-label {
+    display: none;
+  }
+
+  .device__nav-icon {
+    display: block;
+  }
+
+  .device__nav-tab {
+    min-width: 40px;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  /* The readout is reference, not navigation; it loses to the controls. */
+  .device__readout,
+  .device__theme {
+    display: none;
+  }
+
+  .device__sheet-wrap {
+    display: block;
+    position: relative;
+  }
+
+  .device__sheet-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-dim);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+  }
+
+  .device__sheet-trigger:hover,
+  .device__sheet-trigger[aria-expanded="true"] {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+
+  .device__sheet-trigger:focus-visible {
+    outline: none;
+    border-color: var(--chrome);
+    box-shadow: 0 0 0 1px var(--chrome);
+  }
+
+  .device__sheet {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    right: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 220px;
+    padding: var(--space-3);
+    background: var(--surface-1);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    /* The one elevated surface in the shell: it floats over content, so it
+       carries a real offset shadow rather than a flat keyline. */
+    box-shadow: 0 8px 24px -8px oklch(0% 0 0 / 0.6);
+  }
+
+  .device__filters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  /* Rail: 232px labeled column -> icon column. Nav stays one tap away
+     rather than going behind a hamburger; at 833px wide the horizontal
+     room exists, and a drawer would trade a tap for nothing. */
   .device__body {
-    grid-template-columns: 1fr;
+    grid-template-columns: 52px 1fr;
   }
+
   .device__rail {
-    border-right: none;
-    border-bottom: 1px solid var(--line);
+    padding: var(--space-2) var(--space-1);
+    gap: var(--space-1);
+    align-items: center;
   }
+
   .device__tabs {
-    flex-direction: row;
-    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    border-top: none;
+    width: 100%;
+  }
+
+  .device__tab {
+    justify-content: center;
+    min-height: 44px;
+    padding: 0;
+  }
+
+  .device__tab-label {
+    display: none;
+  }
+
+  /* 20px, not 16: the rail glyph IS the label once the text is gone, and on a
+     369dpi handheld a 16px glyph reads as a smudge. */
+  .device__tab-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* The search is the primary compact control; it gets a real target. The
+     header grows a few px to hold it, which is the right trade — this is the
+     control the whole compact shell exists to serve. */
+  .device__search-input {
+    min-height: 44px;
+  }
+
+  /* The active rail item keeps its chrome edge, moved to sit against the
+     screen so the eye still reads the rail as a spine. */
+  .device__tab[data-active="true"] {
+    box-shadow: inset 2px 0 0 var(--chrome);
+  }
+
+  /* Search shrinks to fit the header strip. */
+  .device__search-input {
+    padding: var(--space-1) 0;
+  }
+}
+
+/* Touch sizing is a separate axis from screen size: a desk monitor can have a
+   touchscreen, and the Thor is coarse-pointer at every size. Anything the
+   finger lands on clears the 44px target floor here. */
+@media (pointer: coarse) {
+  .device__tab,
+  .device__filter,
+  .device__nav-tab,
+  .device__sheet-trigger {
+    min-height: 44px;
+  }
+
+  .device__layout-btn {
+    min-height: 40px;
+  }
+
+  .device__search-input {
+    /* 16px stops iOS/Android from zooming the viewport on focus. */
+    font-size: 16px;
   }
 }

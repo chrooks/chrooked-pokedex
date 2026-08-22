@@ -856,3 +856,29 @@ button.dexc-tok__body:hover {
     transition: none;
   }
 }
+
+/* Touch sizing. The filter row sits above the dex on every screen, so on a
+   coarse pointer its controls have to clear the 44px target floor the same as
+   the shell's — a 22px "+ filter" affordance is a miss waiting to happen on a
+   handheld. Sized by padding rather than height so the row keeps its rhythm. */
+@media (pointer: coarse) {
+  .dexc-add__btn,
+  .dexc-clear,
+  .dexc-conn {
+    min-height: 44px;
+  }
+
+  /* The "/" toggle swaps the token row for a typed query. It reads as a key
+     hint, but it is a real control and the only way back to token mode, so it
+     gets a real target rather than being hidden as keyboard-only chrome. */
+  .dexc-mode {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .dexc-line__none {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
