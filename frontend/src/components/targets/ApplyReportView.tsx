@@ -16,6 +16,7 @@ import type {
   ReportStatus,
 } from "../../types";
 import { PacketLink } from "./PacketLink";
+import { SyncStatus } from "./SyncStatus";
 
 type Props = {
   report: ApplyReportSummary;
@@ -100,6 +101,8 @@ export function ApplyReportView({ report, mode }: Props) {
             : report.data_backup.reason + "."}
         </p>
       )}
+
+      {report.sync && <SyncStatus sync={report.sync} idPrefix="patch" />}
 
       <div
         className="report__counts"

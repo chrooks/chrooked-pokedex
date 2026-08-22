@@ -1,0 +1,47 @@
+/* Where an applied patch/ went after it was written — the handheld mirror and
+   the save pull-back. Sits directly under the apply report. */
+
+.sync-status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+
+.sync-status__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+}
+
+/* A failed sync is a warning, never an error: the apply itself still wrote
+   valid files, and the detail line names the fix. */
+.sync-status__line--ok .sync-status__mark {
+  color: color-mix(in oklch, var(--type-grass) 70%, var(--text));
+}
+
+.sync-status__line--warn .sync-status__mark,
+.sync-status__line--warn .sync-status__detail {
+  color: color-mix(in oklch, var(--chrome) 70%, var(--text));
+}
+
+.sync-status__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.sync-status__detail {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sync-status__stats {
+  color: var(--text-faint);
+}

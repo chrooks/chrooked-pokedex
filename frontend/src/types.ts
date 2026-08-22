@@ -533,6 +533,20 @@ export interface ApplyReportSummary {
     reason: string;
     path: string | null;
   } | null;
+  /** Handheld transfer outcome — present only when this Target has a `sync`
+      block (i.e. its patch/ mirrors to a device). A failure here does NOT mean
+      the apply failed: the written files are valid either way. */
+  sync?: SyncOutcome | null;
+}
+
+/** One rsync transfer's result, written to be shown to a human as-is. */
+export interface SyncOutcome {
+  ok: boolean;
+  detail: string;
+  files?: number;
+  seconds?: number;
+  /** The save pull-back, when the device is configured for it. */
+  save_backup?: SyncOutcome;
 }
 
 /** The markdown packet for one behavior, fetched on demand from a DATA-ONLY

@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../../api";
 import type { ApplyReportSummary } from "../../types";
 import { makeoverApi, type ReadBackResponse } from "../../lib/makeoverApi";
+import { SyncStatus } from "../targets/SyncStatus";
 
 type Sub = "apply" | "proof" | "log" | "done";
 
@@ -230,6 +231,7 @@ function ApplyReportView({ report }: { report: ApplyReportSummary }) {
           ))}
         </ul>
       )}
+      {report.sync && <SyncStatus sync={report.sync} idPrefix="makeover" />}
       <details className="mk-report__md">
         <summary className="mono">full report</summary>
         <pre className="mk-report__md-body mono">{report.report_md}</pre>
