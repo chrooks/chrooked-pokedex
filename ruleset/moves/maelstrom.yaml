@@ -9,3 +9,4 @@ pp: 10
 description: A churning vortex of water batters the target. May make it flinch.
 additional_effects:
   - { effect: flinch, chance: 10 }
+target: foes_and_ally
