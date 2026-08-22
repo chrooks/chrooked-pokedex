@@ -123,6 +123,26 @@ function scopeQuery(scope?: string): string {
   return scope && scope !== "base" ? `?scope=${encodeURIComponent(scope)}` : "";
 }
 
+/** Memoize a per-Target fetcher factory on the target id, so the SAME function
+    object comes back every call. `useResource` keys its cross-mount cache on
+    fetcher identity — a fresh closure per render would miss that cache and
+    re-fetch every time a tab is opened. Ids are few and app-lifetime, so a plain
+    Map is fine.
+    ponytail: never evicted; targets are a handful per session. */
+function byId<T>(
+  make: (id: string) => (signal?: AbortSignal) => Promise<T>,
+): (id: string) => (signal?: AbortSignal) => Promise<T> {
+  const memo = new Map<string, (signal?: AbortSignal) => Promise<T>>();
+  return (id: string) => {
+    let fetcher = memo.get(id);
+    if (fetcher === undefined) {
+      fetcher = make(id);
+      memo.set(id, fetcher);
+    }
+    return fetcher;
+  };
+}
+
 export const api = {
   // Reads
   dex: (signal?: AbortSignal) => getJson<DexEntry[]>("/api/dex", signal),
@@ -289,23 +309,27 @@ export const api = {
       { force: force ?? false },
     ),
   /** The target's own values ⊕ Ruleset — the dex backdrop for that fork. */
-  targetDex: (id: string) => (signal?: AbortSignal) =>
+  targetDex: byId((id) => (signal?: AbortSignal) =>
     getJson<DexEntry[]>(`/api/targets/${encodeURIComponent(id)}/dex`, signal),
+  ),
   /** The target's abilities ⊕ Ruleset — the abilities backdrop for that fork. */
-  targetAbilities: (id: string) => (signal?: AbortSignal) =>
+  targetAbilities: byId((id) => (signal?: AbortSignal) =>
     getJson<Ability[]>(
       `/api/targets/${encodeURIComponent(id)}/abilities`,
       signal,
     ),
+  ),
   /** The target's moves ⊕ Ruleset — the moves backdrop for that fork. */
-  targetMoves: (id: string) => (signal?: AbortSignal) =>
+  targetMoves: byId((id) => (signal?: AbortSignal) =>
     getJson<Move[]>(`/api/targets/${encodeURIComponent(id)}/moves`, signal),
+  ),
   /** The target's type chart ⊕ Ruleset — the type-chart backdrop for that fork. */
-  targetTypeChart: (id: string) => (signal?: AbortSignal) =>
+  targetTypeChart: byId((id) => (signal?: AbortSignal) =>
     getJson<TypeChartCell[]>(
       `/api/targets/${encodeURIComponent(id)}/type-chart`,
       signal,
     ),
+  ),
   /** Fetch one behavior packet by its DATA-ONLY `packet_url`. */
   packet: (packetUrl: string, signal?: AbortSignal) =>
     getJson<BehaviorPacket>(packetUrl, signal),

@@ -48,10 +48,22 @@ export default function App() {
     [view.backdrop],
   );
   const dex = useResource<DexEntry[]>(dexFetcher);
-  const moves = useResource<Move[]>(api.moves);
-  // Full ability records app-wide — powers the ability hover cards the same
-  // way the moves resource powers the move ones.
-  const abilityRecords = useResource<Ability[]>(api.abilities);
+  // Moves and abilities are fetched app-wide for the same two reasons the dex is:
+  // they power the hover cards / option lists everywhere, AND fetching them here
+  // warms the shared `useResource` cache so the Moves and Abilities tabs paint
+  // instantly on first open instead of showing a skeleton. Backdrop-aware and
+  // memoized exactly like `dexFetcher`, so the tabs resolve the SAME fetcher
+  // identity and hit that cache.
+  const movesFetcher = useMemo(
+    () => (view.backdrop ? api.targetMoves(view.backdrop) : api.moves),
+    [view.backdrop],
+  );
+  const abilitiesFetcher = useMemo(
+    () => (view.backdrop ? api.targetAbilities(view.backdrop) : api.abilities),
+    [view.backdrop],
+  );
+  const moves = useResource<Move[]>(movesFetcher);
+  const abilityRecords = useResource<Ability[]>(abilitiesFetcher);
   // The active type chart (backdrop's fork ⊕ Ruleset, else base ⊕ Ruleset) —
   // powers the Type filter's matchup operators (weak to / SE against / …), so
   // they reflect the SAME chart the Type Chart and Team tabs show.
