@@ -2,8 +2,10 @@ name: Seismitoad
 chrooked_id: seismitoad
 aka: { pokeemerald: SPECIES_SEISMITOAD }
 abilities:
+  primary: Swift Swim
   secondary: Venomous
-stats: { hp: 100, def: 80, spa: 95, spd: 80, spe: 70 }
+  hidden: Drizzle
+stats: { hp: 100, def: 80, spa: 95, spd: 80, spe: 80 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Supersonic }

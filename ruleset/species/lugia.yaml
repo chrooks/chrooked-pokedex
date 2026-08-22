@@ -4,5 +4,6 @@ aka: { pokeemerald: SPECIES_LUGIA }
 types: [Psychic, Water]
 abilities:
   primary: Multiscale
+  secondary: Drizzle
   hidden: Wingspan
 stats: { hp: 105, spd: 155 }

@@ -2,6 +2,10 @@ name: Swablu
 chrooked_id: swablu
 aka: { pokeemerald: SPECIES_SWABLU }
 types: [Fairy, Flying]
+abilities:
+  primary: Natural Cure
+  secondary: Drizzle
+  hidden: Cloud Nine
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Peck }

@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_POLITOED }
 types: [Water, Normal]
 abilities:
   primary: Downpour
-stats: { hp: 110, def: 80, spa: 100 }
+stats: { hp: 110, def: 80, spa: 100, spd: 95 }
 learnset:
   - { level: 0, move: Bounce }
   - { level: 1, move: Hypnosis }

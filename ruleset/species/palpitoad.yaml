@@ -2,7 +2,9 @@ name: Palpitoad
 chrooked_id: palpitoad
 aka: { pokeemerald: SPECIES_PALPITOAD }
 abilities:
+  primary: Swift Swim
   secondary: Venomous
+  hidden: Drizzle
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Supersonic }

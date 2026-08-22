@@ -31,4 +31,4 @@ learnset:
   - { level: 54, move: Dark Void }
   - { level: 57, move: Eclipse }
   - { level: 60, move: Future Sight }
-evolution: { from: Drowzee, method: { level: 26 } }
+evolution: { from: Drowzee, method: { level: 30 } }

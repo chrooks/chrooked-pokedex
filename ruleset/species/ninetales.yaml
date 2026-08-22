@@ -2,7 +2,7 @@ name: Ninetales
 chrooked_id: ninetales
 aka: { pokeemerald: SPECIES_NINETALES }
 types: [Fire, Fairy]
-stats: { hp: 75, atk: 75, spa: 90, spd: 105 }
+stats: { hp: 75, spa: 110, spd: 105, atk: 66, spe: 89 }
 learnset:
   - { level: 0, move: Dazzling Gleam }
   - { level: 1, move: Quick Attack }

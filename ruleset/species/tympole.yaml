@@ -2,7 +2,9 @@ name: Tympole
 chrooked_id: tympole
 aka: { pokeemerald: SPECIES_TYMPOLE }
 abilities:
+  primary: Swift Swim
   secondary: Venomous
+  hidden: Drizzle
 learnset:
   - { level: 1, move: Bubble }
   - { level: 1, move: Growl }

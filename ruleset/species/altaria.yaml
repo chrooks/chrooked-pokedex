@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_ALTARIA }
 types: [Fairy, Dragon]
 abilities:
   primary: Pixilate
+  secondary: Drizzle
   hidden: Wingspan
 stats: { atk: 90, spa: 90 }
 learnset:
@@ -39,3 +40,4 @@ learnset:
   - { level: 59, move: Outrage }
   - { level: 60, move: Draco Meteor }
   - { level: 64, move: Tempest }
+evolution: { from: Swablu, method: { level: 36 } }
