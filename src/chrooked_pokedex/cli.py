@@ -54,6 +54,9 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 _DEFAULT_RULESET = _REPO_ROOT / "ruleset"
 _DEFAULT_SNAPSHOT = _DEFAULT_RULESET / ".base" / "1.11.2.json"
 _DEFAULT_DIST = _REPO_ROOT / "frontend" / "dist"
+# The Target registry (gitignored, machine-specific). Mirrors
+# web/app.py::DEFAULT_TARGETS_PATH so the CLI and the web layer read one file.
+_DEFAULT_TARGETS = _REPO_ROOT / "targets.json"
 # Apply resolves in dependency tiers: existing owned moves are retuned first, then
 # missing owned content is created, then species scalars, learnsets, evolutions, and
 # finally the type chart. Move-retune runs before create so each owned move is
@@ -125,6 +128,24 @@ def main(argv: list[str] | None = None) -> int:
         "instead. Use for a target with a small dex (e.g. Infinite Fusion 2 Hoenn) "
         "where creating the full national dex floods it with unusable stubs.",
     )
+    apply.add_argument(
+        "--no-sync",
+        dest="sync",
+        action="store_false",
+        default=True,
+        help="Do NOT mirror patch/ to the handheld afterwards. Only affects a "
+        "target that has a 'sync' block in targets.json; others never sync.",
+    )
+
+    sync_cmd = sub.add_parser(
+        "sync", help="Mirror an already-applied patch/ folder to the handheld."
+    )
+    sync_cmd.add_argument("--target", required=True, type=Path, help="Path to the fork.")
+
+    save_backup = sub.add_parser(
+        "save-backup", help="Pull the handheld's saves into the local backup folder."
+    )
+    save_backup.add_argument("--target", required=True, type=Path, help="Path to the fork.")
 
     harvest = sub.add_parser(
         "harvest", help="Propose Ruleset edits from a fork's in-game tuning."
@@ -196,8 +217,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "apply":
         return _run_apply(
             args.target, args.engine, args.category, args.ruleset, args.force,
-            args.dialect, args.slug, args.create_absent,
+            args.dialect, args.slug, args.create_absent, args.sync,
         )
+    if args.command == "sync":
+        return _run_sync_command(args.target)
+    if args.command == "save-backup":
+        return _run_save_backup_command(args.target)
     if args.command == "harvest":
         return _run_harvest(args.fork, args.ruleset, args.dry_run)
     if args.command == "behaviors":
@@ -441,6 +466,7 @@ def _run_apply(
     dialect: str = "auto",
     slug: str | None = None,
     create_absent: bool = True,
+    sync: bool = True,
 ) -> int:
     """Apply the Ruleset to a target fork.
 
@@ -534,7 +560,71 @@ def _run_apply(
 
     print(f"  {target / 'apply-report.md'}")
     print(f"  {json_path}")
+
+    if sync:
+        _sync_after_apply(target)
     return 0
+
+
+def _sync_after_apply(target: Path) -> None:
+    """Mirror patch/ to the handheld, if this Target has a sync block.
+
+    A sync failure never fails the apply: the files written here are valid
+    whether or not the device was reachable, so an asleep handheld gets an
+    honest line, not a non-zero exit.
+    """
+    from .sync import run_save_backup, run_sync, sync_config_for_path
+
+    config = sync_config_for_path(_DEFAULT_TARGETS, target)
+    if config is None:
+        return  # not a synced Target — the overwhelmingly common case
+    result = run_sync(target, config)
+    print(f"  {'✓' if result.ok else '⚠'} {_sync_line(result)}")
+    if config.save_src and config.save_backup_dir:
+        backup = run_save_backup(config)
+        print(f"  {'✓' if backup.ok else '⚠'} {_sync_line(backup)}")
+
+
+def _sync_line(result: "SyncResult") -> str:
+    """One-line human summary of a transfer."""
+    if not result.ok:
+        return result.detail
+    bits = [result.detail]
+    if result.files is not None:
+        bits.append(f"{result.files} file(s)")
+    if result.seconds is not None:
+        bits.append(f"{result.seconds}s")
+    return " · ".join(bits)
+
+
+def _run_sync_command(target: Path) -> int:
+    """Mirror patch/ without applying. Unlike the apply tail, failure exits 1."""
+    from .sync import run_sync, sync_config_for_path
+
+    config = sync_config_for_path(_DEFAULT_TARGETS, target)
+    if config is None:
+        print(
+            f"ERROR: no sync block for {target} in {_DEFAULT_TARGETS}. "
+            "Add one to that Target's entry to enable syncing.",
+            file=sys.stderr,
+        )
+        return 1
+    result = run_sync(target, config)
+    print(_sync_line(result), file=sys.stderr if not result.ok else sys.stdout)
+    return 0 if result.ok else 1
+
+
+def _run_save_backup_command(target: Path) -> int:
+    """Pull the handheld's saves into the local backup folder."""
+    from .sync import run_save_backup, sync_config_for_path
+
+    config = sync_config_for_path(_DEFAULT_TARGETS, target)
+    if config is None:
+        print(f"ERROR: no sync block for {target} in {_DEFAULT_TARGETS}.", file=sys.stderr)
+        return 1
+    result = run_save_backup(config)
+    print(_sync_line(result), file=sys.stderr if not result.ok else sys.stdout)
+    return 0 if result.ok else 1
 
 
 def _run_seed(fork: Path, base: Path, ruleset_dir: Path) -> int:

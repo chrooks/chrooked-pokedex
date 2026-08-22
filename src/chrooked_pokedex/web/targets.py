@@ -38,6 +38,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from ..appliers.dispatch import route_apply as _route_apply
+from ..sync import SyncConfig, run_save_backup, run_sync
 from ..appliers.essentials.data_backup import (
     DataBackupError,
     backup_essentials_data,
@@ -115,6 +116,12 @@ class Target:
     applies the base Ruleset unchanged. The binding is explicit (set by the user),
     never guessed from the label, because ``targets.json`` is machine-specific
     while the namespace slug is committed canon.
+
+    ``sync`` is an optional block describing a handheld that this Target's
+    ``patch/`` folder mirrors to after an apply (see ``chrooked_pokedex.sync``).
+    It is kept as the raw dict so the registry round-trips it untouched; call
+    ``sync_config`` to get the parsed form. Absent on every Target that is not
+    played on a second device.
     """
 
     id: str
@@ -122,9 +129,22 @@ class Target:
     path: str
     engine: str
     namespace: Optional[str] = None
+    sync: Optional[Dict[str, Any]] = None
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        row = asdict(self)
+        if row.get("sync") is None:
+            row.pop("sync", None)  # keep untouched Targets byte-identical
+        return row
+
+    def sync_config(self) -> "SyncConfig | None":
+        """Parsed sync block, or None when absent or malformed."""
+        if not self.sync:
+            return None
+        try:
+            return SyncConfig.from_dict(self.sync)
+        except (ValueError, TypeError):
+            return None
 
 
 # --- Registry ------------------------------------------------------------- #
@@ -730,7 +750,29 @@ def apply_target(
             )
         payload = _report_payload(report)
         payload["data_backup"] = data_backup
+        sync = _sync_after_apply(fork, target)
+        if sync is not None:
+            payload["sync"] = sync
         return payload
+
+
+def _sync_after_apply(fork: Path, target: Target) -> Optional[dict[str, Any]]:
+    """Mirror patch/ to the handheld and pull its saves back; report, never raise.
+
+    Returns None for a Target with no sync block (every Target but the handheld
+    one), so the payload gains the key only when syncing actually applies. A
+    failure here is reported in the payload rather than raised: the files this
+    apply just wrote are valid whether or not the device was reachable, so an
+    asleep handheld must not turn a good apply into an error.
+    """
+    config = target.sync_config()
+    if config is None:
+        return None
+    result = run_sync(fork, config)
+    payload = result.to_dict()
+    if config.save_src and config.save_backup_dir:
+        payload["save_backup"] = run_save_backup(config).to_dict()
+    return payload
 
 
 def _prettify_internal_name(internal: str) -> str:

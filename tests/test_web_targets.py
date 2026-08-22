@@ -1031,6 +1031,114 @@ def test_apply_skips_backup_when_no_data_dir(
 
 
 # ---------------------------------------------------------------------------
+# Handheld sync — the post-apply mirror to a device (see chrooked_pokedex.sync)
+# ---------------------------------------------------------------------------
+
+
+def _register_sync_block(registry_path: Path, target_id: str, block: dict) -> None:
+    """Hand-add a sync block to a stored Target (the registry has no setter)."""
+    rows = json.loads(registry_path.read_text(encoding="utf-8"))
+    for row in rows:
+        if row.get("id") == target_id:
+            row["sync"] = block
+    registry_path.write_text(json.dumps(rows), encoding="utf-8")
+
+
+def test_apply_omits_sync_key_for_targets_without_a_device(
+    essentials162_client: TestClient, essentials162_fork: Path
+) -> None:
+    """Every ordinary Target must be untouched by the sync feature."""
+    add = essentials162_client.post(
+        "/api/targets",
+        json={"label": "NoSync", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    resp = essentials162_client.post(f"/api/targets/{add.json()['id']}/apply", json={})
+    assert resp.status_code == 200, resp.text
+    assert "sync" not in resp.json()
+
+
+def test_apply_reports_a_successful_sync_in_the_payload(
+    essentials162_client: TestClient,
+    essentials162_fork: Path,
+    targets_path: Path,
+    monkeypatch,
+) -> None:
+    """A synced Target carries the transfer result back to the UI."""
+    from chrooked_pokedex.sync import SyncResult
+    from chrooked_pokedex.web import targets as targets_mod
+
+    add = essentials162_client.post(
+        "/api/targets",
+        json={"label": "Handheld", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    target_id = add.json()["id"]
+    _register_sync_block(targets_path, target_id, {"host": "ayn-thor", "port": 8022, "dest": "/dev/patch/"})
+    monkeypatch.setattr(
+        targets_mod, "run_sync",
+        lambda fork, config: SyncResult(True, f"mirrored patch/ to {config.host}", files=7, seconds=2.1),
+    )
+    resp = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert resp.status_code == 200, resp.text
+    sync = resp.json()["sync"]
+    assert sync == {"ok": True, "detail": "mirrored patch/ to ayn-thor", "files": 7, "seconds": 2.1}
+
+
+def test_an_unreachable_handheld_does_not_fail_the_apply(
+    essentials162_client: TestClient,
+    essentials162_fork: Path,
+    targets_path: Path,
+    monkeypatch,
+) -> None:
+    """The written files are valid whether or not the device answered, so the
+    apply must still be a 200 with an honest failure line — not a 500."""
+    from chrooked_pokedex.sync import SyncResult
+    from chrooked_pokedex.web import targets as targets_mod
+
+    add = essentials162_client.post(
+        "/api/targets",
+        json={"label": "Asleep", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    target_id = add.json()["id"]
+    _register_sync_block(targets_path, target_id, {"host": "ayn-thor", "port": 8022, "dest": "/dev/patch/"})
+    monkeypatch.setattr(
+        targets_mod, "run_sync",
+        lambda fork, config: SyncResult(False, "ayn-thor unreachable — open Termux and run: sshd"),
+    )
+    resp = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["sync"]["ok"] is False
+    assert "sshd" in body["sync"]["detail"]
+    assert body["applied"], "the apply itself still did its work"
+
+
+def test_sync_pulls_saves_back_when_the_device_is_configured_for_it(
+    essentials162_client: TestClient,
+    essentials162_fork: Path,
+    targets_path: Path,
+    monkeypatch,
+) -> None:
+    """A device holding the only copy of a save gets backed up on every apply."""
+    from chrooked_pokedex.sync import SyncResult
+    from chrooked_pokedex.web import targets as targets_mod
+
+    add = essentials162_client.post(
+        "/api/targets",
+        json={"label": "Handheld", "path": str(essentials162_fork), "engine": "essentials"},
+    )
+    target_id = add.json()["id"]
+    _register_sync_block(targets_path, target_id, {
+        "host": "ayn-thor", "port": 8022, "dest": "/dev/patch/",
+        "save_src": "/dev/Save Data/", "save_backup_dir": "~/Backups/rejuv-saves",
+    })
+    monkeypatch.setattr(targets_mod, "run_sync", lambda fork, config: SyncResult(True, "mirrored"))
+    monkeypatch.setattr(targets_mod, "run_save_backup", lambda config: SyncResult(True, "pulled saves", files=61))
+    resp = essentials162_client.post(f"/api/targets/{target_id}/apply", json={})
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["sync"]["save_backup"] == {"ok": True, "detail": "pulled saves", "files": 61}
+
+
+# ---------------------------------------------------------------------------
 # POST /api/pick-directory — the native folder picker
 # ---------------------------------------------------------------------------
 
