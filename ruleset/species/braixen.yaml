@@ -1,25 +1,29 @@
 name: Braixen
 chrooked_id: braixen
 aka: { pokeemerald: SPECIES_BRAIXEN }
+types: [Fire, Psychic]
 abilities:
+  primary: Blaze
   secondary: Mystic Power
   hidden: Magic Guard
+stats: { hp: 59, atk: 59, def: 58, spa: 90, spd: 70, spe: 73 }
 learnset:
-  - { level: 1, move: Scratch }
+  - { level: 1, move: Echoed Voice }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Ember }
-  - { level: 11, move: Howl }
-  - { level: 14, move: Flame Charge }
-  - { level: 15, move: Incinerate }
-  - { level: 18, move: Psybeam }
-  - { level: 22, move: Fire Spin }
-  - { level: 28, move: Light Screen }
-  - { level: 36, move: Psyshock }
-  - { level: 38, move: Psychic }
-  - { level: 41, move: Flamethrower }
-  - { level: 45, move: Will-O-Wisp }
-  - { level: 49, move: Mindwarp }
-  - { level: 52, move: Sunny Day }
-  - { level: 56, move: Magic Room }
-  - { level: 57, move: Overheat }
-  - { level: 59, move: Fire Blast }
+  - { level: 5, move: Ember }
+  - { level: 9, move: Confusion }
+  - { level: 13, move: Will-O-Wisp }
+  - { level: 17, move: Magical Leaf }
+  - { level: 21, move: Incinerate }
+  - { level: 25, move: Psybeam }
+  - { level: 29, move: Nasty Plot }
+  - { level: 33, move: Mystical Fire }
+  - { level: 37, move: Psyshock }
+  - { level: 41, move: Shadow Ball }
+  - { level: 45, move: Flamethrower }
+  - { level: 49, move: Psychic }
+  - { level: 53, move: Heat Wave }
+  - { level: 57, move: Mindwarp }
+  - { level: 61, move: Fire Blast }
+  - { level: 65, move: Searing Shot }
+  - { level: 69, move: Future Sight }

@@ -3,29 +3,27 @@ chrooked_id: eelektrik
 aka: { pokeemerald: SPECIES_EELEKTRIK }
 types: [Water, Electric]
 abilities:
+  primary: Levitate
   secondary: Coil Up
   hidden: Vampiric
+stats: { hp: 65, atk: 85, def: 70, spa: 75, spd: 70, spe: 40 }
 learnset:
-  - { level: 0, move: Crunch }
-  - { level: 1, move: Headbutt }
-  - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Spark }
-  - { level: 1, move: Charge Beam }
-  - { level: 2, move: Undertow }
-  - { level: 3, move: Nuzzle }
-  - { level: 9, move: Bind }
-  - { level: 14, move: Water Whip }
-  - { level: 19, move: Acid }
-  - { level: 29, move: Discharge }
-  - { level: 30, move: Aqua Tail }
-  - { level: 36, move: Lightning Slam }
-  - { level: 37, move: Arc Strike }
-  - { level: 43, move: Maelstrom }
-  - { level: 44, move: Thunderbolt }
-  - { level: 49, move: Acid Spray }
-  - { level: 54, move: Coil }
-  - { level: 57, move: Wave Crash }
-  - { level: 59, move: Wild Charge }
-  - { level: 64, move: Gastro Acid }
-  - { level: 69, move: Zap Cannon }
-  - { level: 70, move: Thrash }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Undertow }
+  - { level: 9, move: Nuzzle }
+  - { level: 13, move: Coil }
+  - { level: 17, move: Spark }
+  - { level: 21, move: Gastro Acid }
+  - { level: 25, move: Water Whip }
+  - { level: 29, move: Thunder Wave }
+  - { level: 33, move: Flip Turn }
+  - { level: 37, move: Thunder Fang }
+  - { level: 41, move: Poison Fang }
+  - { level: 45, move: Aqua Tail }
+  - { level: 49, move: Lightning Slam }
+  - { level: 53, move: Fire Fang }
+  - { level: 57, move: Ice Fang }
+  - { level: 61, move: Arc Strike }
+  - { level: 65, move: Wave Crash }
+  - { level: 69, move: Wild Charge }

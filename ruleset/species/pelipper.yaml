@@ -4,29 +4,26 @@ aka: { pokeemerald: SPECIES_PELIPPER }
 abilities:
   primary: Downpour
   secondary: Drizzle
-stats: { hp: 80, spa: 95 }
+  hidden: Rain Dish
+stats: { hp: 95, atk: 50, spa: 105, spd: 75, spe: 100, def: 90 }
 learnset:
+  - { level: 0, move: Tailwind }
   - { level: 1, move: Growl }
-  - { level: 1, move: Supersonic }
-  - { level: 1, move: Tailwind }
-  - { level: 1, move: Agility }
-  - { level: 2, move: Gust }
-  - { level: 3, move: Quick Attack }
-  - { level: 4, move: Protect }
-  - { level: 5, move: Soak }
-  - { level: 6, move: Water Gun }
-  - { level: 7, move: Air Slash }
-  - { level: 15, move: Wing Attack }
-  - { level: 20, move: Water Pulse }
-  - { level: 27, move: Swallow }
-  - { level: 28, move: Stockpile }
-  - { level: 29, move: Spit Up }
-  - { level: 30, move: Muddy Water }
-  - { level: 31, move: Galeburst }
-  - { level: 34, move: Fling }
-  - { level: 41, move: Mist }
-  - { level: 48, move: Roost }
-  - { level: 52, move: Hurricane }
-  - { level: 53, move: Hydro Pump }
-  - { level: 55, move: Tempest }
-  - { level: 62, move: Tsunami }
+  - { level: 1, move: Weather Ball }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Protect }
+  - { level: 17, move: Roost }
+  - { level: 21, move: Stockpile }
+  - { level: 25, move: Water Pulse }
+  - { level: 29, move: Aurora Beam }
+  - { level: 33, move: Air Slash }
+  - { level: 37, move: U-turn }
+  - { level: 45, move: Chilling Water }
+  - { level: 49, move: Galeburst }
+  - { level: 53, move: Surf }
+  - { level: 57, move: Ice Beam }
+  - { level: 61, move: Hydro Pump }
+  - { level: 65, move: Hurricane }
+  - { level: 69, move: Tsunami }
+evolution: { from: Wingull, method: { level: 30 } }

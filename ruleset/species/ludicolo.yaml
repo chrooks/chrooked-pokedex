@@ -2,27 +2,28 @@ name: Ludicolo
 chrooked_id: ludicolo
 aka: { pokeemerald: SPECIES_LUDICOLO }
 abilities:
+  primary: Swift Swim
+  secondary: Downpour
   hidden: Chloroplast
-stats: { spa: 100, spe: 80 }
+stats: { hp: 85, atk: 60, def: 70, spa: 110, spd: 100, spe: 95 }
 learnset:
+  - { level: 0, move: Siphon }
   - { level: 1, move: Growl }
-  - { level: 1, move: Mist }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Flail }
-  - { level: 2, move: Teeter Dance }
-  - { level: 3, move: Astonish }
-  - { level: 4, move: Rain Dance }
+  - { level: 1, move: Weather Ball }
   - { level: 5, move: Water Gun }
-  - { level: 6, move: Absorb }
-  - { level: 7, move: Mega Drain }
-  - { level: 8, move: Fake Out }
-  - { level: 9, move: Knock Off }
-  - { level: 10, move: Bubble Beam }
-  - { level: 11, move: Giga Drain }
-  - { level: 12, move: Zen Headbutt }
-  - { level: 13, move: Muddy Water }
-  - { level: 15, move: Energy Ball }
-  - { level: 29, move: Hydro Pump }
-  - { level: 46, move: Siphon }
-  - { level: 57, move: Leaf Storm }
-  - { level: 64, move: Tsunami }
+  - { level: 9, move: Absorb }
+  - { level: 13, move: Rain Dance }
+  - { level: 17, move: Growth }
+  - { level: 21, move: Mega Drain }
+  - { level: 25, move: Bubble Beam }
+  - { level: 29, move: Acid Armor }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Nasty Plot }
+  - { level: 41, move: Sludge Bomb }
+  - { level: 45, move: Surf }
+  - { level: 49, move: Energy Ball }
+  - { level: 53, move: Hydro Pump }
+  - { level: 57, move: Siphon }
+  - { level: 61, move: Sludge Wave }
+  - { level: 65, move: Quiver Dance }
+  - { level: 69, move: Solar Beam }

@@ -1,27 +1,29 @@
 name: Litleo
 chrooked_id: litleo
 aka: { pokeemerald: SPECIES_LITLEO }
+types: [Fire, Normal]
 abilities:
   primary: Hubris
   secondary: Carnivore
-  hidden: Intimidate
+  hidden: Amplifier
+stats: { hp: 62, atk: 50, def: 58, spa: 73, spd: 54, spe: 72 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 1, move: Pound }
   - { level: 5, move: Ember }
-  - { level: 8, move: Work Up }
-  - { level: 11, move: Headbutt }
-  - { level: 15, move: Noble Roar }
-  - { level: 16, move: Echoed Voice }
-  - { level: 20, move: Take Down }
-  - { level: 23, move: Fire Fang }
-  - { level: 28, move: Endeavor }
-  - { level: 33, move: Swift }
-  - { level: 36, move: Flamethrower }
-  - { level: 39, move: Crunch }
-  - { level: 41, move: Hyper Voice }
-  - { level: 43, move: Resonance }
-  - { level: 44, move: Fire Blast }
-  - { level: 46, move: Incinerate }
-  - { level: 50, move: Overheat }
-  - { level: 57, move: Hyper Beam }
+  - { level: 9, move: Echoed Voice }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Work Up }
+  - { level: 21, move: Incinerate }
+  - { level: 25, move: Will-O-Wisp }
+  - { level: 29, move: Nasty Plot }
+  - { level: 33, move: Mystical Fire }
+  - { level: 37, move: Round }
+  - { level: 40, move: Noble Roar }
+  - { level: 43, move: Alluring Voice }
+  - { level: 46, move: Flamethrower }
+  - { level: 49, move: Hyper Voice }
+  - { level: 53, move: Heat Wave }
+  - { level: 57, move: Torch Song }
+  - { level: 65, move: Resonance }
+  - { level: 69, move: Boomburst }

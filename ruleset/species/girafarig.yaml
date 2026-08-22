@@ -1,28 +1,30 @@
 name: Girafarig
 chrooked_id: girafarig
 aka: { pokeemerald: SPECIES_GIRAFARIG }
-types: [Psychic, Dark]
+types: [Dark, Psychic]
+abilities:
+  primary: Armor Tail
+  secondary: Sap Sipper
+  hidden: Magic Bounce
+stats: { hp: 70, atk: 80, def: 65, spa: 90, spd: 65, spe: 85 }
 learnset:
+  - { level: 1, move: Echoed Voice }
   - { level: 1, move: Growl }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Power Swap }
-  - { level: 1, move: Guard Swap }
-  - { level: 2, move: Slander }
-  - { level: 3, move: Tackle }
-  - { level: 5, move: Confusion }
-  - { level: 10, move: Assurance }
-  - { level: 14, move: Stomp }
-  - { level: 15, move: Snarl }
-  - { level: 19, move: Psybeam }
-  - { level: 23, move: Agility }
-  - { level: 28, move: Double Hit }
-  - { level: 29, move: Dark Pulse }
-  - { level: 32, move: Twin Beam }
-  - { level: 37, move: Crunch }
-  - { level: 39, move: Psychic }
-  - { level: 41, move: Baton Pass }
-  - { level: 43, move: Night Daze }
-  - { level: 46, move: Nasty Plot }
-  - { level: 50, move: Mindwarp }
-  - { level: 57, move: Future Sight }
-  - { level: 59, move: Eclipse }
+  - { level: 5, move: Slander }
+  - { level: 9, move: Confusion }
+  - { level: 13, move: Snarl }
+  - { level: 17, move: Swift }
+  - { level: 21, move: Psybeam }
+  - { level: 25, move: Mud Bomb }
+  - { level: 29, move: Acid Armor }
+  - { level: 33, move: Twin Beam }
+  - { level: 37, move: Tri Attack }
+  - { level: 41, move: Nasty Plot }
+  - { level: 45, move: Dark Pulse }
+  - { level: 49, move: Psychic }
+  - { level: 53, move: Hyper Voice }
+  - { level: 57, move: Night Daze }
+  - { level: 60, move: Mindwarp }
+  - { level: 63, move: Earth Power }
+  - { level: 66, move: Psycho Boost }
+  - { level: 70, move: Eclipse }

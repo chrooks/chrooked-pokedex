@@ -1,26 +1,30 @@
 name: Sandygast
 chrooked_id: sandygast
 aka: {  }
+types: [Ghost, Ground]
+abilities:
+  primary: Water Compaction
+  secondary: Sand Stream
+  hidden: Carnivore
+stats: { hp: 55, atk: 55, def: 80, spa: 70, spd: 45, spe: 15 }
 learnset:
-  - { level: 1, move: Absorb }
+  - { level: 1, move: Astonish }
   - { level: 1, move: Harden }
-  - { level: 2, move: Mud-Slap }
-  - { level: 5, move: Astonish }
-  - { level: 7, move: Knell }
-  - { level: 10, move: Sand Tomb }
-  - { level: 15, move: Mega Drain }
-  - { level: 16, move: Hex }
+  - { level: 5, move: Knell }
+  - { level: 9, move: Mud-Slap }
+  - { level: 13, move: Will-O-Wisp }
   - { level: 17, move: Mud Shot }
-  - { level: 20, move: Sand Attack }
-  - { level: 25, move: Bulldoze }
-  - { level: 30, move: Hypnosis }
-  - { level: 35, move: Giga Drain }
-  - { level: 38, move: Earth Power }
-  - { level: 40, move: Iron Defense }
-  - { level: 43, move: Shadow Ball }
-  - { level: 45, move: Specter Bomb }
-  - { level: 50, move: Quagmire }
-  - { level: 55, move: Shore Up }
-  - { level: 57, move: Sinkhole }
-  - { level: 60, move: Sandstorm }
-  - { level: 64, move: Netherstorm }
+  - { level: 21, move: Mega Drain }
+  - { level: 25, move: Mud Bomb }
+  - { level: 29, move: Hex }
+  - { level: 33, move: Scorching Sands }
+  - { level: 37, move: Shadow Ball }
+  - { level: 40, move: Giga Drain }
+  - { level: 42, move: Acid Armor }
+  - { level: 45, move: Earth Power }
+  - { level: 49, move: Surf }
+  - { level: 51, move: Siphon }
+  - { level: 57, move: Quagmire }
+  - { level: 61, move: Specter Bomb }
+  - { level: 65, move: Netherstorm }
+  - { level: 69, move: Sinkhole }

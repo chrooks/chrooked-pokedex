@@ -1,24 +1,30 @@
 name: Dragonair
 chrooked_id: dragonair
 aka: { pokeemerald: SPECIES_DRAGONAIR }
+abilities:
+  primary: Inner Focus
+  secondary: Deluge
+  hidden: Multiscale
+stats: { hp: 61, atk: 84, def: 65, spa: 70, spd: 70, spe: 70 }
 learnset:
-  - { level: 1, move: Wrap }
   - { level: 1, move: Leer }
-  - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Twister }
-  - { level: 8, move: Maul }
-  - { level: 15, move: Dragon Tail }
-  - { level: 20, move: Agility }
-  - { level: 25, move: Body Slam }
-  - { level: 26, move: Breaking Swipe }
-  - { level: 29, move: Draconic Fang }
-  - { level: 33, move: Aqua Tail }
-  - { level: 36, move: Dive Bomb }
-  - { level: 37, move: Nosedive }
-  - { level: 39, move: Dragon Hammer }
-  - { level: 42, move: Dragon Rush }
-  - { level: 46, move: Safeguard }
-  - { level: 53, move: Rain Dance }
-  - { level: 60, move: Dragon Dance }
-  - { level: 67, move: Outrage }
-  - { level: 70, move: Hyper Beam }
+  - { level: 1, move: Wrap }
+  - { level: 5, move: Maul }
+  - { level: 9, move: Undertow }
+  - { level: 13, move: Breaking Swipe }
+  - { level: 17, move: Water Whip }
+  - { level: 21, move: Thunder Wave }
+  - { level: 25, move: Aqua Jet }
+  - { level: 30, move: Aerial Ace }
+  - { level: 33, move: Dragon Tail }
+  - { level: 37, move: Waterfall }
+  - { level: 41, move: Rain Dance }
+  - { level: 45, move: Dragon Claw }
+  - { level: 48, move: Roost }
+  - { level: 51, move: Extreme Speed }
+  - { level: 54, move: Nosedive }
+  - { level: 57, move: Maelstrom }
+  - { level: 60, move: Arc Strike }
+  - { level: 63, move: Dragon Dance }
+  - { level: 66, move: Outrage }
+  - { level: 69, move: Dragon Ascent }

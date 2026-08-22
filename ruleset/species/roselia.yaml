@@ -1,33 +1,32 @@
 name: Roselia
 chrooked_id: roselia
 aka: { pokeemerald: SPECIES_ROSELIA }
+types: [Grass, Poison]
 abilities:
+  primary: Natural Cure
   secondary: Corrosion
   hidden: Bloom
+stats: { hp: 50, atk: 60, def: 45, spa: 100, spd: 80, spe: 65 }
 learnset:
-  - { level: 0, move: Poison Sting }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Stun Spore }
-  - { level: 1, move: Worry Seed }
-  - { level: 1, move: Poison Sting }
-  - { level: 2, move: Acid Spray }
-  - { level: 3, move: Absorb }
-  - { level: 5, move: Mega Drain }
-  - { level: 10, move: Leech Seed }
-  - { level: 15, move: Magical Leaf }
-  - { level: 16, move: Venoshock }
-  - { level: 20, move: Toxic Spikes }
-  - { level: 25, move: Sweet Scent }
-  - { level: 29, move: Giga Drain }
-  - { level: 30, move: Energy Ball }
-  - { level: 32, move: Miasma }
-  - { level: 35, move: Synthesis }
-  - { level: 37, move: Siphon }
-  - { level: 40, move: Toxic }
-  - { level: 43, move: Sludge Wave }
-  - { level: 45, move: Petal Blizzard }
-  - { level: 50, move: Aromatherapy }
-  - { level: 55, move: Ingrain }
-  - { level: 60, move: Petal Dance }
-  - { level: 64, move: Contagion }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Acid Spray }
+  - { level: 13, move: Growth }
+  - { level: 17, move: Mega Drain }
+  - { level: 21, move: Leech Seed }
+  - { level: 23, move: Venoshock }
+  - { level: 26, move: Magical Leaf }
+  - { level: 30, move: Beguile }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Dazzling Gleam }
+  - { level: 41, move: Spikes }
+  - { level: 43, move: Toxic }
+  - { level: 45, move: Energy Ball }
+  - { level: 49, move: Miasma }
+  - { level: 53, move: Moonblast }
+  - { level: 57, move: Siphon }
+  - { level: 61, move: Sludge Wave }
+  - { level: 64, move: Leaf Storm }
+  - { level: 67, move: Contagion }
 evolution: { from: Budew, method: { level: 16 } }

@@ -482,6 +482,25 @@ leech seed, curse, withdraw, sythesis, etc.
 - **Direction:** learnset-only repass
 - **Corrections:** special, gets good posion coverage, learns water spout, scald & chilling water, toxic, recover, destiny bond, curse
 
+## 2026-08-19 — Roserade line
+
+- **Direction:** learnset-only repass
+- **Corrections:** SPecial, fairy coverage, learns growth, spikes, tox spikes, leech seed, aromatherapy, toxic
+
+## 2026-08-19 — Palossand line
+
+- **Direction:** abilities + learnset repass
+- **Corrections:** special, gets a lot of draining moves, learns surf, scald, astonish, Iron defense, shore up, scorching sands, will o wisp
+
+## 2026-08-20 — Ludicolo line
+
+- **Direction:** rain setup sweeper / pivot
+- **Corrections:** rain setup sweeper / pivot; learns growth, weatherball, sludge bomb and sludge wave, dance moves
+
+## 2026-08-20 — Eelektross line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
 ## 2026-08-20 — Vampiric (new ability)
 
 - **Vampiric** (chrooked_id `vampiric`, ABILITY_VAMPIRIC): contact moves drain
@@ -491,6 +510,20 @@ leech seed, curse, withdraw, sythesis, etc.
   damage-aware on-deal seam (`CHROOKED_ON_DEAL_DMG`) in the harness core — the
   existing on-deal hook never saw the damage amount.
 - No holders yet — assign it when a line wants the kit.
+
+## 2026-08-20 — Azumarill line
+
+- **Direction:** learnset-only repass
+- **Corrections:** physical moves only, learns super power ,brick break, rollout, ice punch, normal type coverage
+
+## 2026-08-20 — Donphan line
+
+- **Direction:** learnset-only repass
+- **Corrections:** bunch of fang moves, rock coversage,, rapid spin, steal rocks, knock off
+
+## 2026-08-20 — Pyroar line
+
+- **Direction:** learnset-only repass
 
 ## 2026-08-20 — Soul Siphon + drain-ability distribution
 
@@ -513,3 +546,52 @@ leech seed, curse, withdraw, sythesis, etc.
 - **Froslass** slot 1 (over Cursed Body; branch — Snorunt/Glalie untouched).
 - Considered and left alone: Chandelure line, Mismagius line, Yveltal.
   Sinistea/Polteageist parked on form-split base data.
+
+## 2026-08-20 — Pelipper line
+
+- **Direction:** bulky pivot / weather setter — typing Water/Flying. Flavor coverage: Ice. Why this fits: Leans into Pelipper's pelican-skipper identity as a hardy sea-transport captain that lords over storm fronts, using its massive gullet to soak up hits and pivot teammates to safety — Ice flavor reflects the cold ocean spray and wave-skimming that define its hunting style.
+- **Corrections:** bulky pivot / weather setter — typing Water/Flying. Flavor coverage: Ice. Why this fits: Leans into Pelipper's pelican-skipper identity as a hardy sea-transport captain that lords over storm fronts, using its massive gullet to soak up hits and pivot teammates to safety — Ice flavor reflects the cold ocean spray and wave-skimming that define its hunting style. 530 BST; bulky pivot / weather setter — typing Water/Flying. Flavor coverage: Ice. Why this fits: Leans into Pelipper's pelican-skipper identity as a hardy sea-transport captain that lords over storm fronts, using its massive gullet to soak up hits and pivot teammates to safety — Ice flavor reflects the cold ocean spray and wave-skimming that define its hunting style.
+Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
+
+## 2026-08-20 — Toxicroak line
+
+- **Direction:** learnset-only repass
+- **Corrections:** mixed learnset, gets ground & water coverage. Learns astonish
+
+## 2026-08-21 — Drampa line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Gets flying & psychic coverage. Pureley special moves except for tackle. Learns Glare,
+
+## 2026-08-21 — Farigiraf line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Normal and ground coverage. Learns astonish, IMPORTANT! LEANRS TWIN BEAM IN earl 30s
+
+## 2026-08-21 — Centiskorch line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Physical. Gets a bunch of biting moves
+
+## 2026-08-21 — Ludicolo line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-21 — Dragonite line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Physical leaning. Learns Dive Bomb L0. Doesnt elanr any Flying moves until L45+, Before L45, learns water moves as 2nd STAB. Gets Extremespeed
+
+## 2026-08-21 — Dusknoir line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Gets a ton of punching moves, astonish, shadow sneak, will o wisp, flash freeze, destiny bond; gets a ton of punching moves; gets astonish, will o wisp, flash freeze, destny bond, pain split, drain punch
+
+## 2026-08-21 — Dragonite line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-08-22 — Delphox line
+
+- **Direction:** learnset-only repass
+- **Corrections:** special, gets future sight, will o wisp, shadow ball, magical leaf

@@ -1,20 +1,31 @@
 name: Budew
 chrooked_id: budew
 aka: { pokeemerald: SPECIES_BUDEW }
+types: [Grass, Poison]
 abilities:
-  secondary: Venomous
+  primary: Natural Cure
+  secondary: Corrosion
   hidden: Bloom
+stats: { hp: 40, atk: 30, def: 35, spa: 50, spd: 70, spe: 55 }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Stun Spore }
-  - { level: 1, move: Worry Seed }
-  - { level: 2, move: Acid Spray }
-  - { level: 15, move: Giga Drain }
-  - { level: 17, move: Venoshock }
-  - { level: 29, move: Energy Ball }
-  - { level: 36, move: Siphon }
-  - { level: 43, move: Miasma }
-  - { level: 48, move: Sludge Wave }
-  - { level: 57, move: Leaf Storm }
-  - { level: 64, move: Contagion }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Acid Spray }
+  - { level: 13, move: Growth }
+  - { level: 17, move: Mega Drain }
+  - { level: 21, move: Leech Seed }
+  - { level: 23, move: Venoshock }
+  - { level: 26, move: Magical Leaf }
+  - { level: 30, move: Beguile }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Dazzling Gleam }
+  - { level: 41, move: Spikes }
+  - { level: 43, move: Toxic }
+  - { level: 45, move: Energy Ball }
+  - { level: 49, move: Miasma }
+  - { level: 53, move: Moonblast }
+  - { level: 57, move: Siphon }
+  - { level: 61, move: Sludge Wave }
+  - { level: 64, move: Leaf Storm }
+  - { level: 67, move: Contagion }

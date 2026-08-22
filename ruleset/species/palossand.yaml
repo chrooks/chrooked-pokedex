@@ -2,29 +2,30 @@ name: Palossand
 chrooked_id: palossand
 aka: { pokeemerald: SPECIES_PALOSSAND }
 abilities:
+  primary: Water Compaction
   secondary: Sand Stream
+  hidden: Carnivore
 stats: { hp: 95, def: 120, spa: 105 }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Harden }
+  - { level: 0, move: Shore Up }
   - { level: 1, move: Astonish }
-  - { level: 1, move: Sand Tomb }
-  - { level: 2, move: Mud-Slap }
-  - { level: 8, move: Knell }
-  - { level: 15, move: Mega Drain }
-  - { level: 16, move: Hex }
+  - { level: 1, move: Harden }
+  - { level: 5, move: Knell }
+  - { level: 9, move: Mud-Slap }
+  - { level: 13, move: Will-O-Wisp }
   - { level: 17, move: Mud Shot }
-  - { level: 20, move: Sand Attack }
-  - { level: 25, move: Bulldoze }
-  - { level: 30, move: Hypnosis }
-  - { level: 35, move: Giga Drain }
-  - { level: 40, move: Iron Defense }
-  - { level: 43, move: Earth Power }
-  - { level: 44, move: Shadow Ball }
-  - { level: 47, move: Specter Bomb }
-  - { level: 54, move: Quagmire }
-  - { level: 57, move: Netherstorm }
-  - { level: 58, move: Sinkhole }
-  - { level: 61, move: Shore Up }
-  - { level: 68, move: Sandstorm }
+  - { level: 21, move: Mega Drain }
+  - { level: 25, move: Mud Bomb }
+  - { level: 29, move: Hex }
+  - { level: 33, move: Scorching Sands }
+  - { level: 37, move: Shadow Ball }
+  - { level: 40, move: Giga Drain }
+  - { level: 42, move: Acid Armor }
+  - { level: 45, move: Earth Power }
+  - { level: 49, move: Surf }
+  - { level: 51, move: Siphon }
+  - { level: 57, move: Quagmire }
+  - { level: 61, move: Specter Bomb }
+  - { level: 65, move: Netherstorm }
+  - { level: 69, move: Sinkhole }
 evolution: { from: Sandygast, method: { level: 42 } }

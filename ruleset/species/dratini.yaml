@@ -1,24 +1,30 @@
 name: Dratini
 chrooked_id: dratini
 aka: { pokeemerald: SPECIES_DRATINI }
+abilities:
+  primary: Inner Focus
+  secondary: Deluge
+  hidden: Multiscale
+stats: { hp: 41, atk: 64, def: 45, spa: 50, spd: 50, spe: 50 }
 learnset:
-  - { level: 1, move: Wrap }
   - { level: 1, move: Leer }
-  - { level: 3, move: Maul }
-  - { level: 5, move: Twister }
-  - { level: 10, move: Thunder Wave }
-  - { level: 15, move: Dragon Tail }
-  - { level: 20, move: Agility }
-  - { level: 25, move: Body Slam }
-  - { level: 26, move: Breaking Swipe }
-  - { level: 28, move: Draconic Fang }
-  - { level: 31, move: Aqua Tail }
-  - { level: 35, move: Dragon Hammer }
-  - { level: 37, move: Dive Bomb }
-  - { level: 38, move: Nosedive }
-  - { level: 40, move: Safeguard }
-  - { level: 42, move: Dragon Rush }
-  - { level: 45, move: Rain Dance }
-  - { level: 50, move: Dragon Dance }
-  - { level: 55, move: Outrage }
-  - { level: 60, move: Hyper Beam }
+  - { level: 1, move: Wrap }
+  - { level: 5, move: Maul }
+  - { level: 9, move: Undertow }
+  - { level: 13, move: Breaking Swipe }
+  - { level: 17, move: Water Whip }
+  - { level: 21, move: Thunder Wave }
+  - { level: 25, move: Aqua Jet }
+  - { level: 30, move: Aerial Ace }
+  - { level: 33, move: Dragon Tail }
+  - { level: 37, move: Waterfall }
+  - { level: 41, move: Rain Dance }
+  - { level: 45, move: Dragon Claw }
+  - { level: 48, move: Roost }
+  - { level: 51, move: Extreme Speed }
+  - { level: 54, move: Nosedive }
+  - { level: 57, move: Maelstrom }
+  - { level: 60, move: Arc Strike }
+  - { level: 63, move: Dragon Dance }
+  - { level: 66, move: Outrage }
+  - { level: 69, move: Dragon Ascent }

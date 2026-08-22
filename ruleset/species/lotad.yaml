@@ -1,22 +1,29 @@
 name: Lotad
 chrooked_id: lotad
 aka: {  }
+types: [Water, Grass]
+abilities:
+  primary: Swift Swim
+  secondary: Downpour
+  hidden: Chloroplast
+stats: { hp: 40, atk: 30, def: 31, spa: 48, spd: 50, spe: 41 }
 learnset:
   - { level: 1, move: Growl }
-  - { level: 1, move: Astonish }
-  - { level: 3, move: Absorb }
-  - { level: 6, move: Water Gun }
-  - { level: 9, move: Mist }
-  - { level: 12, move: Mega Drain }
-  - { level: 16, move: Flail }
-  - { level: 20, move: Bubble Beam }
-  - { level: 24, move: Leech Seed }
-  - { level: 28, move: Giga Drain }
-  - { level: 29, move: Muddy Water }
-  - { level: 33, move: Rain Dance }
-  - { level: 38, move: Zen Headbutt }
-  - { level: 43, move: Energy Ball }
-  - { level: 44, move: Hydro Pump }
-  - { level: 46, move: Siphon }
-  - { level: 57, move: Leaf Storm }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Weather Ball }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Absorb }
+  - { level: 13, move: Rain Dance }
+  - { level: 17, move: Growth }
+  - { level: 21, move: Mega Drain }
+  - { level: 25, move: Bubble Beam }
+  - { level: 29, move: Acid Armor }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Nasty Plot }
+  - { level: 41, move: Sludge Bomb }
+  - { level: 45, move: Surf }
+  - { level: 49, move: Energy Ball }
+  - { level: 53, move: Hydro Pump }
+  - { level: 57, move: Siphon }
+  - { level: 61, move: Sludge Wave }
+  - { level: 65, move: Quiver Dance }
+  - { level: 69, move: Solar Beam }

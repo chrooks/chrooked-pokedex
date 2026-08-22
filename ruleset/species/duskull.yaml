@@ -1,25 +1,29 @@
 name: Duskull
 chrooked_id: duskull
 aka: { pokeemerald: SPECIES_DUSKULL }
+types: [Ghost, Fighting]
 abilities:
-  hidden: Frisk
+  primary: Pressure
+  secondary: Iron Fist
+  hidden: Levitate
+stats: { hp: 25, atk: 40, def: 90, spa: 30, spd: 90, spe: 25 }
 learnset:
   - { level: 1, move: Leer }
-  - { level: 1, move: Astonish }
-  - { level: 2, move: Lick }
-  - { level: 4, move: Disable }
-  - { level: 8, move: Shadow Sneak }
-  - { level: 12, move: Confuse Ray }
-  - { level: 15, move: Shadow Claw }
-  - { level: 16, move: Night Shade }
-  - { level: 20, move: Payback }
-  - { level: 24, move: Will-O-Wisp }
-  - { level: 28, move: Mean Look }
-  - { level: 32, move: Hex }
-  - { level: 36, move: Curse }
-  - { level: 38, move: Wraithstrike }
-  - { level: 40, move: Shadow Ball }
-  - { level: 42, move: Interment }
-  - { level: 44, move: Future Sight }
-  - { level: 48, move: One-Inch Punch }
-  - { level: 62, move: Necrosis }
+  - { level: 1, move: Shadow Sneak }
+  - { level: 5, move: Astonish }
+  - { level: 9, move: Rock Smash }
+  - { level: 13, move: Lick }
+  - { level: 17, move: Flash Freeze }
+  - { level: 21, move: Will-O-Wisp }
+  - { level: 25, move: Shadow Punch }
+  - { level: 29, move: Pain Split }
+  - { level: 33, move: Drain Punch }
+  - { level: 37, move: Poison Jab }
+  - { level: 41, move: Wraithstrike }
+  - { level: 45, move: Destiny Bond }
+  - { level: 49, move: One-Inch Punch }
+  - { level: 53, move: Sucker Punch }
+  - { level: 57, move: Cross Chop }
+  - { level: 60, move: Poltergeist }
+  - { level: 65, move: Necrosis }
+  - { level: 69, move: Close Combat }

@@ -1,27 +1,30 @@
 name: Eelektross
 chrooked_id: eelektross
 aka: { pokeemerald: SPECIES_EELEKTROSS }
-types: [Water, Electric]
+types: [Electric, Water]
 abilities:
   secondary: Coil Up
   hidden: Vampiric
 stats: { def: 90, spa: 110, spd: 90 }
 learnset:
-  - { level: 1, move: Gastro Acid }
-  - { level: 1, move: Coil }
-  - { level: 1, move: Acid }
-  - { level: 1, move: Headbutt }
-  - { level: 2, move: Undertow }
-  - { level: 3, move: Nuzzle }
-  - { level: 4, move: Crush Claw }
-  - { level: 5, move: Spark }
-  - { level: 6, move: Water Whip }
-  - { level: 7, move: Crunch }
-  - { level: 8, move: Discharge }
-  - { level: 9, move: Zap Cannon }
-  - { level: 15, move: Lightning Slam }
-  - { level: 26, move: Aqua Tail }
-  - { level: 43, move: Maelstrom }
-  - { level: 46, move: Arc Strike }
-  - { level: 48, move: Wild Charge }
-  - { level: 57, move: Wave Crash }
+  - { level: 0, move: Crunch }
+  - { level: 1, move: Bind }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Undertow }
+  - { level: 9, move: Nuzzle }
+  - { level: 13, move: Coil }
+  - { level: 17, move: Spark }
+  - { level: 21, move: Gastro Acid }
+  - { level: 25, move: Water Whip }
+  - { level: 29, move: Thunder Wave }
+  - { level: 33, move: Flip Turn }
+  - { level: 37, move: Thunder Fang }
+  - { level: 41, move: Poison Fang }
+  - { level: 45, move: Aqua Tail }
+  - { level: 49, move: Lightning Slam }
+  - { level: 53, move: Fire Fang }
+  - { level: 57, move: Ice Fang }
+  - { level: 61, move: Arc Strike }
+  - { level: 65, move: Wave Crash }
+  - { level: 69, move: Wild Charge }
+evolution: { from: Eelektrik, method: { essentials: Item, param: THUNDERSTONE } }

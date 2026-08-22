@@ -6,23 +6,23 @@ abilities:
   secondary: Blitz
   hidden: Stampede
 learnset:
-  - { level: 0, move: Fury Attack }
+  - { level: 0, move: Tectonic Fang }
   - { level: 1, move: Growl }
-  - { level: 1, move: Defense Curl }
-  - { level: 1, move: Clod Toss }
-  - { level: 1, move: Horn Attack }
-  - { level: 2, move: Bulldoze }
-  - { level: 3, move: Thunder Fang }
-  - { level: 4, move: Fire Fang }
-  - { level: 6, move: Rapid Spin }
-  - { level: 10, move: Rollout }
-  - { level: 15, move: Assurance }
-  - { level: 19, move: Knock Off }
-  - { level: 24, move: Body Slam }
-  - { level: 29, move: Stomping Tantrum }
-  - { level: 30, move: Tectonic Fang }
-  - { level: 31, move: Lithic Fang }
-  - { level: 37, move: Scary Face }
-  - { level: 43, move: Earthquake }
-  - { level: 50, move: Giga Impact }
-  - { level: 52, move: Faultbreak }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Clod Toss }
+  - { level: 9, move: Defense Curl }
+  - { level: 13, move: Stealth Rock }
+  - { level: 17, move: Rollout }
+  - { level: 21, move: Bulldoze }
+  - { level: 25, move: Rapid Spin }
+  - { level: 29, move: After You }
+  - { level: 33, move: Stomping Tantrum }
+  - { level: 37, move: Knock Off }
+  - { level: 41, move: Tectonic Fang }
+  - { level: 45, move: Fire Fang }
+  - { level: 49, move: Lithic Fang }
+  - { level: 53, move: Body Press }
+  - { level: 57, move: Earthquake }
+  - { level: 61, move: Stone Edge }
+  - { level: 65, move: Spikes }
+  - { level: 69, move: Faultbreak }

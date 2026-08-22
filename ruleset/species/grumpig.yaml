@@ -4,22 +4,27 @@ aka: { pokeemerald: SPECIES_GRUMPIG }
 abilities:
   secondary: Psyonize
   hidden: Magical Fists
-stats: { hp: 95, spd: 120 }
+stats: { spa: 100 }
 learnset:
-  - { level: 0, move: Teeter Dance }
-  - { level: 1, move: Psybeam }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Splash }
-  - { level: 1, move: Belch }
-  - { level: 18, move: Psych Up }
-  - { level: 22, move: Confuse Ray }
-  - { level: 26, move: Zen Headbutt }
-  - { level: 29, move: Power Gem }
-  - { level: 35, move: Rest }
-  - { level: 36, move: Snore }
-  - { level: 38, move: Psyshock }
-  - { level: 42, move: Psychic }
-  - { level: 46, move: Payback }
-  - { level: 52, move: Mindwarp }
-  - { level: 57, move: Future Sight }
-  - { level: 60, move: Bounce }
+  - { level: 0, move: Astral Hand }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Confuse Ray }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Calm Mind }
+  - { level: 21, move: Psybeam }
+  - { level: 25, move: Shadow Punch }
+  - { level: 29, move: Teeter Dance }
+  - { level: 33, move: Psyshock }
+  - { level: 37, move: Ice Punch }
+  - { level: 40, move: Fire Punch }
+  - { level: 43, move: Thunder Punch }
+  - { level: 47, move: Drain Punch }
+  - { level: 50, move: Psychic }
+  - { level: 53, move: Cutsie Slap }
+  - { level: 56, move: Mega Punch }
+  - { level: 61, move: Psystrike }
+  - { level: 65, move: Future Sight }
+  - { level: 69, move: Boomburst }
+evolution: { from: Spoink, method: { level: 32 } }

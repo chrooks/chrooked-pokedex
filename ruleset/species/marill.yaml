@@ -1,29 +1,31 @@
 name: Marill
 chrooked_id: marill
 aka: { pokeemerald: SPECIES_MARILL }
+types: [Water, Fairy]
 abilities:
   primary: Huge Power
+  secondary: Thick Fat
+  hidden: Sap Sipper
+stats: { hp: 70, atk: 37, def: 50, spa: 37, spd: 53, spe: 43 }
 learnset:
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Tail Whip }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Water Gun }
-  - { level: 3, move: Undertow }
-  - { level: 4, move: Rollout }
-  - { level: 6, move: Bubble Beam }
-  - { level: 9, move: Charm }
-  - { level: 12, move: Body Slam }
-  - { level: 15, move: Bounce }
-  - { level: 17, move: Water Whip }
-  - { level: 19, move: Aqua Tail }
-  - { level: 21, move: Play Rough }
-  - { level: 24, move: Aqua Ring }
-  - { level: 27, move: Rain Dance }
-  - { level: 30, move: Hydro Pump }
-  - { level: 33, move: Double-Edge }
-  - { level: 36, move: Superpower }
-  - { level: 45, move: Maelstrom }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Glitter Tap }
+  - { level: 13, move: Rollout }
+  - { level: 17, move: Charm }
+  - { level: 21, move: Water Whip }
+  - { level: 25, move: Aqua Jet }
+  - { level: 28, move: Helping Hand }
+  - { level: 31, move: Flip Turn }
+  - { level: 34, move: Cutsie Slap }
+  - { level: 38, move: Ice Punch }
+  - { level: 42, move: Slam }
+  - { level: 45, move: Aqua Tail }
+  - { level: 48, move: Play Rough }
+  - { level: 52, move: Body Slam }
+  - { level: 57, move: Maelstrom }
+  - { level: 61, move: Starfall Slam }
+  - { level: 65, move: Superpower }
+  - { level: 69, move: Jet Punch }
 evolution: { from: Azurill, method: { level: 16 } }

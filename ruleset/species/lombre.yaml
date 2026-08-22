@@ -1,25 +1,29 @@
 name: Lombre
 chrooked_id: lombre
 aka: {  }
+types: [Water, Grass]
+abilities:
+  primary: Swift Swim
+  secondary: Downpour
+  hidden: Chloroplast
+stats: { hp: 60, atk: 50, def: 50, spa: 70, spd: 70, spe: 60 }
 learnset:
   - { level: 1, move: Growl }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Teeter Dance }
-  - { level: 1, move: Flail }
-  - { level: 2, move: Water Gun }
-  - { level: 3, move: Absorb }
-  - { level: 4, move: Fake Out }
-  - { level: 5, move: Knock Off }
-  - { level: 9, move: Mist }
-  - { level: 12, move: Mega Drain }
-  - { level: 18, move: Fury Swipes }
-  - { level: 24, move: Bubble Beam }
-  - { level: 29, move: Muddy Water }
-  - { level: 30, move: Leech Seed }
-  - { level: 36, move: Giga Drain }
-  - { level: 43, move: Energy Ball }
-  - { level: 50, move: Zen Headbutt }
+  - { level: 1, move: Weather Ball }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Absorb }
+  - { level: 13, move: Rain Dance }
+  - { level: 17, move: Growth }
+  - { level: 21, move: Mega Drain }
+  - { level: 25, move: Bubble Beam }
+  - { level: 29, move: Acid Armor }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Nasty Plot }
+  - { level: 41, move: Sludge Bomb }
+  - { level: 45, move: Surf }
+  - { level: 49, move: Energy Ball }
   - { level: 53, move: Hydro Pump }
   - { level: 57, move: Siphon }
-  - { level: 58, move: Leaf Storm }
-  - { level: 64, move: Tsunami }
+  - { level: 61, move: Sludge Wave }
+  - { level: 65, move: Quiver Dance }
+  - { level: 69, move: Solar Beam }

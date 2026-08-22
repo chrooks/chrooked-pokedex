@@ -1,0 +1,12 @@
+name: Sucker Punch
+chrooked_id: suckerpunch
+aka: {  }
+type: Dark
+category: physical
+power: 70
+accuracy: 100
+pp: 5
+description: This move attacks first. It fails if the target is not attacking, however.
+effect: sucker_punch
+flags: [contact, punching]
+priority: 1

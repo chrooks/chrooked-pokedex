@@ -1,30 +1,30 @@
 name: Dusclops
 chrooked_id: dusclops
 aka: { pokeemerald: SPECIES_DUSCLOPS }
+types: [Ghost, Fighting]
 abilities:
-  hidden: Frisk
+  primary: Pressure
+  secondary: Iron Fist
+  hidden: Levitate
+stats: { hp: 45, atk: 70, def: 130, spa: 60, spd: 130, spe: 25 }
 learnset:
-  - { level: 0, move: Shadow Punch }
-  - { level: 1, move: Bind }
   - { level: 1, move: Leer }
-  - { level: 1, move: Disable }
   - { level: 1, move: Shadow Sneak }
-  - { level: 2, move: Lick }
-  - { level: 3, move: Gravity }
-  - { level: 4, move: Astonish }
-  - { level: 5, move: Fire Punch }
-  - { level: 6, move: Ice Punch }
-  - { level: 7, move: Thunder Punch }
-  - { level: 12, move: Confuse Ray }
-  - { level: 16, move: Night Shade }
-  - { level: 20, move: Payback }
-  - { level: 24, move: Will-O-Wisp }
-  - { level: 28, move: Mean Look }
-  - { level: 32, move: Hex }
-  - { level: 36, move: Curse }
-  - { level: 39, move: One-Inch Punch }
-  - { level: 40, move: Wraithstrike }
-  - { level: 42, move: Shadow Ball }
-  - { level: 45, move: Interment }
-  - { level: 48, move: Future Sight }
-  - { level: 62, move: Necrosis }
+  - { level: 5, move: Astonish }
+  - { level: 9, move: Rock Smash }
+  - { level: 13, move: Lick }
+  - { level: 17, move: Flash Freeze }
+  - { level: 21, move: Will-O-Wisp }
+  - { level: 25, move: Shadow Punch }
+  - { level: 29, move: Pain Split }
+  - { level: 33, move: Drain Punch }
+  - { level: 37, move: Poison Jab }
+  - { level: 41, move: Wraithstrike }
+  - { level: 45, move: Destiny Bond }
+  - { level: 49, move: One-Inch Punch }
+  - { level: 53, move: Sucker Punch }
+  - { level: 57, move: Cross Chop }
+  - { level: 60, move: Poltergeist }
+  - { level: 65, move: Necrosis }
+  - { level: 69, move: Close Combat }
+evolution: { from: Duskull, method: { level: 30 } }

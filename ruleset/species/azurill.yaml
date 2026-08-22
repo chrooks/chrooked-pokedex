@@ -1,21 +1,30 @@
 name: Azurill
 chrooked_id: azurill
 aka: { pokeemerald: SPECIES_AZURILL }
+types: [Water, Fairy]
+abilities:
+  primary: Huge Power
+  secondary: Thick Fat
+  hidden: Sap Sipper
+stats: { hp: 52, atk: 30, def: 40, spa: 30, spd: 43, spe: 35 }
 learnset:
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Splash }
-  - { level: 2, move: Undertow }
-  - { level: 3, move: Helping Hand }
-  - { level: 4, move: Tackle }
-  - { level: 6, move: Bubble Beam }
-  - { level: 9, move: Charm }
-  - { level: 12, move: Bail Out }
-  - { level: 15, move: Bounce }
-  - { level: 16, move: Body Slam }
-  - { level: 26, move: Water Whip }
-  - { level: 43, move: Rampage }
-  - { level: 45, move: Maelstrom }
-  - { level: 57, move: Double-Edge }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Glitter Tap }
+  - { level: 13, move: Rollout }
+  - { level: 17, move: Charm }
+  - { level: 21, move: Water Whip }
+  - { level: 25, move: Aqua Jet }
+  - { level: 28, move: Helping Hand }
+  - { level: 31, move: Flip Turn }
+  - { level: 34, move: Cutsie Slap }
+  - { level: 38, move: Ice Punch }
+  - { level: 42, move: Slam }
+  - { level: 45, move: Aqua Tail }
+  - { level: 48, move: Play Rough }
+  - { level: 52, move: Body Slam }
+  - { level: 57, move: Maelstrom }
+  - { level: 61, move: Starfall Slam }
+  - { level: 65, move: Superpower }
+  - { level: 69, move: Jet Punch }

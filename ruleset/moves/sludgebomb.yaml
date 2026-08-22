@@ -1,0 +1,10 @@
+name: Sludge Bomb
+chrooked_id: sludgebomb
+aka: {  }
+type: Poison
+category: special
+power: 90
+accuracy: 100
+pp: 10
+description: Sludge is hurled to inflict damage. May also poison.
+flags: [ballistic]

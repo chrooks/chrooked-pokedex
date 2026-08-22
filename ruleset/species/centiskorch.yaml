@@ -2,25 +2,28 @@ name: Centiskorch
 chrooked_id: centiskorch
 aka: { pokeemerald: SPECIES_CENTISKORCH }
 abilities:
+  primary: Flash Fire
   secondary: Coil Up
+  hidden: Infernal Maw
 learnset:
+  - { level: 0, move: Fire Fang }
   - { level: 1, move: Smokescreen }
   - { level: 1, move: Wrap }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Bite }
-  - { level: 2, move: Flame Charge }
-  - { level: 3, move: Fury Cutter }
-  - { level: 4, move: Inferno }
-  - { level: 15, move: Flame Wheel }
-  - { level: 20, move: Bug Bite }
-  - { level: 25, move: Coil }
-  - { level: 32, move: Body Slam }
-  - { level: 36, move: Fire Lash }
-  - { level: 37, move: Lunge }
-  - { level: 39, move: Fire Spin }
-  - { level: 46, move: Crunch }
-  - { level: 53, move: Combust }
-  - { level: 57, move: Flare Blitz }
-  - { level: 59, move: Moltstrike }
-  - { level: 60, move: Megahorn }
-  - { level: 67, move: Burn Up }
+  - { level: 5, move: Flame Charge }
+  - { level: 9, move: Fury Cutter }
+  - { level: 13, move: Defense Curl }
+  - { level: 17, move: Rollout }
+  - { level: 21, move: Bug Bite }
+  - { level: 25, move: Flame Wheel }
+  - { level: 29, move: Coil }
+  - { level: 33, move: U-turn }
+  - { level: 37, move: Crunch }
+  - { level: 41, move: Poison Fang }
+  - { level: 45, move: Tectonic Fang }
+  - { level: 48, move: Leech Life }
+  - { level: 51, move: First Impression }
+  - { level: 54, move: Combust }
+  - { level: 57, move: Moltstrike }
+  - { level: 65, move: Flare Blitz }
+  - { level: 69, move: Megahorn }
+evolution: { from: Sizzlipede, method: { level: 32 } }

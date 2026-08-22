@@ -1,24 +1,28 @@
 name: Wingull
 chrooked_id: wingull
 aka: { pokeemerald: SPECIES_WINGULL }
+types: [Water, Flying]
 abilities:
-  secondary: Hydration
-  hidden: Downpour
+  primary: Downpour
+  secondary: Drizzle
+  hidden: Rain Dish
+stats: { hp: 55, atk: 30, def: 52, spa: 60, spd: 43, spe: 85 }
 learnset:
   - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
-  - { level: 2, move: Gust }
-  - { level: 5, move: Quick Attack }
-  - { level: 10, move: Supersonic }
-  - { level: 15, move: Wing Attack }
-  - { level: 20, move: Water Pulse }
-  - { level: 26, move: Agility }
-  - { level: 29, move: Muddy Water }
-  - { level: 30, move: Air Slash }
-  - { level: 32, move: Galeburst }
-  - { level: 35, move: Mist }
-  - { level: 40, move: Roost }
-  - { level: 43, move: Hydro Pump }
-  - { level: 45, move: Hurricane }
-  - { level: 64, move: Tsunami }
-  - { level: 65, move: Tempest }
+  - { level: 1, move: Weather Ball }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Gust }
+  - { level: 13, move: Protect }
+  - { level: 17, move: Roost }
+  - { level: 21, move: Stockpile }
+  - { level: 25, move: Water Pulse }
+  - { level: 29, move: Aurora Beam }
+  - { level: 33, move: Air Slash }
+  - { level: 37, move: U-turn }
+  - { level: 45, move: Chilling Water }
+  - { level: 49, move: Galeburst }
+  - { level: 53, move: Surf }
+  - { level: 57, move: Ice Beam }
+  - { level: 61, move: Hydro Pump }
+  - { level: 65, move: Hurricane }
+  - { level: 69, move: Tsunami }

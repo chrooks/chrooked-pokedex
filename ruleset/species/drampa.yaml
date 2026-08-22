@@ -3,22 +3,22 @@ chrooked_id: drampa
 aka: { pokeemerald: SPECIES_DRAMPA }
 stats: { hp: 85 }
 learnset:
-  - { level: 1, move: Play Nice }
-  - { level: 1, move: Echoed Voice }
-  - { level: 5, move: Twister }
-  - { level: 10, move: Protect }
-  - { level: 15, move: Glare }
-  - { level: 16, move: Swift }
-  - { level: 20, move: Safeguard }
-  - { level: 25, move: Dragon Breath }
-  - { level: 26, move: Draconic Fang }
-  - { level: 30, move: Extrasensory }
-  - { level: 35, move: Dragon Pulse }
-  - { level: 37, move: Cataclysm }
-  - { level: 38, move: Hyper Voice }
-  - { level: 40, move: Light Screen }
-  - { level: 45, move: Fly }
-  - { level: 50, move: Resonance }
-  - { level: 55, move: Outrage }
-  - { level: 57, move: Hyper Beam }
-  - { level: 60, move: Draco Meteor }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Echoed Voice }
+  - { level: 9, move: Twister }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Dragon Breath }
+  - { level: 21, move: Light Screen }
+  - { level: 25, move: Glare }
+  - { level: 29, move: Protect }
+  - { level: 33, move: Razor Wind }
+  - { level: 37, move: Air Slash }
+  - { level: 41, move: Extrasensory }
+  - { level: 45, move: Hyper Voice }
+  - { level: 49, move: Dragon Pulse }
+  - { level: 53, move: Resonance }
+  - { level: 57, move: Hurricane }
+  - { level: 61, move: Mindwarp }
+  - { level: 65, move: Boomburst }
+  - { level: 69, move: Draco Meteor }

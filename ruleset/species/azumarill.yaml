@@ -3,28 +3,29 @@ chrooked_id: azumarill
 aka: { pokeemerald: SPECIES_AZUMARILL }
 abilities:
   primary: Huge Power
-stats: { spa: 60 }
+  secondary: Thick Fat
+  hidden: Sap Sipper
+stats: { hp: 105, atk: 60, spd: 85, spe: 70 }
 learnset:
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Tail Whip }
+  - { level: 0, move: Wave Crash }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Water Gun }
-  - { level: 3, move: Undertow }
-  - { level: 4, move: Rollout }
-  - { level: 6, move: Bubble Beam }
-  - { level: 9, move: Charm }
-  - { level: 12, move: Body Slam }
-  - { level: 15, move: Bounce }
-  - { level: 18, move: Water Whip }
-  - { level: 21, move: Aqua Tail }
-  - { level: 25, move: Play Rough }
-  - { level: 29, move: Muddy Water }
-  - { level: 30, move: Aqua Ring }
-  - { level: 32, move: Maelstrom }
-  - { level: 35, move: Rain Dance }
-  - { level: 40, move: Hydro Pump }
-  - { level: 45, move: Double-Edge }
-  - { level: 50, move: Superpower }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Glitter Tap }
+  - { level: 13, move: Rollout }
+  - { level: 17, move: Charm }
+  - { level: 21, move: Water Whip }
+  - { level: 25, move: Aqua Jet }
+  - { level: 28, move: Helping Hand }
+  - { level: 31, move: Flip Turn }
+  - { level: 34, move: Cutsie Slap }
+  - { level: 38, move: Ice Punch }
+  - { level: 42, move: Slam }
+  - { level: 45, move: Aqua Tail }
+  - { level: 48, move: Play Rough }
+  - { level: 52, move: Body Slam }
+  - { level: 57, move: Maelstrom }
+  - { level: 61, move: Starfall Slam }
+  - { level: 65, move: Superpower }
+  - { level: 69, move: Jet Punch }
+evolution: { from: Marill, method: { level: 30 } }

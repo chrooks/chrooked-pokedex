@@ -1,25 +1,29 @@
 name: Sizzlipede
 chrooked_id: sizzlipede
 aka: { dex: 850 }
+types: [Fire, Bug]
 abilities:
+  primary: Flash Fire
   secondary: Coil Up
+  hidden: Infernal Maw
+stats: { hp: 50, atk: 65, def: 45, spa: 50, spd: 50, spe: 45 }
 learnset:
-  - { level: 1, move: Ember }
   - { level: 1, move: Smokescreen }
-  - { level: 2, move: Flame Charge }
-  - { level: 3, move: Fury Cutter }
-  - { level: 5, move: Wrap }
-  - { level: 10, move: Bite }
-  - { level: 15, move: Flame Wheel }
-  - { level: 20, move: Bug Bite }
-  - { level: 25, move: Coil }
-  - { level: 30, move: Body Slam }
-  - { level: 35, move: Fire Spin }
-  - { level: 37, move: Fire Lash }
-  - { level: 38, move: Lunge }
-  - { level: 40, move: Crunch }
-  - { level: 45, move: Combust }
-  - { level: 50, move: Moltstrike }
-  - { level: 55, move: Burn Up }
-  - { level: 57, move: Flare Blitz }
-  - { level: 59, move: Megahorn }
+  - { level: 1, move: Wrap }
+  - { level: 5, move: Flame Charge }
+  - { level: 9, move: Fury Cutter }
+  - { level: 13, move: Defense Curl }
+  - { level: 17, move: Rollout }
+  - { level: 21, move: Bug Bite }
+  - { level: 25, move: Flame Wheel }
+  - { level: 29, move: Coil }
+  - { level: 33, move: U-turn }
+  - { level: 37, move: Crunch }
+  - { level: 41, move: Poison Fang }
+  - { level: 45, move: Tectonic Fang }
+  - { level: 48, move: Leech Life }
+  - { level: 51, move: First Impression }
+  - { level: 54, move: Combust }
+  - { level: 57, move: Moltstrike }
+  - { level: 65, move: Flare Blitz }
+  - { level: 69, move: Megahorn }

@@ -6,29 +6,25 @@ abilities:
   hidden: Bloom
 stats: { hp: 65, atk: 85, def: 65, spe: 95 }
 learnset:
-  - { level: 1, move: Grassy Terrain }
-  - { level: 1, move: Venom Drench }
-  - { level: 1, move: Leech Seed }
-  - { level: 1, move: Toxic Spikes }
-  - { level: 2, move: Acid Spray }
-  - { level: 3, move: Sweet Scent }
-  - { level: 4, move: Synthesis }
-  - { level: 5, move: Toxic }
-  - { level: 6, move: Aromatherapy }
-  - { level: 7, move: Ingrain }
-  - { level: 8, move: Growth }
-  - { level: 9, move: Stun Spore }
-  - { level: 10, move: Worry Seed }
-  - { level: 11, move: Poison Sting }
-  - { level: 12, move: Mega Drain }
-  - { level: 13, move: Absorb }
-  - { level: 14, move: Magical Leaf }
-  - { level: 15, move: Venoshock }
-  - { level: 16, move: Giga Drain }
-  - { level: 17, move: Petal Blizzard }
-  - { level: 18, move: Energy Ball }
-  - { level: 29, move: Siphon }
-  - { level: 36, move: Petal Dance }
-  - { level: 43, move: Miasma }
-  - { level: 48, move: Sludge Wave }
-  - { level: 64, move: Contagion }
+  - { level: 0, move: Toxic Spikes }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Acid Spray }
+  - { level: 13, move: Growth }
+  - { level: 17, move: Mega Drain }
+  - { level: 21, move: Leech Seed }
+  - { level: 23, move: Venoshock }
+  - { level: 26, move: Magical Leaf }
+  - { level: 30, move: Beguile }
+  - { level: 33, move: Giga Drain }
+  - { level: 37, move: Dazzling Gleam }
+  - { level: 41, move: Spikes }
+  - { level: 43, move: Toxic }
+  - { level: 45, move: Energy Ball }
+  - { level: 49, move: Miasma }
+  - { level: 53, move: Moonblast }
+  - { level: 57, move: Siphon }
+  - { level: 61, move: Sludge Wave }
+  - { level: 64, move: Leaf Storm }
+  - { level: 67, move: Contagion }
