@@ -26,7 +26,7 @@ import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
 import { LedgerTab } from "./components/tabs/LedgerTab";
 import { useGamepad, type GamepadAction } from "./hooks/useGamepad";
-import { activateFocused, focusInDirection } from "./lib/spatialNav";
+import { activateFocused, clearPadFocus, focusInDirection } from "./lib/spatialNav";
 import { GamepadProbe } from "./components/GamepadProbe";
 import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
 import { PatchDrawer } from "./components/targets/PatchDrawer";
@@ -461,6 +461,17 @@ export default function App() {
   const [isGamepadProbe] = useState(
     () => new URLSearchParams(window.location.search).get("gamepad") === "probe",
   );
+
+  // A touch takes over from the controller: drop the D-pad cursor so its ring
+  // does not sit somewhere the user has stopped looking, implying the next A
+  // press will act there.
+  useEffect(() => {
+    const onPointer = (event: PointerEvent) => {
+      if (event.pointerType !== "gamepad") clearPadFocus();
+    };
+    document.addEventListener("pointerdown", onPointer);
+    return () => document.removeEventListener("pointerdown", onPointer);
+  }, []);
 
   // The handheld's physical controls, mapped onto real DOM focus rather than a
   // bespoke cursor: the D-pad moves focus, A clicks whatever it lands on. That

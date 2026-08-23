@@ -168,3 +168,27 @@
     min-height: 44px;
   }
 }
+
+/* On the compact header this control shares one strip with the search field and
+   three icon buttons. A <select> will not shrink below the width of its longest
+   option ("Canon · base ⊕ Ruleset"), so it kept its full width, pushed past its
+   share of the row, and collided with the search box. min-width has to reach
+   the select itself — setting it on an ancestor does nothing. */
+@media (max-height: 620px), (max-width: 860px) {
+  .target-switcher,
+  .target-switcher__field {
+    min-width: 0;
+  }
+
+  /* The label is a caption for a control that is self-evident once you read the
+     value; it is also the widest fixed thing here. */
+  .target-switcher__caption {
+    display: none;
+  }
+
+  .target-switcher__select {
+    min-width: 0;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+}

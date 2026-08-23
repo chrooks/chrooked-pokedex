@@ -83,3 +83,31 @@ button {
   white-space: nowrap;
   border: 0;
 }
+
+/* The controller cursor.
+ *
+ * Drawn from an explicit attribute rather than :focus-visible, because the
+ * browser will not render a focus ring for a programmatic .focus() driven by a
+ * gamepad — the D-pad moved the cursor with nothing on screen to show for it.
+ * See lib/spatialNav.ts.
+ *
+ * Deliberately louder than the keyboard focus ring: this is the only cursor on
+ * screen when the device is held like a console, read from arm's length, and it
+ * has to be findable in a dense grid of sprites at a glance. Pairs a chrome
+ * keyline with a surface lift so it survives on any cell state, and never
+ * relies on color alone.
+ */
+[data-padfocus="true"] {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+  background-color: color-mix(in oklch, var(--chrome) 14%, transparent);
+  scroll-margin: var(--space-4);
+}
+
+/* Table rows cannot take an outline cleanly across cells, so the row gets an
+   inset keyline on its own background instead. */
+tr[data-padfocus="true"] {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--chrome);
+}

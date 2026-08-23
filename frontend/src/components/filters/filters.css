@@ -909,3 +909,107 @@ button.dexc-tok__body:hover {
     overscroll-behavior: contain;
   }
 }
+
+/* On a short screen the control stack above the table cost 164px — filter row,
+   then a Sort row, then a Columns row, each on its own line — which left 51% of
+   a 430px viewport showing chrome and about five species. Sort and Columns are
+   one row's worth of controls; they were stacked only because a tall screen
+   could afford it. */
+@media (max-height: 620px) {
+  .dex-controls {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .dex-controls__table {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+  }
+
+  .dex-controls__table > .dexc-row {
+    flex: 0 1 auto;
+  }
+
+  /* "none — click a column header" explains an empty state that the empty row
+     already conveys, and it is the widest thing on the row. */
+  .dexc-hint {
+    display: none;
+  }
+}
+
+/* The compact disclosure. The stack it hides is pinned above a table that
+   scrolls in its own container, so it never scrolls out of the way on its own —
+   on a 430px screen it was holding 118px hostage permanently. Collapsed by
+   default; the summary keeps active filters and sorts visible while folded, so
+   this hides controls without ever hiding state. */
+.dex-controls--compact {
+  padding: 0;
+  gap: 0;
+}
+
+.dex-controls__disclosure {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-1) var(--space-3);
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  text-align: left;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.dex-controls__disclosure:hover {
+  color: var(--text);
+}
+
+.dex-controls__disclosure:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: -2px;
+}
+
+.dex-controls__disclosure-icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.dex-controls__summary {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dex-controls__chevron {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.dex-controls__chevron[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+.dex-controls--compact > .dex-controls__disclosure + * {
+  padding: 0 var(--space-3) var(--space-2);
+}
+
+@media (pointer: coarse) {
+  .dex-controls__disclosure {
+    min-height: 44px;
+  }
+}

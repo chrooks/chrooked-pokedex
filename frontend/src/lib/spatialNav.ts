@@ -96,6 +96,7 @@ export function focusInDirection(direction: Direction): boolean {
   // Nothing focused yet (or focus is on <body>): start at the first candidate.
   if (!active || active === document.body || !pool.includes(active)) {
     pool[0].focus();
+    markPadFocus(pool[0]);
     return true;
   }
 
@@ -105,6 +106,7 @@ export function focusInDirection(direction: Direction): boolean {
 
   const target = others[index];
   target.focus();
+  markPadFocus(target);
   target.scrollIntoView({ block: "nearest", inline: "nearest" });
   return true;
 }
@@ -115,4 +117,29 @@ export function activateFocused(): boolean {
   if (!active || active === document.body) return false;
   active.click();
   return true;
+}
+
+/**
+ * The attribute that marks the controller's cursor.
+ *
+ * `:focus-visible` is not enough. The browser decides whether to draw it from
+ * how focus was last moved, and a programmatic `.focus()` call driven by a
+ * gamepad is not recognised as a keyboard interaction — so the D-pad moved
+ * focus with nothing drawn on screen, and there was no way to tell what the A
+ * button was about to activate. An explicit attribute takes that decision away
+ * from the heuristic.
+ */
+const PAD_FOCUS_ATTR = "data-padfocus";
+
+/** Stamp the controller cursor onto `el`, clearing it from wherever it was. */
+export function markPadFocus(el: Element | null): void {
+  const previous = document.querySelector(`[${PAD_FOCUS_ATTR}]`);
+  if (previous && previous !== el) previous.removeAttribute(PAD_FOCUS_ATTR);
+  if (el) el.setAttribute(PAD_FOCUS_ATTR, "true");
+}
+
+/** Drop the controller cursor — used when a real pointer takes over, so the
+    ring does not linger somewhere the user is no longer looking. */
+export function clearPadFocus(): void {
+  document.querySelector(`[${PAD_FOCUS_ATTR}]`)?.removeAttribute(PAD_FOCUS_ATTR);
 }

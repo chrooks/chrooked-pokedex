@@ -1,9 +1,22 @@
+import { useState } from "react";
 import type { FilterDef, FilterEntry } from "../../lib/filterEngine";
 import type { SortKey } from "../../lib/sortEngine";
+import { useCompactShell } from "../../hooks/useMediaQuery";
+import { IconChevron, IconFilters } from "../icons";
 import { FilterBuilder } from "./FilterBuilder";
 import { SortRow, type SortableField } from "./SortRow";
 import { ColumnsControl, type ToggleableColumn } from "./ColumnsControl";
 import "./filters.css";
+
+/** What the collapsed compact bar says, so folding the controls away never
+    hides the fact that something is filtering or sorting the list. */
+function describeState(filterCount: number, sortCount: number, hiddenCount: number): string {
+  const parts: string[] = [];
+  if (filterCount > 0) parts.push(`${filterCount} filter${filterCount === 1 ? "" : "s"}`);
+  if (sortCount > 0) parts.push(`${sortCount} sort${sortCount === 1 ? "" : "s"}`);
+  if (hiddenCount > 0) parts.push(`${hiddenCount} hidden`);
+  return parts.length === 0 ? "No filters" : parts.join(" · ");
+}
 
 /** A partial update to one entity's control state (filter / sort / hidden). */
 export type EntityViewPatch = {
@@ -59,8 +72,12 @@ export function EntityControls({
     onChange({ filter: [], sort: [], hidden: [] });
   }
 
-  return (
-    <section className="dex-controls" id={`${idPrefix}-controls`} aria-label={ariaLabel}>
+  const compact = useCompactShell();
+  const [open, setOpen] = useState(false);
+  const summary = describeState(filter.length, sort.length, hidden.length);
+
+  const body = (
+    <>
       <FilterBuilder
         defs={defs}
         idPrefix={idPrefix}
@@ -100,6 +117,39 @@ export function EntityControls({
           </div>
         </div>
       )}
+    </>
+  );
+
+  // On a short screen this stack is pinned above a table that scrolls in its
+  // own container, so it never scrolls away: 118px of a 430px viewport, always.
+  // Collapsed by default, with a summary line that says what is active so
+  // hiding it never hides state.
+  if (compact) {
+    return (
+      <section
+        className="dex-controls dex-controls--compact"
+        id={`${idPrefix}-controls`}
+        aria-label={ariaLabel}
+      >
+        <button
+          type="button"
+          className="dex-controls__disclosure"
+          id={`${idPrefix}-controls-disclosure`}
+          aria-expanded={open}
+          onClick={() => setOpen((was) => !was)}
+        >
+          <IconFilters className="dex-controls__disclosure-icon" />
+          <span className="dex-controls__summary mono">{summary}</span>
+          <IconChevron className="dex-controls__chevron" data-open={open} />
+        </button>
+        {open && body}
+      </section>
+    );
+  }
+
+  return (
+    <section className="dex-controls" id={`${idPrefix}-controls`} aria-label={ariaLabel}>
+      {body}
     </section>
   );
 }

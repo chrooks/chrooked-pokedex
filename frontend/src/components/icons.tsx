@@ -157,6 +157,15 @@ export function IconGridView({ className }: IconProps) {
   );
 }
 
+/** Disclosure chevron. Rotated by CSS for the open state. */
+export function IconChevron({ className }: IconProps) {
+  return (
+    <svg {...BASE} className={className}>
+      <path d="M8 10.8 2.4 5.2 3.9 3.7 8 7.8l4.1-4.1 1.5 1.5Z" />
+    </svg>
+  );
+}
+
 /** Close. */
 export function IconClose({ className }: IconProps) {
   return (
