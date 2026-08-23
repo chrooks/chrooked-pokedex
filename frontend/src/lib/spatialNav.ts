@@ -17,7 +17,53 @@ const FOCUSABLE = [
   "select:not([disabled])",
   "textarea:not([disabled])",
   '[tabindex]:not([tabindex="-1"])',
+  // Rows opt in as a single cursor stop for their whole width. See NAV_ROW.
+  "[data-nav-row]",
 ].join(",");
+
+/**
+ * A container that acts as one cursor stop on behalf of everything inside it.
+ *
+ * A dex table row carries its control in the name column only, and the table
+ * scrolls horizontally — so once scrolled right, a row had nothing focusable on
+ * screen and Down from a header jumped to the sidebar instead of into the
+ * table. Marking the row itself makes the full width a target, and collapsing
+ * its contents into that one stop keeps the cursor moving row-by-row instead of
+ * pausing on each cell.
+ */
+const NAV_ROW = "[data-nav-row]";
+
+/** The row standing in for `el`, when it is inside one. */
+function navRowOf(el: Element | null): HTMLElement | null {
+  return (el?.closest(NAV_ROW) as HTMLElement | null) ?? null;
+}
+
+/**
+ * Floating layers that capture the cursor while they are open.
+ *
+ * A popover paints over the page but means nothing to geometry: without this,
+ * pressing a direction inside an open filter menu walked the cursor onto the
+ * grid *behind* it, so the options could never be reached with the controller
+ * even though they were the only thing on screen the user could see. While one
+ * of these is open it is the only place the cursor may go.
+ */
+const OVERLAY_SELECTOR = [
+  ".dexc-menu",
+  ".dexc-editor",
+  ".type-select__list",
+  ".device__sheet",
+  "[role='dialog']:not([aria-hidden='true'])",
+].join(",");
+
+/** The topmost open overlay, or null. Last in DOM order wins, which matches the
+    paint order for the absolutely-positioned layers used here. */
+function activeOverlay(): HTMLElement | null {
+  const open = [...document.querySelectorAll<HTMLElement>(OVERLAY_SELECTOR)].filter((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  });
+  return open.length > 0 ? open[open.length - 1] : null;
+}
 
 export type Direction = "up" | "down" | "left" | "right";
 
@@ -33,11 +79,17 @@ export type Direction = "up" | "down" | "left" | "right";
  */
 const OFFSCREEN_REACH_PX = 120;
 
-/** Focusable elements at or near the viewport — the candidates worth moving to. */
+/** Focusable elements at or near the viewport — the candidates worth moving to.
+    While an overlay is open the search is confined to it. */
 function candidates(): HTMLElement[] {
   const reach = OFFSCREEN_REACH_PX;
-  return [...document.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => {
+  const overlay = activeOverlay();
+  const root: ParentNode = overlay ?? document;
+  return [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => {
     if (el.closest("[inert]") || el.hidden) return false;
+    // A control inside a nav row is represented by the row, so it is not its
+    // own stop — otherwise the cursor pauses twice on every row.
+    if (!el.hasAttribute("data-nav-row") && navRowOf(el)) return false;
     const rect = el.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return false;
     return rect.bottom > -reach && rect.right > -reach &&
@@ -140,7 +192,11 @@ export function pickInDirection(
  * is nothing that way, so the caller can decide whether to scroll instead.
  */
 export function focusInDirection(direction: Direction): boolean {
-  const active = document.activeElement as HTMLElement | null;
+  const focused = document.activeElement as HTMLElement | null;
+  // Where the cursor conceptually is: a control inside a row navigates as the
+  // row, so tabbing to a cell control and then pressing a direction continues
+  // from that row rather than jumping to the top of the list.
+  const active = navRowOf(focused) ?? focused;
   const pool = candidates();
   if (pool.length === 0) return false;
 

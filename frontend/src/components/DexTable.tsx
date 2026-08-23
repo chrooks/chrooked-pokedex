@@ -270,6 +270,15 @@ function DexRow({ entry, rowIndex, isSelected, columns, top, onOpen, onEdit, bac
       aria-rowindex={rowIndex}
       data-edited={edited || undefined}
       data-selected={isSelected || undefined}
+      // The row is the D-pad's cursor stop, not the name button inside it.
+      // The table scrolls horizontally, and the name column is the only cell
+      // with a control — so once you scroll right, a row had nothing focusable
+      // on screen and the cursor jumped to the sidebar instead of down the
+      // table. The row spans the full width, so it is always reachable.
+      // tabIndex -1 keeps it out of the Tab order: it is programmatically
+      // focusable only, so keyboard tabbing still walks the real controls.
+      tabIndex={-1}
+      data-nav-row=""
       style={{ transform: `translateY(${top}px)` }}
       onClick={open}
     >
