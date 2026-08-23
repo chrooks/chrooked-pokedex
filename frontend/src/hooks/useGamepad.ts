@@ -23,15 +23,32 @@ import { useEffect, useRef } from "react";
  *     varies and is not worth detecting.
  */
 
-/** Positional names. The W3C mapping is by position, never by printed label —
-    index 0 is the BOTTOM face button, whatever letter is on it. */
+/**
+ * Named by ROLE, not by position — because on this hardware position is not
+ * stable and role is.
+ *
+ * The W3C mapping is defined positionally (index 0 = bottom face button), but
+ * the Thor reports by printed label instead. Probed on-device 2026-08-23: the
+ * BOTTOM button is printed "B" and reports index 1, so index 0 is the button
+ * printed "A", sitting on the right in Nintendo arrangement.
+ *
+ * That turns out not to matter, because the label convention is what stays put:
+ *
+ *   Nintendo style — "A" on the right, reports 0, means confirm.
+ *   Xbox style     — "A" on the bottom, reports 0, means confirm.
+ *
+ * Index 0 is the confirm button and index 1 the cancel button in BOTH of the
+ * device's Controller Style modes, so this mapping survives the user flipping
+ * that setting. Naming these `south`/`east` would have documented a position
+ * that is wrong here half the time.
+ */
 export type GamepadAction =
   | "up" | "down" | "left" | "right"
-  | "south" | "east" | "west" | "north"
+  | "confirm" | "cancel"
   | "l1" | "r1";
 
 const BUTTON_INDEX: Record<GamepadAction, number> = {
-  south: 0, east: 1, west: 2, north: 3, l1: 4, r1: 5,
+  confirm: 0, cancel: 1, l1: 4, r1: 5,
   up: 12, down: 13, left: 14, right: 15,
 };
 

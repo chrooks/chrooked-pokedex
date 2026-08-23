@@ -476,10 +476,10 @@ export default function App() {
           case "right":
             focusInDirection(action);
             break;
-          case "south": // bottom face button — "A" once the Thor is in Xbox style
+          case "confirm": // the button printed "A" — open what the cursor is on
             activateFocused();
             break;
-          case "east": // right face button — back out of whatever is open
+          case "cancel": // the button printed "B" — back out of whatever is open
             handleEscape();
             break;
           case "l1":
