@@ -1013,3 +1013,51 @@ button.dexc-tok__body:hover {
     min-height: 44px;
   }
 }
+
+/* Narrow screens: the filter popovers become bottom sheets.
+ *
+ * These anchor to the token that spawned them, which is fine when there is room
+ * to the right and fatal when there is not. On the handheld (537px wide) the
+ * value editor is 450px anchored at x=120, so it ran 33px past the edge and put
+ * DONE completely off-screen — a filter could be started but never finished,
+ * by touch or by controller.
+ *
+ * Pinning to the viewport instead of the anchor makes the width knowable: the
+ * sheet is always exactly as wide as the screen allows, wraps instead of
+ * overflowing, and scrolls when it is tall. It stops being a popover and starts
+ * being a sheet, which is the right shape at this size anyway.
+ */
+@media (max-width: 720px) {
+  .dexc-editor,
+  .dexc-menu,
+  .type-select__list {
+    position: fixed;
+    left: var(--space-2);
+    right: var(--space-2);
+    top: auto;
+    bottom: var(--space-2);
+    z-index: 60;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    max-height: min(62vh, 340px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* The editor is a single nowrap row by default; it has to fold instead. */
+  .dexc-editor {
+    flex-wrap: wrap;
+    white-space: normal;
+    justify-content: flex-start;
+    gap: var(--space-2);
+  }
+
+  /* The right-anchored variants lose their offset — the sheet spans the screen,
+     so there is no side to hug. */
+  .dexc-editor--right,
+  .dexc-menu--right {
+    left: var(--space-2);
+    right: var(--space-2);
+  }
+}
