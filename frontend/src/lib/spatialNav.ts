@@ -21,17 +21,68 @@ const FOCUSABLE = [
 
 export type Direction = "up" | "down" | "left" | "right";
 
-/** Visible, on-screen, focusable elements — the candidates worth moving to. */
+/**
+ * How far past the viewport edge a candidate may sit and still be reachable.
+ *
+ * Zero margin meant the cursor stopped dead at the last visible row: the next
+ * row exists in the DOM just below the fold, but was filtered out, so the press
+ * did nothing and the list had to be scrolled by hand. A margin of roughly one
+ * row lets the cursor step over the edge and drag the view with it, while still
+ * excluding the far-off rows a virtualized list keeps mounted — landing on one
+ * of those would teleport the cursor somewhere invisible.
+ */
+const OFFSCREEN_REACH_PX = 120;
+
+/** Focusable elements at or near the viewport — the candidates worth moving to. */
 function candidates(): HTMLElement[] {
+  const reach = OFFSCREEN_REACH_PX;
   return [...document.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => {
     if (el.closest("[inert]") || el.hidden) return false;
     const rect = el.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return false;
-    // Off-screen rows of a virtualized list are real elements; skip them or the
-    // cursor teleports to something the user cannot see.
-    return rect.bottom > 0 && rect.right > 0 &&
-      rect.top < window.innerHeight && rect.left < window.innerWidth;
+    return rect.bottom > -reach && rect.right > -reach &&
+      rect.top < window.innerHeight + reach && rect.left < window.innerWidth + reach;
   });
+}
+
+/** The nearest ancestor that actually scrolls, or null. */
+function scrollHostFor(el: Element | null): HTMLElement | null {
+  let node = el?.parentElement ?? null;
+  while (node) {
+    const style = getComputedStyle(node);
+    const scrollsY = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 2;
+    const scrollsX = /(auto|scroll)/.test(style.overflowX) && node.scrollWidth > node.clientWidth + 2;
+    if (scrollsY || scrollsX) return node;
+    node = node.parentElement;
+  }
+  return null;
+}
+
+/**
+ * Nudge the surrounding scroller when the cursor has run out of candidates.
+ *
+ * A long list is virtualized: the rows past the fold do not exist yet, so there
+ * is nothing to focus until the view moves. Scrolling first and retrying on the
+ * next frame gives those rows a chance to mount, which makes one press feel
+ * like one step rather than requiring the user to scroll by hand first.
+ */
+function scrollAndRetry(direction: Direction, from: Element | null): boolean {
+  const host = scrollHostFor(from) ?? document.scrollingElement;
+  if (!(host instanceof HTMLElement)) return false;
+
+  const vertical = direction === "up" || direction === "down";
+  const sign = direction === "up" || direction === "left" ? -1 : 1;
+  const step = Math.max(80, Math.round((vertical ? host.clientHeight : host.clientWidth) * 0.4));
+
+  const before = vertical ? host.scrollTop : host.scrollLeft;
+  if (vertical) host.scrollTop = before + step * sign;
+  else host.scrollLeft = before + step * sign;
+  const moved = (vertical ? host.scrollTop : host.scrollLeft) !== before;
+  if (!moved) return false; // genuinely at the end of the list
+
+  // Let the newly-revealed rows mount before looking for something to focus.
+  requestAnimationFrame(() => focusInDirection(direction));
+  return true;
 }
 
 /** Just enough of a DOMRect to score against — keeps the geometry testable
@@ -102,7 +153,9 @@ export function focusInDirection(direction: Direction): boolean {
 
   const others = pool.filter((el) => el !== active);
   const index = pickInDirection(toBox(active), others.map(toBox), direction);
-  if (index === null) return false;
+  // Nothing that way yet — the list may simply not have rendered it. Move the
+  // view and try again rather than stopping and making the user scroll by hand.
+  if (index === null) return scrollAndRetry(direction, active);
 
   const target = others[index];
   target.focus();

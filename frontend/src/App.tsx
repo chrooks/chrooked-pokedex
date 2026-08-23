@@ -473,6 +473,35 @@ export default function App() {
     return () => document.removeEventListener("pointerdown", onPointer);
   }, []);
 
+  // Arrow keys drive the same cursor as the D-pad, but only once focus is
+  // already on something inside the screen area — so arrows still scroll the
+  // page normally until you have actually entered the grid, and never fight a
+  // text field or a <select>. This is ordinary grid behaviour at the desk, and
+  // it means the controller path and the keyboard path are the same code.
+  useEffect(() => {
+    const DIRECTIONS: Record<string, "up" | "down" | "left" | "right"> = {
+      ArrowUp: "up",
+      ArrowDown: "down",
+      ArrowLeft: "left",
+      ArrowRight: "right",
+    };
+    function onKeyDown(event: KeyboardEvent) {
+      const direction = DIRECTIONS[event.key];
+      if (!direction || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (!target || target === document.body) return;
+      const tag = target.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || target.isContentEditable) {
+        return;
+      }
+      if (!target.closest("main")) return;
+      event.preventDefault();
+      focusInDirection(direction);
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   // The handheld's physical controls, mapped onto real DOM focus rather than a
   // bespoke cursor: the D-pad moves focus, A clicks whatever it lands on. That
   // reuses every existing click handler and focus-visible style, and works on
