@@ -1576,9 +1576,37 @@ def create_app(
         return {"chrooked_id": chrooked_id, "markdown": render_packet(spec, engine)}
 
     if dist_dir is not None and Path(dist_dir).exists():
-        app.mount("/", StaticFiles(directory=str(dist_dir), html=True), name="frontend")
+        app.mount("/", _SpaFiles(directory=str(dist_dir), html=True), name="frontend")
 
     return app
+
+
+class _SpaFiles(StaticFiles):
+    """StaticFiles that never lets a browser cache ``index.html``.
+
+    The build fingerprints every asset (``index-<hash>.js``), so those are safe
+    to cache forever — but only if the HTML naming them is re-fetched. Served
+    without a ``Cache-Control`` header, ``index.html`` falls under heuristic
+    freshness: the browser may reuse a stored copy for a while WITHOUT
+    revalidating, keep asking for the asset hashes that copy names, and so keep
+    running an old build indefinitely.
+
+    That is not theoretical here. The handheld this app is used from sat on a
+    stale index.html across several deploys, showing an old bundle while the
+    server had the new one — a fix looks like it did nothing, which is the
+    worst possible failure to debug remotely.
+
+    ``no-cache`` does not mean "do not store"; it means "revalidate before
+    reuse", so the usual 304 still applies and only the tiny HTML is rechecked.
+    """
+
+    async def get_response(self, path: str, scope):  # type: ignore[override]
+        response = await super().get_response(path, scope)
+        # `html=True` rewrites a directory or unknown path to index.html, so
+        # match on what actually gets served rather than on the request path.
+        if path in ("", ".", "/", "index.html") or path.endswith("/index.html"):
+            response.headers["Cache-Control"] = "no-cache, must-revalidate"
+        return response
 
 
 def create_app_from_env() -> FastAPI:

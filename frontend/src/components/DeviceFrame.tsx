@@ -10,7 +10,9 @@ import {
   IconBehaviors,
   IconClose,
   IconFilters,
+  IconGridView,
   IconLedger,
+  IconTable,
   IconSpecies,
   IconMoves,
   IconStatuses,
@@ -250,6 +252,28 @@ export function DeviceFrame({
               </li>
             ))}
           </ul>
+
+          {/* Compact only: the Grid/Table switch lives in the rail rather than
+              in the filter sheet. It is a view mode, not a filter, and burying
+              a mode behind a menu means nobody finds it — which is exactly what
+              happened when it was in the sheet. One button showing the mode you
+              would switch TO, so it needs no label. */}
+          {compact && isDex && (
+            <button
+              type="button"
+              className="device__tab device__view-toggle"
+              id="rail-view-toggle"
+              title={layout === "grid" ? "Switch to table" : "Switch to grid"}
+              aria-label={layout === "grid" ? "Switch to table view" : "Switch to grid view"}
+              onClick={() => onLayout(layout === "grid" ? "table" : "grid")}
+            >
+              {layout === "grid" ? (
+                <IconTable className="device__tab-icon" />
+              ) : (
+                <IconGridView className="device__tab-icon" />
+              )}
+            </button>
+          )}
 
           {!compact && kind !== "behaviors" && <ReseedNote />}
         </nav>

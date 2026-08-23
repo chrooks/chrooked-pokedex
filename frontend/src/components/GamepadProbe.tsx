@@ -51,9 +51,22 @@ export function GamepadProbe() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
+  const shell = document.querySelector("#app-shell")?.getAttribute("data-compact");
+
   return (
     <div className="gp-probe" id="gamepad-probe">
-      <p className="gp-probe__head mono">GAMEPAD PROBE</p>
+      <p className="gp-probe__head mono">DEVICE PROBE</p>
+      {/* The layout numbers matter as much as the buttons: the compact shell is
+          driven by viewport size, and a screen that reports something other
+          than expected is the difference between a tidy strip and an
+          overlapping one. Read these off the device rather than guessing. */}
+      <p className="gp-probe__row mono">
+        <span className="gp-probe__label">VIEWPORT</span>
+        <span className="gp-probe__value">
+          {window.innerWidth} x {window.innerHeight} @ {window.devicePixelRatio}x
+          {shell === "true" ? " · compact" : " · DESK"}
+        </span>
+      </p>
       {pads.length === 0 ? (
         <p className="gp-probe__hint">
           No controller seen yet. Press any button — the browser withholds

@@ -61,15 +61,32 @@ const REPEAT_INTERVAL_MS = 90;
 const AXIS_DEADZONE = 0.5;
 const BUTTON_THRESHOLD = 0.5;
 
-function isActionDown(pad: Gamepad, action: GamepadAction): boolean {
+/**
+ * Rest position of each pad's axes, sampled on the first frame we see it.
+ *
+ * Real sticks do not rest at zero, and some pads park an axis at -1.0 when
+ * idle. Measuring deflection from an assumed zero therefore reads as a
+ * permanently-held direction: focus walks away on its own, every frame, and
+ * the page becomes unusable by touch or keyboard because whatever you aim at
+ * has already lost focus. Deflection is measured from the observed rest value
+ * instead, so a mis-centred or oddly-parked axis costs nothing.
+ */
+type AxisRest = number[];
+
+function isActionDown(pad: Gamepad, action: GamepadAction, rest: AxisRest): boolean {
   const button = pad.buttons[BUTTON_INDEX[action]];
   if (button && (button.pressed || button.value > BUTTON_THRESHOLD)) return true;
-  const [x = 0, y = 0] = pad.axes;
-  if (action === "left") return x < -AXIS_DEADZONE;
-  if (action === "right") return x > AXIS_DEADZONE;
-  if (action === "up") return y < -AXIS_DEADZONE;
-  if (action === "down") return y > AXIS_DEADZONE;
-  return false;
+
+  // Directions may also arrive on an axis pair rather than the hat buttons.
+  if (action !== "left" && action !== "right" && action !== "up" && action !== "down") {
+    return false;
+  }
+  const axisIndex = action === "left" || action === "right" ? 0 : 1;
+  const raw = pad.axes[axisIndex];
+  if (raw === undefined) return false;
+  const deflection = raw - (rest[axisIndex] ?? 0);
+  if (action === "left" || action === "up") return deflection < -AXIS_DEADZONE;
+  return deflection > AXIS_DEADZONE;
 }
 
 /**
@@ -99,6 +116,8 @@ export function useGamepad(
     if (typeof navigator.getGamepads !== "function") return;
 
     const heldUntilRepeat = new Map<GamepadAction, number>();
+    // Per-pad axis rest positions, sampled the first time each pad is seen.
+    const restByPad = new Map<number, AxisRest>();
     let rafId = 0;
 
     function poll() {
@@ -116,8 +135,20 @@ export function useGamepad(
         return;
       }
 
+      // Record each pad's resting axes once, before reading any direction from
+      // them. Done here rather than on `gamepadconnected` because that event
+      // does not fire until the first button press, by which point a stick may
+      // already be deflected.
+      for (const pad of pads) {
+        if (pad !== null && !restByPad.has(pad.index)) {
+          restByPad.set(pad.index, [...pad.axes]);
+        }
+      }
+
       for (const action of ACTIONS) {
-        const down = pads.some((pad) => pad !== null && isActionDown(pad, action));
+        const down = pads.some(
+          (pad) => pad !== null && isActionDown(pad, action, restByPad.get(pad.index) ?? []),
+        );
         if (!down) {
           heldUntilRepeat.delete(action);
           continue;

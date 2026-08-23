@@ -442,10 +442,20 @@
     display: none;
   }
 
+  /* Everything in the strip must be able to give way. A flex child stops
+     shrinking at its content's min-content width by default, so `min-width: 0`
+     has to reach the actual control — not just this wrapper — or the row
+     overflows and the children visually collide instead of compressing. */
   .device__target-bar {
     margin-inline: 0;
     min-width: 0;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+  }
+
+  .device__target-bar > *,
+  .device__target-bar select {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .device__header-search {
@@ -453,6 +463,16 @@
     flex: 1 1 auto;
     min-width: 0;
     max-width: 320px;
+  }
+
+  /* The controls on the right are the last thing to lose: they are the only
+     way to reach the filters and the other workspaces. */
+  .device__header-right {
+    flex: none;
+  }
+
+  .device__brand {
+    flex: none;
   }
 
   .device__header-right {
@@ -589,6 +609,16 @@
      screen so the eye still reads the rail as a spine. */
   .device__tab[data-active="true"] {
     box-shadow: inset 2px 0 0 var(--chrome);
+  }
+
+  /* The view toggle is a mode, not a section — a rule separates it from the
+     rail's navigation so the icons above it keep reading as one set. */
+  .device__view-toggle {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--line);
+    width: 100%;
+    border-radius: 0;
   }
 
   /* Search shrinks to fit the header strip. */

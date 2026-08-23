@@ -134,6 +134,29 @@ export function IconFilters({ className }: IconProps) {
   );
 }
 
+/** Table view — a header row over data rows. Distinct from IconLedger's
+    ragged stack of bars, which means "the change record", not "rows". */
+export function IconTable({ className }: IconProps) {
+  return (
+    <svg {...BASE} className={className}>
+      <path d="M1.5 2h13v3.2h-13z" />
+      <path d="M1.5 6.6h13v1.9h-13zM1.5 9.6h13v1.9h-13zM1.5 12.6h13V14h-13z" />
+    </svg>
+  );
+}
+
+/** Grid view — the sprite-led cell layout. */
+export function IconGridView({ className }: IconProps) {
+  return (
+    <svg {...BASE} className={className}>
+      <rect x="1.5" y="1.5" width="5.6" height="5.6" rx="1" />
+      <rect x="8.9" y="1.5" width="5.6" height="5.6" rx="1" />
+      <rect x="1.5" y="8.9" width="5.6" height="5.6" rx="1" />
+      <rect x="8.9" y="8.9" width="5.6" height="5.6" rx="1" />
+    </svg>
+  );
+}
+
 /** Close. */
 export function IconClose({ className }: IconProps) {
   return (
