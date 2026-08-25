@@ -29,6 +29,7 @@ honest message), not an unhandled 500 traceback.
 from __future__ import annotations
 
 import os
+import re
 from typing import Any, Protocol, runtime_checkable
 
 # Defaults (D-D): Anthropic Sonnet, key from ANTHROPIC_API_KEY. Every value is
@@ -93,6 +94,24 @@ class LlmProvider(Protocol):
         output — never an unhandled provider exception.
         """
         ...
+
+
+# API keys appear in some vendors' error payloads when they echo the failing
+# request. Provider messages are surfaced to the UI and written to logs, so any
+# key-shaped token is stripped before the message travels anywhere.
+_SECRET_RE = re.compile(r"\b(sk-[A-Za-z0-9_\-]{8,}|Bearer\s+[A-Za-z0-9._\-]{8,})")
+
+# Vendor errors can carry a whole request body; keep the readable sentence.
+_MAX_PROVIDER_MESSAGE = 400
+
+
+def _redact_secrets(text: str) -> str:
+    """Strip key-shaped tokens and trim a message down to something readable."""
+    cleaned = _SECRET_RE.sub("<redacted>", text)
+    cleaned = " ".join(cleaned.split())
+    if len(cleaned) > _MAX_PROVIDER_MESSAGE:
+        cleaned = cleaned[:_MAX_PROVIDER_MESSAGE].rstrip() + "…"
+    return cleaned
 
 
 class LiteLlmProvider:
@@ -173,10 +192,17 @@ class LiteLlmProvider:
                 max_tokens=max_tokens,
             )
         except Exception as error:  # noqa: BLE001 - normalize any vendor error
-            # LiteLLM raises a wide family of provider/timeout errors; all of
-            # them mean "the upstream call failed" → a single honest message.
+            # LiteLLM raises a wide family of provider/timeout errors. Reporting
+            # only the class name ("BadRequestError.") reads as honest but tells
+            # the user nothing they can act on: an exhausted API credit balance,
+            # an unknown model id, and a malformed request all arrive under that
+            # one name, and the only way to tell them apart was to reproduce the
+            # call by hand. The provider's own sentence is the actionable part,
+            # so it is carried through — redacted, since some vendors echo the
+            # request back.
             raise LlmError(
-                f"The LLM provider call failed: {type(error).__name__}."
+                f"The LLM provider call failed ({type(error).__name__}): "
+                f"{_redact_secrets(str(error))}"
             ) from error
 
         # Detect an output truncated at the token cap before attempting to

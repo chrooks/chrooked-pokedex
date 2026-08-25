@@ -113,3 +113,63 @@ def test_parse_tool_arguments_bad_json_is_llm_error() -> None:
 def test_build_provider_returns_a_port() -> None:
     provider = llmmod.build_provider()
     assert isinstance(provider, llmmod.LlmProvider)
+
+
+# --- provider error reporting -------------------------------------------------
+#
+# A vendor failure is the one error the user is expected to act on themselves —
+# top up a balance, fix a model id, retry a timeout — so the provider's own
+# sentence has to survive. Reporting just the exception class name ("The LLM
+# provider call failed: BadRequestError.") looked honest while telling nobody
+# anything: an exhausted credit balance and an unknown model arrive under that
+# same name, and telling them apart meant reproducing the call by hand.
+
+
+def test_provider_error_keeps_the_vendor_message(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The actionable sentence reaches the caller, not just the class name."""
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    class Boom(Exception):
+        pass
+
+    fake = SimpleNamespace(
+        completion=lambda **_: (_ for _ in ()).throw(
+            Boom("AnthropicException - Your credit balance is too low.")
+        )
+    )
+    monkeypatch.setitem(__import__("sys").modules, "litellm", fake)
+
+    provider = llmmod.LiteLlmProvider(provider="anthropic", model="claude-sonnet-4-6")
+    with pytest.raises(llmmod.LlmError) as excinfo:
+        provider.propose(system="s", cached_context="c", user="u", schema={})
+
+    message = str(excinfo.value)
+    assert "Boom" in message, "the exception class still identifies the failure kind"
+    assert "credit balance is too low" in message, "the actionable part must survive"
+
+
+def test_provider_error_never_leaks_a_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Some vendors echo the failing request back, key and all."""
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    leaked = "sk-ant-api03-AAAABBBBCCCCDDDDEEEEFFFFGGGG"
+
+    fake = SimpleNamespace(
+        completion=lambda **_: (_ for _ in ()).throw(
+            Exception(f"401 unauthorized for key {leaked} on request")
+        )
+    )
+    monkeypatch.setitem(__import__("sys").modules, "litellm", fake)
+
+    provider = llmmod.LiteLlmProvider(provider="anthropic", model="m")
+    with pytest.raises(llmmod.LlmError) as excinfo:
+        provider.propose(system="s", cached_context="c", user="u", schema={})
+
+    assert leaked not in str(excinfo.value)
+    assert "<redacted>" in str(excinfo.value)
+
+
+def test_a_runaway_provider_message_is_trimmed() -> None:
+    """A vendor that returns the whole request body must not become the error."""
+    trimmed = llmmod._redact_secrets("x" * 5000)
+    assert len(trimmed) <= 401
+    assert trimmed.endswith("…")
