@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Dual Aegis
+chrooked_id: dualaegis
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Erects Reflect on the user's side of the field upon switching in.
+    trigger: switch-in
+    when: Reflect is not already active on the user's side
+    effect: Apply Reflect to the user's side for 5 turns (8 turns if the user holds Light Clay).
+  - summary: Erects Light Screen on the user's side of the field upon switching in.
+    trigger: switch-in
+    when: Light Screen is not already active on the user's side
+    effect: Apply Light Screen to the user's side for 5 turns (8 turns if the user holds Light Clay).
+test_cases:
+  - given: User with Dual Aegis switches in on a side with no active screens.
+    expect: Both Reflect and Light Screen are immediately active on the user's side for 5 turns.
+  - given: User with Dual Aegis switches in on a side where Reflect is already active but Light Screen is not.
+    expect: Only Light Screen is applied; the existing Reflect is left untouched at its remaining turn count.
+  - given: User with Dual Aegis holds Light Clay and switches in on a side with no active screens.
+    expect: Both Reflect and Light Screen are active on the user's side for 8 turns.
+notes:
+  - Both screens are applied in the same switch-in event; Reflect is applied first, then Light Screen.
+  - "Light Clay interaction: if the user holds Light Clay, both screens benefit from the extended 8-turn duration, identical to the behavior of the moves Reflect and Light Screen themselves."
+  - Screen Cleaner and Defog still remove screens set by this ability normally.
+  - If either screen is already present on the user's side when this Pokémon switches in, that particular screen is NOT overwritten or refreshed; only the missing screen is applied.
+  - In doubles/multi battles, the screens protect the entire team side as normal.
+engine_hints:
+  rejuv: "references/rejuv-harness/chrooked_dualaegis.rb — a CHROOKED_SWITCH_IN registry entry; durations mirror the vanilla Reflect/Light Screen moves in Battle_MoveEffects.rb (5 turns, 8 with a working LIGHTCLAY, 8 on the MIRROR/DANCEFLOOR fields)."
