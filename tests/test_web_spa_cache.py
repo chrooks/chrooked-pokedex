@@ -67,11 +67,18 @@ def test_index_html_must_be_revalidated(client: TestClient) -> None:
     )
 
 
-def test_hashed_assets_are_not_forced_to_revalidate(client: TestClient) -> None:
-    """Fingerprinted files are immutable by construction; leave them cacheable."""
+def test_hashed_assets_are_cached_forever(client: TestClient) -> None:
+    """Fingerprinted files are immutable by construction, so say so.
+
+    The name carries the content hash: a changed file is a changed URL. Left
+    header-less they inherit the same heuristic freshness as the HTML, which
+    re-downloads the whole bundle to the handheld for no gain.
+    """
     response = client.get("/assets/index-abc123.css")
     assert response.status_code == 200
-    assert "no-cache" not in response.headers.get("cache-control", "")
+    cache_control = response.headers.get("cache-control", "")
+    assert "no-cache" not in cache_control
+    assert "immutable" in cache_control
 
 
 def test_unknown_paths_404_rather_than_falling_back_to_the_shell(client: TestClient) -> None:

@@ -1606,6 +1606,12 @@ class _SpaFiles(StaticFiles):
         # match on what actually gets served rather than on the request path.
         if path in ("", ".", "/", "index.html") or path.endswith("/index.html"):
             response.headers["Cache-Control"] = "no-cache, must-revalidate"
+        elif path.startswith("assets/"):
+            # The other half of the same contract. A hashed name never changes
+            # content, so revalidating it is pure cost; without a header these
+            # fall under the same heuristic freshness as the HTML and the
+            # handheld re-fetches a 650 KB bundle on someone else's timetable.
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         return response
 
 
