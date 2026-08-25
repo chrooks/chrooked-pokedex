@@ -34,6 +34,7 @@ import { MakeoverWorkbench } from "./components/makeover/MakeoverWorkbench";
 import { ParkedMakeoverDock } from "./components/makeover/ParkedMakeover";
 import type { MakeoverActivity } from "./lib/makeoverActivity";
 import type { Stage } from "./lib/makeoverStages";
+import { uid } from "./lib/uid";
 
 /**
  * The Canon dex app shell. Owns the dex fetch, the URL-persisted view state, and
@@ -416,13 +417,13 @@ export default function App() {
     }
     const target = searchTargetFor(view.kind);
     if (target === null) {
-      const next = appendNameFilter(view.filter, view.query, crypto.randomUUID());
+      const next = appendNameFilter(view.filter, view.query, uid());
       if (next !== view.filter) {
         update({ filter: next, query: "" });
       }
       return;
     }
-    if (promoteSearchToPill(target, view.query, crypto.randomUUID())) {
+    if (promoteSearchToPill(target, view.query, uid())) {
       update({ query: "" });
     }
   }, [view.kind, view.filter, view.query, update]);

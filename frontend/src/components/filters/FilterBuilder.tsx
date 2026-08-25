@@ -16,6 +16,7 @@ import { CategoryChip, type Category } from "../CategoryChip";
 import { TypeChip } from "../TypeChip";
 import { TypeSelect } from "../TypeSelect";
 import { CommandBar } from "./CommandBar";
+import { uid } from "../../lib/uid";
 
 type Props = {
   /** The active entity's filterable fields (dex / move / ability). */
@@ -29,9 +30,6 @@ type Props = {
 const MAX_FILTERS = 10;
 const CATEGORY_VALUES = new Set(["physical", "special", "status"]);
 
-function uid(): string {
-  return crypto.randomUUID();
-}
 
 /* ---------------------------------------------------------------------------
    Stored-value codec. A FilterEntry keeps one packed string per field method

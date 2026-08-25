@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { FilterDef, FilterEntry } from "../../lib/filterEngine";
+import { uid } from "../../lib/uid";
 import {
   commitTokens,
   formatQuery,
@@ -22,9 +23,6 @@ type Props = {
 
 const MAX_ROWS = 7;
 
-function uid(): string {
-  return crypto.randomUUID();
-}
 
 /**
  * The command bar: the same expression as one typed query. Committed terms

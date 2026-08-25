@@ -33,6 +33,7 @@ import type { DexEntry } from "../../types";
 import { EditorDialog } from "../editors/EditorDialog";
 import { FormError } from "../editors/FormFeedback";
 import "../editors/editors.css";
+import { uid } from "../../lib/uid";
 
 type Props = {
   /** Species currently in the distribution — from the caller's reverse index. */
@@ -234,7 +235,7 @@ export function ReverseLookupTab({
   function handleFilterInDex() {
     const entry = {
       kind: "filter" as const,
-      id: crypto.randomUUID(),
+      id: uid(),
       field: filterField,
       value: entityName,
       connector: "AND" as const,

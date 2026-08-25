@@ -36,6 +36,7 @@ import { attackCategory, type MoveMeta } from "../lib/moveDisplay";
 import "./proposal/proposal.css";
 import "./detail-ledger.css";
 import "./editors/editors.css";
+import { uid } from "../lib/uid";
 
 /** Jump to a cross-linked entity's page and open its read-only detail (#28).
     `kind` picks the destination tab; `key` is the type name (type-chart) or the
@@ -123,7 +124,7 @@ export function DetailLedger({
   // drop back to the (now filtered) dex list. Dedup-safe via appendNameFilter, so
   // re-adding the same species is a no-op. Closes the profile so the list shows.
   function handleAddToFilter() {
-    const next = appendNameFilter(view.filter, entry.name, crypto.randomUUID());
+    const next = appendNameFilter(view.filter, entry.name, uid());
     update({ kind: "dex", filter: next, selected: null });
   }
 
