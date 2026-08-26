@@ -89,7 +89,7 @@ steers otherwise. They shape input only — the server still owns the rubric and
      and no STAB type goes silent from L9 to L30 — the second early rung exists for
      that. A type whose only ramp step is low-accuracy (Iron Tail) fails the ramp.
    - **At most ~4 moves at L1.** L1 is the floor kit, not a dumping ground. The L1
-     starter attack is the Tackle/Pound/Scratch class — or **Pulse Strike** (the
+     starter attack is the Tackle/Pound/Scratch class — or **Flicker** (the
      special Tackle clone) for special attackers.
    - Signature/user-anchored moves the user has placed (e.g. Mach Punch @14) survive
      redrafts — re-check they're still present after any "try again".

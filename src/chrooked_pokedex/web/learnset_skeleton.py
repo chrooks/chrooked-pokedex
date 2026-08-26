@@ -67,7 +67,7 @@ _SECONDARY_RUNGS = 5
 # written, special attackers keep the fallback).
 _KIT_STARTERS: dict[str, tuple[str, ...]] = {
     "physical": ("Tackle", "Pound", "Scratch"),
-    "special": ("Pulse Strike",),
+    "special": ("Flicker",),
 }
 
 # Signature / species-locked moves kept OUT of generated candidate lists — a
