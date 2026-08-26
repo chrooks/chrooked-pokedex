@@ -3,9 +3,9 @@ chrooked_id: specterbomb
 aka: { pokeemerald: MOVE_SPECTER_BOMB }
 type: Ghost
 category: special
-power: 110
-accuracy: 85
-pp: 5
+power: 100
+accuracy: 90
+pp: 10
 description: A spectral burst that may lower the foe's Sp. Def.
 additional_effects:
   - { effect: sp_def_minus_1, chance: 10 }

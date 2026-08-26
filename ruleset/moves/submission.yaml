@@ -1,0 +1,10 @@
+name: Submission
+chrooked_id: submission
+aka: {  }
+type: Fighting
+category: physical
+power: 120
+accuracy: 100
+pp: 15
+description: A reckless body slam that also hurts the user.
+flags: [contact]
