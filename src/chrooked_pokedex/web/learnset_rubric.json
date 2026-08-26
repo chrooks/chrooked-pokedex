@@ -13,8 +13,9 @@
     "min_ladder_power": 2,
     "rung_exclusions": [
       "payback", "foulplay", "axekick", "hammerarm", "secretsword", "bonetorch",
+      "boneclub", "bonemerang", "bonerush",
       "oblivionwing", "shadowbone", "seasonsedge", "belch", "dreameater",
-      "esperwing", "whirlpool",
+      "esperwing", "whirlpool", "dreammist",
       "bind", "wrap", "clamp", "firespin", "sandtomb", "infestation",
       "snaptrap", "thundercage"
     ],

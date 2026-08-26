@@ -78,7 +78,7 @@ _KIT_STARTERS: dict[str, tuple[str, ...]] = {
 # shortlist share one set.)
 SIGNATURE_MOVES: frozenset[str] = frozenset({
     "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
-    "blood moon", "revelation dance", "relic song",
+    "blood moon", "revelation dance", "relic song", "moongeist beam",
 })
 
 
@@ -132,7 +132,11 @@ _PRIORITY = {
     "kit": 0, "reward": 0, "fuel": 0, "named": 0,
     "stab": 1, "status": 2, "flavor": 3,
 }
-_STAB_EXTRA_PRIORITY = 4  # 3rd+ rung of non-primary ladders
+# 3rd+ rung of non-primary OWN/granted ladders. Kept BELOW direction/flavor
+# coverage (2026-08-26 Granbull ruling): trimming a STAB ladder's payoff rungs
+# to keep a coverage ladder's 100BP rung stalled Ground at 60BP from L26 up.
+_STAB_EXTRA_PRIORITY = 2
+_WIDENER_PRIORITY = 4  # density-pad duplicate rungs — first attackers to trim
 _FLAVOR_PRIORITY = 5
 
 
@@ -327,6 +331,16 @@ def build_skeleton(
     types = [t for t in entry.get("types") or [] if t]
     fuel = species_fuel(entry.get("abilities") or {}, all_abilities)
     is_evolved = bool((entry.get("evolution") or {}).get("from"))
+    # Moves any fuel entry's filter matches — starred in the prompt and sorted
+    # first in rung candidate lists, so an ability-boosted 80BP pick is not
+    # shadowed by a stronger unmarked one (2026-08-26 Granbull ruling: Play
+    # Rough outshone Lovely Bite, the Strong Jaw STAB fang built for the slot).
+    fuel_moves = {
+        r["move"]
+        for _name, spec in fuel
+        if spec.get("filter")
+        for r in _select(move_pool, spec["filter"], bias)
+    }
 
     leans: list[str] = []
     dropped: list[str] = []
@@ -359,6 +373,17 @@ def build_skeleton(
     # flavor): any pool type the user's steer mentions grows a real ladder.
     pool_types = {r.get("type") for r in move_pool if r.get("type")}
     direction_words = (direction or "").casefold()
+    # A direction naming a MOVE ("give it Fire Fang") is a mandate for that
+    # move, not for Fire coverage — strip pool move names before type matching
+    # so they cannot spawn phantom coverage ladders (2026-08-26 Granbull
+    # ruling: "Fire Fang" in the steer grew a Fire ladder demanding a 100BP
+    # payoff). A move named exactly after a type (Psychic) stays: that word
+    # doubles as a type steer.
+    type_names = {t.casefold() for t in pool_types}
+    for r in move_pool:
+        name = (r.get("move") or "").casefold()
+        if name and name not in type_names and name in direction_words:
+            direction_words = direction_words.replace(name, " ")
     for t in sorted(pool_types):
         if t.casefold() in granted_types or t.casefold() not in direction_words:
             continue
@@ -521,7 +546,7 @@ def build_skeleton(
     for t in types:
         for band in reversed(bands[1:4]):  # 51-75 · 76-90 · 91-110, payoff first
             wideners.append({
-                "priority": _STAB_EXTRA_PRIORITY, "band": band, "role": "stab",
+                "priority": _WIDENER_PRIORITY, "band": band, "role": "stab",
                 "label": f"STAB {t} rung ({band['label']}BP)",
                 "filter": {**stab_filter(t), "_band": band}, "required": True,
             })
@@ -558,7 +583,13 @@ def build_skeleton(
             if not rows:
                 dropped.append(f"{spec['label']}: no pool move fits — slot dropped")
                 continue
-            rows.sort(key=lambda r: (-(effective_power(r) or 0), r["move"]))
+            rows.sort(
+                key=lambda r: (
+                    r["move"] not in fuel_moves,
+                    -(effective_power(r) or 0),
+                    r["move"],
+                )
+            )
             spec = {
                 **spec,
                 "candidates": [r["move"] for r in rows],
@@ -628,7 +659,10 @@ def build_skeleton(
         resolved.remove(spec)
     resolved.sort(key=lambda s: (s["level"], s["role"] != "kit", s["label"]))
     slots = [
-        {k: s[k] for k in ("level", "role", "label", "candidates", "required")}
+        {
+            **{k: s[k] for k in ("level", "role", "label", "candidates", "required")},
+            "fuel": [c for c in s["candidates"] if c in fuel_moves],
+        }
         for s in resolved
     ]
     return {"slots": slots, "leans": leans, "dropped": dropped}
@@ -763,11 +797,17 @@ def format_skeleton(skeleton: dict[str, Any]) -> str:
         "be a DIFFERENT move — a repeated move is dropped and its slot fails; "
         "in particular each STATUS slot needs its own distinct status move. "
         "Sole exception: the L0 reward move may also appear once at a later "
-        "level.",
+        "level. A candidate marked * is ability fuel — an ability of this "
+        "species boosts or demands it, so its real output beats its listed BP; "
+        "prefer a *-marked candidate over a stronger unmarked one unless the "
+        "reasoning states why not.",
     ]
     for slot in skeleton["slots"]:
         cands = slot["candidates"]
-        shown = ", ".join(cands[:_MAX_PROMPT_CANDIDATES])
+        marks = set(slot.get("fuel") or ())
+        shown = ", ".join(
+            f"{c}*" if c in marks else c for c in cands[:_MAX_PROMPT_CANDIDATES]
+        )
         overflow = len(cands) - _MAX_PROMPT_CANDIDATES
         more = f" (+{overflow} more in the pool)" if overflow > 0 else ""
         if slot["role"] == "status" and len(cands) > _MAX_PROMPT_CANDIDATES:
