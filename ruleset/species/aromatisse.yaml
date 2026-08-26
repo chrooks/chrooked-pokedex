@@ -1,33 +1,33 @@
 name: Aromatisse
 chrooked_id: aromatisse
 aka: { pokeemerald: SPECIES_AROMATISSE }
+types: [Fairy, Poison]
 abilities:
   primary: Venomize
   secondary: Poison Heal
   hidden: Aroma Veil
-stats: { hp: 115, atk: 60, def: 80, spa: 105, spd: 100, spe: 29 }
+stats: { hp: 115, atk: 60, def: 80, spa: 105, spd: 106, spe: 29 }
 learnset:
   - { level: 0, move: Trick Room }
   - { level: 1, move: Aromatic Mist }
-  - { level: 1, move: Heal Pulse }
-  - { level: 1, move: Fairy Wind }
-  - { level: 1, move: Poison Sting }
-  - { level: 2, move: Echoed Voice }
-  - { level: 9, move: Disarming Voice }
-  - { level: 12, move: Aromatherapy }
-  - { level: 15, move: Draining Kiss }
-  - { level: 18, move: Attract }
-  - { level: 21, move: Toxic }
-  - { level: 22, move: Beguile }
-  - { level: 24, move: Misty Terrain }
-  - { level: 27, move: Venoshock }
-  - { level: 29, move: Dazzling Gleam }
-  - { level: 30, move: Charm }
-  - { level: 33, move: Psychic }
-  - { level: 36, move: Calm Mind }
-  - { level: 39, move: Moonblast }
-  - { level: 42, move: Skill Swap }
-  - { level: 45, move: Psych Up }
-  - { level: 48, move: Miasma }
-  - { level: 64, move: Rapture }
+  - { level: 1, move: Echoed Voice }
+  - { level: 5, move: Fairy Wind }
+  - { level: 9, move: Acid Spray }
+  - { level: 12, move: Disarming Voice }
+  - { level: 16, move: Clear Smog }
+  - { level: 19, move: Aromatherapy }
+  - { level: 23, move: Beguile }
+  - { level: 26, move: Venoshock }
+  - { level: 30, move: Swift }
+  - { level: 33, move: Toxic }
+  - { level: 37, move: Miasma }
+  - { level: 40, move: Tri Attack }
+  - { level: 44, move: Dazzling Gleam }
+  - { level: 47, move: Calm Mind }
+  - { level: 51, move: Moonblast }
+  - { level: 54, move: Sludge Wave }
+  - { level: 58, move: Resonance }
+  - { level: 61, move: Fleur Cannon }
+  - { level: 65, move: Boomburst }
+  - { level: 68, move: Rapture }
 evolution: { from: Spritzee, method: { item: SACHET } }
