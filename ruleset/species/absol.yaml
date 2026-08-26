@@ -1,10 +1,9 @@
 name: Absol
 chrooked_id: absol
 aka: { pokeemerald: SPECIES_ABSOL }
-types: [Dark, Fairy]
 abilities:
   primary: Sharpness
-stats: { spe: 100 }
+stats: { hp: 69, def: 65, spa: 85, spd: 65, spe: 106 }
 learnset:
   - { level: 1, move: Quick Attack }
   - { level: 1, move: Leer }
