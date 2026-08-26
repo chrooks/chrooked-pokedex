@@ -1,28 +1,29 @@
 name: Mr Mime
 chrooked_id: mrmime
 aka: { pokeemerald: SPECIES_MR_MIME }
-stats: { def: 70 }
+abilities:
+  primary: Soundproof
+  secondary: Filter
+  hidden: Dual Aegis
+stats: { hp: 75, atk: 40, def: 75, spa: 105, spd: 125, spe: 105 }
 learnset:
-  - { level: 1, move: Quick Guard }
-  - { level: 1, move: Wide Guard }
-  - { level: 1, move: Power Swap }
-  - { level: 1, move: Guard Swap }
-  - { level: 2, move: Copycat }
-  - { level: 3, move: Baton Pass }
-  - { level: 4, move: Encore }
-  - { level: 5, move: Pound }
-  - { level: 12, move: Confusion }
-  - { level: 16, move: Role Play }
-  - { level: 20, move: Protect }
-  - { level: 24, move: Recycle }
-  - { level: 28, move: Psybeam }
-  - { level: 32, move: Mimic }
-  - { level: 35, move: Safeguard }
-  - { level: 36, move: Light Screen }
-  - { level: 37, move: Reflect }
-  - { level: 38, move: Psychic }
-  - { level: 40, move: Sucker Punch }
-  - { level: 44, move: Dazzling Gleam }
-  - { level: 48, move: Mindwarp }
-  - { level: 52, move: Teeter Dance }
-  - { level: 57, move: Future Sight }
+  - { level: 0, move: Mindwarp }
+  - { level: 1, move: Echoed Voice }
+  - { level: 1, move: Helping Hand }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Reflect }
+  - { level: 13, move: Swift }
+  - { level: 17, move: Light Screen }
+  - { level: 21, move: Psybeam }
+  - { level: 25, move: Beguile }
+  - { level: 29, move: Encore }
+  - { level: 33, move: Psyshock }
+  - { level: 37, move: Dazzling Gleam }
+  - { level: 41, move: Flash Cannon }
+  - { level: 45, move: Psychic }
+  - { level: 49, move: Moonblast }
+  - { level: 53, move: Hyper Voice }
+  - { level: 57, move: Aurora Veil }
+  - { level: 61, move: Thunderbolt }
+  - { level: 65, move: Rapture }
+  - { level: 70, move: Future Sight }
