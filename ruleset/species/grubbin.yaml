@@ -2,8 +2,8 @@ name: Grubbin
 chrooked_id: grubbin
 aka: { dex: 736 }
 learnset:
-  - { level: 1, move: Vise Grip }
   - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Vise Grip }
   - { level: 2, move: Fury Cutter }
   - { level: 5, move: String Shot }
   - { level: 10, move: Bug Bite }
@@ -18,5 +18,6 @@ learnset:
   - { level: 43, move: Moltstrike }
   - { level: 45, move: Antennae Blast }
   - { level: 48, move: Lightning Slam }
+  - { level: 51, move: Gauss Cannon }
   - { level: 57, move: Megahorn }
   - { level: 60, move: Drone Chorus }

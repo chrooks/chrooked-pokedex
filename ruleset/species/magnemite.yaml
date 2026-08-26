@@ -1,25 +1,28 @@
 name: Magnemite
 chrooked_id: magnemite
 aka: {  }
+abilities:
+  primary: Magnet Pull
+  secondary: Transistor
+  hidden: Sturdy
 learnset:
   - { level: 1, move: Tackle }
-  - { level: 1, move: Thunder Shock }
-  - { level: 4, move: Supersonic }
-  - { level: 6, move: Glint }
-  - { level: 8, move: Thunder Wave }
-  - { level: 12, move: Electro Ball }
-  - { level: 16, move: Gyro Ball }
-  - { level: 18, move: Short Circuit }
-  - { level: 19, move: Mirror Shot }
-  - { level: 20, move: Spark }
-  - { level: 24, move: Screech }
-  - { level: 28, move: Magnet Rise }
-  - { level: 32, move: Flash Cannon }
-  - { level: 36, move: Discharge }
-  - { level: 38, move: Luster Cannon }
-  - { level: 40, move: Metal Sound }
-  - { level: 43, move: Thunder }
-  - { level: 44, move: Light Screen }
-  - { level: 48, move: Lock-On }
-  - { level: 52, move: Zap Cannon }
-  - { level: 62, move: Steel Beam }
+  - { level: 1, move: Thunder Wave }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Glint }
+  - { level: 13, move: Supersonic }
+  - { level: 17, move: Shock Wave }
+  - { level: 21, move: Reflect }
+  - { level: 24, move: Mirror Shot }
+  - { level: 27, move: Light Screen }
+  - { level: 30, move: Tri Attack }
+  - { level: 33, move: Short Circuit }
+  - { level: 36, move: Flash Cannon }
+  - { level: 40, move: Lock-On }
+  - { level: 44, move: Discharge }
+  - { level: 48, move: Iron Defense }
+  - { level: 52, move: Luster Cannon }
+  - { level: 56, move: Parabolic Charge }
+  - { level: 60, move: Thunder }
+  - { level: 64, move: Zap Cannon }
+  - { level: 68, move: Steel Beam }

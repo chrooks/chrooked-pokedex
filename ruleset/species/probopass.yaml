@@ -6,10 +6,10 @@ abilities:
 stats: { hp: 75 }
 learnset:
   - { level: 0, move: Tri Attack }
-  - { level: 1, move: Magnetic Flux }
-  - { level: 1, move: Magnet Rise }
-  - { level: 1, move: Gravity }
   - { level: 1, move: Block }
+  - { level: 1, move: Gravity }
+  - { level: 1, move: Magnet Rise }
+  - { level: 1, move: Magnetic Flux }
   - { level: 2, move: Wide Guard }
   - { level: 3, move: Iron Defense }
   - { level: 4, move: Tackle }
@@ -32,5 +32,6 @@ learnset:
   - { level: 43, move: Zap Cannon }
   - { level: 44, move: Lock-On }
   - { level: 48, move: Luster Cannon }
+  - { level: 51, move: Gauss Cannon }
   - { level: 62, move: Steel Beam }
   - { level: 63, move: Meteor Surge }

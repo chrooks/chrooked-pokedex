@@ -1,0 +1,14 @@
+name: Gauss Cannon
+chrooked_id: gausscannon
+aka: {  }
+type: Electric
+category: special
+power: 80
+accuracy: 100
+pp: 10
+description: A crushing electromagnetic blast. Super effective on Steel types and may lower Defense.
+effect: super_effective_on_arg
+argument: { type: Steel }
+additional_effects:
+  - { effect: def_minus_1, chance: 30 }
+flags: [ballistic, pulse]

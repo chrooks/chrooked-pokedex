@@ -7,10 +7,10 @@ abilities:
 stats: { hp: 70, def: 80, spa: 140, spe: 100 }
 learnset:
   - { level: 0, move: Thunderbolt }
+  - { level: 1, move: Charge }
   - { level: 1, move: Dig }
   - { level: 1, move: Iron Defense }
   - { level: 1, move: String Shot }
-  - { level: 1, move: Charge }
   - { level: 2, move: Struggle Bug }
   - { level: 3, move: Thunder Shock }
   - { level: 4, move: Mud-Slap }
@@ -29,6 +29,7 @@ learnset:
   - { level: 40, move: Antennae Blast }
   - { level: 43, move: Guillotine }
   - { level: 44, move: Thunder }
+  - { level: 47, move: Gauss Cannon }
   - { level: 50, move: Fly }
   - { level: 53, move: Drone Chorus }
   - { level: 57, move: Agility }

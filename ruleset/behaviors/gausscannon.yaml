@@ -1,0 +1,41 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Gauss Cannon
+chrooked_id: gausscannon
+applies_to: move
+aka: {  }
+effects:
+  - summary: "Type-chart override: this Electric move hits Steel super-effectively"
+    trigger: damage-calc
+    when: The move resolves its type-effectiveness multiplier against the target's types
+    effect: If the target is Steel-type (primary or secondary), treat the Electric-vs-Steel matchup as 2x instead of the normal 1x. All other type interactions remain unchanged and stack multiplicatively, so a Steel/Ground target keeps its Ground immunity (0x overall).
+  - summary: "Secondary effect: 30% chance to lower target Defense by 1 stage"
+    trigger: on-hit
+    when: The move successfully deals damage
+    effect: Roll a 30% chance; on success, lower the target's Defense by one stage — the electromagnetic field physically warps metallic bodies and armor.
+test_cases:
+  - given: Gauss Cannon hits a pure Steel-type (e.g., Klink)
+    expect: Damage uses a 2x type-effectiveness multiplier (super-effective)
+  - given: Gauss Cannon hits a Steel/Flying-type (e.g., Skarmory)
+    expect: 2x (Steel override) x 1x (Flying vs Electric is 2x in canon — combined per normal chart with the Steel override replacing only the Steel axis)
+  - given: Gauss Cannon hits a Steel/Ground-type (e.g., Steelix)
+    expect: Ground immunity is retained; 2x x 0x = 0x — the move has no effect
+  - given: Gauss Cannon hits a pure Water-type
+    expect: Standard 1x Electric-vs-Water effectiveness; no override applies
+  - given: Gauss Cannon hits any target and the 30% roll succeeds
+    expect: Target's Defense drops by 1 stage after damage (secondary is type-agnostic)
+notes:
+  - "Modeled on Freeze-Dry and the house move Excalibur: the move record reuses effect super_effective_on_arg with argument {type: Steel}; this spec exists to travel the mechanic to engines where that effect is not native (Essentials/Rejuv)."
+  - Steel/Ground keeps its immunity on purpose — Ground remains the counterplay to the trap-and-execute kit (Magnet Pull + Gauss Cannon).
+  - Power stays at 80, below Thunderbolt, so matchup identity carries the move; vs Steel it plays like a 160-BP hit.
+  - Flags [ballistic, pulse] follow the house cannon convention (Zap Cannon, Aura Sphere); pulse per author direction (Mega Launcher boost), ballistic means Bulletproof blocks it.
+  - No contact — a field projection, consistent with the UFO/signal lore.
+engine_hints:
+  pokeemerald: >-
+    Native — no code needed. The data layer already emits
+    .effect = EFFECT_SUPER_EFFECTIVE_ON_ARG with .argument = { .type = TYPE_STEEL };
+    the engine implements the forced super-effective behavior.
+  rejuv: >-
+    Implemented — references/rejuv-harness/chrooked_gausscannon.rb registers
+    CHROOKED_MOVE_TYPEMOD[:GAUSSCANNON] (the Excalibur pattern, Steel instead of
+    Dragon); apply copies it into patch/Mods/. The def_minus_1 secondary ports as
+    data (funccode 0x043, 30%).
