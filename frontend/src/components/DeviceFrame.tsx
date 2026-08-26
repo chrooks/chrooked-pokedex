@@ -59,7 +59,7 @@ type Props = {
   /** Expand every dex match to its whole evolution line. */
   evoLine: boolean;
   onEvoLine: (on: boolean) => void;
-  /** Promote the current search term to a Name filter pill (Enter in search). */
+  /** Keep the search's live Name filter pill as a permanent one (Enter). */
   onSearchEnter: () => void;
   layout: DexLayout;
   onLayout: (layout: DexLayout) => void;
@@ -150,12 +150,12 @@ export function DeviceFrame({
           }
         }}
         disabled={!searchable}
-        aria-label={`${searchPlaceholder} by name. Press Enter to add it as a Name filter.`}
+        aria-label={`${searchPlaceholder} by name. Filters as you type; press Enter to keep the term as a Name filter.`}
       />
       {searchable && query.trim() !== "" && (
         <kbd
           className="device__search-enter mono"
-          title="Press Enter to add as a Name filter"
+          title="Press Enter to keep as a Name filter"
           aria-hidden="true"
         >
           ↵

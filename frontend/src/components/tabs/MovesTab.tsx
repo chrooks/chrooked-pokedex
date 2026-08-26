@@ -234,21 +234,17 @@ export function MovesTab({ backdropTargetId }: MovesTabProps) {
     [controls.hidden],
   );
 
-  // Live name-filter from the single rail search (ac9): `view.query` is the
-  // shared search text, applied by name before the boolean filter. Enter in the
-  // rail promotes the term to a Name pill on `mfilter` (handled in App).
-  const railQuery = view.query.trim().toLowerCase();
-  // The shared rail "Edited only" flag (ac12) ANDs with the query + builder
-  // filter, exactly like the dex.
+  // The single rail search (ac9) arrives as a live-synced Name pill inside
+  // `mfilter` (App owns the sync), so the builder filter is the ONE filtering
+  // path here. The shared rail "Edited only" flag (ac12) ANDs with it, exactly
+  // like the dex.
   const editedOnly = view.editedOnly;
   const filtered = useMemo(() => {
-    let list = moves.filter((move) =>
+    const list = moves.filter((move) =>
       evalEntries(MOVE_REGISTRY, move, controls.filter),
     );
-    if (editedOnly) list = list.filter(isMoveEdited);
-    if (railQuery === "") return list;
-    return list.filter((move) => move.name.toLowerCase().includes(railQuery));
-  }, [moves, controls.filter, railQuery, editedOnly]);
+    return editedOnly ? list.filter(isMoveEdited) : list;
+  }, [moves, controls.filter, editedOnly]);
   const rows = useMemo(
     () => stableMultiSort(filtered, controls.sort, MOVE_SORT_COLUMNS),
     [filtered, controls.sort],

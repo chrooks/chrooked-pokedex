@@ -96,6 +96,48 @@ export function appendNameFilter(
   ];
 }
 
+/** The id of the search-owned Name pill: the rail search keeps exactly one pill
+    with this id in the active tab's filter tree, live-synced to the box. A fixed
+    sentinel (never uid()) so the sync can find and update/remove its own pill
+    without touching user-made ones. */
+export const SEARCH_FILTER_ID = "search";
+
+/** Live-sync the search box into the filter tree: keep one Name pill (id
+    {@link SEARCH_FILTER_ID}) whose value tracks `query` — appended when text
+    appears, updated as it changes, removed when the box empties. Returns the
+    SAME array reference when nothing changes. Pure.
+    ponytail: at the 10-pill cap the search pill is silently not added, matching
+    appendNameFilter; lift the cap for the search pill if that ever bites. */
+export function syncNameFilter(filter: FilterEntry[], query: string): FilterEntry[] {
+  const trimmed = query.trim();
+  const at = filter.findIndex(
+    (e) => e.kind === "filter" && e.id === SEARCH_FILTER_ID,
+  );
+  if (trimmed === "") {
+    return at === -1 ? filter : filter.filter((_, index) => index !== at);
+  }
+  if (at !== -1) {
+    const existing = filter[at] as Extract<FilterEntry, { kind: "filter" }>;
+    if (existing.value === trimmed) return filter;
+    return filter.map((e, index) =>
+      index === at ? { ...existing, value: trimmed } : e,
+    );
+  }
+  const filterCount = filter.filter((e) => e.kind === "filter").length;
+  if (filterCount >= MAX_FILTERS) return filter;
+  return [
+    ...filter,
+    {
+      kind: "filter",
+      id: SEARCH_FILTER_ID,
+      field: "name",
+      value: trimmed,
+      connector: "AND",
+      negated: false,
+    },
+  ];
+}
+
 function compareNumeric(cell: number, op: string, threshold: number): boolean {
   switch (op) {
     case "≥":

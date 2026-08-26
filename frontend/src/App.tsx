@@ -5,11 +5,11 @@ import { useUrlState } from "./hooks/useUrlState";
 import { useTheme } from "./hooks/useTheme";
 import { isEdited } from "./lib/format";
 import { onDataChange } from "./lib/dataChange";
-import { evalEntries, appendNameFilter, matchesQuery } from "./lib/dexFilters";
+import { evalEntries } from "./lib/dexFilters";
 import { cellMap } from "./lib/typeChartGrid";
 import { stableMultiSort } from "./lib/dexSort";
 import { expandEvoLines } from "./lib/evoLine";
-import { searchTargetFor, promoteSearchToPill } from "./lib/searchDispatch";
+import { searchTargetFor, syncSearchToNameFilter, commitSearchPill } from "./lib/searchDispatch";
 import type { Ability, CanonicalMethod, DexEntry, KindKey, Move, Target, TargetNamespace, TypeChartCell } from "./types";
 import { EntityInfoProvider } from "./lib/entityInfo";
 import { applyInlineEdit, previewInlineEdit, type InlineEdit } from "./lib/inlineEdit";
@@ -172,18 +172,16 @@ export default function App() {
     return Array.from(names).sort((a, b) => a.localeCompare(b));
   }, [all]);
 
-  // Row predicates: edited-only, then the rail search, then the boolean filter
-  // builder. All three apply to both grid and table. `view.filter`/`view.sort`
-  // are safe memo deps: useUrlState caches the whole ViewState by the raw query
-  // string, so these arrays keep a stable reference until the URL changes.
+  // Row predicates: edited-only, then the boolean filter builder. The rail
+  // search filters THROUGH the builder — the sync effect below keeps it as a
+  // Name pill in `view.filter`, so there is one filtering path, not two.
+  // `view.filter`/`view.sort` are safe memo deps: useUrlState caches the whole
+  // ViewState by the raw query string, so these arrays keep a stable reference
+  // until the URL changes.
   const filtered = useMemo(() => {
     let list = all;
     if (view.editedOnly) {
       list = list.filter(isEdited);
-    }
-    const query = view.query.trim().toLowerCase();
-    if (query) {
-      list = list.filter((entry) => matchesQuery(entry, query));
     }
     if (view.filter.length) {
       list = list.filter((entry) => evalEntries(entry, view.filter, chartByKey));
@@ -194,7 +192,7 @@ export default function App() {
       list = expandEvoLines(list, all);
     }
     return list;
-  }, [all, view.editedOnly, view.query, view.filter, view.evoLine, chartByKey]);
+  }, [all, view.editedOnly, view.filter, view.evoLine, chartByKey]);
 
   // Both grid and table honor the multi-key sort spec (an empty spec is a stable
   // no-op, so an unsorted view keeps dex order). Only the visible view's list is
@@ -402,31 +400,34 @@ export default function App() {
     [update],
   );
 
-  // Enter in the rail search promotes the term to a composable Name filter pill
-  // on the ACTIVE entity, then clears the box (ac9). The dex writes its own
-  // `filter` param via useUrlState; moves/abilities write their namespaced filter
-  // param via the search dispatch. No-op (search kept) when blank, at the pill
-  // cap, or a duplicate — appendNameFilter signals that by returning the same
-  // array reference.
-  const handleSearchEnter = useCallback(() => {
-    // Type Chart has no filter pills — its "search target" is selecting a type,
-    // which TypeChartTab does by reacting to view.query live. Enter is a no-op at
-    // the App level there (the match is already open); we leave the box as-is.
-    if (view.kind === "type-chart") {
-      return;
+  // The rail search IS a Name filter pill: this effect live-syncs a search-owned
+  // pill (a fixed sentinel id) into the ACTIVE entity's filter param — added on
+  // the first keystroke, updated as the text changes, removed when the box
+  // empties — so the term shows in the filter bar and composes with other pills.
+  // Runs on tab switch too, so the term follows you onto the new tab's builder;
+  // a tab left behind self-heals its pill on the next visit. Type Chart has no
+  // pills (searchTargetFor → null): its search selects a type live via
+  // `view.query`. All three targets write through the URL (chrooked:urlchange),
+  // which useUrlState and the tabs' control hooks both subscribe to.
+  useEffect(() => {
+    const target = searchTargetFor(view.kind);
+    if (target !== null) {
+      syncSearchToNameFilter(target, view.query);
     }
+  }, [view.kind, view.query]);
+
+  // Enter keeps the live pill: the search-owned pill is re-id'd to a permanent
+  // one (or dropped when a duplicate user pill exists) and the box clears, so
+  // clearing no longer removes it — that's how you stack several Name pills.
+  const handleSearchEnter = useCallback(() => {
     const target = searchTargetFor(view.kind);
     if (target === null) {
-      const next = appendNameFilter(view.filter, view.query, uid());
-      if (next !== view.filter) {
-        update({ filter: next, query: "" });
-      }
       return;
     }
-    if (promoteSearchToPill(target, view.query, uid())) {
+    if (commitSearchPill(target, uid())) {
       update({ query: "" });
     }
-  }, [view.kind, view.filter, view.query, update]);
+  }, [view.kind, update]);
 
   // The rail search is the single search for the dex, Moves, Abilities (ac9), and
   // the Type Chart (ac10): live name-filtering / type-selection lives in each tab,

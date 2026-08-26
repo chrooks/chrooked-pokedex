@@ -185,21 +185,17 @@ export function AbilitiesTab({ backdropTargetId }: AbilitiesTabProps) {
     return index;
   }, [dexData, abilityNameToId]);
 
-  // Live name-filter from the single rail search (ac9): `view.query` is the
-  // shared search text, applied by name before the boolean filter. Enter in the
-  // rail promotes the term to a Name pill on `afilter` (handled in App).
-  const railQuery = view.query.trim().toLowerCase();
-  // The shared rail "Edited only" flag (ac12) ANDs with the query + builder
-  // filter, exactly like the dex.
+  // The single rail search (ac9) arrives as a live-synced Name pill inside
+  // `afilter` (App owns the sync), so the builder filter is the ONE filtering
+  // path here. The shared rail "Edited only" flag (ac12) ANDs with it, exactly
+  // like the dex.
   const editedOnly = view.editedOnly;
   const filtered = useMemo(() => {
-    let list = abilities.filter((a) =>
+    const list = abilities.filter((a) =>
       evalEntries(ABILITY_REGISTRY, a, controls.filter),
     );
-    if (editedOnly) list = list.filter(isAbilityEdited);
-    if (railQuery === "") return list;
-    return list.filter((a) => a.name.toLowerCase().includes(railQuery));
-  }, [abilities, controls.filter, railQuery, editedOnly]);
+    return editedOnly ? list.filter(isAbilityEdited) : list;
+  }, [abilities, controls.filter, editedOnly]);
   const rows = useMemo(
     () => stableMultiSort(filtered, controls.sort, ABILITY_SORT_COLUMNS),
     [filtered, controls.sort],

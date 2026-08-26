@@ -4,6 +4,8 @@ import {
   appendNameFilter,
   applyFilter,
   evalEntries,
+  syncNameFilter,
+  SEARCH_FILTER_ID,
   type FilterEntry,
 } from "./filterEngine";
 import { MOVE_REGISTRY, buildMoveFilterDefs } from "./moveRegistry";
@@ -176,5 +178,46 @@ describe("appendNameFilter — shared across registries", () => {
   it("no-ops (same reference) on a blank query", () => {
     const tree = [filter("name", "Blaze")];
     expect(appendNameFilter(tree, "   ", "id1")).toBe(tree);
+  });
+});
+
+describe("syncNameFilter — the search box's live pill", () => {
+  it("adds the search pill on first text", () => {
+    const next = syncNameFilter([], " fla ");
+    expect(next).toHaveLength(1);
+    expect(next[0]).toMatchObject({
+      kind: "filter",
+      id: SEARCH_FILTER_ID,
+      field: "name",
+      value: "fla",
+    });
+  });
+  it("updates the pill's value as the text changes", () => {
+    const tree = syncNameFilter([filter("type", "Fire")], "fla");
+    const next = syncNameFilter(tree, "flame");
+    expect(next).toHaveLength(2);
+    expect(next[1]).toMatchObject({ id: SEARCH_FILTER_ID, value: "flame" });
+  });
+  it("removes the pill when the box empties, keeping user pills", () => {
+    const user = filter("type", "Fire");
+    const tree = syncNameFilter([user], "fla");
+    const next = syncNameFilter(tree, "  ");
+    expect(next).toEqual([user]);
+  });
+  it("no-ops (same reference) when already in sync", () => {
+    const empty: FilterEntry[] = [];
+    expect(syncNameFilter(empty, "  ")).toBe(empty);
+    const tree = syncNameFilter(empty, "fla");
+    expect(syncNameFilter(tree, " fla ")).toBe(tree);
+  });
+  it("never touches a user-made Name pill with the same value", () => {
+    const user = filter("name", "fla");
+    const tree = syncNameFilter([user], "fla");
+    expect(tree).toHaveLength(2); // user pill + search pill
+    expect(syncNameFilter(tree, "")).toEqual([user]);
+  });
+  it("respects the 10-pill cap when adding", () => {
+    const full = Array.from({ length: 10 }, () => filter("name", "x"));
+    expect(syncNameFilter(full, "fla")).toBe(full);
   });
 });

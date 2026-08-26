@@ -206,7 +206,10 @@ function makeSelectMatch(byKey: ReadonlyMap<string, TypeChartCell> | null) {
 
 function textHaystack(field: string, entry: DexEntry): string {
   if (field === "name") {
-    return entry.name;
+    // The dex number rides in the Name haystack so the rail search's live Name
+    // pill keeps matching by № ("35" finds Clefairy) — parity with the old
+    // free-text matchesQuery, which the Team pool still uses.
+    return `${entry.name} ${entry.dex ?? ""}`;
   }
   if (field === "moves") {
     return learnsetText(entry);
