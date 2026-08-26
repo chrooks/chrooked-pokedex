@@ -163,8 +163,8 @@ BAND_CONVENTIONS: dict[str, dict[str, int]] = {
     "≤50": {"accuracy": 100, "pp": 30},
     "51-75": {"accuracy": 100, "pp": 25},
     "76-90": {"accuracy": 100, "pp": 15},
-    "91-110": {"accuracy": 90, "pp": 10},
-    ">110": {"accuracy": 90, "pp": 5},
+    "91-109": {"accuracy": 90, "pp": 10},
+    "110+": {"accuracy": 90, "pp": 5},
 }
 
 STATUS_EFFECTS = frozenset({
@@ -178,7 +178,7 @@ KNOWN_SECONDARY = STATUS_EFFECTS | STAT_DROP_EFFECTS
 
 STATUS_CHANCE = 10
 STAT_DROP_CHANCE: dict[str, int] = {
-    "≤50": 100, "51-75": 100, "76-90": 20, "91-110": 20, ">110": 30,
+    "≤50": 100, "51-75": 100, "76-90": 20, "91-109": 20, "110+": 30,
 }
 
 # Renaming a band label in learnset_rubric.json must fail HERE, loudly, not as
@@ -401,7 +401,7 @@ def audit_move(mid: str, move: Mapping) -> list[str]:
     # At >110 the drawback IS the secondary (D21): a top-band nuke carries its
     # self-cost (phys recoil / spec -2 SpA) instead of the type's target effect,
     # matching canon (Overheat, Head Smash, Double-Edge carry no target effect).
-    if band == ">110":
+    if band == "110+":
         deviations.extend(_drawback_deviations(mid, split, move))
         return deviations
 

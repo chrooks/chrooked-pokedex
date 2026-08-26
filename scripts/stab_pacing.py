@@ -34,7 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import move_coverage as mc  # noqa: E402
 import learnset_ladder as ll  # noqa: E402
 
-BANDS = ["≤50", "51-75", "76-90", "91-110", ">110"]
+BANDS = ["≤50", "51-75", "76-90", "91-109", "110+"]
 # Scheme A — even fifths of L1-70, read from the shared band Contract so this
 # script and the web skeleton builder (learnset_skeleton.py) cannot drift.
 WINDOWS = {

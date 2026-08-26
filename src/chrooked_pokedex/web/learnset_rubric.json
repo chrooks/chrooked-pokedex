@@ -22,8 +22,8 @@
       { "min_power": 2, "label": "≤50", "window": [1, 19] },
       { "min_power": 51, "label": "51-75", "window": [20, 30] },
       { "min_power": 76, "label": "76-90", "window": [31, 44] },
-      { "min_power": 91, "label": "91-110", "window": [45, 59] },
-      { "min_power": 111, "label": ">110", "window": [60, 75] }
+      { "min_power": 91, "label": "91-109", "window": [45, 59] },
+      { "min_power": 110, "label": "110+", "window": [60, 75] }
     ]
   }
 }

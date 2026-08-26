@@ -25,8 +25,9 @@ _spec.loader.exec_module(mc)
         (51, "51-75"),
         (75, "51-75"),   # upper bound inclusive
         (90, "76-90"),
-        (110, "91-110"),
-        (111, ">110"),
+        (109, "91-109"),
+        (110, "110+"),
+        (111, "110+"),
     ],
 )
 def test_band_bucketing_is_upper_inclusive(power, expected) -> None:

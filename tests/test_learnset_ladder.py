@@ -1,8 +1,7 @@
 """Unit tests for the learnset-ladder auditor/fixer (scripts/learnset_ladder.py).
 
-Guards the two transforms the distribution pass needs cleaned up:
-reorder net-new rungs into ascending band order, and drop a net-new rung that
-duplicates a canon move's (type, split, band) cell.
+Guards the one transform left after the dedup retirement (2026-08-26):
+reorder rungs into ascending band order, deleting nothing.
 """
 
 from __future__ import annotations
@@ -38,19 +37,18 @@ def test_reorder_puts_lower_band_first(ctx) -> None:
 
 
 @pytest.mark.unit
-def test_dedup_drops_net_new_when_canon_shares_cell(ctx) -> None:
-    """Dive Bomb (net-new 76-90) is dropped; canon Drill Peck (76-90) stays."""
+def test_shared_cell_rungs_are_kept_and_reordered(ctx) -> None:
+    """Dedup is retired: a same-cell custom rung survives; only order changes."""
     rows = [
-        (38, "Nosedive"),    # Flying phys 91-110, net-new
+        (38, "Nosedive"),    # Flying phys 91-109, net-new
         (41, "Drill Peck"),  # Flying phys 76-90, canon
-        (48, "Dive Bomb"),   # Flying phys 76-90, net-new -> dropped
+        (48, "Dive Bomb"),   # Flying phys 76-90, net-new — kept, never dropped
     ]
     out = ll.transform(rows, ctx)
     moves = [mv for _, mv in out]
-    assert "Dive Bomb" not in moves
-    assert "Drill Peck" in moves
-    # kept rungs ascend by band: Drill Peck(76-90) before Nosedive(91-110)
-    assert moves.index("Drill Peck") < moves.index("Nosedive")
+    assert moves.count("Dive Bomb") == 1  # nothing deleted
+    # rungs ascend by band: both 76-90 rungs before Nosedive(91-109)
+    assert out == [(38, "Drill Peck"), (41, "Dive Bomb"), (48, "Nosedive")]
 
 
 @pytest.mark.unit

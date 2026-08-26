@@ -1,11 +1,9 @@
-"""Audit and fix learnset ladder hygiene across all species.
+"""Audit and fix learnset ladder ORDER across all species.
 
 A species' STAB ladder for a (type, split) should teach its damaging rungs in
-ascending base-power band as level rises, one move per (type, split, band) cell.
-Two defects the distribution pass leaves behind:
+ascending base-power band as level rises. The one defect this pass repairs:
 
   * INVERSION  — a later-level rung sits in a LOWER power band than an earlier one.
-  * SAME-BAND DUP — two rungs share one (type, split, band) cell.
 
 Scope (decided with Chris):
   * Full ladder: canon + custom rungs are sorted together.
@@ -13,10 +11,11 @@ Scope (decided with Chris):
     dropped. Only EARNED rungs (level >= 2) are resequenced.
   * Reorder reuses the ladder's own existing level slots (no new levels invented;
     non-ladder moves keep their levels).
-  * Dedup keeps the canon move and drops OUR redundant custom rung from that
-    species (the custom move file stays; the matrix cell is filled elsewhere).
-    Canon+canon dups (traditional progressions like Absorb/Mega Drain) are left
-    alone. All-custom dups keep the earliest rung.
+  * NOTHING is ever deleted. The old same-band dedup was RETIRED (2026-08-26,
+    Chris's ruling): it was built for mass-distributed filler, but after the
+    multi-hit rebanding it aimed at hand-placed customs (it wanted to delete
+    Gauss Cannon from Vikavolt because canon Discharge shared the cell).
+    Redundant rungs are a makeover-time editorial call, not a script's.
 
 Read-only editorial tool over the Ruleset, like scripts/move_coverage.py:
 stdlib + PyYAML, no import surface into the app.
@@ -103,7 +102,10 @@ def parse_learnset(text: str):
 
 
 def transform(rows: list[tuple[int, str]], ctx: Ctx) -> list[tuple[int, str]] | None:
-    """Apply dedup + reorder. Return new rows, or None if unchanged."""
+    """Reorder inverted ladders in place. Return new rows, or None if unchanged.
+
+    Never deletes a row — the dedup half was retired (see module docstring).
+    """
     # Tag each row with its ladder identity (or None for non-ladder moves).
     tagged = [(lvl, mv, ctx.rung(mv)) for lvl, mv in rows]
 
@@ -115,32 +117,7 @@ def transform(rows: list[tuple[int, str]], ctx: Ctx) -> list[tuple[int, str]] | 
     if not ours:
         return None
 
-    # --- dedup: one rung per (type, split, band) cell -------------------------
-    dropped: set[int] = set()
-    cells: dict[tuple, list[int]] = {}
-    for idx, (lvl, mv, r) in enumerate(tagged):
-        if r is None or (r[0], r[1]) not in ours:
-            continue
-        cells.setdefault((r[0], r[1], r[2]), []).append(idx)
-    for members in cells.values():
-        if len(members) < 2:
-            continue
-        anchors = [i for i in members if tagged[i][0] <= ANCHOR_MAX]
-        earned = [i for i in members if tagged[i][0] > ANCHOR_MAX]
-        has_canon = any(not tagged[i][2][3] for i in members)
-        if has_canon:
-            # keep canon (+ any anchors), drop earned custom rungs
-            for i in earned:
-                if tagged[i][2][3]:
-                    dropped.add(i)
-        else:
-            # all custom: keep the earliest, drop later earned duplicates
-            keep = anchors[0] if anchors else min(earned, key=lambda i: tagged[i][0])
-            for i in earned:
-                if i != keep:
-                    dropped.add(i)
-
-    kept = [t for idx, t in enumerate(tagged) if idx not in dropped]
+    kept = tagged
 
     # --- reorder: earned ladder rungs, per (type, split), reuse level slots ---
     groups: dict[tuple, list[int]] = {}
@@ -164,14 +141,14 @@ def transform(rows: list[tuple[int, str]], ctx: Ctx) -> list[tuple[int, str]] | 
 
 
 def violations(rows: list[tuple[int, str]], ctx: Ctx):
-    """Return (inversions, dups) for one species' earned ladder (level >= 2)."""
+    """Return inversions for one species' earned ladder (level >= 2)."""
     groups: dict[tuple, list] = {}
     for lvl, mv in rows:
         r = ctx.rung(mv)
         if r is None or lvl <= ANCHOR_MAX:
             continue
         groups.setdefault((r[0], r[1]), []).append((lvl, mv, r[2], r[3]))
-    inv, dup = [], []
+    inv = []
     for (typ, split), items in groups.items():
         if not any(isc for _, _, _, isc in items):  # only ladders we touched
             continue
@@ -182,13 +159,7 @@ def violations(rows: list[tuple[int, str]], ctx: Ctx):
                 inv.append((typ, split, items))
                 break
             peak = max(peak, RANK[band])
-        cells: dict[str, list] = {}
-        for lvl, mv, band, isc in items:
-            cells.setdefault(band, []).append(isc)
-        for band, occ in cells.items():
-            if len(occ) > 1 and any(occ):  # a custom rung shares the cell
-                dup.append((typ, split, band))
-    return inv, dup
+    return inv
 
 
 def emit_block(indent: str, rows: list[tuple[int, str]]) -> list[str]:
@@ -200,24 +171,21 @@ def species_files() -> list[Path]:
 
 
 def cmd_audit(ctx: Ctx) -> int:
-    total_inv = total_dup = affected = 0
+    total_inv = affected = 0
     for path in species_files():
         parsed = parse_learnset(path.read_text(encoding="utf-8"))
         if not parsed:
             continue
         _, _, rows, _ = parsed
-        inv, dup = violations(rows, ctx)
-        if inv or dup:
+        inv = violations(rows, ctx)
+        if inv:
             affected += 1
             total_inv += len(inv)
-            total_dup += len(dup)
             for typ, split, items in inv:
                 seq = " ".join(f"L{l}:{m}[{b}]" for l, m, b, _ in items)
                 print(f"INV  {path.stem:20} {typ:8} {split:8} {seq}")
-            for typ, split, band in dup:
-                print(f"DUP  {path.stem:20} {typ:8} {split:8} {band}")
-    print(f"\n{total_inv} inversions, {total_dup} custom-dup cells, {affected} species")
-    return 1 if (total_inv or total_dup) else 0
+    print(f"\n{total_inv} inversions, {affected} species")
+    return 1 if total_inv else 0
 
 
 def cmd_fix(ctx: Ctx, write: bool) -> int:
@@ -232,17 +200,7 @@ def cmd_fix(ctx: Ctx, write: bool) -> int:
         if new_rows is None:
             continue
         changed += 1
-        from collections import Counter
-
-        kept_names = Counter(m for _, m in new_rows)
-        dropped = []
-        for _, mv in rows:
-            if kept_names[mv] > 0:
-                kept_names[mv] -= 1
-            else:
-                dropped.append(mv)
-        note = f" (dropped {', '.join(dropped)})" if dropped else ""
-        print(f"{'WRITE' if write else 'PLAN '} {path.stem}{note}")
+        print(f"{'WRITE' if write else 'PLAN '} {path.stem}")
         if write:
             body = pre + emit_block(indent, new_rows) + post
             path.write_text("\n".join(body) + "\n", encoding="utf-8")
