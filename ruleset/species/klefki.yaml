@@ -1,6 +1,10 @@
 name: Klefki
 chrooked_id: klefki
 aka: {  }
+abilities:
+  primary: Prankster
+  secondary: Dual Aegis
+  hidden: Magician
 learnset:
   - { level: 1, move: Astonish }
   - { level: 2, move: Metal Claw }

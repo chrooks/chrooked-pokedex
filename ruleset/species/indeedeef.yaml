@@ -1,6 +1,8 @@
 name: Indeedee F
 chrooked_id: indeedeef
 aka: {  }
+abilities:
+  hidden: Dual Aegis
 learnset:
   - { level: 1, move: Stored Power }
   - { level: 1, move: Play Nice }

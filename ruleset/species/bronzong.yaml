@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_BRONZONG }
 abilities:
   primary: Levitate
   secondary: Heatproof
-  hidden: Sturdy
+  hidden: Dual Aegis
 stats: { hp: 75, atk: 90, def: 115, spa: 80, spd: 115, spe: 30 }
 learnset:
   - { level: 0, move: Block }
