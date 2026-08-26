@@ -17,11 +17,13 @@ learnset:
   - { level: 20, move: Bug Bite }
   - { level: 23, move: Bulldoze }
   - { level: 33, move: Crunch }
+  - { level: 37, move: Sand Tomb }
   - { level: 40, move: Fire Fang }
   - { level: 44, move: Tectonic Fang }
   - { level: 47, move: Lithic Fang }
   - { level: 51, move: Earthquake }
   - { level: 54, move: Backstab }
+  - { level: 58, move: Sucker Punch }
   - { level: 61, move: Faultbreak }
   - { level: 65, move: Havoc }
   - { level: 68, move: Shore Up }
