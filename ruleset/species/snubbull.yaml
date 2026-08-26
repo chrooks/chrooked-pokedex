@@ -1,29 +1,28 @@
 name: Snubbull
 chrooked_id: snubbull
 aka: { pokeemerald: SPECIES_SNUBBULL }
-types: [Fairy]
 abilities:
   secondary: Blitz
   hidden: Guts
 learnset:
-  - { level: 1, move: Tail Whip }
   - { level: 1, move: Growl }
-  - { level: 1, move: Scary Face }
-  - { level: 1, move: Charm }
-  - { level: 2, move: Tackle }
-  - { level: 3, move: Thunder Fang }
-  - { level: 4, move: Ice Fang }
-  - { level: 5, move: Fire Fang }
-  - { level: 7, move: Bite }
-  - { level: 10, move: Glitter Tap }
-  - { level: 13, move: Lick }
-  - { level: 15, move: Cutsie Slap }
-  - { level: 19, move: Headbutt }
-  - { level: 25, move: Roar }
-  - { level: 31, move: Last Resort }
-  - { level: 35, move: Crunch }
-  - { level: 37, move: Play Rough }
-  - { level: 40, move: Starfall Slam }
-  - { level: 43, move: Payback }
-  - { level: 49, move: Crunch }
-  - { level: 64, move: Faeblitz }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Glitter Tap }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Sand Tomb }
+  - { level: 16, move: Bite }
+  - { level: 19, move: Charm }
+  - { level: 23, move: Cutsie Slap }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Scary Face }
+  - { level: 33, move: Hyper Fang }
+  - { level: 37, move: Fire Fang }
+  - { level: 40, move: Ice Fang }
+  - { level: 44, move: Lovely Bite }
+  - { level: 47, move: Crunch }
+  - { level: 51, move: Starfall Slam }
+  - { level: 54, move: Earthquake }
+  - { level: 58, move: Thunder Fang }
+  - { level: 61, move: Faeblitz }
+  - { level: 65, move: Swords Dance }
+  - { level: 68, move: Faultbreak }

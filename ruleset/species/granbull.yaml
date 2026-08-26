@@ -7,31 +7,26 @@ abilities:
   hidden: Quick Feet
 stats: { atk: 135, def: 80, spe: 75 }
 learnset:
-  - { level: 1, move: Tail Whip }
+  - { level: 0, move: Tectonic Fang }
   - { level: 1, move: Growl }
-  - { level: 1, move: Scary Face }
-  - { level: 1, move: Charm }
-  - { level: 2, move: Clod Toss }
-  - { level: 3, move: Tackle }
-  - { level: 4, move: Ice Fang }
-  - { level: 5, move: Fire Fang }
-  - { level: 6, move: Thunder Fang }
-  - { level: 7, move: Bite }
-  - { level: 8, move: Outrage }
-  - { level: 10, move: Glitter Tap }
-  - { level: 13, move: Lick }
-  - { level: 15, move: Cutsie Slap }
-  - { level: 17, move: Bulldoze }
-  - { level: 19, move: Headbutt }
-  - { level: 27, move: Roar }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 35, move: Last Resort }
-  - { level: 39, move: Crunch }
-  - { level: 40, move: Play Rough }
-  - { level: 43, move: Starfall Slam }
-  - { level: 44, move: Earthquake }
-  - { level: 51, move: Payback }
-  - { level: 57, move: Faultbreak }
-  - { level: 59, move: Crunch }
-  - { level: 64, move: Faeblitz }
-evolution: { from: Snubbull, method: { level: 23 } }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Glitter Tap }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Sand Tomb }
+  - { level: 16, move: Bite }
+  - { level: 19, move: Charm }
+  - { level: 23, move: Cutsie Slap }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Scary Face }
+  - { level: 33, move: Hyper Fang }
+  - { level: 37, move: Fire Fang }
+  - { level: 40, move: Ice Fang }
+  - { level: 44, move: Lovely Bite }
+  - { level: 47, move: Crunch }
+  - { level: 51, move: Starfall Slam }
+  - { level: 54, move: Earthquake }
+  - { level: 58, move: Thunder Fang }
+  - { level: 61, move: Faeblitz }
+  - { level: 65, move: Swords Dance }
+  - { level: 68, move: Faultbreak }
+evolution: { from: Snubbull, method: { level: 30 } }
