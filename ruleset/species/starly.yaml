@@ -2,24 +2,28 @@ name: Starly
 chrooked_id: starly
 aka: { pokeemerald: SPECIES_STARLY }
 abilities:
-  hidden: Reckless
+  primary: Reckless
+  secondary: Updraft
+  hidden: Carnivore
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 2, move: Peck }
-  - { level: 5, move: Quick Attack }
-  - { level: 9, move: Wing Attack }
-  - { level: 13, move: Double Team }
-  - { level: 15, move: Bail Out }
-  - { level: 17, move: Endeavor }
-  - { level: 21, move: Whirlwind }
-  - { level: 25, move: Aerial Ace }
-  - { level: 29, move: Take Down }
-  - { level: 33, move: Agility }
-  - { level: 37, move: Dive Bomb }
-  - { level: 41, move: Final Gambit }
-  - { level: 43, move: Rampage }
-  - { level: 46, move: Nosedive }
-  - { level: 47, move: Cross Chop }
-  - { level: 48, move: Brave Bird }
-  - { level: 57, move: Double-Edge }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Double Kick }
+  - { level: 9, move: Peck }
+  - { level: 12, move: Tidy Up }
+  - { level: 16, move: Pursuit }
+  - { level: 19, move: Low Kick }
+  - { level: 23, move: Wing Attack }
+  - { level: 26, move: Vital Throw }
+  - { level: 30, move: Knock Off }
+  - { level: 33, move: Drill Peck }
+  - { level: 37, move: U-turn }
+  - { level: 40, move: Swords Dance }
+  - { level: 44, move: Thunderous Kick }
+  - { level: 47, move: Roost }
+  - { level: 51, move: Cross Chop }
+  - { level: 54, move: Nosedive }
+  - { level: 58, move: Dive Bomb }
+  - { level: 61, move: Submission }
+  - { level: 65, move: Double-Edge }
+  - { level: 68, move: Brave Bird }
