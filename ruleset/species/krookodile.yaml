@@ -2,29 +2,28 @@ name: Krookodile
 chrooked_id: krookodile
 aka: { pokeemerald: SPECIES_KROOKODILE }
 abilities:
-  hidden: Carnivore
+  primary: Intimidate
+  secondary: Strong Jaw
+  hidden: Death Grip
 stats: { atk: 120, spe: 95 }
 learnset:
-  - { level: 1, move: Sand Attack }
+  - { level: 0, move: Jaw Lock }
   - { level: 1, move: Leer }
-  - { level: 1, move: Hone Claws }
-  - { level: 1, move: Power Trip }
-  - { level: 2, move: Clod Toss }
-  - { level: 9, move: Sand Tomb }
-  - { level: 12, move: Scary Face }
-  - { level: 15, move: Bite }
-  - { level: 16, move: Bulldoze }
-  - { level: 18, move: Torment }
-  - { level: 21, move: Dig }
-  - { level: 24, move: Swagger }
-  - { level: 27, move: Crunch }
-  - { level: 30, move: Lithic Fang }
-  - { level: 31, move: Tectonic Fang }
-  - { level: 32, move: Sandstorm }
-  - { level: 35, move: Foul Play }
-  - { level: 39, move: Backstab }
-  - { level: 44, move: Earthquake }
-  - { level: 48, move: Havoc }
-  - { level: 51, move: Thrash }
-  - { level: 58, move: Outrage }
-  - { level: 64, move: Faultbreak }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Clod Toss }
+  - { level: 9, move: Pursuit }
+  - { level: 12, move: Bite }
+  - { level: 16, move: Sand Attack }
+  - { level: 20, move: Bug Bite }
+  - { level: 23, move: Bulldoze }
+  - { level: 33, move: Crunch }
+  - { level: 40, move: Fire Fang }
+  - { level: 44, move: Tectonic Fang }
+  - { level: 47, move: Lithic Fang }
+  - { level: 51, move: Earthquake }
+  - { level: 54, move: Backstab }
+  - { level: 61, move: Faultbreak }
+  - { level: 65, move: Havoc }
+  - { level: 68, move: Shore Up }
+  - { level: 72, move: Sandstorm }
+  - { level: 75, move: Fishious Rend }

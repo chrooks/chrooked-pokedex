@@ -2,27 +2,26 @@ name: Sandile
 chrooked_id: sandile
 aka: { pokeemerald: SPECIES_SANDILE }
 abilities:
-  hidden: Carnivore
+  primary: Intimidate
+  secondary: Strong Jaw
+  hidden: Death Grip
 learnset:
   - { level: 1, move: Leer }
-  - { level: 1, move: Power Trip }
-  - { level: 3, move: Sand Attack }
-  - { level: 4, move: Clod Toss }
-  - { level: 6, move: Hone Claws }
-  - { level: 9, move: Sand Tomb }
-  - { level: 12, move: Scary Face }
-  - { level: 15, move: Bite }
-  - { level: 16, move: Bulldoze }
-  - { level: 18, move: Torment }
-  - { level: 21, move: Dig }
-  - { level: 24, move: Swagger }
-  - { level: 25, move: Lithic Fang }
-  - { level: 26, move: Tectonic Fang }
-  - { level: 27, move: Crunch }
-  - { level: 30, move: Sandstorm }
-  - { level: 33, move: Foul Play }
-  - { level: 36, move: Earthquake }
-  - { level: 39, move: Thrash }
-  - { level: 45, move: Backstab }
-  - { level: 60, move: Havoc }
-  - { level: 64, move: Faultbreak }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Clod Toss }
+  - { level: 9, move: Pursuit }
+  - { level: 12, move: Bite }
+  - { level: 16, move: Sand Attack }
+  - { level: 20, move: Bug Bite }
+  - { level: 23, move: Bulldoze }
+  - { level: 33, move: Crunch }
+  - { level: 40, move: Fire Fang }
+  - { level: 44, move: Tectonic Fang }
+  - { level: 47, move: Lithic Fang }
+  - { level: 51, move: Earthquake }
+  - { level: 54, move: Backstab }
+  - { level: 61, move: Faultbreak }
+  - { level: 65, move: Havoc }
+  - { level: 68, move: Shore Up }
+  - { level: 72, move: Sandstorm }
+  - { level: 75, move: Fishious Rend }
