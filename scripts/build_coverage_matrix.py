@@ -131,7 +131,7 @@ def main() -> None:
             "type": move["type"],
             "cat": move["category"],
             "power": move["power"],
-            "band": band_of(move["power"]),
+            "band": band_of(effective_power(move)),
             "n": pool.learners.get(mid, 0),
             "custom": mid in pool.custom,
             "body": is_body_specific(move),

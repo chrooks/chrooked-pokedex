@@ -1,6 +1,6 @@
 """Unit tests for the STAB-pacing pass (scripts/stab_pacing.py).
 
-Guards: ability-granted STAB detection, gap fill, and the L1<=4 / <=L70 caps.
+Guards: ability-granted STAB detection, gap fill, and the L1<=4 / <=L75 caps.
 """
 
 from __future__ import annotations
@@ -41,16 +41,16 @@ def test_split_follows_highest_attack_stat() -> None:
 
 
 @pytest.mark.unit
-def test_normalize_caps_l1_and_level70() -> None:
+def test_normalize_caps_l1_and_level75() -> None:
     ctx = ll.Ctx()
     rows = [
         (1, "Harden"), (1, "Growl"), (1, "Leer"), (1, "Tackle"),
         (1, "Ember"), (1, "Scratch"),  # 6 at L1 -> only 4 may stay
-        (80, "Overheat"),              # past L70 -> pulled to <=70
+        (80, "Overheat"),              # past L75 -> pulled to <=75
     ]
     out = sp.normalize(rows, ctx)
     assert sum(1 for lvl, _ in out if lvl == 1) == 4
-    assert max(lvl for lvl, _ in out) <= 70
+    assert max(lvl for lvl, _ in out) <= 75
     assert len(out) == len(rows)  # nothing dropped, only relevelled
 
 
@@ -66,7 +66,7 @@ def test_spread_gives_one_move_per_earned_level() -> None:
     out = sp.normalize(rows, ctx)
     earned = [lvl for lvl, _ in out if lvl >= 2]
     assert len(earned) == len(set(earned))  # all distinct
-    assert max(lvl for lvl, _ in out) <= 70
+    assert max(lvl for lvl, _ in out) <= 75
     assert sum(1 for lvl, _ in out if lvl == 1) == 2  # L1 untouched
 
 
@@ -84,4 +84,4 @@ def test_plan_fills_missing_band() -> None:
     adds = sp.plan_species(mon, rows, ctx, rung)
     bands_added = {ctx.rung(m)[2] for _, m in adds if ctx.rung(m)}
     assert "≤50" in bands_added  # the low rung was filled
-    assert all(1 <= lvl <= 70 for lvl, _ in adds)
+    assert all(1 <= lvl <= 75 for lvl, _ in adds)

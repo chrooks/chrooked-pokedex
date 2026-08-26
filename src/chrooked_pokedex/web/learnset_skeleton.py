@@ -28,6 +28,7 @@ Both are read fresh per call so edits apply without a restart.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -50,11 +51,24 @@ _SHAPES = frozenset({
 # Rung counts per ladder kind. Fuel outranks flavor: a dead ability is a bug,
 # thin flavor is a missed touch — so trimming drops flavor first (see _PRIORITY).
 # Both own-type ladders run ALL five bands (Chris's grid: L5 = primary's first
-# rung, L9 = secondary's — a Steel line owes its Metal Claw-class starter too).
+# rung, L9 = secondary's — a Steel line owes its Metal Claw-class starter too),
+# PLUS a second ≤50BP rung in the teens (2026-08-26 ruling): the early levels
+# are where the player spends the most game, so a type's STAB must not go
+# silent from L9 to the 50-75BP rung in the twenties.
 # The L1 kit starter is a weak NORMAL attack (Scratch/Tackle class), so it no
 # longer collides with the primary ladder's ≤50BP rung.
 _PRIMARY_RUNGS = 5
 _SECONDARY_RUNGS = 5
+
+# The L1 kit starter shortlist (2026-08-26 ruling): the physical side is the
+# canon Tackle class; the special side is our special Tackle clone. The slot
+# falls back to the old broad weak-attack search only when none of these are
+# in the pool (the special clone predates nothing — until it is accepted and
+# written, special attackers keep the fallback).
+_KIT_STARTERS: dict[str, tuple[str, ...]] = {
+    "physical": ("Tackle", "Pound", "Scratch"),
+    "special": ("Pulse Strike",),
+}
 
 # Signature / species-locked moves kept OUT of generated candidate lists — a
 # specific mon's identity move, not generic fuel. The type-changing signatures
@@ -92,10 +106,14 @@ _GRANTED_RUNGS = 3
 _FLAVOR_RUNGS = 2
 _DIRECTION_RUNGS = 3  # a type the user's direction names gets a real ladder
 _STATUS_SLOTS = 4
-# Chris's cadence ruling (2026-08-07): L1 is the kit, the first rung lands at
-# L5, and every following row steps 4 levels — 5, 9, 13, … 69 — with a final
-# L70 payoff position. The grid IS the level plan; no window arithmetic.
-_GRID: tuple[int, ...] = tuple(range(5, 70, 4)) + (70,)
+# Chris's cadence ruling (2026-08-26, superseding 2026-08-07): L1 is the kit,
+# the first rung lands at L5, and rows step 3-4 levels apart. The tail relaxes —
+# no forced L70 payoff back-to-back with L69; the last position sits at L72.
+# The grid IS the level plan; band windows steer WHICH position a rung takes.
+_GRID: tuple[int, ...] = (
+    5, 9, 12, 16, 19, 23, 26, 30, 33, 37,
+    40, 44, 47, 51, 54, 58, 61, 65, 68, 72,
+)
 # Late-game BP floors, same ruling: an attacking row at L50+ carries ≥90BP,
 # at L60+ ≥100BP. Enforced by candidate trim, like the pacing caps.
 _LATE_BP_FLOORS: tuple[tuple[int, int], ...] = ((60, 100), (50, 90))
@@ -138,6 +156,38 @@ def _rung_exclusions() -> frozenset[str]:
 def _slug(name: str) -> str:
     """A move display name as its comparison slug (``Foul Play`` → ``foulplay``)."""
     return "".join(ch for ch in name.casefold() if ch.isalnum())
+
+
+# Fixed two/three-hitters hide behind a plain effect; the description is the
+# only tell (Double Kick "twice", Triple Dive "three times").
+_TWO_HIT_RE = re.compile(r"\btwice\b|\btwo times\b", re.IGNORECASE)
+_THREE_HIT_RE = re.compile(r"\bthree times\b", re.IGNORECASE)
+_MULTI_HIT_AVG = 3.5  # 2-to-5 hit movers: avg of the hit range, per Chris
+_TRIPLE_KICK_MULT = 6  # 1x+2x+3x ramp across three hits
+
+
+def effective_power(row: dict[str, Any]) -> int | None:
+    """A move's banding power: base power × average hit count (2026-08-26).
+
+    Multi-hit movers (Bullet Seed 25) list per-hit BP, so raw power banded
+    them as starter-tier and they never surfaced as real rungs. Filters like
+    ``power_max`` (Technician fuel) still read RAW power — the boost there is
+    per hit by design; only band placement and pacing caps use this.
+    """
+    power = row.get("power")
+    if not isinstance(power, int) or power <= 1:
+        return power
+    effect = row.get("effect") or ""
+    desc = row.get("description") or ""
+    if effect == "multi_hit":
+        return round(power * _MULTI_HIT_AVG)
+    if effect == "triple_kick":
+        return power * _TRIPLE_KICK_MULT
+    if _THREE_HIT_RE.search(desc):
+        return power * 3
+    if _TWO_HIT_RE.search(desc):
+        return power * 2
+    return power
 
 
 def _bands() -> list[dict[str, Any]]:
@@ -338,6 +388,18 @@ def build_skeleton(
                 "label": f"{role.upper()} {t} rung ({band['label']}BP)",
                 "filter": filt, "required": True,
             })
+        if not is_flavor and rungs >= len(bands):
+            # Own-type ladders get a SECOND ≤50BP rung in the teens — the
+            # early game is where playtime concentrates, so a type's STAB
+            # must not go silent between L9 and the 50-75BP rung in the 20s.
+            filt = dict(rung_filter)
+            filt["_band"] = bands[0]
+            specs.append({
+                "priority": prio, "band": bands[0], "role": role,
+                "label": f"{role.upper()} {t} rung (≤{bands[0]['hi_power']}BP, "
+                         "second early rung)",
+                "filter": filt, "required": True, "early_extra": True,
+            })
 
     # --- hard fuel without a granted ladder (flag boosters, sheer force, and
     # an -ate whose granted type collapsed into an own-type ladder above)
@@ -350,7 +412,7 @@ def build_skeleton(
             leans.append(f"{name}: rewards status moves — the STATUS slots are load-bearing.")
         else:
             cands = _select(move_pool, spec.get("filter") or {}, bias)
-            cands.sort(key=lambda r: (r.get("power") or 0, r["move"]))
+            cands.sort(key=lambda r: (effective_power(r) or 0, r["move"]))
             want = min(spec.get("min_moves", 1), len(cands)) if cands else 0
             if want < spec.get("min_moves", 1):
                 dropped.append(
@@ -359,14 +421,14 @@ def build_skeleton(
                 )
             for i in range(want):
                 chunk = cands[i * len(cands) // want:(i + 1) * len(cands) // want] or cands
-                top_power = max((r.get("power") or 0) for r in chunk)
+                top_power = max((effective_power(r) or 0) for r in chunk)
                 band = _band_of(max(top_power, 2), bands)
                 note = f" — {spec['note']}" if spec.get("note") else ""
                 specs.append({
                     "priority": _PRIORITY["fuel"], "band": band, "role": "fuel",
                     "label": f"FUEL for {name}{note}",
                     "filter": None, "candidates": [r["move"] for r in chunk],
-                    "powers": {r["move"]: r.get("power") for r in chunk},
+                    "powers": {r["move"]: effective_power(r) for r in chunk},
                     "required": True,
                 })
         for mv in spec.get("named_moves") or []:
@@ -396,7 +458,19 @@ def build_skeleton(
     # class) plus a basic status row (Leer/Growl class) — the type ladders own
     # everything from L5 up, so the kit never collides with a rung.
     low_band = bands[0]
+    # The starter slot is a fixed shortlist (Tackle class + the special clone),
+    # sided by the offensive bias; the broad weak-attack search is only the
+    # fallback for a pool missing all of them.
+    starter_names = {
+        n.casefold()
+        for side, names in _KIT_STARTERS.items()
+        if bias in (None, side)
+        for n in names
+    }
     kit_stab = [
+        r for r in move_pool
+        if (r.get("move") or "").casefold() in starter_names
+    ] or [
         r for r in _select(
             move_pool,
             {"move_type": "Normal", "attacking": True, "on_stat": True},
@@ -464,10 +538,12 @@ def build_skeleton(
             exclusions = _rung_exclusions()
 
             def in_band(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+                # Banding reads EFFECTIVE power (multi-hit = BP × avg hits),
+                # so Bullet Seed-class movers surface as real mid rungs.
                 return [
                     r for r in rows
-                    if isinstance(r.get("power"), int)
-                    and band["lo_power"] <= r["power"] <= band["hi_power"]
+                    if isinstance(effective_power(r), int)
+                    and band["lo_power"] <= effective_power(r) <= band["hi_power"]
                     and _slug(r.get("move") or "") not in exclusions
                 ]
 
@@ -482,11 +558,11 @@ def build_skeleton(
             if not rows:
                 dropped.append(f"{spec['label']}: no pool move fits — slot dropped")
                 continue
-            rows.sort(key=lambda r: (-(r.get("power") or 0), r["move"]))
+            rows.sort(key=lambda r: (-(effective_power(r) or 0), r["move"]))
             spec = {
                 **spec,
                 "candidates": [r["move"] for r in rows],
-                "powers": {r["move"]: r.get("power") for r in rows},
+                "powers": {r["move"]: effective_power(r) for r in rows},
             }
         resolved.append(spec)
 
@@ -592,13 +668,14 @@ def _cap_and_floor_legal(
 
 
 def _assign_levels(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Weave every non-pinned slot onto the fixed 4-level grid, in place.
+    """Weave every non-pinned slot onto the fixed 3-4-level grid, in place.
 
-    Chris's cadence: L1 is the kit, the first rung lands at L5, and every row
-    after steps 4 levels (5, 9, 13, … 69, 70). Attacking slots take grid
-    positions in ascending-band order (primary's first rung at L5, the
-    secondary's next — Metal Claw class at L9); every third position holds a
-    status/named row. At each assigned level the candidate list trims to what
+    Chris's cadence: L1 is the kit, the first rung lands at L5, and rows step
+    3-4 levels apart (see _GRID). Attacking slots take grid positions in
+    ascending-band order (primary's first rung at L5, the secondary's next),
+    each PREFERRING a position inside its band's level window (the coverage
+    Contract) so rungs land where the band plan says they belong instead of
+    front-loading. At each assigned level the candidate list trims to what
     the level→BP pacing cap AND the late-game floors (≥90BP at L50+, ≥100BP
     at L60+) allow, so the workbench badge cannot fire whatever the model
     picks. Returns slots left with NO legal candidate (caller drops them).
@@ -616,30 +693,38 @@ def _assign_levels(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
     # Ascending bands; within a band the least-trimmable slot (primary STAB,
     # fuel) goes first so it gets the earlier grid step. Stable on insert
     # order, which already runs primary → secondary → granted → flavor.
-    attacking.sort(key=lambda s: s["band"]["lo_power"])
+    # The second early ≤50 rungs sort AFTER both first rungs so the opening
+    # keeps its primary-at-L5 / secondary-next shape.
+    attacking.sort(
+        key=lambda s: (s["band"]["lo_power"], bool(s.get("early_extra")))
+    )
 
-    # Each attacking slot takes the EARLIEST free grid position where it has a
-    # candidate that passes both the pacing cap and the late-game floor — the
-    # grid and the pacing curve disagree when woven blindly (L9 caps at 50BP,
-    # so a 51-75 rung must wait for L13). Utility rows then fill the holes the
-    # attack ladder leaves, which sprinkles them through the list.
+    # Each attacking slot prefers the earliest free grid position INSIDE its
+    # band's window that keeps the WHOLE candidate list; failing that, the
+    # best (in-window, full-list, most-survivors) position anywhere. Plain
+    # earliest-any starved lists — a 91-110 rung grabbed L49 (cap 99) and
+    # lost Earthquake to keep only its 95BP sibling. Utility rows then fill
+    # the holes the attack ladder leaves, sprinkling them through the list.
     free = list(_GRID)
     empty: list[dict[str, Any]] = []
     for spec in attacking:
         powers = spec["powers"]
-        # Earliest position that keeps the WHOLE candidate list; else the
-        # earliest with the most survivors. Plain earliest-any starved lists —
-        # a 91-110 rung grabbed L49 (cap 99) and lost Earthquake to keep only
-        # its 95BP sibling.
+        window_lo, window_hi = spec["band"].get("window") or (1, 100)
         best_pos: int | None = None
         best_legal: list[str] = []
+        best_key = (-1, -1, -1)
         for position in free:
             legal = _cap_and_floor_legal(spec, powers, position, pacing)
-            if len(legal) == len(spec["candidates"]):
+            if not legal:
+                continue
+            in_window = window_lo <= position <= window_hi
+            full = len(legal) == len(spec["candidates"])
+            if in_window and full:
                 best_pos, best_legal = position, legal
                 break
-            if len(legal) > len(best_legal):
-                best_pos, best_legal = position, legal
+            key = (int(in_window), int(full), len(legal))
+            if key > best_key:
+                best_key, best_pos, best_legal = key, position, legal
         if best_pos is None:
             empty.append(spec)
         else:
@@ -662,7 +747,7 @@ def _assign_levels(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
         level = spec["level"]
         while level in taken:
             level += 1
-        spec["level"] = min(level, 70)
+        spec["level"] = min(level, 75)
         while spec["level"] in taken:  # clamped collision walks back down
             spec["level"] -= 1
         taken.add(spec["level"])

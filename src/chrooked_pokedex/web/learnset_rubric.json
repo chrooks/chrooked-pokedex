@@ -2,13 +2,12 @@
   "version": 2,
   "note": "Single source of truth for BOTH band tables — tune bounds here. `bands`: level-range → BP pacing windows, consumed by the Makeover Workbench Signifier (GET /api/meta/learnset-rubric), the learnset-suggest rubric prompt, and its soft pacing warnings; L0 rows (on-evolution rewards) and status moves are exempt. `coverage_bands`: BP → band edges for the coverage matrix and ladder scripts (scripts/move_coverage.py derives MIN_LADDER_POWER, BAND_EDGES, and BAND_LABELS from it; labels must keep matching its BAND_CONVENTIONS keys). The two tables are deliberately separate mappings: recutting one does not recut the other.",
   "bands": [
-    { "level_min": 1, "level_max": 12, "bp_max": 50, "label": "≤50BP" },
-    { "level_min": 10, "level_max": 22, "bp_max": 60, "label": "≤60BP" },
-    { "level_min": 18, "level_max": 32, "bp_min": 50, "bp_max": 70, "label": "50-70BP" },
-    { "level_min": 28, "level_max": 42, "bp_min": 70, "bp_max": 80, "label": "70-80BP" },
-    { "level_min": 38, "level_max": 52, "bp_min": 80, "bp_max": 99, "label": "80-99BP" },
-    { "level_min": 48, "level_max": 62, "bp_min": 100, "bp_max": 110, "label": "100-110BP" },
-    { "level_min": 58, "level_max": 100, "bp_min": 110, "label": "110+BP" }
+    { "level_min": 1, "level_max": 19, "bp_max": 50, "label": "≤50BP" },
+    { "level_min": 20, "level_max": 30, "bp_min": 50, "bp_max": 75, "label": "50-75BP" },
+    { "level_min": 30, "level_max": 40, "bp_min": 75, "bp_max": 89, "label": "75-89BP" },
+    { "level_min": 40, "level_max": 50, "bp_min": 80, "bp_max": 99, "label": "80-99BP" },
+    { "level_min": 50, "level_max": 60, "bp_min": 90, "bp_max": 110, "label": "90-110BP" },
+    { "level_min": 60, "level_max": 100, "bp_min": 100, "label": "100+BP" }
   ],
   "coverage_bands": {
     "min_ladder_power": 2,
@@ -20,11 +19,11 @@
       "snaptrap", "thundercage"
     ],
     "edges": [
-      { "min_power": 2, "label": "≤50", "window": [1, 14] },
-      { "min_power": 51, "label": "51-75", "window": [15, 28] },
-      { "min_power": 76, "label": "76-90", "window": [29, 42] },
-      { "min_power": 91, "label": "91-110", "window": [43, 56] },
-      { "min_power": 111, "label": ">110", "window": [57, 70] }
+      { "min_power": 2, "label": "≤50", "window": [1, 19] },
+      { "min_power": 51, "label": "51-75", "window": [20, 30] },
+      { "min_power": 76, "label": "76-90", "window": [31, 44] },
+      { "min_power": 91, "label": "91-110", "window": [45, 59] },
+      { "min_power": 111, "label": ">110", "window": [60, 75] }
     ]
   }
 }

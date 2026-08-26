@@ -70,7 +70,7 @@ class Ctx:
         mv = self.by_name.get(move_name.casefold())
         if not mv or not mc.is_ladder_eligible(mv):
             return None
-        band = mc.band_of(mv.get("power"))
+        band = mc.band_of(mc.effective_power(mv))
         if band is None:
             return None
         return mv["type"], mv["category"], band, move_name.casefold() in self.net_new

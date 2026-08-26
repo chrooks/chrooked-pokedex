@@ -59,7 +59,7 @@ _LEARNSET_MAX_RETRIES = 3
 # surgical edits inherit the current learnset's shape and must not fail on it).
 LEARNSET_SIZE_MIN = 16  # floor scales down when the move pool is smaller
 LEARNSET_SIZE_MAX = 26
-LEARNSET_MAX_LEVEL = 70  # no level-up move above this level
+LEARNSET_MAX_LEVEL = 75  # no level-up move above this level
 LEARNSET_MAX_MOVES_THROUGH_L5 = 5  # rows with level ≤5, counting the L0/L1 kit
 LEARNSET_MAX_MOVES_THROUGH_L10 = 7  # rows with level ≤10
 
@@ -1557,6 +1557,9 @@ def _format_move_pool(pool: list[dict[str, Any]]) -> str:
     lines = []
     for row in pool:
         pwr = f" {row['power']}bp" if row.get("power") is not None else ""
+        eff = learnset_skeleton.effective_power(row)
+        if isinstance(eff, int) and eff != row.get("power"):
+            pwr = f" {row['power']}bp (≈{eff}bp across hits)"
         tag = " [CUSTOM]" if row.get("custom") else ""
         lines.append(
             f"- {row['move']} ({row['type']} {row['category']}{pwr}; {row['effect']})"
@@ -2091,7 +2094,12 @@ def _validate_learnset_result(
         # rejection: 32% of curated attack rows sit over these caps, so a hard
         # fail would fight Chris's own practice). An attacking move whose BP
         # exceeds its level band's cap gets a visible warning.
-        power_by_move = {row["move"]: row.get("power") for row in move_pool}
+        # Effective power (multi-hit = BP × avg hits) so a Bullet Seed-class
+        # mover is judged by what it actually deals, not its per-hit BP.
+        power_by_move = {
+            row["move"]: learnset_skeleton.effective_power(row)
+            for row in move_pool
+        }
         bands = _pacing_bands()
         for row in deduped:
             if row["level"] == 0:

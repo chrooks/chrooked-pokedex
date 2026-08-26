@@ -70,20 +70,27 @@ steers otherwise. They shape input only — the server still owns the rubric and
 
    | Bracket | BP of the STAB step |
    |---|---|
-   | before L15 | low-BP STAB (the weak "starter" hit) |
-   | twenties | 50–70 BP |
-   | thirties | 70–80 BP |
-   | forties | 80–<100 BP |
-   | after ~L50 | 100+ BP (or a setup capstone that gets there) |
+   | L1–19 | ≤50 BP — two steps per own type (a starter rung ~L5/9 AND a second ≤50 rung in the teens; the early game is where playtime concentrates) |
+   | L20–30 | 50–75 BP |
+   | L30–40 | 75–89 BP |
+   | L40–50 | 80–99 BP |
+   | L50–60 | 90–110 BP |
+   | L60–75 | 100+ BP |
 
    If a species has two STAB types, interleave the ramps so each bracket has a step.
+   Rows step **3–4 levels** apart; the last row may sit at L72–73 — never force a
+   payoff at L70 back-to-back with an L69 row. **Multi-hit moves band by effective
+   BP** (BP × average hits: 2-5-hit movers ×3.5, fixed two-hitters ×2), so Bone
+   Rush ≈ 88, not 25.
 
    **Hard pacing caps** (violations are the most-corrected mistake — check before preview):
-   - **No move above 60 BP before L20.** A 75 BP punch at L12 is exactly the miss.
-   - **Every STAB type lands its first real (reliable, ≥50 BP) hit by the mid-20s.**
-     A type whose first move arrives at L38 — or whose only ramp step is low-accuracy
-     (Iron Tail) — fails the ramp.
-   - **At most ~4 moves at L1.** L1 is the floor kit, not a dumping ground.
+   - **No move above 50 BP before L20.** A 75 BP punch at L12 is exactly the miss.
+   - **Every STAB type lands its first real (reliable, ≥50 BP) hit by the mid-20s,**
+     and no STAB type goes silent from L9 to L30 — the second early rung exists for
+     that. A type whose only ramp step is low-accuracy (Iron Tail) fails the ramp.
+   - **At most ~4 moves at L1.** L1 is the floor kit, not a dumping ground. The L1
+     starter attack is the Tackle/Pound/Scratch class — or **Pulse Strike** (the
+     special Tackle clone) for special attackers.
    - Signature/user-anchored moves the user has placed (e.g. Mach Punch @14) survive
      redrafts — re-check they're still present after any "try again".
 
@@ -180,6 +187,12 @@ Alternatives:
 ```
 
 ### 3. Confirm
+
+**Preview first, question second.** The step-2 preview must be a plain chat message the
+user has already read before any decision prompt appears. End the preview turn and take
+the decision from the user's chat reply — never bundle the preview and an
+AskUserQuestion dialog into the same turn; the dialog covers the options before they
+can be read.
 
 Ask the user to **approve, edit, or reject**:
 

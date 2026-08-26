@@ -68,7 +68,7 @@ def _ability_stab() -> dict:
 
 ABILITY_STAB = _ability_stab()
 MAX_L1 = 4
-MAX_LEVEL = 70
+MAX_LEVEL = 75
 BALANCED_DELTA = 10  # |atk - spa| <= this counts as a balanced dual-attacker
 
 
@@ -81,7 +81,7 @@ def build_rung_map(pool: mc.Pool, base_ids: set[str]) -> dict[tuple, str]:
     for mid, mv in pool.moves.items():
         if not mc.is_ladder_eligible(mv):
             continue
-        band = mc.band_of(mv.get("power"))
+        band = mc.band_of(mc.effective_power(mv))
         if band is None:
             continue
         net_new = mid in pool.custom and mid not in base_ids

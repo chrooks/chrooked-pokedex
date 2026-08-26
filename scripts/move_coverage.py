@@ -87,8 +87,9 @@ BAND_EDGES: tuple[tuple[int, str], ...] = tuple(
 BAND_LABELS: tuple[str, ...] = tuple(label for _, label in BAND_EDGES)
 
 # Move effect names that disqualify a move from being an ordinary ladder rung.
+# multi_hit movers are NOT excluded (2026-08-26): they band by effective_power.
 EXCLUDED_EFFECTS = frozenset({
-    "multi_hit", "max_move", "ohko", "explosion", "two_turns_attack",
+    "max_move", "ohko", "explosion", "two_turns_attack",
     "semi_invulnerable", "power_based_on_target_hp", "power_based_on_user_hp",
     "super_fang", "return", "counter", "mirror_coat", "metal_burst", "bide",
     "present", "magnitude", "psywave", "flail", "frustration", "pledge",
@@ -96,14 +97,37 @@ EXCLUDED_EFFECTS = frozenset({
     "meteor_beam",
 })
 
-# Two-hit heuristic: multi_hit tags the 2-to-5 movers, but fixed two-hitters
-# (Double Kick, Dragon Darts...) hide behind a plain effect, so fall back to
-# the description. Matches "hits twice", "two to five times", "three times",
-# "consecutively in a row".
-_TWO_HIT_RE = re.compile(
-    r"twice|two to five|2 to 5|three times|consecutively in a row",
-    re.IGNORECASE,
-)
+# Hit-count heuristics for effective power (2026-08-26 ruling): a multi-hit
+# move's banding power is BP × average hits — per-hit BP banded Bullet Seed
+# (25) as starter-tier so it never surfaced as a rung. multi_hit tags the
+# 2-to-5 movers; fixed two/three-hitters (Double Kick, Dragon Darts...) hide
+# behind a plain effect, so fall back to the description.
+_TWO_HIT_RE = re.compile(r"\btwice\b|\btwo times\b", re.IGNORECASE)
+_THREE_HIT_RE = re.compile(r"\bthree times\b", re.IGNORECASE)
+_MULTI_HIT_AVG = 3.5   # avg of the 2-5 hit range
+_TRIPLE_KICK_MULT = 6  # 1x+2x+3x ramp across three hits
+
+
+def effective_power(move: Mapping) -> Optional[int]:
+    """Banding power: base power × average hit count (raw power otherwise).
+
+    Mirrors learnset_skeleton.effective_power — the web skeleton and these
+    editorial scripts must band a move identically.
+    """
+    power = move.get("power")
+    if not isinstance(power, int) or power <= 1:
+        return power
+    effect = move.get("effect") or ""
+    desc = move.get("description") or ""
+    if effect == "multi_hit":
+        return round(power * _MULTI_HIT_AVG)
+    if effect == "triple_kick":
+        return power * _TRIPLE_KICK_MULT
+    if _THREE_HIT_RE.search(desc):
+        return power * 3
+    if _TWO_HIT_RE.search(desc):
+        return power * 2
+    return power
 
 # --- D1 effect map + D3 band conventions (the `check` audit source) ----------
 #
@@ -291,8 +315,6 @@ def is_ladder_eligible(move: Mapping) -> bool:
         return False
     if move.get("effect") in EXCLUDED_EFFECTS:
         return False
-    if _TWO_HIT_RE.search(move.get("description") or ""):
-        return False
     if move.get("type") not in REAL_TYPES:
         return False
     return True
@@ -313,7 +335,7 @@ def filled_cells(pool: Pool) -> tuple[set[tuple[str, str, str]], set[tuple[str, 
         common = mid in pool.custom or pool.learners.get(mid, 0) >= COMMON_THRESHOLD
         if not common:
             continue
-        cell = (move["type"], move["category"], band_of(move["power"]))
+        cell = (move["type"], move["category"], band_of(effective_power(move)))
         filled.add(cell)
         if not is_body_specific(move):
             neutral.add(cell)
@@ -366,7 +388,7 @@ def audit_move(mid: str, move: Mapping) -> list[str]:
     deviations: list[str] = []
     move_type = move.get("type")
     split = move.get("category")
-    band = band_of(move.get("power"))
+    band = band_of(effective_power(move))
     if band is None:
         return [f"{mid}: power expected >={MIN_LADDER_POWER} got {move.get('power')}"]
 
