@@ -6,30 +6,25 @@ abilities:
   primary: Striker
   secondary: Queenly Majesty
   hidden: Moxie
+stats: { hp: 42, atk: 30, def: 38, spa: 30, spd: 38, spe: 32 }
 learnset:
-  - { level: 1, move: Flail }
-  - { level: 1, move: Play Nice }
-  - { level: 1, move: Splash }
-  - { level: 1, move: Swagger }
-  - { level: 2, move: Rapid Spin }
-  - { level: 5, move: Leafage }
-  - { level: 9, move: Razor Leaf }
-  - { level: 12, move: Knock Off }
-  - { level: 15, move: Double Kick }
-  - { level: 18, move: Sweet Scent }
-  - { level: 22, move: Stomp }
-  - { level: 24, move: Magical Leaf }
-  - { level: 28, move: Night Slash }
-  - { level: 30, move: Rolling Kick }
-  - { level: 34, move: Low Sweep }
-  - { level: 36, move: Trop Kick }
-  - { level: 38, move: Petal Blizzard }
-  - { level: 40, move: Petal Blizzard }
-  - { level: 42, move: Heel Drop }
-  - { level: 44, move: Axe Kick }
-  - { level: 46, move: Reap }
-  - { level: 48, move: Aromatherapy }
-  - { level: 52, move: Power Whip }
-  - { level: 56, move: High Jump Kick }
-  - { level: 60, move: Havoc }
-  - { level: 62, move: Foul Play }
+  - { level: 1, move: Sweet Scent }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Vine Whip }
+  - { level: 9, move: Cheap Shot }
+  - { level: 13, move: Double Kick }
+  - { level: 17, move: Razor Leaf }
+  - { level: 21, move: Leech Seed }
+  - { level: 25, move: Feint Attack }
+  - { level: 29, move: Low Sweep }
+  - { level: 33, move: Trop Kick }
+  - { level: 37, move: Night Slash }
+  - { level: 41, move: Rolling Kick }
+  - { level: 45, move: Leaf Blade }
+  - { level: 49, move: Heel Drop }
+  - { level: 53, move: Thunderous Kick }
+  - { level: 57, move: Reap }
+  - { level: 61, move: Blaze Kick }
+  - { level: 64, move: Heel Drop }
+  - { level: 67, move: High Horsepower }
+  - { level: 70, move: Axe Kick }
