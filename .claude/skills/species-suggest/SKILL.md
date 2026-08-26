@@ -153,6 +153,12 @@ Alternatives:
 
 ### 3. Confirm
 
+**Preview first, question second.** The step-2 preview must be a plain chat message the
+user has already read before any decision prompt appears. End the preview turn and take
+the decision from the user's chat reply — never bundle the preview and an
+AskUserQuestion dialog into the same turn; the dialog covers the options before they
+can be read.
+
 Ask the user to **approve, edit, or reject**:
 
 - Approve as-is → go to step 4 with the draft values.
