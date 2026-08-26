@@ -595,3 +595,12 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** learnset-only repass
 - **Corrections:** special, gets future sight, will o wisp, shadow ball, magical leaf
+
+## 2026-08-23 — Mr Mime line
+
+- **Direction:** fast utility / screen setter — typing Psychic/Normal. Flavor coverage: Fairy. Why this fits: Normal typing leans into Mr. Mime as a theatrical, stage-performer archetype — an entertainer with no elemental allegiance beyond its mental tricks — while the 90 Speed and 100 SPA let it fire off screens, Future Sight, or Psychic before threats can respond; Fairy flavor coverage comes naturally from Dazzling Gleam already in the learnset, reflecting the glitzy performance-art aesthetic.
+
+## 2026-08-25 — Tsareena line
+
+- **Direction:** learnset-only repass
+- **Corrections:** Trop kick L0 gets fighting and kick moves
