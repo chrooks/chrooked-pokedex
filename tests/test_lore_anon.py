@@ -85,3 +85,10 @@ def test_the_renderers_own_section_label_is_scrubbed() -> None:
     out = anonymize_text(block)
     assert "Pokedex" not in out
     assert "It spins silk" in out
+
+
+def test_game_title_citations_go_in_either_casing() -> None:
+    """'per its Sun Pokedex entry' leaked past a capital-I-only pattern."""
+    assert "Sun" not in anonymize_text("based on a spider, per its Sun Pokedex entry.")
+    assert "Sun" not in anonymize_text("Its Sun Pokedex entry says so.")
+    assert "Sword" not in anonymize_text("Its Sword and Shield Pokedex entry.")

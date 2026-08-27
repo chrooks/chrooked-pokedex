@@ -29,7 +29,8 @@ _FRANCHISE = re.compile(r"\bPok[eé]dex\b|\bPok[eé]mon\b", re.IGNORECASE)
 # Generation names ride along with a dex citation ("Its Sun Pokedex entry"), and
 # a game title dates the creature as surely as a number identifies it.
 _GAME_CITATION = re.compile(
-    r"\bIts\s+[A-Z][A-Za-z]*(?:\s+and\s+[A-Z][A-Za-z]*)?\s+(?=creature entry\b)",
+    r"\b(its)\s+[A-Z][A-Za-z]*(?:\s+and\s+[A-Z][A-Za-z]*)?\s+(?=creature entry\b)",
+    re.IGNORECASE,
 )
 # "Mega Charizard" / "Mega Evolution" — the mechanic names the creature.
 _MEGA = re.compile(r"\bMega\b", re.IGNORECASE)
@@ -70,7 +71,7 @@ def anonymize_text(
     out = _FRANCHISE.sub("creature", out)
     # "Its Sun creature entry ..." -> "Its creature entry ..." — drop the title
     # left stranded once the dex word was genericized.
-    out = _GAME_CITATION.sub("Its ", out)
+    out = _GAME_CITATION.sub(lambda m: m.group(1) + " ", out)
     # Redaction leaves doubled spaces and space-before-punctuation behind.
     out = re.sub(r"[ \t]{2,}", " ", out)
     out = re.sub(r"\s+([,.;:!?])", r"\1", out)
