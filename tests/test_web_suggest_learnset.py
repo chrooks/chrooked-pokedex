@@ -2153,3 +2153,35 @@ def test_validate_learnset_anchor_diff_is_case_insensitive() -> None:
         anchors=["dragon pulse"],
     )
     assert not any(w.startswith("anchor:") for w in out.get("warnings") or [])
+
+
+def test_validate_learnset_reports_crowded_slots_only() -> None:
+    """`crowded:` drops reach the author; `unfillable:` pool poverty stays quiet."""
+    result = {
+        "draft": {
+            "learnset": [
+                {"level": 1, "move": "Tackle", "reasoning": "basic"},
+                {"level": 5, "move": "Dragon Pulse", "reasoning": "STAB"},
+            ]
+        },
+        "rationale": {"learnset": "Standard."},
+        "alternatives": [],
+    }
+    skeleton = {
+        "slots": [],
+        "leans": [],
+        "dropped": [
+            "crowded: STAB Dragon rung (76-90BP) was trimmed — the learnset ran out of room",
+            "unfillable: STATUS / utility: no pool move fits — slot dropped",
+        ],
+    }
+    out = suggestmod._validate_learnset_result(
+        result,
+        _make_pool(),
+        mode="surgical",
+        current_learnset=_make_current_learnset(),
+        skeleton=skeleton,
+    )
+    warnings = out.get("warnings") or []
+    assert any(w.startswith("crowded: ") for w in warnings), warnings
+    assert not any(w.startswith("unfillable: ") for w in warnings), warnings

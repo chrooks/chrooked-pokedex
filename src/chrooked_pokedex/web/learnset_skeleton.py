@@ -318,7 +318,9 @@ def build_skeleton(
     Returns ``{"slots": [...], "leans": [...], "dropped": [...]}``. Each slot is
     ``{level, role, label, candidates, required}`` — candidates are exact pool
     move names; the model must pick one per slot. Leans are the soft-fuel
-    directive lines; dropped records slots the pool could not fill.
+    directive lines; dropped records slots that did not survive, each tagged
+    ``crowded: `` (another slot took the space — worth telling the author) or
+    ``unfillable: `` (the pool had nothing — noise, and not the author's doing).
 
     ``direction`` is the user's free-text steer; any pool type it names grows a
     real coverage ladder — a redirect asking for "flying and grass coverage"
@@ -447,8 +449,8 @@ def build_skeleton(
             want = min(spec.get("min_moves", 1), len(cands)) if cands else 0
             if want < spec.get("min_moves", 1):
                 dropped.append(
-                    f"{name}: pool has only {len(cands)} matching move(s) "
-                    f"for its fuel requirement"
+                    f"unfillable: {name}: pool has only {len(cands)} matching "
+                    f"move(s) for its fuel requirement"
                 )
             for i in range(want):
                 chunk = cands[i * len(cands) // want:(i + 1) * len(cands) // want] or cands
@@ -618,7 +620,9 @@ def build_skeleton(
                 relaxed = {k: v for k, v in filt.items() if k != "on_stat"}
                 rows = in_band(_select(move_pool, relaxed, bias))
             if not rows:
-                dropped.append(f"{spec['label']}: no pool move fits — slot dropped")
+                dropped.append(
+                    f"unfillable: {spec['label']}: no pool move fits — slot dropped"
+                )
                 continue
             rows.sort(
                 key=lambda r: (
@@ -654,8 +658,8 @@ def build_skeleton(
             key = cands[0].casefold()
             if key in claimed:  # two singletons want the same lone move
                 dropped.append(
-                    f"{spec['label']}: its only candidate is already claimed "
-                    "by another slot — slot dropped"
+                    f"crowded: {spec['label']} lost its only candidate to "
+                    "another slot that claimed the same move"
                 )
                 struck.add(i)
                 continue
@@ -677,8 +681,8 @@ def build_skeleton(
                 # Keeping the claimed moves would let a fill here starve the
                 # singleton slot — drop this slot instead (tiny-pool case only).
                 dropped.append(
-                    f"{spec['label']}: every candidate is claimed by a "
-                    "single-option slot — slot dropped"
+                    f"crowded: {spec['label']} lost every candidate to slots "
+                    "that claimed those moves outright"
                 )
                 continue
             spec = {**spec, "candidates": trimmed}
@@ -695,14 +699,17 @@ def build_skeleton(
         )
         if victim["priority"] == 0:
             break  # never trim kit/reward/fuel/named below the cap
-        dropped.append(f"{victim['label']}: trimmed to fit the size cap")
+        dropped.append(
+            f"crowded: {victim['label']} was trimmed — the learnset ran out of "
+            "room before this slot"
+        )
         resolved.remove(victim)
 
     empty = _assign_levels(resolved)
     for spec in empty:
         dropped.append(
-            f"{spec['label']}: no candidate satisfies the pacing cap and "
-            "late-game BP floor at its grid level — slot dropped"
+            f"unfillable: {spec['label']}: no candidate satisfies the pacing "
+            "cap and late-game BP floor at its grid level — slot dropped"
         )
         resolved.remove(spec)
     resolved.sort(key=lambda s: (s["level"], s["role"] != "kit", s["label"]))

@@ -329,3 +329,18 @@ def test_no_anchors_leaves_the_skeleton_unchanged() -> None:
     base = sk.build_skeleton(_entry(), _ABILITIES, _pool())
     empty = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=[])
     assert base == empty
+
+
+def test_dropped_slots_are_tagged_by_cause() -> None:
+    """Every drop says whether a slot took the space or the pool was empty."""
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool())
+    for note in skeleton["dropped"]:
+        assert note.startswith(("crowded: ", "unfillable: ")), note
+
+
+def test_anchors_crowding_out_a_slot_is_reported() -> None:
+    """Anchors claim grid seats; what they displace must not vanish silently."""
+    anchors = ["Twister", "Brine", "Surf", "Slam", "Protect", "Toxic", "Amnesia"]
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=anchors)
+    crowded = [n for n in skeleton["dropped"] if n.startswith("crowded: ")]
+    assert crowded, skeleton["dropped"]

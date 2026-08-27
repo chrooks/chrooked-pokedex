@@ -147,8 +147,15 @@ export function LearnsetStage(props: Props) {
     () => hook.warnings.filter((w) => w.startsWith(ANCHOR_PREFIX)),
     [hook.warnings],
   );
+  const crowdedWarnings = useMemo(
+    () => hook.warnings.filter((w) => w.startsWith(CROWDED_PREFIX)),
+    [hook.warnings],
+  );
   const otherWarnings = useMemo(
-    () => hook.warnings.filter((w) => !w.startsWith(ANCHOR_PREFIX)),
+    () =>
+      hook.warnings.filter(
+        (w) => !w.startsWith(ANCHOR_PREFIX) && !w.startsWith(CROWDED_PREFIX),
+      ),
     [hook.warnings],
   );
 
@@ -342,6 +349,19 @@ export function LearnsetStage(props: Props) {
         </div>
       )}
 
+      {crowdedWarnings.length > 0 && (
+        <div className="mk-crowded-note" id="mk-learnset-crowded" role="status">
+          <p className="mk-crowded-note__head mono">what this cost</p>
+          <ul className="mk-crowded-note__list">
+            {crowdedWarnings.map((warning, i) => (
+              <li key={i} className="mono">
+                {warning.slice(CROWDED_PREFIX.length)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="mk-cols mk-cols--learnset">
         {currentColumn(dropped)}
 
@@ -456,6 +476,10 @@ function rungWindow(rung: LadderRung): string {
 /** The server tags a dropped-anchor warning with this prefix, alongside its
     existing `pacing: ` and `auto-repair: ` tags. */
 const ANCHOR_PREFIX = "anchor: ";
+/** A slot the skeleton had to give up because something else claimed its space
+    — usually an anchor. Distinct from `anchor: `: nothing failed, but the
+    author paid a price they never saw. */
+const CROWDED_PREFIX = "crowded: ";
 
 interface AnchorFieldProps {
   moveOptions: readonly string[];

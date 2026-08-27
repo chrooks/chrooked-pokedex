@@ -2133,6 +2133,16 @@ def _validate_learnset_result(
                     "the draft dropped a move you named"
                 )
 
+    # Step 6.7: the crowding report. build_skeleton records every slot that did
+    # not survive; until now nothing read it. Only the `crowded:` ones are the
+    # author's business — a slot lost because another claimed its move, or
+    # because the learnset ran out of room. `unfillable:` drops are pool
+    # poverty, not a decision anyone made, so they stay quiet.
+    if skeleton is not None:
+        for note in skeleton.get("dropped") or []:
+            if note.startswith("crowded: "):
+                warnings.append(note)
+
     # Step 7: shape bounds, full mode only. Skipped when a skeleton ran — the
     # skeleton fixes the exact row count and levels by construction, and a
     # small-pool skeleton may legitimately sit under the generic size floor.
