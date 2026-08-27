@@ -574,8 +574,8 @@ def create_app(
         # returns 2-3 lore-grounded typing+role directions (`draft.options`)
         # instead of a single typing draft. Not a second prompt path (One Seam).
         mode = body.get("mode", "typing")
-        # Only the lore-options mode reads real lore today; plain typing suggest is
-        # a later follow-up (#79), so its prompt is untouched.
+        # Both modes read real lore now (#79). Anything unrecognized normalizes to
+        # off, so a typo in the body never starts a network fetch.
         lore_mode = suggestmod.normalize_lore_mode(body.get("lore"))
         try:
             if mode == "lore-options":
@@ -593,12 +593,16 @@ def create_app(
                 )
                 _record_lore(chrooked_id, "lore-options", response)
                 return response
-            return suggestmod.suggest_typing(
+            response = suggestmod.suggest_typing(
                 provider=_llm_provider(),
                 entry=entry,
                 type_pool=type_pool,
                 direction=direction,
+                lore_mode=lore_mode,
+                lore_provider=_lore_provider(snapshot, lore_mode),
             )
+            _record_lore(chrooked_id, "typing", response)
+            return response
         except suggestmod.SuggestError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:

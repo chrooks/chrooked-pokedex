@@ -594,3 +594,89 @@ def test_crud_invalid_types_payload_is_handled(ruleset_dir: Path, tmp_path: Path
     # The loader either rejects it (422) or the CRUD coerces it. The key invariant:
     # no raw 500, and the endpoint surfaces a clean response.
     assert response.status_code in (200, 422)
+
+
+# =========================================================================== #
+# Lore + blind on plain typing suggest (#79 / #92)
+#
+# Until now only the lore-options mode read real lore; plain typing suggest was
+# explicitly deferred, so a blind request silently produced an ordinary,
+# fully-informed proposal. Caught by driving it live: the rationale named the
+# species and reasoned from its current learnset.
+# =========================================================================== #
+
+
+class _FakeLore:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str]] = []
+
+    def fetch(self, chrooked_id: str, species_name: str) -> Any:
+        from chrooked_pokedex.web.lore import LoreResult
+
+        self.calls.append((chrooked_id, species_name))
+        return LoreResult(
+            found=True,
+            genus="Dragon Pokémon",
+            dex_entries=(f"{species_name} lives in caves.",),
+            origin="Based on a cave-dwelling gastropod.",
+            name_origin="From goo and dragon.",
+            sources=("https://example.test/x",),
+            base_species=chrooked_id,
+        )
+
+
+def _lore_client(ruleset_dir: Path, tmp_path: Path, provider: Any, lore: Any) -> TestClient:
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    return TestClient(app, raise_server_exceptions=False)
+
+
+def test_typing_lore_off_never_fetches(ruleset_dir: Path, tmp_path: Path) -> None:
+    lore = _FakeLore()
+    client = _lore_client(ruleset_dir, tmp_path, _FakeProvider(_GOOD_TYPING_RESULT), lore)
+
+    body = client.post("/api/species/goodra/suggest/typing", json={}).json()
+
+    assert lore.calls == []
+    assert body["lore"]["mode"] == "off"
+
+
+def test_typing_blind_withholds_the_name_and_current_typing(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """The current typing IS the prior art for this capability, so it goes."""
+    provider = _FakeProvider(_GOOD_TYPING_RESULT)
+    lore = _FakeLore()
+    client = _lore_client(ruleset_dir, tmp_path, provider, lore)
+
+    body = client.post(
+        "/api/species/goodra/suggest/typing", json={"lore": "blind"}
+    ).json()
+
+    user = provider.calls[0]["user"]
+    assert "Species: (withheld" in user
+    assert "Current types:" not in user
+    assert "Goodra" not in user
+    assert "BLIND DESIGN:" in user
+    assert "Base stats:" in user  # stats shape a role, not a type
+    assert body["lore"]["mode"] == "blind"
+
+
+def test_typing_blind_anonymizes_the_lore_block(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _FakeProvider(_GOOD_TYPING_RESULT)
+    client = _lore_client(ruleset_dir, tmp_path, provider, _FakeLore())
+
+    client.post("/api/species/goodra/suggest/typing", json={"lore": "blind"})
+
+    user = provider.calls[0]["user"]
+    assert "Name origin" not in user
+    assert "Pokémon" not in user and "Pokemon" not in user
+    assert "cave-dwelling gastropod" in user

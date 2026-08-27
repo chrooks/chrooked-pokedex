@@ -1009,6 +1009,8 @@ def suggest_typing(
     entry: dict[str, Any],
     type_pool: list[str],
     direction: str | None = None,
+    lore_mode: str = "off",
+    lore_provider: LoreProvider | None = None,
 ) -> dict[str, Any]:
     """Propose a best-fit typing (1-2 types) for a species; never writes a file.
 
@@ -1021,16 +1023,27 @@ def suggest_typing(
     if not type_pool:
         raise SuggestError("No types are available to suggest from.")
 
-    cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
-    return propose_with_repair(
+    injection = build_lore_injection(
+        entry=entry,
+        lore_mode=lore_mode,
+        lore_provider=lore_provider,
         provider=provider,
-        system=_build_typing_rubric(),
+    )
+
+    cached_context = "Type pool (pick only from these):\n" + _format_type_pool(type_pool)
+    result = propose_with_repair(
+        provider=provider,
+        system=_with_lore_note(_build_typing_rubric(), injection),
         cached_context=cached_context,
-        user=_build_typing_user_context(entry, direction),
+        user=_build_typing_user_context(
+            entry, direction, injection.block, is_blind(lore_mode)
+        ),
         schema=_typing_draft_schema(),
         max_tokens=DEFAULT_MAX_TOKENS,
         validate=lambda draft: _validate_typing_result(draft, type_pool),
     )
+    result["lore"] = dict(injection.provenance)
+    return result
 
 
 def _validate_typing_result(

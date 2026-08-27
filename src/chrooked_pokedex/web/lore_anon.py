@@ -22,8 +22,15 @@ OTHER = "another creature"
 
 # "No. 167", "#167", "№ 167" — a dex number is a lookup key, nothing else.
 _DEX_NUMBER = re.compile(r"(?:\bNo\.?\s*|#|№\s*)\d{1,4}\b", re.IGNORECASE)
-# The franchise's own category word, in every casing the dex text uses.
-_FRANCHISE = re.compile(r"\bPok[eé]mon\b", re.IGNORECASE)
+# The franchise's own words, in every casing the dex text uses. "Pokedex" needs
+# its own alternative rather than riding on the "Pokemon" one — a real Ariados
+# profile leaked "Its Sun Pokedex entry" straight through a Pokemon-only pattern.
+_FRANCHISE = re.compile(r"\bPok[eé]dex\b|\bPok[eé]mon\b", re.IGNORECASE)
+# Generation names ride along with a dex citation ("Its Sun Pokedex entry"), and
+# a game title dates the creature as surely as a number identifies it.
+_GAME_CITATION = re.compile(
+    r"\bIts\s+[A-Z][A-Za-z]*(?:\s+and\s+[A-Z][A-Za-z]*)?\s+(?=creature entry\b)",
+)
 # "Mega Charizard" / "Mega Evolution" — the mechanic names the creature.
 _MEGA = re.compile(r"\bMega\b", re.IGNORECASE)
 
@@ -61,6 +68,9 @@ def anonymize_text(
     out = _DEX_NUMBER.sub("", out)
     out = _MEGA.sub("an empowered variant of", out)
     out = _FRANCHISE.sub("creature", out)
+    # "Its Sun creature entry ..." -> "Its creature entry ..." — drop the title
+    # left stranded once the dex word was genericized.
+    out = _GAME_CITATION.sub("Its ", out)
     # Redaction leaves doubled spaces and space-before-punctuation behind.
     out = re.sub(r"[ \t]{2,}", " ", out)
     out = re.sub(r"\s+([,.;:!?])", r"\1", out)
