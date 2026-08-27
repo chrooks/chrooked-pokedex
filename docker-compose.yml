@@ -13,6 +13,13 @@ services:
       - "8000:8000"
     environment:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # Save-state row (#88): Syncthing REST + conflict glob. Key in .env.
+      - SYNCTHING_API_KEY=${SYNCTHING_API_KEY}
+      - SYNCTHING_URL=http://host.docker.internal:8384
+      - SYNCTHING_DEVICES=${SYNCTHING_DEVICES}
+      - SAVES_DIR=/data/rejuv-saves
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # ruleset/ lives on the host so the host-side autocommit loop sees edits
       # the web app writes, and can commit + push them to the remote.
@@ -24,3 +31,5 @@ services:
       - ./targets.json:/app/targets.json
       # Key + known_hosts + config the in-process mirror uses to reach the Thor.
       - /home/chrooks/projects/rejuv-ssh:/root/.ssh:ro
+      # Save-state row: conflict-file glob source, read-only.
+      - /srv/compose/syncthing/data/rejuv-saves:/data/rejuv-saves:ro
