@@ -32,3 +32,4 @@ learnset:
   - { level: 70, move: Nasty Plot }
   - { level: 73, move: Tsunami }
 evolution: { from: Remoraid, method: { level: 30 } }
+# CL-2 freshness probe (safe to delete)
