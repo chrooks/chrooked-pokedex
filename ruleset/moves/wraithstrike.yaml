@@ -7,3 +7,4 @@ power: 90
 accuracy: 100
 pp: 15
 description: The user lunges through the veil and lands a solid, bone-rattling blow before fading back. 10% chance to lower target's Defense.
+flags: [contact]

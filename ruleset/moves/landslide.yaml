@@ -9,3 +9,4 @@ pp: 15
 description: A tumbling slide of earth buries the target. May lower Speed.
 additional_effects:
   - { effect: spd_minus_1, chance: 20 }
+flags: []

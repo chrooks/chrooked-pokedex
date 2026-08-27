@@ -9,3 +9,4 @@ pp: 10
 description: The user buries the target under crushing spectral force. May lower its Defense.
 additional_effects:
   - { effect: def_minus_1, chance: 20 }
+flags: []

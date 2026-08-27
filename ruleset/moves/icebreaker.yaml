@@ -8,3 +8,4 @@ accuracy: 90
 pp: 5
 description: The user shatters the target with a bone-jarring frozen crash, recoiling from the impact.
 effect: recoil
+flags: [contact]

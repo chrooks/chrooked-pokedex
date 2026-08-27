@@ -9,3 +9,4 @@ pp: 10
 description: The user hits with a leaping arc of current. May leave the target paralyzed.
 additional_effects:
   - { effect: paralysis, chance: 10 }
+flags: [contact]

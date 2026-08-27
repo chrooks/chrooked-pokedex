@@ -9,3 +9,4 @@ pp: 10
 description: The user delivers a venom-soaked body blow. May poison the target.
 additional_effects:
   - { effect: poison, chance: 10 }
+flags: [contact]

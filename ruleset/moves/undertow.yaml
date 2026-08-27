@@ -9,3 +9,4 @@ pp: 30
 description: A staggering undertow drags the target down. May make it flinch.
 additional_effects:
   - { effect: flinch, chance: 10 }
+flags: []

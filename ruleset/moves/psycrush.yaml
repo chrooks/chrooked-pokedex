@@ -8,3 +8,4 @@ accuracy: 90
 pp: 5
 description: A reckless psychokinetic ram that batters the target at a cost to itself.
 effect: recoil
+flags: [contact]

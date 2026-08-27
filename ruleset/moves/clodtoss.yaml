@@ -7,3 +7,4 @@ power: 50
 accuracy: 100
 pp: 25
 description: The user flings a clump of dirt and stone at the target. Crude, but it gets the job done.
+flags: []

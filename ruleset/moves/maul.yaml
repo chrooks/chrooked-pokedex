@@ -7,3 +7,4 @@ power: 50
 accuracy: 100
 pp: 30
 description: The user mauls the target with raw draconic force.
+flags: [contact]

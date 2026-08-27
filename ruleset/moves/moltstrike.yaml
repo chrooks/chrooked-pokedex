@@ -9,3 +9,4 @@ pp: 10
 description: A shedding-shell strike that dulls focus. May lower the target's Sp. Atk.
 additional_effects:
   - { effect: sp_atk_minus_1, chance: 20 }
+flags: [contact]

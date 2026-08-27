@@ -9,3 +9,4 @@ pp: 10
 description: A slam of raw kinetic force. May confuse the target.
 additional_effects:
   - { effect: confusion, chance: 10 }
+flags: []
