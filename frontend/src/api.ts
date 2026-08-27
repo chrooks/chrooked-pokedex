@@ -29,6 +29,7 @@ import type {
   LoreMode,
   Move,
   MoveWrite,
+  SaveStatus,
   SpeciesOverride,
   Target,
   TargetDialect,
@@ -339,6 +340,13 @@ export const api = {
   targetDialect: (id: string, signal?: AbortSignal) =>
     getJson<TargetDialect>(
       `/api/targets/${encodeURIComponent(id)}/dialect`,
+      signal,
+    ),
+  /** Save-state sync health for the shared saves folder (#88). Never errors on
+      an unreachable Syncthing — it returns { available: false }. */
+  targetSaveStatus: (id: string, signal?: AbortSignal) =>
+    getJson<SaveStatus>(
+      `/api/targets/${encodeURIComponent(id)}/save-status`,
       signal,
     ),
   /** The Target's bound Override namespace ({slug, engine, label}), or 404. */

@@ -1,0 +1,188 @@
+/* The save-state row in the patch drawer (#88).
+ *
+ * Quiet by default: the calm and unavailable registers carry no frame, no fill
+ * and no icon — one dim line of text under the drawer's meta, at the same
+ * weight as the sync-status lines it sits near. Only the attention register
+ * earns structure, and it earns it with a hairline + a low-chroma wash, never a
+ * fat left bar or a saturated fill.
+ *
+ * --chrome is the device's own red, already used by sync-status.css for "a
+ * human should look at this". Reusing it keeps one color doing one job rather
+ * than introducing a fourth semantic hue for the same meaning. */
+
+.save-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+
+/* The row itself: a real button, styled as text so it reads as a line, not a
+   control that wants pressing. The affordance is the +/− and the hover shift. */
+.save-row__line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-1) 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font: inherit;
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.save-row__line:hover {
+  color: var(--text);
+}
+
+.save-row__label {
+  flex: 0 0 auto;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.save-row__summary {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.save-row__chevron {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+}
+
+/* Unavailable and loading recede a further step — nothing to act on. */
+.save-row--mute .save-row__summary,
+.save-row--loading .save-row__summary {
+  color: var(--text-faint);
+}
+
+/* Attention. The summary itself changes color so the state survives grayscale
+   through its wording ("2 conflicted saves need picking"), never hue alone. */
+.save-row--loud .save-row__summary {
+  color: color-mix(in oklch, var(--chrome) 70%, var(--text));
+  font-weight: 600;
+}
+
+.save-row__alert {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid color-mix(in oklch, var(--chrome) 45%, var(--line));
+  border-radius: var(--radius-md);
+  background: color-mix(in oklch, var(--chrome) 8%, var(--surface-2));
+  font-size: var(--text-xs);
+  color: var(--text);
+}
+
+.save-row__conflicts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Filename on its own line, origin under it: the names are long enough that a
+   single wrapping line puts "from thor" in a different place on every row. */
+.save-row__conflicts li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.save-row__file {
+  overflow-wrap: anywhere;
+}
+
+.save-row__from,
+.save-row__stale {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+/* The expansion: per-device last-sync, plus the one real action in here. */
+.save-row__detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-0);
+  font-size: var(--text-xs);
+  animation: save-row-open var(--dur-fast) var(--ease-out);
+}
+
+@keyframes save-row-open {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .save-row__detail {
+    animation: none;
+  }
+}
+
+.save-row__devices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.save-row__device {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, auto) 1fr auto;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.save-row__device-name {
+  color: var(--text);
+}
+
+.save-row__device-seen {
+  color: var(--text-dim);
+  min-width: 0;
+}
+
+.save-row__device-pct {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.save-row__note {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.save-row__recheck {
+  align-self: flex-start;
+}
+
+/* The drawer is 520px at a desk and the full width of a 468px-wide handheld
+   screen. Below that the device line stops being a three-column grid and
+   stacks, so a long "synced 12m ago" never squeezes the percentage off. */
+@media (max-width: 420px) {
+  .save-row__device {
+    grid-template-columns: 1fr auto;
+  }
+
+  .save-row__device-seen {
+    grid-column: 1 / -1;
+  }
+}

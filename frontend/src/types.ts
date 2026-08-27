@@ -549,6 +549,39 @@ export interface SyncOutcome {
   save_backup?: SyncOutcome;
 }
 
+/** Save-state sync health for the shared saves folder (#88).
+
+    Telemetry, not an operation: `available: false` means Syncthing had nothing
+    to say (stopped, no API key, wrong host), which the row renders quietly. The
+    conflict list is read from disk and survives an unreachable Syncthing. */
+export interface SaveStatus {
+  available: boolean;
+  folder: string;
+  conflicts: SaveConflict[];
+  devices?: SaveDevice[];
+  /** Name of the device that synced most recently, when any has. */
+  newest?: string | null;
+  newest_seconds_ago?: number | null;
+  /** Devices quiet past the staleness threshold while another one synced. */
+  stale?: string[];
+}
+
+export interface SaveDevice {
+  name: string;
+  id: string;
+  /** Percent of the folder this device has caught up with, per Syncthing. */
+  completion: number | null;
+  last_seen: string | null;
+  seconds_ago: number | null;
+}
+
+/** A save Syncthing parked because two devices edited it apart. */
+export interface SaveConflict {
+  file: string;
+  /** Origin device name, or its raw id prefix when the name is unknown. */
+  device: string | null;
+}
+
 /** The markdown packet for one behavior, fetched on demand from a DATA-ONLY
     entry's `packet_url`. */
 export interface BehaviorPacket {

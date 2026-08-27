@@ -19,6 +19,7 @@ import { PokeballSpinner } from "../PokeballSpinner";
 import { ApplyReportView } from "./ApplyReportView";
 import { ApplyErrorView } from "./ApplyErrorView";
 import { EngineVersionReadout } from "./EngineVersionReadout";
+import { SaveStateRow } from "./SaveStateRow";
 import "./patch-drawer.css";
 
 type Mode = "preview" | "apply";
@@ -141,6 +142,8 @@ export function PatchDrawer({ target, trigger, onClose, onApplied }: Props) {
             <EngineVersionReadout id={target.id} engine={target.engine} />
           </div>
         </header>
+
+        <SaveStateRow targetId={target.id} />
 
         <div className="patch-drawer__actions">
           <button
