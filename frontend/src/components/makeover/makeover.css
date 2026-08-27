@@ -2229,6 +2229,43 @@ textarea.mk-stage__redirect-input {
   }
 }
 
+/* The level-swap affordance (#90). Two taps, no drag: arm a row, then tap the
+   row to trade levels with. A drag handle is unhittable on a handheld. */
+.mk-lrow__swap {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  padding: 0 var(--space-1);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.mk-lrow--proposed:hover .mk-lrow__swap,
+.mk-lrow--proposed:focus-within .mk-lrow__swap {
+  opacity: 1;
+}
+.mk-lrow__swap:hover {
+  color: var(--text);
+}
+/* Armed: this row is the one whose level is being traded away. */
+.mk-lrow[data-swap-armed] {
+  background: color-mix(in oklch, var(--edited) 12%, transparent);
+}
+.mk-lrow[data-swap-armed] .mk-lrow__swap {
+  opacity: 1;
+  color: var(--edited);
+}
+/* Every other row becomes a target while a swap is armed — the affordance has
+   to be visible on all of them at once, hover or not. */
+.mk-lrow[data-swap-target] .mk-lrow__swap {
+  opacity: 1;
+  color: var(--text-dim);
+}
+.mk-lrow[data-swap-target]:hover {
+  background: color-mix(in oklch, var(--edited) 6%, transparent);
+}
+
 /* ── Handheld: short, wide, touch (#91) ────────────────────────────────────
    The Thor is held in landscape — roughly 1000-1280 wide but only 600-720 tall.
    Vertical space is the scarce resource here, the opposite of a phone, so this
@@ -2306,43 +2343,6 @@ textarea.mk-stage__redirect-input {
   .mk-line {
     display: none;
   }
-}
-
-/* The level-swap affordance (#90). Two taps, no drag: arm a row, then tap the
-   row to trade levels with. A drag handle is unhittable on a handheld. */
-.mk-lrow__swap {
-  background: none;
-  border: none;
-  color: var(--text-faint);
-  font-size: var(--text-xs);
-  cursor: pointer;
-  padding: 0 var(--space-1);
-  opacity: 0;
-  transition: opacity var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
-}
-.mk-lrow--proposed:hover .mk-lrow__swap,
-.mk-lrow--proposed:focus-within .mk-lrow__swap {
-  opacity: 1;
-}
-.mk-lrow__swap:hover {
-  color: var(--text);
-}
-/* Armed: this row is the one whose level is being traded away. */
-.mk-lrow[data-swap-armed] {
-  background: color-mix(in oklch, var(--edited) 12%, transparent);
-}
-.mk-lrow[data-swap-armed] .mk-lrow__swap {
-  opacity: 1;
-  color: var(--edited);
-}
-/* Every other row becomes a target while a swap is armed — the affordance has
-   to be visible on all of them at once, hover or not. */
-.mk-lrow[data-swap-target] .mk-lrow__swap {
-  opacity: 1;
-  color: var(--text-dim);
-}
-.mk-lrow[data-swap-target]:hover {
-  background: color-mix(in oklch, var(--edited) 6%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
