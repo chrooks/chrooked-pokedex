@@ -14,8 +14,9 @@ RUN npm run build   # -> /fe/dist
 # ---- runtime ----
 FROM python:3.12-slim
 # rsync + ssh: the post-apply mirror to the handheld runs in-process
-# (web/targets.py::_sync_after_apply shells out to them).
-RUN apt-get update && apt-get install -y --no-install-recommends rsync openssh-client \
+# (web/targets.py::_sync_after_apply shells out to them). ruby: the Rejuvenation
+# snapshot (web/snapshot_rejuv.py) evaluates the game's definitions with it.
+RUN apt-get update && apt-get install -y --no-install-recommends rsync openssh-client ruby \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY . .
