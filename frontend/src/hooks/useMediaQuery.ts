@@ -31,11 +31,19 @@ export function useMediaQuery(query: string): boolean {
  * is exactly the bug this replaced. Width is still checked so genuine phones
  * get the same treatment.
  *
- * Keep this threshold in sync with the `--compact` media block in
+ * Keep this threshold in sync with the compact media block in
  * device-frame.css; the CSS handles styling, this handles the two places where
- * markup itself has to move.
+ * markup itself has to move. They are one decision expressed twice, and letting
+ * them drift is not a cosmetic bug: the CSS collapsed the rail to 52px while
+ * this still rendered the full-width search and filters inside it, so they
+ * spilled out over the page (2026-08-27).
+ *
+ * The coarse-pointer clause exists because a landscape handheld (1024x640)
+ * clears both of the first two thresholds and would otherwise get the full
+ * desktop chrome — a 128px two-row header and a 232px labeled rail.
  */
-export const COMPACT_SHELL_QUERY = "(max-height: 620px), (max-width: 860px)";
+export const COMPACT_SHELL_QUERY =
+  "(max-height: 620px), (max-width: 860px), (pointer: coarse) and (max-width: 1400px)";
 
 export function useCompactShell(): boolean {
   return useMediaQuery(COMPACT_SHELL_QUERY);
