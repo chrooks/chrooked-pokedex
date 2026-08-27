@@ -76,3 +76,12 @@ def test_redaction_does_not_leave_doubled_spaces_or_floating_punctuation() -> No
     out = anonymize_text("It is a Pokémon .  Truly.", subject_names=[])
     assert "  " not in out
     assert " ." not in out
+
+
+def test_the_renderers_own_section_label_is_scrubbed() -> None:
+    """The label 'Pokedex entries:' is injected by render_lore, not fetched, so
+    it never passed through anonymize_lore. A live blind run leaked it."""
+    block = "Researched lore (read this; do not contradict it):\nPokedex entries:\n- It spins silk."
+    out = anonymize_text(block)
+    assert "Pokedex" not in out
+    assert "It spins silk" in out

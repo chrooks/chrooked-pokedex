@@ -34,7 +34,7 @@ from typing import Any, Callable, Mapping
 from . import learnset_skeleton
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider, condense_provider
 from .lore import LoreError, LoreProvider
-from .lore_anon import anonymize_lore
+from .lore_anon import anonymize_lore, anonymize_text
 from .lore_text import render_lore
 
 # Learnset responses return a whole list with per-move reasoning (~15–25 rows,
@@ -270,6 +270,13 @@ def build_lore_injection(
         requested_id=requested,
         base_species=base,
     )
+    if mode == "blind":
+        # The renderer emits its OWN franchise markers — the section label is
+        # literally "Pokedex entries:" — and those never passed through
+        # anonymize_lore, which only ever saw the fetched fields. Scrubbing the
+        # rendered block closes the labels we inject ourselves.
+        block = anonymize_text(block)
+
 
     ran_as = mode
     if mode == "condensed" and result.found:
