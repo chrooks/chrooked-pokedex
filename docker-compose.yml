@@ -1,6 +1,8 @@
-# Always-on Ruleset editor for hestia. Serves the dex + edit UI on :8000.
-# Apply/targets are inert here (no game installs on hestia) — this box edits the
-# Ruleset; the gaming PC pulls and applies. See scripts/ruleset-autocommit.sh.
+# Always-on Ruleset editor + applier for hestia. Serves the dex + edit UI on
+# :8000. Since couch loop v2 (mjolnir CL-1), hestia also owns Apply and the
+# patch mirror to the Thor: a staging game copy is bind-mounted at the same
+# absolute path targets.json names, and /root/.ssh carries the key the Thor
+# accepts. See scripts/ruleset-autocommit.sh for the edit-push loop.
 services:
   web:
     build: .
@@ -9,7 +11,16 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
     volumes:
       # ruleset/ lives on the host so the host-side autocommit loop sees edits
       # the web app writes, and can commit + push them to the remote.
       - ./ruleset:/app/ruleset
+      # Couch loop v2: staging game copy (apply target), mounted at the same
+      # path inside and out so targets.json needs one truth. Machine-specific
+      # rows live in targets.json (gitignored).
+      - /home/chrooks/projects/rejuv-game:/home/chrooks/projects/rejuv-game
+      - ./targets.json:/app/targets.json
+      # Key + known_hosts + config the in-process mirror uses to reach the Thor.
+      - /home/chrooks/projects/rejuv-ssh:/root/.ssh:ro
