@@ -3,6 +3,8 @@ chrooked_id: spinarak
 aka: {  }
 abilities:
   primary: Vampiric
+  secondary: Insomnia
+  hidden: Web Weaver
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: String Shot }

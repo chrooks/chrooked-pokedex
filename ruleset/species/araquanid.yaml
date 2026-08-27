@@ -2,6 +2,8 @@ name: Araquanid
 chrooked_id: araquanid
 aka: { pokeemerald: SPECIES_ARAQUANID }
 abilities:
+  primary: Water Bubble
+  secondary: Web Weaver
   hidden: Carnivore
 learnset:
   - { level: 1, move: Wide Guard }

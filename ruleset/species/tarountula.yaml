@@ -1,6 +1,10 @@
 name: Tarountula
 chrooked_id: tarountula
 aka: {  }
+abilities:
+  primary: Insomnia
+  secondary: Web Weaver
+  hidden: Stakeout
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: String Shot }

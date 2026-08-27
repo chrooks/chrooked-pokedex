@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_SURSKIT }
 abilities:
   primary: Intimidate
   secondary: Frighten
+  hidden: Web Weaver
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 2, move: Struggle Bug }

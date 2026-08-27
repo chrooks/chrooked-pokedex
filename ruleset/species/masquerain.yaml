@@ -3,7 +3,9 @@ chrooked_id: masquerain
 aka: { pokeemerald: SPECIES_MASQUERAIN }
 types: [Bug, Water]
 abilities:
+  primary: Intimidate
   secondary: Frighten
+  hidden: Web Weaver
 stats: { def: 60, spa: 110, spd: 90, spe: 90 }
 learnset:
   - { level: 1, move: Whirlwind }

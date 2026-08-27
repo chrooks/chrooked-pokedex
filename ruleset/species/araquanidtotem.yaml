@@ -1,6 +1,9 @@
 name: Araquanid Totem
 chrooked_id: araquanidtotem
 aka: { dex: 752 }
+abilities:
+  primary: Water Bubble
+  secondary: Web Weaver
 learnset:
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Infestation }

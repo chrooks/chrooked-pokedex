@@ -1,6 +1,10 @@
 name: Sewaddle
 chrooked_id: sewaddle
 aka: { dex: 540 }
+abilities:
+  primary: Swarm
+  secondary: Chlorophyll
+  hidden: Web Weaver
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: String Shot }

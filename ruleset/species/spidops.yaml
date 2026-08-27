@@ -1,6 +1,10 @@
 name: Spidops
 chrooked_id: spidops
 aka: { pokeemerald: SPECIES_SPIDOPS }
+abilities:
+  primary: Insomnia
+  secondary: Web Weaver
+  hidden: Stakeout
 stats: { hp: 70, atk: 110, def: 95 }
 learnset:
   - { level: 0, move: Silk Trap }

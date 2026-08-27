@@ -2,6 +2,8 @@ name: Dewpider
 chrooked_id: dewpider
 aka: { pokeemerald: SPECIES_DEWPIDER }
 abilities:
+  primary: Water Bubble
+  secondary: Web Weaver
   hidden: Carnivore
 learnset:
   - { level: 1, move: Infestation }

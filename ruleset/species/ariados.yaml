@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_ARIADOS }
 abilities:
   primary: Vampiric
   secondary: Venomous
+  hidden: Web Weaver
 stats: { hp: 90, atk: 110, def: 80, spd: 80, spe: 55 }
 learnset:
   - { level: 0, move: Swords Dance }

@@ -1,6 +1,10 @@
 name: Swadloon
 chrooked_id: swadloon
 aka: { pokeemerald: SPECIES_SWADLOON }
+abilities:
+  primary: Leaf Guard
+  secondary: Chlorophyll
+  hidden: Web Weaver
 learnset:
   - { level: 0, move: Protect }
   - { level: 1, move: Tackle }
