@@ -583,6 +583,72 @@ textarea.mk-stage__redirect-input {
   gap: var(--space-2);
 }
 
+/* --- Anchors (#89) --------------------------------------------------------
+   The ANCHORS control sits beside PROPOSE inside the direction form; the alert
+   sits ABOVE the proposed rows, because a dropped anchor is the failure the
+   whole field exists to make visible. The quiet .mk-slot-warnings list below
+   the grid was where four dropped moves went unnoticed. */
+.mk-anchors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.mk-anchors__label {
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+}
+.mk-anchors__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: 1px solid var(--chrome-dim);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklch, var(--chrome) 10%, var(--surface-1));
+  padding: 0 var(--space-1) 0 var(--space-2);
+  font-size: var(--text-xs);
+}
+.mk-anchors__drop {
+  border: 0;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 0 var(--space-1);
+  font-size: var(--text-xs);
+}
+.mk-anchors__drop:hover:not(:disabled) {
+  color: var(--text);
+}
+.mk-anchors__input {
+  min-width: 12ch;
+  flex: 1 1 12ch;
+}
+.mk-anchor-alert {
+  border: 1px solid var(--chrome-dim);
+  border-left: 3px solid var(--edited);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklch, var(--edited) 8%, var(--surface-1));
+  color: var(--text);
+  padding: var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+}
+.mk-anchor-alert__head {
+  color: var(--edited);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  margin: 0 0 var(--space-2);
+}
+.mk-anchor-alert__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 /* --- Learnset diff -------------------------------------------------------- */
 
 .mk-cols--learnset {

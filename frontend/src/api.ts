@@ -194,12 +194,19 @@ export const api = {
       proposes only, never writes. `mode` defaults to a full-list proposal. */
   suggestLearnset: (
     id: string,
-    opts?: { direction?: string; mode?: "full" },
+    opts?: { direction?: string; mode?: "full"; anchors?: string[] },
   ) =>
     sendJson<LearnsetProposal>(
       "POST",
       `/api/species/${encodeURIComponent(id)}/suggest/learnset`,
-      { direction: opts?.direction, mode: opts?.mode ?? "full" },
+      {
+        direction: opts?.direction,
+        mode: opts?.mode ?? "full",
+        // Omit the key entirely when empty — the server treats a missing
+        // `anchors` and an empty one identically, and an absent key keeps the
+        // request body honest about what the author actually asked for.
+        anchors: opts?.anchors?.length ? opts.anchors : undefined,
+      },
     ),
   deleteSpecies: (id: string, scope?: string) =>
     sendJson<{ deleted: string }>(

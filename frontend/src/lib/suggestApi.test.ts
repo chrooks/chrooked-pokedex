@@ -79,4 +79,16 @@ describe("api.suggestLearnset (ac2)", () => {
     expect(body.mode).toBe("full");
     expect(result.draft.learnset[0].move).toBe("Tackle");
   });
+
+  it("sends the anchor moves the author named (#89)", async () => {
+    mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
+    await api.suggestLearnset("goodra", { anchors: ["Bite", "U-turn"] });
+    expect(lastCall().body.anchors).toEqual(["Bite", "U-turn"]);
+  });
+
+  it("omits the anchors key when no anchor was named", async () => {
+    mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
+    await api.suggestLearnset("goodra", { anchors: [] });
+    expect("anchors" in lastCall().body).toBe(false);
+  });
 });

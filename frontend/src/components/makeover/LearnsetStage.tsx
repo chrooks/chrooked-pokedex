@@ -102,13 +102,24 @@ export function LearnsetStage(props: Props) {
     return () => onSubSurface?.(null);
   }, [moveCreateOpen, onSubSurface]);
 
+  // Moves the author demands by name. They ride beside `direction` rather than
+  // inside it: the slot skeleton scrubs move names out of the direction prose,
+  // so a move named there grew no slot and got silently dropped. The server
+  // gives each anchor its own slot. `propose` is recreated every render and the
+  // hook's deps include it, so closing over this state is never stale.
+  const [anchors, setAnchors] = useState<string[]>([]);
+
   const hook = useMakeoverStage<LearnsetDraft>({
     section: "learnset",
     entry,
     initialDirection,
     onPhase,
     propose: async (id, direction) => {
-      const result = await api.suggestLearnset(id, { direction: direction || undefined, mode: "full" });
+      const result = await api.suggestLearnset(id, {
+        direction: direction || undefined,
+        mode: "full",
+        anchors,
+      });
       return {
         draft: result.draft,
         rationale: result.rationale ?? {},
@@ -129,6 +140,17 @@ export function LearnsetStage(props: Props) {
   const proposed = useMemo(() => draft?.learnset ?? [], [draft]);
   const classified = classifyProposed(entry.learnset, proposed);
   const dropped = removedRows(entry.learnset, proposed);
+
+  // A dropped anchor is the failure that prompted the whole field, so it gets
+  // its own loud banner above the rows instead of the polite list under them.
+  const anchorWarnings = useMemo(
+    () => hook.warnings.filter((w) => w.startsWith(ANCHOR_PREFIX)),
+    [hook.warnings],
+  );
+  const otherWarnings = useMemo(
+    () => hook.warnings.filter((w) => !w.startsWith(ANCHOR_PREFIX)),
+    [hook.warnings],
+  );
 
   const [editingKey, setEditingKey] = useState<string | null>(null);
   // The ladder overlay: off by default — the list reads calm until the author
@@ -255,6 +277,12 @@ export function LearnsetStage(props: Props) {
       registerActions={registerActions}
       extraControl={
         <>
+          <AnchorField
+            moveOptions={moveOptions}
+            anchors={anchors}
+            onChange={setAnchors}
+            disabled={hook.phase === "proposing"}
+          />
           <button
             type="button"
             className="mk-btn mk-btn--ghost mono"
@@ -301,6 +329,19 @@ export function LearnsetStage(props: Props) {
         </div>
       }
     >
+      {anchorWarnings.length > 0 && (
+        <div className="mk-anchor-alert" id="mk-learnset-anchor-alert" role="alert">
+          <p className="mk-anchor-alert__head mono">dropped anchors</p>
+          <ul className="mk-anchor-alert__list">
+            {anchorWarnings.map((warning, i) => (
+              <li key={i} className="mono">
+                {warning.slice(ANCHOR_PREFIX.length)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="mk-cols mk-cols--learnset">
         {currentColumn(dropped)}
 
@@ -390,9 +431,9 @@ export function LearnsetStage(props: Props) {
         </div>
       </div>
 
-      {hook.warnings.length > 0 && (
+      {otherWarnings.length > 0 && (
         <ul className="mk-slot-warnings" id="mk-learnset-warnings">
-          {hook.warnings.map((warning, i) => (
+          {otherWarnings.map((warning, i) => (
             <li key={i} className="mk-slot-warning mono" role="status">
               {warning}
             </li>
@@ -410,6 +451,99 @@ function rungWindow(rung: LadderRung): string {
   if (rung.bpMax !== undefined) return `≤${rung.bpMax}BP`;
   if (rung.bpMin !== undefined) return `${rung.bpMin}+BP`;
   return rung.label;
+}
+
+/** The server tags a dropped-anchor warning with this prefix, alongside its
+    existing `pacing: ` and `auto-repair: ` tags. */
+const ANCHOR_PREFIX = "anchor: ";
+
+interface AnchorFieldProps {
+  moveOptions: readonly string[];
+  anchors: string[];
+  onChange: (next: string[]) => void;
+  disabled?: boolean;
+}
+
+/** The ANCHORS control beside PROPOSE: moves the author demands by name, each
+    of which the server turns into its own skeleton slot. Chips plus a datalist
+    input, gated against the pool the same way AddRow is.
+
+    This lives INSIDE StagePanel's direction <form>, whose submit fires a
+    proposal — so the button is type="button" and Enter is swallowed here, or
+    naming an anchor would launch a call instead of adding a chip. */
+function AnchorField({ moveOptions, anchors, onChange, disabled }: AnchorFieldProps) {
+  const [draft, setDraft] = useState("");
+  const canon = canonicalize(draft, moveOptions);
+  const known = canon.trim() !== "" && isKnown(canon, moveOptions);
+  const isDuplicate =
+    known && anchors.some((a) => a.toLowerCase() === canon.trim().toLowerCase());
+
+  function commit() {
+    if (!known || isDuplicate) return;
+    onChange([...anchors, canon.trim()]);
+    setDraft("");
+  }
+
+  return (
+    <div className="mk-anchors" id="mk-learnset-anchors">
+      <label className="mk-anchors__label mono" htmlFor="mk-anchor-input">
+        anchors
+      </label>
+      {anchors.map((anchor) => (
+        <span key={anchor} className="mk-anchors__chip mono">
+          {anchor}
+          <button
+            type="button"
+            className="mk-anchors__drop"
+            aria-label={`Remove anchor ${anchor}`}
+            disabled={disabled}
+            onClick={() => onChange(anchors.filter((a) => a !== anchor))}
+          >
+            ✕
+          </button>
+        </span>
+      ))}
+      <input
+        className="mk-anchors__input mono"
+        id="mk-anchor-input"
+        type="text"
+        list="mk-anchor-move-list"
+        placeholder="must-have move…"
+        value={draft}
+        disabled={disabled}
+        onChange={(e) => setDraft(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+            commit();
+          }
+        }}
+        autoComplete="off"
+      />
+      <datalist id="mk-anchor-move-list">
+        {moveOptions.map((opt) => (
+          <option key={opt} value={opt} />
+        ))}
+      </datalist>
+      <button
+        type="button"
+        className="mk-btn mk-btn--ghost"
+        id="mk-learnset-anchor-add"
+        disabled={disabled || !known || isDuplicate}
+        title={
+          isDuplicate
+            ? "Already an anchor"
+            : known
+              ? "Require this move in the proposal"
+              : "Type a known move name"
+        }
+        onClick={commit}
+      >
+        ＋ anchor
+      </button>
+    </div>
+  );
 }
 
 interface AddRowProps {
