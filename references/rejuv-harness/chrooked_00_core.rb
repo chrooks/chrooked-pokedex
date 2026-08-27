@@ -103,6 +103,28 @@ module Chrooked
   WING_MOVES = [:WINGATTACK, :DUALWINGBEAT, :BRAVEBIRD, :OBLIVIONWING,
                 :ESPERWING, :AERIALACE].freeze
 
+  # --- registry resolution ----------------------------------------------------
+  # Every CHROOKED_* table is a Hash keyed by ability symbol. With the All
+  # Abilities option on (chrooked_zz_multiability), a battler's ability is a
+  # ChrookedAbilitySet, and Hash lookup collapses it to the set's PRIMARY
+  # ability — so only one of the mon's chrooked abilities would ever fire.
+  # These two resolve a table across the whole set instead.
+  #   entries -> every handler the mon owns, in ability order (they stack)
+  #   entry   -> the first handler the mon owns (first-wins semantics)
+  # A plain Symbol takes the fast path and behaves exactly as before.
+  def self.entries(table, ability)
+    return [] if ability.nil?
+    unless ability.respond_to?(:list)
+      handler = table[ability]
+      return handler ? [handler] : []
+    end
+    ability.list.map { |a| table[a] }.compact
+  end
+
+  def self.entry(table, ability)
+    entries(table, ability).first
+  end
+
   def self.hammer_move?(move)
     HAMMER_MOVES.include?(move.move)
   end
@@ -140,7 +162,7 @@ module Chrooked
   # True when the attacker's type-mod actually converts this move — the shared
   # predicate between pbType (the conversion) and the +20% damage rider.
   def self.type_changed?(move, attacker)
-    mod = CHROOKED_TYPE_MODS[attacker.ability]
+    mod = Chrooked.entry(CHROOKED_TYPE_MODS, attacker.ability)
     return false unless mod && retypeable?(move)
     !mod.call(move, move.type).nil?
   end
@@ -166,8 +188,9 @@ module Chrooked
 
   def self.damage_mult(move, attacker, opponent)
     mult = 1.0
-    atk_mod = CHROOKED_DAMAGE_MODS[attacker.ability]
-    mult *= atk_mod.call(move, attacker, opponent) if atk_mod
+    Chrooked.entries(CHROOKED_DAMAGE_MODS, attacker.ability).each do |atk_mod|
+      mult *= atk_mod.call(move, attacker, opponent)
+    end
     # Status-keyed rider — a property of the attacker's status condition, not its
     # ability (frostbite halving special damage the way burn halves physical).
     # Attacker-side like the ability mod above, so Mold Breaker never suppresses it.
@@ -184,8 +207,11 @@ module Chrooked
     # disables the user's own ability.
     mold_broken = opponent.respond_to?(:shouldBeMoldBroken?) &&
                   opponent.shouldBeMoldBroken?(attacker, move)
-    def_mod = opponent && !mold_broken && CHROOKED_DEFENSE_MODS[opponent.ability]
-    mult *= def_mod.call(move, attacker, opponent) if def_mod
+    if opponent && !mold_broken
+      Chrooked.entries(CHROOKED_DEFENSE_MODS, opponent.ability).each do |def_mod|
+        mult *= def_mod.call(move, attacker, opponent)
+      end
+    end
     mult
   end
 
@@ -200,7 +226,7 @@ end
 
 module ChrookedDamageMods
   def pbCalcDamage(attacker, opponent, *args, **kwargs)
-    swap = CHROOKED_STAT_SWAP[attacker.ability]
+    swap = Chrooked.entry(CHROOKED_STAT_SWAP, attacker.ability)
     if swap && swap.call(self, attacker)
       original_attack = attacker.attack
       attacker.attack = attacker.spatk
@@ -225,7 +251,7 @@ PokeBattle_Move.prepend(ChrookedDamageMods)
 module ChrookedTypeMods
   def pbType(attacker, type = @type)
     t = super
-    mod = attacker && CHROOKED_TYPE_MODS[attacker.ability]
+    mod = attacker && Chrooked.entry(CHROOKED_TYPE_MODS, attacker.ability)
     if mod && Chrooked.retypeable?(self)
       new_type = mod.call(self, t)
       t = new_type if new_type
@@ -238,8 +264,9 @@ PokeBattle_Move.prepend(ChrookedTypeMods)
 module ChrookedMoveHooks
   def priorityCheck(attacker)
     pri = super
-    mod = CHROOKED_PRIORITY_MODS[attacker.ability]
-    pri += mod.call(self, attacker) if mod
+    Chrooked.entries(CHROOKED_PRIORITY_MODS, attacker.ability).each do |mod|
+      pri += mod.call(self, attacker)
+    end
     pri += 1 if attacker.effects[:ChrookedStampede] && contactMove?
     pri
   end
@@ -251,12 +278,12 @@ module ChrookedMoveHooks
     targets.each_with_index do |opponent, i|
       next if hitflags[i] != :Success
       next unless pbShouldApplyTypeImmunity?(attacker, opponent)
-      immunity = CHROOKED_TYPE_IMMUNITY[opponent.ability]
+      immunity = Chrooked.entry(CHROOKED_TYPE_IMMUNITY, opponent.ability)
       next unless immunity && !opponent.moldbroken
       hitflags[i] = immunity[:flag] if move_type == immunity[:type]
     end
     # Immunity bypass (Bonebreaker): re-open levitation/absorb-ability blocks.
-    bypass = CHROOKED_IMMUNITY_BYPASS[attacker.ability]
+    bypass = Chrooked.entry(CHROOKED_IMMUNITY_BYPASS, attacker.ability)
     if bypass && bypass.call(self, attacker)
       reopened = [:Levitate, :AirBalloon, :MagnetRise, :Telekinesis,
                   :HpAbsorbAbility, :FlashFireAbility]
@@ -275,8 +302,9 @@ module ChrookedMoveHooks
     # move override (Gastric Snare's Bug 2x) composes on top of the rebuilt
     # value instead of being silently discarded by it. Mold Breaker does not
     # suppress this — it is the ATTACKER's ability, not the defender's.
-    amod = CHROOKED_ABILITY_TYPEMOD[attacker.ability]
-    typemod = amod.call(self, atype, attacker, opponent, typemod) if amod
+    Chrooked.entries(CHROOKED_ABILITY_TYPEMOD, attacker.ability).each do |amod|
+      typemod = amod.call(self, atype, attacker, opponent, typemod)
+    end
     mod = CHROOKED_MOVE_TYPEMOD[@move]
     typemod = mod.call(self, atype, attacker, opponent, typemod) if mod
     # Pure block immunities also zero the typemod so the AI's damage preview
@@ -284,11 +312,11 @@ module ChrookedMoveHooks
     # Absorb-heal immunities stay hitflag-only — a zero typemod would skip the
     # heal. ponytail: AI stays blind to absorb-heals, same as it is to ours.
     opp_ability = opponent.shouldBeMoldBroken?(attacker, self) ? nil : opponent.ability
-    immunity = opp_ability && CHROOKED_TYPE_IMMUNITY[opp_ability]
+    immunity = opp_ability && Chrooked.entry(CHROOKED_TYPE_IMMUNITY, opp_ability)
     if immunity && immunity[:flag] == :Soundproof && atype == immunity[:type]
       typemod = Typemod.zero
     end
-    floor = CHROOKED_TYPEMOD_FLOOR[attacker.ability]
+    floor = Chrooked.entry(CHROOKED_TYPEMOD_FLOOR, attacker.ability)
     if floor && typemod.immune? && floor.call(self, attacker)
       typemod = Typemod.normal
     end
@@ -300,13 +328,13 @@ module ChrookedMoveHooks
     # -1 means criticals are impossible here (status move, Battle Armor,
     # Shell Armor, Lucky Chant). Never override that.
     return rate if rate < 0
-    forced = CHROOKED_CRIT_RATE[attacker.ability]
-    return 3 if forced && forced.call(self, attacker, opponent)
+    forced = Chrooked.entries(CHROOKED_CRIT_RATE, attacker.ability)
+    return 3 if forced.any? { |f| f.call(self, attacker, opponent) }
     rate
   end
 
   def pbAccuracyCheck(attacker, opponent)
-    sure = CHROOKED_SURE_HIT[attacker.ability]
+    sure = Chrooked.entry(CHROOKED_SURE_HIT, attacker.ability)
     return true if sure && sure.call(self, attacker)
     super
   end
@@ -315,10 +343,11 @@ module ChrookedMoveHooks
     acc = super
     # -1 = perfect accuracy, 0 = auto-miss/Wonder Skin — leave both untouched.
     return acc if acc <= 0
-    mod = CHROOKED_ACCURACY_MODS[attacker.ability]
     # ponytail: multiply the final accuracy instead of appending to the engine's
     # accmult array — one rounding step off from a native modifier, immaterial here.
-    acc = (acc * mod.call(self, attacker, opponent)).round if mod
+    Chrooked.entries(CHROOKED_ACCURACY_MODS, attacker.ability).each do |mod|
+      acc = (acc * mod.call(self, attacker, opponent)).round
+    end
     acc
   end
 end
@@ -328,52 +357,67 @@ module ChrookedBattlerHooks
   def pbOnKillEffects(targets, basemove, *args)
     ret = super
     return ret if @battle.pbAnySideAllFainted? || self.isFainted?
-    mod = CHROOKED_ON_KO[self.ability]
-    mod&.call(self, targets, basemove, @battle)
+    Chrooked.entries(CHROOKED_ON_KO, self.ability).each do |mod|
+      mod.call(self, targets, basemove, @battle)
+    end
     ret
   end
 
   def pbEffectsOnDealingDamage(move, user, target, damage, *args)
     ret = super
     return ret if damage.to_i <= 0 || target.damagestate.substitute
-    atk_mod = CHROOKED_ON_DEAL[user.ability]
-    atk_mod&.call(move, user, target, @battle) if !user.isFainted?
-    dmg_mod = CHROOKED_ON_DEAL_DMG[user.ability]
-    dmg_mod&.call(move, user, target, damage, @battle) if !user.isFainted?
+    unless user.isFainted?
+      Chrooked.entries(CHROOKED_ON_DEAL, user.ability).each do |atk_mod|
+        atk_mod.call(move, user, target, @battle)
+      end
+      Chrooked.entries(CHROOKED_ON_DEAL_DMG, user.ability).each do |dmg_mod|
+        dmg_mod.call(move, user, target, damage, @battle)
+      end
+    end
     move_mod = CHROOKED_MOVE_ON_DEAL[move.move]
     move_mod&.call(move, user, target, @battle) if !user.isFainted?
     # Same Mold Breaker rule as damage_mult: the target's ability is ignored, so its
     # when-hit reaction must not fire. Attacker-side mods above are unaffected.
     target_mold_broken = target.respond_to?(:shouldBeMoldBroken?) &&
                          target.shouldBeMoldBroken?(user, move)
-    def_mod = target_mold_broken ? nil : CHROOKED_WHEN_HIT[target.ability]
-    def_mod&.call(move, user, target, @battle) if !target.isFainted?
+    unless target_mold_broken || target.isFainted?
+      Chrooked.entries(CHROOKED_WHEN_HIT, target.ability).each do |def_mod|
+        def_mod.call(move, user, target, @battle)
+      end
+    end
     ret
   end
 
   def pbAbilitiesOnSwitchIn(*args, **kwargs)
     ret = super
-    mod = CHROOKED_SWITCH_IN[self.ability]
-    mod&.call(self, @battle) if !self.isFainted?
+    unless self.isFainted?
+      Chrooked.entries(CHROOKED_SWITCH_IN, self.ability).each do |mod|
+        mod.call(self, @battle)
+      end
+    end
     ret
   end
 
   def pbSpeed(*args)
     speed = super
-    mod = CHROOKED_SPEED_MODS[self.ability]
-    mod ? (speed * mod.call(self)).floor : speed
+    mods = Chrooked.entries(CHROOKED_SPEED_MODS, self.ability)
+    mods.empty? ? speed : (speed * mods.inject(1.0) { |m, f| m * f.call(self) }).floor
   end
 
   def pbUseMove(choice, *args, **kwargs)
     ret = super
-    mod = CHROOKED_AFTER_MOVE[self.ability]
-    mod&.call(self, self.lastMoveUsed, @battle) if mod && !self.isFainted? && self.lastMoveUsed.is_a?(Symbol)
+    if !self.isFainted? && self.lastMoveUsed.is_a?(Symbol)
+      Chrooked.entries(CHROOKED_AFTER_MOVE, self.ability).each do |mod|
+        mod.call(self, self.lastMoveUsed, @battle)
+      end
+    end
     ret
   end
 
   def absorbHP(hpgain, opponent, agent, move = nil)
-    mod = CHROOKED_ABSORB_MODS[self.ability]
-    hpgain = mod.call(self, hpgain, agent) if mod
+    Chrooked.entries(CHROOKED_ABSORB_MODS, self.ability).each do |mod|
+      hpgain = mod.call(self, hpgain, agent)
+    end
     # move-keyed drain fraction (the drain funccode passes the move as `move`).
     mmod = move ? CHROOKED_MOVE_ABSORB_MODS[move.move] : nil
     hpgain = (hpgain * mmod).round if mmod
@@ -381,7 +425,7 @@ module ChrookedBattlerHooks
   end
 
   def pbReduceHP(amt, anim = false, emercheck = true, message: nil)
-    veto = CHROOKED_HP_LOSS_VETO[self.ability]
+    veto = Chrooked.entry(CHROOKED_HP_LOSS_VETO, self.ability)
     return 0 if veto && veto.call(self, message)
     super
   end
@@ -404,7 +448,7 @@ module ChrookedBattlerHooks
 
   def pbTarget(move)
     target = super
-    mod = CHROOKED_TARGET_MODS[self.ability]
+    mod = Chrooked.entry(CHROOKED_TARGET_MODS, self.ability)
     if mod
       new_target = mod.call(move, self, target)
       target = new_target if new_target
@@ -421,8 +465,9 @@ module ChrookedBattleHooks
     # super strands an empty slot on the field until the next round's end.
     @battlers.each do |battler|
       next if !battler || battler.isFainted?
-      mod = CHROOKED_TURN_END[battler.ability]
-      mod&.call(battler, self)
+      Chrooked.entries(CHROOKED_TURN_END, battler.ability).each do |mod|
+        mod.call(battler, self)
+      end
       status_mod = battler.status && CHROOKED_STATUS_TURN_END[battler.status]
       status_mod&.call(battler, self)
     end
@@ -450,7 +495,7 @@ module ChrookedBattleHooks
   # Per-user weather perception (Mega Sol's own seam): a battler whose ability
   # is registered sees its OWN moves resolve under that weather.
   def pbWeather(moveuser)
-    forced = moveuser && CHROOKED_WEATHER_FOR_USER[moveuser.ability]
+    forced = moveuser && Chrooked.entry(CHROOKED_WEATHER_FOR_USER, moveuser.ability)
     return forced if forced
     super
   end
@@ -483,7 +528,7 @@ if defined?(PokeBattle_AI)
     def hpGainPerTurn(attacker = @attacker, chipdamageCheck = false)
       healing = super
       begin
-        refund = attacker && CHROOKED_AI_HP_REFUND[attacker.ability]
+        refund = attacker && Chrooked.entry(CHROOKED_AI_HP_REFUND, attacker.ability)
         return healing unless refund && healing.is_a?(Numeric)
 
         healing + refund.call(attacker, @battle)
@@ -500,7 +545,13 @@ end
 if defined?(PokeBattle_Move_0D8)
   module ChrookedWeatherHealMods
     def pbEffect(attacker, alltargets, hitnum = 0)
-      fraction = CHROOKED_HEAL_OVERRIDE[[attacker.ability, @move]]
+      # Composite key — resolve the ability half across the set as well.
+      fraction = Chrooked.entry(
+        CHROOKED_HEAL_OVERRIDE.each_with_object({}) { |((abil, mv), frac), by_abil|
+          by_abil[abil] = frac if mv == @move
+        },
+        attacker.ability
+      )
       return super unless fraction
       hpgain = (attacker.totalhp * fraction).round
       attacker.pbRecoverHP(hpgain, true,

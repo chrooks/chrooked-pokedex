@@ -99,4 +99,46 @@ assert opts[idx + 1].is_a?(EnumOption), "option lands after the Battle header"
 assert opts[idx + 1].name == "All Abilities", "option is named All Abilities"
 assert opts.last == "Back", "Back still closes the list"
 
+# --- registry dispatch across the whole set (the Web Weaver bug) -------------
+# Chrooked.entries/entry live in chrooked_00_core.rb; load it under stubs so the
+# real helpers are exercised, not a copy.
+module PBStats; SPEED = 5; end
+class PokeBattle_Move; end
+class PokeBattle_Battle; end
+eval(File.read(File.join(ARGV[0], "chrooked_00_core.rb")), TOPLEVEL_BINDING)
+
+Ariados = Struct.new(:ability) do
+  def getAbilityList; [:WEBWEAVER, :VIRULENCE, :VAMPIRIC]; end
+end
+
+ariados = PokeBattle_Battler.new
+ariados.pbInitPokemon(Ariados.new(:VIRULENCE), 0)
+set = ariados.ability
+assert set.primary == :VIRULENCE, "primary is the mon's own rolled ability"
+
+CHROOKED_SWITCH_IN[:WEBWEAVER] = ->(*) { :web }
+CHROOKED_CRIT_RATE[:VIRULENCE]  = ->(*) { true }
+CHROOKED_ON_DEAL_DMG[:VAMPIRIC] = ->(*) { :drain }
+
+# A raw Hash lookup still collapses to the primary — that is the trap.
+assert CHROOKED_SWITCH_IN[set].nil?, "raw hash lookup misses a non-primary ability"
+
+# entries/entry see every ability the mon owns, whatever the primary is.
+assert Chrooked.entries(CHROOKED_SWITCH_IN, set).length == 1, "switch-in found via the set"
+assert Chrooked.entry(CHROOKED_SWITCH_IN, set).call == :web, "Web Weaver fires off-primary"
+assert Chrooked.entry(CHROOKED_CRIT_RATE, set).call, "primary ability still fires"
+assert Chrooked.entry(CHROOKED_ON_DEAL_DMG, set).call == :drain, "hidden ability fires"
+
+# Stacking: two owned abilities in one table both come back, in ability order.
+CHROOKED_DAMAGE_MODS[:VIRULENCE] = ->(*) { 1.5 }
+CHROOKED_DAMAGE_MODS[:VAMPIRIC]  = ->(*) { 2.0 }
+mods = Chrooked.entries(CHROOKED_DAMAGE_MODS, set)
+assert mods.length == 2, "both owned damage mods resolve"
+assert mods.inject(1.0) { |m, f| m * f.call } == 3.0, "owned damage mods stack"
+
+# Plain Symbol path unchanged (All Abilities off, or a one-ability mon).
+assert Chrooked.entry(CHROOKED_SWITCH_IN, :WEBWEAVER).call == :web, "symbol path works"
+assert Chrooked.entries(CHROOKED_SWITCH_IN, :VIRULENCE).empty?, "symbol path misses cleanly"
+assert Chrooked.entries(CHROOKED_SWITCH_IN, nil).empty?, "nil ability is safe"
+
 puts "OK"
