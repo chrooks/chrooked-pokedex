@@ -41,6 +41,7 @@ from . import lore as loremod
 from . import readback as readbackmod
 from . import snapshot as snapmod
 from . import suggest as suggestmod
+from . import save_sync
 from . import targets as targetsmod
 
 # The learnset pacing-band rubric — a single JSON source of truth served to the
@@ -1505,6 +1506,22 @@ def create_app(
             return targetsmod.target_dialect(target)
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
+
+    @app.get("/api/targets/{target_id}/save-status")
+    def get_target_save_status(target_id: str) -> dict[str, Any]:
+        """Save-state sync health for the shared saves folder (#88).
+
+        Telemetry, not an operation: an unreachable Syncthing or an unmounted
+        saves dir returns ``{"available": false}`` so the drawer can stay quiet.
+        The target id is validated so the route 404s on a stale drawer, but the
+        payload is machine-wide — one saves folder, not one per target.
+        """
+        registry = app.state.targets_registry
+        try:
+            registry.get(target_id)
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+        return save_sync.save_status()
 
     def _crop_quadrant(sprite_path: Path) -> bytes:
         """Top-left quadrant of a 2x2 battler sheet as PNG bytes (lru-cached)."""
