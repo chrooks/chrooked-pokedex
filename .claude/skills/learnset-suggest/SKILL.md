@@ -131,6 +131,22 @@ curl -sS -X POST "${CHROOKED_API:-http://127.0.0.1:8000}/api/species/goodra/sugg
   -d '{"mode": "full", "direction": "special-attack leaning"}'
 ```
 
+**Anchors — must-have moves.** Do NOT name required moves inside `direction`;
+the slot skeleton strips move names out of the steer, so a move named there
+grows no slot and gets dropped. Pass them as their own field:
+
+```bash
+curl -sS -X POST "${CHROOKED_API:-http://127.0.0.1:8000}/api/species/goodra/suggest/learnset" \
+  -H 'content-type: application/json' \
+  -d '{"mode": "full", "anchors": ["Bug Bite", "U-turn"], "direction": "physical, nocturnal hunter"}'
+```
+
+Each anchor becomes its own skeleton slot the trim never drops, so the model
+cannot spend it elsewhere. Anchors are FULL mode only, at most
+`LEARNSET_ANCHOR_MAX` (8) of them — beyond that they erase the generated STAB
+ladder rather than sit beside it. An unknown name, too many, or anchors in
+surgical mode are all a **422 before the Port call**.
+
 **Surgical mode** (change one targeted move):
 
 ```bash
@@ -145,10 +161,16 @@ by status:
 - **200** → the reusable contract (see shape below).
 - **404** → no such species; show the message, stop.
 - **422** → a validation problem (hallucinated move, bad level, repeat-move violation,
-  untouched-rows guard, missing surgical instruction). Show the message, stop — nothing
-  was written.
+  untouched-rows guard, missing surgical instruction, or a bad `anchors` request —
+  unknown move name, more than 8, or anchors sent in surgical mode). Show the
+  message, stop — nothing was written.
 - **503** → a recoverable backend/LLM problem (missing key, provider/timeout). Show
   the honest message (it never contains the key), stop.
+
+**Check the warnings.** A `warnings` entry prefixed `anchor: ` means the draft
+did not place a move you required — the same failure that lost four anchors on
+the Ariados rework. Relay every one of them in the preview; never present a
+draft as complete while an `anchor:` warning stands.
 
 ### 2. Preview in chat
 

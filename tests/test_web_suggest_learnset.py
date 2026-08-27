@@ -263,7 +263,7 @@ def _make_client(ruleset_dir: Path, tmp_path: Path, provider: Any) -> TestClient
 
 
 def _skeleton_result(
-    chrooked_id: str, ruleset_dir: Path
+    chrooked_id: str, ruleset_dir: Path, anchors: list[str] | None = None
 ) -> dict[str, Any]:
     """A draft that fills the slot skeleton the endpoint will build.
 
@@ -278,18 +278,23 @@ def _skeleton_result(
     pool = dexmod.build_move_pool(_SNAPSHOT, ruleset)
     abilities = dexmod.build_abilities(_SNAPSHOT, ruleset)
     entry = dexmod.build_dex_entry(_SNAPSHOT, ruleset, chrooked_id)
-    return _fill_skeleton(entry, abilities, pool)
+    return _fill_skeleton(entry, abilities, pool, anchors=anchors)
 
 
 def _fill_skeleton(
     entry: dict[str, Any],
     abilities: list[dict[str, Any]],
     pool: list[dict[str, Any]],
+    anchors: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Fill each skeleton slot with its first unused candidate."""
+    """Fill each skeleton slot with its first unused candidate.
+
+    ``anchors`` must mirror what the request sends, or this builds a different
+    skeleton than the server does and the hard gate rejects the draft.
+    """
     from chrooked_pokedex.web import learnset_skeleton as skmod
 
-    skeleton = skmod.build_skeleton(entry, abilities, pool)
+    skeleton = skmod.build_skeleton(entry, abilities, pool, anchors=anchors)
     rows, used = [], set()
     for slot in skeleton["slots"]:
         pick = next(
@@ -1969,3 +1974,182 @@ class _SequenceProvider:
         result = self.results[len(self.calls)]
         self.calls.append(kwargs)
         return result
+
+
+# =========================================================================== #
+# Anchors — moves the user names outright (#89)
+#
+# The anchor field replaces naming moves inside the `direction` prose, which the
+# slot skeleton silently overrode: 14 anchors named, 10 placed (2026-08-27,
+# Ariados). An anchor now gets its own skeleton slot, and the warn-only diff is
+# the backstop for the paths a skeleton cannot cover.
+# =========================================================================== #
+
+
+def test_suggest_learnset_anchors_reach_the_prompt(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir, anchors=["Dragon Pulse"]))
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    client.post(
+        "/api/species/goodra/suggest/learnset",
+        json={"mode": "full", "anchors": ["Dragon Pulse"]},
+    )
+
+    user = provider.calls[0]["user"]
+    assert "MOVES THE USER NAMED" in user
+    assert "Dragon Pulse" in user
+    assert "ANCHOR — the user named Dragon Pulse" in user
+
+
+def test_suggest_learnset_placed_anchor_emits_no_warning(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir, anchors=["Dragon Pulse"]))
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/learnset",
+        json={"mode": "full", "anchors": ["Dragon Pulse"]},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    moves = {row["move"] for row in body["draft"]["learnset"]}
+    assert "Dragon Pulse" in moves
+    assert not any(w.startswith("anchor:") for w in body.get("warnings") or [])
+
+
+def test_suggest_learnset_unknown_anchor_is_422_before_the_port_call(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """A typo'd anchor must fail loud, and must not cost a round-trip."""
+    provider = _FakeProvider(_GOOD_LEARNSET_RESULT)
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/learnset",
+        json={"mode": "full", "anchors": ["Flurb"]},
+    )
+
+    assert response.status_code == 422
+    assert "Flurb" in response.json()["detail"]
+    assert provider.calls == []
+
+
+def test_resolve_anchors_rejects_more_than_the_cap() -> None:
+    """Too many anchors erase the generated ladder, so the boundary refuses."""
+    names = [f"Move {i}" for i in range(suggestmod.LEARNSET_ANCHOR_MAX + 1)]
+    pool = [
+        {"move": n, "type": "Normal", "category": "Physical", "power": 50, "effect": "hit"}
+        for n in names
+    ]
+    with pytest.raises(suggestmod.SuggestError) as excinfo:
+        suggestmod._resolve_anchors(names, pool, "full")
+    assert str(suggestmod.LEARNSET_ANCHOR_MAX) in str(excinfo.value)
+
+
+def test_resolve_anchors_canonicalizes_and_dedupes() -> None:
+    pool = [
+        {"move": "Dragon Pulse", "type": "Dragon", "category": "Special", "power": 85, "effect": "hit"},
+    ]
+    assert suggestmod._resolve_anchors(
+        ["dragon pulse", " DRAGON PULSE "], pool, "full"
+    ) == ["Dragon Pulse"]
+
+
+def test_suggest_learnset_anchors_in_surgical_mode_is_422(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _FakeProvider(_SURGICAL_RESULT)
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/learnset",
+        json={"mode": "surgical", "instruction": "swap L1", "anchors": ["Dragon Pulse"]},
+    )
+
+    assert response.status_code == 422
+    assert "surgical" in response.json()["detail"].lower()
+    assert provider.calls == []
+
+
+def test_suggest_learnset_empty_anchor_list_is_a_no_op(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """`anchors: []` must behave exactly like omitting the key."""
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
+    client = _make_client(ruleset_dir, tmp_path, provider)
+
+    response = client.post(
+        "/api/species/goodra/suggest/learnset",
+        json={"mode": "full", "anchors": []},
+    )
+
+    assert response.status_code == 200
+    assert "MOVES THE USER NAMED" not in provider.calls[0]["user"]
+
+
+def test_validate_learnset_warns_when_the_draft_drops_an_anchor() -> None:
+    """The warn-only backstop.
+
+    Exercised directly rather than through the endpoint: with a skeleton in play
+    the anchor is a hard slot, so a skeleton-valid draft that omits it cannot
+    exist. This covers the skeleton-free path and the autofill shortfall.
+    """
+    # The size floor is min(LEARNSET_SIZE_MIN, len(pool)), so a pool smaller than
+    # the floor forces the draft to use every move — and the anchor could never
+    # be missing. Go wide enough that the floor caps at LEARNSET_SIZE_MIN.
+    filler = [
+        {"move": f"Filler {i}", "type": "Normal", "category": "Physical",
+         "power": 50, "effect": "hit"}
+        for i in range(suggestmod.LEARNSET_SIZE_MIN + 2)
+    ]
+    pool = filler + [
+        {"move": "Dragon Pulse", "type": "Dragon", "category": "Special",
+         "power": 85, "effect": "hit"},
+    ]
+    result = {
+        "draft": {
+            "learnset": [
+                # spaced 4 apart: clears the early-packing caps and the L75 ceiling
+                {"level": i * 4 + 1, "move": row["move"], "reasoning": "filler"}
+                for i, row in enumerate(filler)
+            ]
+        },
+        "rationale": {"learnset": "Standard."},
+        "alternatives": [],
+    }
+    out = suggestmod._validate_learnset_result(
+        result,
+        pool,
+        mode="full",
+        current_learnset=[],
+        anchors=["Dragon Pulse"],
+    )
+    assert any(
+        w.startswith("anchor: Dragon Pulse") for w in out["warnings"]
+    ), out.get("warnings")
+
+
+def test_validate_learnset_anchor_diff_is_case_insensitive() -> None:
+    """A placed anchor must not warn just because the request differed in case."""
+    result = {
+        "draft": {
+            "learnset": [
+                {"level": 1, "move": "Tackle", "reasoning": "basic"},
+                {"level": 5, "move": "Dragon Pulse", "reasoning": "STAB"},
+            ]
+        },
+        "rationale": {"learnset": "Standard."},
+        "alternatives": [],
+    }
+    out = suggestmod._validate_learnset_result(
+        result,
+        _make_pool(),
+        mode="full",
+        current_learnset=[],
+        anchors=["dragon pulse"],
+    )
+    assert not any(w.startswith("anchor:") for w in out.get("warnings") or [])

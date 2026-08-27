@@ -265,3 +265,67 @@ def test_suggest_learnset_strips_gimmicks_from_the_pool() -> None:
     assert "G-Max Wildfire" not in seen["blob"]
     assert "Devastating Drake" not in seen["blob"]
     assert "Draco Meteor" in seen["blob"], "the real pool must survive the strip"
+
+
+# --------------------------------------------------------------------------- #
+# Anchors — moves the user names outright (#89)
+# --------------------------------------------------------------------------- #
+
+
+def test_anchor_becomes_its_own_required_slot() -> None:
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=["Brine"])
+    anchored = [s for s in skeleton["slots"] if s["candidates"] == ["Brine"]]
+    assert len(anchored) == 1
+    slot = anchored[0]
+    assert slot["required"] is True
+    assert slot["role"] == "named"
+    assert "ANCHOR" in slot["label"]
+    assert slot["level"] > 1
+
+
+def test_anchor_is_canonicalized_from_a_casefolded_name() -> None:
+    """The boundary canonicalizes, but the skeleton must not depend on that."""
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=["bRiNe"])
+    assert any(s["candidates"] == ["Brine"] for s in skeleton["slots"])
+
+
+def test_anchor_is_struck_from_every_other_levelled_slot() -> None:
+    """The singleton-collision guard reserves the anchor for its own slot.
+
+    L0 is exempt by design — a move may sit at L0 AND at a real level — so the
+    reward slot may still offer the anchor. Every levelled slot must not.
+    """
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=["Brine"])
+    holders = [
+        s for s in skeleton["slots"]
+        if s["level"] > 0 and "Brine" in s["candidates"]
+    ]
+    assert len(holders) == 1
+    assert holders[0]["candidates"] == ["Brine"]
+
+
+def test_anchors_survive_the_size_cap_trim() -> None:
+    """Anchors are priority 0 — the trim eats flavor and status first."""
+    anchors = ["Twister", "Brine", "Surf", "Slam", "Protect", "Toxic"]
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=anchors)
+    seated = {c for s in skeleton["slots"] for c in s["candidates"] if len(s["candidates"]) == 1}
+    for anchor in anchors:
+        assert anchor in seated, f"{anchor} lost its slot"
+
+
+def test_anchor_not_in_the_pool_is_skipped_without_raising() -> None:
+    """The request boundary rejects these; build_skeleton stays total anyway."""
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=["Flurb"])
+    assert all("Flurb" not in s["candidates"] for s in skeleton["slots"])
+
+
+def test_duplicate_anchors_make_one_slot() -> None:
+    skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=["Brine", "brine"])
+    assert sum(1 for s in skeleton["slots"] if s["candidates"] == ["Brine"]) == 1
+
+
+def test_no_anchors_leaves_the_skeleton_unchanged() -> None:
+    """`anchors=[]` must behave exactly like omitting the argument."""
+    base = sk.build_skeleton(_entry(), _ABILITIES, _pool())
+    empty = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=[])
+    assert base == empty

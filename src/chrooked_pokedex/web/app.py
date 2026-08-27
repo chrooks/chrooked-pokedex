@@ -642,6 +642,7 @@ def create_app(
         mode = body.get("mode", "full")
         instruction = body.get("instruction")
         direction = body.get("direction")
+        anchors = body.get("anchors")
         try:
             return suggestmod.suggest_learnset(
                 provider=_llm_provider(),
@@ -651,6 +652,7 @@ def create_app(
                 mode=mode,
                 instruction=instruction,
                 direction=direction,
+                anchors=anchors,
             )
         except suggestmod.SuggestError as error:
             # A draft that only tripped a soft shape bound is fully editable — hand

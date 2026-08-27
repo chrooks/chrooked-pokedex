@@ -62,6 +62,11 @@ LEARNSET_SIZE_MAX = 26
 LEARNSET_MAX_LEVEL = 75  # no level-up move above this level
 LEARNSET_MAX_MOVES_THROUGH_L5 = 5  # rows with level ≤5, counting the L0/L1 kit
 LEARNSET_MAX_MOVES_THROUGH_L10 = 7  # rows with level ≤10
+# Anchors each claim one of the skeleton's 20 non-pinned grid seats, and the trim
+# pass drops flavor → widener → status → STAB before ever touching one. Leave
+# room for a dual-type ladder (~8 rungs) plus the status slots (~4). A knob, not
+# a law: raise it and the generated ladder shrinks to match.
+LEARNSET_ANCHOR_MAX = 8
 
 # The shared band Contract (also the workbench Signifier's data and the
 # coverage-band source for scripts/move_coverage.py). The pacing bands feed the
@@ -1781,6 +1786,7 @@ def _build_learnset_user_context(
     mode: str,
     instruction: str | None,
     direction: str | None,
+    anchors: list[str] | None = None,
 ) -> str:
     """The fresh per-species delta for learnset suggest.
 
@@ -1843,6 +1849,16 @@ def _build_learnset_user_context(
         lines.append(f"Surgical instruction: {instruction.strip()}")
     if direction and direction.strip():
         lines.append(f"Direction from the user: {direction.strip()}")
+    # Last line in the block, so it abuts the SLOT SKELETON appended after this
+    # context — it reads as the bridge into the ANCHOR slots rather than as one
+    # more clause the direction prose can swallow.
+    if anchors:
+        lines.append(
+            "MOVES THE USER NAMED (non-negotiable): "
+            + ", ".join(anchors)
+            + " — each has its own ANCHOR slot in the skeleton below. "
+            "Place every one."
+        )
     return "\n".join(lines)
 
 
@@ -1910,6 +1926,44 @@ def _pool_move_names(pool: list[dict[str, Any]]) -> dict[str, str]:
     return {row["move"].strip().casefold(): row["move"] for row in pool}
 
 
+def _resolve_anchors(
+    anchors: list[str] | None,
+    move_pool: list[dict[str, Any]],
+    mode: str,
+) -> list[str]:
+    """Canonicalize and bound the user's anchor moves, or raise.
+
+    Every failure here is a :class:`SuggestError` without salvage, which the
+    route turns into a 422 — and every one is raised before the Port call, so a
+    bad request never costs a round-trip.
+    """
+    if not anchors:
+        return []
+    if mode != "full":
+        raise SuggestError(
+            "Anchor moves are a full-mode field; in surgical mode name the "
+            "move in the instruction instead."
+        )
+    known = _pool_move_names(move_pool)
+    resolved: list[str] = []
+    for raw in anchors:
+        name = str(raw).strip()
+        canon = known.get(name.casefold()) if name else None
+        if canon is None:
+            raise SuggestError(
+                f"Anchor move {name!r} is not in this species' move pool."
+            )
+        if canon not in resolved:
+            resolved.append(canon)
+    if len(resolved) > LEARNSET_ANCHOR_MAX:
+        raise SuggestError(
+            f"{len(resolved)} anchor moves is more than the {LEARNSET_ANCHOR_MAX} "
+            "the slot skeleton can seat without erasing the generated ladder — "
+            "keep the most important ones and put the rest in the direction."
+        )
+    return resolved
+
+
 def _validate_learnset_result(
     result: dict[str, Any],
     move_pool: list[dict[str, Any]],
@@ -1918,6 +1972,7 @@ def _validate_learnset_result(
     current_learnset: list[dict[str, Any]],
     instruction: str | None = None,
     skeleton: dict[str, Any] | None = None,
+    anchors: list[str] | None = None,
 ) -> dict[str, Any]:
     """Shape, pool, level, and repeat-move checks on the learnset draft.
 
@@ -2064,6 +2119,19 @@ def _validate_learnset_result(
                 result,
                 warnings,
             )
+
+    # Step 6.6: the dropped-anchor diff. Warn-only by design — the skeleton
+    # already makes an anchor a hard requirement, so this is the backstop for the
+    # paths where no skeleton ran or a slot could not be seated. Reads `deduped`
+    # so the names are already canonicalized to the pool's casing.
+    if anchors:
+        placed = {row["move"].casefold() for row in deduped}
+        for anchor in anchors:
+            if anchor.casefold() not in placed:
+                warnings.append(
+                    f"anchor: {anchor} is not in the proposed learnset — "
+                    "the draft dropped a move you named"
+                )
 
     # Step 7: shape bounds, full mode only. Skipped when a skeleton ran — the
     # skeleton fixes the exact row count and levels by construction, and a
@@ -2245,6 +2313,7 @@ def suggest_learnset(
     mode: str = "full",
     instruction: str | None = None,
     direction: str | None = None,
+    anchors: list[str] | None = None,
 ) -> dict[str, Any]:
     """Propose a level-up learnset for a species; never writes a file.
 
@@ -2275,11 +2344,17 @@ def suggest_learnset(
             "Surgical mode requires an instruction describing which move(s) to change."
         )
 
+    # Anchors are user input at a trust boundary, not model output — so unlike a
+    # bad row in a draft (dropped with a warning), a bad anchor fails loud and
+    # before the Port call. A typo silently vanishing is the exact bug anchors
+    # exist to kill.
+    resolved_anchors = _resolve_anchors(anchors, move_pool, mode)
+
     cached_context = (
         "Move pool (pick ONLY from these moves):\n" + _format_move_pool(move_pool)
     )
     user_context = _build_learnset_user_context(
-        entry, abilities, move_pool, mode, instruction, direction
+        entry, abilities, move_pool, mode, instruction, direction, resolved_anchors
     )
     current_learnset = list(entry.get("learnset") or [])
 
@@ -2290,7 +2365,7 @@ def suggest_learnset(
     skeleton = None
     if mode == "full":
         skeleton = learnset_skeleton.build_skeleton(
-            entry, abilities, move_pool, direction=direction
+            entry, abilities, move_pool, direction=direction, anchors=resolved_anchors
         )
         user_context += "\n" + learnset_skeleton.format_skeleton(skeleton)
 
@@ -2309,6 +2384,7 @@ def suggest_learnset(
                 current_learnset=current_learnset,
                 instruction=instruction,
                 skeleton=skeleton,
+                anchors=resolved_anchors,
             ),
             max_retries=_LEARNSET_MAX_RETRIES,
         )

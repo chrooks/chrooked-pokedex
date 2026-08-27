@@ -311,6 +311,7 @@ def build_skeleton(
     all_abilities: list[dict[str, Any]],
     move_pool: list[dict[str, Any]],
     direction: str | None = None,
+    anchors: list[str] | None = None,
 ) -> dict[str, Any]:
     """Build the slot skeleton for one species.
 
@@ -322,6 +323,11 @@ def build_skeleton(
     ``direction`` is the user's free-text steer; any pool type it names grows a
     real coverage ladder — a redirect asking for "flying and grass coverage"
     must change the structure, not just the prose the model reads.
+
+    ``anchors`` are moves the user demands by name. Each becomes its own
+    single-candidate ``named`` slot, which the trim never drops and the
+    collision guard reserves — the structural half of the mandate the rubric
+    could only ask for in prose.
     """
     from .suggest import LEARNSET_SIZE_MAX  # constants only; no call cycle
 
@@ -468,6 +474,37 @@ def build_skeleton(
             if lean:
                 leans.append(f"{name}: {lean}")
 
+    # --- anchors: moves the user named outright. One single-candidate slot each,
+    # emitted after fuel so they count toward _TARGET_SLOTS (suppressing density
+    # padding) and sit ahead of status in the utility level walk. _PRIORITY
+    # "named" is 0, so the trim pass never drops one. Band stays None on purpose:
+    # the utility branch of _assign_levels skips _cap_and_floor_legal, so a
+    # banded anchor whose lone candidate fails the pacing cap at every free
+    # position would be dropped outright — a guaranteed anchor turned into a lost
+    # one. Pacing-exempt and seated beats paced and missing.
+    anchor_seen = {
+        c.casefold()
+        for s in specs
+        if s["role"] == "named"
+        for c in s["candidates"]
+    }
+    for raw in anchors or []:
+        row = next(
+            (r for r in move_pool if (r.get("move") or "").casefold() == str(raw).casefold()),
+            None,
+        )
+        if row is None:
+            continue  # boundary already rejects these; stay total if bypassed
+        canon = row["move"]
+        if canon.casefold() in anchor_seen:
+            continue
+        anchor_seen.add(canon.casefold())
+        specs.append({
+            "priority": _PRIORITY["named"], "band": None, "role": "named",
+            "label": f"ANCHOR — the user named {canon}", "filter": None,
+            "candidates": [canon], "required": True, "anchor": True,
+        })
+
     # --- status slots
     status_moves = sorted(
         r["move"] for r in move_pool if (r.get("category") or "").casefold() == "status"
@@ -601,9 +638,17 @@ def build_skeleton(
     # struck from every other slot's list — two slots demanding the same lone
     # move would be unfillable under the repeat-move rule (one Twister cannot
     # fill both the kit and a rung). A slot emptied by the strike is dropped.
+    # Anchors claim FIRST. The pass is otherwise first-come, and in a narrow pool
+    # a generated rung whose candidate list collapsed to the same lone move would
+    # take it and strike the anchor slot out of existence — the user's explicit
+    # demand losing to a slot the code invented. Order the claim, not the output.
     claimed: set[str] = set()
-    survivors: list[dict[str, Any]] = []
-    for spec in resolved:
+    struck: set[int] = set()
+    claim_order = sorted(
+        range(len(resolved)), key=lambda i: 0 if resolved[i].get("anchor") else 1
+    )
+    for i in claim_order:
+        spec = resolved[i]
         cands = spec["candidates"]
         if len(cands) == 1 and spec.get("level") != 0:
             key = cands[0].casefold()
@@ -612,9 +657,12 @@ def build_skeleton(
                     f"{spec['label']}: its only candidate is already claimed "
                     "by another slot — slot dropped"
                 )
+                struck.add(i)
                 continue
             claimed.add(key)
-        survivors.append(spec)
+    survivors: list[dict[str, Any]] = [
+        spec for i, spec in enumerate(resolved) if i not in struck
+    ]
     resolved = []
     for spec in survivors:
         # The L0 reward is exempt from the claim-strike: the repeat rule allows
