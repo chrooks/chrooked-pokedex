@@ -26,5 +26,13 @@ while true; do
     git push -q
     echo "[ruleset-autocommit] pushed at $(date -u +%FT%TZ)"
   fi
+  # Couch loop v2 (mjolnir CL-2): also pull each cycle so Mac-side pushes reach
+  # this clone unattended. Rebase keeps a not-yet-pushed autocommit ahead of
+  # upstream; a real conflict stops this cycle loudly (set -eu) and shows in
+  # journalctl -u ruleset-autocommit — the correct failure mode.
+  git pull --rebase -q || {
+    echo "[ruleset-autocommit] pull failed at $(date -u +%FT%TZ)"
+    git rebase --abort 2>/dev/null || true   # never leave the clone mid-rebase
+  }
   sleep "$INTERVAL"
 done
