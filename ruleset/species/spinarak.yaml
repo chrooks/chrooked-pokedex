@@ -1,31 +1,34 @@
 name: Spinarak
 chrooked_id: spinarak
 aka: {  }
+types: [Bug, Dark]
 abilities:
-  primary: Vampiric
-  secondary: Insomnia
-  hidden: Web Weaver
+  primary: Web Weaver
+  secondary: Virulence
+  hidden: Vampiric
 learnset:
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: String Shot }
-  - { level: 2, move: Fury Cutter }
-  - { level: 5, move: Absorb }
-  - { level: 8, move: Infestation }
-  - { level: 12, move: Scary Face }
-  - { level: 15, move: Night Shade }
-  - { level: 16, move: Bug Bite }
-  - { level: 19, move: Shadow Sneak }
-  - { level: 22, move: Fury Swipes }
-  - { level: 26, move: Sucker Punch }
-  - { level: 29, move: Agility }
-  - { level: 30, move: X-Scissor }
-  - { level: 33, move: Pin Missile }
-  - { level: 36, move: Psychic }
-  - { level: 38, move: Moltstrike }
+  - { level: 1, move: Sticky Web }
+  - { level: 5, move: Fury Cutter }
+  - { level: 9, move: Pursuit }
+  - { level: 12, move: Fell Stinger }
+  - { level: 15, move: Silk Trap }
+  - { level: 18, move: Cheap Shot }
+  - { level: 21, move: Toxic Thread }
+  - { level: 24, move: Bite }
+  - { level: 27, move: Bug Bite }
+  - { level: 30, move: Swords Dance }
+  - { level: 33, move: Knock Off }
+  - { level: 36, move: U-turn }
   - { level: 39, move: Cross Poison }
-  - { level: 40, move: Poison Jab }
-  - { level: 44, move: Venom Slam }
-  - { level: 47, move: Sticky Web }
-  - { level: 51, move: Toxic Thread }
-  - { level: 57, move: Megahorn }
-  - { level: 59, move: Gunk Shot }
+  - { level: 42, move: Sucker Punch }
+  - { level: 45, move: Crunch }
+  - { level: 48, move: Poison Fang }
+  - { level: 51, move: Tectonic Fang }
+  - { level: 54, move: Gastric Snare }
+  - { level: 57, move: First Impression }
+  - { level: 60, move: Heel Drop }
+  - { level: 63, move: Venom Slam }
+  - { level: 66, move: Backstab }
+  - { level: 68, move: Megahorn }
+  - { level: 70, move: Thousand Stings }
