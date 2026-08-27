@@ -2,24 +2,30 @@ name: Remoraid
 chrooked_id: remoraid
 aka: { pokeemerald: SPECIES_REMORAID }
 abilities:
-  secondary: Sniper
+  primary: Mega Launcher
+  hidden: Protean
+stats: { def: 55 }
 learnset:
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Helping Hand }
-  - { level: 2, move: Undertow }
-  - { level: 4, move: Water Pulse }
-  - { level: 8, move: Focus Energy }
-  - { level: 12, move: Psybeam }
-  - { level: 14, move: Water Whip }
-  - { level: 16, move: Aurora Beam }
-  - { level: 20, move: Bubble Beam }
-  - { level: 24, move: Lock-On }
-  - { level: 28, move: Bullet Seed }
-  - { level: 29, move: Aqua Tail }
-  - { level: 32, move: Ice Beam }
-  - { level: 36, move: Hydro Pump }
-  - { level: 40, move: Soak }
-  - { level: 43, move: Maelstrom }
-  - { level: 44, move: Hyper Beam }
-  - { level: 57, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Focus Energy }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Ember }
+  - { level: 12, move: Mud Shot }
+  - { level: 16, move: Water Gun }
+  - { level: 19, move: Lock-On }
+  - { level: 23, move: Water Pulse }
+  - { level: 26, move: Flame Burst }
+  - { level: 30, move: Bubble Beam }
+  - { level: 33, move: Psybeam }
+  - { level: 37, move: Signal Beam }
+  - { level: 40, move: Hydro Steam }
+  - { level: 44, move: Dark Pulse }
+  - { level: 47, move: Flamethrower }
+  - { level: 51, move: Aura Sphere }
+  - { level: 54, move: Dragon Pulse }
+  - { level: 58, move: Searing Shot }
+  - { level: 61, move: Hydro Pump }
+  - { level: 64, move: Ice Beam }
+  - { level: 67, move: Origin Pulse }
+  - { level: 70, move: Nasty Plot }
+  - { level: 73, move: Tsunami }
