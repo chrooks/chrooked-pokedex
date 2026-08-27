@@ -2229,6 +2229,122 @@ textarea.mk-stage__redirect-input {
   }
 }
 
+/* ── Handheld: short, wide, touch (#91) ────────────────────────────────────
+   The Thor is held in landscape — roughly 1000-1280 wide but only 600-720 tall.
+   Vertical space is the scarce resource here, the opposite of a phone, so this
+   block buys height back before it touches columns. */
+
+/* Touch, at any size, and the correctness half of this pass. A control revealed
+   on :hover does not exist on a touch screen — the learnset row's `edit` and `✕`
+   were invisible AND unreachable, which is the real reason the rows fought the
+   author on the handheld. */
+@media (hover: none) {
+  .mk-lrow__edit,
+  .mk-lrow__remove,
+  .mk-lrow__swap,
+  .mk-create__dist-table .mk-lrow__remove,
+  .mk-linedist__remove {
+    opacity: 1;
+  }
+  /* A finger needs ~44px. These sit inside a dense row on a screen where height
+     is the scarce axis, so the target grows sideways to 44px and only to the
+     row's height vertically — a wide, short target is still hittable, and 26
+     rows each 44px tall would cost more than it buys. */
+  .mk-lrow__edit,
+  .mk-lrow__remove,
+  .mk-lrow__swap,
+  .mk-lrow__commit,
+  .mk-anchors__drop,
+  .mk-anchors__chip {
+    min-width: 44px;
+    min-height: 32px;
+  }
+  /* Hover is the only hint these carry on a pointer device; on touch the row
+     needs a permanent one. */
+  .mk-lrow--proposed {
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+/* Short viewport: reclaim height from chrome, least-valuable first. The head,
+   the pipeline rail, and the stage padding are three stacked bands of air above
+   the only thing the author came for. */
+@media (max-height: 820px) {
+  .mk-workbench__head {
+    padding: var(--space-2) var(--space-4);
+  }
+  .mk-overhead {
+    padding: var(--space-1) var(--space-4);
+    /* One line, always: wrapping the pipeline onto a second row costs the list
+       two more rows of moves. It scrolls sideways instead. */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mk-overhead::-webkit-scrollbar {
+    display: none;
+  }
+  .mk-workbench__stage {
+    padding: var(--space-3) var(--space-4);
+  }
+  .mk-stage__redirect,
+  .mk-direction__free {
+    margin-bottom: var(--space-3);
+  }
+  .mk-rail {
+    padding: var(--space-2) 0;
+  }
+}
+
+/* Landscape handheld width: the facet rail and the line strip together eat
+   420px of a 1024px screen. The line strip is reference, not action, so it goes
+   first; the rail carries the per-facet keep/queue state and stays. */
+@media (max-width: 1180px) and (min-width: 901px) {
+  .mk-workbench__body {
+    grid-template-columns: 150px minmax(0, 1fr);
+  }
+  .mk-line {
+    display: none;
+  }
+}
+
+/* The level-swap affordance (#90). Two taps, no drag: arm a row, then tap the
+   row to trade levels with. A drag handle is unhittable on a handheld. */
+.mk-lrow__swap {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  padding: 0 var(--space-1);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.mk-lrow--proposed:hover .mk-lrow__swap,
+.mk-lrow--proposed:focus-within .mk-lrow__swap {
+  opacity: 1;
+}
+.mk-lrow__swap:hover {
+  color: var(--text);
+}
+/* Armed: this row is the one whose level is being traded away. */
+.mk-lrow[data-swap-armed] {
+  background: color-mix(in oklch, var(--edited) 12%, transparent);
+}
+.mk-lrow[data-swap-armed] .mk-lrow__swap {
+  opacity: 1;
+  color: var(--edited);
+}
+/* Every other row becomes a target while a swap is armed — the affordance has
+   to be visible on all of them at once, hover or not. */
+.mk-lrow[data-swap-target] .mk-lrow__swap {
+  opacity: 1;
+  color: var(--text-dim);
+}
+.mk-lrow[data-swap-target]:hover {
+  background: color-mix(in oklch, var(--edited) 6%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mk-stage,
   .mk-done,

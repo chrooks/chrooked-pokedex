@@ -18,6 +18,7 @@ import {
   removeRow,
   removeSelectedMoves,
   sortMoves,
+  swapRowLevels,
 } from "./learnsetDraft";
 
 describe("learnset draft — bulk edits", () => {
@@ -236,5 +237,45 @@ describe("learnset draft — merge (ac5)", () => {
       hidden: "Chlorophyll",
     });
     expect(merged.types).toEqual(["Grass", "Poison"]);
+  });
+});
+
+describe("swapRowLevels", () => {
+  const draft = {
+    learnset: [
+      { level: 5, move: "Fury Cutter" },
+      { level: 12, move: "Fell Stinger" },
+      { level: 20, move: "Bug Bite" },
+    ],
+  };
+
+  it("exchanges two rows' levels and re-sorts", () => {
+    const out = swapRowLevels(draft, 0, 1);
+    expect(out.learnset).toEqual([
+      { level: 5, move: "Fell Stinger" },
+      { level: 12, move: "Fury Cutter" },
+      { level: 20, move: "Bug Bite" },
+    ]);
+  });
+
+  it("leaves every other row untouched", () => {
+    const out = swapRowLevels(draft, 0, 2);
+    expect(out.learnset.find((r) => r.move === "Fell Stinger")).toEqual({
+      level: 12,
+      move: "Fell Stinger",
+    });
+  });
+
+  it("is a no-op for the same index", () => {
+    expect(swapRowLevels(draft, 1, 1).learnset).toEqual(draft.learnset);
+  });
+
+  it("is a no-op for an out-of-range index", () => {
+    expect(swapRowLevels(draft, 0, 99).learnset).toEqual(draft.learnset);
+    expect(swapRowLevels(draft, -1, 0).learnset).toEqual(draft.learnset);
+  });
+
+  it("handles a null draft", () => {
+    expect(swapRowLevels(null, 0, 1).learnset).toEqual([]);
   });
 });

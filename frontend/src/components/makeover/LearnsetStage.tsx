@@ -9,8 +9,8 @@
    Reuses the pure learnsetDraft machinery (classify, edit, merge) and the
    learnsetBands logic — extends the proposal machinery, never forks it. */
 
-import { useEffect, useMemo, useState } from "react";
-import type { KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { FocusEvent, KeyboardEvent } from "react";
 import { api } from "../../api";
 import { canonicalize, isKnown } from "../../lib/entityValidation";
 import type { LearnsetDraft, LearnsetMove, ProposalAlternative } from "../../types";
@@ -22,6 +22,7 @@ import {
   mergeDraft,
   removedRows,
   removeRow,
+  swapRowLevels,
 } from "../proposal/learnsetDraft";
 import {
   bandViolation,
@@ -160,6 +161,27 @@ export function LearnsetStage(props: Props) {
   );
 
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  // Level-swap (#90): tap ⇅ on one row to arm it, tap a second row to exchange
+  // their levels. Two taps, no drag — a drag target is unhittable on a handheld,
+  // and a remove-plus-two-re-adds loses the ladder position it was checking.
+  const [swapFromKey, setSwapFromKey] = useState<string | null>(null);
+
+  function swapWith(rowKey: string) {
+    if (swapFromKey === null) {
+      setSwapFromKey(rowKey);
+      return;
+    }
+    if (swapFromKey === rowKey) {
+      setSwapFromKey(null);
+      return;
+    }
+    const [aLv, ...aMove] = swapFromKey.split("-");
+    const [bLv, ...bMove] = rowKey.split("-");
+    const a = draftIndexOf(Number(aLv), aMove.join("-"));
+    const b = draftIndexOf(Number(bLv), bMove.join("-"));
+    if (a >= 0 && b >= 0) hook.editDraft(swapRowLevels(draft, a, b));
+    setSwapFromKey(null);
+  }
   // The ladder overlay: off by default — the list reads calm until the author
   // asks to see the pacing structure the rows sit in.
   const [ladderOn, setLadderOn] = useState(false);
@@ -394,6 +416,10 @@ export function LearnsetStage(props: Props) {
                   data-rowkey={rowKey}
                   data-changed={changed || undefined}
                   data-violation={violation !== null || undefined}
+                  data-swap-armed={swapFromKey === rowKey || undefined}
+                  data-swap-target={
+                    (swapFromKey !== null && swapFromKey !== rowKey) || undefined
+                  }
                   tabIndex={0}
                   onDoubleClick={() => setEditingKey(rowKey)}
                 >
@@ -418,6 +444,28 @@ export function LearnsetStage(props: Props) {
                       {bpChip(row.move)}
                       {changed && <span className="mk-lrow__mark mono">→ new</span>}
                       {violation && <span className="mk-lrow__band mono">{violation}</span>}
+                      <button
+                        type="button"
+                        className="mk-lrow__swap mono"
+                        aria-label={
+                          swapFromKey === null
+                            ? `Swap the level of ${row.move} with another row`
+                            : swapFromKey === rowKey
+                              ? `Cancel swapping ${row.move}`
+                              : `Swap levels with ${row.move}`
+                        }
+                        aria-pressed={swapFromKey === rowKey}
+                        title={
+                          swapFromKey === null
+                            ? "Swap this move's level with another row"
+                            : swapFromKey === rowKey
+                              ? "Cancel the swap"
+                              : "Swap levels with this row"
+                        }
+                        onClick={() => swapWith(rowKey)}
+                      >
+                        {swapFromKey !== null && swapFromKey !== rowKey ? "swap here" : "⇅"}
+                      </button>
                       <button
                         type="button"
                         className="mk-lrow__edit mono"
@@ -657,6 +705,14 @@ function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: R
   const [lv, setLv] = useState(String(level));
   const [mv, setMv] = useState(move);
   const [error, setError] = useState<string | null>(null);
+  // Escape means discard, so it has to suppress the commit-on-blur that firing
+  // onCancel would otherwise trigger as focus leaves.
+  const discarded = useRef(false);
+
+  function cancel() {
+    discarded.current = true;
+    onCancel();
+  }
 
   function commit() {
     const canon = canonicalize(mv, moveOptions);
@@ -671,8 +727,18 @@ function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: R
     });
   }
 
+  // Tapping away used to discard the edit silently — the author's reported
+  // "I hit confirm and often miss it". Focus leaving the editor entirely now
+  // commits, so the only way to lose an edit is to ask for it with Escape.
+  function commitOnFocusLeave(event: FocusEvent<HTMLSpanElement>) {
+    if (discarded.current) return;
+    const next = event.relatedTarget as Node | null;
+    if (next && event.currentTarget.contains(next)) return;
+    commit();
+  }
+
   return (
-    <span className="mk-lrow__editor">
+    <span className="mk-lrow__editor" onBlur={commitOnFocusLeave}>
       <input
         className="mk-lrow__lv-input mono"
         type="number"
@@ -687,7 +753,7 @@ function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: R
             e.preventDefault();
             commit();
           }
-          if (e.key === "Escape") onCancel();
+          if (e.key === "Escape") cancel();
         }}
       />
       <input
@@ -706,7 +772,7 @@ function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: R
             e.preventDefault();
             commit();
           }
-          if (e.key === "Escape") onCancel();
+          if (e.key === "Escape") cancel();
         }}
       />
       <datalist id="mk-move-list">
@@ -719,7 +785,13 @@ function RowEditor({ level, move, moveOptions, onCommit, onRemove, onCancel }: R
           {error}
         </span>
       )}
-      <button type="button" className="mk-lrow__commit mono" aria-label="Save row" onClick={commit}>
+      <button
+        type="button"
+        className="mk-lrow__commit mono"
+        aria-label="Save row"
+        title="Save (leaving the row saves too; Escape discards)"
+        onClick={commit}
+      >
         ✓
       </button>
       <button

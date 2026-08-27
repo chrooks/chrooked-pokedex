@@ -46,6 +46,30 @@ export function removeRow(
   return { learnset: sortMoves(rows.filter((_, i) => i !== index)) };
 }
 
+/** Exchange the levels of two proposed rows, then autosort. The moves stay put;
+    only their levels trade, so "swap Fell Stinger and Fury Cutter" is one action
+    instead of a remove and two re-adds with the ladder re-checked by hand.
+
+    Index-based like editRow/removeRow, so a move sitting at both L0 and a real
+    level can have either row swapped without disturbing the other. Swapping a
+    row with itself, or with an index that does not exist, returns the draft
+    unchanged rather than corrupting it. */
+export function swapRowLevels(
+  draft: LearnsetDraft | null,
+  a: number,
+  b: number,
+): LearnsetDraft {
+  const rows = draft?.learnset ?? [];
+  const inRange = (i: number) => Number.isInteger(i) && i >= 0 && i < rows.length;
+  if (a === b || !inRange(a) || !inRange(b)) return { learnset: sortMoves(rows) };
+  const next = rows.map((row, i) => {
+    if (i === a) return { ...row, level: rows[b].level };
+    if (i === b) return { ...row, level: rows[a].level };
+    return row;
+  });
+  return { learnset: sortMoves(next) };
+}
+
 const LEARNSET_LEVEL_MIN = 0;
 const LEARNSET_LEVEL_MAX = 100;
 
