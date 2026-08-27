@@ -1,10 +1,11 @@
 name: Octillery
 chrooked_id: octillery
 aka: { pokeemerald: SPECIES_OCTILLERY }
+types: [Water, Fire]
 abilities:
   primary: Mega Launcher
   hidden: Protean
-stats: { hp: 80, atk: 95, def: 80, spa: 125 }
+stats: { def: 95 }
 learnset:
   - { level: 0, move: Octazooka }
   - { level: 1, move: Rock Blast }
@@ -27,3 +28,4 @@ learnset:
   - { level: 48, move: Soak }
   - { level: 54, move: Hyper Beam }
   - { level: 64, move: Tsunami }
+evolution: { from: Remoraid, method: { level: 30 } }
