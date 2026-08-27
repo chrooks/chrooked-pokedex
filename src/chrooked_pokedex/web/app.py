@@ -643,8 +643,11 @@ def create_app(
         instruction = body.get("instruction")
         direction = body.get("direction")
         anchors = body.get("anchors")
+        # Researched lore, opted into per call. Anything unrecognized normalizes
+        # to off, so a typo in the body never starts a network fetch.
+        lore_mode = suggestmod.normalize_lore_mode(body.get("lore"))
         try:
-            return suggestmod.suggest_learnset(
+            response = suggestmod.suggest_learnset(
                 provider=_llm_provider(),
                 entry=entry,
                 move_pool=move_pool,
@@ -653,7 +656,11 @@ def create_app(
                 instruction=instruction,
                 direction=direction,
                 anchors=anchors,
+                lore_mode=lore_mode,
+                lore_provider=_lore_provider(snapshot, lore_mode),
             )
+            _record_lore(chrooked_id, "learnset", response)
+            return response
         except suggestmod.SuggestError as error:
             # A draft that only tripped a soft shape bound is fully editable — hand
             # it back as a 200 (with an `error` note) so the author can fix it in

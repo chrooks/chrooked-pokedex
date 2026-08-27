@@ -1787,6 +1787,7 @@ def _build_learnset_user_context(
     instruction: str | None,
     direction: str | None,
     anchors: list[str] | None = None,
+    lore_block: str = "",
 ) -> str:
     """The fresh per-species delta for learnset suggest.
 
@@ -1843,6 +1844,11 @@ def _build_learnset_user_context(
     requirements = _ability_move_requirements(
         ability_slots, all_abilities, move_pool, stats
     )
+    # Researched lore sits with the species facts, above the task lines — it is
+    # context the model reasons FROM, not an instruction. Dropping it down beside
+    # the direction demotes it to one more clause the steer can swallow.
+    if lore_block:
+        lines.append(lore_block)
     if requirements:
         lines.append(f"ABILITY-DRIVEN MOVE REQUIREMENT: {requirements}")
     if instruction and instruction.strip():
@@ -2324,6 +2330,8 @@ def suggest_learnset(
     instruction: str | None = None,
     direction: str | None = None,
     anchors: list[str] | None = None,
+    lore_mode: str = "off",
+    lore_provider: LoreProvider | None = None,
 ) -> dict[str, Any]:
     """Propose a level-up learnset for a species; never writes a file.
 
@@ -2360,11 +2368,19 @@ def suggest_learnset(
     # exist to kill.
     resolved_anchors = _resolve_anchors(anchors, move_pool, mode)
 
+    injection = build_lore_injection(
+        entry=entry,
+        lore_mode=lore_mode,
+        lore_provider=lore_provider,
+        provider=provider,
+    )
+
     cached_context = (
         "Move pool (pick ONLY from these moves):\n" + _format_move_pool(move_pool)
     )
     user_context = _build_learnset_user_context(
-        entry, abilities, move_pool, mode, instruction, direction, resolved_anchors
+        entry, abilities, move_pool, mode, instruction, direction, resolved_anchors,
+        injection.block,
     )
     current_learnset = list(entry.get("learnset") or [])
 
@@ -2380,9 +2396,9 @@ def suggest_learnset(
         user_context += "\n" + learnset_skeleton.format_skeleton(skeleton)
 
     try:
-        return propose_with_repair(
+        result = propose_with_repair(
             provider=provider,
-            system=_build_learnset_rubric(),
+            system=_with_lore_note(_build_learnset_rubric(), injection),
             cached_context=cached_context,
             user=user_context,
             schema=_learnset_draft_schema(),
@@ -2398,6 +2414,11 @@ def suggest_learnset(
             ),
             max_retries=_LEARNSET_MAX_RETRIES,
         )
+        # Provenance rides on every response, including "off" — the author should
+        # always be able to see whether lore reached this draft, and a missing key
+        # would read as "unknown" rather than "no".
+        result["lore"] = dict(injection.provenance)
+        return result
     except SuggestError as error:
         # Auto-repair backstop: when the retries exhaust with the model still
         # misplacing a row or two, the server finishes the draft itself —
@@ -2415,6 +2436,7 @@ def suggest_learnset(
         repaired["draft"] = {**salvage["draft"], "learnset": rows}
         repaired["warnings"] = list(salvage.get("warnings") or []) + notes
         repaired.pop("error", None)
+        repaired["lore"] = dict(injection.provenance)
         return repaired
 
 

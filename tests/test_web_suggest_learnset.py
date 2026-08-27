@@ -2185,3 +2185,105 @@ def test_validate_learnset_reports_crowded_slots_only() -> None:
     warnings = out.get("warnings") or []
     assert any(w.startswith("crowded: ") for w in warnings), warnings
     assert not any(w.startswith("unfillable: ") for w in warnings), warnings
+
+
+# =========================================================================== #
+# Lore on the learnset route (#79)
+# =========================================================================== #
+
+
+class _FakeLore:
+    """Minimal LoreProvider stand-in: records the fetch, returns fixed text."""
+
+    def __init__(self, found: bool = True) -> None:
+        self.calls: list[tuple[str, str]] = []
+        self.found = found
+
+    def fetch(self, chrooked_id: str, species_name: str) -> Any:
+        self.calls.append((chrooked_id, species_name))
+        from chrooked_pokedex.web.lore import LoreResult
+
+        if not self.found:
+            return LoreResult(found=False, base_species=chrooked_id)
+        return LoreResult(
+            found=True,
+            genus="Dragon",
+            dex_entries=("It lives in caves and rarely surfaces.",),
+            origin="Based on a cave-dwelling gastropod.",
+            name_origin="From goo and dragon.",
+            sources=("https://example.test/goodra",),
+            base_species=chrooked_id,
+        )
+
+
+def test_suggest_learnset_lore_off_by_default_never_fetches(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """A lore lookup is opt-in; the default must not start a network call."""
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
+    lore = _FakeLore()
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    client = TestClient(app, raise_server_exceptions=False)
+
+    body = client.post(
+        "/api/species/goodra/suggest/learnset", json={"mode": "full"}
+    ).json()
+
+    assert lore.calls == []
+    assert body["lore"]["mode"] == "off"
+
+
+def test_suggest_learnset_lore_reaches_the_prompt_with_provenance(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
+    lore = _FakeLore()
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    client = TestClient(app, raise_server_exceptions=False)
+
+    response = client.post(
+        "/api/species/goodra/suggest/learnset", json={"mode": "full", "lore": "full"}
+    )
+
+    assert response.status_code == 200
+    assert lore.calls and lore.calls[0][0] == "goodra"
+    assert "It lives in caves" in provider.calls[0]["user"]
+    assert response.json()["lore"]["mode"] == "full"
+
+
+def test_suggest_learnset_unknown_lore_mode_normalizes_to_off(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """A typo in the body must never start a fetch."""
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
+    lore = _FakeLore()
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    client = TestClient(app, raise_server_exceptions=False)
+
+    body = client.post(
+        "/api/species/goodra/suggest/learnset", json={"mode": "full", "lore": "FULLL"}
+    ).json()
+
+    assert lore.calls == []
+    assert body["lore"]["mode"] == "off"
