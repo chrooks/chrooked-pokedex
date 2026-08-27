@@ -117,15 +117,32 @@ class SyncResult:
         return out
 
 
-def _remote_spec(config: SyncConfig, path: str) -> str:
-    """``user@host:/escaped/path`` — spaces escaped for the remote shell.
+def _client_escapes_spaces() -> bool:
+    """Whether the local rsync needs remote spaces backslash-escaped.
 
-    rsync hands the remote path to a shell on the far side, so a literal space
-    would split the argument.  openrsync has no ``--protect-args``, so the
-    backslashes go in here.
+    openrsync (macOS) hands the remote path to a shell on the far side and has
+    no ``--protect-args``, so spaces must be escaped by hand.  GNU rsync >= 3.2.4
+    passes remote args verbatim — escaping there lands a literal backslash on
+    the receiver and the transfer fails (couch loop v2, hestia container).
     """
+    try:
+        out = subprocess.run(
+            ["rsync", "--version"], capture_output=True, text=True, timeout=5, check=False
+        ).stdout
+    except Exception:
+        return True  # unknown rsync: keep the old, mac-safe behavior
+    return "openrsync" in out.lower()
+
+
+_ESCAPE_SPACES = _client_escapes_spaces()
+
+
+def _remote_spec(config: SyncConfig, path: str) -> str:
+    """``user@host:/path`` — spaces escaped only when the client requires it."""
     prefix = f"{config.user}@{config.host}" if config.user else config.host
-    return f"{prefix}:{path.replace(' ', chr(92) + ' ')}"
+    if _ESCAPE_SPACES:
+        path = path.replace(" ", chr(92) + " ")
+    return f"{prefix}:{path}"
 
 
 def _ssh_transport(config: SyncConfig) -> str:
