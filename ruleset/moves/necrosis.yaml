@@ -8,4 +8,4 @@ accuracy: 90
 pp: 5
 description: The user channels rotting force in a reckless assault that harms itself.
 effect: recoil
-flags: []
+flags: [contact]
