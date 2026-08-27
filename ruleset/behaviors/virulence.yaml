@@ -1,0 +1,45 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Virulence
+chrooked_id: virulence
+applies_to: ability
+aka: { pokeemerald: ABILITY_VIRULENCE }
+effects:
+  - summary: "This Pokemon's moves always land a critical hit on an impaired target."
+    trigger: damage-calc
+    when: >-
+      this Pokemon is the attacker and the target is poisoned (regular or bad
+      poison), paralyzed, or has a Speed stat stage below 0
+    effect: >-
+      force the hit to be a critical hit, exactly as Merciless does — Battle
+      Armor / Shell Armor and Lucky Chant still deny it
+  - summary: "This Pokemon's Poison-type moves deal 50% more damage."
+    trigger: damage-calc
+    when: "this Pokemon is the attacker and the move's type is Poison"
+    effect: "multiply the move's damage by 1.5, exactly as Kindle does for Fire"
+test_cases:
+  - given: "a Virulence user attacks a paralyzed target with Crunch"
+    expect: "the hit is a guaranteed critical; no 1.5x boost (Crunch is not Poison)"
+  - given: "a Virulence user uses Poison Fang on a healthy target"
+    expect: "1.5x damage; no forced critical (the target is not yet impaired)"
+  - given: "a Virulence user uses Cross Poison on a target it already poisoned"
+    expect: "1.5x damage AND a guaranteed critical — both clauses stack"
+  - given: "a Virulence user uses Toxic Thread, then attacks the -1 Speed target"
+    expect: "guaranteed critical from the Speed drop"
+  - given: "a Virulence user on a non-Poison Pokemon uses Sludge Bomb"
+    expect: "1.5x boost still applies — the clause keys on the move's type, not the user's"
+notes:
+  - >-
+    Merciless (widened) plus the Poison-type half of Kindle. On a Pokemon with no
+    Poison typing the second clause functions as STAB it would not otherwise get.
+  - >-
+    The two clauses are independent. Neither gates the other, but Toxic Thread and
+    Poison Fang set up the crit clause with the boosted clause, which is the point.
+  - >-
+    No bleed clause: no target engine in this Ruleset has a bleed status.
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: >-
+    Rejuv: two touchpoints, both mirroring existing work. Crit half — extend the
+    Merciless branch in Battle::Move#pbIsCritical? to also match :VIRULENCE
+    (poisoned, :PARALYSIS, or stages[:SPEED] < 0). Damage half — the same 1.5x
+    multiplier hook chrooked_kindle.rb uses, gated on move.type == :POISON.

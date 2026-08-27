@@ -75,6 +75,10 @@ CHROOKED_HEAL_OVERRIDE = {}
 CHROOKED_TARGET_MODS = {}
 # attacker ability => ->(move, attacker) { true } — skip the accuracy roll entirely
 CHROOKED_SURE_HIT = {}
+# attacker ability => ->(move, attacker, opponent) { true } — force a guaranteed
+# critical hit. Consulted only after vanilla says criticals are possible, so
+# Battle Armor / Shell Armor / Lucky Chant still deny it.
+CHROOKED_CRIT_RATE = {}
 # attacker ability => ->(move, attacker, opponent) { float } — multiply final accuracy
 CHROOKED_ACCURACY_MODS = {}
 # ability => ->(battler, message) { true to cancel } — veto a vanilla HP tick the
@@ -105,6 +109,15 @@ module Chrooked
 
   def self.piercing_move?(move)
     PIERCING_MOVES.include?(move.move)
+  end
+
+  # The Merciless family's "impaired target" test: poisoned (either grade),
+  # paralyzed, or standing at a negative Speed stage. Mirrors the vanilla
+  # Ariados Crest condition in pbCritRate?, widened with paralysis.
+  def self.impaired_target?(opponent)
+    return false if opponent.nil?
+    return true if [:POISON, :PARALYSIS].include?(opponent.status)
+    opponent.stages[PBStats::SPEED] < 0
   end
 
   def self.wing_or_wind_move?(move)
@@ -280,6 +293,16 @@ module ChrookedMoveHooks
       typemod = Typemod.normal
     end
     typemod
+  end
+
+  def pbCritRate?(attacker, opponent)
+    rate = super
+    # -1 means criticals are impossible here (status move, Battle Armor,
+    # Shell Armor, Lucky Chant). Never override that.
+    return rate if rate < 0
+    forced = CHROOKED_CRIT_RATE[attacker.ability]
+    return 3 if forced && forced.call(self, attacker, opponent)
+    rate
   end
 
   def pbAccuracyCheck(attacker, opponent)

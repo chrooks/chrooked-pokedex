@@ -1,0 +1,40 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Merciless
+chrooked_id: merciless
+applies_to: ability
+aka: { pokeemerald: ABILITY_MERCILESS }
+effects:
+  - summary: "This Pokemon's moves always land a critical hit on an impaired target."
+    trigger: damage-calc
+    when: >-
+      this Pokemon is the attacker and the target is poisoned (regular or bad
+      poison), paralyzed, or has a Speed stat stage below 0
+    effect: >-
+      force the hit to be a critical hit, through the same guaranteed-crit path
+      Merciless already uses for poison — Battle Armor / Shell Armor and Lucky
+      Chant still deny it
+test_cases:
+  - given: "a Merciless user attacks a badly poisoned target"
+    expect: "the hit is a guaranteed critical (unchanged from base Merciless)"
+  - given: "a Merciless user attacks a paralyzed target"
+    expect: "the hit is a guaranteed critical"
+  - given: "a Merciless user attacks a target at -1 Speed with no status"
+    expect: "the hit is a guaranteed critical"
+  - given: "a Merciless user attacks a burned target at +1 Speed"
+    expect: "no forced critical; normal crit roll"
+  - given: "a Merciless user attacks a poisoned Shell Armor target"
+    expect: "no critical — crit immunity still wins"
+notes:
+  - >-
+    Widened from base Merciless (poison only) to the Elite Redux shape. The
+    bleed clause from that game is deliberately absent: no target engine in this
+    Ruleset has a bleed status.
+  - >-
+    "Slowed" means a negative Speed stat stage on the target, not a Speed-lowering
+    item, ability, or paralysis speed cut. Paralysis is covered by its own clause.
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: >-
+    Rejuv: the crit-stage calc in Battle::Move#pbIsCritical? already special-cases
+    Merciless for :POISON. Widen that branch to also return true when the target
+    has :PARALYSIS or when target.stages[:SPEED] < 0.
