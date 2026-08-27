@@ -304,7 +304,7 @@ export function MakeoverWorkbench({
       );
       break;
     case "typing":
-      panel = <TypingStage {...commonProps} />;
+      panel = <TypingStage {...commonProps} loreMode={loreMode} onLoreMode={setLoreMode} />;
       break;
     case "stats":
       panel = <StatsStage {...commonProps} />;
@@ -333,6 +333,8 @@ export function MakeoverWorkbench({
           speciesTypes={entry.types}
           attackCategory={attackCategory(entry.stats)}
           rubric={rubric}
+          loreMode={loreMode}
+          onLoreMode={setLoreMode}
           onSubSurface={setSubSurface}
           onCreated={handleCreated}
         />

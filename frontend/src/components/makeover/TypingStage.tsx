@@ -5,7 +5,8 @@
 
 import { TypeChip } from "../TypeChip";
 import { TypeSelect } from "../TypeSelect";
-import type { ProposalAlternative } from "../../types";
+import type { LoreMode, ProposalAlternative } from "../../types";
+import { LoreControl } from "./LoreControl";
 import { makeoverApi } from "../../lib/makeoverApi";
 import type { TypingDraft } from "../../lib/makeoverTweak";
 import { StagePanel } from "./StagePanel";
@@ -24,8 +25,13 @@ function applyTypingAlt(alt: ProposalAlternative): TypingDraft {
   return { types: [] };
 }
 
-export function TypingStage(props: CommonStageProps) {
-  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase } =
+interface TypingStageProps extends CommonStageProps {
+  loreMode: LoreMode;
+  onLoreMode: (mode: LoreMode) => void;
+}
+
+export function TypingStage(props: TypingStageProps) {
+  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase, loreMode, onLoreMode } =
     props;
 
   const hook = useMakeoverStage<TypingDraft>({
@@ -34,7 +40,7 @@ export function TypingStage(props: CommonStageProps) {
     initialDirection,
     onPhase,
     propose: async (id, direction) => {
-      const result = await makeoverApi.suggestTyping(id, direction || undefined);
+      const result = await makeoverApi.suggestTyping(id, direction || undefined, loreMode);
       return {
         draft: { types: result.draft.types },
         rationale: result.rationale,
@@ -63,6 +69,13 @@ export function TypingStage(props: CommonStageProps) {
       placeholder="steer the typing (e.g. lean more defensive)…"
       redirectRef={redirectRef}
       registerActions={registerActions}
+      extraControl={
+        <LoreControl
+          mode={loreMode}
+          onChange={onLoreMode}
+          disabled={hook.phase === "proposing"}
+        />
+      }
       applyAlternative={(alt) => applyTypingAlt(alt)}
       altLabel={typingAltLabel}
       current={

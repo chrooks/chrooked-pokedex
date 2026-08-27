@@ -92,3 +92,17 @@ describe("api.suggestLearnset (ac2)", () => {
     expect("anchors" in lastCall().body).toBe(false);
   });
 });
+
+describe("lore sourcing on suggest calls (#92)", () => {
+  it("sends the blind lore mode with a learnset proposal", async () => {
+    mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
+    await api.suggestLearnset("goodra", { lore: "blind" });
+    expect(lastCall().body.lore).toBe("blind");
+  });
+
+  it("sends off when the author has not asked for blind", async () => {
+    mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
+    await api.suggestLearnset("goodra", { lore: "off" });
+    expect(lastCall().body.lore).toBe("off");
+  });
+});

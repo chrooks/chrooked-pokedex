@@ -2287,3 +2287,60 @@ def test_suggest_learnset_unknown_lore_mode_normalizes_to_off(
 
     assert lore.calls == []
     assert body["lore"]["mode"] == "off"
+
+
+def test_blind_withholds_the_name_and_the_current_learnset(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    """Blind hides the retrieval key and the kit being replaced — not the
+    author's fresh typing/stats/ability decisions, which the learnset serves."""
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
+    lore = _FakeLore()
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    client = TestClient(app, raise_server_exceptions=False)
+
+    client.post(
+        "/api/species/goodra/suggest/learnset", json={"mode": "full", "lore": "blind"}
+    )
+
+    user = provider.calls[0]["user"]
+    assert "Species: (withheld" in user
+    assert "Goodra" not in user
+    assert "PRIOR ART" not in user
+    assert "BLIND DESIGN:" in user
+    # Kept on purpose — the learnset must serve these.
+    assert "Base stats:" in user
+    assert "Types:" in user
+    assert "Current abilities" in user
+
+
+def test_blind_anonymizes_the_lore_block(ruleset_dir: Path, tmp_path: Path) -> None:
+    provider = _FakeProvider(_skeleton_result("goodra", ruleset_dir))
+    lore = _FakeLore()
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    client = TestClient(app, raise_server_exceptions=False)
+
+    body = client.post(
+        "/api/species/goodra/suggest/learnset", json={"mode": "full", "lore": "blind"}
+    ).json()
+
+    user = provider.calls[0]["user"]
+    # The fake's name_origin ("From goo and dragon.") names the creature.
+    assert "Name origin" not in user
+    # The design origin survives — it is the material a blind pass reasons from.
+    assert "cave-dwelling gastropod" in user
+    assert body["lore"]["mode"] == "blind"

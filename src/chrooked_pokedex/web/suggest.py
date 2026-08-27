@@ -28,11 +28,13 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from collections.abc import Iterable
 from typing import Any, Callable, Mapping
 
 from . import learnset_skeleton
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider, condense_provider
 from .lore import LoreError, LoreProvider
+from .lore_anon import anonymize_lore
 from .lore_text import render_lore
 
 # Learnset responses return a whole list with per-move reasoning (~15–25 rows,
@@ -136,7 +138,15 @@ class SuggestError(Exception):
 
 # The three modes a request may ask for. Anything else is off — a typo in the
 # request body is not consent to start making network calls.
-LORE_MODES = ("off", "full", "condensed")
+# "blind" is lore-on PLUS prior-art-withheld: the profile is anonymized and the
+# species' own typing, abilities, and learnset are kept out of the prompt, so the
+# design is argued from what the creature IS rather than recalled from a wiki.
+LORE_MODES = ("off", "full", "condensed", "blind")
+
+
+def is_blind(lore_mode: str) -> bool:
+    """Whether this mode withholds the species' current game data."""
+    return normalize_lore_mode(lore_mode) == "blind"
 
 # The condensation is a brief, not a design. A tight cap keeps the extra call
 # cheap and stops it re-expanding the very text it was asked to shrink.
@@ -200,6 +210,7 @@ def build_lore_injection(
     lore_mode: str,
     lore_provider: LoreProvider | None,
     provider: LlmProvider,
+    other_species_names: Iterable[str] = (),
 ) -> LoreInjection:
     """Fetch and render the lore block for one species, or nothing at all.
 
@@ -228,16 +239,36 @@ def build_lore_injection(
             }
         )
 
+    genus, dex_entries = result.genus, result.dex_entries
+    origin, name_origin = result.origin, result.name_origin
+    requested, base = chrooked_id, result.base_species
+    if mode == "blind":
+        # Strip the identity before it ever reaches render_lore. The base-species
+        # label goes too — "this lore describes marowak, not marowakalola" hands
+        # back both names in one line.
+        scrubbed = anonymize_lore(
+            genus=genus,
+            dex_entries=dex_entries,
+            origin=origin,
+            subject_names=[species_name, chrooked_id, result.base_species],
+            other_names=other_species_names,
+        )
+        genus = str(scrubbed["genus"])
+        dex_entries = tuple(scrubbed["dex_entries"])  # type: ignore[arg-type]
+        origin = str(scrubbed["origin"])
+        name_origin = ""
+        requested = base = ""
+
     # render_lore owns the not-found statement, the base-species label, and the
     # character cap — all of it decided once, in one place.
     block = render_lore(
         found=result.found,
-        genus=result.genus,
-        dex_entries=result.dex_entries,
-        origin=result.origin,
-        name_origin=result.name_origin,
-        requested_id=chrooked_id,
-        base_species=result.base_species,
+        genus=genus,
+        dex_entries=dex_entries,
+        origin=origin,
+        name_origin=name_origin,
+        requested_id=requested,
+        base_species=base,
     )
 
     ran_as = mode
@@ -558,6 +589,7 @@ def _build_user_context(
     direction: str | None,
     locked: list[str] | None = None,
     lore_block: str = "",
+    blind: bool = False,
 ) -> str:
     """The fresh per-species delta: stats/types/abilities/learnset + direction.
 
@@ -569,13 +601,28 @@ def _build_user_context(
     stat_line = " ".join(
         f"{key.upper()} {stats[key]}" for key in stats
     ) or "(unknown)"
-    lines = [
-        f"Species: {entry.get('name', entry['chrooked_id'])}",
-        f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
-        f"Base stats: {stat_line}",
-        f"Current abilities: {_format_current_abilities(entry.get('abilities', {}))}",
-        f"Learnset: {_format_learnset(entry.get('learnset', []))}",
-    ]
+    if blind:
+        # Blind: the name is the retrieval key and the current abilities/learnset
+        # ARE the prior art these two capabilities exist to replace, so all three
+        # go. Typing and stats stay — a typing proposal is judged against the
+        # creature's current one, and stats are numbers, not a remembered kit.
+        lines = [
+            "Species: (withheld — design from the researched lore below)",
+            f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
+            f"Base stats: {stat_line}",
+            "BLIND DESIGN: the creature's name, current abilities and learnset "
+            "are deliberately withheld. Do not try to identify which existing "
+            "creature this is, and do not reach for a kit you remember. Every "
+            "pick must be argued from a fact in the lore below.",
+        ]
+    else:
+        lines = [
+            f"Species: {entry.get('name', entry['chrooked_id'])}",
+            f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
+            f"Base stats: {stat_line}",
+            f"Current abilities: {_format_current_abilities(entry.get('abilities', {}))}",
+            f"Learnset: {_format_learnset(entry.get('learnset', []))}",
+        ]
     # Lore sits BEFORE the constraints and the steer, never last. Appended last
     # it ended the prompt with a page of encyclopedia prose, and the first live
     # run came back degenerate: all three slots echoed back unchanged with the
@@ -687,7 +734,9 @@ def suggest_ability(
     )
     system = _with_lore_note(_build_rubric(), injection)
     cached_context = "Ability pool (pick only from these):\n" + _format_pool(pool)
-    user = _build_user_context(entry, direction, locked_slots, injection.block)
+    user = _build_user_context(
+        entry, direction, locked_slots, injection.block, is_blind(lore_mode)
+    )
 
     def _run(user_text: str) -> dict[str, Any]:
         return provider.propose(
@@ -864,7 +913,10 @@ def _format_type_pool(type_pool: list[str]) -> str:
 
 
 def _build_typing_user_context(
-    entry: dict[str, Any], direction: str | None, lore_block: str = ""
+    entry: dict[str, Any],
+    direction: str | None,
+    lore_block: str = "",
+    blind: bool = False,
 ) -> str:
     """The fresh per-species delta for typing suggest: stats/current types/learnset.
 
@@ -875,12 +927,26 @@ def _build_typing_user_context(
     stat_line = " ".join(
         f"{key.upper()} {stats[key]}" for key in _STAT_KEYS if key in stats
     ) or "(unknown)"
-    lines = [
-        f"Species: {entry.get('name', entry['chrooked_id'])}",
-        f"Current types: {', '.join(entry.get('types', [])) or '(unknown)'}",
-        f"Base stats: {stat_line}",
-        f"Learnset: {_format_learnset(entry.get('learnset', []))}",
-    ]
+    if blind:
+        # Typing is the one capability where the CURRENT TYPING is itself the
+        # prior art — showing it is the whole reason a blind pass exists here, so
+        # it goes, along with the name and the learnset that implies it. Stats
+        # stay: they shape a role, not a type.
+        lines = [
+            "Species: (withheld — infer the typing from the researched lore below)",
+            f"Base stats: {stat_line}",
+            "BLIND DESIGN: the creature's name, current typing and learnset are "
+            "deliberately withheld. Do not try to identify which existing "
+            "creature this is. Infer the typing from what the lore says the "
+            "creature IS, and say which facts drove it.",
+        ]
+    else:
+        lines = [
+            f"Species: {entry.get('name', entry['chrooked_id'])}",
+            f"Current types: {', '.join(entry.get('types', [])) or '(unknown)'}",
+            f"Base stats: {stat_line}",
+            f"Learnset: {_format_learnset(entry.get('learnset', []))}",
+        ]
     # Lore before the steer, for the reason spelled out in _build_user_context:
     # ending the prompt with encyclopedia prose degenerates the answer.
     if lore_block:
@@ -1192,7 +1258,9 @@ def suggest_lore_options(
                 _build_lore_options_rubric(kept_types, kept_abilities), injection
             ),
             cached_context=cached_context,
-            user=_build_typing_user_context(entry, direction, injection.block),
+            user=_build_typing_user_context(
+                entry, direction, injection.block, is_blind(lore_mode)
+            ),
             schema=_lore_options_draft_schema(),
             max_tokens=DEFAULT_MAX_TOKENS,
             validate=lambda draft: _validate_lore_options_result(
@@ -1788,6 +1856,7 @@ def _build_learnset_user_context(
     direction: str | None,
     anchors: list[str] | None = None,
     lore_block: str = "",
+    blind: bool = False,
 ) -> str:
     """The fresh per-species delta for learnset suggest.
 
@@ -1820,16 +1889,39 @@ def _build_learnset_user_context(
         )
     else:
         learnset_line = f"Current learnset: {_format_learnset(current_learnset)}"
-    lines = [
-        f"Species: {entry.get('name', entry['chrooked_id'])}",
-        f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
-        f"Base stats: {stat_line}",
-        f"Current abilities (with effects): "
-        f"{_format_abilities_with_effects(ability_slots, all_abilities)}",
-        learnset_line,
-        f"Evolution: {_format_evo_context(entry)}",
-        f"Mode: {mode.upper()}",
-    ]
+    if blind:
+        # Blind withholds the PRIOR ART FOR THIS DECISION, not every fact.
+        #
+        # By the time the learnset stage runs, typing, stats and abilities are
+        # the author's freshly-made choices — the learnset exists to serve them,
+        # so hiding them would hide the design, not the memory. What must go is
+        # the species' NAME (the retrieval key) and its CURRENT LEARNSET (the kit
+        # being replaced). The evolution line goes too: it names the relatives,
+        # which names the creature.
+        lines = [
+            "Species: (withheld — design from the researched lore below)",
+            f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
+            f"Base stats: {stat_line}",
+            f"Current abilities (with effects): "
+            f"{_format_abilities_with_effects(ability_slots, all_abilities)}",
+            f"Mode: {mode.upper()}",
+            "BLIND DESIGN: the current learnset and the creature's name are "
+            "deliberately withheld. Do not try to identify which existing "
+            "creature this is, and do not reproduce a movepool you remember. "
+            "Every pick must be argued from a fact in the lore below or from the "
+            "typing, stats and abilities given above.",
+        ]
+    else:
+        lines = [
+            f"Species: {entry.get('name', entry['chrooked_id'])}",
+            f"Types: {', '.join(entry.get('types', [])) or '(unknown)'}",
+            f"Base stats: {stat_line}",
+            f"Current abilities (with effects): "
+            f"{_format_abilities_with_effects(ability_slots, all_abilities)}",
+            learnset_line,
+            f"Evolution: {_format_evo_context(entry)}",
+            f"Mode: {mode.upper()}",
+        ]
     bias = _offensive_bias(stats)
     if bias:
         atk, spa = stats.get("atk"), stats.get("spa")
@@ -2380,7 +2472,7 @@ def suggest_learnset(
     )
     user_context = _build_learnset_user_context(
         entry, abilities, move_pool, mode, instruction, direction, resolved_anchors,
-        injection.block,
+        injection.block, is_blind(lore_mode),
     )
     current_learnset = list(entry.get("learnset") or [])
 

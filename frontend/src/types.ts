@@ -119,7 +119,14 @@ export interface ProposalAlternative {
 /** The lore-lookup modes a suggest call can opt into. `off` is the default on
     every surface, and the server treats anything unrecognized as `off` — a typo
     must never silently start making network calls. */
-export type LoreMode = "off" | "full" | "condensed";
+/** How a suggest call sources its context.
+ *
+ * `blind` is lore-on PLUS prior-art-withheld: the fetched profile is anonymized
+ * and the species' own name and current kit are kept out of the prompt, so the
+ * design is argued from what the creature IS rather than recalled. `full` and
+ * `condensed` remain valid on the API — the workbench simply stopped exposing
+ * them, because the author never used them. */
+export type LoreMode = "off" | "full" | "condensed" | "blind";
 
 /** What a suggest response reports about the lore lookup it ran. An `off` call
     returns exactly `{ mode: "off" }` — no empty fields pretending a fetch

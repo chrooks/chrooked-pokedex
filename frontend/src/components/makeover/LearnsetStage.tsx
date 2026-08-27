@@ -13,7 +13,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { FocusEvent, KeyboardEvent } from "react";
 import { api } from "../../api";
 import { canonicalize, isKnown } from "../../lib/entityValidation";
-import type { LearnsetDraft, LearnsetMove, ProposalAlternative } from "../../types";
+import type { LearnsetDraft, LearnsetMove, LoreMode, ProposalAlternative } from "../../types";
+import { LoreControl } from "./LoreControl";
 import {
   addRow,
   applyAlternative,
@@ -50,6 +51,9 @@ interface Props extends CommonStageProps {
   attackCategory: "physical" | "special" | null;
   /** The rubric bands (backend-served); null until loaded. */
   rubric: LearnsetRubric | null;
+  /** The session's lore sourcing, owned by the workbench (survives stages). */
+  loreMode: LoreMode;
+  onLoreMode: (mode: LoreMode) => void;
   /** Report the open sub-surface to the overhead rail: "new move" when the inline
       CREATE MOVE panel is open, null otherwise. */
   onSubSurface?: (label: string | null) => void;
@@ -73,6 +77,8 @@ export function LearnsetStage(props: Props) {
     speciesTypes,
     attackCategory,
     rubric,
+    loreMode,
+    onLoreMode,
     onSubSurface,
     onCreated,
   } = props;
@@ -120,6 +126,7 @@ export function LearnsetStage(props: Props) {
         direction: direction || undefined,
         mode: "full",
         anchors,
+        lore: loreMode,
       });
       return {
         draft: result.draft,
@@ -306,6 +313,11 @@ export function LearnsetStage(props: Props) {
       registerActions={registerActions}
       extraControl={
         <>
+          <LoreControl
+            mode={loreMode}
+            onChange={onLoreMode}
+            disabled={hook.phase === "proposing"}
+          />
           <AnchorField
             moveOptions={moveOptions}
             anchors={anchors}

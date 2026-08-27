@@ -165,10 +165,10 @@ export const makeoverApi = {
         lore: opts?.lore,
       },
     ),
-  suggestTyping: (id: string, direction?: string) =>
+  suggestTyping: (id: string, direction?: string, lore?: LoreMode) =>
     postJson<TypingProposal>(
       `/api/species/${encodeURIComponent(id)}/suggest/typing`,
-      { direction },
+      { direction, lore },
     ),
   suggestStats: (id: string, direction?: string) =>
     postJson<StatsProposal>(
