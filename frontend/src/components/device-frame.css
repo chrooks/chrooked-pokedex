@@ -426,7 +426,13 @@
    layout, spending 108px of that 400 on a header. Everything below buys
    vertical space back.
    =================================================================== */
-@media (max-height: 620px), (max-width: 860px) {
+/* The compact shell: header to a 44px strip, rail to a 52px icon column.
+   The third clause exists because the Thor missed the first two by a hair —
+   1024x640 in landscape is neither under 620 tall nor under 860 wide, so a
+   handheld got the full desktop chrome: a 128px two-row header and a 232px
+   labeled rail, together nearly a third of a 640px screen. Keying the extra
+   clause on a coarse pointer keeps every mouse-driven window unchanged. */
+@media (max-height: 620px), (max-width: 860px), (pointer: coarse) and (max-width: 1400px) {
   /* Header: three wrapped rows -> one 44px strip. */
   .device__header {
     flex-wrap: nowrap;
