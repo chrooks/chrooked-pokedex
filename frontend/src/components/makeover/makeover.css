@@ -202,6 +202,18 @@
   align-items: flex-start;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
+  /* Wrap, so an extraControl never competes with the steer box for width.
+     Without this the row is nowrap and the textarea (flex:1, min-width:0)
+     collapses to a one-character column — which is exactly what the anchors
+     control did to it before it got its own row below. */
+  flex-wrap: wrap;
+}
+/* The steer box keeps the first row to itself: a paragraph of direction is the
+   most important input on the stage, so it never shrinks below a readable
+   width. */
+.mk-stage__redirect > textarea.mk-stage__redirect-input {
+  flex: 1 1 24ch;
+  min-width: 20ch;
 }
 .mk-stage__redirect-label {
   color: var(--text-faint);
@@ -593,6 +605,9 @@ textarea.mk-stage__redirect-input {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+  /* Own row, under the steer box + PROPOSE. Anchors are a list that grows, so
+     sharing a row with the direction textarea starves whichever loses. */
+  flex-basis: 100%;
 }
 .mk-anchors__label {
   color: var(--text-faint);
