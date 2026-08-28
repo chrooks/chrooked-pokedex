@@ -1,0 +1,5 @@
+name: Breloom (Aevian Form)
+chrooked_id: breloom--aevianform
+aka: { dex: 286 }
+stats: { hp: 85, def: 90, spd: 65, spe: 75 }
+evolution: { from: Shroomish (Aevian Form), method: { level: 28 } }
