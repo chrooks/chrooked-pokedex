@@ -31,7 +31,7 @@ interface TypingStageProps extends CommonStageProps {
 }
 
 export function TypingStage(props: TypingStageProps) {
-  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase, loreMode, onLoreMode } =
+  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase, loreMode, onLoreMode, backdropTargetId } =
     props;
 
   const hook = useMakeoverStage<TypingDraft>({
@@ -40,7 +40,12 @@ export function TypingStage(props: TypingStageProps) {
     initialDirection,
     onPhase,
     propose: async (id, direction) => {
-      const result = await makeoverApi.suggestTyping(id, direction || undefined, loreMode);
+      const result = await makeoverApi.suggestTyping(
+        id,
+        direction || undefined,
+        loreMode,
+        backdropTargetId ?? undefined,
+      );
       return {
         draft: { types: result.draft.types },
         rationale: result.rationale,

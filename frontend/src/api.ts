@@ -183,18 +183,31 @@ export const api = {
       own message (503 missing key / upstream, 422 invalid). */
   suggestAbility: (
     id: string,
-    opts?: { direction?: string; locked?: string[]; lore?: LoreMode },
+    opts?: { direction?: string; locked?: string[]; lore?: LoreMode; target?: string },
   ) =>
     sendJson<AbilityProposal>(
       "POST",
       `/api/species/${encodeURIComponent(id)}/suggest/ability`,
-      { direction: opts?.direction, locked: opts?.locked, lore: opts?.lore },
+      {
+        direction: opts?.direction,
+        locked: opts?.locked,
+        lore: opts?.lore,
+        // The backdrop Target this call was launched from — the server's
+        // fallback join for a Target-original form canon has never heard of.
+        target: opts?.target,
+      },
     ),
   /** Ask the LLM to propose a whole learnset for this species (#7). Read-only —
       proposes only, never writes. `mode` defaults to a full-list proposal. */
   suggestLearnset: (
     id: string,
-    opts?: { direction?: string; mode?: "full"; anchors?: string[]; lore?: LoreMode },
+    opts?: {
+      direction?: string;
+      mode?: "full";
+      anchors?: string[];
+      lore?: LoreMode;
+      target?: string;
+    },
   ) =>
     sendJson<LearnsetProposal>(
       "POST",
@@ -207,6 +220,9 @@ export const api = {
         // request body honest about what the author actually asked for.
         anchors: opts?.anchors?.length ? opts.anchors : undefined,
         lore: opts?.lore,
+        // The backdrop Target this call was launched from — the server's
+        // fallback join for a Target-original form canon has never heard of.
+        target: opts?.target,
       },
     ),
   deleteSpecies: (id: string, scope?: string) =>

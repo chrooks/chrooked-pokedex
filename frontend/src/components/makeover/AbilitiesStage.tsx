@@ -88,6 +88,7 @@ export function AbilitiesStage(props: Props) {
     onSubSurface,
     onSaved,
     onCreated,
+    backdropTargetId,
   } = props;
 
   const [mode, setMode] = useState<AbilityMode>("swap");
@@ -114,6 +115,7 @@ export function AbilitiesStage(props: Props) {
         direction: direction || undefined,
         locked: locked.size > 0 ? [...locked] : undefined,
         lore: loreMode,
+        target: backdropTargetId ?? undefined,
       });
       setLore(result.lore ?? null);
       // The server may partially degrade: valid slots in `draft`, per-slot verbatim

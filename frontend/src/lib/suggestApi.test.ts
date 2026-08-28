@@ -93,6 +93,26 @@ describe("api.suggestLearnset (ac2)", () => {
   });
 });
 
+describe("backdrop target on suggest calls (Rejuv-original forms)", () => {
+  it("sends the backdrop target with a learnset proposal", async () => {
+    mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
+    await api.suggestLearnset("breloom--aevianform", { target: "t-rejuv" });
+    expect(lastCall().body.target).toBe("t-rejuv");
+  });
+
+  it("sends the backdrop target with an ability proposal", async () => {
+    mockFetch({ draft: { abilities: {} }, rationale: {}, alternatives: [] });
+    await api.suggestAbility("breloom--aevianform", { target: "t-rejuv" });
+    expect(lastCall().body.target).toBe("t-rejuv");
+  });
+
+  it("omits the target key on a canon-launched suggest", async () => {
+    mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
+    await api.suggestLearnset("goodra", {});
+    expect("target" in lastCall().body).toBe(false);
+  });
+});
+
 describe("lore sourcing on suggest calls (#92)", () => {
   it("sends the blind lore mode with a learnset proposal", async () => {
     mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });

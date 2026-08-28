@@ -279,6 +279,7 @@ export function MakeoverWorkbench({
     onLocked: handleLocked,
     onRedirect: handleRedirect,
     onPhase: handlePhase,
+    backdropTargetId,
   };
 
   const targetId = activeTargetId ?? targets[0]?.id ?? null;
@@ -300,6 +301,7 @@ export function MakeoverWorkbench({
           // KEEP, so its current value is fixed and the options must honor it.
           keptTypes={selected.has("typing") ? undefined : entry.types}
           keptAbilities={selected.has("abilities") ? undefined : entry.abilities}
+          backdropTargetId={backdropTargetId}
         />
       );
       break;

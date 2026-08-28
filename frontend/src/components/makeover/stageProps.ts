@@ -27,4 +27,8 @@ export interface CommonStageProps {
   onRedirect: (text: string) => void;
   /** Reports the stage's propose phase upward for the parked-makeover dock LED. */
   onPhase?: (phase: StagePhase) => void;
+  /** The Target backdrop this workbench was launched from (null on canon). Sent
+      with every suggest call so a Target-original form (Rejuv's Aevian mons)
+      resolves server-side against that backdrop instead of 404ing on canon. */
+  backdropTargetId?: string | null;
 }

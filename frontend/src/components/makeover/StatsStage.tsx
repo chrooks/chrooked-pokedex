@@ -15,7 +15,7 @@ const STAT_MIN = 1;
 const STAT_MAX = 255;
 
 export function StatsStage(props: CommonStageProps) {
-  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase } =
+  const { entry, initialDirection, canLock, redirectRef, registerActions, onLocked, onRedirect, onPhase, backdropTargetId } =
     props;
 
   const hook = useMakeoverStage<StatsDraft>({
@@ -24,7 +24,11 @@ export function StatsStage(props: CommonStageProps) {
     initialDirection,
     onPhase,
     propose: async (id, direction) => {
-      const result = await makeoverApi.suggestStats(id, direction || undefined);
+      const result = await makeoverApi.suggestStats(
+        id,
+        direction || undefined,
+        backdropTargetId ?? undefined,
+      );
       return {
         draft: { stats: result.draft.stats },
         rationale: result.rationale,

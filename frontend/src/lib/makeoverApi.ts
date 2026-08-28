@@ -153,6 +153,9 @@ export const makeoverApi = {
       keptAbilities?: AbilitySlots;
       /** Researched-lore mode for this call. Omitted or unrecognized = off. */
       lore?: LoreMode;
+      /** The backdrop Target this call was launched from — the server's fallback
+          join for a Target-original form canon has never heard of. */
+      target?: string;
     },
   ) =>
     postJson<LoreOptionsResponse>(
@@ -163,17 +166,18 @@ export const makeoverApi = {
         kept_types: opts?.keptTypes,
         kept_abilities: opts?.keptAbilities,
         lore: opts?.lore,
+        target: opts?.target,
       },
     ),
-  suggestTyping: (id: string, direction?: string, lore?: LoreMode) =>
+  suggestTyping: (id: string, direction?: string, lore?: LoreMode, target?: string) =>
     postJson<TypingProposal>(
       `/api/species/${encodeURIComponent(id)}/suggest/typing`,
-      { direction, lore },
+      { direction, lore, target },
     ),
-  suggestStats: (id: string, direction?: string) =>
+  suggestStats: (id: string, direction?: string, target?: string) =>
     postJson<StatsProposal>(
       `/api/species/${encodeURIComponent(id)}/suggest/stats`,
-      { direction },
+      { direction, target },
     ),
   /** The pacing-band rubric — the single source of truth the learnset stage
       annotates rows against. */

@@ -26,6 +26,9 @@ interface Props {
   keptTypes?: string[];
   /** Current abilities when ABILITIES is KEPT — options must not hinge on new ones. */
   keptAbilities?: AbilitySlots;
+  /** The Target backdrop this workbench was launched from (null on canon) — sent
+      with the options call so a Target-original form resolves server-side. */
+  backdropTargetId?: string | null;
 }
 
 type Phase = "idle" | "loading" | "ready" | "error";
@@ -53,6 +56,7 @@ export function DirectionStage({
   onLoreMode,
   keptTypes,
   keptAbilities,
+  backdropTargetId,
 }: Props) {
   // ac13: lore options load ON DEMAND (SUGGEST DIRECTIONS), never on mount — the
   // free-direction path stays entirely call-free. `idle` is the opening state.
@@ -77,6 +81,7 @@ export function DirectionStage({
         keptTypes: keptRef.current.keptTypes,
         keptAbilities: keptRef.current.keptAbilities,
         lore: loreMode,
+        target: backdropTargetId ?? undefined,
       });
       setOptions(result.draft.options);
       setLore(result.lore ?? null);

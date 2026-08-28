@@ -436,6 +436,51 @@ def create_app(
         except crudmod.ValidationError as error:
             raise _422(error) from error
 
+    def _suggest_entry(
+        snapshot: dict[str, Any],
+        ruleset: Ruleset,
+        chrooked_id: str,
+        payload: dict[str, Any] | None,
+    ) -> tuple[str, dict[str, Any]]:
+        """The species entry a suggest call reasons about: canon first, then backdrop.
+
+        A backdrop-launched makeover hands us a Target-form id (`marowak--
+        alolanform`); the makeover operates on canon (`marowakalola`), so bridge
+        it. A Target-ORIGINAL form (Rejuv's `breloom--aevianform`) has no canon
+        entry at all — for those the payload's `target` names the backdrop it was
+        launched from, and the entry comes from that Target's dex (target ⊕
+        effective Ruleset): exactly what the workbench shows. The proposal POOLS
+        stay canon either way — an accepted draft is written to the Ruleset and
+        must resolve there. An id neither side knows is still an honest 404.
+        """
+        resolved = dexmod.resolve_form_id(snapshot, chrooked_id)
+        entry = dexmod.build_dex_entry(snapshot, ruleset, resolved)
+        if entry is not None:
+            return resolved, entry
+        target_id = (payload or {}).get("target")
+        if isinstance(target_id, str) and target_id.strip():
+            try:
+                target = app.state.targets_registry.get(target_id.strip())
+                effective, overlay = _display_effective(target)
+                # ponytail: builds the whole backdrop dex to pick one entry —
+                # cached snapshot underneath, and trivial next to the LLM call
+                # this context feeds.
+                backdrop = targetsmod.target_dex(
+                    target,
+                    effective,
+                    app.state.targets_state,
+                    base_snapshot=snapshot,
+                    overlay=overlay,
+                )
+            except targetsmod.TargetError as error:
+                raise _target_error(error) from error
+            for candidate in backdrop:
+                if candidate.get("chrooked_id") == chrooked_id:
+                    return chrooked_id, candidate
+        raise HTTPException(
+            status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
+        )
+
     @app.post("/api/species/{chrooked_id}/suggest/ability")
     def suggest_species_ability(
         chrooked_id: str, payload: dict[str, Any] | None = None
@@ -453,14 +498,7 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
-        # A backdrop-launched makeover hands us a Target-form id (`marowak--
-        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
-        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
-        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
-        if entry is None:
-            raise HTTPException(
-                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
-            )
+        chrooked_id, entry = _suggest_entry(snapshot, ruleset, chrooked_id, payload)
         abilities = dexmod.build_abilities(snapshot, ruleset)
         direction = (payload or {}).get("direction")
         # Slots the author has locked in the workbench: proposals must leave them
@@ -559,14 +597,7 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
-        # A backdrop-launched makeover hands us a Target-form id (`marowak--
-        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
-        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
-        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
-        if entry is None:
-            raise HTTPException(
-                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
-            )
+        chrooked_id, entry = _suggest_entry(snapshot, ruleset, chrooked_id, payload)
         type_pool = dexmod.build_type_pool(snapshot, ruleset)
         body = payload or {}
         direction = body.get("direction")
@@ -632,14 +663,7 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
-        # A backdrop-launched makeover hands us a Target-form id (`marowak--
-        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
-        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
-        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
-        if entry is None:
-            raise HTTPException(
-                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
-            )
+        chrooked_id, entry = _suggest_entry(snapshot, ruleset, chrooked_id, payload)
         move_pool = dexmod.build_move_pool(snapshot, ruleset)
         abilities = dexmod.build_abilities(snapshot, ruleset)
         body = payload or {}
@@ -693,14 +717,7 @@ def create_app(
         """
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
-        # A backdrop-launched makeover hands us a Target-form id (`marowak--
-        # alolanform`); the makeover operates on canon (`marowakalola`), so bridge it.
-        chrooked_id = dexmod.resolve_form_id(snapshot, chrooked_id)
-        entry = dexmod.build_dex_entry(snapshot, ruleset, chrooked_id)
-        if entry is None:
-            raise HTTPException(
-                status_code=404, detail=f"No species with chrooked_id {chrooked_id!r}."
-            )
+        chrooked_id, entry = _suggest_entry(snapshot, ruleset, chrooked_id, payload)
         direction = (payload or {}).get("direction")
         try:
             return suggestmod.suggest_stats(
@@ -1428,8 +1445,27 @@ def create_app(
             if name and entry.get("aka"):
                 aka_by_name[str(name).casefold()] = entry["aka"]
         results: list[dict[str, Any]] = []
+        backdrop_by_id: dict[str, dict[str, Any]] | None = None
         for cid in chrooked_ids:
             expected = dexmod.build_dex_entry(snapshot, ruleset, cid)
+            if expected is None:
+                # A Target-original form (Rejuv's `breloom--aevianform`) has no
+                # canon entry; its expected state is the backdrop merge (target ⊕
+                # effective Ruleset) — the same join the workbench designed it
+                # on. Built once, and only when a cid actually needs it.
+                if backdrop_by_id is None:
+                    effective, overlay = _display_effective(target)
+                    backdrop_by_id = {
+                        e["chrooked_id"]: e
+                        for e in targetsmod.target_dex(
+                            target,
+                            effective,
+                            app.state.targets_state,
+                            base_snapshot=snapshot,
+                            overlay=overlay,
+                        )
+                    }
+                expected = backdrop_by_id.get(cid)
             if expected is None:
                 continue
             fields = [

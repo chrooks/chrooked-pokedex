@@ -81,6 +81,7 @@ export function LearnsetStage(props: Props) {
     onLoreMode,
     onSubSurface,
     onCreated,
+    backdropTargetId,
   } = props;
 
   // The mon's type slugs — a move whose type is in this set is STAB (bold).
@@ -127,6 +128,7 @@ export function LearnsetStage(props: Props) {
         mode: "full",
         anchors,
         lore: loreMode,
+        target: backdropTargetId ?? undefined,
       });
       return {
         draft: result.draft,
