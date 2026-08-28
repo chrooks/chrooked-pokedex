@@ -1,0 +1,38 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Sky Uppercut
+chrooked_id: skyuppercut
+applies_to: move
+aka: {  }
+effects:
+  - summary: "Type-chart override: this Fighting move hits Flying super-effectively"
+    trigger: damage-calc
+    when: The move resolves its type-effectiveness multiplier against the target's types
+    effect: If the target is Flying-type (primary or secondary), treat the Fighting-vs-Flying matchup as 2x instead of the normal 0.5x. All other type interactions remain unchanged and stack multiplicatively, so a Ghost/Flying target keeps its Ghost immunity (0x overall).
+test_cases:
+  - given: Sky Uppercut hits a pure Flying-type (e.g., Tornadus)
+    expect: Damage uses a 2x type-effectiveness multiplier (super-effective)
+  - given: Sky Uppercut hits a Normal/Flying-type (e.g., Pidgeot)
+    expect: 2x (Flying override) x 2x (Fighting vs Normal) = 4x
+  - given: Sky Uppercut hits a Ghost/Flying-type (e.g., Drifblim)
+    expect: Ghost immunity is retained; 2x x 0x = 0x — the move has no effect
+  - given: Sky Uppercut hits a pure Rock-type
+    expect: Standard 2x Fighting-vs-Rock effectiveness; no override applies
+  - given: The target is mid-Fly or mid-Bounce
+    expect: Sky Uppercut still hits — the canon airborne-hit behavior is preserved, not part of this spec
+notes:
+  - "Modeled on Freeze-Dry and the house moves Excalibur / Gauss Cannon / Gastric Snare: the move record reuses effect super_effective_on_arg with argument {type: Flying}; this spec travels the mechanic to engines where that effect is not native (Rejuv)."
+  - Ghost/Flying keeps its Ghost immunity on purpose — same rule as Gauss Cannon's Steel/Ground case.
+  - Power retuned 85 -> 80 and accuracy 90 -> 100 to match the house SE-override template; matchup identity carries the move, so vs Flying it plays like a 160-BP hit.
+  - No new secondary. Its canon perk — hitting targets mid-Fly/Bounce — stays: the Rejuv row keeps :function 0x11B and its AIRHITMOVES membership because the override declares no additional_effects, and the scalar patch never touches the function slot.
+engine_hints:
+  pokeemerald: >-
+    Native — no code needed. The data layer emits
+    .effect = EFFECT_SUPER_EFFECTIVE_ON_ARG with .argument = { .type = TYPE_FLYING };
+    the engine implements the forced super-effective behavior.
+  rejuv: >-
+    Implemented — references/rejuv-harness/chrooked_skyuppercut.rb registers
+    CHROOKED_MOVE_TYPEMOD[:SKYUPPERCUT] (the Excalibur pattern — Steel-vs-Dragon
+    0.5x corrected to 2x is the same math as Fighting-vs-Flying); apply copies it
+    into patch/Mods/. The existing 0x11B funccode and AIRHITMOVES entry (hits
+    mid-Fly) are left untouched. Verified by
+    references/rejuv-harness/typemod_check.rb (run with `ruby`).

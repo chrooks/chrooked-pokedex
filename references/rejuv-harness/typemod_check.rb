@@ -1,6 +1,6 @@
-# Standalone check of the Gastric Snare / Corrosion typemod math.
-# Reimplements Rejuv's Typemod#* and the Poison row of the chart, then runs
-# the two lambdas verbatim from the mod files.
+# Standalone check of the Gastric Snare / Corrosion / Sky Uppercut typemod math.
+# Reimplements Rejuv's Typemod#* and the Poison + Fighting rows of the chart,
+# then runs the three lambdas verbatim from the mod files.
 class Typemod
   attr_reader :numerator, :denominator
   def initialize(n = 1, d = 1); @numerator = n; @denominator = d; end
@@ -19,9 +19,12 @@ end
 module PBTypes
   POISON_ROW = { BUG: [1,1], FLYING: [1,1], STEEL: [0,1], GROUND: [1,2],
                  NORMAL: [1,1], GRASS: [2,1], FAIRY: [2,1], POISON: [1,2] }
+  FIGHTING_ROW = { FLYING: [1,2], NORMAL: [2,1], GHOST: [0,1], ROCK: [2,1],
+                   FIGHTING: [1,1] }
+  ROWS = { POISON: POISON_ROW, FIGHTING: FIGHTING_ROW }
   def self.oneTypeEff(atype, dtype)
-    raise "chart gap #{atype}/#{dtype}" unless atype == :POISON
-    n, d = POISON_ROW.fetch(dtype)
+    row = ROWS.fetch(atype) { raise "chart gap #{atype}/#{dtype}" }
+    n, d = row.fetch(dtype)
     Typemod.new(n, d)
   end
 end
@@ -32,6 +35,16 @@ GASTRIC = lambda { |move, atype, attacker, opponent, typemod|
   opponent.types.each do |opptype|
     next unless opptype == :BUG
     chart = PBTypes.oneTypeEff(atype, :BUG)
+    next if chart.immune?
+    typemod *= Typemod.new(2 * chart.denominator, chart.numerator)
+  end
+  typemod
+}
+
+SKYUPPER = lambda { |move, atype, attacker, opponent, typemod|
+  opponent.types.each do |opptype|
+    next unless opptype == :FLYING
+    chart = PBTypes.oneTypeEff(atype, :FLYING)
     next if chart.immune?
     typemod *= Typemod.new(2 * chart.denominator, chart.numerator)
   end
@@ -58,6 +71,14 @@ def resolve(types, corrosion:, gastric:)
   tm.multiplier
 end
 
+# Same shape for the Fighting row: vanilla chart, then Sky Uppercut's MOVE pass.
+def resolve_fighting(types, skyupper:)
+  tm = Typemod.new(1, 1)
+  types.each { |t| tm *= PBTypes.oneTypeEff(:FIGHTING, t) }
+  tm = SKYUPPER.call(nil, :FIGHTING, nil, Opp.new(types), tm) if skyupper
+  tm.multiplier
+end
+
 def check(label, got, want)
   ok = (got - want).abs < 1e-9
   puts "#{ok ? 'ok  ' : 'FAIL'} #{label}: got #{got}, want #{want}"
@@ -77,6 +98,11 @@ results << check("Registeel, NO corrosion",      resolve([:STEEL], corrosion: fa
 results << check("Scizor (Bug/Steel), both",     resolve([:BUG, :STEEL], corrosion: true, gastric: true), 4.0)
 # Corrosion must not touch non-Steel targets
 results << check("Caterpie, corrosion only",     resolve([:BUG], corrosion: true, gastric: false), 1.0)
+# Sky Uppercut's Flying override — the resisted-chart case (0.5x corrected to 2x)
+results << check("Tornadus (Flying), uppercut",  resolve_fighting([:FLYING], skyupper: true), 2.0)
+results << check("Tornadus, NO uppercut",        resolve_fighting([:FLYING], skyupper: false), 0.5)
+results << check("Pidgeot (Nrm/Fly), uppercut",  resolve_fighting([:NORMAL, :FLYING], skyupper: true), 4.0)
+results << check("Drifblim (Gho/Fly), uppercut", resolve_fighting([:GHOST, :FLYING], skyupper: true), 0.0)
 
 abort("\n#{results.count(false)} FAILED") unless results.all?
 puts "\nall #{results.size} passed"

@@ -1,0 +1,12 @@
+name: Sky Uppercut
+chrooked_id: skyuppercut
+aka: { pokeemerald: MOVE_SKY_UPPERCUT }
+type: Fighting
+category: physical
+power: 80
+accuracy: 100
+pp: 15
+description: An uppercut thrown skyward with force. Super effective against Flying types and strikes foes in mid-air.
+effect: super_effective_on_arg
+argument: { type: Flying }
+flags: [contact, punching]
