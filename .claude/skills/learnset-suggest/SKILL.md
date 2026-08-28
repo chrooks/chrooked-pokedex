@@ -79,7 +79,10 @@ steers otherwise. They shape input only — the server still owns the rubric and
 
    If a species has two STAB types, interleave the ramps so each bracket has a step.
    Rows step **3–4 levels** apart; the last row may sit at L72–73 — never force a
-   payoff at L70 back-to-back with an L69 row. **Multi-hit moves band by effective
+   payoff at L70 back-to-back with an L69 row. **Post-proposal exception:** when
+   folding user edits into an already-proposed learnset (adding a missed anchor,
+   squeezing in a requested move), rows may compress to a **minimum 2-level gap**
+   rather than reshuffling the whole ladder — fresh drafts still use 3–4. **Multi-hit moves band by effective
    BP** (BP × average hits: 2-5-hit movers ×3.5, fixed two-hitters ×2), so Bone
    Rush ≈ 88, not 25.
 
