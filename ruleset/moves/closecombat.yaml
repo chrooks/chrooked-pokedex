@@ -1,0 +1,10 @@
+name: Close Combat
+chrooked_id: closecombat
+aka: {  }
+type: Fighting
+category: physical
+power: 120
+accuracy: 100
+pp: 5
+description: The user fights the target without guarding. It cuts the user's Defense and Sp. Def.
+flags: [contact, punching, kicking]

@@ -1,0 +1,12 @@
+name: Spark
+chrooked_id: spark
+aka: {  }
+type: Electric
+category: physical
+power: 60
+accuracy: 100
+pp: 20
+description: An electrified tackle that may paralyze the foe.
+additional_effects:
+  - { effect: paralysis, chance: 30 }
+flags: [contact]
