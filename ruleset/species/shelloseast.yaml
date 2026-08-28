@@ -10,16 +10,17 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 5, move: Water Gun }
   - { level: 9, move: Mud-Slap }
-  - { level: 12, move: Bubble }
-  - { level: 16, move: Recover }
+  - { level: 12, move: Aqua Ring }
+  - { level: 16, move: Mud Shot }
   - { level: 20, move: Flip Turn }
   - { level: 23, move: Water Pulse }
-  - { level: 26, move: Mud Shot }
+  - { level: 26, move: Recover }
   - { level: 29, move: Ancient Power }
   - { level: 32, move: Icy Wind }
   - { level: 35, move: Chilling Water }
   - { level: 38, move: Mud Bomb }
-  - { level: 41, move: Body Press }
+  - { level: 40, move: Scorching Sands }
+  - { level: 42, move: Body Press }
   - { level: 44, move: Scald }
   - { level: 47, move: Muddy Water }
   - { level: 50, move: Earth Power }
