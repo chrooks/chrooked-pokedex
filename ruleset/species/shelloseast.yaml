@@ -2,22 +2,31 @@ name: Shellos East
 chrooked_id: shelloseast
 aka: { dex: 422, rejuv: "SHELLOS::East Sea" }
 abilities:
-  primary: Sticky Hold
-  secondary: Storm Drain
-  hidden: Self Sufficient
+  primary: Gooey
+  secondary: Regenerator
+  hidden: Earth Eater
 learnset:
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Mud-Slap }
-  - { level: 5, move: Harden }
-  - { level: 10, move: Recover }
-  - { level: 15, move: Water Pulse }
-  - { level: 20, move: Ancient Power }
-  - { level: 25, move: Body Slam }
-  - { level: 31, move: Muddy Water }
-  - { level: 35, move: Earth Power }
-  - { level: 38, move: Quagmire }
-  - { level: 40, move: Rain Dance }
-  - { level: 43, move: Hydro Pump }
-  - { level: 45, move: Memento }
-  - { level: 62, move: Sinkhole }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Mud-Slap }
+  - { level: 12, move: Bubble }
+  - { level: 16, move: Recover }
+  - { level: 20, move: Flip Turn }
+  - { level: 23, move: Water Pulse }
+  - { level: 26, move: Mud Shot }
+  - { level: 29, move: Ancient Power }
+  - { level: 32, move: Icy Wind }
+  - { level: 35, move: Chilling Water }
+  - { level: 38, move: Mud Bomb }
+  - { level: 41, move: Body Press }
+  - { level: 44, move: Scald }
+  - { level: 47, move: Muddy Water }
+  - { level: 50, move: Earth Power }
+  - { level: 53, move: Gastro Acid }
+  - { level: 56, move: Octazooka }
+  - { level: 59, move: Quagmire }
+  - { level: 62, move: Yawn }
+  - { level: 65, move: Tsunami }
+  - { level: 68, move: Sinkhole }
+  - { level: 71, move: Camouflage }
