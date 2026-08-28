@@ -39,6 +39,15 @@ frontend together. This skill is the ONE sanctioned exception to the
 3. Report the line the script prints (`deployed <sha> — healthy`). That sha
    matching `origin/main` IS the proof; don't re-verify by hand.
 
+## Enforcement
+
+This isn't guidance alone. `scripts/hooks/deploy-owed-stop.js` (a Stop hook in
+`.claude/settings.json`) compares `.deployed-commit` — the marker
+`deploy-hestia.sh` writes on success — against `origin/main`, and blocks
+ending the turn while service-affecting changes sit undeployed. It yields
+after one block, so if the deploy genuinely can't run (hestia down), report
+why and the hook lets the session stop. Ruleset-only pushes never trigger it.
+
 ## Failure modes
 
 - **`git pull --ff-only` fails** — hestia's clone diverged (the autocommit

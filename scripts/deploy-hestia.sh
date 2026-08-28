@@ -31,6 +31,9 @@ DEPLOYED=$(ssh -o BatchMode=yes hestia "
 echo "==> health check: $HEALTH_URL"
 for _ in $(seq "$HEALTH_TRIES"); do
   if curl -fsS --max-time 5 "$HEALTH_URL" > /dev/null; then
+    # The deploy record the deploy-owed Stop hook reads (gitignored,
+    # machine-local — same class as targets.json).
+    echo "$DEPLOYED" > "$(dirname "$0")/../.deployed-commit"
     echo "deployed $DEPLOYED — healthy"
     exit 0
   fi

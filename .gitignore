@@ -54,3 +54,4 @@ ui.log
 frontend/e2e/screenshots/
 frontend/test-results/
 frontend/playwright-report/
+.deployed-commit
