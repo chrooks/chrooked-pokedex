@@ -1,0 +1,10 @@
+name: Wake-Up Shock
+chrooked_id: wakeupshock
+aka: { rejuv: WAKEUPSHOCK }
+type: Electric
+category: physical
+power: 80
+accuracy: 100
+pp: 10
+description: "This attack inflicts big damage on a sleeping target. It also wakes the target up."
+flags: [contact]

@@ -505,6 +505,9 @@ def build_skeleton(
             "priority": _PRIORITY["named"], "band": None, "role": "named",
             "label": f"ANCHOR — the user named {canon}", "filter": None,
             "candidates": [canon], "required": True, "anchor": True,
+            # Effective power rides along so _assign_levels can seat the anchor
+            # where its punch belongs (a 40BP anchor at L47 was the miss).
+            "powers": {canon: effective_power(row)},
         })
 
     # --- status slots
@@ -820,7 +823,36 @@ def _assign_levels(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
             spec["level"] = best_pos
             spec["candidates"] = best_legal
             free.remove(best_pos)
-    for spec in utility:
+    # Band-less slots seat power-aware, not first-come: a powered slot (an
+    # anchor's lone move) prefers the free grid position whose pacing cap,
+    # late-game floor, and band window fit its effective power — a 40BP anchor
+    # at L47 or a status move as the L72 capstone was exactly the miss. The
+    # never-drop guarantee holds: with no fitting position it takes the best
+    # free one anyway. Pure status slots then fill the leftovers in order.
+    bands = _bands()
+    powered = [
+        s for s in utility
+        if any(isinstance(p, int) and p > 1 for p in (s.get("powers") or {}).values())
+    ]
+    plain = [s for s in utility if not any(s is p for p in powered)]
+    for spec in powered:
+        powers = spec["powers"]
+        power = max(p for p in powers.values() if isinstance(p, int))
+        window_lo, window_hi = _band_of(power, bands).get("window") or (1, 100)
+        best_pos: int | None = None
+        best_fit = (-1, -1, -_GRID[-1] - 1)
+        for position in free:
+            legal = bool(_cap_and_floor_legal(spec, powers, position, pacing))
+            in_window = window_lo <= position <= window_hi
+            fit = (int(legal), int(in_window), -position)
+            if fit > best_fit:
+                best_fit, best_pos = fit, position
+        if best_pos is None:
+            empty.append(spec)
+            continue
+        spec["level"] = best_pos
+        free.remove(best_pos)
+    for spec in plain:
         if free:
             spec["level"] = free.pop(0)
         else:

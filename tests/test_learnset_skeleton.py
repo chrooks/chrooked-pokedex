@@ -344,3 +344,27 @@ def test_anchors_crowding_out_a_slot_is_reported() -> None:
     skeleton = sk.build_skeleton(_entry(), _ABILITIES, _pool(), anchors=anchors)
     crowded = [n for n in skeleton["dropped"] if n.startswith("crowded: ")]
     assert crowded, skeleton["dropped"]
+
+
+def test_anchor_slots_seat_by_effective_power() -> None:
+    """A user-named anchor seats where its power belongs, never first-free.
+
+    Regression for the Breloom draft: 40BP Mach Punch landed at L47 and a
+    status slot became the L72 capstone because band-less slots took grid
+    leftovers in order.
+    """
+    pool = _pool() + [
+        _mv("Mach Punch", "Fighting", 40, category="Physical"),
+        _mv("Wood Hammer", "Grass", 120, category="Physical"),
+    ]
+    skeleton = sk.build_skeleton(
+        _entry(), _ABILITIES, pool, direction="",
+        anchors=["Mach Punch", "Wood Hammer"],
+    )
+    levels = {
+        s["candidates"][0]: s["level"]
+        for s in skeleton["slots"]
+        if s["role"] == "named"
+    }
+    assert levels["Mach Punch"] <= 19, "a 40BP anchor belongs in the early game"
+    assert levels["Wood Hammer"] >= 50, "a 120BP anchor belongs in the late game"
