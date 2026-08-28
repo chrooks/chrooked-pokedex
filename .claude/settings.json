@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./scripts/deploy-hestia.sh)",
+      "Bash(scripts/deploy-hestia.sh)",
+      "Bash(bash scripts/deploy-hestia.sh)",
+      "Bash(ssh hestia:*)"
+    ]
+  }
+}
