@@ -2,4 +2,27 @@ name: Breloom (Aevian Form)
 chrooked_id: breloom--aevianform
 aka: { dex: 286 }
 stats: { hp: 85, def: 90, spd: 65, spe: 75 }
+learnset:
+  - { level: 0, move: Wake-Up Shock }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Vine Whip }
+  - { level: 9, move: Thunder Shock }
+  - { level: 12, move: Mach Punch }
+  - { level: 16, move: Bullet Seed }
+  - { level: 19, move: Force Palm }
+  - { level: 23, move: Razor Leaf }
+  - { level: 26, move: Spark }
+  - { level: 30, move: Sucker Punch }
+  - { level: 33, move: Needle Arm }
+  - { level: 37, move: Wake-Up Shock }
+  - { level: 40, move: Spore }
+  - { level: 44, move: Seed Bomb }
+  - { level: 47, move: One-Inch Punch }
+  - { level: 51, move: Reap }
+  - { level: 54, move: Arc Strike }
+  - { level: 58, move: Swords Dance }
+  - { level: 61, move: Wood Hammer }
+  - { level: 65, move: Wild Charge }
+  - { level: 70, move: Close Combat }
 evolution: { from: Shroomish (Aevian Form), method: { level: 28 } }
