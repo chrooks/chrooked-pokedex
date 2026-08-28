@@ -4,27 +4,30 @@ aka: { dex: 391 }
 types: [Fire, Fighting]
 abilities:
   primary: Blaze
-  secondary: Magical Fists
-  hidden: Iron Fist
+  secondary: Martial Artist
+  hidden: Thermal Exchange
 learnset:
-  - { level: 1, move: Ember }
   - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
-  - { level: 6, move: Taunt }
-  - { level: 8, move: Mach Punch }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Ember }
+  - { level: 9, move: Mach Punch }
   - { level: 12, move: Power-Up Punch }
-  - { level: 16, move: Flame Wheel }
-  - { level: 18, move: Bulk Up }
-  - { level: 22, move: Thunder Punch }
-  - { level: 26, move: Ice Punch }
-  - { level: 30, move: Fire Punch }
-  - { level: 34, move: Drain Punch }
-  - { level: 38, move: Blaze Kick }
-  - { level: 42, move: Cutsie Slap }
-  - { level: 46, move: Cross Chop }
-  - { level: 50, move: Slack Off }
-  - { level: 54, move: Combust }
-  - { level: 58, move: Ki Blast }
-  - { level: 62, move: Focus Punch }
-  - { level: 66, move: Flare Blitz }
-  - { level: 70, move: Close Combat }
+  - { level: 15, move: Flame Charge }
+  - { level: 18, move: Fake Out }
+  - { level: 21, move: Flame Wheel }
+  - { level: 24, move: Double Kick }
+  - { level: 26, move: Fire Punch }
+  - { level: 28, move: Cutsie Slap }
+  - { level: 30, move: Thunder Punch }
+  - { level: 33, move: Fiery Dance }
+  - { level: 36, move: Sky Uppercut }
+  - { level: 39, move: Blaze Kick }
+  - { level: 42, move: Rock Climb }
+  - { level: 46, move: One-Inch Punch }
+  - { level: 50, move: U-turn }
+  - { level: 54, move: Acrobatics }
+  - { level: 60, move: Victory Dance }
+  - { level: 64, move: Close Combat }
+  - { level: 68, move: Flare Blitz }
+  - { level: 72, move: High Jump Kick }
