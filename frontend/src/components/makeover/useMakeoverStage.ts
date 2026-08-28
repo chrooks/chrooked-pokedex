@@ -32,7 +32,7 @@ export interface StageProposal<Draft> {
   error?: string;
 }
 
-interface State<Draft> {
+export interface State<Draft> {
   phase: StagePhase;
   /** The author's freeform redirect steer; persists across a re-roll. */
   direction: string;
@@ -48,7 +48,7 @@ interface State<Draft> {
   errorKind: StageErrorKind | null;
 }
 
-type Action<Draft> =
+export type Action<Draft> =
   | { type: "setDirection"; direction: string }
   | { type: "proposing" }
   | { type: "proposed"; proposal: StageProposal<Draft> }
@@ -56,7 +56,7 @@ type Action<Draft> =
   | { type: "locking" }
   | { type: "failed"; kind: StageErrorKind; message: string };
 
-function reducer<Draft>(state: State<Draft>, action: Action<Draft>): State<Draft> {
+export function reducer<Draft>(state: State<Draft>, action: Action<Draft>): State<Draft> {
   switch (action.type) {
     case "setDirection":
       return { ...state, direction: action.direction };
@@ -84,7 +84,17 @@ function reducer<Draft>(state: State<Draft>, action: Action<Draft>): State<Draft
       if (state.phase !== "proposed" || state.draft === null) return state;
       return { ...state, phase: "locking", error: null, errorKind: null };
     case "failed":
-      return { ...state, phase: "error", error: action.message, errorKind: action.kind };
+      // A failed LOCK IN must NOT leave "proposed": the draft only renders (and
+      // can only be re-locked) in that phase, so parking in "error" makes the
+      // author's hand-tuned rows invisible and unrecoverable. Keep the draft on
+      // screen with the rejected banner; propose failures (no usable draft)
+      // still land in "error".
+      return {
+        ...state,
+        phase: action.kind === "lock" && state.draft !== null ? "proposed" : "error",
+        error: action.message,
+        errorKind: action.kind,
+      };
     default:
       return state;
   }
