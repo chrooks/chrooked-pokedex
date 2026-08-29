@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_LUCARIO }
 abilities:
   primary: Magical Fists
   hidden: Mega Launcher
-stats: { atk: 110 }
+stats: { atk: 105, spa: 120, spe: 105 }
 learnset:
   - { level: 0, move: Aura Sphere }
   - { level: 1, move: Feint }
