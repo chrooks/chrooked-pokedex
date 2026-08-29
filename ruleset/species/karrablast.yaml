@@ -6,26 +6,26 @@ abilities:
   secondary: Shell Armor
   hidden: Riposte
 learnset:
-  - { level: 1, move: Leer }
-  - { level: 1, move: Scratch }
-  - { level: 5, move: Twineedle }
-  - { level: 7, move: Poison Sting }
-  - { level: 9, move: Bullet Punch }
-  - { level: 12, move: Fell Stinger }
-  - { level: 16, move: Metal Claw }
-  - { level: 20, move: Sucker Punch }
-  - { level: 23, move: Skitter Smack }
-  - { level: 26, move: Cut }
-  - { level: 30, move: Horn Attack }
-  - { level: 33, move: Smart Strike }
-  - { level: 37, move: Drill Peck }
-  - { level: 40, move: Iron Head }
-  - { level: 44, move: X-Scissor }
-  - { level: 47, move: First Impression }
-  - { level: 48, move: Poison Jab }
-  - { level: 49, move: Drill Run }
-  - { level: 51, move: Moltstrike }
-  - { level: 61, move: Thousand Stings }
-  - { level: 65, move: Megahorn }
-  - { level: 68, move: Gunk Shot }
-  - { level: 72, move: Shell Smash }
+  - { level: 1, move: Agility }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Smokescreen }
+  - { level: 5, move: Struggle Bug }
+  - { level: 9, move: Slander }
+  - { level: 12, move: Vacuum Wave }
+  - { level: 16, move: Acid Spray }
+  - { level: 19, move: Toxic Spikes }
+  - { level: 23, move: Signal Beam }
+  - { level: 26, move: Snarl }
+  - { level: 30, move: Water Shuriken }
+  - { level: 33, move: Dark Pulse }
+  - { level: 37, move: U-turn }
+  - { level: 40, move: Aura Sphere }
+  - { level: 44, move: Bug Buzz }
+  - { level: 47, move: Night Daze }
+  - { level: 51, move: Antennae Blast }
+  - { level: 54, move: Sludge Bomb }
+  - { level: 58, move: Ki Blast }
+  - { level: 61, move: Drone Chorus }
+  - { level: 65, move: Toxic }
+  - { level: 68, move: Recover }
+  - { level: 72, move: Eclipse }

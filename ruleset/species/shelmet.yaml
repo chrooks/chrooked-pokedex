@@ -2,25 +2,26 @@ name: Shelmet
 chrooked_id: shelmet
 aka: {  }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Protect }
-  - { level: 2, move: Fury Cutter }
-  - { level: 4, move: Acid }
-  - { level: 8, move: Curse }
-  - { level: 12, move: Mega Drain }
-  - { level: 15, move: Bug Bite }
-  - { level: 16, move: Struggle Bug }
-  - { level: 20, move: Yawn }
-  - { level: 22, move: Signal Beam }
-  - { level: 24, move: Acid Armor }
-  - { level: 28, move: Giga Drain }
-  - { level: 29, move: X-Scissor }
-  - { level: 32, move: Guard Swap }
-  - { level: 36, move: Body Slam }
-  - { level: 38, move: Bug Buzz }
-  - { level: 40, move: Recover }
-  - { level: 43, move: Moltstrike }
-  - { level: 44, move: Antennae Blast }
-  - { level: 48, move: Final Gambit }
-  - { level: 57, move: Megahorn }
-  - { level: 60, move: Drone Chorus }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Twineedle }
+  - { level: 7, move: Poison Sting }
+  - { level: 9, move: Bullet Punch }
+  - { level: 12, move: Fell Stinger }
+  - { level: 16, move: Metal Claw }
+  - { level: 20, move: Sucker Punch }
+  - { level: 23, move: Skitter Smack }
+  - { level: 26, move: Cut }
+  - { level: 30, move: Horn Attack }
+  - { level: 33, move: Smart Strike }
+  - { level: 37, move: Drill Peck }
+  - { level: 40, move: Iron Head }
+  - { level: 44, move: X-Scissor }
+  - { level: 47, move: First Impression }
+  - { level: 48, move: Poison Jab }
+  - { level: 49, move: Drill Run }
+  - { level: 51, move: Moltstrike }
+  - { level: 61, move: Thousand Stings }
+  - { level: 65, move: Megahorn }
+  - { level: 68, move: Gunk Shot }
+  - { level: 72, move: Shell Smash }
