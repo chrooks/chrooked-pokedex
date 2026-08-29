@@ -8,8 +8,8 @@ abilities:
   hidden: Kindle
 stats: { atk: 110, def: 86, spa: 95, spd: 86 }
 learnset:
-  - { level: 1, move: Smokescreen }
   - { level: 1, move: Scratch }
+  - { level: 1, move: Smokescreen }
   - { level: 5, move: Flame Charge }
   - { level: 9, move: Bullet Punch }
   - { level: 12, move: Lick }
@@ -17,6 +17,7 @@ learnset:
   - { level: 19, move: Tailwind }
   - { level: 23, move: Flame Wheel }
   - { level: 26, move: Rapid Spin }
+  - { level: 28, move: Smart Strike }
   - { level: 30, move: Crush Claw }
   - { level: 33, move: Metallic Fang }
   - { level: 37, move: Fire Fang }
