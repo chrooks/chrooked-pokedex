@@ -39,6 +39,7 @@ The behavior-port loop (see `.claude/skills/port-behavior/SKILL.md`):
 | innerfocus | pokeemerald-expansion 1.15.3 | `.patch` | `make check` RED→GREEN (battle test) + compiles |
 | innerfocus | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify innerfocus` 3/3 (log oracle) |
 | kindle | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify kindle` 3/3 (log oracle); Seam `pbModifyDamage` |
+| soulsight | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/soulsight_check.rb` 24/24, RED 11/24 without the mechanic |
 
 ### innerfocus.pokeemerald-expansion-1.15.3
 
