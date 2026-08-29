@@ -1,22 +1,31 @@
 name: Karrablast
 chrooked_id: karrablast
 aka: { dex: 588 }
+abilities:
+  primary: Impale
+  secondary: Shell Armor
+  hidden: Riposte
 learnset:
-  - { level: 1, move: Peck }
   - { level: 1, move: Leer }
-  - { level: 4, move: Fury Cutter }
-  - { level: 8, move: Endure }
-  - { level: 12, move: False Swipe }
-  - { level: 15, move: Bug Bite }
-  - { level: 16, move: Acid Spray }
-  - { level: 20, move: Headbutt }
-  - { level: 24, move: Flail }
-  - { level: 28, move: Scary Face }
-  - { level: 32, move: X-Scissor }
-  - { level: 36, move: Swords Dance }
-  - { level: 38, move: Moltstrike }
-  - { level: 40, move: Take Down }
-  - { level: 44, move: Bug Buzz }
-  - { level: 48, move: Double-Edge }
-  - { level: 55, move: Pixie Slash }
-  - { level: 57, move: Megahorn }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Twineedle }
+  - { level: 7, move: Poison Sting }
+  - { level: 9, move: Bullet Punch }
+  - { level: 12, move: Fell Stinger }
+  - { level: 16, move: Metal Claw }
+  - { level: 20, move: Sucker Punch }
+  - { level: 23, move: Skitter Smack }
+  - { level: 26, move: Cut }
+  - { level: 30, move: Horn Attack }
+  - { level: 33, move: Smart Strike }
+  - { level: 37, move: Drill Peck }
+  - { level: 40, move: Iron Head }
+  - { level: 44, move: X-Scissor }
+  - { level: 47, move: First Impression }
+  - { level: 48, move: Poison Jab }
+  - { level: 49, move: Drill Run }
+  - { level: 51, move: Moltstrike }
+  - { level: 61, move: Thousand Stings }
+  - { level: 65, move: Megahorn }
+  - { level: 68, move: Gunk Shot }
+  - { level: 72, move: Shell Smash }
