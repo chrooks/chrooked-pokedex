@@ -1,0 +1,34 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Riposte
+chrooked_id: riposte
+applies_to: ability
+aka: { pokeemerald: ABILITY_RIPOSTE }
+effects:
+  - summary: "A contact move recoils a quarter of its damage back at the attacker."
+    trigger: on-hit
+    when: "this Pokemon is damaged by a contact move and survives"
+    effect: >-
+      the attacker loses HP equal to 25% of the damage this Pokemon just took,
+      minimum 1; Magic Guard and Protective Pads prevent it
+test_cases:
+  - given: "a Riposte holder takes 100 damage from a contact move"
+    expect: "the attacker loses 25 HP"
+  - given: "a Riposte holder is hit by a non-contact move for 100"
+    expect: "no recoil (no contact = no trigger)"
+  - given: "the hit is absorbed by a substitute"
+    expect: "no recoil"
+  - given: "the attacker holds Protective Pads, or has a Magic Guard ability"
+    expect: "no recoil"
+  - given: "a Riposte holder takes 2 damage from a contact move"
+    expect: "the attacker loses 1 HP (floor of 0.5 clamped up)"
+notes:
+  - "Scales with the incoming hit, unlike Rough Skin / Iron Barbs which are a flat 1/8 max HP."
+  - "Fires even if the Riposte holder faints to the hit — the lance is already couched."
+  - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: >-
+    Rejuv: chrooked_riposte.rb registers CHROOKED_WHEN_HIT_DMG[:RIPOSTE] — a new
+    damage-aware defender table in chrooked_00_core.rb (the existing
+    CHROOKED_WHEN_HIT never sees the damage amount). Gates on makesContact?,
+    Protective Pads, and battle.magicGuardAbilities, then pbReduceHP on the user,
+    mirroring the vanilla Iron Barbs block in Battler.rb (~line 3624).

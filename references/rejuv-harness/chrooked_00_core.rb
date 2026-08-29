@@ -28,6 +28,9 @@ CHROOKED_ON_DEAL_DMG = {}
 CHROOKED_MOVE_ON_DEAL = {}
 # defender ability => ->(move, user, target, battle) — after surviving a damaging hit
 CHROOKED_WHEN_HIT = {}
+# defender ability => ->(move, user, target, damage, battle) — the damage-aware
+# twin of CHROOKED_WHEN_HIT, for reactions scaled by the HP actually taken.
+CHROOKED_WHEN_HIT_DMG = {}
 # ability => ->(battler, battle) — on switch-in
 CHROOKED_SWITCH_IN = {}
 # ability => ->(battler, battle) — end of round while on the field
@@ -383,6 +386,9 @@ module ChrookedBattlerHooks
     unless target_mold_broken || target.isFainted?
       Chrooked.entries(CHROOKED_WHEN_HIT, target.ability).each do |def_mod|
         def_mod.call(move, user, target, @battle)
+      end
+      Chrooked.entries(CHROOKED_WHEN_HIT_DMG, target.ability).each do |def_mod|
+        def_mod.call(move, user, target, damage, @battle)
       end
     end
     ret
