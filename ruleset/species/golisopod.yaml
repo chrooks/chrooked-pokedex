@@ -1,6 +1,9 @@
 name: Golisopod
 chrooked_id: golisopod
 aka: { pokeemerald: SPECIES_GOLISOPOD }
+abilities:
+  primary: Emergency Exit
+  secondary: Riposte
 stats: { def: 110 }
 learnset:
   - { level: 0, move: First Impression }

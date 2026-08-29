@@ -1,6 +1,9 @@
 name: Wimpod
 chrooked_id: wimpod
 aka: { dex: 767 }
+abilities:
+  primary: Wimp Out
+  secondary: Riposte
 learnset:
   - { level: 1, move: Struggle Bug }
   - { level: 1, move: Sand Attack }

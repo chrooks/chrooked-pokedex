@@ -1,6 +1,10 @@
 name: Skarmory
 chrooked_id: skarmory
 aka: { pokeemerald: SPECIES_SKARMORY }
+abilities:
+  primary: Keen Eye
+  secondary: Sturdy
+  hidden: Riposte
 stats: { hp: 80, spe: 80 }
 learnset:
   - { level: 1, move: Leer }

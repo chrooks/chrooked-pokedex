@@ -1,6 +1,10 @@
 name: Durant
 chrooked_id: durant
 aka: { pokeemerald: SPECIES_DURANT }
+abilities:
+  primary: Swarm
+  secondary: Hustle
+  hidden: Riposte
 learnset:
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Sand Attack }

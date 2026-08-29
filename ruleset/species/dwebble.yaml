@@ -1,6 +1,10 @@
 name: Dwebble
 chrooked_id: dwebble
 aka: {  }
+abilities:
+  primary: Sturdy
+  secondary: Shell Armor
+  hidden: Riposte
 learnset:
   - { level: 1, move: Fury Cutter }
   - { level: 1, move: Sand Attack }

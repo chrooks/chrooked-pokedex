@@ -1,6 +1,10 @@
 name: Crustle
 chrooked_id: crustle
 aka: { pokeemerald: SPECIES_CRUSTLE }
+abilities:
+  primary: Sturdy
+  secondary: Shell Armor
+  hidden: Riposte
 stats: { def: 135 }
 learnset:
   - { level: 1, move: Fury Cutter }
