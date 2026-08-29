@@ -3,28 +3,32 @@ chrooked_id: riolu
 aka: { pokeemerald: SPECIES_RIOLU }
 types: [Fighting, Steel]
 abilities:
-  primary: Magical Fists
-  secondary: Inner Focus
-  hidden: Mega Launcher
+  primary: Mega Launcher
+  secondary: Magical Fists
+  hidden: Soulsight
 stats: { hp: 40, atk: 70, def: 40, spa: 35, spd: 40, spe: 60 }
 learnset:
-  - { level: 1, move: Feint }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Quick Guard }
-  - { level: 5, move: Vacuum Wave }
+  - { level: 5, move: Aura Spark }
   - { level: 9, move: Glint }
-  - { level: 13, move: Calm Mind }
-  - { level: 17, move: Detect }
-  - { level: 21, move: Work Up }
-  - { level: 25, move: Mirror Shot }
-  - { level: 29, move: Bullet Punch }
-  - { level: 33, move: Chi Wave }
-  - { level: 37, move: Drain Punch }
-  - { level: 39, move: Dark Pulse }
-  - { level: 41, move: Flash Cannon }
-  - { level: 45, move: Aura Sphere }
-  - { level: 49, move: Meteor Mash }
-  - { level: 53, move: Ki Blast }
-  - { level: 57, move: Luster Cannon }
-  - { level: 65, move: Focus Blast }
-  - { level: 69, move: Excalibur }
-  - { level: 70, move: Focus Punch }
+  - { level: 12, move: Vacuum Wave }
+  - { level: 16, move: Bullet Punch }
+  - { level: 19, move: Mach Punch }
+  - { level: 23, move: Chi Wave }
+  - { level: 26, move: Mirror Shot }
+  - { level: 30, move: Ice Punch }
+  - { level: 33, move: Calm Mind }
+  - { level: 37, move: Flash Cannon }
+  - { level: 40, move: Drain Punch }
+  - { level: 42, move: Astral Hand }
+  - { level: 44, move: Meteor Mash }
+  - { level: 47, move: Extrasensory }
+  - { level: 49, move: Extreme Speed }
+  - { level: 51, move: Ki Blast }
+  - { level: 54, move: Luster Cannon }
+  - { level: 58, move: Heal Pulse }
+  - { level: 61, move: Close Combat }
+  - { level: 65, move: Dark Pulse }
+  - { level: 68, move: Focus Blast }
+  - { level: 72, move: Focus Punch }

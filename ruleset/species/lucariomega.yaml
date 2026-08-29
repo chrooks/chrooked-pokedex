@@ -3,33 +3,27 @@ chrooked_id: lucariomega
 aka: { dex: 448 }
 learnset:
   - { level: 0, move: Aura Sphere }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Helping Hand }
-  - { level: 1, move: Vacuum Wave }
-  - { level: 2, move: Detect }
-  - { level: 3, move: Reversal }
-  - { level: 4, move: Screech }
-  - { level: 5, move: Quick Attack }
-  - { level: 6, move: Final Gambit }
-  - { level: 7, move: Life Dew }
-  - { level: 8, move: Rock Smash }
-  - { level: 9, move: Metal Claw }
-  - { level: 12, move: Counter }
-  - { level: 15, move: Smart Strike }
-  - { level: 16, move: Work Up }
-  - { level: 20, move: Force Palm }
-  - { level: 24, move: Calm Mind }
-  - { level: 28, move: Metal Sound }
-  - { level: 32, move: Quick Guard }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Bone Rush }
-  - { level: 40, move: Swords Dance }
-  - { level: 43, move: Cross Chop }
-  - { level: 44, move: Heal Pulse }
-  - { level: 45, move: Meteor Mash }
-  - { level: 48, move: Iron Tail }
-  - { level: 52, move: Dragon Pulse }
-  - { level: 56, move: Extreme Speed }
-  - { level: 57, move: Excalibur }
-  - { level: 60, move: Close Combat }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Quick Guard }
+  - { level: 5, move: Aura Spark }
+  - { level: 9, move: Glint }
+  - { level: 12, move: Vacuum Wave }
+  - { level: 16, move: Bullet Punch }
+  - { level: 19, move: Mach Punch }
+  - { level: 23, move: Chi Wave }
+  - { level: 26, move: Mirror Shot }
+  - { level: 30, move: Ice Punch }
+  - { level: 33, move: Calm Mind }
+  - { level: 37, move: Flash Cannon }
+  - { level: 40, move: Drain Punch }
+  - { level: 42, move: Astral Hand }
+  - { level: 44, move: Meteor Mash }
+  - { level: 47, move: Extrasensory }
+  - { level: 49, move: Extreme Speed }
+  - { level: 51, move: Ki Blast }
+  - { level: 54, move: Luster Cannon }
+  - { level: 58, move: Heal Pulse }
+  - { level: 61, move: Close Combat }
+  - { level: 65, move: Dark Pulse }
+  - { level: 68, move: Focus Blast }
+  - { level: 72, move: Focus Punch }
