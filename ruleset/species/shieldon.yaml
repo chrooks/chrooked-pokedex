@@ -1,33 +1,30 @@
 name: Shieldon
 chrooked_id: shieldon
 aka: { pokeemerald: SPECIES_SHIELDON }
+types: [Rock, Steel]
 abilities:
   primary: Sturdy
   secondary: Battle Armor
   hidden: Impenetrable
+stats: { hp: 30, atk: 42, def: 118, spa: 42, spd: 88, spe: 30 }
 learnset:
+  - { level: 1, move: Leer }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Protect }
-  - { level: 2, move: Rollout }
-  - { level: 3, move: Metal Claw }
-  - { level: 6, move: Taunt }
-  - { level: 8, move: Glint }
-  - { level: 10, move: Metal Sound }
-  - { level: 15, move: Take Down }
-  - { level: 16, move: Rock Slide }
-  - { level: 17, move: Smart Strike }
-  - { level: 19, move: Iron Defense }
-  - { level: 21, move: Mirror Shot }
-  - { level: 24, move: Swagger }
-  - { level: 28, move: Ancient Power }
-  - { level: 29, move: Lithic Fang }
-  - { level: 33, move: Endure }
-  - { level: 37, move: Metal Burst }
-  - { level: 39, move: Luster Cannon }
-  - { level: 42, move: Iron Head }
-  - { level: 43, move: Stone Edge }
-  - { level: 45, move: Iron Tail }
-  - { level: 46, move: Heavy Slam }
-  - { level: 57, move: Head Smash }
-  - { level: 59, move: Excalibur }
-  - { level: 62, move: Steel Beam }
+  - { level: 5, move: Rock Throw }
+  - { level: 9, move: Metal Claw }
+  - { level: 12, move: Rock Tomb }
+  - { level: 16, move: Clang }
+  - { level: 19, move: Wide Guard }
+  - { level: 23, move: Rock Slide }
+  - { level: 26, move: Smart Strike }
+  - { level: 30, move: Metal Burst }
+  - { level: 33, move: Iron Head }
+  - { level: 37, move: Stealth Rock }
+  - { level: 41, move: Anchor Shot }
+  - { level: 44, move: Lithic Fang }
+  - { level: 47, move: King's Shield }
+  - { level: 51, move: Stone Edge }
+  - { level: 54, move: Anvil Slam }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Head Smash }
+  - { level: 65, move: Gigaton Hammer }
