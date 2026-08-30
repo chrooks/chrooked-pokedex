@@ -2,7 +2,7 @@ name: Bastiodon
 chrooked_id: bastiodon
 aka: { pokeemerald: SPECIES_BASTIODON }
 abilities:
-  primary: Sturdy
+  primary: Riposte
   secondary: Battle Armor
   hidden: Impenetrable
 stats: { hp: 75, atk: 50, def: 170, spa: 45, spd: 140 }
@@ -28,3 +28,4 @@ learnset:
   - { level: 58, move: Earthquake }
   - { level: 61, move: Head Smash }
   - { level: 65, move: Gigaton Hammer }
+evolution: { from: Shieldon, method: { level: 30 } }

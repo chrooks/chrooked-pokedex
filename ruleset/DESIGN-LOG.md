@@ -604,3 +604,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** learnset-only repass
 - **Corrections:** Trop kick L0 gets fighting and kick moves
+
+## 2026-08-30 — Bastiodon line
+
+- **Direction:** learnset-only repass
