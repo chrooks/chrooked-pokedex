@@ -7,7 +7,7 @@ abilities:
   hidden: Impenetrable
 stats: { hp: 75, atk: 50, def: 170, spa: 45, spd: 140 }
 learnset:
-  - { level: 0, move: Iron Defense }
+  - { level: 0, move: King's Shield }
   - { level: 1, move: Leer }
   - { level: 1, move: Tackle }
   - { level: 5, move: Rock Throw }
@@ -22,7 +22,7 @@ learnset:
   - { level: 37, move: Stealth Rock }
   - { level: 41, move: Anchor Shot }
   - { level: 44, move: Lithic Fang }
-  - { level: 47, move: King's Shield }
+  - { level: 47, move: Iron Defense }
   - { level: 51, move: Stone Edge }
   - { level: 54, move: Anvil Slam }
   - { level: 58, move: Earthquake }
