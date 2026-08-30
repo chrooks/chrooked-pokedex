@@ -1,10 +1,11 @@
 name: Flash
 chrooked_id: flash
 aka: {  }
-type: Normal
-category: status
+type: Electric
+category: special
 power: 60
 accuracy: 100
 pp: 20
 description: Looses a powerful blast of light that cuts accuracy.
 effect: accuracy_down
+target: foes_and_ally
