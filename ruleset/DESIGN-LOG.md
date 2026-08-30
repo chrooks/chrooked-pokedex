@@ -608,3 +608,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-08-30 — Bastiodon line
 
 - **Direction:** learnset-only repass
+
+## 2026-08-30 — Chandelure line
+
+- **Direction:** learnset-only repass
