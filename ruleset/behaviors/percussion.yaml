@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Percussion
+chrooked_id: percussion
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Sound moves deal physical damage using the user's Attack stat.
+    trigger: damage-calc
+    when: the move used has the sound flag
+    effect: Override the move's damage category to Physical for damage calculation purposes; substitute the user's Attack stat (and the target's Defense stat) in place of Special Attack and Special Defense. The move's listed category, type, and all other properties remain unchanged. This override applies before other damage modifiers are evaluated.
+test_cases:
+  - given: A Zebstrika with Percussion uses Boomburst (normally Special) against a target with high Defense and low Sp. Def.
+    expect: Damage is calculated using Zebstrika's Attack and the target's Defense, not Sp. Atk / Sp. Def; a target with low Defense takes more damage than one with low Sp. Def.
+  - given: A Zebstrika with Percussion uses Hyper Voice while burned.
+    expect: The burn's 50% Attack penalty applies to the damage calculation, reducing Hyper Voice's output as if it were a physical move.
+  - given: A foe has Soundproof and Zebstrika with Percussion uses Boomburst.
+    expect: Soundproof still blocks Boomburst entirely; Percussion does not circumvent the sound immunity.
+notes:
+  - Only the damage calculation is affected — the move is still flagged as a special move for all other purposes (e.g., contact checks remain absent, Soundproof still blocks it, Shell Armor/Battle Armor still check the physical critical-hit table).
+  - If the user also has an ability that modifies physical moves (e.g., Tough Claws), those do NOT interact with Percussion-converted moves because the move itself does not become a contact move and its category tag is unchanged outside of the damage step.
+  - In doubles, moves like Boomburst or Hyper Voice still hit all adjacent foes as normal; Percussion does not change targeting.
+  - Burn halving applies to the Attack stat used, since the damage calculation now treats the move as physical.
+  - Unaware on the target ignores Attack and Defense boosts as it normally would for a physical hit.
+  - Stat-using abilities on the user such as Hustle apply to the Attack stat used by these moves.
+  - STUB — engine_hints ungrounded, needs human grounding pass

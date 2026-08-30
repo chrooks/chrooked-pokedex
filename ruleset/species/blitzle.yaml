@@ -1,19 +1,31 @@
 name: Blitzle
 chrooked_id: blitzle
 aka: { dex: 522 }
+abilities:
+  primary: Percussion
+  secondary: Galvanize
+  hidden: Motor Drive
 learnset:
-  - { level: 1, move: Quick Attack }
-  - { level: 2, move: Nuzzle }
-  - { level: 4, move: Tail Whip }
-  - { level: 8, move: Charge }
-  - { level: 11, move: Shock Wave }
-  - { level: 15, move: Thunder Wave }
-  - { level: 18, move: Flame Charge }
-  - { level: 22, move: Spark }
-  - { level: 25, move: Stomp }
-  - { level: 29, move: Discharge }
-  - { level: 33, move: Agility }
-  - { level: 35, move: Lightning Slam }
-  - { level: 40, move: Thrash }
-  - { level: 46, move: Arc Strike }
-  - { level: 48, move: Wild Charge }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Nuzzle }
+  - { level: 9, move: Jolt }
+  - { level: 12, move: Charge }
+  - { level: 16, move: Agility }
+  - { level: 19, move: Thunder Wave }
+  - { level: 23, move: Spark }
+  - { level: 26, move: Quick Attack }
+  - { level: 30, move: Stomp }
+  - { level: 32, move: Galeburst }
+  - { level: 34, move: Extreme Speed }
+  - { level: 37, move: Stomping Tantrum }
+  - { level: 40, move: Blaze Kick }
+  - { level: 44, move: Lightning Slam }
+  - { level: 47, move: High Horsepower }
+  - { level: 51, move: Hyper Voice }
+  - { level: 54, move: Resonance }
+  - { level: 58, move: Overdrive }
+  - { level: 61, move: Thrash }
+  - { level: 65, move: Wild Charge }
+  - { level: 68, move: Taunt }
+  - { level: 72, move: Boomburst }

@@ -1,20 +1,33 @@
 name: Zebstrika
 chrooked_id: zebstrika
 aka: { pokeemerald: SPECIES_ZEBSTRIKA }
+abilities:
+  primary: Percussion
+  secondary: Galvanize
+  hidden: Motor Drive
 stats: { atk: 110, def: 60, spa: 75, spd: 60, spe: 125 }
 learnset:
+  - { level: 0, move: Arc Strike }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Thunder Wave }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Charge }
-  - { level: 2, move: Nuzzle }
-  - { level: 11, move: Shock Wave }
-  - { level: 18, move: Flame Charge }
-  - { level: 25, move: Spark }
-  - { level: 31, move: Stomp }
-  - { level: 36, move: Discharge }
-  - { level: 39, move: Lightning Slam }
-  - { level: 40, move: Arc Strike }
-  - { level: 42, move: Agility }
-  - { level: 47, move: Wild Charge }
-  - { level: 53, move: Thrash }
+  - { level: 5, move: Nuzzle }
+  - { level: 9, move: Jolt }
+  - { level: 12, move: Charge }
+  - { level: 16, move: Agility }
+  - { level: 19, move: Thunder Wave }
+  - { level: 23, move: Spark }
+  - { level: 26, move: Quick Attack }
+  - { level: 30, move: Stomp }
+  - { level: 32, move: Galeburst }
+  - { level: 34, move: Extreme Speed }
+  - { level: 37, move: Stomping Tantrum }
+  - { level: 40, move: Blaze Kick }
+  - { level: 44, move: Lightning Slam }
+  - { level: 47, move: High Horsepower }
+  - { level: 51, move: Hyper Voice }
+  - { level: 54, move: Resonance }
+  - { level: 58, move: Overdrive }
+  - { level: 61, move: Thrash }
+  - { level: 65, move: Wild Charge }
+  - { level: 68, move: Taunt }
+  - { level: 72, move: Boomburst }

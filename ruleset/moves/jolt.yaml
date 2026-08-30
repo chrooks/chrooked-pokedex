@@ -1,0 +1,12 @@
+name: Jolt
+chrooked_id: jolt
+aka: {  }
+type: Electric
+category: physical
+power: 50
+accuracy: 100
+pp: 20
+description: The user delivers a sharp, short-range electric prod to the target, with a 30% chance of leaving it paralyzed.
+additional_effects:
+  - { effect: paralysis, chance: 30 }
+flags: [contact]
