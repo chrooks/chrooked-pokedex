@@ -1,15 +1,13 @@
 # chrooked:soulsight
-# Soulsight — "Prevents flinching; moves hit Ghosts; Psychic moves +30% power;
-#   Fighting-type special moves never miss."
+# Soulsight — "Prevents flinching; moves hit Ghosts; Fighting-type special
+#   moves never miss."
 #   accuracy-check: Fighting-type SPECIAL move => skip the roll
 #   type-chart:     Normal/Fighting move vs an immune target => neutral (Scrappy)
-#   damage-calc:    Psychic-type move => x1.3
 #   flinch:         the holder never loses its turn to a flinch (Inner Focus)
 # Test cases:
 #   - Focus Blast (70% acc) never misses; Aura Sphere/Ki Blast/Chi Wave likewise
 #   - a Fighting PHYSICAL move (Close Combat) keeps its normal accuracy
 #   - Close Combat hits a Ghost; a Psychic move vs a Dark-type stays immune
-#   - Extrasensory => 1.3x; a Fighting move gets no damage boost
 #   - Fake Out's flinch does not stop the holder acting
 
 # Never-miss is scoped to type + category, NOT the pulse flag, so it covers
@@ -26,10 +24,6 @@ CHROOKED_SURE_HIT[:SOULSIGHT] = lambda { |move, attacker|
 # through (a Psychic move vs a Dark-type stays immune).
 CHROOKED_TYPEMOD_FLOOR[:SOULSIGHT] = lambda { |move, attacker|
   [:NORMAL, :FIGHTING].include?(move.pbType(attacker))
-}
-
-CHROOKED_DAMAGE_MODS[:SOULSIGHT] = lambda { |move, attacker, opponent|
-  move.pbType(attacker) == :PSYCHIC ? 1.3 : 1.0
 }
 
 # Flinch immunity has no registry hook. Rejuv sets effects[:Flinch] at 17 move

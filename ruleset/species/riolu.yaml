@@ -1,7 +1,7 @@
 name: Riolu
 chrooked_id: riolu
 aka: { pokeemerald: SPECIES_RIOLU }
-types: [Fighting, Steel]
+types: [Fighting, Psychic]
 abilities:
   primary: Mega Launcher
   secondary: Magical Fists

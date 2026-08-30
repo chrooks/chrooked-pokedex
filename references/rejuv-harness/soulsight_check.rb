@@ -1,4 +1,4 @@
-# Standalone check of all four Soulsight clauses. Unlike the older *_check.rb
+# Standalone check of all three Soulsight clauses. Unlike the older *_check.rb
 # scripts this does NOT copy the lambdas — it `load`s chrooked_soulsight.rb so
 # the shipped code is what runs. The mod's PokeBattle_Battler block is guarded
 # by `defined?`, so the flinch clause is exercised against a stub battler here.
@@ -55,7 +55,6 @@ load File.join(File.dirname(__FILE__), "chrooked_soulsight.rb")
 
 SURE  = CHROOKED_SURE_HIT[:SOULSIGHT]
 FLOOR = CHROOKED_TYPEMOD_FLOOR[:SOULSIGHT]
-DMG   = CHROOKED_DAMAGE_MODS[:SOULSIGHT]
 
 # Mirrors core pbTypeModifier's floor step: vanilla chart, then floor an
 # immune result to neutral when the ability lambda says so.
@@ -86,7 +85,7 @@ EXTRASENSORY = Move.new(:EXTRASENSORY,:PSYCHIC,  true,  true)
 ASTRAL_HAND  = Move.new(:ASTRALHAND,  :PSYCHIC,  false, true)
 EXTREME_SPD  = Move.new(:EXTREMESPEED,:NORMAL,   false, true)
 
-puts "-- clause 4: Fighting specials never miss --"
+puts "-- clause 3: Fighting specials never miss --"
 [AURA_SPHERE, FOCUS_BLAST, KI_BLAST, CHI_WAVE, VACUUM_WAVE, AURA_SPARK].each do |m|
   check("#{m.move} skips the accuracy roll", SURE.call(m, nil), true)
 end
@@ -102,12 +101,6 @@ check("Extrasensory vs Dark STAYS immune", resolve(EXTRASENSORY, [:DARK], soulsi
 check("Astral Hand vs Dark STAYS immune",  resolve(ASTRAL_HAND,  [:DARK], soulsight: true),  0.0)
 check("Aura Sphere vs Steel unchanged",    resolve(AURA_SPHERE,  [:STEEL], soulsight: true), 2.0)
 check("Aura Sphere vs Ghost/Steel",        resolve(AURA_SPHERE,  [:GHOST, :STEEL], soulsight: true), 1.0)
-
-puts "-- clause 3: Psychic +30%, nothing else --"
-check("Extrasensory boosted", DMG.call(EXTRASENSORY, nil, nil), 1.3)
-check("Astral Hand boosted",  DMG.call(ASTRAL_HAND,  nil, nil), 1.3)
-check("Aura Sphere unboosted", DMG.call(AURA_SPHERE, nil, nil), 1.0)
-check("Extreme Speed unboosted", DMG.call(EXTREME_SPD, nil, nil), 1.0)
 
 puts "-- clause 1: flinch immunity --"
 holder = PokeBattle_Battler.new(:SOULSIGHT)

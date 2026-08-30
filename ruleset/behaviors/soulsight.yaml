@@ -12,10 +12,6 @@ effects:
     trigger: accuracy-check
     when: the target is Ghost-type and the immunity would otherwise cause the move to fail
     effect: Suppress the Normal-immune and Fighting-immune Ghost-type immunity; the move proceeds to the damage step as if the type immunity does not exist.
-  - summary: Psychic-type moves deal 30% more damage
-    trigger: damage-calc
-    when: the move used is Psychic-type
-    effect: Multiply the final damage by 1.3 before applying to the target.
   - summary: Fighting-type special moves never miss
     trigger: accuracy-check
     when: the move used is Fighting-type AND the move's category is Special
@@ -27,15 +23,12 @@ test_cases:
     expect: Focus Blast never misses; the 70 accuracy value is bypassed entirely.
   - given: Bearer uses Aura Sphere (Fighting, Special) against a Ghost-type target
     expect: The Ghost-type immunity to Fighting is suppressed (Scrappy clause); the no-miss clause also applies; Aura Sphere hits the Ghost and deals damage.
-  - given: Bearer uses Extrasensory (Psychic, Special) against a foe; both Pokemon have no stat changes
-    expect: Extrasensory's damage is multiplied by 1.3; no accuracy benefit is granted (Extrasensory is not Fighting-type).
   - given: An opposing Fake Out (Normal, Physical) targets the bearer on Turn 1
     expect: Fake Out's flinch effect is cancelled by Soulsight; the bearer is not flinched and takes only the damage.
 notes:
   - "Effect 2 (Ghost immunity bypass) mirrors Scrappy: it only suppresses the type-immunity block, not any other immunity (e.g. Wonder Guard or ability-based immunities unrelated to Ghost typing)."
-  - "Effect 4 covers exactly the Fighting-type special-category moves in the dex: Vacuum Wave, Aura Spark, Chi Wave, Aura Sphere, Ki Blast, Focus Blast, plus Final Gambit and Secret Sword (both already 100 accuracy, so no practical change). It does NOT use the pulse/ballistic flag as its trigger condition, so a future Fighting special move is covered automatically."
-  - Effects 2 and 4 are both accuracy-check hooks but guard on distinct conditions; both should be evaluated independently each move.
-  - The 1.3x multiplier in Effect 3 stacks multiplicatively with STAB, type effectiveness, and other damage multipliers in the standard order.
-  - Soulsight's no-miss clause (Effect 4) does not interact with No Guard - it is unilateral (only the bearer's Fighting specials are guaranteed to hit, not foes' moves against the bearer).
+  - "Effect 3 covers exactly the Fighting-type special-category moves in the dex: Vacuum Wave, Aura Spark, Chi Wave, Aura Sphere, Ki Blast, Focus Blast, plus Final Gambit and Secret Sword (both already 100 accuracy, so no practical change). It does NOT use the pulse/ballistic flag as its trigger condition, so a future Fighting special move is covered automatically."
+  - Effects 2 and 3 are both accuracy-check hooks but guard on distinct conditions; both should be evaluated independently each move.
+  - Soulsight's no-miss clause (Effect 3) does not interact with No Guard - it is unilateral (only the bearer's Fighting specials are guaranteed to hit, not foes' moves against the bearer).
   - "AI rating at authoring time: B+ - potent but not centralizing; the never-miss Fighting special clause is the strongest element."
   - STUB - engine_hints ungrounded, needs human grounding pass

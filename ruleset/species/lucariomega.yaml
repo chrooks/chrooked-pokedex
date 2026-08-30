@@ -1,6 +1,7 @@
 name: Lucario Mega
 chrooked_id: lucariomega
 aka: { dex: 448 }
+types: [Fighting, Psychic]
 learnset:
   - { level: 0, move: Aura Sphere }
   - { level: 1, move: Flicker }

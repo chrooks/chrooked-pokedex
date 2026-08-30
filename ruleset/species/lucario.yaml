@@ -1,6 +1,7 @@
 name: Lucario
 chrooked_id: lucario
 aka: { pokeemerald: SPECIES_LUCARIO }
+types: [Fighting, Psychic]
 abilities:
   primary: Mega Launcher
   secondary: Magical Fists
