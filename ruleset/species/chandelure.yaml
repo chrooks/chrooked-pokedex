@@ -2,7 +2,9 @@ name: Chandelure
 chrooked_id: chandelure
 aka: { pokeemerald: SPECIES_CHANDELURE }
 abilities:
+  primary: Flash Fire
   secondary: Pyre
+  hidden: Levitate
 learnset:
   - { level: 1, move: Fire Spin }
   - { level: 1, move: Night Shade }
@@ -25,3 +27,4 @@ learnset:
   - { level: 29, move: Flamethrower }
   - { level: 43, move: Specter Bomb }
   - { level: 64, move: Netherstorm }
+evolution: { from: Lampent, method: { essentials: Item, param: DUSKSTONE } }
