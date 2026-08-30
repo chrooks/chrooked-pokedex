@@ -6,25 +6,26 @@ abilities:
   secondary: Pyre
   hidden: Levitate
 learnset:
-  - { level: 1, move: Fire Spin }
-  - { level: 1, move: Night Shade }
-  - { level: 1, move: Minimize }
+  - { level: 0, move: Specter Bomb }
   - { level: 1, move: Confuse Ray }
-  - { level: 2, move: Curse }
-  - { level: 3, move: Pain Split }
-  - { level: 4, move: Will-O-Wisp }
-  - { level: 5, move: Memento }
-  - { level: 6, move: Imprison }
-  - { level: 7, move: Astonish }
-  - { level: 8, move: Ember }
-  - { level: 9, move: Smog }
-  - { level: 10, move: Knell }
-  - { level: 11, move: Hex }
-  - { level: 12, move: Inferno }
-  - { level: 13, move: Overheat }
-  - { level: 15, move: Shadow Ball }
-  - { level: 16, move: Incinerate }
-  - { level: 29, move: Flamethrower }
-  - { level: 43, move: Specter Bomb }
-  - { level: 64, move: Netherstorm }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Knell }
+  - { level: 9, move: Ember }
+  - { level: 12, move: Will-O-Wisp }
+  - { level: 16, move: Memento }
+  - { level: 20, move: Ominous Wind }
+  - { level: 23, move: Flame Burst }
+  - { level: 26, move: Mystical Fire }
+  - { level: 30, move: Hex }
+  - { level: 33, move: Shadow Ball }
+  - { level: 37, move: Fiery Dance }
+  - { level: 40, move: Nasty Plot }
+  - { level: 44, move: Flamethrower }
+  - { level: 47, move: Energy Ball }
+  - { level: 50, move: Specter Bomb }
+  - { level: 54, move: Dark Pulse }
+  - { level: 58, move: Calm Mind }
+  - { level: 61, move: Heat Wave }
+  - { level: 65, move: Overheat }
+  - { level: 68, move: Netherstorm }
 evolution: { from: Lampent, method: { essentials: Item, param: DUSKSTONE } }
