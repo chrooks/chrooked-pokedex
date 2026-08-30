@@ -11,12 +11,12 @@ learnset:
   - { level: 1, move: Flicker }
   - { level: 1, move: Quick Guard }
   - { level: 5, move: Aura Spark }
-  - { level: 9, move: Glint }
+  - { level: 9, move: Confusion }
   - { level: 12, move: Vacuum Wave }
   - { level: 16, move: Bullet Punch }
   - { level: 19, move: Mach Punch }
   - { level: 23, move: Chi Wave }
-  - { level: 26, move: Mirror Shot }
+  - { level: 26, move: Psybeam }
   - { level: 30, move: Ice Punch }
   - { level: 33, move: Calm Mind }
   - { level: 37, move: Flash Cannon }
@@ -27,6 +27,7 @@ learnset:
   - { level: 49, move: Extreme Speed }
   - { level: 51, move: Ki Blast }
   - { level: 54, move: Luster Cannon }
+  - { level: 56, move: Psychic }
   - { level: 58, move: Heal Pulse }
   - { level: 61, move: Close Combat }
   - { level: 65, move: Dark Pulse }
