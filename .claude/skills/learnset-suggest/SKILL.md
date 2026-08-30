@@ -94,6 +94,13 @@ steers otherwise. They shape input only — the server still owns the rubric and
    - **At most ~4 moves at L1.** L1 is the floor kit, not a dumping ground. The L1
      starter attack is the Tackle/Pound/Scratch class — or **Flicker** (the
      special Tackle clone) for special attackers.
+   - **A 100%-status move is utility, never a ramp rung.** A move whose damage is
+     incidental to a guaranteed status effect (Nuzzle: 20 BP, 100% paralysis) counts
+     as utility for ramp purposes and CANNOT satisfy a STAB bracket, however well its
+     type and category match. Nuzzle is Thunder Wave that happens to scratch. Seating
+     it as the early Electric rung is the classic miss: it leaves the species with no
+     attacking move at all from ~L5 until the first 51–75 BP rung in the low 20s — an
+     18-level hole. Check every ≤50 BP bracket fill against this before preview.
    - Signature/user-anchored moves the user has placed (e.g. Mach Punch @14) survive
      redrafts — re-check they're still present after any "try again".
 
@@ -169,6 +176,13 @@ by status:
   message, stop — nothing was written.
 - **503** → a recoverable backend/LLM problem (missing key, provider/timeout). Show
   the honest message (it never contains the key), stop.
+
+**A `crowded:` warning may be a pool gap, not a packing problem.** When a warning
+says a bracket "lost its only candidate", check whether the merged pool genuinely
+holds any move in that type + category + BP band. If it does not, the honest fix is
+to design the missing move (`/move-design`) and re-run — not to reshuffle levels
+around a hole. Zebstrika hit exactly this: no 50 BP physical Electric move existed,
+so the ≤50 BP bracket had only Nuzzle to offer and correctly refused it.
 
 **Check the warnings.** A `warnings` entry prefixed `anchor: ` means the draft
 did not place a move you required — the same failure that lost four anchors on
