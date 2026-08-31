@@ -13,7 +13,6 @@ learnset:
   - { level: 19, move: Mach Punch }
   - { level: 23, move: Chi Wave }
   - { level: 26, move: Psybeam }
-  - { level: 30, move: Ice Punch }
   - { level: 33, move: Calm Mind }
   - { level: 37, move: Flash Cannon }
   - { level: 40, move: Drain Punch }
@@ -23,8 +22,9 @@ learnset:
   - { level: 49, move: Extreme Speed }
   - { level: 51, move: Ki Blast }
   - { level: 54, move: Luster Cannon }
-  - { level: 56, move: Psychic }
+  - { level: 56, move: Mindwarp }
   - { level: 58, move: Heal Pulse }
+  - { level: 60, move: Future Sight }
   - { level: 61, move: Close Combat }
   - { level: 65, move: Dark Pulse }
   - { level: 68, move: Focus Blast }
