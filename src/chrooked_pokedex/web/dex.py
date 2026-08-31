@@ -707,6 +707,16 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
             "effect": entry.get("effect") or "",
             "flags": list(entry.get("flags") or ()),
             "secondary": bool(entry.get("additional_effects")),
+            # The utility grader reads target (spread) and additional_effects
+            # (the 100%-status classifier); without them a spread status move
+            # grades as single-target and Nuzzle reads as an attacking rung.
+            "target": entry.get("target") or "",
+            "additional_effects": [
+                dict(e) if isinstance(e, dict) else
+                {"effect": getattr(e, "effect", None), "chance": getattr(e, "chance", None)}
+                for e in (entry.get("additional_effects") or ())
+            ],
+            "chrooked_id": entry.get("chrooked_id"),
             "custom": entry["chrooked_id"] in created_ids,
         }
         for entry in all_moves

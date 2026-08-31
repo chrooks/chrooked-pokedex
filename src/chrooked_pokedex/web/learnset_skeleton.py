@@ -35,6 +35,7 @@ from typing import Any
 _HERE = Path(__file__).resolve().parent
 _FUEL_PATH = _HERE / "ability_fuel.json"
 _BAND_PATH = _HERE / "learnset_rubric.json"
+_GRADE_PATH = _HERE / "utility_grades.json"
 
 # The closed set of filter fields a fuel entry may use — validated by
 # validate_fuel_table so a typo'd field fails loudly, not silently matches nothing.
@@ -217,6 +218,66 @@ def offensive_bias(stats: dict[str, Any]) -> str | None:
     return "physical" if atk > spa else "special"
 
 
+
+# --- utility classification and grading -------------------------------------
+# A move is UTILITY when its damage is not the point. Two cases: a status move,
+# and a damaging move whose damage is incidental to a guaranteed status effect
+# (Nuzzle: 20 BP, 100% paralysis — Thunder Wave that happens to scratch).
+# A utility move may never satisfy an attacking slot, however well its type and
+# category match. Seating Nuzzle as a species' early Electric rung is what left
+# Zebstrika with no attacking move between L5 and L23.
+_UTILITY_BP_FLOOR = 40  # the Tackle/Pound starter-attack class
+
+
+def is_utility_move(row: dict[str, Any]) -> bool:
+    """True when this move is utility rather than an attacking rung."""
+    if (row.get("category") or "").casefold() == "status":
+        return True
+    power = row.get("power")
+    if not isinstance(power, int) or power >= _UTILITY_BP_FLOOR:
+        return False
+    return any(
+        (e or {}).get("chance") == 100 for e in (row.get("additional_effects") or ())
+    )
+
+
+def _grade_table() -> dict[str, Any]:
+    return json.loads(_GRADE_PATH.read_text("utf-8"))
+
+
+def _spread_target(row: dict[str, Any]) -> bool:
+    return (row.get("target") or "") in {
+        "both", "foes_and_ally", "all_opposing", "opponents_field", "all_battlers"
+    }
+
+
+def grade_utility(row: dict[str, Any], table: dict[str, Any] | None = None) -> tuple[float, str]:
+    """(score, letter) for one utility move.
+
+    score = payoff x reliability x (1 - immunity) x spread, where reliability is
+    (accuracy/100) raised to ``accuracy_exponent`` — superlinear, because a
+    missed status move wastes the whole turn. Every weight is a taste call and
+    lives in utility_grades.json; nothing here is derived from first principles.
+    """
+    t = table or _grade_table()
+    effect = (row.get("effect") or "").casefold()
+    payoff = t["payoff"].get(effect, t["default_payoff"])
+
+    acc = row.get("accuracy")
+    # 0 / None means "never misses" (self-targeting boosts, hazards).
+    reliability = 1.0 if not isinstance(acc, int) or acc <= 0 else (acc / 100.0) ** t["accuracy_exponent"]
+
+    mid = (row.get("chrooked_id") or row.get("move") or "").casefold().replace(" ", "").replace("-", "")
+    immunity = t["immunity"][t["immunity_by_move"].get(mid, "none")]
+
+    spread = t["spread_bonus"] if _spread_target(row) else 1.0
+    score = payoff * reliability * (1.0 - immunity) * spread
+    for letter, floor in t["bands"]:
+        if score >= floor:
+            return score, letter
+    return score, t["bands"][-1][0]
+
+
 def _matches(row: dict[str, Any], filt: dict[str, Any], bias: str | None) -> bool:
     """Does one pool row pass one fuel/slot filter?"""
     cat = (row.get("category") or "").casefold()
@@ -233,6 +294,9 @@ def _matches(row: dict[str, Any], filt: dict[str, Any], bias: str | None) -> boo
     if filt.get("attacking"):
         power = row.get("power")
         if cat == "status" or not isinstance(power, int) or power <= 1:
+            return False
+        # A 100%-status move is utility, never a ramp rung — see is_utility_move.
+        if is_utility_move(row):
             return False
     if filt.get("on_stat") and bias and cat != bias:
         return False
@@ -511,9 +575,23 @@ def build_skeleton(
         })
 
     # --- status slots
-    status_moves = sorted(
-        r["move"] for r in move_pool if (r.get("category") or "").casefold() == "status"
-    )
+    # Status candidates are ranked by their utility grade, best first, and
+    # anything under the floor is dropped — an F-grade status move should never
+    # win a slot by accident. Ties keep alphabetical order so runs stay stable.
+    _grades = _grade_table()
+    _scored = [
+        (grade_utility(r, _grades)[0], r["move"])
+        for r in move_pool
+        if (r.get("category") or "").casefold() == "status"
+    ]
+    status_moves = [
+        m for _, m in sorted(
+            (p for p in _scored if p[0] >= _grades["floor_score"]),
+            key=lambda p: (-p[0], p[1]),
+        )
+    ]
+    if not status_moves:  # a pool of only weak status moves still needs rows
+        status_moves = sorted(m for _, m in _scored)
     for _ in range(min(_STATUS_SLOTS, len(status_moves))):
         specs.append({
             "priority": _PRIORITY["status"], "band": None, "role": "status",
