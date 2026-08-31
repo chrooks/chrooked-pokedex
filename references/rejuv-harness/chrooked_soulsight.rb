@@ -33,14 +33,17 @@ CHROOKED_TYPEMOD_FLOOR[:SOULSIGHT] = lambda { |move, attacker|
 # ponytail: clears the flag outright rather than teaching all 17 setters about
 # a second ability. Upgrade path if a move ever needs to see a suppressed
 # flinch: gate inside pbTryUseMove instead of zeroing the effect.
-if defined?(PokeBattle_Battler)
-  class PokeBattle_Battler
-    if method_defined?(:pbTryUseMove) && !method_defined?(:chrooked_soulsight_trymove)
-      alias_method :chrooked_soulsight_trymove, :pbTryUseMove
-      def pbTryUseMove(*args)
-        @effects[:Flinch] = false if @effects[:Flinch] && self.ability == :SOULSIGHT
-        chrooked_soulsight_trymove(*args)
-      end
+# MUST be a prepend, never alias_method. chrooked_frostbite.rb already prepends
+# its own pbTryUseMove wrapper and loads first (f < s). An alias taken in the
+# class body resolves through the prepended module, so the alias would capture
+# frostbite's wrapper while this definition landed behind it — the two then call
+# each other forever and the first move used blows the stack.
+module ChrookedSoulsightNoFlinch
+  def pbTryUseMove(*args, **kwargs)
+    if @effects && @effects[:Flinch] && self.ability == :SOULSIGHT
+      @effects[:Flinch] = false
     end
+    super
   end
 end
+PokeBattle_Battler.prepend(ChrookedSoulsightNoFlinch) if defined?(PokeBattle_Battler)
