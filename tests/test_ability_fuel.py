@@ -53,6 +53,18 @@ _DELIBERATELY_UNFUELED = {
 }
 
 
+def _composed_abilities() -> dict[str, list[str]]:
+    """id -> its behavior parts, for abilities that declare a composition."""
+    import yaml
+    out: dict[str, list[str]] = {}
+    for path in _RULESET_ABILITIES.glob("*.yaml"):
+        data = yaml.safe_load(path.read_text("utf-8")) or {}
+        parts = data.get("behaviors") or []
+        if parts:
+            out[data.get("chrooked_id", path.stem)] = list(parts)
+    return out
+
+
 def _all_abilities() -> dict[str, str]:
     """id → description for base ⊕ ruleset (ruleset wins)."""
     snap = json.loads(_SNAPSHOT_PATH.read_text("utf-8"))
@@ -117,13 +129,35 @@ def test_every_fuel_shaped_ability_is_classified() -> None:
     genuinely defensive — to _DELIBERATELY_UNFUELED with a reason.
     """
     table = _fuel_table()
+    # A composed ability is classified by its PARTS — species_fuel resolves it
+    # through them, so a hand-copied entry here would be a duplicate that can
+    # drift away from the part it copied.
+    composed = _composed_abilities()
     unclassified = sorted(
         aid
         for aid, desc in _all_abilities().items()
         if _FUEL_SHAPED.search(desc)
         and aid not in table
         and aid not in _DELIBERATELY_UNFUELED
+        and not (composed.get(aid) and any(p in table for p in composed[aid]))
     )
     assert not unclassified, (
         f"fuel-shaped abilities missing from ability_fuel.json: {unclassified}"
     )
+
+
+def test_a_composed_ability_inherits_its_parts_fuel() -> None:
+    """Apex Predator is [carnivore, strongjaw], so it must demand what Strong
+    Jaw demands — biting moves — without a duplicated table entry to drift."""
+    from chrooked_pokedex.web.learnset_skeleton import species_fuel
+
+    pool = [
+        {"name": "Strong Jaw", "chrooked_id": "strongjaw", "behaviors": []},
+        {"name": "Apex Predator", "chrooked_id": "apexpredator",
+         "behaviors": ["carnivore", "strongjaw"]},
+    ]
+    direct = species_fuel({"primary": "Strong Jaw"}, pool)
+    composed = species_fuel({"primary": "Apex Predator"}, pool)
+    assert composed, "a composed ability resolved no fuel at all"
+    assert [e for _, e in composed] == [e for _, e in direct]
+    assert "apexpredator" not in _fuel_table(), "should resolve via parts, not a copy"

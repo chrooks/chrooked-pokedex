@@ -353,8 +353,12 @@ def species_fuel(
     abilities pool provides the name→id bridge.
     """
     table = _fuel_table()
-    id_by_name = {
-        (a.get("name") or "").strip().casefold(): a.get("chrooked_id", "")
+    by_name = {
+        (a.get("name") or "").strip().casefold(): a
+        for a in all_abilities
+    }
+    parts_by_id = {
+        a.get("chrooked_id", ""): list(a.get("behaviors") or [])
         for a in all_abilities
     }
     out = []
@@ -363,10 +367,17 @@ def species_fuel(
         name = ability_slots.get(slot)
         if not name:
             continue
-        aid = id_by_name.get(name.strip().casefold(), "")
-        if aid in table and aid not in seen:
-            seen.add(aid)
-            out.append((name, table[aid]))
+        entry = by_name.get(name.strip().casefold())
+        aid = (entry or {}).get("chrooked_id", "")
+        # A COMPOSED ability inherits its parts' fuel. Apex Predator is
+        # [carnivore, strongjaw], so it demands exactly what Strong Jaw
+        # demands — biting moves. Copying strongjaw's entry under a second key
+        # would be one more thing to keep in step by hand, which is the drift
+        # composition exists to remove.
+        for source in ([aid] if aid in table else parts_by_id.get(aid) or [aid]):
+            if source in table and source not in seen:
+                seen.add(source)
+                out.append((name, table[source]))
     return out
 
 
