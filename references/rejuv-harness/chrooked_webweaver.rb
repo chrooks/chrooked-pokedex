@@ -1,11 +1,20 @@
+# encoding: utf-8
 # chrooked:webweaver
-# Web Weaver — "On entry, lays Sticky Web on the foe's side. Grounded foes cannot flee."
-#   switch-in: set the Sticky Web side hazard on the opposing side (no stacking)
-#   escape-check: grounded foes can't switch/flee, exactly like Arena Trap
-# Test cases:
-#   - switch in, no web up => opposing side gains Sticky Web + message
-#   - switch in, web already up => nothing (no stack)
-#   - grounded foe tries to switch => blocked; airborne / Ghost / Shed Shell escape
+# Web Weaver — "On entry, lays Sticky Web on the foe's side. Grounded foes
+#   cannot flee."
+#
+# Only the HAZARD clause lives here. The trapping half is declared in the
+# Ruleset as
+#   behaviors: [webweaver, arenatrap]
+# so chrooked_zz_zcompose.rb makes the holder a ChrookedAbilitySet of
+# [:WEBWEAVER, :ARENATRAP]. Every vanilla Arena Trap check then matches the
+# holder on its own, including pbCheckSideAbility.
+#
+# What used to be here was a PokeBattle_Battle prepend that rewrote
+# pbCheckSideAbility to append :WEBWEAVER wherever :ARENATRAP appeared — a
+# hand-copy of Arena Trap's reach that had to be kept in step by hand and only
+# covered the one call site it knew about. Composition covers every site,
+# including ones nobody enumerated. Do not reintroduce it.
 CHROOKED_SWITCH_IN[:WEBWEAVER] = lambda { |battler, battle|
   side = battler.pbOpposingSide
   next if side.effects[:StickyWeb]
@@ -14,16 +23,3 @@ CHROOKED_SWITCH_IN[:WEBWEAVER] = lambda { |battler, battle|
   battle.pbDisplay(_INTL("A sticky web has been laid out on the ground around the opposing team!"))
   battle.pbHideAbilityBox(battler)
 }
-
-# Trap clause: every trap check builds an ability list gated the way Arena Trap
-# needs (grounded-only push, after the Ghost/Shed Shell early returns), then asks
-# pbCheckSideAbility. Riding that list means Web Weaver inherits ALL of Arena
-# Trap's bypasses everywhere it is checked (player switch, run, AI) for free.
-module ChrookedWebWeaverTrap
-  def pbCheckSideAbility(abilities, battler, **kwargs)
-    abilities = Array(abilities)
-    abilities += [:WEBWEAVER] if abilities.include?(:ARENATRAP)
-    super(abilities, battler, **kwargs)
-  end
-end
-PokeBattle_Battle.prepend(ChrookedWebWeaverTrap)

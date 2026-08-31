@@ -81,7 +81,10 @@ class Ruleset:
             for b in (loader.load_behavior(p) for p in _yaml_files(ruleset_dir / "behaviors"))
         }
 
-        _validate_compositions(abilities, behaviors)
+        _validate_compositions(
+            abilities, behaviors,
+            base_abilities=_load_base_snapshot_section(ruleset_dir, "abilities"),
+        )
 
         return cls(
             species=species,
@@ -143,15 +146,19 @@ class Ruleset:
 def _validate_compositions(
     abilities: Mapping[str, AbilityDef],
     behaviors: Mapping[str, Any],
+    base_abilities: Mapping[str, Any] | None = None,
 ) -> None:
     """Fail fast on a malformed `behaviors:` list.
 
     A part is an ENGINE ABILITY, not necessarily a behavior file — vanilla parts
-    this project never changed (Drought, Arena Trap, Sticky Web) have no spec and
-    must not be forced to grow one. So a part is legal when it names a
-    Ruleset-owned ability, an existing behavior spec, or the ability's own id.
-    Anything else is a typo and stops the load.
+    this project never changed (Drought, Arena Trap) have no spec and must not be
+    forced to grow one. Nor should they be given a Ruleset ability file just to
+    be citable: that would claim ownership of a vanilla ability and let an apply
+    overwrite its stock description. So a part is legal when it names a
+    Ruleset-owned ability, an existing behavior spec, or an ability in the base
+    snapshot. Anything else is a typo and stops the load.
     """
+    base = base_abilities or {}
     for ability in abilities.values():
         declared = ability.behaviors
         if not declared:
@@ -165,12 +172,11 @@ def _validate_compositions(
                     f"duplicate behavior part {part!r} in behaviors:"
                 )
             seen.add(part)
-            if part not in abilities and part not in behaviors:
+            if part not in abilities and part not in behaviors and part not in base:
                 raise ValueError(
                     f"ruleset/abilities/{ability.chrooked_id}.yaml: "
                     f"behaviors: names {part!r}, which is neither a "
-                    f"Ruleset ability nor a behavior spec. A vanilla engine "
-                    f"ability is fine, but it needs an ability file to be cited."
+                    f"Ruleset ability, a behavior spec, nor a base ability."
                 )
 
     # Cycle check: A -> B -> A at any depth. Depth-first with a path set; the
@@ -198,6 +204,17 @@ def _yaml_files(directory: Path) -> list[Path]:
     if not directory.exists():
         return []
     return sorted(directory.glob("*.yaml"))
+
+
+def _load_base_snapshot_section(ruleset_dir: Path, section: str) -> Mapping[str, Any]:
+    """One top-level map out of the `.base/<version>.json` seed snapshot."""
+    base_dir = ruleset_dir / ".base"
+    snapshots = sorted(base_dir.glob("*.json")) if base_dir.exists() else []
+    if not snapshots:
+        return {}
+    data = json.loads(snapshots[-1].read_text(encoding="utf-8"))
+    value = data.get(section) if isinstance(data, dict) else None
+    return value if isinstance(value, dict) else {}
 
 
 def _load_base_species(ruleset_dir: Path) -> Mapping[str, Mapping[str, Any]]:

@@ -1,4 +1,11 @@
 # Behavior spec — human-owned. The seed never touches this folder.
+# COMPOSED: ruleset/abilities/solardynamo.yaml carries
+#   behaviors: [solarpower, drought]
+# so this ability has no implementation of its own. The clauses below describe
+# what the composition adds up to, for engines that cannot compose at runtime.
+# To change how it behaves, edit solarpower.yaml or vanilla Drought — never
+# copy a rule back into here. A hand-copy is what made this ability wrong on
+# four species until 510f421.
 name: Solar Dynamo
 chrooked_id: solardynamo
 applies_to: ability

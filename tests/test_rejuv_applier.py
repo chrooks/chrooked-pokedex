@@ -1127,3 +1127,46 @@ def test_generated_compose_mod_composes_at_runtime(tmp_path):
         capture_output=True, text=True, cwd=tmp_path,
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_shipped_migrations_compose_from_the_real_ruleset(tmp_path):
+    """The two genuine compositions (#101), driven through a real apply.
+
+    Solar Dynamo is fully composed and must own no lambda; Web Weaver keeps its
+    own hazard clause and composes only the trapping half from Arena Trap.
+    """
+    import subprocess
+    from chrooked_pokedex.model import Ruleset as _R
+    real = _R.load(Path(__file__).parent.parent / "ruleset")
+    _, target = _apply(_R(abilities=real.abilities), tmp_path)
+    generated = (target / "patch" / "Mods" / "chrooked_zz_zcompose.rb").read_text()
+    assert ":SOLARDYNAMO => [:SOLARPOWER, :DROUGHT]" in generated
+    assert ":WEBWEAVER => [:WEBWEAVER, :ARENATRAP]" in generated
+
+    script = tmp_path / "migration_checks.rb"
+    script.write_text(
+        '$f = 0\n'
+        'def ck(l, g, w); ok = (g == w); $f += 1 unless ok;'
+        ' puts "#{ok ? %q(ok  ) : %q(FAIL)} #{l}: #{g.inspect}"; end\n'
+        'class PokeBattle_Battler; attr_accessor :ability, :backupability\n'
+        '  def initialize(a); @ability = a; end\n'
+        '  def pbInitPokemon(_p, _i); end\nend\n'
+        'module Chrooked; end\n'
+        f'load {str(HARNESS / "chrooked_zz_redux.rb")!r}\n'
+        f'load {str(target / "patch" / "Mods" / "chrooked_zz_zcompose.rb")!r}\n'
+        'def build(s); b = PokeBattle_Battler.new(s); b.pbInitPokemon(nil, 0); b; end\n'
+        'sd = build(:SOLARDYNAMO)\n'
+        'ck("Solar Dynamo is Solar Power", sd.ability == :SOLARPOWER, true)\n'
+        'ck("Solar Dynamo is Drought",     sd.ability == :DROUGHT, true)\n'
+        'ck("still named Solar Dynamo",    sd.ability.display_sym, :SOLARDYNAMO)\n'
+        'ww = build(:WEBWEAVER)\n'
+        'ck("Web Weaver is Arena Trap",    ww.ability == :ARENATRAP, true)\n'
+        'ck("Web Weaver is still itself",  ww.ability == :WEBWEAVER, true)\n'
+        'ck("still named Web Weaver",      ww.ability.display_sym, :WEBWEAVER)\n'
+        'ck("Arena Trap check matches",    [:ARENATRAP].include?(ww.ability), true)\n'
+        'exit($f.zero? ? 0 : 1)\n',
+        encoding="utf-8",
+    )
+    proc = subprocess.run(["ruby", str(script)], capture_output=True, text=True, cwd=tmp_path)
+    assert proc.returncode == 0, proc.stdout + proc.stderr

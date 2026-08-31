@@ -13,10 +13,6 @@ effects:
     trigger: switch-in
     when: "this Pokemon enters the battle and the opposing side does not already have Sticky Web set"
     effect: "set the Sticky Web side hazard on the opposing side (as if the move Sticky Web had been used) — grounded foes that switch in have their Speed lowered by one stage"
-  - summary: "Grounded opposing Pokemon cannot switch out."
-    trigger: escape-check
-    when: "an opposing Pokemon that is grounded (not Flying-type, no Levitate, not holding Air Balloon, not under Magnet Rise/Telekinesis) attempts to switch out or flee while this Pokemon is active"
-    effect: "prevent the switch/flee, exactly as Arena Trap does — the foe is trapped on the ground by the web"
 test_cases:
   - given: "a Web Weaver Pokemon switches in with no Sticky Web on the opposing side"
     expect: "Sticky Web is set on the opposing side; the 'sticky web' entry message fires"
@@ -29,9 +25,10 @@ test_cases:
   - given: "the opposing Pokemon holds a Shed Shell"
     expect: "the switch succeeds — Shed Shell bypasses trapping, as with Arena Trap"
 notes:
-  - "Two independent clauses; either can be reused alone on a future ability. The trap clause is Arena Trap verbatim (grounded-only, Shed Shell / Ghost-type escape still bypass it). The entry clause mirrors the on-switch-in hazard/field setters."
+  - "This spec now holds ONLY the hazard clause. The trapping half is Arena Trap and is declared as composition — ruleset/abilities/webweaver.yaml carries `behaviors: [webweaver, arenatrap]`, so the holder matches every vanilla Arena Trap check on its own. The earlier note here said the trap clause was 'Arena Trap verbatim'; that verbatim copy is exactly what composition removed."
+  - "Change nothing here to change the trapping. Arena Trap is stock engine behavior and this ability inherits it."
   - "Sticky Web here is the standard side hazard: it lowers the Speed of grounded foes that switch in by one stage, is removed by Defog/Rapid Spin/Mortal Spin, and does not stack."
   - "Order on switch-in: set the hazard during the same on-switch-in resolution used by weather/terrain abilities."
 engine_hints:
-  pokeemerald: "Two seams. (1) Entry: ABILITYEFFECT_ON_SWITCHIN in src/battle_util.c — add a case ABILITY_WEB_WEAVER that sets SIDE_STATUS_STICKY_WEB on the opposing side (gSideStatuses[GetBattlerSide(BATTLE_OPPOSITE(battler))]) with the standard Sticky Web setup, mirroring how the terrain-setter abilities apply their field on entry; gate on the flag not already set so it does not stack. (2) Trap: add ABILITY_WEB_WEAVER alongside ABILITY_ARENA_TRAP in the escape-prevention path (GetBattlerEscapePreventionAbility / CanBattlerEscape), grounded-only, so it inherits Shed Shell / Ghost / Run-Away bypass for free."
-  essentials: "Rejuv is Essentials. (1) Entry: in the ability's on-switch-in / pbOnBattlerEnteringBattle handler, call the opposing side's pbStartSideEffect / add the :StickyWeb PBEffects hazard (same code path Sticky Web the move uses), only if not already present. (2) Trap: in pbCanSwitch? / the trapping check, treat Web Weaver exactly like Arena Trap — trap grounded foes, honoring the standard Shed Shell / airborne / Ghost-type escapes."
+  pokeemerald: "Two seams. (1) Entry: ABILITYEFFECT_ON_SWITCHIN in src/battle_util.c — add a case ABILITY_WEB_WEAVER that sets SIDE_STATUS_STICKY_WEB on the opposing side (gSideStatuses[GetBattlerSide(BATTLE_OPPOSITE(battler))]) with the standard Sticky Web setup, mirroring how the terrain-setter abilities apply their field on entry; gate on the flag not already set so it does not stack. (2) Trap: this half is COMPOSED from Arena Trap, not written here. pokeemerald has no ability-set machinery, so realize it by adding ABILITY_WEB_WEAVER alongside ABILITY_ARENA_TRAP in the escape-prevention path (GetBattlerEscapePreventionAbility / CanBattlerEscape), grounded-only, inheriting Shed Shell / Ghost / Run-Away bypass for free."
+  essentials: "Rejuv is Essentials. (1) Entry: in the ability's on-switch-in / pbOnBattlerEnteringBattle handler, call the opposing side's pbStartSideEffect / add the :StickyWeb PBEffects hazard (same code path Sticky Web the move uses), only if not already present. (2) Trap: nothing to write. Rejuv gets this from composition — chrooked_zz_zcompose.rb makes the holder a ChrookedAbilitySet of [:WEBWEAVER, :ARENATRAP], so every vanilla Arena Trap check matches it, pbCheckSideAbility included."

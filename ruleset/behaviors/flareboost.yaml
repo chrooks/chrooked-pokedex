@@ -21,6 +21,7 @@ test_cases:
   - given: "a Flare Boost Pokemon is burned and the turn ends"
     expect: "it takes zero burn damage (immune to its own burn residual), while still keeping the special boost"
 notes:
+  - "NOT a composition, deliberately. Flare Boost and Toxic Boost are one SHAPE stamped twice — stat up while statused, plus immunity to that status's chip — with different stats and statuses. Neither is built from the other, so neither can be the other's part. What they want is a shared named shape: see issue #97."
   - "The special-damage boost is the mainline-canonical half; both engines already ship it. Only the burn-chip immunity is chrooked."
   - "The immunity covers the holder's own burn residual only — external fire damage (Fire moves, Burning-field ticks, wildfire) is untouched."
   - "This is the burn twin of Toxic Boost's poison-chip immunity; the two specs stay in lockstep."

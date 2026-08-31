@@ -81,29 +81,20 @@ check("Desert field, no sandstorm",    mult(:SANDFORCE, nil, PHYS_MON, :physical
 check("no sand, nothing touched",      mult(:SANDFORCE, nil, PHYS_MON, :physical, type: :GROUND), 1.0)
 check("ignores Utility Umbrella",      mult(:SANDFORCE, :SANDSTORM, Battler.new(120, 60, :UTILITYUMBRELLA), :physical, type: :ICE), 1.5)
 
-puts "\n-- Solar Dynamo (sun) — SAME RULE as Solar Power, but vanilla pays it nothing,"
-puts "   so it owes the full 1.5 instead of correcting a boost that already happened."
-check("phys user, physical move", mult(:SOLARDYNAMO, :SUNNYDAY, PHYS_MON, :physical), 1.5)
-check("phys user, special move",  mult(:SOLARDYNAMO, :SUNNYDAY, PHYS_MON, :special), 1.0)
-check("spec user, special move",  mult(:SOLARDYNAMO, :SUNNYDAY, SPEC_MON, :special), 1.5)
-check("spec user, physical move", mult(:SOLARDYNAMO, :SUNNYDAY, SPEC_MON, :physical), 1.0)
-check("tie resolves physical",    mult(:SOLARDYNAMO, :SUNNYDAY, TIE_MON,  :physical), 1.5)
-check("tie, special gets nothing",mult(:SOLARDYNAMO, :SUNNYDAY, TIE_MON,  :special), 1.0)
-check("no sun, nothing touched",  mult(:SOLARDYNAMO, nil, PHYS_MON, :physical), 1.0)
-check("Utility Umbrella negates", mult(:SOLARDYNAMO, :SUNNYDAY, Battler.new(120, 60, :UTILITYUMBRELLA), :physical), 1.0)
-check("Frozen Dimension negates", mult(:SOLARDYNAMO, :SUNNYDAY, PHYS_MON, :physical, fe: :FROZENDIMENSION), 1.0)
-
-# The regression this file exists to catch: Solar Dynamo drifted to Sp.Atk-only
-# while Solar Power moved to the higher-stat rule. Both must agree on WHICH
-# category gets boosted, even though the multipliers differ by baseline.
-puts "\n-- the two must agree on which category the rule picks --"
-[[PHYS_MON, "phys user"], [SPEC_MON, "spec user"], [TIE_MON, "tie"]].each do |mon, label|
-  sp_picks = mult(:SOLARPOWER,  :SUNNYDAY, mon, :physical) > 1.0 ? :physical : :special
-  sd_picks = mult(:SOLARDYNAMO, :SUNNYDAY, mon, :physical) > 1.0 ? :physical : :special
-  ok = sp_picks == sd_picks
+puts "\n-- Solar Dynamo: COMPOSED, so it must own no damage rule of its own --"
+# It used to hand-copy Solar Power's lambda here and drifted: Sp.Atk-only after
+# Solar Power moved to the higher attacking stat, wrong in-game on four species.
+# The Ruleset now declares `behaviors: [solarpower, drought]`, so the holder
+# becomes a ChrookedAbilitySet and Solar Power's OWN lambda applies. A lambda
+# reappearing under :SOLARDYNAMO means someone re-copied the rule.
+def check_nil(label, got)
+  ok = got.nil?
   $failures += 1 unless ok
-  puts "#{ok ? 'ok  ' : 'FAIL'} #{label}: Solar Power picks #{sp_picks}, Solar Dynamo picks #{sd_picks}"
+  puts "#{ok ? 'ok  ' : 'FAIL'} #{label}: got #{got.inspect}, want nil"
 end
+check_nil("no damage mod of its own",  CHROOKED_DAMAGE_MODS[:SOLARDYNAMO])
+check_nil("no HP-loss veto of its own", CHROOKED_HP_LOSS_VETO[:SOLARDYNAMO])
+check_nil("no AI refund of its own",    CHROOKED_AI_HP_REFUND[:SOLARDYNAMO])
 
 puts "\n#{$failures.zero? ? 'all checks passed' : "#{$failures} FAILURES"}"
 exit($failures.zero? ? 0 : 1)
