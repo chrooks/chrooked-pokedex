@@ -1,0 +1,5 @@
+name: Apex Predator
+chrooked_id: apexpredator
+aka: {  }
+behaviors: [carnivore, strongjaw]
+description: Biting moves deal 50% more damage. A KO heals a quarter of max HP.

@@ -1170,3 +1170,54 @@ def test_shipped_migrations_compose_from_the_real_ruleset(tmp_path):
     )
     proc = subprocess.run(["ruby", str(script)], capture_output=True, text=True, cwd=tmp_path)
     assert proc.returncode == 0, proc.stdout + proc.stderr
+
+
+def test_a_composed_ability_is_not_reported_data_only(tmp_path):
+    """Its parts implement it, so the DATA ONLY warning would be crying wolf —
+    and that warning is only useful if it is never wrong."""
+    from chrooked_pokedex.model.behavior_spec import BehaviorSpec as _B
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_carnivore.rb": "# chrooked:carnivore\nX = 1\n",
+    })
+    r = Ruleset(
+        abilities={
+            "carnivore": AbilityDef(name="Carnivore", chrooked_id="carnivore"),
+            "apexpredator": AbilityDef(
+                name="Apex Predator", chrooked_id="apexpredator",
+                behaviors=("carnivore", "strongjaw"),
+            ),
+        },
+        behaviors={"carnivore": _B(name="Carnivore", chrooked_id="carnivore",
+                                  applies_to="ability")},
+    )
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    report = ApplyReport()
+    apply_rejuv(target, r, report, behavior_source_dir=src)
+    entry = next(e for e in report.entries if e.chrooked_id == "apexpredator")
+    assert "DATA ONLY" not in (entry.reason or ""), entry.reason
+
+
+def test_a_composition_on_an_UNinstalled_part_still_warns(tmp_path):
+    """The honesty Invariant survives composition: if a part is a Ruleset
+    behavior with no implementation, the combo is still DATA ONLY."""
+    from chrooked_pokedex.model.behavior_spec import BehaviorSpec as _B
+    src = _harness(tmp_path, {"chrooked_00_core.rb": _CORE})  # no carnivore mod
+    r = Ruleset(
+        abilities={
+            "carnivore": AbilityDef(name="Carnivore", chrooked_id="carnivore"),
+            "apexpredator": AbilityDef(
+                name="Apex Predator", chrooked_id="apexpredator",
+                behaviors=("carnivore", "strongjaw"),
+            ),
+        },
+        behaviors={"carnivore": _B(name="Carnivore", chrooked_id="carnivore",
+                                  applies_to="ability")},
+    )
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    report = ApplyReport()
+    apply_rejuv(target, r, report, behavior_source_dir=src)
+    entry = next(e for e in report.entries if e.chrooked_id == "apexpredator")
+    assert "DATA ONLY" in (entry.reason or "")

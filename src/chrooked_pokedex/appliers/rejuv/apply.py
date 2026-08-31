@@ -17,6 +17,7 @@ from ...model import Ruleset
 from ...model.schema import DEFAULT_EFFECT, STAT_KEYS
 from ...report import ApplyReport, ReportEntry
 from . import behavior_install, compose, behavior_triage
+from ...model.schema import composed_behaviors, is_composed
 from .emit import (
     Sym, abiltext_delta, itemtext_delta, montext_delta, movetext_delta, ruby_sym,
     to_ruby, typetext_delta,
@@ -52,6 +53,22 @@ def apply_rejuv(
             cid for cid in ruleset.behaviors
             if behavior_install.has_implementation(cid, behavior_source_dir)
         }
+        # A COMPOSED ability is implemented by its parts, not by a mod of its
+        # own — chrooked_zz_zcompose.rb makes the holder a set, so the parts'
+        # vanilla checks and chrooked tables both fire. Counting it as DATA ONLY
+        # would cry wolf on every combo, and this warning only works if it is
+        # never wrong. The honesty Invariant still holds: a part that is itself
+        # a Ruleset behavior must have a real implementation, so a combo built
+        # on an uninstalled mechanic still warns.
+        for ability in ruleset.abilities.values():
+            if not is_composed(ability):
+                continue
+            parts = composed_behaviors(ability)
+            if all(
+                part not in ruleset.behaviors or part in implemented
+                for part in parts
+            ):
+                implemented.add(ability.chrooked_id)
 
     # Symbols the Ruleset will make exist (base ∪ owned) — used to resolve species
     # slots/learnset entries that point at a brand-new Ruleset ability or move.

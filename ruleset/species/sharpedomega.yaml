@@ -1,6 +1,9 @@
 name: Sharpedo Mega
 chrooked_id: sharpedomega
 aka: { pokeemerald: SPECIES_SHARPEDO_MEGA }
+abilities:
+  primary: Apex Predator
+  secondary: Blitz
 stats: { spe: 125 }
 learnset:
   - { level: 0, move: Slash }
