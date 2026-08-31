@@ -28,7 +28,7 @@ test_cases:
 notes:
   - "The higher-stat tie (Attack == Sp. Atk) resolves to the physical branch, matching Whiteout."
   - "This is the sun member of the weather-attack family: Solar Power (sun), Downpour (rain), Duststorm (sand), Whiteout (hail/snow). All four share one shape."
-  - "Solar Dynamo is deliberately left alone — it stays the summon-your-own-sun, Sp. Atk-only variant."
+  - "Solar Dynamo shares this higher-attacking-stat rule and adds its own sun on entry. It is NOT a copy of this lambda: vanilla pays a sun boost for :SOLARPOWER only, so this file corrects vanilla while chrooked_solardynamo.rb pays the full 1.5 itself. Change the rule here and change it there too."
   - "Boost only applies while sunlight affects the user: negated by Utility Umbrella, suppressed by Air Lock / Cloud Nine."
   - "The enemy AI is taught the change too, so trainers play the real ability instead of the vanilla one: it sees the higher-stat boost in its damage model and no longer plans around a drain that no longer exists."
 engine_hints:

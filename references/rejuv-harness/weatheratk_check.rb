@@ -6,9 +6,10 @@
 CHROOKED_DAMAGE_MODS = {}
 CHROOKED_HP_LOSS_VETO = {}
 CHROOKED_AI_HP_REFUND = {}
+CHROOKED_SWITCH_IN = {}
 
 HERE = File.dirname(__FILE__)
-%w[solarpower downpour sandforce whiteout].each { |id| load File.join(HERE, "chrooked_#{id}.rb") }
+%w[solarpower downpour sandforce whiteout solardynamo].each { |id| load File.join(HERE, "chrooked_#{id}.rb") }
 
 Battle = Struct.new(:weather, :FE) do
   def pbWeather(_battler); weather; end
@@ -79,6 +80,30 @@ check("tie resolves physical",         mult(:SANDFORCE, :SANDSTORM, TIE_MON, :ph
 check("Desert field, no sandstorm",    mult(:SANDFORCE, nil, PHYS_MON, :physical, type: :ICE, fe: :DESERT), 1.5)
 check("no sand, nothing touched",      mult(:SANDFORCE, nil, PHYS_MON, :physical, type: :GROUND), 1.0)
 check("ignores Utility Umbrella",      mult(:SANDFORCE, :SANDSTORM, Battler.new(120, 60, :UTILITYUMBRELLA), :physical, type: :ICE), 1.5)
+
+puts "\n-- Solar Dynamo (sun) — SAME RULE as Solar Power, but vanilla pays it nothing,"
+puts "   so it owes the full 1.5 instead of correcting a boost that already happened."
+check("phys user, physical move", mult(:SOLARDYNAMO, :SUNNYDAY, PHYS_MON, :physical), 1.5)
+check("phys user, special move",  mult(:SOLARDYNAMO, :SUNNYDAY, PHYS_MON, :special), 1.0)
+check("spec user, special move",  mult(:SOLARDYNAMO, :SUNNYDAY, SPEC_MON, :special), 1.5)
+check("spec user, physical move", mult(:SOLARDYNAMO, :SUNNYDAY, SPEC_MON, :physical), 1.0)
+check("tie resolves physical",    mult(:SOLARDYNAMO, :SUNNYDAY, TIE_MON,  :physical), 1.5)
+check("tie, special gets nothing",mult(:SOLARDYNAMO, :SUNNYDAY, TIE_MON,  :special), 1.0)
+check("no sun, nothing touched",  mult(:SOLARDYNAMO, nil, PHYS_MON, :physical), 1.0)
+check("Utility Umbrella negates", mult(:SOLARDYNAMO, :SUNNYDAY, Battler.new(120, 60, :UTILITYUMBRELLA), :physical), 1.0)
+check("Frozen Dimension negates", mult(:SOLARDYNAMO, :SUNNYDAY, PHYS_MON, :physical, fe: :FROZENDIMENSION), 1.0)
+
+# The regression this file exists to catch: Solar Dynamo drifted to Sp.Atk-only
+# while Solar Power moved to the higher-stat rule. Both must agree on WHICH
+# category gets boosted, even though the multipliers differ by baseline.
+puts "\n-- the two must agree on which category the rule picks --"
+[[PHYS_MON, "phys user"], [SPEC_MON, "spec user"], [TIE_MON, "tie"]].each do |mon, label|
+  sp_picks = mult(:SOLARPOWER,  :SUNNYDAY, mon, :physical) > 1.0 ? :physical : :special
+  sd_picks = mult(:SOLARDYNAMO, :SUNNYDAY, mon, :physical) > 1.0 ? :physical : :special
+  ok = sp_picks == sd_picks
+  $failures += 1 unless ok
+  puts "#{ok ? 'ok  ' : 'FAIL'} #{label}: Solar Power picks #{sp_picks}, Solar Dynamo picks #{sd_picks}"
+end
 
 puts "\n#{$failures.zero? ? 'all checks passed' : "#{$failures} FAILURES"}"
 exit($failures.zero? ? 0 : 1)

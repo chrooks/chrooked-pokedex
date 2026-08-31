@@ -34,10 +34,22 @@ CHROOKED_SWITCH_IN[:SOLARDYNAMO] = lambda { |battler, battle|
   battle.pbHideAbilityBox(battler)
 }
 
+# Mirrors chrooked_solarpower.rb's RULE — boost whichever attacking stat is
+# higher — but NOT its lambda. Solar Power corrects a boost vanilla already
+# pays for :SOLARPOWER (Battle_Move.rb / Battle_AI.rb key on that symbol);
+# vanilla knows nothing about :SOLARDYNAMO, so this pays the full 1.5 itself.
+# Same rule, different baseline. Change Solar Power's rule and change this too
+# until the composition model lands.
+# Tie (Attack == Sp. Atk) resolves physical, matching Solar Power and Whiteout.
 CHROOKED_DAMAGE_MODS[:SOLARDYNAMO] = lambda { |move, attacker, opponent|
   weather = move.battle.pbWeather(attacker)
   next 1.0 unless weather == :SUNNYDAY
   next 1.0 if attacker.hasWorkingItem(:UTILITYUMBRELLA) || move.battle.FE == :FROZENDIMENSION
   type = move.pbType(attacker)
-  move.pbIsSpecial?(attacker, type) ? 1.5 : 1.0
+  if attacker.attack >= attacker.spatk
+    next 1.5 if move.pbIsPhysical?(attacker, type)
+  else
+    next 1.5 if move.pbIsSpecial?(attacker, type)
+  end
+  1.0
 }
