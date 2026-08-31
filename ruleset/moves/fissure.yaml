@@ -3,7 +3,9 @@ chrooked_id: fissure
 aka: { pokeemerald: MOVE_FISSURE }
 type: Ground
 category: physical
-power: 120
-accuracy: 85
+power: 140
+accuracy: 100
 pp: 5
-description: Opens a fissure to swallow the foe. Very powerful.
+description: Splits the ground open beneath both foes.
+effect: plain_damage
+target: both

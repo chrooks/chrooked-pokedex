@@ -7,4 +7,5 @@ power: 80
 accuracy: 100
 pp: 10
 description: An attack that steals half the damage inflicted.
+effect: absorb
 flags: [contact, biting]

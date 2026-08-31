@@ -7,4 +7,6 @@ power: 15
 accuracy: 100
 pp: 35
 description: A toxic attack with barbs, etc., that may poison.
+additional_effects:
+  - { effect: poison, chance: 30 }
 flags: [piercing]

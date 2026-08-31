@@ -7,6 +7,7 @@ category: special
 power: 80
 accuracy: 100
 pp: 10
-description: The user attacks with a surge of muddy water. This move is Water and Ground type simultaneously. May lower Speed.
+description: A surge of muddy water that swamps both foes. Water and Ground at once. May lower Speed.
 additional_effects:
   - { effect: spd_minus_1, chance: 50 }
+target: both
