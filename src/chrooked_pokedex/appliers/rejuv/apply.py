@@ -508,6 +508,13 @@ _PRIMARY_EFFECT_CODES = {
     # gate only; a shield whose block differs from Spiky Shield's (Root Shelter
     # halves instead of blocking) replaces pbEffect in its own behavior.
     "shield": (0x140, None),
+    # "this move is now plain damage" — the ONLY way to move an edited move OFF
+    # an engine funccode it should no longer have. The applier rewrites :function
+    # solely when an effect maps, so a move redesigned away from a special code
+    # (Fissure and Guillotine off OHKO 0x070) otherwise keeps every behavior of
+    # the old one. It has to be opt-in: `effect` defaults to "hit" on 155 of the
+    # 207 overrides, so mapping "hit" itself would reset 155 engine funccodes.
+    "plain_damage": (0x000, None),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance
@@ -566,6 +573,13 @@ def _build_movetext(
                 value = getattr(move, attr)
                 if value is not None and value != "":
                     lines.append(f"{ref}[:{field}] = {to_ruby(value)}")
+            # Target is emitted only when it is NOT the "selected" default.
+            # 191 of 207 overrides sit on that default without meaning it, so
+            # writing it unconditionally would turn every base spread move the
+            # Ruleset touches for power into a single-target move.
+            if move.target and move.target != "selected":
+                if (tsym := _TARGET.get(move.target)):
+                    lines.append(f"{ref}[:target] = :{tsym}")
             # ponytail: priority 0 is indistinguishable from "unset" in a
             # MoveDef, so only a nonzero priority is written.
             if move.priority:

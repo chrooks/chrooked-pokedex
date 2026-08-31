@@ -404,6 +404,7 @@ def _move_from_payload(payload: dict[str, Any], chrooked_id: str) -> MoveDef:
         name=name,
         chrooked_id=chrooked_id,
         type=move_type,
+        second_type=payload.get("second_type"),
         category=category,
         power=payload.get("power"),
         accuracy=payload.get("accuracy"),
@@ -427,7 +428,10 @@ def _additional_effect(entry: dict[str, Any]) -> AdditionalEffect:
 
 
 _MOVE_FIELDS = (
-    "name", "chrooked_id", "aka", "type",
+    # Keep in step with loader._MOVE_KEYS — a field the loader stores but this
+    # tuple omits is rejected on write, and one that slips past here but is
+    # dropped by serialize_move/_move_from_payload is deleted by every save.
+    "name", "chrooked_id", "aka", "type", "second_type",
     "category", "power", "accuracy", "pp", "description",
     "effect", "argument", "additional_effects", "flags", "priority", "target",
 )

@@ -48,6 +48,10 @@ def serialize_move(move: MoveDef) -> dict[str, Any]:
         # on save instead of silently dropping it (it powers apply in M3).
         "aka": dict(move.aka),
         "type": move.type,
+        # Dual-type moves (Muddy Water is Water AND Ground). The loader stores it
+        # and the rejuv applier writes it as :secondtype, so omitting it here made
+        # every editor save silently delete the move's second half.
+        "second_type": move.second_type,
         "category": move.category,
         "power": move.power,
         "accuracy": move.accuracy,

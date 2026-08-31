@@ -125,3 +125,27 @@ def test_every_status_move_grades_without_raising() -> None:
             score, letter = ls.grade_utility(m, t)
             assert score >= 0, mid
             assert letter, mid
+
+
+def test_serialize_move_round_trips_every_stored_field() -> None:
+    """A field the loader accepts but the serializer drops is deleted by any save.
+    That is how Muddy Water lost its Ground half."""
+    from chrooked_pokedex.model import loader
+    from chrooked_pokedex.web import collections as colmod
+    from chrooked_pokedex.model.ruleset import Ruleset
+
+    rules = Ruleset.load(Path("ruleset"))
+    move = rules.moves["muddywater"]
+    keys = set(colmod.serialize_move(move))
+    missing = set(loader._MOVE_KEYS) - keys
+    assert not missing, f"serialize_move drops stored fields: {sorted(missing)}"
+    assert colmod.serialize_move(move)["second_type"] == "Ground"
+
+
+def test_crud_move_fields_match_the_loader() -> None:
+    """The write allowlist and the loader's must not drift — a field in one and
+    not the other is either rejected on save or silently deleted by it."""
+    from chrooked_pokedex.model import loader
+    from chrooked_pokedex.web import crud
+
+    assert set(crud._MOVE_FIELDS) == set(loader._MOVE_KEYS)
