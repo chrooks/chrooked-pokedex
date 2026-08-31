@@ -363,6 +363,9 @@ export interface Ability {
   description: string;
   /** Engine symbol(s); carried through edits so apply (M3) keeps resolving. */
   aka: Record<string, unknown>;
+  /** The behaviors this ability is built from. `[]` ⇒ its own behavior.
+      One entry that is not this ability = an alias; two or more = a combo. */
+  behaviors: string[];
   /** The fields the Ruleset changed. `[]` ⇒ base-only (not edited). */
   overridden_fields: AbilityField[];
   /** Pre-override base values for the changed fields. `{}` for a created entry. */

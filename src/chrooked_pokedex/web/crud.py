@@ -584,6 +584,7 @@ def _ability_from_payload(payload: dict[str, Any], chrooked_id: str) -> AbilityD
         chrooked_id=chrooked_id,
         description=payload.get("description", ""),
         aka=dict(payload.get("aka") or {}),
+        behaviors=tuple(payload.get("behaviors") or ()),
     )
 
 
@@ -614,7 +615,7 @@ def upsert_ability(
     return after
 
 
-_ABILITY_FIELDS = ("name", "chrooked_id", "aka", "description")
+_ABILITY_FIELDS = ("name", "chrooked_id", "aka", "description", "behaviors")
 
 
 def upsert_status(

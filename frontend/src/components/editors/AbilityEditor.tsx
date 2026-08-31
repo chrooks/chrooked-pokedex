@@ -4,9 +4,9 @@
    ability a species' slot still cites returns 409, and the footer becomes a
    "Delete anyway" confirm naming the citing species. */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../api";
-import type { Ability, AbilityField, AbilityWrite } from "../../types";
+import type { Ability, AbilityField, AbilityWrite, Behavior } from "../../types";
 import { useSubmit } from "../../hooks/useSubmit";
 import { isAbilityEdited, ABILITY_FIELD_LABEL } from "../../lib/format";
 import { EditedLed } from "../EditedLed";
@@ -29,7 +29,15 @@ type Props = {
   embedded?: boolean;
 };
 
-type AbilityForm = { name: string; chrooked_id: string; description: string };
+type AbilityForm = {
+  name: string;
+  chrooked_id: string;
+  description: string;
+  /** Which behaviors this ability is built from. Empty = its own behavior.
+      One non-self entry is an alias; two or more is a combo. One control
+      serves both — they differ only by how many entries the list has. */
+  behaviors: string[];
+};
 
 export function AbilityEditor({ ability, onClose, onSaved, embedded = false }: Props) {
   const isNew = ability === null;
@@ -39,9 +47,31 @@ export function AbilityEditor({ ability, onClose, onSaved, embedded = false }: P
     name: ability?.name ?? "",
     chrooked_id: ability?.chrooked_id ?? "",
     description: ability?.description ?? "",
+    behaviors: ability?.behaviors ?? [],
   }));
+  const [allBehaviors, setAllBehaviors] = useState<Behavior[]>([]);
+
+  useEffect(() => {
+    const ctrl = new AbortController();
+    api
+      .behaviors(ctrl.signal)
+      .then((rows) => setAllBehaviors(rows.filter((b) => b.applies_to === "ability")))
+      .catch(() => {
+        /* the picker degrades to empty; saving without parts still works */
+      });
+    return () => ctrl.abort();
+  }, []);
 
   const titleId = "ability-editor-title";
+
+  function toggleBehavior(id: string) {
+    setForm((f) => ({
+      ...f,
+      behaviors: f.behaviors.includes(id)
+        ? f.behaviors.filter((b) => b !== id)
+        : [...f.behaviors, id],
+    }));
+  }
 
   function set<K extends keyof AbilityForm>(key: K, value: AbilityForm[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -58,6 +88,7 @@ export function AbilityEditor({ ability, onClose, onSaved, embedded = false }: P
       chrooked_id: id,
       description: form.description.trim(),
       aka: ability?.aka ?? {},
+      behaviors: form.behaviors,
     };
     const ok = await run(() => api.putAbility(id, payload));
     if (ok) {
@@ -185,6 +216,41 @@ export function AbilityEditor({ ability, onClose, onSaved, embedded = false }: P
             value={form.description}
             onChange={(v) => set("description", v)}
           />
+          <fieldset id="ability-behaviors" className="editor-form__full field">
+            <legend className="field__label">
+              Behaviors
+              <span className="field__hint">
+                {" · "}
+                leave empty to use this ability&apos;s own behavior
+              </span>
+            </legend>
+            <p id="ability-behaviors-summary" className="field__hint">
+              {form.behaviors.length === 0
+                ? "Uses its own behavior."
+                : form.behaviors.length === 1
+                  ? `Alias — behaves exactly as ${form.behaviors[0]}.`
+                  : `Combo — built from ${form.behaviors.join(" + ")}.`}
+            </p>
+            <div className="ability-behaviors__options" role="group"
+                 aria-describedby="ability-behaviors-summary">
+              {allBehaviors.map((b) => (
+                <label
+                  key={b.chrooked_id}
+                  className="ability-behaviors__option"
+                  htmlFor={`ability-behavior-${b.chrooked_id}`}
+                >
+                  <input
+                    id={`ability-behavior-${b.chrooked_id}`}
+                    type="checkbox"
+                    checked={form.behaviors.includes(b.chrooked_id)}
+                    onChange={() => toggleBehavior(b.chrooked_id)}
+                  />
+                  <span>{b.name}</span>
+                  <span className="mono field__hint">{b.chrooked_id}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         {(error !== null || del.error !== null) && (

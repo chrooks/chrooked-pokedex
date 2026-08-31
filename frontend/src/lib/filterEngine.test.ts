@@ -44,6 +44,7 @@ function makeAbility(overrides: Partial<Ability> = {}): Ability {
     chrooked_id: "blaze",
     description: "Powers up Fire moves in a pinch.",
     aka: {},
+    behaviors: [],
     overridden_fields: [],
     base: {},
     ...overrides,

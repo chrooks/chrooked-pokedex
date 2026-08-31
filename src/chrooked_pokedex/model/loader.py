@@ -67,7 +67,7 @@ _MOVE_KEYS = (
     "recoil",
 )
 _ADDITIONAL_EFFECT_KEYS = ("effect", "chance")
-_ABILITY_KEYS = ("name", "chrooked_id", "aka", "description")
+_ABILITY_KEYS = ("name", "chrooked_id", "aka", "description", "behaviors")
 _STATUS_KEYS = ("name", "chrooked_id", "aka", "description", "effects")
 _TYPE_CHART_ENTRY_KEYS = ("attacker", "defender", "multiplier")
 _BEHAVIOR_KEYS = (
@@ -190,6 +190,7 @@ def load_ability(path: Path) -> AbilityDef:
         chrooked_id=data["chrooked_id"],
         description=data.get("description", ""),
         aka=dict(data.get("aka") or {}),
+        behaviors=tuple(data.get("behaviors") or ()),
     )
 
 

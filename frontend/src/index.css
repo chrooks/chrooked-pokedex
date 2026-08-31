@@ -1,0 +1,22 @@
+
+/* Ability composition picker (#102) — one control for alias and combo alike;
+   they differ only by how many entries are checked, so there is no mode. */
+.ability-behaviors__options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.25rem 1rem;
+  max-height: 14rem;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--line, #333);
+  border-radius: 4px;
+}
+.ability-behaviors__option {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.ability-behaviors__option input {
+  cursor: pointer;
+}

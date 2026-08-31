@@ -76,6 +76,8 @@ def serialize_ability(ability: AbilityDef) -> dict[str, Any]:
         "description": ability.description,
         # see serialize_move: aka rides along so an edit doesn't strip it.
         "aka": dict(ability.aka),
+        # Which behaviors this ability is built from; [] means its own.
+        "behaviors": list(ability.behaviors),
     }
 
 

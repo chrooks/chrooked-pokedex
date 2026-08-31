@@ -11,7 +11,14 @@ import yaml
 
 from . import loader
 from .behavior_spec import BehaviorSpec
-from .schema import AbilityDef, MoveDef, SpeciesOverride, StatusDef, TypeChartOverride
+from .schema import (
+    AbilityDef,
+    MoveDef,
+    SpeciesOverride,
+    StatusDef,
+    TypeChartOverride,
+    composed_behaviors,
+)
 
 
 @dataclass(frozen=True)
@@ -74,6 +81,8 @@ class Ruleset:
             for b in (loader.load_behavior(p) for p in _yaml_files(ruleset_dir / "behaviors"))
         }
 
+        _validate_compositions(abilities, behaviors)
+
         return cls(
             species=species,
             moves=moves,
@@ -129,6 +138,60 @@ class Ruleset:
             if spec.chrooked_id == key or spec.name.lower() == key:
                 return spec
         return None
+
+
+def _validate_compositions(
+    abilities: Mapping[str, AbilityDef],
+    behaviors: Mapping[str, Any],
+) -> None:
+    """Fail fast on a malformed `behaviors:` list.
+
+    A part is an ENGINE ABILITY, not necessarily a behavior file — vanilla parts
+    this project never changed (Drought, Arena Trap, Sticky Web) have no spec and
+    must not be forced to grow one. So a part is legal when it names a
+    Ruleset-owned ability, an existing behavior spec, or the ability's own id.
+    Anything else is a typo and stops the load.
+    """
+    for ability in abilities.values():
+        declared = ability.behaviors
+        if not declared:
+            continue
+
+        seen: set[str] = set()
+        for part in declared:
+            if part in seen:
+                raise ValueError(
+                    f"ruleset/abilities/{ability.chrooked_id}.yaml: "
+                    f"duplicate behavior part {part!r} in behaviors:"
+                )
+            seen.add(part)
+            if part not in abilities and part not in behaviors:
+                raise ValueError(
+                    f"ruleset/abilities/{ability.chrooked_id}.yaml: "
+                    f"behaviors: names {part!r}, which is neither a "
+                    f"Ruleset ability nor a behavior spec. A vanilla engine "
+                    f"ability is fine, but it needs an ability file to be cited."
+                )
+
+    # Cycle check: A -> B -> A at any depth. Depth-first with a path set; the
+    # graph is tiny (99 abilities) so a plain walk beats anything cleverer.
+    def walk(node: str, path: tuple[str, ...]) -> None:
+        if node in path:
+            loop = " -> ".join(path[path.index(node):] + (node,))
+            raise ValueError(
+                f"ruleset/abilities/{path[0]}.yaml: composition cycle {loop}"
+            )
+        target = abilities.get(node)
+        if target is None:
+            return
+        for part in composed_behaviors(target):
+            if part == node:
+                continue
+            walk(part, path + (node,))
+
+    for ability in abilities.values():
+        if ability.behaviors:
+            walk(ability.chrooked_id, ())
 
 
 def _yaml_files(directory: Path) -> list[Path]:

@@ -82,6 +82,76 @@ def render_packet(spec: BehaviorSpec, engine: str | None = None) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_composed_packet(
+    ability, ruleset, engine: str | None = None
+) -> str:
+    """An implementation brief for an ability built from several behaviors.
+
+    Engines with no ability-set machinery (pokeemerald) cannot compose at
+    runtime, so they get the UNION of the parts' clauses and implement it once.
+    Each clause is labelled with the part it came from, so a later change to a
+    part is traceable to the line it produced.
+
+    A part with no BehaviorSpec is a vanilla ability this project never changed.
+    It is named as engine-implemented rather than having clauses invented for
+    it — writing a fake spec for stock Drought would be a lie the next reader
+    would have to unpick.
+    """
+    from ..model.schema import composed_behaviors
+
+    parts = composed_behaviors(ability)
+    lines = [
+        f"# Implement: {ability.name}",
+        "",
+        f"- chrooked_id: `{ability.chrooked_id}`",
+        f"- composed of: {', '.join(f'`{p}`' for p in parts)}",
+        "",
+        "This ability is the union of the behaviors below. On an engine that can",
+        "hold several abilities at once it is assembled at runtime; here it must be",
+        "implemented as one ability doing all of it.",
+        "",
+    ]
+
+    vanilla: list[str] = []
+    for part in parts:
+        spec = ruleset.behaviors.get(part)
+        if spec is None:
+            vanilla.append(part)
+            continue
+        lines += [f"## From `{part}` ({spec.name})", ""]
+        for effect in spec.effects:
+            gate = f" _(when {effect.when})_" if effect.when else ""
+            lines.append(f"- **{effect.summary}**{gate}")
+            lines.append(f"  - trigger: `{effect.trigger}`")
+            lines.append(f"  - effect: {effect.effect}")
+        lines.append("")
+
+    if vanilla:
+        lines += ["## Stock engine behavior — implement by reuse, not by rewrite", ""]
+        for part in vanilla:
+            owned = ruleset.abilities.get(part)
+            label = owned.name if owned else part
+            lines.append(
+                f"- **{label}** (`{part}`) has no BehaviorSpec because this Ruleset "
+                f"never changed it. The engine's existing implementation IS the "
+                f"specification — reuse it verbatim."
+            )
+        lines.append("")
+
+    lines += ["## Acceptance tests (the mechanic is correct only if all pass)", ""]
+    numbered = 0
+    for part in parts:
+        spec = ruleset.behaviors.get(part)
+        if spec is None:
+            continue
+        for case in spec.test_cases:
+            numbered += 1
+            lines.append(f"{numbered}. [{part}] Given {case.given}, expect: {case.expect}.")
+    if not numbered:
+        lines.append("_No test cases on any part — add them before trusting an implementation._")
+    return "\n".join(lines) + "\n"
+
+
 def _engine_hint_lines(spec: BehaviorSpec, engine: str | None) -> list[str]:
     if not spec.engine_hints:
         return ["_No engine hint provided._"]

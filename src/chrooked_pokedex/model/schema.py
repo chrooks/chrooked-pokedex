@@ -151,6 +151,26 @@ class AbilityDef:
     chrooked_id: str
     description: str = ""
     aka: Mapping[str, object] = field(default_factory=dict)
+    # Which behaviors this ability is built from. Empty means "its own" — see
+    # composed_behaviors(). Stored empty rather than materialised as
+    # (chrooked_id,) so renaming the id in the dex cannot leave a stale
+    # self-reference behind.
+    behaviors: tuple[str, ...] = ()
+
+
+def composed_behaviors(ability: AbilityDef) -> tuple[str, ...]:
+    """The behavior ids an ability resolves to.
+
+    Absent/empty -> the ability's own id. One entry that is not itself is an
+    alias; two or more is a combo. This is the single definition of that rule;
+    never re-derive it at a call site.
+    """
+    return ability.behaviors or (ability.chrooked_id,)
+
+
+def is_composed(ability: AbilityDef) -> bool:
+    """True when the ability draws on behaviors other than its own."""
+    return composed_behaviors(ability) != (ability.chrooked_id,)
 
 
 @dataclass(frozen=True)

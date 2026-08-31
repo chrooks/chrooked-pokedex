@@ -78,6 +78,8 @@ async function writeAbilityAndBehavior(draft: AbilityCreateDraft): Promise<void>
     chrooked_id: draft.ability.chrooked_id,
     description: draft.ability.description,
     aka: {},
+    // A generated ability uses its own behavior stub, written just below.
+    behaviors: [],
   });
   // The behavior stub AS-IS — engine_hints stays {} (never filled here).
   await api.putBehavior(draft.behavior.chrooked_id, draft.behavior);

@@ -1079,3 +1079,51 @@ def test_rejuv_dump_selects_every_mapped_flag():
 
     missing = [f for f in sr._REJUV_FLAG_TO_NEUTRAL if f not in sr._DUMP_SCRIPT]
     assert missing == []
+
+
+# --- ability composition (#99) --------------------------------------------------
+
+def _composed_ruleset() -> Ruleset:
+    """Solar Dynamo built from Solar Power + Drought, plus one plain ability."""
+    return Ruleset(abilities={
+        "solarpower": AbilityDef(name="Solar Power", chrooked_id="solarpower"),
+        "drought": AbilityDef(name="Drought", chrooked_id="drought"),
+        "soulsight": AbilityDef(name="Soulsight", chrooked_id="soulsight"),
+        "solardynamo": AbilityDef(
+            name="Solar Dynamo", chrooked_id="solardynamo",
+            behaviors=("solarpower", "drought"),
+        ),
+    })
+
+
+def test_compose_mod_sorts_after_the_redux_mod(tmp_path):
+    """Mods load alphabetically and the compose hook needs ChrookedAbilitySet,
+    which chrooked_zz_redux.rb defines. 'compose' would sort BEFORE 'redux' —
+    getting this wrong makes composition a silent no-op."""
+    _, target = _apply(_composed_ruleset(), tmp_path)
+    names = sorted(p.name for p in (target / "patch" / "Mods").glob("chrooked_*.rb"))
+    assert "chrooked_zz_zcompose.rb" in names
+    assert names.index("chrooked_zz_zcompose.rb") > names.index("chrooked_zz_redux.rb")
+
+
+def test_compose_mod_is_written_even_with_no_composed_abilities(tmp_path):
+    """Apply never prunes mods, so an empty table must overwrite a stale one."""
+    r = Ruleset(abilities={"soulsight": AbilityDef(name="Soulsight", chrooked_id="soulsight")})
+    _, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Mods" / "chrooked_zz_zcompose.rb").read_text()
+    assert "CHROOKED_COMPOSITION = {\n}.freeze" in text
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_generated_compose_mod_composes_at_runtime(tmp_path):
+    """Drive the GENERATED file, not a fixture copy — that is what makes this
+    unable to pass while the applier emits something else."""
+    import subprocess
+    _, target = _apply(_composed_ruleset(), tmp_path)
+    generated = target / "patch" / "Mods" / "chrooked_zz_zcompose.rb"
+    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "compose_checks.rb"
+    proc = subprocess.run(
+        ["ruby", str(script), str(HARNESS), str(generated)],
+        capture_output=True, text=True, cwd=tmp_path,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr

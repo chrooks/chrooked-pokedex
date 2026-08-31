@@ -16,7 +16,7 @@ from pathlib import Path
 from ...model import Ruleset
 from ...model.schema import DEFAULT_EFFECT, STAT_KEYS
 from ...report import ApplyReport, ReportEntry
-from . import behavior_install, behavior_triage
+from . import behavior_install, compose, behavior_triage
 from .emit import (
     Sym, abiltext_delta, itemtext_delta, montext_delta, movetext_delta, ruby_sym,
     to_ruby, typetext_delta,
@@ -97,6 +97,12 @@ def apply_rejuv(
         written |= behavior_install.install_behaviors(
             target, ruleset, report, source_dir=behavior_source_dir
         )
+        # Abilities built from several behaviors. Written even when the table is
+        # empty so a target cannot keep a stale one — apply never prunes mods.
+        written.add(_write(
+            target / "patch" / "Mods" / compose.MOD_NAME,
+            compose.render_compose_mod(ruleset),
+        ))
 
     # Static mods (chrooked_zz_*.rb) — self-contained UI/mechanic tweaks that are
     # not Ruleset behaviors, so they install unconditionally on every apply.

@@ -147,6 +147,8 @@ def ability_yaml(ability: AbilityDef) -> str:
         f"chrooked_id: {ability.chrooked_id}",
         f"aka: {_aka_flow(dict(ability.aka))}",
     ]
+    if ability.behaviors:
+        lines.append("behaviors: [" + ", ".join(ability.behaviors) + "]")
     if ability.description:
         lines.append(f"description: {_scalar(ability.description)}")
     return "\n".join(lines) + "\n"

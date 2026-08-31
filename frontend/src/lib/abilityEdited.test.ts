@@ -12,6 +12,7 @@ function makeAbility(overrides: Partial<Ability> = {}): Ability {
     chrooked_id: "static",
     description: "May paralyze on contact.",
     aka: {},
+    behaviors: [],
     overridden_fields: [],
     base: {},
     ...overrides,

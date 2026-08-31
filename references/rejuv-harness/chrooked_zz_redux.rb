@@ -18,10 +18,22 @@
 
 class ChrookedAbilitySet
   attr_reader :list, :primary
+  # What the ability is CALLED, when that differs from what it MATCHES AS.
+  # A composed ability (chrooked_zz_zcompose) matches as its parts but must
+  # still show its own name; a Redux set has no display identity and leaves
+  # this nil, falling back to the primary as before.
+  attr_accessor :chrooked_display
 
   def initialize(list)
     @list = list.compact.uniq
     @primary = @list.first
+    @chrooked_display = nil
+  end
+
+  # The symbol name/description lookups should resolve to. Kept apart from
+  # `==` on purpose: matching is about the parts, naming is about the whole.
+  def display_sym
+    @chrooked_display || @primary
   end
 
   # Symbols are interned, so equal? is exact comparison without re-entering
@@ -35,22 +47,23 @@ class ChrookedAbilitySet
     @list.any? { |a| a.equal?(sym) }
   end
 
-  # Hash lookups (e.g. $cache.abil[ability]) resolve to the primary ability.
+  # Hash lookups (e.g. $cache.abil[ability]) resolve to the DISPLAY ability —
+  # its own symbol for a composed ability, the primary for a plain Redux set.
   def eql?(other)
-    @primary.eql?(other)
+    display_sym.eql?(other)
   end
 
   def hash
-    @primary.hash
+    display_sym.hash
   end
 
   def to_sym
-    @primary
+    display_sym
   end
 
   # Object#to_s would shadow method_missing — delegate explicitly.
   def to_s
-    @primary.to_s
+    display_sym.to_s
   end
 
   def inspect
@@ -58,11 +71,11 @@ class ChrookedAbilitySet
   end
 
   def method_missing(name, *args, &block)
-    @primary.send(name, *args, &block)
+    display_sym.send(name, *args, &block)
   end
 
   def respond_to_missing?(name, include_private = false)
-    @primary.respond_to?(name, include_private)
+    display_sym.respond_to?(name, include_private)
   end
 end
 
