@@ -1,0 +1,11 @@
+name: Boomburst
+chrooked_id: boomburst
+aka: {  }
+type: Normal
+category: special
+power: 140
+accuracy: 100
+pp: 5
+description: Attacks everything with a destructive sound wave.
+flags: [sound]
+target: foes_and_ally

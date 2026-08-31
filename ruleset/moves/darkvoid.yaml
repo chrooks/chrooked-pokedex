@@ -7,3 +7,5 @@ power: 0
 accuracy: 85
 pp: 10
 description: Drags the foe into total darkness, inducing Sleep.
+effect: dark_void
+target: both

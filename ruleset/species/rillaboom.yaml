@@ -1,13 +1,17 @@
 name: Rillaboom
 chrooked_id: rillaboom
 aka: { pokeemerald: SPECIES_RILLABOOM }
+abilities:
+  primary: Overgrow
+  secondary: Percussion
+  hidden: Grassy Surge
 stats: { spd: 75, spe: 90 }
 learnset:
   - { level: 0, move: Drum Beating }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Taunt }
   - { level: 1, move: Double Hit }
+  - { level: 1, move: Growl }
   - { level: 1, move: Noble Roar }
+  - { level: 1, move: Taunt }
   - { level: 2, move: Grassy Terrain }
   - { level: 3, move: Scratch }
   - { level: 4, move: Branch Poke }
