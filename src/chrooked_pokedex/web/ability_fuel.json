@@ -2,136 +2,961 @@
   "version": 1,
   "note": "The ability→move-fuel table: which moves an ability DEMANDS (hard) or PREFERS (soft) for a learnset to make the ability live. Keyed by ability chrooked_id — the source of truth; the description regexes in suggest.py are only the drift tripwire (tests/test_ability_fuel.py) and the fallback for brand-new customs. Filter fields form a closed set validated at load: move_type, flags_any, category, attacking, on_stat, has_secondary, effect_any, power_max, accuracy_max, moves. `stab_types` merges into the species' STAB ladder set (type boosters ARE STAB per Chris's ruling); an -ate entry grants the converted type as a ladder whose rungs draw Normal moves via `filter`. `hard: true` reserves gated learnset slots (min_moves of them); `hard: false` only emits a lean directive.",
   "abilities": {
-    "pixilate":    { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Fairy"],    "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "aerilate":    { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Flying"],   "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "refrigerate": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ice"],      "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "galvanize":   { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Electric"], "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "chitinize":   { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Bug"],      "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "foliate":     { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Grass"],    "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "hydrate":     { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Water"],    "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "immolate":    { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Fire"],     "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "martialize":  { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Fighting"], "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "mineralize":  { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Rock"],     "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "obfuscate":   { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Dark"],     "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "psyonize":    { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Psychic"],  "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "spectralize": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ghost"],    "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "tectonize":   { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ground"],   "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "venomize":    { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Poison"],   "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "wyvernize":   { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Dragon"],   "filter": { "move_type": "Normal", "attacking": true, "on_stat": true } },
-    "singingsands": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ground"],  "filter": { "move_type": "Normal", "flags_any": ["sound"], "attacking": true },
-                      "note": "Only SOUND-flagged Normal moves convert." },
-    "arcticariette": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Ice"],   "filter": { "move_type": "Normal", "flags_any": ["sound"], "attacking": true },
-                      "note": "Only SOUND-flagged Normal moves convert." },
-    "liquidvoice": { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Water"],    "filter": { "flags_any": ["sound"], "attacking": true },
-                     "note": "ALL sound moves become Water, not only Normal ones." },
-    "sacredtoll":  { "shape": "ate", "hard": true, "min_moves": 2, "stab_types": ["Psychic"],  "filter": { "flags_any": ["sound"], "attacking": true },
-                     "note": "Sound moves convert to Psychic with a power boost." },
-
-    "ironfist":      { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["punching"], "attacking": true } },
-    "hammerfist":    { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["punching", "hammer"], "attacking": true } },
-    "magicalfists":  { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["punching"], "attacking": true },
-                       "note": "Punch moves run off Sp. Atk — physical-categorized punches are CORRECT picks for a special attacker." },
-    "martialartist": { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["punching", "kicking"], "attacking": true } },
-    "strongjaw":     { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["biting"], "attacking": true } },
-    "infernalmaw":   { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["biting"], "attacking": true } },
-    "rimefang":      { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["biting"], "attacking": true } },
-    "coilup":        { "shape": "flag_boost", "hard": true, "min_moves": 1, "filter": { "flags_any": ["biting"], "attacking": true } },
-    "punkrock":      { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["sound"], "attacking": true } },
-    "amplifier":     { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["sound"], "attacking": true } },
-    "sharpness":     { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["slicing"], "attacking": true } },
-    "mysticblades":  { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["slicing"], "attacking": true },
-                       "note": "Slicing moves run off Sp. Atk — physical-categorized slices are CORRECT picks for a special attacker." },
-    "striker":       { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["kicking"], "attacking": true } },
-    "wingspan":      { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["wing", "wind"], "attacking": true } },
-    "updraft":       { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["wing", "wind"], "attacking": true } },
-    "windrider":     { "shape": "flag_boost", "hard": true, "min_moves": 1, "filter": { "flags_any": ["wind"], "attacking": true } },
-    "windpower":     { "shape": "flag_boost", "hard": true, "min_moves": 1, "filter": { "flags_any": ["wind"], "attacking": true } },
-    "sledgehammer":  { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["hammer"], "attacking": true } },
-    "impale":        { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["piercing"], "attacking": true } },
-    "bonebreaker":   { "shape": "flag_boost", "hard": true, "min_moves": 2, "filter": { "flags_any": ["bone"], "attacking": true } },
-    "megalauncher":  { "shape": "flag_boost", "hard": true, "min_moves": 1,
-                       "filter": { "moves": ["Water Pulse", "Dark Pulse", "Dragon Pulse", "Aura Sphere", "Origin Pulse", "Heal Pulse"] },
-                       "note": "Pulse moves carry no engine flag — the named list IS the filter." },
-
-    "toughclaws": { "shape": "flag_boost", "hard": false, "lean": "Prefer contact moves — nearly all physical attacks qualify already." },
-    "longreach":  { "shape": "flag_boost", "hard": false, "lean": "Contact moves lose their contact drawbacks — no slot needed." },
-    "unseenfist": { "shape": "flag_boost", "hard": false, "lean": "Prefer contact moves so Protect piercing matters." },
-
-    "steelworker":     { "shape": "stab_grant", "stab_types": ["Steel"] },
-    "steelyspirit":    { "shape": "stab_grant", "stab_types": ["Steel"] },
-    "transistor":      { "shape": "stab_grant", "stab_types": ["Electric"] },
-    "dragonsmaw":      { "shape": "stab_grant", "stab_types": ["Dragon"] },
-    "rockypayload":    { "shape": "stab_grant", "stab_types": ["Rock"] },
-    "darkaura":        { "shape": "stab_grant", "stab_types": ["Dark"] },
-    "fairyaura":       { "shape": "stab_grant", "stab_types": ["Fairy"] },
-    "waterbubble":     { "shape": "stab_grant", "stab_types": ["Water"] },
-    "bloom":           { "shape": "stab_grant", "stab_types": ["Grass"] },
-    "cryomancer":      { "shape": "stab_grant", "stab_types": ["Ice"] },
-    "deluge":          { "shape": "stab_grant", "stab_types": ["Water"] },
-    "kindle":          { "shape": "stab_grant", "stab_types": ["Fire"] },
-    "overcharge":      { "shape": "stab_grant", "stab_types": ["Electric"] },
-    "pyre":            { "shape": "stab_grant", "stab_types": ["Ghost"] },
-    "nematocyst":      { "shape": "stab_grant", "stab_types": ["Water"] },
-    "rapidcombustion": { "shape": "stab_grant", "stab_types": ["Fire"] },
-    "spitefulblock":   { "shape": "stab_grant", "stab_types": ["Dark"] },
-    "corrosion":       { "shape": "stab_grant", "stab_types": ["Poison"], "named_moves": ["Toxic"],
-                         "note": "Poison attacks hit Steel super-effectively and Toxic lands on anything." },
-    "fullmoon":  { "shape": "stab_grant", "stab_types": ["Dark", "Fairy"], "named_moves": ["Moonlight"] },
-    "highnoon":  { "shape": "stab_grant", "stab_types": ["Fire", "Psychic"], "named_moves": ["Morning Sun"] },
-    "flowergift": { "shape": "stab_grant", "stab_types": ["Fire", "Grass"], "named_moves": ["Morning Sun"] },
-    "mysticpower": { "shape": "stab_grant", "stab_types": [],
-                     "note": "All moves get STAB — own-type ladders suffice; no extra ladder (matches the stab_pacing ruling)." },
-
-    "sheerforce":  { "shape": "secondary", "hard": true, "min_moves": 3, "filter": { "has_secondary": true, "attacking": true, "on_stat": true } },
-    "serenegrace": { "shape": "secondary", "hard": true, "min_moves": 2, "filter": { "has_secondary": true, "attacking": true, "on_stat": true } },
-    "starfall":    { "shape": "secondary", "hard": false, "lean": "Special moves gain a Sp. Def drop chance — any special kit feeds it." },
-
-    "reckless": { "shape": "recoil", "hard": true, "min_moves": 1,
-                  "filter": { "moves": ["Take Down", "Double-Edge", "Head Smash", "Flare Blitz", "Brave Bird", "Wild Charge", "Wood Hammer", "Submission", "Volt Tackle", "Jump Kick", "High Jump Kick", "Axe Kick", "Supercell Slam"] },
-                  "note": "The vendored parser reads classic recoil as plain 'hit', so the named list IS the filter — extend it when new recoil moves land." },
-    "rockhead": { "shape": "recoil", "hard": true, "min_moves": 1,
-                  "filter": { "moves": ["Take Down", "Double-Edge", "Head Smash", "Flare Blitz", "Brave Bird", "Wild Charge", "Wood Hammer", "Submission", "Volt Tackle"] },
-                  "note": "Recoil is negated — the recoil nuke is pure upside. Crash-on-miss and HP-cost moves stay out: Rock Head does not cover them." },
-
-    "skilllink":    { "shape": "multi_hit", "hard": true, "min_moves": 2, "filter": { "effect_any": ["multi_hit", "triple_kick"], "attacking": true } },
-    "parentalbond": { "shape": "multi_hit", "hard": false, "lean": "Every single-hit attack doubles — no specific fuel needed." },
-
-    "prankster":      { "shape": "status_reward", "hard": true, "min_moves": 3, "filter": { "category": "status" } },
-    "insidious":      { "shape": "status_reward", "hard": true, "min_moves": 3, "filter": { "category": "status" } },
-    "myceliummight":  { "shape": "status_reward", "hard": true, "min_moves": 3, "filter": { "category": "status" } },
-
-    "triage": { "shape": "healing", "hard": true, "min_moves": 1,
-                "filter": { "effect_any": ["absorb", "restore_hp", "rest", "roost", "synthesis", "moonlight", "morning_sun", "wish", "heal_pulse", "jungle_healing"] } },
-    "deeprooted": { "shape": "drain", "hard": true, "min_moves": 2, "filter": { "effect_any": ["absorb"], "attacking": true } },
-
-    "daydreamer": { "shape": "sleep_payoff", "hard": true, "min_moves": 1, "filter": { "moves": ["Dream Eater", "Nightmare"] },
-                    "lean": "Also carry a sleep inducer (Hypnosis, Sleep Powder, Yawn) if the pool offers one." },
-
-    "technician":   { "shape": "low_bp", "hard": false, "lean": "Weak moves (≤60BP) get boosted — keep a strong ≤60BP attack even at high levels; multi-hit moves are ideal." },
-    "compoundeyes": { "shape": "inaccurate_ok", "hard": false, "lean": "Accuracy is boosted — inaccurate nukes (Thunder, Blizzard, Focus Blast class) become reliable; prefer them over their accurate weaker siblings." },
-    "hustle":       { "shape": "inaccurate_ok", "hard": false, "lean": "Physical accuracy drops anyway — inaccurate physical nukes cost little extra." },
-    "victorystar":  { "shape": "inaccurate_ok", "hard": false, "lean": "Accuracy is boosted — inaccurate high-power moves become reliable." },
-    "noguard":      { "shape": "inaccurate_ok", "hard": false, "lean": "Everything hits — low-accuracy nukes (Dynamic Punch, Zap Cannon class) are the whole point." },
-
-    "drizzle":       { "shape": "weather_setter", "hard": false, "lean": "Rain is up on entry — Thunder and Hurricane never miss, Water moves are boosted." },
-    "primordialsea": { "shape": "weather_setter", "hard": false, "lean": "Heavy rain is up — Thunder and Hurricane never miss, Water moves are boosted." },
-    "drought":       { "shape": "weather_setter", "hard": false, "lean": "Sun is up on entry — solar moves skip their charge, Fire moves are boosted, Morning Sun class heals more." },
-    "desolateland":  { "shape": "weather_setter", "hard": false, "lean": "Harsh sun is up — solar moves skip their charge, Fire moves are boosted." },
-    "solardynamo":   { "shape": "weather_setter", "hard": false, "lean": "Sun is up on entry and Sp. Atk climbs — special Fire and solar moves are the payoff." },
-    "sandstream":    { "shape": "weather_setter", "hard": false, "lean": "Sand is up on entry — Shore Up and Weather Ball class moves pay off." },
-    "sandspit":      { "shape": "weather_setter", "hard": false, "lean": "Sand goes up when hit — sand-synergy moves pay off." },
-    "snowwarning":   { "shape": "weather_setter", "hard": false, "lean": "Snow is up on entry — Blizzard never misses, Aurora Veil unlocks." },
-    "downpour":      { "shape": "weather_rider", "hard": false, "lean": "Boosted in rain — pair with Rain Dance if the pool offers it." },
-    "sandforce":     { "shape": "weather_rider", "hard": false, "lean": "Boosted in sand — pair with Sandstorm if the pool offers it." },
-    "solarpower":    { "shape": "weather_rider", "hard": false, "lean": "Boosted in sun — pair with Sunny Day if the pool offers it." },
-    "whiteout":      { "shape": "weather_rider", "hard": false, "lean": "Boosted in hail — pair with Hail/Snowscape if the pool offers it." },
-    "chloroplast":   { "shape": "weather_rider", "hard": false, "lean": "Moves act as if in sun — solar moves skip their charge unconditionally; strongly prefer them." },
-
-    "grassysurge":   { "shape": "terrain", "hard": false, "lean": "Grassy Terrain is up — Grass moves and terrain-synergy moves pay off." },
-    "electricsurge": { "shape": "terrain", "hard": false, "lean": "Electric Terrain is up — Electric moves and terrain-synergy moves pay off." },
-    "mistysurge":    { "shape": "terrain", "hard": false, "lean": "Misty Terrain is up — Fairy-leaning kits pay off." },
-    "psychicsurge":  { "shape": "terrain", "hard": false, "lean": "Psychic Terrain is up — Psychic moves and Expanding Force class pay off." },
-    "forestry":      { "shape": "terrain", "hard": false, "lean": "Attacks are boosted on Grassy Terrain — carry Grassy Terrain if the pool offers it." },
-    "seedsower":     { "shape": "terrain", "hard": false, "lean": "Grassy Terrain goes up when hit — Grass moves and terrain synergy pay off." }
+    "aerilate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Flying"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "amplifier": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      }
+    },
+    "arcticariette": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Ice"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      },
+      "note": "Only SOUND-flagged Normal moves convert."
+    },
+    "bloom": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Grass"
+      ]
+    },
+    "bonebreaker": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "bone"
+        ],
+        "attacking": true
+      }
+    },
+    "chitinize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Bug"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "chloroplast": {
+      "shape": "weather_rider",
+      "hard": false,
+      "lean": "Moves act as if in sun — solar moves skip their charge unconditionally; strongly prefer them."
+    },
+    "coilup": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "flags_any": [
+          "biting"
+        ],
+        "attacking": true
+      }
+    },
+    "compoundeyes": {
+      "shape": "inaccurate_ok",
+      "hard": false,
+      "lean": "Accuracy is boosted — inaccurate nukes (Thunder, Blizzard, Focus Blast class) become reliable; prefer them over their accurate weaker siblings."
+    },
+    "corrosion": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Poison"
+      ],
+      "named_moves": [
+        "Toxic"
+      ],
+      "note": "Poison attacks hit Steel super-effectively and Toxic lands on anything."
+    },
+    "cryomancer": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Ice"
+      ]
+    },
+    "darkaura": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Dark"
+      ]
+    },
+    "daydreamer": {
+      "shape": "sleep_payoff",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "moves": [
+          "Dream Eater",
+          "Nightmare"
+        ]
+      },
+      "lean": "Also carry a sleep inducer (Hypnosis, Sleep Powder, Yawn) if the pool offers one."
+    },
+    "deeprooted": {
+      "shape": "drain",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "effect_any": [
+          "absorb"
+        ],
+        "attacking": true
+      }
+    },
+    "deluge": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Water"
+      ]
+    },
+    "desolateland": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Harsh sun is up — solar moves skip their charge, Fire moves are boosted."
+    },
+    "downpour": {
+      "shape": "weather_rider",
+      "hard": false,
+      "lean": "Boosted in rain — pair with Rain Dance if the pool offers it."
+    },
+    "dragonsmaw": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Dragon"
+      ]
+    },
+    "drizzle": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Rain is up on entry — Thunder and Hurricane never miss, Water moves are boosted."
+    },
+    "drought": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Sun is up on entry — solar moves skip their charge, Fire moves are boosted, Morning Sun class heals more."
+    },
+    "electricsurge": {
+      "shape": "terrain",
+      "hard": false,
+      "lean": "Electric Terrain is up — Electric moves and terrain-synergy moves pay off."
+    },
+    "fairyaura": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Fairy"
+      ]
+    },
+    "flowergift": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Fire",
+        "Grass"
+      ],
+      "named_moves": [
+        "Morning Sun"
+      ]
+    },
+    "foliate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Grass"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "forestry": {
+      "shape": "terrain",
+      "hard": false,
+      "lean": "Attacks are boosted on Grassy Terrain — carry Grassy Terrain if the pool offers it."
+    },
+    "fullmoon": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Dark",
+        "Fairy"
+      ],
+      "named_moves": [
+        "Moonlight"
+      ]
+    },
+    "galvanize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Electric"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "grassysurge": {
+      "shape": "terrain",
+      "hard": false,
+      "lean": "Grassy Terrain is up — Grass moves and terrain-synergy moves pay off."
+    },
+    "hammerfist": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "punching",
+          "hammer"
+        ],
+        "attacking": true
+      }
+    },
+    "highnoon": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Fire",
+        "Psychic"
+      ],
+      "named_moves": [
+        "Morning Sun"
+      ]
+    },
+    "hustle": {
+      "shape": "inaccurate_ok",
+      "hard": false,
+      "lean": "Physical accuracy drops anyway — inaccurate physical nukes cost little extra."
+    },
+    "hydrate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Water"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "immolate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Fire"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "impale": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "piercing"
+        ],
+        "attacking": true
+      }
+    },
+    "infernalmaw": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "biting"
+        ],
+        "attacking": true
+      }
+    },
+    "insidious": {
+      "shape": "status_reward",
+      "hard": true,
+      "min_moves": 3,
+      "filter": {
+        "category": "status"
+      }
+    },
+    "ironfist": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "punching"
+        ],
+        "attacking": true
+      }
+    },
+    "kindle": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Fire"
+      ]
+    },
+    "liquidvoice": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Water"
+      ],
+      "filter": {
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      },
+      "note": "ALL sound moves become Water, not only Normal ones."
+    },
+    "longreach": {
+      "shape": "flag_boost",
+      "hard": false,
+      "lean": "Contact moves lose their contact drawbacks — no slot needed."
+    },
+    "magicalfists": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "punching"
+        ],
+        "attacking": true
+      },
+      "note": "Punch moves run off Sp. Atk — physical-categorized punches are CORRECT picks for a special attacker."
+    },
+    "martialartist": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "punching",
+          "kicking"
+        ],
+        "attacking": true
+      }
+    },
+    "martialize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Fighting"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "megalauncher": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "moves": [
+          "Water Pulse",
+          "Dark Pulse",
+          "Dragon Pulse",
+          "Aura Sphere",
+          "Origin Pulse",
+          "Heal Pulse"
+        ]
+      },
+      "note": "Pulse moves carry no engine flag — the named list IS the filter."
+    },
+    "mineralize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Rock"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "mistysurge": {
+      "shape": "terrain",
+      "hard": false,
+      "lean": "Misty Terrain is up — Fairy-leaning kits pay off."
+    },
+    "myceliummight": {
+      "shape": "status_reward",
+      "hard": true,
+      "min_moves": 3,
+      "filter": {
+        "category": "status"
+      }
+    },
+    "mysticblades": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "slicing"
+        ],
+        "attacking": true
+      },
+      "note": "Slicing moves run off Sp. Atk — physical-categorized slices are CORRECT picks for a special attacker."
+    },
+    "mysticpower": {
+      "shape": "stab_grant",
+      "stab_types": [],
+      "note": "All moves get STAB — own-type ladders suffice; no extra ladder (matches the stab_pacing ruling)."
+    },
+    "nematocyst": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Water"
+      ]
+    },
+    "noguard": {
+      "shape": "inaccurate_ok",
+      "hard": false,
+      "lean": "Everything hits — low-accuracy nukes (Dynamic Punch, Zap Cannon class) are the whole point."
+    },
+    "obfuscate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Dark"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "overcharge": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Electric"
+      ]
+    },
+    "parentalbond": {
+      "shape": "multi_hit",
+      "hard": false,
+      "lean": "Every single-hit attack doubles — no specific fuel needed."
+    },
+    "percussion": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      },
+      "note": "Sound moves run off Attack — special-categorized sound moves are CORRECT picks for a physical attacker."
+    },
+    "pixilate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Fairy"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "prankster": {
+      "shape": "status_reward",
+      "hard": true,
+      "min_moves": 3,
+      "filter": {
+        "category": "status"
+      }
+    },
+    "primordialsea": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Heavy rain is up — Thunder and Hurricane never miss, Water moves are boosted."
+    },
+    "psychicsurge": {
+      "shape": "terrain",
+      "hard": false,
+      "lean": "Psychic Terrain is up — Psychic moves and Expanding Force class pay off."
+    },
+    "psyonize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Psychic"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "punkrock": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      }
+    },
+    "pyre": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Ghost"
+      ]
+    },
+    "rapidcombustion": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Fire"
+      ]
+    },
+    "reckless": {
+      "shape": "recoil",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "moves": [
+          "Take Down",
+          "Double-Edge",
+          "Head Smash",
+          "Flare Blitz",
+          "Brave Bird",
+          "Wild Charge",
+          "Wood Hammer",
+          "Submission",
+          "Volt Tackle",
+          "Jump Kick",
+          "High Jump Kick",
+          "Axe Kick",
+          "Supercell Slam"
+        ]
+      },
+      "note": "The vendored parser reads classic recoil as plain 'hit', so the named list IS the filter — extend it when new recoil moves land."
+    },
+    "refrigerate": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Ice"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "rimefang": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "biting"
+        ],
+        "attacking": true
+      }
+    },
+    "rockhead": {
+      "shape": "recoil",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "moves": [
+          "Take Down",
+          "Double-Edge",
+          "Head Smash",
+          "Flare Blitz",
+          "Brave Bird",
+          "Wild Charge",
+          "Wood Hammer",
+          "Submission",
+          "Volt Tackle"
+        ]
+      },
+      "note": "Recoil is negated — the recoil nuke is pure upside. Crash-on-miss and HP-cost moves stay out: Rock Head does not cover them."
+    },
+    "rockypayload": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Rock"
+      ]
+    },
+    "sacredtoll": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Psychic"
+      ],
+      "filter": {
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      },
+      "note": "Sound moves convert to Psychic with a power boost."
+    },
+    "sandforce": {
+      "shape": "weather_rider",
+      "hard": false,
+      "lean": "Boosted in sand — pair with Sandstorm if the pool offers it."
+    },
+    "sandspit": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Sand goes up when hit — sand-synergy moves pay off."
+    },
+    "sandstream": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Sand is up on entry — Shore Up and Weather Ball class moves pay off."
+    },
+    "seedsower": {
+      "shape": "terrain",
+      "hard": false,
+      "lean": "Grassy Terrain goes up when hit — Grass moves and terrain synergy pay off."
+    },
+    "serenegrace": {
+      "shape": "secondary",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "has_secondary": true,
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "sharpness": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "slicing"
+        ],
+        "attacking": true
+      }
+    },
+    "sheerforce": {
+      "shape": "secondary",
+      "hard": true,
+      "min_moves": 3,
+      "filter": {
+        "has_secondary": true,
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "singingsands": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Ground"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "flags_any": [
+          "sound"
+        ],
+        "attacking": true
+      },
+      "note": "Only SOUND-flagged Normal moves convert."
+    },
+    "skilllink": {
+      "shape": "multi_hit",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "effect_any": [
+          "multi_hit",
+          "triple_kick"
+        ],
+        "attacking": true
+      }
+    },
+    "sledgehammer": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "hammer"
+        ],
+        "attacking": true
+      }
+    },
+    "snowwarning": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Snow is up on entry — Blizzard never misses, Aurora Veil unlocks."
+    },
+    "solardynamo": {
+      "shape": "weather_setter",
+      "hard": false,
+      "lean": "Sun is up on entry and Sp. Atk climbs — special Fire and solar moves are the payoff."
+    },
+    "solarpower": {
+      "shape": "weather_rider",
+      "hard": false,
+      "lean": "Boosted in sun — pair with Sunny Day if the pool offers it."
+    },
+    "spectralize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Ghost"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "spitefulblock": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Dark"
+      ]
+    },
+    "starfall": {
+      "shape": "secondary",
+      "hard": false,
+      "lean": "Special moves gain a Sp. Def drop chance — any special kit feeds it."
+    },
+    "steelworker": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Steel"
+      ]
+    },
+    "steelyspirit": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Steel"
+      ]
+    },
+    "striker": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "kicking"
+        ],
+        "attacking": true
+      }
+    },
+    "strongjaw": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "biting"
+        ],
+        "attacking": true
+      }
+    },
+    "technician": {
+      "shape": "low_bp",
+      "hard": false,
+      "lean": "Weak moves (≤60BP) get boosted — keep a strong ≤60BP attack even at high levels; multi-hit moves are ideal."
+    },
+    "tectonize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Ground"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "toughclaws": {
+      "shape": "flag_boost",
+      "hard": false,
+      "lean": "Prefer contact moves — nearly all physical attacks qualify already."
+    },
+    "transistor": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Electric"
+      ]
+    },
+    "triage": {
+      "shape": "healing",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "effect_any": [
+          "absorb",
+          "restore_hp",
+          "rest",
+          "roost",
+          "synthesis",
+          "moonlight",
+          "morning_sun",
+          "wish",
+          "heal_pulse",
+          "jungle_healing"
+        ]
+      }
+    },
+    "unseenfist": {
+      "shape": "flag_boost",
+      "hard": false,
+      "lean": "Prefer contact moves so Protect piercing matters."
+    },
+    "updraft": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "wing",
+          "wind"
+        ],
+        "attacking": true
+      }
+    },
+    "venomize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Poison"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    },
+    "victorystar": {
+      "shape": "inaccurate_ok",
+      "hard": false,
+      "lean": "Accuracy is boosted — inaccurate high-power moves become reliable."
+    },
+    "waterbubble": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Water"
+      ]
+    },
+    "whiteout": {
+      "shape": "weather_rider",
+      "hard": false,
+      "lean": "Boosted in hail — pair with Hail/Snowscape if the pool offers it."
+    },
+    "windpower": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "flags_any": [
+          "wind"
+        ],
+        "attacking": true
+      }
+    },
+    "windrider": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 1,
+      "filter": {
+        "flags_any": [
+          "wind"
+        ],
+        "attacking": true
+      }
+    },
+    "wingspan": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "wing",
+          "wind"
+        ],
+        "attacking": true
+      }
+    },
+    "wyvernize": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Dragon"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      }
+    }
   }
 }
