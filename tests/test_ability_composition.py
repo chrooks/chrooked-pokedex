@@ -109,3 +109,19 @@ def test_error_names_the_offending_file(tmp_path):
     _write(tmp_path, "combo", _ability("combo", "ghost"))
     with pytest.raises(ValueError, match=r"abilities/combo\.yaml"):
         Ruleset.load(tmp_path)
+
+
+# --- the dex round-trips a composition -------------------------------------
+
+def test_merged_view_carries_behaviors_so_an_edit_cannot_reset_them(tmp_path):
+    """Without this the editor reads `behaviors ?? []` and a save would quietly
+    turn a composed ability back into a plain one."""
+    from chrooked_pokedex.web.dex import build_abilities
+
+    _write(tmp_path, "solarpower", _ability("solarpower"))
+    _write(tmp_path, "drought", _ability("drought"))
+    _write(tmp_path, "solardynamo", _ability("solardynamo", "solarpower, drought"))
+    r = Ruleset.load(tmp_path)
+    rows = {row["chrooked_id"]: row for row in build_abilities({}, r)}
+    assert rows["solardynamo"]["behaviors"] == ["solarpower", "drought"]
+    assert rows["solarpower"]["behaviors"] == []

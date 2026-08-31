@@ -409,6 +409,9 @@ def _merge_ability(
             "name": base["name"],
             "description": base.get("description", ""),
             "aka": dict(base.get("aka", {})),
+            # A base-only ability has no composition — the snapshot has no such
+            # concept, so it always uses its own behavior.
+            "behaviors": [],
             "overridden_fields": [],
             "base": {},
         }
@@ -423,6 +426,7 @@ def _merge_ability(
             "name": override.name,
             "description": override.description,
             "aka": dict(override.aka),
+            "behaviors": list(override.behaviors),
             "overridden_fields": provided,
             "base": {},
         }
@@ -441,6 +445,9 @@ def _merge_ability(
         "description": override.description,
         # aka follows the Ruleset def when overridden so an edit round-trips it.
         "aka": dict(override.aka),
+        # Likewise behaviors: without this an edit through the dex would reset a
+        # composed ability to "its own behavior" without anyone asking it to.
+        "behaviors": list(override.behaviors),
         "overridden_fields": overridden,
         "base": base_values,
     }
