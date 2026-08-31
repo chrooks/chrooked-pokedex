@@ -1,7 +1,7 @@
 # encoding: utf-8
-# chrooked:zz_multiability
+# chrooked:zz_redux
 # Static mod (not a Ruleset behavior) — always installed by apply.
-# "All Abilities" Options toggle: when On, every battler enters battle with ALL
+# "Redux Mode" Options toggle: when On, every battler enters battle with ALL
 # of its species' abilities (regular + hidden) active at once, Tectonic-style.
 #
 # Rejuv has no single ability-check seam — ~1650 direct `battler.ability == :X`
@@ -90,11 +90,11 @@ end
 # ConversionClasses.rb is only the legacy save-conversion shim.
 if defined?(PokemonOptions)
   class PokemonOptions
-    attr_writer :chrooked_all_abilities
+    attr_writer :chrooked_redux
 
     # nil on saves from before this mod → default Off (EnumOption index 1).
-    def chrooked_all_abilities
-      @chrooked_all_abilities.nil? ? 1 : @chrooked_all_abilities
+    def chrooked_redux
+      @chrooked_redux.nil? ? 1 : @chrooked_redux
     end
   end
 end
@@ -102,10 +102,10 @@ end
 if defined?(PokeBattle_Battler)
   class PokeBattle_Battler
     if method_defined?(:pbInitPokemon)
-      alias_method :chrooked_multiability_init, :pbInitPokemon
+      alias_method :chrooked_redux_init, :pbInitPokemon
       def pbInitPokemon(pkmn, pkmnIndex)
-        chrooked_multiability_init(pkmn, pkmnIndex)
-        return unless $Settings && $Settings.chrooked_all_abilities == 0
+        chrooked_redux_init(pkmn, pkmnIndex)
+        return unless $Settings && $Settings.chrooked_redux == 0
         list = [@ability]
         list.concat(pkmn.getAbilityList) if pkmn.respond_to?(:getAbilityList)
         list = list.compact.uniq
@@ -122,13 +122,13 @@ end
 
 if defined?(PokemonOptionScene)
   class PokemonOptionScene
-    alias_method :chrooked_multiability_initOptions, :initOptions
+    alias_method :chrooked_redux_initOptions, :initOptions
     def initOptions
-      optionList = chrooked_multiability_initOptions
+      optionList = chrooked_redux_initOptions
       option = EnumOption.new(
-        _INTL("All Abilities"), [_INTL("On"), _INTL("Off")],
-        proc { $Settings.chrooked_all_abilities },
-        proc { |value| $Settings.chrooked_all_abilities = value },
+        _INTL("Redux Mode"), [_INTL("On"), _INTL("Off")],
+        proc { $Settings.chrooked_redux },
+        proc { |value| $Settings.chrooked_redux = value },
         _INTL("When On, every Pokémon fights with all of its abilities (hidden included) active at once.")
       )
       # First entry of the Battle section; falls back to just above "Back".

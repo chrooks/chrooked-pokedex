@@ -1,5 +1,5 @@
-# Semantic checks for chrooked_zz_multiability.rb against stub battle classes.
-# Usage: ruby multiability_checks.rb <harness-dir>
+# Semantic checks for chrooked_zz_redux.rb against stub battle classes.
+# Usage: ruby redux_checks.rb <harness-dir>
 
 def assert(cond, msg)
   raise "FAIL: #{msg}" unless cond
@@ -34,7 +34,7 @@ def _INTL(s, *args)
   s
 end
 
-eval(File.read(File.join(ARGV[0], "chrooked_zz_multiability.rb")), TOPLEVEL_BINDING)
+eval(File.read(File.join(ARGV[0], "chrooked_zz_redux.rb")), TOPLEVEL_BINDING)
 
 Pkmn = Struct.new(:ability) do
   def getAbilityList
@@ -44,7 +44,7 @@ end
 
 # --- option default and Off behavior ------------------------------------------
 $Settings = PokemonOptions.new
-assert $Settings.chrooked_all_abilities == 1, "default is Off (1)"
+assert $Settings.chrooked_redux == 1, "default is Off (1)"
 
 b = PokeBattle_Battler.new
 b.pbInitPokemon(Pkmn.new(:INTIMIDATE), 0)
@@ -52,7 +52,7 @@ assert b.ability.is_a?(Symbol), "Off leaves a plain Symbol"
 assert b.ability == :INTIMIDATE, "Off keeps the mon's own ability"
 
 # --- On: the set matches every owned ability ----------------------------------
-$Settings.chrooked_all_abilities = 0
+$Settings.chrooked_redux = 0
 b = PokeBattle_Battler.new
 b.pbInitPokemon(Pkmn.new(:INTIMIDATE), 0)
 a = b.ability
@@ -96,7 +96,7 @@ assert b.ability.is_a?(Symbol), "single-ability mon keeps a plain Symbol"
 opts = PokemonOptionScene.new.initOptions
 idx = opts.index("Battle")
 assert opts[idx + 1].is_a?(EnumOption), "option lands after the Battle header"
-assert opts[idx + 1].name == "All Abilities", "option is named All Abilities"
+assert opts[idx + 1].name == "Redux Mode", "option is named Redux Mode"
 assert opts.last == "Back", "Back still closes the list"
 
 # --- registry dispatch across the whole set (the Web Weaver bug) -------------
@@ -136,7 +136,7 @@ mods = Chrooked.entries(CHROOKED_DAMAGE_MODS, set)
 assert mods.length == 2, "both owned damage mods resolve"
 assert mods.inject(1.0) { |m, f| m * f.call } == 3.0, "owned damage mods stack"
 
-# Plain Symbol path unchanged (All Abilities off, or a one-ability mon).
+# Plain Symbol path unchanged (Redux Mode off, or a one-ability mon).
 assert Chrooked.entry(CHROOKED_SWITCH_IN, :WEBWEAVER).call == :web, "symbol path works"
 assert Chrooked.entries(CHROOKED_SWITCH_IN, :VIRULENCE).empty?, "symbol path misses cleanly"
 assert Chrooked.entries(CHROOKED_SWITCH_IN, nil).empty?, "nil ability is safe"

@@ -107,8 +107,8 @@ module Chrooked
                 :ESPERWING, :AERIALACE].freeze
 
   # --- registry resolution ----------------------------------------------------
-  # Every CHROOKED_* table is a Hash keyed by ability symbol. With the All
-  # Abilities option on (chrooked_zz_multiability), a battler's ability is a
+  # Every CHROOKED_* table is a Hash keyed by ability symbol. With the Redux
+  # Mode option on (chrooked_zz_redux), a battler's ability is a
   # ChrookedAbilitySet, and Hash lookup collapses it to the set's PRIMARY
   # ability — so only one of the mon's chrooked abilities would ever fire.
   # These two resolve a table across the whole set instead.

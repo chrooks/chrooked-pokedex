@@ -663,11 +663,11 @@ def test_harness_event_hooks(tmp_path):
 
 
 @pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
-def test_harness_multiability_semantics(tmp_path):
-    """The All Abilities set matches ==/include?/case in both operand orders,
+def test_harness_redux_semantics(tmp_path):
+    """The Redux Mode set matches ==/include?/case in both operand orders,
     resolves hash lookups to the primary, and splices into the options list."""
     import subprocess
-    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "multiability_checks.rb"
+    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "redux_checks.rb"
     proc = subprocess.run(
         ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
     )
