@@ -65,6 +65,7 @@ def serialize_move(move: MoveDef) -> dict[str, Any]:
         "flags": list(move.flags),
         "priority": move.priority,
         "target": move.target,
+        "recoil": move.recoil,
     }
 
 

@@ -738,3 +738,132 @@ def test_skill_file_never_authors_engine_hints() -> None:
     # The skill must instruct leaving engine_hints empty.
     assert "engine_hints" in content
     assert "empty" in content.lower()
+
+
+# ===========================================================================
+# Lore + blind on ability creation, scoped to the anchor species (#79)
+#
+# lore here means the ANCHOR SPECIES' lore, and blind applies. Standalone
+# create (no `species` in the body) is a clean no-op, not an error.
+# ===========================================================================
+
+
+class _FakeLore:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str]] = []
+
+    def fetch(self, chrooked_id: str, species_name: str) -> Any:
+        from chrooked_pokedex.web.lore import LoreResult
+
+        self.calls.append((chrooked_id, species_name))
+        return LoreResult(
+            found=True,
+            genus="Dragon Pokémon",
+            dex_entries=(f"{species_name} lives in caves.",),
+            origin="Based on a cave-dwelling gastropod.",
+            name_origin="From goo and dragon.",
+            sources=("https://example.test/x",),
+            base_species=chrooked_id,
+        )
+
+
+def _lore_client(ruleset_dir: Path, tmp_path: Path, provider: Any, lore: Any) -> TestClient:
+    snap_path = tmp_path / "snap.json"
+    snap_path.write_text(json.dumps(_SNAPSHOT), encoding="utf-8")
+    app = create_app(
+        ruleset_dir=ruleset_dir,
+        snapshot_path=snap_path,
+        llm_provider=provider,
+        lore_provider=lore,
+    )
+    return TestClient(app, raise_server_exceptions=False)
+
+
+def test_ac1_lore_off_never_fetches(ruleset_dir: Path, tmp_path: Path) -> None:
+    lore = _FakeLore()
+    provider = _FakeProvider(_good_result())
+    client = _lore_client(ruleset_dir, tmp_path, provider, lore)
+
+    response = client.post(
+        "/api/abilities/suggest",
+        json={"direction": "a Water sponge", "species": "goodra"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert lore.calls == []
+    assert body["lore"]["mode"] == "off"
+    assert "Lore" not in provider.calls[0]["user"]
+
+
+def test_ac1_lore_absent_is_also_off(ruleset_dir: Path, tmp_path: Path) -> None:
+    lore = _FakeLore()
+    provider = _FakeProvider(_good_result())
+    client = _lore_client(ruleset_dir, tmp_path, provider, lore)
+
+    response = client.post("/api/abilities/suggest", json={"direction": "x"})
+
+    assert response.status_code == 200
+    assert lore.calls == []
+    assert response.json()["lore"]["mode"] == "off"
+
+
+def test_ac2_anchor_species_full_lore_reaches_prompt(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    lore = _FakeLore()
+    provider = _FakeProvider(_good_result())
+    client = _lore_client(ruleset_dir, tmp_path, provider, lore)
+
+    response = client.post(
+        "/api/abilities/suggest",
+        json={"direction": "a Water sponge", "species": "goodra", "lore": "full"},
+    )
+
+    assert response.status_code == 200
+    assert lore.calls == [("goodra", "Goodra")]
+    user = provider.calls[0]["user"]
+    assert "cave-dwelling gastropod" in user
+    assert "Goodra" in user
+    assert response.json()["lore"]["mode"] == "full"
+
+
+def test_ac3_blind_withholds_name_and_abilities(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    lore = _FakeLore()
+    provider = _FakeProvider(_good_result())
+    client = _lore_client(ruleset_dir, tmp_path, provider, lore)
+
+    response = client.post(
+        "/api/abilities/suggest",
+        json={"direction": "a Water sponge", "species": "goodra", "lore": "blind"},
+    )
+
+    assert response.status_code == 200
+    user = provider.calls[0]["user"]
+    assert "Goodra" not in user
+    assert "Pokemon" not in user and "Pokémon" not in user
+    assert "Pokedex" not in user and "Pokédex" not in user
+    assert "Sap Sipper" not in user and "Gooey" not in user  # current abilities
+    assert "BLIND DESIGN:" in user
+    assert "cave-dwelling gastropod" in user
+    assert response.json()["lore"]["mode"] == "blind"
+
+
+def test_ac4_no_anchor_species_blind_is_clean_noop(
+    ruleset_dir: Path, tmp_path: Path
+) -> None:
+    lore = _FakeLore()
+    provider = _FakeProvider(_good_result())
+    client = _lore_client(ruleset_dir, tmp_path, provider, lore)
+
+    response = client.post(
+        "/api/abilities/suggest",
+        json={"direction": "a Water sponge", "lore": "blind"},
+    )
+
+    assert response.status_code == 200
+    assert lore.calls == []
+    assert response.json()["lore"]["mode"] == "off"
+    assert "BLIND DESIGN:" not in provider.calls[0]["user"]

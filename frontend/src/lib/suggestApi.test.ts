@@ -9,6 +9,7 @@
 
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { api, ApiError } from "../api";
+import { makeoverApi } from "./makeoverApi";
 
 function mockFetch(body: unknown, status = 200): void {
   globalThis.fetch = vi.fn().mockResolvedValue({
@@ -124,5 +125,32 @@ describe("lore sourcing on suggest calls (#92)", () => {
     mockFetch({ draft: { learnset: [] }, rationale: {}, alternatives: [] });
     await api.suggestLearnset("goodra", { lore: "off" });
     expect(lastCall().body.lore).toBe("off");
+  });
+});
+
+describe("makeoverApi.createAbility — anchor-species lore (#79)", () => {
+  it("sends the anchor species and lore mode in the request body", async () => {
+    mockFetch({
+      draft: { ability: { chrooked_id: "x", name: "X", description: "" }, behavior: { effects: [] }, distribution: [] },
+      rationale: {},
+      alternatives: [],
+    });
+    await makeoverApi.createAbility("a Water sponge", "goodra", "blind");
+    const { url, body } = lastCall();
+    expect(url).toBe("/api/abilities/suggest");
+    expect(body.species).toBe("goodra");
+    expect(body.lore).toBe("blind");
+  });
+
+  it("omits species and lore on the standalone create path", async () => {
+    mockFetch({
+      draft: { ability: { chrooked_id: "x", name: "X", description: "" }, behavior: { effects: [] }, distribution: [] },
+      rationale: {},
+      alternatives: [],
+    });
+    await makeoverApi.createAbility("a Water sponge");
+    const { body } = lastCall();
+    expect(body.species).toBeUndefined();
+    expect(body.lore).toBeUndefined();
   });
 });

@@ -6,7 +6,6 @@ category: physical
 power: 140
 accuracy: 100
 pp: 5
-description: Enormous pincers shear through both foes.
+description: Enormous pincers shear through the foe.
 effect: plain_damage
 flags: [contact, slicing]
-target: both

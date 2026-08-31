@@ -354,6 +354,9 @@ function buildMove(form: MoveForm, original: Move | null): MoveWrite {
     chrooked_id: form.chrooked_id.trim(),
     aka: original?.aka ?? {},
     type: form.type.trim(),
+    // Carried through untouched: the editor has no control for these, and
+    // omitting them from the payload is how a save used to delete them.
+    second_type: original?.second_type ?? null,
     category: form.category as Move["category"],
     power: emptyToNull(form.power),
     accuracy: emptyToNull(form.accuracy),
@@ -366,6 +369,7 @@ function buildMove(form: MoveForm, original: Move | null): MoveWrite {
     flags: form.flags,
     priority: form.priority === "" ? 0 : form.priority,
     target: form.target.trim() || "selected",
+    recoil: original?.recoil ?? null,
   };
 }
 

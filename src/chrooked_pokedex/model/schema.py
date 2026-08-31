@@ -133,6 +133,10 @@ class MoveDef:
     flags: tuple[str, ...] = ()
     priority: int = 0
     target: str = "selected"
+    # Fraction of the damage dealt that rebounds on the user (0.33 = Flare Blitz
+    # class). Rejuv reads it as the MOVEHASH :recoil attribute, and Reckless keys
+    # off it being above zero.
+    recoil: Optional[float] = None
 
 
 @dataclass(frozen=True)

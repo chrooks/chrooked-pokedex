@@ -191,6 +191,8 @@ export function AbilitiesStage(props: Props) {
           registerActions={registerActions}
           onLocked={onLocked}
           onCreated={onCreated}
+          loreMode={loreMode}
+          onLoreMode={onLoreMode}
         />
       </div>
     );

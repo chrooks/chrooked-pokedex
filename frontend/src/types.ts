@@ -286,7 +286,9 @@ export type MoveField =
   | "additional_effects"
   | "flags"
   | "priority"
-  | "target";
+  | "target"
+  | "second_type"
+  | "recoil";
 
 /** Pre-override base values for whatever the Ruleset changed (base → now diff).
     Empty (`{}`) for a Ruleset-created move that has no base to diff against. */
@@ -315,6 +317,10 @@ export interface Move {
   /** Engine symbol(s); carried through edits so apply (M3) keeps resolving. */
   aka: Record<string, unknown>;
   type: string;
+  /** Dual-damage-type move (Muddy Water is Water AND Ground). Only engines with
+      native support express it; the editor must still round-trip it, or a save
+      strips the move's second half. */
+  second_type: string | null;
   category: "physical" | "special" | "status";
   power: number | null;
   accuracy: number | null;
@@ -326,6 +332,8 @@ export interface Move {
   flags: string[];
   priority: number;
   target: string;
+  /** Fraction of the damage dealt that rebounds on the user (0.33 = Flare Blitz). */
+  recoil: number | null;
   /** The fields the Ruleset changed. `[]` ⇒ base-only (not edited). */
   overridden_fields: MoveField[];
   /** Pre-override base values for the changed fields. `{}` for a created entry. */

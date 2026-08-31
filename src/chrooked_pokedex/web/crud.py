@@ -149,6 +149,48 @@ def resolve_scope_dir(
 # --------------------------------------------------------------------------- #
 
 
+def _leading_comments(text: str) -> str:
+    """The file's opening ``#`` block, blank lines included, up to the first key."""
+    out: list[str] = []
+    for line in text.splitlines():
+        stripped = line.lstrip()
+        if stripped.startswith("#") or not stripped:
+            out.append(line)
+            continue
+        break
+    while out and not out[-1].strip():
+        out.pop()
+    return "\n".join(out)
+
+
+def _keep_header(final_path: Path, yaml_text: str) -> str:
+    """Carry the existing file's header comments onto the regenerated text.
+
+    A save REGENERATES the file from a frozen dataclass, and a dataclass has
+    nowhere to hold a comment — so without this every save silently erased the
+    author's notes (332 lines across 115 files when this was measured). The
+    writers emit a short header of their own; the stored one supersedes it,
+    which also keeps the generated line from being duplicated.
+
+    ponytail: header block only. Comments sitting BETWEEN keys (26 lines in 8
+    files) are still lost — preserving those needs a round-trip YAML parser
+    (ruamel), which is the upgrade path if it ever matters.
+    """
+    if not final_path.exists():
+        return yaml_text
+    try:
+        stored = _leading_comments(final_path.read_text("utf-8"))
+    except OSError:
+        return yaml_text
+    if not stored:
+        return yaml_text
+    body = yaml_text
+    generated = _leading_comments(yaml_text)
+    if generated:
+        body = yaml_text[len(generated):].lstrip("\n")
+    return f"{stored}\n{body}"
+
+
 def _validated_write(
     final_path: Path, yaml_text: str, validate: Callable[[Path], Any]
 ) -> Any:
@@ -166,7 +208,7 @@ def _validated_write(
     staging = Path(tempfile.mkdtemp(dir=final_path.parent, prefix=".staging-"))
     try:
         staged = staging / final_path.name
-        staged.write_text(yaml_text, encoding="utf-8")
+        staged.write_text(_keep_header(final_path, yaml_text), encoding="utf-8")
         try:
             result = validate(staged)
         except (ValueError, KeyError, TypeError) as error:
@@ -420,6 +462,7 @@ def _move_from_payload(payload: dict[str, Any], chrooked_id: str) -> MoveDef:
         flags=tuple(payload.get("flags") or ()),
         priority=int(payload.get("priority") or 0),
         target=payload.get("target") or "selected",
+        recoil=payload.get("recoil"),
     )
 
 
@@ -434,6 +477,7 @@ _MOVE_FIELDS = (
     "name", "chrooked_id", "aka", "type", "second_type",
     "category", "power", "accuracy", "pp", "description",
     "effect", "argument", "additional_effects", "flags", "priority", "target",
+    "recoil",
 )
 
 

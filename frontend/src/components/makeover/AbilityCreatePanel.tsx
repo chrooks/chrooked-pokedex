@@ -9,7 +9,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 import { api, ApiError } from "../../api";
-import type { DexEntry, SpeciesOverride } from "../../types";
+import type { DexEntry, LoreMode, SpeciesOverride } from "../../types";
 import {
   makeoverApi,
   type AbilityCreateDraft,
@@ -17,6 +17,7 @@ import {
   type StageFacts,
 } from "../../lib/makeoverApi";
 import { addRow, deriveReplaces, removeRow, setSlot, type DistRow } from "./distributionDraft";
+import { LoreControl } from "./LoreControl";
 import type { StageActions } from "./StagePanel";
 
 const SLOTS: DistRow["slot"][] = ["primary", "secondary", "hidden"];
@@ -40,6 +41,11 @@ interface Props {
       (+behavior) — no species writes, and `onLocked` is not called (a standalone
       tab caller distributes in a later step). Default true = makeover behavior. */
   showDistribution?: boolean;
+  /** The session's lore-lookup mode, owned by the workbench (survives stages).
+      Only meaningful when `entry` is present — the control itself only renders
+      then (#79: lore here means the ANCHOR SPECIES' lore). */
+  loreMode?: LoreMode;
+  onLoreMode?: (mode: LoreMode) => void;
 }
 
 type Phase = "input" | "proposing" | "proposed" | "writing" | "error";
@@ -123,6 +129,8 @@ export function AbilityCreatePanel({
   onLocked,
   onCreated,
   showDistribution = true,
+  loreMode = "off",
+  onLoreMode,
 }: Props) {
   const [phase, setPhase] = useState<Phase>("input");
   const [direction, setDirection] = useState("");
@@ -164,7 +172,11 @@ export function AbilityCreatePanel({
     setPhase("proposing");
     setError(null);
     try {
-      const response = await makeoverApi.createAbility(direction.trim());
+      const response = await makeoverApi.createAbility(
+        direction.trim(),
+        entry?.chrooked_id,
+        entry ? loreMode : undefined,
+      );
       setResult(response);
       setPhase("proposed");
     } catch (caught: unknown) {
@@ -252,6 +264,15 @@ export function AbilityCreatePanel({
         >
           {draft ? "TRY AGAIN" : "PROPOSE"}
         </button>
+        {/* Only when there's an anchor species — lore here means the ANCHOR
+            SPECIES' lore, and a standalone create has no species to fetch. */}
+        {entry && onLoreMode && (
+          <LoreControl
+            mode={loreMode}
+            onChange={onLoreMode}
+            disabled={phase === "proposing"}
+          />
+        )}
       </form>
 
       {phase === "proposing" && (

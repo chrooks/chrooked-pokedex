@@ -91,6 +91,8 @@ export interface AbilityCreateResponse {
   rationale: { ability?: string; ai_rating?: string; distribution?: string };
   alternatives: { value: unknown; rationale: string }[];
   warnings?: string[];
+  /** What the lore lookup did for this call (`{ mode: "off" }` when none ran). */
+  lore?: LoreProvenance;
 }
 
 /** The move-create draft: a new owned move plus an optional engine-neutral behavior
@@ -205,9 +207,15 @@ export const makeoverApi = {
   }) => postJson<{ section: string }>("/api/design-log", payload),
   /** Drive the existing ability-create Seam: propose a brand-new ability + behavior
       stub + distribution. Writes nothing — the accept path is PUT ability →
-      behavior → species ×N through the existing CRUD routes, on confirm. */
-  createAbility: (direction: string) =>
-    postJson<AbilityCreateResponse>("/api/abilities/suggest", { direction }),
+      behavior → species ×N through the existing CRUD routes, on confirm.
+      `species` is the anchor species' chrooked_id (#79) — omitted on the
+      standalone create path, where a `lore` request is a clean no-op. */
+  createAbility: (direction: string, species?: string, lore?: LoreMode) =>
+    postJson<AbilityCreateResponse>("/api/abilities/suggest", {
+      direction,
+      species,
+      lore,
+    }),
   /** Drive the existing move-create Seam: propose a brand-new move (+ optional
       behavior stub). Writes nothing — the accept path is PUT move → behavior
       through the existing CRUD routes, on confirm (mirrors createAbility). */

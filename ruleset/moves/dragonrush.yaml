@@ -6,5 +6,6 @@ category: physical
 power: 120
 accuracy: 100
 pp: 15
-description: A reckless, headlong charge that crashes into the foe.
+description: A reckless, headlong charge. It hurts the user a little.
 flags: [contact]
+recoil: 0.33

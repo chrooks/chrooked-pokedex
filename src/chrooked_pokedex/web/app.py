@@ -1122,8 +1122,17 @@ def create_app(
             entry["name"] for entry in dex if entry.get("name")
         )
         direction = (payload or {}).get("direction", "")
+        # The ANCHOR species (#79): present when this panel opened inside a
+        # makeover, absent on the standalone create path. Anything unrecognized
+        # normalizes to off, so a typo in the body never starts a network fetch.
+        lore_mode = suggestmod.normalize_lore_mode((payload or {}).get("lore"))
+        species_id = (payload or {}).get("species")
+        anchor_entry = None
+        if isinstance(species_id, str) and species_id.strip():
+            resolved_id = dexmod.resolve_form_id(snapshot, species_id.strip())
+            anchor_entry = dexmod.build_dex_entry(snapshot, ruleset, resolved_id)
         try:
-            return suggestmod.suggest_ability_creation(
+            response = suggestmod.suggest_ability_creation(
                 provider=_llm_provider(),
                 direction=direction,
                 ability_pool=ability_pool,
@@ -1131,7 +1140,13 @@ def create_app(
                 behavior_ids=behavior_ids,
                 dex_lookup=dex_lookup,
                 roster=roster,
+                entry=anchor_entry,
+                lore_mode=lore_mode,
+                lore_provider=_lore_provider(snapshot, lore_mode),
             )
+            if anchor_entry is not None:
+                _record_lore(anchor_entry["chrooked_id"], "ability-create", response)
+            return response
         except suggestmod.SuggestError as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         except llmmod.LlmError as error:

@@ -136,6 +136,8 @@ def move_yaml(move: MoveDef) -> str:
         lines.append(f"priority: {move.priority}")
     if move.target and move.target != "selected":
         lines.append(f"target: {move.target}")
+    if move.recoil:
+        lines.append(f"recoil: {move.recoil}")
     return "\n".join(lines) + "\n"
 
 

@@ -469,7 +469,10 @@ _MOVE_SCALARS: tuple[tuple[str, str], ...] = (
 
 # Neutral move target -> Rejuv :target symbol. "both" means both foes (Overdrive,
 # Twister). Anything unlisted falls back to :SingleNonUser.
-_TARGET = {"selected": "SingleNonUser", "user": "User", "both": "AllOpposing"}
+_TARGET = {"selected": "SingleNonUser", "user": "User", "both": "AllOpposing",
+           # Boomburst's target — hits both foes AND your own ally. Missing here
+           # meant every foes_and_ally move degraded to single-target silently.
+           "foes_and_ally": "AllNonUser"}
 # Neutral move flag -> Rejuv bool key. Flags with no Rejuv counterpart (hammer,
 # bone, wing, piercing) are simply not set — they carry no standard Rejuv flag.
 _FLAG = {
@@ -564,6 +567,10 @@ def _build_movetext(
             ref = f"MOVEHASH[{ruby_sym(sym)}]"
             lines = [f"{ref}[:type] = :{_type_sym(move.type)}",
                      f"{ref}[:category] = :{move.category}"]
+            if move.recoil:
+                # Rejuv reads :recoil as a fraction of damage dealt
+                # (Battle_Move.rb: @recoil = @data.checkFlag?(:recoil, 0)).
+                lines.append(f"{ref}[:recoil] = {move.recoil}")
             if move.second_type:
                 # Dual-damage-type (Flying Press): pure data, the engine reads
                 # :secondtype in its type-mod calc.

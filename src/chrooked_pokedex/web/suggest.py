@@ -31,7 +31,7 @@ from pathlib import Path
 from collections.abc import Iterable
 from typing import Any, Callable, Mapping
 
-from . import learnset_skeleton
+from . import learnset_repair, learnset_skeleton
 from .llm import DEFAULT_MAX_TOKENS, LlmProvider, condense_provider
 from .lore import LoreError, LoreProvider
 from .lore_anon import anonymize_lore, anonymize_text
@@ -2530,6 +2530,8 @@ def suggest_learnset(
         # always be able to see whether lore reached this draft, and a missing key
         # would read as "unknown" rather than "no".
         result["lore"] = dict(injection.provenance)
+        if mode == "full":
+            result = _apply_learnset_repair(result, move_pool, resolved_anchors)
         return result
     except SuggestError as error:
         # Auto-repair backstop: when the retries exhaust with the model still
@@ -2549,7 +2551,31 @@ def suggest_learnset(
         repaired["warnings"] = list(salvage.get("warnings") or []) + notes
         repaired.pop("error", None)
         repaired["lore"] = dict(injection.provenance)
+        repaired = _apply_learnset_repair(repaired, move_pool, resolved_anchors)
         return repaired
+
+
+def _apply_learnset_repair(
+    result: dict[str, Any],
+    move_pool: list[dict[str, Any]],
+    anchors: list[str] | None,
+) -> dict[str, Any]:
+    """Run the deterministic repair pass (learnset_repair) on a FULL-mode draft.
+
+    Runs on EVERY validated FULL-mode draft, not only the retry-exhaustion
+    salvage path — a skeleton-clean draft can still carry pacing, ascent,
+    gap, or capstone violations the per-slot validator does not see. Repairs
+    re-seat rows; nothing is ever dropped. Every repair note appends to the
+    response's ``warnings`` list.
+    """
+    rows = result["draft"]["learnset"]
+    repaired, notes = learnset_repair.repair_draft(rows, move_pool, anchors=anchors)
+    if not notes:
+        return result
+    result = dict(result)
+    result["draft"] = {**result["draft"], "learnset": repaired}
+    result["warnings"] = list(result.get("warnings") or []) + notes
+    return result
 
 
 # =========================================================================== #
@@ -2765,6 +2791,9 @@ def suggest_ability_creation(
     behavior_ids: set[str],
     dex_lookup: dict[str, dict[str, Any]],
     roster: list[str],
+    entry: dict[str, Any] | None = None,
+    lore_mode: str = "off",
+    lore_provider: LoreProvider | None = None,
 ) -> dict[str, Any]:
     """Draft a brand-new ability + behavior stub + distribution; never writes.
 
@@ -2785,14 +2814,32 @@ def suggest_ability_creation(
 
     ``direction`` is required (the freeform brief). ``dex_lookup`` is keyed by
     case-folded species NAME → merged dex entry. ``roster`` is the sorted list of
-    in-dex species display names fed to the model. Returns the reusable
-    ``{draft, rationale, alternatives}`` contract, plus a ``warnings`` list (empty
-    when every row was valid).
+    in-dex species display names fed to the model. ``entry`` is the ANCHOR
+    species (#79) — the makeover species this create panel was opened from, or
+    ``None`` on the standalone create path. With no anchor, lore is a clean
+    no-op: ``build_lore_injection`` is never called and the response still
+    carries ``lore: {"mode": "off"}`` (the provenance invariant holds either
+    way). With an anchor, the anchor's researched lore grounds the new ability;
+    under ``lore_mode="blind"`` the anchor's name and current abilities are
+    withheld and the prompt carries a BLIND DESIGN directive. Returns the
+    reusable ``{draft, rationale, alternatives}`` contract, plus a ``warnings``
+    list (empty when every row was valid) and a ``lore`` provenance object.
     """
     if not direction or not direction.strip():
         raise SuggestError(
             "An ability-creation direction is required (describe the ability)."
         )
+
+    injection = (
+        build_lore_injection(
+            entry=entry,
+            lore_mode=lore_mode,
+            lore_provider=lore_provider,
+            provider=provider,
+        )
+        if entry is not None
+        else LORE_OFF
+    )
 
     cached_context = (
         "Existing abilities (do NOT reuse a name; this is a NEW ability):\n"
@@ -2802,19 +2849,65 @@ def suggest_ability_creation(
         + (_format_roster(roster) or "(none)")
     )
     result = provider.propose(
-        system=_build_ability_creation_rubric(),
+        system=_with_lore_note(_build_ability_creation_rubric(), injection),
         cached_context=cached_context,
-        user=f"Direction from the user: {direction.strip()}",
+        user=_build_ability_creation_user_context(
+            direction, entry, injection.block, is_blind(lore_mode)
+        ),
         schema=_ability_creation_draft_schema(),
         max_tokens=LEARNSET_MAX_TOKENS,
     )
 
-    return _validate_ability_creation_result(
+    response = _validate_ability_creation_result(
         result,
         ability_ids=ability_ids,
         behavior_ids=behavior_ids,
         dex_lookup=dex_lookup,
     )
+    response["lore"] = dict(injection.provenance)
+    return response
+
+
+def _build_ability_creation_user_context(
+    direction: str,
+    entry: dict[str, Any] | None,
+    lore_block: str = "",
+    blind: bool = False,
+) -> str:
+    """The fresh per-call delta for ability creation: the anchor species (if
+    any) + researched lore + the freeform direction.
+
+    ``direction`` is the steer here (there is no per-species draft to react
+    to), so it stays LAST — the same recency reasoning ``_build_user_context``
+    documents. With no ``entry`` this returns exactly the old bare direction
+    line, so a standalone (no-anchor) prompt is byte-identical to before #79.
+    """
+    lines: list[str] = []
+    if entry is not None:
+        if blind:
+            lines.append(
+                "Anchor species: (withheld — design from the researched lore below)"
+            )
+        else:
+            lines.append(
+                f"Anchor species: {entry.get('name', entry.get('chrooked_id', ''))}"
+            )
+            lines.append(
+                "Anchor species' current abilities: "
+                f"{_format_current_abilities(entry.get('abilities', {}))}"
+            )
+        if lore_block:
+            lines.append(lore_block)
+        if blind:
+            lines.append(
+                "BLIND DESIGN: the anchor creature's name and current abilities "
+                "are deliberately withheld. Do not try to identify which existing "
+                "creature this is, and do not design adjacent to a kit you "
+                "remember. Every pick must be argued from a fact in the lore "
+                "above."
+            )
+    lines.append(f"Direction from the user: {direction.strip()}")
+    return "\n".join(lines)
 
 
 def _validate_ability_creation_result(

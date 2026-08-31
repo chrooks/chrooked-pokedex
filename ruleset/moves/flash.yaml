@@ -6,6 +6,6 @@ category: special
 power: 60
 accuracy: 100
 pp: 20
-description: Looses a powerful blast of light that cuts accuracy.
-effect: accuracy_down
-target: foes_and_ally
+description: A blast of light that damages and cuts the foe's accuracy.
+additional_effects:
+  - { effect: acc_minus_1, chance: 100 }

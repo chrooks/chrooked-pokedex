@@ -6,6 +6,5 @@ category: physical
 power: 140
 accuracy: 100
 pp: 5
-description: Splits the ground open beneath both foes.
+description: Splits the ground open beneath the foe.
 effect: plain_damage
-target: both

@@ -64,6 +64,7 @@ _MOVE_KEYS = (
     "name", "chrooked_id", "aka", "type", "second_type",
     "category", "power", "accuracy", "pp", "description",
     "effect", "argument", "additional_effects", "flags", "priority", "target",
+    "recoil",
 )
 _ADDITIONAL_EFFECT_KEYS = ("effect", "chance")
 _ABILITY_KEYS = ("name", "chrooked_id", "aka", "description")
@@ -177,6 +178,7 @@ def load_move(path: Path) -> MoveDef:
         flags=flags,
         priority=int(data.get("priority", 0)),
         target=target,
+        recoil=data.get("recoil"),
     )
 
 
