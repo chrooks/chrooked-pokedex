@@ -49,6 +49,7 @@ _DELIBERATELY_UNFUELED = {
     "soundproof",   # blocks incoming sound moves — defensive
     "magicbounce",  # reflects incoming status moves — defensive
     "liquidooze",   # punishes incoming drain moves — defensive
+    "riposte",      # recoils contact damage at the attacker — defensive
 }
 
 

@@ -521,6 +521,17 @@ _SINGLE_EFFECT_CODES = {
     # The >110 special drawback: user's Sp. Atk falls two steps after use
     # (Overheat / Draco Meteor / Leaf Storm all share 0x03F, :effect 100).
     "sp_atk_minus_2": 0x03F,
+    # Self stat-raise secondaries. Cribbed from Battle_MoveEffects.rb, whose
+    # own class comments name the move we are writing:
+    #   0x01D "(Harden, Steel Wing, Withdraw, Psyshield Bash)"
+    #   0x01F "(Flame Charge / Esper Wing / Aqua Step / Trailblaze)"
+    #   0x020 "(Charge Beam, Fiery Dance, Mystical Power, Torch Song)"
+    "def_plus_1": 0x01D, "spd_plus_1": 0x01F, "sp_atk_plus_1": 0x020,
+    # Rejuv swaps freeze for frostbite behind the NeverMeltIce gate, so the
+    # freeze secondary and the frostbite secondary are the same 0x00C class
+    # (Battle_MoveEffects.rb: "Freezes the target. (Ice Beam / Ice Punch /
+    # Powder Snow / Freeze-Dry / Freezing Glare)").
+    "freeze_or_frostbite": 0x00C,
 }
 
 
@@ -565,6 +576,7 @@ def _build_movetext(
                 if (key := _FLAG.get(flag)):
                     lines.append(f"{ref}[:{key}] = true")
             reason = ""
+            covered = False
             if move.effect in _PRIMARY_EFFECT_CODES:
                 code, chance = _PRIMARY_EFFECT_CODES[move.effect]
                 lines.append(f"{ref}[:function] = 0x{code:03X}")
@@ -580,10 +592,20 @@ def _build_movetext(
                     if chance is not None:
                         lines.append(f"{ref}[:effect] = {chance}")
                 if leftover:
-                    reason = f"DATA ONLY: {', '.join(leftover)}"
+                    # A move behavior sharing the move's chrooked_id owns what
+                    # the funccode can't express — same rule the create branch
+                    # below applies. Without this an edited move with a shipped
+                    # mechanic reports DATA ONLY while its mod sits installed.
+                    if move.chrooked_id in implemented:
+                        covered = True
+                        reason = (f"{move.chrooked_id} mechanic "
+                                  f"({', '.join(leftover)})")
+                    else:
+                        reason = f"DATA ONLY: {', '.join(leftover)}"
             blocks.extend(lines)
             report.add(ReportEntry(
-                status="partial" if reason else "applied", category="move",
+                status="applied" if covered or not reason else "partial",
+                category="move",
                 chrooked_id=move.chrooked_id, symbol=sym, reason=reason))
         else:
             # New move — create a full MOVEHASH entry. Flinch combos map onto a
