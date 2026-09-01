@@ -544,6 +544,11 @@ _PRIMARY_EFFECT_CODES = {
     # the old one. It has to be opt-in: `effect` defaults to "hit" on 155 of the
     # 207 overrides, so mapping "hit" itself would reset 155 engine funccodes.
     "plain_damage": (0x000, None),
+    # Sleep-gated attack that does NOT wake the user, with a flinch chance
+    # (0x011 = Snore; Battle_MoveEffects.rb gates it on attacker.isSleeping?).
+    # The chance rides :effect, so 30 reproduces Snore's roll on any BP.
+    # Comatose satisfies the gate permanently (Battler.rb#isSleeping?).
+    "sleep_gated": (0x011, 30),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance

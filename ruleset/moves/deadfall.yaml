@@ -1,0 +1,11 @@
+name: Deadfall
+chrooked_id: deadfall
+aka: {  }
+type: Normal
+category: physical
+power: 120
+accuracy: 100
+pp: 5
+description: Usable only while the user sleeps. The user drops its whole weight without waking, and may make the target flinch.
+effect: sleep_gated
+flags: [contact]

@@ -466,6 +466,26 @@ def test_new_move_primary_effect_uturn_gets_function_code(tmp_path):
     assert "0x0EE" in entry.reason
 
 
+def test_new_move_sleep_gated_gets_snore_function_code(tmp_path):
+    """Deadfall must inherit Snore's gate, not ship as plain damage.
+
+    0x011 is the engine's "usable only while asleep, does not wake, may flinch"
+    code, and the flinch chance rides :effect. Without the mapping a 120 BP
+    Normal move would apply as an unconditional hit.
+    """
+    r = Ruleset(moves={"deadfall": MoveDef(
+        name="Deadfall", chrooked_id="deadfall", type="Normal", category="physical",
+        power=120, accuracy=100, pp=5, effect="sleep_gated", flags=("contact",),
+    )})
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert "MOVEHASH[:DEADFALL] = {" in text
+    assert ":function => 0x011" in text
+    assert ":effect => 30" in text
+    entry = next(e for e in report.entries if e.chrooked_id == "deadfall")
+    assert "DATA ONLY" not in (entry.reason or "")
+
+
 def test_new_move_primary_effect_triple_kick_gets_function_code(tmp_path):
     r = Ruleset(moves={"triplehit": MoveDef(
         name="Triple Hit", chrooked_id="triplehit", type="Normal", category="physical",
