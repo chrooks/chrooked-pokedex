@@ -495,7 +495,10 @@ _MOVE_SCALARS: tuple[tuple[str, str], ...] = (
 _TARGET = {"selected": "SingleNonUser", "user": "User", "both": "AllOpposing",
            # Boomburst's target — hits both foes AND your own ally. Missing here
            # meant every foes_and_ally move degraded to single-target silently.
-           "foes_and_ally": "AllNonUser"}
+           # PLURAL: Battler.rb#pbTargets cases on :AllNonUsers, and an unknown
+           # symbol falls out of that case with an EMPTY target list — the move
+           # deals no damage while its function code still fires.
+           "foes_and_ally": "AllNonUsers"}
 # Neutral move flag -> Rejuv bool key. Flags with no Rejuv counterpart (hammer,
 # bone, wing, piercing) are simply not set — they carry no standard Rejuv flag.
 _FLAG = {

@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from chrooked_pokedex.appliers.rejuv import behavior_triage, definitions_read
-from chrooked_pokedex.appliers.rejuv.apply import apply_rejuv
+from chrooked_pokedex.appliers.rejuv.apply import _TARGET, apply_rejuv
 from chrooked_pokedex.appliers.rejuv.emit import Sym, montext_delta, ruby_sym, to_ruby
 from chrooked_pokedex.appliers.rejuv.resolution import RejuvResolution
 from chrooked_pokedex.model import Ruleset
@@ -1221,3 +1221,20 @@ def test_a_composition_on_an_UNinstalled_part_still_warns(tmp_path):
     apply_rejuv(target, r, report, behavior_source_dir=src)
     entry = next(e for e in report.entries if e.chrooked_id == "apexpredator")
     assert "DATA ONLY" in (entry.reason or "")
+
+
+def test_target_symbols_are_engine_vocabulary():
+    """Every emitted :target must be a symbol Battler.rb#pbTargets cases on.
+
+    A symbol outside that case (`:AllNonUser`, singular) adds NO battlers to the
+    target list: the move deals no damage while its function code still fires.
+    Nothing crashes, so only this pin catches the typo.
+    """
+    # Copied from Battler.rb's `case pbTarget(move)` arms.
+    engine_targets = {
+        "SingleNonUser", "SingleOpposing", "OppositeOpposing", "RandomOpposing",
+        "AllOpposing", "AllNonUsers", "DragonDarts", "UserOrPartner", "Partner",
+        "AllyBattlers", "AllBattlers", "User", "UserSide", "OpposingSide",
+        "BothSides", "NoTarget", "NonUserPosition",
+    }
+    assert set(_TARGET.values()) <= engine_targets
