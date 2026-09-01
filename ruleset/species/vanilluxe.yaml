@@ -30,3 +30,4 @@ learnset:
   - { level: 56, move: Cryoblast }
   - { level: 57, move: Rapture }
   - { level: 60, move: Sheer Cold }
+evolution: { from: Vanillish, method: { level: 36 } }

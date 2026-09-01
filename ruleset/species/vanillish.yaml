@@ -1,7 +1,6 @@
 name: Vanillish
 chrooked_id: vanillish
 aka: { pokeemerald: SPECIES_VANILLISH }
-types: [Ice, Fairy]
 abilities:
   secondary: Snow Cloak
 learnset:
@@ -26,3 +25,4 @@ learnset:
   - { level: 56, move: Sheer Cold }
   - { level: 57, move: Rapture }
   - { level: 64, move: Cryoblast }
+evolution: { from: Vanillite, method: { level: 18 } }
