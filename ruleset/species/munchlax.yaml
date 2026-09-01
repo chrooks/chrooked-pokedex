@@ -2,24 +2,27 @@ name: Munchlax
 chrooked_id: munchlax
 aka: { pokeemerald: SPECIES_MUNCHLAX }
 abilities:
-  primary: Self Sufficient
-  secondary: Thick Fat
-  hidden: Cheek Pouch
+  primary: Comatose
+  secondary: Self Sufficient
+  hidden: Earth Eater
 learnset:
   - { level: 1, move: Tackle }
-  - { level: 1, move: Lick }
-  - { level: 4, move: Defense Curl }
-  - { level: 8, move: Recycle }
-  - { level: 12, move: Covet }
-  - { level: 16, move: Bite }
-  - { level: 20, move: Stockpile }
-  - { level: 21, move: Swallow }
-  - { level: 24, move: Screech }
-  - { level: 28, move: Bail Out }
-  - { level: 32, move: Fling }
-  - { level: 36, move: Body Slam }
-  - { level: 38, move: Rampage }
-  - { level: 40, move: Metronome }
-  - { level: 44, move: Flail }
-  - { level: 48, move: Belly Drum }
-  - { level: 52, move: Last Resort }
+  - { level: 1, move: Yawn }
+  - { level: 5, move: Covet }
+  - { level: 9, move: Fake Out }
+  - { level: 12, move: Bug Bite }
+  - { level: 16, move: Curse }
+  - { level: 19, move: Block }
+  - { level: 23, move: Headbutt }
+  - { level: 26, move: Slack Off }
+  - { level: 30, move: Bulldoze }
+  - { level: 33, move: Seed Bomb }
+  - { level: 37, move: Stomping Tantrum }
+  - { level: 40, move: Stockpile }
+  - { level: 44, move: Body Slam }
+  - { level: 47, move: Heavy Slam }
+  - { level: 51, move: Rampage }
+  - { level: 54, move: Earthquake }
+  - { level: 58, move: Belly Drum }
+  - { level: 61, move: Deadfall }
+  - { level: 65, move: Giga Impact }
