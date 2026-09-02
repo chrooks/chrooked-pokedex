@@ -1,0 +1,10 @@
+name: Dual Chop
+chrooked_id: dualchop
+aka: {  }
+type: Dragon
+category: physical
+power: 40
+accuracy: 90
+pp: 15
+description: Attacks with brutal hits that strike twice.
+flags: [contact, slicing]

@@ -1,0 +1,10 @@
+name: Cross Chop
+chrooked_id: crosschop
+aka: {  }
+type: Fighting
+category: physical
+power: 100
+accuracy: 80
+pp: 5
+description: A double-chopping attack. High critical-hit ratio.
+flags: [contact, slicing]
