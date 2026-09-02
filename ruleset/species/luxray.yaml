@@ -16,20 +16,20 @@ learnset:
   - { level: 12, move: Cheap Shot }
   - { level: 16, move: Thunder Wave }
   - { level: 21, move: Spark }
-  - { level: 23, move: Bite }
+  - { level: 23, move: Sucker Punch }
   - { level: 26, move: Hone Claws }
-  - { level: 30, move: Sucker Punch }
-  - { level: 32, move: Surge Tackle }
-  - { level: 34, move: Jaw Lock }
-  - { level: 37, move: Ice Fang }
-  - { level: 40, move: Thunder Fang }
-  - { level: 42, move: Lock-On }
+  - { level: 30, move: Surge Tackle }
+  - { level: 34, move: Bite }
+  - { level: 37, move: Lock-On }
+  - { level: 40, move: Lightning Slam }
   - { level: 44, move: Rest }
-  - { level: 47, move: Lightning Slam }
-  - { level: 51, move: Electric Terrain }
-  - { level: 54, move: Backstab }
-  - { level: 58, move: Psychic Fangs }
-  - { level: 61, move: Gleamfang }
-  - { level: 65, move: Havoc }
-  - { level: 68, move: Noble Roar }
-  - { level: 72, move: Wild Charge }
+  - { level: 47, move: Backstab }
+  - { level: 50, move: Electric Terrain }
+  - { level: 53, move: Noble Roar }
+  - { level: 56, move: Ice Fang }
+  - { level: 59, move: Thunder Fang }
+  - { level: 62, move: Jaw Lock }
+  - { level: 65, move: Psychic Fangs }
+  - { level: 68, move: Wild Charge }
+  - { level: 70, move: Havoc }
+  - { level: 72, move: Gleamfang }
