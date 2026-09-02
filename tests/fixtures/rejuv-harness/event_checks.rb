@@ -147,6 +147,10 @@ def _INTL(s, *a); s; end
 class Sprite_Character
   def update; end
 end
+# The party Pokemon class — chrooked_zz_darmanitan prepends onto it. The mod
+# guards on its own module, not the target class, which is right for the game
+# (the class always exists there) and leaves each harness to supply it.
+class PokeBattle_Pokemon; end
 
 class PokeBattle_Move_0D8 < PokeBattle_Move
   def pbEffect(attacker, alltargets, hitnum = 0); attacker.pbRecoverHP(50, true); end

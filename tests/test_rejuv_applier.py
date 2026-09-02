@@ -660,6 +660,11 @@ class PokeBattle_Battle; end
 class Sprite_Character
   def update; end
 end
+# The party Pokemon class — chrooked_zz_darmanitan prepends onto it to stop the
+# engine reverting a chosen Zen form. The mod guards on its own module being
+# defined, not on the target class, which is right for the game (the class
+# always exists there) and leaves the stub to supply it here.
+class PokeBattle_Pokemon; end
 """
 
 
