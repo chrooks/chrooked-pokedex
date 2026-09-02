@@ -113,13 +113,19 @@ def parse_learnset(text: str):
     return lines[: head + 1], indent, rows, lines[end:]
 
 
-def transform(rows: list[tuple[int, str]], ctx: Ctx) -> list[tuple[int, str]] | None:
+def transform(
+    rows: list[tuple[int, str]], ctx: Ctx, abilities: tuple[str, ...] = ()
+) -> list[tuple[int, str]] | None:
     """Reorder inverted ladders in place. Return new rows, or None if unchanged.
 
     Never deletes a row — the dedup half was retired (see module docstring).
+
+    `abilities` must match what the audit used, or the repair reorders against
+    a different banding than the one that flagged the inversion and the audit
+    stays red after a write.
     """
     # Tag each row with its ladder identity (or None for non-ladder moves).
-    tagged = [(lvl, mv, ctx.rung(mv)) for lvl, mv in rows]
+    tagged = [(lvl, mv, ctx.rung(mv, abilities)) for lvl, mv in rows]
 
     # Only touch (type, split) ladders we actually modified — those carrying at
     # least one custom rung. Pure-canon vanilla ladders are out of scope.
@@ -230,7 +236,7 @@ def cmd_fix(ctx: Ctx, write: bool) -> int:
         if not parsed:
             continue
         pre, indent, rows, post = parsed
-        new_rows = transform(rows, ctx)
+        new_rows = transform(rows, ctx, species_abilities(path))
         if new_rows is None:
             continue
         changed += 1
