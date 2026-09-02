@@ -5,6 +5,7 @@ abilities:
   primary: Kindle
   secondary: Sheer Force
   hidden: Hammerfist
+stats: { atk: 145, def: 70, spd: 60, spe: 110 }
 learnset:
   - { level: 0, move: Hammer Arm }
   - { level: 1, move: Tackle }

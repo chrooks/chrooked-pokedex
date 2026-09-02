@@ -5,6 +5,7 @@ abilities:
   primary: Immolate
   secondary: Kindle
   hidden: Aftermath
+stats: { atk: 165, def: 50, spd: 45, spe: 125 }
 learnset:
   - { level: 0, move: Icicle Crash }
   - { level: 1, move: Tackle }

@@ -5,6 +5,7 @@ abilities:
   primary: Permafrost
   secondary: Thick Fat
   hidden: Guts
+stats: { def: 85, spd: 70, spe: 90 }
 learnset:
   - { level: 0, move: Icicle Crash }
   - { level: 1, move: Tackle }

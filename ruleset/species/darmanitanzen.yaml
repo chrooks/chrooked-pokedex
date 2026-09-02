@@ -5,27 +5,27 @@ abilities:
   primary: Sage Power
   secondary: Soulsight
   hidden: Impenetrable
+stats: { spe: 35 }
 learnset:
-  - { level: 0, move: Hammer Arm }
-  - { level: 1, move: Tackle }
+  - { level: 0, move: Psystrike }
   - { level: 1, move: Ember }
+  - { level: 1, move: Confusion }
   - { level: 1, move: Taunt }
-  - { level: 2, move: Meditate }
-  - { level: 4, move: Flame Charge }
-  - { level: 8, move: Chi Wave }
-  - { level: 12, move: Flame Wheel }
-  - { level: 16, move: Work Up }
-  - { level: 20, move: Zen Headbutt }
-  - { level: 24, move: Calm Mind }
-  - { level: 28, move: Fire Fang }
+  - { level: 4, move: Incinerate }
+  - { level: 8, move: Psybeam }
+  - { level: 12, move: Chi Wave }
+  - { level: 16, move: Calm Mind }
+  - { level: 20, move: Flame Burst }
+  - { level: 24, move: Extrasensory }
+  - { level: 28, move: Mystical Fire }
   - { level: 32, move: Psyshock }
-  - { level: 36, move: Astral Hand }
-  - { level: 40, move: Temper Flare }
-  - { level: 44, move: Heat Crash }
-  - { level: 48, move: Belly Drum }
+  - { level: 36, move: Flamethrower }
+  - { level: 40, move: Psychic }
+  - { level: 44, move: Heat Wave }
+  - { level: 48, move: Luster Purge }
   - { level: 52, move: Ki Blast }
-  - { level: 56, move: Cinder Smash }
-  - { level: 60, move: Kinetic Slam }
-  - { level: 64, move: Combust }
-  - { level: 68, move: Flare Blitz }
-  - { level: 70, move: Mindwarp }
+  - { level: 56, move: Fire Blast }
+  - { level: 60, move: Mindwarp }
+  - { level: 64, move: Future Sight }
+  - { level: 68, move: Overheat }
+  - { level: 70, move: Psycho Boost }
