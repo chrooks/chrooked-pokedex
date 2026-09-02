@@ -1,23 +1,32 @@
 name: Darmanitan Galar Standard
 chrooked_id: darmanitangalarstandard
-aka: { pokeemerald: SPECIES_DARMANITAN_GALAR_STANDARD }
+aka: { pokeemerald: SPECIES_DARMANITAN_GALAR_STANDARD, rejuv: "DARMANITAN::Galarian Standard Mode" }
+abilities:
+  primary: Permafrost
+  secondary: Thick Fat
+  hidden: Guts
 learnset:
   - { level: 0, move: Icicle Crash }
-  - { level: 1, move: Taunt }
-  - { level: 1, move: Powder Snow }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Bite }
+  - { level: 1, move: Powder Snow }
+  - { level: 1, move: Taunt }
   - { level: 2, move: Ice Ball }
-  - { level: 3, move: Ice Punch }
+  - { level: 4, move: Quick Attack }
+  - { level: 8, move: Headbutt }
   - { level: 12, move: Avalanche }
   - { level: 16, move: Work Up }
-  - { level: 20, move: Icicle Crash }
-  - { level: 24, move: Headbutt }
+  - { level: 20, move: Ice Punch }
+  - { level: 24, move: Body Slam }
   - { level: 28, move: Ice Fang }
-  - { level: 32, move: Uproar }
-  - { level: 38, move: Belly Drum }
-  - { level: 43, move: Ice Hammer }
-  - { level: 44, move: Blizzard }
-  - { level: 50, move: Thrash }
-  - { level: 56, move: Superpower }
+  - { level: 32, move: Vital Throw }
+  - { level: 36, move: Icefall }
+  - { level: 40, move: Take Down }
+  - { level: 44, move: Glacial Crush }
+  - { level: 48, move: Belly Drum }
+  - { level: 52, move: Hammer Arm }
+  - { level: 56, move: Thrash }
+  - { level: 60, move: Ice Hammer }
   - { level: 64, move: Icebreaker }
+  - { level: 66, move: Double-Edge }
+  - { level: 68, move: Superpower }
+  - { level: 70, move: Self-Destruct }

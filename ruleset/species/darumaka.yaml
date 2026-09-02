@@ -1,20 +1,30 @@
 name: Darumaka
 chrooked_id: darumaka
 aka: { dex: 554 }
+abilities:
+  primary: Kindle
+  secondary: Sheer Force
+  hidden: Hammerfist
 learnset:
-  - { level: 1, move: Ember }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Flame Charge }
-  - { level: 4, move: Taunt }
-  - { level: 8, move: Bite }
-  - { level: 12, move: Incinerate }
+  - { level: 1, move: Ember }
+  - { level: 1, move: Taunt }
+  - { level: 2, move: Arm Thrust }
+  - { level: 4, move: Flame Charge }
+  - { level: 8, move: Power-Up Punch }
+  - { level: 12, move: Flame Wheel }
   - { level: 16, move: Work Up }
   - { level: 20, move: Fire Punch }
-  - { level: 24, move: Headbutt }
+  - { level: 24, move: Mach Punch }
   - { level: 28, move: Fire Fang }
-  - { level: 32, move: Uproar }
-  - { level: 36, move: Belly Drum }
-  - { level: 38, move: Combust }
-  - { level: 40, move: Flare Blitz }
-  - { level: 44, move: Thrash }
-  - { level: 48, move: Superpower }
+  - { level: 32, move: Bulk Up }
+  - { level: 36, move: Drain Punch }
+  - { level: 40, move: Temper Flare }
+  - { level: 44, move: Heat Crash }
+  - { level: 48, move: Belly Drum }
+  - { level: 52, move: One-Inch Punch }
+  - { level: 56, move: Cinder Smash }
+  - { level: 60, move: Superpower }
+  - { level: 64, move: Combust }
+  - { level: 68, move: Flare Blitz }
+  - { level: 70, move: Focus Punch }
