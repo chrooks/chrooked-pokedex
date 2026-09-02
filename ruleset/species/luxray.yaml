@@ -3,28 +3,33 @@ chrooked_id: luxray
 aka: { pokeemerald: SPECIES_LUXRAY }
 types: [Electric, Dark]
 abilities:
-  primary: Strong Jaw
-  secondary: Carnivore
+  primary: Apex Predator
+  secondary: Supreme Overlord
+  hidden: Volt Absorb
 stats: { def: 75, spa: 75, spd: 75, spe: 100 }
 learnset:
+  - { level: 0, move: Crunch }
   - { level: 1, move: Leer }
-  - { level: 1, move: Charge }
-  - { level: 1, move: Electric Terrain }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Nuzzle }
-  - { level: 3, move: Cheap Shot }
-  - { level: 4, move: Thunder Shock }
-  - { level: 12, move: Bite }
-  - { level: 18, move: Spark }
-  - { level: 24, move: Roar }
-  - { level: 33, move: Volt Switch }
-  - { level: 40, move: Scary Face }
-  - { level: 43, move: Crunch }
-  - { level: 44, move: Lightning Slam }
-  - { level: 45, move: Arc Strike }
-  - { level: 48, move: Thunder Wave }
-  - { level: 56, move: Backstab }
-  - { level: 57, move: Havoc }
-  - { level: 64, move: Discharge }
-  - { level: 69, move: Wild Charge }
-  - { level: 70, move: Swagger }
+  - { level: 5, move: Jolt }
+  - { level: 9, move: Pursuit }
+  - { level: 12, move: Cheap Shot }
+  - { level: 16, move: Thunder Wave }
+  - { level: 21, move: Spark }
+  - { level: 23, move: Bite }
+  - { level: 26, move: Hone Claws }
+  - { level: 30, move: Sucker Punch }
+  - { level: 32, move: Surge Tackle }
+  - { level: 34, move: Jaw Lock }
+  - { level: 37, move: Ice Fang }
+  - { level: 40, move: Thunder Fang }
+  - { level: 42, move: Lock-On }
+  - { level: 44, move: Rest }
+  - { level: 47, move: Lightning Slam }
+  - { level: 51, move: Electric Terrain }
+  - { level: 54, move: Backstab }
+  - { level: 58, move: Psychic Fangs }
+  - { level: 61, move: Gleamfang }
+  - { level: 65, move: Havoc }
+  - { level: 68, move: Noble Roar }
+  - { level: 72, move: Wild Charge }

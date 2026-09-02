@@ -1,25 +1,34 @@
 name: Luxio
 chrooked_id: luxio
 aka: { pokeemerald: SPECIES_LUXIO }
+types: [Electric, Dark]
 abilities:
-  primary: Strong Jaw
-  secondary: Carnivore
+  primary: Apex Predator
+  secondary: Supreme Overlord
+  hidden: Volt Absorb
 stats: { spa: 65, spe: 80 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Thunder Shock }
-  - { level: 1, move: Charge }
-  - { level: 2, move: Nuzzle }
-  - { level: 12, move: Bite }
-  - { level: 18, move: Spark }
-  - { level: 24, move: Roar }
-  - { level: 31, move: Volt Switch }
-  - { level: 36, move: Scary Face }
-  - { level: 39, move: Lightning Slam }
-  - { level: 40, move: Arc Strike }
-  - { level: 42, move: Thunder Wave }
-  - { level: 48, move: Crunch }
-  - { level: 54, move: Discharge }
-  - { level: 60, move: Swagger }
-  - { level: 68, move: Wild Charge }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Jolt }
+  - { level: 9, move: Pursuit }
+  - { level: 12, move: Cheap Shot }
+  - { level: 16, move: Thunder Wave }
+  - { level: 21, move: Spark }
+  - { level: 23, move: Bite }
+  - { level: 26, move: Hone Claws }
+  - { level: 30, move: Sucker Punch }
+  - { level: 32, move: Surge Tackle }
+  - { level: 34, move: Jaw Lock }
+  - { level: 37, move: Ice Fang }
+  - { level: 40, move: Thunder Fang }
+  - { level: 42, move: Lock-On }
+  - { level: 44, move: Rest }
+  - { level: 47, move: Lightning Slam }
+  - { level: 51, move: Electric Terrain }
+  - { level: 54, move: Backstab }
+  - { level: 58, move: Psychic Fangs }
+  - { level: 61, move: Gleamfang }
+  - { level: 65, move: Havoc }
+  - { level: 68, move: Noble Roar }
+  - { level: 72, move: Wild Charge }
