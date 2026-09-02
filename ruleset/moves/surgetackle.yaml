@@ -1,0 +1,12 @@
+name: Surge Tackle
+chrooked_id: surgetackle
+aka: {  }
+type: Electric
+category: physical
+power: 70
+accuracy: 100
+pp: 20
+description: The user hurls its electrically charged body into the target; may paralyze the target.
+additional_effects:
+  - { effect: paralysis, chance: 10 }
+flags: [contact]
