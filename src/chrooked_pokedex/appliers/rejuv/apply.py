@@ -506,6 +506,11 @@ _FLAG = {
     "sound": "soundmove", "slicing": "sharpmove", "wind": "windmove",
     "ballistic": "ballmove", "kicking": "kickmove", "pulse": "pulsemove",
     "high_crit": "highcrit",
+    # Lets the move itself land on a protected target. Distinct from function
+    # 0x0AD, which LIFTS the protection for everyone else that turn — Feint
+    # carries both, and a move with only the funccode would be blocked before
+    # its effect ever ran (movetext.rb :FEINT).
+    "bypass_protect": "bypassprotect",
 }
 # Creation defaults for a scalar a MoveDef leaves as None (all 23 current
 # creation moves carry full numbers; these guard a future sparse def).
@@ -549,6 +554,11 @@ _PRIMARY_EFFECT_CODES = {
     # The chance rides :effect, so 30 reproduces Snore's roll on any BP.
     # Comatose satisfies the gate permanently (Battler.rb#isSleeping?).
     "sleep_gated": (0x011, 30),
+    # Ignores the target's protections; once it lands, every other move that
+    # round ignores them too (0x0AD = Feint / Hyperspace Hole; it clears
+    # effects[:Protect] and resets the side guards). Pair it with the
+    # bypass_protect flag above — the code alone does not get the move through.
+    "ignores_protect": (0x0AD, None),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance

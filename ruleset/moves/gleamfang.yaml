@@ -1,0 +1,11 @@
+name: Gleamfang
+chrooked_id: gleamfang
+aka: {  }
+type: Electric
+category: physical
+power: 90
+accuracy: 100
+pp: 10
+description: The user's eyes gleam gold and it bites what was hiding. This move ignores the target's protections, and every other move this turn ignores them too.
+effect: ignores_protect
+flags: [contact, biting, bypass_protect]

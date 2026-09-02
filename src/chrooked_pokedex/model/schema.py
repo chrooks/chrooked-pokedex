@@ -29,6 +29,10 @@ MOVE_FLAGS: frozenset[str] = frozenset({
     "contact", "punching", "biting", "sound", "slicing", "wind",
     "wing", "kicking", "piercing", "bone", "hammer", "ballistic",
     "pulse", "high_crit",
+    # Lands on a target behind Protect/Detect. A behavioural flag rather than a
+    # contact-style descriptor, but it lives here for the same reason the rest
+    # do: the engines read it as a data field on the move.
+    "bypass_protect",
 })
 
 # Neutral move targets the Ruleset models — the union of pokeemerald's neutralized

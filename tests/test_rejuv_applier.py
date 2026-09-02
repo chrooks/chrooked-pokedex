@@ -466,6 +466,29 @@ def test_new_move_primary_effect_uturn_gets_function_code(tmp_path):
     assert "0x0EE" in entry.reason
 
 
+def test_new_move_ignores_protect_gets_feint_code_and_bypass_flag(tmp_path):
+    """Gleamfang needs BOTH halves of Feint, not just the function code.
+
+    0x0AD lifts the target's protections for the rest of the turn, but
+    :bypassprotect is what lets this move land on a protected target in the
+    first place. With only the funccode, Protect blocks the move and the
+    effect never runs.
+    """
+    r = Ruleset(moves={"gleamfang": MoveDef(
+        name="Gleamfang", chrooked_id="gleamfang", type="Electric", category="physical",
+        power=90, accuracy=100, pp=10, effect="ignores_protect",
+        flags=("contact", "biting", "bypass_protect"),
+    )})
+    report, target = _apply(r, tmp_path)
+    text = (target / "patch" / "Definitions" / "movetext.rb").read_text()
+    assert "MOVEHASH[:GLEAMFANG] = {" in text
+    assert ":function => 0x0AD" in text
+    assert ":bypassprotect => true" in text
+    assert ":bitingmove => true" in text   # Apex Predator keys off this
+    entry = next(e for e in report.entries if e.chrooked_id == "gleamfang")
+    assert "DATA ONLY" not in (entry.reason or "")
+
+
 def test_new_move_sleep_gated_gets_snore_function_code(tmp_path):
     """Deadfall must inherit Snore's gate, not ship as plain damage.
 
