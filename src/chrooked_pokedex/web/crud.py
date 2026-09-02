@@ -463,6 +463,7 @@ def _move_from_payload(payload: dict[str, Any], chrooked_id: str) -> MoveDef:
         priority=int(payload.get("priority") or 0),
         target=payload.get("target") or "selected",
         recoil=payload.get("recoil"),
+        strike_count=payload.get("strike_count"),
     )
 
 
@@ -477,7 +478,7 @@ _MOVE_FIELDS = (
     "name", "chrooked_id", "aka", "type", "second_type",
     "category", "power", "accuracy", "pp", "description",
     "effect", "argument", "additional_effects", "flags", "priority", "target",
-    "recoil",
+    "recoil", "strike_count",
 )
 
 

@@ -30,7 +30,9 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping, Sequence
+
+from ..model import power_mods
 
 _HERE = Path(__file__).resolve().parent
 _FUEL_PATH = _HERE / "ability_fuel.json"
@@ -171,28 +173,76 @@ _MULTI_HIT_AVG = 3.5  # 2-to-5 hit movers: avg of the hit range, per Chris
 _TRIPLE_KICK_MULT = 6  # 1x+2x+3x ramp across three hits
 
 
+def strike_multiplier(row: Mapping[str, Any]) -> float:
+    """How many hits a move lands, for banding. 1 when it is a single hit.
+
+    Read in order: the declared ``strike_count``, then the effect where the
+    engine names it, then the description. The description is a LAST resort —
+    it only works because canon dex text happens to say "twice", which is no
+    use for a net-new move. A fixed multi-hitter we create should declare
+    ``strike_count`` in its Ruleset YAML instead (Chris, 2026-09-02).
+    """
+    declared = row.get("strike_count")
+    if isinstance(declared, int) and not isinstance(declared, bool) and declared > 1:
+        return float(declared)
+    effect = row.get("effect") or ""
+    desc = row.get("description") or ""
+    if effect == "multi_hit":
+        return _MULTI_HIT_AVG
+    if effect == "triple_kick":
+        return float(_TRIPLE_KICK_MULT)
+    if _THREE_HIT_RE.search(desc):
+        return 3.0
+    if _TWO_HIT_RE.search(desc):
+        return 2.0
+    return 1.0
+
+
 def effective_power(row: dict[str, Any]) -> int | None:
-    """A move's banding power: base power × average hit count (2026-08-26).
+    """A move's banding power: base power × hits × any ability boost.
 
     Multi-hit movers (Bullet Seed 25) list per-hit BP, so raw power banded
     them as starter-tier and they never surfaced as real rungs. Filters like
     ``power_max`` (Technician fuel) still read RAW power — the boost there is
     per hit by design; only band placement and pacing caps use this.
+
+    Two fields may be precomputed on the row, because this function alone
+    cannot see them:
+
+    * ``strikes`` — the hit count. The move pool is deliberately compact and
+      carries no description, so the regex fallback below never fires on a pool
+      row; ``build_move_pool`` stamps the count from the merged entry, which
+      does have one. Without it Twin Beam banded at 40 instead of 80 and landed
+      as an early rung (2026-09-02).
+    * ``power_mult`` — an ability boost from ``stamp_ability_power``, e.g.
+      Sharpness making a 90 BP cut band as 117.
     """
     power = row.get("power")
     if not isinstance(power, int) or power <= 1:
         return power
-    effect = row.get("effect") or ""
-    desc = row.get("description") or ""
-    if effect == "multi_hit":
-        return round(power * _MULTI_HIT_AVG)
-    if effect == "triple_kick":
-        return power * _TRIPLE_KICK_MULT
-    if _THREE_HIT_RE.search(desc):
-        return power * 3
-    if _TWO_HIT_RE.search(desc):
-        return power * 2
-    return power
+    strikes = row.get("strikes")
+    if not isinstance(strikes, (int, float)) or strikes <= 0:
+        strikes = strike_multiplier(row)
+    return round(power * strikes * (row.get("power_mult") or 1.0))
+
+
+def stamp_ability_power(
+    rows: Sequence[dict[str, Any]], abilities: Mapping[str, str] | None
+) -> list[dict[str, Any]]:
+    """Copies of `rows` carrying the species' ability boost as ``power_mult``.
+
+    Stamped once per species so every ``effective_power`` call downstream bands
+    against the boosted number without threading abilities through each one.
+    Returns new dicts — rows are shared across species and must not be mutated.
+    """
+    owned = power_mods.slots(abilities)
+    if not owned:
+        return list(rows)
+    out = []
+    for row in rows:
+        mult = power_mods.power_multiplier(owned, row.get("flags") or ())
+        out.append({**row, "power_mult": mult} if mult != 1.0 else dict(row))
+    return out
 
 
 def _bands() -> list[dict[str, Any]]:
@@ -413,6 +463,11 @@ def build_skeleton(
     bias = offensive_bias(stats)
     types = [t for t in entry.get("types") or [] if t]
     fuel = species_fuel(entry.get("abilities") or {}, all_abilities)
+    # Band against BOOSTED power for THIS species. Sharpness makes a 90 BP cut
+    # land as 117, so its rung belongs in a later bracket than the printed
+    # number implies. Stamped once here so every effective_power call below
+    # sees it without threading abilities through each one (2026-09-02).
+    move_pool = stamp_ability_power(move_pool, entry.get("abilities") or {})
     is_evolved = bool((entry.get("evolution") or {}).get("from"))
     # Moves any fuel entry's filter matches — starred in the prompt and sorted
     # first in rung candidate lists, so an ability-boosted 80BP pick is not

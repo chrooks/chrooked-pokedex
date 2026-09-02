@@ -4,6 +4,7 @@ aka: {  }
 type: Dragon
 category: physical
 power: 40
+strike_count: 2
 accuracy: 90
 pp: 15
 description: Attacks with brutal hits that strike twice.

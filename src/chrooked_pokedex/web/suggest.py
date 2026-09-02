@@ -2468,6 +2468,14 @@ def suggest_learnset(
     ]
     if not move_pool:
         raise SuggestError("No moves are available to suggest from.")
+    # Band every consumer against this species' BOOSTED power — the prompt's
+    # power line, the slot skeleton, and the advisory pacing check must agree.
+    # Without it the skeleton seated a Sharpness cut by its printed BP and the
+    # validator judged it by a different number (2026-09-02). The stamp is
+    # idempotent, so build_skeleton re-applying it for its own callers is safe.
+    move_pool = learnset_skeleton.stamp_ability_power(
+        move_pool, entry.get("abilities") or {}
+    )
 
     if mode == "surgical" and not (instruction and instruction.strip()):
         raise SuggestError(

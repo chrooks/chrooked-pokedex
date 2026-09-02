@@ -108,26 +108,34 @@ _MULTI_HIT_AVG = 3.5   # avg of the 2-5 hit range
 _TRIPLE_KICK_MULT = 6  # 1x+2x+3x ramp across three hits
 
 
-def effective_power(move: Mapping) -> Optional[int]:
-    """Banding power: base power × average hit count (raw power otherwise).
+def effective_power(move: Mapping, mult: float = 1.0) -> Optional[int]:
+    """Banding power: base power × hit count × `mult` (an ability boost).
 
     Mirrors learnset_skeleton.effective_power — the web skeleton and these
     editorial scripts must band a move identically.
+
+    Hit count comes from the declared `strike_count` first, then the effect,
+    then the description. `mult` is the caller's species-specific boost, e.g.
+    1.3 for a slicing move on a Sharpness holder — pass it or a cut bands by
+    its printed power and the pacing pass reports a gap that is already filled.
     """
     power = move.get("power")
     if not isinstance(power, int) or power <= 1:
         return power
+    declared = move.get("strike_count")
+    if isinstance(declared, int) and not isinstance(declared, bool) and declared > 1:
+        return round(power * declared * mult)
     effect = move.get("effect") or ""
     desc = move.get("description") or ""
     if effect == "multi_hit":
-        return round(power * _MULTI_HIT_AVG)
+        return round(power * _MULTI_HIT_AVG * mult)
     if effect == "triple_kick":
-        return power * _TRIPLE_KICK_MULT
+        return round(power * _TRIPLE_KICK_MULT * mult)
     if _THREE_HIT_RE.search(desc):
-        return power * 3
+        return round(power * 3 * mult)
     if _TWO_HIT_RE.search(desc):
-        return power * 2
-    return power
+        return round(power * 2 * mult)
+    return round(power * mult)
 
 # --- D1 effect map + D3 band conventions (the `check` audit source) ----------
 #

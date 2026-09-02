@@ -141,6 +141,20 @@ class MoveDef:
     # class). Rejuv reads it as the MOVEHASH :recoil attribute, and Reckless keys
     # off it being above zero.
     recoil: Optional[float] = None
+    # How many times the move strikes in one use, when that is FIXED (Double
+    # Kick 2, Triple Dive 3). Variable 2-to-5 movers carry `effect: multi_hit`
+    # instead and need no number here.
+    #
+    # It exists because banding needs it: a two-hitter lists per-hit BP, so
+    # Twin Beam reads as 40 and seats as an early rung when it really lands 80.
+    # Before this, the only tell was the word "twice" in the description — fine
+    # for canon dex text, useless for a net-new move whose wording nobody
+    # policed (Chris, 2026-09-02).
+    #
+    # EDITORIAL ONLY for now: it changes where a rung is placed, not what the
+    # engine does. No applier maps it, so a CREATED move given a strike_count
+    # still needs a multi-hit function code to actually hit twice in game.
+    strike_count: Optional[int] = None
 
 
 @dataclass(frozen=True)

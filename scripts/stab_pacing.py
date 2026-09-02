@@ -33,6 +33,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import move_coverage as mc  # noqa: E402
 import learnset_ladder as ll  # noqa: E402
+from chrooked_pokedex.model import power_mods  # noqa: E402
+# Shared level-placement primitive (2026-08-28, #95): one nearest-free-level
+# walk instead of a private copy here and in the web repair pass.
+from chrooked_pokedex.web.learnset_repair import nearest_free_level  # noqa: E402
 
 BANDS = ["≤50", "51-75", "76-90", "91-109", "110+"]
 # Scheme A — even fifths of L1-70, read from the shared band Contract so this
@@ -135,10 +139,12 @@ def chosen_splits(sp: dict) -> list[str]:
     return ["physical"] if atk >= spa else ["special"]
 
 
-def existing_cells(ctx: ll.Ctx, rows: list[tuple[int, str]]) -> set[tuple]:
+def existing_cells(
+    ctx: ll.Ctx, rows: list[tuple[int, str]], abilities: tuple[str, ...] = ()
+) -> set[tuple]:
     cells = set()
     for _, mv in rows:
-        r = ctx.rung(mv)
+        r = ctx.rung(mv, abilities)
         if r is not None:
             cells.add((r[0], r[1], r[2]))
     return cells
@@ -152,7 +158,9 @@ def plan_species(
     `sp` supplies types/stats/abilities; `rows` is the mon's learnset as
     (level, move) tuples.
     """
-    have = existing_cells(ctx, rows)
+    owned = power_mods.slots(sp.get("abilities"))
+    have = existing_cells(ctx, rows, owned)
+    have_moves = {mv.casefold() for _, mv in rows}
     used_levels = [lvl for lvl, _ in rows]
     splits = chosen_splits(sp)
     types = stab_types(sp)
@@ -168,6 +176,17 @@ def plan_species(
         ]
         for i, (typ, split) in enumerate(needers):
             move = rung_map[(typ, split, band)]
+            # rung_map picks one canonical move per cell from UNBOOSTED banding.
+            # On a Sharpness or Strong Jaw holder that move may already be on
+            # the ladder in a higher cell, or may simply no longer land in the
+            # cell we are filling. Proposing it anyway duplicates a row or
+            # mis-bands one, so leave the cell empty and say nothing — the pool
+            # genuinely has no filler for this species (2026-09-02).
+            if move.casefold() in have_moves:
+                continue
+            boosted = ctx.rung(move, owned)
+            if boosted is None or boosted[2] != band:
+                continue
             # first free-ish level in the window, offset per needer
             target = min(hi, lo + i * 2)
             while target in used_levels and target < hi:
@@ -178,19 +197,10 @@ def plan_species(
     return adds
 
 
-def band_key(ctx: ll.Ctx, move: str) -> int:
+def band_key(ctx: ll.Ctx, move: str, abilities: tuple[str, ...] = ()) -> int:
     """Sort rank for L1 keep-priority: status/non-ladder (0) then band index+1."""
-    r = ctx.rung(move)
+    r = ctx.rung(move, abilities)
     return 0 if r is None else BANDS.index(r[2]) + 1
-
-
-def _nearest_free(level: int, used: set[int]) -> int:
-    """Closest level to `level` not in `used`, within [2, 70], preferring later."""
-    for step in range(0, MAX_LEVEL):
-        for cand in (level + step, level - step):
-            if 2 <= cand <= MAX_LEVEL and cand not in used:
-                return cand
-    return level  # unreachable for real learnsets (never 69 slots full)
 
 
 def spread_levels(rows: list[tuple[int, str]]) -> list[tuple[int, str]]:
@@ -201,7 +211,7 @@ def spread_levels(rows: list[tuple[int, str]]) -> list[tuple[int, str]]:
     used: set[int] = set()
     out: list[tuple[int, str]] = []
     for lvl, mv in earned:
-        target = lvl if lvl not in used else _nearest_free(lvl, used)
+        target = lvl if lvl not in used else nearest_free_level(lvl, used, 2, MAX_LEVEL)
         used.add(target)
         out.append((target, mv))
     return sorted(anchors + out, key=lambda t: t[0])

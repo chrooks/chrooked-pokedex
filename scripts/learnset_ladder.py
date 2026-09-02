@@ -32,8 +32,14 @@ import re
 import sys
 from pathlib import Path
 
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import move_coverage as mc  # noqa: E402
+# Shared ladder-ascent primitive (2026-08-28, #95): one slot-reuse/reorder
+# implementation instead of a private copy here and in the web repair pass.
+from chrooked_pokedex.web.learnset_repair import assign_to_slots  # noqa: E402
+from chrooked_pokedex.model import power_mods  # noqa: E402
 
 RANK = {label: i for i, label in enumerate(mc.BAND_LABELS)}
 ANCHOR_MAX = 1  # levels <= this are fixed pre-load kit
@@ -64,12 +70,18 @@ class Ctx:
             if c not in base_ids and pool.moves.get(c, {}).get("name")
         }
 
-    def rung(self, move_name: str):
-        """Return (type, split, band, is_net_new) for a ladder rung, else None."""
+    def rung(self, move_name: str, abilities: tuple[str, ...] = ()):
+        """Return (type, split, band, is_net_new) for a ladder rung, else None.
+
+        `abilities` are the holder's three slots. They matter because a boost
+        moves the band: Sharpness makes Cross Chop band as 130, not 100, so a
+        ladder audited without them reports a false inversion (2026-09-02).
+        """
         mv = self.by_name.get(move_name.casefold())
         if not mv or not mc.is_ladder_eligible(mv):
             return None
-        band = mc.band_of(mc.effective_power(mv))
+        mult = power_mods.power_multiplier(abilities, mv.get("flags") or ())
+        band = mc.band_of(mc.effective_power(mv, mult))
         if band is None:
             return None
         return mv["type"], mv["category"], band, move_name.casefold() in self.net_new
@@ -128,9 +140,10 @@ def transform(rows: list[tuple[int, str]], ctx: Ctx) -> list[tuple[int, str]] | 
     for members in groups.values():
         if len(members) < 2:
             continue
-        slots = sorted(kept[i][0] for i in members)
-        order = sorted(members, key=lambda i: (RANK[kept[i][2][2]], kept[i][0]))
-        for slot, i in zip(slots, order):
+        levels = [kept[i][0] for i in members]
+        for slot, i in assign_to_slots(
+            levels, members, key=lambda i: (RANK[kept[i][2][2]], kept[i][0])
+        ):
             new_level[i] = slot
 
     out = sorted(
@@ -140,11 +153,11 @@ def transform(rows: list[tuple[int, str]], ctx: Ctx) -> list[tuple[int, str]] | 
     return out if out != rows else None
 
 
-def violations(rows: list[tuple[int, str]], ctx: Ctx):
+def violations(rows: list[tuple[int, str]], ctx: Ctx, abilities: tuple[str, ...] = ()):
     """Return inversions for one species' earned ladder (level >= 2)."""
     groups: dict[tuple, list] = {}
     for lvl, mv in rows:
-        r = ctx.rung(mv)
+        r = ctx.rung(mv, abilities)
         if r is None or lvl <= ANCHOR_MAX:
             continue
         groups.setdefault((r[0], r[1]), []).append((lvl, mv, r[2], r[3]))
@@ -170,6 +183,27 @@ def species_files() -> list[Path]:
     return sorted((mc.RULESET / "species").glob("*.yaml"))
 
 
+_BASE_ABILITIES: dict[str, dict] | None = None
+
+
+def species_abilities(path: Path) -> tuple[str, ...]:
+    """The species' three ability slots — Ruleset override first, else base.
+
+    Needed for banding, not for flavor: a power-boosting ability shifts which
+    bracket a rung sits in (see Ctx.rung).
+    """
+    global _BASE_ABILITIES
+    if _BASE_ABILITIES is None:
+        base = json.loads((mc.RULESET / ".base" / "1.11.2.json").read_text("utf-8"))
+        _BASE_ABILITIES = {
+            sid: (sp.get("abilities") or {}) for sid, sp in base["species"].items()
+        }
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    slots = dict(_BASE_ABILITIES.get(path.stem) or {})
+    slots.update({k: v for k, v in (data.get("abilities") or {}).items() if v})
+    return power_mods.slots(slots)
+
+
 def cmd_audit(ctx: Ctx) -> int:
     total_inv = affected = 0
     for path in species_files():
@@ -177,7 +211,7 @@ def cmd_audit(ctx: Ctx) -> int:
         if not parsed:
             continue
         _, _, rows, _ = parsed
-        inv = violations(rows, ctx)
+        inv = violations(rows, ctx, species_abilities(path))
         if inv:
             affected += 1
             total_inv += len(inv)

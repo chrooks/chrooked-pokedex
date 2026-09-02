@@ -64,7 +64,7 @@ _MOVE_KEYS = (
     "name", "chrooked_id", "aka", "type", "second_type",
     "category", "power", "accuracy", "pp", "description",
     "effect", "argument", "additional_effects", "flags", "priority", "target",
-    "recoil",
+    "recoil", "strike_count",
 )
 _ADDITIONAL_EFFECT_KEYS = ("effect", "chance")
 _ABILITY_KEYS = ("name", "chrooked_id", "aka", "description", "behaviors")
@@ -130,6 +130,23 @@ def load_species(path: Path) -> SpeciesOverride:
     )
 
 
+def _strike_count(data: dict, path: Path) -> int | None:
+    """Validate `strike_count`: absent, or a whole number of hits from 2 to 10.
+
+    1 is rejected rather than accepted-and-ignored — a single hit is the
+    default, so writing it means the author expected it to mean something.
+    """
+    raw = data.get("strike_count")
+    if raw is None:
+        return None
+    if not isinstance(raw, int) or isinstance(raw, bool) or not 2 <= raw <= 10:
+        raise ValueError(
+            f"{path.name}:strike_count: expected a whole number of hits "
+            f"between 2 and 10, got {raw!r}"
+        )
+    return raw
+
+
 def load_move(path: Path) -> MoveDef:
     data = _read_yaml(path)
     _check_keys(data, _MOVE_KEYS, path.name)
@@ -179,6 +196,7 @@ def load_move(path: Path) -> MoveDef:
         priority=int(data.get("priority", 0)),
         target=target,
         recoil=data.get("recoil"),
+        strike_count=_strike_count(data, path),
     )
 
 

@@ -138,6 +138,8 @@ def move_yaml(move: MoveDef) -> str:
         lines.append(f"target: {move.target}")
     if move.recoil:
         lines.append(f"recoil: {move.recoil}")
+    if move.strike_count:
+        lines.append(f"strike_count: {move.strike_count}")
     return "\n".join(lines) + "\n"
 
 

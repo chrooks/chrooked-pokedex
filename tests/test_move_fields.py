@@ -178,3 +178,29 @@ def test_apply_report_unaffected_and_loader_validates_bad_addl_effect(tmp_path: 
 
     with pytest.raises(ValueError, match="unknown field"):
         Ruleset.load(root)
+
+
+def test_strike_count_loads_and_rejects_a_meaningless_value(tmp_path):
+    """`strike_count` is the declared hit count for a FIXED multi-hitter.
+
+    1 is rejected rather than quietly ignored: a single hit is the default, so
+    writing it means the author expected it to do something.
+    """
+    import pytest
+
+    from chrooked_pokedex.model.loader import load_move
+
+    def write(body: str):
+        p = tmp_path / "twohit.yaml"
+        p.write_text(
+            "name: Two Hit\nchrooked_id: twohit\ntype: Normal\n"
+            "category: physical\npower: 40\n" + body,
+            encoding="utf-8",
+        )
+        return p
+
+    assert load_move(write("strike_count: 2\n")).strike_count == 2
+    assert load_move(write("")).strike_count is None
+    for bad in ("1", "0", "11", "'2'", "2.5"):
+        with pytest.raises(ValueError, match="strike_count"):
+            load_move(write(f"strike_count: {bad}\n"))

@@ -29,6 +29,7 @@ from ..model.schema import (
     TypeChartOverride,
 )
 from . import collections as colmod
+from . import learnset_skeleton
 from .evolution import method_label
 
 # Top-level species fields the dex flags as overridden, in display order.
@@ -514,6 +515,7 @@ def _move_override_values(override: MoveDef) -> dict[str, Any]:
         "flags": list(override.flags),
         "priority": override.priority,
         "target": override.target,
+        "strike_count": override.strike_count,
     }
 
 
@@ -712,6 +714,11 @@ def build_move_pool(snapshot: dict[str, Any], ruleset: Ruleset) -> list[dict[str
             "accuracy": entry.get("accuracy"),
             "pp": entry.get("pp"),
             "effect": entry.get("effect") or "",
+            # Hit count, precomputed here because the pool row deliberately
+            # carries no description and the fixed two/three-hitters are only
+            # detectable from one. Without it Twin Beam banded at its per-hit
+            # 40 BP and seated as an early rung (2026-09-02).
+            "strikes": learnset_skeleton.strike_multiplier(entry),
             "flags": list(entry.get("flags") or ()),
             "secondary": bool(entry.get("additional_effects")),
             # The utility grader reads target (spread) and additional_effects

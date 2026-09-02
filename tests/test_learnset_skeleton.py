@@ -368,3 +368,61 @@ def test_anchor_slots_seat_by_effective_power() -> None:
     }
     assert levels["Mach Punch"] <= 19, "a 40BP anchor belongs in the early game"
     assert levels["Wood Hammer"] >= 50, "a 120BP anchor belongs in the late game"
+
+
+# --- band placement: declared hit counts and ability boosts (2026-09-02) ------
+
+
+def test_strike_multiplier_prefers_the_declared_count_over_the_prose():
+    """A net-new two-hitter cannot rely on its description saying "twice".
+
+    The description regex only ever worked because canon dex text happens to
+    use that word. `strike_count` is the field an author declares instead.
+    """
+    from chrooked_pokedex.web.learnset_skeleton import strike_multiplier
+
+    declared = {"power": 40, "effect": "hit", "strike_count": 2,
+                "description": "A bespoke move whose wording nobody policed."}
+    assert strike_multiplier(declared) == 2.0
+    # Prose fallback still covers the base moves that carry no declaration.
+    assert strike_multiplier({"effect": "hit", "description": "strikes twice."}) == 2.0
+    assert strike_multiplier({"effect": "multi_hit"}) == 3.5
+    assert strike_multiplier({"effect": "hit", "description": "one clean hit."}) == 1.0
+
+
+def test_pool_row_bands_a_two_hitter_by_its_real_power():
+    """Regression: the pool carries no description, so the regex never fired.
+
+    Twin Beam banded at its per-hit 40 BP and the skeleton seated it as an
+    early rung; the real move lands 80.
+    """
+    from pathlib import Path
+
+    from chrooked_pokedex.model.ruleset import Ruleset
+    from chrooked_pokedex.web import dex as dexmod, snapshot as snapmod
+    from chrooked_pokedex.web.learnset_skeleton import effective_power
+
+    snap = snapmod.load_snapshot(Path("ruleset/.base/1.11.2.json"))
+    pool = {r["move"]: r for r in dexmod.build_move_pool(snap, Ruleset.load(Path("ruleset")))}
+    assert not pool["Twin Beam"].get("description"), "pool stays compact by design"
+    assert effective_power(pool["Twin Beam"]) == 80
+    assert effective_power(pool["Bone Rush"]) == 88
+    assert effective_power(pool["Sacred Sword"]) == 90, "single hits are untouched"
+
+
+def test_ability_boost_moves_a_rung_into_a_later_band():
+    """Sharpness makes a 100 BP cut band as 130, so its rung belongs later."""
+    from chrooked_pokedex.web.learnset_skeleton import effective_power, stamp_ability_power
+
+    rows = [
+        {"move": "Cross Chop", "power": 100, "flags": ["contact", "slicing"]},
+        {"move": "Drain Punch", "power": 75, "flags": ["contact"]},
+    ]
+    stamped = stamp_ability_power(rows, {"primary": "Sharpness", "hidden": "Justified"})
+    by_move = {r["move"]: effective_power(r) for r in stamped}
+    assert by_move == {"Cross Chop": 130, "Drain Punch": 75}
+    # Rows are shared across species, so the originals must not be touched.
+    assert all("power_mult" not in r for r in rows)
+    # A species without the ability bands by the printed number.
+    plain = stamp_ability_power(rows, {"primary": "Levitate"})
+    assert effective_power(plain[0]) == 100
