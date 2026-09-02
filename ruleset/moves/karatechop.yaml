@@ -1,0 +1,10 @@
+name: Karate Chop
+chrooked_id: karatechop
+aka: {  }
+type: Fighting
+category: physical
+power: 50
+accuracy: 100
+pp: 25
+description: A chopping attack with a high critical-hit ratio.
+flags: [contact, slicing]
