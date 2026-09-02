@@ -56,6 +56,11 @@ _MOVE_DIFF_FIELDS = (
     "flags",
     "priority",
     "target",
+    # Carried so the merged entry reaches build_move_pool, which needs it to
+    # band a fixed multi-hitter. Without it the pool fell back to matching the
+    # word "twice" in the description — right for canon text, wrong for any
+    # move we create (2026-09-02).
+    "strike_count",
 )
 
 
@@ -774,4 +779,5 @@ def _move_schema_defaults() -> dict[str, Any]:
         "flags": [],
         "priority": 0,
         "target": "selected",
+        "strike_count": None,
     }
