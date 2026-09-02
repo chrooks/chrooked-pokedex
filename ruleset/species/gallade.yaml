@@ -2,7 +2,9 @@ name: Gallade
 chrooked_id: gallade
 aka: { pokeemerald: SPECIES_GALLADE }
 abilities:
-  secondary: Sharpness
+  primary: Sharpness
+  secondary: Riposte
+  hidden: Justified
 stats: { hp: 70, spa: 60, spd: 110, spe: 95 }
 learnset:
   - { level: 0, move: Slash }

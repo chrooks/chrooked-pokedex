@@ -2,30 +2,31 @@ name: Kirlia
 chrooked_id: kirlia
 aka: { pokeemerald: SPECIES_KIRLIA }
 types: [Psychic, Fairy]
+abilities:
+  primary: Dual Aegis
+  secondary: Levitate
+  hidden: Magic Guard
 learnset:
-  - { level: 1, move: Growl }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Disarming Voice }
-  - { level: 9, move: Hypnosis }
-  - { level: 12, move: Draining Kiss }
-  - { level: 15, move: Teleport }
-  - { level: 16, move: Beguile }
-  - { level: 18, move: Psybeam }
-  - { level: 23, move: Life Dew }
-  - { level: 28, move: Charm }
-  - { level: 29, move: Dazzling Gleam }
-  - { level: 30, move: Astral Hand }
-  - { level: 33, move: Calm Mind }
-  - { level: 35, move: One-Inch Punch }
-  - { level: 36, move: Cross Chop }
-  - { level: 38, move: Psychic }
-  - { level: 40, move: Kinetic Slam }
-  - { level: 41, move: Pixie Slash }
-  - { level: 43, move: Heal Pulse }
-  - { level: 44, move: Mindwarp }
-  - { level: 45, move: Moonblast }
-  - { level: 48, move: Dream Eater }
-  - { level: 53, move: Future Sight }
-  - { level: 57, move: Rapture }
-  - { level: 62, move: Psycrush }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Teleport }
+  - { level: 5, move: Charm }
+  - { level: 9, move: Disarming Voice }
+  - { level: 12, move: Confusion }
+  - { level: 16, move: Draining Kiss }
+  - { level: 19, move: Helping Hand }
+  - { level: 23, move: Psybeam }
+  - { level: 26, move: Beguile }
+  - { level: 30, move: Healing Wish }
+  - { level: 33, move: Dazzling Gleam }
+  - { level: 37, move: Follow Me }
+  - { level: 40, move: Twin Beam }
+  - { level: 42, move: Ally Switch }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Take Heart }
+  - { level: 51, move: Mindwarp }
+  - { level: 54, move: Moonblast }
+  - { level: 58, move: Calm Mind }
+  - { level: 61, move: Destiny Bond }
+  - { level: 65, move: Rapture }
+  - { level: 68, move: Future Sight }
+  - { level: 72, move: Light Of Ruin }
