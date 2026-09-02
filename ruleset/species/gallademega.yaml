@@ -3,44 +3,26 @@ chrooked_id: gallademega
 aka: { pokeemerald: SPECIES_GALLADE_MEGA }
 stats: { hp: 70, spd: 120 }
 learnset:
-  - { level: 0, move: Slash }
-  - { level: 1, move: Calm Mind }
-  - { level: 1, move: Charm }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Dream Eater }
-  - { level: 2, move: Rock Smash }
-  - { level: 3, move: Growl }
-  - { level: 4, move: Hypnosis }
-  - { level: 5, move: Imprison }
-  - { level: 6, move: Leer }
-  - { level: 7, move: Life Dew }
-  - { level: 8, move: Confusion }
-  - { level: 9, move: Helping Hand }
-  - { level: 10, move: Disarming Voice }
-  - { level: 11, move: Draining Kiss }
-  - { level: 12, move: Feint }
-  - { level: 13, move: Fury Cutter }
-  - { level: 14, move: Aqua Cutter }
-  - { level: 15, move: Mind Flick }
-  - { level: 16, move: Brick Break }
-  - { level: 17, move: Night Slash }
-  - { level: 18, move: Aerial Ace }
-  - { level: 19, move: Psybeam }
-  - { level: 20, move: Leaf Blade }
-  - { level: 21, move: Psychic }
-  - { level: 22, move: Sacred Sword }
-  - { level: 23, move: False Swipe }
-  - { level: 24, move: Future Sight }
-  - { level: 28, move: Protect }
-  - { level: 31, move: Psycho Cut }
-  - { level: 35, move: Swords Dance }
-  - { level: 42, move: Astral Hand }
-  - { level: 43, move: Kinetic Slam }
-  - { level: 45, move: Pixie Slash }
-  - { level: 46, move: Cross Chop }
-  - { level: 49, move: Heal Pulse }
-  - { level: 52, move: Secret Sword }
-  - { level: 56, move: Quick Guard }
-  - { level: 57, move: Wide Guard }
-  - { level: 58, move: Psycrush }
-  - { level: 63, move: Close Combat }
+  - { level: 0, move: Sacred Sword }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Mind Flick }
+  - { level: 9, move: Fury Cutter }
+  - { level: 12, move: Detect }
+  - { level: 16, move: Mach Punch }
+  - { level: 20, move: Psyshield Bash }
+  - { level: 23, move: Karate Chop }
+  - { level: 26, move: Upper Hand }
+  - { level: 30, move: Drain Punch }
+  - { level: 33, move: Night Slash }
+  - { level: 37, move: Psycho Cut }
+  - { level: 40, move: Psyblade }
+  - { level: 44, move: Thunderous Kick }
+  - { level: 47, move: Kowtow Cleave }
+  - { level: 51, move: Swords Dance }
+  - { level: 54, move: Leaf Blade }
+  - { level: 58, move: Counter }
+  - { level: 61, move: Close Combat }
+  - { level: 65, move: Psycrush }
+  - { level: 68, move: Cross Chop }
+  - { level: 72, move: Excalibur }
