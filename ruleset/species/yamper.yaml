@@ -1,6 +1,7 @@
 name: Yamper
 chrooked_id: yamper
 aka: { dex: 835 }
+types: [Electric, Normal]
 abilities:
   primary: Finishing Kick
   secondary: Motor Drive

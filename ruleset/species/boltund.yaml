@@ -1,6 +1,7 @@
 name: Boltund
 chrooked_id: boltund
 aka: { pokeemerald: SPECIES_BOLTUND }
+types: [Electric, Normal]
 abilities:
   primary: Finishing Kick
   secondary: Motor Drive
