@@ -2,7 +2,9 @@ name: Clawitzer
 chrooked_id: clawitzer
 aka: { pokeemerald: SPECIES_CLAWITZER }
 abilities:
+  primary: Mega Launcher
   secondary: Hydrate
+  hidden: Deadeye
 stats: { spa: 135 }
 learnset:
   - { level: 1, move: Splash }

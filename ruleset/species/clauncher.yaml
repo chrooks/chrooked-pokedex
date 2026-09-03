@@ -2,7 +2,9 @@ name: Clauncher
 chrooked_id: clauncher
 aka: { pokeemerald: SPECIES_CLAUNCHER }
 abilities:
+  primary: Mega Launcher
   secondary: Hydrate
+  hidden: Deadeye
 learnset:
   - { level: 1, move: Water Gun }
   - { level: 1, move: Splash }

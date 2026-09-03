@@ -1,6 +1,10 @@
 name: Dartrix
 chrooked_id: dartrix
 aka: { dex: 723 }
+abilities:
+  primary: Overgrow
+  secondary: Long Reach
+  hidden: Deadeye
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }

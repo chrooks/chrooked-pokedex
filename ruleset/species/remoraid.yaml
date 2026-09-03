@@ -3,6 +3,7 @@ chrooked_id: remoraid
 aka: { pokeemerald: SPECIES_REMORAID }
 abilities:
   primary: Mega Launcher
+  secondary: Deadeye
   hidden: Protean
 stats: { def: 55 }
 learnset:

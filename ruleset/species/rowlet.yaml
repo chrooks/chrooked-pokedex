@@ -1,6 +1,10 @@
 name: Rowlet
 chrooked_id: rowlet
 aka: { dex: 722 }
+abilities:
+  primary: Overgrow
+  secondary: Long Reach
+  hidden: Deadeye
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Growl }

@@ -2,8 +2,9 @@ name: Decidueye
 chrooked_id: decidueye
 aka: { pokeemerald: SPECIES_DECIDUEYE }
 abilities:
+  primary: Overgrow
   secondary: Long Reach
-  hidden: Blitz
+  hidden: Deadeye
 stats: { hp: 80, atk: 120, spa: 80, spd: 75, spe: 110 }
 learnset:
   - { level: 0, move: Spirit Shackle }

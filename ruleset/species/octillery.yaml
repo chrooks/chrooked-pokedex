@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_OCTILLERY }
 types: [Water, Fire]
 abilities:
   primary: Mega Launcher
+  secondary: Deadeye
   hidden: Protean
 stats: { def: 95 }
 learnset:
