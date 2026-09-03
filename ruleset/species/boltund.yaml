@@ -3,6 +3,8 @@ chrooked_id: boltund
 aka: { pokeemerald: SPECIES_BOLTUND }
 abilities:
   primary: Finishing Kick
+  secondary: Motor Drive
+  hidden: Reckless
 stats: { hp: 80, spe: 125 }
 learnset:
   - { level: 1, move: Electrify }

@@ -3,6 +3,8 @@ chrooked_id: yamper
 aka: { dex: 835 }
 abilities:
   primary: Finishing Kick
+  secondary: Motor Drive
+  hidden: Reckless
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Tail Whip }
