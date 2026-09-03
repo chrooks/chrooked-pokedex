@@ -27,4 +27,12 @@ notes:
   - "Design intent: the sniper who reads the weak point. Contrast to Protean speed-spam: this rewards the one aimed ranged shot."
   - "Contact flag is the sole gate; a move's physical/special category is irrelevant."
   - "Distribution candidates: Octillery, Remoraid, Clawitzer, Blastoise, Decidueye, Magnezone, Genesect, Kingdra."
-  - STUB - engine_hints ungrounded, needs human grounding pass
+engine_hints:
+  essentials: >-
+    Rejuv: references/rejuv-harness/chrooked_deadeye.rb. Accuracy half via the
+    core's CHROOKED_SURE_HIT registry (pbAccuracyCheck; invulMisses? is a separate
+    gate so Dive/Fly still dodge). Damage half is a pbCalcDamage prepend that clamps
+    the target's positive Defense/Sp. Def stages to 0 around super and restores
+    them - Battler#pbDefense/pbSpDef read stages[] directly and the only vanilla
+    bypass is the attacker-side unaware kwarg. Also covers the AI's pbRoughDamage.
+    Check: docker run --rm -v $PWD/references/rejuv-harness:/h:ro ruby:3.2-slim ruby /h/deadeye_check.rb
