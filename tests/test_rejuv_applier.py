@@ -641,30 +641,22 @@ def test_installer_write_failure_reports_blocked(tmp_path, monkeypatch):
 
 HARNESS = Path(__file__).parent.parent / "references" / "rejuv-harness"
 
-_RUBY_STUB = """
+# The inert Rejuv classes every harness needs live in ONE file — see
+# fixtures/rejuv-harness/engine_stubs.rb for why. This test evals a string
+# rather than running a file, so it reads that file in instead of requiring it.
+# What stays here is only what THIS test drives.
+_ENGINE_STUBS = (
+    Path(__file__).parent / "fixtures" / "rejuv-harness" / "engine_stubs.rb"
+).read_text(encoding="utf-8")
+
+_RUBY_STUB = _ENGINE_STUBS + """
 class PokeBattle_Move
   def pbCalcDamage(a, o, h = 0, f = {}); 100; end
   def pbType(attacker, type = nil); :NORMAL; end
 end
 # Dream Eater's effect class — chrooked_daydreamer prepends onto it.
 class PokeBattle_Move_0DE < PokeBattle_Move; end
-# Rejuv's party-menu registry — the zz_* QoL mods register handlers on it.
-module MenuHandlers
-  def self.add(*args, &blk); end
-end
-def _INTL(s, *a); s; end
 class PokeBattle_Battler; end
-class PokeBattle_Battle; end
-# Rejuv's overworld sprite class — chrooked_zz_kirincull alias-chains #update,
-# so the method must exist before the shim is eval'd.
-class Sprite_Character
-  def update; end
-end
-# The party Pokemon class — chrooked_zz_darmanitan prepends onto it to stop the
-# engine reverting a chosen Zen form. The mod guards on its own module being
-# defined, not on the target class, which is right for the game (the class
-# always exists there) and leaves the stub to supply it here.
-class PokeBattle_Pokemon; end
 """
 
 

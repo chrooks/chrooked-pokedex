@@ -1,6 +1,8 @@
 # Behavioral checks for the rejuv-harness wave-1 lambdas, run against stub
 # battle classes (no game needed). Invoked by test_harness_lambda_behavior.
 # Exits non-zero listing each failed expectation.
+require_relative "engine_stubs"   # inert Rejuv classes the mods load against
+
 class PokeBattle_Move
   attr_accessor :move, :battle, :basedamage, :flags, :cat, :type, :zmove
   def pbCalcDamage(a, o, h = 0, f = {}); 100; end
@@ -13,22 +15,7 @@ class PokeBattle_Move
   def pbIsSpecial?(a, t = nil); @cat == :special; end
 end
 class PokeBattle_Move_0DE < PokeBattle_Move; end
-# Rejuv's party-menu registry — the zz_* QoL mods register handlers on it.
-module MenuHandlers
-  def self.add(*args, &blk); end
-end
-def _INTL(s, *a); s; end
 class PokeBattle_Battler; end
-class PokeBattle_Battle; end
-# Rejuv's overworld sprite class — chrooked_zz_kirincull alias-chains #update,
-# so the method must exist before the shim is eval'd.
-class Sprite_Character
-  def update; end
-end
-# The party Pokemon class — chrooked_zz_darmanitan prepends onto it. The mod
-# guards on its own module, not the target class, which is right for the game
-# (the class always exists there) and leaves each harness to supply it.
-class PokeBattle_Pokemon; end
 Dir[File.join(ARGV[0], "chrooked_*.rb")].sort.each { |f| eval(File.read(f), TOPLEVEL_BINDING) }
 
 Battler = Struct.new(:ability, :hp, :totalhp, :attack, :spatk, :types, :airborne, :damagestate, :status) do

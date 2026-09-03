@@ -1,10 +1,11 @@
 # Behavioral checks for the rejuv-harness event hooks (waves 3+), run against
 # stub battle classes. ARGV[0] = harness dir. Non-zero exit lists failures.
 
+require_relative "engine_stubs"   # inert Rejuv classes the mods load against
+
 module PBStats
   ATTACK = 1; SPATK = 3; SPDEF = 4; SPEED = 5; ACCURACY = 6
 end
-def _INTL(s, *a); s; end
 $cache = Struct.new(:moves).new({})
 
 class Typemod
@@ -137,20 +138,6 @@ class PokeBattle_Move
 end
 
 class PokeBattle_Move_0DE < PokeBattle_Move; end
-# Rejuv's party-menu registry — the zz_* QoL mods register handlers on it.
-module MenuHandlers
-  def self.add(*args, &blk); end
-end
-def _INTL(s, *a); s; end
-# Rejuv's overworld sprite class — chrooked_zz_kirincull alias-chains #update,
-# so the method must exist before the shim is eval'd.
-class Sprite_Character
-  def update; end
-end
-# The party Pokemon class — chrooked_zz_darmanitan prepends onto it. The mod
-# guards on its own module, not the target class, which is right for the game
-# (the class always exists there) and leaves each harness to supply it.
-class PokeBattle_Pokemon; end
 
 class PokeBattle_Move_0D8 < PokeBattle_Move
   def pbEffect(attacker, alltargets, hitnum = 0); attacker.pbRecoverHP(50, true); end
