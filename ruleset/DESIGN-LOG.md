@@ -612,3 +612,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-08-30 — Chandelure line
 
 - **Direction:** learnset-only repass
+
+## 2026-09-03 — Inteleon line
+
+- **Direction:** mirror-only: current kit onto pre-evos

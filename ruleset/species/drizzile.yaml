@@ -1,13 +1,14 @@
 name: Drizzile
 chrooked_id: drizzile
 aka: { pokeemerald: SPECIES_DRIZZILE }
+types: [Water]
 abilities:
   primary: Torrent
   secondary: Deadeye
   hidden: Sniper
-stats: { atk: 50, spd: 50 }
+stats: { hp: 65, atk: 50, def: 55, spa: 95, spd: 50, spe: 90 }
 learnset:
-  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Fake Tears }
   - { level: 1, move: Flicker }
   - { level: 5, move: Water Gun }
   - { level: 9, move: Gust }
