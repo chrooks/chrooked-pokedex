@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Deadeye
+chrooked_id: deadeye
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Non-contact attacks never miss
+    trigger: accuracy-check
+    when: the move used is damaging AND does not make contact
+    effect: Skip the accuracy roll entirely; the move always hits, ignoring evasion, accuracy modifiers, and accuracy-reducing conditions. Semi-invulnerable turns (Fly, Dig, Dive) still block the hit.
+  - summary: Non-contact attacks ignore defensive boosts
+    trigger: damage-calc
+    when: the move used is damaging AND does not make contact AND the target's Defense or Sp. Def stage is above 0
+    effect: Treat the target's Defense and Sp. Def stages as 0 for this damage calculation (positive stages only; negative stages still apply). Mirrors the Unaware clause, restricted to the bearer's own non-contact attacks.
+test_cases:
+  - given: Bearer uses Hydro Pump (80 accuracy, non-contact) against a foe with +6 evasion under Sand Veil in a sandstorm
+    expect: Hydro Pump hits without an accuracy roll and deals full damage.
+  - given: Bearer uses Snipe Shot against a foe at +2 Sp. Def from Calm Mind
+    expect: Damage is calculated as if the foe's Sp. Def stage were 0.
+  - given: Bearer uses Snipe Shot against a foe at -1 Sp. Def
+    expect: The -1 stage still applies; only positive stages are ignored.
+  - given: Bearer uses Liquidation (contact) against a foe at +2 Defense with lowered accuracy
+    expect: Neither clause applies; normal accuracy roll and the +2 Defense both count.
+  - given: Bearer uses Hydro Pump against a foe mid-Dive
+    expect: The move misses; semi-invulnerability is not bypassed.
+notes:
+  - "Design intent: the sniper who reads the weak point. Contrast to Protean speed-spam: this rewards the one aimed ranged shot."
+  - "Contact flag is the sole gate; a move's physical/special category is irrelevant."
+  - "Distribution candidates: Octillery, Remoraid, Clawitzer, Blastoise, Decidueye, Magnezone, Genesect, Kingdra."
+  - STUB - engine_hints ungrounded, needs human grounding pass

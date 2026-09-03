@@ -1,6 +1,10 @@
 name: Inteleon
 chrooked_id: inteleon
 aka: { pokeemerald: SPECIES_INTELEON }
+abilities:
+  primary: Torrent
+  secondary: Deadeye
+  hidden: Sniper
 stats: { spa: 135 }
 learnset:
   - { level: 0, move: Snipe Shot }

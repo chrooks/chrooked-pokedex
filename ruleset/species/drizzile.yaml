@@ -1,6 +1,10 @@
 name: Drizzile
 chrooked_id: drizzile
 aka: { pokeemerald: SPECIES_DRIZZILE }
+abilities:
+  primary: Torrent
+  secondary: Deadeye
+  hidden: Sniper
 stats: { atk: 50, spd: 50 }
 learnset:
   - { level: 1, move: Pound }

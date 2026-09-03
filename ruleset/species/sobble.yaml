@@ -1,6 +1,10 @@
 name: Sobble
 chrooked_id: sobble
 aka: {  }
+abilities:
+  primary: Torrent
+  secondary: Deadeye
+  hidden: Sniper
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Growl }
