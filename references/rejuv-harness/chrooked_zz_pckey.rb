@@ -8,6 +8,13 @@
 # and letter scancodes work with triggerex? (TextEntry.rb uses :C/:V).
 # F8 stays the party-screen level-cap key (chrooked_zz_levelcap.rb).
 #
+# Pad hotkey: Select (SDL calls it BACK on an Xbox-style pad) does the same, so
+# the screen is reachable when streaming to a handheld with no keyboard. It has
+# to be a separate check: mkxp-z's F1 binding dialog maps pad buttons to game
+# *actions*, never to keystrokes, so no pad button can ever produce :P. Pad
+# state lives behind Input::Controller, guarded with defined? because the
+# stub-test harness has no such module.
+#
 # Overworld: uses the designed Seam Scene_Map#checkKeyPresses/
 # #handleKeyPresses ("to be overwritten per game", Scene_Map.rb:250).
 # Rejuv's Blessings overlay already overwrites them
@@ -25,6 +32,17 @@ class Game_Temp
   attr_accessor :chrooked_pc_calling
 end
 
+module ChrookedPCKey
+  # One place both call sites ask, so the keyboard and pad hotkeys can never
+  # drift apart.
+  def self.pressed?
+    return true if Input.triggerex?(:P)
+    return false unless defined?(Input::Controller)
+
+    Input::Controller.triggerex?(:BACK)
+  end
+end
+
 class Scene_Map
   # Chain only when the base Seam exists — the stub-test harness loads this
   # file against bare stand-in classes with no key-press methods.
@@ -34,7 +52,7 @@ class Scene_Map
 
     def checkKeyPresses
       chrooked_pckey_checkKeyPresses
-      if Input.triggerex?(:P) && !pbMapInterpreterRunning? &&
+      if ChrookedPCKey.pressed? && !pbMapInterpreterRunning? &&
          !$game_switches[:NotPlayerCharacter]
         $game_temp.chrooked_pc_calling = true
       end
@@ -61,7 +79,7 @@ class PokemonScreen_Scene
     def update
       chrooked_pckey_update
       # busy guard: message loops call self.update reentrantly
-      return if @chrooked_pckey_busy || !Input.triggerex?(:P)
+      return if @chrooked_pckey_busy || !ChrookedPCKey.pressed?
       return if $game_temp.in_battle || $game_switches[:NotPlayerCharacter]
 
       @chrooked_pckey_busy = true

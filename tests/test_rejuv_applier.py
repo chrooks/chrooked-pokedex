@@ -1278,3 +1278,45 @@ def test_target_symbols_are_engine_vocabulary():
         "BothSides", "NoTarget", "NonUserPosition",
     }
     assert set(_TARGET.values()) <= engine_targets
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_pckey_hotkey_accepts_keyboard_and_pad(tmp_path):
+    """The PC hotkey answers to the P key AND to Select on a pad.
+
+    mkxp-z keeps pad state behind Input::Controller, separate from the keyboard,
+    because its binding dialog maps pad buttons to game actions rather than to
+    keystrokes — no pad button can produce :P. The module must also survive an
+    engine with no Controller module at all, which is how the harness runs.
+    """
+    import subprocess
+    mod = HARNESS / "chrooked_zz_pckey.rb"
+    script = f"""
+      module Input
+        def self.triggerex?(k); $kb == k; end
+      end
+      eval(File.read({str(mod)!r}), TOPLEVEL_BINDING)
+
+      $kb = :P
+      raise "keyboard P should fire" unless ChrookedPCKey.pressed?
+
+      $kb = nil
+      raise "nothing pressed should not fire" if ChrookedPCKey.pressed?
+
+      module Input
+        module Controller
+          def self.triggerex?(b); $pad == b; end
+        end
+      end
+
+      $pad = :BACK
+      raise "pad Select should fire" unless ChrookedPCKey.pressed?
+
+      $pad = :START
+      raise "a different pad button should not fire" if ChrookedPCKey.pressed?
+
+      puts "OK"
+    """
+    proc = subprocess.run(["ruby", "-e", script], capture_output=True, text=True, cwd=tmp_path)
+    assert proc.returncode == 0, proc.stderr
+    assert "OK" in proc.stdout
