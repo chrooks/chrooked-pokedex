@@ -4,7 +4,7 @@ aka: {  }
 abilities:
   primary: Magnet Pull
   secondary: Transistor
-  hidden: Sturdy
+  hidden: Deadeye
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Thunder Wave }
