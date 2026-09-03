@@ -28,8 +28,14 @@
 
 .tm-breakdown {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0, …) kills the grid's min-content floor so a bucket can never
+     force the side panel wider than itself (no horizontal scroll). */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem 1.5rem;
+}
+
+.tm-breakdown__col {
+  min-width: 0;
 }
 
 @media (max-width: 640px) {

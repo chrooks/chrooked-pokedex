@@ -2,17 +2,27 @@ name: Kricketot
 chrooked_id: kricketot
 aka: { pokeemerald: SPECIES_KRICKETOT }
 types: [Bug, Normal]
-stats: { atk: 45, spa: 45 }
+abilities:
+  primary: Chitinize
+  secondary: Technician
+  hidden: Amplifier
+stats: { hp: 45, atk: 25, def: 35, spa: 70, spd: 34, spe: 30 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 2, move: Fury Cutter }
-  - { level: 6, move: Struggle Bug }
-  - { level: 15, move: Bail Out }
-  - { level: 16, move: Bug Bite }
-  - { level: 29, move: X-Scissor }
-  - { level: 31, move: Take Down }
-  - { level: 46, move: Rampage }
-  - { level: 47, move: Moltstrike }
-  - { level: 57, move: Megahorn }
-  - { level: 59, move: Double-Edge }
+  - { level: 1, move: Bide }
+  - { level: 1, move: Absorb }
+  - { level: 5, move: Supersonic }
+  - { level: 8, move: Echoed Voice }
+  - { level: 12, move: Struggle Bug }
+  - { level: 15, move: Sing }
+  - { level: 18, move: Round }
+  - { level: 21, move: Screech }
+  - { level: 24, move: Disarming Voice }
+  - { level: 27, move: Uproar }
+  - { level: 30, move: Overdrive }
+  - { level: 33, move: Bug Buzz }
+  - { level: 36, move: Calm Mind }
+  - { level: 39, move: Hyper Voice }
+  - { level: 43, move: Perish Song }
+  - { level: 47, move: Sparkling Aria }
+  - { level: 52, move: Boomburst }

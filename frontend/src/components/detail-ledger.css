@@ -59,6 +59,10 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+  /* The narrow side panel can't fit id + every tool on one line — wrap rather
+     than overflow it (the panel must never scroll horizontally). Full page is
+     wide enough that nothing wraps. */
+  flex-wrap: wrap;
 }
 
 /* Identity pairs with the dex number on the left so the action row on the right
@@ -125,6 +129,8 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-1);
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .ledger__tool {
