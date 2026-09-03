@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Finishing Kick
+chrooked_id: finishingkick
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Contact moves deal 1.2x damage while Speed is +1 or higher
+    trigger: damage-calc
+    when: this Pokemon is the attacker AND its Speed stat stage is +1 or higher AND the move is a damaging contact move
+    effect: multiply the damage modifier by 1.2 (flat multiplier, applied alongside other ability damage multipliers)
+test_cases:
+  - given: a Finishing Kick user at Speed stage 0 (just switched in) uses Quick Attack
+    expect: normal damage; the 1.2x bonus does not apply
+  - given: a Finishing Kick user at Speed stage +1 uses Wild Charge (contact)
+    expect: Wild Charge deals 1.2x damage
+  - given: a Finishing Kick user at Speed stage +2 uses Thunderbolt (non-contact)
+    expect: normal damage; only contact moves are boosted
+  - given: a Finishing Kick user at Speed stage +6 uses Crunch
+    expect: Crunch deals 1.2x damage; the bonus stays active at the cap
+notes:
+  - "COMPOSED: ruleset/abilities/finishingkick.yaml carries behaviors: [finishingkick, speedboost]. The turn-end +1 Speed comes from vanilla Speed Boost and is NOT restated here — edit Speed Boost, never copy its rule in."
+  - The condition reads the Speed stat STAGE (boost counter >= +1), not the computed Speed value, so Simple/Contrary change how fast the threshold is reached but not the multiplier.
+  - Speed stages reset on switch-out, so the bonus is lost on a switch and rebuilt from Speed Boost.
+  - Suppressed by Neutralizing Gas like any ability.
+  - STUB — engine_hints ungrounded, needs human grounding pass

@@ -1,6 +1,8 @@
 name: Boltund
 chrooked_id: boltund
 aka: { pokeemerald: SPECIES_BOLTUND }
+abilities:
+  primary: Finishing Kick
 stats: { hp: 80, spe: 125 }
 learnset:
   - { level: 1, move: Electrify }

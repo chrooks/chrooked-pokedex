@@ -1,0 +1,5 @@
+name: Finishing Kick
+chrooked_id: finishingkick
+aka: {  }
+behaviors: [finishingkick, speedboost]
+description: Speed rises each turn. Once it has risen, contact moves hit 1.2x harder.
