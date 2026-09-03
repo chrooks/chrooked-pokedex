@@ -1,12 +1,14 @@
 name: Sobble
 chrooked_id: sobble
 aka: {  }
+types: [Water]
 abilities:
   primary: Torrent
   secondary: Deadeye
   hidden: Sniper
+stats: { hp: 50, atk: 40, def: 40, spa: 70, spd: 40, spe: 70 }
 learnset:
-  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Fake Tears }
   - { level: 1, move: Flicker }
   - { level: 5, move: Water Gun }
   - { level: 9, move: Gust }

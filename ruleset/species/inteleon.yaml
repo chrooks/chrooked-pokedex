@@ -8,7 +8,7 @@ abilities:
 stats: { spa: 135 }
 learnset:
   - { level: 0, move: Snipe Shot }
-  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Fake Tears }
   - { level: 1, move: Flicker }
   - { level: 5, move: Water Gun }
   - { level: 9, move: Gust }
