@@ -1280,28 +1280,36 @@ def test_target_symbols_are_engine_vocabulary():
     assert set(_TARGET.values()) <= engine_targets
 
 
+@pytest.mark.parametrize(
+    "mod_name, module, key, pad_button",
+    [
+        ("chrooked_zz_pckey.rb", "ChrookedPCKey", ":P", ":BACK"),
+        ("chrooked_zz_levelcap.rb", "ChrookedLevelCap", ":F8", ":RIGHTSTICK"),
+    ],
+)
 @pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
-def test_pckey_hotkey_accepts_keyboard_and_pad(tmp_path):
-    """The PC hotkey answers to the P key AND to Select on a pad.
+def test_static_mod_hotkeys_accept_keyboard_and_pad(tmp_path, mod_name, module, key, pad_button):
+    """Each keyboard hotkey has a pad equivalent, and both go through one check.
 
     mkxp-z keeps pad state behind Input::Controller, separate from the keyboard,
     because its binding dialog maps pad buttons to game actions rather than to
-    keystrokes — no pad button can produce :P. The module must also survive an
-    engine with no Controller module at all, which is how the harness runs.
+    keystrokes — no pad button can produce a raw scancode. The module must also
+    survive an engine with no Controller module at all, which is how the stub
+    harness runs.
     """
     import subprocess
-    mod = HARNESS / "chrooked_zz_pckey.rb"
+    mod = HARNESS / mod_name
     script = f"""
       module Input
         def self.triggerex?(k); $kb == k; end
       end
       eval(File.read({str(mod)!r}), TOPLEVEL_BINDING)
 
-      $kb = :P
-      raise "keyboard P should fire" unless ChrookedPCKey.pressed?
+      $kb = {key}
+      raise "keyboard should fire" unless {module}.pressed?
 
       $kb = nil
-      raise "nothing pressed should not fire" if ChrookedPCKey.pressed?
+      raise "nothing pressed should not fire" if {module}.pressed?
 
       module Input
         module Controller
@@ -1309,11 +1317,11 @@ def test_pckey_hotkey_accepts_keyboard_and_pad(tmp_path):
         end
       end
 
-      $pad = :BACK
-      raise "pad Select should fire" unless ChrookedPCKey.pressed?
+      $pad = {pad_button}
+      raise "pad button should fire" unless {module}.pressed?
 
-      $pad = :START
-      raise "a different pad button should not fire" if ChrookedPCKey.pressed?
+      $pad = :GUIDE
+      raise "a different pad button should not fire" if {module}.pressed?
 
       puts "OK"
     """

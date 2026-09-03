@@ -7,6 +7,22 @@
 # learning, and evolutions all run. Eggs, shadow mons, and mons already at
 # the cap are skipped. F8 is free: F6/F10 are $DEBUG-only, F2 is controls,
 # F3/F4/F5 are item hotkeys.
+#
+# Pad hotkey: R3 (right stick click — SDL calls it RIGHTSTICK) does the same,
+# so the cap raise is reachable when streaming to a handheld with no keyboard.
+# It has to be a separate check: mkxp-z's F1 binding dialog maps pad buttons to
+# game *actions*, never to keystrokes, so no pad button can produce :F8. Pad
+# state lives behind Input::Controller, guarded with defined? because the
+# stub-test harness has no such module. Same shape as chrooked_zz_pckey.rb.
+module ChrookedLevelCap
+  def self.pressed?
+    return true if Input.triggerex?(:F8)
+    return false unless defined?(Input::Controller)
+
+    Input::Controller.triggerex?(:RIGHTSTICK)
+  end
+end
+
 class PokemonScreen_Scene
   # Chain only when the base method exists — the stub-test harness loads this
   # file against bare stand-in classes with no #update.
@@ -17,7 +33,7 @@ class PokemonScreen_Scene
   def update
     chrooked_levelcap_update
     # busy guard: pbDisplay/pbConfirmMessage loops call self.update reentrantly
-    return if @chrooked_levelcap_busy || !Input.triggerex?(:F8)
+    return if @chrooked_levelcap_busy || !ChrookedLevelCap.pressed?
     return if noExp?
 
     @chrooked_levelcap_busy = true
