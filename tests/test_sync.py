@@ -60,10 +60,30 @@ class _FakeRun:
 
 # --- argv construction --------------------------------------------------------
 
-def test_push_argv_escapes_spaces_in_the_remote_path():
-    """The device path has a space; openrsync has no --protect-args."""
-    argv = build_push_argv(Path("/Applications/Rejuvenation.app/Contents/Game"), _config())
-    assert argv[-1] == r"u0_a132@ayn-thor:/storage/emulated/0/Pokemon\ Rejuvenation/patch/"
+@pytest.mark.parametrize("escape_spaces", [True, False], ids=["openrsync", "gnu-rsync"])
+def test_remote_paths_escape_spaces_only_for_openrsync(monkeypatch, escape_spaces):
+    """The device path has a space, and the right handling depends on the client.
+
+    openrsync (macOS) hands the remote path to a shell on the far side and has no
+    ``--protect-args``, so spaces must be backslash-escaped. GNU rsync passes
+    remote args verbatim, where an escape lands a literal backslash on the
+    receiver and the transfer fails — the couch-loop-v2 mirror bug.
+
+    The flavor is probed once at import, so pin it here. Reading the ambient
+    value made this assertion pass only on a Mac.
+    """
+    monkeypatch.setattr("chrooked_pokedex.sync._ESCAPE_SPACES", escape_spaces)
+    sep = "\\ " if escape_spaces else " "
+
+    push = build_push_argv(Path("/games/rejuv"), _config())
+    assert push[-1] == f"u0_a132@ayn-thor:/storage/emulated/0/Pokemon{sep}Rejuvenation/patch/"
+
+    pull = build_save_pull_argv(
+        _config(save_src=f"{DEVICE_GAME}/Save Data/"), Path("/backups/latest")
+    )
+    assert pull[-2] == (
+        f"u0_a132@ayn-thor:/storage/emulated/0/Pokemon{sep}Rejuvenation/Save{sep}Data/"
+    )
 
 
 def test_push_argv_sends_folder_contents_not_the_folder():
@@ -92,7 +112,6 @@ def test_save_pull_never_mirrors_deletions():
     """A save removed on the device must not disappear from the backup."""
     argv = build_save_pull_argv(_config(save_src=f"{DEVICE_GAME}/Save Data/"), Path("/backups/latest"))
     assert "--delete" not in argv
-    assert argv[-2] == r"u0_a132@ayn-thor:/storage/emulated/0/Pokemon\ Rejuvenation/Save\ Data/"
     assert argv[-1] == "/backups/latest/"
 
 
