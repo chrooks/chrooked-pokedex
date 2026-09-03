@@ -8,19 +8,28 @@ abilities:
   hidden: Reckless
 stats: { hp: 80, spe: 125 }
 learnset:
-  - { level: 1, move: Electrify }
-  - { level: 1, move: Tail Whip }
+  - { level: 0, move: Arc Strike }
+  - { level: 1, move: Howl }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Nuzzle }
-  - { level: 2, move: Bite }
-  - { level: 15, move: Roar }
-  - { level: 20, move: Spark }
-  - { level: 24, move: Short Circuit }
-  - { level: 28, move: Charm }
-  - { level: 34, move: Crunch }
-  - { level: 37, move: Lightning Slam }
-  - { level: 38, move: Arc Strike }
-  - { level: 41, move: Charge }
-  - { level: 48, move: Wild Charge }
-  - { level: 55, move: Play Rough }
-  - { level: 62, move: Electric Terrain }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Fake Out }
+  - { level: 12, move: Jolt }
+  - { level: 16, move: Quick Attack }
+  - { level: 20, move: Bite }
+  - { level: 23, move: Surge Tackle }
+  - { level: 26, move: Headbutt }
+  - { level: 30, move: Bail Out }
+  - { level: 33, move: Body Slam }
+  - { level: 35, move: Pursuit }
+  - { level: 37, move: Zing Zap }
+  - { level: 40, move: Trailblaze }
+  - { level: 42, move: High Horsepower }
+  - { level: 44, move: Blaze Kick }
+  - { level: 47, move: Gleamfang }
+  - { level: 49, move: Crunch }
+  - { level: 51, move: Supercell Slam }
+  - { level: 54, move: Rampage }
+  - { level: 58, move: Thunderous Kick }
+  - { level: 61, move: Head Charge }
+  - { level: 65, move: Extreme Speed }
+  - { level: 68, move: Wild Charge }
