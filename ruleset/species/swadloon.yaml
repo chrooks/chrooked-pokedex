@@ -2,7 +2,7 @@ name: Swadloon
 chrooked_id: swadloon
 aka: { pokeemerald: SPECIES_SWADLOON }
 abilities:
-  primary: Leaf Guard
+  primary: Sharpness
   secondary: Winter Coat
   hidden: Web Weaver
 learnset:

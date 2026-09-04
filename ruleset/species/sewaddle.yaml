@@ -2,7 +2,7 @@ name: Sewaddle
 chrooked_id: sewaddle
 aka: { dex: 540 }
 abilities:
-  primary: Swarm
+  primary: Sharpness
   secondary: Winter Coat
   hidden: Web Weaver
 learnset:

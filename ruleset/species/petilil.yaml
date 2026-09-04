@@ -2,24 +2,29 @@ name: Petilil
 chrooked_id: petilil
 aka: { pokeemerald: SPECIES_PETILIL }
 abilities:
+  primary: Dancer
   secondary: Bloom
-  hidden: Chloroplast
+  hidden: Aroma Veil
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Growth }
-  - { level: 3, move: Helping Hand }
-  - { level: 6, move: Stun Spore }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
   - { level: 9, move: Mega Drain }
-  - { level: 12, move: Charm }
-  - { level: 15, move: Magical Leaf }
-  - { level: 18, move: Sleep Powder }
-  - { level: 21, move: Giga Drain }
-  - { level: 24, move: Leech Seed }
-  - { level: 27, move: After You }
-  - { level: 30, move: Energy Ball }
-  - { level: 33, move: Synthesis }
-  - { level: 36, move: Sunny Day }
-  - { level: 39, move: Entrainment }
-  - { level: 42, move: Siphon }
-  - { level: 43, move: Leaf Storm }
-  - { level: 46, move: Reap }
+  - { level: 12, move: Quiver Dance }
+  - { level: 16, move: Teeter Dance }
+  - { level: 19, move: Feather Dance }
+  - { level: 23, move: Giga Drain }
+  - { level: 26, move: Magical Leaf }
+  - { level: 30, move: Lunar Dance }
+  - { level: 33, move: Yawn }
+  - { level: 37, move: Fiery Dance }
+  - { level: 40, move: Aromatherapy }
+  - { level: 44, move: Energy Ball }
+  - { level: 47, move: Revelation Dance }
+  - { level: 51, move: Siphon }
+  - { level: 54, move: Moonblast }
+  - { level: 58, move: Charm }
+  - { level: 61, move: Solar Beam }
+  - { level: 65, move: Synthesis }
+  - { level: 68, move: Sunny Day }
+  - { level: 72, move: Leaf Storm }
