@@ -122,9 +122,10 @@ export function useGamepad(
 
     function poll() {
       rafId = requestAnimationFrame(poll);
-      // Visible is not focused: on the handheld the browser stays visible
-      // beside the game, and Chromium keeps reporting the pad to it. Game
-      // inputs then drove this page — once as far as deleting a Target.
+      // Visible is not focused: with the dex open on one PC monitor and a
+      // game streaming to the handheld from another, the pad stays visible to
+      // this unfocused tab. Game inputs then drove this page — once as far
+      // as deleting a Target.
       if (!document.hasFocus()) {
         heldUntilRepeat.clear();
         return;
