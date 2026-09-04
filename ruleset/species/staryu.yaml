@@ -6,21 +6,25 @@ abilities:
   secondary: Regenerator
   hidden: Mystic Power
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Harden }
-  - { level: 4, move: Water Gun }
-  - { level: 8, move: Confuse Ray }
-  - { level: 12, move: Rapid Spin }
-  - { level: 16, move: Minimize }
-  - { level: 20, move: Swift }
-  - { level: 24, move: Psybeam }
-  - { level: 28, move: Brine }
-  - { level: 32, move: Light Screen }
-  - { level: 36, move: Power Gem }
-  - { level: 38, move: Psychic }
-  - { level: 40, move: Mindwarp }
-  - { level: 44, move: Surf }
-  - { level: 48, move: Recover }
-  - { level: 52, move: Cosmic Power }
-  - { level: 56, move: Hydro Pump }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Confusion }
+  - { level: 13, move: Jewel Glow }
+  - { level: 16, move: Rapid Spin }
+  - { level: 19, move: Flash }
+  - { level: 23, move: Water Pulse }
+  - { level: 26, move: Psybeam }
+  - { level: 30, move: Ancient Power }
+  - { level: 33, move: Swift }
+  - { level: 37, move: Signal Beam }
+  - { level: 40, move: Recover }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Volt Switch }
+  - { level: 50, move: Surf }
+  - { level: 53, move: Ice Beam }
+  - { level: 56, move: Power Gem }
+  - { level: 59, move: Mindwarp }
+  - { level: 62, move: Hydro Pump }
+  - { level: 66, move: Photon Geyser }
+  - { level: 70, move: Meteor Surge }
