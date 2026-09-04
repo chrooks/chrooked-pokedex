@@ -3,9 +3,10 @@ chrooked_id: trubbish
 aka: { pokeemerald: SPECIES_TRUBBISH }
 types: [Poison, Steel]
 abilities:
-  secondary: Carnivore
-  hidden: Corrosion
-stats: { hp: 65, spa: 50 }
+  primary: Death Grip
+  secondary: Corrosion
+  hidden: Virulence
+stats: { hp: 65, atk: 68, def: 78, spa: 30, spd: 70, spe: 64 }
 learnset:
   - { level: 1, move: Poison Gas }
   - { level: 1, move: Pound }
