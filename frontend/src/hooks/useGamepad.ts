@@ -122,6 +122,13 @@ export function useGamepad(
 
     function poll() {
       rafId = requestAnimationFrame(poll);
+      // Visible is not focused: on the handheld the browser stays visible
+      // beside the game, and Chromium keeps reporting the pad to it. Game
+      // inputs then drove this page — once as far as deleting a Target.
+      if (!document.hasFocus()) {
+        heldUntilRepeat.clear();
+        return;
+      }
       const now = performance.now();
 
       let pads: (Gamepad | null)[];
