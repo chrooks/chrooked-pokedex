@@ -8,28 +8,23 @@ abilities:
   hidden: Virulence
 stats: { hp: 65, atk: 68, def: 78, spa: 30, spd: 70, spe: 64 }
 learnset:
-  - { level: 1, move: Poison Gas }
   - { level: 1, move: Pound }
-  - { level: 3, move: Recycle }
-  - { level: 6, move: Acid Spray }
-  - { level: 9, move: Metal Claw }
-  - { level: 12, move: Clear Smog }
-  - { level: 15, move: Toxic Spikes }
-  - { level: 16, move: Mortal Spin }
-  - { level: 17, move: Smart Strike }
-  - { level: 18, move: Sludge }
-  - { level: 21, move: Stockpile }
-  - { level: 22, move: Swallow }
-  - { level: 24, move: Iron Defense }
-  - { level: 27, move: Sludge Bomb }
-  - { level: 29, move: Cross Poison }
-  - { level: 30, move: Toxic }
-  - { level: 31, move: Metallic Fang }
-  - { level: 33, move: Belch }
-  - { level: 35, move: Gastric Snare }
-  - { level: 37, move: Pain Split }
-  - { level: 39, move: Venom Slam }
-  - { level: 42, move: Explosion }
-  - { level: 43, move: Iron Tail }
-  - { level: 46, move: Gunk Shot }
-  - { level: 57, move: Excalibur }
+  - { level: 1, move: Poison Gas }
+  - { level: 5, move: Poison Sting }
+  - { level: 9, move: Bullet Punch }
+  - { level: 12, move: Poison Tail }
+  - { level: 16, move: Metal Claw }
+  - { level: 19, move: Toxic }
+  - { level: 23, move: Cross Poison }
+  - { level: 26, move: Toxic Spikes }
+  - { level: 30, move: Knock Off }
+  - { level: 33, move: Smart Strike }
+  - { level: 37, move: Gastric Snare }
+  - { level: 40, move: Stealth Rock }
+  - { level: 44, move: Anchor Shot }
+  - { level: 47, move: Gastro Acid }
+  - { level: 51, move: Acid Armor }
+  - { level: 54, move: Venom Slam }
+  - { level: 58, move: Anvil Slam }
+  - { level: 62, move: Gunk Shot }
+  - { level: 66, move: Explosion }
