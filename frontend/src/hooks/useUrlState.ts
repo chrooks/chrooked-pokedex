@@ -172,11 +172,26 @@ function writeState(next: ViewState): void {
   window.dispatchEvent(new Event("chrooked:urlchange"));
 }
 
+/** Each tab remembers its own search text. Leaving a tab stashes its query here
+    and the arriving tab restores its own (or starts clear), so "blastoise" on
+    Species never shows up on Abilities and comes back when you return.
+    ponytail: session-only memory; the URL still carries only the active tab's q. */
+const queryByKind = new Map<KindKey, string>();
+
+/** Swap the query on a tab change unless the caller set one explicitly
+    (deep links like the ledger "History" button pass their own). */
+export function withTabQuery(prev: ViewState, patch: Partial<ViewState>): Partial<ViewState> {
+  if (patch.kind === undefined || patch.kind === prev.kind || "query" in patch) return patch;
+  queryByKind.set(prev.kind, prev.query);
+  return { ...patch, query: queryByKind.get(patch.kind) ?? "" };
+}
+
 export function useUrlState(): [ViewState, (patch: Partial<ViewState>) => void] {
   const state = useSyncExternalStore(subscribe, readState, readState);
 
   const update = useCallback((patch: Partial<ViewState>) => {
-    writeState({ ...readState(), ...patch });
+    const prev = readState();
+    writeState({ ...prev, ...withTabQuery(prev, patch) });
   }, []);
 
   return [state, update];
