@@ -1,0 +1,5 @@
+name: Ice Skater
+chrooked_id: iceskater
+aka: {  }
+behaviors: [wintercoat, slushrush]
+description: Doubles Speed in Hail or Snow. Ice-type moves do not affect the user.

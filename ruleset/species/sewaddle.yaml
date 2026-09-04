@@ -3,7 +3,7 @@ chrooked_id: sewaddle
 aka: { dex: 540 }
 abilities:
   primary: Swarm
-  secondary: Chlorophyll
+  secondary: Winter Coat
   hidden: Web Weaver
 learnset:
   - { level: 1, move: Tackle }

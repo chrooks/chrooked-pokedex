@@ -3,7 +3,7 @@ chrooked_id: leavanny
 aka: { pokeemerald: SPECIES_LEAVANNY }
 abilities:
   primary: Sharpness
-  secondary: Chlorophyll
+  secondary: Winter Coat
   hidden: Web Weaver
 stats: { atk: 115 }
 learnset:

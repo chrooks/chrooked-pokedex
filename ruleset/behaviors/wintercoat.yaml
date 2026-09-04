@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Winter Coat
+chrooked_id: wintercoat
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Full immunity to Ice-type moves
+    trigger: damage-calc
+    when: an Ice-type move targets this Pokémon
+    effect: The move deals 0 damage and all secondary effects are suppressed. The immunity applies regardless of whether the move makes contact or is special/physical.
+test_cases:
+  - given: Opponent uses Blizzard against a Leavanny with Winter Coat
+    expect: Blizzard deals 0 damage; no freeze chance is rolled; no stat drops occur.
+  - given: Opponent uses Freeze-Dry (Ice-type) against a Leavanny with Winter Coat
+    expect: Freeze-Dry deals 0 damage even though it would normally hit Water-types super effectively; immunity takes full precedence.
+  - given: Leavanny with Winter Coat is hit by Icicle Crash
+    expect: Icicle Crash deals 0 damage; the flinch secondary effect is not rolled.
+notes:
+  - This ability functions identically in structure to Flash Fire or Volt Absorb but provides no secondary benefit — pure immunity only.
+  - Powder and status Ice-type moves (e.g. Freeze-Dry secondary, Powder Snow) are also negated.
+  - Does not interact with weather, terrain, or any stat stage; it is purely a type-immunity gate.
+  - Replaces Chlorophyll in Leavanny's secondary slot; Chlorophyll is not removed from any other species.
+  - STUB — engine_hints ungrounded, needs human grounding pass

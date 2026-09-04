@@ -616,3 +616,10 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-03 — Inteleon line
 
 - **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-09-04 — Lilligant line (blind design)
+
+- **Direction:** blind-design from the anonymized lore profile. Hisui form: Grass/Fighting kicker (Striker / Ice Skater / Finishing Kick), anchors Trop Kick, Axe Kick, High Jump Kick, Triple Axel, Victory Dance. Common form: "the ballroom" — pure Grass, Dancer / Bloom / Aroma Veil, every dance in the pool as the spine, Lunar Dance as the withering act.
+- **Rejected:** the agent's Grass/Fairy special-drainer read of the common form — that lane is already Bellossom (and Meganium, Shiinotic). Also rejected the perfumer (Grass/Psychic) and terroir (Mimicry) lanes.
+- **New mechanics:** Winter Coat (Ice immunity, `CHROOKED_TYPE_IMMUNITY`) on the Sewaddle line; Ice Skater composed as `[wintercoat, slushrush]` — no code of its own.
+- **Corrections:** no Victory Dance at both L0 and L40 (L40 → Thunderous Kick); swap Cross Chop / Body Press for Ice Spinner / Coaching; drop the forced Fairy rungs but keep Moonblast; Petal Dance to L0 with Solar Beam filling L61; Lunar Dance later than L19; "don't love the name" Blade Dance → Ice Skater; separate the Ice immunity into its own ability for Leavanny, named Winter Coat, whole line.

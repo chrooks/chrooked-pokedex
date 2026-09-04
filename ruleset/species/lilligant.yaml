@@ -2,28 +2,30 @@ name: Lilligant
 chrooked_id: lilligant
 aka: { pokeemerald: SPECIES_LILLIGANT }
 abilities:
+  primary: Dancer
   secondary: Bloom
-  hidden: Chloroplast
+  hidden: Aroma Veil
 learnset:
   - { level: 0, move: Petal Dance }
-  - { level: 1, move: Entrainment }
-  - { level: 1, move: Quiver Dance }
-  - { level: 1, move: Teeter Dance }
-  - { level: 1, move: Helping Hand }
-  - { level: 2, move: Sunny Day }
-  - { level: 3, move: Synthesis }
-  - { level: 4, move: Charm }
-  - { level: 5, move: Mega Drain }
-  - { level: 6, move: Sleep Powder }
-  - { level: 7, move: Stun Spore }
-  - { level: 8, move: Growth }
-  - { level: 9, move: Leech Seed }
-  - { level: 10, move: After You }
-  - { level: 11, move: Absorb }
-  - { level: 12, move: Magical Leaf }
-  - { level: 13, move: Giga Drain }
-  - { level: 14, move: Petal Blizzard }
-  - { level: 15, move: Energy Ball }
-  - { level: 16, move: Siphon }
-  - { level: 43, move: Leaf Storm }
-  - { level: 46, move: Reap }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Mega Drain }
+  - { level: 12, move: Quiver Dance }
+  - { level: 16, move: Teeter Dance }
+  - { level: 19, move: Feather Dance }
+  - { level: 23, move: Giga Drain }
+  - { level: 26, move: Magical Leaf }
+  - { level: 30, move: Lunar Dance }
+  - { level: 33, move: Yawn }
+  - { level: 37, move: Fiery Dance }
+  - { level: 40, move: Aromatherapy }
+  - { level: 44, move: Energy Ball }
+  - { level: 47, move: Revelation Dance }
+  - { level: 51, move: Siphon }
+  - { level: 54, move: Moonblast }
+  - { level: 58, move: Charm }
+  - { level: 61, move: Solar Beam }
+  - { level: 65, move: Synthesis }
+  - { level: 68, move: Sunny Day }
+  - { level: 72, move: Leaf Storm }
