@@ -17,14 +17,29 @@ set -eu
 cd "$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 
 INTERVAL="${RULESET_AUTOCOMMIT_INTERVAL:-120}"
+# Commit only after ruleset/ has been unchanged for this long. An agent session
+# on this box edits, applies, reads back, then makes its own scoped commit
+# within a few minutes; the quiet window lets that commit win instead of the
+# poll grabbing half the change under a generic message.
+QUIET="${RULESET_AUTOCOMMIT_QUIET:-900}"
+
+last_state=""
+quiet_since=0
 
 while true; do
   # --porcelain is empty when nothing under ruleset/ changed.
-  if [ -n "$(git status --porcelain -- ruleset/)" ]; then
+  state="$(git status --porcelain -- ruleset/)"
+  now="$(date +%s)"
+  if [ "$state" != "$last_state" ]; then
+    last_state="$state"
+    quiet_since="$now"
+  fi
+  if [ -n "$state" ] && [ $((now - quiet_since)) -ge "$QUIET" ]; then
     git add -- ruleset/
     git commit -q -m "chore(ruleset): auto-commit editor changes"
     git push -q
     echo "[ruleset-autocommit] pushed at $(date -u +%FT%TZ)"
+    last_state=""
   fi
   # Couch loop v2 (mjolnir CL-2): also pull each cycle so Mac-side pushes reach
   # this clone unattended. Rebase keeps a not-yet-pushed autocommit ahead of
