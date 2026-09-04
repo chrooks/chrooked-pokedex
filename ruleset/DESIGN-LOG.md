@@ -630,3 +630,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Direction:** blind-design from the anonymized lore profile. Pure Grass physical mount; Self Sufficient / Mountaineer / Sap Sipper. Anchors: Bail Out, Milk Drink, Helping Hand, Follow Me, Grassy Glide, High Horsepower, Landslide, Earthquake, Rock Climb. Skiddo mirrors minus L0 Horn Leech.
 - **Rejected:** the agent's Grass/Ground typing (kept pure Grass); Fur Coat and Foliate dropped from the old trio.
 - **Corrections:** nine anchors exceed the cap of eight — fold the ninth (Rock Climb) in by hand over a status row; "Synthesis is just a worse Milk Drink" — dropped, Leech Seed folded in early (L3) instead, L58 → Megahorn.
+
+## 2026-09-04 — Gogoat line
+
+- **Direction:** mirror-only: current kit onto pre-evos
+
+## 2026-09-04 — Leavanny line
+
+- **Direction:** learnset-only repass

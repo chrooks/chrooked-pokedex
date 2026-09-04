@@ -9,4 +9,4 @@ pp: 10
 description: The user scythes the target and drinks its vigor, recovering a quarter of the damage dealt.
 effect: absorb
 argument: { absorb_percentage: 25 }
-flags: [contact]
+flags: [contact, slicing]

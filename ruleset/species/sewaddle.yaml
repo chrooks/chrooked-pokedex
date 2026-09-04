@@ -1,26 +1,32 @@
 name: Sewaddle
 chrooked_id: sewaddle
 aka: { dex: 540 }
+types: [Bug, Grass]
 abilities:
   primary: Sharpness
   secondary: Winter Coat
   hidden: Web Weaver
+stats: { hp: 45, atk: 53, def: 70, spa: 40, spd: 60, spe: 42 }
 learnset:
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Scratch }
   - { level: 1, move: String Shot }
-  - { level: 2, move: Fury Cutter }
-  - { level: 3, move: Leafage }
-  - { level: 8, move: Bug Bite }
-  - { level: 15, move: Razor Leaf }
-  - { level: 22, move: Struggle Bug }
-  - { level: 29, move: Endure }
-  - { level: 30, move: X-Scissor }
-  - { level: 31, move: Sticky Web }
-  - { level: 32, move: Seed Bomb }
-  - { level: 36, move: Bug Buzz }
-  - { level: 39, move: Moltstrike }
-  - { level: 43, move: Flail }
-  - { level: 46, move: Reap }
-  - { level: 55, move: Pixie Slash }
-  - { level: 57, move: Megahorn }
-  - { level: 59, move: Power Whip }
+  - { level: 5, move: Fury Cutter }
+  - { level: 9, move: Vine Whip }
+  - { level: 12, move: Harden }
+  - { level: 16, move: Trailblaze }
+  - { level: 23, move: Bug Bite }
+  - { level: 26, move: Razor Leaf }
+  - { level: 33, move: Seed Bomb }
+  - { level: 40, move: Sticky Web }
+  - { level: 43, move: Lunge }
+  - { level: 46, move: Swords Dance }
+  - { level: 49, move: Cross Poison }
+  - { level: 51, move: Moltstrike }
+  - { level: 54, move: Pixie Slash }
+  - { level: 56, move: Leaf Blade }
+  - { level: 58, move: X-Scissor }
+  - { level: 61, move: Sacred Sword }
+  - { level: 64, move: Bitter Blade }
+  - { level: 68, move: Reap }
+  - { level: 71, move: Guillotine }
+  - { level: 73, move: Solar Blade }

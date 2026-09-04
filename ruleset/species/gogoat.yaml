@@ -5,7 +5,7 @@ abilities:
   primary: Self Sufficient
   secondary: Mountaineer
   hidden: Sap Sipper
-stats: { atk: 105 }
+stats: { hp: 120, atk: 107, def: 70, spa: 60, spd: 80, spe: 83 }
 learnset:
   - { level: 0, move: Horn Leech }
   - { level: 1, move: Growl }
@@ -29,3 +29,4 @@ learnset:
   - { level: 58, move: Megahorn }
   - { level: 61, move: Grassy Terrain }
   - { level: 65, move: Power Whip }
+evolution: { from: Skiddo, method: { level: 36 } }
