@@ -638,3 +638,9 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-04 — Leavanny line
 
 - **Direction:** learnset-only repass
+
+## 2026-09-04 — Houndstone line (blind design)
+
+- **Direction:** blind-design from the anonymized lore profile. Ghost/Ground kept (the agent re-derived it). Vampiric / Sand Rush / Pyre. Anchors: Grave Drop, Astonish, Lick, Play Rough, Shadow Bone, Bone Torch, Crunch, Destiny Bond, Pain Split, Earthquake, Fire Fang, Tectonic Fang. Greavard mirrors minus L0.
+- **Rejected:** Guard Dog hidden (Pyre taken instead); Fluffy and Frighten from the old trio.
+- **Corrections:** twelve anchors > cap of eight — anchor the attacks, fold the rest by hand over status/duplicate rows; no move at both L0 and a later level (second Interment removed); "Last Respects is the line's signature move and not really a 50 BP move" — it is the L0, Interment fits at L51.

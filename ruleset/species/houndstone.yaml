@@ -3,35 +3,33 @@ chrooked_id: houndstone
 aka: { pokeemerald: SPECIES_HOUNDSTONE }
 types: [Ghost, Ground]
 abilities:
-  primary: Fluffy
-  secondary: Frighten
-  hidden: Sand Rush
+  primary: Vampiric
+  secondary: Sand Rush
+  hidden: Pyre
 stats: { hp: 75, atk: 115, spd: 100, spe: 70 }
 learnset:
   - { level: 0, move: Last Respects }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 2, move: Clod Toss }
-  - { level: 3, move: Lick }
-  - { level: 6, move: Tail Whip }
-  - { level: 7, move: Bite }
-  - { level: 9, move: Roar }
-  - { level: 12, move: Headbutt }
-  - { level: 15, move: Shadow Claw }
-  - { level: 16, move: Dig }
-  - { level: 17, move: Bulldoze }
-  - { level: 24, move: Rest }
-  - { level: 28, move: Crunch }
-  - { level: 30, move: Lithic Fang }
-  - { level: 31, move: Tectonic Fang }
-  - { level: 36, move: Play Rough }
-  - { level: 38, move: Wraithstrike }
-  - { level: 39, move: Interment }
-  - { level: 41, move: Helping Hand }
-  - { level: 43, move: Earthquake }
-  - { level: 46, move: Phantom Force }
-  - { level: 51, move: Charm }
-  - { level: 57, move: Faultbreak }
-  - { level: 58, move: Double-Edge }
-  - { level: 62, move: Necrosis }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Lick }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Shadow Sneak }
+  - { level: 20, move: Bone Torch }
+  - { level: 23, move: Grave Drop }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Shadow Claw }
+  - { level: 32, move: Crunch }
+  - { level: 34, move: Drill Run }
+  - { level: 37, move: Shadow Bone }
+  - { level: 40, move: Fire Fang }
+  - { level: 44, move: Wraithstrike }
+  - { level: 47, move: Tectonic Fang }
+  - { level: 49, move: Pain Split }
+  - { level: 51, move: Interment }
+  - { level: 54, move: Play Rough }
+  - { level: 58, move: High Horsepower }
+  - { level: 61, move: Sandstorm }
+  - { level: 65, move: Earthquake }
+  - { level: 68, move: Destiny Bond }
+  - { level: 72, move: Necrosis }
 evolution: { from: Greavard, method: { level: 32 } }

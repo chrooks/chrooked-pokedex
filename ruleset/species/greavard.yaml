@@ -3,32 +3,30 @@ chrooked_id: greavard
 aka: { pokeemerald: SPECIES_GREAVARD }
 types: [Ghost, Ground]
 abilities:
-  primary: Fluffy
-  secondary: Frighten
-  hidden: Sand Rush
+  primary: Vampiric
+  secondary: Sand Rush
+  hidden: Pyre
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 2, move: Clod Toss }
-  - { level: 3, move: Lick }
-  - { level: 6, move: Tail Whip }
-  - { level: 7, move: Bite }
-  - { level: 9, move: Roar }
-  - { level: 12, move: Headbutt }
-  - { level: 15, move: Shadow Claw }
-  - { level: 16, move: Dig }
-  - { level: 17, move: Bulldoze }
-  - { level: 24, move: Rest }
-  - { level: 25, move: Lithic Fang }
-  - { level: 26, move: Tectonic Fang }
-  - { level: 28, move: Crunch }
-  - { level: 32, move: Play Rough }
-  - { level: 37, move: Helping Hand }
-  - { level: 39, move: Wraithstrike }
-  - { level: 40, move: Interment }
-  - { level: 41, move: Phantom Force }
-  - { level: 43, move: Earthquake }
-  - { level: 46, move: Charm }
-  - { level: 52, move: Double-Edge }
-  - { level: 57, move: Faultbreak }
-  - { level: 62, move: Necrosis }
+  - { level: 1, move: Astonish }
+  - { level: 5, move: Lick }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Shadow Sneak }
+  - { level: 20, move: Bone Torch }
+  - { level: 23, move: Grave Drop }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Shadow Claw }
+  - { level: 32, move: Crunch }
+  - { level: 34, move: Drill Run }
+  - { level: 37, move: Shadow Bone }
+  - { level: 40, move: Fire Fang }
+  - { level: 44, move: Wraithstrike }
+  - { level: 47, move: Tectonic Fang }
+  - { level: 49, move: Pain Split }
+  - { level: 51, move: Interment }
+  - { level: 54, move: Play Rough }
+  - { level: 58, move: High Horsepower }
+  - { level: 61, move: Sandstorm }
+  - { level: 65, move: Earthquake }
+  - { level: 68, move: Destiny Bond }
+  - { level: 72, move: Necrosis }
