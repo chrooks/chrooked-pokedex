@@ -2,8 +2,9 @@ name: Staryu
 chrooked_id: staryu
 aka: { pokeemerald: SPECIES_STARYU }
 abilities:
-  primary: Mystic Power
-  hidden: Victory Star
+  primary: Starfall
+  secondary: Regenerator
+  hidden: Mystic Power
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Harden }

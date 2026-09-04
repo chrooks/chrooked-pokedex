@@ -1,26 +1,40 @@
 # Behavior spec — human-owned. The seed never touches this folder.
-# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
-# can compile it into any target engine. The data layer carries the ability itself.
 name: Starfall
 chrooked_id: starfall
 applies_to: ability
 aka: { pokeemerald: ABILITY_STARFALL }
 effects:
-  - summary: "Special moves have a 30% chance to lower the target's Special Defense."
-    trigger: stat-change
-    when: "this Pokemon damages a target with a special move and the target survives"
-    effect: "with a 30% chance, lower the target's Special Defense by 1 stage"
+  - summary: Special moves gain power for each consecutive attacking turn
+    trigger: damage-calc
+    when: the bearer uses a damaging special move
+    effect: Multiply damage by 1 + 0.2 x N, where N is the number of consecutive prior turns (max 3) in which the bearer dealt damage with a move without switching out. Turn 1 is x1.0, turn 2 x1.2, turn 3 x1.4, turn 4 and later x1.6.
+  - summary: The streak counts attacking turns
+    trigger: turn-end
+    when: end of each round while the bearer is on the field
+    effect: If the bearer dealt damage with a move this round, N increases by 1 (capped at 3). Otherwise (status move, missed, flinched, asleep) N resets to 0.
+  - summary: Switching resets the streak
+    trigger: switch-in
+    when: the bearer enters the field
+    effect: N is set to 0.
 test_cases:
-  - given: "a Starfall Pokemon uses a special move (e.g. Ember) and the target survives (roll succeeds)"
-    expect: "the target's Special Defense drops one stage"
-  - given: "a Starfall Pokemon uses a physical move (e.g. Tackle)"
-    expect: "the target's Special Defense is unchanged (not a special move = no trigger)"
-  - given: "a Starfall Pokemon uses a special move but the 30% roll fails"
-    expect: "no stat change occurs"
+  - given: Bearer uses Psybeam on its first turn in
+    expect: Normal damage (x1.0).
+  - given: Bearer used Psybeam last turn and uses Psybeam again
+    expect: x1.2 damage.
+  - given: Bearer attacked on each of the last three turns and attacks again
+    expect: x1.6 damage; a fifth consecutive attack stays at x1.6.
+  - given: Bearer attacked twice, then used Recover, then attacks
+    expect: The Recover turn reset the streak; this attack is x1.0.
+  - given: Bearer attacked three times, switched out, and came back in
+    expect: The first attack after re-entry is x1.0.
+  - given: Bearer has a three-turn streak and uses a physical move
+    expect: The physical move gets no boost; the streak still counts the turn.
 notes:
-  - "Drop chance is 30% (RandomPercentage(RNG_STARFALL, 30)). Keys off the move being special category (IsBattleMoveSpecial), NOT contact — so it fires on any damaging special hit."
-  - "Suppressed when the attacker holds nothing relevant but is gated on: !MOVE_RESULT_NO_EFFECT, target alive, !confusionSelfDmg, target took damage."
-  - "stat-change is the closest neutral trigger; the real shape is 'on a damaging special hit, roll 30% to apply a -1 Sp. Def stat change to the target'."
+  - "Design intent: a falling star accelerates. Rewards staying in and firing beams; a Volt Switch pivot is an honest reset."
+  - "Reworked 2026-09-04 from the old 30% Sp. Def-drop effect. Users: Gothita line, Staryu line."
 engine_hints:
-  pokeemerald: "src/battle_util.c ABILITYEFFECT_MOVE_END_ATTACKER, case ABILITY_STARFALL (line ~6359). Gates: !MOVE_RESULT_NO_EFFECT, IsBattlerAlive(target), !confusionSelfDmg, IsBattleMoveSpecial(gCurrentMove), IsBattlerTurnDamaged, RandomPercentage(RNG_STARFALL, 30). Applies gBattleScripting.moveEffect = MOVE_EFFECT_SP_DEF_MINUS_1."
-  essentials: "In the on-dealing-damage hook, when the move category is :Special and it dealt damage, roll 30% and apply a -1 SPECIAL_DEFENSE stat stage to the target."
+  essentials: >-
+    Rejuv: references/rejuv-harness/chrooked_starfall.rb. Streak lives in
+    effects[:ChrookedStarfall]; ON_DEAL marks the turn as attacking, TURN_END
+    advances or resets the streak, SWITCH_IN zeroes it, DAMAGE_MODS reads it
+    for special moves. Check: docker run --rm -v $PWD/references/rejuv-harness:/h:ro ruby:3.2-slim ruby /h/starfall_check.rb

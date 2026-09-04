@@ -1,4 +1,4 @@
 name: Starfall
 chrooked_id: starfall
 aka: { pokeemerald: ABILITY_STARFALL }
-description: Special moves may lower foe's Sp. Def.
+description: Special moves gain 20% power for each consecutive turn spent attacking, up to 60%. Switching or a non-attacking turn resets it.
