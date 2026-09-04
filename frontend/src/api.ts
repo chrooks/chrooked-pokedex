@@ -85,6 +85,7 @@ export async function sendJson<T>(
   method: "POST" | "PUT" | "DELETE",
   path: string,
   payload?: unknown,
+  opts?: { silent?: boolean },
 ): Promise<T> {
   const response = await fetch(path, {
     method,
@@ -95,7 +96,13 @@ export async function sendJson<T>(
   if (!response.ok) {
     throw await toError(response);
   }
-  return (await response.json()) as T;
+  const result = (await response.json()) as T;
+  // Every successful write changes data some mounted reader shows, so signal
+  // once here rather than trusting each of ~20 call sites to remember.
+  // `silent` lets a sequential batch (awaited writes, so a microtask cannot
+  // coalesce them) hold the signal and emit once at the end.
+  if (!opts?.silent) emitDataChange();
+  return result;
 }
 
 async function toError(response: Response): Promise<ApiError> {
@@ -169,14 +176,8 @@ export const api = {
       "PUT",
       `/api/species/${encodeURIComponent(id)}${scopeQuery(scope)}`,
       payload,
-    ).then((result) => {
-      // Species data changed → let the always-mounted dex resource refetch, so a
-      // distribution/species edit made from any screen shows on the dex page.
-      // `silent` lets a batch caller suppress the per-write signal and emit once
-      // at the end (avoids an O(N) dex-refetch storm during a bulk save).
-      if (!opts?.silent) emitDataChange();
-      return result;
-    }),
+      opts,
+    ),
   /** Ask the LLM to propose an abilities block for this species (#6). A read-only
       action — proposes only, never writes. The `direction` is the author's
       freeform steer ("make it a special attacker"). Errors carry the server's
@@ -230,7 +231,6 @@ export const api = {
       "DELETE",
       `/api/species/${encodeURIComponent(id)}${scopeQuery(scope)}`,
     ).then((result) => {
-      emitDataChange();
       return result;
     }),
 
@@ -265,7 +265,6 @@ export const api = {
       `/api/moves/${encodeURIComponent(id)}/distribute/apply`,
       { rows },
     ).then((result) => {
-      emitDataChange();
       return result;
     }),
 

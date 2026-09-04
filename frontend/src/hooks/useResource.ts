@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ApiError } from "../api";
+import { onDataChange } from "../lib/dataChange";
 
 export interface ResourceState<T> {
   data: T | null;
@@ -47,6 +48,9 @@ export function useResource<T>(
   });
   const [token, setToken] = useState(0);
   const reload = useCallback(() => setToken((t) => t + 1), []);
+  // Any successful write anywhere refetches every mounted reader (stale-while-
+  // revalidate keeps rows on screen), so no screen shows pre-edit data.
+  useEffect(() => onDataChange(reload), [reload]);
   const mutate = useCallback(
     (updater: (data: T | null) => T | null) => {
       setState((prev) => {

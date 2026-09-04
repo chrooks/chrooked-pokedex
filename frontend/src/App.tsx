@@ -4,7 +4,6 @@ import { useResource } from "./hooks/useResource";
 import { useUrlState } from "./hooks/useUrlState";
 import { useTheme } from "./hooks/useTheme";
 import { isEdited } from "./lib/format";
-import { onDataChange } from "./lib/dataChange";
 import { evalEntries } from "./lib/dexFilters";
 import { cellMap } from "./lib/typeChartGrid";
 import { stableMultiSort } from "./lib/dexSort";
@@ -117,11 +116,6 @@ export default function App() {
   useEffect(() => {
     if (patch !== null && activeTarget === null) setPatch(null);
   }, [patch, activeTarget]);
-
-  // The dex resource is mounted for the whole app, so a species write made from
-  // another screen (e.g. ability/move distribution on its tab) would leave the
-  // dex page stale. Refetch whenever a species mutation signals a data change.
-  useEffect(() => onDataChange(() => reloadDex()), [reloadDex]);
 
   const all = useMemo(() => dex.data ?? [], [dex.data]);
   const editedCount = useMemo(() => all.filter(isEdited).length, [all]);

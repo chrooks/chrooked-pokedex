@@ -12,8 +12,15 @@
 const EVENT = "chrooked:datachange";
 
 /** Signal that persisted dex data changed (call after a successful species write). */
+let isQueued = false;
 export function emitDataChange(): void {
-  window.dispatchEvent(new Event(EVENT));
+  // Coalesce: a batch of N writes in one tick refetches once, not N times.
+  if (isQueued) return;
+  isQueued = true;
+  queueMicrotask(() => {
+    isQueued = false;
+    window.dispatchEvent(new Event(EVENT));
+  });
 }
 
 /** Subscribe to data-change signals. Returns an unsubscribe function. */
