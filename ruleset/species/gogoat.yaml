@@ -2,28 +2,30 @@ name: Gogoat
 chrooked_id: gogoat
 aka: { pokeemerald: SPECIES_GOGOAT }
 abilities:
-  primary: Fur Coat
+  primary: Self Sufficient
   secondary: Mountaineer
-  hidden: Foliate
+  hidden: Sap Sipper
 stats: { atk: 105 }
 learnset:
-  - { level: 0, move: Aerial Ace }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Vine Whip }
+  - { level: 0, move: Horn Leech }
+  - { level: 1, move: Growl }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Earthquake }
-  - { level: 12, move: Leech Seed }
-  - { level: 13, move: Razor Leaf }
-  - { level: 16, move: Worry Seed }
-  - { level: 20, move: Synthesis }
-  - { level: 22, move: Take Down }
-  - { level: 26, move: Bulldoze }
-  - { level: 30, move: Horn Leech }
-  - { level: 34, move: Bulk Up }
-  - { level: 37, move: Seed Bomb }
-  - { level: 40, move: Double-Edge }
-  - { level: 47, move: Leaf Blade }
-  - { level: 55, move: Reap }
-  - { level: 57, move: Power Whip }
-  - { level: 58, move: Milk Drink }
+  - { level: 3, move: Leech Seed }
+  - { level: 5, move: Leafage }
+  - { level: 9, move: Vine Whip }
+  - { level: 12, move: Milk Drink }
+  - { level: 16, move: Helping Hand }
+  - { level: 19, move: Follow Me }
+  - { level: 23, move: Grassy Glide }
+  - { level: 26, move: Bail Out }
+  - { level: 30, move: Razor Leaf }
+  - { level: 33, move: Landslide }
+  - { level: 37, move: Bulk Up }
+  - { level: 40, move: Rock Climb }
+  - { level: 44, move: Leaf Blade }
+  - { level: 47, move: High Horsepower }
+  - { level: 51, move: Earthquake }
+  - { level: 54, move: Reap }
+  - { level: 58, move: Megahorn }
+  - { level: 61, move: Grassy Terrain }
+  - { level: 65, move: Power Whip }

@@ -3,7 +3,8 @@ chrooked_id: gothitelle
 aka: { pokeemerald: SPECIES_GOTHITELLE }
 abilities:
   primary: Starfall
-  secondary: Competitive
+  secondary: Forewarn
+  hidden: Shadow Tag
 stats: { hp: 80, spa: 105, spd: 130 }
 learnset:
   - { level: 1, move: Pound }

@@ -3,7 +3,8 @@ chrooked_id: gothorita
 aka: { pokeemerald: SPECIES_GOTHORITA }
 abilities:
   primary: Starfall
-  secondary: Competitive
+  secondary: Forewarn
+  hidden: Shadow Tag
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Confusion }
