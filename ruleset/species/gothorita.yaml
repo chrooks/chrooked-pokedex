@@ -6,19 +6,24 @@ abilities:
   secondary: Forewarn
   hidden: Shadow Tag
 learnset:
-  - { level: 1, move: Pound }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Play Nice }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Tickle }
-  - { level: 12, move: Psybeam }
-  - { level: 15, move: Charm }
-  - { level: 18, move: Psyshock }
-  - { level: 22, move: Calm Mind }
-  - { level: 26, move: Fake Tears }
-  - { level: 30, move: Shadow Ball }
-  - { level: 36, move: Psychic }
-  - { level: 40, move: Mindwarp }
-  - { level: 42, move: Thunderbolt }
-  - { level: 48, move: Future Sight }
-  - { level: 54, move: Magic Room }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Fairy Wind }
+  - { level: 13, move: Hypnosis }
+  - { level: 16, move: Teleport }
+  - { level: 19, move: Nightmare }
+  - { level: 23, move: Psybeam }
+  - { level: 26, move: Ominous Wind }
+  - { level: 30, move: Beguile }
+  - { level: 33, move: Extrasensory }
+  - { level: 37, move: Calm Mind }
+  - { level: 40, move: Psyshock }
+  - { level: 44, move: Destiny Bond }
+  - { level: 47, move: Dream Eater }
+  - { level: 50, move: Moonblast }
+  - { level: 54, move: Mindwarp }
+  - { level: 58, move: Moonlight }
+  - { level: 61, move: Trick Room }
+  - { level: 65, move: Future Sight }
 evolution: { from: Gothita, method: { level: 18 } }
