@@ -2,7 +2,9 @@ name: Venomoth
 chrooked_id: venomoth
 aka: { pokeemerald: SPECIES_VENOMOTH }
 abilities:
+  primary: Shield Dust
   secondary: Tinted Lens
+  hidden: Night Stalker
 learnset:
   - { level: 0, move: Air Slash }
   - { level: 1, move: Tackle }

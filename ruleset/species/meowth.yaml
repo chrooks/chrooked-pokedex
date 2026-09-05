@@ -1,6 +1,9 @@
 name: Meowth
 chrooked_id: meowth
 aka: {  }
+abilities:
+  primary: Pickup
+  hidden: Night Stalker
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Fake Out }

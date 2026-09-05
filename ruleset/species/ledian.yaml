@@ -5,6 +5,7 @@ types: [Bug, Fighting]
 abilities:
   primary: Huge Power
   secondary: Aerodynamic
+  hidden: Night Stalker
 stats: { atk: 75, def: 60, spe: 95 }
 learnset:
   - { level: 1, move: Tackle }

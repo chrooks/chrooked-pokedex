@@ -2,8 +2,9 @@ name: Murkrow
 chrooked_id: murkrow
 aka: { pokeemerald: SPECIES_MURKROW }
 abilities:
-  primary: Super Luck
+  primary: Night Stalker
   secondary: Sniper
+  hidden: Prankster
 stats: { hp: 80, atk: 100, def: 40, spa: 84, spd: 40, spe: 61 }
 learnset:
   - { level: 1, move: Haze }

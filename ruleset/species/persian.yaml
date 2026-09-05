@@ -2,7 +2,9 @@ name: Persian
 chrooked_id: persian
 aka: { pokeemerald: SPECIES_PERSIAN }
 abilities:
+  primary: Limber
   secondary: Technician
+  hidden: Night Stalker
 stats: { atk: 90, spa: 60 }
 learnset:
   - { level: 0, move: Power Gem }

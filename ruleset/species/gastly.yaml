@@ -2,7 +2,9 @@ name: Gastly
 chrooked_id: gastly
 aka: { dex: 92 }
 abilities:
+  primary: Levitate
   secondary: Soul Siphon
+  hidden: Night Stalker
 learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Lick }

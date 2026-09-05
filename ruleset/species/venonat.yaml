@@ -2,7 +2,9 @@ name: Venonat
 chrooked_id: venonat
 aka: { pokeemerald: SPECIES_VENONAT }
 abilities:
+  primary: Compound Eyes
   secondary: Tinted Lens
+  hidden: Night Stalker
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Disable }

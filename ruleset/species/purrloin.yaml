@@ -1,6 +1,10 @@
 name: Purrloin
 chrooked_id: purrloin
 aka: { dex: 509 }
+abilities:
+  primary: Night Stalker
+  secondary: Unburden
+  hidden: Prankster
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Growl }

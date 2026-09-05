@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_GENGAR }
 abilities:
   primary: Levitate
   secondary: Soul Siphon
+  hidden: Night Stalker
 learnset:
   - { level: 1, move: Mean Look }
   - { level: 1, move: Reflect Type }

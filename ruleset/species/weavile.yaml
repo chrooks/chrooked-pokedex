@@ -3,7 +3,7 @@ chrooked_id: weavile
 aka: { pokeemerald: SPECIES_WEAVILE }
 abilities:
   primary: Carnivore
-  secondary: Pressure
+  secondary: Night Stalker
   hidden: Refrigerate
 stats: { spe: 130 }
 learnset:

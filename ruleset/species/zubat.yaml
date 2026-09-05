@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_ZUBAT }
 abilities:
   primary: Mountaineer
   secondary: Vampiric
-  hidden: Tinted Lens
+  hidden: Night Stalker
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Astonish }

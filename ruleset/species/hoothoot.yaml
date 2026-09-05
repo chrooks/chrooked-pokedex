@@ -3,7 +3,7 @@ chrooked_id: hoothoot
 aka: { pokeemerald: SPECIES_HOOTHOOT }
 abilities:
   primary: Deadeye
-  secondary: Nocturnal
+  secondary: Night Stalker
   hidden: Full Moon
 stats: { hp: 60, atk: 30, def: 35, spa: 70, spd: 50, spe: 75 }
 learnset:

@@ -3,7 +3,7 @@ chrooked_id: shuppet
 aka: { pokeemerald: SPECIES_SHUPPET }
 types: [Ghost, Normal]
 abilities:
-  primary: Guts
+  primary: Night Stalker
   secondary: Infiltrator
   hidden: Insidious
 learnset:

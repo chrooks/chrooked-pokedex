@@ -1,6 +1,6 @@
 # Behavior spec — human-owned. The seed never touches this folder.
-name: Nocturnal
-chrooked_id: nocturnal
+name: Night Stalker
+chrooked_id: nightstalker
 applies_to: ability
 aka: {  }
 effects:
@@ -13,11 +13,11 @@ effects:
     when: It is not currently night / darkness
     effect: The user's critical-hit ratio is treated as one stage higher than its base value (equivalent to a +1 crit stage bonus, stacking with Scope Lens, Super Luck, etc.).
 test_cases:
-  - given: Noctowl with Nocturnal uses Aerial Ace during nighttime against a Blissey with no crit-blocking ability
+  - given: Noctowl with Night Stalker uses Aerial Ace during nighttime against a Blissey with no crit-blocking ability
     expect: Aerial Ace always deals critical-hit damage.
-  - given: Noctowl with Nocturnal uses Aerial Ace during daytime, holding no item, with no other crit modifiers
+  - given: Noctowl with Night Stalker uses Aerial Ace during daytime, holding no item, with no other crit modifiers
     expect: Aerial Ace has a +1 crit stage (the equivalent of holding a Scope Lens), not a guaranteed crit.
-  - given: Hoothoot with Nocturnal uses Tackle during nighttime against a target with Shell Armor
+  - given: Hoothoot with Night Stalker uses Tackle during nighttime against a target with Shell Armor
     expect: Engine resolves forced-crit vs. crit-immunity according to its own precedence rules (result is engine-defined; spec does not override Shell Armor by fiat).
 notes:
   - Darkness is defined as the in-game night clock. Engine-specific dark terrains or field states may optionally extend the darkness condition; this is an engine-level decision, not part of this neutral spec.

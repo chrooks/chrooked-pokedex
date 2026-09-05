@@ -2,7 +2,9 @@ name: Haunter
 chrooked_id: haunter
 aka: { dex: 93 }
 abilities:
+  primary: Levitate
   secondary: Soul Siphon
+  hidden: Night Stalker
 learnset:
   - { level: 0, move: Shadow Punch }
   - { level: 1, move: Hypnosis }

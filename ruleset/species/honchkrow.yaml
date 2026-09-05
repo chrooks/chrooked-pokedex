@@ -2,8 +2,9 @@ name: Honchkrow
 chrooked_id: honchkrow
 aka: { pokeemerald: SPECIES_HONCHKROW }
 abilities:
-  primary: Super Luck
+  primary: Night Stalker
   secondary: Sniper
+  hidden: Moxie
 stats: { def: 50, spd: 50, spe: 75 }
 learnset:
   - { level: 0, move: Night Slash }

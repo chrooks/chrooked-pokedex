@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_CROBAT }
 abilities:
   primary: Mountaineer
   secondary: Vampiric
-  hidden: Tinted Lens
+  hidden: Night Stalker
 stats: { spa: 85 }
 learnset:
   - { level: 0, move: Cross Poison }

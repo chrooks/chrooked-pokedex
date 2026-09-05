@@ -3,7 +3,7 @@ chrooked_id: banette
 aka: { pokeemerald: SPECIES_BANETTE }
 types: [Ghost, Normal]
 abilities:
-  primary: Guts
+  primary: Night Stalker
   secondary: Infiltrator
   hidden: Insidious
 learnset:

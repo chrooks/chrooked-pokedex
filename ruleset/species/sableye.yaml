@@ -2,7 +2,9 @@ name: Sableye
 chrooked_id: sableye
 aka: { pokeemerald: SPECIES_SABLEYE }
 abilities:
+  primary: Night Stalker
   secondary: Stall
+  hidden: Prankster
 stats: { hp: 80, spa: 75 }
 learnset:
   - { level: 1, move: Scratch }

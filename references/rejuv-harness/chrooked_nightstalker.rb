@@ -1,5 +1,5 @@
-# chrooked:nocturnal
-# Nocturnal — "In darkness, all moves land as critical hits. In light,
+# chrooked:nightstalker
+# Night Stalker — "In darkness, all moves land as critical hits. In light,
 #              critical-hit ratio is raised by one stage."
 #   Neutral spec: darkness = the night clock. Rejuv extension: darkness is
 #   exactly the Dusk Ball gate (Balls.rb ~166) — night, or one of the dark
@@ -15,7 +15,7 @@
 #   - day, Air Slash, no item                   => +1 stage (Scope Lens-equivalent)
 #   - night, Tackle into Shell Armor            => no crit (vanilla immunity wins)
 #   - day, Starlight field                      => counts as dark => always a crit
-module ChrookedNocturnal
+module ChrookedNightStalker
   DARK_FIELDS = [:DARKCRYSTALCAVERN, :SHORTCIRCUIT, :UNDERWATER, :CAVE, :CRYSTALCAVERN,
                  :DRAGONSDEN, :STARLIGHT, :NEWWORLD, :INVERSE].freeze
 
@@ -29,13 +29,13 @@ module ChrookedNocturnal
     def pbCritRate?(attacker, opponent)
       rate = super
       return rate if rate < 0 || rate >= 3
-      return rate + 1 if attacker.ability == :NOCTURNAL && !ChrookedNocturnal.dark?(@battle)
+      return rate + 1 if attacker.ability == :NIGHTSTALKER && !ChrookedNightStalker.dark?(@battle)
       rate
     end
   end
 end
 
-CHROOKED_CRIT_RATE[:NOCTURNAL] = lambda { |move, attacker, opponent|
-  ChrookedNocturnal.dark?(move.instance_variable_get(:@battle))
+CHROOKED_CRIT_RATE[:NIGHTSTALKER] = lambda { |move, attacker, opponent|
+  ChrookedNightStalker.dark?(move.instance_variable_get(:@battle))
 }
-PokeBattle_Move.prepend(ChrookedNocturnal::CritStage)
+PokeBattle_Move.prepend(ChrookedNightStalker::CritStage)

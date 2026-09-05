@@ -3,6 +3,7 @@ chrooked_id: sneasel
 aka: { pokeemerald: SPECIES_SNEASEL }
 abilities:
   primary: Carnivore
+  secondary: Night Stalker
   hidden: Refrigerate
 learnset:
   - { level: 1, move: Scratch }

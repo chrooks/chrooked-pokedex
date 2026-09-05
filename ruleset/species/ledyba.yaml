@@ -1,6 +1,10 @@
 name: Ledyba
 chrooked_id: ledyba
 aka: {  }
+abilities:
+  primary: Swarm
+  secondary: Early Bird
+  hidden: Night Stalker
 learnset:
   - { level: 1, move: Tackle }
   - { level: 2, move: Gust }

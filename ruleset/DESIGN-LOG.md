@@ -651,3 +651,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **New mechanic:** Nocturnal — crits in darkness, +1 crit stage in light. Neutral spec = night clock; the Rejuv plugin uses the exact Dusk Ball gate (night or the dark fields). Chosen over Night Vision (never-miss) and a Speed-doubling Nocturnal; user: "when I think of an assassin I think of playing around crits".
 - **Rejected:** Daydreamer hidden — Deadeye plus Dark Void already guarantees sleep, so Full Moon adds more (Dark/Fairy STAB, Moonlight). Full Moon / Psyonize dropped from the old pair.
 - **Corrections:** Dream Mist and Springtide Storm blocked ("no need for Springtide with Moonblast"); Stored Power and Extrasensory "way too early" → 44 and 37; must have Hurricane and Galeburst "it's Flying type"; Mystical Power ("wtf is that") → Psybeam; keep the last six capstones as proposed; tables should show BP, bold STAB, italicize the mon's own types.
+
+## 2026-09-04 — Night Stalker distribution (was Nocturnal)
+
+- **Rename:** Nocturnal → Night Stalker. A crit ability only serves night predators; every exclusion in the scan was a defensive or support mon, so the name should say what the mechanic does.
+- **Method:** 95 candidate ids from ecology → real sources fetched per id (lore cache) → dex sentences with night words → 31 lines nocturnal by text → 17 predators/strikers → 11 lines after niche checks.
+- **Distributed (whole lines):** Noctowl (secondary), Murkrow/Honchkrow (slot 1 over Super Luck), Zubat line (HA over Tinted Lens), Sneasel/Weavile (slot 2 over Keen Eye/Pressure), Meowth/Persian (HA over Unnerve), Gastly line (empty HA), Sableye (slot 1 over Keen Eye), Purrloin/Liepard (slot 1 over Limber), Ledyba/Ledian (HA over Iron Fist), Venonat/Venomoth (HA over Wonder Skin), Shuppet/Banette (slot 1 over Guts).
+- **Rejected:** Decidueye (starters keep Overgrow slot 1; Long Reach is a unique niche; Deadeye already the archer), Noivern (a screaming bat is the opposite creature; Amplifier + crits too much in Redux), Dusknoir, Dustox/Volbeat/Illumise (not hunters), moon lines (Full Moon), Ariados (Virulence already crits).
+- **Corrections:** "crits help less for special attackers" was wrong — 1.5x either way; Ledian keeps Aerodynamic (Flying-immune bug niche), swap Iron Fist instead.
