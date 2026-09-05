@@ -5,7 +5,7 @@ types: [Psychic, Flying]
 abilities:
   primary: Full Moon
   secondary: Psyonize
-stats: { def: 60, spa: 90, spd: 100 }
+stats: { hp: 85, atk: 50, def: 55, spa: 115, spd: 90, spe: 115 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Sky Attack }
