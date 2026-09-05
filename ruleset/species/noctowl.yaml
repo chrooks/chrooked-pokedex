@@ -3,8 +3,9 @@ chrooked_id: noctowl
 aka: { pokeemerald: SPECIES_NOCTOWL }
 types: [Psychic, Flying]
 abilities:
-  primary: Full Moon
-  secondary: Psyonize
+  primary: Deadeye
+  secondary: Nocturnal
+  hidden: Full Moon
 stats: { hp: 85, atk: 50, def: 55, spa: 115, spd: 90, spe: 115 }
 learnset:
   - { level: 1, move: Growl }

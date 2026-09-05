@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Nocturnal
+chrooked_id: nocturnal
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Guaranteed critical hits in darkness
+    trigger: damage-calc
+    when: It is currently night / darkness
+    effect: The move always results in a critical hit, regardless of the target's Shell Armor, Battle Armor, or similar crit-blocking abilities (normal crit-immunity rules still apply as governed by the engine).
+  - summary: Raised critical-hit ratio outside darkness
+    trigger: damage-calc
+    when: It is not currently night / darkness
+    effect: The user's critical-hit ratio is treated as one stage higher than its base value (equivalent to a +1 crit stage bonus, stacking with Scope Lens, Super Luck, etc.).
+test_cases:
+  - given: Noctowl with Nocturnal uses Aerial Ace during nighttime against a Blissey with no crit-blocking ability
+    expect: Aerial Ace always deals critical-hit damage.
+  - given: Noctowl with Nocturnal uses Aerial Ace during daytime, holding no item, with no other crit modifiers
+    expect: Aerial Ace has a +1 crit stage (the equivalent of holding a Scope Lens), not a guaranteed crit.
+  - given: Hoothoot with Nocturnal uses Tackle during nighttime against a target with Shell Armor
+    expect: Engine resolves forced-crit vs. crit-immunity according to its own precedence rules (result is engine-defined; spec does not override Shell Armor by fiat).
+notes:
+  - Darkness is defined as the in-game night clock. Engine-specific dark terrains or field states may optionally extend the darkness condition; this is an engine-level decision, not part of this neutral spec.
+  - The guaranteed crit in darkness is an always-on effect during the damage-calc step; it does not interact with the move's own crit stage — it simply forces a crit result.
+  - Crit-blocking abilities (Shell Armor, Battle Armor) and the Lucky Chant effect should be evaluated by the engine according to its normal precedence rules for forced crits vs. crit immunity.
+  - The +1 crit stage in light is purely additive with other crit-stage modifiers (Scope Lens, Super Luck, etc.) and does not stack with itself on multiple switch-ins.
+  - Day/night state is sampled at the moment the move's damage is calculated, not at turn start, to handle edge cases where the clock ticks mid-turn.
+  - STUB — engine_hints ungrounded, needs human grounding pass
