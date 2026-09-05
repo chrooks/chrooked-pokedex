@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Medium
+chrooked_id: medium
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Substitute Sp. Atk for Attack on contact moves
+    trigger: damage-calc
+    when: The user is executing a move that makes contact
+    effect: Replace the user's Attack stat (including all stage modifiers and burns) with the user's Sp. Atk stat (including all its stage modifiers) as the offensive stat in the damage formula. The move's category remains Physical, the target's Defense stat is still used, and all contact-related effects (Rocky Helmet, Static, Iron Barbs, etc.) still trigger normally.
+test_cases:
+  - given: Gengar (Sp. Atk 130 effective, Attack 65 effective) uses Lick (Physical, contact)
+    expect: Damage is calculated using Gengar's Sp. Atk (130) against the target's Defense, exactly as if 130 were the Attack value; Lick still triggers contact effects such as the target's Rough Skin
+  - given: Gengar under a burn uses a contact Physical move
+    expect: Damage is NOT halved by burn, because the operative offensive stat is Sp. Atk, not Attack; the burn penalty does not apply
+  - given: Gengar uses Shadow Ball (Special, contact-exempt in most engines) while holding Medium
+    expect: Medium does not activate; Shadow Ball is a Special move and already uses Sp. Atk normally — no change
+notes:
+  - This ability only substitutes the offensive stat; it does not change damage category, the defensive stat used, or whether contact is made.
+  - "Burn halving the damage source: since Attack is not used, a burn on the Medium user does NOT halve damage (burn's penalty applies to Attack, which is no longer the operative stat). This is intentional and mirrors how Flare Boost / Guts work in analogous stat-swap cases — confirm desired ruling at engine pass."
+  - Stat stages on Sp. Atk (e.g. from Nasty Plot) fully apply; stat stages on Attack are ignored for damage purposes while Medium is active.
+  - Abilities that read the attack stat of an incoming physical hit (e.g. Download, Stamina) are unaffected — they still see a Physical move and respond accordingly.
+  - "Sibling abilities: Magical Fists (punching moves, Sp. Atk for Attack), Mystic Blades (slicing moves, Sp. Atk for Attack). Medium is broader — any contact move — but carries no power bonus to compensate."
+  - Moves that are Special and make contact (e.g. Grass Knot) are unaffected; the ability only activates when the move is Physical (and contact-making).
+  - STUB — engine_hints ungrounded, needs human grounding pass
