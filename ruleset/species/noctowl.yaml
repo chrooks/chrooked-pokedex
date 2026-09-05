@@ -8,35 +8,32 @@ abilities:
   hidden: Full Moon
 stats: { hp: 85, atk: 50, def: 55, spa: 115, spd: 90, spe: 115 }
 learnset:
+  - { level: 0, move: Galeburst }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Growl }
-  - { level: 1, move: Sky Attack }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Peck }
-  - { level: 2, move: Gust }
-  - { level: 3, move: Slander }
-  - { level: 4, move: Echoed Voice }
-  - { level: 5, move: Disarming Voice }
-  - { level: 9, move: Confusion }
-  - { level: 12, move: Reflect }
-  - { level: 15, move: Defog }
-  - { level: 16, move: Dream Mist }
-  - { level: 17, move: Snarl }
-  - { level: 18, move: Air Slash }
-  - { level: 19, move: Beguile }
-  - { level: 23, move: Extrasensory }
-  - { level: 28, move: Take Down }
-  - { level: 29, move: Dark Pulse }
-  - { level: 30, move: Galeburst }
-  - { level: 31, move: Dazzling Gleam }
-  - { level: 33, move: Uproar }
-  - { level: 38, move: Roost }
-  - { level: 43, move: Moonblast }
-  - { level: 44, move: Mindwarp }
-  - { level: 45, move: Hurricane }
-  - { level: 47, move: Night Daze }
-  - { level: 48, move: Hypnosis }
-  - { level: 53, move: Dream Eater }
-  - { level: 57, move: Future Sight }
-  - { level: 59, move: Eclipse }
-  - { level: 61, move: Rapture }
-  - { level: 64, move: Tempest }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Gust }
+  - { level: 12, move: Roost }
+  - { level: 16, move: Tailwind }
+  - { level: 20, move: Psybeam }
+  - { level: 23, move: Air Cutter }
+  - { level: 26, move: Hex }
+  - { level: 30, move: Beguile }
+  - { level: 33, move: Air Slash }
+  - { level: 35, move: Shadow Ball }
+  - { level: 37, move: Extrasensory }
+  - { level: 40, move: Calm Mind }
+  - { level: 42, move: Dark Pulse }
+  - { level: 44, move: Stored Power }
+  - { level: 47, move: Moonblast }
+  - { level: 49, move: Lumina Crash }
+  - { level: 51, move: Oblivion Wing }
+  - { level: 54, move: Mindwarp }
+  - { level: 58, move: Night Daze }
+  - { level: 61, move: Future Sight }
+  - { level: 65, move: Dream Eater }
+  - { level: 68, move: Moonlight }
+  - { level: 70, move: Hurricane }
+  - { level: 72, move: Nightmare }
+  - { level: 75, move: Dark Void }
+evolution: { from: Hoothoot, method: { level: 38 } }

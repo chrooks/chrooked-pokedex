@@ -7,25 +7,30 @@ abilities:
   hidden: Full Moon
 stats: { hp: 60, atk: 30, def: 35, spa: 70, spd: 50, spe: 75 }
 learnset:
+  - { level: 1, move: Flicker }
   - { level: 1, move: Growl }
-  - { level: 1, move: Peck }
-  - { level: 2, move: Gust }
-  - { level: 3, move: Tackle }
-  - { level: 6, move: Echoed Voice }
-  - { level: 9, move: Confusion }
-  - { level: 12, move: Reflect }
-  - { level: 15, move: Defog }
-  - { level: 16, move: Swift }
-  - { level: 18, move: Air Slash }
-  - { level: 21, move: Extrasensory }
-  - { level: 24, move: Take Down }
-  - { level: 27, move: Uproar }
-  - { level: 30, move: Roost }
-  - { level: 33, move: Moonblast }
-  - { level: 36, move: Hypnosis }
-  - { level: 39, move: Dream Eater }
-  - { level: 42, move: Galeburst }
-  - { level: 43, move: Hurricane }
-  - { level: 46, move: Resonance }
-  - { level: 57, move: Hyper Beam }
-  - { level: 64, move: Tempest }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Gust }
+  - { level: 12, move: Roost }
+  - { level: 16, move: Tailwind }
+  - { level: 20, move: Psybeam }
+  - { level: 23, move: Air Cutter }
+  - { level: 26, move: Hex }
+  - { level: 30, move: Beguile }
+  - { level: 33, move: Air Slash }
+  - { level: 35, move: Shadow Ball }
+  - { level: 37, move: Extrasensory }
+  - { level: 40, move: Calm Mind }
+  - { level: 42, move: Dark Pulse }
+  - { level: 44, move: Stored Power }
+  - { level: 47, move: Moonblast }
+  - { level: 49, move: Lumina Crash }
+  - { level: 51, move: Oblivion Wing }
+  - { level: 54, move: Mindwarp }
+  - { level: 58, move: Night Daze }
+  - { level: 61, move: Future Sight }
+  - { level: 65, move: Dream Eater }
+  - { level: 68, move: Moonlight }
+  - { level: 70, move: Hurricane }
+  - { level: 72, move: Nightmare }
+  - { level: 75, move: Dark Void }
