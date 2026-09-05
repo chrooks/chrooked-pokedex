@@ -4,7 +4,7 @@ aka: { dex: 757 }
 types: [Poison, Fire]
 abilities:
   primary: Corrosion
-  secondary: Oblivious
+  secondary: Medium
   hidden: Serene Grace
 stats: { atk: 46, spa: 83, spd: 43, spe: 80 }
 learnset:

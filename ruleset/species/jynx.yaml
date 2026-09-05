@@ -3,6 +3,7 @@ chrooked_id: jynx
 aka: { pokeemerald: SPECIES_JYNX }
 types: [Psychic, Ice]
 abilities:
+  primary: Medium
   secondary: Forewarn
   hidden: Arctic Ariette
 stats: { spa: 130 }

@@ -2,7 +2,7 @@ name: Reuniclus
 chrooked_id: reuniclus
 aka: { pokeemerald: SPECIES_REUNICLUS }
 abilities:
-  primary: Overcoat
+  primary: Medium
   secondary: Magic Guard
   hidden: Liquified
 stats: { def: 80, spa: 130, spd: 105 }

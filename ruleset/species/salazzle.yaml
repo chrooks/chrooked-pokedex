@@ -3,7 +3,7 @@ chrooked_id: salazzle
 aka: { pokeemerald: SPECIES_SALAZZLE }
 abilities:
   primary: Corrosion
-  secondary: Oblivious
+  secondary: Medium
   hidden: Serene Grace
 stats: { hp: 70, atk: 70, def: 50, spa: 125, spd: 65, spe: 120 }
 learnset:

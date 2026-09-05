@@ -1,6 +1,10 @@
 name: Toxel
 chrooked_id: toxel
 aka: { pokeemerald: SPECIES_TOXEL }
+abilities:
+  primary: Medium
+  secondary: Static
+  hidden: Klutz
 stats: { spa: 35, spd: 40 }
 learnset:
   - { level: 1, move: Growl }

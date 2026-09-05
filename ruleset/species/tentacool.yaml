@@ -4,7 +4,7 @@ aka: { dex: 72 }
 types: [Water, Poison]
 abilities:
   primary: Regenerator
-  secondary: Merciless
+  secondary: Medium
   hidden: Nematocyst
 learnset:
   - { level: 1, move: Reflect Type }

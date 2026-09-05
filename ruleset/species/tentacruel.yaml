@@ -3,7 +3,7 @@ chrooked_id: tentacruel
 aka: { dex: 73 }
 abilities:
   primary: Regenerator
-  secondary: Merciless
+  secondary: Medium
   hidden: Nematocyst
 stats: { hp: 90, atk: 63, def: 80, spa: 78, spd: 114, spe: 90 }
 learnset:

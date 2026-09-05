@@ -2,7 +2,7 @@ name: Toxtricity Low Key
 chrooked_id: toxtricitylowkey
 aka: { pokeemerald: SPECIES_TOXTRICITY_LOW_KEY }
 abilities:
-  primary: Soundproof
+  primary: Medium
   secondary: Amplifier
   hidden: Venomize
 learnset:
