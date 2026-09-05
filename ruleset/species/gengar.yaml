@@ -5,7 +5,7 @@ abilities:
   primary: Medium
   secondary: Vampiric
   hidden: Frost Body
-stats: { hp: 65, atk: 95, def: 60, spa: 120, spd: 80, spe: 120 }
+stats: { hp: 65, atk: 80, spa: 135, spd: 80, spe: 120 }
 learnset:
   - { level: 0, move: Shadow Ball }
   - { level: 1, move: Flicker }
@@ -28,10 +28,11 @@ learnset:
   - { level: 47, move: Glacial Crush }
   - { level: 49, move: Pain Split }
   - { level: 51, move: Specter Bomb }
-  - { level: 54, move: Sludge Bomb }
+  - { level: 54, move: Wraithstrike }
   - { level: 56, move: Venom Slam }
   - { level: 58, move: Sludge Wave }
   - { level: 61, move: Destiny Bond }
   - { level: 63, move: Perish Song }
   - { level: 65, move: Necrosis }
   - { level: 72, move: Spectral Thief }
+evolution: { from: Haunter, method: { level: 38 } }
