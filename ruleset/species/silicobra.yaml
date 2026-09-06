@@ -1,6 +1,10 @@
 name: Silicobra
 chrooked_id: silicobra
 aka: { pokeemerald: SPECIES_SILICOBRA }
+abilities:
+  primary: Sand Spit
+  secondary: Shed Skin
+  hidden: Sand Guard
 learnset:
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Wrap }

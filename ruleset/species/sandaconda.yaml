@@ -1,6 +1,10 @@
 name: Sandaconda
 chrooked_id: sandaconda
 aka: { pokeemerald: SPECIES_SANDACONDA }
+abilities:
+  primary: Sand Spit
+  secondary: Shed Skin
+  hidden: Sand Guard
 learnset:
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Wrap }

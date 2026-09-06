@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_HIPPOWDON }
 abilities:
   primary: Sand Stream
   secondary: Bioturbation
-  hidden: Sand Force
+  hidden: Sand Guard
 stats: { hp: 110 }
 learnset:
   - { level: 1, move: Yawn }

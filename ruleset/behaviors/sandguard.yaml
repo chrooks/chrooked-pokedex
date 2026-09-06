@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Sand Guard
+chrooked_id: sandguard
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Halves incoming special damage in sandstorm
+    trigger: damage-calc
+    when: sandstorm is active and the move is special-category
+    effect: Multiply the final damage dealt to this Pokémon by 0.5 before it is applied.
+  - summary: Immune to end-of-turn sandstorm chip damage
+    trigger: turn-end
+    when: sandstorm is active
+    effect: Skip the 1/16 sandstorm residual damage for this Pokémon.
+test_cases:
+  - given: Sandstorm is active; foe uses Surf (special) against a Pokémon with Sand Guard
+    expect: Damage dealt is halved relative to the standard damage calculation
+  - given: Sandstorm is active; foe uses Earthquake (physical) against a Pokémon with Sand Guard
+    expect: Damage dealt is NOT halved — Sand Guard only affects special moves
+  - given: No weather or non-sandstorm weather is active; foe uses Thunderbolt (special) against a Pokémon with Sand Guard
+    expect: Damage dealt is NOT halved — Sand Guard is inactive outside sandstorm
+notes:
+  - The halving applies to the final damage value (after all other modifiers), functioning identically to Ice Scales in structure but restricted to sandstorm.
+  - The sandstorm immunity is a baseline courtesy granted to all sand abilities (Sand Rush, Sand Veil, Sand Force all carry it implicitly); it is included explicitly here to avoid ambiguity.
+  - Because the Rock-type Sp. Def boost (+50% Sp. Def in sand for Rock types) already covers the Sp. Def angle for Rock Pokémon natively, Sand Guard should primarily target non-Rock sand dwellers (Ground, Steel, etc.) to avoid stacking into brokenness.
+  - Sand Guard does NOT boost any stat, only reduces incoming special damage — preserving a clear mechanical difference from all existing sand abilities.
+  - The ability is condition-dependent (requires sandstorm), which is the appropriate limiting factor in lieu of a raw stat boost.
+  - STUB — engine_hints ungrounded, needs human grounding pass

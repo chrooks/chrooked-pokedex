@@ -5,7 +5,7 @@ types: [Ghost, Ground]
 abilities:
   primary: Water Compaction
   secondary: Sand Stream
-  hidden: Carnivore
+  hidden: Sand Guard
 stats: { hp: 55, atk: 55, def: 80, spa: 70, spd: 45, spe: 15 }
 learnset:
   - { level: 1, move: Astonish }

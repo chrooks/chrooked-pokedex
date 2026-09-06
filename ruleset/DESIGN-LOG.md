@@ -681,3 +681,18 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **New move:** Strafing Run — Ground physical 90 BP / 100 acc, contact, second type Flying (the Flying Press rule with Ground as base). Built from "fast both underground and above" and the wind-blade wings. Agent's name Sonic Sortie rejected ("love the move, hate the name"); Strafing Run chosen (P-40 desert-shark nose art). No plugin needed — Rejuv has native :secondtype.
 - **Slot 2 debate:** Deadlock (Glalie line identity, 3 holders), Updraft (bird-line ability, no Ground immunity — that is Wingspan), Sand Rush chosen to keep the sandstorm boost beside the Mega's Sand Force.
 - **Corrections:** spread the five-fang pileup; no move at L0 and later (second Draconic Fang → Outrage); **never Glaive Rush** (standing rule); Dragon Dance very late (L71), Swords Dance mid-game; Dragon Hammer → Iron Head coverage.
+
+## 2026-09-06 — Seviper / Zangoose (blind design as a rival pair)
+
+- **Direction:** blind-design both from anonymized profiles, then iterate together for equilibrium ("this way seems more geared to Zangoose > Seviper"). Iteration 1 gave the rival Ground/Fighting (4x into a Steel/Poison serpent) — rejected. Iteration 2 proposed Poison/Dark vs Ground/Psychic — "Zangoose as a Ground Psychic type makes zero sense". Final: Seviper pure Poison, Zangoose pure Normal; balance carried by abilities and tempo, not the type chart.
+- **Seviper:** Sharpness / Riposte / Intimidate. Whetted sword-blade duelist with scars, not a poison snake. Anchors: Dire Claw, Ceaseless Edge, Sucker Punch, Cut, Excalibur, Cross Poison. Dark and Steel slicing as coverage. Wins long fights.
+- **Zangoose:** Long Reach / Toxic Boost / Rattled. Snake-killer claws and fangs, at most two flurry-class moves. Anchors: Facade, Rampage, Extreme Speed, Super Fang, Crush Claw, Fake Out, Bail Out, Taunt; folded by hand: Bulldoze, Dig, Crunch. Wins short fights.
+- **Corrections:** server auto-filled Dark Void into an empty utility slot ("Hell no") → Counter; Venoshock (special) → Smart Strike; Gunk Shot → Iron Tail; keep Coil; Scratch → Tackle. Ten must-haves exceed the eight-anchor cap → anchor eight, fold two post-proposal.
+
+## 2026-09-06 — Sand Guard (create + distribute)
+
+- **Ability:** in a sandstorm, halves damage from special moves; immune to sand chip. User was undecided between Def, Sp. Def, or both. Sp. Def chosen as the one defensive lane no sand ability uses (Rush = Speed, Force = power, Veil = evasion); damage halving over a stat stage so it does not stack with Calm Mind or items; both defenses rejected as past Fur Coat / Ice Scales with no cost. Rating B+. Behavior stub written, engine_hints empty (grounding pass pending).
+- **Beneficiary:** walls with explicit sandstorm or desert endurance claims; non-Rock (Rock already gets Sp. Def in sand).
+- **Method:** dex distribute endpoint (25 lines) + whole-dex lore scan → 33 lines with theme words → 20 explicit desert/sandstorm claims → 5 walls → 4 distributed.
+- **Distributed (HA):** Hippopotas/Hippowdon (over Sand Force), Silicobra/Sandaconda (over Sand Veil), Sandygast/Palossand (over Carnivore), Orthworm (over Sand Veil).
+- **Rejected:** Sandshrew line (optional row, user skipped — Sand Rush is the line's identity); Maractus (special attacker, 67/67 defenses, dex only calls it desert food); Cacturne, Krookodile, Garchomp, Flygon (Singing Sands), Drapion, Skorupi as strikers; Trapinch line ends in Flygon; the create-time proposal's Garchomp and Flygon rows displaced user customs (Apex Predator, Amplifier).

@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_HIPPOPOTAS }
 abilities:
   primary: Sand Stream
   secondary: Bioturbation
-  hidden: Sand Force
+  hidden: Sand Guard
 learnset:
   - { level: 1, move: Sand Attack }
   - { level: 1, move: Tackle }
