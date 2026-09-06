@@ -7,24 +7,26 @@ abilities:
   hidden: Chlorophyll
 stats: { spa: 115, spe: 112 }
 learnset:
-  - { level: 0, move: Thunderbolt }
-  - { level: 1, move: Charge }
-  - { level: 1, move: Quick Attack }
+  - { level: 0, move: Thunderclap }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Tail Whip }
-  - { level: 1, move: Thunder Shock }
-  - { level: 4, move: Echoed Voice }
-  - { level: 7, move: Mud-Slap }
-  - { level: 10, move: Eerie Impulse }
-  - { level: 13, move: Parabolic Charge }
-  - { level: 16, move: Volt Switch }
-  - { level: 19, move: Mud Shot }
-  - { level: 22, move: Round }
-  - { level: 26, move: Scorching Sands }
-  - { level: 30, move: Discharge }
-  - { level: 34, move: Hyper Voice }
-  - { level: 38, move: Sunny Day }
-  - { level: 42, move: Heat Wave }
-  - { level: 46, move: Thunderclap }
-  - { level: 50, move: Thunder }
-  - { level: 56, move: Solar Beam }
-  - { level: 62, move: Hyper Beam }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Echoed Voice }
+  - { level: 12, move: Charge Beam }
+  - { level: 16, move: Terrain Pulse }
+  - { level: 19, move: Weather Ball }
+  - { level: 23, move: Shock Wave }
+  - { level: 26, move: Round }
+  - { level: 30, move: Scorching Sands }
+  - { level: 33, move: Tri Attack }
+  - { level: 37, move: Parabolic Charge }
+  - { level: 40, move: Volt Switch }
+  - { level: 44, move: Thunderbolt }
+  - { level: 47, move: Morning Sun }
+  - { level: 51, move: Overdrive }
+  - { level: 54, move: Resonance }
+  - { level: 58, move: Sunny Day }
+  - { level: 61, move: Thunder }
+  - { level: 65, move: Sandstorm }
+  - { level: 68, move: Solar Beam }
+  - { level: 72, move: Boomburst }
