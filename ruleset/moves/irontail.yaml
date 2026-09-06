@@ -1,0 +1,13 @@
+name: Iron Tail
+chrooked_id: irontail
+aka: { pokeemerald: MOVE_IRON_TAIL }
+type: Steel
+category: physical
+power: 100
+accuracy: 90
+pp: 15
+description: Attacks with a rock-hard tail. May lower Defense.
+effect: hit
+additional_effects:
+  - { effect: def_minus_1, chance: 30 }
+flags: [contact]
