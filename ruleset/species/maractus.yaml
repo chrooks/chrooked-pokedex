@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_MARACTUS }
 abilities:
   primary: Self Sufficient
   secondary: Thorned Succulent
-  hidden: Storm Drain
+  hidden: Sand Guard
 stats: { hp: 100, atk: 65, def: 95, spa: 115, spd: 95, spe: 55 }
 learnset:
   - { level: 1, move: Absorb }
