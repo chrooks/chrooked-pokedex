@@ -2,9 +2,9 @@ name: Heliolisk
 chrooked_id: heliolisk
 aka: { pokeemerald: SPECIES_HELIOLISK }
 abilities:
-  primary: Solar Dynamo
-  secondary: Sand Veil
-  hidden: Solar Power
+  primary: Solar Power
+  secondary: Sand Force
+  hidden: Chlorophyll
 stats: { spa: 115, spe: 112 }
 learnset:
   - { level: 0, move: Thunderbolt }

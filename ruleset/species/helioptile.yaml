@@ -3,9 +3,9 @@ chrooked_id: helioptile
 aka: {  }
 types: [Electric, Normal]
 abilities:
-  primary: Solar Dynamo
-  secondary: Sand Veil
-  hidden: Solar Power
+  primary: Solar Power
+  secondary: Sand Force
+  hidden: Chlorophyll
 learnset:
   - { level: 1, move: Charge }
   - { level: 1, move: Quick Attack }
