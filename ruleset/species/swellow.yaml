@@ -1,30 +1,33 @@
 name: Swellow
 chrooked_id: swellow
 aka: { pokeemerald: SPECIES_SWELLOW }
+abilities:
+  primary: Sharpness
+  secondary: Super Luck
+  hidden: Death Grip
 stats: { atk: 95, spa: 80 }
 learnset:
+  - { level: 0, move: Aerial Ace }
   - { level: 1, move: Growl }
-  - { level: 1, move: Focus Energy }
-  - { level: 1, move: Quick Attack }
+  - { level: 1, move: Tackle }
   - { level: 1, move: Peck }
-  - { level: 2, move: Tackle }
-  - { level: 3, move: Air Slash }
-  - { level: 4, move: Pluck }
-  - { level: 5, move: Focus Energy }
-  - { level: 6, move: Wing Attack }
-  - { level: 9, move: Quick Attack }
-  - { level: 13, move: Aerial Ace }
-  - { level: 17, move: Double Team }
-  - { level: 21, move: Dive Bomb }
-  - { level: 27, move: Quick Guard }
-  - { level: 29, move: Bail Out }
-  - { level: 30, move: Take Down }
-  - { level: 33, move: Agility }
-  - { level: 35, move: Nosedive }
-  - { level: 36, move: Brave Bird }
-  - { level: 37, move: Rampage }
-  - { level: 39, move: Air Slash }
-  - { level: 45, move: Endeavor }
-  - { level: 51, move: Brave Bird }
-  - { level: 57, move: Reversal }
-  - { level: 58, move: Double-Edge }
+  - { level: 5, move: Quick Attack }
+  - { level: 9, move: Fury Cutter }
+  - { level: 13, move: Flutter Bash }
+  - { level: 16, move: Cut }
+  - { level: 20, move: Slash }
+  - { level: 23, move: Wing Attack }
+  - { level: 26, move: U-turn }
+  - { level: 30, move: Focus Energy }
+  - { level: 33, move: Aerial Ace }
+  - { level: 37, move: Drill Peck }
+  - { level: 40, move: Night Slash }
+  - { level: 43, move: Roost }
+  - { level: 46, move: X-Scissor }
+  - { level: 49, move: Dive Bomb }
+  - { level: 52, move: Swords Dance }
+  - { level: 55, move: Kowtow Cleave }
+  - { level: 58, move: Nosedive }
+  - { level: 62, move: Tailwind }
+  - { level: 65, move: Double-Edge }
+  - { level: 68, move: Brave Bird }

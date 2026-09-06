@@ -1,23 +1,31 @@
 name: Taillow
 chrooked_id: taillow
 aka: { dex: 276 }
+abilities:
+  primary: Sharpness
+  secondary: Super Luck
+  hidden: Death Grip
 learnset:
-  - { level: 1, move: Peck }
   - { level: 1, move: Growl }
-  - { level: 2, move: Tackle }
-  - { level: 5, move: Focus Energy }
-  - { level: 9, move: Quick Attack }
-  - { level: 13, move: Wing Attack }
-  - { level: 17, move: Double Team }
-  - { level: 21, move: Aerial Ace }
-  - { level: 25, move: Quick Guard }
-  - { level: 29, move: Bail Out }
-  - { level: 30, move: Take Down }
-  - { level: 33, move: Air Slash }
-  - { level: 37, move: Endeavor }
-  - { level: 39, move: Rampage }
-  - { level: 40, move: Dive Bomb }
-  - { level: 41, move: Nosedive }
-  - { level: 45, move: Reversal }
-  - { level: 48, move: Brave Bird }
-  - { level: 57, move: Double-Edge }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Peck }
+  - { level: 5, move: Quick Attack }
+  - { level: 9, move: Fury Cutter }
+  - { level: 13, move: Flutter Bash }
+  - { level: 16, move: Cut }
+  - { level: 20, move: Slash }
+  - { level: 23, move: Wing Attack }
+  - { level: 26, move: U-turn }
+  - { level: 30, move: Focus Energy }
+  - { level: 33, move: Aerial Ace }
+  - { level: 37, move: Drill Peck }
+  - { level: 40, move: Night Slash }
+  - { level: 43, move: Roost }
+  - { level: 46, move: X-Scissor }
+  - { level: 49, move: Dive Bomb }
+  - { level: 52, move: Swords Dance }
+  - { level: 55, move: Kowtow Cleave }
+  - { level: 58, move: Nosedive }
+  - { level: 62, move: Tailwind }
+  - { level: 65, move: Double-Edge }
+  - { level: 68, move: Brave Bird }
