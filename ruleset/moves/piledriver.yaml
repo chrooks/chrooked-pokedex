@@ -1,0 +1,12 @@
+name: Pile Driver
+chrooked_id: piledriver
+aka: {  }
+type: Steel
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: A full-weight steel slam. The impact dents the user, lowering its Defense and Sp. Def.
+additional_effects:
+  - { effect: user_def_sp_def_minus_1, chance: 100 }
+flags: [contact]

@@ -709,3 +709,10 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Thorned Succulent:** "a cactus ability that combines Water Absorb with Iron Barbs" + "should make mons immune to sand damage". Built as a COMPOSED ability — behaviors [thornedsucculent, waterabsorb, ironbarbs] — so vanilla pays the absorb and the barbs; the own plugin carries only the sand clause. Names declined: Xerophyte, Desert Bloom.
 - **Distributed:** Cacnea/Cacturne (HA over Water Absorb, now a part), Maractus (slot 2 over Iron Barbs, now a part). Rejected: Bramblin/Brambleghast (tumbleweed, no water storage); Sandslash and Ferrothorn hit on "spines" but are not plants.
 - **Process:** ability-create no longer distributes; the endpoint's distribution plan is shown as an unsourced one-liner and /ability-distribute owns the species writes.
+
+## 2026-09-06 — Aggron line (blind design)
+
+- **Direction:** blind-design, lore-table format. Steel/Rock kept (agent read Steel/Ground). Earth Eater / Bioturbation / Impenetrable (Stamina proposed for slot 2, Chris took Bioturbation; Impenetrable kept from the old trio). Anchors: Heavy Slam, Stealth Rock, Body Press, Drill Run, Earthquake, Rototiller. Pre-evos mirror; Mega keeps Filter.
+- **New move:** Pile Driver — Steel physical 120/90, contact, user's Def and Sp. Def −1 after use (Close Combat shape, "the armor dents"). Created because the pool had no generic physical Steel capstone above 100 BP: Excalibur is to be limited, Steel Roller needs a terrain, Gigaton Hammer cannot repeat. Applier gained the user_def_sp_def_minus_1 → 0x03C mapping for it.
+- **Rejected:** the agent's custom Reclamation (self-heal that clears own hazards); Bullet Punch at L5 → Clang.
+- **Parked:** Excalibur is on 60 species — a reverse-distribution pass to limit it, with Pile Driver as the generic replacement.

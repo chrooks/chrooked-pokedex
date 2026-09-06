@@ -2,29 +2,29 @@ name: Aron
 chrooked_id: aron
 aka: { pokeemerald: SPECIES_ARON }
 abilities:
-  primary: Sturdy
-  secondary: Rock Head
+  primary: Earth Eater
+  secondary: Bioturbation
   hidden: Impenetrable
 learnset:
+  - { level: 1, move: Leer }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Harden }
-  - { level: 4, move: Metal Claw }
-  - { level: 8, move: Rock Tomb }
-  - { level: 12, move: Roar }
-  - { level: 15, move: Smart Strike }
-  - { level: 16, move: Headbutt }
-  - { level: 20, move: Protect }
-  - { level: 24, move: Rock Slide }
-  - { level: 28, move: Iron Head }
-  - { level: 29, move: Lithic Fang }
-  - { level: 33, move: Metal Sound }
-  - { level: 36, move: Take Down }
-  - { level: 40, move: Autotomize }
-  - { level: 43, move: Stone Edge }
-  - { level: 44, move: Iron Tail }
-  - { level: 48, move: Iron Defense }
-  - { level: 52, move: Heavy Slam }
-  - { level: 56, move: Double-Edge }
-  - { level: 57, move: Excalibur }
-  - { level: 59, move: Head Smash }
-  - { level: 60, move: Metal Burst }
+  - { level: 5, move: Clang }
+  - { level: 9, move: Rock Throw }
+  - { level: 12, move: Metal Claw }
+  - { level: 16, move: Rock Tomb }
+  - { level: 19, move: Heavy Slam }
+  - { level: 23, move: Smart Strike }
+  - { level: 26, move: Rock Slide }
+  - { level: 30, move: Stealth Rock }
+  - { level: 33, move: Lithic Fang }
+  - { level: 37, move: Body Press }
+  - { level: 40, move: Drill Run }
+  - { level: 44, move: Iron Head }
+  - { level: 47, move: Rototiller }
+  - { level: 51, move: Iron Tail }
+  - { level: 54, move: Stone Edge }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Pile Driver }
+  - { level: 65, move: Roar }
+  - { level: 68, move: Metal Sound }
+  - { level: 72, move: Head Smash }
