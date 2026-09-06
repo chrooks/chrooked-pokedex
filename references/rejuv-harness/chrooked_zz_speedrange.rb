@@ -81,8 +81,7 @@ module ChrookedSpeedRange
     end
   end
 
-  module BattleHooks
-    attr_reader :speedData, :choices, :state
+  module BattleHooks   # battle already exposes speedData / choices / state
 
     def setMoveOrder
       order = super
