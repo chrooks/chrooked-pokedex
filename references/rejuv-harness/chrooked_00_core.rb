@@ -326,7 +326,7 @@ module ChrookedMoveHooks
     typemod
   end
 
-  def pbCritRate?(attacker, opponent)
+  def pbCritRate?(attacker, opponent, *rest)
     rate = super
     # -1 means criticals are impossible here (status move, Battle Armor,
     # Shell Armor, Lucky Chant). Never override that.

@@ -26,7 +26,7 @@ module ChrookedNightStalker
   # Light-side +1 crit stage. Runs ahead of the core's wrapper; a -1 (crit
   # impossible) or an already-forced 3 passes through untouched.
   module CritStage
-    def pbCritRate?(attacker, opponent)
+    def pbCritRate?(attacker, opponent, *rest)
       rate = super
       return rate if rate < 0 || rate >= 3
       return rate + 1 if attacker.ability == :NIGHTSTALKER && !ChrookedNightStalker.dark?(@battle)
