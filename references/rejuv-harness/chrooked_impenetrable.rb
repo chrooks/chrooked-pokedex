@@ -5,6 +5,9 @@
 #   Life Orb, crash damage) routes through pbReduceHP WITH a message — veto those.
 #   Own-move recoil keeps its damage (spec: self-inflicted), keyed on Rejuv's
 #   "was damaged by the recoil!" message (Battle_Move.rb:2277).
+#   Weather chip does NOT route through pbReduceHP at all — the sand/hail tick
+#   subtracts HP directly in pbReduceBattlersHP (Battle.rb:7877) — so it is
+#   covered by CHROOKED_WEATHER_IMMUNE via the core's takesWeatherDamage? wrapper.
 # ponytail: message-less pbReduceHP ticks slip through (e.g. Battle.rb:5930) and
 #   Toxic Spikes can still poison on entry (status, not damage; its gate at
 #   Battle.rb:3243 is mid-method) — extend if either shows up in play.
@@ -19,3 +22,4 @@ CHROOKED_HP_LOSS_VETO[:IMPENETRABLE] = lambda { |battler, message|
   msg = message.to_s
   !msg.empty? && !msg.include?("recoil")
 }
+CHROOKED_WEATHER_IMMUNE[:IMPENETRABLE] = [:SANDSTORM, :HAIL, :SHADOWSKY]
