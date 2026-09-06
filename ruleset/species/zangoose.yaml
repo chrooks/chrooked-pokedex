@@ -2,37 +2,30 @@ name: Zangoose
 chrooked_id: zangoose
 aka: { pokeemerald: SPECIES_ZANGOOSE }
 abilities:
-  primary: Toxic Boost
+  primary: Long Reach
+  secondary: Toxic Boost
+  hidden: Rattled
 stats: { atk: 125, spa: 50, spe: 110 }
 learnset:
-  - { level: 1, move: Double Kick }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Counter }
-  - { level: 1, move: Fury Swipes }
-  - { level: 2, move: Curse }
-  - { level: 3, move: Flail }
-  - { level: 4, move: Belly Drum }
-  - { level: 5, move: Quick Attack }
-  - { level: 6, move: Feint }
-  - { level: 7, move: Double Hit }
-  - { level: 8, move: Fury Cutter }
-  - { level: 9, move: Quick Guard }
-  - { level: 10, move: Final Gambit }
-  - { level: 11, move: Leer }
-  - { level: 12, move: Metal Claw }
-  - { level: 13, move: Scratch }
-  - { level: 14, move: Night Slash }
-  - { level: 15, move: Hone Claws }
-  - { level: 19, move: False Swipe }
-  - { level: 22, move: Power Trip }
-  - { level: 26, move: Slash }
-  - { level: 29, move: Crush Claw }
-  - { level: 30, move: Take Down }
-  - { level: 36, move: Detect }
-  - { level: 38, move: Rampage }
-  - { level: 40, move: X-Scissor }
-  - { level: 43, move: Taunt }
-  - { level: 47, move: Swords Dance }
-  - { level: 50, move: Close Combat }
-  - { level: 55, move: Pixie Slash }
-  - { level: 57, move: Double-Edge }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Feint }
+  - { level: 9, move: Fake Out }
+  - { level: 12, move: Quick Attack }
+  - { level: 16, move: Super Fang }
+  - { level: 19, move: Taunt }
+  - { level: 23, move: Bail Out }
+  - { level: 26, move: Bulldoze }
+  - { level: 30, move: Slash }
+  - { level: 33, move: Dig }
+  - { level: 37, move: Facade }
+  - { level: 40, move: Crush Claw }
+  - { level: 44, move: Extreme Speed }
+  - { level: 47, move: Hyper Fang }
+  - { level: 51, move: Rampage }
+  - { level: 54, move: Crunch }
+  - { level: 58, move: Swords Dance }
+  - { level: 61, move: Detect }
+  - { level: 65, move: Hone Claws }
+  - { level: 68, move: Focus Energy }
+  - { level: 72, move: Double-Edge }

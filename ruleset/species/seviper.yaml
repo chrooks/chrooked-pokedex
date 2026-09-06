@@ -2,27 +2,30 @@ name: Seviper
 chrooked_id: seviper
 aka: { pokeemerald: SPECIES_SEVIPER }
 abilities:
-  secondary: Coil Up
+  primary: Sharpness
+  secondary: Riposte
+  hidden: Intimidate
 stats: { atk: 110, spa: 110 }
 learnset:
-  - { level: 1, move: Wrap }
-  - { level: 1, move: Swagger }
-  - { level: 4, move: Bite }
-  - { level: 6, move: Lick }
+  - { level: 1, move: Glare }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Poison Sting }
   - { level: 9, move: Poison Tail }
-  - { level: 11, move: Feint }
-  - { level: 14, move: Screech }
-  - { level: 15, move: Cross Poison }
-  - { level: 19, move: Glare }
-  - { level: 21, move: Poison Fang }
-  - { level: 24, move: Venoshock }
-  - { level: 29, move: Gastro Acid }
-  - { level: 31, move: Poison Jab }
-  - { level: 34, move: Haze }
-  - { level: 36, move: Venom Slam }
-  - { level: 39, move: Crunch }
-  - { level: 41, move: Belch }
-  - { level: 44, move: Coil }
-  - { level: 46, move: Sludge Bomb }
-  - { level: 57, move: Gunk Shot }
-  - { level: 64, move: Contagion }
+  - { level: 16, move: Swords Dance }
+  - { level: 19, move: Rock Polish }
+  - { level: 23, move: Smart Strike }
+  - { level: 26, move: Knock Off }
+  - { level: 30, move: Sucker Punch }
+  - { level: 32, move: Cut }
+  - { level: 34, move: Crunch }
+  - { level: 37, move: Dire Claw }
+  - { level: 40, move: Ceaseless Edge }
+  - { level: 44, move: Poison Jab }
+  - { level: 47, move: Night Slash }
+  - { level: 51, move: Cross Poison }
+  - { level: 54, move: Venom Slam }
+  - { level: 58, move: Counter }
+  - { level: 61, move: Kowtow Cleave }
+  - { level: 65, move: Iron Tail }
+  - { level: 68, move: Coil }
+  - { level: 72, move: Excalibur }
