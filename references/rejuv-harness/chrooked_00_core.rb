@@ -88,6 +88,11 @@ CHROOKED_ACCURACY_MODS = {}
 # holder would otherwise take. The only seam for a drawback hardcoded mid-method
 # (Solar Power's sun drain lives inside pbEndOfRoundPhase, no hook of its own).
 CHROOKED_HP_LOSS_VETO = {}
+# ability => [weather symbols] — the holder takes no residual chip from those
+# weathers. Needed because takesWeatherDamage? (Battle_Effects.rb:1365) keys on
+# a hard list of vanilla ability symbols, and the sand/hail tick subtracts HP
+# directly in pbReduceBattlersHP (Battle.rb:7877), bypassing pbReduceHP.
+CHROOKED_WEATHER_IMMUNE = {}
 # ability => ->(battler, battle) { Float fraction of max HP } — added back to the
 # AI's hpGainPerTurn. Only needed when a chrooked ability REMOVES a per-turn cost
 # the AI still subtracts by ability symbol (Solar Power's sun drain).
@@ -357,6 +362,16 @@ end
 PokeBattle_Move.prepend(ChrookedMoveHooks)
 
 module ChrookedBattlerHooks
+  def takesWeatherDamage?(weather = nil)
+    immune = Chrooked.entry(CHROOKED_WEATHER_IMMUNE, self.ability)
+    if immune
+      w = weather.nil? ? @battle.pbWeather(nil) : weather
+      # Desert's Mark negates sand immunity in vanilla (checked before the ability list).
+      return false if immune.include?(w) && !self.effects[:DesertsMark]
+    end
+    super
+  end
+
   def pbOnKillEffects(targets, basemove, *args)
     ret = super
     return ret if @battle.pbAnySideAllFainted? || self.isFainted?

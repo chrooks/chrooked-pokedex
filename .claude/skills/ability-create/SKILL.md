@@ -1,6 +1,6 @@
 ---
 name: ability-create
-description: Create a brand-new custom ability from chat — describe the ability in plain words and get a complete proposal (a new owned ability + an engine-neutral behavior stub + a species-distribution plan), then on your confirmation write it through the existing chrooked-pokedex CRUD API. Calls the same propose endpoint the editor UI will use (one Seam), shows the ability + behavior stub (engine_hints left empty for your grounding pass) + the distribution table, and never writes without confirmation. Use when the user wants to invent a new ability for this Ruleset.
+description: Create a brand-new custom ability from chat — describe the ability in plain words and get a complete proposal (a new owned ability + an engine-neutral behavior stub), then on your confirmation write it through the existing chrooked-pokedex CRUD API. Calls the same propose endpoint the editor UI will use (one Seam), shows the ability + behavior stub (engine_hints left empty for your grounding pass), and never writes without confirmation. Distribution is NOT this skill's job — hand it to /ability-distribute. Use when the user wants to invent a new ability for this Ruleset.
 argument-hint: "<direction describing the ability...>"
 disable-model-invocation: true
 ---
@@ -9,16 +9,17 @@ disable-model-invocation: true
 
 Drive LLM-assisted **ability creation** from chat, against the **running backend** —
 the `POST /api/abilities/suggest` endpoint. This is the first capability that *creates*
-owned content (rather than picking or rewriting existing data) and the first that writes
-to **three** places on accept. There is **one prompt path, one validation path**: the
+owned content (rather than picking or rewriting existing data) and writes to **two**
+places on accept: the ability and its behavior stub. Distribution is a separate,
+lore-sourced pass — `/ability-distribute` — never this skill. There is **one prompt path, one validation path**: the
 server builds the rubric, calls the LLM Port, and validates the draft (a slugified id
 that refuses to clobber, an engine-neutral behavior stub with **empty** `engine_hints`,
 and a distribution plan validated against the dex). This skill is a thin chat client over
 that Seam; it adds no second prompt and no second validation.
 
 On your confirmation it writes via the existing CRUD routes **in order** —
-`PUT /api/abilities/{id}` → `PUT /api/behaviors/{id}` → `PUT /api/species/{id}` ×N —
-the loader is the gate, exactly as the UI's Save will be.
+`PUT /api/abilities/{id}` → `PUT /api/behaviors/{id}` — the loader is the gate, exactly
+as the UI's Save will be. Species writes belong to `/ability-distribute`.
 
 ## Quick start
 
@@ -42,10 +43,11 @@ the loader is the gate, exactly as the UI's Save will be.
   (lowercase, no separators). If it collides with an existing owned ability OR behavior
   id, the server returns a 422 with a `warnings` entry — relay it and ask the user to
   rename; do not overwrite.
-- **Distribution is validated at propose time.** Every target species must exist in the
-  dex and the slot must be one of `primary`/`secondary`/`hidden`. Each row's `replaces`
-  shows the species' real current slot occupant. Zero species is valid (author now,
-  distribute later).
+- **Never distribute from here.** The endpoint still returns a `distribution` plan; it is
+  an unsourced LLM guess (it has displaced user customs — Apex Predator on Garchomp,
+  Amplifier on Flygon, 2026-09-06). Show it as a hint at most, never PUT a species.
+  Distribution runs through `/ability-distribute`, which screens by beneficiary and
+  sourced dex text, writes whole lines, applies, and reads back.
 - **Proposal-only fields.** `reasoning`, `replaces`, the `ai_rating`, and `warnings` are
   for your review; strip them before each PUT (the loader stores only the real fields).
   The AI rating is advisory — fold it into the behavior `notes` if the user wants it
@@ -108,7 +110,8 @@ Present:
 - The **ability**: name + description.
 - The **behavior stub**: its effects + test cases, and call out that `engine_hints` is
   empty — that is the human's grounding TODO, not a bug.
-- The **distribution** as a table: species · slot · replaces · reasoning.
+- The endpoint's **distribution hint** in one line ("the rubric suggested X, Y, Z") —
+  labelled as unsourced, not a table, not a decision.
 - The **AI rating** from `rationale.ai_rating` (advisory).
 
 ### 3. Confirm
@@ -122,8 +125,8 @@ can be read.
 Ask the user to **approve, edit, or reject**:
 
 - Approve as-is → go to step 4.
-- Edit (rename the ability, drop/add a distribution row, change a slot) → adjust, then
-  re-propose if the name changed (so the id + collision check re-runs), then step 4.
+- Edit (rename the ability, reword an effect or test case) → adjust, then re-propose
+  if the name changed (so the id + collision check re-runs), then step 4.
 - Reject → stop. Nothing is written.
 
 **Do not proceed to step 4 without an explicit yes.**
@@ -156,25 +159,16 @@ curl -sS -X PUT "${CHROOKED_API:-http://127.0.0.1:8000}/api/behaviors/tidalforce
         "engine_hints": {} }'
 ```
 
-**4c. Distribute — for EACH distribution row**, read the current Override, merge the new
-ability into the chosen slot, and PUT the whole species (strip `replaces`/`reasoning`):
-
-```bash
-# 404 here means no Override yet → start from {name, chrooked_id}
-curl -sS "${CHROOKED_API:-http://127.0.0.1:8000}/api/species/poliwag"
-
-curl -sS -X PUT "${CHROOKED_API:-http://127.0.0.1:8000}/api/species/poliwag" \
-  -H 'content-type: application/json' \
-  -d '{ "name": "Poliwag", "chrooked_id": "poliwag",
-        "abilities": { "hidden": "Tidal Force" } }'
-```
+**4c. Hand off distribution.** Do not touch species. Close the turn with one line:
+"Ability and stub written, undistributed — run `/ability-distribute "<Name>" <theme words>`
+when ready." If the user asked for both in one message, invoke `/ability-distribute` next.
 
 Handle each write response:
 
 - **200** → relay what landed; continue to the next write.
 - **422** → the loader rejected it; show its message verbatim, STOP. Report which writes
-  already landed (e.g. ability + behavior wrote, species N did not) — the partial state
-  is valid on disk and the same Boundary the UI's Save will hit.
+  already landed (e.g. ability wrote, behavior did not) — the partial state is valid on
+  disk and the same Boundary the UI's Save will hit.
 
 Chris reviews `git diff` and commits himself; the skill never touches git.
 
@@ -184,4 +178,5 @@ The propose endpoint, the `{draft, rationale, alternatives}` contract, and the
 accept-through-CRUD path are the reusable foundation built in issues #6 (ability),
 #32 (typing + stats), and #7 (learnset). This skill and the later editor UI (#37) are two
 clients of the **same** backend Seam — no prompt drift between chat and UI. What is new
-in #8 is that accept orchestrates THREE existing routes in order rather than one.
+in #8 is that accept orchestrates TWO existing routes in order rather than one; the
+species route is `/ability-distribute`'s.
