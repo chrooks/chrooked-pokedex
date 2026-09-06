@@ -13,7 +13,7 @@
 #               opponent first  => lo = max(lo, my effective speed)
 #               player first    => hi = min(hi, my effective speed)
 #             Trick Room flips the reading. Ties are random, so bounds stay inclusive.
-#   reset   : when a new Pokemon fills the opposing slot.
+#   reset   : when a new Pokemon fills the opposing slot (checked lazily by owner).
 #
 # ponytail: bounds are on the opponent's EFFECTIVE speed (stages, item, weather
 # included) while the starting range is the RAW stat; a Choice Scarf or +2 can push
@@ -32,6 +32,13 @@ module ChrookedSpeedRange
   end
 
   def self.range(battler)
+    # A new Pokemon in the slot resets the bounds (Battler objects are reused per slot).
+    owner = battler.pokemon.object_id
+    if battler.chrooked_spd_owner != owner
+      battler.chrooked_spd_owner = owner
+      battler.chrooked_spd_lo = nil
+      battler.chrooked_spd_hi = nil
+    end
     lo, hi = raw_range(battler)
     lo = battler.chrooked_spd_lo if battler.chrooked_spd_lo
     hi = battler.chrooked_spd_hi if battler.chrooked_spd_hi
@@ -66,11 +73,10 @@ module ChrookedSpeedRange
   module BattlerHooks
     attr_accessor :chrooked_spd_lo, :chrooked_spd_hi
 
-    def pbInitPokemon(pkmn, pkmnIndex)
-      super
-      @chrooked_spd_lo = nil
-      @chrooked_spd_hi = nil
-    end
+    # ponytail: no pbInitPokemon hook — chrooked_zz_zcompose aliases that method
+    # and a prepend in front of it loops the alias back into itself (stack overflow,
+    # 2026-09-06). Ownership is checked lazily instead: see ChrookedSpeedRange.range.
+    attr_accessor :chrooked_spd_owner
 
     # Battle Stats screen: "Base Spe: 102" -> "Base Spe: 102  [200-300]" for foes.
     def pbGetBaseStatInspect(stat)
