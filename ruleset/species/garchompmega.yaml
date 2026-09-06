@@ -2,25 +2,29 @@ name: Garchomp Mega
 chrooked_id: garchompmega
 aka: { pokeemerald: SPECIES_GARCHOMP_MEGA }
 learnset:
-  - { level: 0, move: Crunch }
+  - { level: 0, move: Draconic Fang }
   - { level: 1, move: Sand Attack }
-  - { level: 1, move: Sand Tomb }
-  - { level: 1, move: Clod Toss }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Maul }
-  - { level: 3, move: Dragon Breath }
-  - { level: 15, move: Breaking Swipe }
-  - { level: 18, move: Bulldoze }
-  - { level: 27, move: Bite }
-  - { level: 30, move: Lithic Fang }
-  - { level: 31, move: Tectonic Fang }
-  - { level: 34, move: Slash }
-  - { level: 42, move: Dragon Claw }
-  - { level: 43, move: Dragon Hammer }
-  - { level: 45, move: Earthquake }
-  - { level: 47, move: Pixie Slash }
-  - { level: 52, move: Dig }
-  - { level: 57, move: Faultbreak }
-  - { level: 62, move: Sandstorm }
-  - { level: 69, move: Dragon Rush }
-  - { level: 70, move: Take Down }
+  - { level: 5, move: Twister }
+  - { level: 9, move: Clod Toss }
+  - { level: 13, move: Sand Tomb }
+  - { level: 16, move: Screech }
+  - { level: 20, move: Maul }
+  - { level: 22, move: Bulldoze }
+  - { level: 26, move: Aerial Ace }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Dragon Claw }
+  - { level: 35, move: Drill Run }
+  - { level: 38, move: Fire Fang }
+  - { level: 40, move: Swords Dance }
+  - { level: 44, move: Strafing Run }
+  - { level: 47, move: Dive Bomb }
+  - { level: 51, move: Iron Head }
+  - { level: 53, move: Earthquake }
+  - { level: 56, move: Tectonic Fang }
+  - { level: 58, move: Nosedive }
+  - { level: 61, move: Ice Fang }
+  - { level: 65, move: Stone Edge }
+  - { level: 69, move: Faultbreak }
+  - { level: 71, move: Dragon Dance }
+  - { level: 73, move: Outrage }

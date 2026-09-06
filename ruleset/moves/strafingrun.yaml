@@ -1,0 +1,13 @@
+name: Strafing Run
+chrooked_id: strafingrun
+aka: {  }
+type: Ground
+second_type: Flying
+category: physical
+power: 90
+accuracy: 100
+pp: 10
+description: The user skims the earth at sonic speed. This move is Ground and Flying type simultaneously.
+effect: two_typed_move
+argument: { type: Flying }
+flags: [contact, wing]
