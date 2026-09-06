@@ -10,3 +10,4 @@ description: A deafening swarm-drone batters everything. The user's Sp. Atk fall
 additional_effects:
   - { effect: sp_atk_minus_2, chance: 100 }
 flags: [sound]
+target: foes_and_ally
