@@ -4,7 +4,7 @@ aka: { dex: 331 }
 abilities:
   primary: Sand Rush
   secondary: Stakeout
-  hidden: Water Absorb
+  hidden: Thorned Succulent
 learnset:
   - { level: 1, move: Poison Sting }
   - { level: 1, move: Leer }

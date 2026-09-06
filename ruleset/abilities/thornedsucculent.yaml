@@ -1,0 +1,5 @@
+name: Thorned Succulent
+chrooked_id: thornedsucculent
+aka: {  }
+behaviors: [thornedsucculent, waterabsorb, ironbarbs]
+description: Water moves heal the user instead of damaging it. Contact attackers lose 1/8 max HP. Immune to sandstorm damage.

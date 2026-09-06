@@ -43,6 +43,7 @@ The behavior-port loop (see `.claude/skills/port-behavior/SKILL.md`):
 | percussion | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/percussion_check.rb` 16/16, RED 11/16 without the mechanic |
 | finishingkick | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply); contact clause only, Speed Boost half via `behaviors: [finishingkick, speedboost]` composition | `ruby rejuv-harness/finishingkick_check.rb` 6/6, RED (nil handler) without the mechanic |
 | sandguard | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply); new `CHROOKED_WEATHER_IMMUNE` table + `takesWeatherDamage?` wrapper in the core | static review only (no ruby harness); syntax OK in ruby:3.3; human plays one sand battle |
+| thornedsucculent | rejuv (Rejuvenation) | composed `behaviors: [thornedsucculent, waterabsorb, ironbarbs]` (vanilla parts via `chrooked_zz_zcompose.rb`); own plugin carries only `CHROOKED_WEATHER_IMMUNE` sand clause | syntax OK in ruby:3.3; composition row confirmed in the generated compose mod; human plays one battle |
 
 ### innerfocus.pokeemerald-expansion-1.15.3
 

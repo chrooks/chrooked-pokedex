@@ -3,7 +3,7 @@ chrooked_id: maractus
 aka: { pokeemerald: SPECIES_MARACTUS }
 abilities:
   primary: Self Sufficient
-  secondary: Iron Barbs
+  secondary: Thorned Succulent
   hidden: Storm Drain
 stats: { hp: 100, atk: 65, def: 95, spa: 115, spd: 95, spe: 55 }
 learnset:

@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_CACTURNE }
 abilities:
   primary: Sand Rush
   secondary: Stakeout
-  hidden: Water Absorb
+  hidden: Thorned Succulent
 stats: { atk: 125, spa: 125 }
 learnset:
   - { level: 0, move: Spiky Shield }

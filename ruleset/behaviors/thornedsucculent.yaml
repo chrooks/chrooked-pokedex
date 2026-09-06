@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Thorned Succulent
+chrooked_id: thornedsucculent
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Sandstorm immunity
+    trigger: turn-end
+    when: active weather is Sandstorm
+    effect: Suppress the sandstorm chip damage tick that would be applied to this Pokémon.
+test_cases:
+  - given: Cacturne with Thorned Succulent is hit by Surf (special, non-contact, Water-type) at 50% HP
+    expect: Surf is fully negated; Cacturne restores 1/4 max HP (now at 75% HP); no spine retaliation fires.
+  - given: Cacturne with Thorned Succulent is hit by Poison Jab (contact, Poison-type)
+    expect: Poison Jab deals normal damage; attacker loses 1/8 of its own max HP from spine retaliation.
+  - given: Cacturne with Thorned Succulent is alive during a Sandstorm turn-end
+    expect: Sandstorm chip damage to Cacturne is suppressed; Cacturne loses 0 HP from weather.
+notes:
+  - "Composed ability: behaviors [thornedsucculent, waterabsorb, ironbarbs]. Water immunity + 1/4 heal and the 1/8 contact spine damage are the VANILLA Water Absorb and Iron Barbs parts; this behavior carries only the sandstorm-immunity clause."
+  - "Vanilla ordering decides the Water-contact edge: an absorbed Water move never lands, so Iron Barbs does not fire on it."
+engine_hints:
+  pokeemerald: "Compose: run the ABILITY_WATER_ABSORB and ABILITY_IRON_BARBS branches for this ability too (AbilityBattleEffects / contact-damage handler), and add it to the sandstorm immunity list beside SAND_VEIL/SAND_RUSH/SAND_FORCE."
+  essentials: "Rejuv: composition via chrooked_zz_zcompose.rb turns the battler's ability into a ChrookedAbilitySet of :THORNEDSUCCULENT/:WATERABSORB/:IRONBARBS, so vanilla's own checks pay the absorb and the barbs. patch/Mods/chrooked_thornedsucculent.rb registers CHROOKED_WEATHER_IMMUNE[:THORNEDSUCCULENT] = [:SANDSTORM], read by the core's takesWeatherDamage? wrapper."
