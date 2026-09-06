@@ -1,0 +1,11 @@
+name: Landbreaker
+chrooked_id: landbreaker
+aka: {  }
+type: Ground
+category: physical
+power: 110
+accuracy: 90
+pp: 5
+description: A mountain-crumbling blow. Destroys the terrain and leaves stealth rocks around the target.
+effect: landbreaker
+flags: [contact]

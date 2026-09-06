@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Landbreaker
+chrooked_id: landbreaker
+applies_to: move
+aka: {  }
+effects:
+  - summary: Destroys the active terrain on hit
+    trigger: on-hit
+    when: this move damages a target and a temporary terrain is active
+    effect: end the active terrain (the Ice Spinner / Steel Roller rule); weather is NOT touched
+  - summary: Leaves Stealth Rock on the target's side on hit
+    trigger: on-hit
+    when: this move damages a target
+    effect: set Stealth Rock on the target's side of the field if it is not already there
+test_cases:
+  - given: Landbreaker hits a target while Grassy Terrain is active and Sandstorm is blowing
+    expect: Grassy Terrain ends; Sandstorm continues; Stealth Rock appears on the target's side
+  - given: Landbreaker hits a target whose side already has Stealth Rock
+    expect: damage as normal; no second layer, nothing else changes
+  - given: Landbreaker misses
+    expect: no terrain change, no Stealth Rock
+notes:
+  - "Built from the dex: the quakes when it walks change the terrain; maps must be redrawn afterward. Weather is deliberately untouched so it coexists with Sand Stream."
+  - STUB — engine_hints ungrounded, needs human grounding pass

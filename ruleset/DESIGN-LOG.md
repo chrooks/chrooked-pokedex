@@ -696,3 +696,9 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Method:** dex distribute endpoint (25 lines) + whole-dex lore scan → 33 lines with theme words → 20 explicit desert/sandstorm claims → 5 walls → 4 distributed.
 - **Distributed (HA):** Hippopotas/Hippowdon (over Sand Force), Silicobra/Sandaconda (over Sand Veil), Sandygast/Palossand (over Carnivore), Orthworm (over Sand Veil).
 - **Rejected:** Sandshrew line (optional row, user skipped — Sand Rush is the line's identity); Maractus (special attacker, 67/67 defenses, dex only calls it desert food); Cacturne, Krookodile, Garchomp, Flygon (Singing Sands), Drapion, Skorupi as strikers; Trapinch line ends in Flygon; the create-time proposal's Garchomp and Flygon rows displaced user customs (Apex Predator, Amplifier).
+
+## 2026-09-05 — Tyranitar line (blind design)
+
+- **Direction:** blind-design, lore-table format. Rock/Dark kept (agent read Ground/Dragon; Chris: "keeping Rock Dark but with Ground and Dragon coverage"). Impenetrable / Sand Stream / Rock Head — Rock Head over Moxie / Earth Eater / a custom because three of the five late anchors are recoil moves. Anchors: Head Smash, Havoc, Faultbreak, Dragon Rush, Landbreaker. Pre-evos and Mega mirror; Mega keeps Sand Stream.
+- **New move:** Landbreaker — Ground physical 110/90, contact; on hit ends the temporary terrain (Ice Spinner rule) and sets Stealth Rock on the target's side; weather deliberately untouched. First shape (also cleared weather) rejected: "removing weather kinda ruins TTar". Rejuv plugin on CHROOKED_MOVE_ON_DEAL.
+- **Corrections:** ecological role must mean habitat + ecosystem niche, not a dex-behavior list (saved as a standing rule); Precipice Blades is now protected like Glaive Rush; Scary Face → Stealth Rock; Ground/Dragon coverage spread through the ladder instead of arriving at L53.

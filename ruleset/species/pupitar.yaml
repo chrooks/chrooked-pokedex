@@ -1,29 +1,32 @@
 name: Pupitar
 chrooked_id: pupitar
 aka: { pokeemerald: SPECIES_PUPITAR }
+abilities:
+  primary: Impenetrable
+  secondary: Sand Stream
+  hidden: Rock Head
 learnset:
-  - { level: 0, move: Iron Defense }
-  - { level: 1, move: Payback }
   - { level: 1, move: Leer }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Rock Throw }
-  - { level: 2, move: Clod Toss }
-  - { level: 5, move: Cheap Shot }
-  - { level: 9, move: Bite }
-  - { level: 12, move: Scary Face }
-  - { level: 15, move: Smack Down }
-  - { level: 18, move: Stomping Tantrum }
-  - { level: 21, move: Screech }
-  - { level: 24, move: Rock Slide }
-  - { level: 25, move: Lithic Fang }
-  - { level: 26, move: Tectonic Fang }
-  - { level: 27, move: Crunch }
-  - { level: 33, move: Earthquake }
-  - { level: 35, move: Backstab }
-  - { level: 37, move: Stone Edge }
-  - { level: 42, move: Thrash }
-  - { level: 47, move: Sandstorm }
-  - { level: 52, move: Hyper Beam }
-  - { level: 57, move: Head Smash }
-  - { level: 60, move: Havoc }
-  - { level: 64, move: Faultbreak }
+  - { level: 5, move: Rock Throw }
+  - { level: 9, move: Pursuit }
+  - { level: 12, move: Smack Down }
+  - { level: 16, move: Cheap Shot }
+  - { level: 20, move: Bulldoze }
+  - { level: 23, move: Rock Slide }
+  - { level: 26, move: Bite }
+  - { level: 29, move: Stomping Tantrum }
+  - { level: 33, move: Crunch }
+  - { level: 36, move: Dragon Claw }
+  - { level: 40, move: Iron Defense }
+  - { level: 44, move: Tectonic Fang }
+  - { level: 47, move: Stealth Rock }
+  - { level: 51, move: Stone Edge }
+  - { level: 53, move: Landbreaker }
+  - { level: 55, move: Backstab }
+  - { level: 58, move: Shore Up }
+  - { level: 61, move: Havoc }
+  - { level: 63, move: Dragon Rush }
+  - { level: 65, move: Faultbreak }
+  - { level: 68, move: Head Smash }
+  - { level: 72, move: Outrage }
