@@ -1093,6 +1093,14 @@ def test_new_move_emits_over110_drawbacks():
     block = _new_move_block(spec, "TESTBURST", 999, function, chance)
     assert ":function => 0x03F" in block and ":effect => 100" in block
 
+    dent = MoveDef(name="Testdent", chrooked_id="testdent", type="Steel",
+                   category="physical", power=120, accuracy=90, pp=5,
+                   effect="hit",
+                   additional_effects=(AdditionalEffect(effect="user_def_sp_def_minus_1", chance=100),))
+    function, chance, leftover = _function_for(dent)
+    assert (function, chance, leftover) == (0x03C, 100, [])
+    assert ":function => 0x03C" in _new_move_block(dent, "TESTDENT", 997, function, chance)
+
 
 def test_new_drain_move_maps_to_absorb_funccode():
     """A new HP-drain move (effect: absorb) emits the 0x0DD drain funccode."""

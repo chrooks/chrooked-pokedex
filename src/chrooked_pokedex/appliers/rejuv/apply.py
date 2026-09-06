@@ -583,6 +583,9 @@ _SINGLE_EFFECT_CODES = {
     # (Battle_MoveEffects.rb: "Freezes the target. (Ice Beam / Ice Punch /
     # Powder Snow / Freeze-Dry / Freezing Glare)").
     "freeze_or_frostbite": 0x00C,
+    # The >110 physical drawback: user's Def and Sp. Def fall one step after use
+    # (Close Combat / Dragon Ascent share 0x03C, :effect 100). "The armor dents."
+    "user_def_sp_def_minus_1": 0x03C,
 }
 
 
