@@ -26,7 +26,7 @@ learnset:
   - { level: 48, move: Anvil Slam }
   - { level: 52, move: Electric Terrain }
   - { level: 56, move: Discharge }
-  - { level: 57, move: Excalibur }
+  - { level: 57, move: Pile Driver }
   - { level: 60, move: Flash Cannon }
   - { level: 65, move: Zap Cannon }
   - { level: 70, move: Arc Strike }

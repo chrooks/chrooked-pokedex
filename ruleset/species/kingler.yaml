@@ -27,5 +27,5 @@ learnset:
   - { level: 45, move: Crabhammer }
   - { level: 48, move: Swords Dance }
   - { level: 54, move: Wave Crash }
-  - { level: 57, move: Excalibur }
+  - { level: 57, move: Pile Driver }
   - { level: 60, move: Guillotine }

@@ -716,3 +716,10 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **New move:** Pile Driver — Steel physical 120/90, contact, user's Def and Sp. Def −1 after use (Close Combat shape, "the armor dents"). Created because the pool had no generic physical Steel capstone above 100 BP: Excalibur is to be limited, Steel Roller needs a terrain, Gigaton Hammer cannot repeat. Applier gained the user_def_sp_def_minus_1 → 0x03C mapping for it.
 - **Rejected:** the agent's custom Reclamation (self-heal that clears own hazards); Bullet Punch at L5 → Clang.
 - **Parked:** Excalibur is on 60 species — a reverse-distribution pass to limit it, with Pile Driver as the generic replacement.
+
+## 2026-09-06 — Excalibur cleanup + Meltdown
+
+- **Direction:** limit Excalibur to blade lines. Keep rule: a blade (sword, axe tusks, lances, blade arms, blade feathers). Kept on 12 lines / 25 species: Honedge line, Zacian Crowned, Cobalion, Kartana, Gallade, Haxorus, Pawniard line, Escavalier, Scizor, Seviper, Skarmory.
+- **Replaced on 21 lines / 38 species**, each at the exact level Excalibur held: Pile Driver for the physical heavies (Sandslash-A, Dugtrio-A, Kingler, Forretress, Steelix, Metagross, Excadrill, Ferrothorn, Klinklang, Stunfisk-G, Togedemaru, Corviknight, Durant, Copperajah lines); canon signatures for Tinkaton (Gigaton Hammer), Revavroom (Spin Out), Zamazenta Crowned (Behemoth Bash); Meltdown for the special lines (Bronzong, Klefki, Empoleon, Wormadam Trash). Where the line already had the replacement, Excalibur was simply dropped.
+- **New move:** Meltdown — Steel special 130/90, user's Sp. Atk −2 (the Overheat / Draco Meteor capstone shape). Created because the pool's only special Steel above 105 was Steel Beam ("I don't love Steel Beam as a generic capstone") and Luster Cannon already sits mid-40s on the special lines. Flash Cannon rejected as a capstone (80 BP).
+- **Read-back note:** Rejuv spells Vise Grip as :VICEGRIP — the Klink line and Durant diff only on that symbol.

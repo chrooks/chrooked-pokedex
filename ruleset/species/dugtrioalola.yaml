@@ -27,4 +27,4 @@ learnset:
   - { level: 48, move: Earthquake }
   - { level: 54, move: Fissure }
   - { level: 56, move: Faultbreak }
-  - { level: 57, move: Excalibur }
+  - { level: 57, move: Pile Driver }
