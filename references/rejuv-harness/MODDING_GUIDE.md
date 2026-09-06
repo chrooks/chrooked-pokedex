@@ -94,3 +94,4 @@ for free — nothing to do per behavior. Two things still need hand-teaching:
   `CHROOKED_AI_HP_REFUND` handler (see Solar Power's sun drain).
 - A scoring heuristic keyed on the ability (`weatherscore`, `miniscore`) — those
   are in `Battle_AI.rb` by symbol, hand-check them when an ability's role changes.
+| Battle Stats screen (R key) shows a possible-speed range for the foe that narrows from the observed move order | static mod | `chrooked_zz_speedrange.rb` (prepend `pbGetBaseStatInspect` for the line, `setMoveOrder` to observe) |
