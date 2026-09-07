@@ -1,5 +1,5 @@
 # chrooked:virulence
-# Virulence — "Always criticals foes that are poisoned, paralyzed, or slowed.
+# Virulence — "Always criticals foes that are poisoned, burned, frostbitten, paralyzed, or slowed.
 #              Poison-type moves are boosted by 50%."
 #   crit-calc:   same impaired-target test as Merciless
 #   damage-calc: attacker's move type is Poison => x1.5 (Kindle's shape, Poison)

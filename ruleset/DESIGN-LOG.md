@@ -737,3 +737,10 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Beneficiary rule:** grounded creatures whose dex text says they float or repel by magnetism, without Levitate. 41 ids scanned (1 unresolved: gimmighoulchest) → 8 mention magnetism/floating → 2 lines explicit and Levitate-free.
 - **Distributed:** Magnemite line, slot 2 over Transistor ("floats in air on powerful electromagnetic waves", "uses antigravity"); Nosepass line, slot 2 over Magnet Pull ("their magnetic noses repel one another"). Chris's slot calls, not the scan's (it proposed slot 1 over Magnet Pull for Magnemite).
 - **Rejected:** Klink, Bronzong, Rotom, Porygon, Elgyem, Minior, Togedemaru, Tinkaton, Meltan, Magearna, Cufant, Duraludon, Dhelmise, Varoom, Electrode (no magnet/float sentence); Claydol/Bronzong/Rotom (Levitate); paradox and legendary rows from the endpoint.
+
+## 2026-09-07 — Weavile line (blind design)
+
+- **Direction:** blind-design, lore-table format. Dark/Ice re-derived by the agent, Night Stalker re-picked by it. Trio Cold Snap / Merciless / Night Stalker. Anchors (14): Ice Shard, Triple Axel, Fake Out, Pursuit, Low Kick, Aerial Ace, Brick Break, Taunt, Hone Claws (L1), Knock Off, Ceaseless Edge (capstone), Sucker Punch, Poison Jab, X-Scissor. Sneasel mirrors; the Hisuian branch is untouched.
+- **New ability:** Cold Snap — composed [toughclaws, frostbody]: contact +30% and 30% frostbite both ways. Four abilities for three slots (Merciless a must, Frost Body, Night Stalker, Tough Claws "exactly what this kit needs" — 8 holders, mostly Megas); the combo solved it. Names rejected: Frost Claws (claw-bound, not generalizable to pawed/fisted attackers). Distributable to icy contact strikers (Beartic, Crabominable, Avalugg) on the same test.
+- **Merciless widened** (core `impaired_target?`): poisoned, burned, frostbitten, paralyzed, or slowed. "It doesn't trigger on frostbite — if we expand, then burn too." Virulence inherits it.
+- **Corrections:** no recoil on a glass cannon except the one Icebreaker Chris placed at 68; Cross Poison at 61 "not good" → Agility; ladder re-ordered Aerial Ace 20 / Brick Break 40 / Triple Axel 49.

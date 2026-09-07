@@ -7,32 +7,28 @@ abilities:
   hidden: Night Stalker
 stats: { spe: 130 }
 learnset:
-  - { level: 1, move: Leer }
-  - { level: 1, move: Agility }
-  - { level: 1, move: Quick Attack }
-  - { level: 1, move: Taunt }
-  - { level: 2, move: Ice Ball }
-  - { level: 3, move: Beat Up }
-  - { level: 4, move: Ice Shard }
-  - { level: 5, move: Scratch }
-  - { level: 6, move: Cheap Shot }
-  - { level: 7, move: Slash }
-  - { level: 7, move: Flash Freeze }
-  - { level: 9, move: Assurance }
-  - { level: 15, move: Ice Punch }
-  - { level: 18, move: Metal Claw }
-  - { level: 24, move: Icy Wind }
-  - { level: 30, move: Fury Swipes }
-  - { level: 36, move: Hone Claws }
-  - { level: 37, move: Night Slash }
-  - { level: 39, move: Heel Drop }
-  - { level: 40, move: Glacial Crush }
-  - { level: 42, move: Fling }
-  - { level: 43, move: Ice Hammer }
-  - { level: 45, move: Pixie Slash }
-  - { level: 48, move: Nasty Plot }
+  - { level: 0, move: Night Slash }
+  - { level: 1, move: Hone Claws }
+  - { level: 1, move: Scratch }
+  - { level: 3, move: Fake Out }
+  - { level: 5, move: Pursuit }
+  - { level: 9, move: Cheap Shot }
+  - { level: 12, move: Ice Shard }
+  - { level: 16, move: Taunt }
+  - { level: 20, move: Aerial Ace }
+  - { level: 23, move: Ice Punch }
+  - { level: 26, move: Low Kick }
+  - { level: 30, move: Knock Off }
+  - { level: 33, move: Ice Fang }
+  - { level: 37, move: Sucker Punch }
+  - { level: 40, move: Brick Break }
+  - { level: 44, move: Poison Jab }
+  - { level: 47, move: X-Scissor }
+  - { level: 49, move: Triple Axel }
   - { level: 51, move: Backstab }
-  - { level: 54, move: Screech }
-  - { level: 57, move: Icebreaker }
-  - { level: 60, move: Havoc }
-  - { level: 66, move: Dark Pulse }
+  - { level: 54, move: Glacial Crush }
+  - { level: 58, move: Swords Dance }
+  - { level: 61, move: Agility }
+  - { level: 65, move: Heel Drop }
+  - { level: 68, move: Icebreaker }
+  - { level: 72, move: Ceaseless Edge }

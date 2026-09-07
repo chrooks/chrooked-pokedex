@@ -146,7 +146,7 @@ module Chrooked
   # Ariados Crest condition in pbCritRate?, widened with paralysis.
   def self.impaired_target?(opponent)
     return false if opponent.nil?
-    return true if [:POISON, :PARALYSIS].include?(opponent.status)
+    return true if [:POISON, :PARALYSIS, :BURN, :FROZEN].include?(opponent.status)  # FROZEN = frostbite in Rejuv
     opponent.stages[PBStats::SPEED] < 0
   end
 

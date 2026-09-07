@@ -1,5 +1,5 @@
 # chrooked:merciless
-# Merciless — "Always criticals foes that are poisoned, paralyzed, or slowed."
+# Merciless — "Always criticals foes that are poisoned, burned, frostbitten, paralyzed, or slowed."
 #   crit-calc: target poisoned / paralyzed / at negative Speed stage => guaranteed crit
 #   Vanilla Rejuv already forces the crit on poison; this widens it to paralysis
 #   and to a Speed drop. No bleed clause — Rejuv has no bleed status.
