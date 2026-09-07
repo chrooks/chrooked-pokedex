@@ -1,6 +1,9 @@
 name: Magikarp
 chrooked_id: magikarp
 aka: { dex: 129 }
+abilities:
+  primary: Swift Swim
+  hidden: Brawler's Spirit
 learnset:
   - { level: 1, move: Splash }
   - { level: 2, move: Water Gun }

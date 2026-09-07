@@ -2,7 +2,9 @@ name: Machoke
 chrooked_id: machoke
 aka: { pokeemerald: SPECIES_MACHOKE }
 abilities:
+  primary: Brawler's Spirit
   secondary: No Guard
+  hidden: Steadfast
 learnset:
   - { level: 1, move: Low Kick }
   - { level: 1, move: Leer }

@@ -2,7 +2,9 @@ name: Machop
 chrooked_id: machop
 aka: { pokeemerald: SPECIES_MACHOP }
 abilities:
+  primary: Brawler's Spirit
   secondary: No Guard
+  hidden: Steadfast
 learnset:
   - { level: 1, move: Low Kick }
   - { level: 1, move: Leer }

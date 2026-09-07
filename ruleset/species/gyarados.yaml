@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_GYARADOS }
 types: [Water, Dragon]
 abilities:
   primary: Levitate
+  hidden: Brawler's Spirit
 stats: { def: 80, spe: 85 }
 learnset:
   - { level: 0, move: Bite }

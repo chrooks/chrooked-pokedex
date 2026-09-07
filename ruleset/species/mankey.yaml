@@ -5,7 +5,7 @@ types: [Fighting]
 abilities:
   primary: Blitz
   secondary: Iron Fist
-  hidden: Moxie
+  hidden: Brawler's Spirit
 stats: { hp: 49, atk: 80, def: 36, spa: 35, spd: 45, spe: 70 }
 learnset:
   - { level: 1, move: Focus Energy }

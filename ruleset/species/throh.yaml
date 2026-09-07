@@ -1,6 +1,10 @@
 name: Throh
 chrooked_id: throh
 aka: { dex: 538 }
+abilities:
+  primary: Brawler's Spirit
+  secondary: Inner Focus
+  hidden: Mold Breaker
 learnset:
   - { level: 1, move: Bind }
   - { level: 1, move: Leer }

@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_ANNIHILAPE }
 abilities:
   primary: Blitz
   secondary: Iron Fist
-  hidden: Moxie
+  hidden: Brawler's Spirit
 stats: { hp: 110, atk: 130, def: 80, spa: 50, spd: 92, spe: 93 }
 learnset:
   - { level: 0, move: Rage Fist }

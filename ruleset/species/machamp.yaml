@@ -2,7 +2,9 @@ name: Machamp
 chrooked_id: machamp
 aka: { pokeemerald: SPECIES_MACHAMP }
 abilities:
+  primary: Brawler's Spirit
   secondary: No Guard
+  hidden: Steadfast
 stats: { hp: 100, spd: 90, spe: 65 }
 learnset:
   - { level: 1, move: Wide Guard }
