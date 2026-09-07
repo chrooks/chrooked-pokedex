@@ -3,6 +3,8 @@ chrooked_id: probopass
 aka: { pokeemerald: SPECIES_PROBOPASS }
 abilities:
   primary: Lightning Rod
+  secondary: Repulsion
+  hidden: Sand Force
 stats: { hp: 75 }
 learnset:
   - { level: 0, move: Tri Attack }

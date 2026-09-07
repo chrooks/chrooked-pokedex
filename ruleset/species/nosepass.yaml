@@ -1,6 +1,10 @@
 name: Nosepass
 chrooked_id: nosepass
 aka: { dex: 299 }
+abilities:
+  primary: Sturdy
+  secondary: Repulsion
+  hidden: Sand Force
 learnset:
   - { level: 1, move: Tackle }
   - { level: 4, move: Harden }

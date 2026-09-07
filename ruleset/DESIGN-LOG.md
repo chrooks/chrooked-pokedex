@@ -731,3 +731,9 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Pile Driver** gained the hammer flag and joined the Rejuv HAMMER_MOVES set (Sledgehammer).
 - **Corrections:** no move at L0 and later (Pile Driver dup → Hammer Arm at L0); Excalibur removed (blade rule); fang pileup spread; Trick Room / Agility / Psycrush restored where the server ran out of room; Heavy Slam over Iron Tail (weight lore).
 - **Parked:** Repulsion distribution to other magnetic floaters (Magnemite, Nosepass, Klink lines).
+
+## 2026-09-07 — Repulsion distribution
+
+- **Beneficiary rule:** grounded creatures whose dex text says they float or repel by magnetism, without Levitate. 41 ids scanned (1 unresolved: gimmighoulchest) → 8 mention magnetism/floating → 2 lines explicit and Levitate-free.
+- **Distributed:** Magnemite line, slot 2 over Transistor ("floats in air on powerful electromagnetic waves", "uses antigravity"); Nosepass line, slot 2 over Magnet Pull ("their magnetic noses repel one another"). Chris's slot calls, not the scan's (it proposed slot 1 over Magnet Pull for Magnemite).
+- **Rejected:** Klink, Bronzong, Rotom, Porygon, Elgyem, Minior, Togedemaru, Tinkaton, Meltan, Magearna, Cufant, Duraludon, Dhelmise, Varoom, Electrode (no magnet/float sentence); Claydol/Bronzong/Rotom (Levitate); paradox and legendary rows from the endpoint.

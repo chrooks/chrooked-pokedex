@@ -3,7 +3,7 @@ chrooked_id: magnezone
 aka: { pokeemerald: SPECIES_MAGNEZONE }
 abilities:
   primary: Magnet Pull
-  secondary: Transistor
+  secondary: Repulsion
   hidden: Deadeye
 learnset:
   - { level: 0, move: Gauss Cannon }

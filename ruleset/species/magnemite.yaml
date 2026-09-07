@@ -3,7 +3,7 @@ chrooked_id: magnemite
 aka: {  }
 abilities:
   primary: Magnet Pull
-  secondary: Transistor
+  secondary: Repulsion
   hidden: Deadeye
 learnset:
   - { level: 1, move: Tackle }
