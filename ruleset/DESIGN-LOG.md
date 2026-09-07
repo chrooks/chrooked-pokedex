@@ -750,3 +750,12 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Beneficiary rule:** physical contact attackers whose dex text says their touch, body or strike freezes; not special attackers, walls, or Rimefang holders. 41 ids scanned (darmanitangalar unresolved) → 22 mention cold → 5 freezing-touch claims → 3 physical lines.
 - **Distributed (HA over Frost Body, the strict upgrade):** Cubchoo/Beartic ("icy fangs harder than steel"), Bergmite/Avalugg ("chill the air to −150 °F"), Glastrier ("emits intense cold from its hooves").
 - **Rejected:** Cryogonal/Froslass/Glalie (freeze at range, special, or Rimefang); Crabominable, Mamoswine, Cetitan, Walrein, Dewgong, Seel, Spheal, Snorunt, Piloswine (endure cold only); Baxcalibur, Arctozolt, Sandslash-A, Abomasnow (no freezing sentence); endpoint typing picks (Sneasler, Cloyster, Kyurem, Calyrex, Chien-Pao).
+
+## 2026-09-07 — Heracross (blind design)
+
+- **Direction:** blind-design, lore-table format. Bug/Fighting re-derived by the agent (Steel considered for the shell, rejected: five lines of wrestling to one of shell). Axis: the horn-under-the-belly throw and the claws planted for footing. Impale / Sap Sipper / Brawler's Spirit (agent proposed Impale / Sap Sipper / Guts; Guts and Moxie re-derived from canon). Mega keeps Skill Link and mirrors the ladder.
+- **New ability:** Brawler's Spirit — Guts + Moxie composed (`behaviors: [guts, moxie]`, no plugin). Chris: "combine Guts and Moxie, make that the hidden ability, something that can be generalized and distributed." Names offered: Berserker (frenzy), Valor (heroic), Bloodlust (predator); Chris chose Brawler's Spirit. Distribution to brawlers parked.
+- **Stats:** 85/125/95/30/95/90 (520). Chris first asked for "= Pinsir BST" (500), then "let's try 510–525, I want more bulk". Def +20, SpD 0, HP +5, SpA dumped to 30, Speed keeps the Ruleset's 90.
+- **Anchors (16, eight passed, eight folded by hand):** First Impression, Megahorn, Fell Stinger, U-turn, Body Press, Bulk Up, Vital Throw, Circle Throw, Close Combat, Horn Leech, Smart Strike, Drill Run, Knock Off, Bullet Seed, Rock Blast, One-Inch Punch. Added: Poison Jab ("fit Poison Jab in there somewhere"), Smart Strike moved earlier (58 → 43). Five multi-hit moves for the Mega's Skill Link. No Flying moves.
+- **Rejected:** the server's Skitter Smack, Sky Uppercut, Twineedle, Thousand Stings, Superpower; every utility slot was trimmed by the server and restored by hand.
+- **Parked:** Brawler's Spirit distribution (Primeape, Ursaring, Conkeldurr, Tauros, Zangoose class).

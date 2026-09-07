@@ -4,23 +4,28 @@ aka: { dex: 214 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Arm Thrust }
-  - { level: 2, move: Fury Cutter }
-  - { level: 3, move: Rock Smash }
-  - { level: 5, move: Fury Attack }
-  - { level: 10, move: Endure }
-  - { level: 15, move: Aerial Ace }
-  - { level: 16, move: Bug Bite }
-  - { level: 20, move: Horn Attack }
-  - { level: 25, move: Counter }
-  - { level: 29, move: X-Scissor }
-  - { level: 30, move: Brick Break }
-  - { level: 35, move: Pin Missile }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 40, move: Throat Chop }
-  - { level: 43, move: Moltstrike }
-  - { level: 45, move: Thrash }
-  - { level: 46, move: Cross Chop }
-  - { level: 50, move: Swords Dance }
-  - { level: 55, move: Megahorn }
-  - { level: 60, move: Close Combat }
+  - { level: 4, move: Fury Cutter }
+  - { level: 7, move: Rock Smash }
+  - { level: 10, move: Bullet Seed }
+  - { level: 13, move: Fell Stinger }
+  - { level: 16, move: Power-Up Punch }
+  - { level: 19, move: Pin Missile }
+  - { level: 22, move: Rock Blast }
+  - { level: 25, move: Arm Thrust }
+  - { level: 28, move: Bulk Up }
+  - { level: 31, move: Circle Throw }
+  - { level: 34, move: Horn Leech }
+  - { level: 37, move: Vital Throw }
+  - { level: 40, move: Body Press }
+  - { level: 43, move: Smart Strike }
+  - { level: 46, move: Drill Run }
+  - { level: 49, move: Swords Dance }
+  - { level: 52, move: Poison Jab }
+  - { level: 55, move: U-turn }
+  - { level: 58, move: Knock Off }
+  - { level: 61, move: First Impression }
+  - { level: 64, move: One-Inch Punch }
+  - { level: 67, move: Cross Chop }
+  - { level: 70, move: Moltstrike }
+  - { level: 73, move: Megahorn }
+  - { level: 76, move: Close Combat }

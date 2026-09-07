@@ -1,0 +1,5 @@
+name: Brawler's Spirit
+chrooked_id: brawlersspirit
+aka: {  }
+behaviors: [guts, moxie]
+description: Attack is 1.5x while statused. Each KO raises Attack by one stage.
