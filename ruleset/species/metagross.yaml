@@ -2,30 +2,31 @@ name: Metagross
 chrooked_id: metagross
 aka: { pokeemerald: SPECIES_METAGROSS }
 abilities:
-  secondary: Carnivore
-  hidden: Battle Armor
+  primary: Analytic
+  secondary: Apex Predator
+  hidden: Repulsion
 learnset:
   - { level: 0, move: Hammer Arm }
-  - { level: 1, move: Explosion }
-  - { level: 1, move: Hone Claws }
-  - { level: 1, move: Bullet Punch }
+  - { level: 1, move: Gravity }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Confusion }
-  - { level: 3, move: Metal Claw }
-  - { level: 6, move: Mind Flick }
-  - { level: 9, move: Psycho Cut }
-  - { level: 12, move: Magnet Rise }
-  - { level: 15, move: Smart Strike }
-  - { level: 16, move: Flash Cannon }
-  - { level: 17, move: Zen Headbutt }
-  - { level: 26, move: Take Down }
-  - { level: 34, move: Psychic }
-  - { level: 38, move: Kinetic Slam }
-  - { level: 42, move: Scary Face }
-  - { level: 43, move: Meteor Mash }
-  - { level: 47, move: Psycrush }
-  - { level: 52, move: Iron Tail }
-  - { level: 57, move: Pile Driver }
-  - { level: 62, move: Iron Defense }
-  - { level: 69, move: Hyper Beam }
-  - { level: 70, move: Agility }
+  - { level: 5, move: Bullet Punch }
+  - { level: 9, move: Mind Flick }
+  - { level: 12, move: Clang }
+  - { level: 16, move: Metal Claw }
+  - { level: 23, move: Smart Strike }
+  - { level: 26, move: Psycho Cut }
+  - { level: 30, move: Crunch }
+  - { level: 33, move: Iron Head }
+  - { level: 37, move: Zen Headbutt }
+  - { level: 41, move: Meteor Mash }
+  - { level: 44, move: Psychic Fangs }
+  - { level: 47, move: Body Press }
+  - { level: 51, move: Heavy Slam }
+  - { level: 54, move: Kinetic Slam }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Metallic Fang }
+  - { level: 64, move: Trick Room }
+  - { level: 66, move: Ice Fang }
+  - { level: 69, move: Agility }
+  - { level: 71, move: Pile Driver }
+  - { level: 73, move: Psycrush }

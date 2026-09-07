@@ -723,3 +723,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Replaced on 21 lines / 38 species**, each at the exact level Excalibur held: Pile Driver for the physical heavies (Sandslash-A, Dugtrio-A, Kingler, Forretress, Steelix, Metagross, Excadrill, Ferrothorn, Klinklang, Stunfisk-G, Togedemaru, Corviknight, Durant, Copperajah lines); canon signatures for Tinkaton (Gigaton Hammer), Revavroom (Spin Out), Zamazenta Crowned (Behemoth Bash); Meltdown for the special lines (Bronzong, Klefki, Empoleon, Wormadam Trash). Where the line already had the replacement, Excalibur was simply dropped.
 - **New move:** Meltdown — Steel special 130/90, user's Sp. Atk −2 (the Overheat / Draco Meteor capstone shape). Created because the pool's only special Steel above 105 was Steel Beam ("I don't love Steel Beam as a generic capstone") and Luster Cannon already sits mid-40s on the special lines. Flash Cannon rejected as a capstone (80 BP).
 - **Read-back note:** Rejuv spells Vise Grip as :VICEGRIP — the Klink line and Durant diff only on that symbol.
+
+## 2026-09-07 — Metagross line (blind design)
+
+- **Direction:** blind-design, lore-table format. Steel/Psychic re-derived by the agent. Analytic / Apex Predator / Repulsion (agent proposed Analytic / Deadlock / Whiteout; Chris took Apex Predator for the stomach mouth and the new Repulsion for the float). Anchors: Meteor Mash, Psychic Fangs, Metallic Fang, Crunch, Earthquake, Bullet Punch, Pile Driver, Body Press. Pre-evos mirror; Mega keeps Tough Claws.
+- **New ability:** Repulsion — on entry the user gains Magnet Rise for 5 turns (8 on Electric fields, +2 Speed on Deep Earth, mirroring the move). Born from "does Metagross justify Levitate?": lore yes (every stage floats by magnetism), battle no (Bronzong's niche, removes its main check, lands to hunt) — a timed float is the honest middle. Plugin on CHROOKED_SWITCH_IN.
+- **Pile Driver** gained the hammer flag and joined the Rejuv HAMMER_MOVES set (Sledgehammer).
+- **Corrections:** no move at L0 and later (Pile Driver dup → Hammer Arm at L0); Excalibur removed (blade rule); fang pileup spread; Trick Room / Agility / Psycrush restored where the server ran out of room; Heavy Slam over Iron Tail (weight lore).
+- **Parked:** Repulsion distribution to other magnetic floaters (Magnemite, Nosepass, Klink lines).

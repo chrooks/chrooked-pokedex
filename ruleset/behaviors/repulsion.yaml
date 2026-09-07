@@ -1,0 +1,32 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Repulsion
+chrooked_id: repulsion
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Auto Magnet Rise on entry
+    trigger: switch-in
+    when: The user does not already have Magnet Rise active; Gravity is not in effect
+    effect: Apply Magnet Rise to the user for 5 turns. The user becomes immune to Ground-type moves for the duration. Displays the standard Magnet Rise message. If Gravity is already active on entry, Magnet Rise fails silently (matching base Magnet Rise behavior under Gravity).
+  - summary: Magnet Rise timer counts down
+    trigger: turn-end
+    when: Magnet Rise is active on the user from this ability
+    effect: Decrement the Magnet Rise turn counter by 1. When it reaches 0, remove Magnet Rise and display the standard 'floated back down' message.
+  - summary: Early termination by Smack Down / Gravity / Thousand Arrows
+    trigger: on-hit
+    when: User is hit by Smack Down or Thousand Arrows, OR Gravity is set while Magnet Rise is active
+    effect: Remove Magnet Rise immediately, exactly as the base game resolves those interactions with a manually used Magnet Rise.
+test_cases:
+  - given: Metagross with Repulsion switches in on turn 1; foe uses Earthquake on turn 1
+    expect: Magnet Rise is applied on switch-in; Earthquake deals 0 damage on that same turn
+  - given: Metagross with Repulsion switches in; foe uses Smack Down on turn 3 (Magnet Rise still active)
+    expect: Smack Down removes Magnet Rise immediately; Metagross is now grounded and vulnerable to Ground-type moves
+  - given: Metagross with Repulsion switches in when Magnet Rise is already active from a Baton Pass chain
+    expect: Repulsion does not trigger; the existing Magnet Rise timer continues unchanged
+notes:
+  - Repulsion's Magnet Rise is mechanically identical to the move Magnet Rise — it uses the same volatile status flag so all existing engine interactions (Gravity, Smack Down, Thousand Arrows, Ingrain, Roost grounding) apply without special-casing.
+  - "Does NOT stack: if Magnet Rise is already present when the Pokémon switches in (e.g., passed via Baton Pass), the ability does nothing, preserving the existing timer."
+  - Designed as a structural sibling to Dual Aegis — both abilities cast a move-equivalent protective effect on entry for a fixed number of turns.
+  - Unlike Levitate, Repulsion's Ground immunity is temporary and can be forcibly ended; this is intentional and is the key design distinction.
+  - Switching out and back in reapplies Magnet Rise (a fresh 5-turn counter), provided no Magnet Rise is already active on re-entry.
+  - STUB — engine_hints ungrounded, needs human grounding pass
