@@ -1,0 +1,5 @@
+name: Cold Snap
+chrooked_id: coldsnap
+aka: {  }
+behaviors: [toughclaws, frostbody]
+description: Contact moves hit 30% harder and may cause frostbite. Contact with the user may frostbite the attacker.
