@@ -744,3 +744,9 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **New ability:** Cold Snap — composed [toughclaws, frostbody]: contact +30% and 30% frostbite both ways. Four abilities for three slots (Merciless a must, Frost Body, Night Stalker, Tough Claws "exactly what this kit needs" — 8 holders, mostly Megas); the combo solved it. Names rejected: Frost Claws (claw-bound, not generalizable to pawed/fisted attackers). Distributable to icy contact strikers (Beartic, Crabominable, Avalugg) on the same test.
 - **Merciless widened** (core `impaired_target?`): poisoned, burned, frostbitten, paralyzed, or slowed. "It doesn't trigger on frostbite — if we expand, then burn too." Virulence inherits it.
 - **Corrections:** no recoil on a glass cannon except the one Icebreaker Chris placed at 68; Cross Poison at 61 "not good" → Agility; ladder re-ordered Aerial Ace 20 / Brick Break 40 / Triple Axel 49.
+
+## 2026-09-07 — Cold Snap distribution
+
+- **Beneficiary rule:** physical contact attackers whose dex text says their touch, body or strike freezes; not special attackers, walls, or Rimefang holders. 41 ids scanned (darmanitangalar unresolved) → 22 mention cold → 5 freezing-touch claims → 3 physical lines.
+- **Distributed (HA over Frost Body, the strict upgrade):** Cubchoo/Beartic ("icy fangs harder than steel"), Bergmite/Avalugg ("chill the air to −150 °F"), Glastrier ("emits intense cold from its hooves").
+- **Rejected:** Cryogonal/Froslass/Glalie (freeze at range, special, or Rimefang); Crabominable, Mamoswine, Cetitan, Walrein, Dewgong, Seel, Spheal, Snorunt, Piloswine (endure cold only); Baxcalibur, Arctozolt, Sandslash-A, Abomasnow (no freezing sentence); endpoint typing picks (Sneasler, Cloyster, Kyurem, Calyrex, Chien-Pao).

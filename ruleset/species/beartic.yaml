@@ -5,7 +5,7 @@ types: [Ice, Fighting]
 abilities:
   primary: Snow Cloak
   secondary: Slush Rush
-  hidden: Frost Body
+  hidden: Cold Snap
 stats: { spe: 70 }
 learnset:
   - { level: 0, move: Hammer Arm }

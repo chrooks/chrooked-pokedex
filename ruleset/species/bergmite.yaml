@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_BERGMITE }
 abilities:
   primary: Whiteout
   secondary: Permafrost
-  hidden: Frost Body
+  hidden: Cold Snap
 learnset:
   - { level: 1, move: Harden }
   - { level: 1, move: Rapid Spin }

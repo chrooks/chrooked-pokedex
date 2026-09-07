@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_CUBCHOO }
 abilities:
   primary: Snow Cloak
   secondary: Slush Rush
-  hidden: Frost Body
+  hidden: Cold Snap
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Powder Snow }
