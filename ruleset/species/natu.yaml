@@ -3,7 +3,7 @@ chrooked_id: natu
 aka: {  }
 abilities:
   primary: Synchronize
-  secondary: Sage Power
+  secondary: Fixation
   hidden: Magic Bounce
 learnset:
   - { level: 1, move: Peck }

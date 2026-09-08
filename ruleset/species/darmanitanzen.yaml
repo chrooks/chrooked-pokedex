@@ -2,7 +2,7 @@ name: Darmanitan Zen
 chrooked_id: darmanitanzen
 aka: { pokeemerald: SPECIES_DARMANITAN_ZEN }
 abilities:
-  primary: Sage Power
+  primary: Fixation
   secondary: Soulsight
   hidden: Impenetrable
 stats: { spe: 35 }

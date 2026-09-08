@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_DARMANITAN_GALAR_STANDARD, rejuv: "DARMANITAN::Galar
 abilities:
   primary: Permafrost
   secondary: Thick Fat
-  hidden: Guts
+  hidden: Compulsion
 stats: { def: 85, spd: 70, spe: 90 }
 learnset:
   - { level: 0, move: Icicle Crash }

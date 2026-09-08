@@ -1,0 +1,5 @@
+name: Compulsion
+chrooked_id: compulsion
+aka: {  }
+behaviors: [gorillatactics]
+description: Attack x1.5 but locks into one move.

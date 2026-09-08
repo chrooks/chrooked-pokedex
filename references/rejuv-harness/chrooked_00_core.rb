@@ -495,7 +495,7 @@ module ChrookedBattleHooks
     super
   end
 
-  # Sage Power's Gorilla-Tactics-style lock. Vanilla keys its lock checks on
+  # Fixation's Gorilla-Tactics-style lock. Vanilla keys its lock checks on
   # ability == :GORILLATACTICS, so the lock for other abilities is enforced
   # here at move selection. ponytail: sleep-talk/z-move edge cases keep
   # vanilla behavior (unlocked) — same ceiling as the AI's view of the lock.

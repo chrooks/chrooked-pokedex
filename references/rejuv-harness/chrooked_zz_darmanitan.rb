@@ -16,7 +16,7 @@
 #    index off the old list instead and set the matching entry of the new one, so
 #    a capsuled slot survives and the mapping is position-for-position:
 #      Standard 0/1/2 (Kindle / Sheer Force / Hammerfist)
-#        -> Zen 0/1/2 (Sage Power / Soulsight / Impenetrable)
+#        -> Zen 0/1/2 (Fixation / Soulsight / Impenetrable)
 #      Galar Standard 0/1/2 (Permafrost / Thick Fat / Guts)
 #        -> Galar Zen 0/1/2 (Immolate / Kindle / Aftermath)
 #

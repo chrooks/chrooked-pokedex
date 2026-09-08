@@ -280,23 +280,23 @@ ins.pbUseMove(nil)
 check(fails, "insidious damaging move", ins.log, [])
 
 # sage power: lock arms after first move, choose-move enforced
-sg = PokeBattle_Battler.new(:SAGEPOWER, battle)
+sg = PokeBattle_Battler.new(:FIXATION, battle)
 sg.lastMoveUsed = :PSYCHIC
 sg.pbUseMove(nil)
-check(fails, "sagepower lock armed", sg.effects[:ChrookedMoveLock], :PSYCHIC)
+check(fails, "fixation lock armed", sg.effects[:ChrookedMoveLock], :PSYCHIC)
 MoveSlot = Struct.new(:move)
 sg.moves = [MoveSlot.new(:PSYCHIC), MoveSlot.new(:CALMMIND)]
 battle.battlers = [sg]
-check(fails, "sagepower locked move ok", battle.pbCanChooseMove?(0, 0), true)
-check(fails, "sagepower other move blocked", battle.pbCanChooseMove?(0, 1), false)
+check(fails, "fixation locked move ok", battle.pbCanChooseMove?(0, 0), true)
+check(fails, "fixation other move blocked", battle.pbCanChooseMove?(0, 1), false)
 # AI path passes the battler object and a move object directly
 ai_move = PokeBattle_Move.new(:CALMMIND)
-check(fails, "sagepower AI battler+move blocked", battle.pbCanChooseMove?(sg, ai_move), false)
+check(fails, "fixation AI battler+move blocked", battle.pbCanChooseMove?(sg, ai_move), false)
 ai_locked = PokeBattle_Move.new(:PSYCHIC)
-check(fails, "sagepower AI locked move ok", battle.pbCanChooseMove?(sg, ai_locked), true)
+check(fails, "fixation AI locked move ok", battle.pbCanChooseMove?(sg, ai_locked), true)
 nolock = PokeBattle_Battler.new(:NONE, battle)
 check(fails, "no-lock battler AI path ok", battle.pbCanChooseMove?(nolock, ai_move), true)
-check(fails, "sagepower special dmg", PokeBattle_Move.new(:PSYCHIC, type: :PSYCHIC, cat: :special).pbCalcDamage(sg, tgt4), 150)
+check(fails, "fixation special dmg", PokeBattle_Move.new(:PSYCHIC, type: :PSYCHIC, cat: :special).pbCalcDamage(sg, tgt4), 150)
 
 # deathgrip trap
 dg = PokeBattle_Battler.new(:DEATHGRIP, battle)
