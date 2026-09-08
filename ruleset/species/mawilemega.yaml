@@ -2,20 +2,24 @@ name: Mawile Mega
 chrooked_id: mawilemega
 aka: { dex: 303 }
 learnset:
-  - { level: 1, move: Astonish }
   - { level: 1, move: Growl }
+  - { level: 1, move: Fake Out }
   - { level: 4, move: Fairy Wind }
-  - { level: 8, move: Baton Pass }
-  - { level: 12, move: Bite }
-  - { level: 15, move: Spit Up }
-  - { level: 16, move: Stockpile }
-  - { level: 17, move: Swallow }
-  - { level: 20, move: Sucker Punch }
-  - { level: 24, move: Iron Defense }
-  - { level: 28, move: Crunch }
-  - { level: 32, move: Sweet Scent }
+  - { level: 8, move: Baby-Doll Eyes }
+  - { level: 12, move: Poison Fang }
+  - { level: 16, move: Metal Claw }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Bail Out }
+  - { level: 28, move: Fire Fang }
+  - { level: 32, move: Sucker Punch }
   - { level: 36, move: Iron Head }
-  - { level: 40, move: Taunt }
-  - { level: 44, move: Fake Tears }
-  - { level: 48, move: Play Rough }
-  - { level: 55, move: Fire Punch }
+  - { level: 40, move: Ice Fang }
+  - { level: 44, move: Thunder Fang }
+  - { level: 48, move: Crunch }
+  - { level: 52, move: Play Rough }
+  - { level: 55, move: Metallic Fang }
+  - { level: 58, move: Psychic Fangs }
+  - { level: 61, move: Jaw Lock }
+  - { level: 64, move: Swords Dance }
+  - { level: 68, move: Lovely Bite }
+  - { level: 72, move: Pile Driver }
