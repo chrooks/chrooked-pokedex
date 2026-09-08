@@ -6,7 +6,7 @@ abilities:
   primary: Overgrow
   secondary: Chloroplast
   hidden: Contrary
-stats: { atk: 75, spa: 90, spe: 115 }
+stats: { atk: 70, spa: 90, spe: 115 }
 learnset:
   - { level: 1, move: Vine Whip }
   - { level: 1, move: Tackle }

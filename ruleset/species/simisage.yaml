@@ -2,14 +2,33 @@ name: Simisage
 chrooked_id: simisage
 aka: { pokeemerald: SPECIES_SIMISAGE }
 abilities:
-  hidden: Sage Power
+  primary: Bloom
+  secondary: Brawler's Spirit
+  hidden: Defiant
 stats: { atk: 100, spa: 100 }
 learnset:
+  - { level: 0, move: Seed Bomb }
+  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
-  - { level: 1, move: Lick }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Seed Bomb }
-  - { level: 2, move: Leafage }
-  - { level: 15, move: Razor Leaf }
-  - { level: 46, move: Reap }
-  - { level: 57, move: Power Whip }
+  - { level: 4, move: Leafage }
+  - { level: 7, move: Fury Swipes }
+  - { level: 10, move: Vine Whip }
+  - { level: 13, move: Bite }
+  - { level: 16, move: Poison Tail }
+  - { level: 19, move: Razor Leaf }
+  - { level: 22, move: Low Sweep }
+  - { level: 25, move: Needle Arm }
+  - { level: 28, move: Taunt }
+  - { level: 31, move: Spiky Shield }
+  - { level: 34, move: Trop Kick }
+  - { level: 37, move: Drain Punch }
+  - { level: 40, move: Acrobatics }
+  - { level: 43, move: Knock Off }
+  - { level: 46, move: Swords Dance }
+  - { level: 49, move: Leaf Blade }
+  - { level: 52, move: U-turn }
+  - { level: 55, move: Lash Out }
+  - { level: 58, move: Synthesis }
+  - { level: 61, move: Wood Hammer }
+  - { level: 64, move: Close Combat }
+  - { level: 68, move: Power Whip }

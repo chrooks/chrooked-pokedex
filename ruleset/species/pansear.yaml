@@ -1,25 +1,34 @@
 name: Pansear
 chrooked_id: pansear
 aka: { pokeemerald: SPECIES_PANSEAR }
+abilities:
+  primary: Kindle
+  secondary: Flame Body
+  hidden: Rapid Combustion
 stats: { spa: 60 }
 learnset:
   - { level: 1, move: Scratch }
-  - { level: 1, move: Play Nice }
-  - { level: 2, move: Ember }
-  - { level: 4, move: Leer }
-  - { level: 7, move: Lick }
-  - { level: 10, move: Incinerate }
-  - { level: 13, move: Fury Swipes }
-  - { level: 16, move: Yawn }
-  - { level: 19, move: Bite }
-  - { level: 22, move: Flame Burst }
-  - { level: 25, move: Amnesia }
-  - { level: 28, move: Fling }
-  - { level: 29, move: Flamethrower }
-  - { level: 31, move: Acrobatics }
-  - { level: 34, move: Fire Blast }
-  - { level: 37, move: Recycle }
-  - { level: 40, move: Natural Gift }
-  - { level: 43, move: Crunch }
-  - { level: 46, move: Combust }
-  - { level: 57, move: Overheat }
+  - { level: 1, move: Leer }
+  - { level: 4, move: Ember }
+  - { level: 7, move: Fury Swipes }
+  - { level: 10, move: Flame Charge }
+  - { level: 13, move: Bite }
+  - { level: 16, move: Incinerate }
+  - { level: 19, move: Stuff Cheeks }
+  - { level: 22, move: Flame Wheel }
+  - { level: 25, move: Bulldoze }
+  - { level: 28, move: Taunt }
+  - { level: 31, move: Fire Lash }
+  - { level: 34, move: Acrobatics }
+  - { level: 37, move: Rock Slide }
+  - { level: 40, move: Lava Plume }
+  - { level: 43, move: Knock Off }
+  - { level: 46, move: Nasty Plot }
+  - { level: 49, move: Blaze Kick }
+  - { level: 52, move: U-turn }
+  - { level: 55, move: Will-O-Wisp }
+  - { level: 58, move: Heat Wave }
+  - { level: 61, move: Stone Edge }
+  - { level: 64, move: Flare Blitz }
+  - { level: 67, move: Belch }
+  - { level: 71, move: Eruption }

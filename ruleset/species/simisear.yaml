@@ -2,15 +2,34 @@ name: Simisear
 chrooked_id: simisear
 aka: { pokeemerald: SPECIES_SIMISEAR }
 abilities:
-  hidden: Sage Power
+  primary: Kindle
+  secondary: Flame Body
+  hidden: Rapid Combustion
 stats: { atk: 100, spa: 100 }
 learnset:
+  - { level: 0, move: Cinder Smash }
+  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
-  - { level: 1, move: Lick }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Flame Burst }
-  - { level: 2, move: Flame Charge }
-  - { level: 15, move: Flame Wheel }
-  - { level: 29, move: Cinder Smash }
-  - { level: 46, move: Combust }
-  - { level: 57, move: Flare Blitz }
+  - { level: 4, move: Ember }
+  - { level: 7, move: Fury Swipes }
+  - { level: 10, move: Flame Charge }
+  - { level: 13, move: Bite }
+  - { level: 16, move: Incinerate }
+  - { level: 19, move: Stuff Cheeks }
+  - { level: 22, move: Flame Wheel }
+  - { level: 25, move: Bulldoze }
+  - { level: 28, move: Taunt }
+  - { level: 31, move: Fire Lash }
+  - { level: 34, move: Acrobatics }
+  - { level: 37, move: Rock Slide }
+  - { level: 40, move: Lava Plume }
+  - { level: 43, move: Knock Off }
+  - { level: 46, move: Nasty Plot }
+  - { level: 49, move: Blaze Kick }
+  - { level: 52, move: U-turn }
+  - { level: 55, move: Will-O-Wisp }
+  - { level: 58, move: Heat Wave }
+  - { level: 61, move: Stone Edge }
+  - { level: 64, move: Flare Blitz }
+  - { level: 67, move: Belch }
+  - { level: 71, move: Eruption }

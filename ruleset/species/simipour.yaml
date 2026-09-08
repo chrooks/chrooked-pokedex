@@ -2,16 +2,33 @@ name: Simipour
 chrooked_id: simipour
 aka: { pokeemerald: SPECIES_SIMIPOUR }
 abilities:
-  hidden: Sage Power
+  primary: Water Absorb
+  secondary: Deluge
+  hidden: Self Sufficient
 stats: { atk: 100, spa: 100 }
 learnset:
+  - { level: 0, move: Muddy Water }
+  - { level: 1, move: Scratch }
   - { level: 1, move: Leer }
-  - { level: 1, move: Lick }
-  - { level: 1, move: Fury Swipes }
-  - { level: 1, move: Scald }
-  - { level: 15, move: Undertow }
-  - { level: 26, move: Water Whip }
-  - { level: 29, move: Aqua Tail }
-  - { level: 45, move: Maelstrom }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 4, move: Water Gun }
+  - { level: 7, move: Fury Swipes }
+  - { level: 10, move: Undertow }
+  - { level: 13, move: Bite }
+  - { level: 16, move: Aqua Ring }
+  - { level: 19, move: Water Pulse }
+  - { level: 22, move: Whirlpool }
+  - { level: 25, move: Grass Knot }
+  - { level: 28, move: Taunt }
+  - { level: 31, move: Scald }
+  - { level: 34, move: Acrobatics }
+  - { level: 37, move: Aura Sphere }
+  - { level: 40, move: Giga Drain }
+  - { level: 43, move: Knock Off }
+  - { level: 46, move: Nasty Plot }
+  - { level: 49, move: Surf }
+  - { level: 52, move: U-turn }
+  - { level: 55, move: Crunch }
+  - { level: 58, move: Rain Dance }
+  - { level: 61, move: Life Dew }
+  - { level: 64, move: Hydro Pump }
+  - { level: 68, move: Water Spout }
