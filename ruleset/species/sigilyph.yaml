@@ -1,6 +1,10 @@
 name: Sigilyph
 chrooked_id: sigilyph
 aka: { dex: 561 }
+abilities:
+  primary: Sage Power
+  secondary: Magic Guard
+  hidden: Tinted Lens
 learnset:
   - { level: 1, move: Gust }
   - { level: 1, move: Confusion }

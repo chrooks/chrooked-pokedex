@@ -1,6 +1,10 @@
 name: Xatu
 chrooked_id: xatu
 aka: { pokeemerald: SPECIES_XATU }
+abilities:
+  primary: Synchronize
+  secondary: Sage Power
+  hidden: Magic Bounce
 stats: { spa: 110, spe: 85 }
 learnset:
   - { level: 0, move: Air Slash }

@@ -1,6 +1,10 @@
 name: Natu
 chrooked_id: natu
 aka: {  }
+abilities:
+  primary: Synchronize
+  secondary: Sage Power
+  hidden: Magic Bounce
 learnset:
   - { level: 1, move: Peck }
   - { level: 1, move: Leer }

@@ -1,6 +1,9 @@
 name: Unown
 chrooked_id: unown
 aka: {  }
+abilities:
+  primary: Levitate
+  secondary: Sage Power
 learnset:
   - { level: 1, move: Mind Flick }
   - { level: 15, move: Psycho Cut }
