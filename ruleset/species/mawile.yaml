@@ -5,7 +5,7 @@ abilities:
   primary: Strong Jaw
   secondary: Coil Up
   hidden: Cute Charm
-stats: { hp: 60, def: 95, spd: 75 }
+stats: { hp: 70, atk: 105, def: 110, spe: 75 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Fake Out }
