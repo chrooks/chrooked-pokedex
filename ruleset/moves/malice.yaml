@@ -1,0 +1,11 @@
+name: Malice
+chrooked_id: malice
+aka: {  }
+type: Dark
+category: special
+power: 65
+accuracy: 100
+pp: 20
+description: The user assails the target with a concentrated wave of pure ill will, which may lower the target's Sp. Def.
+additional_effects:
+  - { effect: sp_def_minus_1, chance: 30 }

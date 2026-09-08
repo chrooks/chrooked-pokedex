@@ -2,27 +2,31 @@ name: Seedot
 chrooked_id: seedot
 aka: { pokeemerald: SPECIES_SEEDOT }
 abilities:
-  secondary: Forestry
+  primary: Updraft
+  secondary: Frighten
+  hidden: Prankster
 learnset:
   - { level: 1, move: Tackle }
-  - { level: 1, move: Harden }
-  - { level: 2, move: Cheap Shot }
-  - { level: 3, move: Absorb }
-  - { level: 4, move: Leafage }
-  - { level: 6, move: Astonish }
-  - { level: 9, move: Growth }
-  - { level: 12, move: Rollout }
-  - { level: 15, move: Mega Drain }
-  - { level: 16, move: Razor Leaf }
-  - { level: 18, move: Payback }
-  - { level: 21, move: Headbutt }
-  - { level: 24, move: Sunny Day }
-  - { level: 27, move: Synthesis }
-  - { level: 29, move: Seed Bomb }
-  - { level: 30, move: Sucker Punch }
-  - { level: 33, move: Explosion }
-  - { level: 39, move: Reap }
-  - { level: 45, move: Heel Drop }
-  - { level: 48, move: Backstab }
-  - { level: 57, move: Power Whip }
-  - { level: 60, move: Havoc }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Leech Seed }
+  - { level: 5, move: Leafage }
+  - { level: 8, move: Gust }
+  - { level: 11, move: Snarl }
+  - { level: 14, move: Air Cutter }
+  - { level: 17, move: Razor Leaf }
+  - { level: 20, move: Malice }
+  - { level: 23, move: Nasty Plot }
+  - { level: 26, move: Extrasensory }
+  - { level: 29, move: Icy Wind }
+  - { level: 32, move: Energy Ball }
+  - { level: 35, move: Sucker Punch }
+  - { level: 38, move: Dark Pulse }
+  - { level: 41, move: Synthesis }
+  - { level: 44, move: Taunt }
+  - { level: 47, move: Tailwind }
+  - { level: 50, move: Night Daze }
+  - { level: 53, move: Knock Off }
+  - { level: 56, move: Bleakwind Storm }
+  - { level: 60, move: Hurricane }
+  - { level: 64, move: Leaf Storm }
+  - { level: 68, move: Tempest }

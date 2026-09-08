@@ -2,32 +2,31 @@ name: Nuzleaf
 chrooked_id: nuzleaf
 aka: { pokeemerald: SPECIES_NUZLEAF }
 abilities:
-  secondary: Forestry
+  primary: Updraft
+  secondary: Frighten
+  hidden: Prankster
 learnset:
-  - { level: 0, move: Razor Leaf }
-  - { level: 1, move: Harden }
-  - { level: 1, move: Explosion }
-  - { level: 1, move: Swagger }
-  - { level: 1, move: Torment }
-  - { level: 2, move: Leafage }
-  - { level: 3, move: Astonish }
-  - { level: 4, move: Tackle }
-  - { level: 5, move: Cheap Shot }
-  - { level: 6, move: Absorb }
-  - { level: 7, move: Fake Out }
-  - { level: 8, move: Air Cutter }
-  - { level: 9, move: Growth }
-  - { level: 12, move: Rollout }
-  - { level: 15, move: Bite }
-  - { level: 18, move: Mega Drain }
-  - { level: 24, move: Payback }
-  - { level: 30, move: Synthesis }
-  - { level: 36, move: Sunny Day }
-  - { level: 39, move: Heel Drop }
-  - { level: 40, move: Backstab }
-  - { level: 43, move: Extrasensory }
-  - { level: 46, move: Leaf Blade }
-  - { level: 50, move: Sucker Punch }
-  - { level: 53, move: Havoc }
-  - { level: 57, move: Reap }
-  - { level: 58, move: Power Whip }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Astonish }
+  - { level: 1, move: Leech Seed }
+  - { level: 5, move: Leafage }
+  - { level: 8, move: Gust }
+  - { level: 11, move: Snarl }
+  - { level: 14, move: Air Cutter }
+  - { level: 17, move: Razor Leaf }
+  - { level: 20, move: Malice }
+  - { level: 23, move: Nasty Plot }
+  - { level: 26, move: Extrasensory }
+  - { level: 29, move: Icy Wind }
+  - { level: 32, move: Energy Ball }
+  - { level: 35, move: Sucker Punch }
+  - { level: 38, move: Dark Pulse }
+  - { level: 41, move: Synthesis }
+  - { level: 44, move: Taunt }
+  - { level: 47, move: Tailwind }
+  - { level: 50, move: Night Daze }
+  - { level: 53, move: Knock Off }
+  - { level: 56, move: Bleakwind Storm }
+  - { level: 60, move: Hurricane }
+  - { level: 64, move: Leaf Storm }
+  - { level: 68, move: Tempest }
