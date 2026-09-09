@@ -133,6 +133,14 @@ module Chrooked
     entries(table, ability).first
   end
 
+  # A CHROOKED_TYPE_IMMUNITY value is one {type:, flag:} hash, or an array of
+  # them for an ability that blocks more than one type (Airborne = Flying +
+  # Ground). Every reader of that table goes through here, so no call site has
+  # to know which shape it got back.
+  def self.immunities(table, ability)
+    entries(table, ability).flat_map { |e| e.is_a?(Hash) ? [e] : e }
+  end
+
   def self.hammer_move?(move)
     HAMMER_MOVES.include?(move.move)
   end
@@ -286,13 +294,10 @@ module ChrookedMoveHooks
     targets.each_with_index do |opponent, i|
       next if hitflags[i] != :Success
       next unless pbShouldApplyTypeImmunity?(attacker, opponent)
-      immunity = Chrooked.entry(CHROOKED_TYPE_IMMUNITY, opponent.ability)
-      next unless immunity && !opponent.moldbroken
-      # ponytail: the value is one {type:, flag:} hash, or an array of them for an
-      # ability that blocks more than one type (Airborne = Flying + Ground). Each
-      # type carries its own flag so Ground keeps :Levitate and stays reopenable
-      # by Bonebreaker / Gravity / Smack Down.
-      Array(immunity.is_a?(Hash) ? [immunity] : immunity).each do |im|
+      next if opponent.moldbroken
+      # Each blocked type carries its own flag, so Airborne's Ground clause keeps
+      # :Levitate and stays reopenable by Bonebreaker / Gravity / Smack Down.
+      Chrooked.immunities(CHROOKED_TYPE_IMMUNITY, opponent.ability).each do |im|
         hitflags[i] = im[:flag] if move_type == im[:type]
       end
     end
@@ -326,8 +331,8 @@ module ChrookedMoveHooks
     # Absorb-heal immunities stay hitflag-only — a zero typemod would skip the
     # heal. ponytail: AI stays blind to absorb-heals, same as it is to ours.
     opp_ability = opponent.shouldBeMoldBroken?(attacker, self) ? nil : opponent.ability
-    immunity = opp_ability && Chrooked.entry(CHROOKED_TYPE_IMMUNITY, opp_ability)
-    if immunity && immunity[:flag] == :Soundproof && atype == immunity[:type]
+    blocks = opp_ability ? Chrooked.immunities(CHROOKED_TYPE_IMMUNITY, opp_ability) : []
+    if blocks.any? { |im| im[:flag] == :Soundproof && atype == im[:type] }
       typemod = Typemod.zero
     end
     floor = Chrooked.entry(CHROOKED_TYPEMOD_FLOOR, attacker.ability)
