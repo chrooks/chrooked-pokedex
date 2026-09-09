@@ -288,7 +288,13 @@ module ChrookedMoveHooks
       next unless pbShouldApplyTypeImmunity?(attacker, opponent)
       immunity = Chrooked.entry(CHROOKED_TYPE_IMMUNITY, opponent.ability)
       next unless immunity && !opponent.moldbroken
-      hitflags[i] = immunity[:flag] if move_type == immunity[:type]
+      # ponytail: the value is one {type:, flag:} hash, or an array of them for an
+      # ability that blocks more than one type (Airborne = Flying + Ground). Each
+      # type carries its own flag so Ground keeps :Levitate and stays reopenable
+      # by Bonebreaker / Gravity / Smack Down.
+      Array(immunity.is_a?(Hash) ? [immunity] : immunity).each do |im|
+        hitflags[i] = im[:flag] if move_type == im[:type]
+      end
     end
     # Immunity bypass (Bonebreaker): re-open levitation/absorb-ability blocks.
     bypass = Chrooked.entry(CHROOKED_IMMUNITY_BYPASS, attacker.ability)

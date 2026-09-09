@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_VIKAVOLT }
 abilities:
   primary: Battery
   secondary: Deadeye
-  hidden: Aerodynamic
+  hidden: Airborne
 stats: { hp: 70, def: 80, spa: 140, spe: 100 }
 learnset:
   - { level: 0, move: Thunderbolt }

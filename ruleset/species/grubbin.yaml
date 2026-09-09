@@ -4,7 +4,7 @@ aka: { dex: 736 }
 abilities:
   primary: Battery
   secondary: Deadeye
-  hidden: Aerodynamic
+  hidden: Airborne
 learnset:
   - { level: 1, move: Charge }
   - { level: 1, move: Iron Defense }

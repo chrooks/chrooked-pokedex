@@ -1,0 +1,39 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Airborne
+chrooked_id: airborne
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Immune to Flying moves; takes no damage from them.
+    trigger: damage-calc
+    when: an incoming move's type is Flying
+    effect: the move is absorbed and deals no damage to this Pokemon
+  - summary: Absorbing a Flying move raises this Pokemon's Speed by one stage.
+    trigger: on-hit
+    when: an incoming move's type is Flying
+    effect: raise this Pokemon's Speed by 1 stage instead of taking damage
+  - summary: In double battles, draws single-target Flying moves toward itself.
+    trigger: turn-order
+    when: a single-target Flying move is used and this Pokemon is a valid redirect target
+    effect: redirect the Flying move to this Pokemon (like Lightning Rod / Storm Drain)
+  - summary: Immune to Ground moves, exactly as Levitate is.
+    trigger: damage-calc
+    when: an incoming move's type is Ground
+    effect: the move does not affect this Pokemon. The block uses the same Levitate flag vanilla Levitate uses, so Gravity, Smack Down, Thousand Arrows, Iron Ball, Ingrain, Mold Breaker and Bonebreaker all cancel it the same way they cancel Levitate. Unlike the Flying clause this grants no Speed and no redirection.
+test_cases:
+  - given: an Airborne Pokemon is hit by Air Slash (Flying)
+    expect: it takes 0 damage and its Speed rises by 1 stage
+  - given: an Airborne Pokemon is hit by Earthquake (Ground)
+    expect: the move does not affect it, and its Speed does NOT change
+  - given: an Airborne Pokemon is hit by Earthquake under Gravity, or after Smack Down, or by a Mold Breaker user
+    expect: the Ground immunity is cancelled and it takes normal damage, exactly as a Levitate user would
+  - given: an Airborne Pokemon is hit by Tackle (Normal)
+    expect: it takes normal damage and Speed does not change
+  - given: in a double battle, a foe targets the Airborne Pokemon's ally with a single-target Flying move
+    expect: the move is redirected to the Airborne Pokemon. A single-target Ground move is NOT redirected.
+notes:
+  - Airborne is Aerodynamic plus Levitate in one slot. Aerodynamic is kept as the Flying-only version; the two coexist deliberately.
+  - Two immunities in one slot is a strong ability. Distribute it only to Pokemon that genuinely own the air - fliers and true hoverers - not to anything with wings.
+  - The Ground clause reuses the vanilla Levitate hitflag rather than a bespoke block, so every existing Levitate counter keeps working with no extra code.
+  - The Flying clause is modeled on Motor Drive (immunity + Speed +1); redirection follows the Lightning Rod / Storm Drain gating (doubles only, single-target moves, not Snipe Shot / Propeller Tail / Stalwart users).
+  - STUB - engine_hints ungrounded, needs human grounding pass
