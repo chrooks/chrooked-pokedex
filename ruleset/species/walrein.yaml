@@ -5,7 +5,7 @@ abilities:
   primary: Thick Fat
   secondary: Bioturbation
   hidden: Permafrost
-stats: { spa: 75 }
+stats: { hp: 120, atk: 90, def: 95, spd: 95 }
 learnset:
   - { level: 0, move: Chilling Water }
   - { level: 1, move: Growl }
