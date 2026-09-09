@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Battery
+chrooked_id: battery
+applies_to: ability
+aka: {  }
+effects:
+  - summary: On entry, the user charges up.
+    trigger: switch-in
+    when: the user is not already charged (Charge counter is 0)
+    effect: Set the user's Charge counter to 2 (the same counter the move Charge sets, so the next Electric-type move it uses deals double damage), then raise the user's Sp. Def by 1 stage. Under an Electric-field the Sp. Def raise is 2 stages, matching the move Charge. Show the ability box and a charging message.
+  - summary: Vanilla ally boost is retained.
+    trigger: damage-calc
+    when: an ally in a double battle uses a special move
+    effect: The ally's Special Attack is boosted, exactly as the unmodified ability does. This plugin adds the entry effect on top; it does not remove the ally boost.
+test_cases:
+  - given: A Battery user switches in with no Charge active, then uses Thunderbolt next turn.
+    expect: On entry its Sp. Def rises by 1 and a charging message shows. Thunderbolt deals double damage, and the Charge counter is spent.
+  - given: A Battery user switches in while already charged (for example, it used the move Charge, switched out with Baton Pass semantics, or Electromorphosis charged it).
+    expect: No second charge and no Sp. Def raise. The existing counter is untouched.
+  - given: A Battery user switches in on an Electric field.
+    expect: Sp. Def rises by 2 stages, matching the move Charge under the same field.
+  - given: A Battery user switches in, then uses a Bug-type move.
+    expect: The Bug move is not boosted. The Charge counter decays as normal.
+notes:
+  - "The entry effect is additive: the vanilla ally Sp. Atk boost stays. Stripping it would need engine surgery on the vanilla ability and buys nothing."
+  - "Charge is the same counter the move Charge uses (effects[:Charge] = 2), so it decays and is consumed by the same code path. No new counter is introduced."
+  - The already-charged guard mirrors Electromorphosis, which also refuses to re-charge an already-charged battler.
+  - STUB - engine_hints ungrounded, needs human grounding pass

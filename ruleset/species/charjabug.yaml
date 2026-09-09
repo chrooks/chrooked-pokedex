@@ -1,28 +1,39 @@
 name: Charjabug
 chrooked_id: charjabug
 aka: { dex: 737 }
+abilities:
+  primary: Battery
+  secondary: Deadeye
+  hidden: Aerodynamic
 learnset:
-  - { level: 0, move: Charge }
-  - { level: 1, move: Bug Bite }
-  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Charge }
+  - { level: 1, move: Iron Defense }
+  - { level: 1, move: Magnet Rise }
   - { level: 1, move: String Shot }
-  - { level: 1, move: Vise Grip }
-  - { level: 2, move: Fury Cutter }
-  - { level: 3, move: Nuzzle }
-  - { level: 15, move: Bite }
-  - { level: 19, move: Short Circuit }
-  - { level: 20, move: Signal Beam }
-  - { level: 23, move: Spark }
-  - { level: 29, move: Sticky Web }
-  - { level: 36, move: X-Scissor }
-  - { level: 39, move: Lightning Slam }
-  - { level: 40, move: Antennae Blast }
-  - { level: 43, move: Crunch }
-  - { level: 44, move: Moltstrike }
-  - { level: 45, move: Arc Strike }
-  - { level: 50, move: Gauss Cannon }
-  - { level: 53, move: Drone Chorus }
-  - { level: 57, move: Iron Defense }
-  - { level: 58, move: Megahorn }
-  - { level: 59, move: Wild Charge }
-  - { level: 64, move: Discharge }
+  - { level: 3, move: Struggle Bug }
+  - { level: 5, move: Thunder Shock }
+  - { level: 7, move: Mud-Slap }
+  - { level: 9, move: Gust }
+  - { level: 12, move: Short Circuit }
+  - { level: 15, move: Thunder Wave }
+  - { level: 18, move: Electroweb }
+  - { level: 21, move: Discharge }
+  - { level: 24, move: Charge Beam }
+  - { level: 27, move: Air Cutter }
+  - { level: 30, move: Signal Beam }
+  - { level: 33, move: Volt Switch }
+  - { level: 36, move: Air Slash }
+  - { level: 39, move: Agility }
+  - { level: 42, move: Thunder }
+  - { level: 45, move: Bug Buzz }
+  - { level: 48, move: Sticky Web }
+  - { level: 51, move: Metal Sound }
+  - { level: 54, move: Gauss Cannon }
+  - { level: 57, move: Overdrive }
+  - { level: 60, move: Lock-On }
+  - { level: 63, move: Zap Cannon }
+  - { level: 66, move: Antennae Blast }
+  - { level: 69, move: Drone Chorus }
+  - { level: 72, move: Electro Shot }
+  - { level: 75, move: Hurricane }
+  - { level: 80, move: Tempest }
