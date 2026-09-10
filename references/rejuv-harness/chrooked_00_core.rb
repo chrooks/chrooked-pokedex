@@ -93,6 +93,14 @@ CHROOKED_HP_LOSS_VETO = {}
 # a hard list of vanilla ability symbols, and the sand/hail tick subtracts HP
 # directly in pbReduceBattlersHP (Battle.rb:7877), bypassing pbReduceHP.
 CHROOKED_WEATHER_IMMUNE = {}
+# [ability symbols] — the holder is treated as a Magic Guard user everywhere
+# vanilla asks. Rejuv gates 62 separate damage sources on one list
+# (Battle.rb:893) — hazards, burn/poison/curse/binding/Leech Seed/Nightmare/Bad
+# Dreams ticks, Life Orb, and move recoil (getRecoil, Battle_Move.rb:2271) — so
+# registering here covers all of them at once instead of vetoing tick by tick.
+# It does NOT cover weather chip: that keys on takesWeatherDamage?, so a
+# Magic-Guard-alike still needs its CHROOKED_WEATHER_IMMUNE entry.
+CHROOKED_MAGIC_GUARD = []
 # ability => ->(battler, battle) { Float fraction of max HP } — added back to the
 # AI's hpGainPerTurn. Only needed when a chrooked ability REMOVES a per-turn cost
 # the AI still subtracts by ability symbol (Solar Power's sun drain).
@@ -522,6 +530,14 @@ module ChrookedBattleHooks
       return false if basemove && basemove.move != lock
     end
     allowed
+  end
+
+  # Chrooked Magic-Guard-alikes join vanilla's list, so every one of the 62 call
+  # sites that gates on it covers them too — including getRecoil, which is why
+  # a registered holder takes no recoil from Head Smash or Double-Edge.
+  def magicGuardAbilities
+    guards = super
+    CHROOKED_MAGIC_GUARD.empty? ? guards : guards + CHROOKED_MAGIC_GUARD
   end
 
   # Per-user weather perception (Mega Sol's own seam): a battler whose ability
