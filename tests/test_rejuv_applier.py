@@ -1336,3 +1336,54 @@ def test_static_mod_hotkeys_accept_keyboard_and_pad(tmp_path, mod_name, module, 
     proc = subprocess.run(["ruby", "-e", script], capture_output=True, text=True, cwd=tmp_path)
     assert proc.returncode == 0, proc.stderr
     assert "OK" in proc.stdout
+
+
+def test_installer_copies_engine_mod_alongside_core(tmp_path):
+    """An engine-level mod has no behavior spec; it ships whenever anything installs."""
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nCHROOKED_DAMAGE_MODS[:SLEDGEHAMMER] = 1\n",
+        "chrooked_pcsort.rb": "# chrooked:pcsort\nmodule ChrookedPCSort; end\n",
+    })
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    r = Ruleset(behaviors={"sledgehammer": BehaviorSpec(
+        name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")})
+    report = ApplyReport()
+    written = install_behaviors(target, r, report, source_dir=src)
+    dest = target / "patch" / "Mods" / "chrooked_pcsort.rb"
+    assert dest.exists() and dest in written
+    assert any(e.status == "applied" and e.chrooked_id == "pcsort" for e in report.entries)
+
+
+def test_installer_untagged_engine_mod_blocks(tmp_path):
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nCHROOKED_DAMAGE_MODS[:SLEDGEHAMMER] = 1\n",
+        "chrooked_pcsort.rb": "module ChrookedPCSort; end\n",  # no tag
+    })
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    r = Ruleset(behaviors={"sledgehammer": BehaviorSpec(
+        name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")})
+    report = ApplyReport()
+    install_behaviors(target, r, report, source_dir=src)
+    assert not (target / "patch" / "Mods" / "chrooked_pcsort.rb").exists()
+    assert any(e.status == "blocked" and e.chrooked_id == "pcsort" for e in report.entries)
+
+
+def test_installer_absent_engine_mod_is_silent(tmp_path):
+    from chrooked_pokedex.appliers.rejuv.behavior_install import install_behaviors
+    src = _harness(tmp_path, {
+        "chrooked_00_core.rb": _CORE,
+        "chrooked_sledgehammer.rb": "# chrooked:sledgehammer\nCHROOKED_DAMAGE_MODS[:SLEDGEHAMMER] = 1\n",
+    })
+    target = tmp_path / "game"
+    shutil.copytree(FIXTURE, target)
+    r = Ruleset(behaviors={"sledgehammer": BehaviorSpec(
+        name="Sledgehammer", chrooked_id="sledgehammer", applies_to="ability")})
+    report = ApplyReport()
+    install_behaviors(target, r, report, source_dir=src)
+    assert not any(e.chrooked_id == "pcsort" for e in report.entries)
