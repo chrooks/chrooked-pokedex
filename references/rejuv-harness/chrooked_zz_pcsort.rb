@@ -1,4 +1,6 @@
-# chrooked:pcsort
+# chrooked:zz_pcsort
+# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+#
 # PC sort by date caught, both directions.
 #   Adds "Date Caught (Newest)" and "Date Caught (Oldest)" to the Sort Box /
 #   Sort PC menu (vanilla list: Storage.rb:784-793, comparators: 816-865).

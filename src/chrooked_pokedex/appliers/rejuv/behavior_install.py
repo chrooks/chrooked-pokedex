@@ -30,12 +30,6 @@ from ...report import ApplyReport, ReportEntry
 _DEFAULT_SOURCE_DIR = Path(__file__).resolve().parents[4] / "references" / "rejuv-harness"
 _CORE_NAME = "chrooked_00_core.rb"
 
-# Engine-level mods: game changes that are not a battle mechanic, so they have
-# no spec in ``ruleset/behaviors/`` and no ability or move to hang off. They
-# ship alongside the core whenever anything installs. Each still carries the
-# ``# chrooked:<id>`` tag and is validated exactly like a behavior file.
-_ENGINE_MODS: tuple[str, ...] = ("pcsort",)
-
 
 def install_behaviors(
     target: Path,
@@ -96,45 +90,6 @@ def install_behaviors(
                 status="blocked", category="behavior", chrooked_id="(core)",
                 reason=f"core copy failed: {core_src}: {exc} — installed behaviors will not run",
             ))
-        written |= _install_engine_mods(source_dir, mods_dir, report)
-    return written
-
-
-def _install_engine_mods(source_dir: Path, mods_dir: Path, report: ApplyReport) -> set[Path]:
-    """Copy the engine-level mods, reporting each as honestly as a behavior."""
-    written: set[Path] = set()
-    for mod_id in _ENGINE_MODS:
-        src = source_dir / f"chrooked_{mod_id}.rb"
-        if not src.exists():
-            continue  # not implemented — same silence as an absent behavior file
-        try:
-            contents = src.read_text(encoding="utf-8")
-        except OSError as exc:
-            report.add(ReportEntry(
-                status="blocked", category="behavior", chrooked_id=mod_id,
-                reason=f"engine mod unreadable: {src}: {exc}",
-            ))
-            continue
-        if not _is_valid(contents, mod_id):
-            report.add(ReportEntry(
-                status="blocked", category="behavior", chrooked_id=mod_id,
-                reason=f"engine mod invalid (empty or missing '# chrooked:{mod_id}' tag): {src}",
-            ))
-            continue
-        dest = mods_dir / f"chrooked_{mod_id}.rb"
-        try:
-            dest.write_text(contents, encoding="utf-8")
-        except OSError as exc:
-            report.add(ReportEntry(
-                status="blocked", category="behavior", chrooked_id=mod_id,
-                reason=f"engine mod copy failed: {dest}: {exc}",
-            ))
-            continue
-        written.add(dest)
-        report.add(ReportEntry(
-            status="applied", category="behavior", chrooked_id=mod_id,
-            reason=f"engine mod installed (patch/Mods/chrooked_{mod_id}.rb)",
-        ))
     return written
 
 

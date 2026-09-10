@@ -60,7 +60,7 @@ class PokemonStorageScreen
   end
 end
 
-require_relative "chrooked_pcsort"
+require_relative "chrooked_zz_pcsort"
 
 def t(y) = Time.gm(y, 1, 1)
 def fresh_storage
