@@ -2,18 +2,30 @@ name: Corvisquire
 chrooked_id: corvisquire
 aka: { pokeemerald: SPECIES_CORVISQUIRE }
 abilities:
-  secondary: Updraft
+  primary: Dauntless Shield
+  secondary: Mirror Armor
+  hidden: Pressure
 stats: { hp: 72, atk: 72, def: 70, spa: 45, spd: 70, spe: 81 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }
-  - { level: 1, move: Hone Claws }
-  - { level: 1, move: Power Trip }
-  - { level: 12, move: Fury Attack }
-  - { level: 16, move: Pluck }
-  - { level: 22, move: Taunt }
-  - { level: 28, move: Scary Face }
-  - { level: 34, move: Drill Peck }
-  - { level: 37, move: Nosedive }
-  - { level: 40, move: Swagger }
-  - { level: 46, move: Brave Bird }
+  - { level: 4, move: Metal Claw }
+  - { level: 8, move: Rock Throw }
+  - { level: 12, move: Wing Attack }
+  - { level: 16, move: Taunt }
+  - { level: 20, move: Rock Slide }
+  - { level: 24, move: Dual Wingbeat }
+  - { level: 27, move: Roost }
+  - { level: 30, move: Smart Strike }
+  - { level: 33, move: Knock Off }
+  - { level: 36, move: Drill Peck }
+  - { level: 39, move: Anchor Shot }
+  - { level: 42, move: Iron Defense }
+  - { level: 45, move: Body Press }
+  - { level: 48, move: U-turn }
+  - { level: 51, move: Iron Head }
+  - { level: 54, move: Bulk Up }
+  - { level: 57, move: Power Trip }
+  - { level: 60, move: Wide Guard }
+  - { level: 65, move: Brave Bird }
+  - { level: 68, move: Excalibur }

@@ -2,18 +2,30 @@ name: Rookidee
 chrooked_id: rookidee
 aka: { pokeemerald: SPECIES_ROOKIDEE }
 abilities:
-  secondary: Updraft
+  primary: Dauntless Shield
+  secondary: Mirror Armor
+  hidden: Pressure
 stats: { hp: 42, atk: 52, def: 50, spa: 35, spd: 50, spe: 61 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }
-  - { level: 4, move: Power Trip }
-  - { level: 8, move: Hone Claws }
-  - { level: 12, move: Fury Attack }
-  - { level: 16, move: Pluck }
-  - { level: 20, move: Taunt }
-  - { level: 24, move: Scary Face }
-  - { level: 28, move: Drill Peck }
-  - { level: 32, move: Swagger }
-  - { level: 36, move: Nosedive }
-  - { level: 46, move: Brave Bird }
+  - { level: 4, move: Metal Claw }
+  - { level: 8, move: Rock Throw }
+  - { level: 12, move: Wing Attack }
+  - { level: 16, move: Taunt }
+  - { level: 20, move: Rock Slide }
+  - { level: 24, move: Dual Wingbeat }
+  - { level: 27, move: Roost }
+  - { level: 30, move: Smart Strike }
+  - { level: 33, move: Knock Off }
+  - { level: 36, move: Drill Peck }
+  - { level: 39, move: Anchor Shot }
+  - { level: 42, move: Iron Defense }
+  - { level: 45, move: Body Press }
+  - { level: 48, move: U-turn }
+  - { level: 51, move: Iron Head }
+  - { level: 54, move: Bulk Up }
+  - { level: 57, move: Power Trip }
+  - { level: 60, move: Wide Guard }
+  - { level: 65, move: Brave Bird }
+  - { level: 68, move: Excalibur }
