@@ -559,6 +559,9 @@ _PRIMARY_EFFECT_CODES = {
     # effects[:Protect] and resets the side guards). Pair it with the
     # bypass_protect flag above — the code alone does not get the move through.
     "ignores_protect": (0x0AD, None),
+    # 2-to-5-hit flurry (0x0C0 = Fury Swipes / Arm Thrust; pbIsMultiHit true,
+    # Skill Link forces five). Verified against Rejuv Battle_MoveEffects.rb:4344.
+    "multi_hit": (0x0C0, None),
 }
 
 # Vanilla function codes for one single secondary effect at :effect chance

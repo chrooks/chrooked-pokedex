@@ -2,24 +2,29 @@ name: Mienfoo
 chrooked_id: mienfoo
 aka: { pokeemerald: SPECIES_MIENFOO }
 abilities:
-  primary: Reckless
-  hidden: Martial Artist
+  primary: Martial Artist
+  secondary: Skill Link
+  hidden: Regenerator
 stats: { hp: 50, atk: 85, def: 55, spa: 30, spd: 55, spe: 75 }
 learnset:
   - { level: 1, move: Pound }
+  - { level: 1, move: Fake Out }
   - { level: 1, move: Detect }
-  - { level: 2, move: Rock Smash }
-  - { level: 5, move: Fake Out }
-  - { level: 10, move: Reversal }
-  - { level: 15, move: Fury Swipes }
-  - { level: 20, move: Quick Guard }
-  - { level: 25, move: Force Palm }
-  - { level: 30, move: U-turn }
-  - { level: 35, move: Drain Punch }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 40, move: Hone Claws }
-  - { level: 45, move: Aura Sphere }
+  - { level: 4, move: Fury Swipes }
+  - { level: 8, move: Mach Punch }
+  - { level: 12, move: Double Kick }
+  - { level: 16, move: Karate Chop }
+  - { level: 20, move: Arm Thrust }
+  - { level: 24, move: Force Palm }
+  - { level: 27, move: Triple Kick }
+  - { level: 30, move: Drain Punch }
+  - { level: 33, move: Rock Blast }
+  - { level: 36, move: U-turn }
+  - { level: 39, move: Gale Flurry }
+  - { level: 42, move: Swords Dance }
+  - { level: 45, move: Thunderous Kick }
   - { level: 48, move: Cross Chop }
-  - { level: 51, move: Bounce }
-  - { level: 55, move: Calm Mind }
-  - { level: 60, move: High Jump Kick }
+  - { level: 51, move: Upper Hand }
+  - { level: 54, move: Axe Kick }
+  - { level: 58, move: Close Combat }
+  - { level: 63, move: High Jump Kick }
