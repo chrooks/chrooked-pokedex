@@ -3,6 +3,7 @@ chrooked_id: corvisquire
 aka: { pokeemerald: SPECIES_CORVISQUIRE }
 abilities:
   secondary: Updraft
+stats: { hp: 72, atk: 72, def: 70, spa: 45, spd: 70, spe: 81 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }

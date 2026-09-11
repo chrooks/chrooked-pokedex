@@ -3,6 +3,7 @@ chrooked_id: rookidee
 aka: { pokeemerald: SPECIES_ROOKIDEE }
 abilities:
   secondary: Updraft
+stats: { hp: 42, atk: 52, def: 50, spa: 35, spd: 50, spe: 61 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Peck }
