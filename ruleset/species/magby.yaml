@@ -3,25 +3,31 @@ chrooked_id: magby
 aka: { pokeemerald: SPECIES_MAGBY }
 abilities:
   primary: Flash Fire
-  secondary: Flame Body
+  secondary: Mega Launcher
+  hidden: Deadeye
 stats: { hp: 50, atk: 60, def: 37, spa: 80, spd: 55, spe: 83 }
 learnset:
   - { level: 1, move: Leer }
+  - { level: 1, move: Ember }
   - { level: 1, move: Smog }
-  - { level: 2, move: Flame Charge }
-  - { level: 4, move: Ember }
-  - { level: 8, move: Smokescreen }
-  - { level: 12, move: Clear Smog }
-  - { level: 16, move: Flame Wheel }
-  - { level: 20, move: Confuse Ray }
+  - { level: 1, move: Smokescreen }
+  - { level: 8, move: Clear Smog }
+  - { level: 12, move: Confuse Ray }
+  - { level: 16, move: Incinerate }
+  - { level: 20, move: Mirror Shot }
   - { level: 24, move: Scary Face }
-  - { level: 28, move: Fire Punch }
-  - { level: 32, move: Lava Plume }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Low Kick }
-  - { level: 38, move: Cinder Smash }
-  - { level: 40, move: Flamethrower }
-  - { level: 43, move: Combust }
-  - { level: 44, move: Sunny Day }
-  - { level: 48, move: Fire Blast }
-  - { level: 57, move: Flare Blitz }
+  - { level: 27, move: Chi Wave }
+  - { level: 30, move: Lava Plume }
+  - { level: 33, move: Flash Cannon }
+  - { level: 36, move: Flamethrower }
+  - { level: 39, move: Sunny Day }
+  - { level: 42, move: Aura Sphere }
+  - { level: 45, move: Dark Pulse }
+  - { level: 48, move: Heat Wave }
+  - { level: 51, move: Luster Cannon }
+  - { level: 54, move: Focus Blast }
+  - { level: 57, move: Fire Blast }
+  - { level: 60, move: Meltdown }
+  - { level: 63, move: Steel Beam }
+  - { level: 66, move: Armor Cannon }
+  - { level: 70, move: Searing Shot }
