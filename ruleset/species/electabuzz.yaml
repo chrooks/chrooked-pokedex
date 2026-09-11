@@ -2,31 +2,32 @@ name: Electabuzz
 chrooked_id: electabuzz
 aka: { pokeemerald: SPECIES_ELECTABUZZ }
 types: [Electric, Fighting]
+abilities:
+  primary: Motor Drive
+  secondary: Hammerfist
+  hidden: Static
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Charge }
-  - { level: 1, move: Low Kick }
-  - { level: 2, move: Aura Spark }
-  - { level: 3, move: Thunder Shock }
-  - { level: 4, move: Swift }
-  - { level: 5, move: Thunder Punch }
-  - { level: 15, move: Chi Wave }
+  - { level: 1, move: Nuzzle }
+  - { level: 4, move: Charge }
+  - { level: 6, move: Jolt }
+  - { level: 8, move: Power-Up Punch }
+  - { level: 12, move: Low Kick }
+  - { level: 16, move: Spark }
   - { level: 20, move: Thunder Wave }
   - { level: 24, move: Brick Break }
-  - { level: 28, move: Ice Punch }
-  - { level: 31, move: Short Circuit }
-  - { level: 32, move: Discharge }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Bulk Up }
-  - { level: 37, move: Cross Chop }
-  - { level: 38, move: Lightning Slam }
-  - { level: 39, move: Aura Sphere }
-  - { level: 41, move: Arc Strike }
-  - { level: 43, move: Ki Blast }
-  - { level: 46, move: Thunderbolt }
-  - { level: 52, move: Close Combat }
-  - { level: 57, move: Thunder }
-  - { level: 58, move: Zap Cannon }
-  - { level: 59, move: Focus Blast }
+  - { level: 27, move: Agility }
+  - { level: 30, move: Thunder Punch }
+  - { level: 33, move: Drain Punch }
+  - { level: 36, move: Fire Punch }
+  - { level: 39, move: Ice Punch }
+  - { level: 42, move: Bulk Up }
+  - { level: 45, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
+  - { level: 51, move: Hammer Arm }
+  - { level: 54, move: Earthquake }
+  - { level: 57, move: Close Combat }
+  - { level: 62, move: Plasma Fists }
+  - { level: 70, move: Volt Tackle }
 evolution: { from: Elekid, method: { level: 24 } }

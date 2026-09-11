@@ -3,31 +3,32 @@ chrooked_id: electivire
 aka: { pokeemerald: SPECIES_ELECTIVIRE }
 types: [Electric, Fighting]
 abilities:
-  primary: Static
-  secondary: Vital Spirit
+  primary: Motor Drive
+  secondary: Hammerfist
+  hidden: Static
 learnset:
+  - { level: 0, move: Lightning Slam }
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 1, move: Charge }
-  - { level: 1, move: Swift }
-  - { level: 2, move: Nuzzle }
-  - { level: 3, move: Rock Smash }
-  - { level: 4, move: Thunder Punch }
-  - { level: 5, move: Ice Punch }
-  - { level: 6, move: Fire Punch }
-  - { level: 7, move: Brick Break }
-  - { level: 24, move: Thunder Wave }
-  - { level: 30, move: Short Circuit }
-  - { level: 31, move: Discharge }
-  - { level: 36, move: Bulk Up }
-  - { level: 37, move: Aura Sphere }
-  - { level: 38, move: Lightning Slam }
-  - { level: 39, move: One-Inch Punch }
-  - { level: 40, move: Arc Strike }
-  - { level: 42, move: Thunderbolt }
-  - { level: 45, move: Cross Chop }
-  - { level: 48, move: Close Combat }
-  - { level: 54, move: Thunder }
-  - { level: 57, move: Wild Charge }
-  - { level: 60, move: Giga Impact }
+  - { level: 1, move: Nuzzle }
+  - { level: 4, move: Charge }
+  - { level: 6, move: Jolt }
+  - { level: 8, move: Power-Up Punch }
+  - { level: 12, move: Low Kick }
+  - { level: 16, move: Spark }
+  - { level: 20, move: Thunder Wave }
+  - { level: 24, move: Brick Break }
+  - { level: 27, move: Agility }
+  - { level: 30, move: Thunder Punch }
+  - { level: 33, move: Drain Punch }
+  - { level: 36, move: Fire Punch }
+  - { level: 39, move: Ice Punch }
+  - { level: 42, move: Bulk Up }
+  - { level: 45, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
+  - { level: 51, move: Hammer Arm }
+  - { level: 54, move: Earthquake }
+  - { level: 57, move: Close Combat }
+  - { level: 62, move: Plasma Fists }
+  - { level: 70, move: Volt Tackle }
 evolution: { from: Electabuzz, method: { level: 40 } }

@@ -894,3 +894,13 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Funnel:** 7 ids named → 7 fetched → 7 explicit gas/scent claims → 6 pass the slow-wall beneficiary screen → 6 written across three lines; Galarian Weezing skipped by decision.
 - **Read-back:** `applied=1726 partial=0`; all six slots MATCH in montext.rb; ABILHASH has HEAVYFUMES; plugin present in patch/Mods.
 - **Owed:** in-game — a Normal foe loses 1/16 per turn against Garbodor, a Grass foe does not; Aromatisse holds a foe in place.
+
+## 2026-09-11 — Electivire line: blind design, third of the item-evo trio
+
+- **Trigger:** Chris: "what abilities does electivire have? and is its moveset garbled still?" It had Static plus a doubled Vital Spirit and a bulk-pass learnset (six punches at L2–L7, nothing until L24). Never had a makeover.
+- **Method:** `/blind-design` with Magmortar (ranged special cannon) and Rhyperior (slow physical wall) as design cousins in the anonymized profile. The agent inferred **Electric/Fighting** unprompted — it matches the Ruleset's seeded typing — and re-derived **Motor Drive** as primary. Design axis: voltage rises with heart rate, so the kit snowballs; every STAB is contact.
+- **Abilities:** Chris picked **Motor Drive / Hammerfist / Static**. Agent's trio was Motor Drive / Iron Fist / Finishing Kick; Chris took Hammerfist over Iron Fist so slams pay off too. For the hidden slot Chris offered Static, Brawler's Spirit, Blitz, or splitting Finishing Kick into a contact-boost ability plus a speed part; Static chosen as the default (vanilla, keeps the one-custom-per-cousin pattern, Stage 2 leaks paralysis by lore). The Finishing Kick split is parked.
+- **Stats:** untouched — canon 75/123/67/95/85/95 (540). Agent's 80/125/70/75/80/110 was not taken.
+- **Learnset:** 24 rows. Chris's anchors: Plasma Fists as the capstone, Close Combat, Drain Punch, One-Inch Punch, Fire/Ice/Thunder Punch, Power-Up Punch, Earthquake, Nuzzle, Agility. Corrections: "Jolt needed between 1 and 16" → L6; "Add another capstone at L70" → Volt Tackle, the 20,000-volt discharge. Lightning Slam is the L0 reward and pays Hammerfist on evolution. Wild Charge and Arc Strike dropped (120 BP before the capstone broke the order; neither pays Hammerfist). Suggester draft put Close Combat after Plasma Fists and added Tackle, Gleamfang, Superpower — hand-reworked.
+- **Read-back:** `partial=0`, no line rows blocked. montext.rb: all three movesets MATCH; MOTORDRIVE / HAMMERFIST / STATIC.
+- **Owed:** an in-game check that Hammerfist boosts Lightning Slam and Hammer Arm as well as the punches.

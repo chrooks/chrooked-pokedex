@@ -1,21 +1,31 @@
 name: Elekid
 chrooked_id: elekid
 aka: { pokeemerald: SPECIES_ELEKID }
+abilities:
+  primary: Motor Drive
+  secondary: Hammerfist
+  hidden: Static
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 4, move: Thunder Shock }
-  - { level: 7, move: Charge }
-  - { level: 10, move: Swift }
-  - { level: 13, move: Thunder Wave }
-  - { level: 16, move: Shock Wave }
-  - { level: 19, move: Low Kick }
-  - { level: 22, move: Thunder Punch }
-  - { level: 24, move: Discharge }
-  - { level: 30, move: Thunderbolt }
-  - { level: 36, move: Thunder }
-  - { level: 38, move: Lightning Slam }
-  - { level: 39, move: Aura Sphere }
-  - { level: 42, move: One-Inch Punch }
-  - { level: 48, move: Arc Strike }
-  - { level: 57, move: Zap Cannon }
+  - { level: 1, move: Nuzzle }
+  - { level: 4, move: Charge }
+  - { level: 6, move: Jolt }
+  - { level: 8, move: Power-Up Punch }
+  - { level: 12, move: Low Kick }
+  - { level: 16, move: Spark }
+  - { level: 20, move: Thunder Wave }
+  - { level: 24, move: Brick Break }
+  - { level: 27, move: Agility }
+  - { level: 30, move: Thunder Punch }
+  - { level: 33, move: Drain Punch }
+  - { level: 36, move: Fire Punch }
+  - { level: 39, move: Ice Punch }
+  - { level: 42, move: Bulk Up }
+  - { level: 45, move: One-Inch Punch }
+  - { level: 48, move: Cross Chop }
+  - { level: 51, move: Hammer Arm }
+  - { level: 54, move: Earthquake }
+  - { level: 57, move: Close Combat }
+  - { level: 62, move: Plasma Fists }
+  - { level: 70, move: Volt Tackle }
