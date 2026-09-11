@@ -1,0 +1,11 @@
+name: Gale Flurry
+chrooked_id: galeflurry
+aka: {  }
+type: Flying
+category: physical
+power: 25
+accuracy: 100
+pp: 10
+description: The user lashes the target with whip-like gusts 2 to 5 times in a row.
+effect: multi_hit
+flags: [contact]
