@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_TRUBBISH }
 types: [Poison, Steel]
 abilities:
   primary: Death Grip
-  secondary: Corrosion
+  secondary: Heavy Fumes
   hidden: Virulence
 stats: { hp: 65, atk: 68, def: 78, spa: 30, spd: 70, spe: 64 }
 learnset:

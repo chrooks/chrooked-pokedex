@@ -2,7 +2,8 @@ name: Weezing
 chrooked_id: weezing
 aka: { pokeemerald: SPECIES_WEEZING }
 abilities:
-  secondary: Neutralizing Gas
+  primary: Levitate
+  secondary: Heavy Fumes
   hidden: Exhaust
 stats: { hp: 70, spa: 90, spd: 75 }
 learnset:

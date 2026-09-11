@@ -2,7 +2,8 @@ name: Koffing
 chrooked_id: koffing
 aka: { pokeemerald: SPECIES_KOFFING }
 abilities:
-  secondary: Neutralizing Gas
+  primary: Levitate
+  secondary: Heavy Fumes
   hidden: Exhaust
 stats: { hp: 46, spd: 49, spe: 40 }
 learnset:

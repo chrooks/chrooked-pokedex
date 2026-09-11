@@ -885,3 +885,12 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Suggester note:** the draft piled nine moves into L61–73, filled a status slot with Dark Void, doubled Flame Burst, and reached for physical Iron Head. Hand-reworked in full.
 - **Read-back:** `partial=0`, no line rows blocked. montext.rb: all three movesets MATCH; Magmortar BaseStats 80/80/67/135/95/83, FLASHFIRE / MEGALAUNCHER / DEADEYE; Rhyperior BaseStats[4] = 60.
 - **Owed:** an in-game check that Mega Launcher boosts Flame Burst and Luster Cannon, and that Deadeye lands Focus Blast through an evasion boost.
+
+## 2026-09-11 — Smell abilities: Heavy Fumes created, Pheromone distributed
+
+- **Origin:** the Venusaur blind design. Chris: "Idr any smell abilities being particularly viable. I think giving the smell mons something useful would be nice. There are a few of them, Aromatisse Garbodor Weezing all come to mind." Pool audit: Stench (10% flinch) is dead on slow bodies, Lingering Aroma is Mummy, Aroma Veil is a doubles-only Taunt block.
+- **Heavy Fumes** [new] — "Foes lose 1/16 max HP at the end of each turn. Poison and Grass types are unaffected." Bad Dreams keyed on type instead of sleep. `CHROOKED_TURN_END` loops the holder's opposing battlers; Magic-Guard-alikes are skipped through vanilla's `magicGuardAbilities`, so Impenetrable is covered. Steel is not immune on purpose. ponytail: the AI is not taught the chip.
+- **Distributed:** Trubbish/Garbodor slot 2 over Corrosion ("finishes them off with foul-smelling poison gas belched from its mouth"; Death Grip kept, it is sourced by "clenches opponents with its left arm" and pairs with the chip). Koffing/Weezing slot 2 over Neutralizing Gas — Chris: "Neutralizing Gas should be Galarian Weezing's thing. Replace that w HF." Galarian Weezing untouched (keeps Levitate / Neutralizing Gas / Misty Surge). Pheromone to Spritzee/Aromatisse HA over Aroma Veil ("its scent is so overpowering... a hard time walking alongside it").
+- **Funnel:** 7 ids named → 7 fetched → 7 explicit gas/scent claims → 6 pass the slow-wall beneficiary screen → 6 written across three lines; Galarian Weezing skipped by decision.
+- **Read-back:** `applied=1726 partial=0`; all six slots MATCH in montext.rb; ABILHASH has HEAVYFUMES; plugin present in patch/Mods.
+- **Owed:** in-game — a Normal foe loses 1/16 per turn against Garbodor, a Grass foe does not; Aromatisse holds a foe in place.

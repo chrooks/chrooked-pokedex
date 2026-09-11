@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Heavy Fumes
+chrooked_id: heavyfumes
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Every opposing Pokemon on the field loses 1/16 max HP at the end of each turn.
+    trigger: turn-end
+    when: an opposing Pokemon is on the field, not fainted, not Poison or Grass type, and not protected by a Magic-Guard-alike
+    effect: reduce its HP by floor(max HP / 16), minimum 1
+test_cases:
+  - given: foe is a Normal type at full HP
+    expect: loses 1/16 max HP at end of turn with a fumes message
+  - given: foe is Poison or Grass type
+    expect: no damage
+  - given: foe has Magic Guard
+    expect: no damage
+  - given: foe is behind a Substitute
+    expect: takes the chip (it is not a move)
+notes:
+  - "A Bad Dreams-shaped chip keyed on type immunity rather than sleep. Stacks with Toxic and Leech Seed. Steel is not immune on purpose: gas gets through armor."
+engine_hints:
+  rejuv: "CHROOKED_TURN_END[:HEAVYFUMES] loops battler.pbOpposing1/2, skips Poison/Grass and magicGuardAbilities holders, calls pbReduceHP(totalhp/16). AI is not taught the chip (ponytail)."

@@ -5,7 +5,7 @@ types: [Fairy, Poison]
 abilities:
   primary: Venomize
   secondary: Poison Heal
-  hidden: Aroma Veil
+  hidden: Pheromone
 stats: { hp: 115, atk: 60, def: 80, spa: 105, spd: 106, spe: 29 }
 learnset:
   - { level: 0, move: Trick Room }
