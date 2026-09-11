@@ -2,30 +2,33 @@ name: Ivysaur
 chrooked_id: ivysaur
 aka: { pokeemerald: SPECIES_IVYSAUR }
 abilities:
-  secondary: Chloroplast
+  primary: Overgrow
+  secondary: Sunbask
+  hidden: Pheromone
+stats: { hp: 68, atk: 52, def: 70, spa: 83, spd: 89, spe: 58 }
 learnset:
-  - { level: 1, move: Vine Whip }
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Growth }
-  - { level: 2, move: Absorb }
-  - { level: 3, move: Acid Spray }
-  - { level: 9, move: Leech Seed }
-  - { level: 12, move: Razor Leaf }
-  - { level: 15, move: Poison Powder }
-  - { level: 16, move: Sleep Powder }
-  - { level: 17, move: Giga Drain }
-  - { level: 18, move: Venoshock }
-  - { level: 20, move: Seed Bomb }
-  - { level: 25, move: Take Down }
-  - { level: 29, move: Energy Ball }
-  - { level: 30, move: Sweet Scent }
-  - { level: 32, move: Miasma }
-  - { level: 35, move: Synthesis }
-  - { level: 37, move: Siphon }
-  - { level: 40, move: Worry Seed }
-  - { level: 43, move: Sludge Wave }
-  - { level: 45, move: Power Whip }
-  - { level: 50, move: Solar Beam }
-  - { level: 57, move: Leaf Storm }
-  - { level: 64, move: Contagion }
+  - { level: 1, move: Flicker }
+  - { level: 4, move: Growth }
+  - { level: 7, move: Absorb }
+  - { level: 10, move: Leech Seed }
+  - { level: 13, move: Acid Spray }
+  - { level: 16, move: Poison Powder }
+  - { level: 18, move: Sleep Powder }
+  - { level: 20, move: Mega Drain }
+  - { level: 23, move: Venoshock }
+  - { level: 26, move: Magical Leaf }
+  - { level: 29, move: Sweet Scent }
+  - { level: 32, move: Petal Blizzard }
+  - { level: 35, move: Sunny Day }
+  - { level: 38, move: Weather Ball }
+  - { level: 41, move: Energy Ball }
+  - { level: 44, move: Synthesis }
+  - { level: 47, move: Sludge Bomb }
+  - { level: 50, move: Earth Power }
+  - { level: 53, move: Toxic }
+  - { level: 56, move: Sludge Wave }
+  - { level: 59, move: Siphon }
+  - { level: 62, move: Solar Beam }
+  - { level: 66, move: Leaf Storm }
+  - { level: 70, move: Contagion }

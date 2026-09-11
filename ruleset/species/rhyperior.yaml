@@ -5,6 +5,7 @@ abilities:
   primary: Impale
   secondary: Rock Head
   hidden: True Shot
+stats: { spd: 60 }
 learnset:
   - { level: 1, move: Tail Whip }
   - { level: 1, move: Hammer Arm }

@@ -2,33 +2,35 @@ name: Venusaur
 chrooked_id: venusaur
 aka: { pokeemerald: SPECIES_VENUSAUR }
 abilities:
-  secondary: Chloroplast
-stats: { hp: 90, spa: 105 }
+  primary: Overgrow
+  secondary: Sunbask
+  hidden: Pheromone
+stats: { hp: 95, atk: 70, def: 90, spa: 105, spd: 110, spe: 70 }
 learnset:
-  - { level: 0, move: Petal Blizzard }
-  - { level: 1, move: Growth }
+  - { level: 0, move: Giga Drain }
   - { level: 1, move: Growl }
-  - { level: 1, move: Vine Whip }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Absorb }
-  - { level: 3, move: Acid Spray }
-  - { level: 4, move: Giga Drain }
-  - { level: 9, move: Leech Seed }
-  - { level: 12, move: Razor Leaf }
-  - { level: 15, move: Sleep Powder }
+  - { level: 1, move: Flicker }
+  - { level: 4, move: Growth }
+  - { level: 7, move: Absorb }
+  - { level: 10, move: Leech Seed }
+  - { level: 13, move: Acid Spray }
   - { level: 16, move: Poison Powder }
-  - { level: 17, move: Energy Ball }
-  - { level: 18, move: Venoshock }
-  - { level: 20, move: Seed Bomb }
-  - { level: 25, move: Take Down }
-  - { level: 29, move: Siphon }
-  - { level: 30, move: Sweet Scent }
-  - { level: 33, move: Miasma }
-  - { level: 37, move: Synthesis }
-  - { level: 40, move: Petal Dance }
-  - { level: 43, move: Sludge Wave }
-  - { level: 44, move: Worry Seed }
-  - { level: 51, move: Power Whip }
-  - { level: 58, move: Solar Beam }
-  - { level: 64, move: Contagion }
+  - { level: 18, move: Sleep Powder }
+  - { level: 20, move: Mega Drain }
+  - { level: 23, move: Venoshock }
+  - { level: 26, move: Magical Leaf }
+  - { level: 29, move: Sweet Scent }
+  - { level: 32, move: Petal Blizzard }
+  - { level: 35, move: Sunny Day }
+  - { level: 38, move: Weather Ball }
+  - { level: 41, move: Energy Ball }
+  - { level: 44, move: Synthesis }
+  - { level: 47, move: Sludge Bomb }
+  - { level: 50, move: Earth Power }
+  - { level: 53, move: Toxic }
+  - { level: 56, move: Sludge Wave }
+  - { level: 59, move: Siphon }
+  - { level: 62, move: Solar Beam }
+  - { level: 66, move: Leaf Storm }
+  - { level: 70, move: Contagion }
 evolution: { from: Ivysaur, method: { level: 32 } }

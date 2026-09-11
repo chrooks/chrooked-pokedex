@@ -4,6 +4,7 @@ aka: { pokeemerald: SPECIES_MAGMAR }
 abilities:
   primary: Flash Fire
   secondary: Flame Body
+stats: { hp: 70, atk: 80, def: 57, spa: 110, spd: 85, spe: 93 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Ember }

@@ -1,0 +1,21 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Pheromone
+chrooked_id: pheromone
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Opposing Pokemon cannot switch out or flee while this Pokemon is on the field.
+    trigger: escape-check
+    when: an opposing Pokemon tries to switch or run, and it is not Ghost type and holds no Shed Shell
+    effect: the switch fails with a trapping-ability message
+test_cases:
+  - given: foe is a non-Ghost with no Shed Shell
+    expect: cannot switch; message names Pheromone
+  - given: foe is Ghost type or holds Shed Shell
+    expect: switches freely
+  - given: foe uses U-turn or Baton Pass
+    expect: switches (move-forced switches are not blocked, as with Shadow Tag)
+notes:
+  - Shadow Tag without the mirror-holder exemption, on a slow scent mon. AI treats it as a trapping ability via TRAPPINGABILITIESAI.
+engine_hints:
+  rejuv: "prepend PokeBattle_Battle#pbCanSwitch?; after super, fail if pbCheckSideAbility(:PHEROMONE, thispkmn.pbOpposing1) finds a holder and thispkmn is not Ghost and has no Shed Shell. Push :PHEROMONE into PBStuff::TRAPPINGABILITIES and TRAPPINGABILITIESAI."

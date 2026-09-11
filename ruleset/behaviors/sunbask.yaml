@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Sunbask
+chrooked_id: sunbask
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Heals 1/8 max HP at the end of each turn in sun.
+    trigger: turn-end
+    when: harsh sunlight is active and affects this Pokemon, and it can heal
+    effect: restore floor(max HP / 8)
+  - summary: Drain moves recover 100% of damage dealt in sun.
+    trigger: damage-calc
+    when: harsh sunlight is active and this Pokemon recovers HP from a draining move or passive drain
+    effect: double the HP recovered (50% of damage becomes 100%)
+test_cases:
+  - given: sun, end of turn, holder below max HP
+    expect: holder heals 1/8 max HP with an ability box
+  - given: sun, Giga Drain deals 80
+    expect: holder recovers 80, not 40
+  - given: no weather, Giga Drain deals 80
+    expect: holder recovers 40; no end-of-turn heal
+  - given: sun under Air Lock or with Utility Umbrella
+    expect: no heal, no drain bonus
+notes:
+  - Rain Dish for sun, plus the drain half of Deep-Rooted at x2. Stacks with Big Root.
+engine_hints:
+  rejuv: "CHROOKED_TURN_END[:SUNBASK] heals 1/8 when battle.pbWeather(battler)==:SUNNYDAY; CHROOKED_ABSORB_MODS[:SUNBASK] doubles hpgain under the same gate. AI: CHROOKED_AI_HP_REFUND adds 0.125 in sun."
