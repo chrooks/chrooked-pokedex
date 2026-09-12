@@ -2,30 +2,34 @@ name: Kleavor
 chrooked_id: kleavor
 aka: { pokeemerald: SPECIES_KLEAVOR }
 abilities:
-  primary: Mountaineer
-  secondary: Sharpness
-stats: { spe: 90 }
+  primary: Sharpness
+  secondary: Mountaineer
+  hidden: Sturdy
+stats: { hp: 80, atk: 145, def: 105, spa: 35, spd: 85, spe: 90 }
 learnset:
   - { level: 0, move: Stone Axe }
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 4, move: Fury Cutter }
-  - { level: 8, move: False Swipe }
-  - { level: 12, move: Smack Down }
-  - { level: 15, move: Bug Bite }
-  - { level: 16, move: Double Team }
-  - { level: 20, move: Double Hit }
-  - { level: 24, move: Slash }
-  - { level: 28, move: Focus Energy }
-  - { level: 29, move: Rock Slide }
-  - { level: 32, move: Agility }
-  - { level: 36, move: Lithic Fang }
-  - { level: 38, move: X-Scissor }
-  - { level: 40, move: Moltstrike }
-  - { level: 43, move: Stone Edge }
-  - { level: 44, move: Swords Dance }
-  - { level: 48, move: Dive Bomb }
-  - { level: 55, move: Pixie Slash }
-  - { level: 57, move: Megahorn }
-  - { level: 59, move: Head Smash }
+  - { level: 1, move: Fury Cutter }
+  - { level: 4, move: Rock Throw }
+  - { level: 8, move: Wing Attack }
+  - { level: 12, move: Bug Bite }
+  - { level: 16, move: Smack Down }
+  - { level: 20, move: Karate Chop }
+  - { level: 24, move: Aerial Ace }
+  - { level: 27, move: Accelerock }
+  - { level: 30, move: Rock Polish }
+  - { level: 33, move: Night Slash }
+  - { level: 36, move: U-turn }
+  - { level: 39, move: Brick Break }
+  - { level: 42, move: Rock Slide }
+  - { level: 45, move: X-Scissor }
+  - { level: 48, move: Swords Dance }
+  - { level: 51, move: Leaf Blade }
+  - { level: 54, move: Sacred Sword }
+  - { level: 57, move: First Impression }
+  - { level: 60, move: Mighty Cleave }
+  - { level: 63, move: Stone Edge }
+  - { level: 66, move: Close Combat }
+  - { level: 70, move: Timberfall }
 evolution: { from: Scyther, method: { item: Black Augurite } }

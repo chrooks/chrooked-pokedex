@@ -2,26 +2,31 @@ name: Scyther
 chrooked_id: scyther
 aka: { pokeemerald: SPECIES_SCYTHER }
 abilities:
-  secondary: Sharpness
+  primary: Sharpness
+  secondary: Blitz
+  hidden: Technician
+stats: { hp: 70, atk: 115, def: 80, spa: 30, spd: 80, spe: 115 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 1, move: Quick Attack }
-  - { level: 2, move: Peck }
   - { level: 4, move: Fury Cutter }
-  - { level: 8, move: False Swipe }
+  - { level: 8, move: Pounce }
   - { level: 12, move: Wing Attack }
-  - { level: 15, move: Bug Bite }
-  - { level: 16, move: Double Team }
-  - { level: 20, move: Double Hit }
-  - { level: 24, move: Slash }
-  - { level: 28, move: Focus Energy }
-  - { level: 32, move: Agility }
-  - { level: 36, move: Air Slash }
-  - { level: 38, move: X-Scissor }
-  - { level: 40, move: Moltstrike }
-  - { level: 43, move: Dive Bomb }
-  - { level: 44, move: Swords Dance }
-  - { level: 48, move: Nosedive }
-  - { level: 55, move: Pixie Slash }
-  - { level: 57, move: Megahorn }
-  - { level: 59, move: Brave Bird }
+  - { level: 16, move: False Swipe }
+  - { level: 20, move: Double Team }
+  - { level: 24, move: Bug Bite }
+  - { level: 27, move: Slash }
+  - { level: 30, move: Aerial Ace }
+  - { level: 33, move: Karate Chop }
+  - { level: 36, move: Agility }
+  - { level: 39, move: Night Slash }
+  - { level: 42, move: U-turn }
+  - { level: 45, move: Brick Break }
+  - { level: 48, move: Swords Dance }
+  - { level: 51, move: X-Scissor }
+  - { level: 54, move: Drill Peck }
+  - { level: 58, move: Leaf Blade }
+  - { level: 61, move: First Impression }
+  - { level: 64, move: Sacred Sword }
+  - { level: 67, move: Dive Bomb }
+  - { level: 70, move: Brave Bird }
