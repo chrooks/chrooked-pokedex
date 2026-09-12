@@ -1,0 +1,14 @@
+name: Timberfall
+chrooked_id: timberfall
+aka: {  }
+type: Rock
+category: physical
+power: 120
+accuracy: 90
+pp: 5
+description: A tree-felling obsidian swing. Super effective on Grass. Lowers the user's Defense and Sp. Def.
+effect: super_effective_on_arg
+argument: { type: Grass }
+additional_effects:
+  - { effect: user_def_sp_def_minus_1, chance: 100 }
+flags: [contact, slicing]

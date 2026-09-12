@@ -1,0 +1,22 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Timberfall
+chrooked_id: timberfall
+applies_to: move
+aka: {  }
+effects:
+  - summary: Always counts as super effective against Grass-type targets.
+    trigger: damage-calc
+    when: this move hits a target whose typing includes Grass
+    effect: force the move to be super effective (an extra x2) against the Grass-type target, regardless of the move's normal type effectiveness against Grass
+test_cases:
+  - given: Timberfall (a Rock move) hits a pure Grass-type target
+    expect: damage uses a super-effective multiplier (x2), not Rock-vs-Grass normal x1
+  - given: Timberfall hits a Grass/Flying target
+    expect: the Grass forced x2 applies on top of Rock-vs-Flying x2
+  - given: Timberfall hits a non-Grass target
+    expect: normal type effectiveness only
+notes:
+  - The user Def/Sp.Def drop is native (Close Combat funccode 0x03C) and is NOT part of this behavior.
+  - The forced multiplier stacks on top of normal effectiveness for other types.
+engine_hints:
+  rejuv: "CHROOKED_MOVE_TYPEMOD[:TIMBERFALL] — same seam as Excalibur, keyed on :GRASS."
