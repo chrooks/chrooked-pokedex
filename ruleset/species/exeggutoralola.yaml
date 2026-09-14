@@ -1,6 +1,10 @@
 name: Exeggutor Alola
 chrooked_id: exeggutoralola
 aka: {  }
+abilities:
+  primary: Dragon's Maw
+  secondary: Sledgehammer
+  hidden: Harvest
 learnset:
   - { level: 0, move: Dragon Hammer }
   - { level: 1, move: Growth }

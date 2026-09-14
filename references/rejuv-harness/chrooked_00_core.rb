@@ -109,7 +109,7 @@ CHROOKED_AI_HP_REFUND = {}
 module Chrooked
   # Rejuv has no hammer flag; keyed by move symbol (the hammer/slam set).
   HAMMER_MOVES = [:SLAM, :BODYSLAM, :HAMMERARM, :IRONHEAD, :WOODHAMMER, :PILEDRIVER,
-                  :HEAVYSLAM, :ICEHAMMER, :GIGATONHAMMER].freeze
+                  :HEAVYSLAM, :ICEHAMMER, :GIGATONHAMMER, :DRAGONHAMMER].freeze
   # No piercing flag either; the horn/drill set from the Ruleset's flag data.
   # ponytail: covers Ruleset-flagged moves only — extend if a piercing move is missing in play.
   PIERCING_MOVES = [:DRILLPECK, :DRILLRUN, :FURYATTACK, :HORNATTACK, :HORNDRILL,

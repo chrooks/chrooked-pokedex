@@ -1,0 +1,12 @@
+name: Egg Bomb
+chrooked_id: eggbomb
+aka: {  }
+type: Fire
+category: physical
+power: 100
+accuracy: 75
+pp: 10
+description: A large searing egg is hurled at the foe. May leave a burn.
+additional_effects:
+  - { effect: burn, chance: 30 }
+flags: [ballistic]

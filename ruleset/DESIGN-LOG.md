@@ -946,3 +946,21 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Flagged to Chris, accepted:** Peck and Drill Peck are contact-only, so Sharpness skips them; the two Flying anchors sit outside the payoff lane by choice.
 - **Read-back:** `applied=1732 partial=0`, nothing blocked for the line. montext.rb: all three movesets MATCH, BaseStats 85/120/100/70/95/70, TORRENT / PRESSURE / SHARPNESS. movetext.rb: IMPERIALCLEAVE id 1021, `:function => 0x0AD`, `:contact => true`, `:sharpmove => true`, `:bypassprotect => true`. Imperial Cleave confirmed at L62/L61/L61/L66/L58 across the five recipients.
 - **Owed:** in-game checks that Imperial Cleave hits through a Protect, that it drops Reflect and Aurora Veil on connect, and that Sharpness lifts Excalibur to a 180 effective swing.
+
+## 2026-09-14 — Meganium line (blind-design confirmation pass)
+
+- **Direction:** blind re-derivation of an already-reworked line. The context-free agent
+  read only the anonymized lore profile and independently landed on **Grass/Fairy** and
+  **Petal Barrier** as primary — the same typing and same ability the line already had.
+  Strong confirmation of the 2026-07-28 pass; typing, stats, and abilities untouched.
+- **Design axis (agent):** the fragrance blunts an opponent's fighting spirit, and
+  standing next to it refreshes a creature. Not an attacker that heals — a presence that
+  makes a fight less possible.
+- **Change shipped:** learnset fold of eight agent-proposed moves — Charm (4),
+  Grassy Terrain (20), Aromatherapy (24), Strange Steam (39), Body Press (50),
+  Earth Power (53), Springtide Storm (65), Leaf Storm (71). Back half re-spaced to keep
+  a 2-level gap. Siphon kept at 62.
+- **Rejected by the user:** Earthquake, Heavy Slam, Frenzy Plant — the sauropod-mass
+  lane, cut to keep the kit a scent-and-drain wall rather than a heavy physical one.
+- **Rejected ability swaps:** Sunbask and the agent's custom **Balmwake** (side-wide
+  1/16 regen plus an Attack drop on every foe switch-in). **Triage stays** the secondary.

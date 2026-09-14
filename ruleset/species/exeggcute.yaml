@@ -1,6 +1,10 @@
 name: Exeggcute
 chrooked_id: exeggcute
 aka: {  }
+abilities:
+  primary: Chlorophyll
+  secondary: Amplifier
+  hidden: Harvest
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Hypnosis }

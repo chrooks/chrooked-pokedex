@@ -2,8 +2,9 @@ name: Exeggutor
 chrooked_id: exeggutor
 aka: { pokeemerald: SPECIES_EXEGGUTOR }
 abilities:
-  primary: Chloroplast
-  secondary: Harvest
+  primary: Chlorophyll
+  secondary: Amplifier
+  hidden: Grassy Surge
 stats: { hp: 100, spe: 45 }
 learnset:
   - { level: 0, move: Stomp }
