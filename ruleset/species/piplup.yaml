@@ -4,29 +4,31 @@ aka: { pokeemerald: SPECIES_PIPLUP }
 types: [Water, Steel]
 abilities:
   primary: Torrent
-  secondary: Impenetrable
-  hidden: Intimidate
+  secondary: Pressure
+  hidden: Sharpness
+stats: { hp: 51, atk: 72, def: 60, spa: 42, spd: 57, spe: 42 }
 learnset:
   - { level: 1, move: Growl }
-  - { level: 1, move: Metal Claw }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Water Gun }
-  - { level: 7, move: Aqua Jet }
-  - { level: 10, move: Peck }
-  - { level: 13, move: Undertow }
-  - { level: 16, move: Glint }
-  - { level: 19, move: Bubble Beam }
-  - { level: 22, move: Smart Strike }
-  - { level: 25, move: Flip Turn }
-  - { level: 31, move: Mirror Shot }
-  - { level: 34, move: Aerial Ace }
-  - { level: 37, move: Liquidation }
-  - { level: 40, move: Swagger }
-  - { level: 44, move: Metallic Fang }
-  - { level: 48, move: Luster Cannon }
-  - { level: 52, move: Drill Peck }
-  - { level: 56, move: Wave Crash }
-  - { level: 58, move: Hydro Pump }
-  - { level: 62, move: Meltdown }
-  - { level: 66, move: Steel Beam }
-  - { level: 70, move: Tsunami }
+  - { level: 5, move: Undertow }
+  - { level: 9, move: Bullet Punch }
+  - { level: 12, move: Peck }
+  - { level: 16, move: Metal Claw }
+  - { level: 19, move: Aqua Jet }
+  - { level: 23, move: Flip Turn }
+  - { level: 26, move: Smart Strike }
+  - { level: 29, move: Roar }
+  - { level: 31, move: Liquidation }
+  - { level: 33, move: Drill Peck }
+  - { level: 35, move: Swords Dance }
+  - { level: 37, move: Aerial Ace }
+  - { level: 40, move: King's Shield }
+  - { level: 42, move: Glacial Crush }
+  - { level: 44, move: Aqua Cutter }
+  - { level: 47, move: Night Slash }
+  - { level: 51, move: Razor Shell }
+  - { level: 58, move: Imperial Cleave }
+  - { level: 63, move: Icebreaker }
+  - { level: 65, move: Sacred Sword }
+  - { level: 68, move: Wave Crash }
+  - { level: 72, move: Excalibur }

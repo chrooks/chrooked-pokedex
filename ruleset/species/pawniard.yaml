@@ -24,4 +24,5 @@ learnset:
   - { level: 55, move: Iron Tail }
   - { level: 57, move: Excalibur }
   - { level: 60, move: Swords Dance }
+  - { level: 62, move: Imperial Cleave }
   - { level: 65, move: Guillotine }

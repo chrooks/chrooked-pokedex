@@ -1,0 +1,25 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Imperial Cleave
+chrooked_id: imperialcleave
+applies_to: move
+aka: {  }
+effects:
+  - summary: Imperial Cleave removes Reflect, Light Screen and Aurora Veil from the target side on hit.
+    trigger: on-hit
+    when: Imperial Cleave connects and deals damage
+    effect: in addition to the native Protect-family break carried by function 0x0AD, end every screen effect on the target side (Reflect, Light Screen, Aurora Veil), the same set Brick Break clears
+test_cases:
+  - given: the target is behind Protect / King Shield / Spiky Shield
+    expect: Imperial Cleave hits through it (native bypass_protect + 0x0AD) and the shield is cleared for the rest of the turn
+  - given: the target side has Reflect up
+    expect: Reflect reduces this hit, then is removed — same ordering as Brick Break
+  - given: the target side has Aurora Veil and Light Screen
+    expect: both are removed in one hit
+  - given: the move misses or the target has a Substitute
+    expect: no screens are removed (the on-deal seam is gated on real damage)
+notes:
+  - "The Protect half is native: effect ignores_protect maps to Rejuv function 0x0AD and the bypass_protect flag gets the move through. This behavior only adds the screen half, which no single vanilla funccode combines with the Protect break."
+  - "Screens still reduce Imperial Cleave own hit before falling. That matches Rejuv Brick Break exactly — pbResolveMoveEffects runs pbEffectTarget after damage (Battler.rb:5990), so the vanilla move behaves the same way. Deliberate: consistency with the engine beats a bespoke pre-damage hook."
+engine_hints:
+  pokeemerald: Needs a combined effect. pokeemerald has EFFECT_BRICK_BREAK (screens) and EFFECT_FEINT (protect) separately; a new EFFECT_IMPERIAL_CLEAVE should call the brick-break screen teardown and set the feint protect bypass.
+  essentials: "Needs a plugin (patch/Mods/chrooked_imperialcleave.rb). Register CHROOKED_MOVE_ON_DEAL[:IMPERIALCLEAVE] to call battle.pbEndSideEffects(target.pbOwnSide, PBStuff::SCREENEFFECTS.values). The Protect break and bypass come free from function 0x0AD plus the bypassprotect flag."

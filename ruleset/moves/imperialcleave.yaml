@@ -1,0 +1,11 @@
+name: Imperial Cleave
+chrooked_id: imperialcleave
+aka: {  }
+type: Steel
+category: physical
+power: 90
+accuracy: 100
+pp: 10
+description: A sovereign blade opens a channel. Shatters the foe barriers, then cuts.
+effect: ignores_protect
+flags: [contact, slicing, bypass_protect]
