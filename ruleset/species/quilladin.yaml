@@ -10,9 +10,9 @@ learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Tackle }
   - { level: 5, move: Vine Whip }
-  - { level: 9, move: Power-Up Punch }
+  - { level: 9, move: Rock Smash }
   - { level: 12, move: Trailblaze }
-  - { level: 16, move: Rock Smash }
+  - { level: 16, move: Power-Up Punch }
   - { level: 20, move: Rock Slide }
   - { level: 23, move: Razor Leaf }
   - { level: 26, move: Revenge }
