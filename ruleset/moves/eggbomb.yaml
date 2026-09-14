@@ -4,7 +4,7 @@ aka: {  }
 type: Fire
 category: physical
 power: 100
-accuracy: 75
+accuracy: 90
 pp: 10
 description: A large searing egg is hurled at the foe. May leave a burn.
 additional_effects:

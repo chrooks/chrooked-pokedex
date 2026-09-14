@@ -5,32 +5,29 @@ abilities:
   primary: Chlorophyll
   secondary: Amplifier
   hidden: Grassy Surge
-stats: { hp: 100, spe: 45 }
+stats: { hp: 100, atk: 80, def: 85, spa: 120, spd: 85, spe: 60 }
 learnset:
-  - { level: 0, move: Stomp }
-  - { level: 1, move: Growth }
-  - { level: 1, move: Worry Seed }
-  - { level: 1, move: Bullet Seed }
-  - { level: 1, move: Synthesis }
-  - { level: 2, move: Reflect }
-  - { level: 3, move: Hypnosis }
-  - { level: 4, move: Solar Beam }
-  - { level: 5, move: Leech Seed }
-  - { level: 6, move: Confusion }
-  - { level: 7, move: Mega Drain }
-  - { level: 8, move: Absorb }
-  - { level: 9, move: Giga Drain }
-  - { level: 10, move: Seed Bomb }
-  - { level: 11, move: Dream Mist }
-  - { level: 12, move: Uproar }
-  - { level: 13, move: Extrasensory }
-  - { level: 14, move: Energy Ball }
-  - { level: 15, move: Psyshock }
-  - { level: 16, move: Wood Hammer }
-  - { level: 29, move: Siphon }
-  - { level: 36, move: Leaf Storm }
-  - { level: 45, move: Cataclysm }
-  - { level: 46, move: Mindwarp }
-  - { level: 57, move: Future Sight }
-  - { level: 60, move: Draco Meteor }
+  - { level: 0, move: Leaf Storm }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Sleep Powder }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Round }
+  - { level: 12, move: Mega Drain }
+  - { level: 16, move: Magical Leaf }
+  - { level: 19, move: Weather Ball }
+  - { level: 23, move: Giga Drain }
+  - { level: 26, move: Psybeam }
+  - { level: 30, move: Psychic Noise }
+  - { level: 33, move: Extrasensory }
+  - { level: 37, move: Uproar }
+  - { level: 40, move: Growth }
+  - { level: 44, move: Energy Ball }
+  - { level: 47, move: Hyper Voice }
+  - { level: 51, move: Synthesis }
+  - { level: 54, move: Resonance }
+  - { level: 58, move: Earth Power }
+  - { level: 61, move: Psychic }
+  - { level: 65, move: Solar Beam }
+  - { level: 68, move: Bug Buzz }
+  - { level: 72, move: Boomburst }
 evolution: { from: Exeggcute, method: { item: LEAFSTONE } }
