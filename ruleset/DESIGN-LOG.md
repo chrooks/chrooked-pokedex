@@ -981,3 +981,35 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Branch hazard.** Exeggcute feeds both finals, so per the house rule it is an opt-in mirror and was skipped on both runs (`--skip-pre exeggcute,<other final>`). Writing either kit onto it would have clobbered the other form's spine.
 - **Read-back:** `applied=1733 partial=0`, nothing blocked for either form. montext.rb: both movesets MATCH (Exeggutor 23 rows topping at Boomburst L72, Alolan Form 26 rows topping at Solar Blade L73), BaseStats 100/80/85/120/85/60 and 105/135/85/60/100/45, CHLOROPHYLL / AMPLIFIER / GRASSYSURGE and DRAGONSMAW / SLEDGEHAMMER / HARVEST. movetext.rb: EGGBOMB retyped to :FIRE at 100 BP / 90 acc / function 0x00A. chrooked_00_core.rb: `:DRAGONHAMMER` present in HAMMER_MOVES.
 - **Owed:** in-game checks that Amplifier boosts and spreads all seven sound rungs, that Sledgehammer now lifts Dragon Hammer, and that Egg Bomb burns at its new 30%.
+
+## 2026-09-14 — Chesnaught line (blind design)
+
+- **Direction:** a Grass/Fighting bodyguard, not a staller. The context-free agent read
+  only the anonymized lore profile and re-derived **Grass/Fighting** (grown-wood shell +
+  upright warrior class) and **Bulletproof** (the bomb-suit and raised-fists line) on its
+  own — a second convergence with canon. Typing and stats untouched.
+- **Design axis (agent):** "it shields its allies from danger with its own body" plus
+  "armour that turns an incoming attack back on the attacker by touch alone". Every pick
+  is a contact-punish, a defence-scaling attack, or an ally-protection tool.
+- **Abilities:** Overgrow / **Iron Barbs** / Bulletproof, written to all three stages.
+  Iron Barbs is the quills, at a flat 1/8.
+- **Learnset:** 23 rows, all eight user anchors placed — Body Press, Drain Punch,
+  Needle Arm, Horn Leech, Wide Guard, Rock Slide, Stone Edge, Follow Me.
+  Hand-fixes to the generated draft: Follow Me reseated L72 → L29 and Wide Guard
+  L68 → L47 (the ally-protection pair is the identity, not a level-70 afterthought);
+  **Iron Defense added at L35** to pay off Body Press at L38; Sky Uppercut dropped
+  (Cross Chop and Close Combat own that rung); Reap and Seed Bomb reseated so the Grass
+  ladder climbs 45 → 120 cleanly.
+- **Spiky Shield buffed** — contact chip raised from 1/8 to 1/6 of the attacker's max HP,
+  via `chrooked_zz_spikyshield.rb`. The plugin lets vanilla apply its own 1/8 and tops up
+  the difference only when that chip actually landed, so Magic Guard, substitutes, and a
+  fainted attacker gate the extra with no second check. The Colosseum field already chips
+  for 1/4 and is left alone. This is a **shared move**: the buff reaches all ten Ruleset
+  species that learn it (Cacturne, Maractus, Sandslash + Alolan, Glimmora, Togedemaru +
+  Totem, Pansage, Simisage, Chesnaught).
+- **Rejected by the user:** the Riposte primary (Overgrow kept) and the custom ability
+  **Aegis Oath** (redirects single-target attacks off allies onto the user, taken at half
+  damage). Three louder Spiky Shield buffs also rejected in favour of the plain 1/6 —
+  chip plus an Attack drop, chip raised to 1/4, and chip plus a Defense raise.
+- **Parked:** the user asked for an Iron Barbs + Riposte combo on the Mega. **No Mega
+  Chesnaught exists** in the dex or in Rejuv, so nothing was written.

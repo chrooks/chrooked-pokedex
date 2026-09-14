@@ -1,30 +1,32 @@
 name: Chesnaught
 chrooked_id: chesnaught
 aka: { pokeemerald: SPECIES_CHESNAUGHT }
+abilities:
+  primary: Overgrow
+  secondary: Iron Barbs
+  hidden: Bulletproof
 stats: { hp: 100, atk: 115, def: 130, spa: 55, spe: 65 }
 learnset:
   - { level: 0, move: Spiky Shield }
-  - { level: 1, move: Feint }
-  - { level: 1, move: Hammer Arm }
   - { level: 1, move: Growl }
-  - { level: 1, move: Rollout }
-  - { level: 2, move: Rock Smash }
-  - { level: 3, move: Tackle }
-  - { level: 4, move: Vine Whip }
-  - { level: 11, move: Bite }
-  - { level: 15, move: Leech Seed }
-  - { level: 16, move: Razor Leaf }
-  - { level: 17, move: Brick Break }
-  - { level: 19, move: Pin Missile }
-  - { level: 29, move: Take Down }
-  - { level: 35, move: Seed Bomb }
-  - { level: 38, move: One-Inch Punch }
-  - { level: 39, move: Cross Chop }
-  - { level: 41, move: Mud Shot }
-  - { level: 44, move: Reap }
-  - { level: 48, move: Bulk Up }
-  - { level: 54, move: Body Slam }
-  - { level: 57, move: Close Combat }
-  - { level: 60, move: Pain Split }
-  - { level: 66, move: Wood Hammer }
-  - { level: 70, move: Giga Impact }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Vine Whip }
+  - { level: 9, move: Power-Up Punch }
+  - { level: 12, move: Trailblaze }
+  - { level: 16, move: Rock Smash }
+  - { level: 20, move: Rock Slide }
+  - { level: 23, move: Razor Leaf }
+  - { level: 26, move: Revenge }
+  - { level: 29, move: Follow Me }
+  - { level: 32, move: Drain Punch }
+  - { level: 35, move: Iron Defense }
+  - { level: 38, move: Body Press }
+  - { level: 41, move: Needle Arm }
+  - { level: 44, move: Horn Leech }
+  - { level: 47, move: Wide Guard }
+  - { level: 50, move: Seed Bomb }
+  - { level: 54, move: Reap }
+  - { level: 58, move: Cross Chop }
+  - { level: 61, move: Stone Edge }
+  - { level: 65, move: Wood Hammer }
+  - { level: 69, move: Close Combat }
