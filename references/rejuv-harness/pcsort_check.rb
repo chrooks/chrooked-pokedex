@@ -3,7 +3,7 @@
 def _INTL(s, *a) = s
 STORAGEBOXES = 2
 
-FakeMon = Struct.new(:name, :timeReceived, :dexnum, :form, :egg) do
+FakeMon = Struct.new(:name, :timeReceived, :dexnum, :form, :egg, :baseStats) do
   def isEgg? = egg
 end
 
@@ -21,12 +21,18 @@ end
 # same nil-`pokes` hazard (no `else` in the case).
 class PokemonStorageScreen
   attr_reader :shown
+  attr_reader :menus
   def pbShowCommands(msg, commands, *args, **kwargs)
-    @shown = commands
+    (@menus ||= []) << commands
+    @shown ||= commands
     @picker.call(commands)
   end
 
-  def pick_with(&blk) = @picker = blk
+  def pick_with(&blk)
+    @shown = nil
+    @menus = []
+    @picker = blk
+  end
 
   def pbSortPokemon(minbox = $PokemonStorage.currentBox, maxbox = $PokemonStorage.currentBox)
     commands = ["Nickname", "Level", "Dex No.", "Species", "Type", "Shiny", "Item", "Total IVs"]
@@ -65,11 +71,12 @@ require_relative "chrooked_zz_pcsort"
 def t(y) = Time.gm(y, 1, 1)
 def fresh_storage
   $PokemonStorage = FakeStorage.new([
-    [FakeMon.new("mid",     t(2010), 3, 0, false),
-     FakeMon.new("oldest",  t(2001), 1, 0, false),
-     FakeMon.new("egg",     t(2005), 9, 0, true),
-     FakeMon.new("newest",  t(2020), 2, 0, false),
-     FakeMon.new("glitched", :Glitched, 4, 0, false)],
+    #                                              HP  Atk Def SpA SpD Spe
+    [FakeMon.new("mid",     t(2010), 3, 0, false, [ 50, 90, 50, 50, 50, 50]),  # BST 340
+     FakeMon.new("oldest",  t(2001), 1, 0, false, [100, 40, 40, 40, 40, 40]),  # BST 300
+     FakeMon.new("egg",     t(2005), 9, 0, true,  [255,255,255,255,255,255]),
+     FakeMon.new("newest",  t(2020), 2, 0, false, [ 60, 60, 60, 60, 60,130]),  # BST 430
+     FakeMon.new("glitched", :Glitched, 4, 0, false, [ 45, 45, 45, 45, 45, 45])],  # BST 270
   ])
 end
 def names = $PokemonStorage[0].map { |p| p&.name }
@@ -80,7 +87,7 @@ screen = PokemonStorageScreen.new
 fresh_storage
 screen.pick_with { |c| c.index("Date Caught (Newest)") }
 screen.pbSortPokemon
-check("menu offers both new entries") { screen.shown.last(2) == ["Date Caught (Newest)", "Date Caught (Oldest)"] }
+check("menu offers the three new entries") { screen.shown.last(3) == ["Date Caught (Newest)", "Date Caught (Oldest)", "Base Stats..."] }
 check("vanilla modes still listed")   { screen.shown.first(8).include?("Total IVs") }
 check("newest first")                 { names == ["newest", "mid", "oldest", "glitched", "egg"] }
 
@@ -99,5 +106,31 @@ fresh_storage
 screen.pick_with { |_c| -1 } # cancel
 check("cancel returns -1")            { screen.pbSortPokemon == -1 }
 check("cancel leaves box untouched")  { names == ["mid", "oldest", "egg", "newest", "glitched"] }
+
+# Base-stat submenu: first menu picks "Base Stats...", second picks the stat.
+def stat_sort(screen, stat_label)
+  fresh_storage
+  answers = [->(c) { c.index("Base Stats...") }, ->(c) { stat_label ? c.index(stat_label) : -1 }]
+  screen.pick_with { |c| answers.shift.call(c) }
+  screen.pbSortPokemon
+end
+
+ret = stat_sort(screen, "BST")
+check("submenu lists BST and six stats") { screen.menus[1] == ["BST", "HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"] }
+check("BST highest first, egg last")     { names == ["newest", "mid", "oldest", "glitched", "egg"] }
+check("stat sort returns vanilla value") { ret == 0 }
+
+stat_sort(screen, "HP")
+check("HP highest first")                { names == ["oldest", "newest", "mid", "glitched", "egg"] }
+
+stat_sort(screen, "Attack")
+check("Attack highest first")            { names == ["mid", "newest", "glitched", "oldest", "egg"] }
+
+stat_sort(screen, "Speed")
+check("Speed highest first")             { names == ["newest", "mid", "glitched", "oldest", "egg"] }
+
+ret = stat_sort(screen, nil) # cancel the submenu
+check("submenu cancel returns -1")       { ret == -1 }
+check("submenu cancel leaves box alone") { names == ["mid", "oldest", "egg", "newest", "glitched"] }
 
 puts "all checks passed"
