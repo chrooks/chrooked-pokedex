@@ -1,0 +1,22 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Mind Wipe
+chrooked_id: mindwipe
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Each damaging hit erases 4 PP from the target's last used move.
+    trigger: on-hit
+    when: this Pokemon's move deals damage and the target has used a move this battle whose PP is above 0
+    effect: reduce that move's PP by 4 (or by whatever PP remains, if less)
+test_cases:
+  - given: a Mind Wipe Pokemon hits a target that last used Recover with 10 PP left
+    expect: Recover drops to 6 PP
+  - given: the target has not moved yet this battle
+    expect: nothing happens
+  - given: the target's last move has 0 PP
+    expect: nothing happens
+  - given: a multi-hit move lands 3 hits
+    expect: 12 PP erased (4 per hit, capped at the PP remaining)
+notes:
+  - STUB — engine_hints ungrounded, needs human grounding pass
+  - "Rejuv: references/rejuv-harness/chrooked_mindwipe.rb (CHROOKED_ON_DEAL; mirrors Spite 0x10E pbSetPP on opponent.lastMoveUsed)"
