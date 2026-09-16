@@ -156,14 +156,18 @@ def realize(
     pool = inputs["move_pool"]
     all_anchors = _canonical_anchors(decisions.get("anchors") or [], pool)
     rows, fold_notes = fold_anchors(rows, all_anchors, pool, proposed=_proposed_moves(record))
-    rows, pin_notes = apply_pins(rows, decisions.get("pins") or {}, pool)
-    fold_notes = fold_notes + pin_notes
-    anchors = all_anchors + [p for p in (decisions.get("pins") or {}) if p not in all_anchors]
+    pins = decisions.get("pins") or {}
+    anchors = all_anchors + [p for p in pins if p not in all_anchors]
     # A drop can open a ladder hole or a gap, so the repair chain runs again
     # over the trimmed rows (the endpoint already ran it once before the drop).
     rows, notes = learnset_repair.scrub_draft(rows, pool, anchors=anchors)
     notes = fold_notes + notes
     rows, repair_notes = learnset_repair.repair_draft(rows, pool, anchors=anchors)
+    # Pins are the author's word and go LAST: the repair pass reorders by
+    # ascent and gap, and Chris's ladder ("Clamp, then Aqua Jet") may break
+    # ascent on purpose. The audit still reports what the pin costs.
+    rows, pin_notes = apply_pins(rows, pins, pool)
+    repair_notes = repair_notes + pin_notes
     lint = learnset_repair.audit_draft(
         rows, pool, anchors=anchors, stab_types=inputs["entry"]["types"]
     )
