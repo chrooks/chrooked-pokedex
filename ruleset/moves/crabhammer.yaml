@@ -1,0 +1,10 @@
+name: Crabhammer
+chrooked_id: crabhammer
+aka: { pokeemerald: MOVE_CRABHAMMER }
+type: Water
+category: physical
+power: 110
+accuracy: 90
+pp: 10
+description: Hammers with a pincer. Has a high critical-hit ratio.
+flags: [contact]
