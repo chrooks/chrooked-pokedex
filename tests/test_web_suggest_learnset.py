@@ -1369,8 +1369,11 @@ def test_suggest_learnset_flagged_draft_returns_200_with_editable_salvage(
     assert response.status_code == 200
     body = response.json()
     assert "error" not in body  # repaired, not flagged
-    assert any("auto-repair" in w for w in body["warnings"])
-    assert len(body["draft"]["learnset"]) > 2  # the two model rows got completed
+    assert any("auto-repair: filled" in w for w in body["warnings"])
+    # The auto-repair completed the draft; with the 3-move sample pool the
+    # house-rule scrub then drops the L0 duplicate it seated (M3), so the
+    # count can land back at 2 — the completion is visible in the warnings.
+    assert len(body["draft"]["learnset"]) >= 2
     assert len(provider.calls) == 4  # first try + 3 eager repairs, then repaired
 
 
@@ -1675,7 +1678,9 @@ def test_suggest_learnset_two_nonzero_levels_repaired_to_200(
 def test_suggest_learnset_l0_plus_nonzero_accepted(
     ruleset_dir: Path, tmp_path: Path
 ) -> None:
-    """L0 (on-evo) + one non-zero level for the same move is the B carve-out."""
+    """L0 (on-evo) + one non-zero level for the same move passes the validator
+    (the B carve-out); the house-rule scrub (M3) then drops the later copy with
+    a ``scrub:`` warning rather than a 422."""
     ok = {
         "draft": {
             "learnset": [
@@ -1692,8 +1697,11 @@ def test_suggest_learnset_l0_plus_nonzero_accepted(
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
 
     assert response.status_code == 200
-    rows = response.json()["draft"]["learnset"]
-    assert sum(1 for r in rows if r["move"] == "Dragon Pulse") == 2
+    body = response.json()
+    assert "error" not in body
+    rows = body["draft"]["learnset"]
+    assert [r["level"] for r in rows if r["move"] == "Dragon Pulse"] == [0]
+    assert any(w.startswith("scrub: ") and "Dragon Pulse" in w for w in body["warnings"])
 
 
 def test_suggest_learnset_unsorted_input_sorted_on_output(
@@ -2344,3 +2352,42 @@ def test_blind_anonymizes_the_lore_block(ruleset_dir: Path, tmp_path: Path) -> N
     # The design origin survives — it is the material a blind pass reasons from.
     assert "cave-dwelling gastropod" in user
     assert body["lore"]["mode"] == "blind"
+
+
+# ===========================================================================
+# M3 (#105) — house-rule scrub runs on every FULL-mode draft
+# ===========================================================================
+
+
+def test_suggest_learnset_scrubs_banned_move_with_warning(tmp_path: Path) -> None:
+    """A banned move (Glaive Rush) the model seats is scrubbed from the
+    response with a ``scrub:`` warning — the draft/warnings contract holds."""
+    import yaml
+    from chrooked_pokedex.model import Ruleset
+
+    ruleset_dir = tmp_path / "ruleset"
+    shutil.copytree(_SAMPLE, ruleset_dir)
+    (ruleset_dir / "moves" / "glaive-rush.yaml").write_text(
+        yaml.dump({
+            "chrooked_id": "glaive-rush",
+            "name": "Glaive Rush",
+            "type": "Dragon",
+            "category": "physical",
+            "power": 120,
+        }),
+        encoding="utf-8",
+    )
+    ruleset = Ruleset.load(ruleset_dir)
+    pool = dexmod.build_move_pool(_SNAPSHOT, ruleset)
+    abilities = dexmod.build_abilities(_SNAPSHOT, ruleset)
+    entry = dexmod.build_dex_entry(_SNAPSHOT, ruleset, "goodra")
+    draft = _fill_skeleton(entry, abilities, pool)
+    assert any(r["move"] == "Glaive Rush" for r in draft["draft"]["learnset"])
+    client = _make_client(ruleset_dir, tmp_path, _FakeProvider(draft))
+
+    response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
+
+    assert response.status_code == 200
+    body = response.json()
+    assert not any(r["move"] == "Glaive Rush" for r in body["draft"]["learnset"])
+    assert any(w.startswith("scrub: ") and "Glaive Rush" in w for w in body["warnings"])

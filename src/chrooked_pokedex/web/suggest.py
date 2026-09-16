@@ -2539,7 +2539,9 @@ def suggest_learnset(
         # would read as "unknown" rather than "no".
         result["lore"] = dict(injection.provenance)
         if mode == "full":
-            result = _apply_learnset_repair(result, move_pool, resolved_anchors)
+            result = _apply_learnset_repair(
+                result, move_pool, resolved_anchors, entry.get("types") or []
+            )
         return result
     except SuggestError as error:
         # Auto-repair backstop: when the retries exhaust with the model still
@@ -2559,7 +2561,9 @@ def suggest_learnset(
         repaired["warnings"] = list(salvage.get("warnings") or []) + notes
         repaired.pop("error", None)
         repaired["lore"] = dict(injection.provenance)
-        repaired = _apply_learnset_repair(repaired, move_pool, resolved_anchors)
+        repaired = _apply_learnset_repair(
+            repaired, move_pool, resolved_anchors, entry.get("types") or []
+        )
         return repaired
 
 
@@ -2567,17 +2571,30 @@ def _apply_learnset_repair(
     result: dict[str, Any],
     move_pool: list[dict[str, Any]],
     anchors: list[str] | None,
+    stab_types: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Run the deterministic repair pass (learnset_repair) on a FULL-mode draft.
+    """Scrub, then repair, then lint a FULL-mode draft (learnset_repair).
 
     Runs on EVERY validated FULL-mode draft, not only the retry-exhaustion
     salvage path — a skeleton-clean draft can still carry pacing, ascent,
-    gap, or capstone violations the per-slot validator does not see. Repairs
-    re-seat rows; nothing is ever dropped. Every repair note appends to the
-    response's ``warnings`` list.
+    gap, capstone, or house-rule violations the per-slot validator does not
+    see. ``scrub_draft`` is the only step that drops rows (banned/protected
+    moves, L0 dups); ``repair_draft`` re-seats; what neither can fix (a STAB
+    hole, no early rung, an L0 that outranks the ladder) surfaces as a
+    ``lint:`` warning. Every note appends to the response's ``warnings``.
     """
     rows = result["draft"]["learnset"]
-    repaired, notes = learnset_repair.repair_draft(rows, move_pool, anchors=anchors)
+    scrubbed, notes = learnset_repair.scrub_draft(rows, move_pool, anchors=anchors)
+    repaired, repair_notes = learnset_repair.repair_draft(
+        scrubbed, move_pool, anchors=anchors
+    )
+    notes += repair_notes
+    notes += [
+        f"lint: {v}"
+        for v in learnset_repair.audit_draft(
+            repaired, move_pool, anchors=anchors, stab_types=stab_types
+        )
+    ]
     if not notes:
         return result
     result = dict(result)

@@ -1,6 +1,14 @@
 {
   "version": 2,
-  "note": "Single source of truth for BOTH band tables — tune bounds here. `bands`: level-range → BP pacing windows, consumed by the Makeover Workbench Signifier (GET /api/meta/learnset-rubric), the learnset-suggest rubric prompt, and its soft pacing warnings; L0 rows (on-evolution rewards) and status moves are exempt. `coverage_bands`: BP → band edges for the coverage matrix and ladder scripts (scripts/move_coverage.py derives MIN_LADDER_POWER, BAND_EDGES, and BAND_LABELS from it; labels must keep matching its BAND_CONVENTIONS keys). The two tables are deliberately separate mappings: recutting one does not recut the other.",
+  "note": "Single source of truth for BOTH band tables — tune bounds here. `bands`: level-range → BP pacing windows, consumed by the Makeover Workbench Signifier (GET /api/meta/learnset-rubric), the learnset-suggest rubric prompt, and its soft pacing warnings; L0 rows (on-evolution rewards) and status moves are exempt. `coverage_bands`: BP → band edges for the coverage matrix and ladder scripts (scripts/move_coverage.py derives MIN_LADDER_POWER, BAND_EDGES, and BAND_LABELS from it; labels must keep matching its BAND_CONVENTIONS keys). The two tables are deliberately separate mappings: recutting one does not recut the other. `house_rules`: Chris's learnset house rules (banned/protected moves, late floors, status clumping, STAB holes, early rung, L0 power) — consumed by learnset_repair.scrub_draft / audit_draft / repair_draft.",
+  "house_rules": {
+    "banned_moves": ["Glaive Rush", "Precipice Blades", "Dark Void"],
+    "protected_moves": ["Excalibur"],
+    "late_floor": { "Dragon Dance": 60 },
+    "status_clump": { "window": 10, "max": 3 },
+    "stab_hole_max_levels": 20,
+    "early_rung_by_level": 16
+  },
   "bands": [
     { "level_min": 1, "level_max": 19, "bp_max": 50, "label": "≤50BP" },
     { "level_min": 20, "level_max": 30, "bp_min": 50, "bp_max": 75, "label": "50-75BP" },

@@ -15,12 +15,34 @@ Repairs never drop a row — a violating row is re-seated at the nearest legal
 free level, minimally, everything else held stable. A user anchor (a move the
 author demanded by name) is additionally guaranteed to never be dropped, but
 may still be re-seated like any other row.
+
+House rules (``learnset_rubric.json`` → ``house_rules``) split two ways:
+
+* ``scrub_draft`` REMOVES rows — the one pass allowed to drop anything. It
+  drops banned moves (Glaive Rush, Precipice Blades, Dark Void), protected
+  signatures (Excalibur) that were not demanded by name, and the later copy
+  of a move that also sits at L0. A user anchor is never scrubbed, only noted.
+  Notes start ``"scrub: "``.
+* ``audit_draft`` / ``repair_draft`` never drop. The house-rule audits are
+  ``late_floor`` (Dragon Dance not before L60), ``status_clump`` (no more
+  than 3 status rows in any 10-level span), ``stab_hole`` (consecutive STAB
+  rungs no more than 20 levels apart; needs ``stab_types``), ``early_rung``
+  (a damaging row by L16), and ``l0_outranks`` (the L0 reward does not
+  out-power both of the next two rungs). Only the first two have a legal
+  re-seat and are repaired; the other three need a new move — the model's or
+  Chris's call — so they stay audit-only and surface as warnings.
 """
 from __future__ import annotations
 
+import json
 from typing import Any
 
-from .learnset_skeleton import _LATE_BP_FLOORS, _pacing_bands, effective_power
+from .learnset_skeleton import (
+    _BAND_PATH,
+    _LATE_BP_FLOORS,
+    _pacing_bands,
+    effective_power,
+)
 
 MIN_LEVEL_GAP = 2
 # L0 (evolution reward) and L1 (starting kit) are fixed anchors — exempt from
@@ -93,6 +115,154 @@ def nearest_free_level(
     return preferred
 
 
+def house_rules() -> dict[str, Any]:
+    """The ``house_rules`` block of ``learnset_rubric.json`` — tune there."""
+    return json.loads(_BAND_PATH.read_text("utf-8"))["house_rules"]
+
+
+def _name(row: dict[str, Any]) -> str:
+    return (row.get("move") or "").casefold()
+
+
+def scrub_draft(
+    rows: list[dict[str, Any]],
+    move_pool: list[dict[str, Any]],
+    anchors: list[str] | None = None,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Drop banned moves, un-anchored protected moves, and L0 duplicates.
+
+    The only pass that removes rows. An anchor is never removed: a banned
+    anchor stays with a note, and when a duplicated move is anchored the L0
+    copy goes instead of the later one. Returns ``(rows, notes)``; every note
+    starts with ``"scrub: "``. Inputs are not mutated.
+    """
+    del move_pool  # ponytail: rules are by name; the pool is here for signature parity
+    rules = house_rules()
+    anchor_set = {a.casefold() for a in (anchors or ())}
+    banned = {m.casefold() for m in rules.get("banned_moves", ())}
+    protected = {m.casefold() for m in rules.get("protected_moves", ())}
+    notes: list[str] = []
+
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        name, level = _name(row), int(row.get("level", -1))
+        if name in banned:
+            if name in anchor_set:
+                notes.append(
+                    f"scrub: kept banned {row['move']} at L{level} — anchor overrides ban"
+                )
+            else:
+                notes.append(f"scrub: removed {row['move']} at L{level} — banned move")
+                continue
+        elif name in protected and name not in anchor_set:
+            notes.append(
+                f"scrub: removed {row['move']} at L{level} — protected signature, "
+                "not anchored"
+            )
+            continue
+        kept.append(row)
+
+    l0_names = {_name(r) for r in kept if int(r.get("level", -1)) == 0}
+    out: list[dict[str, Any]] = []
+    for row in kept:
+        name, level = _name(row), int(row.get("level", -1))
+        if name in l0_names and level != 0 and name not in anchor_set:
+            notes.append(
+                f"scrub: removed {row['move']} at L{level} — already the L0 reward"
+            )
+            continue
+        if name in l0_names and level == 0 and name in anchor_set and any(
+            _name(r) == name and int(r.get("level", -1)) != 0 for r in kept
+        ):
+            notes.append(
+                f"scrub: removed the L0 copy of {row['move']} — the anchored "
+                "later copy stays"
+            )
+            continue
+        out.append(dict(row))
+    return out, notes
+
+
+def _damaging(rows: list[dict[str, Any]], idx: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    """Rows whose move deals damage, in ascending level order."""
+    return sorted(
+        (r for r in rows if isinstance(_power(r, idx), int) and (_power(r, idx) or 0) > 1),
+        key=lambda r: int(r["level"]),
+    )
+
+
+def _status_clumps(
+    rows: list[dict[str, Any]], idx: dict[str, dict[str, Any]], rules: dict[str, Any]
+) -> list[tuple[int, int, int]]:
+    """``(first_level, last_level, count)`` for every over-full status window."""
+    window, cap = rules["status_clump"]["window"], rules["status_clump"]["max"]
+    levels = sorted(
+        int(r["level"]) for r in rows if _is_status(r, idx) and int(r["level"]) > ANCHOR_MAX
+    )
+    clumps = []
+    for i, start in enumerate(levels):
+        inside = [lv for lv in levels[i:] if lv - start < window]
+        if len(inside) > cap:
+            clumps.append((start, inside[-1], len(inside)))
+    return clumps
+
+
+def _house_rule_audits(
+    rows: list[dict[str, Any]],
+    idx: dict[str, dict[str, Any]],
+    stab_types: list[str] | None,
+) -> list[str]:
+    rules = house_rules()
+    problems: list[str] = []
+
+    floors = {m.casefold(): lv for m, lv in rules.get("late_floor", {}).items()}
+    for row in rows:
+        floor = floors.get(_name(row))
+        if floor is not None and int(row["level"]) < floor:
+            problems.append(
+                f"L{row['level']} {row['move']}: house rule seats it no earlier than L{floor}"
+            )
+
+    for first, last, count in _status_clumps(rows, idx, rules):
+        problems.append(
+            f"status clump: {count} status rows between L{first} and L{last} "
+            f"(max {rules['status_clump']['max']} per {rules['status_clump']['window']} levels)"
+        )
+
+    damaging = [r for r in _damaging(rows, idx) if int(r["level"]) > 0]
+    max_gap = rules["stab_hole_max_levels"]
+    for typ in stab_types or ():
+        rungs = [r for r in damaging if _type(r, idx).casefold() == typ.casefold()]
+        for a, b in zip(rungs, rungs[1:]):
+            gap = int(b["level"]) - int(a["level"])
+            if gap > max_gap:
+                problems.append(
+                    f"{typ} STAB hole: L{a['level']} {a['move']} → L{b['level']} "
+                    f"{b['move']} is {gap} levels apart (max {max_gap})"
+                )
+
+    by = rules["early_rung_by_level"]
+    # ponytail: an all-status draft is already flagged by the capstone rule;
+    # only a draft that attacks at all is asked to attack early.
+    if damaging and not any(_LEVEL_LO <= int(r["level"]) <= by for r in damaging):
+        problems.append(f"early rung: no damaging move between L{_LEVEL_LO} and L{by}")
+
+    next_two = damaging[:2]
+    if len(next_two) == 2:
+        for row in rows:
+            if int(row["level"]) != 0:
+                continue
+            p0 = _power(row, idx) or 0
+            if all(p0 > (_power(r, idx) or 0) for r in next_two):
+                problems.append(
+                    f"L0 {row['move']} ({p0}BP) outranks the next two rungs "
+                    + " and ".join(
+                        f"L{r['level']} {r['move']} ({_power(r, idx)}BP)" for r in next_two
+                    )
+                )
+    return problems
+
+
 def _ladder_groups(
     rows: list[dict[str, Any]], idx: dict[str, dict[str, Any]]
 ) -> dict[tuple[str, str], list[dict[str, Any]]]:
@@ -115,13 +285,16 @@ def audit_draft(
     move_pool: list[dict[str, Any]],
     anchors: list[str] | None = None,
     size_bounds: tuple[int, int] | None = None,
+    stab_types: list[str] | None = None,
 ) -> list[str]:
     """Violation strings for a draft; empty means audit-clean.
 
     Checks: pacing cap + late-game BP floor, per (type, category) ladder
     ascent, minimum level gap, row-count bounds (informational — never
-    repaired by re-seating), and capstone sanity (status never final unless a
-    user anchor; the top two non-status rows are the highest-power rows).
+    repaired by re-seating), capstone sanity (status never final unless a
+    user anchor; the top two non-status rows are the highest-power rows),
+    and the house rules (module docstring); ``stab_hole`` runs only when
+    ``stab_types`` is given.
     """
     idx = _index(move_pool)
     pacing = _pacing_bands()
@@ -178,6 +351,7 @@ def audit_draft(
                 f"L{final['level']} {final.get('move')}: a status move holds "
                 "the final learnset row"
             )
+    problems += _house_rule_audits(rows, idx, stab_types)
     return problems
 
 
@@ -312,14 +486,70 @@ def _fix_capstone(
     return notes
 
 
+def _fix_late_floor(work: list[dict[str, Any]], idx: dict[str, dict[str, Any]]) -> list[str]:
+    notes: list[str] = []
+    floors = {m.casefold(): lv for m, lv in house_rules().get("late_floor", {}).items()}
+    pacing = _pacing_bands()
+    for row in work:
+        floor = floors.get(_name(row))
+        level = int(row["level"])
+        if floor is None or level >= floor:
+            continue
+        used = {int(r["level"]) for r in work if r is not row and int(r["level"]) > ANCHOR_MAX}
+        power = _power(row, idx)
+        new_level = nearest_free_level(
+            floor, used, _LEVEL_LO, _LEVEL_HI,
+            legal=lambda cand: cand >= floor and _pacing_ok(cand, power, pacing),
+        )
+        notes.append(
+            f"repair: reseated {row['move']} from L{level} to L{new_level} — "
+            f"house rule seats it no earlier than L{floor}"
+        )
+        row["level"] = new_level
+    return notes
+
+
+def _fix_status_clump(work: list[dict[str, Any]], idx: dict[str, dict[str, Any]]) -> list[str]:
+    """Push the surplus status rows of an over-full window to the nearest free
+    level past the window, walking upward so a row never lands in a clump."""
+    notes: list[str] = []
+    rules = house_rules()["status_clump"]
+    window, cap = rules["window"], rules["max"]
+    status_rows = sorted(
+        (r for r in work if _is_status(r, idx) and int(r["level"]) > ANCHOR_MAX),
+        key=lambda r: int(r["level"]),
+    )
+    placed: list[int] = []
+    for row in status_rows:
+        level = int(row["level"])
+        inside = [lv for lv in placed if level - lv < window]
+        if len(inside) >= cap:
+            target = inside[-cap] + window
+            used = {int(r["level"]) for r in work if r is not row and int(r["level"]) > ANCHOR_MAX}
+            new_level = nearest_free_level(
+                target, used, _LEVEL_LO, _LEVEL_HI, legal=lambda cand: cand >= target
+            )
+            if new_level != level:
+                notes.append(
+                    f"repair: reseated {row['move']} from L{level} to L{new_level} — "
+                    f"more than {cap} status rows within {window} levels"
+                )
+                row["level"] = new_level
+                level = new_level
+        placed.append(level)
+        placed.sort()
+    return notes
+
+
 def repair_draft(
     rows: list[dict[str, Any]],
     move_pool: list[dict[str, Any]],
     anchors: list[str] | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Minimally re-seat rows to fix every rule ``audit_draft`` checks.
+    """Minimally re-seat rows to fix every re-seatable rule ``audit_draft`` checks.
 
-    Never drops a row (anchors doubly so — they are only ever re-seated).
+    The house rules ``stab_hole``, ``early_rung``, and ``l0_outranks`` need a
+    new move, not a new level, and are left to the audit. Never drops a row (anchors doubly so — they are only ever re-seated).
     Returns ``(rows, notes)``; each note starts with ``"repair: "``. The
     row-count bound is audit-only and cannot be fixed by re-seating, so it is
     not addressed here.
@@ -331,6 +561,8 @@ def repair_draft(
     notes: list[str] = []
     notes += _reorder_ascent(work, idx)
     notes += _fix_pacing(work, idx)
+    notes += _fix_late_floor(work, idx)
+    notes += _fix_status_clump(work, idx)
     notes += _fix_min_gap(work, idx)
     notes += _fix_capstone(work, idx, anchor_set)
 
