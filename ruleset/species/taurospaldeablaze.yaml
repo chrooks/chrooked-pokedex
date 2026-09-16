@@ -23,6 +23,7 @@ learnset:
   - { level: 37, move: Cinder Smash }
   - { level: 38, move: Combust }
   - { level: 40, move: Rest }
+  - { level: 42, move: Horn Drill }
   - { level: 45, move: Swagger }
   - { level: 50, move: Thrash }
   - { level: 55, move: Flare Blitz }

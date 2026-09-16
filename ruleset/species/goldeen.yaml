@@ -27,5 +27,6 @@ learnset:
   - { level: 31, move: Waterfall }
   - { level: 32, move: Maelstrom }
   - { level: 37, move: Starfall Slam }
+  - { level: 42, move: Horn Drill }
   - { level: 57, move: Faeblitz }
   - { level: 60, move: Wave Crash }

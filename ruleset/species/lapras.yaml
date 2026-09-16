@@ -20,6 +20,7 @@ learnset:
   - { level: 33, move: Chilling Water }
   - { level: 37, move: Freeze-Dry }
   - { level: 41, move: Perish Song }
+  - { level: 42, move: Horn Drill }
   - { level: 45, move: Surf }
   - { level: 49, move: Dragon Pulse }
   - { level: 53, move: Hyper Voice }
