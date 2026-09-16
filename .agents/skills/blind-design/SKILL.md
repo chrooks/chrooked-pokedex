@@ -54,11 +54,17 @@ Custom (only when `packet.custom` exists): kind, mechanic, the five names. Close
 with the decisions: typing (only if opened), trio, custom yes/no + name, anchors
 and drops against the draft.
 
+**Anchor budget (house rule, 2026-09-16).** The learnset cap is 26 rows and the
+skeleton needs room to pace the opening, so 12–15 anchors is the norm: identity
+moves and capstones. Past 20 the preview comes back front-loaded and jammed. A
+`pins` map (`{"Move": level}`) seats a move at an exact level and wins over the
+repair pass; use it for a shared ladder or a capstone that must sit late.
+
 Take Chris's reply and translate it into the decisions schema — he answers by
 exception, so start from the packet's trio and draft and apply his changes:
 
     {"typing": null | [...], "abilities": [p, s, h], "anchors": [...], "drop": [...],
-     "custom": null | {"kind", "name", "mechanic", "written": false},
+     "pins": {"Move": level}, "custom": null | {"kind", "name", "mechanic", "written": false},
      "stats": null | {six} | {"delta": {...}}, "skip_pre": [...], "notes": "his words"}
 
 `PUT $API/{id}/decisions` (auto-realizes in the background unless a custom is
