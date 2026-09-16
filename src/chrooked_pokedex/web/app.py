@@ -1443,11 +1443,17 @@ def create_app(
                 status_code=422,
                 detail="read-back needs a non-empty `chrooked_ids` list.",
             )
-        registry = app.state.targets_registry
+        try:
+            target = app.state.targets_registry.get(target_id)
+        except targetsmod.TargetError as error:
+            raise _target_error(error) from error
+        return _read_back_ids(target, chrooked_ids)
+
+    def _read_back_ids(target, chrooked_ids: list[str]) -> dict[str, Any]:
+        """The read-back differ, shared by the route above and the design Ship."""
         snapshot = _load_snapshot_or_503()
         ruleset = _load_ruleset_or_503()
         try:
-            target = registry.get(target_id)
             # A fresh parse of the Target's on-disk state (apply invalidates the
             # cache, so this reflects what actually landed).
             target_snapshot = app.state.targets_state.snapshot_for(target)
@@ -1500,6 +1506,11 @@ def create_app(
                 )
             )
         return readbackmod.read_back(results)
+
+    # Seams for the design Ship (#103 M5): the same read-back and the same
+    # effective-Ruleset the routes above use, reachable without HTTP.
+    app.state.read_back_ids = _read_back_ids
+    app.state.apply_target_effective = lambda target: _effective(target)[0]
 
     @app.get("/api/targets/{target_id}/dex")
     def get_target_dex(target_id: str) -> list[dict[str, Any]]:
