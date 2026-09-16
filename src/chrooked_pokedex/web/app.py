@@ -33,7 +33,9 @@ from ..model import Ruleset, evolution_methods
 from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
 from . import crud as crudmod
+from . import design as designmod
 from . import design_log as designlogmod
+from .design_store import DesignStore
 from . import dex as dexmod
 from . import folder_picker as pickermod
 from . import llm as llmmod
@@ -108,6 +110,7 @@ def create_app(
     targets_path: Path | None = None,
     llm_provider: llmmod.LlmProvider | None = None,
     lore_provider: loremod.LoreProvider | None = None,
+    design_dir: Path | None = None,
 ) -> FastAPI:
     # Load a repo-root `.env` so provider keys/config are available to the LLM
     # adapter (read lazily at request time). Covers the non-reload `ui` path that
@@ -1655,6 +1658,26 @@ def create_app(
                 detail=f"No behavior spec for {chrooked_id!r}.",
             )
         return {"chrooked_id": chrooked_id, "markdown": render_packet(spec, engine)}
+
+    # Batch blind-design pipeline state (#103): app-owned JSON records under a
+    # gitignored dir (same precedent as targets.json); tests pass a tmp dir.
+    app.state.design_store = DesignStore(
+        Path(design_dir) if design_dir is not None else _PROJECT_ROOT / ".chrooked" / "design"
+    )
+    app.include_router(
+        designmod.build_router(
+            designmod.DesignContext(
+                store=app.state.design_store,
+                load_snapshot=_load_snapshot_or_503,
+                load_ruleset=_load_ruleset_or_503,
+                llm_provider=_llm_provider,
+                lore_provider=_lore_provider,
+                ruleset_dir=ruleset_dir,
+                queue_path=ruleset_dir / "QUEUE.md",
+                app=app,
+            )
+        )
+    )
 
     if dist_dir is not None and Path(dist_dir).exists():
         app.mount("/", _SpaFiles(directory=str(dist_dir), html=True), name="frontend")

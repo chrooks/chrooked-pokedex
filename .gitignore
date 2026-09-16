@@ -55,3 +55,9 @@ frontend/e2e/screenshots/
 frontend/test-results/
 frontend/playwright-report/
 .deployed-commit
+
+# visual-skill build products (/table, /diagram, /figure)
+.exports/
+
+# Batch blind-design pipeline state (#103) — app-owned, never canon.
+.chrooked/design/
