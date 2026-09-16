@@ -156,7 +156,9 @@ def realize(
     pool = inputs["move_pool"]
     all_anchors = _canonical_anchors(decisions.get("anchors") or [], pool)
     rows, fold_notes = fold_anchors(rows, all_anchors, pool, proposed=_proposed_moves(record))
-    anchors = all_anchors
+    rows, pin_notes = apply_pins(rows, decisions.get("pins") or {}, pool)
+    fold_notes = fold_notes + pin_notes
+    anchors = all_anchors + [p for p in (decisions.get("pins") or {}) if p not in all_anchors]
     # A drop can open a ladder hole or a gap, so the repair chain runs again
     # over the trimmed rows (the endpoint already ran it once before the drop).
     rows, notes = learnset_repair.scrub_draft(rows, pool, anchors=anchors)
@@ -250,6 +252,32 @@ def fold_anchors(
         work.append({"level": level, "move": name})
         present.add(name.casefold())
         notes.append(f"fold: seated {name} at L{level}")
+    work.sort(key=lambda r: (int(r["level"]), r["move"]))
+    return work, notes
+
+
+def apply_pins(
+    rows: list[dict[str, Any]], pins: dict[str, int], pool: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Seat each pinned move at exactly its level; whatever held that level moves
+    to the nearest free one. Pure. Lets two lines share a ladder level for level
+    ("the same Water moves at the same levels", Kingler / Crawdaunt)."""
+    by_key = {str(r["move"]).casefold(): str(r["move"]) for r in pool}
+    work = [dict(r) for r in rows]
+    notes: list[str] = []
+    for name, level in pins.items():
+        canon = by_key.get(name.casefold())
+        if not canon:
+            continue
+        work = [r for r in work if str(r["move"]).casefold() != canon.casefold()]
+        used = {int(r["level"]) for r in work}
+        if level in used and level > learnset_repair.ANCHOR_MAX:
+            holder = next(r for r in work if int(r["level"]) == level)
+            new_level = learnset_repair.nearest_free_level(level, used | {level})
+            holder["level"] = new_level
+            notes.append(f"pin: moved {holder['move']} L{level} → L{new_level} for {canon}")
+        work.append({"level": level, "move": canon})
+        notes.append(f"pin: {canon} at L{level}")
     work.sort(key=lambda r: (int(r["level"]), r["move"]))
     return work, notes
 

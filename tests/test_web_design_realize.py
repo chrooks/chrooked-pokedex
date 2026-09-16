@@ -213,3 +213,15 @@ def test_fold_seats_every_anchor_past_the_eighth():
     out2, notes2 = dr.fold_anchors(rows, ["Body Slam"], pool, size_max=2)
     assert "Swift" not in [r["move"] for r in out2] and "Body Slam" in [r["move"] for r in out2]
     assert any("dropped Swift" in n for n in notes2)
+
+
+def test_pins_seat_moves_at_exact_levels():
+    from chrooked_pokedex.web import design_realize as dr
+    pool = [{"move": "Clamp", "type": "Water", "category": "physical", "power": 50},
+            {"move": "Swift", "type": "Normal", "category": "special", "power": 60},
+            {"move": "Aqua Jet", "type": "Water", "category": "physical", "power": 40}]
+    rows = [{"level": 8, "move": "Swift"}, {"level": 20, "move": "Clamp"}]
+    out, notes = dr.apply_pins(rows, {"Clamp": 8, "Aqua Jet": 14}, pool)
+    levels = {r["move"]: r["level"] for r in out}
+    assert levels["Clamp"] == 8 and levels["Aqua Jet"] == 14 and levels["Swift"] != 8
+    assert any(n.startswith("pin: moved Swift") for n in notes)

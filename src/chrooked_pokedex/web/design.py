@@ -24,7 +24,7 @@ from . import dex as dexmod
 from .design_store import DesignError, DesignRecord, DesignStore
 
 DECISION_KEYS = {
-    "typing", "abilities", "anchors", "drop", "custom", "stats", "skip_pre", "notes"
+    "typing", "abilities", "anchors", "drop", "custom", "stats", "skip_pre", "notes", "pins"
 }
 STAT_KEYS = {"hp", "atk", "def", "spa", "spd", "spe"}
 
@@ -140,6 +140,16 @@ def validate_decisions(
         if "delta" not in stats and set(spread) != STAT_KEYS:
             raise HTTPException(status_code=422, detail="a full stats spread needs all six stats.")
 
+    pins = body.get("pins")
+    if pins is not None:
+        if not isinstance(pins, dict) or not all(
+            isinstance(k, str) and isinstance(v, int) and 0 <= v <= 100 for k, v in pins.items()
+        ):
+            raise HTTPException(status_code=422, detail="pins must map move names to levels 0-100.")
+        for name in pins:
+            if name not in move_names:
+                raise HTTPException(status_code=422, detail=f"Move {name!r} (pins) is not in the pool.")
+
     notes = body.get("notes", "")
     if notes is not None and not isinstance(notes, str):
         raise HTTPException(status_code=422, detail="notes must be a string.")
@@ -148,6 +158,7 @@ def validate_decisions(
         "typing": typing,
         "abilities": abilities,
         "anchors": _str_list(body, "anchors"),
+        "pins": {k: int(v) for k, v in (body.get("pins") or {}).items()},
         "drop": _str_list(body, "drop"),
         "custom": custom,
         "stats": stats,
