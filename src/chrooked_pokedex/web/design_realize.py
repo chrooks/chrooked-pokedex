@@ -75,6 +75,11 @@ def learnset_inputs(
         "types": list(decisions.get("typing") or current.get("types") or []),
         "abilities": abilities,
     }
+    # The skeleton reads the offensive bias off the entry's stats, so the
+    # DECIDED spread must be on it — canon Slurpuff is special-leaning, Chris's
+    # is a 110 Atk sweeper, and the skeleton laid a special ladder (first batch).
+    if decisions.get("stats") is not None:
+        entry = {**entry, "stats": stats_for_line(record, snapshot, ruleset)[record.id]}
     return {
         "entry": entry,
         "move_pool": dexmod.build_move_pool(snapshot, ruleset),

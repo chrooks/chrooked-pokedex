@@ -245,3 +245,16 @@ def test_realize_falls_back_to_lore_off_when_the_blind_pass_fails(env, monkeypat
     assert rec["state"] == "previewed", rec.get("error")
     assert calls == ["blind", "off"]
     assert any(w.startswith("lore fallback") for w in rec["preview"]["learnset"]["warnings"])
+
+
+def test_skeleton_sees_the_decided_stats(env):
+    """A decided spread reaches the entry the skeleton reads, so a physical
+    rework gets physical ladders (Slurpuff, first real batch)."""
+    from chrooked_pokedex.web import design_realize as dr
+    from chrooked_pokedex.web.design_store import DesignStore
+    client, design_dir, ruleset_dir = env
+    body = {**_DECISIONS, "stats": {"hp": 90, "atk": 140, "def": 90, "spa": 40, "spd": 80, "spe": 80}}
+    client.put("/api/design/goodra/decisions?realize=false", json=body)
+    rec = DesignStore(design_dir).get("goodra")
+    inputs = dr.learnset_inputs(rec, _SNAPSHOT, __import__("chrooked_pokedex.model", fromlist=["Ruleset"]).Ruleset.load(ruleset_dir))
+    assert inputs["entry"]["stats"]["atk"] == 140 and inputs["entry"]["stats"]["spa"] == 40
