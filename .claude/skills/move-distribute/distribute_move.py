@@ -81,7 +81,9 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("move", help="Move display name or chrooked_id (must already exist)")
-    ap.add_argument("--types", required=True,
+    ap.add_argument("--only", default="",
+                    help="Comma-separated chrooked_ids: curated recipients, skips the type/split rule")
+    ap.add_argument("--types", default="",
                     help="Comma-separated type(s); a species matches if it has any of them")
     ap.add_argument("--split", default="physical", choices=sorted(engine.SPLITS),
                     help="Attack-split filter over base atk/spa (default: physical)")
@@ -116,10 +118,14 @@ def main() -> None:
 
     records = build_records(snap, move_name)
     evo = engine.build_evolution_index(snap["species"])
-    matched = [cid for cid in engine.select_by_rule(
+    only = {x.strip() for x in args.only.split(",") if x.strip()}
+    if not only and not types:
+        ap.error("need --types or --only")
+    # ponytail: --only bypasses the rule, evolution expansion still applies.
+    matched = [cid for cid in (only or engine.select_by_rule(
         records.values(), types=types, split=args.split,
         include_legendaries=args.include_legendaries,
-        include_megas=args.include_megas) if cid not in drop]
+        include_megas=args.include_megas)) if cid not in drop]
     matched = engine.apply_breadth(records, matched, args.rarity)
     rows = [r for r in engine.distribute(
         records, evo, matched_ids=matched, window=window,
