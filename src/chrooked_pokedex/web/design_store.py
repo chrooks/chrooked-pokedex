@@ -43,7 +43,7 @@ TRANSITIONS: dict[str, set[str]] = {
     "decided": {"decided", "realizing"},
     "realizing": {"previewed"},
     "previewed": {"decided", "realizing", "confirmed"},
-    "confirmed": {"shipped"},
+    "confirmed": {"shipped", "decided", "realizing"},
     "shipped": {"proven", "queued"},
     "proven": {"queued"},
     "error": set(STATES) - {"error"},
