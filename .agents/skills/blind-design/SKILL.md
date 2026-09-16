@@ -11,11 +11,11 @@ The prior-art trap: any designer who recognizes the species reaches for its cano
 kit. The server strips the name so the design comes from what the creature *is*.
 This skill is a **thin client**: it renders, it parses Chris's replies, it calls
 routes. It never writes YAML, never runs its own design prompt, never applies by
-hand. One Seam: the `/api/design` router on the host server (`localhost:8000`,
-started with `.venv/bin/chrooked-pokedex ui`; the hestia container lags the
+hand. One Seam: the `/api/design` router on the host server (`localhost:8001`, 
+started with `.venv/bin/chrooked-pokedex ui --port 8001`; port 8000 is the container, which lags the
 harness, so apply and ship always go through the host).
 
-    API=http://localhost:8000/api/design
+    API=http://localhost:8001/api/design
 
 ## `queue <row>` — capture
 
@@ -84,7 +84,7 @@ Hand-check before showing: the anchors are all present, nothing from `drop`, no
 
 ## Ship — automatic once every preview has a "go"
 
-1. Target id: `curl -s localhost:8000/api/targets | jq '.[] | {id,label}'` (Rejuv).
+1. Target id: `curl -s localhost:8001/api/targets | jq '.[] | {id,label}'` (Rejuv).
 2. `POST $API/ship {"target_id": "<id>"}` (all `confirmed`). Synchronous; one apply.
    Per id the response is `{state, apply, readback, log_section, bad_rows}`; an
    `error` record names its bad rows or diff — report it, fix, ship again for that
