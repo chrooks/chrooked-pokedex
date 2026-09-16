@@ -301,3 +301,25 @@ def test_stoutland_style_draft_scrubs_spreads_and_flags_the_hole() -> None:
     after = lr.audit_draft(repaired, HOUSE_POOL, stab_types=["Normal"])
     assert not any("status clump" in p for p in after)
     assert any("Normal STAB hole" in p for p in after)
+
+
+@pytest.mark.unit
+def test_skeleton_excludes_banned_moves_and_strikes_late_singletons():
+    """Skeleton candidates never offer a banned move (Dark Void), and two rungs
+    that collapse to the same lone move after narrowing do not both survive —
+    the Alakazam L5/L9 → Confusion failure from the first real batch."""
+    from pathlib import Path
+    from chrooked_pokedex.model.ruleset import Ruleset
+    from chrooked_pokedex.web import dex as dexmod, learnset_skeleton as sk, snapshot as snapmod
+    repo = Path(__file__).resolve().parent.parent
+    snap = snapmod.load_snapshot(repo / "ruleset" / ".base" / "1.11.2.json")
+    rs = Ruleset.load(repo / "ruleset")
+    pool = dexmod.build_move_pool(snap, rs)
+    abilities = dexmod.build_abilities(snap, rs)
+    entry = dexmod.build_dex_entry(snap, rs, "alakazam")
+    skel = sk.build_skeleton(entry, abilities, pool, anchors=["Stored Power", "Hypnosis"])
+    all_cands = {c.casefold() for s in skel["slots"] for c in s["candidates"]}
+    assert "dark void" not in all_cands and "glaive rush" not in all_cands
+    singles = [s["candidates"][0].casefold() for s in skel["slots"]
+               if len(s["candidates"]) == 1 and s["level"] not in (0, None)]
+    assert len(singles) == len(set(singles)), singles

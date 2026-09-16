@@ -2360,8 +2360,9 @@ def test_blind_anonymizes_the_lore_block(ruleset_dir: Path, tmp_path: Path) -> N
 
 
 def test_suggest_learnset_scrubs_banned_move_with_warning(tmp_path: Path) -> None:
-    """A banned move (Glaive Rush) the model seats is scrubbed from the
-    response with a ``scrub:`` warning — the draft/warnings contract holds."""
+    """A banned move (Glaive Rush) never reaches the response: the skeleton
+    refuses it as a candidate (house rules at the source), and the scrub pass
+    is the backstop for a model that names it anyway."""
     import yaml
     from chrooked_pokedex.model import Ruleset
 
@@ -2382,7 +2383,7 @@ def test_suggest_learnset_scrubs_banned_move_with_warning(tmp_path: Path) -> Non
     abilities = dexmod.build_abilities(_SNAPSHOT, ruleset)
     entry = dexmod.build_dex_entry(_SNAPSHOT, ruleset, "goodra")
     draft = _fill_skeleton(entry, abilities, pool)
-    assert any(r["move"] == "Glaive Rush" for r in draft["draft"]["learnset"])
+    assert not any(r["move"] == "Glaive Rush" for r in draft["draft"]["learnset"])
     client = _make_client(ruleset_dir, tmp_path, _FakeProvider(draft))
 
     response = client.post("/api/species/goodra/suggest/learnset", json={"mode": "full"})
@@ -2390,4 +2391,3 @@ def test_suggest_learnset_scrubs_banned_move_with_warning(tmp_path: Path) -> Non
     assert response.status_code == 200
     body = response.json()
     assert not any(r["move"] == "Glaive Rush" for r in body["draft"]["learnset"])
-    assert any(w.startswith("scrub: ") and "Glaive Rush" in w for w in body["warnings"])

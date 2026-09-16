@@ -457,6 +457,20 @@ def build_skeleton(
     could only ask for in prose.
     """
     from .suggest import LEARNSET_SIZE_MAX  # constants only; no call cycle
+    from .learnset_repair import house_rules  # data only; repair imports us too
+
+    # House rules apply at the source: a banned move must never be a candidate
+    # (Dark Void reached a rescue dog through the status slot, 2026-09-16), and a
+    # protected move is offered only when the user anchored it by name.
+    rules = house_rules()
+    anchor_keys = {a.casefold() for a in (anchors or ())}
+    banned = {m.casefold() for m in rules.get("banned_moves", ())}
+    protected = {m.casefold() for m in rules.get("protected_moves", ())}
+    move_pool = [
+        r for r in move_pool
+        if (k := str(r.get("move", "")).casefold()) in anchor_keys
+        or (k not in banned and k not in protected)
+    ]
 
     bands = _bands()
     stats = entry.get("stats") or {}
@@ -859,6 +873,27 @@ def build_skeleton(
             "cap and late-game BP floor at its grid level — slot dropped"
         )
         resolved.remove(spec)
+    # Second singleton pass, AFTER level assignment and pacing narrowed the
+    # lists: the first pass ran on wider candidate sets, so two rungs that both
+    # collapsed to the same lone move (Alakazam L5/L9 → Confusion, first real
+    # batch 2026-09-16) slipped through and made the fill unsatisfiable under the
+    # repeat-move rule. Same rule, same message; anchors still claim first.
+    late_claimed: set[str] = set()
+    late_struck: list[dict[str, Any]] = []
+    for spec in sorted(resolved, key=lambda s: 0 if s.get("anchor") else 1):
+        if len(spec["candidates"]) == 1 and spec.get("level") != 0:
+            key = spec["candidates"][0].casefold()
+            if key in late_claimed:
+                dropped.append(
+                    f"crowded: {spec['label']} lost its only candidate to "
+                    "another slot that claimed the same move"
+                )
+                late_struck.append(spec)
+                continue
+            late_claimed.add(key)
+    for spec in late_struck:
+        resolved.remove(spec)
+
     resolved.sort(key=lambda s: (s["level"], s["role"] != "kit", s["label"]))
     slots = [
         {
