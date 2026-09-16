@@ -137,13 +137,20 @@ def realize(
     """Decisions → preview dict. Pure: writes nothing."""
     decisions = _decisions(record)
     inputs = learnset_inputs(record, snapshot, ruleset)
-    result = suggestmod.suggest_learnset(
-        provider=provider,
-        lore_mode="blind",
-        lore_provider=lore_provider,
-        **inputs,
-    )
-    warnings = list(result.get("warnings") or [])
+    fallback_note: list[str] = []
+    try:
+        result = suggestmod.suggest_learnset(
+            provider=provider, lore_mode="blind", lore_provider=lore_provider, **inputs
+        )
+    except Exception as error:  # noqa: BLE001 — SuggestError / LlmError after retries
+        # The blind lore block makes some replies drop the learnset (Arboliva,
+        # first real batch, 3×3 retries). The anchors and direction carry the
+        # design; the lore is an enhancement, so one pass without it is honest.
+        result = suggestmod.suggest_learnset(
+            provider=provider, lore_mode="off", lore_provider=None, **inputs
+        )
+        fallback_note = [f"lore fallback: blind pass failed ({str(error)[:80]}); drafted without lore"]
+    warnings = fallback_note + list(result.get("warnings") or [])
     drop = {m.casefold() for m in decisions.get("drop") or []}
     rows = [
         {"level": r["level"], "move": r["move"]}

@@ -225,3 +225,23 @@ def test_pins_seat_moves_at_exact_levels():
     levels = {r["move"]: r["level"] for r in out}
     assert levels["Clamp"] == 8 and levels["Aqua Jet"] == 14 and levels["Swift"] != 8
     assert any(n.startswith("pin: moved Swift") for n in notes)
+
+
+def test_realize_falls_back_to_lore_off_when_the_blind_pass_fails(env, monkeypatch):
+    """A blind pass that raises after its retries is retried once without lore,
+    and the preview says so (Arboliva, first real batch)."""
+    from chrooked_pokedex.web import design_realize as dr, suggest as sg
+    calls = []
+    real = sg.suggest_learnset
+    def flaky(**kw):
+        calls.append(kw["lore_mode"])
+        if kw["lore_mode"] == "blind":
+            raise sg.SuggestError("The suggestion was missing a draft learnset list.")
+        return real(**kw)
+    monkeypatch.setattr(dr.suggestmod, "suggest_learnset", flaky)
+    client, _, _ = env
+    client.put("/api/design/goodra/decisions", json=_DECISIONS)
+    rec = client.get("/api/design/goodra").json()
+    assert rec["state"] == "previewed", rec.get("error")
+    assert calls == ["blind", "off"]
+    assert any(w.startswith("lore fallback") for w in rec["preview"]["learnset"]["warnings"])
