@@ -213,6 +213,8 @@ def fold_anchors(
     work = [dict(r) for r in rows]
     notes: list[str] = []
     present = {str(r["move"]).casefold() for r in work}
+    early_cap = int(learnset_repair.house_rules().get("early_rung_by_level", 16))
+    status_seat = 20  # folded status moves spread across the mid-game, not one block
     for name in anchors:
         if name.casefold() in present:
             continue
@@ -220,9 +222,11 @@ def fold_anchors(
         power = learnset_repair._power(row, idx)
         status = learnset_repair._is_status(row, idx)
         if len(work) >= size_max:
+            # The opening rungs (≤ early_rung_by_level) are the game's first
+            # hours; they never give way (first rebuild evicted Falinks' L5/L9).
             fillers = [
                 r for r in work
-                if int(r["level"]) > learnset_repair.ANCHOR_MAX
+                if int(r["level"]) > early_cap
                 and str(r["move"]).casefold() not in anchor_keys
             ]
             unnamed = [r for r in fillers if str(r["move"]).casefold() not in proposed]
@@ -234,7 +238,8 @@ def fold_anchors(
             work.remove(victim)
             notes.append(f"fold: dropped {victim['move']} @{victim['level']} to make room for {name}")
         if status:
-            preferred = 30
+            preferred = status_seat
+            status_seat = 20 + (status_seat - 20 + 9) % 45  # 20, 29, 38, 47, 56, 20…
         else:
             band = next((b for b in pacing if (b.get("bp_min", 0) <= (power or 0) <= b.get("bp_max", 10**6))), None)
             preferred = (band["level_min"] + band["level_max"]) // 2 if band else 40
