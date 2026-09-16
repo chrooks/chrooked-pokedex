@@ -1013,3 +1013,19 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
   chip plus an Attack drop, chip raised to 1/4, and chip plus a Defense raise.
 - **Parked:** the user asked for an Iron Barbs + Riposte combo on the Mega. **No Mega
   Chesnaught exists** in the dex or in Rejuv, so nothing was written.
+
+## 2026-09-16 — Stoutland line (blind design)
+
+- **Direction:** blind-design, lore-table format. The agent inferred **Normal / Ice**; Chris: "Pure Normal". Typing untouched, and that matters — Winter Coat only earns its slot on a non-Ice mon, where the Ice immunity is real coverage rather than a resisted matchup.
+- **Axis:** the coat hardens as it grows and shelters others, and the dog **rescues rather than hunts**. So the kit is a bulky wall with partner support, not a predator. The bite stays because the line is still a dog.
+- **Trio:** Fur Coat / Winter Coat / Intimidate (hidden), on all three stages. Replaces Intimidate / Sand Rush / Scrappy — Sand Rush had no lore support at all on a blizzard dog.
+- **Hidden slot, decided on evidence.** Chris asked for a pro/con on Friend Guard vs Intimidate vs Guard Dog, read against the Rejuv source. Friend Guard (Battle_Move.rb:1812) only reduces damage to a *partner*, so it is dead in singles — the best lore fit and the worst battle pick. Guard Dog (Battler.rb:3073, Battle_Effects.rb:1306) only answers Intimidate and forced switches; its real merit is protecting a Cotton Guard stack from Roar/Whirlwind. Intimidate works in every battle and stacks with Fur Coat. Chris: "Intimadte works yes".
+- **Doubles-only caveat, stated not silently fixed:** Helping Hand and Follow Me are also dead in singles. Kept because Chris anchored them.
+- **Corrections, three rounds, all Chris's and all right:**
+  1. *"Poor pacing w phsyical normal stabs"* — the draft ran 40 → 70 → 120 with a forty-level hole, and the on-evolution move outranked the two rungs after it. Rebuilt to climb every rung: 40 (L1) → 65 (L11) → 70 (L19) → 75 (L25) → 80 (L40) → 100 (L67) → 120 (L73), with Body Slam 85 at L0 sitting above the early band. **Hyper Fang** added as the terrier fang rung, **Stomp** added on his "need something between tackle and reatliate".
+  2. *"wtf dark void?"* — the server's auto-repair filled a status slot with Dark Void on a rescue dog. It was cut before the preview; flagged so the pattern is on record.
+  3. *"Iron defense doesnt make a ton of sense lore wise"* — right, steel plating is the wrong image for fur. Replaced with **Cotton Guard**, which wraps the body in thick fluff and raises Defense by 3 instead of 2, so it feeds Body Press harder. Seated at L34, three levels before Body Press at L37.
+  4. *"Disperse teh status moves instead of putting them all from L7-L16"* — status had clumped into one early block. Now spread across L1, 8, 15, 28, 34, 46, 55, 64.
+- **Rejected:** the server's draft wholesale (Body Slam at both L0 and L44, Dark Void, a dead L9-L19 stretch, Body Press reseated to L31 by its own pacing rule); Covet (40 BP after a 70 BP rung); the agent's Ice STAB lane (Powder Snow, Avalanche, Icicle Crash, Snowscape, Aurora Veil) — pure Normal keeps Ice as coverage only, so three Ice rungs carry it; Heal Bell, Return, Retaliate's siblings.
+- **Read-back:** `applied=1733 partial=0`, `line_write` reports MATCH on all three stages. `ABILHASH[:WINTERCOAT]` registered at ID 431 with `chrooked_wintercoat.rb` installed; all three stages read FURCOAT / WINTERCOAT / HiddenAbility INTIMIDATE with identical movesets, pre-evos minus the L0 row.
+- **Owed:** an in-game battle check. The harness cannot run a battle.

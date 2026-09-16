@@ -1,18 +1,33 @@
 name: Lillipup
 chrooked_id: lillipup
 aka: {  }
+abilities:
+  primary: Fur Coat
+  secondary: Winter Coat
+  hidden: Intimidate
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 4, move: Glitter Tap }
-  - { level: 8, move: Bite }
-  - { level: 12, move: Retaliate }
-  - { level: 17, move: Baby-Doll Eyes }
-  - { level: 20, move: Play Rough }
-  - { level: 24, move: Crunch }
-  - { level: 28, move: Take Down }
-  - { level: 36, move: Reversal }
-  - { level: 38, move: Rampage }
-  - { level: 40, move: Roar }
-  - { level: 44, move: Last Resort }
-  - { level: 48, move: Giga Impact }
+  - { level: 4, move: Bite }
+  - { level: 8, move: Odor Sleuth }
+  - { level: 11, move: Stomp }
+  - { level: 15, move: Howl }
+  - { level: 19, move: Retaliate }
+  - { level: 22, move: Ice Fang }
+  - { level: 25, move: Crush Claw }
+  - { level: 28, move: Helping Hand }
+  - { level: 31, move: Dig }
+  - { level: 34, move: Cotton Guard }
+  - { level: 37, move: Body Press }
+  - { level: 40, move: Hyper Fang }
+  - { level: 43, move: Crunch }
+  - { level: 46, move: Follow Me }
+  - { level: 49, move: Liquidation }
+  - { level: 52, move: Glacial Crush }
+  - { level: 55, move: Wish }
+  - { level: 58, move: Play Rough }
+  - { level: 61, move: Earthquake }
+  - { level: 64, move: Roar }
+  - { level: 67, move: Rampage }
+  - { level: 70, move: Mountain Gale }
+  - { level: 73, move: Double-Edge }
