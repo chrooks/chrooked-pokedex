@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 
 from . import design_propose, design_queue, design_realize, design_ship
 from . import dex as dexmod
@@ -193,14 +193,17 @@ def build_router(ctx: DesignContext) -> APIRouter:
 
     @router.put("/{record_id}/decisions")
     async def put_decisions(
-        record_id: str, request: Request, realize: bool = True
+        record_id: str, request: Request, background_tasks: BackgroundTasks, realize: bool = True
     ) -> dict[str, Any]:
-        # `realize` is accepted now so clients need not change when M4 lands;
-        # until then it is a no-op and the record rests at `decided`.
+        # `realize=true` (default) enqueues Realize unless a custom is pending —
+        # the custom lane finishes with its own PUT setting `custom.written`.
         body = await request.json()
         decisions = validate_decisions(body, ctx.load_snapshot(), ctx.load_ruleset())
         try:
-            return ctx.store.transition(record_id, "decided", decisions=decisions).as_dict()
+            record = ctx.store.transition(record_id, "decided", decisions=decisions)
+            if realize and not design_realize.pending_custom(record):
+                record = design_realize.enqueue_realize(background_tasks, ctx, record_id)
+            return record.as_dict()
         except DesignError as error:
             raise raise_http(error) from error
 
