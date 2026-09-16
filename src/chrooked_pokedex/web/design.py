@@ -76,6 +76,33 @@ def validate_decisions(
     ability_names = _names(dexmod.build_abilities(snapshot, ruleset))
     move_names = {row["move"] for row in dexmod.build_move_pool(snapshot, ruleset)}
 
+    custom = body.get("custom")
+    if custom is not None:
+        if not isinstance(custom, dict) or custom.get("kind") not in ("ability", "move"):
+            raise HTTPException(status_code=422, detail="custom.kind must be 'ability' or 'move'.")
+        name = custom.get("name")
+        if not isinstance(name, str) or not name.strip():
+            raise HTTPException(status_code=422, detail="custom.name is required.")
+        written = bool(custom.get("written", False))
+        exists = name in ability_names or name in move_names
+        # Pending: the name must be free (it is about to be created) and it may
+        # already appear in anchors/abilities. Written: the entry must now exist —
+        # that is the proof the custom lane finished (seen on Falinks / Volley).
+        if not written and exists:
+            raise HTTPException(
+                status_code=422, detail=f"custom name {name!r} clashes with an existing entry."
+            )
+        if written and not exists:
+            raise HTTPException(
+                status_code=422,
+                detail=f"custom {name!r} is marked written but is not in the pool yet.",
+            )
+        if custom["kind"] == "move":
+            move_names = move_names | {name}
+        else:
+            ability_names = ability_names | {name}
+        custom = {**custom, "written": written}
+
     abilities = _str_list(body, "abilities")
     for name in abilities:
         if name not in ability_names:
@@ -98,19 +125,6 @@ def validate_decisions(
         for t in typing:
             if known_types and t not in known_types:
                 raise HTTPException(status_code=422, detail=f"Unknown type {t!r}.")
-
-    custom = body.get("custom")
-    if custom is not None:
-        if not isinstance(custom, dict) or custom.get("kind") not in ("ability", "move"):
-            raise HTTPException(status_code=422, detail="custom.kind must be 'ability' or 'move'.")
-        name = custom.get("name")
-        if not isinstance(name, str) or not name.strip():
-            raise HTTPException(status_code=422, detail="custom.name is required.")
-        if name in ability_names or name in move_names:
-            raise HTTPException(
-                status_code=422, detail=f"custom name {name!r} clashes with an existing entry."
-            )
-        custom = {**custom, "written": bool(custom.get("written", False))}
 
     stats = body.get("stats")
     if stats is not None:

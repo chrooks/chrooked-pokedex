@@ -104,13 +104,16 @@ def test_put_decisions_with_realize_false_rests_at_decided(env):
 
 
 def test_pending_custom_is_409_and_put_does_not_enqueue(env):
-    client, _, _ = env
+    client, _, ruleset_dir = env
     body = {**_DECISIONS, "custom": {"kind": "ability", "name": "Slime Coat", "mechanic": "x"}}
     assert client.put("/api/design/goodra/decisions", json=body).json()["state"] == "decided"
     resp = client.post("/api/design/goodra/realize", json={})
     assert resp.status_code == 409
     assert "Slime Coat" in resp.json()["detail"] and "written" in resp.json()["detail"]
-    # The custom lane finishes with written=true → realize runs.
+    # The custom lane finishes by creating the ability, then written=true → realize runs.
+    (ruleset_dir / "abilities" / "slimecoat.yaml").write_text(
+        "name: Slime Coat\nchrooked_id: slimecoat\naka: {}\ndescription: x\n", encoding="utf-8"
+    )
     body["custom"]["written"] = True
     client.put("/api/design/goodra/decisions", json=body)
     assert client.get("/api/design/goodra").json()["state"] == "previewed"

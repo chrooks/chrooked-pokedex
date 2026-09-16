@@ -238,3 +238,18 @@ def test_delete_removes_record_not_queue_row(env):
 def test_record_dataclass_roundtrip():
     rec = DesignRecord(id="goodra", line=["goodra"])
     assert DesignRecord.from_dict({**rec.as_dict(), "extra": 1}) == rec
+
+
+def test_pending_custom_may_be_anchored_and_written_must_exist(env):
+    """A custom decided in the sitting is anchored before it exists; once the
+    custom lane writes it, `written: true` demands it be in the pool."""
+    client, design_dir = env
+    client.post("/api/design/ingest")
+    _force_state(design_dir, "proposed")
+    body = {"anchors": ["Volley"],
+            "custom": {"kind": "move", "name": "Volley", "mechanic": "x", "written": False}}
+    resp = client.put("/api/design/goodra/decisions?realize=false", json=body)
+    assert resp.status_code == 200, resp.text
+    body["custom"]["written"] = True
+    resp = client.put("/api/design/goodra/decisions?realize=false", json=body)
+    assert resp.status_code == 422 and "not in the pool yet" in resp.json()["detail"]
