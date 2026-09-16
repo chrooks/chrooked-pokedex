@@ -1,6 +1,6 @@
 Arboliva
 Falinks
-Beeheeyem
+Beheeyem
 Probopass
 Krabby & Corphish lines
 Sableye, mrror Mawile's viability
