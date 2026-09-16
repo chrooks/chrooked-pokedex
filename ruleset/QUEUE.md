@@ -15,3 +15,5 @@ Reuniclus, mirror Gothitelle BST, genral viability
 Absol - 540 BST
 Sigilyph
 Mandibuzz line & Braviary line together, mirrored
+Toedscruel mirro Tentacruel in gimmick, BST
+Toucannon

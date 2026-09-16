@@ -1,0 +1,11 @@
+name: Volley
+chrooked_id: volley
+aka: {  }
+type: Steel
+category: physical
+power: 25
+accuracy: 100
+pp: 10
+description: The user strikes in a coordinated volley two to five times in a row.
+effect: multi_hit
+flags: [contact]
