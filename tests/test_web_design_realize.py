@@ -258,3 +258,13 @@ def test_skeleton_sees_the_decided_stats(env):
     rec = DesignStore(design_dir).get("goodra")
     inputs = dr.learnset_inputs(rec, _SNAPSHOT, __import__("chrooked_pokedex.model", fromlist=["Ruleset"]).Ruleset.load(ruleset_dir))
     assert inputs["entry"]["stats"]["atk"] == 140 and inputs["entry"]["stats"]["spa"] == 40
+
+
+def test_respace_keeps_two_levels_between_earned_rows():
+    from chrooked_pokedex.web import design_realize as dr
+    rows = [{"level": 1, "move": "Leer"}, {"level": 41, "move": "A"}, {"level": 42, "move": "B"},
+            {"level": 43, "move": "C"}, {"level": 75, "move": "D"}, {"level": 75, "move": "E"}]
+    out, notes = dr.respace_rows(rows)
+    levels = [r["level"] for r in out if r["level"] > 1]
+    assert all(b - a >= 2 for a, b in zip(levels, levels[1:])), levels
+    assert max(levels) <= dr.RESPACE_CEILING and any(n.startswith("respace:") for n in notes)

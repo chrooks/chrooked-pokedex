@@ -431,6 +431,15 @@ def species_fuel(
     return out
 
 
+# The Leer/Growl class: what a freshly hatched or caught mon opens with.
+_BASIC_KIT_STATUS = (
+    "Leer", "Growl", "Tail Whip", "Harden", "Defense Curl", "Withdraw", "Sand Attack",
+    "String Shot", "Baby-Doll Eyes", "Charm", "Tearful Look", "Play Nice", "Howl",
+    "Focus Energy", "Smokescreen", "Sweet Scent", "Confuse Ray", "Supersonic",
+    "Poison Gas", "Thunder Wave", "Mud Sport", "Water Sport", "Foresight", "Odor Sleuth",
+    "Bide", "Splash", "Sing", "Yawn", "Astonish", "Rage",
+)
+
 def build_skeleton(
     entry: dict[str, Any],
     all_abilities: list[dict[str, Any]],
@@ -718,10 +727,14 @@ def build_skeleton(
         if (r.get("category") or "").casefold() == "status"
         or (isinstance(r.get("power"), int) and 1 < r["power"] <= low_band["hi_power"])
     )
+    # The starting-kit status slot is the Leer/Growl class only. An open list
+    # seated Stealth Rock, Trick Room and Dark Void at L1 on the first batch.
+    basic_keys = {m.casefold() for m in _BASIC_KIT_STATUS}
+    basic_kit = [m for m in (status_moves or status_or_weak) if m.casefold() in basic_keys]
     specs.append({
         "priority": _PRIORITY["kit"], "band": None, "role": "kit", "level": 1,
         "label": "KIT — basic status (Leer/Growl class)", "filter": None,
-        "candidates": status_moves or status_or_weak, "required": True,
+        "candidates": basic_kit or status_moves or status_or_weak, "required": True,
     })
     if is_evolved:
         specs.append({
