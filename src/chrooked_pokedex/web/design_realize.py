@@ -150,10 +150,17 @@ def realize(
         for r in result["draft"]["learnset"]
         if r["move"].casefold() not in drop
     ]
+    # The suggest endpoint honours eight anchors; Chris names fifteen to
+    # twenty-five. Every anchor past the eighth is folded in deterministically
+    # (first real batch: 5–7 anchors dropped per line before this existed).
+    pool = inputs["move_pool"]
+    all_anchors = _canonical_anchors(decisions.get("anchors") or [], pool)
+    rows, fold_notes = fold_anchors(rows, all_anchors, pool, proposed=_proposed_moves(record))
+    anchors = all_anchors
     # A drop can open a ladder hole or a gap, so the repair chain runs again
     # over the trimmed rows (the endpoint already ran it once before the drop).
-    pool, anchors = inputs["move_pool"], inputs["anchors"]
     rows, notes = learnset_repair.scrub_draft(rows, pool, anchors=anchors)
+    notes = fold_notes + notes
     rows, repair_notes = learnset_repair.repair_draft(rows, pool, anchors=anchors)
     lint = learnset_repair.audit_draft(
         rows, pool, anchors=anchors, stab_types=inputs["entry"]["types"]
@@ -164,6 +171,82 @@ def realize(
         "abilities": list(decisions.get("abilities") or []),
         "typing": inputs["entry"]["types"],
     }
+
+
+def _canonical_anchors(names: list[str], pool: list[dict[str, Any]]) -> list[str]:
+    """Anchor names in the pool's own casing, order kept, unknowns dropped."""
+    by_key = {str(r["move"]).casefold(): str(r["move"]) for r in pool}
+    out: list[str] = []
+    for n in names:
+        canon = by_key.get(str(n).casefold())
+        if canon and canon not in out:
+            out.append(canon)
+    return out
+
+
+def _proposed_moves(record: DesignRecord) -> set[str]:
+    packet = record.packet or {}
+    return {str(m.get("move", "")).casefold() for m in packet.get("moves") or []}
+
+
+def fold_anchors(
+    rows: list[dict[str, Any]],
+    anchors: list[str],
+    pool: list[dict[str, Any]],
+    *,
+    proposed: set[str] | None = None,
+    size_max: int = suggestmod.LEARNSET_SIZE_MAX,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Seat every missing anchor at the nearest legal free level.
+
+    Pure. When the learnset is at its cap, a filler row gives way first: a
+    non-anchor row above L1 that neither the user nor the packet ever named,
+    lowest power first; failing that, the weakest non-anchor row above L1.
+    Notes start ``"fold: "``. The caller runs scrub/repair/audit afterwards.
+    """
+    from .learnset_skeleton import _pacing_bands
+
+    idx = learnset_repair._index(pool)
+    pacing = _pacing_bands()
+    proposed = proposed or set()
+    anchor_keys = {a.casefold() for a in anchors}
+    work = [dict(r) for r in rows]
+    notes: list[str] = []
+    present = {str(r["move"]).casefold() for r in work}
+    for name in anchors:
+        if name.casefold() in present:
+            continue
+        row = {"level": 0, "move": name}
+        power = learnset_repair._power(row, idx)
+        status = learnset_repair._is_status(row, idx)
+        if len(work) >= size_max:
+            fillers = [
+                r for r in work
+                if int(r["level"]) > learnset_repair.ANCHOR_MAX
+                and str(r["move"]).casefold() not in anchor_keys
+            ]
+            unnamed = [r for r in fillers if str(r["move"]).casefold() not in proposed]
+            victims = sorted(unnamed or fillers, key=lambda r: learnset_repair._power(r, idx) or 0)
+            if not victims:
+                notes.append(f"fold: no room for {name} — every row is an anchor or kit")
+                continue
+            victim = victims[0]
+            work.remove(victim)
+            notes.append(f"fold: dropped {victim['move']} @{victim['level']} to make room for {name}")
+        if status:
+            preferred = 30
+        else:
+            band = next((b for b in pacing if (b.get("bp_min", 0) <= (power or 0) <= b.get("bp_max", 10**6))), None)
+            preferred = (band["level_min"] + band["level_max"]) // 2 if band else 40
+        used = {int(r["level"]) for r in work}
+        level = learnset_repair.nearest_free_level(
+            preferred, used, legal=lambda L, p=power: learnset_repair._pacing_ok(L, p, pacing)
+        )
+        work.append({"level": level, "move": name})
+        present.add(name.casefold())
+        notes.append(f"fold: seated {name} at L{level}")
+    work.sort(key=lambda r: (int(r["level"]), r["move"]))
+    return work, notes
 
 
 def _run_realize(ctx: Any, record_id: str) -> None:

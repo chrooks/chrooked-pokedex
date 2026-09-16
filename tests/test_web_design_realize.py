@@ -191,3 +191,25 @@ def test_full_spread_and_skip_pre(tmp_path):
     delta = 600 - sum(before["goodra"].values())
     assert sum(out["sliggoo"].values()) == sum(before["sliggoo"].values()) + delta
     assert len({out["sliggoo"][k] for k in ("atk", "def", "spa", "spd", "spe")}) == 1  # flat like the final; HP takes the rounding
+
+
+def test_fold_seats_every_anchor_past_the_eighth():
+    """The suggest Seam honours eight anchors; realize folds the rest in at legal
+    free levels, evicting an unnamed filler when the learnset is at its cap."""
+    from chrooked_pokedex.web import design_realize as dr
+    pool = [
+        {"move": "Tackle", "type": "Normal", "category": "physical", "power": 40},
+        {"move": "Body Slam", "type": "Normal", "category": "physical", "power": 85},
+        {"move": "Swift", "type": "Normal", "category": "special", "power": 60},
+        {"move": "Recover", "type": "Normal", "category": "status", "power": 0},
+        {"move": "Hyper Beam", "type": "Normal", "category": "special", "power": 150},
+    ]
+    rows = [{"level": 1, "move": "Tackle"}, {"level": 26, "move": "Swift"}]
+    out, notes = dr.fold_anchors(rows, ["Body Slam", "Recover", "Hyper Beam"], pool)
+    names = [r["move"] for r in out]
+    assert {"Body Slam", "Recover", "Hyper Beam"} <= set(names)
+    assert all(n.startswith("fold: seated") for n in notes)
+    # at the cap, an unnamed filler (Swift) gives way to the anchor
+    out2, notes2 = dr.fold_anchors(rows, ["Body Slam"], pool, size_max=2)
+    assert "Swift" not in [r["move"] for r in out2] and "Body Slam" in [r["move"] for r in out2]
+    assert any("dropped Swift" in n for n in notes2)
