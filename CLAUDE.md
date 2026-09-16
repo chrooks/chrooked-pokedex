@@ -82,5 +82,7 @@ A species makeover is **not done** at Ruleset write. Done means:
 3. **Committed and pushed** once the read-back checks out.
 
 Dex UI changes get the same discipline: drive the running UI with a real query (screenshot or assertion) before calling it done — passing vitest alone has shipped broken filters.
-</content>
-</invoke>
+
+### Batch blind design
+
+Lines to redesign go in `ruleset/QUEUE.md` (one row each, steer after a comma). `/blind-design preprocess` researches and stages a packet per row unattended through `/api/design`; `/blind-design review` walks the packets one decision each, realizes previews in the background, ships every confirmed line with one apply, and commits one commit per line. The definition of done above is unchanged: applied, read back, committed, pushed. The pipeline is server-side so the dex UI can drive the same routes later.

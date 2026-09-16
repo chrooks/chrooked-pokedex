@@ -1,152 +1,114 @@
 ---
 name: blind-design
-description: Design a species line's abilities, learnset (and on request stats, typing, or one custom move/ability) from its lore alone, then carry the approved kit all the way to a pushed commit — anonymize the line's lore profile, hand it to a context-free agent with the merged move and ability pools (customs tagged), relay a fresh kit free of prior-art bias in the house lore-table format, take the user's picks, write the whole line through the CRUD API, apply to Rejuv, read back, log, commit, push. Use when the user wants a "blind design", a fresh kit from lore, or asks what a mon's kit SHOULD be based on what the creature is.
-argument-hint: "<species or line> [steer...]"
+description: Batch blind design over the split-shift pipeline — queue lines in ruleset/QUEUE.md, `preprocess` researches and stages one packet per line unattended, `review` walks the packets one decision each, realizes previews in the background, ships every confirmed line with one apply, and commits one commit per line. A thin chat client over the /api/design router (the dex UI will drive the same routes later). Use when the user says "blind design", "preprocess the queue", "review my packets", or "queue <mon>".
+argument-hint: "queue <row> | preprocess | review | status"
 disable-model-invocation: true
 ---
 
-# blind-design — lore profile in, unbiased kit out, pushed commit at the end
+# blind-design — queue → preprocess → review
 
 The prior-art trap: any designer who recognizes the species reaches for its canon
-kit. This skill removes the name so the design comes from what the creature *is*.
-Proven on Staraptor (2026-08-26) and on seven lines in one session (2026-09-04..06:
-Lilligant, Gogoat, Houndstone, Noctowl, Gengar, Garchomp, Tyranitar): the blind
-agent re-derived canon abilities word for word (Rough Skin, Shadow Tag, Sap Sipper)
-and then improved on them with customs.
+kit. The server strips the name so the design comes from what the creature *is*.
+This skill is a **thin client**: it renders, it parses Chris's replies, it calls
+routes. It never writes YAML, never runs its own design prompt, never applies by
+hand. One Seam: the `/api/design` router on the host server (`localhost:8000`,
+started with `.venv/bin/chrooked-pokedex ui`; the hestia container lags the
+harness, so apply and ship always go through the host).
 
-Pipeline: **lore → anonymize → pool dump → context-free agent → lore-table relay →
-picks → write the line → apply → read back → log → commit → push.**
+    API=http://localhost:8000/api/design
 
-## 1. Lore
+## `queue <row>` — capture
 
-Run `search-lore` for the whole line. Reuse a profile already produced this
-conversation.
+Append the row verbatim to `ruleset/QUEUE.md`. One row per line; a steer after a
+comma or ` - `; `&` joins lines designed together (`Mandibuzz line & Braviary line
+together, mirrored`); regional prefixes work (`Alolan Ninetales`). Say nothing else.
 
-## 2. Anonymize → `.cache/lore/profiles/<final-id>.md`
+## `preprocess` — the machine's shift, unattended
 
-Persist it there (gitignored with the cache); a rerun reuses it. Rules:
+1. `POST $API/ingest` → report `created`, `existing`, and every `unresolved` row
+   verbatim with its reason (a typo gets a "did you mean" hint; fix the row, never
+   guess).
+2. `POST $API/propose` → `{started: [...]}`. Poll `GET $API` every 30 s until no
+   record is `proposing`. Records in a group travel together.
+3. Report: counts by state, every packet `warnings` entry, every `error` record
+   with its message. A queue with a `custom` in the steer gets a custom proposal.
 
-- Strip every species/stage name, Japanese name, and the whole **Name origin**.
-- Strip franchise markers: "Pokémon" as a label, dex numbers, "Mega" → "an
-  empowered variant", other mons → a generic description (Steelix → "a giant serpent").
-- Stages as "Stage 1 / 2 / 3" with a plain role label; regional variants as
-  "Variant A / B" under the final stage, each designed separately.
-- **Keep** real-world biology, design-origin animals, myth references. That is the
-  material the design pulls on.
-- **No** typing, stats, abilities, or game data. The agent infers typing.
+## `review` — Chris's sitting, one decision per packet
 
-## 3. Pools
+Walk every `proposed` record in queue order. For each, render the packet in the
+house lore-table format, four parts:
 
-Dump once per session with `pool_dump.py` (bundled here); it writes
-`moves-pool.txt` and `abilities-pool.txt` with `[CUSTOM]` tags to the scratchpad:
+1. **Lore profile table** — `Stage | Ecological role | Fantastical element` from
+   `packet.profile`. Ecological role means habitat + ecosystem niche.
+2. **How the profile becomes mechanics** — 3–4 ASD-STE100 sentences from
+   `packet.axis`; state `inferred_types` and park typing as Chris's call; say when
+   the kit converged with `packet.current`.
+3. **Abilities** — `**Name — slot.** Reason. Pro: … Con: …` for `packet.abilities`,
+   then the bench, then `packet.current.abilities` for contrast.
+4. **Moves** — one table `Move | Role | Reason | Pays off`, then the pre-drafted
+   learnset as `Lv | Move | Type | BP` (**STAB bold**, *own types italic*) with its
+   `warnings` and `lint` lines under it. `reference_stats` (a "mirror X BST" steer)
+   and `current.stats` render as one stat table when present.
 
-```bash
-.venv/bin/python .claude/skills/blind-design/pool_dump.py <SCRATCHPAD>
-```
+Custom (only when `packet.custom` exists): kind, mechanic, the five names. Close
+with the decisions: typing (only if opened), trio, custom yes/no + name, anchors
+and drops against the draft.
 
-Re-dump after creating an ability or move mid-session.
+Take Chris's reply and translate it into the decisions schema — he answers by
+exception, so start from the packet's trio and draft and apply his changes:
 
-## 4. The context-free agent
+    {"typing": null | [...], "abilities": [p, s, h], "anchors": [...], "drop": [...],
+     "custom": null | {"kind", "name", "mechanic", "written": false},
+     "stats": null | {six} | {"delta": {...}}, "skip_pre": [...], "notes": "his words"}
 
-One `general-purpose` agent, nothing but the three file paths and this shape
-(keep the constraints verbatim; adapt the brackets):
+`PUT $API/{id}/decisions` (auto-realizes in the background unless a custom is
+pending). A 422 names the offending ability or move — fix and re-PUT. Move to the
+next packet **immediately**; do not wait for the preview.
 
-> You are doing a blind creature-design exercise for a Pokémon-style fan game.
-> You have NO context beyond the three files named below. Do not try to identify
-> which existing creature this profile might describe — design purely from the
-> profile.
->
-> Read fully: [profile], [abilities-pool], [moves-pool]. [CUSTOM]-tagged entries
-> are net-new bespoke content.
->
-> For the FINAL STAGE, propose from the pools only — never invent a name [— EXCEPT
-> in section C]:
-> A. ABILITIES — 5–8 candidates, one line of reasoning each tied to a specific
-> profile fact. Mark primary / secondary / hidden. [CUSTOM] on equal footing.
-> B. MOVES — 25–35 level-up-worthy moves grouped by role: STAB-flavored attacks
-> (pick the types YOU think fit and say why), predation/flavor coverage, lean
-> utility. Half-line reason each; flag moves that pay off a proposed ability.
-> Never include Glaive Rush or Precipice Blades.
-> [C. ONE NEW CUSTOM — exactly one brand-new move OR ability that best completes
-> the kit: which kind and why, working name, terse pool-style description, exact
-> mechanic, the profile facts it is built from, the closest pool entry and why it
-> is not a duplicate.]  ← only when the user said the mon deserves something custom
-> [D. STATS — a six-stat spread in the BST band the user gave, one line per stat.]
-> [E. BATTLER ROLE + a "defense of connection": one sentence per pick tracing it
-> to a quoted profile fact.]  ← only when asked
-> Plus one short paragraph naming the one or two profile facts you treated as the
-> design axis.
->
-> Your final text IS the deliverable — structured markdown, no files.
+**Custom lane.** When the decisions carry a custom, before the PUT dispatch ONE
+background `general-purpose` agent with: the mechanic and chosen name; the
+`/ability-create` Seam (`POST /api/abilities/suggest` → `PUT /api/abilities/{id}`
+→ `PUT /api/behaviors/{id}`; a move goes `PUT /api/moves/{id}`); the Rejuv plugin
+conventions (`references/rejuv-harness/`, never prepend `pbInitPokemon`, hook
+`CHROOKED_SWITCH_IN` / `CHROOKED_MAGIC_GUARD`); and the instruction to finish with
+`PUT $API/{id}/decisions` re-sending the same decisions with `custom.written: true`
+(that triggers realize). Names: when Chris dislikes one, Datamuse `?ml=` and offer
+the filtered hits.
 
-Add the user's steer as one extra line, never as context about the species. Keep
-the agent id; the user may want an iteration.
+After the last packet, walk every `previewed` record: render `preview.learnset.rows`
+as the `Lv | Move | Type | BP` table with `warnings`/`lint` under it and
+`preview.stats` per stage. Take "go" → `POST $API/{id}/confirm`; a correction →
+`POST $API/{id}/realize {"correction": "his words"}` and re-show when `previewed`.
+Hand-check before showing: the anchors are all present, nothing from `drop`, no
+`scrub:` note left unexplained.
 
-## 5. Relay — the lore-table format (default)
+## Ship — automatic once every preview has a "go"
 
-Never pass the agent output through raw. Four parts:
+1. Target id: `curl -s localhost:8000/api/targets | jq '.[] | {id,label}'` (Rejuv).
+2. `POST $API/ship {"target_id": "<id>"}` (all `confirmed`). Synchronous; one apply.
+   Per id the response is `{state, apply, readback, log_section, bad_rows}`; an
+   `error` record names its bad rows or diff — report it, fix, ship again for that
+   id (`"ids": [...]`). Shipped rows are removed from `ruleset/QUEUE.md` and the
+   design log is already appended.
+3. One commit per shipped line: its `ruleset/species/*.yaml` stages plus any custom
+   ability / move / behavior / plugin files, message
+   `feat(ruleset): <Line> line blind design — <one-line axis>`; the `DESIGN-LOG.md`
+   and `QUEUE.md` changes ride with the last commit. Push.
+4. Report: read-back proof first (MATCH per stage from `readback`), then what
+   shipped per line, then the in-game check owed (the harness cannot run a battle).
+   `POST $API/{id}/proof {"result": "proven"|"problem", "note"}` when Chris reports
+   back from the game.
 
-1. **Lore profile table** — `Stage | Ecological role | Fantastical element`.
-   *Ecological role* means **habitat + ecosystem niche** (biome, what it eats, what
-   eats it, apex / prey / engineer), sourced, inferences labeled. It is NOT a list of
-   dex behaviors — those go in a "most representative dex facts" line if wanted.
-2. **How the profile becomes mechanics** — 3–4 ASD-STE100 sentences: the design
-   axis, and how it translates to slots and ladder. State the agent's inferred
-   typing and park it as the user's call. Say when the kit converged with canon.
-3. **Abilities** — `**Name — slot.** Justification.` then the bench, then the
-   current trio for contrast.
-4. **Moves** — ONE table `Move | Role | Reason | Pays off`. When a learnset preview
-   follows, that table is `Lv | Move | Type | BP` with **STAB bold** and *the mon's
-   own types italic*.
+## `status`
 
-Custom proposal, stats, battler role, and defense of connection are extra parts
-only when they were asked for. Close with the decisions: typing (only if the user
-opened it), ability trio, custom yes / no, anchors. Typing and stats stay untouched
-unless the user says so.
-
-## 6. Picks → write the line (this skill owns the tail)
-
-1. **New custom first.** Ability → `/ability-create` (propose, preview, PUT ability
-   + behavior stub, Rejuv plugin in `references/rejuv-harness/`; compose via
-   `behaviors: [part, vanillapart]` in the ability YAML when it is two existing
-   effects). Move → PUT `/api/moves/{id}`; a two-typed move needs only
-   `second_type` (Rejuv is native); a bespoke effect needs a behavior spec plus a
-   `CHROOKED_MOVE_ON_DEAL` plugin. Never prepend `pbInitPokemon` (zz_zcompose
-   aliases it). Names: offer three to five; when the user dislikes one, run a
-   meaning-similar word search (Datamuse `?ml=`) and offer the filtered hits.
-   Re-dump the pools afterwards.
-2. **Abilities** → merge-PUT the trio to every stage of the line (branch-shared
-   pre-evos are opt-in). Megas keep their own ability.
-3. **Learnset** → `POST /api/species/{final}/suggest/learnset` with `anchors`
-   (max 8 — the rest the user named get folded by hand) and a `direction` built
-   from the axis and the abilities. Preview as the `Lv | Move | Type | BP` table.
-   Hand-rework before showing: no move at L0 AND a later level; no Glaive Rush or
-   Precipice Blades; spread pileups (five fangs at L61–67); Dragon Dance very late,
-   Swords Dance mid-game; a 100 BP STAB rung may give way to coverage; folds keep a
-   2-level gap; the user's late capstones stay in order. Relay every `anchor:`
-   warning. Confirm gate: preview first, decision from the user's reply.
-4. **Write + apply + read back** in one call:
-
-   ```bash
-   .venv/bin/python .claude/skills/blind-design/line_write.py <final> \
-     --rows "0:Move,1:Move,5:Move,…" [--abilities "P,S,H"] [--stats hp=65,atk=95,…]
-   ```
-
-   It writes the final stage, the pre-evos minus L0, and the megas with L0; runs the
-   **host CLI** apply (the dex container lags the harness); fails on any `partial`
-   or `blocked` row for the line (a newer-gen move absent from Rejuv, e.g. Noxious
-   Torque → swap in the Ruleset's custom equivalent); and diffs every stage's
-   moveset in `montext.rb`. Exit 1 means stop, nothing is committed.
-5. **Design log + commit + push.** `ruleset/DESIGN-LOG.md` gets: direction, typing
-   decision, new mechanics with the rejected names, rejected lanes, the user's
-   corrections near-verbatim. One commit for the Ruleset plus plugins, pushed.
-   Report: proof first (the read-back), then what shipped, then the in-game check
-   owed (the harness cannot run a battle).
+`GET $API` → one table `id | state | activity | steer`.
 
 ## Boundaries
 
-- One Seam: the suggest endpoints propose, the CRUD routes write, the applier
-  applies. No hand-written YAML, no second prompt path.
-- Anonymization is best-effort against inference. The point is removing the reflex.
-- A blind typing that differs from canon or the Ruleset is a parked one-liner,
-  never a silent write.
+- One Seam: the router proposes, realizes, and ships; the CRUD routes write; the
+  applier applies. No hand-written YAML, no second prompt path, no chat-side agent
+  design call.
+- Typing that differs from canon or the Ruleset is a parked one-liner, never a
+  silent write. Nothing reaches `ruleset/` before a confirm except an approved
+  custom.
+- Deep dive on the pipeline: `.tasks/103-batch-blind-design/plan.md`.
