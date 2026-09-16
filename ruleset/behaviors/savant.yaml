@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Savant
+chrooked_id: savant
+applies_to: ability
+aka: {  }
+effects:
+  - summary: The first use of each move since switch-in deals 30% more damage.
+    trigger: damage-calc
+    when: this Pokemon uses a damaging move it has not used since it last entered the field
+    effect: multiply damage by 1.3
+  - summary: Used moves are remembered per stay on the field.
+    trigger: switch-in
+    when: this Pokemon enters the field
+    effect: clear the set of used moves
+test_cases:
+  - given: a Savant Pokemon uses Psychic twice in a row
+    expect: the first Psychic deals 1.3x damage; the second deals normal damage
+  - given: a Savant Pokemon uses Psychic, then Shadow Ball
+    expect: both first uses deal 1.3x damage
+  - given: a Savant Pokemon uses Psychic, switches out, returns, and uses Psychic
+    expect: Psychic deals 1.3x again
+notes:
+  - STUB — engine_hints ungrounded, needs human grounding pass
+  - "Rejuv: references/rejuv-harness/chrooked_savant.rb (CHROOKED_DAMAGE_MODS + CHROOKED_AFTER_MOVE + CHROOKED_SWITCH_IN)"

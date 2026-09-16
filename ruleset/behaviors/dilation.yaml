@@ -1,0 +1,18 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Dilation
+chrooked_id: dilation
+applies_to: ability
+aka: {  }
+effects:
+  - summary: On entry, sets Trick Room for five turns; ends it if already active.
+    trigger: switch-in
+    when: this Pokemon enters the field
+    effect: if Trick Room is not active, start Trick Room for 5 turns (Drought shape); if Trick Room is active, end it
+test_cases:
+  - given: a Dilation Pokemon switches in with no Trick Room active
+    expect: Trick Room starts and lasts 5 turns
+  - given: a Dilation Pokemon switches in while Trick Room is active
+    expect: Trick Room ends immediately
+notes:
+  - STUB — engine_hints ungrounded, needs human grounding pass
+  - "Rejuv: references/rejuv-harness/chrooked_dilation.rb (CHROOKED_SWITCH_IN, pbSetTrickRoom)"
