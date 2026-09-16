@@ -236,7 +236,9 @@ def propose_packet(
         cached_context=format_pools(pools),
         user=_user_prompt(profile, steer, want_custom, bst_band, count),
         schema=batch_schema(count, want_custom, bst_band is not None),
-        max_tokens=PROPOSE_MAX_TOKENS,
+        # A group answers with one packet per member in the same call; the cap
+        # scales with it or a pair truncates (seen on the first real batch).
+        max_tokens=PROPOSE_MAX_TOKENS * count,
     )
     packets = result.get("packets") if isinstance(result, dict) else None
     if not isinstance(packets, list) or len(packets) != count:
@@ -402,9 +404,17 @@ def _propose_group(ctx: Any, records: list[DesignRecord], snapshot: dict[str, An
             packet, _ = validate_packet(
                 draft, move_pool, abilities, entry=entry, refs=refs[record.id]
             )
-            packet = predraft_learnset(
-                provider, entry, packet, move_pool, abilities, lore_provider
-            )
+            try:
+                packet = predraft_learnset(
+                    provider, entry, packet, move_pool, abilities, lore_provider
+                )
+            except Exception as error:  # noqa: BLE001
+                # The pre-draft is a convenience over the packet, not the packet:
+                # a skeleton the model cannot fill (three retries) must not cost
+                # Chris the abilities and moves. Realize builds the real draft
+                # from his anchors anyway.
+                packet = {**packet, "draft_learnset": None,
+                          "warnings": [*packet.get("warnings", []), f"pre-draft skipped: {error}"]}
             ctx.store.transition(record.id, "proposed", activity="ready", packet=packet)
         except Exception as error:  # noqa: BLE001
             ctx.store.transition(record.id, "error", activity="error", error=str(error))

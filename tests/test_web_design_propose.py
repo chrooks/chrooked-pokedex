@@ -170,9 +170,18 @@ def test_hallucinated_ability_dropped_with_warning(tmp_path: Path) -> None:
 
 
 def test_provider_error_isolates_one_record(tmp_path: Path) -> None:
-    fake = _SchemaFake([_packet()], fail_learnset_for="vaporeon")
+    """A packet-call failure errors that record only."""
+    fake = _SchemaFake([_packet()])
     client, _ = _make(tmp_path, fake, _QUEUE)
+    calls = {"n": 0}
+    original = fake.propose
 
+    def flaky(**kw):
+        if "packets" in kw["schema"]["properties"] and "Stage 3" not in kw["user"]:
+            raise RuntimeError("boom")  # vaporeon's packet call only
+        return original(**kw)
+
+    fake.propose = flaky
     client.post("/api/design/propose")
 
     records = {r["id"]: r for r in client.get("/api/design").json()}
@@ -182,6 +191,33 @@ def test_provider_error_isolates_one_record(tmp_path: Path) -> None:
     assert "boom" in records["vaporeon"]["error"]
     # An errored record can be re-proposed.
     assert client.post("/api/design/vaporeon/propose").status_code == 200
+
+
+def test_predraft_failure_keeps_the_packet(tmp_path: Path) -> None:
+    """A learnset skeleton the model cannot fill (seen on the first real batch:
+    Alakazam, Slurpuff) leaves the record proposed with a warning — the packet
+    is the deliverable, the pre-draft a bonus that Realize rebuilds anyway."""
+    fake = _SchemaFake([_packet()], fail_learnset_for="vaporeon")
+    client, _ = _make(tmp_path, fake, _QUEUE)
+
+    client.post("/api/design/propose")
+
+    rec = client.get("/api/design/vaporeon").json()
+    assert rec["state"] == "proposed"
+    assert rec["packet"]["draft_learnset"] is None
+    assert any(w.startswith("pre-draft skipped") for w in rec["packet"]["warnings"])
+
+
+def test_group_call_scales_the_token_cap(tmp_path: Path) -> None:
+    """Two packets in one call need twice the output budget (a pair truncated
+    at the flat cap on the first real batch)."""
+    fake = _SchemaFake([_packet(), _packet()])
+    client, _ = _make(tmp_path, fake, "Goodra & Vaporeon lines\n")
+
+    client.post("/api/design/propose")
+
+    packet_calls = [c for c in fake.calls if "packets" in c["schema"]["properties"]]
+    assert packet_calls[0]["max_tokens"] == dp.PROPOSE_MAX_TOKENS * 2
 
 
 def test_prompt_is_blind(tmp_path: Path) -> None:
