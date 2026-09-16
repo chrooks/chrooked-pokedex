@@ -3,9 +3,9 @@ chrooked_id: horndrill
 aka: { pokeemerald: MOVE_HORN_DRILL }
 type: Normal
 category: physical
-power: 1
-accuracy: 30
-pp: 5
-description: A one-hit KO attack that uses a horn like a drill.
-effect: ohko
+power: 90
+accuracy: 100
+pp: 15
+description: The user drives its horn into the target like a drill.
+effect: plain_damage
 flags: [contact, piercing]
