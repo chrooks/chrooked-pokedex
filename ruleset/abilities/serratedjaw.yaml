@@ -1,0 +1,5 @@
+name: Serrated Jaw
+chrooked_id: serratedjaw
+aka: {  }
+behaviors: [strongjaw, sharpness]
+description: Biting and slicing moves are boosted.
