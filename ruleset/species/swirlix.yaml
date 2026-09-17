@@ -1,23 +1,35 @@
 name: Swirlix
 chrooked_id: swirlix
 aka: {  }
+types: [Fairy, Normal]
+abilities:
+  primary: Unburden
+  secondary: Fluffy
+  hidden: Pheromone
+stats: { hp: 62, atk: 79, def: 61, spa: 40, spd: 58, spe: 61 }
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Sweet Scent }
-  - { level: 3, move: Play Nice }
-  - { level: 6, move: Fairy Wind }
-  - { level: 9, move: Aromatherapy }
-  - { level: 12, move: Draining Kiss }
-  - { level: 15, move: Fake Tears }
-  - { level: 18, move: Round }
-  - { level: 21, move: String Shot }
-  - { level: 22, move: Beguile }
-  - { level: 24, move: Cotton Spore }
-  - { level: 27, move: Energy Ball }
-  - { level: 29, move: Dazzling Gleam }
-  - { level: 30, move: Wish }
-  - { level: 33, move: Play Rough }
-  - { level: 36, move: Cotton Guard }
-  - { level: 39, move: Endeavor }
-  - { level: 43, move: Moonblast }
-  - { level: 64, move: Rapture }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Covet }
+  - { level: 9, move: Fake Out }
+  - { level: 11, move: Lick }
+  - { level: 13, move: Glitter Tap }
+  - { level: 19, move: String Shot }
+  - { level: 21, move: Sticky Web }
+  - { level: 23, move: Headbutt }
+  - { level: 26, move: Cutsie Slap }
+  - { level: 29, move: Charm }
+  - { level: 31, move: Spirit Break }
+  - { level: 34, move: Wish }
+  - { level: 37, move: Extreme Speed }
+  - { level: 39, move: Yawn }
+  - { level: 41, move: Attract }
+  - { level: 44, move: Body Slam }
+  - { level: 47, move: Play Rough }
+  - { level: 54, move: Hyper Drill }
+  - { level: 56, move: Aromatherapy }
+  - { level: 61, move: Starfall Slam }
+  - { level: 63, move: Misty Terrain }
+  - { level: 68, move: Belly Drum }
+  - { level: 72, move: Faeblitz }
+  - { level: 74, move: Last Resort }
