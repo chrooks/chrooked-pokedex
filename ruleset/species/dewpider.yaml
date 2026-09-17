@@ -3,28 +3,33 @@ chrooked_id: dewpider
 aka: { pokeemerald: SPECIES_DEWPIDER }
 abilities:
   primary: Water Bubble
-  secondary: Web Weaver
-  hidden: Carnivore
+  secondary: Strong Jaw
+  hidden: Death Grip
+stats: { hp: 38, atk: 40, def: 52, spa: 40, spd: 72, spe: 27 }
 learnset:
-  - { level: 1, move: Infestation }
-  - { level: 2, move: Fury Cutter }
-  - { level: 4, move: Bug Bite }
-  - { level: 6, move: Undertow }
-  - { level: 8, move: Bite }
-  - { level: 12, move: Water Gun }
-  - { level: 14, move: Water Whip }
-  - { level: 16, move: Aqua Ring }
-  - { level: 20, move: Headbutt }
-  - { level: 24, move: Bubble Beam }
-  - { level: 26, move: Crunch }
-  - { level: 28, move: Soak }
-  - { level: 30, move: Liquidation }
-  - { level: 32, move: Entrainment }
-  - { level: 36, move: Lunge }
-  - { level: 38, move: Leech Life }
-  - { level: 40, move: Maelstrom }
-  - { level: 44, move: Moltstrike }
-  - { level: 48, move: Mirror Coat }
-  - { level: 57, move: Megahorn }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Leer }
+  - { level: 7, move: Undertow }
+  - { level: 10, move: Bite }
+  - { level: 12, move: Aqua Jet }
+  - { level: 16, move: Headbutt }
+  - { level: 19, move: Bug Bite }
+  - { level: 21, move: Toxic }
+  - { level: 27, move: Sticky Web }
+  - { level: 31, move: Aqua Ring }
+  - { level: 33, move: Ice Fang }
+  - { level: 35, move: Whirlpool }
+  - { level: 37, move: Zen Headbutt }
+  - { level: 39, move: Mean Look }
+  - { level: 41, move: Liquidation }
+  - { level: 43, move: Jaw Lock }
+  - { level: 45, move: Leech Life }
+  - { level: 47, move: Crunch }
+  - { level: 49, move: Poison Fang }
+  - { level: 51, move: Swords Dance }
+  - { level: 53, move: Aqua Tail }
+  - { level: 55, move: X-Scissor }
+  - { level: 57, move: First Impression }
+  - { level: 59, move: Protect }
+  - { level: 61, move: String Shot }
+  - { level: 63, move: Maelstrom }
+  - { level: 65, move: Crabhammer }
