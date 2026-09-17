@@ -1,39 +1,36 @@
 name: Probopass
 chrooked_id: probopass
 aka: { pokeemerald: SPECIES_PROBOPASS }
+types: [Rock, Electric]
 abilities:
-  primary: Lightning Rod
-  secondary: Repulsion
-  hidden: Sand Force
-stats: { hp: 75 }
+  primary: Magnet Pull
+  secondary: Sand Stream
+  hidden: Sturdy
+stats: { hp: 75, atk: 55, def: 145, spa: 75, spd: 150, spe: 40 }
 learnset:
-  - { level: 0, move: Tri Attack }
-  - { level: 1, move: Block }
-  - { level: 1, move: Gravity }
-  - { level: 1, move: Magnet Rise }
-  - { level: 1, move: Magnetic Flux }
-  - { level: 2, move: Wide Guard }
-  - { level: 3, move: Iron Defense }
-  - { level: 4, move: Tackle }
-  - { level: 7, move: Glint }
-  - { level: 8, move: Jewel Glow }
-  - { level: 13, move: Thunder Wave }
-  - { level: 16, move: Rest }
-  - { level: 18, move: Mirror Shot }
-  - { level: 19, move: Spark }
-  - { level: 22, move: Rock Slide }
-  - { level: 23, move: Geo Pulse }
-  - { level: 25, move: Power Gem }
-  - { level: 28, move: Rock Blast }
-  - { level: 29, move: Flash Cannon }
-  - { level: 31, move: Discharge }
-  - { level: 34, move: Sandstorm }
-  - { level: 35, move: Crystal Beam }
-  - { level: 37, move: Earth Power }
-  - { level: 40, move: Stone Edge }
-  - { level: 43, move: Zap Cannon }
-  - { level: 44, move: Lock-On }
-  - { level: 48, move: Luster Cannon }
-  - { level: 51, move: Gauss Cannon }
-  - { level: 62, move: Steel Beam }
-  - { level: 63, move: Meteor Surge }
+  - { level: 1, move: Stealth Rock }
+  - { level: 5, move: Jewel Glow }
+  - { level: 9, move: Thunder Shock }
+  - { level: 12, move: Charge Beam }
+  - { level: 16, move: Glint }
+  - { level: 19, move: Magnet Rise }
+  - { level: 21, move: Instruct }
+  - { level: 23, move: Ancient Power }
+  - { level: 25, move: Thunder Wave }
+  - { level: 29, move: Lock-On }
+  - { level: 31, move: Mirror Shot }
+  - { level: 33, move: Discharge }
+  - { level: 37, move: Gauss Cannon }
+  - { level: 39, move: Mean Look }
+  - { level: 41, move: Flash Cannon }
+  - { level: 44, move: Power Gem }
+  - { level: 46, move: Thunderbolt }
+  - { level: 49, move: Earth Power }
+  - { level: 51, move: Block }
+  - { level: 54, move: Crystal Beam }
+  - { level: 58, move: Luster Cannon }
+  - { level: 61, move: Shore Up }
+  - { level: 65, move: Meteor Beam }
+  - { level: 68, move: Gravity }
+  - { level: 72, move: Zap Cannon }
+  - { level: 75, move: Meltdown }
