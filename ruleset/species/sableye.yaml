@@ -2,33 +2,34 @@ name: Sableye
 chrooked_id: sableye
 aka: { pokeemerald: SPECIES_SABLEYE }
 abilities:
-  primary: Night Stalker
-  secondary: Stall
-  hidden: Prankster
-stats: { hp: 80, spa: 75 }
+  primary: Magic Guard
+  secondary: Prankster
+  hidden: Tough Claws
+stats: { hp: 80, atk: 105, def: 90, spa: 45, spd: 80, spe: 70 }
 learnset:
+  - { level: 1, move: Confuse Ray }
   - { level: 1, move: Scratch }
-  - { level: 1, move: Leer }
-  - { level: 2, move: Lick }
-  - { level: 3, move: Astonish }
-  - { level: 6, move: Cheap Shot }
-  - { level: 9, move: Shadow Sneak }
-  - { level: 12, move: Fake Out }
-  - { level: 15, move: Disable }
-  - { level: 18, move: Detect }
-  - { level: 21, move: Night Shade }
-  - { level: 24, move: Fury Swipes }
-  - { level: 27, move: Knock Off }
-  - { level: 29, move: Heel Drop }
-  - { level: 30, move: Quash }
-  - { level: 33, move: Shadow Claw }
-  - { level: 35, move: Backstab }
-  - { level: 36, move: Mean Look }
-  - { level: 39, move: Power Gem }
-  - { level: 40, move: Wraithstrike }
-  - { level: 42, move: Zen Headbutt }
-  - { level: 43, move: Interment }
-  - { level: 45, move: Shadow Ball }
-  - { level: 48, move: Foul Play }
-  - { level: 57, move: Necrosis }
-  - { level: 60, move: Havoc }
+  - { level: 5, move: Pursuit }
+  - { level: 9, move: Lick }
+  - { level: 11, move: Metal Claw }
+  - { level: 16, move: Astonish }
+  - { level: 19, move: Shadow Sneak }
+  - { level: 22, move: Will-O-Wisp }
+  - { level: 24, move: Recover }
+  - { level: 28, move: Hone Claws }
+  - { level: 30, move: Knock Off }
+  - { level: 32, move: Mean Look }
+  - { level: 34, move: Shadow Claw }
+  - { level: 36, move: Zen Headbutt }
+  - { level: 38, move: Taunt }
+  - { level: 40, move: Bulk Up }
+  - { level: 42, move: Phantom Force }
+  - { level: 44, move: Night Slash }
+  - { level: 46, move: Power Gem }
+  - { level: 48, move: Trick }
+  - { level: 50, move: Sucker Punch }
+  - { level: 52, move: Rock Slide }
+  - { level: 56, move: Crunch }
+  - { level: 61, move: Spite }
+  - { level: 66, move: Stone Edge }
+  - { level: 72, move: Foul Play }
