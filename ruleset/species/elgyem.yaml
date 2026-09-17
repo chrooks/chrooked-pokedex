@@ -1,21 +1,35 @@
 name: Elgyem
 chrooked_id: elgyem
 aka: { pokeemerald: SPECIES_ELGYEM }
+types: [Psychic, Rock]
 abilities:
-  hidden: Insidious
+  primary: Analytic
+  secondary: Mystic Power
+  hidden: Mind Wipe
+stats: { hp: 55, atk: 55, def: 55, spa: 85, spd: 55, spe: 30 }
 learnset:
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Growl }
-  - { level: 6, move: Imprison }
-  - { level: 12, move: Teleport }
-  - { level: 18, move: Psybeam }
-  - { level: 24, move: Power Split }
-  - { level: 25, move: Guard Split }
-  - { level: 30, move: Headbutt }
-  - { level: 36, move: Zen Headbutt }
-  - { level: 39, move: Psychic }
-  - { level: 43, move: Recover }
-  - { level: 48, move: Calm Mind }
-  - { level: 54, move: Wonder Room }
-  - { level: 57, move: Mindwarp }
-  - { level: 60, move: Future Sight }
+  - { level: 1, move: Confuse Ray }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Jewel Glow }
+  - { level: 14, move: Ancient Power }
+  - { level: 17, move: Stealth Rock }
+  - { level: 19, move: Nasty Plot }
+  - { level: 24, move: Psybeam }
+  - { level: 28, move: Mystical Power }
+  - { level: 30, move: Eerie Impulse }
+  - { level: 32, move: Trick Room }
+  - { level: 34, move: Expanding Force }
+  - { level: 36, move: Shadow Ball }
+  - { level: 38, move: Stored Power }
+  - { level: 40, move: Dark Pulse }
+  - { level: 42, move: Extrasensory }
+  - { level: 44, move: Hypnosis }
+  - { level: 46, move: Power Gem }
+  - { level: 48, move: Psyshock }
+  - { level: 50, move: Psychic }
+  - { level: 52, move: Mean Look }
+  - { level: 55, move: Psystrike }
+  - { level: 57, move: Skill Swap }
+  - { level: 59, move: Dream Eater }
+  - { level: 61, move: Calm Mind }
+  - { level: 68, move: Meteor Beam }
