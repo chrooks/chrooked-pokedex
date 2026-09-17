@@ -1,27 +1,36 @@
 name: Toedscruel
 chrooked_id: toedscruel
 aka: {  }
+types: [Grass, Ground]
+abilities:
+  primary: Mycelium Might
+  secondary: Medium
+  hidden: Poison Touch
+stats: { hp: 80, atk: 70, def: 65, spa: 80, spd: 120, spe: 100 }
 learnset:
-  - { level: 1, move: Reflect Type }
-  - { level: 1, move: Wrap }
-  - { level: 1, move: Mud-Slap }
-  - { level: 4, move: Absorb }
-  - { level: 8, move: Stun Spore }
-  - { level: 9, move: Poison Powder }
-  - { level: 12, move: Supersonic }
-  - { level: 15, move: Tackle }
-  - { level: 16, move: Mega Drain }
-  - { level: 20, move: Screech }
-  - { level: 24, move: Mud Shot }
-  - { level: 28, move: Hex }
-  - { level: 29, move: Giga Drain }
-  - { level: 34, move: Seed Bomb }
-  - { level: 36, move: Energy Ball }
-  - { level: 38, move: Earth Power }
-  - { level: 40, move: Spore }
-  - { level: 44, move: Growth }
-  - { level: 48, move: Siphon }
+  - { level: 0, move: Contagion }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Wrap }
+  - { level: 11, move: Poison Sting }
+  - { level: 13, move: Mud-Slap }
+  - { level: 15, move: Mega Drain }
+  - { level: 17, move: Mortal Spin }
+  - { level: 19, move: Leech Seed }
+  - { level: 23, move: Giga Drain }
+  - { level: 25, move: Mud Shot }
+  - { level: 27, move: Mud Bomb }
+  - { level: 30, move: Toxic }
+  - { level: 33, move: Toxic Spikes }
+  - { level: 35, move: Poison Jab }
+  - { level: 37, move: Recover }
+  - { level: 40, move: Gastro Acid }
+  - { level: 44, move: Energy Ball }
+  - { level: 46, move: High Horsepower }
+  - { level: 48, move: Earth Power }
+  - { level: 51, move: Siphon }
   - { level: 54, move: Quagmire }
-  - { level: 57, move: Leaf Storm }
-  - { level: 58, move: Power Whip }
-  - { level: 62, move: Sinkhole }
+  - { level: 58, move: Sludge Wave }
+  - { level: 68, move: Spore }
+  - { level: 74, move: Faultbreak }
+  - { level: 76, move: Power Whip }
