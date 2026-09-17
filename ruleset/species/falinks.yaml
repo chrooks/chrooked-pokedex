@@ -3,23 +3,33 @@ chrooked_id: falinks
 aka: { pokeemerald: SPECIES_FALINKS }
 abilities:
   primary: Skill Link
-  secondary: Battle Armor
-  hidden: Martialize
+  secondary: Stamina
+  hidden: Battle Armor
+stats: { hp: 80, atk: 115, def: 115, spa: 50, spd: 75, spe: 80 }
 learnset:
+  - { level: 1, move: Stealth Rock }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Protect }
   - { level: 5, move: Rock Smash }
-  - { level: 10, move: Focus Energy }
-  - { level: 15, move: Headbutt }
-  - { level: 16, move: Brick Break }
-  - { level: 20, move: Bulk Up }
-  - { level: 25, move: Endure }
-  - { level: 30, move: Reversal }
-  - { level: 35, move: First Impression }
-  - { level: 37, move: One-Inch Punch }
-  - { level: 38, move: Cross Chop }
-  - { level: 40, move: No Retreat }
-  - { level: 45, move: Iron Defense }
-  - { level: 50, move: Close Combat }
-  - { level: 55, move: Megahorn }
-  - { level: 60, move: Counter }
+  - { level: 9, move: Karate Chop }
+  - { level: 16, move: Iron Defense }
+  - { level: 19, move: Defend Order }
+  - { level: 22, move: Protect }
+  - { level: 24, move: Arm Thrust }
+  - { level: 26, move: Triple Kick }
+  - { level: 29, move: Endure }
+  - { level: 31, move: Body Press }
+  - { level: 35, move: Iron Head }
+  - { level: 36, move: X-Scissor }
+  - { level: 39, move: Rock Blast }
+  - { level: 41, move: Heal Order }
+  - { level: 43, move: Pin Missile }
+  - { level: 46, move: Sacred Sword }
+  - { level: 47, move: Volley }
+  - { level: 49, move: Attack Order }
+  - { level: 50, move: Agility }
+  - { level: 52, move: Cross Chop }
+  - { level: 54, move: Wide Guard }
+  - { level: 58, move: Bulk Up }
+  - { level: 61, move: Spikes }
+  - { level: 68, move: Swords Dance }
+  - { level: 72, move: Close Combat }
