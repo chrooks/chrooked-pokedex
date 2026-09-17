@@ -2,31 +2,33 @@ name: Chansey
 chrooked_id: chansey
 aka: { pokeemerald: SPECIES_CHANSEY }
 abilities:
-  primary: Natural Cure
+  primary: Healer
   secondary: Self Sufficient
-  hidden: Healer
+  hidden: Triage
+stats: { hp: 250, atk: 5, def: 5, spa: 35, spd: 105, spe: 50 }
 learnset:
-  - { level: 1, move: Charm }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Sweet Kiss }
-  - { level: 1, move: Defense Curl }
-  - { level: 2, move: Covet }
-  - { level: 3, move: Disarming Voice }
-  - { level: 4, move: Tail Whip }
-  - { level: 5, move: Pound }
-  - { level: 8, move: Echoed Voice }
-  - { level: 12, move: Life Dew }
-  - { level: 15, move: Swift }
-  - { level: 16, move: Sing }
-  - { level: 20, move: Fling }
-  - { level: 24, move: Take Down }
-  - { level: 28, move: Heal Pulse }
-  - { level: 29, move: Uproar }
-  - { level: 32, move: Helping Hand }
-  - { level: 36, move: Light Screen }
-  - { level: 38, move: Resonance }
-  - { level: 40, move: Double-Edge }
-  - { level: 44, move: Soft-Boiled }
-  - { level: 48, move: Last Resort }
-  - { level: 52, move: Healing Wish }
-  - { level: 57, move: Hyper Beam }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Heal Order }
+  - { level: 5, move: Echoed Voice }
+  - { level: 10, move: Disarming Voice }
+  - { level: 12, move: Counter }
+  - { level: 16, move: Seismic Toss }
+  - { level: 19, move: Soft-Boiled }
+  - { level: 21, move: Yawn }
+  - { level: 23, move: Swift }
+  - { level: 26, move: Wish }
+  - { level: 29, move: Stealth Rock }
+  - { level: 31, move: Heal Pulse }
+  - { level: 36, move: Heal Bell }
+  - { level: 39, move: Aromatherapy }
+  - { level: 41, move: Protect }
+  - { level: 44, move: Tri Attack }
+  - { level: 47, move: Hyper Voice }
+  - { level: 50, move: Life Dew }
+  - { level: 52, move: Moonlight }
+  - { level: 55, move: Resonance }
+  - { level: 57, move: Charm }
+  - { level: 59, move: Thunder Wave }
+  - { level: 61, move: Safeguard }
+  - { level: 65, move: Light Screen }
+  - { level: 68, move: Hyper Beam }
