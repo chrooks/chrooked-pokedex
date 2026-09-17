@@ -1,30 +1,36 @@
 name: Toucannon
 chrooked_id: toucannon
 aka: { dex: 733 }
+types: [Fire, Flying]
 abilities:
-  primary: True Shot
-  secondary: Skill Link
-  hidden: Sheer Force
+  primary: Skill Link
+  secondary: True Shot
+  hidden: Kindle
+stats: { hp: 90, atk: 130, def: 85, spa: 55, spd: 80, spe: 80 }
 learnset:
-  - { level: 0, move: Beak Blast }
   - { level: 1, move: Growl }
-  - { level: 1, move: Rock Blast }
-  - { level: 1, move: Peck }
-  - { level: 1, move: Rock Smash }
-  - { level: 2, move: Tackle }
-  - { level: 3, move: Echoed Voice }
-  - { level: 13, move: Supersonic }
-  - { level: 16, move: Pluck }
-  - { level: 21, move: Roost }
-  - { level: 24, move: Fury Attack }
-  - { level: 27, move: Bail Out }
-  - { level: 29, move: Take Down }
-  - { level: 30, move: Screech }
-  - { level: 34, move: Drill Peck }
-  - { level: 37, move: Rampage }
-  - { level: 38, move: Nosedive }
-  - { level: 40, move: Bullet Seed }
-  - { level: 44, move: Feather Dance }
-  - { level: 50, move: Hyper Voice }
-  - { level: 57, move: Double-Edge }
-  - { level: 59, move: Brave Bird }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Flame Charge }
+  - { level: 9, move: Peck }
+  - { level: 12, move: Flutter Bash }
+  - { level: 20, move: Roost }
+  - { level: 24, move: Knock Off }
+  - { level: 27, move: Rock Slide }
+  - { level: 29, move: Aerial Ace }
+  - { level: 31, move: Defog }
+  - { level: 33, move: Barrage }
+  - { level: 35, move: Volley }
+  - { level: 37, move: Seed Bomb }
+  - { level: 39, move: Drill Peck }
+  - { level: 41, move: Gale Flurry }
+  - { level: 43, move: Fury Attack }
+  - { level: 45, move: Terra Cannon }
+  - { level: 47, move: Cinder Smash }
+  - { level: 49, move: Bullet Seed }
+  - { level: 51, move: Rock Blast }
+  - { level: 53, move: Combust }
+  - { level: 55, move: Beak Blast }
+  - { level: 58, move: Nosedive }
+  - { level: 61, move: Egg Bomb }
+  - { level: 68, move: Flare Blitz }
+  - { level: 75, move: Brave Bird }

@@ -1,24 +1,36 @@
 name: Pikipek
 chrooked_id: pikipek
 aka: { dex: 731 }
+types: [Fire, Flying]
+abilities:
+  primary: Skill Link
+  secondary: True Shot
+  hidden: Kindle
+stats: { hp: 52, atk: 75, def: 49, spa: 32, spd: 46, spe: 46 }
 learnset:
-  - { level: 1, move: Peck }
-  - { level: 2, move: Tackle }
-  - { level: 3, move: Growl }
-  - { level: 7, move: Echoed Voice }
-  - { level: 9, move: Rock Smash }
-  - { level: 13, move: Supersonic }
-  - { level: 15, move: Pluck }
-  - { level: 19, move: Roost }
-  - { level: 21, move: Fury Attack }
-  - { level: 25, move: Screech }
-  - { level: 27, move: Drill Peck }
-  - { level: 29, move: Bail Out }
-  - { level: 31, move: Bullet Seed }
-  - { level: 33, move: Feather Dance }
-  - { level: 37, move: Hyper Voice }
-  - { level: 40, move: Take Down }
-  - { level: 46, move: Rampage }
-  - { level: 47, move: Nosedive }
-  - { level: 57, move: Double-Edge }
-  - { level: 59, move: Brave Bird }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Flame Charge }
+  - { level: 9, move: Peck }
+  - { level: 12, move: Flutter Bash }
+  - { level: 20, move: Roost }
+  - { level: 24, move: Knock Off }
+  - { level: 27, move: Rock Slide }
+  - { level: 29, move: Aerial Ace }
+  - { level: 31, move: Defog }
+  - { level: 33, move: Barrage }
+  - { level: 35, move: Volley }
+  - { level: 37, move: Seed Bomb }
+  - { level: 39, move: Drill Peck }
+  - { level: 41, move: Gale Flurry }
+  - { level: 43, move: Fury Attack }
+  - { level: 45, move: Terra Cannon }
+  - { level: 47, move: Cinder Smash }
+  - { level: 49, move: Bullet Seed }
+  - { level: 51, move: Rock Blast }
+  - { level: 53, move: Combust }
+  - { level: 55, move: Beak Blast }
+  - { level: 58, move: Nosedive }
+  - { level: 61, move: Egg Bomb }
+  - { level: 68, move: Flare Blitz }
+  - { level: 75, move: Brave Bird }
