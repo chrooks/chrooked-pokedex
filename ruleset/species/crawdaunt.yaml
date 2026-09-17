@@ -33,3 +33,4 @@ learnset:
   - { level: 65, move: Superpower }
   - { level: 72, move: Wave Crash }
   - { level: 73, move: Guillotine }
+evolution: { from: Corphish, method: { level: 30 } }

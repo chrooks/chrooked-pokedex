@@ -5,7 +5,7 @@ abilities:
   primary: Brawler's Spirit
   secondary: No Guard
   hidden: Steadfast
-stats: { hp: 100, spd: 90, spe: 65 }
+stats: { hp: 100, atk: 135, def: 80, spa: 65, spd: 90, spe: 65 }
 learnset:
   - { level: 1, move: Wide Guard }
   - { level: 1, move: Low Kick }

@@ -34,3 +34,4 @@ learnset:
   - { level: 68, move: Superpower }
   - { level: 72, move: Wave Crash }
   - { level: 75, move: Guillotine }
+evolution: { from: Krabby, method: { level: 30 } }

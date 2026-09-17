@@ -5,7 +5,7 @@ abilities:
   primary: Medium
   secondary: Vampiric
   hidden: Frost Body
-stats: { hp: 65, atk: 80, spa: 135, spd: 80, spe: 120 }
+stats: { hp: 65, atk: 80, def: 60, spa: 135, spd: 80, spe: 120 }
 learnset:
   - { level: 0, move: Shadow Ball }
   - { level: 1, move: Flicker }

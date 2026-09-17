@@ -3,7 +3,7 @@ chrooked_id: golem
 aka: { pokeemerald: SPECIES_GOLEM }
 abilities:
   hidden: Mineralize
-stats: { hp: 90, atk: 120, spa: 45, spd: 85 }
+stats: { hp: 90, atk: 125, def: 135, spa: 45, spd: 90, spe: 50 }
 learnset:
   - { level: 0, move: Head Smash }
   - { level: 1, move: Defense Curl }
