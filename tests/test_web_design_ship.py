@@ -194,3 +194,24 @@ def test_proof_transitions(env):
 
     assert env.client.post("/api/design/goodra/proof", json={"result": "proven"}).status_code == 409
     assert env.client.post("/api/design/goodra/proof", json={"result": "maybe"}).status_code == 422
+
+
+def test_montext_readback_matches_moveset_abilities_and_types(tmp_path):
+    from chrooked_pokedex.web import design_ship as ds
+    (tmp_path / "patch" / "Definitions").mkdir(parents=True)
+    (tmp_path / "patch" / "Definitions" / "montext.rb").write_text(
+        'if MONHASH.dig(:KINGLER, "Normal Form")\n'
+        '  MONHASH[:KINGLER]["Normal Form"][:Type1] = :WATER\n'
+        '  MONHASH[:KINGLER]["Normal Form"][:Type2] = :STEEL\n'
+        '  MONHASH[:KINGLER]["Normal Form"][:Abilities][0] = :SHEERFORCE\n'
+        '  MONHASH[:KINGLER]["Normal Form"][:Abilities][1] = :SERRATEDJAW\n'
+        '  MONHASH[:KINGLER]["Normal Form"][:HiddenAbility] = :HYPERCUTTER\n'
+        '  MONHASH[:KINGLER]["Normal Form"][:Moveset] = [[0, :PILEDRIVER], [8, :CLAMP], [14, :AQUAJET]]\n'
+        'else\n  puts "skip"\nend\n', encoding="utf-8")
+    exp = [{"id": "kingler", "name": "Kingler", "rows": [(0, "Pile Driver"), (8, "Clamp"), (14, "Aqua Jet")],
+            "abilities": {"primary": "Sheer Force", "secondary": "Serrated Jaw", "hidden": "Hyper Cutter"},
+            "types": ["Water", "Steel"]}]
+    out = ds.montext_readback(tmp_path, exp)
+    assert out["ok"] and out["ok_count"] == out["total"] == 6
+    exp[0]["rows"][1] = (9, "Clamp")
+    assert not ds.montext_readback(tmp_path, exp)["ok"]

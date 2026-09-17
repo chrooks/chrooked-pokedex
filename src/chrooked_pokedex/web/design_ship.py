@@ -107,6 +107,89 @@ def _new_mechanics(record: DesignRecord) -> str | None:
     return f"{custom.get('name')} ({custom.get('kind')}): {custom.get('mechanic', '')}".strip()
 
 
+# --- read-back without Ruby -------------------------------------------------- #
+# hestia has no Ruby, so the snapshot-based read-back 500s there. The retired
+# line_write.py read the applied montext.rb by regex instead; this is that path,
+# kept as the fallback so a green apply still gets its proof.
+
+def _sym(name: str | None) -> str:
+    return re.sub(r"[^A-Z0-9]", "", (name or "").upper()).replace("HIGHJUMPKICK", "HIJUMPKICK")
+
+
+_BLOCK = re.compile(r'if MONHASH\.dig\(:([A-Z0-9]+), "([^"]+)"\)(.*?)\nelse', re.S)
+
+
+def montext_readback(
+    target_path: str | Path, expectations: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Diff applied montext.rb blocks against per-stage expectations.
+
+    Each expectation: ``{"id", "name", "rows", "abilities", "types"}``. A stage
+    matches when some block for its base symbol carries the same moveset; the
+    ability and type lines are then checked on that block. Same result shape as
+    ``readback.read_back``.
+    """
+    src = (Path(target_path) / "patch" / "Definitions" / "montext.rb").read_text(encoding="utf-8")
+    blocks: dict[str, list[str]] = {}
+    for base, _form, body in _BLOCK.findall(src):
+        blocks.setdefault(base, []).append(body)
+    species: list[dict[str, Any]] = []
+    for exp in expectations:
+        base = _sym(str(exp["name"]).split()[0])
+        want_rows = sorted((int(l), _sym(m)) for l, m in exp["rows"])
+        checks: list[dict[str, Any]] = []
+        hit_body = None
+        for body in blocks.get(base, []):
+            m = re.search(r"\[:Moveset\] = (.*)", body)
+            got = sorted((int(l), x) for l, x in re.findall(r"\[(\d+), :(\w+)\]", m.group(1) if m else ""))
+            if got == want_rows:
+                hit_body = body
+                break
+        checks.append({"field": "learnset", "ok": hit_body is not None,
+                       "expected": len(want_rows), "actual": "MATCH" if hit_body else "no block matched"})
+        if hit_body is not None:
+            for i, slot in enumerate(("primary", "secondary")):
+                want = exp.get("abilities", {}).get(slot)
+                if want:
+                    got = re.search(r"\[:Abilities\]\[%d\] = :(\w+)" % i, hit_body)
+                    checks.append({"field": f"ability.{slot}", "ok": bool(got) and got.group(1) == _sym(want),
+                                   "expected": _sym(want), "actual": got.group(1) if got else None})
+            want_h = exp.get("abilities", {}).get("hidden")
+            if want_h:
+                got = re.search(r"\[:HiddenAbility\] = :(\w+)", hit_body)
+                checks.append({"field": "ability.hidden", "ok": bool(got) and got.group(1) == _sym(want_h),
+                               "expected": _sym(want_h), "actual": got.group(1) if got else None})
+            for i, t in enumerate(exp.get("types") or []):
+                got = re.search(r"\[:Type%d\] = :(\w+)" % (i + 1), hit_body)
+                if got:
+                    checks.append({"field": f"type{i+1}", "ok": got.group(1) == _sym(t),
+                                   "expected": _sym(t), "actual": got.group(1)})
+        ok_count = sum(1 for c in checks if c["ok"])
+        species.append({"chrooked_id": exp["id"], "ok": ok_count == len(checks),
+                        "ok_count": ok_count, "total": len(checks), "checks": checks})
+    ok_count = sum(s["ok_count"] for s in species)
+    total = sum(s["total"] for s in species)
+    return {"species": species, "ok_count": ok_count, "total": total, "ok": all(s["ok"] for s in species)}
+
+
+def _expectations(record: DesignRecord, snapshot: dict[str, Any]) -> list[dict[str, Any]]:
+    decisions = record.decisions or {}
+    preview = record.preview or {}
+    plan = line_plan(record, decisions, preview)
+    abilities = _ability_slots(list(decisions.get("abilities") or []))
+    out = []
+    for cid, rows in plan.items():
+        entry = snapshot["species"].get(cid) or {}
+        is_form = cid in record.forms
+        out.append({
+            "id": cid, "name": entry.get("name", cid),
+            "rows": [(r["level"], r["move"]) for r in rows],
+            "abilities": {} if is_form else abilities,
+            "types": [] if is_form else list(preview.get("typing") or []),
+        })
+    return out
+
+
 def ship(
     records: list[DesignRecord], target: Any, ctx: Any, snapshot: dict[str, Any]
 ) -> dict[str, dict[str, Any]]:
@@ -151,8 +234,14 @@ def ship(
         try:
             readback = app.state.read_back_ids(target, stages)
         except Exception as error:
-            fail(record, f"read-back failed: {error}", apply=counts, bad_rows=bad)
-            continue
+            if "ruby" not in str(error).lower():
+                fail(record, f"read-back failed: {error}", apply=counts, bad_rows=bad)
+                continue
+            try:
+                readback = montext_readback(target.path, _expectations(record, snapshot))
+            except Exception as error2:  # noqa: BLE001
+                fail(record, f"read-back failed: {error2}", apply=counts, bad_rows=bad)
+                continue
         summary = {k: readback.get(k) for k in ("ok", "ok_count", "total")}
         if bad or not readback.get("ok"):
             diff = [s for s in readback.get("species", []) if not s.get("ok")]
