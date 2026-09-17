@@ -1,0 +1,31 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Hyper Cutter
+chrooked_id: hypercutter
+applies_to: ability
+aka: { pokeemerald: ABILITY_HYPER_CUTTER }
+effects:
+  - summary: Attack cannot be lowered.
+    trigger: stat-change
+    when: any effect would lower this Pokemon's Attack stage (Mold Breaker still bypasses it)
+    effect: the Attack drop is blocked, exactly as the unmodified ability does
+  - summary: A foe's blocked Attack drop raises Attack instead.
+    trigger: stat-change
+    when: a foe's move or ability tries to lower this Pokemon's Attack and Hyper Cutter blocks it (not self-inflicted drops, not drops blocked by Substitute or Mist)
+    effect: show the ability box and raise this Pokemon's Attack by 1 stage, through the same raise path Defiant uses
+test_cases:
+  - given: a foe's Intimidate hits a Hyper Cutter user
+    expect: the drop is blocked and Attack rises by 1
+  - given: a foe uses Growl on a Hyper Cutter user twice
+    expect: Attack rises by 1 each time
+  - given: a Mold Breaker foe uses Growl
+    expect: Attack drops; no raise
+  - given: the Hyper Cutter user's own Superpower lowers its Attack
+    expect: Attack drops; no raise
+  - given: a foe's Growl hits a Hyper Cutter user behind a Substitute
+    expect: Substitute blocks it; no raise
+  - given: a foe's Intimidate hits a Hyper Cutter user at +6 Attack
+    expect: blocked; Attack stays at +6
+notes:
+  - "Reskin of the vanilla :HYPERCUTTER symbol — the block is unchanged, the rebound is added on top."
+  - "Rejuv: references/rejuv-harness/chrooked_hypercutter.rb wraps PokeBattle_Battler#pbCanReduceStatStage? (Battle_Effects.rb:766) and fires only on the showMessage path so silent AI checks never buff."
+  - STUB — engine_hints ungrounded, needs human grounding pass

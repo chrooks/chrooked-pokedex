@@ -1114,3 +1114,8 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-17 — Slurpuff
 
 - **Direction:** Chris: Slurpuff's niche is the Unburden Belly Drum sweeper. Physical Fairy (Fairy/Normal). Unburden / Fluffy / Pheromone. Belly Drum as a capstone near the end. Stats geared to physical Attack over Special, 500 BST. Sticky threads, scent and charm, pivot support stay. Belly Drum pinned as the late capstone (68); no special moves at all. No special fillers (Beguile, Tri Attack, Resonance dropped); Baby-Doll Eyes back at L1. Wrap, Snore, Lick out; the Normal physical ladder comes from the skeleton now that it sees 110 Atk. Chris: Headbutt in (23); Magical Torque blocked (not a common move); Lick stays; Wish at 34.; The twin design axes are (1) the Fairy-type 'fairy cake / fairy dog' identity expressed through sweet-sticky utility and aromatic scent mastery, and (2) the contrast between its deceptively soft, airy, clownish appearance and the grip-and-control battlefield role it fulfils with sticky threads and its extraordinary nose — mirroring Aromatisse's role as a tanky, utility-forward Fairy pivot.
+
+## 2026-09-17 — Hyper Cutter (rework)
+
+- **Direction:** Chris: Hyper Cutter makes sense on the crabs but it sucks — buffed: Attack cannot be lowered and rises one stage when a foe tries. Reskin, symbol kept.
+- **New mechanics:** Hyper Cutter rebound — references/rejuv-harness/chrooked_hypercutter.rb prepends PokeBattle_Battler#pbCanReduceStatStage? and raises Attack +1 (Defiant-style) when the vanilla :HyperCutter block fires on a foe-caused Attack drop. Behavior stub ruleset/behaviors/hypercutter.yaml; engine_hints left empty.
