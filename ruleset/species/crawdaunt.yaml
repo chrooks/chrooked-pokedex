@@ -2,31 +2,34 @@ name: Crawdaunt
 chrooked_id: crawdaunt
 aka: { pokeemerald: SPECIES_CRAWDAUNT }
 abilities:
-  primary: Death Grip
-  secondary: Brawler's Spirit
-  hidden: Adaptability
-stats: { hp: 65, atk: 125, def: 90 }
+  primary: Adaptability
+  secondary: Hyper Cutter
+  hidden: Death Grip
+stats: { hp: 75, atk: 135, def: 95, spa: 70, spd: 65, spe: 80 }
 learnset:
-  - { level: 0, move: Swift }
   - { level: 1, move: Leer }
-  - { level: 1, move: Water Gun }
-  - { level: 1, move: Harden }
-  - { level: 1, move: Taunt }
-  - { level: 6, move: Undertow }
-  - { level: 7, move: Cheap Shot }
-  - { level: 12, move: Bubble Beam }
-  - { level: 16, move: Knock Off }
-  - { level: 20, move: Double Hit }
-  - { level: 24, move: Protect }
-  - { level: 28, move: Night Slash }
-  - { level: 29, move: Razor Shell }
-  - { level: 34, move: Aqua Tail }
-  - { level: 37, move: Crunch }
-  - { level: 40, move: Swords Dance }
-  - { level: 43, move: Pixie Slash }
-  - { level: 46, move: Backstab }
-  - { level: 49, move: Havoc }
-  - { level: 50, move: Crabhammer }
-  - { level: 52, move: Wave Crash }
-  - { level: 58, move: Endeavor }
-  - { level: 64, move: Guillotine }
+  - { level: 1, move: Scratch }
+  - { level: 8, move: Clamp }
+  - { level: 14, move: Aqua Jet }
+  - { level: 23, move: Bite }
+  - { level: 24, move: Brick Break }
+  - { level: 25, move: Knock Off }
+  - { level: 26, move: Razor Shell }
+  - { level: 27, move: Night Slash }
+  - { level: 29, move: Rock Slide }
+  - { level: 31, move: Sucker Punch }
+  - { level: 32, move: Flip Turn }
+  - { level: 33, move: Crunch }
+  - { level: 34, move: Thunder Fang }
+  - { level: 35, move: X-Scissor }
+  - { level: 36, move: Jaw Lock }
+  - { level: 40, move: Liquidation }
+  - { level: 41, move: Dragon Claw }
+  - { level: 47, move: Aqua Tail }
+  - { level: 52, move: Crabhammer }
+  - { level: 58, move: Swords Dance }
+  - { level: 60, move: Fishious Rend }
+  - { level: 61, move: Dragon Dance }
+  - { level: 65, move: Superpower }
+  - { level: 72, move: Wave Crash }
+  - { level: 73, move: Guillotine }
