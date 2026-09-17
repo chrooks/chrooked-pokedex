@@ -26,6 +26,7 @@ learnset:
   - { level: 48, move: Poison Jab }
   - { level: 49, move: Drill Run }
   - { level: 51, move: Moltstrike }
+  - { level: 56, move: Volley }
   - { level: 61, move: Thousand Stings }
   - { level: 65, move: Megahorn }
   - { level: 68, move: Gunk Shot }

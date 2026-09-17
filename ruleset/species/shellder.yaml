@@ -25,5 +25,6 @@ learnset:
   - { level: 40, move: Ice Beam }
   - { level: 44, move: Shell Smash }
   - { level: 48, move: Hydro Pump }
+  - { level: 54, move: Volley }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Icebreaker }

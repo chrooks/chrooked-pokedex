@@ -31,5 +31,6 @@ learnset:
   - { level: 29, move: Aqua Tail }
   - { level: 43, move: Ice Hammer }
   - { level: 45, move: Maelstrom }
+  - { level: 52, move: Volley }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Icebreaker }
