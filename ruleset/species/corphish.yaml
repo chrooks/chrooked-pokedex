@@ -3,7 +3,7 @@ chrooked_id: corphish
 aka: { dex: 341 }
 abilities:
   primary: Adaptability
-  secondary: Hyper Cutter
+  secondary: Moxie
   hidden: Death Grip
 stats: { hp: 49, atk: 90, def: 64, spa: 47, spd: 44, spe: 54 }
 learnset:

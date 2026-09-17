@@ -1119,3 +1119,8 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** Chris: Hyper Cutter makes sense on the crabs but it sucks — buffed: Attack cannot be lowered and rises one stage when a foe tries. Reskin, symbol kept.
 - **New mechanics:** Hyper Cutter rebound — references/rejuv-harness/chrooked_hypercutter.rb prepends PokeBattle_Battler#pbCanReduceStatStage? and raises Attack +1 (Defiant-style) when the vanilla :HyperCutter block fires on a foe-caused Attack drop. Behavior stub ruleset/behaviors/hypercutter.yaml; engine_hints left empty.
+
+## 2026-09-17 — Hyper Cutter (rework reverted)
+
+- **Direction:** Chris: the buffed Hyper Cutter was basically Defiant; the reflect variant gives viability but makes no sense lore-wise. Reverted to vanilla. Kingler takes Shell Armor (the steel-hard shell) in the third slot, Crawdaunt takes Moxie (the scarred veteran that empties its pond).
+- **Corrections:** Serrated Jaw stays on Kingler, Death Grip stays on Crawdaunt.

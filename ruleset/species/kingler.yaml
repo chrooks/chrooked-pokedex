@@ -5,7 +5,7 @@ types: [Water, Steel]
 abilities:
   primary: Sheer Force
   secondary: Serrated Jaw
-  hidden: Hyper Cutter
+  hidden: Shell Armor
 stats: { hp: 70, atk: 140, def: 120, spa: 40, spd: 65, spe: 85 }
 learnset:
   - { level: 0, move: Pile Driver }

@@ -3,7 +3,7 @@ chrooked_id: crawdaunt
 aka: { pokeemerald: SPECIES_CRAWDAUNT }
 abilities:
   primary: Adaptability
-  secondary: Hyper Cutter
+  secondary: Moxie
   hidden: Death Grip
 stats: { hp: 75, atk: 135, def: 95, spa: 70, spd: 65, spe: 80 }
 learnset:

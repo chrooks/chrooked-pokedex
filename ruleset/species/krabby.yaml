@@ -4,7 +4,7 @@ aka: { dex: 98 }
 abilities:
   primary: Sheer Force
   secondary: Serrated Jaw
-  hidden: Hyper Cutter
+  hidden: Shell Armor
 stats: { hp: 51, atk: 100, def: 85, spa: 28, spd: 46, spe: 60 }
 learnset:
   - { level: 1, move: Leer }
