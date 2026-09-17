@@ -1,11 +1,7 @@
-name: Alakazam
-chrooked_id: alakazam
-aka: { pokeemerald: SPECIES_ALAKAZAM }
-abilities:
-  primary: Magic Guard
-  secondary: Savant
-  hidden: Inner Focus
-stats: { hp: 55, atk: 50, def: 45, spa: 150, spd: 95, spe: 140 }
+name: Alakazam Mega
+chrooked_id: alakazammega
+aka: {  }
+stats: { hp: 55, atk: 50, def: 65, spa: 190, spd: 105, spe: 170 }
 learnset:
   - { level: 1, move: Flicker }
   - { level: 1, move: Kinesis }

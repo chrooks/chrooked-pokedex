@@ -2,21 +2,34 @@ name: Kadabra
 chrooked_id: kadabra
 aka: { pokeemerald: SPECIES_KADABRA }
 abilities:
-  primary: Mystic Power
+  primary: Magic Guard
+  secondary: Savant
+  hidden: Inner Focus
+stats: { hp: 44, atk: 41, def: 37, spa: 122, spd: 77, spe: 114 }
 learnset:
-  - { level: 0, move: Confusion }
-  - { level: 1, move: Confusion }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Kinesis }
-  - { level: 1, move: Disable }
-  - { level: 1, move: Teleport }
-  - { level: 5, move: Psybeam }
-  - { level: 10, move: Reflect }
-  - { level: 15, move: Ally Switch }
-  - { level: 20, move: Psycho Cut }
-  - { level: 25, move: Recover }
-  - { level: 30, move: Psyshock }
-  - { level: 35, move: Psychic }
-  - { level: 37, move: Mindwarp }
-  - { level: 40, move: Role Play }
-  - { level: 45, move: Future Sight }
-  - { level: 50, move: Calm Mind }
+  - { level: 5, move: Stored Power }
+  - { level: 9, move: Teleport }
+  - { level: 12, move: Confusion }
+  - { level: 16, move: Hypnosis }
+  - { level: 19, move: Reflect }
+  - { level: 21, move: Recover }
+  - { level: 24, move: Psybeam }
+  - { level: 27, move: Trick }
+  - { level: 30, move: Calm Mind }
+  - { level: 34, move: Dazzling Gleam }
+  - { level: 35, move: Shadow Ball }
+  - { level: 36, move: Psychic Terrain }
+  - { level: 39, move: Expanding Force }
+  - { level: 41, move: Aura Sphere }
+  - { level: 43, move: Extrasensory }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Energy Ball }
+  - { level: 49, move: Thunderbolt }
+  - { level: 51, move: Psychic }
+  - { level: 55, move: Dream Eater }
+  - { level: 58, move: Psystrike }
+  - { level: 61, move: Future Sight }
+  - { level: 68, move: Nasty Plot }
+  - { level: 75, move: Focus Blast }

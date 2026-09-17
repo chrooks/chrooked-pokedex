@@ -2,11 +2,34 @@ name: Abra
 chrooked_id: abra
 aka: { pokeemerald: SPECIES_ABRA }
 abilities:
-  primary: Mystic Power
+  primary: Magic Guard
+  secondary: Savant
+  hidden: Inner Focus
+stats: { hp: 36, atk: 32, def: 29, spa: 97, spd: 61, spe: 90 }
 learnset:
-  - { level: 1, move: Teleport }
-  - { level: 2, move: Confusion }
-  - { level: 15, move: Dream Mist }
-  - { level: 29, move: Psychic }
-  - { level: 46, move: Mindwarp }
-  - { level: 57, move: Future Sight }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Kinesis }
+  - { level: 5, move: Stored Power }
+  - { level: 9, move: Teleport }
+  - { level: 12, move: Confusion }
+  - { level: 16, move: Hypnosis }
+  - { level: 19, move: Reflect }
+  - { level: 21, move: Recover }
+  - { level: 24, move: Psybeam }
+  - { level: 27, move: Trick }
+  - { level: 30, move: Calm Mind }
+  - { level: 34, move: Dazzling Gleam }
+  - { level: 35, move: Shadow Ball }
+  - { level: 36, move: Psychic Terrain }
+  - { level: 39, move: Expanding Force }
+  - { level: 41, move: Aura Sphere }
+  - { level: 43, move: Extrasensory }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Energy Ball }
+  - { level: 49, move: Thunderbolt }
+  - { level: 51, move: Psychic }
+  - { level: 55, move: Dream Eater }
+  - { level: 58, move: Psystrike }
+  - { level: 61, move: Future Sight }
+  - { level: 68, move: Nasty Plot }
+  - { level: 75, move: Focus Blast }
