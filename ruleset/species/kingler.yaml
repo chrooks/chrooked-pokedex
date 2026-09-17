@@ -3,29 +3,34 @@ chrooked_id: kingler
 aka: { pokeemerald: SPECIES_KINGLER }
 types: [Water, Steel]
 abilities:
-  primary: Death Grip
-  secondary: Shell Armor
+  primary: Sheer Force
+  secondary: Serrated Jaw
+  hidden: Hyper Cutter
+stats: { hp: 70, atk: 140, def: 120, spa: 40, spd: 65, spe: 85 }
 learnset:
-  - { level: 1, move: Wide Guard }
-  - { level: 1, move: Hammer Arm }
+  - { level: 0, move: Pile Driver }
   - { level: 1, move: Leer }
-  - { level: 1, move: Harden }
-  - { level: 2, move: Water Gun }
-  - { level: 3, move: Metal Claw }
-  - { level: 6, move: Undertow }
-  - { level: 12, move: Mud Shot }
-  - { level: 15, move: Smart Strike }
-  - { level: 16, move: Protect }
-  - { level: 20, move: Bubble Beam }
-  - { level: 24, move: Stomp }
-  - { level: 29, move: Razor Shell }
-  - { level: 31, move: Flail }
-  - { level: 32, move: Metallic Fang }
-  - { level: 36, move: Aqua Tail }
-  - { level: 42, move: Body Slam }
-  - { level: 43, move: Iron Tail }
-  - { level: 45, move: Crabhammer }
-  - { level: 48, move: Swords Dance }
-  - { level: 54, move: Wave Crash }
-  - { level: 57, move: Pile Driver }
-  - { level: 60, move: Guillotine }
+  - { level: 1, move: Scratch }
+  - { level: 8, move: Clamp }
+  - { level: 14, move: Aqua Jet }
+  - { level: 21, move: Swords Dance }
+  - { level: 25, move: Karate Chop }
+  - { level: 26, move: Razor Shell }
+  - { level: 27, move: Metal Claw }
+  - { level: 33, move: Rock Slide }
+  - { level: 34, move: Bite }
+  - { level: 35, move: X-Scissor }
+  - { level: 36, move: Crunch }
+  - { level: 39, move: Jaw Lock }
+  - { level: 40, move: Liquidation }
+  - { level: 41, move: Thunder Fang }
+  - { level: 43, move: Metallic Fang }
+  - { level: 47, move: Brick Break }
+  - { level: 48, move: Meteor Mash }
+  - { level: 52, move: Crabhammer }
+  - { level: 55, move: Cross Chop }
+  - { level: 60, move: Fishious Rend }
+  - { level: 65, move: Hammer Arm }
+  - { level: 68, move: Superpower }
+  - { level: 72, move: Wave Crash }
+  - { level: 75, move: Guillotine }

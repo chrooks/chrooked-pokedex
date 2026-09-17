@@ -2,24 +2,33 @@ name: Krabby
 chrooked_id: krabby
 aka: { dex: 98 }
 abilities:
-  primary: Death Grip
-  secondary: Shell Armor
-  hidden: Sheer Force
+  primary: Sheer Force
+  secondary: Serrated Jaw
+  hidden: Hyper Cutter
+stats: { hp: 51, atk: 100, def: 85, spa: 28, spd: 46, spe: 60 }
 learnset:
-  - { level: 1, move: Water Gun }
   - { level: 1, move: Leer }
-  - { level: 4, move: Harden }
-  - { level: 6, move: Undertow }
-  - { level: 8, move: Metal Claw }
-  - { level: 12, move: Mud Shot }
-  - { level: 16, move: Protect }
-  - { level: 20, move: Bubble Beam }
-  - { level: 24, move: Stomp }
-  - { level: 29, move: Flail }
-  - { level: 30, move: Razor Shell }
-  - { level: 32, move: Aqua Tail }
-  - { level: 36, move: Body Slam }
-  - { level: 40, move: Swords Dance }
-  - { level: 44, move: Crabhammer }
-  - { level: 48, move: Guillotine }
-  - { level: 60, move: Wave Crash }
+  - { level: 1, move: Scratch }
+  - { level: 8, move: Clamp }
+  - { level: 14, move: Aqua Jet }
+  - { level: 21, move: Swords Dance }
+  - { level: 25, move: Karate Chop }
+  - { level: 26, move: Razor Shell }
+  - { level: 27, move: Metal Claw }
+  - { level: 33, move: Rock Slide }
+  - { level: 34, move: Bite }
+  - { level: 35, move: X-Scissor }
+  - { level: 36, move: Crunch }
+  - { level: 39, move: Jaw Lock }
+  - { level: 40, move: Liquidation }
+  - { level: 41, move: Thunder Fang }
+  - { level: 43, move: Metallic Fang }
+  - { level: 47, move: Brick Break }
+  - { level: 48, move: Meteor Mash }
+  - { level: 52, move: Crabhammer }
+  - { level: 55, move: Cross Chop }
+  - { level: 60, move: Fishious Rend }
+  - { level: 65, move: Hammer Arm }
+  - { level: 68, move: Superpower }
+  - { level: 72, move: Wave Crash }
+  - { level: 75, move: Guillotine }
