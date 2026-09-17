@@ -2,27 +2,34 @@ name: Rufflet
 chrooked_id: rufflet
 aka: { pokeemerald: SPECIES_RUFFLET }
 abilities:
-  primary: Updraft
+  primary: Defiant
+  secondary: Sheer Force
+  hidden: Brawler's Spirit
+stats: { hp: 68, atk: 92, def: 54, spa: 34, spd: 51, spe: 54 }
 learnset:
   - { level: 1, move: Leer }
-  - { level: 1, move: Peck }
-  - { level: 2, move: Tackle }
-  - { level: 6, move: Hone Claws }
-  - { level: 12, move: Wing Attack }
-  - { level: 18, move: Tailwind }
-  - { level: 24, move: Scary Face }
-  - { level: 29, move: Slash }
-  - { level: 30, move: Aerial Ace }
-  - { level: 33, move: Air Slash }
-  - { level: 36, move: Crush Claw }
-  - { level: 38, move: Dive Bomb }
-  - { level: 39, move: Take Down }
-  - { level: 40, move: Nosedive }
-  - { level: 42, move: Whirlwind }
-  - { level: 48, move: Rampage }
-  - { level: 52, move: Galeburst }
-  - { level: 55, move: Tempest }
-  - { level: 60, move: Defog }
-  - { level: 63, move: Oblivion Wing }
-  - { level: 66, move: Thrash }
-  - { level: 70, move: Brave Bird }
+  - { level: 5, move: Pound }
+  - { level: 9, move: Peck }
+  - { level: 12, move: Quick Attack }
+  - { level: 16, move: Flutter Bash }
+  - { level: 21, move: Bulk Up }
+  - { level: 23, move: Slash }
+  - { level: 24, move: Knock Off }
+  - { level: 25, move: Headbutt }
+  - { level: 28, move: Aerial Ace }
+  - { level: 30, move: U-turn }
+  - { level: 32, move: Swords Dance }
+  - { level: 34, move: Rock Slide }
+  - { level: 36, move: Liquidation }
+  - { level: 39, move: Drill Peck }
+  - { level: 42, move: Roost }
+  - { level: 43, move: Fly }
+  - { level: 46, move: Body Slam }
+  - { level: 48, move: Aqua Tail }
+  - { level: 51, move: Hyper Drill }
+  - { level: 58, move: Reversal }
+  - { level: 61, move: Double-Edge }
+  - { level: 64, move: Brave Bird }
+  - { level: 66, move: Superpower }
+  - { level: 71, move: Sky Attack }
+  - { level: 73, move: Close Combat }
