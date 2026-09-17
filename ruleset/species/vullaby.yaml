@@ -2,27 +2,30 @@ name: Vullaby
 chrooked_id: vullaby
 aka: { pokeemerald: SPECIES_VULLABY }
 abilities:
-  primary: Carnivore
+  primary: Bone Breaker
+  secondary: Regenerator
   hidden: Stamina
+stats: { hp: 84, atk: 51, def: 80, spa: 37, spd: 73, spe: 55 }
 learnset:
-  - { level: 1, move: Gust }
   - { level: 1, move: Leer }
-  - { level: 2, move: Peck }
-  - { level: 6, move: Flatter }
-  - { level: 9, move: Cheap Shot }
-  - { level: 12, move: Pluck }
-  - { level: 18, move: Tailwind }
-  - { level: 24, move: Knock Off }
-  - { level: 29, move: Heel Drop }
-  - { level: 30, move: Iron Defense }
-  - { level: 36, move: Whirlwind }
-  - { level: 38, move: Dive Bomb }
-  - { level: 39, move: Nosedive }
-  - { level: 40, move: Backstab }
-  - { level: 42, move: Air Slash }
-  - { level: 48, move: Dark Pulse }
-  - { level: 51, move: Havoc }
-  - { level: 54, move: Nasty Plot }
-  - { level: 60, move: Defog }
-  - { level: 66, move: Attract }
-  - { level: 70, move: Brave Bird }
+  - { level: 9, move: Peck }
+  - { level: 13, move: Flutter Bash }
+  - { level: 16, move: Pursuit }
+  - { level: 20, move: Acrobatics }
+  - { level: 22, move: Knock Off }
+  - { level: 24, move: Roost }
+  - { level: 26, move: Assurance }
+  - { level: 28, move: U-turn }
+  - { level: 30, move: Defog }
+  - { level: 32, move: Drill Peck }
+  - { level: 34, move: Dual Wingbeat }
+  - { level: 37, move: Bone Club }
+  - { level: 39, move: Tailwind }
+  - { level: 41, move: Bone Rush }
+  - { level: 47, move: Taunt }
+  - { level: 49, move: Body Press }
+  - { level: 51, move: Crunch }
+  - { level: 53, move: Fly }
+  - { level: 55, move: Foul Play }
+  - { level: 57, move: Bonemerang }
+  - { level: 66, move: Brave Bird }
