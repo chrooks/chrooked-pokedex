@@ -1,26 +1,37 @@
 name: Reuniclus
 chrooked_id: reuniclus
 aka: { pokeemerald: SPECIES_REUNICLUS }
+types: [Psychic, Poison]
 abilities:
-  primary: Medium
-  secondary: Magic Guard
-  hidden: Liquified
-stats: { def: 80, spa: 130, spd: 105 }
+  primary: Dilation
+  secondary: Liquified
+  hidden: Medium
+stats: { hp: 110, atk: 80, def: 85, spa: 135, spd: 100, spe: 20 }
 learnset:
-  - { level: 0, move: Hammer Arm }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Recover }
-  - { level: 1, move: Protect }
-  - { level: 1, move: Endeavor }
-  - { level: 12, move: Psybeam }
-  - { level: 16, move: Charm }
-  - { level: 20, move: Psyshock }
-  - { level: 24, move: Light Screen }
-  - { level: 25, move: Reflect }
-  - { level: 28, move: Ally Switch }
-  - { level: 35, move: Pain Split }
-  - { level: 40, move: Psychic }
-  - { level: 44, move: Mindwarp }
-  - { level: 48, move: Skill Swap }
-  - { level: 56, move: Future Sight }
-  - { level: 64, move: Wonder Room }
+  - { level: 0, move: Trick Room }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Smog }
+  - { level: 12, move: Mind Flick }
+  - { level: 16, move: Acid Spray }
+  - { level: 20, move: Sludge }
+  - { level: 22, move: Toxic }
+  - { level: 24, move: Psybeam }
+  - { level: 27, move: Drain Punch }
+  - { level: 30, move: Venoshock }
+  - { level: 32, move: Recover }
+  - { level: 34, move: Shadow Ball }
+  - { level: 36, move: Zen Headbutt }
+  - { level: 38, move: Body Press }
+  - { level: 40, move: Extrasensory }
+  - { level: 42, move: Calm Mind }
+  - { level: 44, move: Sludge Bomb }
+  - { level: 46, move: Sludge Wave }
+  - { level: 49, move: Psyshock }
+  - { level: 53, move: Poison Jab }
+  - { level: 56, move: Kinetic Slam }
+  - { level: 58, move: Psychic }
+  - { level: 61, move: Superpower }
+  - { level: 65, move: Gunk Shot }
+  - { level: 73, move: Wring Out }
+  - { level: 75, move: Future Sight }
