@@ -1,19 +1,37 @@
 name: Vulpix
 chrooked_id: vulpix
 aka: { pokeemerald: SPECIES_VULPIX }
+types: [Fire, Psychic]
+abilities:
+  primary: Drought
+  secondary: Cursed Body
+  hidden: Flash Fire
+stats: { hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65 }
 learnset:
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Ember }
-  - { level: 4, move: Disable }
-  - { level: 8, move: Quick Attack }
-  - { level: 12, move: Fire Spin }
-  - { level: 16, move: Incinerate }
-  - { level: 20, move: Confuse Ray }
-  - { level: 24, move: Will-O-Wisp }
-  - { level: 28, move: Disarming Voice }
-  - { level: 32, move: Flamethrower }
-  - { level: 36, move: Extrasensory }
-  - { level: 40, move: Mystical Fire }
-  - { level: 44, move: Draining Kiss }
-  - { level: 48, move: Fire Blast }
-  - { level: 57, move: Overheat }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Ember }
+  - { level: 9, move: Confusion }
+  - { level: 12, move: Knell }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 19, move: Confuse Ray }
+  - { level: 21, move: Hypnosis }
+  - { level: 24, move: Psybeam }
+  - { level: 26, move: Beguile }
+  - { level: 28, move: Ominous Wind }
+  - { level: 31, move: Hex }
+  - { level: 33, move: Stored Power }
+  - { level: 35, move: Fiery Dance }
+  - { level: 37, move: Shadow Ball }
+  - { level: 39, move: Dazzling Gleam }
+  - { level: 41, move: Calm Mind }
+  - { level: 44, move: Extrasensory }
+  - { level: 46, move: Psychic }
+  - { level: 48, move: Pain Split }
+  - { level: 50, move: Flamethrower }
+  - { level: 52, move: Moonblast }
+  - { level: 55, move: Dream Eater }
+  - { level: 61, move: Heat Wave }
+  - { level: 65, move: Future Sight }
+  - { level: 68, move: Imprison }
+  - { level: 72, move: Overheat }
+  - { level: 75, move: Rapture }
