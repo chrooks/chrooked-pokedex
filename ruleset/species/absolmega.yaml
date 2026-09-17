@@ -2,26 +2,27 @@ name: Absol Mega
 chrooked_id: absolmega
 aka: { pokeemerald: SPECIES_ABSOL_MEGA }
 types: [Dark, Fairy]
+stats: { hp: 66, atk: 155, def: 65, spa: 115, spd: 65, spe: 119 }
 learnset:
   - { level: 1, move: Leer }
-  - { level: 1, move: Quick Attack }
-  - { level: 2, move: Cheap Shot }
-  - { level: 5, move: Double Team }
-  - { level: 10, move: Knock Off }
-  - { level: 15, move: Glitter Tap }
-  - { level: 20, move: Taunt }
-  - { level: 22, move: Cutsie Slap }
-  - { level: 25, move: Slash }
-  - { level: 29, move: Night Slash }
-  - { level: 30, move: Heel Drop }
-  - { level: 35, move: Focus Energy }
-  - { level: 40, move: Sucker Punch }
-  - { level: 42, move: Pixie Slash }
-  - { level: 43, move: Backstab }
-  - { level: 45, move: Swords Dance }
-  - { level: 46, move: Starfall Slam }
-  - { level: 50, move: Future Sight }
-  - { level: 55, move: Perish Song }
-  - { level: 57, move: Havoc }
-  - { level: 59, move: Faeblitz }
-  - { level: 60, move: Secret Sword }
+  - { level: 5, move: Pursuit }
+  - { level: 9, move: Glitter Tap }
+  - { level: 14, move: Cheap Shot }
+  - { level: 20, move: Knock Off }
+  - { level: 23, move: Swords Dance }
+  - { level: 25, move: Night Slash }
+  - { level: 27, move: Spirit Break }
+  - { level: 29, move: Focus Energy }
+  - { level: 33, move: Lovely Bite }
+  - { level: 41, move: Sucker Punch }
+  - { level: 44, move: Pixie Slash }
+  - { level: 46, move: Perish Song }
+  - { level: 48, move: Psycho Cut }
+  - { level: 50, move: Stone Axe }
+  - { level: 52, move: Kowtow Cleave }
+  - { level: 55, move: Maelstrom }
+  - { level: 58, move: Play Rough }
+  - { level: 60, move: Sacred Sword }
+  - { level: 62, move: Starfall Slam }
+  - { level: 68, move: Havoc }
+  - { level: 72, move: Faeblitz }
