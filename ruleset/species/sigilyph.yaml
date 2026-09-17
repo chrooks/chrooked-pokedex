@@ -3,27 +3,31 @@ chrooked_id: sigilyph
 aka: { dex: 561 }
 abilities:
   primary: Fixation
-  secondary: Magic Guard
-  hidden: Tinted Lens
+  secondary: Serene Grace
+  hidden: Pressure
+stats: { hp: 75, atk: 50, def: 85, spa: 110, spd: 85, spe: 105 }
 learnset:
-  - { level: 1, move: Gust }
-  - { level: 1, move: Confusion }
-  - { level: 5, move: Gravity }
-  - { level: 10, move: Hypnosis }
-  - { level: 15, move: Air Cutter }
-  - { level: 20, move: Psybeam }
-  - { level: 25, move: Whirlwind }
-  - { level: 30, move: Cosmic Power }
-  - { level: 32, move: Air Slash }
-  - { level: 35, move: Galeburst }
-  - { level: 37, move: Psychic }
-  - { level: 40, move: Mindwarp }
-  - { level: 43, move: Hurricane }
-  - { level: 45, move: Tailwind }
-  - { level: 50, move: Light Screen }
-  - { level: 51, move: Reflect }
-  - { level: 55, move: Sky Attack }
-  - { level: 57, move: Future Sight }
-  - { level: 60, move: Skill Swap }
-  - { level: 64, move: Oblivion Wing }
-  - { level: 65, move: Tempest }
+  - { level: 1, move: Sand Attack }
+  - { level: 9, move: Gust }
+  - { level: 12, move: Confusion }
+  - { level: 16, move: Calm Mind }
+  - { level: 19, move: Cosmic Power }
+  - { level: 21, move: Tailwind }
+  - { level: 23, move: Psybeam }
+  - { level: 26, move: Air Cutter }
+  - { level: 29, move: Defog }
+  - { level: 31, move: Roost }
+  - { level: 33, move: Air Slash }
+  - { level: 35, move: Shadow Ball }
+  - { level: 37, move: Ancient Power }
+  - { level: 39, move: Imprison }
+  - { level: 41, move: Extrasensory }
+  - { level: 44, move: Psyshock }
+  - { level: 46, move: Whirlwind }
+  - { level: 48, move: Earth Power }
+  - { level: 50, move: Psychic }
+  - { level: 52, move: Stored Power }
+  - { level: 54, move: Aeroblast }
+  - { level: 61, move: Sandsear Storm }
+  - { level: 65, move: Future Sight }
+  - { level: 68, move: Hurricane }
