@@ -2,27 +2,33 @@ name: Dolliv
 chrooked_id: dolliv
 aka: { pokeemerald: SPECIES_DOLLIV }
 abilities:
-  primary: Early Bird
-  secondary: Deep-Rooted
-  hidden: Harvest
+  primary: Deep-Rooted
+  secondary: Regenerator
+  hidden: Sunbask
+stats: { hp: 63, atk: 38, def: 62, spa: 86, spd: 79, spe: 31 }
 learnset:
-  - { level: 0, move: Giga Drain }
-  - { level: 1, move: Sweet Scent }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Echoed Voice }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leech Seed }
   - { level: 5, move: Absorb }
-  - { level: 7, move: Growth }
-  - { level: 10, move: Razor Leaf }
-  - { level: 13, move: Helping Hand }
-  - { level: 15, move: Swift }
-  - { level: 16, move: Flail }
-  - { level: 20, move: Mega Drain }
-  - { level: 23, move: Grassy Terrain }
-  - { level: 27, move: Leech Seed }
-  - { level: 29, move: Uproar }
-  - { level: 31, move: Seed Bomb }
-  - { level: 34, move: Energy Ball }
-  - { level: 40, move: Siphon }
-  - { level: 46, move: Resonance }
-  - { level: 57, move: Leaf Storm }
-  - { level: 59, move: Hyper Beam }
+  - { level: 9, move: Echoed Voice }
+  - { level: 12, move: Mega Drain }
+  - { level: 16, move: Terrain Pulse }
+  - { level: 19, move: Strength Sap }
+  - { level: 21, move: Synthesis }
+  - { level: 23, move: Magical Leaf }
+  - { level: 24, move: Mud Shot }
+  - { level: 27, move: Scorching Sands }
+  - { level: 30, move: Swift }
+  - { level: 32, move: Aromatherapy }
+  - { level: 34, move: Giga Drain }
+  - { level: 37, move: Apple Acid }
+  - { level: 39, move: Recover }
+  - { level: 41, move: Energy Ball }
+  - { level: 44, move: Hyper Voice }
+  - { level: 51, move: Siphon }
+  - { level: 54, move: Resonance }
+  - { level: 58, move: Earth Power }
+  - { level: 61, move: Solar Beam }
+  - { level: 65, move: Hyper Beam }
+  - { level: 68, move: Leaf Storm }
+  - { level: 72, move: Grassy Terrain }
