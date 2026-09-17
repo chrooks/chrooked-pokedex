@@ -1,23 +1,34 @@
 name: Glimmet
 chrooked_id: glimmet
 aka: { dex: 969 }
+abilities:
+  primary: Toxic Debris
+  secondary: Poison Touch
+  hidden: Adaptability
+stats: { hp: 55, atk: 36, def: 60, spa: 86, spd: 54, spe: 60 }
 learnset:
-  - { level: 1, move: Rock Throw }
-  - { level: 1, move: Harden }
-  - { level: 1, move: Smack Down }
+  - { level: 1, move: Stealth Rock }
   - { level: 5, move: Jewel Glow }
-  - { level: 7, move: Acid Spray }
-  - { level: 11, move: Ancient Power }
-  - { level: 15, move: Rock Polish }
-  - { level: 18, move: Stealth Rock }
-  - { level: 22, move: Venoshock }
-  - { level: 26, move: Sandstorm }
-  - { level: 29, move: Self-Destruct }
-  - { level: 31, move: Miasma }
-  - { level: 33, move: Rock Slide }
-  - { level: 35, move: Power Gem }
-  - { level: 37, move: Crystal Beam }
-  - { level: 41, move: Acid Armor }
-  - { level: 46, move: Sludge Wave }
-  - { level: 62, move: Meteor Surge }
-  - { level: 64, move: Contagion }
+  - { level: 9, move: Smog }
+  - { level: 12, move: Acid Spray }
+  - { level: 14, move: Poison Gas }
+  - { level: 16, move: Clear Smog }
+  - { level: 21, move: Taunt }
+  - { level: 23, move: Venoshock }
+  - { level: 25, move: Giga Drain }
+  - { level: 27, move: Ancient Power }
+  - { level: 29, move: Sleep Powder }
+  - { level: 31, move: Geo Pulse }
+  - { level: 33, move: Miasma }
+  - { level: 34, move: Recover }
+  - { level: 35, move: Flash Cannon }
+  - { level: 37, move: Toxic Spikes }
+  - { level: 39, move: Stun Spore }
+  - { level: 41, move: Toxic }
+  - { level: 44, move: Sludge Bomb }
+  - { level: 47, move: Power Gem }
+  - { level: 54, move: Sludge Wave }
+  - { level: 56, move: Confuse Ray }
+  - { level: 61, move: Meteor Surge }
+  - { level: 65, move: Spikes }
+  - { level: 72, move: Contagion }
