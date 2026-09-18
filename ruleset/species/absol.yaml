@@ -12,21 +12,25 @@ learnset:
   - { level: 5, move: Pursuit }
   - { level: 9, move: Glitter Tap }
   - { level: 14, move: Cheap Shot }
+  - { level: 18, move: Malice }
   - { level: 20, move: Knock Off }
   - { level: 23, move: Swords Dance }
   - { level: 25, move: Night Slash }
   - { level: 27, move: Spirit Break }
   - { level: 29, move: Focus Energy }
-  - { level: 33, move: Lovely Bite }
+  - { level: 32, move: Dazzling Gleam }
+  - { level: 35, move: Psycho Cut }
+  - { level: 38, move: Stone Axe }
   - { level: 41, move: Sucker Punch }
   - { level: 44, move: Pixie Slash }
   - { level: 46, move: Perish Song }
-  - { level: 48, move: Psycho Cut }
-  - { level: 50, move: Stone Axe }
+  - { level: 49, move: Night Daze }
   - { level: 52, move: Kowtow Cleave }
   - { level: 55, move: Maelstrom }
-  - { level: 58, move: Play Rough }
-  - { level: 60, move: Sacred Sword }
-  - { level: 62, move: Starfall Slam }
-  - { level: 68, move: Havoc }
-  - { level: 72, move: Faeblitz }
+  - { level: 58, move: Sacred Sword }
+  - { level: 61, move: Future Sight }
+  - { level: 64, move: Havoc }
+  - { level: 67, move: Fleur Cannon }
+  - { level: 70, move: Faeblitz }
+  - { level: 73, move: Doom Desire }
+  - { level: 75, move: Eclipse }
