@@ -1128,6 +1128,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-18 — Charizard line: Dragon's Maw hidden, Mega Y Solar Dynamo
 
 - **Method:** direct edit, no blind pass. Megas now keep every pre-Mega ability and add the Mega one (`chrooked_zz_zmega.rb`), so a Mega edit is typing, one ability, stats.
+- **In-Game Proof (2026-09-18):** Chris confirmed a Mega keeps its base abilities plus the Mega ability in battle.
 - **Changes:** hidden Solar Power → **Dragon's Maw** on Charmander, Charmeleon, Charizard (first Ruleset holders; pays the Fire/Dragon typing). Mega Y → **Solar Dynamo** (Drought + Solar Power) — the old hidden lives on in the Mega. Mega X untouched.
 - **Rejected:** Infernal Maw (not bite-led), Rapid Combustion (Talonflame's), Thermal Exchange (dull on a starter).
 - **Read-back:** `applied=1746 partial=0`; montext HiddenAbility DRAGONSMAW ×3, Mega Y Abilities SOLARDYNAMO.
