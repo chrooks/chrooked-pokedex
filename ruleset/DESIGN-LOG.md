@@ -1124,3 +1124,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** Chris: the buffed Hyper Cutter was basically Defiant; the reflect variant gives viability but makes no sense lore-wise. Reverted to vanilla. Kingler takes Shell Armor (the steel-hard shell) in the third slot, Crawdaunt takes Moxie (the scarred veteran that empties its pond).
 - **Corrections:** Serrated Jaw stays on Kingler, Death Grip stays on Crawdaunt.
+
+## 2026-09-18 — Charizard line: Dragon's Maw hidden, Mega Y Solar Dynamo
+
+- **Method:** direct edit, no blind pass. Megas now keep every pre-Mega ability and add the Mega one (`chrooked_zz_zmega.rb`), so a Mega edit is typing, one ability, stats.
+- **Changes:** hidden Solar Power → **Dragon's Maw** on Charmander, Charmeleon, Charizard (first Ruleset holders; pays the Fire/Dragon typing). Mega Y → **Solar Dynamo** (Drought + Solar Power) — the old hidden lives on in the Mega. Mega X untouched.
+- **Rejected:** Infernal Maw (not bite-led), Rapid Combustion (Talonflame's), Thermal Exchange (dull on a starter).
+- **Read-back:** `applied=1746 partial=0`; montext HiddenAbility DRAGONSMAW ×3, Mega Y Abilities SOLARDYNAMO.
+- **Open:** Mega X / Mega Y stats and the Mega X learnset mirror.

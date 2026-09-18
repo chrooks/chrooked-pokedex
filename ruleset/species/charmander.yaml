@@ -2,7 +2,9 @@ name: Charmander
 chrooked_id: charmander
 aka: { pokeemerald: SPECIES_CHARMANDER }
 abilities:
+  primary: Blaze
   secondary: Flash Fire
+  hidden: Dragon's Maw
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Growl }

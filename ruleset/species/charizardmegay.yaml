@@ -1,6 +1,10 @@
 name: Charizard Mega Y
 chrooked_id: charizardmegay
 aka: { pokeemerald: SPECIES_CHARIZARD_MEGA_Y }
+abilities:
+  primary: Solar Dynamo
+  secondary: Solar Dynamo
+  hidden: Solar Dynamo
 stats: { spa: 160 }
 learnset:
   - { level: 0, move: Air Slash }

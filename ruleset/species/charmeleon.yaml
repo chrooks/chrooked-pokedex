@@ -3,7 +3,9 @@ chrooked_id: charmeleon
 aka: { pokeemerald: SPECIES_CHARMELEON }
 types: [Fire, Dragon]
 abilities:
+  primary: Blaze
   secondary: Flash Fire
+  hidden: Dragon's Maw
 learnset:
   - { level: 0, move: Dragon Breath }
   - { level: 1, move: Ember }
