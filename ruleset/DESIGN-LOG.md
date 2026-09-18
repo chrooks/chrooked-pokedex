@@ -1132,4 +1132,4 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Rejected:** Infernal Maw (not bite-led), Rapid Combustion (Talonflame's), Thermal Exchange (dull on a starter).
 - **Read-back:** `applied=1746 partial=0`; montext HiddenAbility DRAGONSMAW ×3, Mega Y Abilities SOLARDYNAMO.
 - **Stats:** canon Mega deltas kept on the Ruleset base (70/105/75/110/75/105): Mega X **70/151/108/131/75/105** (640), Mega Y **70/125/75/160/105/105** (640).
-- **Open:** the Mega X learnset mirror.
+- **Learnset (28 rows, all five stages, Megas mirror with L0):** mixed kit so Mega X (Tough Claws contact) and Mega Y (Drought special) both draw from it. Suggester draft was special-heavy; the physical ladder was folded in by hand: Scratch, Maul, Flame Charge, Wing Attack, Flame Wheel, Breaking Swipe, Combust. Chris: "replace hurricane w bleakwind", "give dive bomb" (L50, physical Flying rung). Dropped Smokescreen (L1 cap) and Dragon Energy. Size cap 26 waived: "Im not mad at the 27 moves".
