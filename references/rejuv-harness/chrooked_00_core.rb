@@ -51,6 +51,12 @@ CHROOKED_PRIORITY_MODS = {}
 CHROOKED_TYPE_IMMUNITY = {}
 # attacker ability => ->(move, attacker) { true } — use SpA in place of Atk for this hit
 CHROOKED_STAT_SWAP = {}
+# [ability symbols] — for every damaging move, the holder attacks with whichever
+# of Attack / Sp. Atk is higher AFTER stat stages, using that stat's stage too.
+# The move's category still picks the DEFENDING stat, so a special move off a
+# higher Attack still targets Sp. Def. Ties go to Attack, matching the source
+# this is ported from (Elite Redux's Equinox, battle_util.c highestAttackStat).
+CHROOKED_ATTACK_EQUALIZE = []
 # ability => ->(battler, move_symbol, battle) — after the battler used a move
 CHROOKED_AFTER_MOVE = {}
 # ability => weather Symbol — this battler's MOVES resolve weather as this (Mega Sol seam)
@@ -147,6 +153,42 @@ module Chrooked
   # to know which shape it got back.
   def self.immunities(table, ability)
     entries(table, ability).flat_map { |e| e.is_a?(Hash) ? [e] : e }
+  end
+
+  # Mirrors `entries`' handling of Rejuv's multi-ability sets (zz_redux), but for
+  # a plain list of ability symbols rather than a handler table.
+  def self.ability_in?(list, ability)
+    return false if ability.nil?
+    return list.include?(ability) unless ability.respond_to?(:list)
+    ability.list.any? { |a| list.include?(a) }
+  end
+
+  # Set the weaker attacking stat (and its stage) to the stronger one's values
+  # for the duration of the block, then restore. Rejuv's damage calc reads
+  # attacker.attack / attacker.spatk and attacker.stages directly, so this is
+  # the whole mechanic — no second copy of the damage formula.
+  def self.with_equalized_attack(battler)
+    atk_stage = battler.stages[PBStats::ATTACK]
+    spa_stage = battler.stages[PBStats::SPATK]
+    atk_eff = battler.attack * PBStats::StageMul[atk_stage + 6]
+    spa_eff = battler.spatk * PBStats::StageMul[spa_stage + 6]
+    old_atk = battler.attack
+    old_spa = battler.spatk
+    if spa_eff > atk_eff
+      battler.attack = old_spa
+      battler.stages[PBStats::ATTACK] = spa_stage
+    else
+      battler.spatk = old_atk
+      battler.stages[PBStats::SPATK] = atk_stage
+    end
+    begin
+      yield
+    ensure
+      battler.attack = old_atk
+      battler.spatk = old_spa
+      battler.stages[PBStats::ATTACK] = atk_stage
+      battler.stages[PBStats::SPATK] = spa_stage
+    end
   end
 
   def self.hammer_move?(move)
@@ -250,6 +292,10 @@ end
 
 module ChrookedDamageMods
   def pbCalcDamage(attacker, opponent, *args, **kwargs)
+    if Chrooked.ability_in?(CHROOKED_ATTACK_EQUALIZE, attacker.ability)
+      return Chrooked.with_equalized_attack(attacker) { super }
+    end
+
     swap = Chrooked.entry(CHROOKED_STAT_SWAP, attacker.ability)
     if swap && swap.call(self, attacker)
       original_attack = attacker.attack

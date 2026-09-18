@@ -1,0 +1,27 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Equinox
+chrooked_id: equinox
+applies_to: ability
+aka: {  }
+effects:
+  - summary: The holder attacks with whichever of Attack or Sp. Atk is higher.
+    trigger: damage-calc
+    when: the holder uses any damaging move
+    effect: "Compare the holder's Attack and Sp. Atk AFTER their stat stages are applied. Whichever is higher becomes the attacking stat for this move, and it carries its own stat stage across. The move's category is NOT changed: a special move powered by a higher Attack still targets the foe's Sp. Def, and contact and move flags are unaffected. A tie resolves to Attack."
+test_cases:
+  - given: A holder with 170 Attack and 65 Sp. Atk uses a special move.
+    expect: Damage is calculated from 170, and is still checked against the target's Sp. Def.
+  - given: The same holder uses Swords Dance, then a special move.
+    expect: The +2 Attack stage carries across, so the special move is powered by Attack at +2.
+  - given: The same holder uses Nasty Plot twice (Sp. Atk 65 at +2 = 130), then a special move.
+    expect: 130 is still below 170, so Attack keeps winning and damage does not change.
+  - given: A holder with 60 Attack and 150 Sp. Atk uses a physical move.
+    expect: Damage is calculated from 150, and is still checked against the target's Defense.
+  - given: A holder whose Attack and Sp. Atk are exactly equal after stages.
+    expect: Attack is used.
+notes:
+  - "Ported from Pokemon Elite Redux. Source wording: 'The user Attack and Special Attack are equal to the higher of the two, Applies after Stat Modifiers' (include/constants/abilities.h); implementation at src/battle_util.c, the highestAttackStat branch."
+  - "'After stat modifiers' is load-bearing and easy to get wrong: the comparison uses stage-adjusted values, and the winning stat's STAGE travels with it. Comparing raw base stats would silently break the Swords Dance interaction."
+  - Only the attacking stat is substituted. The defending stat still follows the move's category, so this is not a category change like Mystic Blades or Photon Geyser.
+  - "It makes a dumped offensive stat harmless, which is the point: a holder can run a lopsided spread and still fire both move categories at full power."
+  - STUB - engine_hints ungrounded, needs human grounding pass

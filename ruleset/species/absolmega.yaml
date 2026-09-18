@@ -2,7 +2,9 @@ name: Absol Mega
 chrooked_id: absolmega
 aka: { pokeemerald: SPECIES_ABSOL_MEGA }
 types: [Dark, Fairy]
-stats: { hp: 66, atk: 155, def: 65, spa: 115, spd: 65, spe: 119 }
+abilities:
+  primary: Equinox
+stats: { hp: 70, atk: 170, def: 85, spa: 65, spd: 80, spe: 145 }
 learnset:
   - { level: 1, move: Leer }
   - { level: 5, move: Pursuit }
