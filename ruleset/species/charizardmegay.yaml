@@ -5,7 +5,7 @@ abilities:
   primary: Solar Dynamo
   secondary: Solar Dynamo
   hidden: Solar Dynamo
-stats: { spa: 160 }
+stats: { hp: 70, atk: 125, def: 75, spa: 160, spd: 105, spe: 105 }
 learnset:
   - { level: 0, move: Air Slash }
   - { level: 1, move: Growl }

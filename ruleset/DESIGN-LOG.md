@@ -1131,4 +1131,5 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Changes:** hidden Solar Power → **Dragon's Maw** on Charmander, Charmeleon, Charizard (first Ruleset holders; pays the Fire/Dragon typing). Mega Y → **Solar Dynamo** (Drought + Solar Power) — the old hidden lives on in the Mega. Mega X untouched.
 - **Rejected:** Infernal Maw (not bite-led), Rapid Combustion (Talonflame's), Thermal Exchange (dull on a starter).
 - **Read-back:** `applied=1746 partial=0`; montext HiddenAbility DRAGONSMAW ×3, Mega Y Abilities SOLARDYNAMO.
-- **Open:** Mega X / Mega Y stats and the Mega X learnset mirror.
+- **Stats:** canon Mega deltas kept on the Ruleset base (70/105/75/110/75/105): Mega X **70/151/108/131/75/105** (640), Mega Y **70/125/75/160/105/105** (640).
+- **Open:** the Mega X learnset mirror.
