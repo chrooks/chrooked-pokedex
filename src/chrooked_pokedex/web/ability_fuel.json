@@ -759,6 +759,12 @@
       "hard": false,
       "lean": "Boosted in sun — pair with Sunny Day if the pool offers it."
     },
+    "sunbask": {
+      "shape": "weather_rider",
+      "hard": false,
+      "lean": "In sun it regenerates each turn AND drain moves recover all damage dealt \u2014 carry drain moves (Giga Drain, Drain Punch, Horn Leech class), and a sun setter if the pool offers one.",
+      "note": "Soft, not hard: the drain payoff only applies while the sun is up, so the learnset owes it a lean rather than a required slot. Heliotrope composes this part and resolves through it."
+    },
     "spectralize": {
       "shape": "ate",
       "hard": true,

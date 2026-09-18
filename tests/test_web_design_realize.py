@@ -9,18 +9,21 @@ from __future__ import annotations
 
 import json
 import shutil
+import sys
 from pathlib import Path
 from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 from chrooked_pokedex.model import Ruleset
 from chrooked_pokedex.web import design_realize, learnset_skeleton
 from chrooked_pokedex.web import lore as loremod
 from chrooked_pokedex.web.app import create_app
 from chrooked_pokedex.web.design_store import DesignRecord, DesignStore
-from tests.test_web_design import _QUEUE, _SNAPSHOT
+from test_web_design import _QUEUE, _SNAPSHOT  # noqa: E402
 
 pytestmark = pytest.mark.unit
 

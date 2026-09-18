@@ -722,14 +722,23 @@ def test_skill_file_exists_and_is_confirmation_gated() -> None:
     assert "explicit" in content.lower()
 
 
-def test_skill_file_drives_propose_and_three_writes() -> None:
+def test_skill_file_drives_propose_and_two_writes() -> None:
+    """Accept writes the ability and its behavior stub — and nothing else.
+
+    This asserted a third, species write until 2026-09-18. Distribution moved
+    out to /ability-distribute, so a species write from here is now a defect,
+    not a requirement: the endpoint's `distribution` plan is an unsourced LLM
+    guess that has displaced user customs.
+    """
     skill_path = _REPO_ROOT / ".claude" / "skills" / "ability-create" / "SKILL.md"
     content = skill_path.read_text(encoding="utf-8")
     assert "/api/abilities/suggest" in content
     assert "PUT" in content
     assert "/api/abilities/" in content
     assert "/api/behaviors/" in content
-    assert "/api/species/" in content
+    # The species route belongs to /ability-distribute, and the skill says so.
+    assert "/ability-distribute" in content
+    assert "Never distribute from here" in content
 
 
 def test_skill_file_never_authors_engine_hints() -> None:
