@@ -23,7 +23,7 @@ module ChrookedSpikyShield
     before = user.hp
     result = super
     if hitflag == :SpikyShield && @battle.FE != :COLOSSEUM &&
-       user.hp < before && !user.fainted?
+       user.hp < before && !user.isFainted?
       extra = (user.totalhp / 6.0).floor - (user.totalhp / 8.0).floor
       user.pbReduceHP(extra, true) if extra > 0
     end
