@@ -1101,7 +1101,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-17 — Reuniclus
 
 - **Direction:** Chris: Psychic/Poison. Custom Trick Room-setting ability (working name Dilation, rename pending) / Liquified / Medium. A ton of contact moves and special moves: the first three move groups (Psychic STAB, toxic cytoplasm, the arms). High Sp. Atk, mirror Gothitelle at 530. Chris: Confusion 5, Mind Flick 12 (contact, pays Medium). Keep Psystrike. Power Whip out for Wring Out (pseudopods wringing prey, contact). STAB rungs to fill L12-L35 Psychic (Psybeam 24) and L9-L35 Poison (Sludge 20, Venoshock 30). Chris: Focus Blast, Wring Out, Psystrike out; pace Sludge Wave 45 -> Psyshock 49 -> Poison Jab 53 -> Psychic 57.; The design axis is the tension between psychic intelligence and brute physical dominance: the final stage is an alien-looking psychic powerhouse that paradoxically prefers to smash opponents with crushing liquid-pseudopod arms rather than rely on ESP, while its network-forming handshake and toxic cytoplasm reward a mixed attacker role with strong utility. Every ability, move, and stat choice flows from this 'psychic brain in a brawler body' contradiction, grounded in the cell-biology and extraterrestrial themes.
-- **New mechanics:** Dilation (ability): On entry, sets Trick Room for five turns (the way Drought sets sun). If Trick Room is already active, it ends it instead.
+- **New mechanics:** Dilation (ability): On entry, sets Trick Room for five turns (the way Drought sets sun). If Trick Room is already active, it ends it instead. **In-Game Proof (2026-09-18):** Chris confirmed Dilation sets Trick Room on entry.
 
 ## 2026-09-17 — Sableye
 
