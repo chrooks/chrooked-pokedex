@@ -86,6 +86,9 @@ _REF_RE = re.compile(r"<ref[^>]*?/>|<ref[^>]*>.*?</ref>", re.S | re.I)
 _COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
 _TAG_RE = re.compile(r"<[^>]+>")
 _HEADING_RE = re.compile(r"^\s*=+\s*.*?\s*=+\s*$", re.M)
+# Image embeds and layout templates: captions and "left clear" are not prose.
+_FILE_LINE_RE = re.compile(r"^\s*\[\[(?:File|Image):.*\]\]\s*$", re.M | re.I)
+_CLEAR_RE = re.compile(r"\{\{\s*(?:left |right )?clear\s*\}\}", re.I)
 _TEMPLATE_RE = re.compile(r"\{\{([^{}]*)\}\}")
 _PIPED_LINK_RE = re.compile(r"\[\[[^\]|]*\|([^\]]*)\]\]")
 _PLAIN_LINK_RE = re.compile(r"\[\[([^\]]*)\]\]")
@@ -117,6 +120,8 @@ def clean_wikitext(raw: str) -> str:
     text = _COMMENT_RE.sub("", raw)
     text = _REF_RE.sub("", text)
     text = _HEADING_RE.sub("", text)
+    text = _FILE_LINE_RE.sub("", text)
+    text = _CLEAR_RE.sub("", text)
 
     # Innermost-first so nested templates unwind. Bounded: each pass strictly
     # reduces the brace count, and the loop stops when nothing more matches.
@@ -135,6 +140,59 @@ def clean_wikitext(raw: str) -> str:
     text = _WS_RE.sub(" ", text)
     text = _BLANKLINE_RE.sub("\n\n", text)
     return text.strip()
+
+
+# Ruleset form suffix -> the adjective Bulbapedia uses for that regional form.
+REGIONAL_ADJECTIVES = {
+    "alola": "Alolan",
+    "galar": "Galarian",
+    "hisui": "Hisuian",
+    "paldea": "Paldean",
+}
+
+
+def regional_adjective(chrooked_id: str, base_id: str) -> str:
+    """``"Alolan"`` for ``ninetalesalola`` over base ``ninetales``; ``""`` otherwise.
+
+    PokeAPI keys flavor text on the base species only, and its Sun/Moon entries
+    for ``ninetales`` describe the Kanto fox — so a regional form cannot get its
+    own dex text from there, and version filtering does not help.
+    """
+    if not base_id or not chrooked_id.startswith(base_id):
+        return ""
+    return REGIONAL_ADJECTIVES.get(chrooked_id[len(base_id):], "")
+
+
+_DEX_ENTRY_RE = re.compile(r"\|entry=(.*)\}\}\s*$")
+
+
+def regional_dex_entries(wikitext: str, adjective: str) -> tuple[str, ...]:
+    """Dex entries from Bulbapedia's ``Pokédex entries`` section for one regional form.
+
+    The section lists the base form's entries per generation, then a
+    ``{{Dex/Form|Alolan Form}}`` row followed by that form's own entries. Only
+    rows under a form header naming ``adjective`` are kept, de-duplicated.
+    """
+    entries: list[str] = []
+    in_form = False
+    for line in wikitext.splitlines():
+        line = line.strip()
+        if line.startswith("{{Dex/Form"):
+            in_form = adjective.casefold() in line.casefold()
+        elif line.startswith(("{{Dex/Gen", "|}")):
+            in_form = False
+        elif in_form and line.startswith("{{Dex/Entry"):
+            match = _DEX_ENTRY_RE.search(line)
+            text = clean_wikitext(match.group(1)) if match else ""
+            if text and text not in entries:
+                entries.append(text)
+    return tuple(entries)
+
+
+def regional_paragraphs(text: str, adjective: str) -> str:
+    """The paragraphs of cleaned prose that mention ``adjective`` ("Alolan ...")."""
+    kept = [p for p in text.split("\n\n") if adjective.casefold() in p.casefold()]
+    return "\n\n".join(p.strip() for p in kept)
 
 
 def pokeapi_lore(payload: dict[str, Any]) -> tuple[str, tuple[str, ...]]:

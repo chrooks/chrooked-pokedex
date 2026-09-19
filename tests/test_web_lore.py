@@ -240,6 +240,112 @@ def test_a_corrupt_cache_entry_is_a_miss_not_a_crash(tmp_path: Path) -> None:
     assert result.found is True
 
 
+def test_a_pre_regional_fix_cache_entry_is_a_miss(tmp_path: Path) -> None:
+    """v1 entries cached base-species lore under regional ids; they must refetch."""
+    cache_dir = tmp_path / "lore"
+    cache_dir.mkdir(parents=True)
+    stale = {"result": {"found": True, "dex_entries": ["STALE"], "base_species": "glalie"}}
+    (cache_dir / "glalie.json").write_text(json.dumps(stale), encoding="utf-8")
+    result = _provider(tmp_path, []).fetch("glalie", "Glalie")
+    assert "STALE" not in result.dex_entries
+
+
+# --------------------------------------------------------------------------- #
+# Regional forms — their own lore, never the base form's
+# --------------------------------------------------------------------------- #
+
+_NINETALES_SECTIONS = {
+    "parse": {
+        "sections": [
+            {"index": "2", "line": "Forms"},
+            {"index": "6", "line": "Pokédex entries"},
+            {"index": "65", "line": "Origin"},
+            {"index": "66", "line": "Name origin"},
+        ]
+    }
+}
+_NINETALES_WIKITEXT = {
+    "2": (
+        "===Forms===\n[[File:Alolan Ninetales SM concept art.jpg|thumb|250px|left|Art]]\n"
+        "Ninetales has a [[regional form]]: {{rf|Alolan}} Ninetales.\n\n"
+        "Alolan Ninetales lives on Alola's snow-capped [[Mount Lanakila]].\n{{left clear}}"
+    ),
+    "6": (
+        "===Pokédex entries===\n{{Dex/Gen/3|gen=VII|reg1=Alola}}\n"
+        "{{Dex/Entry1|v=Sun|entry=Legend has it that this mystical Pokémon was formed "
+        "when nine saints coalesced into one.}}\n"
+        "{{Dex/Form|Alolan Form}}\n"
+        "{{Dex/Entry1|v=Sun|entry=It creates drops of ice in its coat.}}\n"
+        "|}\n|}\n{{Dex/Gen/5|gen=VIII}}\n"
+        "{{Dex/Entry1|v=Sword|t=FFF|entry=Grabbing one of its tails could result in a curse.}}\n"
+        "{{Dex/Form|Alolan Form}}\n"
+        "{{Dex/Entry1|v=Sword|t=FFF|entry=A deity resides in the snowy mountains.}}\n|}"
+    ),
+    "65": (
+        "===Origin===\nNinetales is based on a {{wp|fox}} and the ''{{wp|kitsune}}''.\n\n"
+        "Alolan Ninetales may be based on an {{wp|Arctic fox}}."
+    ),
+    "66": "====Name origin====\nNinetales may be a combination of ''nine'' and ''tales''.",
+}
+
+
+def _ninetales_provider(tmp_path: Path, calls: list[httpx.Request]) -> HttpLoreProvider:
+    def handle(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        if "pokeapi.co" in str(request.url):
+            if request.url.path.endswith("/ninetales"):
+                # PokeAPI's Sun/Moon text for the base species is the KANTO fox.
+                return httpx.Response(200, json={
+                    "genera": [{"genus": "Fox Pokémon", "language": {"name": "en"}}],
+                    "flavor_text_entries": [{
+                        "flavor_text": "Very vengeful. A 1,000-year curse.",
+                        "language": {"name": "en"},
+                        "version": {"name": "sun"},
+                    }],
+                })
+            return httpx.Response(404)
+        section = request.url.params.get("section")
+        if section is None:
+            return httpx.Response(200, json=_NINETALES_SECTIONS)
+        return httpx.Response(
+            200, json={"parse": {"wikitext": {"*": _NINETALES_WIKITEXT[section]}}}
+        )
+
+    client = httpx.Client(transport=httpx.MockTransport(handle))
+    return HttpLoreProvider(
+        known_species={"ninetales", "ninetalesalola"},
+        cache_dir=tmp_path / "lore",
+        client=client,
+    )
+
+
+def test_a_regional_form_gets_its_own_lore_not_the_base_forms(tmp_path: Path) -> None:
+    """ninetalesalola once read as the Kanto Fire fox and inferred Fire/Psychic."""
+    result = _ninetales_provider(tmp_path, []).fetch("ninetalesalola", "Ninetales")
+
+    assert result.dex_entries == (
+        "It creates drops of ice in its coat.",
+        "A deity resides in the snowy mountains.",
+    )
+    assert "Mount Lanakila" in result.origin
+    assert "Arctic fox" in result.origin
+    assert "kitsune" not in result.origin  # the base form's paragraph is dropped
+    assert "thumb" not in result.origin and "clear" not in result.origin
+    assert "nine" in result.name_origin  # the name is shared, so it stays
+    assert result.genus == "Fox Pokémon"
+    # It describes the form itself now, so no BASE label is rendered.
+    assert result.base_species == "ninetalesalola"
+
+
+def test_the_base_species_does_not_read_regional_sections(tmp_path: Path) -> None:
+    calls: list[httpx.Request] = []
+    result = _ninetales_provider(tmp_path, calls).fetch("ninetales", "Ninetales")
+    assert result.dex_entries == ("Very vengeful. A 1,000-year curse.",)
+    assert "kitsune" in result.origin
+    fetched = {c.url.params.get("section") for c in calls}
+    assert fetched == {None, "65", "66"}
+
+
 # --------------------------------------------------------------------------- #
 # The null provider and the Port contract
 # --------------------------------------------------------------------------- #

@@ -34,7 +34,14 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Optional, Protocol, runtime_checkable
 
-from .lore_text import clean_wikitext, fallback_base_id, pokeapi_lore
+from .lore_text import (
+    clean_wikitext,
+    fallback_base_id,
+    pokeapi_lore,
+    regional_adjective,
+    regional_dex_entries,
+    regional_paragraphs,
+)
 
 POKEAPI_BASE = "https://pokeapi.co/api/v2"
 BULBAPEDIA_API = "https://bulbapedia.bulbagarden.net/w/api.php"
@@ -47,12 +54,20 @@ USER_AGENT = "chrooked-pokedex/0.1 (personal Pokemon ruleset tool; local single-
 # case-insensitively against the page's own section list — indices are per-page
 # and meaningless across pages, so they are never hardcoded.
 WANTED_SECTIONS = ("Origin", "Name origin")
+# Extra sections a regional form reads: "Forms" describes the variant's body and
+# habitat, and "Pokédex entries" holds its own entries under a form header.
+REGIONAL_SECTIONS = ("Forms", "Pokédex entries")
 
 DEFAULT_TIMEOUT = 20.0
 
 # Cache lives outside the Ruleset: it is fetched third-party text, not authored
 # canon, and committing encyclopedia prose into the repo buys nothing.
 DEFAULT_CACHE_DIR = Path(".cache/lore")
+
+# Bumped when what a cache entry means changes, so old entries read as misses.
+# v2: regional forms stopped inheriting base-species lore (ninetalesalola got
+# the Kanto fox), so every v1 entry for a regional id is stale.
+CACHE_VERSION = 2
 
 
 class LoreError(Exception):
@@ -130,6 +145,8 @@ class _Cache:
             raw = json.loads(path.read_text("utf-8"))
         except (json.JSONDecodeError, OSError):
             return None  # a corrupt cache entry is a miss, never a crash
+        if raw.get("version") != CACHE_VERSION:
+            return None
         payload = raw.get("result", {})
         try:
             return LoreResult(
@@ -150,7 +167,11 @@ class _Cache:
             path = self.directory / f"{key}.json"
             path.write_text(
                 json.dumps(
-                    {"fetched_at": time.time(), "result": asdict(result)},
+                    {
+                        "version": CACHE_VERSION,
+                        "fetched_at": time.time(),
+                        "result": asdict(result),
+                    },
                     ensure_ascii=False,
                     indent=2,
                     sort_keys=True,
@@ -246,8 +267,10 @@ class HttpLoreProvider:
         base = fallback_base_id(species_id, self.known_species)
         return [species_id, base] if base else [species_id]
 
-    def _bulbapedia(self, species_name: str) -> tuple[str, str, str]:
-        """The Origin and Name origin sections as plain prose, plus the page URL.
+    def _bulbapedia(
+        self, species_name: str, titles: tuple[str, ...] = WANTED_SECTIONS
+    ) -> tuple[dict[str, str], str]:
+        """Named sections as ``{casefolded title: raw wikitext}``, plus the page URL.
 
         Two requests: the section list first, because section indices are
         per-page — Glalie's ``Origin`` is 46 and ``Name origin`` is 47, and those
@@ -260,9 +283,9 @@ class HttpLoreProvider:
             {"action": "parse", "page": page, "prop": "sections", "format": "json"},
         )
         if not listing or "parse" not in listing:
-            return "", "", ""
+            return {}, ""
 
-        wanted = {title.casefold(): "" for title in WANTED_SECTIONS}
+        wanted = {title.casefold(): "" for title in titles}
         index_by_title: dict[str, str] = {}
         for section in listing["parse"].get("sections", []):
             title = str(section.get("line", "")).strip().casefold()
@@ -284,21 +307,27 @@ class HttpLoreProvider:
             )
             if not payload:
                 continue
-            raw = (payload.get("parse", {}).get("wikitext", {}) or {}).get("*", "")
-            wanted[title] = clean_wikitext(raw)
+            wanted[title] = (payload.get("parse", {}).get("wikitext", {}) or {}).get(
+                "*", ""
+            )
 
         page_url = (
             "https://bulbapedia.bulbagarden.net/wiki/"
             + page.replace(" ", "_")
         )
-        origin = wanted.get("origin", "")
-        name_origin = wanted.get("name origin", "")
+        return wanted, (page_url if any(wanted.values()) else "")
+
+    @staticmethod
+    def _origins(sections: dict[str, str]) -> tuple[str, str]:
+        """Cleaned ``(origin, name_origin)`` from fetched sections."""
+        origin = clean_wikitext(sections.get("origin", ""))
+        name_origin = clean_wikitext(sections.get("name origin", ""))
         # MediaWiki returns a section WITH its subsections, and "Name origin" is
         # a child of "Origin" — so the etymology arrives twice and pays for the
         # character budget twice. Keep it under its own heading only.
         if name_origin and name_origin in origin:
             origin = origin.replace(name_origin, "").strip()
-        return origin, name_origin, (page_url if (origin or name_origin) else "")
+        return origin, name_origin
 
     # -- Port -------------------------------------------------------------- #
 
@@ -309,7 +338,31 @@ class HttpLoreProvider:
             return cached
 
         genus, entries, pokeapi_url, resolved = self._pokeapi(chrooked_id)
-        origin, name_origin, bulba_url = self._bulbapedia(species_name)
+        adjective = regional_adjective(
+            chrooked_id, fallback_base_id(chrooked_id, self.known_species)
+        )
+        sections, bulba_url = self._bulbapedia(
+            species_name, WANTED_SECTIONS + (REGIONAL_SECTIONS if adjective else ())
+        )
+        origin, name_origin = self._origins(sections)
+
+        if adjective:
+            # PokeAPI's entries (and the Origin's lead paragraph) describe the
+            # base form. When Bulbapedia holds the regional form's own text, use
+            # it instead; otherwise keep the base lore under its BASE label.
+            form_entries = regional_dex_entries(
+                sections.get("pokédex entries", ""), adjective
+            )
+            form_origin = "\n\n".join(
+                p
+                for p in (
+                    regional_paragraphs(clean_wikitext(sections.get("forms", "")), adjective),
+                    regional_paragraphs(origin, adjective),
+                )
+                if p
+            )
+            if form_entries or form_origin:
+                entries, origin, resolved = form_entries, form_origin, chrooked_id
 
         sources = tuple(u for u in (pokeapi_url, bulba_url) if u)
         result = LoreResult(
