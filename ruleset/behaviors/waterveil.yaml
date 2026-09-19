@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Water Veil
+chrooked_id: waterveil
+applies_to: ability
+aka: { pokeemerald: ABILITY_WATER_VEIL }
+effects:
+  - summary: This Pokemon cannot be burned.
+    trigger: status-apply
+    when: any effect would burn this Pokemon (Mold Breaker still bypasses it)
+    effect: the burn is blocked and an existing burn is cured, exactly as the unmodified ability does
+  - summary: On entry, this Pokemon surrounds itself with Aqua Ring.
+    trigger: switch-in
+    when: this Pokemon enters battle (battle start or switch-in) and Aqua Ring is not already active on it
+    effect: show the ability box and set the Aqua Ring effect on this Pokemon, the same effect the move Aqua Ring sets (heals 1/16 max HP at the end of each round; cleared on switch-out; passed by Baton Pass)
+test_cases:
+  - given: a Water Veil Pokemon switches in
+    expect: it gains Aqua Ring and restores 1/16 of its max HP at the end of each round
+  - given: a Water Veil Pokemon receives Aqua Ring through Baton Pass
+    expect: no second ring and no second message
+  - given: a Water Veil Pokemon switches out and back in
+    expect: Aqua Ring is set again on the new entry
+  - given: a foe uses Will-O-Wisp on a Water Veil Pokemon
+    expect: the burn is blocked (vanilla)
+  - given: a Water Veil Pokemon later uses the move Aqua Ring
+    expect: the move fails because the ring is already active
+notes:
+  - "Buff of the canon :WATERVEIL symbol — the burn immunity is unchanged, the entry Aqua Ring is added on top. Applies to every holder (Buizel, Floatzel, Goldeen, Seaking, Finneon, Lumineon, Mantyke, Mantine, Huntail, Finizen, Dondozo, Wailmer, Wailord)."
+  - "Once per entry: switch-out clears Aqua Ring, so each new entry sets it again."
+  - "Rejuv: references/rejuv-harness/chrooked_waterveil.rb registers CHROOKED_SWITCH_IN[:WATERVEIL]."
+engine_hints:
+  rejuv: "Burn half is vanilla (Battle_Effects.rb:270 failure = :WaterVeil; Battler.rb:4095 cure) — do not touch. Entry ring: CHROOKED_SWITCH_IN[:WATERVEIL], skip if battler.effects[:AquaRing], else set battler.effects[:AquaRing] = true the way move 0DA does (Battle_MoveEffects.rb:5289), with pbAnimation(:AQUARING) and the move's 'surrounded itself with a veil of water!' message inside the ability box."
+  pokeemerald: "Burn half is vanilla ABILITY_WATER_VEIL. Entry ring: in ABILITYEFFECT_ON_SWITCHIN (src/battle_util.c) add case ABILITY_WATER_VEIL that, if !(gStatuses3[battler] & STATUS3_AQUA_RING), sets STATUS3_AQUA_RING and runs a battle script with the ability popup and the Aqua Ring message."
+  essentials: Burn half is vanilla. On switch-in, if the battler's AquaRing effect is not set, set it to true and show the ability splash with the Aqua Ring message.

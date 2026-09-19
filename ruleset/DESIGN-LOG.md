@@ -1150,3 +1150,8 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Note:** Future Sight and Doom Desire share the delayed-hit slot; only one can be pending at a time.
 - **Read-back:** `applied=1748 partial=0`, no partial or blocked row for the line. Both `Normal Form` and `Mega Form` diff **MATCH** against the approved 26 rows; Mega Form carries 70/170/85/65/80/145, Dark/Fairy, `Abilities[0] = :EQUINOX`, and `ABILHASH[:EQUINOX]` is registered at ID 360.
 - **Owed:** an in-game battle check — especially that a special move fires off Attack, and that Swords Dance lifts it.
+
+## 2026-09-19 — Water Veil (buff)
+
+- **Direction:** Chris: Water Veil keeps its burn immunity and also casts Aqua Ring on the holder on entry. Shared edit — all 13 holders. Canon symbol kept.
+- **New mechanics:** Water Veil entry ring — references/rejuv-harness/chrooked_waterveil.rb registers CHROOKED_SWITCH_IN[:WATERVEIL] and sets effects[:AquaRing] the way move 0DA does, skipped when already ringed. Behavior spec ruleset/behaviors/waterveil.yaml.
