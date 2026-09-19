@@ -1,26 +1,34 @@
 name: Wailmer
 chrooked_id: wailmer
 aka: { dex: 320 }
+abilities:
+  primary: Water Veil
+  secondary: Pressure
+  hidden: Self Sufficient
+stats: { hp: 136, atk: 67, def: 59, spa: 63, spd: 59, spe: 36 }
 learnset:
-  - { level: 1, move: Splash }
-  - { level: 2, move: Undertow }
-  - { level: 3, move: Growl }
-  - { level: 6, move: Astonish }
-  - { level: 12, move: Water Gun }
-  - { level: 14, move: Water Whip }
-  - { level: 15, move: Mist }
-  - { level: 18, move: Water Pulse }
-  - { level: 21, move: Heavy Slam }
-  - { level: 24, move: Brine }
-  - { level: 27, move: Whirlpool }
-  - { level: 29, move: Aqua Tail }
-  - { level: 30, move: Dive }
-  - { level: 33, move: Bounce }
-  - { level: 36, move: Body Slam }
-  - { level: 39, move: Rest }
-  - { level: 42, move: Amnesia }
-  - { level: 43, move: Maelstrom }
-  - { level: 45, move: Hydro Pump }
-  - { level: 48, move: Water Spout }
-  - { level: 57, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Water Gun }
+  - { level: 7, move: Aqua Jet }
+  - { level: 9, move: Aqua Ring }
+  - { level: 12, move: Whirlpool }
+  - { level: 16, move: Amnesia }
+  - { level: 19, move: Rest }
+  - { level: 23, move: Brine }
+  - { level: 25, move: Flip Turn }
+  - { level: 27, move: Stockpile }
+  - { level: 30, move: Swallow }
+  - { level: 33, move: Muddy Water }
+  - { level: 37, move: Scald }
+  - { level: 40, move: Spit Up }
+  - { level: 42, move: Heavy Slam }
+  - { level: 44, move: Dive }
+  - { level: 47, move: Surf }
+  - { level: 50, move: Protect }
+  - { level: 52, move: Hyper Voice }
+  - { level: 54, move: Bounce }
+  - { level: 58, move: Maelstrom }
+  - { level: 61, move: Hydro Pump }
+  - { level: 66, move: Tsunami }
+  - { level: 72, move: Water Spout }

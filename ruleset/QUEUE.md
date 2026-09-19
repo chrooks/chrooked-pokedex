@@ -8,4 +8,3 @@ Scovillain
 Camerupt
 Electrode (both versions)
 Mothim
-Wailord
