@@ -17,6 +17,8 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable
 
+from .lore_text import split_regional_name
+
 SUBJECT = "this creature"
 OTHER = "another creature"
 
@@ -44,7 +46,17 @@ def _name_pattern(names: Iterable[str]) -> re.Pattern[str] | None:
     "a golem of rock" intact while still catching "Golem" the species. Longest
     first so "Mr. Mime" is redacted before "Mime" can split it.
     """
-    cleaned = sorted({n.strip() for n in names if n and len(n.strip()) >= 3}, key=len, reverse=True)
+    expanded: set[str] = set()
+    for n in names:
+        if not n:
+            continue
+        expanded.add(n.strip())
+        # The dex says "Ninetales Alola"; the lore says "Alolan Ninetales" and
+        # plain "Ninetales". All three name the creature.
+        base, adjective = split_regional_name(n)
+        if adjective:
+            expanded.update({base, f"{adjective} {base}"})
+    cleaned = sorted({n for n in expanded if len(n) >= 3}, key=len, reverse=True)
     if not cleaned:
         return None
     return re.compile(r"\b(?:" + "|".join(re.escape(n) for n in cleaned) + r")\b")

@@ -41,6 +41,7 @@ from .lore_text import (
     regional_adjective,
     regional_dex_entries,
     regional_paragraphs,
+    split_regional_name,
 )
 
 POKEAPI_BASE = "https://pokeapi.co/api/v2"
@@ -341,8 +342,11 @@ class HttpLoreProvider:
         adjective = regional_adjective(
             chrooked_id, fallback_base_id(chrooked_id, self.known_species)
         )
+        # The dex calls the form "Ninetales Alola"; Bulbapedia files it on the
+        # base page, "Ninetales (Pokémon)".
+        page_name = split_regional_name(species_name)[0] if adjective else species_name
         sections, bulba_url = self._bulbapedia(
-            species_name, WANTED_SECTIONS + (REGIONAL_SECTIONS if adjective else ())
+            page_name, WANTED_SECTIONS + (REGIONAL_SECTIONS if adjective else ())
         )
         origin, name_origin = self._origins(sections)
 

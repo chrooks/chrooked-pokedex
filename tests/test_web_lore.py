@@ -321,7 +321,12 @@ def _ninetales_provider(tmp_path: Path, calls: list[httpx.Request]) -> HttpLoreP
 
 def test_a_regional_form_gets_its_own_lore_not_the_base_forms(tmp_path: Path) -> None:
     """ninetalesalola once read as the Kanto Fire fox and inferred Fire/Psychic."""
-    result = _ninetales_provider(tmp_path, []).fetch("ninetalesalola", "Ninetales")
+    calls: list[httpx.Request] = []
+    # The dex display name; Bulbapedia has no "Ninetales Alola (Pokémon)" page.
+    result = _ninetales_provider(tmp_path, calls).fetch("ninetalesalola", "Ninetales Alola")
+
+    pages = {c.url.params.get("page") for c in calls if "pokeapi.co" not in str(c.url)}
+    assert pages == {"Ninetales (Pokémon)"}
 
     assert result.dex_entries == (
         "It creates drops of ice in its coat.",

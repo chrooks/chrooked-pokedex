@@ -163,6 +163,17 @@ def regional_adjective(chrooked_id: str, base_id: str) -> str:
     return REGIONAL_ADJECTIVES.get(chrooked_id[len(base_id):], "")
 
 
+def split_regional_name(name: str) -> tuple[str, str]:
+    """``("Ninetales", "Alolan")`` for the dex display name ``"Ninetales Alola"``.
+
+    Bulbapedia has no page for "Ninetales Alola"; the form lives on the base
+    page. Returns ``(name, "")`` for a name with no trailing region word.
+    """
+    head, _, tail = name.strip().rpartition(" ")
+    adjective = REGIONAL_ADJECTIVES.get(tail.lower(), "")
+    return (head, adjective) if head and adjective else (name.strip(), "")
+
+
 _DEX_ENTRY_RE = re.compile(r"\|entry=(.*)\}\}\s*$")
 
 

@@ -92,3 +92,15 @@ def test_game_title_citations_go_in_either_casing() -> None:
     assert "Sun" not in anonymize_text("based on a spider, per its Sun Pokedex entry.")
     assert "Sun" not in anonymize_text("Its Sun Pokedex entry says so.")
     assert "Sword" not in anonymize_text("Its Sword and Shield Pokedex entry.")
+
+
+def test_a_regional_dex_name_masks_every_way_the_lore_names_it() -> None:
+    """The dex says 'Ninetales Alola'; Bulbapedia says 'Alolan Ninetales' and
+    'Ninetales'. Matching only the dex name leaked both."""
+    out = anonymize_text(
+        "Alolan Ninetales is a regional variant of Ninetales. It leads Vulpix.",
+        subject_names=["Ninetales Alola"],
+        other_names=["Vulpix Alola"],
+    )
+    assert "Ninetales" not in out and "Vulpix" not in out
+    assert out == f"{SUBJECT} is a regional variant of {SUBJECT}. It leads {OTHER}."
