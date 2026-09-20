@@ -1,25 +1,34 @@
 name: Wooper
 chrooked_id: wooper
 aka: {  }
+abilities:
+  primary: Water Absorb
+  secondary: Unaware
+  hidden: Gooey
+stats: { hp: 49, atk: 42, def: 46, spa: 22, spd: 46, spe: 15 }
 learnset:
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
-  - { level: 4, move: Rain Dance }
-  - { level: 6, move: Clod Toss }
-  - { level: 7, move: Undertow }
-  - { level: 8, move: Mud Shot }
-  - { level: 12, move: Mist }
-  - { level: 13, move: Haze }
-  - { level: 14, move: Water Whip }
-  - { level: 15, move: Bulldoze }
-  - { level: 16, move: Body Slam }
-  - { level: 21, move: Yawn }
-  - { level: 24, move: Aqua Tail }
-  - { level: 28, move: Muddy Water }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 32, move: Amnesia }
-  - { level: 36, move: Toxic }
-  - { level: 40, move: Earthquake }
-  - { level: 45, move: Maelstrom }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Faultbreak }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Mud-Slap }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Aqua Jet }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Yawn }
+  - { level: 16, move: Water Whip }
+  - { level: 18, move: Undertow }
+  - { level: 20, move: Bulldoze }
+  - { level: 23, move: Stockpile }
+  - { level: 25, move: Flip Turn }
+  - { level: 27, move: Swallow }
+  - { level: 30, move: Stomping Tantrum }
+  - { level: 33, move: Triple Dive }
+  - { level: 37, move: Haze }
+  - { level: 39, move: Landslide }
+  - { level: 41, move: Liquidation }
+  - { level: 43, move: Amnesia }
+  - { level: 45, move: Toxic }
+  - { level: 47, move: High Horsepower }
+  - { level: 51, move: Recover }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Maelstrom }
+  - { level: 65, move: Faultbreak }
+  - { level: 72, move: Wave Crash }
