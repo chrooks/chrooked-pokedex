@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Spicy Extract
+chrooked_id: spicyextract
+applies_to: move
+aka: {  }
+effects:
+  - summary: Raises both of the target's attacking stats and lowers both of its defending stats.
+    trigger: stat-change
+    when: the move hits a target
+    effect: Raise the target's Attack by 2 AND its Sp. Atk by 2, then lower its Defense by 2 AND its Sp. Def by 2. Vanilla applies only the Attack and Defense pair; this widens it to all four. The move can affect a target if ANY of the four stages can still move.
+test_cases:
+  - given: Spicy Extract hits a target at neutral stages.
+    expect: Target ends at +2 Attack, +2 Sp. Atk, -2 Defense, -2 Sp. Def.
+  - given: Spicy Extract hits a target already at -6 Defense and -6 Sp. Def.
+    expect: "The move still works: both attacking stats still rise by 2, and the two defensive stages stay at their floor."
+  - given: Spicy Extract hits a target already at +6 Attack and +6 Sp. Atk.
+    expect: "The move still works: both defensive stats still drop by 2."
+  - given: Spicy Extract is used against a Contrary holder.
+    expect: All four changes invert, exactly as vanilla inverts the original two.
+notes:
+  - Scovillain is the only holder in the Ruleset, so this widening is a signature-move change and displaces nothing else.
+  - "This is a rework of an existing move, not a new one. Rejuv's function 0x50D calls pbChangeStats(PBStats::Physical, [2, -2]); the plugin re-sends all four stats with parallel amounts, which pbChangeStats (Battle_Effects.rb:985) already supports."
+  - "The move stays a double-edged lure: it hands the target BOTH attacking stats, so it is used to open a kill, never to stall."
+  - STUB - engine_hints ungrounded, needs human grounding pass
