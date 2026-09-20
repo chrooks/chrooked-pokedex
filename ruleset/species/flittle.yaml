@@ -2,18 +2,33 @@ name: Flittle
 chrooked_id: flittle
 aka: { pokeemerald: SPECIES_FLITTLE }
 abilities:
+  primary: Speed Boost
   secondary: Mystic Power
+  hidden: Opportunist
+stats: { hp: 43, atk: 26, def: 31, spa: 59, spd: 39, spe: 57 }
 learnset:
+  - { level: 1, move: Flicker }
   - { level: 1, move: Growl }
-  - { level: 1, move: Peck }
   - { level: 5, move: Confusion }
-  - { level: 8, move: Baby-Doll Eyes }
-  - { level: 11, move: Disarming Voice }
-  - { level: 15, move: Quick Attack }
-  - { level: 19, move: Psybeam }
-  - { level: 24, move: Pluck }
-  - { level: 29, move: Agility }
-  - { level: 30, move: Psychic }
-  - { level: 34, move: Uproar }
-  - { level: 46, move: Mindwarp }
-  - { level: 57, move: Future Sight }
+  - { level: 9, move: Sand Attack }
+  - { level: 12, move: Mud Shot }
+  - { level: 16, move: Psybeam }
+  - { level: 19, move: Agility }
+  - { level: 23, move: Hypnosis }
+  - { level: 26, move: Protect }
+  - { level: 28, move: Icy Wind }
+  - { level: 30, move: Air Slash }
+  - { level: 33, move: Stored Power }
+  - { level: 35, move: Psychic Noise }
+  - { level: 37, move: Calm Mind }
+  - { level: 39, move: Extrasensory }
+  - { level: 41, move: Dazzling Gleam }
+  - { level: 44, move: Earth Power }
+  - { level: 47, move: Psyshock }
+  - { level: 51, move: Psychic }
+  - { level: 54, move: Trick }
+  - { level: 58, move: Hyper Voice }
+  - { level: 61, move: Mindwarp }
+  - { level: 63, move: Confuse Ray }
+  - { level: 66, move: Hurricane }
+  - { level: 72, move: Future Sight }
