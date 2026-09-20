@@ -9,3 +9,4 @@ Camerupt
 Electrode (both versions)
 Mothim
 incineroar
+Hisuian Electrode

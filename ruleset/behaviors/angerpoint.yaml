@@ -1,0 +1,26 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Anger Point
+chrooked_id: angerpoint
+applies_to: ability
+aka: {  }
+effects:
+  - summary: A critical hit maxes the holder's HIGHER attacking stat, not always Attack.
+    trigger: on-hit
+    when: the holder is hit by a critical hit and survives
+    effect: "If the holder's base Attack is at least its Sp. Atk, behave exactly as vanilla: raise Attack to +6. If its Sp. Atk is higher, raise Sp. Atk to +6 instead and leave Attack untouched. Only one stat is maxed, never both. The comparison uses the raw stats, not stage-adjusted values, so the ability always picks the same stat for a given species."
+test_cases:
+  - given: Camerupt (80 Attack, 105 Sp. Atk) is hit by a critical hit.
+    expect: Sp. Atk rises to +6. Attack does not change.
+  - given: Primeape (105 Attack, 60 Sp. Atk) is hit by a critical hit.
+    expect: Attack rises to +6, exactly as vanilla. Sp. Atk does not change.
+  - given: A holder whose Attack and Sp. Atk are equal is hit by a critical hit.
+    expect: Attack is maxed. Ties go to Attack.
+  - given: A special-leaning holder is hit by a critical hit while already at +6 Sp. Atk.
+    expect: Nothing happens, and Attack is NOT maxed as a fallback.
+  - given: A holder is hit by a non-critical hit.
+    expect: Nothing happens.
+notes:
+  - "Chris, 2026-09-20: 'Update Anger point to work for highest atk stat instead of just atk.' Camerupt is the reason - at 105 Sp. Atk against 80 Attack, vanilla Anger Point maxed the stat it never uses."
+  - "This is a rework of a vanilla ability, so every holder is affected. In the base snapshot that is 9 species: Camerupt, Crabrawler, Crabominable, Sandile, Krokorok, Krookodile and the three Paldean Tauros forms. All except Camerupt are physical, so for them the behaviour is unchanged."
+  - "Implementation note: vanilla runs inline inside pbEffectsOnDealingDamage (Battler.rb:4024), not in a method of its own. The plugin wraps that method, records the Attack stage before vanilla runs, and if vanilla maxed Attack on a special-leaning holder it restores the old stage and maxes Sp. Atk instead. Both stats are never left maxed."
+  - STUB - engine_hints ungrounded, needs human grounding pass
