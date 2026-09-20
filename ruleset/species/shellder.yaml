@@ -2,29 +2,33 @@ name: Shellder
 chrooked_id: shellder
 aka: { pokeemerald: SPECIES_SHELLDER }
 abilities:
-  primary: Shell Armor
-  secondary: Skill Link
-  hidden: Impenetrable
+  primary: Skill Link
+  secondary: Shell Armor
+  hidden: Impale
+stats: { hp: 28, atk: 67, def: 99, spa: 32, spd: 35, spe: 44 }
 learnset:
   - { level: 1, move: Tackle }
-  - { level: 1, move: Water Gun }
-  - { level: 4, move: Withdraw }
-  - { level: 6, move: Undertow }
-  - { level: 8, move: Ice Shard }
-  - { level: 10, move: Flash Freeze }
-  - { level: 12, move: Leer }
-  - { level: 16, move: Whirlpool }
-  - { level: 20, move: Supersonic }
-  - { level: 24, move: Aurora Beam }
-  - { level: 28, move: Protect }
-  - { level: 29, move: Razor Shell }
-  - { level: 30, move: Aqua Tail }
-  - { level: 32, move: Maelstrom }
-  - { level: 36, move: Iron Defense }
-  - { level: 38, move: Glacial Crush }
-  - { level: 40, move: Ice Beam }
-  - { level: 44, move: Shell Smash }
-  - { level: 48, move: Hydro Pump }
-  - { level: 54, move: Volley }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Icebreaker }
+  - { level: 1, move: Withdraw }
+  - { level: 5, move: Triple Dive }
+  - { level: 9, move: Ice Ball }
+  - { level: 12, move: Aqua Jet }
+  - { level: 16, move: Clamp }
+  - { level: 19, move: Undertow }
+  - { level: 21, move: Spikes }
+  - { level: 23, move: Water Whip }
+  - { level: 26, move: Ice Shard }
+  - { level: 29, move: Iron Defense }
+  - { level: 31, move: Fury Attack }
+  - { level: 33, move: Horn Attack }
+  - { level: 35, move: Rock Blast }
+  - { level: 37, move: Icefall }
+  - { level: 40, move: Razor Shell }
+  - { level: 44, move: Liquidation }
+  - { level: 46, move: Pin Missile }
+  - { level: 48, move: Icicle Crash }
+  - { level: 50, move: Icicle Spear }
+  - { level: 52, move: Spike Cannon }
+  - { level: 54, move: Maelstrom }
+  - { level: 56, move: Stone Edge }
+  - { level: 72, move: Crabhammer }
+  - { level: 74, move: Megahorn }
