@@ -2,39 +2,32 @@ name: Claydol
 chrooked_id: claydol
 aka: { pokeemerald: SPECIES_CLAYDOL }
 abilities:
-  hidden: Mystic Power
-stats: { spe: 85 }
+  primary: Levitate
+  secondary: Analytic
+  hidden: Gyroscope
+stats: { hp: 60, atk: 60, def: 105, spa: 80, spd: 120, spe: 85 }
 learnset:
-  - { level: 0, move: Hyper Beam }
-  - { level: 1, move: Teleport }
+  - { level: 0, move: Cosmic Power }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Harden }
-  - { level: 1, move: Mud-Slap }
-  - { level: 1, move: Rapid Spin }
-  - { level: 2, move: Mind Flick }
-  - { level: 3, move: Confusion }
-  - { level: 4, move: Clod Toss }
-  - { level: 5, move: Hyper Beam }
-  - { level: 9, move: Rock Tomb }
-  - { level: 12, move: Power Trick }
-  - { level: 15, move: Psybeam }
-  - { level: 16, move: Bulldoze }
-  - { level: 17, move: Psycho Cut }
-  - { level: 18, move: Ancient Power }
-  - { level: 21, move: Imprison }
-  - { level: 24, move: Cosmic Power }
-  - { level: 27, move: Extrasensory }
-  - { level: 29, move: Tectonic Fang }
-  - { level: 30, move: Earth Power }
-  - { level: 31, move: Astral Hand }
-  - { level: 33, move: Self-Destruct }
-  - { level: 38, move: Guard Split }
-  - { level: 39, move: Power Split }
-  - { level: 40, move: Kinetic Slam }
-  - { level: 41, move: Quagmire }
-  - { level: 43, move: Sandstorm }
-  - { level: 44, move: Earthquake }
-  - { level: 48, move: Explosion }
-  - { level: 57, move: Faultbreak }
-  - { level: 60, move: Terra Cannon }
-  - { level: 62, move: Psycrush }
-  - { level: 63, move: Sinkhole }
+  - { level: 9, move: Stored Power }
+  - { level: 12, move: Confusion }
+  - { level: 16, move: Rapid Spin }
+  - { level: 19, move: Trick Room }
+  - { level: 23, move: Mud Bomb }
+  - { level: 26, move: Psybeam }
+  - { level: 30, move: Stealth Rock }
+  - { level: 33, move: Reflect }
+  - { level: 35, move: Shadow Ball }
+  - { level: 37, move: Light Screen }
+  - { level: 40, move: Calm Mind }
+  - { level: 44, move: Psyshock }
+  - { level: 46, move: Ice Beam }
+  - { level: 48, move: Earth Power }
+  - { level: 51, move: Quagmire }
+  - { level: 54, move: Psychic }
+  - { level: 58, move: Mindwarp }
+  - { level: 61, move: Spikes }
+  - { level: 65, move: Future Sight }
+  - { level: 68, move: Teeter Dance }
+  - { level: 72, move: Sinkhole }
