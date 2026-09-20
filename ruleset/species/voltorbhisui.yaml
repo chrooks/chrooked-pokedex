@@ -1,28 +1,34 @@
 name: Voltorb Hisui
 chrooked_id: voltorbhisui
 aka: {  }
+abilities:
+  primary: Chloroplast
+  secondary: Motor Drive
+  hidden: Solar Power
+stats: { hp: 53, atk: 34, def: 54, spa: 74, spd: 61, spe: 54 }
 learnset:
-  - { level: 1, move: Charge }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Absorb }
-  - { level: 4, move: Thunder Shock }
-  - { level: 6, move: Stun Spore }
-  - { level: 9, move: Bullet Seed }
-  - { level: 11, move: Rollout }
-  - { level: 13, move: Screech }
-  - { level: 15, move: Giga Drain }
-  - { level: 16, move: Charge Beam }
-  - { level: 18, move: Short Circuit }
-  - { level: 20, move: Swift }
-  - { level: 22, move: Electro Ball }
-  - { level: 26, move: Self-Destruct }
-  - { level: 29, move: Energy Ball }
-  - { level: 34, move: Seed Bomb }
-  - { level: 35, move: Discharge }
-  - { level: 37, move: Siphon }
-  - { level: 41, move: Explosion }
-  - { level: 43, move: Thunder }
-  - { level: 46, move: Gyro Ball }
-  - { level: 50, move: Grassy Terrain }
-  - { level: 57, move: Zap Cannon }
-  - { level: 59, move: Leaf Storm }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Thunder Wave }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Absorb }
+  - { level: 12, move: Charge Beam }
+  - { level: 16, move: Mega Drain }
+  - { level: 20, move: Magical Leaf }
+  - { level: 22, move: Leech Seed }
+  - { level: 24, move: Volt Switch }
+  - { level: 26, move: Giga Drain }
+  - { level: 29, move: Spore }
+  - { level: 31, move: Apple Acid }
+  - { level: 33, move: Discharge }
+  - { level: 38, move: Synthesis }
+  - { level: 40, move: Gauss Cannon }
+  - { level: 42, move: Energy Ball }
+  - { level: 47, move: Thunderbolt }
+  - { level: 49, move: Sunny Day }
+  - { level: 51, move: Overdrive }
+  - { level: 58, move: Thunder }
+  - { level: 61, move: Electro Shot }
+  - { level: 63, move: Solar Beam }
+  - { level: 65, move: Leaf Storm }
+  - { level: 68, move: Chloroblast }
+  - { level: 72, move: Frenzy Plant }
