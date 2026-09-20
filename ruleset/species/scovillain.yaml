@@ -1,28 +1,35 @@
 name: Scovillain
 chrooked_id: scovillain
 aka: { pokeemerald: SPECIES_SCOVILLAIN }
-stats: { atk: 115, spa: 115, spe: 95 }
+abilities:
+  primary: Equinox
+  secondary: Sheer Force
+  hidden: Chlorophyll
+stats: { hp: 70, atk: 125, def: 70, spa: 90, spd: 70, spe: 95 }
 learnset:
   - { level: 0, move: Spicy Extract }
-  - { level: 0, move: Flamethrower }
   - { level: 1, move: Leer }
-  - { level: 1, move: Fire Fang }
-  - { level: 1, move: Leafage }
-  - { level: 2, move: Flame Charge }
-  - { level: 4, move: Bite }
-  - { level: 10, move: Growth }
-  - { level: 13, move: Razor Leaf }
-  - { level: 15, move: Flame Wheel }
-  - { level: 17, move: Sunny Day }
-  - { level: 21, move: Bullet Seed }
-  - { level: 24, move: Headbutt }
-  - { level: 28, move: Zen Headbutt }
-  - { level: 33, move: Worry Seed }
-  - { level: 36, move: Seed Bomb }
-  - { level: 38, move: Crunch }
-  - { level: 41, move: Combust }
-  - { level: 44, move: Reap }
-  - { level: 48, move: Solar Beam }
-  - { level: 49, move: Overheat }
-  - { level: 57, move: Power Whip }
-  - { level: 59, move: Flare Blitz }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Branch Poke }
+  - { level: 9, move: Flame Charge }
+  - { level: 12, move: Vine Whip }
+  - { level: 20, move: Grassy Glide }
+  - { level: 23, move: Will-O-Wisp }
+  - { level: 26, move: Flame Wheel }
+  - { level: 28, move: Mystical Fire }
+  - { level: 35, move: Sucker Punch }
+  - { level: 37, move: Seed Bomb }
+  - { level: 40, move: Crunch }
+  - { level: 45, move: Flamethrower }
+  - { level: 48, move: Energy Ball }
+  - { level: 50, move: Swords Dance }
+  - { level: 52, move: Combust }
+  - { level: 54, move: Reap }
+  - { level: 57, move: Sunny Day }
+  - { level: 59, move: Earthquake }
+  - { level: 62, move: Growth }
+  - { level: 64, move: Wood Hammer }
+  - { level: 66, move: Solar Blade }
+  - { level: 69, move: Flare Blitz }
+  - { level: 71, move: Overheat }
+  - { level: 73, move: Leaf Storm }
