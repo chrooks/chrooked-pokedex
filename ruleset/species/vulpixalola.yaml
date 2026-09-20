@@ -3,27 +3,37 @@ chrooked_id: vulpixalola
 aka: { pokeemerald: SPECIES_VULPIX_ALOLA }
 types: [Ice, Fairy]
 abilities:
-  primary: Whiteout
-  secondary: Snow Cloak
-  hidden: Snow Warning
-stats: { hp: 38, atk: 41, def: 40, spa: 50, spd: 65, spe: 65 }
+  primary: Snow Warning
+  secondary: Ice Body
+  hidden: Refrigerate
+stats: { hp: 42, atk: 34, def: 43, spa: 60, spd: 58, spe: 62 }
 learnset:
   - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Charm }
   - { level: 5, move: Powder Snow }
-  - { level: 9, move: Disarming Voice }
-  - { level: 13, move: Confuse Ray }
-  - { level: 17, move: Knell }
-  - { level: 21, move: Snowscape }
-  - { level: 25, move: Freeze-Dry }
-  - { level: 29, move: Beguile }
-  - { level: 33, move: Hex }
-  - { level: 37, move: Dazzling Gleam }
-  - { level: 41, move: Ice Beam }
-  - { level: 45, move: Moonlight }
-  - { level: 49, move: Shadow Ball }
-  - { level: 53, move: Blizzard }
-  - { level: 57, move: Moonblast }
-  - { level: 61, move: Specter Bomb }
-  - { level: 65, move: Sheer Cold }
-  - { level: 69, move: Rapture }
+  - { level: 7, move: Disarming Voice }
+  - { level: 9, move: Fairy Wind }
+  - { level: 12, move: Draining Kiss }
+  - { level: 16, move: Icy Wind }
+  - { level: 19, move: Confuse Ray }
+  - { level: 21, move: Moonlight }
+  - { level: 24, move: Beguile }
+  - { level: 26, move: Psybeam }
+  - { level: 28, move: Mist }
+  - { level: 31, move: Hyper Voice }
+  - { level: 33, move: Stored Power }
+  - { level: 35, move: Freeze-Dry }
+  - { level: 37, move: Extrasensory }
+  - { level: 39, move: Dazzling Gleam }
+  - { level: 41, move: Calm Mind }
+  - { level: 44, move: Aurora Veil }
+  - { level: 46, move: Moonblast }
+  - { level: 48, move: Pain Split }
+  - { level: 50, move: Ice Beam }
+  - { level: 52, move: Psychic }
+  - { level: 55, move: Haze }
+  - { level: 61, move: Blizzard }
+  - { level: 65, move: Future Sight }
+  - { level: 68, move: Imprison }
+  - { level: 72, move: Cryoblast }
+  - { level: 75, move: Rapture }

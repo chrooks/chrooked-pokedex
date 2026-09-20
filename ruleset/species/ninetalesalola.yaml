@@ -2,28 +2,39 @@ name: Ninetales Alola
 chrooked_id: ninetalesalola
 aka: { pokeemerald: SPECIES_NINETALES_ALOLA }
 abilities:
-  primary: Whiteout
-  secondary: Snow Cloak
-stats: { def: 80, spa: 90, spd: 105, spe: 105 }
+  primary: Snow Warning
+  secondary: Ice Body
+  hidden: Refrigerate
+stats: { hp: 73, atk: 60, def: 75, spa: 105, spd: 100, spe: 107 }
 learnset:
-  - { level: 0, move: Aurora Veil }
+  - { level: 0, move: Nasty Plot }
   - { level: 1, move: Baby-Doll Eyes }
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Charm }
   - { level: 5, move: Powder Snow }
-  - { level: 9, move: Disarming Voice }
-  - { level: 13, move: Confuse Ray }
-  - { level: 17, move: Knell }
-  - { level: 21, move: Snowscape }
-  - { level: 25, move: Freeze-Dry }
-  - { level: 29, move: Beguile }
-  - { level: 33, move: Hex }
-  - { level: 37, move: Dazzling Gleam }
-  - { level: 41, move: Ice Beam }
-  - { level: 45, move: Moonlight }
-  - { level: 49, move: Shadow Ball }
-  - { level: 53, move: Blizzard }
-  - { level: 57, move: Moonblast }
-  - { level: 61, move: Specter Bomb }
-  - { level: 65, move: Sheer Cold }
-  - { level: 69, move: Rapture }
-evolution: { from: Vulpix Alola, method: { essentials: Item, param: ICESTONE } }
+  - { level: 7, move: Disarming Voice }
+  - { level: 9, move: Fairy Wind }
+  - { level: 12, move: Draining Kiss }
+  - { level: 16, move: Icy Wind }
+  - { level: 19, move: Confuse Ray }
+  - { level: 21, move: Moonlight }
+  - { level: 24, move: Beguile }
+  - { level: 26, move: Psybeam }
+  - { level: 28, move: Mist }
+  - { level: 31, move: Hyper Voice }
+  - { level: 33, move: Stored Power }
+  - { level: 35, move: Freeze-Dry }
+  - { level: 37, move: Extrasensory }
+  - { level: 39, move: Dazzling Gleam }
+  - { level: 41, move: Calm Mind }
+  - { level: 44, move: Aurora Veil }
+  - { level: 46, move: Moonblast }
+  - { level: 48, move: Pain Split }
+  - { level: 50, move: Ice Beam }
+  - { level: 52, move: Psychic }
+  - { level: 55, move: Haze }
+  - { level: 61, move: Blizzard }
+  - { level: 65, move: Future Sight }
+  - { level: 68, move: Imprison }
+  - { level: 72, move: Cryoblast }
+  - { level: 75, move: Rapture }
+evolution: { from: Vulpix Alola, method: { item: ICESTONE } }
