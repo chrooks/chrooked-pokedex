@@ -1,11 +1,7 @@
-name: Camerupt
-chrooked_id: camerupt
-aka: { pokeemerald: SPECIES_CAMERUPT }
-abilities:
-  primary: Kindle
-  secondary: Solid Rock
-  hidden: Anger Point
-stats: { hp: 105, atk: 80, def: 80, spa: 120, spd: 85, spe: 40 }
+name: Camerupt Mega
+chrooked_id: cameruptmega
+aka: {  }
+stats: { hp: 70, atk: 120, def: 100, spa: 145, spd: 105, spe: 20 }
 learnset:
   - { level: 0, move: Lava Plume }
   - { level: 1, move: Flicker }
@@ -32,4 +28,3 @@ learnset:
   - { level: 69, move: Overheat }
   - { level: 71, move: Magma Storm }
   - { level: 74, move: Eruption }
-evolution: { from: Numel, method: { level: 33 } }

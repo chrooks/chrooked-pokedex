@@ -2,25 +2,32 @@ name: Numel
 chrooked_id: numel
 aka: { pokeemerald: SPECIES_NUMEL }
 abilities:
-  secondary: Simple
+  primary: Kindle
+  secondary: Solid Rock
+  hidden: Anger Point
+stats: { hp: 60, atk: 60, def: 40, spa: 65, spd: 45, spe: 35 }
 learnset:
-  - { level: 1, move: Tackle }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Growl }
-  - { level: 2, move: Mud-Slap }
   - { level: 5, move: Ember }
-  - { level: 8, move: Focus Energy }
-  - { level: 12, move: Bulldoze }
-  - { level: 15, move: Incinerate }
-  - { level: 16, move: Mud Shot }
-  - { level: 19, move: Amnesia }
-  - { level: 22, move: Lava Plume }
-  - { level: 26, move: Earth Power }
-  - { level: 29, move: Curse }
-  - { level: 31, move: Take Down }
-  - { level: 38, move: Quagmire }
-  - { level: 40, move: Earthquake }
-  - { level: 43, move: Flamethrower }
-  - { level: 44, move: Fire Blast }
-  - { level: 47, move: Double-Edge }
-  - { level: 57, move: Overheat }
-  - { level: 62, move: Sinkhole }
+  - { level: 9, move: Clod Toss }
+  - { level: 12, move: Stealth Rock }
+  - { level: 16, move: Yawn }
+  - { level: 19, move: Will-O-Wisp }
+  - { level: 23, move: Flame Burst }
+  - { level: 26, move: Mud Bomb }
+  - { level: 30, move: Scorching Sands }
+  - { level: 33, move: Fiery Dance }
+  - { level: 37, move: Amnesia }
+  - { level: 40, move: Curse }
+  - { level: 44, move: Earth Power }
+  - { level: 46, move: Power Gem }
+  - { level: 48, move: Flamethrower }
+  - { level: 51, move: Heat Wave }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Fire Blast }
+  - { level: 65, move: Sinkhole }
+  - { level: 67, move: Sandsear Storm }
+  - { level: 69, move: Overheat }
+  - { level: 71, move: Magma Storm }
+  - { level: 74, move: Eruption }
