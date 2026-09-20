@@ -1,26 +1,34 @@
 name: Torracat
 chrooked_id: torracat
 aka: { dex: 726 }
+abilities:
+  primary: Blaze
+  secondary: Intimidate
+  hidden: Martial Artist
+stats: { hp: 74, atk: 89, def: 82, spa: 58, spd: 70, spe: 47 }
 learnset:
+  - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Lick }
-  - { level: 2, move: Flame Charge }
-  - { level: 5, move: Cheap Shot }
-  - { level: 9, move: Roar }
-  - { level: 12, move: Fury Swipes }
-  - { level: 15, move: Bite }
-  - { level: 16, move: Flame Wheel }
-  - { level: 20, move: Double Kick }
-  - { level: 25, move: Fire Fang }
-  - { level: 30, move: Scary Face }
-  - { level: 35, move: Swagger }
-  - { level: 36, move: Combust }
-  - { level: 37, move: Heel Drop }
-  - { level: 38, move: Backstab }
-  - { level: 40, move: Flamethrower }
-  - { level: 42, move: One-Inch Punch }
-  - { level: 45, move: Thrash }
-  - { level: 50, move: Flare Blitz }
-  - { level: 60, move: Havoc }
+  - { level: 5, move: Flame Charge }
+  - { level: 12, move: Cheap Shot }
+  - { level: 20, move: Knock Off }
+  - { level: 23, move: Swords Dance }
+  - { level: 27, move: Sucker Punch }
+  - { level: 29, move: Flame Wheel }
+  - { level: 31, move: Fire Punch }
+  - { level: 34, move: Wicked Blow }
+  - { level: 36, move: Parting Shot }
+  - { level: 39, move: Mach Punch }
+  - { level: 41, move: Crunch }
+  - { level: 43, move: Drain Punch }
+  - { level: 45, move: Will-O-Wisp }
+  - { level: 47, move: Jaw Lock }
+  - { level: 49, move: Throat Chop }
+  - { level: 51, move: Blaze Kick }
+  - { level: 53, move: Taunt }
+  - { level: 55, move: Combust }
+  - { level: 57, move: Backstab }
+  - { level: 59, move: Bulk Up }
+  - { level: 65, move: Close Combat }
+  - { level: 68, move: Flare Blitz }
+  - { level: 72, move: Axe Kick }

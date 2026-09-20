@@ -1,30 +1,35 @@
 name: Incineroar
 chrooked_id: incineroar
 aka: { pokeemerald: SPECIES_INCINEROAR }
-stats: { def: 100 }
+abilities:
+  primary: Blaze
+  secondary: Intimidate
+  hidden: Martial Artist
+stats: { hp: 95, atk: 115, def: 105, spa: 75, spd: 90, spe: 60 }
 learnset:
   - { level: 0, move: Darkest Lariat }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Bulk Up }
+  - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
-  - { level: 1, move: Ember }
-  - { level: 2, move: Flame Charge }
-  - { level: 3, move: Lick }
-  - { level: 4, move: Cheap Shot }
-  - { level: 5, move: Bite }
-  - { level: 6, move: One-Inch Punch }
-  - { level: 9, move: Roar }
-  - { level: 12, move: Fury Swipes }
-  - { level: 15, move: Throat Chop }
-  - { level: 16, move: Flame Wheel }
-  - { level: 20, move: Double Kick }
-  - { level: 25, move: Fire Fang }
-  - { level: 30, move: Scary Face }
-  - { level: 32, move: Swagger }
-  - { level: 35, move: Cross Chop }
-  - { level: 38, move: Backstab }
-  - { level: 39, move: Combust }
-  - { level: 44, move: Flamethrower }
-  - { level: 48, move: Havoc }
-  - { level: 51, move: Thrash }
-  - { level: 58, move: Flare Blitz }
+  - { level: 5, move: Flame Charge }
+  - { level: 12, move: Cheap Shot }
+  - { level: 20, move: Knock Off }
+  - { level: 23, move: Swords Dance }
+  - { level: 27, move: Sucker Punch }
+  - { level: 29, move: Flame Wheel }
+  - { level: 31, move: Fire Punch }
+  - { level: 34, move: Wicked Blow }
+  - { level: 36, move: Parting Shot }
+  - { level: 39, move: Mach Punch }
+  - { level: 41, move: Crunch }
+  - { level: 43, move: Drain Punch }
+  - { level: 45, move: Will-O-Wisp }
+  - { level: 47, move: Jaw Lock }
+  - { level: 49, move: Throat Chop }
+  - { level: 51, move: Blaze Kick }
+  - { level: 53, move: Taunt }
+  - { level: 55, move: Combust }
+  - { level: 57, move: Backstab }
+  - { level: 59, move: Bulk Up }
+  - { level: 65, move: Close Combat }
+  - { level: 68, move: Flare Blitz }
+  - { level: 72, move: Axe Kick }
