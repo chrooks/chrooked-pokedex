@@ -1,26 +1,33 @@
 name: Electrode
 chrooked_id: electrode
 aka: { pokeemerald: SPECIES_ELECTRODE }
-stats: { spe: 150 }
+abilities:
+  primary: Aftermath
+  secondary: Static
+  hidden: Electric Surge
+stats: { hp: 60, atk: 45, def: 60, spa: 105, spd: 70, spe: 150 }
 learnset:
-  - { level: 1, move: Eerie Impulse }
-  - { level: 1, move: Charge }
-  - { level: 1, move: Magnetic Flux }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Thunder Shock }
-  - { level: 9, move: Spark }
-  - { level: 11, move: Rollout }
-  - { level: 13, move: Screech }
-  - { level: 16, move: Charge Beam }
-  - { level: 20, move: Swift }
-  - { level: 22, move: Electro Ball }
-  - { level: 26, move: Self-Destruct }
-  - { level: 29, move: Light Screen }
-  - { level: 32, move: Short Circuit }
-  - { level: 36, move: Magnet Rise }
-  - { level: 41, move: Discharge }
-  - { level: 43, move: Thunder }
-  - { level: 47, move: Explosion }
-  - { level: 54, move: Gyro Ball }
-  - { level: 57, move: Zap Cannon }
-  - { level: 58, move: Mirror Coat }
+  - { level: 0, move: Self-Destruct }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Charge Beam }
+  - { level: 11, move: Mirror Coat }
+  - { level: 13, move: Electro Ball }
+  - { level: 16, move: Thunder Wave }
+  - { level: 19, move: Screech }
+  - { level: 21, move: Light Screen }
+  - { level: 23, move: Rising Voltage }
+  - { level: 26, move: Short Circuit }
+  - { level: 30, move: Volt Switch }
+  - { level: 33, move: Discharge }
+  - { level: 37, move: Gauss Cannon }
+  - { level: 40, move: Taunt }
+  - { level: 44, move: Thunderbolt }
+  - { level: 47, move: Stealth Rock }
+  - { level: 51, move: Overdrive }
+  - { level: 54, move: Magnet Rise }
+  - { level: 61, move: Thunder }
+  - { level: 65, move: Zap Cannon }
+  - { level: 68, move: Electro Shot }
+  - { level: 74, move: Explosion }
