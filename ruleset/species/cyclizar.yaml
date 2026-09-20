@@ -1,23 +1,33 @@
 name: Cyclizar
 chrooked_id: cyclizar
 aka: { pokeemerald: SPECIES_CYCLIZAR }
-stats: { spe: 125 }
+abilities:
+  primary: Shed Skin
+  secondary: Regenerator
+  hidden: Blitz
+stats: { hp: 70, atk: 115, def: 75, spa: 45, spd: 70, spe: 130 }
 learnset:
+  - { level: 1, move: Leer }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Growl }
-  - { level: 4, move: Maul }
-  - { level: 7, move: Rapid Spin }
-  - { level: 11, move: Taunt }
-  - { level: 14, move: Breaking Swipe }
+  - { level: 5, move: Maul }
+  - { level: 7, move: Rage }
+  - { level: 9, move: Fake Out }
+  - { level: 16, move: Breaking Swipe }
   - { level: 18, move: Quick Attack }
-  - { level: 23, move: Bite }
-  - { level: 27, move: Bail Out }
-  - { level: 29, move: Take Down }
-  - { level: 31, move: Shed Tail }
-  - { level: 36, move: Dragon Claw }
-  - { level: 38, move: Rampage }
-  - { level: 40, move: Shift Gear }
-  - { level: 45, move: Dragon Pulse }
-  - { level: 48, move: Dragon Hammer }
-  - { level: 51, move: Double-Edge }
-  - { level: 57, move: Dragon Rush }
+  - { level: 20, move: Scratch }
+  - { level: 23, move: Headbutt }
+  - { level: 25, move: Bail Out }
+  - { level: 27, move: Dragon Tail }
+  - { level: 30, move: Swords Dance }
+  - { level: 33, move: Draconic Fang }
+  - { level: 35, move: Shed Tail }
+  - { level: 37, move: U-turn }
+  - { level: 40, move: Wyrmstrike }
+  - { level: 42, move: Extreme Speed }
+  - { level: 47, move: Body Slam }
+  - { level: 51, move: Dragon Hammer }
+  - { level: 60, move: Dragon Dance }
+  - { level: 62, move: Stealth Rock }
+  - { level: 64, move: Double-Edge }
+  - { level: 66, move: Outrage }
+  - { level: 72, move: Dragon Rush }
