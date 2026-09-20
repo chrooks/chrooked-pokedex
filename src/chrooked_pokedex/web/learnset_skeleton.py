@@ -82,6 +82,15 @@ _KIT_STARTERS: dict[str, tuple[str, ...]] = {
 SIGNATURE_MOVES: frozenset[str] = frozenset({
     "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
     "blood moon", "revelation dance", "relic song", "moongeist beam",
+    # Added 2026-09-20 — each of these was offered to a mon that does not own it
+    # during one batch pass: Matcha Gotcha and Ivy Cudgel (Ogerpon) to
+    # Scovillain, Seed Flare (Shaymin) to Hisuian Electrode, Wildbolt Storm
+    # (Thundurus) to Electrode, Luster Purge (Latios) to Claydol, Sandsear Storm
+    # (Landorus) to Camerupt. An explicit anchor still carries them, which is
+    # how Camerupt keeps Sandsear Storm as a deliberate exception.
+    "matcha gotcha", "ivy cudgel", "seed flare", "wildbolt storm",
+    "luster purge", "sandsear storm", "chloroblast", "surging strikes",
+    "sacred fire",  # Ho-Oh — offered to Incineroar in the same pass.
 })
 
 
