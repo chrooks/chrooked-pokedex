@@ -1,0 +1,5 @@
+name: Gyroscope
+chrooked_id: gyroscope
+aka: {  }
+behaviors: [clearbody, suctioncups]
+description: Its stats cannot be lowered, and it cannot be forced out.
