@@ -52,6 +52,15 @@ _FUNCTION_MACRO_PATTERN = re.compile(
     r"^\s*#define\s+([A-Z][A-Z0-9_]*)\s*\(([^)]*)\)\s*(.*?)\s*$"
 )
 _MACRO_CALL_PATTERN = re.compile(r"([A-Z][A-Z0-9_]*)\s*\(")
+# An OBJECT-like macro: `#define NAME <body>`, with no parameter list. Upstream
+# uses one for Mothim alone — its three cosmetic forms all read
+# `[SPECIES_MOTHIM_PLANT] = MOTHIM_SPECIES_INFO,`. Every other species in every
+# generation carries an inline `{...}` body or a function-like macro call, so
+# without this the whole species is dropped silently.
+_OBJECT_MACRO_PATTERN = re.compile(
+    r"^\s*#define\s+([A-Z][A-Z0-9_]*)\s+(?!\()(.*?)\s*$"
+)
+_BARE_MACRO_REF_PATTERN = re.compile(r"([A-Z][A-Z0-9_]*)\s*,")
 _FIELD_PATTERN = re.compile(r"\.([A-Za-z_][A-Za-z0-9_]*)\s*=")
 
 
@@ -124,6 +133,15 @@ def _iter_species_entry_bodies(
 
         macro_match = _MACRO_CALL_PATTERN.match(text, value_start)
         if macro_match is None:
+            # An object-like macro reference: `= MOTHIM_SPECIES_INFO,`. Its body
+            # is already a brace block, so reuse the same unwrapping as a
+            # function-like macro with no arguments.
+            bare = _BARE_MACRO_REF_PATTERN.match(text, value_start)
+            bare_macro = macros.get(bare.group(1)) if bare else None
+            if bare_macro is not None and not bare_macro.parameters:
+                entries.append((species, _expand_function_macro(bare_macro, [])))
+                search_pos = bare.end()
+                continue
             search_pos = match.end()
             continue
 
@@ -156,6 +174,16 @@ def _parse_function_macros(text: str) -> dict[str, _FunctionMacro]:
             if parameter.strip()
         )
         macros[name] = _FunctionMacro(parameters=parameters, body=match.group(3))
+
+    # Object-like macros share the same table with an empty parameter tuple. A
+    # function-like definition already claimed its name above, so it wins.
+    for line in _logical_preprocessor_lines(text):
+        match = _OBJECT_MACRO_PATTERN.match(line)
+        if match is None or match.group(1) in macros:
+            continue
+        body = match.group(2).strip()
+        if body.startswith("{"):
+            macros[match.group(1)] = _FunctionMacro(parameters=(), body=body)
     return macros
 
 

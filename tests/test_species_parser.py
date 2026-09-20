@@ -135,3 +135,54 @@ def test_parse_multiline_function_macro_species_profile_entry(tmp_path):
         "types": "MON_TYPES(TYPE_NORMAL)",
         "abilities": "{ ABILITY_MULTITYPE, ABILITY_NONE }",
     }
+
+
+def test_parse_object_macro_species_profile_entry(tmp_path):
+    """An object-like macro body, shared by several cosmetic forms.
+
+    Upstream declares Mothim this way and nothing else — in pokeemerald-expansion
+    1.11.2 its three cloak forms are the only `[SPECIES_X] = NAME,` entries in any
+    generation. Before this was handled the parser matched neither an inline `{`
+    body nor a `NAME(` call, so all three were dropped without a warning and
+    Mothim never reached the base snapshot.
+    """
+    source_repo = tmp_path / "pokeemerald-expansion"
+    pokemon_dir = source_repo / "src" / "data" / "pokemon"
+    pokemon_dir.mkdir(parents=True)
+    (pokemon_dir / "species_info.h").write_text(
+        """
+        #define MOTHIM_SPECIES_INFO                     \\
+            {                                           \\
+                .baseHP        = 70,                    \\
+                .baseAttack    = 94,                    \\
+                .types         = MON_TYPES(TYPE_BUG, TYPE_FLYING), \\
+                .catchRate     = 120,                   \\
+            }
+
+        const struct SpeciesInfo gSpeciesInfo[] =
+        {
+            [SPECIES_MOTHIM_PLANT] = MOTHIM_SPECIES_INFO,
+            [SPECIES_MOTHIM_SANDY] = MOTHIM_SPECIES_INFO,
+            [SPECIES_MOTHIM_TRASH] = MOTHIM_SPECIES_INFO,
+            [SPECIES_BURMY_PLANT] =
+            {
+                .baseHP = 40,
+                .catchRate = 120,
+            },
+        };
+        """,
+        encoding="utf-8",
+    )
+
+    profiles = parse_species_profiles(source_repo)
+
+    expected = {
+        "baseHP": "70",
+        "baseAttack": "94",
+        "types": "MON_TYPES(TYPE_BUG, TYPE_FLYING)",
+        "catchRate": "120",
+    }
+    for form in ("PLANT", "SANDY", "TRASH"):
+        assert profiles[f"SPECIES_MOTHIM_{form}"].fields == expected
+    # The inline-brace species beside them is untouched.
+    assert profiles["SPECIES_BURMY_PLANT"].fields == {"baseHP": "40", "catchRate": "120"}
