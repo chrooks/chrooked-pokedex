@@ -1231,3 +1231,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-21 — Cradily
 
 - **Direction:** Anchored acid wall; Corrosion Toxic niche; Hydrophyte replaces Storm Drain; Deep-Rooted moved off (Trevenant owns it).; The two facts treated as the design axis are (1) immovable-anchor-meets-mobile-hunter tension: Cradily evolved from a permanently rooted ambush filter-feeder into a slow-walking predator that still anchors itself against the sea, and (2) chemical predation via acid-secreting tentacles that dissolve prey whole. Every ability and move choice flows from these two poles — gravitational weight/immovability and corrosive, dissolving offense.
+
+## 2026-09-21 — Volcarona
+
+- **Direction:** Solar deity Quiver Dance sweeper; Airborne replaces Levitate.; The design axis is the solar divinity cycle: a humble, larval spark (born of the sun, living at its volcanic foot) that transforms into a six-winged seraphic moth — the literal embodiment of the sun replacing itself in the sky. Every ability and move choice flows from this two-beat arc of volcanic warmth → radiant solar deity, emphasizing fire-scattering offense, entry-field manipulation, and the mythic salvation role of bringing light to the cold.

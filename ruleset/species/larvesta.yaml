@@ -1,29 +1,34 @@
 name: Larvesta
 chrooked_id: larvesta
 aka: { pokeemerald: SPECIES_LARVESTA }
+types: [Bug, Fire]
 abilities:
-  primary: Swarm
-  secondary: Drought
-stats: { hp: 75, spa: 85, spe: 70 }
+  primary: Flame Body
+  secondary: Airborne
+  hidden: Drought
+stats: { hp: 64, atk: 46, def: 57, spa: 102, spd: 80, spe: 76 }
 learnset:
-  - { level: 1, move: Ember }
+  - { level: 1, move: Flicker }
   - { level: 1, move: String Shot }
-  - { level: 2, move: Fury Cutter }
-  - { level: 6, move: Flame Charge }
-  - { level: 12, move: Struggle Bug }
-  - { level: 18, move: Flame Wheel }
-  - { level: 24, move: Bug Bite }
-  - { level: 25, move: Signal Beam }
-  - { level: 29, move: Cinder Smash }
-  - { level: 30, move: Screech }
-  - { level: 36, move: Leech Life }
-  - { level: 39, move: Bug Buzz }
-  - { level: 42, move: Antennae Blast }
-  - { level: 43, move: Moltstrike }
-  - { level: 45, move: Combust }
-  - { level: 48, move: Take Down }
-  - { level: 51, move: Drone Chorus }
-  - { level: 54, move: Amnesia }
-  - { level: 57, move: Megahorn }
-  - { level: 60, move: Double-Edge }
-  - { level: 66, move: Flare Blitz }
+  - { level: 5, move: Struggle Bug }
+  - { level: 9, move: Ember }
+  - { level: 12, move: Flame Burst }
+  - { level: 16, move: Morning Sun }
+  - { level: 19, move: Sunny Day }
+  - { level: 23, move: Incinerate }
+  - { level: 30, move: Silver Wind }
+  - { level: 33, move: Mystical Fire }
+  - { level: 37, move: Lava Plume }
+  - { level: 39, move: Fiery Dance }
+  - { level: 41, move: Signal Beam }
+  - { level: 44, move: Bug Buzz }
+  - { level: 46, move: Pollen Puff }
+  - { level: 50, move: Flamethrower }
+  - { level: 52, move: Antennae Blast }
+  - { level: 54, move: Heat Wave }
+  - { level: 58, move: Hurricane }
+  - { level: 60, move: Fire Blast }
+  - { level: 62, move: Drone Chorus }
+  - { level: 65, move: Confuse Ray }
+  - { level: 72, move: Eruption }
+  - { level: 74, move: Overheat }
