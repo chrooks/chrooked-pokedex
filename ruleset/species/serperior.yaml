@@ -6,28 +6,28 @@ abilities:
   primary: Overgrow
   secondary: Chloroplast
   hidden: Contrary
-stats: { atk: 70, spa: 90, spe: 115 }
+stats: { hp: 75, atk: 65, def: 95, spa: 105, spd: 95, spe: 105 }
 learnset:
-  - { level: 1, move: Vine Whip }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Wrap }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Leer }
-  - { level: 2, move: Maul }
-  - { level: 13, move: Growth }
-  - { level: 15, move: Razor Leaf }
-  - { level: 16, move: Magical Leaf }
-  - { level: 17, move: Breaking Swipe }
-  - { level: 20, move: Leech Seed }
-  - { level: 24, move: Mega Drain }
-  - { level: 28, move: Slam }
-  - { level: 29, move: Draconic Fang }
-  - { level: 32, move: Leaf Blade }
-  - { level: 38, move: Coil }
-  - { level: 41, move: Reap }
-  - { level: 43, move: Dragon Hammer }
-  - { level: 44, move: Giga Drain }
-  - { level: 50, move: Gastro Acid }
-  - { level: 56, move: Leaf Storm }
-  - { level: 57, move: Power Whip }
-  - { level: 59, move: Outrage }
+  - { level: 5, move: Absorb }
+  - { level: 9, move: Twister }
+  - { level: 12, move: Mega Drain }
+  - { level: 19, move: Glare }
+  - { level: 23, move: Leaf Tornado }
+  - { level: 25, move: Magical Leaf }
+  - { level: 27, move: Dragon Breath }
+  - { level: 33, move: Leech Seed }
+  - { level: 35, move: Dragon Pulse }
+  - { level: 37, move: Giga Drain }
+  - { level: 40, move: Weather Ball }
+  - { level: 44, move: Energy Ball }
+  - { level: 51, move: Siphon }
+  - { level: 54, move: Leaf Storm }
+  - { level: 58, move: Cataclysm }
+  - { level: 61, move: Synthesis }
+  - { level: 65, move: Solar Beam }
+  - { level: 68, move: Outrage }
+  - { level: 72, move: Overheat }
+  - { level: 74, move: Draco Meteor }
 evolution: { from: Servine, method: { level: 36 } }
