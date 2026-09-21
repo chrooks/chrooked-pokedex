@@ -247,3 +247,37 @@ def test_the_block_respects_the_cap() -> None:
         cap=500,
     )
     assert len(block) <= 500
+
+
+def test_fallback_base_id_uses_the_sibling_root_for_form_only_species():
+    """Mothim, Burmy and Wormadam exist ONLY as cloak forms upstream.
+
+    There is no bare `mothim` in the base snapshot, so no known species prefixes
+    `mothimplant` and the old fallback returned "" — the lore lookup failed, and
+    the blind-design agent designed a moth as a Dark/Fighting predator from the
+    move pools alone. The shared prefix of the sibling forms is the PokeAPI page.
+    """
+    from chrooked_pokedex.web.lore_text import fallback_base_id
+
+    known = {
+        "mothimplant", "mothimsandy", "mothimtrash",
+        "burmyplant", "burmysandy", "burmytrash",
+        "wormadamplant", "wormadamsandy", "wormadamtrash",
+        "marowak", "marowakalola",
+    }
+    assert fallback_base_id("mothimplant", known) == "mothim"
+    assert fallback_base_id("burmysandy", known) == "burmy"
+    assert fallback_base_id("wormadamtrash", known) == "wormadam"
+    # A real prefix still wins, so regional forms are unchanged.
+    assert fallback_base_id("marowakalola", known) == "marowak"
+    # No sibling and no prefix: still nothing to try.
+    assert fallback_base_id("zzzzform", known) == ""
+
+
+def test_base_page_name_for_form_only_species():
+    """Bulbapedia has no 'Mothim Plant' page; the base name is the page."""
+    from chrooked_pokedex.web.lore import _base_page_name
+
+    assert _base_page_name("Mothim Plant", "mothim") == "Mothim"
+    assert _base_page_name("Wormadam Sandy", "wormadam") == "Wormadam"
+    assert _base_page_name("Pikachu", "raichu") == ""

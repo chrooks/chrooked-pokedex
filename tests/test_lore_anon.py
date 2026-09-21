@@ -104,3 +104,4 @@ def test_a_regional_dex_name_masks_every_way_the_lore_names_it() -> None:
     )
     assert "Ninetales" not in out and "Vulpix" not in out
     assert out == f"{SUBJECT} is a regional variant of {SUBJECT}. It leads {OTHER}."
+

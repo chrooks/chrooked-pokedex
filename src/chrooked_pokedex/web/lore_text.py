@@ -69,17 +69,48 @@ def fallback_base_id(chrooked_id: str, known_species: Iterable[str]) -> str:
     for it — and PokeAPI has none. The upstream 404 is the only honest signal, so
     the caller tries the id first and falls back through here.
 
+    Some species exist ONLY as forms, with no bare id to prefix them: upstream
+    has ``mothimplant``/``mothimsandy``/``mothimtrash`` but no ``mothim``, and the
+    same for Burmy and Wormadam. For those the base is the prefix the id shares
+    with its sibling forms, which is exactly the PokeAPI page name.
+
     Returns ``""`` when nothing prefixes it, meaning there is no base to try.
 
         >>> fallback_base_id("marowakalola", {"marowak", "marowakalola"})
         'marowak'
+        >>> fallback_base_id("mothimplant", {"mothimplant", "mothimsandy", "mothimtrash"})
+        'mothim'
     """
     key = chrooked_id.strip().lower()
     known = {s.strip().lower() for s in known_species}
     prefixes = [s for s in known if key.startswith(s) and s != key]
-    if not prefixes:
-        return ""
-    return max(prefixes, key=len)
+    if prefixes:
+        return max(prefixes, key=len)
+    return _sibling_root(key, known)
+
+
+# A shared root shorter than this is coincidence, not a species name.
+_MIN_SIBLING_ROOT = 4
+
+
+def _sibling_root(key: str, known: set[str]) -> str:
+    """The longest prefix ``key`` shares with another known id, or ``""``.
+
+    Only reached when no known species prefixes ``key`` at all, so an ordinary
+    regional form (which always has its base in the dex) never lands here.
+    """
+    best = ""
+    for other in known:
+        if other == key:
+            continue
+        n = 0
+        for a, b in zip(key, other):
+            if a != b:
+                break
+            n += 1
+        if n > len(best) and n < len(key):
+            best = key[:n]
+    return best if len(best) >= _MIN_SIBLING_ROOT else ""
 
 
 _REF_RE = re.compile(r"<ref[^>]*?/>|<ref[^>]*>.*?</ref>", re.S | re.I)

@@ -28,6 +28,8 @@ that is the caller's per-request choice, and the default is off.
 
 from __future__ import annotations
 
+import re
+
 import json
 import time
 from dataclasses import asdict, dataclass, field
@@ -181,6 +183,22 @@ class _Cache:
             )
         except OSError:
             pass  # a cache that cannot be written must not fail the lookup
+
+
+def _base_page_name(species_name: str, base_id: str) -> str:
+    """The leading words of ``species_name`` whose slug is ``base_id``, or "".
+
+        >>> _base_page_name("Mothim Plant", "mothim")
+        'Mothim'
+        >>> _base_page_name("Wormadam Sandy", "wormadam")
+        'Wormadam'
+    """
+    words = species_name.split()
+    for n in range(len(words), 0, -1):
+        candidate = " ".join(words[:n])
+        if re.sub(r"[^a-z0-9]", "", candidate.lower()) == base_id:
+            return candidate
+    return ""
 
 
 class HttpLoreProvider:
@@ -345,6 +363,10 @@ class HttpLoreProvider:
         # The dex calls the form "Ninetales Alola"; Bulbapedia files it on the
         # base page, "Ninetales (Pokémon)".
         page_name = split_regional_name(species_name)[0] if adjective else species_name
+        if not adjective and resolved and resolved != chrooked_id.strip().lower():
+            # A form-only species ("Mothim Plant") has no page of its own either;
+            # PokeAPI already resolved it to its base, so page on that base name.
+            page_name = _base_page_name(species_name, resolved) or page_name
         sections, bulba_url = self._bulbapedia(
             page_name, WANTED_SECTIONS + (REGIONAL_SECTIONS if adjective else ())
         )
