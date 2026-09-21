@@ -34964,6 +34964,16 @@
           "to": "wormadamplant",
           "to_dex": 413,
           "to_name": "Wormadam Plant"
+        },
+        {
+          "method": "Level Male 20",
+          "method_detail": {
+            "kind": "EVO_LEVEL_MALE",
+            "param": "20"
+          },
+          "to": "mothimplant",
+          "to_dex": 414,
+          "to_name": "Mothim Plant"
         }
       ],
       "fully_evolved": false,
@@ -35017,6 +35027,16 @@
           "to": "wormadamsandy",
           "to_dex": 413,
           "to_name": "Wormadam Sandy"
+        },
+        {
+          "method": "Level Male 20",
+          "method_detail": {
+            "kind": "EVO_LEVEL_MALE",
+            "param": "20"
+          },
+          "to": "mothimsandy",
+          "to_dex": 414,
+          "to_name": "Mothim Sandy"
         }
       ],
       "fully_evolved": false,
@@ -35070,6 +35090,16 @@
           "to": "wormadamtrash",
           "to_dex": 413,
           "to_name": "Wormadam Trash"
+        },
+        {
+          "method": "Level Male 20",
+          "method_detail": {
+            "kind": "EVO_LEVEL_MALE",
+            "param": "20"
+          },
+          "to": "mothimtrash",
+          "to_dex": 414,
+          "to_name": "Mothim Trash"
         }
       ],
       "fully_evolved": false,
@@ -90936,6 +90966,111 @@
       "types": [
         "Electric",
         "Dark"
+      ]
+    },
+    "mothimplant": {
+      "abilities": {
+        "hidden": "Tinted Lens",
+        "primary": "Swarm",
+        "secondary": null
+      },
+      "chrooked_id": "mothimplant",
+      "dex": 414,
+      "evolution": {
+        "from": "burmyplant",
+        "from_dex": 412,
+        "from_name": "Burmy Plant",
+        "method": "Level Male 20",
+        "method_detail": {
+          "kind": "EVO_LEVEL_MALE",
+          "param": "20"
+        }
+      },
+      "evolves_into": [],
+      "fully_evolved": true,
+      "learnset": [],
+      "name": "Mothim Plant",
+      "stats": {
+        "atk": 94,
+        "def": 50,
+        "hp": 70,
+        "spa": 94,
+        "spd": 50,
+        "spe": 66
+      },
+      "types": [
+        "Bug",
+        "Flying"
+      ]
+    },
+    "mothimsandy": {
+      "abilities": {
+        "hidden": "Tinted Lens",
+        "primary": "Swarm",
+        "secondary": null
+      },
+      "chrooked_id": "mothimsandy",
+      "dex": 414,
+      "evolution": {
+        "from": "burmysandy",
+        "from_dex": 412,
+        "from_name": "Burmy Sandy",
+        "method": "Level Male 20",
+        "method_detail": {
+          "kind": "EVO_LEVEL_MALE",
+          "param": "20"
+        }
+      },
+      "evolves_into": [],
+      "fully_evolved": true,
+      "learnset": [],
+      "name": "Mothim Sandy",
+      "stats": {
+        "atk": 94,
+        "def": 50,
+        "hp": 70,
+        "spa": 94,
+        "spd": 50,
+        "spe": 66
+      },
+      "types": [
+        "Bug",
+        "Flying"
+      ]
+    },
+    "mothimtrash": {
+      "abilities": {
+        "hidden": "Tinted Lens",
+        "primary": "Swarm",
+        "secondary": null
+      },
+      "chrooked_id": "mothimtrash",
+      "dex": 414,
+      "evolution": {
+        "from": "burmytrash",
+        "from_dex": 412,
+        "from_name": "Burmy Trash",
+        "method": "Level Male 20",
+        "method_detail": {
+          "kind": "EVO_LEVEL_MALE",
+          "param": "20"
+        }
+      },
+      "evolves_into": [],
+      "fully_evolved": true,
+      "learnset": [],
+      "name": "Mothim Trash",
+      "stats": {
+        "atk": 94,
+        "def": 50,
+        "hp": 70,
+        "spa": 94,
+        "spd": 50,
+        "spe": 66
+      },
+      "types": [
+        "Bug",
+        "Flying"
       ]
     },
     "mrmime": {
