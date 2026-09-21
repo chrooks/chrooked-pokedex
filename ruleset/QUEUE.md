@@ -1,1 +1,3 @@
 Mothim Plant
+Serperior
+Cradily
