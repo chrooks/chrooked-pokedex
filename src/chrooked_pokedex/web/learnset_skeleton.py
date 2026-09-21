@@ -94,6 +94,9 @@ SIGNATURE_MOVES: frozenset[str] = frozenset({
     # Starter ultimates: Hydro Cannon was offered to Masquerain and Blast Burn
     # to Camerupt, so the whole trio is guarded together.
     "hydro cannon", "blast burn", "frenzy plant",
+    # The Forces of Nature quartet, completed: Wildbolt and Sandsear were already
+    # here; Bleakwind (Tornadus) and Springtide (Enamorus) were offered to Mothim.
+    "bleakwind storm", "springtide storm",
 })
 
 

@@ -1,0 +1,37 @@
+name: Mothim Plant
+chrooked_id: mothimplant
+aka: { rejuv: "MOTHIM::Normal Form" }
+abilities:
+  primary: Tinted Lens
+  secondary: Magician
+  hidden: Serene Grace
+stats: { hp: 70, atk: 100, def: 60, spa: 105, spd: 60, spe: 105 }
+learnset:
+  - { level: 0, move: Silver Wind }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Struggle Bug }
+  - { level: 9, move: Gust }
+  - { level: 12, move: Bug Bite }
+  - { level: 20, move: U-turn }
+  - { level: 23, move: Roost }
+  - { level: 25, move: Steel Wing }
+  - { level: 27, move: Signal Beam }
+  - { level: 29, move: Air Slash }
+  - { level: 31, move: Tailwind }
+  - { level: 33, move: Thief }
+  - { level: 36, move: Lunge }
+  - { level: 38, move: Galeburst }
+  - { level: 41, move: Drill Peck }
+  - { level: 43, move: Dive Bomb }
+  - { level: 45, move: Knock Off }
+  - { level: 47, move: Extrasensory }
+  - { level: 49, move: Bug Buzz }
+  - { level: 51, move: X-Scissor }
+  - { level: 53, move: Ominous Wind }
+  - { level: 55, move: Iron Head }
+  - { level: 57, move: Antennae Blast }
+  - { level: 59, move: Quiver Dance }
+  - { level: 61, move: Nosedive }
+  - { level: 63, move: Luster Cannon }
+  - { level: 65, move: Hurricane }
+  - { level: 68, move: Drone Chorus }
