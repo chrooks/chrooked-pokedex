@@ -1,3 +1,2 @@
-Cradily
 Volcarona
 Gourgeist Average

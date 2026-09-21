@@ -1227,3 +1227,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-21 — Serperior
 
 - **Direction:** Special Contrary sun serpent; niche vs Sceptile (physical Grass/Dragon).; The two profile facts treated as the design axis are (1) solar amplification — the creature takes in solar energy and boosts it internally, pointing to sun-powered offense and speed — and (2) the paralyzing regal glare — the creature can stop opponents' movements with a look alone, pointing to an intimidating, high-pressure presence that rewards patience and punishes aggression. Everything else (vine whip mastery, regal posture, photosynthesis) orbits these two pillars.
+
+## 2026-09-21 — Cradily
+
+- **Direction:** Anchored acid wall; Corrosion Toxic niche; Hydrophyte replaces Storm Drain; Deep-Rooted moved off (Trevenant owns it).; The two facts treated as the design axis are (1) immovable-anchor-meets-mobile-hunter tension: Cradily evolved from a permanently rooted ambush filter-feeder into a slow-walking predator that still anchors itself against the sea, and (2) chemical predation via acid-secreting tentacles that dissolve prey whole. Every ability and move choice flows from these two poles — gravitational weight/immovability and corrosive, dissolving offense.

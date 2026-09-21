@@ -1,29 +1,35 @@
 name: Lileep
 chrooked_id: lileep
 aka: { pokeemerald: SPECIES_LILEEP }
+types: [Rock, Grass]
 abilities:
-  primary: Deep-Rooted
+  primary: Hydrophyte
+  secondary: Corrosion
+  hidden: Regenerator
+stats: { hp: 66, atk: 42, def: 73, spa: 66, spd: 77, spe: 31 }
 learnset:
-  - { level: 1, move: Wrap }
-  - { level: 1, move: Astonish }
-  - { level: 4, move: Acid }
-  - { level: 6, move: Jewel Glow }
-  - { level: 8, move: Confuse Ray }
-  - { level: 12, move: Ingrain }
-  - { level: 16, move: Ancient Power }
-  - { level: 20, move: Mega Drain }
-  - { level: 21, move: Root Shelter }
-  - { level: 24, move: Brine }
-  - { level: 28, move: Amnesia }
-  - { level: 32, move: Gastro Acid }
-  - { level: 34, move: Power Gem }
-  - { level: 36, move: Giga Drain }
-  - { level: 38, move: Reap }
-  - { level: 40, move: Swallow }
-  - { level: 41, move: Stockpile }
-  - { level: 42, move: Spit Up }
-  - { level: 43, move: Energy Ball }
-  - { level: 44, move: Siphon }
-  - { level: 48, move: Crystal Beam }
-  - { level: 57, move: Leaf Storm }
-  - { level: 62, move: Meteor Surge }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Acid }
+  - { level: 7, move: Jewel Glow }
+  - { level: 9, move: Absorb }
+  - { level: 13, move: Mega Drain }
+  - { level: 16, move: Leech Seed }
+  - { level: 20, move: Rock Tomb }
+  - { level: 23, move: Ancient Power }
+  - { level: 25, move: Geo Pulse }
+  - { level: 27, move: Acid Spray }
+  - { level: 29, move: Giga Drain }
+  - { level: 31, move: Ingrain }
+  - { level: 33, move: Stockpile }
+  - { level: 37, move: Miasma }
+  - { level: 40, move: Toxic }
+  - { level: 44, move: Sludge Bomb }
+  - { level: 46, move: Power Gem }
+  - { level: 48, move: Energy Ball }
+  - { level: 50, move: Recover }
+  - { level: 54, move: Stealth Rock }
+  - { level: 56, move: Siphon }
+  - { level: 58, move: Crystal Beam }
+  - { level: 61, move: Meteor Surge }
+  - { level: 68, move: Leaf Storm }
