@@ -2,33 +2,31 @@ name: Drapion
 chrooked_id: drapion
 aka: { pokeemerald: SPECIES_DRAPION }
 abilities:
-  primary: Coil Up
-  hidden: Death Grip
-stats: { atk: 110, def: 120 }
+  primary: Tough Claws
+  secondary: Death Grip
+  hidden: Merciless
+stats: { hp: 70, atk: 120, def: 120, spa: 60, spd: 75, spe: 95 }
 learnset:
+  - { level: 0, move: Gastric Snare }
   - { level: 1, move: Leer }
-  - { level: 1, move: Hone Claws }
-  - { level: 1, move: Poison Sting }
-  - { level: 1, move: Fell Stinger }
-  - { level: 2, move: Thunder Fang }
-  - { level: 3, move: Ice Fang }
-  - { level: 4, move: Fire Fang }
-  - { level: 5, move: Cheap Shot }
-  - { level: 9, move: Cross Poison }
-  - { level: 12, move: Bite }
-  - { level: 15, move: Toxic Spikes }
-  - { level: 18, move: Bug Bite }
-  - { level: 21, move: Venoshock }
-  - { level: 24, move: Knock Off }
-  - { level: 27, move: Scary Face }
-  - { level: 30, move: Pin Missile }
-  - { level: 33, move: Toxic }
-  - { level: 36, move: Night Slash }
-  - { level: 39, move: Poison Fang }
-  - { level: 41, move: Venom Slam }
-  - { level: 42, move: Crunch }
-  - { level: 44, move: X-Scissor }
-  - { level: 49, move: Acupressure }
+  - { level: 1, move: Scratch }
+  - { level: 6, move: Bite }
+  - { level: 12, move: Poison Tail }
+  - { level: 16, move: Cheap Shot }
+  - { level: 22, move: Toxic }
+  - { level: 24, move: Barb Barrage }
+  - { level: 26, move: Knock Off }
+  - { level: 28, move: Toxic Spikes }
+  - { level: 30, move: Cross Poison }
+  - { level: 34, move: Swords Dance }
+  - { level: 37, move: Poison Fang }
+  - { level: 40, move: Sucker Punch }
+  - { level: 44, move: Crunch }
+  - { level: 47, move: Jaw Lock }
+  - { level: 49, move: Poison Jab }
   - { level: 54, move: Backstab }
-  - { level: 57, move: Gunk Shot }
-  - { level: 60, move: Havoc }
+  - { level: 56, move: Iron Tail }
+  - { level: 58, move: Earthquake }
+  - { level: 65, move: Venom Slam }
+  - { level: 68, move: Gunk Shot }
+  - { level: 72, move: Havoc }

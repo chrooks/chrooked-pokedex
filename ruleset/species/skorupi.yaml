@@ -2,31 +2,30 @@ name: Skorupi
 chrooked_id: skorupi
 aka: { dex: 451 }
 abilities:
-  primary: Coil Up
-  hidden: Death Grip
+  primary: Tough Claws
+  secondary: Death Grip
+  hidden: Merciless
+stats: { hp: 43, atk: 76, def: 76, spa: 38, spd: 47, spe: 60 }
 learnset:
-  - { level: 1, move: Poison Sting }
   - { level: 1, move: Leer }
-  - { level: 2, move: Cheap Shot }
-  - { level: 3, move: Hone Claws }
-  - { level: 6, move: Fell Stinger }
-  - { level: 9, move: Cross Poison }
-  - { level: 12, move: Bite }
-  - { level: 15, move: Toxic Spikes }
-  - { level: 18, move: Bug Bite }
-  - { level: 21, move: Venoshock }
-  - { level: 24, move: Knock Off }
-  - { level: 27, move: Scary Face }
-  - { level: 30, move: Pin Missile }
-  - { level: 33, move: Toxic }
-  - { level: 35, move: Night Slash }
-  - { level: 36, move: Crunch }
+  - { level: 1, move: Scratch }
+  - { level: 6, move: Bite }
+  - { level: 12, move: Poison Tail }
+  - { level: 16, move: Cheap Shot }
+  - { level: 22, move: Toxic }
+  - { level: 24, move: Barb Barrage }
+  - { level: 26, move: Knock Off }
+  - { level: 28, move: Toxic Spikes }
+  - { level: 30, move: Cross Poison }
+  - { level: 34, move: Swords Dance }
   - { level: 37, move: Poison Fang }
-  - { level: 39, move: Venom Slam }
-  - { level: 42, move: X-Scissor }
-  - { level: 43, move: Moltstrike }
-  - { level: 45, move: Acupressure }
-  - { level: 48, move: Backstab }
-  - { level: 57, move: Gunk Shot }
-  - { level: 59, move: Megahorn }
-  - { level: 60, move: Havoc }
+  - { level: 40, move: Sucker Punch }
+  - { level: 44, move: Crunch }
+  - { level: 47, move: Jaw Lock }
+  - { level: 49, move: Poison Jab }
+  - { level: 54, move: Backstab }
+  - { level: 56, move: Iron Tail }
+  - { level: 58, move: Earthquake }
+  - { level: 65, move: Venom Slam }
+  - { level: 68, move: Gunk Shot }
+  - { level: 72, move: Havoc }
