@@ -1,0 +1,24 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Hydrophyte
+chrooked_id: hydrophyte
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Full immunity to Water-type moves
+    trigger: damage-calc
+    when: a Water-type move targets this Pokemon
+    effect: The move deals 0 damage and its secondary effects are suppressed. No HP is restored and no stat rises.
+  - summary: Halves damage from Fire-type moves
+    trigger: damage-calc
+    when: a Fire-type move hits this Pokemon
+    effect: The damage is multiplied by 0.5.
+test_cases:
+  - given: a Hydrophyte Pokemon is hit by Surf
+    expect: it takes 0 damage
+  - given: a Hydrophyte Pokemon is hit by Flamethrower
+    expect: it takes half the damage it would otherwise take
+  - given: a Hydrophyte Pokemon is hit by Tackle
+    expect: normal damage
+notes:
+  - Adapted from Elite Redux's Seaweed. The offensive half (Grass deals x2 to Fire) is dropped; a Water immunity replaces it.
+  - Distribute to aquatic plants - Ludicolo, Dhelmise, Cradily.
