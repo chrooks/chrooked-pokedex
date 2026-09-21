@@ -91,6 +91,9 @@ SIGNATURE_MOVES: frozenset[str] = frozenset({
     "matcha gotcha", "ivy cudgel", "seed flare", "wildbolt storm",
     "luster purge", "sandsear storm", "chloroblast", "surging strikes",
     "sacred fire",  # Ho-Oh — offered to Incineroar in the same pass.
+    # Starter ultimates: Hydro Cannon was offered to Masquerain and Blast Burn
+    # to Camerupt, so the whole trio is guarded together.
+    "hydro cannon", "blast burn", "frenzy plant",
 })
 
 

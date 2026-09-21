@@ -1,3 +1,2 @@
-Masquerain
 Mothim Plant
 Drapion
