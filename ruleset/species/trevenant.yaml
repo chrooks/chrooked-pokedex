@@ -2,30 +2,33 @@ name: Trevenant
 chrooked_id: trevenant
 aka: { pokeemerald: SPECIES_TREVENANT }
 abilities:
-  secondary: Forestry
-  hidden: Insidious
-stats: { def: 86 }
+  primary: Deep-Rooted
+  secondary: Cursed Body
+  hidden: Grassy Surge
+stats: { hp: 95, atk: 115, def: 95, spa: 55, spd: 95, spe: 55 }
 learnset:
-  - { level: 0, move: Shadow Claw }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Leech Seed }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Branch Poke }
-  - { level: 2, move: Lick }
-  - { level: 12, move: Confuse Ray }
-  - { level: 16, move: Will-O-Wisp }
-  - { level: 20, move: Hex }
-  - { level: 21, move: Root Shelter }
-  - { level: 24, move: Growth }
-  - { level: 28, move: Horn Leech }
-  - { level: 29, move: Seed Bomb }
-  - { level: 32, move: Curse }
-  - { level: 36, move: Phantom Force }
-  - { level: 38, move: Wraithstrike }
-  - { level: 40, move: Ingrain }
-  - { level: 42, move: Interment }
-  - { level: 44, move: Reap }
-  - { level: 46, move: Wood Hammer }
-  - { level: 48, move: Destiny Bond }
-  - { level: 52, move: Forest's Curse }
-  - { level: 62, move: Necrosis }
+  - { level: 0, move: Horn Leech }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Astonish }
+  - { level: 9, move: Bone Chill }
+  - { level: 9, move: Branch Poke }
+  - { level: 12, move: Shadow Sneak }
+  - { level: 16, move: Vine Whip }
+  - { level: 19, move: Forest's Curse }
+  - { level: 23, move: Shadow Claw }
+  - { level: 25, move: Knock Off }
+  - { level: 30, move: Ingrain }
+  - { level: 32, move: Absorb }
+  - { level: 34, move: Seed Bomb }
+  - { level: 37, move: Wither Grasp }
+  - { level: 40, move: Strength Sap }
+  - { level: 44, move: Phantom Force }
+  - { level: 47, move: Leaf Blade }
+  - { level: 49, move: Wraithstrike }
+  - { level: 54, move: Leech Seed }
+  - { level: 58, move: Reap }
+  - { level: 60, move: Will-O-Wisp }
+  - { level: 62, move: Poltergeist }
+  - { level: 65, move: Wood Hammer }
+  - { level: 72, move: Curse }

@@ -1,4 +1,3 @@
-Trevenant
 Serperior
 Cradily
 Volcarona
