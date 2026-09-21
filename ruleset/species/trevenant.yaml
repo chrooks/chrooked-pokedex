@@ -11,8 +11,8 @@ learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Pound }
   - { level: 5, move: Astonish }
+  - { level: 7, move: Branch Poke }
   - { level: 9, move: Bone Chill }
-  - { level: 9, move: Branch Poke }
   - { level: 12, move: Shadow Sneak }
   - { level: 16, move: Vine Whip }
   - { level: 19, move: Forest's Curse }
