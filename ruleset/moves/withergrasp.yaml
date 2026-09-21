@@ -1,0 +1,12 @@
+name: Wither Grasp
+chrooked_id: withergrasp
+aka: {  }
+type: Ghost
+category: physical
+power: 75
+accuracy: 100
+pp: 10
+description: The user grips the target and withers its life away, restoring half the damage dealt.
+effect: absorb
+argument: { absorb_percentage: 50 }
+flags: [contact]

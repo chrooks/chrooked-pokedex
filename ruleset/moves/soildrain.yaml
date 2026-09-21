@@ -1,0 +1,11 @@
+name: Soil Drain
+chrooked_id: soildrain
+aka: {  }
+type: Ground
+category: special
+power: 80
+accuracy: 100
+pp: 10
+description: The earth draws the target's strength into the soil, restoring half the damage dealt.
+effect: absorb
+argument: { absorb_percentage: 50 }

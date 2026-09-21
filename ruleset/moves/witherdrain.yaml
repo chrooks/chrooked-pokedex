@@ -1,0 +1,11 @@
+name: Wither Drain
+chrooked_id: witherdrain
+aka: {  }
+type: Ghost
+category: special
+power: 75
+accuracy: 100
+pp: 10
+description: A withering haze drains the target from afar, restoring half the damage dealt.
+effect: absorb
+argument: { absorb_percentage: 50 }
