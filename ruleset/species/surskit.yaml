@@ -2,27 +2,31 @@ name: Surskit
 chrooked_id: surskit
 aka: { pokeemerald: SPECIES_SURSKIT }
 abilities:
-  primary: Intimidate
-  secondary: Frighten
-  hidden: Web Weaver
+  primary: Frighten
+  secondary: Compound Eyes
+  hidden: Supersweet Syrup
+stats: { hp: 40, atk: 23, def: 37, spa: 68, spd: 51, spe: 60 }
 learnset:
-  - { level: 1, move: Water Gun }
-  - { level: 2, move: Struggle Bug }
-  - { level: 6, move: Quick Attack }
-  - { level: 9, move: Sweet Scent }
-  - { level: 14, move: Soak }
-  - { level: 17, move: Bubble Beam }
-  - { level: 22, move: Agility }
-  - { level: 25, move: Mist }
-  - { level: 26, move: Haze }
-  - { level: 29, move: Signal Beam }
-  - { level: 30, move: Bug Buzz }
-  - { level: 31, move: Galeburst }
-  - { level: 32, move: Muddy Water }
-  - { level: 35, move: Baton Pass }
-  - { level: 38, move: Sticky Web }
-  - { level: 43, move: Hydro Pump }
-  - { level: 45, move: Antennae Blast }
-  - { level: 60, move: Drone Chorus }
-  - { level: 64, move: Tsunami }
-  - { level: 65, move: Tempest }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Struggle Bug }
+  - { level: 9, move: Bubble }
+  - { level: 12, move: Water Gun }
+  - { level: 16, move: Sleep Powder }
+  - { level: 19, move: Stun Spore }
+  - { level: 21, move: Tailwind }
+  - { level: 23, move: Signal Beam }
+  - { level: 26, move: Bubble Beam }
+  - { level: 29, move: Roost }
+  - { level: 31, move: Air Slash }
+  - { level: 33, move: Hydro Steam }
+  - { level: 37, move: Scald }
+  - { level: 40, move: Feather Dance }
+  - { level: 44, move: Bug Buzz }
+  - { level: 47, move: Quiver Dance }
+  - { level: 51, move: Antennae Blast }
+  - { level: 54, move: Surf }
+  - { level: 61, move: Hurricane }
+  - { level: 65, move: Hydro Pump }
+  - { level: 68, move: Drone Chorus }
+  - { level: 72, move: Tsunami }

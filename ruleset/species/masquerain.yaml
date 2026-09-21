@@ -3,31 +3,32 @@ chrooked_id: masquerain
 aka: { pokeemerald: SPECIES_MASQUERAIN }
 types: [Bug, Water]
 abilities:
-  primary: Intimidate
-  secondary: Frighten
-  hidden: Web Weaver
-stats: { def: 60, spa: 110, spd: 90, spe: 90 }
+  primary: Frighten
+  secondary: Compound Eyes
+  hidden: Supersweet Syrup
+stats: { hp: 70, atk: 40, def: 65, spa: 120, spd: 90, spe: 105 }
 learnset:
-  - { level: 1, move: Whirlwind }
-  - { level: 1, move: Quick Attack }
+  - { level: 0, move: Silver Wind }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Sweet Scent }
-  - { level: 1, move: Soak }
-  - { level: 2, move: Struggle Bug }
-  - { level: 3, move: Water Gun }
-  - { level: 15, move: Water Pulse }
-  - { level: 17, move: Gust }
-  - { level: 22, move: Scary Face }
-  - { level: 23, move: Air Cutter }
-  - { level: 26, move: Stun Spore }
-  - { level: 29, move: Signal Beam }
-  - { level: 30, move: Muddy Water }
-  - { level: 32, move: Air Slash }
-  - { level: 35, move: Galeburst }
-  - { level: 36, move: Bug Buzz }
-  - { level: 38, move: Giga Drain }
-  - { level: 43, move: Hydro Pump }
-  - { level: 44, move: Antennae Blast }
-  - { level: 52, move: Quiver Dance }
-  - { level: 57, move: Tsunami }
-  - { level: 60, move: Drone Chorus }
-  - { level: 64, move: Tempest }
+  - { level: 5, move: Struggle Bug }
+  - { level: 9, move: Bubble }
+  - { level: 12, move: Water Gun }
+  - { level: 16, move: Sleep Powder }
+  - { level: 19, move: Stun Spore }
+  - { level: 21, move: Tailwind }
+  - { level: 23, move: Signal Beam }
+  - { level: 26, move: Bubble Beam }
+  - { level: 29, move: Roost }
+  - { level: 31, move: Air Slash }
+  - { level: 33, move: Hydro Steam }
+  - { level: 37, move: Scald }
+  - { level: 40, move: Feather Dance }
+  - { level: 44, move: Bug Buzz }
+  - { level: 47, move: Quiver Dance }
+  - { level: 51, move: Antennae Blast }
+  - { level: 54, move: Surf }
+  - { level: 61, move: Hurricane }
+  - { level: 65, move: Hydro Pump }
+  - { level: 68, move: Drone Chorus }
+  - { level: 72, move: Tsunami }
