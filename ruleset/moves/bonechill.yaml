@@ -1,0 +1,12 @@
+name: Bone Chill
+chrooked_id: bonechill
+aka: {  }
+type: Ghost
+category: physical
+power: 50
+accuracy: 100
+pp: 20
+description: A grave-cold touch that seeps into the bone. May inflict frostbite.
+additional_effects:
+  - { effect: frostbite, chance: 10 }
+flags: [contact, bone]
