@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Frisk
+chrooked_id: frisk
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Vanilla Frisk — the holder sees the foes' held items on entry.
+    trigger: switch-in
+    when: this Pokemon enters the field
+    effect: The held item of each adjacent foe is revealed. This is the vanilla effect and is unchanged.
+  - summary: On entry, adjacent foes are under Embargo for 2 rounds.
+    trigger: switch-in
+    when: this Pokemon enters the field
+    effect: Each adjacent foe gets the Embargo counter set to 2, so its held item has no effect for 2 rounds. A foe already under a longer Embargo keeps the longer timer.
+test_cases:
+  - given: Frisk enters against a foe holding Leftovers
+    expect: the foes item is revealed, and Leftovers does not heal for 2 rounds
+  - given: a foe is already under Embargo from the move Embargo (5 rounds)
+    expect: the 5-round timer is kept and no message is shown
+  - given: three rounds pass after entry
+    expect: the foe's held item works again
+notes:
+  - Reuses the vanilla effects[:Embargo] counter, so every existing item-suppression check applies with no extra code.
