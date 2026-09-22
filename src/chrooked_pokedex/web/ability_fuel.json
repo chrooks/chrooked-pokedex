@@ -762,7 +762,7 @@
     "sunbask": {
       "shape": "weather_rider",
       "hard": false,
-      "lean": "In sun it regenerates each turn AND drain moves recover all damage dealt \u2014 carry drain moves (Giga Drain, Drain Punch, Horn Leech class), and a sun setter if the pool offers one.",
+      "lean": "In sun it regenerates each turn AND drain moves recover all damage dealt — carry drain moves (Giga Drain, Drain Punch, Horn Leech class), and a sun setter if the pool offers one.",
       "note": "Soft, not hard: the drain payoff only applies while the sun is up, so the learnset owes it a lean rather than a required slot. Heliotrope composes this part and resolves through it."
     },
     "spectralize": {
@@ -963,6 +963,54 @@
         "attacking": true,
         "on_stat": true
       }
+    },
+    "mawcannon": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "pulse"
+        ],
+        "attacking": true
+      },
+      "note": "Pulse moves run off Attack — special-categorized pulse moves are CORRECT picks for a physical attacker."
+    },
+    "scaldingpulse": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "pulse"
+        ],
+        "attacking": true
+      },
+      "note": "Pulse moves gain a burn chance; the kit needs pulse moves to use it."
+    },
+    "mawofruin": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "pulse"
+        ],
+        "attacking": true
+      },
+      "note": "Composed Maw Cannon + Scalding Pulse: pulse moves run off Attack and may burn."
+    },
+    "heartofrage": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "pulse"
+        ],
+        "attacking": true
+      },
+      "note": "Composed Maw of Ruin + Violent Blood: pulse moves run off Attack and may burn; Dark moves get STAB."
     }
   }
 }

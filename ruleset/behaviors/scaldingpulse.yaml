@@ -1,0 +1,19 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Scalding Pulse
+chrooked_id: scaldingpulse
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Pulse moves gain a 30% chance to burn.
+    trigger: on-hit
+    when: a damaging pulse move from this Pokémon deals damage
+    effect: The target is burned 30% of the time, subject to the normal burn rules.
+test_cases:
+  - given: a Scalding Pulse user lands Dragon Pulse
+    expect: a 30% burn roll
+  - given: the target is a Fire type
+    expect: no burn
+  - given: the move is not a pulse move
+    expect: no burn
+notes:
+  - Modeled on Infernal Maw's biting-move burn rider; pbCanBurn? gates it.

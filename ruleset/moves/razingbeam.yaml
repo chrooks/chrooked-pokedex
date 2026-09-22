@@ -1,0 +1,14 @@
+name: Razing Beam
+chrooked_id: razingbeam
+aka: {  }
+type: Fire
+category: special
+power: 110
+accuracy: 85
+pp: 5
+target: both
+flags: [pulse]
+additional_effects:
+  - effect: burn
+    chance: 10
+description: The user fires white-hot beams from its maw in every direction, burning everything around it.

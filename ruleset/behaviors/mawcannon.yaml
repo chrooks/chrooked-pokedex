@@ -1,0 +1,19 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Maw Cannon
+chrooked_id: mawcannon
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Pulse moves resolve as physical for this attacker.
+    trigger: damage-calc
+    when: this Pokémon uses a damaging move with the pulse flag
+    effect: The move uses the user's Attack stat and is defended by the target's Defense. The move's displayed category is unchanged, so Mega Launcher and the AI still read it as special.
+test_cases:
+  - given: a Maw Cannon user attacks with Dragon Pulse
+    expect: damage scales off its Attack and the target's Defense
+  - given: a Maw Cannon user attacks with Waterfall
+    expect: nothing changes
+  - given: a Maw Cannon user uses Heal Pulse
+    expect: it stays a status move
+notes:
+  - Same seam as Percussion — override pbIsPhysical?/pbIsSpecial?, never swap stat values.

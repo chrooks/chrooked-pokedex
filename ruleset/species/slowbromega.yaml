@@ -4,8 +4,8 @@ aka: {  }
 learnset:
   - { level: 1, move: Curse }
   - { level: 1, move: Growl }
-  - { level: 1, move: Withdraw }
   - { level: 1, move: Tackle }
+  - { level: 1, move: Withdraw }
   - { level: 2, move: Water Gun }
   - { level: 3, move: Confusion }
   - { level: 9, move: Yawn }
@@ -20,9 +20,9 @@ learnset:
   - { level: 30, move: Surf }
   - { level: 33, move: Slack Off }
   - { level: 36, move: Mindwarp }
+  - { level: 38, move: Future Sight }
   - { level: 41, move: Psych Up }
   - { level: 43, move: Hydro Pump }
-  - { level: 45, move: Future Sight }
   - { level: 46, move: Rain Dance }
   - { level: 51, move: Heal Pulse }
-  - { level: 57, move: Tsunami }
+  - { level: 64, move: Tsunami }

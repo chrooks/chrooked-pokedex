@@ -1235,3 +1235,8 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-21 — Volcarona
 
 - **Direction:** Solar deity Quiver Dance sweeper; Airborne replaces Levitate.; The design axis is the solar divinity cycle: a humble, larval spark (born of the sun, living at its volcanic foot) that transforms into a six-winged seraphic moth — the literal embodiment of the sun replacing itself in the sky. Every ability and move choice flows from this two-beat arc of volcanic warmth → radiant solar deity, emphasizing fire-scattering offense, entry-field manipulation, and the mythic salvation role of bringing light to the cold.
+
+## 2026-09-22 — Gyarados
+
+- **Direction:** Physical serpent whose beams are fire. Mega keeps Water/Dragon with Evil Heart. Magikarp designed separately; evolution moves to L30.; The core design axis for the FINAL STAGE is the paradox of **evolutionary explosion**: a creature defined entirely by helplessness becomes an unstoppable, fire-breathing catastrophe. Every stat and ability choice is anchored to the lore of uncontrollable rage, incendiary destruction, and the structural brain-transformation that drives berserk behavior. Secondary axis: the creature is a serpentine Chinese dragon — physically massive, Water-typed in body but Fire in temperament.
+- **New mechanics:** Maw of Ruin (ability): Composed: pulse moves use Attack (Maw Cannon) + 30% burn (Scalding Pulse); move Razing Beam; Mega ability Evil Heart adds Violent Blood (Dark STAB).

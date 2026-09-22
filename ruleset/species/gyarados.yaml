@@ -3,35 +3,35 @@ chrooked_id: gyarados
 aka: { pokeemerald: SPECIES_GYARADOS }
 types: [Water, Dragon]
 abilities:
-  primary: Levitate
-  hidden: Brawler's Spirit
-stats: { def: 80, spe: 85 }
+  primary: Intimidate
+  secondary: Maw of Ruin
+  hidden: Moxie
+stats: { hp: 95, atk: 130, def: 85, spa: 50, spd: 105, spe: 95 }
 learnset:
-  - { level: 0, move: Bite }
+  - { level: 0, move: Thrash }
   - { level: 1, move: Leer }
-  - { level: 1, move: Splash }
-  - { level: 1, move: Flail }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Twister }
-  - { level: 4, move: Whirlpool }
-  - { level: 6, move: Undertow }
-  - { level: 8, move: Ice Fang }
-  - { level: 10, move: Maul }
-  - { level: 12, move: Brine }
-  - { level: 14, move: Water Whip }
-  - { level: 16, move: Scary Face }
-  - { level: 21, move: Breaking Swipe }
-  - { level: 24, move: Crunch }
-  - { level: 28, move: Dragon Tail }
-  - { level: 29, move: Draconic Fang }
-  - { level: 30, move: Aqua Tail }
-  - { level: 32, move: Maelstrom }
-  - { level: 36, move: Dragon Dance }
-  - { level: 38, move: Dragon Hammer }
-  - { level: 40, move: Hydro Pump }
-  - { level: 44, move: Hurricane }
-  - { level: 48, move: Outrage }
-  - { level: 52, move: Hyper Beam }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Triple Dive }
+  - { level: 9, move: Maul }
+  - { level: 12, move: Dragon Dance }
+  - { level: 14, move: Aqua Jet }
+  - { level: 19, move: Flame Burst }
+  - { level: 23, move: Water Pulse }
+  - { level: 26, move: Dragon Tail }
+  - { level: 32, move: Crunch }
+  - { level: 34, move: Dragon Pulse }
+  - { level: 36, move: Ice Fang }
+  - { level: 38, move: Fire Fang }
+  - { level: 40, move: Wyrmstrike }
+  - { level: 42, move: Dark Pulse }
+  - { level: 45, move: Waterfall }
+  - { level: 51, move: Earthquake }
+  - { level: 53, move: Maelstrom }
+  - { level: 55, move: Dragon Hammer }
+  - { level: 58, move: Hurricane }
+  - { level: 61, move: Faultbreak }
+  - { level: 68, move: Outrage }
+  - { level: 72, move: Razing Beam }
+  - { level: 75, move: Wave Crash }
+  - { level: 78, move: Hydro Pump }
 evolution: { from: Magikarp, method: { level: 20 } }

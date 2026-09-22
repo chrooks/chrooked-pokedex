@@ -1,30 +1,34 @@
 name: Gyarados Mega
 chrooked_id: gyaradosmega
 aka: {  }
+stats: { hp: 95, atk: 160, def: 114, spa: 60, spd: 135, spe: 91 }
+types: [Water, Dragon]
+abilities:
+  primary: Heart of Rage
 learnset:
-  - { level: 0, move: Bite }
-  - { level: 1, move: Flail }
+  - { level: 0, move: Thrash }
   - { level: 1, move: Leer }
-  - { level: 1, move: Splash }
   - { level: 1, move: Tackle }
-  - { level: 2, move: Undertow }
-  - { level: 3, move: Cheap Shot }
-  - { level: 4, move: Whirlpool }
-  - { level: 5, move: Twister }
-  - { level: 8, move: Ice Fang }
-  - { level: 12, move: Brine }
-  - { level: 14, move: Water Whip }
-  - { level: 16, move: Scary Face }
-  - { level: 21, move: Breaking Swipe }
-  - { level: 24, move: Crunch }
-  - { level: 28, move: Dragon Tail }
-  - { level: 32, move: Aqua Tail }
-  - { level: 36, move: Dragon Dance }
-  - { level: 40, move: Hydro Pump }
-  - { level: 43, move: Maelstrom }
-  - { level: 44, move: Hurricane }
-  - { level: 45, move: Backstab }
-  - { level: 48, move: Outrage }
-  - { level: 52, move: Hyper Beam }
-  - { level: 57, move: Wave Crash }
-  - { level: 59, move: Havoc }
+  - { level: 5, move: Triple Dive }
+  - { level: 9, move: Maul }
+  - { level: 12, move: Dragon Dance }
+  - { level: 14, move: Aqua Jet }
+  - { level: 19, move: Flame Burst }
+  - { level: 23, move: Water Pulse }
+  - { level: 26, move: Dragon Tail }
+  - { level: 32, move: Crunch }
+  - { level: 34, move: Dragon Pulse }
+  - { level: 36, move: Ice Fang }
+  - { level: 38, move: Fire Fang }
+  - { level: 40, move: Wyrmstrike }
+  - { level: 42, move: Dark Pulse }
+  - { level: 45, move: Waterfall }
+  - { level: 51, move: Earthquake }
+  - { level: 53, move: Maelstrom }
+  - { level: 55, move: Dragon Hammer }
+  - { level: 58, move: Hurricane }
+  - { level: 61, move: Faultbreak }
+  - { level: 68, move: Outrage }
+  - { level: 72, move: Razing Beam }
+  - { level: 75, move: Wave Crash }
+  - { level: 78, move: Hydro Pump }

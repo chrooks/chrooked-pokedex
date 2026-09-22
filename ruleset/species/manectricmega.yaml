@@ -2,3 +2,21 @@ name: Manectric Mega
 chrooked_id: manectricmega
 aka: { pokeemerald: SPECIES_MANECTRIC_MEGA }
 stats: { spa: 145, spe: 145 }
+learnset:
+  - { level: 1, move: Howl }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 1, move: Thunder Wave }
+  - { level: 2, move: Thunder Shock }
+  - { level: 3, move: Fire Fang }
+  - { level: 12, move: Quick Attack }
+  - { level: 16, move: Shock Wave }
+  - { level: 20, move: Bite }
+  - { level: 24, move: Thunder Fang }
+  - { level: 30, move: Roar }
+  - { level: 36, move: Discharge }
+  - { level: 42, move: Charge }
+  - { level: 48, move: Wild Charge }
+  - { level: 54, move: Thunder }
+  - { level: 57, move: Zap Cannon }
+  - { level: 60, move: Electric Terrain }

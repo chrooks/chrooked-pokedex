@@ -2,12 +2,12 @@ name: Lopunny Mega
 chrooked_id: lopunnymega
 aka: { dex: 428 }
 learnset:
-  - { level: 1, move: Baby-Doll Eyes }
   - { level: 1, move: Defense Curl }
   - { level: 1, move: Magic Coat }
   - { level: 1, move: Mirror Coat }
+  - { level: 1, move: Splash }
   - { level: 2, move: Rock Smash }
-  - { level: 3, move: Splash }
+  - { level: 3, move: Baby-Doll Eyes }
   - { level: 4, move: Pound }
   - { level: 9, move: Glitter Tap }
   - { level: 12, move: After You }
@@ -19,10 +19,10 @@ learnset:
   - { level: 32, move: Take Down }
   - { level: 34, move: One-Inch Punch }
   - { level: 36, move: Agility }
+  - { level: 38, move: Rampage }
+  - { level: 39, move: Cross Chop }
   - { level: 40, move: Entrainment }
-  - { level: 43, move: Rampage }
   - { level: 44, move: Flatter }
-  - { level: 45, move: Cross Chop }
   - { level: 48, move: Bounce }
   - { level: 52, move: Healing Wish }
   - { level: 56, move: High Jump Kick }

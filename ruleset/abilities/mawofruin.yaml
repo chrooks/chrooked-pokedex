@@ -1,0 +1,5 @@
+name: Maw of Ruin
+chrooked_id: mawofruin
+aka: {  }
+behaviors: [mawcannon, scaldingpulse]
+description: Pulse moves use this Pokémon's Attack stat and may burn the target.

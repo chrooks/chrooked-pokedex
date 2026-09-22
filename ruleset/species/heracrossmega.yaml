@@ -2,8 +2,8 @@ name: Heracross Mega
 chrooked_id: heracrossmega
 aka: { dex: 214 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
   - { level: 4, move: Fury Cutter }
   - { level: 7, move: Rock Smash }
   - { level: 10, move: Bullet Seed }
@@ -18,6 +18,7 @@ learnset:
   - { level: 37, move: Vital Throw }
   - { level: 38, move: Volley }
   - { level: 40, move: Body Press }
+  - { level: 42, move: Horn Drill }
   - { level: 43, move: Smart Strike }
   - { level: 46, move: Drill Run }
   - { level: 49, move: Swords Dance }

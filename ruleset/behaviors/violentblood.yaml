@@ -1,0 +1,19 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Violent Blood
+chrooked_id: violentblood
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Dark moves get the STAB bonus without the Dark type.
+    trigger: damage-calc
+    when: this Pokémon uses a damaging Dark-type move and is not itself Dark
+    effect: The move's damage is multiplied by 1.5. A Dark-type user gains nothing extra, so STAB never doubles.
+test_cases:
+  - given: a Water/Dragon user with Violent Blood uses Crunch
+    expect: 1.5x damage
+  - given: a Dark-type user with Violent Blood uses Crunch
+    expect: unchanged
+  - given: the same user attacks with Waterfall
+    expect: unchanged
+notes:
+  - Narrowed clone of Full Moon's Dark/Fairy STAB grant, via Chrooked.stab_grant.
