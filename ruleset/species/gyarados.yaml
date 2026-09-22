@@ -34,4 +34,4 @@ learnset:
   - { level: 72, move: Razing Beam }
   - { level: 75, move: Wave Crash }
   - { level: 78, move: Hydro Pump }
-evolution: { from: Magikarp, method: { level: 20 } }
+evolution: { from: Magikarp, method: { level: 30 } }

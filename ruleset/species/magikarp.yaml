@@ -3,20 +3,13 @@ chrooked_id: magikarp
 aka: { dex: 129 }
 abilities:
   primary: Swift Swim
-  hidden: Brawler's Spirit
+  secondary: Rattled
+  hidden: Immunity
+stats: { hp: 45, atk: 10, def: 60, spa: 15, spd: 40, spe: 80 }
 learnset:
   - { level: 1, move: Splash }
-  - { level: 2, move: Water Gun }
-  - { level: 4, move: Maul }
-  - { level: 8, move: Undertow }
-  - { level: 15, move: Tackle }
-  - { level: 16, move: Water Pulse }
-  - { level: 20, move: Water Whip }
-  - { level: 25, move: Flail }
-  - { level: 29, move: Muddy Water }
-  - { level: 32, move: Breaking Swipe }
-  - { level: 36, move: Dragon Hammer }
-  - { level: 43, move: Hydro Pump }
-  - { level: 45, move: Maelstrom }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Tackle }
+  - { level: 12, move: Flail }
+  - { level: 18, move: Bounce }
+  - { level: 25, move: Dragon Rage }
+  - { level: 30, move: Splash }
