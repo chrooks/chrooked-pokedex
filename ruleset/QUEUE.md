@@ -1,0 +1,8 @@
+Greninja
+Primarina
+Meowscarada
+Blastoise
+Rillaboom
+Cinderace
+Skeledirge
+Quaquaval
