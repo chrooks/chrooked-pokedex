@@ -1,12 +1,12 @@
 name: Pumpkaboo Average
 chrooked_id: pumpkabooaverage
-aka: { dex: 710 }
+aka: { dex: 710, rejuv: "PUMPKABOO::Jumbo Variety" }
+stats: { hp: 50, atk: 76, def: 84, spa: 26, spd: 57, spe: 58 }
 types: [Ghost, Grass]
 abilities:
   primary: Perish Body
   secondary: Cursed Body
   hidden: Frisk
-stats: { hp: 50, atk: 76, def: 84, spa: 26, spd: 57, spe: 58 }
 learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Pound }

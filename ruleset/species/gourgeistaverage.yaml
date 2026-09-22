@@ -1,12 +1,12 @@
 name: Gourgeist Average
 chrooked_id: gourgeistaverage
-aka: { dex: 711 }
+aka: { dex: 711, rejuv: "GOURGEIST::Jumbo Variety" }
+stats: { hp: 73, atk: 110, def: 122, spa: 38, spd: 83, spe: 84 }
 types: [Ghost, Grass]
 abilities:
   primary: Perish Body
   secondary: Cursed Body
   hidden: Frisk
-stats: { hp: 73, atk: 110, def: 122, spa: 38, spd: 83, spe: 84 }
 learnset:
   - { level: 0, move: Trick-or-Treat }
   - { level: 1, move: Confuse Ray }
