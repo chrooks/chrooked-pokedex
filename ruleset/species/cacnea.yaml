@@ -17,6 +17,7 @@ learnset:
   - { level: 23, move: Needle Arm }
   - { level: 26, move: Sucker Punch }
   - { level: 29, move: Spikes }
+  - { level: 31, move: Soil Drain }
   - { level: 33, move: Giga Drain }
   - { level: 37, move: Toxic Spikes }
   - { level: 41, move: Scorching Sands }

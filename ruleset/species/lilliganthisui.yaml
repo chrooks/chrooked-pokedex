@@ -17,6 +17,7 @@ learnset:
   - { level: 23, move: Trop Kick }
   - { level: 30, move: Horn Leech }
   - { level: 32, move: Ice Spinner }
+  - { level: 36, move: Soil Drain }
   - { level: 40, move: Thunderous Kick }
   - { level: 44, move: Leaf Blade }
   - { level: 47, move: Heel Drop }

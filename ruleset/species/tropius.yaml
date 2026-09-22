@@ -21,6 +21,7 @@ learnset:
   - { level: 29, move: Seed Bomb }
   - { level: 30, move: Wide Guard }
   - { level: 31, move: Draconic Fang }
+  - { level: 32, move: Soil Drain }
   - { level: 33, move: Air Slash }
   - { level: 36, move: Galeburst }
   - { level: 38, move: Reap }

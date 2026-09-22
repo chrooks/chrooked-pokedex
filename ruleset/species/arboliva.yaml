@@ -20,6 +20,7 @@ learnset:
   - { level: 24, move: Mud Shot }
   - { level: 27, move: Scorching Sands }
   - { level: 30, move: Swift }
+  - { level: 31, move: Soil Drain }
   - { level: 32, move: Aromatherapy }
   - { level: 34, move: Giga Drain }
   - { level: 37, move: Apple Acid }

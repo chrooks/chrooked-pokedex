@@ -18,6 +18,7 @@ learnset:
   - { level: 26, move: Magical Leaf }
   - { level: 30, move: Beguile }
   - { level: 33, move: Giga Drain }
+  - { level: 35, move: Soil Drain }
   - { level: 37, move: Dazzling Gleam }
   - { level: 41, move: Spikes }
   - { level: 43, move: Toxic }

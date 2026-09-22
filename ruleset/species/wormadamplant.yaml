@@ -19,6 +19,7 @@ learnset:
   - { level: 26, move: Razor Leaf }
   - { level: 29, move: Growth }
   - { level: 30, move: Energy Ball }
+  - { level: 31, move: Soil Drain }
   - { level: 32, move: Psybeam }
   - { level: 35, move: Infestation }
   - { level: 36, move: Bug Buzz }

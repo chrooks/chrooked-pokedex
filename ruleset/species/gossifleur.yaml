@@ -14,6 +14,7 @@ learnset:
   - { level: 29, move: Seed Bomb }
   - { level: 32, move: Aromatherapy }
   - { level: 36, move: Siphon }
+  - { level: 39, move: Soil Drain }
   - { level: 43, move: Reap }
   - { level: 46, move: Leaf Storm }
   - { level: 57, move: Power Whip }

@@ -22,6 +22,7 @@ learnset:
   - { level: 19, move: Feint }
   - { level: 22, move: Counter }
   - { level: 28, move: Force Palm }
+  - { level: 30, move: Soil Drain }
   - { level: 33, move: Worry Seed }
   - { level: 36, move: Brick Break }
   - { level: 37, move: One-Inch Punch }

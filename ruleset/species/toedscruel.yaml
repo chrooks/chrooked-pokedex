@@ -21,6 +21,7 @@ learnset:
   - { level: 25, move: Mud Shot }
   - { level: 27, move: Mud Bomb }
   - { level: 30, move: Toxic }
+  - { level: 31, move: Soil Drain }
   - { level: 33, move: Toxic Spikes }
   - { level: 35, move: Poison Jab }
   - { level: 37, move: Recover }

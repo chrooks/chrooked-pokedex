@@ -19,6 +19,7 @@ learnset:
   - { level: 22, move: Low Sweep }
   - { level: 25, move: Needle Arm }
   - { level: 28, move: Taunt }
+  - { level: 30, move: Soil Drain }
   - { level: 31, move: Spiky Shield }
   - { level: 34, move: Trop Kick }
   - { level: 37, move: Drain Punch }

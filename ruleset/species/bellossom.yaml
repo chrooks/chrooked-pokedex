@@ -28,5 +28,6 @@ learnset:
   - { level: 29, move: Siphon }
   - { level: 31, move: Moonblast }
   - { level: 36, move: Petal Dance }
+  - { level: 40, move: Soil Drain }
   - { level: 48, move: Miasma }
   - { level: 57, move: Rapture }

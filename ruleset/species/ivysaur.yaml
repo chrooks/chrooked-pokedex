@@ -19,6 +19,7 @@ learnset:
   - { level: 23, move: Venoshock }
   - { level: 26, move: Magical Leaf }
   - { level: 29, move: Sweet Scent }
+  - { level: 30, move: Soil Drain }
   - { level: 32, move: Petal Blizzard }
   - { level: 35, move: Sunny Day }
   - { level: 38, move: Weather Ball }

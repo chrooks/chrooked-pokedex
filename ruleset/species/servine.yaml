@@ -17,6 +17,7 @@ learnset:
   - { level: 23, move: Leaf Tornado }
   - { level: 25, move: Magical Leaf }
   - { level: 27, move: Dragon Breath }
+  - { level: 30, move: Soil Drain }
   - { level: 33, move: Leech Seed }
   - { level: 35, move: Dragon Pulse }
   - { level: 37, move: Giga Drain }
