@@ -62,9 +62,16 @@ can't drift):
 - `--types T[,T]` (required) — a species matches if it has **any** listed type.
 - `--split` — `physical` (atk≥spa, default), `special` (spa≥atk),
   `strong-physical` (atk>spa), `strong-special` (spa>atk), or `any`.
+- **Window default: the move's own base power decides it.** The skill reads
+  `src/chrooked_pokedex/web/learnset_rubric.json` — the same pacing table the
+  design engine enforces — and places the move in the band its BP falls in:
+  ≤50BP → L1-19, 50-75 → L20-30, 75-89 → L30-40, 80-99 → L40-50, 90-110 →
+  L50-60, 100+ → L60+. A distributed move therefore lands where a designed one
+  would. Status moves (no power) fall back to `early`.
 - `--preset start|early|mid|late|end` — window shorthand: start `1-5`, early
-  `6-15`, mid `16-35`, late `36-48`, end `48-64`. Default `early`.
-- `--levels MIN-MAX` — explicit window (overrides `--preset`). Level numbers are
+  `6-15`, mid `16-35`, late `36-48`, end `48-64`. Overrides the BP window and
+  prints a note saying so.
+- `--levels MIN-MAX` — explicit window (wins over everything). Level numbers are
   the real metric; presets are just shorthand.
 - `--rarity common|uncommon|rare|signature` — breadth tier (default `common`).
   Narrows the matched set by BST (rare = only the strong few) and biases rarer
@@ -87,6 +94,10 @@ can't drift):
   fires, nothing for that species is written and the run stops.
 - **Idempotent.** A species that already has the move is reported and skipped, so
   re-running is safe.
+- **Levels are read from the Ruleset override, not the base snapshot.** That is
+  the learnset the move is written into; placing against vanilla put the move on
+  an occupied level and gave two stages of one line different levels when their
+  vanilla learnsets differed (Baltoy L16 / Claydol L35, 2026-09-22).
 - **Gap placement, never a collision.** The chosen level is the one in the window
   farthest from any existing move; it only sits adjacent to a neighbor when the
   learnset is too dense for a real gap (acceptable at low levels).

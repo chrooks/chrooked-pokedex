@@ -56,13 +56,65 @@ def resolve_move_name(root: Path, snap: dict, move_arg: str) -> str:
     )
 
 
-def build_records(snap: dict, move_name: str) -> dict[str, engine.SpeciesRecord]:
+_RUBRIC = Path(__file__).resolve().parents[3] / "src" / "chrooked_pokedex" / "web" / "learnset_rubric.json"
+
+
+def move_power(root: Path, snap: dict, move_name: str) -> int | None:
+    """The move's base power, from the Ruleset override first, then the base snapshot."""
+    import yaml
+    for f in (root / "ruleset" / "moves").glob("*.yaml"):
+        data = yaml.safe_load(f.read_text()) or {}
+        if data.get("name") == move_name:
+            power = data.get("power")
+            if isinstance(power, int):
+                return power
+    for _cid, m in snap.get("moves", {}).items():
+        if m.get("name") == move_name:
+            power = m.get("power")
+            return power if isinstance(power, int) else None
+    return None
+
+
+def pacing_window(power: int | None) -> tuple[int, int] | None:
+    """The level window the project's own pacing table gives a move of ``power``.
+
+    The rubric (src/chrooked_pokedex/web/learnset_rubric.json) is the same table
+    the design engine enforces, so a distributed move lands where a designed one
+    would. Chris, 2026-09-22: an 80BP move at L16 "feels really early" — the mid
+    preset (16-35) ignored the table. Status moves (no power) get no window.
+    """
+    if not isinstance(power, int) or power <= 0:
+        return None
+    bands = json.loads(_RUBRIC.read_text("utf-8"))["bands"]
+    for band in bands:
+        lo_bp = band.get("bp_min", 0)
+        hi_bp = band.get("bp_max")
+        if power >= lo_bp and (hi_bp is None or power <= hi_bp):
+            return band["level_min"], band["level_max"]
+    return None
+
+
+def build_records(snap: dict, move_name: str,
+                  species_dir: Path | None = None) -> dict[str, engine.SpeciesRecord]:
     """SpeciesRecords from the base snapshot, flagged with whether they already
-    learn the move."""
+    learn the move.
+
+    Levels come from the Ruleset override when the species has one, because that
+    is the learnset the move is actually written into. Placing against the base
+    snapshot instead put the move on an occupied level and gave two stages of one
+    line different levels when their vanilla learnsets differed (Baltoy/Claydol,
+    2026-09-22).
+    """
     out: dict[str, engine.SpeciesRecord] = {}
     for cid, v in snap["species"].items():
         st = v.get("stats") or {}
         learn = v.get("learnset") or []
+        if species_dir is not None:
+            path = species_dir / f"{cid}.yaml"
+            if path.exists():
+                ov = load_species(path)
+                if ov.learnset is not None:
+                    learn = [{"level": m.level, "move": m.move} for m in ov.learnset]
         out[cid] = engine.SpeciesRecord(
             chrooked_id=cid,
             name=v.get("name", cid),
@@ -89,8 +141,8 @@ def main() -> None:
                     help="Attack-split filter over base atk/spa (default: physical)")
     g = ap.add_mutually_exclusive_group()
     g.add_argument("--levels", help="Explicit window MIN-MAX, e.g. 4-14")
-    g.add_argument("--preset", choices=sorted(engine.PRESETS), default="early",
-                   help="Named window shorthand (default: early)")
+    g.add_argument("--preset", choices=sorted(engine.PRESETS),
+                   help="Named window shorthand; overrides the move's BP-derived window")
     ap.add_argument("--no-evolutions", action="store_true",
                     help="Only the matched species; don't pull in their evolution lines")
     ap.add_argument("--evolved-at-1", action="store_true",
@@ -110,13 +162,23 @@ def main() -> None:
     species_dir = root / "ruleset" / "species"
 
     move_name = resolve_move_name(root, snap, args.move)
-    window = engine.parse_window(
-        levels=tuple(int(x) for x in args.levels.split("-")) if args.levels else None,
-        preset=args.preset)
+    power = move_power(root, snap, move_name)
+    derived = pacing_window(power)
+    if args.levels:
+        window = engine.parse_window(levels=tuple(int(x) for x in args.levels.split("-")))
+    elif args.preset:
+        window = engine.parse_window(preset=args.preset)
+        if derived and window != derived:
+            print(f"note: --preset {args.preset} overrides the pacing window "
+                  f"{derived[0]}-{derived[1]} for a {power}BP move")
+    elif derived:
+        window = derived
+    else:
+        window = engine.parse_window(preset="early")
     types = {t.strip() for t in args.types.split(",") if t.strip()}
     drop = {x.strip() for x in args.exclude.split(",") if x.strip()}
 
-    records = build_records(snap, move_name)
+    records = build_records(snap, move_name, species_dir)
     evo = engine.build_evolution_index(snap["species"])
     only = {x.strip() for x in args.only.split(",") if x.strip()}
     if not only and not types:
