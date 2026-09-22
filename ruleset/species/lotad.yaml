@@ -4,7 +4,7 @@ aka: {  }
 types: [Water, Grass]
 abilities:
   primary: Swift Swim
-  secondary: Downpour
+  secondary: Hydrophyte
   hidden: Chloroplast
 stats: { hp: 40, atk: 30, def: 31, spa: 48, spd: 50, spe: 41 }
 learnset:

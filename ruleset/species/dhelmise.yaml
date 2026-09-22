@@ -1,6 +1,8 @@
 name: Dhelmise
 chrooked_id: dhelmise
 aka: { dex: 781 }
+abilities:
+  secondary: Hydrophyte
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Rapid Spin }
