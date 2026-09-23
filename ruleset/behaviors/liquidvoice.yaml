@@ -1,0 +1,22 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Liquid Voice
+chrooked_id: liquidvoice
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Sound moves become Water-type (vanilla, unchanged).
+    trigger: damage-calc
+    when: this Pokémon uses a sound-based move
+    effect: The move's type becomes Water. This is the native engine behavior.
+  - summary: Sound moves deal 30% more damage.
+    trigger: damage-calc
+    when: this Pokémon uses a damaging sound-based move
+    effect: The damage is multiplied by 1.3.
+test_cases:
+  - given: a Liquid Voice user attacks with Hyper Voice
+    expect: it resolves as a Water move and deals 1.3x damage
+  - given: the same user attacks with Surf
+    expect: unchanged
+notes:
+  - Chris, 2026-09-23 (Primarina) — the boost half is new; the type change is vanilla.
+  - Ducklett and Swanna also hold Liquid Voice and gain the boost.
