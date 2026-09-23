@@ -1,21 +1,35 @@
 name: Crocalor
 chrooked_id: crocalor
 aka: {  }
+types: [Fire, Ghost]
+abilities:
+  primary: Blaze
+  secondary: Amplifier
+  hidden: Requiem
+stats: { hp: 80, atk: 57, def: 80, spa: 84, spd: 61, spe: 49 }
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Ember }
-  - { level: 6, move: Knell }
-  - { level: 7, move: Lick }
-  - { level: 10, move: Round }
-  - { level: 12, move: Bite }
-  - { level: 15, move: Yawn }
-  - { level: 17, move: Incinerate }
-  - { level: 24, move: Snarl }
-  - { level: 28, move: Roar }
-  - { level: 32, move: Flamethrower }
-  - { level: 38, move: Hyper Voice }
-  - { level: 42, move: Will-O-Wisp }
-  - { level: 47, move: Fire Blast }
-  - { level: 57, move: Overheat }
-  - { level: 64, move: Netherstorm }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Ember }
+  - { level: 9, move: Knell }
+  - { level: 20, move: Burning Jealousy }
+  - { level: 22, move: Will-O-Wisp }
+  - { level: 24, move: Infernal Parade }
+  - { level: 26, move: Mystical Fire }
+  - { level: 28, move: Hex }
+  - { level: 30, move: Night Shade }
+  - { level: 32, move: Round }
+  - { level: 34, move: Fiery Dance }
+  - { level: 36, move: Torch Song }
+  - { level: 38, move: Wither Drain }
+  - { level: 40, move: Disarming Voice }
+  - { level: 42, move: Shadow Ball }
+  - { level: 48, move: Flamethrower }
+  - { level: 51, move: Alluring Voice }
+  - { level: 53, move: Heat Wave }
+  - { level: 55, move: Specter Bomb }
+  - { level: 61, move: Earth Power }
+  - { level: 65, move: Overheat }
+  - { level: 67, move: Resonance }
+  - { level: 69, move: Boomburst }
+  - { level: 72, move: Netherstorm }

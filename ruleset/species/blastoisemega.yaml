@@ -2,24 +2,33 @@ name: Blastoise Mega
 chrooked_id: blastoisemega
 aka: { dex: 9 }
 types: [Water, Steel]
-stats: { hp: 80, spe: 80, atk: 105 }
+stats: { hp: 80, atk: 105, def: 120, spa: 135, spd: 115, spe: 80 }
+abilities:
+  primary: Artillery
 learnset:
-  - { level: 0, move: Flash Cannon }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Water Gun }
+  - { level: 0, move: Shell Smash }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Withdraw }
-  - { level: 9, move: Rapid Spin }
-  - { level: 12, move: Water Pulse }
-  - { level: 16, move: Bite }
-  - { level: 20, move: Protect }
-  - { level: 25, move: Flip Turn }
-  - { level: 29, move: Bubble Beam }
-  - { level: 30, move: Muddy Water }
-  - { level: 35, move: Recover }
-  - { level: 40, move: Shell Smash }
-  - { level: 44, move: Dark Pulse }
-  - { level: 49, move: Aura Sphere }
-  - { level: 54, move: Hydro Pump }
-  - { level: 60, move: Origin Pulse }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Flash }
+  - { level: 11, move: Glint }
+  - { level: 13, move: Aqua Jet }
+  - { level: 19, move: Iron Defense }
+  - { level: 30, move: Water Pulse }
+  - { level: 32, move: Mirror Shot }
+  - { level: 34, move: Anchor Shot }
+  - { level: 41, move: Iron Head }
+  - { level: 43, move: Liquidation }
+  - { level: 45, move: Brine }
+  - { level: 47, move: Ice Beam }
+  - { level: 49, move: Scald }
+  - { level: 51, move: Surf }
+  - { level: 53, move: Luster Cannon }
+  - { level: 55, move: Dragon Pulse }
+  - { level: 61, move: Aura Sphere }
+  - { level: 64, move: Water Spout }
+  - { level: 66, move: Flash Cannon }
+  - { level: 69, move: Steel Beam }
+  - { level: 71, move: Hydro Pump }
+  - { level: 73, move: Dark Pulse }
+  - { level: 78, move: Origin Pulse }

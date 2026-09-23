@@ -1,24 +1,35 @@
 name: Grookey
 chrooked_id: grookey
 aka: {  }
+types: [Grass]
 abilities:
   primary: Overgrow
   secondary: Percussion
   hidden: Grassy Surge
+stats: { hp: 57, atk: 72, def: 52, spa: 34, spd: 43, spe: 52 }
 learnset:
-  - { level: 1, move: Double Hit }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Noble Roar }
-  - { level: 1, move: Taunt }
-  - { level: 2, move: Grassy Terrain }
-  - { level: 3, move: Scratch }
-  - { level: 4, move: Branch Poke }
-  - { level: 12, move: Razor Leaf }
-  - { level: 19, move: Screech }
-  - { level: 24, move: Knock Off }
-  - { level: 30, move: Slam }
-  - { level: 38, move: Uproar }
-  - { level: 42, move: Reap }
-  - { level: 46, move: Wood Hammer }
-  - { level: 54, move: Endeavor }
-  - { level: 62, move: Boomburst }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Branch Poke }
+  - { level: 9, move: Vine Whip }
+  - { level: 12, move: Echoed Voice }
+  - { level: 19, move: Grassy Terrain }
+  - { level: 21, move: Bulk Up }
+  - { level: 23, move: Round }
+  - { level: 26, move: Snarl }
+  - { level: 28, move: Razor Leaf }
+  - { level: 30, move: Horn Leech }
+  - { level: 32, move: Drum Beating }
+  - { level: 34, move: Grassy Glide }
+  - { level: 37, move: Disarming Voice }
+  - { level: 39, move: Seed Bomb }
+  - { level: 44, move: Leaf Blade }
+  - { level: 46, move: Hyper Voice }
+  - { level: 48, move: Synthesis }
+  - { level: 51, move: Reap }
+  - { level: 54, move: Swords Dance }
+  - { level: 61, move: Wood Hammer }
+  - { level: 64, move: Knock Off }
+  - { level: 71, move: Boomburst }
+  - { level: 73, move: Close Combat }
+  - { level: 75, move: Solar Blade }

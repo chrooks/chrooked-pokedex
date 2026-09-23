@@ -1,30 +1,30 @@
 name: Greninja
 chrooked_id: greninja
 aka: { pokeemerald: SPECIES_GRENINJA }
+types: [Water, Dark]
+abilities:
+  primary: Torrent
+  secondary: Protean
+  hidden: Infiltrator
 stats: { hp: 70, atk: 100, def: 70, spa: 105, spd: 70, spe: 125 }
 learnset:
-  - { level: 0, move: Water Shuriken }
-  - { level: 1, move: Role Play }
-  - { level: 1, move: Haze }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Quick Attack }
-  - { level: 2, move: Pound }
-  - { level: 3, move: Water Gun }
-  - { level: 4, move: Night Slash }
-  - { level: 6, move: Slander }
-  - { level: 10, move: Lick }
-  - { level: 14, move: Water Pulse }
-  - { level: 15, move: Snarl }
-  - { level: 19, move: Smokescreen }
-  - { level: 23, move: Shadow Sneak }
-  - { level: 28, move: Spikes }
-  - { level: 29, move: Muddy Water }
-  - { level: 31, move: Dark Pulse }
-  - { level: 33, move: Aerial Ace }
-  - { level: 42, move: Substitute }
-  - { level: 43, move: Night Daze }
-  - { level: 49, move: Extrasensory }
-  - { level: 56, move: Double Team }
-  - { level: 62, move: Eclipse }
-  - { level: 63, move: Hydro Pump }
-  - { level: 68, move: Tsunami }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Smokescreen }
+  - { level: 12, move: Water Gun }
+  - { level: 23, move: Water Shuriken }
+  - { level: 26, move: Snarl }
+  - { level: 30, move: Water Pulse }
+  - { level: 33, move: Toxic Spikes }
+  - { level: 35, move: Dark Pulse }
+  - { level: 37, move: Liquidation }
+  - { level: 39, move: U-turn }
+  - { level: 41, move: Night Slash }
+  - { level: 44, move: Ice Beam }
+  - { level: 46, move: Surf }
+  - { level: 48, move: Night Daze }
+  - { level: 54, move: Substitute }
+  - { level: 58, move: Gunk Shot }
+  - { level: 61, move: Hydro Pump }
+  - { level: 65, move: Taunt }

@@ -1,26 +1,35 @@
 name: Floragato
 chrooked_id: floragato
 aka: { dex: 907 }
+types: [Grass, Dark]
+abilities:
+  primary: Overgrow
+  secondary: Protean
+  hidden: Technician
+stats: { hp: 57, atk: 84, def: 53, spa: 61, spd: 53, spe: 102 }
 learnset:
+  - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Leafage }
-  - { level: 4, move: Cheap Shot }
-  - { level: 7, move: Bite }
-  - { level: 10, move: Hone Claws }
-  - { level: 13, move: Magical Leaf }
-  - { level: 15, move: Quick Attack }
-  - { level: 16, move: Razor Leaf }
-  - { level: 20, move: Seed Bomb }
-  - { level: 24, move: U-turn }
-  - { level: 28, move: Worry Seed }
-  - { level: 33, move: Slash }
-  - { level: 35, move: Night Slash }
-  - { level: 36, move: Heel Drop }
-  - { level: 38, move: Energy Ball }
-  - { level: 40, move: Reap }
-  - { level: 42, move: Play Rough }
-  - { level: 46, move: Leaf Storm }
-  - { level: 55, move: Backstab }
-  - { level: 57, move: Power Whip }
-  - { level: 60, move: Havoc }
+  - { level: 5, move: Vine Whip }
+  - { level: 9, move: Bite }
+  - { level: 12, move: Trailblaze }
+  - { level: 16, move: Feint Attack }
+  - { level: 23, move: Flower Trick }
+  - { level: 30, move: Trop Kick }
+  - { level: 33, move: Needle Arm }
+  - { level: 37, move: U-turn }
+  - { level: 40, move: Aerial Ace }
+  - { level: 42, move: Knock Off }
+  - { level: 44, move: Sucker Punch }
+  - { level: 46, move: Lunge }
+  - { level: 48, move: Seed Bomb }
+  - { level: 50, move: Horn Leech }
+  - { level: 52, move: Throat Chop }
+  - { level: 54, move: Leaf Blade }
+  - { level: 56, move: Poison Jab }
+  - { level: 58, move: Zen Headbutt }
+  - { level: 60, move: Play Rough }
+  - { level: 62, move: Reap }
+  - { level: 64, move: Backstab }
+  - { level: 66, move: Wood Hammer }
+  - { level: 72, move: Havoc }

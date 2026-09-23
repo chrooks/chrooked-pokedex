@@ -1,21 +1,36 @@
 name: Raboot
 chrooked_id: raboot
 aka: { pokeemerald: SPECIES_RABOOT }
+types: [Fire]
 abilities:
+  primary: Blaze
   secondary: Striker
+  hidden: Libero
+stats: { hp: 64, atk: 89, def: 58, spa: 54, spd: 58, spe: 97 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Growl }
-  - { level: 1, move: Ember }
-  - { level: 1, move: Quick Attack }
-  - { level: 12, move: Double Kick }
-  - { level: 15, move: Flame Charge }
-  - { level: 19, move: Flame Wheel }
-  - { level: 24, move: Agility }
-  - { level: 30, move: Headbutt }
-  - { level: 36, move: Counter }
-  - { level: 39, move: Cinder Smash }
-  - { level: 40, move: Combust }
-  - { level: 42, move: Bounce }
-  - { level: 48, move: Double-Edge }
-  - { level: 57, move: Flare Blitz }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Flame Charge }
+  - { level: 16, move: Bulk Up }
+  - { level: 19, move: Agility }
+  - { level: 22, move: Ice Punch }
+  - { level: 24, move: Double Kick }
+  - { level: 27, move: Flame Wheel }
+  - { level: 31, move: Triple Kick }
+  - { level: 33, move: Blaze Kick }
+  - { level: 35, move: Low Sweep }
+  - { level: 37, move: Sky Uppercut }
+  - { level: 40, move: Fire Punch }
+  - { level: 44, move: Fire Lash }
+  - { level: 48, move: High Horsepower }
+  - { level: 51, move: Combust }
+  - { level: 54, move: Swords Dance }
+  - { level: 58, move: Coaching }
+  - { level: 61, move: Pyro Ball }
+  - { level: 64, move: Axe Kick }
+  - { level: 66, move: Close Combat }
+  - { level: 68, move: Triple Axel }
+  - { level: 70, move: Taunt }
+  - { level: 72, move: Thunderous Kick }
+  - { level: 74, move: High Jump Kick }
+  - { level: 76, move: Flare Blitz }

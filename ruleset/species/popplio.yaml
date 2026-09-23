@@ -1,22 +1,36 @@
 name: Popplio
 chrooked_id: popplio
 aka: {  }
+types: [Water, Fairy]
+abilities:
+  primary: Torrent
+  secondary: Liquid Voice
+  hidden: Serene Grace
+stats: { hp: 51, atk: 44, def: 44, spa: 74, spd: 68, spe: 39 }
 learnset:
-  - { level: 1, move: Pound }
-  - { level: 1, move: Growl }
-  - { level: 3, move: Water Gun }
-  - { level: 6, move: Disarming Voice }
-  - { level: 9, move: Aqua Jet }
-  - { level: 12, move: Baby-Doll Eyes }
-  - { level: 15, move: Icy Wind }
-  - { level: 18, move: Sing }
-  - { level: 21, move: Bubble Beam }
-  - { level: 22, move: Beguile }
-  - { level: 24, move: Encore }
-  - { level: 27, move: Misty Terrain }
-  - { level: 29, move: Muddy Water }
-  - { level: 30, move: Hyper Voice }
-  - { level: 33, move: Moonblast }
-  - { level: 36, move: Hydro Pump }
-  - { level: 64, move: Tsunami }
-  - { level: 65, move: Rapture }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Disarming Voice }
+  - { level: 12, move: Water Gun }
+  - { level: 16, move: Fairy Wind }
+  - { level: 19, move: Draining Kiss }
+  - { level: 21, move: Moonlight }
+  - { level: 23, move: Energy Ball }
+  - { level: 25, move: Water Pulse }
+  - { level: 33, move: Echoed Voice }
+  - { level: 35, move: Alluring Voice }
+  - { level: 38, move: Psybeam }
+  - { level: 40, move: Dazzling Gleam }
+  - { level: 43, move: Moonblast }
+  - { level: 45, move: Scald }
+  - { level: 47, move: Surf }
+  - { level: 49, move: Round }
+  - { level: 51, move: Sparkling Aria }
+  - { level: 53, move: Hyper Voice }
+  - { level: 55, move: Resonance }
+  - { level: 58, move: Shadow Ball }
+  - { level: 61, move: Aqua Ring }
+  - { level: 68, move: Boomburst }
+  - { level: 70, move: Hydro Pump }
+  - { level: 72, move: Psychic }

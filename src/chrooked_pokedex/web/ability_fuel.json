@@ -338,19 +338,16 @@
       ]
     },
     "liquidvoice": {
-      "shape": "ate",
+      "shape": "flag_boost",
       "hard": true,
       "min_moves": 2,
-      "stab_types": [
-        "Water"
-      ],
       "filter": {
         "flags_any": [
           "sound"
         ],
         "attacking": true
       },
-      "note": "ALL sound moves become Water, not only Normal ones."
+      "note": "Sound moves become Water and hit 30% harder — the kit needs sound moves."
     },
     "longreach": {
       "shape": "flag_boost",
@@ -1011,6 +1008,44 @@
         "attacking": true
       },
       "note": "Composed Maw of Ruin + Violent Blood: pulse moves run off Attack and may burn; Dark moves get STAB."
+    },
+    "barrage": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "pulse"
+        ],
+        "attacking": true
+      },
+      "note": "Pulse moves never miss and hit both foes — the kit needs pulse moves."
+    },
+    "artillery": {
+      "shape": "flag_boost",
+      "hard": true,
+      "min_moves": 2,
+      "filter": {
+        "flags_any": [
+          "pulse"
+        ],
+        "attacking": true
+      },
+      "note": "Composed Barrage + Mega Launcher: pulse moves never miss, spread, and hit 50% harder."
+    },
+    "requiem": {
+      "shape": "ate",
+      "hard": true,
+      "min_moves": 2,
+      "stab_types": [
+        "Ghost"
+      ],
+      "filter": {
+        "move_type": "Normal",
+        "attacking": true,
+        "on_stat": true
+      },
+      "note": "Composed Pyre + Spectralize: Normal moves become Ghost at +20% and may burn."
     }
   }
 }

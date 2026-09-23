@@ -1,32 +1,36 @@
 name: Quaquaval
 chrooked_id: quaquaval
 aka: { pokeemerald: SPECIES_QUAQUAVAL }
+types: [Water, Fighting]
 abilities:
+  primary: Torrent
   secondary: Striker
-stats: { spe: 95 }
+  hidden: Moxie
+stats: { hp: 85, atk: 120, def: 80, spa: 78, spd: 75, spe: 102 }
 learnset:
-  - { level: 0, move: Aqua Step }
-  - { level: 1, move: Counter }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Double Hit }
-  - { level: 1, move: Pound }
-  - { level: 2, move: Rock Smash }
-  - { level: 3, move: Water Gun }
-  - { level: 4, move: Undertow }
-  - { level: 7, move: Work Up }
-  - { level: 10, move: Wing Attack }
-  - { level: 13, move: Aqua Jet }
-  - { level: 17, move: Low Sweep }
-  - { level: 18, move: Water Pulse }
-  - { level: 21, move: Aqua Cutter }
-  - { level: 27, move: Air Slash }
-  - { level: 29, move: One-Inch Punch }
-  - { level: 32, move: Focus Energy }
-  - { level: 35, move: Liquidation }
-  - { level: 36, move: Cross Chop }
-  - { level: 38, move: Mega Kick }
-  - { level: 43, move: Acrobatics }
-  - { level: 47, move: Maelstrom }
-  - { level: 52, move: Feather Dance }
-  - { level: 58, move: Close Combat }
-  - { level: 64, move: Wave Crash }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Mach Punch }
+  - { level: 12, move: Aqua Jet }
+  - { level: 16, move: Power-Up Punch }
+  - { level: 19, move: Acrobatics }
+  - { level: 23, move: Water Whip }
+  - { level: 26, move: Double Kick }
+  - { level: 28, move: Rock Smash }
+  - { level: 30, move: Triple Dive }
+  - { level: 32, move: Karate Chop }
+  - { level: 34, move: Razor Shell }
+  - { level: 37, move: Aqua Step }
+  - { level: 40, move: Triple Kick }
+  - { level: 44, move: Waterfall }
+  - { level: 46, move: Liquidation }
+  - { level: 48, move: Heel Drop }
+  - { level: 50, move: Sky Uppercut }
+  - { level: 52, move: Aqua Tail }
+  - { level: 54, move: Swords Dance }
+  - { level: 56, move: Hydro Pump }
+  - { level: 68, move: Close Combat }
+  - { level: 72, move: Wave Crash }
+  - { level: 74, move: Axe Kick }
+  - { level: 76, move: High Jump Kick }

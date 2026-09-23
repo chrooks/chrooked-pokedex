@@ -1,22 +1,30 @@
 name: Frogadier
 chrooked_id: frogadier
 aka: {  }
+types: [Water, Dark]
+abilities:
+  primary: Torrent
+  secondary: Protean
+  hidden: Infiltrator
+stats: { hp: 53, atk: 75, def: 52, spa: 79, spd: 52, spe: 94 }
 learnset:
-  - { level: 1, move: Pound }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
-  - { level: 6, move: Slander }
-  - { level: 8, move: Quick Attack }
-  - { level: 10, move: Lick }
-  - { level: 14, move: Water Pulse }
-  - { level: 19, move: Smokescreen }
-  - { level: 23, move: Round }
-  - { level: 28, move: Fling }
-  - { level: 29, move: Muddy Water }
-  - { level: 33, move: Smack Down }
-  - { level: 40, move: Substitute }
-  - { level: 45, move: Bounce }
-  - { level: 50, move: Double Team }
-  - { level: 56, move: Hydro Pump }
-  - { level: 64, move: Tsunami }
-  - { level: 65, move: Eclipse }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Smokescreen }
+  - { level: 12, move: Water Gun }
+  - { level: 23, move: Water Shuriken }
+  - { level: 26, move: Snarl }
+  - { level: 30, move: Water Pulse }
+  - { level: 33, move: Toxic Spikes }
+  - { level: 35, move: Dark Pulse }
+  - { level: 37, move: Liquidation }
+  - { level: 39, move: U-turn }
+  - { level: 41, move: Night Slash }
+  - { level: 44, move: Ice Beam }
+  - { level: 46, move: Surf }
+  - { level: 48, move: Night Daze }
+  - { level: 54, move: Substitute }
+  - { level: 58, move: Gunk Shot }
+  - { level: 61, move: Hydro Pump }
+  - { level: 65, move: Taunt }

@@ -1240,3 +1240,34 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** Physical serpent whose beams are fire. Mega keeps Water/Dragon with Evil Heart. Magikarp designed separately; evolution moves to L30.; The core design axis for the FINAL STAGE is the paradox of **evolutionary explosion**: a creature defined entirely by helplessness becomes an unstoppable, fire-breathing catastrophe. Every stat and ability choice is anchored to the lore of uncontrollable rage, incendiary destruction, and the structural brain-transformation that drives berserk behavior. Secondary axis: the creature is a serpentine Chinese dragon — physically massive, Water-typed in body but Fire in temperament.
 - **New mechanics:** Maw of Ruin (ability): Composed: pulse moves use Attack (Maw Cannon) + 30% burn (Scalding Pulse); move Razing Beam; Mega ability Evil Heart adds Violent Blood (Dark STAB).
+
+## 2026-09-23 — Blastoise
+
+- **Direction:** Siege turtle. Shell Smash alone at L0; Water Spout moved to L64.; The design axis is PRESSURIZED WATER ARTILLERY married to ARMORED FORTRESS. Every choice derives from the two inseparable facts: (1) rocket cannons on a turtle shell that punch through steel with pinpoint accuracy, and (2) the creature deliberately weighs itself down to endure its own recoil — a living siege engine, not merely a swimmer.
+- **New mechanics:** Artillery (ability): Mega ability: composed Barrage (pulse moves never miss and hit all adjacent foes) + Mega Launcher.
+
+## 2026-09-23 — Cinderace
+
+- **Direction:** Striker rabbit; pure Fire since Libero grants Fighting STAB on kicks. Thunderous Kick kept as a deliberate late exception.; The design axis is the interplay between foot-based fire generation and the soccer/football striker identity. Every ability and move choice is filtered through these two facts: this creature's kicks are its weapon and its source of fire, and its performance scales with momentum (cheered on → pumped up; showboating → self-harm).
+
+## 2026-09-23 — Meowscarada
+
+- **Direction:** Phantom thief; Protean + Technician; redundant Grass/Dark rows swapped for real coverage.; The two profile facts treated as the design axis are (1) illusionist misdirection via reflective camouflage — the creature hides the truth of what it is doing until it is too late — and (2) the pollen-bomb ambush, which rewards setting up, maneuvering, and striking before the opponent realizes the trap has been laid. Together they point toward a fast, Grass/Dark trickster that layers utility and deceptive burst damage rather than brute force.
+
+## 2026-09-23 — Primarina
+
+- **Direction:** Siren soloist. Hurricane, Charge Beam and Searing Shot cut; Psybeam and Psychic are the coverage.; The design axis is VOICE AS WEAPON paired with WATER BALLOON ARTISTRY. The creature's entire identity pivots on two interlocked facts: (1) its singing generates sonic waves that physically control water balloons, and (2) every battle is a theatrical performance. This means the kit must reward sound-based offense while giving balloons — i.e., projectile Water moves and pulse/ball mechanics — equal billing. Dancer identity, colony leadership, and moonlit mystique are secondary texture layered on top.
+- **New mechanics:** Liquid Voice (ability): Vanilla type change plus a new 30% damage boost to sound moves.
+
+## 2026-09-23 — Quaquaval
+
+- **Direction:** Carnival capoeira duck. Triple Dive is a multi-hit move, so it moves to L30; Water Gun takes the early slot. Water Whip replaces Aqua Cutter.; The design axis is the fusion of devastating kick-based martial arts (capoeira) with ornamental water-based dance performance. Every ability and move choice flows from two inseparable facts: (1) its legs deliver truck-rolling kicks, and (2) its decorative water feathers simultaneously mesmerize and slice — a fighter dressed as a dancer, rooted in Water/Fighting.
+
+## 2026-09-23 — Rillaboom
+
+- **Direction:** Drummer king. Percussion makes every sound move physical, so sound doubles as coverage: Snarl (Dark), Disarming Voice (Fairy), Round, Echoed Voice.; The two profile facts treated as the design axis are (1) drumming as both a social-dominance display and a source of plant-revitalizing energy, and (2) the gorilla-alpha's 'gentle disposition that values harmony' — the creature is simultaneously a ferocious combat drummer and a benevolent troop patriarch. Every ability and move choice flows from the tension between explosive rhythmic aggression and life-giving, harmony-preserving support.
+
+## 2026-09-23 — Skeledirge
+
+- **Direction:** Funeral singer. Requiem + Amplifier: Boomburst becomes a spread Ghost nuke that burns. Alluring Voice is the sound coverage move replacing redundant Fire Blast.; The design axis is the fusion of SINGING AS WEAPONIZED SOUL-MAGIC with FIRE-AS-DEATH-CELEBRATION: every ability and move choice radiates outward from the idea that this creature's voice is both a funeral hymn and a blowtorch — a Ghost/Fire crocodile conductor whose songs soothe the dead and scorch the living.
+- **New mechanics:** Requiem (ability): Composed Pyre + Spectralize: Normal moves become Ghost at +20% power and Ghost moves may burn (30%).

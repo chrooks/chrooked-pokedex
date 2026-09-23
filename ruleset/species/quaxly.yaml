@@ -1,20 +1,36 @@
 name: Quaxly
 chrooked_id: quaxly
 aka: { dex: 912 }
+types: [Water, Fighting]
+abilities:
+  primary: Torrent
+  secondary: Striker
+  hidden: Moxie
+stats: { hp: 48, atk: 69, def: 46, spa: 45, spd: 43, spe: 59 }
 learnset:
-  - { level: 1, move: Pound }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Water Gun }
-  - { level: 4, move: Undertow }
-  - { level: 7, move: Work Up }
-  - { level: 10, move: Wing Attack }
-  - { level: 13, move: Aqua Jet }
-  - { level: 17, move: Double Hit }
-  - { level: 21, move: Aqua Cutter }
-  - { level: 24, move: Air Slash }
-  - { level: 28, move: Focus Energy }
-  - { level: 31, move: Acrobatics }
-  - { level: 35, move: Liquidation }
-  - { level: 45, move: Maelstrom }
-  - { level: 46, move: Cross Chop }
-  - { level: 60, move: Wave Crash }
+  - { level: 1, move: Scratch }
+  - { level: 1, move: Tail Whip }
+  - { level: 5, move: Water Gun }
+  - { level: 9, move: Mach Punch }
+  - { level: 12, move: Aqua Jet }
+  - { level: 16, move: Power-Up Punch }
+  - { level: 19, move: Acrobatics }
+  - { level: 23, move: Water Whip }
+  - { level: 26, move: Double Kick }
+  - { level: 28, move: Rock Smash }
+  - { level: 30, move: Triple Dive }
+  - { level: 32, move: Karate Chop }
+  - { level: 34, move: Razor Shell }
+  - { level: 37, move: Aqua Step }
+  - { level: 40, move: Triple Kick }
+  - { level: 44, move: Waterfall }
+  - { level: 46, move: Liquidation }
+  - { level: 48, move: Heel Drop }
+  - { level: 50, move: Sky Uppercut }
+  - { level: 52, move: Aqua Tail }
+  - { level: 54, move: Swords Dance }
+  - { level: 56, move: Hydro Pump }
+  - { level: 68, move: Close Combat }
+  - { level: 72, move: Wave Crash }
+  - { level: 74, move: Axe Kick }
+  - { level: 76, move: High Jump Kick }

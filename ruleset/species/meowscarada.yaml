@@ -1,32 +1,35 @@
 name: Meowscarada
 chrooked_id: meowscarada
 aka: { pokeemerald: SPECIES_MEOWSCARADA }
-stats: { hp: 75, spa: 80, spe: 135 }
+types: [Grass, Dark]
+abilities:
+  primary: Overgrow
+  secondary: Protean
+  hidden: Technician
+stats: { hp: 75, atk: 110, def: 70, spa: 80, spd: 70, spe: 135 }
 learnset:
-  - { level: 0, move: Flower Trick }
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Trick }
-  - { level: 1, move: Tail Whip }
-  - { level: 1, move: Leafage }
-  - { level: 2, move: Scratch }
-  - { level: 4, move: Cheap Shot }
-  - { level: 7, move: Bite }
-  - { level: 10, move: Hone Claws }
-  - { level: 13, move: Magical Leaf }
-  - { level: 15, move: Quick Attack }
-  - { level: 20, move: Seed Bomb }
-  - { level: 24, move: U-turn }
-  - { level: 29, move: Worry Seed }
-  - { level: 33, move: Slash }
-  - { level: 35, move: Night Slash }
-  - { level: 36, move: Knock Off }
-  - { level: 38, move: Heel Drop }
-  - { level: 40, move: Reap }
-  - { level: 42, move: Energy Ball }
-  - { level: 47, move: Play Rough }
-  - { level: 52, move: Backstab }
-  - { level: 55, move: Sucker Punch }
-  - { level: 56, move: Havoc }
-  - { level: 57, move: Power Whip }
-  - { level: 58, move: Grassy Terrain }
-  - { level: 64, move: Leaf Storm }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Vine Whip }
+  - { level: 9, move: Bite }
+  - { level: 12, move: Trailblaze }
+  - { level: 16, move: Feint Attack }
+  - { level: 23, move: Flower Trick }
+  - { level: 30, move: Trop Kick }
+  - { level: 33, move: Needle Arm }
+  - { level: 37, move: U-turn }
+  - { level: 40, move: Aerial Ace }
+  - { level: 42, move: Knock Off }
+  - { level: 44, move: Sucker Punch }
+  - { level: 46, move: Lunge }
+  - { level: 48, move: Seed Bomb }
+  - { level: 50, move: Horn Leech }
+  - { level: 52, move: Throat Chop }
+  - { level: 54, move: Leaf Blade }
+  - { level: 56, move: Poison Jab }
+  - { level: 58, move: Zen Headbutt }
+  - { level: 60, move: Play Rough }
+  - { level: 62, move: Reap }
+  - { level: 64, move: Backstab }
+  - { level: 66, move: Wood Hammer }
+  - { level: 72, move: Havoc }
