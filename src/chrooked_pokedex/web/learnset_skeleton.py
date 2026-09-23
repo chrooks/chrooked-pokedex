@@ -85,7 +85,7 @@ SIGNATURE_MOVES: frozenset[str] = frozenset({
     # replaced in a design goes on this list the same turn it is replaced.
     "apple acid", "grav apple", "malignant chain", "salt cure", "torch song",
     "magma storm", "spirit shackle", "bitter malice", "shadow force",
-    "clanging scales", "dragon energy", "rage fist", "sparkling aria", "drum beating", "sappy seed", "searing shot", "thunderous kick", "hydro steam", "origin pulse", "armor cannon",
+    "clanging scales", "dragon energy", "rage fist", "sparkling aria", "drum beating", "sappy seed", "searing shot", "thunderous kick", "aeroblast", "chatter", "hydro steam", "origin pulse", "armor cannon",
     "judgment", "techno blast", "multi-attack", "tera blast", "tera starstorm",
     "blood moon", "revelation dance", "relic song", "moongeist beam",
     # Added 2026-09-20 — each of these was offered to a mon that does not own it

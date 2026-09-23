@@ -1,27 +1,31 @@
 name: Pidgeotto
 chrooked_id: pidgeotto
 aka: { pokeemerald: SPECIES_PIDGEOTTO }
+types: [Normal, Flying]
 abilities:
   primary: Updraft
-  secondary: Tangled Feet
-stats: { hp: 68, atk: 45, def: 60, spa: 78, spd: 58, spe: 81 }
+  secondary: No Guard
+  hidden: Intimidate
+stats: { hp: 64, atk: 49, def: 56, spa: 79, spd: 56, spe: 86 }
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Sand Attack }
-  - { level: 1, move: Gust }
-  - { level: 8, move: Echoed Voice }
-  - { level: 14, move: Whirlwind }
-  - { level: 20, move: Air Cutter }
-  - { level: 24, move: Swift }
-  - { level: 28, move: Feather Dance }
-  - { level: 29, move: Air Slash }
-  - { level: 32, move: Galeburst }
-  - { level: 36, move: Agility }
-  - { level: 40, move: Hyper Voice }
-  - { level: 43, move: Resonance }
-  - { level: 44, move: Roost }
-  - { level: 48, move: Tailwind }
-  - { level: 52, move: Oblivion Wing }
-  - { level: 56, move: Hurricane }
-  - { level: 57, move: Tempest }
-  - { level: 62, move: Boomburst }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Sand Attack }
+  - { level: 9, move: Quick Attack }
+  - { level: 12, move: Gust }
+  - { level: 16, move: Swift }
+  - { level: 19, move: Agility }
+  - { level: 23, move: Air Cutter }
+  - { level: 26, move: Air Slash }
+  - { level: 31, move: Oblivion Wing }
+  - { level: 33, move: Galeburst }
+  - { level: 37, move: Esper Wing }
+  - { level: 40, move: Wing Attack }
+  - { level: 44, move: Heat Wave }
+  - { level: 47, move: Tailwind }
+  - { level: 51, move: Defog }
+  - { level: 55, move: Hurricane }
+  - { level: 58, move: Roost }
+  - { level: 61, move: Blizzard }
+  - { level: 65, move: Nosedive }
+  - { level: 72, move: Tempest }

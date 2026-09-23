@@ -1278,3 +1278,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Distributed to:** Magby, Magmar, Magmortar — slot 2, displacing Mega Launcher (Artillery contains it, so nothing is lost).
 - **Why:** the dex says "its arm starts to melt when it fires a whole barrage"; its name is magma + mortar, an artillery weapon.
 - **Rejected:** Clawitzer, Octillery/Remoraid, Lucario line — all already hold Mega Launcher, so Barrage would stack a second pulse ability on the same moves. Toucannon and Inteleon fit a ballistic version, which Chris declined ("I don't want another new ability").
+
+## 2026-09-23 — Pidgeot
+
+- **Direction:** Esper Wing replaces Dual Wingbeat; Blizzard replaces Brave Bird — both special, both boosted by Updraft, Blizzard never misses under No Guard.; The two profile facts treated as the design axis are (1) Mach-2 wing-power that generates literal windstorms — making wind/wing moves the absolute core of the kit — and (2) the apex-predator talon identity introduced in Stage 2 and sharpened in Stage 3, which pushes a secondary predation/contact-attack lane. Everything else — speed boosts, sand utilities, vision accuracy — orbits those two pillars.
