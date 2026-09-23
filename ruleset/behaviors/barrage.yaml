@@ -1,0 +1,21 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Barrage
+chrooked_id: barrage
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Pulse moves never miss.
+    trigger: accuracy-check
+    when: this Pokémon uses a move with the pulse flag
+    effect: The accuracy roll is skipped, so evasion and accuracy drops do not matter.
+  - summary: Single-target pulse moves hit all adjacent foes.
+    trigger: turn-order
+    when: this Pokémon uses a single-target pulse move
+    effect: The target kind becomes AllOpposing, exactly as Amplifier does for sound moves.
+test_cases:
+  - given: a Barrage user fires Water Pulse in a double battle
+    expect: both foes are hit and neither can dodge
+  - given: the same user attacks with Hydro Pump
+    expect: normal accuracy, single target
+notes:
+  - Built for Mega Blastoise, composed with Mega Launcher as the ability Artillery.

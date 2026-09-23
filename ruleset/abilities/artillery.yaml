@@ -1,0 +1,5 @@
+name: Artillery
+chrooked_id: artillery
+aka: {  }
+behaviors: [barrage, megalauncher]
+description: Pulse moves never miss, hit all adjacent foes, and deal 50% more damage.
