@@ -1271,3 +1271,10 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** Funeral singer. Requiem + Amplifier: Boomburst becomes a spread Ghost nuke that burns. Alluring Voice is the sound coverage move replacing redundant Fire Blast.; The design axis is the fusion of SINGING AS WEAPONIZED SOUL-MAGIC with FIRE-AS-DEATH-CELEBRATION: every ability and move choice radiates outward from the idea that this creature's voice is both a funeral hymn and a blowtorch — a Ghost/Fire crocodile conductor whose songs soothe the dead and scorch the living.
 - **New mechanics:** Requiem (ability): Composed Pyre + Spectralize: Normal moves become Ghost at +20% power and Ghost moves may burn (30%).
+
+## 2026-09-23 — Artillery distribution: the Magmortar line
+
+- **Ability:** Artillery (composed Barrage + Mega Launcher) — pulse moves never miss, hit all adjacent foes, and deal 50% more damage.
+- **Distributed to:** Magby, Magmar, Magmortar — slot 2, displacing Mega Launcher (Artillery contains it, so nothing is lost).
+- **Why:** the dex says "its arm starts to melt when it fires a whole barrage"; its name is magma + mortar, an artillery weapon.
+- **Rejected:** Clawitzer, Octillery/Remoraid, Lucario line — all already hold Mega Launcher, so Barrage would stack a second pulse ability on the same moves. Toucannon and Inteleon fit a ballistic version, which Chris declined ("I don't want another new ability").

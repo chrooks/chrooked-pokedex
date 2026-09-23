@@ -3,7 +3,7 @@ chrooked_id: magmortar
 aka: { pokeemerald: SPECIES_MAGMORTAR }
 abilities:
   primary: Flash Fire
-  secondary: Mega Launcher
+  secondary: Artillery
   hidden: Deadeye
 stats: { hp: 80, atk: 80, def: 67, spa: 135, spd: 95, spe: 83 }
 learnset:

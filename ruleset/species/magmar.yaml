@@ -3,7 +3,7 @@ chrooked_id: magmar
 aka: { pokeemerald: SPECIES_MAGMAR }
 abilities:
   primary: Flash Fire
-  secondary: Mega Launcher
+  secondary: Artillery
   hidden: Deadeye
 stats: { hp: 70, atk: 80, def: 57, spa: 110, spd: 85, spe: 93 }
 learnset:
