@@ -80,6 +80,10 @@ _KIT_STARTERS: dict[str, tuple[str, ...]] = {
 # them. (Moved here from suggest.py so the slot builder and the ability
 # shortlist share one set.)
 SIGNATURE_MOVES: frozenset[str] = frozenset({
+    # Added 2026-09-25 — dropped as borrowed signatures during the Slaking,
+    # Kommo-o, Dondozo, Rotom, Mr. Rime, Ceruledge/Armarouge, Lanturn and
+    # Farfetch'd passes. Fishious Rend stays on Dondozo as a deliberate anchor.
+    "last respects", "buzzy buzz", "meteor assault", "crush grip", "head charge", "hyper drill", "glaciate", "freezy frost", "lumina crash", "octazooka", "electro drift", "electro shot", "overdrive", "shadow bone", "kowtow cleave", "wicked blow", "psystrike", "psycho boost", "fiery dance", "triple arrows", "flying press", "headlong rush", "order up", "bitter blade", "fishious rend",
     # Added 2026-09-22 — dropped as borrowed signatures during the Serperior,
     # Cradily, Volcarona and Gourgeist passes. House rule: every signature move
     # replaced in a design goes on this list the same turn it is replaced.
