@@ -1,21 +1,35 @@
 name: Jangmo O
 chrooked_id: jangmoo
 aka: {  }
+abilities:
+  primary: Tough Claws
+  secondary: Percussion
+  hidden: Heavily Armored
+stats: { hp: 45, atk: 55, def: 65, spa: 45, spd: 45, spe: 45 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 4, move: Protect }
-  - { level: 6, move: Maul }
-  - { level: 8, move: Dragon Tail }
-  - { level: 12, move: Scary Face }
-  - { level: 16, move: Headbutt }
-  - { level: 20, move: Work Up }
-  - { level: 22, move: Breaking Swipe }
-  - { level: 24, move: Screech }
-  - { level: 28, move: Iron Defense }
-  - { level: 32, move: Dragon Claw }
-  - { level: 36, move: Noble Roar }
-  - { level: 38, move: Cross Chop }
-  - { level: 40, move: Dragon Dance }
-  - { level: 44, move: Dragon Hammer }
-  - { level: 48, move: Outrage }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Maul }
+  - { level: 9, move: Mach Punch }
+  - { level: 12, move: Power-Up Punch }
+  - { level: 16, move: Clang }
+  - { level: 20, move: Clangorous Soul }
+  - { level: 23, move: Breaking Swipe }
+  - { level: 26, move: Brick Break }
+  - { level: 29, move: Swords Dance }
+  - { level: 31, move: Drain Punch }
+  - { level: 33, move: Dragon Claw }
+  - { level: 38, move: Bulk Up }
+  - { level: 40, move: Sky Uppercut }
+  - { level: 44, move: Sacred Sword }
+  - { level: 46, move: Scary Face }
+  - { level: 48, move: Thunder Punch }
+  - { level: 50, move: Iron Head }
+  - { level: 52, move: Ice Punch }
+  - { level: 54, move: Dragon Hammer }
+  - { level: 56, move: Cross Chop }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Outrage }
+  - { level: 65, move: Boomburst }
+  - { level: 68, move: Close Combat }
+  - { level: 72, move: Clanging Scales }

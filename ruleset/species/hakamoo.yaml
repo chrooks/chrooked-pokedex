@@ -1,25 +1,35 @@
 name: Hakamo O
 chrooked_id: hakamoo
 aka: {  }
+abilities:
+  primary: Tough Claws
+  secondary: Percussion
+  hidden: Heavily Armored
+stats: { hp: 55, atk: 75, def: 90, spa: 65, spd: 70, spe: 65 }
 learnset:
-  - { level: 1, move: Tackle }
   - { level: 1, move: Leer }
-  - { level: 1, move: Protect }
-  - { level: 1, move: Dragon Tail }
-  - { level: 2, move: Rock Smash }
-  - { level: 6, move: Maul }
-  - { level: 12, move: Scary Face }
-  - { level: 15, move: Brick Break }
-  - { level: 16, move: Headbutt }
-  - { level: 20, move: Work Up }
-  - { level: 22, move: Breaking Swipe }
-  - { level: 24, move: Screech }
-  - { level: 28, move: Iron Defense }
-  - { level: 29, move: One-Inch Punch }
-  - { level: 32, move: Dragon Claw }
-  - { level: 38, move: Noble Roar }
-  - { level: 41, move: Dragon Hammer }
-  - { level: 42, move: Cross Chop }
-  - { level: 44, move: Dragon Dance }
-  - { level: 50, move: Outrage }
-  - { level: 56, move: Close Combat }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Maul }
+  - { level: 9, move: Mach Punch }
+  - { level: 12, move: Power-Up Punch }
+  - { level: 16, move: Clang }
+  - { level: 20, move: Clangorous Soul }
+  - { level: 23, move: Breaking Swipe }
+  - { level: 26, move: Brick Break }
+  - { level: 29, move: Swords Dance }
+  - { level: 31, move: Drain Punch }
+  - { level: 33, move: Dragon Claw }
+  - { level: 38, move: Bulk Up }
+  - { level: 40, move: Sky Uppercut }
+  - { level: 44, move: Sacred Sword }
+  - { level: 46, move: Scary Face }
+  - { level: 48, move: Thunder Punch }
+  - { level: 50, move: Iron Head }
+  - { level: 52, move: Ice Punch }
+  - { level: 54, move: Dragon Hammer }
+  - { level: 56, move: Cross Chop }
+  - { level: 58, move: Earthquake }
+  - { level: 61, move: Outrage }
+  - { level: 65, move: Boomburst }
+  - { level: 68, move: Close Combat }
+  - { level: 72, move: Clanging Scales }
