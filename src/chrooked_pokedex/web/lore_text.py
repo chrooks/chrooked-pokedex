@@ -194,6 +194,36 @@ def regional_adjective(chrooked_id: str, base_id: str) -> str:
     return REGIONAL_ADJECTIVES.get(chrooked_id[len(base_id):], "")
 
 
+# The dex strips punctuation from names ("Kommo O", "Mr Rime"); PokeAPI slugs,
+# Bulbapedia titles, and the lore text itself keep it. A closed set of canon
+# names, so a table beats a heuristic. Keyed by the dex display name.
+PUNCTUATED_NAMES: dict[str, str] = {
+    "Chi Yu": "Chi-Yu",
+    "Chien Pao": "Chien-Pao",
+    "Farfetchd": "Farfetch'd",
+    "Hakamo O": "Hakamo-o",
+    "Ho Oh": "Ho-Oh",
+    "Jangmo O": "Jangmo-o",
+    "Kommo O": "Kommo-o",
+    "Mime Jr": "Mime Jr.",
+    "Mr Mime": "Mr. Mime",
+    "Mr Rime": "Mr. Rime",
+    "Nidoran F": "Nidoran♀",
+    "Nidoran M": "Nidoran♂",
+    "Porygon Z": "Porygon-Z",
+    "Sirfetchd": "Sirfetch'd",
+    "Ting Lu": "Ting-Lu",
+    "Type Null": "Type: Null",
+    "Wo Chien": "Wo-Chien",
+}
+
+# chrooked_id -> PokeAPI slug for the same set ("kommoo" -> "kommo-o").
+POKEAPI_SLUGS: dict[str, str] = {
+    re.sub(r"[^a-z0-9]", "", name.lower()): name.lower().replace(" ", "-")
+    for name in PUNCTUATED_NAMES
+}
+
+
 def split_regional_name(name: str) -> tuple[str, str]:
     """``("Ninetales", "Alolan")`` for the dex display name ``"Ninetales Alola"``.
 

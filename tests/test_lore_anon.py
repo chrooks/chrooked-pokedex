@@ -105,3 +105,14 @@ def test_a_regional_dex_name_masks_every_way_the_lore_names_it() -> None:
     assert "Ninetales" not in out and "Vulpix" not in out
     assert out == f"{SUBJECT} is a regional variant of {SUBJECT}. It leads {OTHER}."
 
+
+
+def test_a_punctuated_name_is_redacted_in_its_canon_spelling() -> None:
+    # The dex name is "Kommo O"; the lore writes "Kommo-o".
+    out = anonymize_text(
+        "Kommo-o clangs its scales. Mr. Rime taps its cane.",
+        subject_names=["Kommo O"],
+        other_names=["Mr Rime"],
+    )
+    assert "Kommo" not in out and "Rime" not in out
+    assert out.startswith(SUBJECT)

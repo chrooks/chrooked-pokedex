@@ -376,3 +376,13 @@ def test_chars_counts_every_piece_of_text() -> None:
         found=True, genus="ab", dex_entries=("cde", "fg"), origin="h", name_origin="ij"
     )
     assert result.chars == 2 + 3 + 2 + 1 + 2
+
+
+def test_a_punctuated_name_asks_both_upstreams_by_its_canon_spelling(tmp_path: Path) -> None:
+    """The dex says "Kommo O"; PokeAPI wants `kommo-o` and Bulbapedia "Kommo-o"."""
+    calls: list[httpx.Request] = []
+    _provider(tmp_path, calls).fetch("kommoo", "Kommo O")
+    asked = [c.url.path.rsplit("/", 1)[-1] for c in calls if "pokeapi.co" in str(c.url)]
+    pages = {c.url.params.get("page") for c in calls if BULBAPEDIA_API in str(c.url)}
+    assert asked == ["kommo-o"]
+    assert pages == {"Kommo-o (Pokémon)"}

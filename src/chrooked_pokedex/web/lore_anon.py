@@ -17,7 +17,7 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable
 
-from .lore_text import split_regional_name
+from .lore_text import PUNCTUATED_NAMES, split_regional_name
 
 SUBJECT = "this creature"
 OTHER = "another creature"
@@ -51,6 +51,9 @@ def _name_pattern(names: Iterable[str]) -> re.Pattern[str] | None:
         if not n:
             continue
         expanded.add(n.strip())
+        # The dex says "Kommo O"; the lore says "Kommo-o".
+        if n.strip() in PUNCTUATED_NAMES:
+            expanded.add(PUNCTUATED_NAMES[n.strip()])
         # The dex says "Ninetales Alola"; the lore says "Alolan Ninetales" and
         # plain "Ninetales". All three name the creature.
         base, adjective = split_regional_name(n)

@@ -37,6 +37,8 @@ from pathlib import Path
 from typing import Any, Iterable, Optional, Protocol, runtime_checkable
 
 from .lore_text import (
+    POKEAPI_SLUGS,
+    PUNCTUATED_NAMES,
     clean_wikitext,
     fallback_base_id,
     pokeapi_lore,
@@ -272,7 +274,7 @@ class HttpLoreProvider:
         Returns ``(genus, entries, url, resolved_id)``.
         """
         for candidate in self._candidates(species_id):
-            url = f"{POKEAPI_BASE}/pokemon-species/{candidate}"
+            url = f"{POKEAPI_BASE}/pokemon-species/{POKEAPI_SLUGS.get(candidate, candidate)}"
             payload = self._get_json(url, {})
             if payload is None:
                 continue
@@ -367,6 +369,7 @@ class HttpLoreProvider:
             # A form-only species ("Mothim Plant") has no page of its own either;
             # PokeAPI already resolved it to its base, so page on that base name.
             page_name = _base_page_name(species_name, resolved) or page_name
+        page_name = PUNCTUATED_NAMES.get(page_name, page_name)
         sections, bulba_url = self._bulbapedia(
             page_name, WANTED_SECTIONS + (REGIONAL_SECTIONS if adjective else ())
         )
