@@ -1,24 +1,34 @@
 name: Rotom Mow
 chrooked_id: rotommow
 aka: {  }
+abilities:
+  primary: Levitate
+  secondary: Phantom
+  hidden: Grassy Surge
+stats: { hp: 55, atk: 65, def: 107, spa: 105, spd: 107, spe: 91 }
 learnset:
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Astonish }
-  - { level: 2, move: Absorb }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leer }
   - { level: 5, move: Thunder Shock }
-  - { level: 10, move: Confuse Ray }
-  - { level: 15, move: Charge }
-  - { level: 16, move: Giga Drain }
-  - { level: 20, move: Electro Ball }
-  - { level: 25, move: Thunder Wave }
-  - { level: 29, move: Energy Ball }
-  - { level: 30, move: Shock Wave }
-  - { level: 35, move: Hex }
-  - { level: 37, move: Siphon }
-  - { level: 40, move: Substitute }
-  - { level: 43, move: Thunder }
-  - { level: 45, move: Trick }
-  - { level: 50, move: Discharge }
-  - { level: 55, move: Uproar }
-  - { level: 57, move: Zap Cannon }
-  - { level: 59, move: Leaf Storm }
+  - { level: 9, move: Absorb }
+  - { level: 12, move: Thunder Wave }
+  - { level: 16, move: Mega Drain }
+  - { level: 19, move: Charge Beam }
+  - { level: 23, move: Hex }
+  - { level: 25, move: Parabolic Charge }
+  - { level: 27, move: Giga Drain }
+  - { level: 30, move: Volt Switch }
+  - { level: 33, move: Discharge }
+  - { level: 35, move: Grass Pledge }
+  - { level: 37, move: Will-O-Wisp }
+  - { level: 40, move: Shadow Ball }
+  - { level: 45, move: Energy Ball }
+  - { level: 47, move: Thunderbolt }
+  - { level: 49, move: Leaf Blade }
+  - { level: 51, move: Nasty Plot }
+  - { level: 54, move: Pain Split }
+  - { level: 56, move: Specter Bomb }
+  - { level: 58, move: Siphon }
+  - { level: 61, move: Thunder }
+  - { level: 72, move: Leaf Storm }

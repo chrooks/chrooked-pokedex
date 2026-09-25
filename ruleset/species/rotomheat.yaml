@@ -1,24 +1,32 @@
 name: Rotom Heat
 chrooked_id: rotomheat
 aka: {  }
+abilities:
+  primary: Levitate
+  secondary: Phantom
+  hidden: Turboblaze
+stats: { hp: 55, atk: 65, def: 107, spa: 105, spd: 107, spe: 91 }
 learnset:
-  - { level: 1, move: Double Team }
-  - { level: 1, move: Astonish }
-  - { level: 2, move: Ember }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Smokescreen }
   - { level: 5, move: Thunder Shock }
-  - { level: 10, move: Confuse Ray }
-  - { level: 15, move: Charge }
-  - { level: 16, move: Incinerate }
-  - { level: 20, move: Electro Ball }
-  - { level: 25, move: Thunder Wave }
-  - { level: 29, move: Flamethrower }
-  - { level: 30, move: Shock Wave }
-  - { level: 35, move: Hex }
-  - { level: 40, move: Substitute }
-  - { level: 43, move: Thunder }
-  - { level: 45, move: Trick }
-  - { level: 46, move: Fire Blast }
-  - { level: 50, move: Discharge }
-  - { level: 55, move: Uproar }
-  - { level: 57, move: Zap Cannon }
-  - { level: 59, move: Overheat }
+  - { level: 9, move: Ember }
+  - { level: 12, move: Thunder Wave }
+  - { level: 16, move: Charge Beam }
+  - { level: 23, move: Hex }
+  - { level: 25, move: Parabolic Charge }
+  - { level: 27, move: Incinerate }
+  - { level: 30, move: Volt Switch }
+  - { level: 33, move: Discharge }
+  - { level: 35, move: Lava Plume }
+  - { level: 37, move: Will-O-Wisp }
+  - { level: 40, move: Shadow Ball }
+  - { level: 47, move: Thunderbolt }
+  - { level: 49, move: Flamethrower }
+  - { level: 51, move: Nasty Plot }
+  - { level: 54, move: Pain Split }
+  - { level: 56, move: Heat Wave }
+  - { level: 58, move: Specter Bomb }
+  - { level: 61, move: Thunder }
+  - { level: 72, move: Overheat }
