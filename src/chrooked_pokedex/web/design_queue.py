@@ -208,7 +208,9 @@ def resolve_row(
     if not row.subjects:
         first = _clean(row.raw.split()[0])
         hint = difflib.get_close_matches(first.lower(), list(names), n=1, cutoff=0.8)
-        suggestion = f"; did you mean {names[hint[0]]!r}?" if hint else ""
+        suggestion = (
+            f"; did you mean {snapshot['species'][names[hint[0]]]['name']!r}?" if hint else ""
+        )
         return Unresolved(
             row.raw, f"no species name recognised at the start of the row{suggestion}"
         )

@@ -128,4 +128,12 @@ def test_unknown_name_is_unresolved(rows, snapshot, names):
 def test_typo_gets_a_close_match_hint(rows, snapshot, names):
     result = _resolve("Beeheeyem", rows, snapshot, names)
     assert isinstance(result, q.Unresolved)
-    assert "beheeyem" in result.reason
+    assert "Beheeyem" in result.reason
+
+
+def test_hint_names_the_display_name_not_the_id(snapshot, names):
+    # Kommo-o's id is `kommoo` but its display name is `Kommo O`; only the name resolves.
+    (row,) = q.parse_rows("Kommo-o line, redo", names)
+    result = q.resolve_row(row, snapshot, names)
+    assert isinstance(result, q.Unresolved)
+    assert "'Kommo O'" in result.reason
