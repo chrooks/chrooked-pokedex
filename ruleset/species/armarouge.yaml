@@ -2,32 +2,31 @@ name: Armarouge
 chrooked_id: armarouge
 aka: { pokeemerald: SPECIES_ARMAROUGE }
 abilities:
+  primary: Flash Fire
   secondary: Mega Launcher
-stats: { spa: 130, spe: 80 }
+  hidden: Heavily Armored
+stats: { hp: 85, atk: 60, def: 100, spa: 130, spd: 80, spe: 80 }
 learnset:
-  - { level: 0, move: Psyshock }
-  - { level: 1, move: Leer }
-  - { level: 1, move: Astonish }
-  - { level: 1, move: Wide Guard }
-  - { level: 1, move: Ember }
-  - { level: 2, move: Confusion }
-  - { level: 3, move: Mystical Fire }
-  - { level: 8, move: Clear Smog }
-  - { level: 12, move: Fire Spin }
-  - { level: 15, move: Dream Mist }
-  - { level: 16, move: Will-O-Wisp }
-  - { level: 20, move: Night Shade }
-  - { level: 24, move: Flame Charge }
-  - { level: 28, move: Incinerate }
-  - { level: 32, move: Lava Plume }
-  - { level: 37, move: Calm Mind }
-  - { level: 40, move: Wraithstrike }
-  - { level: 42, move: Ally Switch }
-  - { level: 43, move: Fire Blast }
-  - { level: 45, move: Cinder Smash }
-  - { level: 46, move: Combust }
-  - { level: 47, move: Expanding Force }
-  - { level: 48, move: Flamethrower }
-  - { level: 56, move: Mindwarp }
-  - { level: 57, move: Future Sight }
-  - { level: 62, move: Armor Cannon }
+  - { level: 0, move: Armor Cannon }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Harden }
+  - { level: 9, move: Confusion }
+  - { level: 12, move: Ember }
+  - { level: 19, move: Will-O-Wisp }
+  - { level: 22, move: Calm Mind }
+  - { level: 24, move: Psybeam }
+  - { level: 26, move: Burning Jealousy }
+  - { level: 30, move: Flame Burst }
+  - { level: 32, move: Psychic Noise }
+  - { level: 34, move: Flash Cannon }
+  - { level: 37, move: Dark Pulse }
+  - { level: 39, move: Dragon Pulse }
+  - { level: 41, move: Water Pulse }
+  - { level: 43, move: Mystical Fire }
+  - { level: 45, move: Expanding Force }
+  - { level: 47, move: Psychic }
+  - { level: 49, move: Aura Sphere }
+  - { level: 51, move: Flamethrower }
+  - { level: 58, move: Heat Wave }
+  - { level: 61, move: Fire Blast }
+  - { level: 68, move: Future Sight }
