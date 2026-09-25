@@ -1,0 +1,10 @@
+name: Armor Cannon
+chrooked_id: armorcannon
+aka: { pokeemerald: MOVE_ARMOR_CANNON }
+type: Fire
+category: special
+power: 120
+accuracy: 100
+pp: 5
+description: A strong attack but lowers the defensive stats.
+flags: [pulse]
