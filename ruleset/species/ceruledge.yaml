@@ -2,33 +2,33 @@ name: Ceruledge
 chrooked_id: ceruledge
 aka: { pokeemerald: SPECIES_CERULEDGE }
 abilities:
+  primary: Flash Fire
   secondary: Sharpness
-stats: { hp: 80, atk: 130 }
+  hidden: Supreme Overlord
+stats: { hp: 80, atk: 130, def: 80, spa: 60, spd: 100, spe: 85 }
 learnset:
-  - { level: 0, move: Shadow Claw }
-  - { level: 1, move: Shadow Sneak }
-  - { level: 1, move: Quick Guard }
-  - { level: 1, move: Solar Blade }
+  - { level: 0, move: Bitter Blade }
   - { level: 1, move: Leer }
-  - { level: 2, move: Lick }
-  - { level: 3, move: Astonish }
-  - { level: 4, move: Ember }
-  - { level: 5, move: Night Slash }
-  - { level: 8, move: Clear Smog }
-  - { level: 12, move: Fire Spin }
-  - { level: 15, move: Flame Charge }
-  - { level: 16, move: Will-O-Wisp }
-  - { level: 20, move: Night Shade }
-  - { level: 24, move: Flame Wheel }
-  - { level: 28, move: Incinerate }
-  - { level: 32, move: Lava Plume }
-  - { level: 37, move: Swords Dance }
-  - { level: 39, move: Wraithstrike }
-  - { level: 40, move: Interment }
-  - { level: 42, move: Ally Switch }
-  - { level: 45, move: Bitter Blade }
-  - { level: 48, move: Combust }
-  - { level: 52, move: Pixie Slash }
-  - { level: 53, move: Necrosis }
-  - { level: 56, move: Psycho Cut }
-  - { level: 62, move: Flare Blitz }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Lick }
+  - { level: 9, move: Astonish }
+  - { level: 12, move: Shadow Sneak }
+  - { level: 16, move: Flame Charge }
+  - { level: 20, move: Will-O-Wisp }
+  - { level: 23, move: Fire Punch }
+  - { level: 26, move: Grave Drop }
+  - { level: 29, move: Swords Dance }
+  - { level: 31, move: Shadow Claw }
+  - { level: 38, move: Taunt }
+  - { level: 41, move: Night Slash }
+  - { level: 43, move: Psycho Cut }
+  - { level: 45, move: Cinder Smash }
+  - { level: 47, move: Phantom Force }
+  - { level: 49, move: X-Scissor }
+  - { level: 51, move: Cross Poison }
+  - { level: 53, move: Combust }
+  - { level: 55, move: Interment }
+  - { level: 58, move: Leaf Blade }
+  - { level: 60, move: Sacred Sword }
+  - { level: 69, move: Poltergeist }
+  - { level: 71, move: Flare Blitz }
