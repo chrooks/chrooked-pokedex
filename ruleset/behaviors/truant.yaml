@@ -1,0 +1,30 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Truant
+chrooked_id: truant
+applies_to: ability
+aka: {  }
+effects:
+  - summary: On a loaf turn the holder can still use a status move. Only damaging moves are blocked.
+    trigger: turn-order
+    when: the holder has Truant and this is its loaf turn
+    effect: "The active/loaf rhythm is exactly vanilla: the holder acts, then loafs, then acts, and the toggle happens at the end of every round. On a loaf turn a status-category move goes ahead normally. A damaging move is blocked with \"{1} is loafing around!\", as in vanilla. Recharge (Hyper Beam, Giga Impact) still lands on the loaf turn and consumes it. Locked and two-turn moves are damaging, so they behave as vanilla. A called move (Metronome, Sleep Talk, Nature Power, Assist) is judged by the move it calls: a damaging one loafs, a status one goes through."
+test_cases:
+  - given: Slaking is on its loaf turn and picks Bulk Up.
+    expect: Bulk Up works. The next turn is an active turn.
+  - given: Slaking is on its loaf turn and picks Double-Edge.
+    expect: "\"Slaking is loafing around!\" No damage is dealt."
+  - given: Slaking uses Giga Impact on its active turn.
+    expect: The next turn it must recharge. It uses no move, status or not, and the turn after is active.
+  - given: Slaking is on its loaf turn and uses Metronome, which calls a damaging move.
+    expect: The called move is blocked with the loafing message.
+  - given: A trainer's Slaking with Slack Off is on its loaf turn.
+    expect: The AI picks Slack Off (or another useful status move), not a damaging move.
+  - given: A non-Truant Pokemon uses any move.
+    expect: Nothing changes.
+notes:
+  - "Chris, 2026-09-25: rework Truant to the Pokemon Elite Redux rule - a loafing holder may still use non-attacking moves. Name stays Truant."
+  - This is a rework of a vanilla ability, so every holder is affected. In the base snapshot that is Slakoth, Slaking and Durant (hidden ability), plus anything that gains Truant mid-battle (Entrainment, Skill Swap, Worry Seed-style effects).
+  - "Implementation note: vanilla's loaf check is inline inside pbTryUseMove (Battler.rb:5747), not in a method of its own. The plugin wraps pbTryUseMove and, only when the chosen move is a status move (the engine's own pbIsStatus?) on a loaf turn, clears effects[:Truant] for that one call and restores it in an ensure. Nothing else in pbTryUseMove reads the flag, and the recharge check runs before the loaf check, so recharge still eats the loaf turn. Called moves re-enter pbTryUseMove after the flag is back, so a damaging called move still loafs."
+  - "AI: the plugin wraps PokeBattle_AI#getModifiedMoveScore. On the holder's own loaf turn every damaging move scores 0 (a vanilla -1 stays -1), so any status move scoring above 0 wins. The AI does NOT: add a bonus to status moves on a loaf turn (a status move the AI already scores 0 stays 0, and it then picks among the zeros at random, damaging ones included); tune the Truant ability valuation (x0.1 in getAbilityDisruptScore) or the Entrainment/Skill Swap scoring for the milder drawback; or model that a loafing opponent can still Protect or set up (the priority check at Battle_AI.rb:1594 treats a loafing opponent as unable to act). A move score of 0 also lowers the AI's hard-switch threshold, so with no useful status move it may switch out on a loaf turn more often than before. Wild Pokemon pick moves at random and are unaffected by the AI change."
+engine_hints:
+  essentials: "Rejuv: patch/Mods/chrooked_truant.rb (canonical source references/rejuv-harness/). Prepend PokeBattle_Battler#pbTryUseMove; for a status basemove on a loaf turn, clear @effects[:Truant] around super and restore it in ensure (vanilla check at Battler.rb:5747; toggle at Battle.rb:7462 untouched). Prepend PokeBattle_AI#getModifiedMoveScore to cap damaging-move scores at 0 on the holder's own loaf turn. Stub check: references/rejuv-harness/truant_check.rb."

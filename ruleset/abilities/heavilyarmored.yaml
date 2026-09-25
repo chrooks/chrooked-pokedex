@@ -1,0 +1,5 @@
+name: Heavily Armored
+chrooked_id: heavilyarmored
+aka: {  }
+behaviors: [soundproof, bulletproof, battlearmor]
+description: Blocks sound, ball and bomb moves, and critical hits.

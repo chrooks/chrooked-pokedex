@@ -1,0 +1,4 @@
+name: Order Taker
+chrooked_id: ordertaker
+aka: {  }
+description: Raises all stats on entry if a Tatsugiri is in the party.

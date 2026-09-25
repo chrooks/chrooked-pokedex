@@ -9,4 +9,4 @@ pp: 30
 description: A ringing metal blow rattles the target. May cause flinching.
 additional_effects:
   - { effect: flinch, chance: 10 }
-flags: [contact]
+flags: [contact, sound]
