@@ -1,40 +1,32 @@
 name: Mr Rime
 chrooked_id: mrrime
 aka: {  }
+abilities:
+  primary: Ice Skater
+  secondary: Screen Cleaner
+  hidden: Dancer
+stats: { hp: 80, atk: 85, def: 75, spa: 110, spd: 100, spe: 70 }
 learnset:
-  - { level: 1, move: Fake Tears }
-  - { level: 1, move: Slack Off }
-  - { level: 1, move: After You }
-  - { level: 1, move: Block }
-  - { level: 2, move: Powder Snow }
-  - { level: 3, move: Copycat }
-  - { level: 4, move: Encore }
-  - { level: 5, move: Role Play }
-  - { level: 6, move: Protect }
-  - { level: 7, move: Recycle }
-  - { level: 8, move: Mimic }
-  - { level: 9, move: Light Screen }
-  - { level: 10, move: Reflect }
-  - { level: 11, move: Safeguard }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Powder Snow }
   - { level: 12, move: Confusion }
-  - { level: 13, move: Misty Terrain }
-  - { level: 14, move: Baton Pass }
-  - { level: 15, move: Ice Shard }
-  - { level: 16, move: Ally Switch }
-  - { level: 17, move: Pound }
-  - { level: 18, move: Rapid Spin }
-  - { level: 19, move: Dazzling Gleam }
-  - { level: 20, move: Icy Wind }
-  - { level: 24, move: Double Kick }
-  - { level: 28, move: Psybeam }
-  - { level: 29, move: Freeze-Dry }
-  - { level: 32, move: Hypnosis }
-  - { level: 36, move: Mirror Coat }
-  - { level: 38, move: Psychic }
-  - { level: 40, move: Sucker Punch }
-  - { level: 43, move: Ice Beam }
-  - { level: 44, move: Blizzard }
-  - { level: 48, move: Mindwarp }
-  - { level: 52, move: Teeter Dance }
-  - { level: 57, move: Future Sight }
-  - { level: 64, move: Cryoblast }
+  - { level: 16, move: Ice Shard }
+  - { level: 19, move: Encore }
+  - { level: 21, move: Snowscape }
+  - { level: 23, move: Icy Wind }
+  - { level: 26, move: Psybeam }
+  - { level: 29, move: Mimic }
+  - { level: 33, move: Freeze-Dry }
+  - { level: 37, move: Extrasensory }
+  - { level: 39, move: Reflect }
+  - { level: 41, move: Calm Mind }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Ice Beam }
+  - { level: 49, move: Light Screen }
+  - { level: 54, move: Psychic }
+  - { level: 58, move: Mindwarp }
+  - { level: 61, move: Blizzard }
+  - { level: 65, move: Future Sight }
+  - { level: 68, move: Triple Axel }
+  - { level: 72, move: Cryoblast }
