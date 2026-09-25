@@ -24,6 +24,7 @@ import difflib
 import re
 from dataclasses import dataclass
 from typing import Any
+from .lore_text import PUNCTUATED_NAMES
 
 REGIONAL_PREFIXES = {
     "alolan": "Alola",
@@ -64,8 +65,16 @@ class Unresolved:
 
 
 def display_names(snapshot: dict[str, Any]) -> dict[str, str]:
-    """Lower-cased display name -> chrooked_id, the lookup every step below uses."""
-    return {base["name"].lower(): cid for cid, base in snapshot["species"].items()}
+    """Lower-cased display name -> chrooked_id, the lookup every step below uses.
+
+    Canon punctuated spellings ("Farfetch'd", "Kommo-o") resolve too: the dex
+    strips the punctuation, but a queue row is written the way the game spells it.
+    """
+    names = {base["name"].lower(): cid for cid, base in snapshot["species"].items()}
+    for dex_name, canon in PUNCTUATED_NAMES.items():
+        if dex_name.lower() in names:
+            names[canon.lower()] = names[dex_name.lower()]
+    return names
 
 
 def _clean(token: str) -> str:

@@ -132,8 +132,14 @@ def test_typo_gets_a_close_match_hint(rows, snapshot, names):
 
 
 def test_hint_names_the_display_name_not_the_id(snapshot, names):
-    # Kommo-o's id is `kommoo` but its display name is `Kommo O`; only the name resolves.
-    (row,) = q.parse_rows("Kommo-o line, redo", names)
+    # Kommo-o's id is `kommoo` but its display name is `Kommo O`.
+    (row,) = q.parse_rows("Kommoo line, redo", names)
     result = q.resolve_row(row, snapshot, names)
     assert isinstance(result, q.Unresolved)
     assert "'Kommo O'" in result.reason
+
+
+def test_canon_punctuated_spellings_resolve(snapshot, names):
+    rows = q.parse_rows("Farfetch'd\nKommo-o line, redo\n", names)
+    resolved = [q.resolve_row(r, snapshot, names)[0].id for r in rows]
+    assert resolved == ["farfetchd", "kommoo"]
