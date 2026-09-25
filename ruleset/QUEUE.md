@@ -1,4 +1,3 @@
-Greninja
 Slaking line, redo with the matured design system; the Truant problem is the design question
 Kommo-o line, redo with the matured design system
 Dondozo, redo with the matured design system; the Tatsugiri partnership is its identity
