@@ -2,24 +2,30 @@ name: Chinchou
 chrooked_id: chinchou
 aka: { pokeemerald: SPECIES_CHINCHOU }
 abilities:
+  primary: Volt Absorb
   secondary: Water Absorb
+  hidden: Barrage
+stats: { hp: 79, atk: 30, def: 40, spa: 76, spd: 59, spe: 46 }
 learnset:
-  - { level: 1, move: Supersonic }
-  - { level: 1, move: Water Gun }
-  - { level: 2, move: Thunder Shock }
-  - { level: 4, move: Electro Ball }
-  - { level: 8, move: Thunder Wave }
-  - { level: 12, move: Bubble Beam }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Thunder Shock }
+  - { level: 12, move: Thunder Wave }
+  - { level: 14, move: Water Gun }
   - { level: 16, move: Confuse Ray }
-  - { level: 18, move: Short Circuit }
-  - { level: 20, move: Spark }
-  - { level: 24, move: Charge }
-  - { level: 28, move: Discharge }
-  - { level: 29, move: Muddy Water }
-  - { level: 32, move: Aqua Ring }
-  - { level: 36, move: Flail }
-  - { level: 40, move: Take Down }
-  - { level: 43, move: Thunder }
-  - { level: 44, move: Hydro Pump }
-  - { level: 57, move: Zap Cannon }
-  - { level: 64, move: Tsunami }
+  - { level: 19, move: Charge Beam }
+  - { level: 21, move: Heal Bell }
+  - { level: 23, move: Water Pulse }
+  - { level: 30, move: Parabolic Charge }
+  - { level: 33, move: Discharge }
+  - { level: 35, move: Gauss Cannon }
+  - { level: 37, move: Dark Pulse }
+  - { level: 40, move: Brine }
+  - { level: 44, move: Bubble Beam }
+  - { level: 47, move: Scald }
+  - { level: 49, move: Ice Beam }
+  - { level: 52, move: Thunderbolt }
+  - { level: 54, move: Signal Beam }
+  - { level: 56, move: Surf }
+  - { level: 61, move: Hydro Pump }
+  - { level: 72, move: Zap Cannon }
