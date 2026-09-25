@@ -497,6 +497,13 @@
       },
       "note": "Sound moves run off Attack — special-categorized sound moves are CORRECT picks for a physical attacker."
     },
+    "phantom": {
+      "shape": "stab_grant",
+      "stab_types": [
+        "Ghost"
+      ],
+      "note": "Adds Ghost as a third type on entry, so Ghost moves get STAB."
+    },
     "pixilate": {
       "shape": "ate",
       "hard": true,
@@ -867,6 +874,14 @@
           "jungle_healing"
         ]
       }
+    },
+    "truant": {
+      "shape": "status_reward",
+      "hard": false,
+      "filter": {
+        "category": "status"
+      },
+      "lean": "Loaf turns can still use status moves (damaging moves are blocked) — carry at least one useful status move (recovery, setup, or utility) to spend them on."
     },
     "unseenfist": {
       "shape": "flag_boost",

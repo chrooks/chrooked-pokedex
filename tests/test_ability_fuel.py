@@ -50,6 +50,7 @@ _DELIBERATELY_UNFUELED = {
     "magicbounce",  # reflects incoming status moves — defensive
     "liquidooze",   # punishes incoming drain moves — defensive
     "riposte",      # recoils contact damage at the attacker — defensive
+    "heavilyarmored",  # Soundproof + Bulletproof + Battle Armor — defensive
 }
 
 

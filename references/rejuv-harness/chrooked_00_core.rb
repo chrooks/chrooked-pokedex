@@ -33,6 +33,16 @@ CHROOKED_WHEN_HIT = {}
 CHROOKED_WHEN_HIT_DMG = {}
 # ability => ->(battler, battle) — on switch-in
 CHROOKED_SWITCH_IN = {}
+# ability => type Symbol — on switch-in the holder gains that type as an extra
+# type, exactly as Trick-or-Treat / Forest's Curse add one: it writes the
+# battler's single added-type slot effects[:TemporaryType] (Battle_MoveEffects.rb
+# :7424 / :7392), which Battler#types appends (Battler.rb:226), so hasType?,
+# type effectiveness, STAB and the AI all read it. pbInitEffects clears the slot
+# (OtherEff, Battler.rb:139/655) when the next mon takes the position, so it
+# goes on switch-out, Baton Pass included. Applied by the pbAbilitiesOnSwitchIn
+# wrapper below — a new type-adding ability is one line in its own plugin:
+#   CHROOKED_ADDED_TYPE[:PHANTOM] = :GHOST
+CHROOKED_ADDED_TYPE = {}
 # ability => ->(battler, battle) — end of round while on the field
 CHROOKED_TURN_END = {}
 # attacker status Symbol => ->(move, attacker, opponent) { Float multiplier }
@@ -281,6 +291,17 @@ module Chrooked
     mult
   end
 
+  # The CHROOKED_ADDED_TYPE type this battler would gain now, or nil. Same gate
+  # as Trick-or-Treat's pbEffectValid (Battle_MoveEffects.rb:7416): fails on a
+  # battler that cannot change type (Multitype, RKS System, crested Silvally,
+  # Terastallized) or already has the type. Shared by the switch-in wrapper and
+  # the AI's switch-candidate model so the two cannot disagree.
+  def self.added_type(battler)
+    type = entry(CHROOKED_ADDED_TYPE, battler.ability)
+    return nil if type.nil? || !battler.canChangeType? || battler.hasType?(type)
+    type
+  end
+
   # Proof trail: one line per boosted hit in chrooked.log (game root).
   # ponytail: unconditional append, no rotation — file grows only when mods fire.
   def self.log(message)
@@ -480,6 +501,14 @@ module ChrookedBattlerHooks
       Chrooked.entries(CHROOKED_SWITCH_IN, self.ability).each do |mod|
         mod.call(self, @battle)
       end
+      added = Chrooked.added_type(self)
+      if added
+        # The one write Trick-or-Treat makes; one slot, so a later Forest's
+        # Curse replaces it and a later Trick-or-Treat fails, as vanilla.
+        @effects[:TemporaryType] = added
+        @battle.pbAbilityBoxAndDisplay(self, _INTL("{1} type was added to {2}!",
+                                                   getTypeName(added), pbThis(true)))
+      end
     end
     ret
   end
@@ -617,6 +646,47 @@ if defined?(PokeBattle_AI)
       rescue StandardError
         dmg # a mispredicted score is survivable; a crashed AI turn is not
       end
+    end
+
+    # A ChrookedAbilitySet that holds :SOUNDPROOF (Heavily Armored =
+    # Soundproof + Bulletproof + Battle Armor, or a Redux Mode set) can match an
+    # EARLIER `when` of pbTypeModNoMessages' `case opponent.ability`
+    # (Battle_AI.rb:9426). `when :BULLETPROOF then return ... if bulletMove?`
+    # (9439) matches, returns nothing for a non-bullet move and exits the case,
+    # so `when :SOUNDPROOF` (9441) never runs and the AI thinks sound moves land.
+    # Re-ask the sound question with vanilla's own gates.
+    def pbTypeModNoMessages(type = @move.type, attacker = @attacker, opponent = @opponent, move = @move, skill = @mondata.skill)
+      mod = super
+      begin
+        return mod if mod.immune? || !type || skill < PokeBattle_AI::MEDIUMSKILL
+        abil = opponent.ability
+        return mod unless abil.respond_to?(:list) && abil.include?(:SOUNDPROOF)
+        return mod if [:User, :OpposingSide, :BothSides, :UserSide, :AllyBattlers].include?(attacker.pbTarget(move))
+        return mod if moldBreakerCheck(attacker, opponent, move)
+        move.checkSoundMove?(attacker) ? Typemod.zero : mod
+      rescue StandardError
+        mod # a mispredicted score is survivable; a crashed AI turn is not
+      end
+    end
+
+    # The switch scorer builds each candidate as a fresh fake battler and gives
+    # it its entry types here (Battle_AI.rb:349, called at :10627) — vanilla
+    # only for trainer-effect addType. Add the CHROOKED_ADDED_TYPE type the same
+    # way, so a Phantom candidate is scored as part Ghost. On the field the real
+    # battler's effects are cloned (pbCloneBattler, Battle_AI.rb:264), so the
+    # added type needs no further teaching.
+    # ponytail: the post-Mega re-run (Battle_AI.rb:10656) does not call this, and
+    # `i.form =` clears the slot (Battler.rb:194), so a Mega candidate that gains
+    # the type is scored without it — vanilla's addType has the same gap.
+    def getTypesOnEntry(trainer, pkmn, delay = false)
+      ret = super
+      begin
+        added = Chrooked.added_type(pkmn)
+        pkmn.effects[:TemporaryType] = added if added
+      rescue StandardError
+        # a mispredicted score is survivable; a crashed AI turn is not
+      end
+      ret
     end
 
     def hpGainPerTurn(attacker = @attacker, chipdamageCheck = false)
