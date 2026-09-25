@@ -4,28 +4,32 @@ aka: { pokeemerald: SPECIES_FARFETCHD }
 types: [Fighting, Flying]
 abilities:
   primary: Sharpness
+  secondary: Sniper
   hidden: Martialize
-stats: { atk: 90, spe: 100 }
+stats: { hp: 65, atk: 115, def: 70, spa: 55, spd: 70, spe: 125 }
 learnset:
-  - { level: 1, move: Peck }
-  - { level: 1, move: Sand Attack }
-  - { level: 2, move: Rock Smash }
-  - { level: 5, move: Leer }
-  - { level: 10, move: Fury Cutter }
-  - { level: 15, move: Cut }
-  - { level: 16, move: Brick Break }
-  - { level: 20, move: Aerial Ace }
-  - { level: 25, move: Air Cutter }
-  - { level: 29, move: One-Inch Punch }
-  - { level: 30, move: Knock Off }
-  - { level: 35, move: False Swipe }
-  - { level: 36, move: Cross Chop }
-  - { level: 37, move: Dive Bomb }
-  - { level: 38, move: Nosedive }
-  - { level: 40, move: Slash }
-  - { level: 45, move: Swords Dance }
-  - { level: 50, move: Air Slash }
-  - { level: 55, move: Leaf Blade }
-  - { level: 57, move: Close Combat }
-  - { level: 60, move: Agility }
-  - { level: 65, move: Brave Bird }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Mach Punch }
+  - { level: 9, move: Peck }
+  - { level: 12, move: Rock Smash }
+  - { level: 16, move: Flutter Bash }
+  - { level: 19, move: Quick Attack }
+  - { level: 21, move: Swords Dance }
+  - { level: 23, move: Karate Chop }
+  - { level: 25, move: Knock Off }
+  - { level: 27, move: Acrobatics }
+  - { level: 29, move: Focus Energy }
+  - { level: 31, move: Slash }
+  - { level: 33, move: Fury Cutter }
+  - { level: 35, move: Aerial Ace }
+  - { level: 37, move: Brick Break }
+  - { level: 39, move: Detect }
+  - { level: 47, move: Roost }
+  - { level: 50, move: Drill Peck }
+  - { level: 52, move: Night Slash }
+  - { level: 54, move: Aqua Cutter }
+  - { level: 56, move: Sacred Sword }
+  - { level: 58, move: Leaf Blade }
+  - { level: 66, move: Brave Bird }
+  - { level: 72, move: Cross Chop }

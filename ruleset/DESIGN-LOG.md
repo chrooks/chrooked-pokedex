@@ -1290,3 +1290,62 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-25 — Weezing Galar
 
 - **Direction:** Galar does not own Koffing. BST 510.; The two locked design axes are (1) Neutralizing Gas as the creature's mechanical identity — a field-wide ability suppressor that maps directly to noble-gas chemical inertness and Victorian aristocratic composure — and (2) the pollution-purification paradox: it cleanses the air it breathes yet concentrates those toxins into lethally potent gas clouds, making utility-disruption and status-spreading the twin pillars of its kit.
+
+## 2026-09-25 — Farfetchd
+
+- **Direction:** Chris: Fighting/Flying. Sharpness / Sniper / Martialize with spread B (500 = Hawlucha). The Leek (+2 crit stages) makes every high-crit blade crit; Sniper pays it off. Anchor Karate Chop (a Sharpness move); keep Aqua Cutter. No Huge Power.; The single design axis is the inseparable bond between this duck and its plant stalk — simultaneously weapon, tool, and survival ration. Every ability and move choice flows from that central tension: a fighter that is only as powerful as the stick it carries, defending both itself and the reed-beds those sticks grow from.
+
+## 2026-09-25 — Lanturn
+
+- **Direction:** Chris: trio Volt Absorb / Water Absorb / Barrage and the 14 anchors as proposed. Stats spread A (lure striker): 120/45/60/115/90/70 = 500, Attack moved to Sp. Atk.; The design axis is the pairing of deep-sea bioluminescent luring/blinding with dual-polarity electrical discharge. Every mechanical choice flows from one of these two facts: the creature is a light-emitter that stuns prey visually before shocking or swallowing them, and its electricity is uniquely bipolar (positive and negative simultaneously) rather than simple lightning.
+
+## 2026-09-25 — Armarouge
+
+- **Direction:** Chris: neither line owns Charcadet. Flash Fire / Mega Launcher / Heavily Armored. Good pulse coverage for Mega Launcher; Armor Cannon now carries the pulse flag. Bitter Blade and Armor Cannon pinned at the same level (L0) across both.; The design axis is the **psychic-fortified arm-cannon**: every stat, ability, and move choice flows from a special-attacking armored knight that charges up psionic energy inside a pressurized fire-cannon and rewards staying in to fire repeatedly, reflecting both the chivalric loyalty of the knight and the controlled-combustion physics of a pressurized gas cylinder.
+
+## 2026-09-25 — Ceruledge
+
+- **Direction:** Chris: neither line owns Charcadet. Flash Fire / Sharpness / Supreme Overlord (the fallen swordsman's grudge). Good slicing coverage for Sharpness. Bitter Blade and Armor Cannon pinned at the same level (L0, the evolution reward) across both.; The design axis is **resentful ghost-fire swordsmanship**: a physically attacking Fire/Ghost dual swordsman whose every ability and move channels the grudge of a warrior who refused to die—rewarding aggressive contact, punishing foes for the kill, and leaning into the phantom-blade identity of burning swords fueled by unfinished business.
+
+## 2026-09-25 — Dondozo
+
+- **Direction:** Chris: Water, custom partnership ability, Unaware, Strong Jaw. Give Fishious Rend as the capstone (a deliberate share of Dracovish's signature).; The locked symbiosis with Tatsugiri is the absolute design axis: every ability and move selection asks 'does this creature function as loyal, powerful, but intellectually-dependent brawn?' The secondary axis is its catfish identity — ambush, engulfing, water-predator traits — expressed through Schooling and Commander mechanics already baked into its lore. Abilities that reward switching partners in or functioning as a doubles anchor were heavily weighted; pure solo-carry tools were deprioritized because the profile explicitly states it is bad at getting food alone.
+- **New mechanics:** Order Taker (ability): On switch-in, if the holder's party holds a non-fainted Tatsugiri, raise Attack, Defense, Sp. Atk, Sp. Def and Speed one stage each. The singles version of the Tatsugiri partnership.
+
+## 2026-09-25 — Rotom Fan
+
+- **Direction:** Chris: shared ladder and anchors, Fan and Mow fixes, 530 BST. Levitate primary (Volt Absorb on Fan), Phantom secondary (adds Ghost like Trick-or-Treat), hidden: Heat Turboblaze (heard as 'Terablaze'), Wash Downpour, Frost Whiteout, Fan Aerodynamic. Rain Dance / Hail anchored so Downpour / Whiteout have their weather. +10 BST went to HP 50->55 and Speed 86->91 (base Rotom's Speed).; Design axis: the plasma ghost's act of POSSESSION married to the electric fan — a device defined by spinning blades, wind generation, and aerodynamic force. Every move and ability flows from (1) the shared ghost/poltergeist nature, (2) the Electric plasma engine, and (3) the fan's unique wind and spin identity that distinguishes this form.
+- **New mechanics:** Phantom (ability): On switch-in, adds Ghost as an extra type to the holder, like Trick-or-Treat. The first of a pattern: abilities that add a type.
+
+## 2026-09-25 — Rotom Frost
+
+- **Direction:** Chris: shared ladder and anchors, Fan and Mow fixes, 530 BST. Levitate primary (Volt Absorb on Fan), Phantom secondary (adds Ghost like Trick-or-Treat), hidden: Heat Turboblaze (heard as 'Terablaze'), Wash Downpour, Frost Whiteout, Fan Aerodynamic. Rain Dance / Hail anchored so Downpour / Whiteout have their weather. +10 BST went to HP 50->55 and Speed 86->91 (base Rotom's Speed).; Design axis: the plasma ghost's act of POSSESSION married to the refrigerator — a device defined by cold, preservation, and ice formation. Every move and ability flows from (1) the shared ghost/poltergeist nature, (2) the Electric plasma engine, and (3) the fridge-freezer's unique ice and chill identity that distinguishes this form.
+- **New mechanics:** Phantom (ability): On switch-in, adds Ghost as an extra type to the holder, like Trick-or-Treat. The first of a pattern: abilities that add a type.
+
+## 2026-09-25 — Rotom Heat
+
+- **Direction:** Chris: shared ladder and anchors, Fan and Mow fixes, 530 BST. Levitate primary (Volt Absorb on Fan), Phantom secondary (adds Ghost like Trick-or-Treat), hidden: Heat Turboblaze (heard as 'Terablaze'), Wash Downpour, Frost Whiteout, Fan Aerodynamic. Rain Dance / Hail anchored so Downpour / Whiteout have their weather. +10 BST went to HP 50->55 and Speed 86->91 (base Rotom's Speed).; Design axis: the plasma ghost's act of POSSESSION married to the specific appliance — a microwave oven that radiates intense, invisible heat from the inside out. Every ability and move choice flows from (1) the ghost/poltergeist nature shared across all forms, (2) the Electric plasma body as the common engine, and (3) the microwave's unique cooking/burning identity that separates this form from the others.
+- **New mechanics:** Phantom (ability): On switch-in, adds Ghost as an extra type to the holder, like Trick-or-Treat. The first of a pattern: abilities that add a type.
+
+## 2026-09-25 — Rotom Mow
+
+- **Direction:** Chris: shared ladder and anchors, Fan and Mow fixes, 530 BST. Levitate primary (Volt Absorb on Fan), Phantom secondary (adds Ghost like Trick-or-Treat), hidden: Heat Turboblaze (heard as 'Terablaze'), Wash Downpour, Frost Whiteout, Fan Aerodynamic, Mow Grassy Surge (Chris agreed). Rain Dance / Hail anchored so Downpour / Whiteout have their weather. +10 BST went to HP 50->55 and Speed 86->91 (base Rotom's Speed).; Design axis: the plasma ghost's act of POSSESSION married to the lawn mower — a device defined by spinning blades, cutting, and grass destruction. Every move and ability flows from (1) the shared ghost/poltergeist nature, (2) the Electric plasma engine, and (3) the lawn mower's unique slashing and Grass-type identity that distinguishes this form.
+- **New mechanics:** Phantom (ability): On switch-in, adds Ghost as an extra type to the holder, like Trick-or-Treat. The first of a pattern: abilities that add a type.
+
+## 2026-09-25 — Rotom Wash
+
+- **Direction:** Chris: shared ladder and anchors, Fan and Mow fixes, 530 BST. Levitate primary (Volt Absorb on Fan), Phantom secondary (adds Ghost like Trick-or-Treat), hidden: Heat Turboblaze (heard as 'Terablaze'), Wash Downpour, Frost Whiteout, Fan Aerodynamic. Rain Dance / Hail anchored so Downpour / Whiteout have their weather. +10 BST went to HP 50->55 and Speed 86->91 (base Rotom's Speed).; Design axis: the plasma ghost's act of POSSESSION married to the washing machine — a device defined by water, rotation, and entrapment. Every move and ability flows from (1) the shared ghost/poltergeist nature, (2) the Electric plasma engine, and (3) the washing machine's unique water-cycle and spin identity that distinguishes this form.
+- **New mechanics:** Phantom (ability): On switch-in, adds Ghost as an extra type to the holder, like Trick-or-Treat. The first of a pattern: abilities that add a type.
+
+## 2026-09-25 — Slaking
+
+- **Direction:** Chris: package as listed, spread A, just Truant. Truant is reworked to the Elite Redux rule: on the loaf turn the holder may use non-attacking moves; only attacks are blocked. So the kit alternates attack turn / status turn and the status half (Slack Off, Bulk Up, Yawn, Encore, Taunt, Substitute) fills the loaf turns. BST 670 -> 560 (= Volcarona). Stated exceptions, set after ship through the edit route: Slakoth and Vigoroth keep canon stats (280 / 440); Vigoroth keeps Vital Spirit, not Truant.; The single design axis is the TRUANT PARADOX: Slaking's lore states explicitly that lying still saves energy for a devastating strike, and that it is the world's laziest creature yet exerts horrifying power. Truant — acting only every other turn — is not a weakness bolted on to balance high stats; it IS the creature. Every ability candidate and move choice is evaluated against the question: does this deepen the 'stored-energy release' fantasy, make Truant feel purposeful rather than punishing, or create meaningful decisions around the idle turn?
+
+## 2026-09-25 — Kommo O
+
+- **Direction:** Chris: keep Dragon/Fighting. Tough Claws / Percussion (Clanging Scales uses the Attack stat) / Heavily Armored (Soundproof + Bulletproof + Battle Armor). Keep the Steel coverage. Clang is now a sound move so Percussion covers it. Clanging Scales is the capstone (pinned last).; The twin pillars driving this design are PERCUSSIVE METALLIC SCALES AS WEAPON AND LANGUAGE and WARRIOR VALIANCE — everything from STAB typing to ability selection and move curation flows from the creature being a scale-clanging, uppercut-specializing, never-turn-its-back brawler whose body is simultaneously instrument, armor, and blade.
+- **New mechanics:** Heavily Armored (ability): Combines Soundproof, Bulletproof, and Battle Armor: immune to sound-based moves and to ball and bomb moves, and cannot take a critical hit.
+
+## 2026-09-25 — Mr Rime
+
+- **Direction:** Chris: agreed trio (Ice Skater / Screen Cleaner / Dancer) and anchors. Mime Jr. skipped as a branch-shared pre-evo (it also feeds Kanto Mr. Mime).; The design axis is the duality of performance and psychic projection: every offensive and supportive choice flows from two inseparable profile facts — (1) the creature channels Psychic power through the clown-face pattern on its belly (a direct bodily focal point for energy release), and (2) it is a gifted, graceful tap-dancer whose footwork is the physical engine behind every trick, barrier, and attack. Ice is the secondary axis, inherited from the Galarian tap-dance lineage, grounding its coverage and hazard game.
