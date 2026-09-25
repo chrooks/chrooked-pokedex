@@ -257,3 +257,17 @@ def test_wants_custom_and_schema_flags() -> None:
     schema = dp.packet_schema(want_custom=True, want_stats=True)
     assert {"custom", "stats"} <= set(schema["properties"])
     assert "custom" not in dp.packet_schema(False, False)["properties"]
+
+
+class _BaseLore:
+    """Every id resolves to `rotom`, the way the five appliance forms do."""
+
+    def fetch(self, chrooked_id: str, species_name: str) -> loremod.LoreResult:
+        return loremod.LoreResult(found=True, base_species="rotom")
+
+
+def test_a_form_on_base_lore_carries_its_form_word() -> None:
+    snapshot = {"species": {"rotom": {"name": "Rotom"}, "rotomheat": {"name": "Rotom Heat"}}}
+    word = dp._form_word("rotomheat", {"name": "Rotom Heat"}, snapshot, _BaseLore())
+    assert word == "Heat"
+    assert dp._form_word("rotom", {"name": "Rotom"}, snapshot, _BaseLore()) == ""

@@ -71,6 +71,22 @@ def _line_names(records: list[DesignRecord], snapshot: dict[str, Any]) -> list[s
     return [species[cid]["name"] for cid in ids if cid in species]
 
 
+def _form_word(cid: str, entry: dict[str, Any], snapshot: dict[str, Any], lore_provider: Any) -> str:
+    """"Heat" for Rotom Heat when its lore fell back to the base, else "".
+
+    Five Rotom forms share one base page, so their blocks came out identical and
+    the model paired appliances to variants by canon order, not by record. The
+    form word is the one fact that tells the variants apart.
+    """
+    lore = lore_provider.fetch(cid, entry["name"])
+    base = snapshot["species"].get(lore.base_species) if lore.found else None
+    if not base or lore.base_species == cid:
+        return ""
+    base_name = base["name"]
+    name = entry["name"]
+    return name[len(base_name):].strip() if name.startswith(base_name + " ") else ""
+
+
 def _stage_blocks(
     record: DesignRecord,
     snapshot: dict[str, Any],
@@ -91,7 +107,11 @@ def _stage_blocks(
         label = STAGE_LABELS[min(index, len(STAGE_LABELS) - 1)]
         if len(record.line) == 1:
             label = "single stage"
-        blocks.append(f"Stage {index + 1} ({label}):\n{injection.block.strip()}")
+        block = injection.block.strip()
+        form = _form_word(cid, entry, snapshot, lore_provider)
+        if form:
+            block += f"\nForm: the {form} form of this creature (the lore above is the base form's)."
+        blocks.append(f"Stage {index + 1} ({label}):\n{block}")
     return "\n\n".join(blocks)
 
 
