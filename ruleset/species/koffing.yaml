@@ -1,30 +1,32 @@
 name: Koffing
 chrooked_id: koffing
 aka: { pokeemerald: SPECIES_KOFFING }
+types: [Poison]
 abilities:
   primary: Levitate
   secondary: Heavy Fumes
-  hidden: Exhaust
-stats: { hp: 46, spd: 49, spe: 40 }
+  hidden: Corrosion
+stats: { hp: 52, atk: 64, def: 85, spa: 64, spd: 53, spe: 42 }
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Poison Gas }
-  - { level: 2, move: Poison Sting }
-  - { level: 4, move: Smog }
-  - { level: 8, move: Smokescreen }
-  - { level: 12, move: Clear Smog }
-  - { level: 15, move: Cross Poison }
-  - { level: 16, move: Assurance }
-  - { level: 20, move: Sludge }
-  - { level: 24, move: Haze }
-  - { level: 28, move: Self-Destruct }
-  - { level: 29, move: Gastric Snare }
-  - { level: 32, move: Sludge Bomb }
-  - { level: 36, move: Toxic }
-  - { level: 38, move: Venom Slam }
-  - { level: 40, move: Belch }
-  - { level: 44, move: Explosion }
-  - { level: 48, move: Memento }
-  - { level: 52, move: Destiny Bond }
-  - { level: 57, move: Gunk Shot }
-  - { level: 64, move: Faeblitz }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Smog }
+  - { level: 12, move: Acid Spray }
+  - { level: 16, move: Clear Smog }
+  - { level: 19, move: Toxic }
+  - { level: 23, move: Self-Destruct }
+  - { level: 26, move: Venoshock }
+  - { level: 30, move: Coil }
+  - { level: 33, move: Acid Armor }
+  - { level: 37, move: Toxic Spikes }
+  - { level: 40, move: Spikes }
+  - { level: 44, move: Stealth Rock }
+  - { level: 47, move: Gastric Snare }
+  - { level: 51, move: Sludge Bomb }
+  - { level: 54, move: Venom Slam }
+  - { level: 58, move: Fire Blast }
+  - { level: 60, move: Confuse Ray }
+  - { level: 62, move: Sludge Wave }
+  - { level: 65, move: Gunk Shot }
+  - { level: 68, move: Belch }
+  - { level: 70, move: Contagion }
+  - { level: 72, move: Explosion }

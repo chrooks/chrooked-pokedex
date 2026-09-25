@@ -1,31 +1,32 @@
 name: Weezing
 chrooked_id: weezing
 aka: { pokeemerald: SPECIES_WEEZING }
+types: [Poison]
 abilities:
   primary: Levitate
   secondary: Heavy Fumes
-  hidden: Exhaust
-stats: { hp: 70, spa: 90, spd: 75 }
+  hidden: Corrosion
+stats: { hp: 75, atk: 90, def: 120, spa: 90, spd: 75, spe: 60 }
 learnset:
-  - { level: 0, move: Double Hit }
-  - { level: 1, move: Smokescreen }
-  - { level: 1, move: Poison Gas }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Smog }
-  - { level: 2, move: Poison Sting }
-  - { level: 3, move: Heat Wave }
-  - { level: 12, move: Clear Smog }
-  - { level: 15, move: Cross Poison }
-  - { level: 16, move: Assurance }
-  - { level: 20, move: Sludge }
-  - { level: 24, move: Haze }
-  - { level: 28, move: Self-Destruct }
-  - { level: 29, move: Gastric Snare }
-  - { level: 32, move: Sludge Bomb }
-  - { level: 38, move: Toxic }
-  - { level: 41, move: Venom Slam }
-  - { level: 44, move: Belch }
-  - { level: 50, move: Explosion }
-  - { level: 56, move: Memento }
-  - { level: 57, move: Gunk Shot }
-  - { level: 62, move: Destiny Bond }
+  - { level: 1, move: Growl }
+  - { level: 5, move: Smog }
+  - { level: 12, move: Acid Spray }
+  - { level: 16, move: Clear Smog }
+  - { level: 19, move: Toxic }
+  - { level: 23, move: Self-Destruct }
+  - { level: 26, move: Venoshock }
+  - { level: 30, move: Coil }
+  - { level: 33, move: Acid Armor }
+  - { level: 37, move: Toxic Spikes }
+  - { level: 40, move: Spikes }
+  - { level: 44, move: Stealth Rock }
+  - { level: 47, move: Gastric Snare }
+  - { level: 51, move: Sludge Bomb }
+  - { level: 54, move: Venom Slam }
+  - { level: 58, move: Fire Blast }
+  - { level: 60, move: Confuse Ray }
+  - { level: 62, move: Sludge Wave }
+  - { level: 65, move: Gunk Shot }
+  - { level: 68, move: Belch }
+  - { level: 70, move: Contagion }
+  - { level: 72, move: Explosion }

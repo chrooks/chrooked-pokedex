@@ -1282,3 +1282,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-23 — Pidgeot
 
 - **Direction:** Esper Wing replaces Dual Wingbeat; Blizzard replaces Brave Bird — both special, both boosted by Updraft, Blizzard never misses under No Guard.; The two profile facts treated as the design axis are (1) Mach-2 wing-power that generates literal windstorms — making wind/wing moves the absolute core of the kit — and (2) the apex-predator talon identity introduced in Stage 2 and sharpened in Stage 3, which pushes a secondary predation/contact-attack lane. Everything else — speed boosts, sand utilities, vision accuracy — orbits those two pillars.
+
+## 2026-09-25 — Weezing
+
+- **Direction:** Kanto owns Koffing. Mixing reactor: Corrosion poisons anything; explosions and hazards restored.; The twin-body mixing-reactor loop is the design axis: Weezing's defining trait is that it continuously cycles toxic gases between its two lobes to amplify their potency, and that escalating toxicity — combined with its explosive payload and garbage-feasting ecology — governs every ability, move, and stat decision. Secondary axis: the explosive self-destruction pressure that builds as gases grow more potent.
+
+## 2026-09-25 — Weezing Galar
+
+- **Direction:** Galar does not own Koffing. BST 510.; The two locked design axes are (1) Neutralizing Gas as the creature's mechanical identity — a field-wide ability suppressor that maps directly to noble-gas chemical inertness and Victorian aristocratic composure — and (2) the pollution-purification paradox: it cleanses the air it breathes yet concentrates those toxins into lethally potent gas clouds, making utility-disruption and status-spreading the twin pillars of its kit.
