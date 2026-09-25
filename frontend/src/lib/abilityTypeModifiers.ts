@@ -14,6 +14,9 @@ export interface AbilityTypeModifier {
   multiplier?: Partial<Record<string, number>>;
   /** Multiplier applied whenever the combined result is already supereffective (>1). */
   supereffectiveMultiplier?: number;
+  /** Types the holder gains on top of its own (Trick-or-Treat style, so a
+      dual-type becomes a triple-type). Read through {@link effectiveTypes}. */
+  addsTypes?: string[];
 }
 
 const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
@@ -48,7 +51,27 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
   filter: { supereffectiveMultiplier: 0.75 },
   "solid rock": { supereffectiveMultiplier: 0.75 },
   "prism armor": { supereffectiveMultiplier: 0.75 },
+  // Custom Ruleset abilities that ADD a type to the holder (mirrored by hand, like
+  // the immunities above). Add a new one whenever the Ruleset introduces another.
+  phantom: { addsTypes: ["Ghost"] }, // "Gains the Ghost type on switch-in" (Trick-or-Treat)
 };
+
+/** The single definition of "what types does this mon battle as": the species'
+    own types, then any the ability adds that it doesn't already have (compared
+    case-insensitively). Always a new array. `ability` null or not type-adding →
+    a copy of `types`. Every defense product and best-STAB offense pass for a mon
+    with a known ability reads this, so a Phantom Rotom Wash defends and attacks
+    as Electric/Water/Ghost — the added type gives STAB, as Trick-or-Treat's does
+    in the games. */
+export function effectiveTypes(
+  types: readonly string[],
+  ability: string | null,
+): string[] {
+  const added = ability ? ABILITY_TYPE_MODIFIERS[ability.toLowerCase()]?.addsTypes : undefined;
+  if (!added) return [...types];
+  const have = new Set(types.map((t) => t.toLowerCase()));
+  return [...types, ...added.filter((t) => !have.has(t.toLowerCase()))];
+}
 
 /** True iff this ability changes at least one type matchup — drives whether
     the toggle is worth offering at all for a given slot. */

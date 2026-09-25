@@ -2,9 +2,10 @@
    typeChartGrid's single-type breakdown used by the Type Chart tab). Defense
    multiplies across both of the species' types (and folds in the selected
    ability, if any); offense takes the BEST of the species' own types per
-   defender, since a dual-type attacker picks whichever STAB move fits. */
+   defender, since a dual-type attacker picks whichever STAB move fits. Both
+   sides read the ability's effectiveTypes, so Phantom adds Ghost to each. */
 
-import { applyAbilityModifier } from "./abilityTypeModifiers";
+import { applyAbilityModifier, effectiveTypes } from "./abilityTypeModifiers";
 import { axisOrder, cellKey, cellMap } from "./typeChartGrid";
 import type { TypeChartCell } from "../types";
 
@@ -41,6 +42,7 @@ export function speciesMatchups(
 ): SpeciesMatchups {
   const axis = axisOrder(cells);
   const byKey = cellMap(cells);
+  const ownTypes = effectiveTypes(types, ability);
 
   const defense: SpeciesDefenseMatchups = {
     weak: [],
@@ -58,7 +60,7 @@ export function speciesMatchups(
   for (const other of axis) {
     let combined = 1;
     let sawDefense = false;
-    for (const ownType of types) {
+    for (const ownType of ownTypes) {
       const cell = byKey.get(cellKey(other, ownType));
       if (cell) {
         combined *= cell.multiplier;
@@ -75,7 +77,7 @@ export function speciesMatchups(
     }
 
     let best: number | null = null;
-    for (const ownType of types) {
+    for (const ownType of ownTypes) {
       const cell = byKey.get(cellKey(ownType, other));
       if (cell) best = best === null ? cell.multiplier : Math.max(best, cell.multiplier);
     }

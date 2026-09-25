@@ -7,6 +7,7 @@ import { DEX_REGISTRY, evalEntries, matchesQuery } from "../../lib/dexFilters";
 import { dexCodec } from "../../lib/dexViewCodec";
 import { cellMap } from "../../lib/typeChartGrid";
 import { teamMatchups, type TeamMember } from "../../lib/teamMatchups";
+import { effectiveTypes } from "../../lib/abilityTypeModifiers";
 import { bringsNewType, teamTypeSet } from "../../lib/teamTypeGap";
 import {
   decodeParty,
@@ -96,8 +97,9 @@ export function TeamTab() {
   }, [party, byId]);
 
   // Every type the party already covers — the "New types only" toggle reads it.
+  // A member's chosen type-adding ability counts (Phantom Rotom covers Ghost).
   const coveredTypes = useMemo(
-    () => teamTypeSet(resolved.map((r) => r.entry)),
+    () => teamTypeSet(resolved.map((r) => ({ types: effectiveTypes(r.entry.types, r.ability) }))),
     [resolved],
   );
 

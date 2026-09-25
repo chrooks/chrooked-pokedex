@@ -10,7 +10,6 @@ import { COLUMNS, EVO_KINDS, evoKind, evoLevel } from "./dexColumns";
 import { CLASS_VALUES, classesOf } from "./dexTags";
 import type { ClassValue } from "./dexTags";
 import { memberDefense, memberOffense } from "./teamMatchups";
-import { applyAbilityModifier } from "./abilityTypeModifiers";
 import type { AbilitySlots } from "../types";
 import {
   applyFilter as applyFilterGeneric,
@@ -143,11 +142,16 @@ function abilityNames(abilities: AbilitySlots): string[] {
     loads (`byKey` null) a matchup operator matches nothing — fail safe, never a
     false positive.
 
-    Defensive operators fold in the species' abilities: a species matches when
+    Matchup operators fold in the species' abilities: a species matches when
     ANY ability it can hold produces that matchup. So a Levitate mon reads as
-    immune to Ground, and a Dry Skin mon (Fire ×1.25) reads as weak to Fire even
-    when its typing alone is neutral. Offense is unmodified — every ability in
-    the modifier table is defensive. */
+    immune to Ground, a Dry Skin mon (Fire ×1.25) reads as weak to Fire even
+    when its typing alone is neutral, and a Phantom mon (adds Ghost) reads as
+    immune to Normal and SE against Ghost.
+
+    `is` stays the species' printed typing (the chips on its row), NOT its
+    ability-added types: it answers "what is this species", not a matchup, and a
+    Rotom Wash matching `Type is Ghost` with no Ghost chip in sight would read as
+    a wrong result. The matchup operators are where battle typing shows up. */
 function typeMatch(
   entry: DexEntry,
   value: string,
@@ -158,31 +162,29 @@ function typeMatch(
     return entry.types.includes(type); // Fire matches Fire/Water
   }
   if (!byKey) return false;
-  const member = { id: entry.chrooked_id, name: entry.name, types: entry.types, ability: null };
-  if (op === "weak" || op === "resists" || op === "immune") {
-    const combined = memberDefense(member, type, byKey);
-    if (combined === null) return false;
-    // The set of multipliers the species can actually reach: one per ability it
-    // can hold (an ability that doesn't touch this type leaves it unchanged). No
-    // matchup-altering ability → just the base typing. Match if ANY qualifies —
-    // so both immunities (Levitate → 0) and added weaknesses (Dry Skin → ×1.25)
-    // surface, while a species whose only ability negates the matchup does not.
-    const names = abilityNames(entry.abilities);
-    const mults =
-      names.length > 0
-        ? names.map((name) => applyAbilityModifier(combined, type, name))
-        : [combined];
-    const qualifies = (mult: number) =>
-      op === "weak" ? mult > 1 : op === "immune" ? mult === 0 : mult > 0 && mult < 1;
-    return mults.some(qualifies);
-  }
-  if (op === "se" || op === "nve" || op === "noeffect") {
-    const best = memberOffense(member, type, byKey);
-    if (best === null) return false;
-    if (op === "se") return best > 1;
-    if (op === "noeffect") return best === 0;
-    return best > 0 && best < 1; // NVE (excludes no-effect)
-  }
+  // One member per ability the species can hold (an ability that doesn't touch
+  // this type leaves the base result). No abilities → just the base typing.
+  // Match if ANY qualifies — so immunities (Levitate → 0), added weaknesses
+  // (Dry Skin → ×1.25), and added types (Phantom → Ghost) all surface, while a
+  // species whose only ability negates the matchup does not.
+  const names = abilityNames(entry.abilities);
+  const members = (names.length > 0 ? names : [null]).map((ability) => ({
+    id: entry.chrooked_id,
+    name: entry.name,
+    types: entry.types,
+    ability,
+  }));
+  const qualifies = (compute: typeof memberDefense, test: (mult: number) => boolean) =>
+    members.some((member) => {
+      const mult = compute(member, type, byKey);
+      return mult !== null && test(mult);
+    });
+  if (op === "weak") return qualifies(memberDefense, (m) => m > 1);
+  if (op === "immune") return qualifies(memberDefense, (m) => m === 0);
+  if (op === "resists") return qualifies(memberDefense, (m) => m > 0 && m < 1);
+  if (op === "se") return qualifies(memberOffense, (m) => m > 1);
+  if (op === "noeffect") return qualifies(memberOffense, (m) => m === 0);
+  if (op === "nve") return qualifies(memberOffense, (m) => m > 0 && m < 1); // excludes no-effect
   return false;
 }
 

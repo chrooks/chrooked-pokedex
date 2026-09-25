@@ -8,7 +8,7 @@
    the member's own types per defender (a dual-type attacker picks its better
    STAB). No React — unit-tested in teamMatchups.test.ts. */
 
-import { applyAbilityModifier } from "./abilityTypeModifiers";
+import { applyAbilityModifier, effectiveTypes } from "./abilityTypeModifiers";
 import { axisOrder, cellKey, cellMap } from "./typeChartGrid";
 import type { TypeChartCell } from "../types";
 
@@ -30,7 +30,8 @@ export type Bucket =
   | "immune";
 
 /** Combined defensive multiplier: `attackType` hitting this member's typing
-    (both types multiplied together), then the ability folded in. null ⇒ the
+    (every effective type multiplied together — a type-adding ability like
+    Phantom makes it a triple-type product), then the ability folded in. null ⇒ the
     chart has no data for any of the member's types (cell renders "no data"). */
 export function memberDefense(
   member: TeamMember,
@@ -39,7 +40,7 @@ export function memberDefense(
 ): number | null {
   let combined = 1;
   let saw = false;
-  for (const own of member.types) {
+  for (const own of effectiveTypes(member.types, member.ability)) {
     const cell = byKey.get(cellKey(attackType, own));
     if (cell) {
       combined *= cell.multiplier;
@@ -51,7 +52,8 @@ export function memberDefense(
 }
 
 /** Best-STAB offensive multiplier: this member attacking `defendType`, taking
-    the best of its own types (a dual-type attacker picks its better STAB).
+    the best of its effective types (a dual-type attacker picks its better STAB;
+    an ability-added type counts as STAB, as Trick-or-Treat's does).
     null ⇒ the chart has no data for any of the member's types. */
 export function memberOffense(
   member: TeamMember,
@@ -59,7 +61,7 @@ export function memberOffense(
   byKey: ReadonlyMap<string, TypeChartCell>,
 ): number | null {
   let best: number | null = null;
-  for (const own of member.types) {
+  for (const own of effectiveTypes(member.types, member.ability)) {
     const cell = byKey.get(cellKey(own, defendType));
     if (cell) best = best === null ? cell.multiplier : Math.max(best, cell.multiplier);
   }

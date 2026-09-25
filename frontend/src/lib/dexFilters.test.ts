@@ -216,6 +216,26 @@ describe("Type matchup operators (weak to / SE against / …)", () => {
     expect(m("immune|Ground")).toBe(true); // via Levitate
     expect(m("weak|Ground")).toBe(true); //   via Sturdy
   });
+
+  it("folds in a type-adding ability — Phantom Rotom Wash battles as Electric/Water/Ghost", () => {
+    const ghostChart = cellMap([
+      cell("Normal", "Electric", 1), cell("Normal", "Water", 1), cell("Normal", "Ghost", 0),
+      cell("Dark", "Electric", 1), cell("Dark", "Water", 1), cell("Dark", "Ghost", 2),
+      cell("Electric", "Ghost", 1), cell("Water", "Ghost", 1), cell("Ghost", "Ghost", 2),
+    ]);
+    const rotom = (primary: string) =>
+      makeEntry({ types: ["Electric", "Water"], abilities: { primary, secondary: null, hidden: null } });
+    const m = (e: DexEntry, v: string) => evalEntries(e, [filter("type", v)], ghostChart);
+    expect(m(rotom("Phantom"), "immune|Normal")).toBe(true);
+    expect(m(rotom("Phantom"), "weak|Dark")).toBe(true);
+    expect(m(rotom("Phantom"), "se|Ghost")).toBe(true); // added type is STAB
+    // `is` stays the printed typing: no Ghost chip, no Ghost match.
+    expect(m(rotom("Phantom"), "is|Ghost")).toBe(false);
+    // A non-type-adding ability leaves the base typing alone.
+    expect(m(rotom("Levitate"), "immune|Normal")).toBe(false);
+    expect(m(rotom("Levitate"), "weak|Dark")).toBe(false);
+    expect(m(rotom("Levitate"), "se|Ghost")).toBe(false);
+  });
 });
 
 describe("appendNameFilter — promote search to a Name pill", () => {

@@ -67,6 +67,44 @@ describe("memberDefense", () => {
   });
 });
 
+describe("type-adding abilities (Phantom → +Ghost)", () => {
+  // Rotom Heat is Electric/Fire; Phantom makes it a triple-type with Ghost.
+  const byKey = cellMap([
+    cell("Normal", "Electric", 1), cell("Normal", "Fire", 1), cell("Normal", "Ghost", 0),
+    cell("Fighting", "Electric", 1), cell("Fighting", "Fire", 1), cell("Fighting", "Ghost", 0),
+    cell("Ground", "Electric", 2), cell("Ground", "Fire", 2), cell("Ground", "Ghost", 1),
+    cell("Bug", "Electric", 1), cell("Bug", "Fire", 0.5), cell("Bug", "Ghost", 0.5),
+    cell("Dark", "Electric", 1), cell("Dark", "Fire", 1), cell("Dark", "Ghost", 2),
+    cell("Electric", "Ghost", 1), cell("Fire", "Ghost", 1), cell("Ghost", "Ghost", 2),
+  ]);
+  const heat = (ability: string | null): TeamMember => ({
+    id: "rotomheat", name: "Rotom Heat", types: ["Electric", "Fire"], ability,
+  });
+
+  it("gains Ghost's Normal and Fighting immunities", () => {
+    expect(memberDefense(heat("Phantom"), "Normal", byKey)).toBe(0);
+    expect(memberDefense(heat("Phantom"), "Fighting", byKey)).toBe(0);
+    expect(memberDefense(heat(null), "Normal", byKey)).toBe(1);
+  });
+
+  it("multiplies all three types together", () => {
+    expect(memberDefense(heat("Phantom"), "Dark", byKey)).toBe(2); // 1 × 1 × 2
+    expect(memberDefense(heat("Phantom"), "Ground", byKey)).toBe(4); // 2 × 2 × 1
+    expect(memberDefense(heat("Phantom"), "Bug", byKey)).toBe(0.25); // 1 × ½ × ½
+  });
+
+  it("counts the added type as STAB on offense", () => {
+    expect(memberOffense(heat("Phantom"), "Ghost", byKey)).toBe(2);
+    expect(memberOffense(heat(null), "Ghost", byKey)).toBe(1);
+  });
+
+  it("leaves a non-type-adding ability's typing unchanged", () => {
+    expect(memberDefense(heat("Flash Fire"), "Normal", byKey)).toBe(1);
+    expect(memberDefense(heat("Flash Fire"), "Bug", byKey)).toBe(0.5);
+    expect(memberOffense(heat("Flash Fire"), "Ghost", byKey)).toBe(1);
+  });
+});
+
 describe("memberOffense", () => {
   it("takes the best STAB of a dual-type attacker", () => {
     // Water→Fire(×2), Grass has no Fire cell → best is ×2.
