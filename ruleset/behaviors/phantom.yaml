@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Phantom
+chrooked_id: phantom
+applies_to: ability
+aka: {  }
+effects:
+  - summary: On entry, the holder gains Ghost as an extra type, as if hit by Trick-or-Treat.
+    trigger: switch-in
+    when: the holder is not already Ghost-type and can change type (not Multitype, RKS System, a crested Silvally, or Terastallized)
+    effect: Add Ghost as a third type on top of the holder's own types, the same added-type slot Trick-or-Treat and Forest's Curse write. Show the ability box and "Ghost type was added to {holder}!". The type counts for type matchups, STAB and every hasType check. It lasts while the holder stays in battle and clears on switch-out (Baton Pass does not pass it). The battle-start lead counts as a switch-in. If the condition fails, nothing happens and no ability box shows.
+test_cases:
+  - given: Rotom-Heat (Electric/Fire) with Phantom leads.
+    expect: "Ability box and \"Ghost type was added to Rotom!\". It is now Electric/Fire/Ghost: Normal and Fighting moves do not affect it."
+  - given: Rotom-Heat with Phantom uses Shadow Ball.
+    expect: Shadow Ball gets 1.5x STAB.
+  - given: Rotom-Heat switches out and back in.
+    expect: Ghost is gone while it is out and is added again on entry.
+  - given: A Ghost-type holder (base Rotom, Electric/Ghost) switches in.
+    expect: Nothing happens. No ability box.
+  - given: The foe uses Forest's Curse on a Phantom holder.
+    expect: Grass replaces the added Ghost (one added-type slot), as vanilla Forest's Curse does after Trick-or-Treat.
+  - given: The foe uses Trick-or-Treat on a Phantom holder.
+    expect: "It fails: the holder already has Ghost."
+  - given: A trainer's AI weighs switching in its Phantom holder.
+    expect: The switch scorer treats the candidate as part Ghost.
+notes:
+  - "Chris, 2026-09-25: approved for the Rotom appliance forms (Heat, Wash, Frost, Fan; Mow later). Gives the forms back the Ghost typing base Rotom has."
+  - "The first of a pattern: abilities that add a type. The Rejuv core holds one generic registry, CHROOKED_ADDED_TYPE (ability => type); a new type-adding ability is one registry line in its own plugin."
+  - "Same added-type slot as vanilla Trick-or-Treat / Forest's Curse (effects[:TemporaryType]). One slot: a later Forest's Curse replaces Ghost with Grass, a later Trick-or-Treat fails. A form change (Mega Evolution) clears the slot, and the vanilla re-run of switch-in abilities after the change adds it again."
+  - Once added, the type stays even if the ability is later suppressed or swapped away, as vanilla Trick-or-Treat's does. The vanilla re-activations of switch-in abilities (Skill Swap, Trace, Transform, boss ability change) apply it again if it is missing.
+  - "AI: the added type lives on the battler, so the AI's type-effectiveness and STAB reads see it once the holder is on the field. For switch scoring, the core prepends PokeBattle_AI#getTypesOnEntry so a candidate is scored with the added type. Not modelled: a candidate that Mega Evolves (the AI's post-Mega re-run clears the slot, the same gap vanilla trainer addType has)."
+engine_hints:
+  essentials: "Rejuv: references/rejuv-harness/chrooked_phantom.rb is one line, CHROOKED_ADDED_TYPE[:PHANTOM] = :GHOST. The core (chrooked_00_core.rb) applies it in the pbAbilitiesOnSwitchIn wrapper: Chrooked.added_type gates on canChangeType? and !hasType? (Trick-or-Treat's pbEffectValid, Battle_MoveEffects.rb:7416), then sets effects[:TemporaryType] (Trick-or-Treat, Battle_MoveEffects.rb:7424), read by Battler#types (Battler.rb:226) and cleared by pbInitEffects (Battler.rb:655). AI: prepend PokeBattle_AI#getTypesOnEntry (Battle_AI.rb:349, called at :10627). Stub check: references/rejuv-harness/addedtype_check.rb."
