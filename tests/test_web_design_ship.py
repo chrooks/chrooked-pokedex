@@ -215,3 +215,32 @@ def test_montext_readback_matches_moveset_abilities_and_types(tmp_path):
     assert out["ok"] and out["ok_count"] == out["total"] == 6
     exp[0]["rows"][1] = (9, "Clamp")
     assert not ds.montext_readback(tmp_path, exp)["ok"]
+
+
+def test_montext_readback_finds_multi_word_symbols(tmp_path):
+    # "Kommo O" is :KOMMOO in the game; the first word alone looked up :KOMMO and
+    # reported "no block matched" on a correct apply. Forms still fall back to
+    # the base symbol ("Rotom Heat" lives under :ROTOM).
+    from chrooked_pokedex.web import design_ship as ds
+    (tmp_path / "patch" / "Definitions").mkdir(parents=True)
+    (tmp_path / "patch" / "Definitions" / "montext.rb").write_text(
+        'if MONHASH.dig(:KOMMOO, "Normal Form")\n'
+        '  MONHASH[:KOMMOO]["Normal Form"][:Moveset] = [[1, :LEER]]\n'
+        'else\n  puts "skip"\nend\n'
+        'if MONHASH.dig(:ROTOM, "Heat Rotom")\n'
+        '  MONHASH[:ROTOM]["Heat Rotom"][:Moveset] = [[1, :CONFUSERAY]]\n'
+        'else\n  puts "skip"\nend\n', encoding="utf-8")
+    exp = [{"id": "kommoo", "name": "Kommo O", "rows": [(1, "Leer")]},
+           {"id": "rotomheat", "name": "Rotom Heat", "rows": [(1, "Confuse Ray")]}]
+    assert ds.montext_readback(tmp_path, exp)["ok"]
+
+
+def test_bad_rows_ignore_evolution_rows_a_design_never_writes():
+    from chrooked_pokedex.web import design_ship as ds
+    report = (
+        "| blocked | evolution | mrmimegalar | MIMEJR::Normal Form | evolution method not renderable |\n"
+        "| blocked | species | mrrime | x | missing |\n"
+    )
+    assert ds._bad_rows(report, ["mrrime", "mrmimegalar"]) == [
+        "| blocked | species | mrrime | x | missing |"
+    ]
