@@ -1,21 +1,28 @@
 name: Slaking
 chrooked_id: slaking
 aka: {  }
+abilities:
+  primary: Truant
+stats: { hp: 150, atk: 140, def: 90, spa: 45, spd: 65, spe: 70 }
 learnset:
-  - { level: 0, move: Swagger }
-  - { level: 1, move: Encore }
-  - { level: 1, move: Yawn }
-  - { level: 1, move: Slack Off }
-  - { level: 1, move: Sucker Punch }
-  - { level: 2, move: Scratch }
-  - { level: 17, move: Amnesia }
-  - { level: 23, move: Covet }
-  - { level: 27, move: Throat Chop }
-  - { level: 29, move: Bail Out }
-  - { level: 30, move: Take Down }
-  - { level: 33, move: Counter }
-  - { level: 36, move: Rampage }
-  - { level: 39, move: Flail }
-  - { level: 45, move: Fling }
-  - { level: 52, move: Mega Kick }
-  - { level: 63, move: Hammer Arm }
+  - { level: 0, move: Slack Off }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Feint }
+  - { level: 9, move: Covet }
+  - { level: 12, move: Fake Out }
+  - { level: 19, move: Yawn }
+  - { level: 23, move: Facade }
+  - { level: 30, move: Encore }
+  - { level: 37, move: Hyper Fang }
+  - { level: 40, move: Taunt }
+  - { level: 44, move: Body Slam }
+  - { level: 47, move: Bulk Up }
+  - { level: 51, move: Rampage }
+  - { level: 54, move: Substitute }
+  - { level: 56, move: Earthquake }
+  - { level: 58, move: Superpower }
+  - { level: 60, move: Amnesia }
+  - { level: 65, move: Rest }
+  - { level: 72, move: Giga Impact }
+  - { level: 74, move: Double-Edge }

@@ -1,17 +1,27 @@
 name: Slakoth
 chrooked_id: slakoth
 aka: {  }
+abilities:
+  primary: Truant
+stats: { hp: 60, atk: 60, def: 60, spa: 35, spd: 35, spe: 30 }
 learnset:
+  - { level: 1, move: Leer }
   - { level: 1, move: Scratch }
-  - { level: 1, move: Yawn }
-  - { level: 6, move: Encore }
-  - { level: 9, move: Slack Off }
-  - { level: 14, move: Covet }
-  - { level: 17, move: Amnesia }
-  - { level: 22, move: Headbutt }
-  - { level: 25, move: Throat Chop }
-  - { level: 29, move: Take Down }
-  - { level: 33, move: Flail }
-  - { level: 38, move: Play Rough }
-  - { level: 46, move: Rampage }
-  - { level: 57, move: Double-Edge }
+  - { level: 5, move: Feint }
+  - { level: 9, move: Covet }
+  - { level: 12, move: Fake Out }
+  - { level: 19, move: Yawn }
+  - { level: 23, move: Facade }
+  - { level: 30, move: Encore }
+  - { level: 37, move: Hyper Fang }
+  - { level: 40, move: Taunt }
+  - { level: 44, move: Body Slam }
+  - { level: 47, move: Bulk Up }
+  - { level: 51, move: Rampage }
+  - { level: 54, move: Substitute }
+  - { level: 56, move: Earthquake }
+  - { level: 58, move: Superpower }
+  - { level: 60, move: Amnesia }
+  - { level: 65, move: Rest }
+  - { level: 72, move: Giga Impact }
+  - { level: 74, move: Double-Edge }
