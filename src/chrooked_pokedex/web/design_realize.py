@@ -179,7 +179,7 @@ def realize(
     # ascent and gap, and Chris's ladder ("Clamp, then Aqua Jet") may break
     # ascent on purpose. The audit still reports what the pin costs.
     rows, pin_notes = apply_pins(rows, pins, pool)
-    rows, space_notes = respace_rows(rows)
+    rows, space_notes = respace_rows(rows, frozenset(p.casefold() for p in pins))
     repair_notes = repair_notes + pin_notes + space_notes
     lint = learnset_repair.audit_draft(
         rows, pool, anchors=anchors, stab_types=inputs["entry"]["types"]
@@ -303,25 +303,36 @@ RESPACE_GAP = 2
 RESPACE_CEILING = 80  # Chris: break the L75 cap before breaking the spacing rule
 
 
-def respace_rows(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[str]]:
+def respace_rows(
+    rows: list[dict[str, Any]], pinned: frozenset[str] = frozenset()
+) -> tuple[list[dict[str, Any]], list[str]]:
     """Final pass: every earned row (L2+) sits at least RESPACE_GAP levels from
     its neighbours, order kept, rows pushed upward, ceiling RESPACE_CEILING.
     Consecutive learns read as noise in the game's reminder screen (first batch:
-    41-47 on Araquanid, 47-49 on Mandibuzz)."""
-    fixed = [r for r in rows if int(r["level"]) <= learnset_repair.ANCHOR_MAX]
-    earned = sorted((dict(r) for r in rows if int(r["level"]) > learnset_repair.ANCHOR_MAX),
+    41-47 on Araquanid, 47-49 on Mandibuzz).
+
+    Pinned moves (casefolded names) never move: the others space around them.
+    A pin is the author's word, and a shared ladder only works if every line
+    keeps it level for level (Rotom forms drifted by one when respace pushed it).
+    """
+    keep = [r for r in rows if int(r["level"]) <= learnset_repair.ANCHOR_MAX
+            or str(r["move"]).casefold() in pinned]
+    pin_levels = {int(r["level"]) for r in keep if int(r["level"]) > learnset_repair.ANCHOR_MAX}
+    earned = sorted((dict(r) for r in rows if r not in keep),
                     key=lambda r: (int(r["level"]), r["move"]))
     notes: list[str] = []
     prev = learnset_repair.ANCHOR_MAX
     for r in earned:
         want = max(int(r["level"]), prev + RESPACE_GAP)
+        while any(abs(want - p) < RESPACE_GAP for p in pin_levels) and want < RESPACE_CEILING:
+            want += 1
         if want > RESPACE_CEILING:
             want = RESPACE_CEILING
         if want != int(r["level"]):
             notes.append(f"respace: {r['move']} L{r['level']} → L{want}")
             r["level"] = want
         prev = want
-    out = fixed + earned
+    out = keep + earned
     out.sort(key=lambda r: (int(r["level"]), r["move"]))
     return out, notes
 

@@ -271,3 +271,16 @@ def test_respace_keeps_two_levels_between_earned_rows():
     levels = [r["level"] for r in out if r["level"] > 1]
     assert all(b - a >= 2 for a, b in zip(levels, levels[1:])), levels
     assert max(levels) <= dr.RESPACE_CEILING and any(n.startswith("respace:") for n in notes)
+
+
+def test_respace_never_moves_a_pinned_row():
+    # A shared ladder pinned across five Rotom forms drifted by one level when
+    # respace pushed pinned rows; the others must space around the pin instead.
+    from chrooked_pokedex.web import design_realize as dr
+    rows = [{"level": 1, "move": "Leer"}, {"level": 46, "move": "A"},
+            {"level": 47, "move": "Thunderbolt"}, {"level": 48, "move": "B"}]
+    out, _ = dr.respace_rows(rows, frozenset({"thunderbolt"}))
+    by_move = {r["move"]: r["level"] for r in out}
+    assert by_move["Thunderbolt"] == 47
+    levels = sorted(r["level"] for r in out if r["level"] > 1)
+    assert all(b - a >= 2 for a, b in zip(levels, levels[1:])), levels
