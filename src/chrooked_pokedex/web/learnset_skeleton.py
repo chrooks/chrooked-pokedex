@@ -80,6 +80,8 @@ _KIT_STARTERS: dict[str, tuple[str, ...]] = {
 # them. (Moved here from suggest.py so the slot builder and the ability
 # shortlist share one set.)
 SIGNATURE_MOVES: frozenset[str] = frozenset({
+    # Added 2026-09-26 — Steam Eruption (Volcanion) offered to Milotic.
+    "steam eruption",
     # Added 2026-09-25 — dropped as borrowed signatures during the Slaking,
     # Kommo-o, Dondozo, Rotom, Mr. Rime, Ceruledge/Armarouge, Lanturn and
     # Farfetch'd passes. Fishious Rend stays on Dondozo as a deliberate anchor.
