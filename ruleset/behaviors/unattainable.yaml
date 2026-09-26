@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Unattainable
+chrooked_id: unattainable
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Contact may infatuate the attacker, regardless of gender.
+    trigger: on-contact
+    when: an opposing Pokémon hits this Pokémon with a damaging contact move and this Pokémon survives the hit
+    effect: "30% chance to infatuate the attacker, exactly as Cute Charm does except that the gender check is removed: same-gender and genderless attackers can be infatuated. Still blocked by Oblivious, Aroma Veil (the attacker's or its partner's), an attacker that is already infatuated or has fainted, Protective Pads, a Substitute, and Z-moves."
+test_cases:
+  - given: a same-gender attacker uses Tackle on the holder and the holder survives
+    expect: 30% of the time the attacker becomes infatuated
+  - given: a genderless attacker (Magnezone) uses a contact move on the holder
+    expect: 30% of the time Magnezone becomes infatuated; the gender gate is gone
+  - given: the attacker has Oblivious, or it or its partner has Aroma Veil
+    expect: never infatuated
+  - given: the attacker uses a non-contact move, or holds Protective Pads
+    expect: never infatuated
+  - given: the attacker is already infatuated
+    expect: nothing changes
+  - given: a foe at +6 Attack uses a contact move on the holder
+    expect: damage is calculated as if the foe's Attack stage were 0 (the Unaware half, from composition)
+notes:
+  - "This spec holds ONLY the gender-free Cute Charm clause. The stat-stage half is Unaware and is declared as composition — ruleset/abilities/unattainable.yaml carries `behaviors: [unattainable, unaware]`, so the holder matches every vanilla Unaware check on its own (ignores the target's Def/SpD/evasion stages when attacking and the attacker's Atk/SpA/accuracy stages when attacked). Change nothing here to change that half."
+  - "Cute Charm is deliberately NOT a composed part: the holder would also roll vanilla's gender-gated 30%, giving opposite-gender attackers two rolls."
+  - "Flavor: a beauty so far out of your league that your boosts don't matter and touching it leaves you smitten. Designed for Milotic."
+engine_hints:
+  essentials: "Rejuv: references/rejuv-harness/chrooked_unattainable.rb. Unaware half is composition — chrooked_zz_zcompose.rb makes the holder a ChrookedAbilitySet of [:UNATTAINABLE, :UNAWARE], so the vanilla `ability == :UNAWARE` sites in Battle_Move.rb (damage stages ~362/382/1462, accuracy ~927/931) and the AI all match. Charm half is a CHROOKED_WHEN_HIT[:UNATTAINABLE] entry: contact (makesContact?), not a Z-move, no Protective Pads, 30% via battle.pbRandom(100), then a copy of pbCanAttract? (Battle_Effects.rb:594) minus its gender line, then pbAttract. Check: docker run --rm -v $PWD/references/rejuv-harness:/h:ro ruby:3.2-slim ruby /h/unattainable_check.rb"
