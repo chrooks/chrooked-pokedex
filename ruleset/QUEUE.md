@@ -1,3 +1,2 @@
 Cetitan
 Lopunny
-Milotic

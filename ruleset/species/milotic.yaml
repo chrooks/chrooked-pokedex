@@ -3,32 +3,35 @@ chrooked_id: milotic
 aka: { pokeemerald: SPECIES_MILOTIC }
 types: [Water, Fairy]
 abilities:
-  secondary: Competitive
-stats: { hp: 100, def: 85, spe: 80 }
+  primary: Marvel Scale
+  secondary: Unattainable
+  hidden: Serene Grace
+stats: { hp: 105, atk: 50, def: 95, spa: 95, spd: 130, spe: 85 }
 learnset:
-  - { level: 0, move: Water Pulse }
-  - { level: 1, move: Wrap }
-  - { level: 1, move: Splash }
-  - { level: 1, move: Flail }
-  - { level: 1, move: Tackle }
-  - { level: 2, move: Water Gun }
-  - { level: 4, move: Disarming Voice }
-  - { level: 8, move: Twister }
-  - { level: 12, move: Aqua Ring }
-  - { level: 14, move: Water Whip }
-  - { level: 15, move: Beguile }
-  - { level: 16, move: Attract }
-  - { level: 20, move: Life Dew }
-  - { level: 24, move: Dragon Tail }
-  - { level: 28, move: Recover }
-  - { level: 29, move: Dazzling Gleam }
-  - { level: 32, move: Aqua Tail }
-  - { level: 36, move: Safeguard }
-  - { level: 40, move: Surf }
-  - { level: 43, move: Moonblast }
-  - { level: 44, move: Rain Dance }
-  - { level: 48, move: Coil }
-  - { level: 52, move: Hydro Pump }
-  - { level: 57, move: Rapture }
-  - { level: 64, move: Tsunami }
+  - { level: 0, move: Sparkling Aria }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Disarming Voice }
+  - { level: 12, move: Water Gun }
+  - { level: 16, move: Fairy Wind }
+  - { level: 19, move: Draining Kiss }
+  - { level: 22, move: Recover }
+  - { level: 24, move: Safeguard }
+  - { level: 27, move: Bubble Beam }
+  - { level: 29, move: Beguile }
+  - { level: 31, move: Calm Mind }
+  - { level: 33, move: Rest }
+  - { level: 35, move: Chilling Water }
+  - { level: 37, move: Alluring Voice }
+  - { level: 39, move: Aqua Ring }
+  - { level: 41, move: Dazzling Gleam }
+  - { level: 44, move: Scald }
+  - { level: 46, move: Ice Beam }
+  - { level: 51, move: Life Dew }
+  - { level: 54, move: Surf }
+  - { level: 56, move: Haze }
+  - { level: 58, move: Moonblast }
+  - { level: 61, move: Hydro Pump }
+  - { level: 68, move: Tsunami }
+  - { level: 75, move: Rapture }
 evolution: { from: Feebas, method: { item: Prism Scale } }
