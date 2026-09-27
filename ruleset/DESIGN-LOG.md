@@ -1354,3 +1354,8 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** Mirror Gyarados BST (560) but as a special utility sponge/tank. Tank spread. Custom combo ability Unattainable: out of your league — Unaware + all-gender Cute Charm. Skip Feebas like Magikarp. Preview correction: dropped Steam Eruption (Volcanion signature), Charge Beam, and Blizzard; freed rows go to utility. Utility fill: Haze, Safeguard, Rest (Marvel Scale loop); Rapture stays the L75 capstone.; The single controlling axis is the Ugly-Duckling transformation: the final stage's entire identity is the absolute inversion of the basic stage — supreme beauty vs. utter shabbiness, calming aura vs. dimwitted passivity, deep-lake majesty vs. polluted-puddle survival. Every mechanical choice flows from that aura of pacifying, radiant beauty and the serpentine aquatic grace of the final form.
 - **New mechanics:** Unattainable (ability): Composed: Unaware (ignores the target's/attacker's stat stage changes) + Cute Charm with no gender gate (30% chance to infatuate a Pokemon that makes contact, regardless of gender).
+
+## 2026-09-27 — Dhelmise line
+
+- **Direction:** learnset-only repass
+- **Corrections:** steel and water coverage

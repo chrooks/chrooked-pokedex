@@ -7,30 +7,26 @@ abilities:
   hidden: Vampiric
 stats: { atk: 135, def: 105, spa: 85 }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Rapid Spin }
-  - { level: 2, move: Lick }
-  - { level: 3, move: Leafage }
-  - { level: 4, move: Astonish }
-  - { level: 8, move: Wrap }
-  - { level: 12, move: Mega Drain }
-  - { level: 15, move: Shadow Claw }
-  - { level: 16, move: Growth }
-  - { level: 17, move: Razor Leaf }
-  - { level: 20, move: Gyro Ball }
-  - { level: 24, move: Switcheroo }
-  - { level: 28, move: Giga Drain }
-  - { level: 29, move: Seed Bomb }
-  - { level: 32, move: Whirlpool }
-  - { level: 36, move: Heavy Slam }
-  - { level: 38, move: Wraithstrike }
-  - { level: 40, move: Body Slam }
-  - { level: 42, move: Interment }
-  - { level: 44, move: Shadow Ball }
-  - { level: 46, move: Reap }
-  - { level: 48, move: Metal Sound }
-  - { level: 50, move: Necrosis }
-  - { level: 52, move: Anchor Shot }
-  - { level: 56, move: Energy Ball }
-  - { level: 60, move: Phantom Force }
-  - { level: 64, move: Power Whip }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Bone Chill }
+  - { level: 9, move: Vine Whip }
+  - { level: 12, move: Shadow Sneak }
+  - { level: 16, move: Razor Leaf }
+  - { level: 19, move: Rapid Spin }
+  - { level: 21, move: Leech Seed }
+  - { level: 23, move: Shadow Claw }
+  - { level: 26, move: Horn Leech }
+  - { level: 30, move: Aqua Cutter }
+  - { level: 33, move: Seed Bomb }
+  - { level: 37, move: Wither Grasp }
+  - { level: 40, move: Iron Head }
+  - { level: 44, move: Liquidation }
+  - { level: 47, move: Anchor Shot }
+  - { level: 51, move: Phantom Force }
+  - { level: 54, move: Anvil Slam }
+  - { level: 58, move: Interment }
+  - { level: 61, move: Poltergeist }
+  - { level: 65, move: Gyro Ball }
+  - { level: 68, move: Pile Driver }
+  - { level: 72, move: Power Whip }
