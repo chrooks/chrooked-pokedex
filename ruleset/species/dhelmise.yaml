@@ -2,7 +2,10 @@ name: Dhelmise
 chrooked_id: dhelmise
 aka: { dex: 781 }
 abilities:
+  primary: Steelworker
   secondary: Hydrophyte
+  hidden: Vampiric
+stats: { atk: 135, def: 105, spa: 85 }
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Rapid Spin }
