@@ -1,0 +1,5 @@
+name: Breadbasket
+chrooked_id: breadbasket
+aka: {  }
+behaviors: [grassysurge, grasspelt]
+description: Field becomes grassy on entry. Defense rises in Grassy Terrain.

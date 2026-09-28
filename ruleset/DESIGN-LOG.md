@@ -1364,3 +1364,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** learnset-only repass
 - **Corrections:** dark type coverage, pure physical
+
+## 2026-09-28 — Cetitan
+
+- **Direction:** Chris: pure Ice; Thick Fat / Slush Rush / Cryomancer; Belly Drum user that separates it from Mamoswine (drum once, sweep with Cryomancer Ice Shard priority, Slush Rush in snow). Belly Drum pinned L44, Icebreaker the L72 capstone. Aqua Jet + Liquidation for Water coverage. Spread A drum tank 170/118/70/35/60/72 = 525.; The design axis is the horn as a cryogenic weapon married to the creature's bulk and blubber-armored endurance. Every offensive pick leans into ice-energy accumulation and freezing power; every defensive pick reflects the thick fat and powerful muscles that let this land-whale shrug off punishment. These two facts — freezing horn and armored mass — determine every slot.
+
+## 2026-09-28 — Lopunny
+
+- **Direction:** Chris: Cute Charm / Striker / Unburden. Mega gets Kickboxer (Striker + Scrappy, composed) at 620 BST (Ruleset base 520 + canon Mega delta), set through the edit route after ship. Kicks now carry the kicking tag. Anchors, pins, and drops as proposed.; The design axis is the tension between cautious evasion and explosive physical retaliation. The creature is built around speed-first safety (bounding away, monitoring surroundings) but transitions into devastating contact-based punishment the moment flight fails — perfectly captured by moves and abilities that reward switching between defensive posture and burst-damage kicking.

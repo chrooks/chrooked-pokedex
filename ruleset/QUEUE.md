@@ -1,3 +1,1 @@
-Cetitan
-Lopunny
 Dachsbun
