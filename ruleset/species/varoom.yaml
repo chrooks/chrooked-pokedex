@@ -1,28 +1,33 @@
 name: Varoom
 chrooked_id: varoom
 aka: { pokeemerald: SPECIES_VAROOM }
+types: [Steel, Poison]
 abilities:
   primary: Filter
   secondary: Motor Drive
-  hidden: Exhaust
+  hidden: Heavy Fumes
+stats: { hp: 45, atk: 70, def: 63, spa: 30, spd: 45, spe: 47 }
 learnset:
-  - { level: 1, move: Lick }
-  - { level: 1, move: Poison Gas }
-  - { level: 2, move: Metal Claw }
-  - { level: 3, move: Poison Sting }
-  - { level: 4, move: Smog }
-  - { level: 7, move: Taunt }
-  - { level: 10, move: Assurance }
-  - { level: 13, move: Sludge }
-  - { level: 15, move: Smart Strike }
-  - { level: 17, move: Gyro Ball }
-  - { level: 18, move: Cross Poison }
-  - { level: 21, move: Headbutt }
-  - { level: 25, move: Screech }
-  - { level: 28, move: Iron Head }
-  - { level: 32, move: Swagger }
-  - { level: 36, move: Poison Jab }
-  - { level: 38, move: Venom Slam }
-  - { level: 41, move: Uproar }
-  - { level: 46, move: Spin Out }
-  - { level: 50, move: Gunk Shot }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Tackle }
+  - { level: 5, move: Bullet Punch }
+  - { level: 9, move: Poison Tail }
+  - { level: 12, move: Metal Claw }
+  - { level: 16, move: Taunt }
+  - { level: 19, move: Rapid Spin }
+  - { level: 23, move: Smart Strike }
+  - { level: 26, move: Cross Poison }
+  - { level: 30, move: Clear Smog }
+  - { level: 33, move: Surge Tackle }
+  - { level: 35, move: Parting Shot }
+  - { level: 37, move: Poison Jab }
+  - { level: 40, move: Iron Head }
+  - { level: 44, move: Lightning Slam }
+  - { level: 47, move: Shift Gear }
+  - { level: 50, move: Ice Spinner }
+  - { level: 52, move: Venom Slam }
+  - { level: 55, move: Magnet Rise }
+  - { level: 58, move: Spin Out }
+  - { level: 61, move: Gunk Shot }
+  - { level: 65, move: Double-Edge }
+  - { level: 68, move: Pile Driver }

@@ -1359,3 +1359,8 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 
 - **Direction:** learnset-only repass
 - **Corrections:** steel and water coverage
+
+## 2026-09-28 — Revavroom line
+
+- **Direction:** learnset-only repass
+- **Corrections:** dark type coverage, pure physical
