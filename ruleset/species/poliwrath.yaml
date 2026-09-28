@@ -2,9 +2,10 @@ name: Poliwrath
 chrooked_id: poliwrath
 aka: { pokeemerald: SPECIES_POLIWRATH }
 abilities:
-  secondary: Hydrate
+  primary: Water Absorb
+  secondary: Iron Fist
   hidden: Downpour
-stats: { atk: 95, def: 100, spd: 95 }
+stats: { hp: 100, atk: 105, spa: 55, spd: 100 }
 learnset:
   - { level: 0, move: Dynamic Punch }
   - { level: 1, move: Belly Drum }
@@ -31,3 +32,4 @@ learnset:
   - { level: 57, move: Close Combat }
   - { level: 60, move: Wave Crash }
   - { level: 64, move: Tsunami }
+evolution: { from: Poliwhirl, method: { essentials: Item, param: WATERSTONE } }
