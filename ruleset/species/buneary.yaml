@@ -1,21 +1,35 @@
 name: Buneary
 chrooked_id: buneary
 aka: { pokeemerald: SPECIES_BUNEARY }
+abilities:
+  primary: Cute Charm
+  secondary: Striker
+  hidden: Unburden
+stats: { hp: 55, atk: 66, def: 44, spa: 44, spd: 56, spe: 85 }
 learnset:
+  - { level: 1, move: Baby-Doll Eyes }
   - { level: 1, move: Pound }
-  - { level: 4, move: Defense Curl }
-  - { level: 8, move: Glitter Tap }
-  - { level: 12, move: After You }
-  - { level: 16, move: Quick Attack }
-  - { level: 20, move: Double Kick }
-  - { level: 24, move: Charm }
-  - { level: 29, move: Headbutt }
-  - { level: 32, move: Take Down }
-  - { level: 34, move: One-Inch Punch }
-  - { level: 36, move: Agility }
-  - { level: 38, move: Rampage }
-  - { level: 40, move: Entrainment }
-  - { level: 44, move: Flatter }
-  - { level: 48, move: Bounce }
-  - { level: 52, move: Healing Wish }
-  - { level: 57, move: Double-Edge }
+  - { level: 5, move: Covet }
+  - { level: 9, move: Mach Punch }
+  - { level: 12, move: Fake Out }
+  - { level: 19, move: Quick Attack }
+  - { level: 21, move: Healing Wish }
+  - { level: 23, move: Rapid Spin }
+  - { level: 25, move: Knock Off }
+  - { level: 27, move: U-turn }
+  - { level: 29, move: Double Kick }
+  - { level: 31, move: Ice Punch }
+  - { level: 33, move: Bounce }
+  - { level: 35, move: Facade }
+  - { level: 37, move: Rolling Kick }
+  - { level: 39, move: Trop Kick }
+  - { level: 41, move: Triple Kick }
+  - { level: 44, move: Extreme Speed }
+  - { level: 47, move: Heel Drop }
+  - { level: 49, move: Sky Uppercut }
+  - { level: 51, move: Rampage }
+  - { level: 54, move: Jump Kick }
+  - { level: 61, move: Axe Kick }
+  - { level: 65, move: Close Combat }
+  - { level: 68, move: Last Resort }
+  - { level: 72, move: High Jump Kick }

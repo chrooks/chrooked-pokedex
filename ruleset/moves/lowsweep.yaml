@@ -1,0 +1,12 @@
+name: Low Sweep
+chrooked_id: lowsweep
+aka: { pokeemerald: MOVE_LOW_SWEEP }
+type: Fighting
+category: physical
+power: 65
+accuracy: 100
+pp: 20
+description: Attacks the foe's legs lowering its Speed.
+additional_effects:
+  - { effect: spd_minus_1, chance: 100 }
+flags: [contact, kicking]

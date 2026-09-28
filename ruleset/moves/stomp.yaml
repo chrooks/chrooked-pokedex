@@ -1,0 +1,12 @@
+name: Stomp
+chrooked_id: stomp
+aka: { pokeemerald: MOVE_STOMP }
+type: Normal
+category: physical
+power: 65
+accuracy: 100
+pp: 20
+description: Stomps the enemy with a big foot. May cause flinching.
+additional_effects:
+  - { effect: flinch, chance: 30 }
+flags: [contact, kicking]
