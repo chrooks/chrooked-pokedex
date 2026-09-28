@@ -1,0 +1,12 @@
+name: Rolling Kick
+chrooked_id: rollingkick
+aka: { pokeemerald: MOVE_ROLLING_KICK }
+type: Fighting
+category: physical
+power: 60
+accuracy: 85
+pp: 15
+description: A fast kick delivered from a rapid spin.
+additional_effects:
+  - { effect: flinch, chance: 30 }
+flags: [contact, kicking]

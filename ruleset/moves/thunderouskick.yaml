@@ -1,0 +1,12 @@
+name: Thunderous Kick
+chrooked_id: thunderouskick
+aka: { pokeemerald: MOVE_THUNDEROUS_KICK }
+type: Fighting
+category: physical
+power: 90
+accuracy: 100
+pp: 10
+description: Uses a lightning-like kick to hit. Lowers foe's Defense.
+additional_effects:
+  - { effect: def_minus_1, chance: 100 }
+flags: [contact, kicking]

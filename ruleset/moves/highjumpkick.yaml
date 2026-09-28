@@ -1,0 +1,10 @@
+name: High Jump Kick
+chrooked_id: highjumpkick
+aka: { pokeemerald: MOVE_HIGH_JUMP_KICK }
+type: Fighting
+category: physical
+power: 130
+accuracy: 90
+pp: 10
+description: A jumping knee kick. If it misses, the user is hurt.
+flags: [contact, kicking]

@@ -1,0 +1,12 @@
+name: Trop Kick
+chrooked_id: tropkick
+aka: { pokeemerald: MOVE_TROP_KICK }
+type: Grass
+category: physical
+power: 70
+accuracy: 100
+pp: 15
+description: An intense kick from the tropics. Lowers Attack.
+additional_effects:
+  - { effect: atk_minus_1, chance: 100 }
+flags: [contact, kicking]

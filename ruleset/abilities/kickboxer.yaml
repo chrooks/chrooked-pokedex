@@ -1,0 +1,5 @@
+name: Kickboxer
+chrooked_id: kickboxer
+aka: {  }
+behaviors: [striker, scrappy]
+description: Kicks are boosted 30%. Normal and Fighting moves hit Ghost types.

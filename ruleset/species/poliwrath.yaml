@@ -7,29 +7,28 @@ abilities:
   hidden: Downpour
 stats: { hp: 100, atk: 105, spa: 55, spd: 100 }
 learnset:
-  - { level: 0, move: Dynamic Punch }
-  - { level: 1, move: Belly Drum }
-  - { level: 1, move: Rain Dance }
-  - { level: 1, move: Circle Throw }
-  - { level: 1, move: Hypnosis }
-  - { level: 2, move: Rock Smash }
-  - { level: 3, move: Pound }
-  - { level: 4, move: Water Gun }
-  - { level: 5, move: Mud Shot }
-  - { level: 6, move: Bubble Beam }
-  - { level: 7, move: Earth Power }
-  - { level: 8, move: Bail Out }
-  - { level: 9, move: Hydro Pump }
-  - { level: 10, move: Body Slam }
-  - { level: 15, move: Undertow }
-  - { level: 16, move: Brick Break }
-  - { level: 26, move: Water Whip }
-  - { level: 29, move: Aqua Tail }
-  - { level: 31, move: Double-Edge }
-  - { level: 45, move: Maelstrom }
-  - { level: 46, move: One-Inch Punch }
-  - { level: 48, move: Cross Chop }
-  - { level: 57, move: Close Combat }
-  - { level: 60, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 0, move: Belly Drum }
+  - { level: 1, move: Leer }
+  - { level: 1, move: Pound }
+  - { level: 5, move: Undertow }
+  - { level: 9, move: Rain Dance }
+  - { level: 12, move: Clod Toss }
+  - { level: 16, move: Hypnosis }
+  - { level: 20, move: Bail Out }
+  - { level: 23, move: Water Whip }
+  - { level: 25, move: Brick Break }
+  - { level: 30, move: Bulldoze }
+  - { level: 33, move: Body Press }
+  - { level: 37, move: Liquidation }
+  - { level: 40, move: Body Slam }
+  - { level: 43, move: Jet Punch }
+  - { level: 45, move: Drain Punch }
+  - { level: 48, move: Waterfall }
+  - { level: 51, move: Maelstrom }
+  - { level: 54, move: Ice Punch }
+  - { level: 58, move: One-Inch Punch }
+  - { level: 61, move: Dynamic Punch }
+  - { level: 65, move: Earthquake }
+  - { level: 68, move: Wave Crash }
+  - { level: 72, move: Close Combat }
 evolution: { from: Poliwhirl, method: { essentials: Item, param: WATERSTONE } }

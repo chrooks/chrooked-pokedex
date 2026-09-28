@@ -1,0 +1,10 @@
+name: Jump Kick
+chrooked_id: jumpkick
+aka: { pokeemerald: MOVE_JUMP_KICK }
+type: Fighting
+category: physical
+power: 100
+accuracy: 95
+pp: 10
+description: A strong jumping kick. May miss and hurt the kicker.
+flags: [contact, kicking]

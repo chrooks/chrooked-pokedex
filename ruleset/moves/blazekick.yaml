@@ -1,0 +1,12 @@
+name: Blaze Kick
+chrooked_id: blazekick
+aka: { pokeemerald: MOVE_BLAZE_KICK }
+type: Fire
+category: physical
+power: 85
+accuracy: 90
+pp: 10
+description: A kick with a high critical- hit ratio. May cause a burn.
+additional_effects:
+  - { effect: burn, chance: 10 }
+flags: [contact, kicking]
