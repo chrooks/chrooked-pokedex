@@ -1,24 +1,34 @@
 name: Cetoddle
 chrooked_id: cetoddle
 aka: { dex: 974 }
+abilities:
+  primary: Thick Fat
+  secondary: Slush Rush
+  hidden: Cryomancer
+stats: { hp: 109, atk: 76, def: 45, spa: 23, spd: 39, spe: 46 }
 learnset:
+  - { level: 1, move: Growl }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Powder Snow }
-  - { level: 2, move: Ice Ball }
-  - { level: 6, move: Growl }
-  - { level: 7, move: Flash Freeze }
-  - { level: 9, move: Echoed Voice }
-  - { level: 12, move: Ice Shard }
-  - { level: 15, move: Rest }
-  - { level: 16, move: Ice Punch }
-  - { level: 19, move: Take Down }
-  - { level: 25, move: Flail }
-  - { level: 27, move: Avalanche }
-  - { level: 31, move: Bounce }
-  - { level: 36, move: Body Slam }
-  - { level: 40, move: Amnesia }
-  - { level: 43, move: Ice Spinner }
-  - { level: 44, move: Ice Hammer }
-  - { level: 49, move: Double-Edge }
-  - { level: 53, move: Blizzard }
-  - { level: 64, move: Icebreaker }
+  - { level: 5, move: Ice Ball }
+  - { level: 13, move: Aqua Jet }
+  - { level: 15, move: Ice Shard }
+  - { level: 19, move: Yawn }
+  - { level: 22, move: Snowscape }
+  - { level: 24, move: Icefall }
+  - { level: 26, move: Razor Shell }
+  - { level: 30, move: Icy Wind }
+  - { level: 32, move: Ice Fang }
+  - { level: 34, move: Icicle Crash }
+  - { level: 37, move: Horn Attack }
+  - { level: 40, move: Body Slam }
+  - { level: 44, move: Belly Drum }
+  - { level: 46, move: Liquidation }
+  - { level: 48, move: Icicle Spear }
+  - { level: 50, move: Heavy Slam }
+  - { level: 52, move: Glacial Crush }
+  - { level: 54, move: Earthquake }
+  - { level: 56, move: Ice Hammer }
+  - { level: 58, move: Rest }
+  - { level: 62, move: Sleep Talk }
+  - { level: 65, move: Megahorn }
+  - { level: 72, move: Icebreaker }
