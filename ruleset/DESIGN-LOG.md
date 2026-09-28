@@ -1372,3 +1372,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-28 — Lopunny
 
 - **Direction:** Chris: Cute Charm / Striker / Unburden. Mega gets Kickboxer (Striker + Scrappy, composed) at 620 BST (Ruleset base 520 + canon Mega delta), set through the edit route after ship. Kicks now carry the kicking tag. Anchors, pins, and drops as proposed.; The design axis is the tension between cautious evasion and explosive physical retaliation. The creature is built around speed-first safety (bounding away, monitoring surroundings) but transitions into devastating contact-based punishment the moment flight fails — perfectly captured by moves and abilities that reward switching between defensive posture and burst-damage kicking.
+
+## 2026-09-28 — Dachsbun
+
+- **Direction:** Chris: Normal/Fairy. Well-Baked Body / Breadbasket (Grassy Surge + Grass Pelt, composed) / Aroma Veil. Fairy physical ladder (Glitter Tap, Cutsie Slap, Play Rough, Starfall Slam, Faeblitz capstone). 510 BST, fast bulky support with high Defense: 80/75/120/40/85/110. Body Press + Iron Defense use the crust; Grassy Glide rides its own terrain.; The two interlocking design axes are (1) the Maillard reaction / baking chemistry — the creature's skin hardens and browns under heat, directly expressed through its signature Well-Baked Body and a broader fire-immunity/empowerment kit — and (2) active-yeast fermentation — its breath and aura enrich the field, expressed through Grass-terrain support, aroma utility, and HP-recovery tools that mirror a leavening, rising quality.
