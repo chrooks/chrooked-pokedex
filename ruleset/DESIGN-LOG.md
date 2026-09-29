@@ -1376,3 +1376,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-28 — Dachsbun
 
 - **Direction:** Chris: Normal/Fairy. Well-Baked Body / Breadbasket (Grassy Surge + Grass Pelt, composed) / Aroma Veil. Fairy physical ladder (Glitter Tap, Cutsie Slap, Play Rough, Starfall Slam, Faeblitz capstone). 510 BST, fast bulky support with high Defense: 80/75/120/40/85/110. Body Press + Iron Defense use the crust; Grassy Glide rides its own terrain.; The two interlocking design axes are (1) the Maillard reaction / baking chemistry — the creature's skin hardens and browns under heat, directly expressed through its signature Well-Baked Body and a broader fire-immunity/empowerment kit — and (2) active-yeast fermentation — its breath and aura enrich the field, expressed through Grass-terrain support, aroma utility, and HP-recovery tools that mirror a leavening, rising quality.
+
+## 2026-09-29 — Greninja
+
+- **Direction:** Glass-cannon ninja striker; shuriken identity; U-turn is the hit-and-vanish.; The design axis is SPEED + WATER SHURIKEN PRECISION. Every lore beat — cleaving metal with thrown water, scaling 2,000-ft towers in a minute, running on water, appearing/vanishing with ninja grace — points to a glass-cannon ranged striker that wins through unmatched Speed, multi-hit Water projectile STAB, and Dark-type thief flavor. The foam-bubble defensive identity of Stage 1 survives only as a faint utility thread; by Stage 3 it is fully subordinated to the ninja assassin identity.
+
+## 2026-09-29 — Gourgeist Average
+
+- **Direction:** Lantern psychopomp; physical wall-breaker; BST 510 matches Trevenant. Size forms mirrored after ship.; The design axis is the dual nature of Gourgeist as a haunted lantern and a sadistic psychopomp: it is simultaneously a vessel of imprisoned souls (defensive, trapping, cursing) and an active nocturnal predator that sings with joy at suffering and physically ensnares prey with its wax-drip hair arms. Every ability and move choice flows from either the 'lantern full of trapped spirits' imagery or the 'new-moon door-knocker who drags you to the afterlife' behavior.
