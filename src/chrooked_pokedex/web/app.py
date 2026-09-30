@@ -43,7 +43,7 @@ from . import lore as loremod
 from . import readback as readbackmod
 from . import snapshot as snapmod
 from . import suggest as suggestmod
-from . import save_sync
+from . import rejuv_save, save_sync
 from . import targets as targetsmod
 
 # The learnset pacing-band rubric — a single JSON source of truth served to the
@@ -1518,7 +1518,7 @@ def create_app(
         try:
             target = registry.get(target_id)
             effective, overlay = _display_effective(target)
-            return targetsmod.target_dex(
+            entries = targetsmod.target_dex(
                 target,
                 effective,
                 app.state.targets_state,
@@ -1527,6 +1527,15 @@ def create_app(
             )
         except targetsmod.TargetError as error:
             raise _target_error(error) from error
+        if target.engine != "rejuv":
+            return entries
+        # The Syncthing-mirrored save is read fresh each load, so saving in-game
+        # is the whole "upload". No readable save -> no `caught` key, no filter.
+        save = rejuv_save.read_caught()
+        if not save["available"]:
+            return entries
+        caught = set(save["caught"])
+        return [{**entry, "caught": entry["chrooked_id"] in caught} for entry in entries]
 
     @app.get("/api/targets/{target_id}/abilities")
     def get_target_abilities(target_id: str) -> list[dict[str, Any]]:

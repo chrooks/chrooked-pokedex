@@ -18,6 +18,8 @@ type Props = {
   sort: SortKey[];
   hidden: ColumnKey[];
   layout: DexLayout;
+  /** True when the loaded dex carries save-derived `caught` flags. */
+  hasCaught: boolean;
   onChange: (patch: DexViewPatch) => void;
 };
 
@@ -30,13 +32,15 @@ const TOGGLEABLE = COLUMNS.filter((c) => !c.locked).map((c) => ({
   label: c.label,
 }));
 
+const DEFS_WITHOUT_CAUGHT = DEX_REGISTRY.defs.filter((def) => def.field !== "caught");
+
 /**
  * The control stack above the dex, a thin dex binding of the shared
  * EntityControls. The filter builder applies to both views; the sort row and
  * column toggles are table-only (the grid is dex-ordered and column-less).
  * Switching grid→table preserves filters and reveals the rest.
  */
-export function DexControls({ filter, sort, hidden, layout, onChange }: Props) {
+export function DexControls({ filter, sort, hidden, layout, hasCaught, onChange }: Props) {
   const isTable = layout === "table";
 
   // The generic patch carries `string` keys; narrow them back to the dex's
@@ -53,7 +57,7 @@ export function DexControls({ filter, sort, hidden, layout, onChange }: Props) {
     <EntityControls
       idPrefix="dexc"
       ariaLabel="Dex view controls"
-      defs={DEX_REGISTRY.defs}
+      defs={hasCaught ? DEX_REGISTRY.defs : DEFS_WITHOUT_CAUGHT}
       sortable={isTable ? SORTABLE : []}
       columns={isTable ? TOGGLEABLE : []}
       filter={filter}

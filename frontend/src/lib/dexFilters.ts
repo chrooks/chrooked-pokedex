@@ -91,6 +91,9 @@ export function buildFilterDefs(_entries: DexEntry[]): FilterDef[] {
       method: "select",
       values: ["Edited", "Not edited"],
     },
+    // Only a Rejuv dex with a readable synced save carries `caught`; DexControls
+    // hides this def elsewhere, where it would match nothing.
+    { field: "caught", label: "Caught", method: "select", values: ["Caught", "Not caught"] },
     { field: "name", label: "Name", method: "text" },
     { field: "abilities", label: "Abilities", method: "text" },
     { field: "moves", label: "Moves", method: "text" },
@@ -198,6 +201,9 @@ function makeSelectMatch(byKey: ReadonlyMap<string, TypeChartCell> | null) {
     }
     if (field === "evolution") {
       return evoKind(entry) === value;
+    }
+    if (field === "caught") {
+      return entry.caught === (value === "Caught");
     }
     if (field === "edited") {
       return value === "Edited" ? isEdited(entry) : !isEdited(entry);

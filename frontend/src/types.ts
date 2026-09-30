@@ -91,6 +91,9 @@ export interface DexEntry {
       that has a bound Override namespace). Drives the per-field "this target only"
       badge. Absent on the Canon dex and on targets with no namespace. */
   target_overridden_fields?: OverridableField[];
+  /** Owned in the newest Syncthing-mirrored Rejuv save. Present only on a Rejuv
+      target dex whose save parsed; drives the Caught filter. */
+  caught?: boolean;
 }
 
 /** The raw Ruleset Override for one species (overrides-only), as returned by

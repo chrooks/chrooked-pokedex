@@ -66,6 +66,7 @@ export function DexView({
         sort={sort}
         hidden={hidden}
         layout={layout}
+        hasCaught={resource.data?.some((entry) => entry.caught !== undefined) ?? false}
         onChange={onChange}
       />
       <div className="dex-screen__view">
