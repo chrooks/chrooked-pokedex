@@ -4,26 +4,29 @@ aka: { pokeemerald: SPECIES_JOLTIK }
 types: [Bug, Electric]
 abilities:
   primary: Web Weaver
-  secondary: Carnivore
-  hidden: Swarm
-stats: { atk: 50, spa: 75, spe: 72 }
+  secondary: Compound Eyes
+  hidden: Electromorphosis
+stats: { hp: 50, atk: 50, def: 50, spa: 75, spd: 50, spe: 72 }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Sticky Web }
-  - { level: 1, move: Struggle Bug }
-  - { level: 1, move: Thunder Shock }
-  - { level: 8, move: Infestation }
-  - { level: 13, move: Shock Wave }
-  - { level: 17, move: Thunder Wave }
-  - { level: 22, move: Electroweb }
-  - { level: 26, move: Toxic Thread }
-  - { level: 30, move: Signal Beam }
-  - { level: 33, move: Venoshock }
-  - { level: 35, move: Agility }
-  - { level: 36, move: Bug Buzz }
-  - { level: 40, move: Discharge }
-  - { level: 46, move: Giga Drain }
-  - { level: 50, move: Antennae Blast }
-  - { level: 57, move: Zap Cannon }
-  - { level: 60, move: Drone Chorus }
-  - { level: 64, move: Thunder }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: String Shot }
+  - { level: 5, move: Thunder Shock }
+  - { level: 9, move: Charge Beam }
+  - { level: 12, move: Infestation }
+  - { level: 16, move: Struggle Bug }
+  - { level: 19, move: Thunder Wave }
+  - { level: 23, move: Silver Wind }
+  - { level: 26, move: Electroweb }
+  - { level: 30, move: Parabolic Charge }
+  - { level: 33, move: Short Circuit }
+  - { level: 37, move: Volt Switch }
+  - { level: 40, move: Signal Beam }
+  - { level: 42, move: Agility }
+  - { level: 44, move: Bug Buzz }
+  - { level: 46, move: Discharge }
+  - { level: 48, move: Thunderbolt }
+  - { level: 52, move: Antennae Blast }
+  - { level: 58, move: Charge }
+  - { level: 64, move: Drone Chorus }
+  - { level: 68, move: Zap Cannon }
+  - { level: 72, move: Thunder }

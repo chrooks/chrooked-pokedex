@@ -1384,3 +1384,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-09-29 — Gourgeist Average
 
 - **Direction:** Lantern psychopomp; physical wall-breaker; BST 510 matches Trevenant. Size forms mirrored after ship.; The design axis is the dual nature of Gourgeist as a haunted lantern and a sadistic psychopomp: it is simultaneously a vessel of imprisoned souls (defensive, trapping, cursing) and an active nocturnal predator that sings with joy at suffering and physically ensnares prey with its wax-drip hair arms. Every ability and move choice flows from either the 'lantern full of trapped spirits' imagery or the 'new-moon door-knocker who drags you to the afterlife' behavior.
+
+## 2026-10-01 — Galvantula
+
+- **Direction:** Chris: trio Web Weaver / Compound Eyes / Electromorphosis, anchors and pins as proposed. More powerful inaccurate moves in lore for Compound Eyes (Charge Beam, Antennae Blast, Drone Chorus alongside Thunder and Zap Cannon). Short Circuit (70 BP, doubles on a paralyzed target) closes the paralysis loop. Thunder Cage left out as Regieleki's signature.; The design axis is the combination of 'electrified web as both trap and barrier' and 'paralysis-through-contact silk.' Every ability and move choice is evaluated against: (1) the creature's identity as a web-laying electric ambush predator, and (2) its defensive use of charged silk threads that stun anything that touches them.
