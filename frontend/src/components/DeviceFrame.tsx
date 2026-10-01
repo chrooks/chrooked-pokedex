@@ -59,6 +59,11 @@ type Props = {
   /** Expand every dex match to its whole evolution line. */
   evoLine: boolean;
   onEvoLine: (on: boolean) => void;
+  /** Whether the loaded dex carries save-derived `caught` flags. */
+  hasCaught: boolean;
+  /** Keep only species owned in the synced Rejuv save. */
+  caughtOnly: boolean;
+  onCaughtOnly: (on: boolean) => void;
   /** Keep the search's live Name filter pill as a permanent one (Enter). */
   onSearchEnter: () => void;
   layout: DexLayout;
@@ -98,6 +103,9 @@ export function DeviceFrame({
   onEditedOnly,
   evoLine,
   onEvoLine,
+  hasCaught,
+  caughtOnly,
+  onCaughtOnly,
   onSearchEnter,
   layout,
   onLayout,
@@ -126,6 +134,9 @@ export function DeviceFrame({
       onEditedOnly={onEditedOnly}
       evoLine={evoLine}
       onEvoLine={onEvoLine}
+      hasCaught={hasCaught}
+      caughtOnly={caughtOnly}
+      onCaughtOnly={onCaughtOnly}
       layout={layout}
       onLayout={onLayout}
     />
@@ -292,6 +303,9 @@ function DexFilters({
   onEditedOnly,
   evoLine,
   onEvoLine,
+  hasCaught,
+  caughtOnly,
+  onCaughtOnly,
   layout,
   onLayout,
 }: {
@@ -300,6 +314,9 @@ function DexFilters({
   onEditedOnly: (on: boolean) => void;
   evoLine: boolean;
   onEvoLine: (on: boolean) => void;
+  hasCaught: boolean;
+  caughtOnly: boolean;
+  onCaughtOnly: (on: boolean) => void;
   layout: DexLayout;
   onLayout: (layout: DexLayout) => void;
 }) {
@@ -329,6 +346,20 @@ function DexFilters({
         >
           <span className="device__filter-lamp" aria-hidden="true" />
           Whole evo line
+        </button>
+      )}
+
+      {isDex && hasCaught && (
+        <button
+          type="button"
+          className="device__filter"
+          data-on={caughtOnly}
+          aria-pressed={caughtOnly}
+          title="Species owned in your newest synced Rejuvenation save"
+          onClick={() => onCaughtOnly(!caughtOnly)}
+        >
+          <span className="device__filter-lamp" aria-hidden="true" />
+          Caught only
         </button>
       )}
 

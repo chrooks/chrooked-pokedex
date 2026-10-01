@@ -118,6 +118,8 @@ export default function App() {
   }, [patch, activeTarget]);
 
   const all = useMemo(() => dex.data ?? [], [dex.data]);
+  // Only a Rejuv dex with a readable synced save carries `caught`.
+  const hasCaught = useMemo(() => all.some((entry) => entry.caught !== undefined), [all]);
   const editedCount = useMemo(() => all.filter(isEdited).length, [all]);
 
   // A party id that no longer resolves against the active dex is a phantom: it
@@ -177,6 +179,9 @@ export default function App() {
     if (view.editedOnly) {
       list = list.filter(isEdited);
     }
+    if (view.caughtOnly && hasCaught) {
+      list = list.filter((entry) => entry.caught === true);
+    }
     if (view.filter.length) {
       list = list.filter((entry) => evalEntries(entry, view.filter, chartByKey));
     }
@@ -186,7 +191,7 @@ export default function App() {
       list = expandEvoLines(list, all);
     }
     return list;
-  }, [all, view.editedOnly, view.filter, view.evoLine, chartByKey]);
+  }, [all, view.editedOnly, view.caughtOnly, hasCaught, view.filter, view.evoLine, chartByKey]);
 
   // Both grid and table honor the multi-key sort spec (an empty spec is a stable
   // no-op, so an unsorted view keeps dex order). Only the visible view's list is
@@ -561,6 +566,9 @@ export default function App() {
       onEditedOnly={(editedOnly) => update({ editedOnly })}
       evoLine={view.evoLine}
       onEvoLine={(evoLine) => update({ evoLine })}
+      hasCaught={hasCaught}
+      caughtOnly={view.caughtOnly}
+      onCaughtOnly={(caughtOnly) => update({ caughtOnly })}
       onSearchEnter={handleSearchEnter}
       layout={view.layout}
       onLayout={(layout) => update({ layout })}

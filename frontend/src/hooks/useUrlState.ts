@@ -27,6 +27,8 @@ export interface ViewState {
   editedOnly: boolean;
   /** Expand every match to its whole evolution line (dex only). */
   evoLine: boolean;
+  /** Keep only species owned in the synced Rejuv save (Rejuv dex only). */
+  caughtOnly: boolean;
   selected: string | null;
   /** How the open species renders: the side panel (default) or full-page. */
   detail: "panel" | "full";
@@ -95,6 +97,7 @@ function readState(): ViewState {
     query: params.get("q") ?? "",
     editedOnly: params.get("edited") === "1",
     evoLine: params.get("line") === "1",
+    caughtOnly: params.get("caught") === "1",
     selected: params.get("id"),
     detail: params.get("detail") === "full" ? "full" : "panel",
     layout: params.get("view") === "table" ? "table" : "grid",
@@ -129,6 +132,7 @@ const OWNED_PARAMS = [
   "q",
   "edited",
   "line",
+  "caught",
   "id",
   "detail",
   "view",
@@ -150,6 +154,7 @@ function writeState(next: ViewState): void {
   if (next.query) params.set("q", next.query);
   if (next.editedOnly) params.set("edited", "1");
   if (next.evoLine) params.set("line", "1");
+  if (next.caughtOnly) params.set("caught", "1");
   if (next.selected) params.set("id", next.selected);
   if (next.detail === "full") params.set("detail", "full");
   if (next.layout === "table") params.set("view", "table");
