@@ -10,3 +10,4 @@ description: Releases a toxic wind. May poison the target.
 additional_effects:
   - { effect: poison, chance: 30 }
 flags: [wind]
+target: foes_and_ally
