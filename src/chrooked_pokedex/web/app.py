@@ -1709,6 +1709,13 @@ def create_app(
             species.update(targetsmod.original_forms(target_snapshot, snapshot, ruleset))
         return {**snapshot, "species": species, "design_warnings": warnings}
 
+    def _design_lore_provider(
+        snapshot: dict[str, Any], lore_mode: str
+    ) -> loremod.LoreProvider | None:
+        """The lore Port, with an original form's own game text in front (#112)."""
+        inner = _lore_provider(snapshot, lore_mode)
+        return None if inner is None else loremod.GameTextLore(inner, snapshot["species"])
+
     app.include_router(
         designmod.build_router(
             designmod.DesignContext(
@@ -1716,7 +1723,7 @@ def create_app(
                 load_snapshot=_load_design_snapshot,
                 load_ruleset=_load_ruleset_or_503,
                 llm_provider=_llm_provider,
-                lore_provider=_lore_provider,
+                lore_provider=_design_lore_provider,
                 ruleset_dir=ruleset_dir,
                 queue_path=ruleset_dir / "QUEUE.md",
                 app=app,

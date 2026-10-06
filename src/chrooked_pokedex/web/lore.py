@@ -131,6 +131,34 @@ class NullLoreProvider:
         return LoreResult(found=False, base_species=chrooked_id)
 
 
+class GameTextLore:
+    """Lore for a Target-original form: the game's own category and dex entry (#112).
+
+    No public source holds an Aevian form, and the base species' page describes
+    a different creature (canon Golisopod is a sea isopod; Aevian Golisopod a
+    desert bone-hoarder), so the inner provider is never asked for one. A form
+    with no text of its own is honestly not found. Every other id passes through.
+    """
+
+    def __init__(self, inner: LoreProvider, species: dict[str, Any]) -> None:
+        self._inner = inner
+        self._species = species
+
+    def fetch(self, chrooked_id: str, species_name: str) -> LoreResult:
+        entry = self._species.get(chrooked_id)
+        if entry is None or "--" not in chrooked_id:
+            return self._inner.fetch(chrooked_id, species_name)
+        genus = str(entry.get("genus") or "")
+        text = str(entry.get("dex_entry") or "")
+        return LoreResult(
+            found=bool(genus or text),
+            genus=genus,
+            dex_entries=(text,) if text else (),
+            sources=("game data",) if genus or text else (),
+            base_species=chrooked_id,
+        )
+
+
 @dataclass
 class _Cache:
     """A dumb on-disk cache. Dex text does not change; entries never expire.

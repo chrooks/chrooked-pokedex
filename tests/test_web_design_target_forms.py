@@ -22,9 +22,12 @@ import pytest
 from fastapi.testclient import TestClient
 
 from chrooked_pokedex.model.ruleset import Ruleset
+from chrooked_pokedex.web import design_propose as dp
 from chrooked_pokedex.web import design_queue as q
+from chrooked_pokedex.web import lore as loremod
 from chrooked_pokedex.web import targets as targetsmod
 from chrooked_pokedex.web.app import create_app
+from chrooked_pokedex.web.design_store import DesignRecord
 
 pytestmark = pytest.mark.unit
 
@@ -190,3 +193,46 @@ def test_ingest_names_the_reason_when_the_target_cannot_snapshot(make_client):
     assert body["created"] == ["breloom"]
     assert [u["row"] for u in body["unresolved"]] == ["Aevian Breloom"]
     assert any("ruby is required" in w for w in body["warnings"])
+
+
+# --- lore: the game's own text, never the base species' -------------------- #
+
+
+class _CanonLore:
+    """Canon lore for every id — what the base fallback hands an Aevian form."""
+
+    def __init__(self) -> None:
+        self.asked: list[str] = []
+
+    def fetch(self, chrooked_id: str, species_name: str) -> loremod.LoreResult:
+        self.asked.append(chrooked_id)
+        return loremod.LoreResult(
+            found=True, genus="Mushroom", dex_entries=("It scatters spores.",),
+            base_species="breloom",
+        )
+
+
+def test_an_original_form_reads_its_game_text_and_never_asks_the_inner_provider():
+    canon = _CanonLore()
+    lore = loremod.GameTextLore(canon, _design_snapshot()["species"])
+    result = lore.fetch("breloom--aevianform", "Breloom (Aevian Form)")
+    assert result.found
+    assert (result.genus, result.dex_entries) == ("Shock Mushroom", ("It stores lightning in its cap.",))
+    assert result.base_species == "breloom--aevianform"
+    assert canon.asked == []
+    lore.fetch("breloom", "Breloom")  # canon still goes to the published sources
+    assert canon.asked == ["breloom"]
+
+
+def test_blind_profile_tells_the_aevian_story_without_the_canon_one():
+    snapshot = _design_snapshot()
+    record = DesignRecord(
+        id="breloom--aevianform",
+        line=["shroomish--aevianform", "breloom--aevianform"],
+        forms=["breloom--aevianmegaform"],
+    )
+    lore = loremod.GameTextLore(_CanonLore(), snapshot["species"])
+    profile = dp.build_line_profile(record, snapshot, Ruleset(), lore, provider=None)
+    assert "stores lightning in its cap" in profile
+    assert "spores" not in profile
+    assert "Breloom" not in profile

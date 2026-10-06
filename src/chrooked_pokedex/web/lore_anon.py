@@ -59,6 +59,10 @@ def _name_pattern(names: Iterable[str]) -> re.Pattern[str] | None:
         base, adjective = split_regional_name(n)
         if adjective:
             expanded.update({base, f"{adjective} {base}"})
+        # Rejuv labels a form "Golisopod (Aevian Form)"; the text says "Golisopod".
+        head = n.strip().partition(" (")[0]
+        if head != n.strip():
+            expanded.add(head)
     cleaned = sorted({n for n in expanded if len(n) >= 3}, key=len, reverse=True)
     if not cleaned:
         return None

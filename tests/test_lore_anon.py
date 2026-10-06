@@ -116,3 +116,11 @@ def test_a_punctuated_name_is_redacted_in_its_canon_spelling() -> None:
     )
     assert "Kommo" not in out and "Rime" not in out
     assert out.startswith(SUBJECT)
+
+
+def test_a_labelled_form_name_also_redacts_its_bare_base_name() -> None:
+    # Rejuv names an original form "Golisopod (Aevian Form)"; its text and its
+    # line's text say plain "Golisopod" (#112).
+    out = anonymize_text("Golisopod hoards bones.", subject_names=["Golisopod (Aevian Form)"])
+    assert "Golisopod" not in out
+    assert out.startswith(SUBJECT)
