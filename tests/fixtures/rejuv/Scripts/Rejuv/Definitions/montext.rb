@@ -30,6 +30,8 @@ MONHASH = {
       :Moveset => [
         [1, :SCRATCH],
       ],
+      :kind => "Disaster",
+      :dexentry => "It senses coming disasters and appears before people only to warn them.",
     },
     "Mega Form" => {
       :name => "Absol",

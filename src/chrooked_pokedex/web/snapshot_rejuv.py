@@ -91,6 +91,9 @@ if defined?(MONHASH)
         "type1" => merged[:Type1], "type2" => merged[:Type2],
         "abilities" => merged[:Abilities] || [], "hidden" => merged[:HiddenAbility],
         "stats" => merged[:BaseStats] || [], "moveset" => merged[:Moveset] || [],
+        # The form's OWN dex text, never the base's: an Aevian form is a
+        # different creature, and inherited text would hand it the base's lore.
+        "kind" => form[:kind], "dexentry" => form[:dexentry],
       }
     end
   end
@@ -275,6 +278,10 @@ def build_snapshot_rejuv(target: Path) -> dict[str, Any]:
                 if i < len(stats_raw) and isinstance(stats_raw[i], int)
             },
             "learnset": learnset,
+            # The game's own category and dex entry: the only lore a
+            # Target-original form (Aevian lines) has anywhere (#112).
+            "genus": mon.get("kind") or "",
+            "dex_entry": (mon.get("dexentry") or "").strip(),
         }
 
     # Evolution edges: sources/targets are entry ids; a `form:` index on the

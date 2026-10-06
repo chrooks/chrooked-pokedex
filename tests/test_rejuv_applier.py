@@ -822,6 +822,19 @@ def test_rejuv_web_snapshot_carries_sprite_hints():
 
 
 @pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_rejuv_web_snapshot_carries_each_forms_own_dex_text():
+    from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
+    snap = build_snapshot_rejuv(FIXTURE)
+    absol = snap["species"]["absol"]
+    assert absol["genus"] == "Disaster"
+    assert absol["dex_entry"].startswith("It senses coming disasters")
+    # A form with no text of its own must not inherit the base form's: Aevian
+    # Golisopod's lore is a desert bone-hoarder, not canon Golisopod's (#112).
+    mega = snap["species"]["absol--megaform"]
+    assert (mega["genus"], mega["dex_entry"]) == ("", "")
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
 def test_rejuv_web_snapshot_evolution_edges(tmp_path):
     from chrooked_pokedex.web.snapshot_rejuv import build_snapshot_rejuv
     # Give the fixture a forward edge: Bulbasaur -> Absol at level 16 (nonsense
