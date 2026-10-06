@@ -26,6 +26,7 @@ from chrooked_pokedex.web import dex as dexmod  # noqa: E402
 from chrooked_pokedex.web import learnset_skeleton as skmod  # noqa: E402
 from chrooked_pokedex.web import lore as loremod  # noqa: E402
 from chrooked_pokedex.web.app import create_app  # noqa: E402
+from chrooked_pokedex.web.design_store import DesignRecord  # noqa: E402
 
 pytestmark = pytest.mark.unit
 
@@ -271,3 +272,20 @@ def test_a_form_on_base_lore_carries_its_form_word() -> None:
     word = dp._form_word("rotomheat", {"name": "Rotom Heat"}, snapshot, _BaseLore())
     assert word == "Heat"
     assert dp._form_word("rotom", {"name": "Rotom"}, snapshot, _BaseLore()) == ""
+
+
+def test_the_last_stage_of_a_two_stage_line_is_labelled_final() -> None:
+    # Labelled "middle stage", stage 2 of Aevian Golisopod's line read as a
+    # stage with one more to come, and the packet invented a third.
+    snapshot = {"species": {
+        cid: {"dex": 1, "chrooked_id": cid, "name": cid.title(), "types": ["Bug"],
+              "abilities": {}, "stats": {}, "learnset": []}
+        for cid in ("grub", "isopod")
+    }}
+    record = DesignRecord(id="isopod", line=["grub", "isopod"])
+    profile = dp.build_line_profile(
+        record, snapshot, Ruleset(), loremod.NullLoreProvider(), provider=None
+    )
+    assert "Stage 1 (basic stage)" in profile
+    assert "Stage 2 (final stage)" in profile
+    assert "middle stage" not in profile

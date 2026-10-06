@@ -104,9 +104,15 @@ def _stage_blocks(
             entry=entry, lore_mode="blind", lore_provider=lore_provider,
             provider=provider, other_species_names=other_names,
         )
-        label = STAGE_LABELS[min(index, len(STAGE_LABELS) - 1)]
-        if len(record.line) == 1:
+        # The last stage is the final one however long the line is: labelled
+        # "middle stage", stage 2 of a two-stage line made the model invent a third.
+        last = len(record.line) - 1
+        if last == 0:
             label = "single stage"
+        elif index == last:
+            label = STAGE_LABELS[-1]
+        else:
+            label = STAGE_LABELS[min(index, 1)]
         block = injection.block.strip()
         form = _form_word(cid, entry, snapshot, lore_provider)
         if form:
