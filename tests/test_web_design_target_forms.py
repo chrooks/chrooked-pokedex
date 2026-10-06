@@ -23,11 +23,14 @@ from fastapi.testclient import TestClient
 
 from chrooked_pokedex.model.ruleset import Ruleset
 from chrooked_pokedex.web import design_propose as dp
+from chrooked_pokedex.web import design_ship
 from chrooked_pokedex.web import design_queue as q
 from chrooked_pokedex.web import lore as loremod
 from chrooked_pokedex.web import targets as targetsmod
 from chrooked_pokedex.web.app import create_app
 from chrooked_pokedex.web.design_store import DesignRecord
+
+from test_web_design import _move
 
 pytestmark = pytest.mark.unit
 
@@ -71,7 +74,7 @@ _CANON = {
         "technician": {"chrooked_id": "technician", "name": "Technician",
                        "description": "Powers up weak moves.", "aka": {}},
     },
-    "moves": {},
+    "moves": {"tackle": _move("tackle", "Tackle", "Normal", 40)},
     "type_chart": [{"attacker": "Grass", "defender": "Ghost", "multiplier": 1.0}],
 }
 
@@ -236,3 +239,44 @@ def test_blind_profile_tells_the_aevian_story_without_the_canon_one():
     assert "stores lightning in its cap" in profile
     assert "spores" not in profile
     assert "Breloom" not in profile
+
+
+# --- ship: the CRUD write, the one apply, the read-back -------------------- #
+
+
+def test_ship_writes_and_reads_back_every_stage_of_an_original_line(
+    make_client, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    http = make_client("Aevian Breloom\n", lambda path: copy.deepcopy(_TARGET))
+    http.post("/api/design/ingest")
+    app = http.app
+    store = app.state.design_store
+    store.save(DesignRecord.from_dict({
+        **store.get("breloom--aevianform").as_dict(),
+        "state": "confirmed",
+        "decisions": {
+            "typing": ["Grass", "Ghost"], "abilities": ["Technician"], "anchors": [], "drop": [],
+            "custom": None, "stats": None, "skip_pre": [], "notes": "a storm in a cap",
+        },
+        "preview": {"learnset": {"rows": [{"level": 1, "move": "Tackle"}]}, "typing": ["Grass", "Ghost"]},
+    }))
+    monkeypatch.setattr(
+        design_ship.targetsmod, "apply_target",
+        lambda target, effective, state, force, ledger_dir=None, ruleset_dir=None: {
+            "applied": 3, "partial": 0, "blocked": 0, "report_md": "",
+        },
+    )
+    read_back: list[str] = []
+    app.state.read_back_ids = lambda target, ids: read_back.extend(ids) or {
+        "ok": True, "ok_count": len(ids), "total": len(ids), "species": [],
+    }
+
+    body = http.post("/api/design/ship", json={"target_id": "t-rejuv"}).json()
+
+    assert body["breloom--aevianform"]["state"] == "shipped", body
+    stages = {"shroomish--aevianform", "breloom--aevianform", "breloom--aevianmegaform"}
+    assert set(read_back) == stages
+    ruleset = Ruleset.load(tmp_path / "ruleset")
+    assert stages <= set(ruleset.species)
+    assert ruleset.species["breloom--aevianform"].name == "Breloom (Aevian Form)"
+    assert "Aevian Breloom" not in (tmp_path / "ruleset" / "QUEUE.md").read_text()
