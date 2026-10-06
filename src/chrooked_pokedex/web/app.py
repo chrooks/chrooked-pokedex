@@ -1684,11 +1684,36 @@ def create_app(
     app.state.design_store = DesignStore(
         Path(design_dir) if design_dir is not None else _PROJECT_ROOT / ".chrooked" / "design"
     )
+
+    def _load_design_snapshot() -> dict[str, Any]:
+        """The base snapshot plus every Rejuv Target's original forms (#112).
+
+        Queue, propose, realize, and ship all read this one snapshot, so an
+        Aevian line designs like a canon one. Only `species` grows; the pools
+        stay canon. A Target that cannot snapshot (no Ruby on the host) adds
+        nothing and leaves its reason in `design_warnings` for ingest.
+        ponytail: Rejuv only — the one engine with original forms today.
+        """
+        snapshot = _load_snapshot_or_503()
+        ruleset = _load_ruleset_or_503()
+        species = dict(snapshot["species"])
+        warnings: list[str] = []
+        for target in app.state.targets_registry.list():
+            if target.engine != "rejuv":
+                continue
+            try:
+                target_snapshot = app.state.targets_state.snapshot_for(target)
+            except targetsmod.TargetError as error:
+                warnings.append(f"{target.label}: {error.detail}")
+                continue
+            species.update(targetsmod.original_forms(target_snapshot, snapshot, ruleset))
+        return {**snapshot, "species": species, "design_warnings": warnings}
+
     app.include_router(
         designmod.build_router(
             designmod.DesignContext(
                 store=app.state.design_store,
-                load_snapshot=_load_snapshot_or_503,
+                load_snapshot=_load_design_snapshot,
                 load_ruleset=_load_ruleset_or_503,
                 llm_provider=_llm_provider,
                 lore_provider=_lore_provider,

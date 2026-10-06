@@ -1069,6 +1069,27 @@ def rekey_ruleset_to_rejuv(ruleset: Ruleset, snapshot: dict[str, Any]) -> Rulese
     return replace(ruleset, species=species)
 
 
+def original_forms(
+    target_snapshot: dict[str, Any], base_snapshot: dict[str, Any], ruleset: Ruleset
+) -> dict[str, dict[str, Any]]:
+    """A Target's ORIGINAL forms as base-shaped species entries (#112).
+
+    Rejuv's Aevian lines exist nowhere in canon. A `--` id that no canon id
+    bridges to (`resolve_form_id` hands it back unchanged) is original; a
+    re-slugged canon form (`absol--megaform` -> `absolmega`) is not, so canon
+    never gains a duplicate. Abilities and learnset moves are relabeled to the
+    canon English names the design pools validate against.
+    """
+    entries = [
+        entry
+        for cid, entry in target_snapshot.get("species", {}).items()
+        if "--" in cid and dexmod.resolve_form_id(base_snapshot, cid) == cid
+    ]
+    entries = _relabel_species_learnsets(entries, _english_moves_map(base_snapshot, ruleset))
+    entries = _relabel_species_abilities(entries, _english_abilities_map(base_snapshot, ruleset))
+    return {entry["chrooked_id"]: entry for entry in entries}
+
+
 def target_dex(
     target: Target,
     ruleset: Ruleset,

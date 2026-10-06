@@ -94,6 +94,15 @@ def _match_name(
         candidate = f"{_clean(tokens[start + 1])} {REGIONAL_PREFIXES[head.lower()]}"
         if candidate.lower() in names:
             return candidate, 2
+    # A Target-original form reads the way the game labels it: `Aevian Golisopod`
+    # -> "Golisopod (Aevian Form)", `Fiery Aevian Palossand` -> "Palossand
+    # (Fiery Aevian Form)" (#112).
+    for width in (1, 2):
+        if start + width < len(tokens):
+            label = " ".join(_clean(t) for t in tokens[start : start + width])
+            candidate = f"{_clean(tokens[start + width])} ({label} Form)"
+            if candidate.lower() in names:
+                return candidate, width + 1
     for width in range(min(_MAX_NAME_WORDS, len(tokens) - start), 0, -1):
         candidate = " ".join(_clean(t) for t in tokens[start : start + width])
         if candidate.lower() in names:
@@ -185,12 +194,17 @@ def _line_of(snapshot: dict[str, Any], final: str) -> list[str]:
 
 
 def _forms_of(snapshot: dict[str, Any], final: str) -> list[str]:
+    # A Target-original form's mega names the form first (golisopod--aevianform
+    # -> golisopod--aevianmegaform, #112). A `--` form never belongs to a canon
+    # final: canon Golisopod must not rewrite the Aevian Mega.
+    stem = final.removesuffix("form") if "--" in final else final
     return [
         cid
         for cid in snapshot["species"]
         if cid != final
-        and cid.startswith(final)
-        and ("mega" in cid[len(final):] or "gmax" in cid[len(final):])
+        and cid.startswith(stem)
+        and "--" not in cid[len(stem):]
+        and ("mega" in cid[len(stem):] or "gmax" in cid[len(stem):])
     ]
 
 

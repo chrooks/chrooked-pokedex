@@ -192,7 +192,12 @@ def ingest_queue(ctx: DesignContext) -> dict[str, Any]:
                 )
             )
             created.append(r.id)
-    return {"created": created, "existing": existing, "unresolved": unresolved}
+    result: dict[str, Any] = {"created": created, "existing": existing, "unresolved": unresolved}
+    # A Target that could not snapshot (no Ruby) leaves its forms out; say so,
+    # or an Aevian row's "no species name" reads as a typo (#112).
+    if snapshot.get("design_warnings"):
+        result["warnings"] = list(snapshot["design_warnings"])
+    return result
 
 
 def build_router(ctx: DesignContext) -> APIRouter:

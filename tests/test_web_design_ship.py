@@ -55,7 +55,7 @@ def env(tmp_path: Path, monkeypatch) -> SimpleNamespace:
         lore_provider=loremod.NullLoreProvider(), design_dir=tmp_path / "design",
     )
     target = targetsmod.Target(id="rejuv", label="Rejuv", path=str(tmp_path / "game"), engine="essentials")
-    app.state.targets_registry = SimpleNamespace(get=lambda tid: target)
+    app.state.targets_registry = SimpleNamespace(get=lambda tid: target, list=lambda: [target])
     app.state.read_back_ids = lambda target, ids: {
         "ok": True, "ok_count": len(ids), "total": len(ids), "species": [],
     }
