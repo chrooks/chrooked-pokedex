@@ -3,11 +3,12 @@
 #   damage-calc: immune matchup (0x) with a bone move => neutral (1x);
 #   also re-opens Levitate/air-balloon/absorb-ability blocks
 #   damage-calc: bone move => x1.2
-#   Rejuv has no bone flag; keyed by move symbol.
+#   Rejuv has no bone flag; keyed by move symbol. Every Ruleset move with
+#   `flags: [bone]` belongs here (tests/test_harness_bone_moves.py).
 # Test cases:
 #   - Bonemerang vs Flying/Levitate => connects at neutral
 #   - Bone Club => 1.2x damage
-BONEBREAKER_BONE_MOVES = [:BONECLUB, :BONEMERANG, :BONERUSH, :SHADOWBONE].freeze
+BONEBREAKER_BONE_MOVES = [:BONECLUB, :BONEMERANG, :BONERUSH, :SHADOWBONE, :BONETORCH, :BONECHILL].freeze
 CHROOKED_TYPEMOD_FLOOR[:BONEBREAKER] = lambda { |move, attacker|
   BONEBREAKER_BONE_MOVES.include?(move.move)
 }
