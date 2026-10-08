@@ -1399,3 +1399,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Rejected:** Bellossom (Chris); Venusaur line (Pheromone was a deliberate 2026-09 pick); Shaymin (legendary, Sky has no petals); Lilligant, Lurantis, Roserade, Comfey, Jumpluff, Sunflora (no petal-as-cover claim or too frail). Florges line is not in the dex — a roster gap.
 - **Read-back:** all six slots MATCH in `montext.rb`; `abiltext.rb` carries the new text; plugin installed in `patch/Mods/`. `write_lines.py` now resolves form keys (`CHERRIM::Overcast Form`) from the Apply Report; before this it reported forms as "not written" although they were.
 - **Owed:** in-game — Vileplume enters, takes a hit at half with "petals scattered", the next hit is full, switch out and in re-arms.
+
+## 2026-10-08 — Glamour Drain (new Fairy drain move) on the Meganium line
+
+- **Direction:** Chris: "a stronger fairy type drain move than draining kiss… something not flower specific so I can apply it to other fairy mons." First draft (Bloom Drain, floral) rejected for being Meganium-only flavor.
+- **Move:** Glamour Drain — Fairy, special, 80 BP, 100 acc, 10 PP, vanilla absorb (heals half the damage dealt). No side effects, no Ruby; the Rejuv applier maps `absorb` to function 0DD. Name picked from the rubric's alternatives over Fae Drain, Soul Siphon, Vital Charm: "glamour" is the folklore fae spell, so it reads Fairy on any holder.
+- **Learnset:** replaces Dazzling Gleam at L31 on Chikorita, Bayleef, Meganium (Moonblast 45 already covers the spread lane; Draining Kiss 15 stays as the early rung).
+- **Read-back:** `movetext.rb` carries GLAMOURDRAIN; `[31, :GLAMOURDRAIN]` on all three movesets.
+- **Owed:** `/move-distribute "Glamour Drain"` across other Fairy lines.

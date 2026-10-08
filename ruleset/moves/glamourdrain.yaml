@@ -1,0 +1,10 @@
+name: Glamour Drain
+chrooked_id: glamourdrain
+aka: {  }
+type: Fairy
+category: special
+power: 80
+accuracy: 100
+pp: 10
+description: The user siphons the target's life force with fae glamour, restoring HP equal to half the damage dealt.
+effect: absorb
