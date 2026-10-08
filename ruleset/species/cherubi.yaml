@@ -4,6 +4,7 @@ aka: {  }
 abilities:
   primary: Chloroplast
   secondary: Bloom
+  hidden: Petal Barrier
 stats: { hp: 62, atk: 36, def: 52, spa: 62, spd: 59, spe: 57 }
 learnset:
   - { level: 0, move: Sunny Day }

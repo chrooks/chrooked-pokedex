@@ -3,6 +3,8 @@ chrooked_id: gloom
 aka: { pokeemerald: SPECIES_GLOOM }
 abilities:
   primary: Chloroplast
+  secondary: Petal Barrier
+  hidden: Stench
 learnset:
   - { level: 1, move: Acid }
   - { level: 1, move: Absorb }

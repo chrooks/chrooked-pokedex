@@ -5,6 +5,7 @@ types: [Grass]
 abilities:
   primary: Flower Gift
   secondary: Bloom
+  hidden: Petal Barrier
 stats: { hp: 95, atk: 55, def: 80, spa: 95, spd: 90, spe: 88 }
 learnset:
   - { level: 0, move: Sunny Day }

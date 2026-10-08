@@ -3,6 +3,8 @@ chrooked_id: oddish
 aka: { pokeemerald: SPECIES_ODDISH }
 abilities:
   primary: Chloroplast
+  secondary: Petal Barrier
+  hidden: Run Away
 learnset:
   - { level: 1, move: Absorb }
   - { level: 1, move: Growth }

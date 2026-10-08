@@ -10,11 +10,11 @@ species: types, current primary / secondary / hidden, hit count, the sentences.
 Read-only. ponytail: --all walks the whole dex; the first run is a long fetch,
 every later run is offline.
 """
-import argparse, glob, json, re, subprocess, sys, urllib.request
+import argparse, os, glob, json, re, subprocess, sys, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-API = "http://localhost:8000"
+API = os.environ.get("CHROOKED_API", "http://localhost:8000")
 CACHE = Path(".cache/lore")
 
 def probe(cid: str) -> str:

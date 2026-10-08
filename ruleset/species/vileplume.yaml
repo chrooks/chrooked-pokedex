@@ -3,6 +3,8 @@ chrooked_id: vileplume
 aka: { pokeemerald: SPECIES_VILEPLUME }
 abilities:
   primary: Chloroplast
+  secondary: Petal Barrier
+  hidden: Effect Spore
 stats: { hp: 100, atk: 60, def: 105, spa: 120, spd: 100 }
 learnset:
   - { level: 0, move: Petal Blizzard }

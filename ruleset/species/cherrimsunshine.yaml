@@ -5,6 +5,7 @@ types: [Fire, Fairy]
 abilities:
   primary: Flower Gift
   secondary: Bloom
+  hidden: Petal Barrier
 stats: { hp: 95, atk: 55, def: 60, spa: 125, spd: 70, spe: 98 }
 learnset:
   - { level: 0, move: Sunny Day }

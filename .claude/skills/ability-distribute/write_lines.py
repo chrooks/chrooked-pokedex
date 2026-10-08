@@ -41,9 +41,15 @@ def main() -> None:
     subprocess.run([".venv/bin/chrooked-pokedex", "apply", "--target", a.target, "--engine", "rejuv"], check=True)
     src = open(f"{a.target}/patch/Definitions/montext.rb", encoding="utf-8").read()
     sym = re.sub(r"[^A-Z0-9]", "", a.ability.upper()); ok = True
+    # Forms live under the base symbol + form name (CHERRIM::Overcast Form); the
+    # Apply Report already resolved each id to that key.
+    report = json.load(open(f"{a.target}/apply-report.json", encoding="utf-8"))
+    keys = {e["chrooked_id"]: e["symbol"].split("::") for e in report["entries"]
+            if e.get("category") == "species" and "::" in (e.get("symbol") or "")}
     idx = {0: "primary", 1: "secondary"}
     for cid, slot in plan.items():
-        m = re.search(r'if MONHASH\.dig\(:%s, "[^"]+"\)(.*?)\nelse' % cid.upper(), src, re.S)
+        base, form = keys.get(cid, (cid.upper(), None))
+        m = re.search(r'if MONHASH\.dig\(:%s, "%s"\)(.*?)\nelse' % (base, re.escape(form) if form else "[^\"]+"), src, re.S)
         blk = m.group(1) if m else ""
         pat = r"\[:HiddenAbility\] = :(\w+)" if slot == "hidden" else r"\[:Abilities\]\[%d\] = :(\w+)" % [k for k, v in idx.items() if v == slot][0]
         g = re.search(pat, blk); hit = g and g.group(1) == sym; ok &= bool(hit)

@@ -230,12 +230,12 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
          "select": {"move": "GROWTH"}, "expect": {"increment": "2"}},
     ],
     "petalbarrier": [
-        {"stage": "Let a Petal Barrier user be hit by any SPECIAL move (Surf, Hex, ...) — ~0.75x damage.",
-         "select": {"ability": "true", "special": "true"}, "expect": {"result": "REDUCED"}},
-        {"stage": "Let it be hit by any PHYSICAL move (Tackle, Shadow Punch, ...) — no reduction.",
-         "select": {"ability": "true", "special": "false"}, "expect": {"result": "NORMAL"}},
-        {"stage": "Burn the Petal Barrier user, then pass several turns — it cures the burn at end of turn (~1-in-3/turn; keep ending turns until it cures).",
-         "select": {"event": "eor_cure", "cured": "true"}, "expect": {"cured": "true"}},
+        {"stage": "Switch a Petal Barrier user in, then hit it with any damaging move (Surf, Tackle, ...) — ~0.5x damage and 'petals scattered'.",
+         "select": {"ability": "true", "armed": "true"}, "expect": {"result": "HALVED"}},
+        {"stage": "Hit it again without switching — full damage, no message.",
+         "select": {"ability": "true", "armed": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Switch it out and back in, then hit it — halved again.",
+         "select": {"event": "rearm", "ability": "true"}, "expect": {"armed": "true"}},
     ],
     "mountaineer": [
         {"stage": "Hit the Mountaineer user with a ROCK move (e.g. Rock Slide) — fully absorbed, 0 damage.",
