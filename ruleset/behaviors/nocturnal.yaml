@@ -1,0 +1,23 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Nocturnal
+chrooked_id: nocturnal
+applies_to: ability
+aka: {  }
+effects:
+  - summary: Immune to Dark-type moves.
+    trigger: damage-calc
+    when: an incoming move's type is Dark
+    effect: "the move does not affect this Pokemon: 0 damage, no secondary effect, no stat change (Soundproof-style block, same shape as Winter Coat)"
+test_cases:
+  - given: a Nocturnal Pokemon is hit by Knock Off or Dark Pulse
+    expect: "'It doesn't affect...' — 0 damage, no flinch roll, item kept"
+  - given: hit by Shadow Ball (Ghost)
+    expect: normal damage — only Dark is blocked
+  - given: hit by Taunt or Torment (Dark status moves)
+    expect: blocked as well; the immunity is by type
+notes:
+  - Pure type immunity, the Dark twin of Winter Coat. Built 2026-10-08 as the primitive under Witching Hour (Mismagius line); distributed on its own afterwards to true night creatures.
+  - Witching Hour is COMPOSED as [nocturnal, levitate] in ruleset/abilities/witchinghour.yaml; never restate Levitate here.
+engine_hints:
+  essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:NOCTURNAL] = { type: :DARK, flag: :Soundproof } — mirrors chrooked_wintercoat.rb."
+  pokeemerald: "Type-effectiveness ability gate in src/battle_util.c (the site that zeroes TYPE_GROUND for ABILITY_LEVITATE): return 0 for TYPE_DARK when the defender has ABILITY_NOCTURNAL."
