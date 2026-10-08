@@ -21,6 +21,7 @@ learnset:
   - { level: 24, move: Dream Mist }
   - { level: 25, move: Dazzling Gleam }
   - { level: 28, move: Calm Mind }
+  - { level: 30, move: Glamour Drain }
   - { level: 32, move: Psychic Terrain }
   - { level: 36, move: Moonlight }
   - { level: 40, move: Dream Eater }

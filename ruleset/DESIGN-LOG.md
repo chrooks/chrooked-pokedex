@@ -1407,3 +1407,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Learnset:** replaces Dazzling Gleam at L31 on Chikorita, Bayleef, Meganium (Moonblast 45 already covers the spread lane; Draining Kiss 15 stays as the early rung).
 - **Read-back:** `movetext.rb` carries GLAMOURDRAIN; `[31, :GLAMOURDRAIN]` on all three movesets.
 - **Owed:** `/move-distribute "Glamour Drain"` across other Fairy lines.
+
+## 2026-10-08 — Glamour Drain distribution (uncommon-rare)
+
+- **Direction:** Chris: "distribute glamour drain to other fairy mons, be selective, it should be an uncommon-rare move." The numeric `--rarity rare` tier pulled in the whole Eevee line, Klefki, Carbink; rejected in favour of a dex-text screen for draining or bewitching claims across the 66-species Fairy special pool.
+- **Shipped (L):** Misdreavus / Mismagius 34 ("absorbs the fearful feelings of foes… as nutrition"); Morelull / Shiinotic 31 ("siphons off their vitality") — Chris pushed from 30 to clear Giga Drain 29; Sylveon 31 ("aura that weakens hostility in its prey"); Spritzee / Aromatisse 35 ("foul smells that sap an opponent's will to fight"); Popplio / Brionne / Primarina 30 (siren lure); Munna / Musharna 30 ("feeds on dreams"); Flutter Mane 31 (Misdreavus paradox). Meganium line keeps 31.
+- **Rejected:** Gardevoir line (protective, not draining), Hatterene, Ribombee / Cutiefly (nectar), Comfey, Klefki, Carbink, Clefable, Alolan Ninetales, Eevee line.
+- **Corrections:** Misdreavus and Mismagius each carried Draining Kiss twice (15/17 and 20); the L20 duplicate is gone. Chris: "mirror mismagius learnset to misdreavus" — Misdreavus now carries Mismagius's rows minus L0 Shadow Ball (house mirror rule), which drops Misdreavus's own L29 Shadow Ball.
+- **Read-back:** `[L, :GLAMOURDRAIN]` present on all 14 movesets in `montext.rb`; `applied=1812 partial=0`.

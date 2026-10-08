@@ -14,6 +14,7 @@ learnset:
   - { level: 21, move: Charm }
   - { level: 25, move: Stored Power }
   - { level: 29, move: Bail Out }
+  - { level: 31, move: Glamour Drain }
   - { level: 33, move: Recover }
   - { level: 37, move: Reflect }
   - { level: 37, move: Light Screen }

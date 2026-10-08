@@ -1,0 +1,22 @@
+name: Flutter Mane
+chrooked_id: fluttermane
+aka: {  }
+learnset:
+  - { level: 1, move: Sunny Day }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Spite }
+  - { level: 1, move: Astonish }
+  - { level: 7, move: Psybeam }
+  - { level: 14, move: Mean Look }
+  - { level: 21, move: Memento }
+  - { level: 28, move: Wish }
+  - { level: 31, move: Glamour Drain }
+  - { level: 35, move: Dazzling Gleam }
+  - { level: 42, move: Shadow Ball }
+  - { level: 49, move: Mystical Fire }
+  - { level: 56, move: Power Gem }
+  - { level: 63, move: Psyshock }
+  - { level: 70, move: Phantom Force }
+  - { level: 77, move: Pain Split }
+  - { level: 84, move: Moonblast }
+  - { level: 91, move: Perish Song }

@@ -21,9 +21,9 @@ learnset:
   - { level: 15, move: Hex }
   - { level: 16, move: Mystical Fire }
   - { level: 17, move: Draining Kiss }
-  - { level: 20, move: Draining Kiss }
   - { level: 24, move: Will-O-Wisp }
   - { level: 28, move: Phantom Force }
+  - { level: 34, move: Glamour Drain }
   - { level: 32, move: Beguile }
   - { level: 36, move: Extrasensory }
   - { level: 40, move: Nasty Plot }

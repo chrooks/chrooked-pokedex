@@ -14,15 +14,14 @@ learnset:
   - { level: 2, move: Disarming Voice }
   - { level: 3, move: Magical Leaf }
   - { level: 4, move: Fairy Wind }
-  - { level: 6, move: Knell }
   - { level: 8, move: Psywave }
-  - { level: 12, move: Hex }
-  - { level: 15, move: Draining Kiss }
+  - { level: 12, move: Knell }
+  - { level: 15, move: Hex }
   - { level: 16, move: Mystical Fire }
-  - { level: 20, move: Draining Kiss }
+  - { level: 17, move: Draining Kiss }
   - { level: 24, move: Will-O-Wisp }
   - { level: 28, move: Phantom Force }
-  - { level: 29, move: Shadow Ball }
+  - { level: 34, move: Glamour Drain }
   - { level: 32, move: Beguile }
   - { level: 36, move: Extrasensory }
   - { level: 40, move: Nasty Plot }

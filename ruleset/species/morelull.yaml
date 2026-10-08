@@ -17,6 +17,7 @@ learnset:
   - { level: 25, move: Strength Sap }
   - { level: 28, move: Giga Drain }
   - { level: 29, move: Energy Ball }
+  - { level: 31, move: Glamour Drain }
   - { level: 32, move: Dazzling Gleam }
   - { level: 34, move: Soil Drain }
   - { level: 36, move: Spore }

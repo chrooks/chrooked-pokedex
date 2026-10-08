@@ -19,6 +19,7 @@ learnset:
   - { level: 26, move: Venoshock }
   - { level: 30, move: Swift }
   - { level: 33, move: Toxic }
+  - { level: 35, move: Glamour Drain }
   - { level: 37, move: Miasma }
   - { level: 40, move: Tri Attack }
   - { level: 44, move: Dazzling Gleam }
