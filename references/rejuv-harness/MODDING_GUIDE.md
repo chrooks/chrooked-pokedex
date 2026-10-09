@@ -78,6 +78,7 @@ Target lives at the path in the gitignored `targets.json` (engine `rejuv`). v14 
 | Change | Kind | Files |
 |--------|------|-------|
 | Learn menu shows past level-up moves (free relearn everywhere) | static mod | `chrooked_zz_relearn.rb` (override `canRelearnAll?` → true) |
+| Redux ability box names the ability that fired; summary lists all owned abilities | static mod | `chrooked_zz_zreduxinfo.rb` (reopens `ChrookedAbilitySet`, prepends `pbShowAbilityBox` + summary `draw*` pages) |
 | Bad Dreams makes Hypnosis 1.2× accurate | behavior | `ruleset/behaviors/baddreams.yaml`, `chrooked_baddreams.rb`, new `CHROOKED_ACCURACY_MODS` table + `pbCalcAccuracy` wrapper in the core |
 | Pressing B runs from a wild battle | static mod | `chrooked_zz_run.rb` (per-method override of `pbCommandMenuEx`) |
 | Solar Power drops its HP drain and boosts the higher attacking stat | behavior | `ruleset/behaviors/solarpower.yaml`, `chrooked_solarpower.rb`, new `CHROOKED_HP_LOSS_VETO` + `CHROOKED_AI_HP_REFUND` tables in the core |
