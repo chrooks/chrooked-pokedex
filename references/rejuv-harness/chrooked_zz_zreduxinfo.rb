@@ -13,11 +13,10 @@
 #    ponytail: "last match" is a heuristic. A stray check of a different
 #    ability between the match and the box would mislabel one popup; no
 #    battle logic reads chrooked_display outside the show window.
-# 2. Summary screens list every ability the species owns, not just the active
-#    one: the ABILITY page gets each extra ability with its description; the
-#    SKILLS pages get one "Also:" line under the active ability's text.
-#    ponytail: the "Also:" line sits at y=352 by eye (no screenshot possible on
-#    hestia) — nudge if it collides with the item row.
+# 2. The ABILITY summary page lists every ability the species owns, not just
+#    the active one, as one "Also: X, Y" line at the foot of the panel.
+#    The SKILLS pages have no free row (the two-line description reaches the
+#    bottom), so they are left alone — first cut drew over it (2026-10-09).
 
 class ChrookedAbilitySet
   attr_accessor :chrooked_last
@@ -68,35 +67,13 @@ module ChrookedSummaryAbilities
 
   def drawAbilPage(pokemon)
     super
-    others = chrooked_other_abilities(pokemon)
-    return if others.empty?
-    overlay = @sprites["overlay"].bitmap
-    memo = ""
-    others.each do |a|
-      abil = $cache.abil[a]
-      next if abil.nil?
-      memo += "<c3=F8F8F8,686868>" + _INTL("Also:") + " <c3=404040,B0B0B0>" + getAbilityName(a) + "\n"
-      memo += "<c3=404040,B0B0B0>" + getAbilityDesc(a, false) + "\n"
-    end
-    # Below the active ability's memo block (drawn at y=78); 190 clears four
-    # lines of name + description at this font.
-    drawFormattedTextEx(overlay, 232, 190, 272, memo)
-  end
-
-  def drawPageThree(pokemon)
-    super
     line = chrooked_also_line(pokemon)
     return unless line
     overlay = @sprites["overlay"].bitmap
-    drawTextEx(overlay, 224, 352, 282, 1, line, PokemonSummaryScene::DarkBase, PokemonSummaryScene::DarkShadow)
-  end
-
-  def drawPageFour(pokemon)
-    super
-    line = chrooked_also_line(pokemon)
-    return unless line
-    overlay = @sprites["overlay"].bitmap
-    drawTextEx(overlay, 224, 352, 282, 1, line, PokemonSummaryScene::DarkBase, PokemonSummaryScene::DarkShadow)
+    # Bottom of the description panel. The active ability's memo (name +
+    # description) runs from y=78 to ~y=300 at six lines; 334 clears it.
+    drawTextEx(overlay, 232, 334, 272, 1, line,
+               PokemonSummaryScene::DarkBase, PokemonSummaryScene::DarkShadow)
   end
 end
 if defined?(PokemonSummaryScene)
