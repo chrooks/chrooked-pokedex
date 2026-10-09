@@ -3,26 +3,30 @@ chrooked_id: morelull
 aka: { pokeemerald: SPECIES_MORELULL }
 abilities:
   primary: Soul Siphon
-stats: { hp: 55 }
+  secondary: Sporulation
+  hidden: Nocturnal
+stats: { hp: 75, atk: 35, def: 70, spa: 85, spd: 95, spe: 25 }
 learnset:
-  - { level: 1, move: Absorb }
-  - { level: 1, move: Astonish }
-  - { level: 2, move: Disarming Voice }
-  - { level: 4, move: Confuse Ray }
-  - { level: 8, move: Ingrain }
+  - { level: 1, move: Confuse Ray }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Absorb }
+  - { level: 7, move: Disarming Voice }
   - { level: 12, move: Mega Drain }
+  - { level: 14, move: Draining Kiss }
   - { level: 16, move: Sleep Powder }
-  - { level: 20, move: Moonlight }
-  - { level: 22, move: Beguile }
+  - { level: 19, move: Leech Seed }
+  - { level: 22, move: Moonlight }
   - { level: 25, move: Strength Sap }
-  - { level: 28, move: Giga Drain }
-  - { level: 29, move: Energy Ball }
-  - { level: 31, move: Glamour Drain }
-  - { level: 32, move: Dazzling Gleam }
-  - { level: 34, move: Soil Drain }
-  - { level: 36, move: Spore }
-  - { level: 38, move: Siphon }
-  - { level: 40, move: Moonblast }
-  - { level: 44, move: Dream Eater }
-  - { level: 57, move: Leaf Storm }
-  - { level: 64, move: Rapture }
+  - { level: 28, move: Spore }
+  - { level: 31, move: Giga Drain }
+  - { level: 34, move: Glamour Drain }
+  - { level: 37, move: Dream Mist }
+  - { level: 40, move: Dream Eater }
+  - { level: 42, move: Soil Drain }
+  - { level: 44, move: Energy Ball }
+  - { level: 46, move: Dazzling Gleam }
+  - { level: 50, move: Moonblast }
+  - { level: 56, move: Siphon }
+  - { level: 60, move: Aromatherapy }
+  - { level: 65, move: Moongeist Beam }
+  - { level: 70, move: Leaf Storm }

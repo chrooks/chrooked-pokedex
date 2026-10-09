@@ -1,0 +1,34 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Sporulation
+chrooked_id: sporulation
+applies_to: ability
+aka: {  }
+effects:
+  - summary: On entry, arm a one-time spore burst.
+    trigger: switch-in
+    when: this Pokemon enters the field
+    effect: set a per-battler flag (dropped with the other volatile effects on switch-out)
+  - summary: While armed, Spore gets +1 priority.
+    trigger: turn-order
+    when: the flag is armed and this Pokemon uses Spore
+    effect: add +1 to Spore's priority
+  - summary: The burst is spent when Spore is used.
+    trigger: turn-order
+    when: this Pokemon finishes using Spore
+    effect: clear the flag; re-entry re-arms it
+test_cases:
+  - given: a Sporulation Pokemon switches in and uses Spore against a faster foe
+    expect: Spore goes first
+  - given: it uses Spore again the next turn
+    expect: normal priority — the burst is spent
+  - given: it uses Sleep Powder while armed
+    expect: normal priority; only Spore is boosted, the flag stays armed
+  - given: it switches out and back in
+    expect: the burst is armed again
+notes:
+  - "Chris (2026-10-09): 'a custom mushroom ability that gives spore priority once on switch-in like Coil Up'. Built for the Morelull line: enter, Spore first, then drain the sleeper. Not Prankster: one move, one use per entry, so the sleep loop is reliable without being a priority wall."
+  - "Mirrors chrooked_coilup.rb: armed in CHROOKED_SWITCH_IN, read in CHROOKED_PRIORITY_MODS, consumed in CHROOKED_AFTER_MOVE (Spore deals no damage, so the on-deal seam Coil Up uses does not fire)."
+  - Dark types and Psychic Terrain block priority Spore exactly as they block Prankster moves? No — this is a plain priority bump like Quick Attack, not a Prankster flag; Dark types are NOT immune. Grass types, Overcoat and Safety Goggles still ignore Spore.
+engine_hints:
+  essentials: "Rejuv: CHROOKED_SWITCH_IN[:SPORULATION] arms effects[:ChrookedSporulation]; CHROOKED_PRIORITY_MODS returns 1 when armed and move.move == :SPORE; CHROOKED_AFTER_MOVE clears the flag after :SPORE."
+  pokeemerald: "Switch-in: set a gBattleStruct flag in SwitchInAbilities. Priority: GetChosenMovePriority — if the flag is set and move == MOVE_SPORE, priority += 1. Clear the flag in the move-end handler after MOVE_SPORE."

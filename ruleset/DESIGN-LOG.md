@@ -1415,3 +1415,24 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Rejected:** Gardevoir line (protective, not draining), Hatterene, Ribombee / Cutiefly (nectar), Comfey, Klefki, Carbink, Clefable, Alolan Ninetales, Eevee line.
 - **Corrections:** Misdreavus and Mismagius each carried Draining Kiss twice (15/17 and 20); the L20 duplicate is gone. Chris: "mirror mismagius learnset to misdreavus" — Misdreavus now carries Mismagius's rows minus L0 Shadow Ball (house mirror rule), which drops Misdreavus's own L29 Shadow Ball.
 - **Read-back:** `[L, :GLAMOURDRAIN]` present on all 14 movesets in `montext.rb`; `applied=1812 partial=0`.
+
+## 2026-10-09 — Mismagius
+
+- **Direction:** Chris: Ghost/Psychic. Serene Grace / Witching Hour / Punk Rock. Witch: shrieks and spells (sound) plus status, Hex central. Will-O-Wisp 14, Psybeam 20, Thunder Wave out. BST 515: +5 HP; Misdreavus mirrors to 440.; The design axis is the dual nature of the incantation-cry — a sonic weapon that torments through fear and hallucination but can capriciously bestow blessings — combined with the fear-absorption economy of the red gem necklace. Every ability and move choice is filtered through 'screaming witch-ghost that feeds on dread and casts curses via sound.'
+- **New mechanics:** Witching Hour (ability): Composed: Nocturnal (immune to Dark-type moves) plus Levitate.
+- **Corrections:** Status moves come early, not as capstones: Thunder Wave at L14, Hypnosis at L16, Flash Freeze at L26, Will-O-Wisp at L19 stays. Close the Ghost hole: Hex at L17 (it is the central move), Knell stays at L5, Shadow Ball at L0 on Mismagius and at L38. Build a real Psychic special ladder: Confusion L12, Extrasensory L31, Psychic L56; drop Stored Power, Psychic Noise, Blizzard. Capstones carry power: Boomburst L72, Netherstorm L68, Specter Bomb L61, Mystical Fire L48. Keep Glamour Drain pinned at L34, Icy Wind 30, Miasma 40, Scald 42, Alluring Voice 44, Hyper Voice 46, Perish Song 22, Nasty Plot 36, Magical Leaf 24.; Add Shadow Ball at L0 on Mismagius as the evolution reward (keep the L38 row too; both rows stay). Change nothing else.
+
+## 2026-10-09 — Shiinotic
+
+- **Direction:** Chris: Soul Siphon / Sporulation (custom: Spore priority once on switch-in, like Coil Up) / Nocturnal. Soil Drain at 42 instead of Ingrain. BST 515 for Shiinotic: +85 on canon, Speed stays the dump stat; Morelull mirrors the delta to 385.; The two profile facts treated as the design axis are (1) the glowing sleep-spore loop — scatter spores → prey sleeps → drain vitality — and (2) the will-o'-the-wisp / lamp lure identity, where the creature's entire kit revolves around hypnotic light, forced sleep, and life-siphoning. Every ability choice and move selection flows from 'illuminate to incapacitate, then feed.'
+- **New mechanics:** Sporulation (ability): On entry, arms a one-time +1 priority for the next Spore (Coil Up pattern).
+- **Corrections:** Drop Magical Leaf, Beguile, Teeter Dance and Stealth Rock. Leaf Storm at L68 is the final row; nothing after it. Move Draining Kiss from L9 to L14 so the Fairy hole closes. Change nothing else.
+
+## 2026-10-09 — Mismagius + Shiinotic: notes beyond the pipeline log
+
+- **Nocturnal** (ability, Dark immunity only) is the primitive under Witching Hour; Chris: "make a Nocturnal (dark immunity) its own ability that we distribute after Mismagius". Names considered for the combo: Broomstick (Chris's first; "Mismagius doesn't have a broomstick, it just floats"), Night Flight, Witching Hour (chosen). Nocturne / Night Drift / Umbral Veil were offered when the combo was still called Nocturnal.
+- **Sporulation** names offered: Sporulation (chosen), Puffball, Fruiting Body. Chris: "no Daydreamer because it has Spore"; the loop is Spore → sleep → drain, "really good at applying sleep", "strong enough to put sleepers away before they wake, not so strong it's no fun". Prankster rejected in favour of one priority Spore per entry.
+- **Pre-evo stats:** the design router scales pre-evos proportionally (Misdreavus came back 55/51/51/103/90/90). House rule is the same delta on canon, so both were re-set through the species route after ship: Misdreavus 65/60/60/85/85/85 (440), Morelull 75/35/70/85/95/25 (385). Pipeline gap, parked.
+- **Realize notes:** free-text corrections were not honoured against the skeleton (dropped moves refilled, levels ignored); only `pins` held. Both lines shipped with every row pinned.
+- **Read-back (post stat fix):** montext.rb — both stages Ghost/Psychic, SERENEGRACE / WITCHINGHOUR / PUNKROCK, L0 SHADOWBALL on Mismagius only; Morelull line SOULSIPHON / SPORULATION / NOCTURNAL; stats as above; zz_zcompose carries `:WITCHINGHOUR => [:NOCTURNAL, :LEVITATE]`; nocturnal and sporulation plugins in patch/Mods.
+- **Owed in-game:** Knock Off into Mismagius does nothing; Earthquake does nothing; Shiinotic's first Spore after entry goes before a faster foe, the second does not.
