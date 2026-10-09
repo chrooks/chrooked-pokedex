@@ -1,0 +1,5 @@
+name: Daylily
+chrooked_id: daylily
+aka: {  }
+behaviors: [chloroplast, petalbarrier]
+description: Its moves act as if in sunlight. Fresh petals halve the first hit after entry.

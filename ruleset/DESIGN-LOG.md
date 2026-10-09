@@ -1453,3 +1453,12 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Holders unchanged (19):** Zubat / Golbat / Crobat, Hoothoot / Noctowl, Murkrow / Honchkrow, Shuppet / Banette, Meowth / Persian, Purrloin / Liepard, Ledyba / Ledian, Venonat / Venomoth, Sneasel / Weavile.
 - **Read-back:** abiltext.rb carries the new text; plugin byte-identical in patch/Mods; `CHROOKED_CRIT_RATE[:NIGHTSTALKER]` removed, `CHROOKED_DAMAGE_MODS` entry added.
 - **Owed in-game:** Crobat Cross Poison at night does ~1.3x and crits about 1 in 8; Air Cutter at night does not get the 1.3x; Noctowl by day is plain.
+
+## 2026-10-09 — Mega Meganium
+
+- **Direction:** Chris: "scale the stat buffs and combine chloroplast and petal barrier for the mega." Rejuv already ships a Mega Form (Grass/Fairy, 80/92/115/143/115/80, Mega Sol); this is an edit, not a creation.
+- **Stats:** keep-the-delta — canon Mega delta 0/+10/+15/+60/+15/0 on the Ruleset base → 85/90/120/145/120/80 (640).
+- **Ability:** **Daylily** = composed `[chloroplast, petalbarrier]` (Mega Sol is Rejuv's Chloroplast; the shield is new). Named for the design-origin flower; Sun Crown and Full Bloom were the alternatives. Base abilities union back in per the Mega rule.
+- **Learnset:** mirrors Meganium including L0 Petal Dance.
+- **Read-back:** montext.rb Mega Form — GRASS/FAIRY, 85/90/120/145/120/80, DAYLILY ×3, Moveset starts `[0, :PETALDANCE]`; abiltext carries Daylily; zz_zcompose `:DAYLILY => [:CHLOROPLAST, :PETALBARRIER]`.
+- **Owed in-game:** Mega Evolve, take a hit at half with "petals scattered", Solar Beam fires in one turn.

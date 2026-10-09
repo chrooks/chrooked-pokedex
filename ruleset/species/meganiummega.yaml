@@ -1,0 +1,42 @@
+name: Meganium Mega
+chrooked_id: meganiummega
+aka: { dex: 154 }
+types: [Grass, Fairy]
+abilities:
+  primary: Daylily
+  secondary: Daylily
+  hidden: Daylily
+stats: { hp: 85, atk: 90, def: 120, spa: 145, spd: 120, spe: 80 }
+learnset:
+  - { level: 0, move: Petal Dance }
+  - { level: 1, move: Absorb }
+  - { level: 1, move: Growl }
+  - { level: 1, move: Tackle }
+  - { level: 4, move: Charm }
+  - { level: 6, move: Disarming Voice }
+  - { level: 9, move: Poison Powder }
+  - { level: 12, move: Mega Drain }
+  - { level: 15, move: Draining Kiss }
+  - { level: 18, move: Reflect }
+  - { level: 20, move: Grassy Terrain }
+  - { level: 22, move: Beguile }
+  - { level: 22, move: Magical Leaf }
+  - { level: 24, move: Aromatherapy }
+  - { level: 26, move: Leech Seed }
+  - { level: 29, move: Giga Drain }
+  - { level: 30, move: Soil Drain }
+  - { level: 31, move: Glamour Drain }
+  - { level: 34, move: Synthesis }
+  - { level: 36, move: Energy Ball }
+  - { level: 39, move: Strange Steam }
+  - { level: 42, move: Light Screen }
+  - { level: 45, move: Moonblast }
+  - { level: 48, move: Body Slam }
+  - { level: 50, move: Body Press }
+  - { level: 53, move: Earth Power }
+  - { level: 56, move: Recover }
+  - { level: 59, move: Rapture }
+  - { level: 62, move: Siphon }
+  - { level: 65, move: Springtide Storm }
+  - { level: 68, move: Solar Beam }
+  - { level: 71, move: Leaf Storm }
