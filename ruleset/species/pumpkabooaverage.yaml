@@ -4,7 +4,7 @@ aka: { dex: 710, rejuv: "PUMPKABOO::Jumbo Variety" }
 types: [Ghost, Grass]
 abilities:
   primary: Perish Body
-  secondary: Cursed Body
+  secondary: Nocturnal
   hidden: Frisk
 stats: { hp: 50, atk: 76, def: 84, spa: 26, spd: 57, spe: 58 }
 learnset:

@@ -4,7 +4,7 @@ aka: { dex: 711, rejuv: "GOURGEIST::Jumbo Variety" }
 types: [Ghost, Grass]
 abilities:
   primary: Perish Body
-  secondary: Cursed Body
+  secondary: Nocturnal
   hidden: Frisk
 stats: { hp: 73, atk: 110, def: 122, spa: 38, spd: 83, spe: 84 }
 learnset:

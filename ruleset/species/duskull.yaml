@@ -5,7 +5,7 @@ types: [Ghost, Fighting]
 abilities:
   primary: Pressure
   secondary: Iron Fist
-  hidden: Levitate
+  hidden: Witching Hour
 stats: { hp: 25, atk: 40, def: 90, spa: 30, spd: 90, spe: 25 }
 learnset:
   - { level: 1, move: Leer }

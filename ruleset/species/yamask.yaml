@@ -1,6 +1,9 @@
 name: Yamask
 chrooked_id: yamask
 aka: {  }
+abilities:
+  primary: Mummy
+  secondary: Nocturnal
 learnset:
   - { level: 1, move: Astonish }
   - { level: 1, move: Protect }

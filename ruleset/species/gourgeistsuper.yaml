@@ -1,12 +1,12 @@
 name: Gourgeist Super
 chrooked_id: gourgeistsuper
 aka: { dex: 711 }
-stats: { hp: 93, atk: 120, def: 122, spa: 38, spd: 83, spe: 54 }
 types: [Ghost, Grass]
 abilities:
   primary: Perish Body
-  secondary: Cursed Body
+  secondary: Nocturnal
   hidden: Frisk
+stats: { hp: 93, atk: 120, def: 122, spa: 38, spd: 83, spe: 54 }
 learnset:
   - { level: 0, move: Trick-or-Treat }
   - { level: 1, move: Confuse Ray }

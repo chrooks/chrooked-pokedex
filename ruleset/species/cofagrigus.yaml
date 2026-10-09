@@ -2,6 +2,9 @@ name: Cofagrigus
 chrooked_id: cofagrigus
 aka: { pokeemerald: SPECIES_COFAGRIGUS }
 types: [Ghost, Steel]
+abilities:
+  primary: Mummy
+  secondary: Nocturnal
 learnset:
   - { level: 0, move: Shadow Claw }
   - { level: 1, move: Scary Face }

@@ -1,12 +1,12 @@
 name: Pumpkaboo Large
 chrooked_id: pumpkaboolarge
 aka: { dex: 710 }
-stats: { hp: 56, atk: 76, def: 84, spa: 26, spd: 57, spe: 52 }
 types: [Ghost, Grass]
 abilities:
   primary: Perish Body
-  secondary: Cursed Body
+  secondary: Nocturnal
   hidden: Frisk
+stats: { hp: 56, atk: 76, def: 84, spa: 26, spd: 57, spe: 52 }
 learnset:
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Pound }
