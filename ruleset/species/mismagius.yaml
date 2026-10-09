@@ -1,36 +1,37 @@
 name: Mismagius
 chrooked_id: mismagius
 aka: { pokeemerald: SPECIES_MISMAGIUS }
-types: [Ghost, Fairy]
+types: [Ghost, Psychic]
 abilities:
-  primary: Levitate
-  secondary: Serene Grace
-  hidden: Pixilate
-stats: { spa: 120 }
+  primary: Serene Grace
+  secondary: Witching Hour
+  hidden: Punk Rock
+stats: { hp: 65, atk: 60, def: 60, spa: 120, spd: 105, spe: 105 }
 learnset:
   - { level: 0, move: Shadow Ball }
-  - { level: 1, move: Astonish }
   - { level: 1, move: Confuse Ray }
   - { level: 1, move: Growl }
-  - { level: 1, move: Spite }
-  - { level: 2, move: Disarming Voice }
-  - { level: 3, move: Magical Leaf }
-  - { level: 4, move: Fairy Wind }
-  - { level: 8, move: Psywave }
-  - { level: 12, move: Knell }
-  - { level: 15, move: Hex }
-  - { level: 16, move: Mystical Fire }
-  - { level: 17, move: Draining Kiss }
-  - { level: 24, move: Will-O-Wisp }
-  - { level: 28, move: Phantom Force }
+  - { level: 5, move: Knell }
+  - { level: 12, move: Confusion }
+  - { level: 14, move: Will-O-Wisp }
+  - { level: 16, move: Hypnosis }
+  - { level: 18, move: Hex }
+  - { level: 20, move: Psybeam }
+  - { level: 22, move: Perish Song }
+  - { level: 24, move: Magical Leaf }
+  - { level: 26, move: Flash Freeze }
+  - { level: 28, move: Icy Wind }
+  - { level: 31, move: Extrasensory }
   - { level: 34, move: Glamour Drain }
-  - { level: 32, move: Beguile }
-  - { level: 36, move: Extrasensory }
-  - { level: 40, move: Nasty Plot }
-  - { level: 44, move: Dazzling Gleam }
-  - { level: 48, move: Dark Pulse }
-  - { level: 52, move: Hyper Voice }
-  - { level: 56, move: Moonblast }
-  - { level: 57, move: Rapture }
-  - { level: 60, move: Specter Bomb }
-  - { level: 64, move: Netherstorm }
+  - { level: 36, move: Nasty Plot }
+  - { level: 38, move: Wither Drain }
+  - { level: 40, move: Miasma }
+  - { level: 42, move: Scald }
+  - { level: 44, move: Alluring Voice }
+  - { level: 46, move: Hyper Voice }
+  - { level: 48, move: Mystical Fire }
+  - { level: 54, move: Psychic }
+  - { level: 56, move: Mindwarp }
+  - { level: 58, move: Specter Bomb }
+  - { level: 65, move: Netherstorm }
+  - { level: 72, move: Boomburst }
