@@ -1445,3 +1445,11 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Rejected:** Gengar line (Chris); Night Stalker holders (Noctowl, Hoothoot, Shuppet line, Zubat line, Murkrow line, Sneasel); Dark types (Umbreon, Sableye, Hypno, Darkrai, Absol, Zoroark, Houndoom, Ariados); Noivern and Volbeat / Illumise — night is central but no Dark weakness and no wall role, Chris took neither; Gothorita (one thin sentence); Rowlet line (Long Reach must not be displaced). Lycanroc Midnight: the lore probe cannot fetch the form — gap.
 - **Read-back:** Duskull line HA WITCHINGHOUR ×3 MATCH; Nocturnal MATCH on Pumpkaboo/Gourgeist Average + Small, Yamask, Cofagrigus. Large and Super sizes are "not written" because Rejuv ships only two sizes (Jumbo, Small) — expected, the Ruleset rows stay for other engines.
 - **Owed in-game:** Knock Off into Dusknoir, Gourgeist and Cofagrigus does nothing; Earthquake into Dusknoir does nothing.
+
+## 2026-10-09 — Night Stalker nerf
+
+- **Direction:** Chris: "too OP". Old: forced crit in darkness, +1 crit stage in light; darkness = night plus nine dark fields (every cave), so half the game was "always crit". Options offered: crit stages only (+2 dark / +1 light) or a stat multiplier. Chris: "option B 1.3x plus +1 crit stage in darkness".
+- **New:** in darkness only — 1.3x damage on moves of the holder's stronger raw attacking stat (Attack vs Sp. Atk, before stages) and a +1 crit stage (1 in 8). Nothing in light. Shell Armor / Battle Armor / Lucky Chant still deny the crit.
+- **Holders unchanged (19):** Zubat / Golbat / Crobat, Hoothoot / Noctowl, Murkrow / Honchkrow, Shuppet / Banette, Meowth / Persian, Purrloin / Liepard, Ledyba / Ledian, Venonat / Venomoth, Sneasel / Weavile.
+- **Read-back:** abiltext.rb carries the new text; plugin byte-identical in patch/Mods; `CHROOKED_CRIT_RATE[:NIGHTSTALKER]` removed, `CHROOKED_DAMAGE_MODS` entry added.
+- **Owed in-game:** Crobat Cross Poison at night does ~1.3x and crits about 1 in 8; Air Cutter at night does not get the 1.3x; Noctowl by day is plain.

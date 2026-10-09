@@ -4,25 +4,27 @@ chrooked_id: nightstalker
 applies_to: ability
 aka: {  }
 effects:
-  - summary: Guaranteed critical hits in darkness
+  - summary: "In darkness, the holder's stronger attacking stat hits 1.3x harder."
     trigger: damage-calc
-    when: It is currently night / darkness
-    effect: The move always results in a critical hit, regardless of the target's Shell Armor, Battle Armor, or similar crit-blocking abilities (normal crit-immunity rules still apply as governed by the engine).
-  - summary: Raised critical-hit ratio outside darkness
+    when: "it is night (or a dark field), and the move's category matches the holder's higher attacking stat (Attack vs Sp. Atk, raw stat before stages)"
+    effect: "multiply the damage by 1.3; a move of the other category gets nothing"
+  - summary: "In darkness, the critical-hit ratio is one stage higher."
     trigger: damage-calc
-    when: It is not currently night / darkness
-    effect: The user's critical-hit ratio is treated as one stage higher than its base value (equivalent to a +1 crit stage bonus, stacking with Scope Lens, Super Luck, etc.).
+    when: "it is night (or a dark field)"
+    effect: "+1 crit stage (1 in 8 from base), additive with Scope Lens, Super Luck, Focus Energy; Shell Armor / Battle Armor / Lucky Chant still deny the crit"
 test_cases:
-  - given: Noctowl with Night Stalker uses Aerial Ace during nighttime against a Blissey with no crit-blocking ability
-    expect: Aerial Ace always deals critical-hit damage.
-  - given: Noctowl with Night Stalker uses Aerial Ace during daytime, holding no item, with no other crit modifiers
-    expect: Aerial Ace has a +1 crit stage (the equivalent of holding a Scope Lens), not a guaranteed crit.
-  - given: Hoothoot with Night Stalker uses Tackle during nighttime against a target with Shell Armor
-    expect: Engine resolves forced-crit vs. crit-immunity according to its own precedence rules (result is engine-defined; spec does not override Shell Armor by fiat).
+  - given: "Crobat (Atk > SpA) uses Cross Poison at night"
+    expect: "1.3x damage and a 1-in-8 crit roll"
+  - given: "Crobat uses Air Cutter (special) at night"
+    expect: "no 1.3x; the crit stage is still +1"
+  - given: "Noctowl (SpA > Atk) uses Air Slash by day, no item"
+    expect: "normal damage, base crit rate — the ability does nothing in light"
+  - given: "any holder at night into Shell Armor"
+    expect: "1.3x applies; no crit"
 notes:
-  - Darkness is defined as the in-game night clock. Engine-specific dark terrains or field states may optionally extend the darkness condition; this is an engine-level decision, not part of this neutral spec.
-  - The guaranteed crit in darkness is an always-on effect during the damage-calc step; it does not interact with the move's own crit stage — it simply forces a crit result.
-  - Crit-blocking abilities (Shell Armor, Battle Armor) and the Lucky Chant effect should be evaluated by the engine according to its normal precedence rules for forced crits vs. crit immunity.
-  - The +1 crit stage in light is purely additive with other crit-stage modifiers (Scope Lens, Super Luck, etc.) and does not stack with itself on multiple switch-ins.
-  - Day/night state is sampled at the moment the move's damage is calculated, not at turn start, to handle edge cases where the clock ticks mid-turn.
-  - STUB — engine_hints ungrounded, needs human grounding pass
+  - "Redesigned 2026-10-09. The old version forced a crit in darkness and gave +1 in light; with night plus nine dark fields (every cave) that was 'always crit' for half the game. Chris: 'too OP'. Now a flat 1.3x (Tough Claws / Sheer Force range) plus a 1-in-8 crit stage, darkness only."
+  - "Darkness is the night clock; Rejuv extends it to the Dusk Ball dark fields, as before."
+  - "'Stronger attacking stat' is read from the raw stat, not the staged one, so a Swords Dance does not flip which category the bonus serves."
+engine_hints:
+  essentials: "Rejuv: CHROOKED_DAMAGE_MODS[:NIGHTSTALKER] returns 1.3 when ChrookedNightStalker.dark?(battle) and the move category matches attacker.attack >= attacker.spatk; the existing CritStage prepend now adds +1 only when dark. CHROOKED_CRIT_RATE entry removed."
+  pokeemerald: "Damage: in the attacker-ability switch of CalcDamage/ApplyModifier (same site as ABILITY_TOUGH_CLAWS), if night and category matches max(baseAttack, baseSpAttack) → UQ_4_12(1.3). Crit: in CalcCritChance's ability switch, +1 when night."
