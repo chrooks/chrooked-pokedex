@@ -4,7 +4,7 @@
 require_relative "engine_stubs"   # inert Rejuv classes the mods load against
 
 module PBStats
-  ATTACK = 1; SPATK = 3; SPDEF = 4; SPEED = 5; ACCURACY = 6
+  ATTACK = 1; DEFENSE = 2; SPATK = 3; SPDEF = 4; SPEED = 5; ACCURACY = 6; EVASION = 7
 end
 $cache = Struct.new(:moves).new({})
 
@@ -81,10 +81,12 @@ class PokeBattle_Battler
   def pbContinueStatus(showAnim = true); @log << [:continue, @status]; end
   def pbCureStatus(showMessage = true); @log << [:cure, @status]; @status = nil; end
   def hasType?(t); types.include?(t); end
-  # The vanilla body our turn-skip prepend wraps. Returns :acted so a test can
-  # tell "the move went through" from "the turn was cancelled".
+  # The vanilla body our turn-skip prepend wraps, shaped like 14.0.20: the
+  # freeze block is unconditional, so a battler whose status reads :FROZEN
+  # loses the turn. Returns :acted / :skipped so a test can tell them apart.
   def pbTryUseMove(choice, basemove, flags = {})
-    @log << [:tried, @battle.state.effects[:NeverMeltIce]]
+    @log << [:tried, @status]
+    return :skipped if @status == :FROZEN
     :acted
   end
 end
@@ -410,22 +412,28 @@ mg.status = :FROZEN
 CHROOKED_STATUS_TURN_END[:FROZEN].call(mg, battle)
 check(fails, "magic guard takes no chip", mg.log.any? { |e| e[0] == :chip }, false)
 
-# While Nevermelting Hail is really on, vanilla already chipped - ours must not.
+# 14.0.20 dropped Rejuv's own gated frostbite, so ours is the only chip even
+# while Nevermelting Hail is on.
 battle.state.effects[:NeverMeltIce] = true
 nm = PokeBattle_Battler.new(:NONE, battle)
 nm.status = :FROZEN
 CHROOKED_STATUS_TURN_END[:FROZEN].call(nm, battle)
-check(fails, "no double chip under nevermelting hail", nm.log.any? { |e| e[0] == :chip }, false)
+check(fails, "still chips under nevermelting hail", nm.log.any? { |e| e[0] == :chip }, true)
 battle.state.effects[:NeverMeltIce] = false
 
-# The turn-skip block is guarded by !NeverMeltIce, so the vanilla body must see
-# the flag ON - and the flag must be restored the moment the call returns.
+# The freeze block is unconditional on 14.0.20, so the vanilla body must see
+# no status at all - and the status must be back the moment the call returns.
 act = PokeBattle_Battler.new(:NONE, battle)
 act.status = :FROZEN
 plain = PokeBattle_Move.new(:TACKLE)
 check(fails, "frostbitten mon still acts", act.pbTryUseMove(nil, plain), :acted)
-check(fails, "turn-skip block sees the flag on", act.log.include?([:tried, true]), true)
-check(fails, "flag restored after the call", battle.state.effects[:NeverMeltIce], false)
+check(fails, "vanilla body sees no frozen status", act.log.include?([:tried, nil]), true)
+check(fails, "status restored after the call", act.status, :FROZEN)
+check(fails, "no random thaw happened", act.log.any? { |e| e[0] == :cure }, false)
+
+healthy = PokeBattle_Battler.new(:NONE, battle)
+check(fails, "healthy mon untouched", healthy.pbTryUseMove(nil, plain), :acted)
+check(fails, "healthy mon stays healthy", healthy.status, nil)
 
 thaw = PokeBattle_Battler.new(:NONE, battle)
 thaw.status = :FROZEN
@@ -434,6 +442,7 @@ def fire.canThawUser?; true; end
 def fire.name; "Flame Wheel"; end
 thaw.pbTryUseMove(nil, fire)
 check(fails, "fire move thaws the frostbite", thaw.log.include?([:cure, :FROZEN]), true)
+check(fails, "thawed mon is not re-frozen", thaw.status, nil)
 
 # --- end-of-round handlers run BEFORE the vanilla body ---------------------
 # Vanilla pbEndOfRoundPhase replaces fainted battlers inside itself (Battle.rb

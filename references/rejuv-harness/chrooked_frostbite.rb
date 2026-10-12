@@ -2,16 +2,15 @@
 # Frostbite — freeze reskinned. The engine keeps its :FROZEN symbol; only the
 # behavior and the player-facing text change.
 #
-# Rejuv already implements frostbite, gated behind the Nevermelting Hail/Snow
-# weather state (state.effects[:NeverMeltIce]). Three sites read that flag:
-#   Battler.rb ~5719   (pbTryUseMove)      flag on => the turn-skip block is skipped
-#   Battle_Move.rb ~1179 (pbCalcDamage)    flag on => special attacks deal x0.5
-#   Battle.rb ~6404    (pbEndOfRoundPhase) flag on => 1/8 max HP chip each turn
-# This file ungates all three permanently, and drops the chip to 1/16 so it
-# matches burn (Battle.rb ~6544) exactly.
-#
-# Every handler no-ops when the flag is genuinely on, so real Nevermelting Hail
-# keeps vanilla behavior and nothing is applied twice.
+# History: through 14.0.1x Rejuv shipped its own frostbite gated behind the
+# Nevermelting Hail state (state.effects[:NeverMeltIce]) and this file ungated
+# it by flipping the flag. 14.0.20 deleted that gated code outright — the
+# freeze block in pbTryUseMove is unconditional again and pbCalcDamage /
+# pbEndOfRoundPhase no longer know frostbite — so this file now implements
+# all three effects itself:
+#   special damage x0.5 (Guts exempt)  -> CHROOKED_STATUS_DAMAGE_MODS (core)
+#   1/16 max HP chip each turn          -> CHROOKED_STATUS_TURN_END (core)
+#   no turn skip, no random thaw        -> prepend on pbTryUseMove below
 #
 # Test cases:
 #   - frostbitten mon takes its turn instead of losing it
@@ -28,8 +27,6 @@
 CHROOKED_STATUS_DAMAGE_MODS[:FROZEN] = lambda { |move, attacker, opponent|
   next 1.0 if attacker.crested == :SUICUNE
   next 1.0 if attacker.ability == :GUTS
-  # Vanilla already applied its own x0.5 when the flag is really on.
-  next 1.0 if move.battle.state.effects[:NeverMeltIce]
   next 1.0 unless move.pbIsSpecial?(attacker, move.pbType(attacker))
   0.5
 }
@@ -38,37 +35,38 @@ CHROOKED_STATUS_DAMAGE_MODS[:FROZEN] = lambda { |move, attacker, opponent|
 CHROOKED_STATUS_TURN_END[:FROZEN] = lambda { |battler, battle|
   next if battler.crested == :SUICUNE
   next if battle.magicGuardAbilities.include?(battler.ability)
-  # Vanilla already chipped (at its own 1/8) when the flag is really on.
-  next if battle.state.effects[:NeverMeltIce]
   battler.pbContinueStatus
   battler.pbReduceHP((battler.totalhp / 16.0).floor)
   battler.pbFaint if battler.isFainted?
 }
 
 # --- No turn skip, but keep the Fire-move thaw -----------------------------
-# The turn-skip block in pbTryUseMove is guarded by `!NeverMeltIce`, so flipping
-# the flag on for the duration of that one call skips the block wholesale. The
-# flip is scoped to the call and restored in an ensure, so nothing outside sees
-# it — that is what keeps this off the weather display and the NeverMeltIce item,
-# which the always-on-flag approach would have changed.
+# The freeze block in pbTryUseMove (Battler.rb ~5723 on 14.0.20) is
+# `if self.status == :FROZEN` with no gate, and it sits inside a 200-line
+# method we must not redefine. So the prepend handles the Fire-move thaw
+# itself, then hides the status from the vanilla body for the duration of
+# that one call: @status is swapped to nil and restored in an ensure.
 #
-# Skipping the block also discards its Fire-move thaw branch, so that branch is
-# re-done here first, minus the random thaw roll and the turn cancellation.
+# The ivar is written directly on purpose — `status=` has Truant / Petrified
+# side effects on nil. The only other status reads inside pbTryUseMove are
+# SLEEP, PARALYSIS and PETRIFIED, all false for a frostbitten mon, so nothing
+# else changes. Nothing in that method cures a status for a mon it thinks is
+# healthy, so the restore cannot re-freeze a cured mon.
 module ChrookedFrostbiteNoTurnSkip
   def pbTryUseMove(*args, **kwargs)
+    return super unless @status == :FROZEN
     basemove = args[1]
-    if self.status == :FROZEN && basemove.respond_to?(:canThawUser?) &&
-       basemove.canThawUser? && !(basemove.move == :BURNUP && !self.hasType?(:FIRE))
+    if basemove.respond_to?(:canThawUser?) && basemove.canThawUser? &&
+       !(basemove.move == :BURNUP && !self.hasType?(:FIRE))
       self.pbCureStatus(false)
       @battle.pbDisplay(_INTL("{1}'s {2} melted the frost!", pbThis, basemove.name))
+      return super
     end
-    state = @battle.state.effects
-    was = state[:NeverMeltIce]
-    state[:NeverMeltIce] = true
+    @status = nil
     begin
       super
     ensure
-      state[:NeverMeltIce] = was
+      @status = :FROZEN if @status.nil?
     end
   end
 end

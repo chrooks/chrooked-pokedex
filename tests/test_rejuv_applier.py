@@ -1349,3 +1349,16 @@ def test_static_mod_hotkeys_accept_keyboard_and_pad(tmp_path, mod_name, module, 
     proc = subprocess.run(["ruby", "-e", script], capture_output=True, text=True, cwd=tmp_path)
     assert proc.returncode == 0, proc.stderr
     assert "OK" in proc.stdout
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby unavailable")
+def test_harness_frostbite_on_14_0_20(tmp_path):
+    """Frostbite never costs the turn on 14.0.20, where the engine's freeze
+    block is unconditional: the prepend hides the status from the vanilla body
+    and restores it; Fire moves thaw; chip and special penalty need no gate."""
+    import subprocess
+    script = Path(__file__).parent / "fixtures" / "rejuv-harness" / "frostbite_checks.rb"
+    proc = subprocess.run(
+        ["ruby", str(script), str(HARNESS)], capture_output=True, text=True, cwd=tmp_path
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
