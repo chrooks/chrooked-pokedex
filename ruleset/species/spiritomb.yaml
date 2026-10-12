@@ -2,34 +2,33 @@ name: Spiritomb
 chrooked_id: spiritomb
 aka: { pokeemerald: SPECIES_SPIRITOMB }
 abilities:
-  secondary: Insidious
-stats: { hp: 60, atk: 100, def: 110, spa: 100, spd: 110 }
+  primary: Pressure
+  secondary: Shadow Tag
+  hidden: Cursed Body
+stats: { hp: 75, atk: 85, def: 125, spa: 85, spd: 125, spe: 40 }
 learnset:
-  - { level: 1, move: Night Shade }
   - { level: 1, move: Confuse Ray }
-  - { level: 2, move: Lick }
-  - { level: 3, move: Cheap Shot }
-  - { level: 5, move: Shadow Sneak }
-  - { level: 7, move: Knell }
-  - { level: 8, move: Slander }
-  - { level: 10, move: Spite }
-  - { level: 15, move: Payback }
-  - { level: 16, move: Shadow Claw }
-  - { level: 17, move: Bite }
-  - { level: 20, move: Nasty Plot }
-  - { level: 25, move: Hex }
-  - { level: 29, move: Heel Drop }
-  - { level: 30, move: Memento }
-  - { level: 35, move: Sucker Punch }
-  - { level: 37, move: Backstab }
-  - { level: 40, move: Curse }
-  - { level: 42, move: Wraithstrike }
-  - { level: 43, move: Interment }
-  - { level: 45, move: Shadow Ball }
-  - { level: 48, move: Havoc }
-  - { level: 50, move: Dark Pulse }
-  - { level: 55, move: Hypnosis }
-  - { level: 57, move: Necrosis }
-  - { level: 60, move: Dream Eater }
-  - { level: 64, move: Netherstorm }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Astonish }
+  - { level: 12, move: Knell }
+  - { level: 16, move: Will-O-Wisp }
+  - { level: 18, move: Slander }
+  - { level: 21, move: Hex }
+  - { level: 23, move: Shadow Sneak }
+  - { level: 26, move: Spite }
+  - { level: 28, move: Mean Look }
+  - { level: 30, move: Grave Drop }
+  - { level: 32, move: Rock Slide }
+  - { level: 34, move: Knock Off }
+  - { level: 36, move: Night Slash }
+  - { level: 38, move: Crunch }
+  - { level: 40, move: Rest }
+  - { level: 44, move: Shadow Ball }
+  - { level: 46, move: Foul Play }
+  - { level: 50, move: Pain Split }
+  - { level: 52, move: Curse }
+  - { level: 55, move: Specter Bomb }
+  - { level: 57, move: Night Daze }
+  - { level: 60, move: Perish Song }
   - { level: 65, move: Eclipse }
+  - { level: 72, move: Netherstorm }

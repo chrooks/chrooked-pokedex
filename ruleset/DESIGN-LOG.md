@@ -1462,3 +1462,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Learnset:** mirrors Meganium including L0 Petal Dance.
 - **Read-back:** montext.rb Mega Form — GRASS/FAIRY, 85/90/120/145/120/80, DAYLILY ×3, Moveset starts `[0, :PETALDANCE]`; abiltext carries Daylily; zz_zcompose `:DAYLILY => [:CHLOROPLAST, :PETALBARRIER]`.
 - **Owed in-game:** Mega Evolve, take a hit at half with "petals scattered", Solar Beam fires in one turn.
+
+## 2026-10-12 — Spiritomb
+
+- **Direction:** Warden: trapper-staller. Keep Ghost/Dark plus Rock coverage. Pressure / Shadow Tag / Cursed Body. Atk 85 so the physical moves are usable; BST 535. Status tools early (Confuse Ray, Will-O-Wisp before Hex), Spite early, Curse mid, Netherstorm capstone.; The twin axes are IMPRISONMENT and COMPOSITE WICKEDNESS: 108 malevolent spirits forcibly merged and sealed inside a stone act as both the creature's identity and its narrative tension. Every design decision flows from 'a multitude of sinners bound into one cursed anchor' — its typing, its trapping utility, its curse-spreading, and its passive punishment of those who disturb it.
