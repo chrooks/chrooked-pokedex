@@ -10,11 +10,12 @@
 # owned ability. A Symbol#== fallback covers the reversed comparisons,
 # Array#include? and case/when sites. Hash lookups ($cache.abil[ability]) fall
 # through to the primary ability via hash/eql?, so names/descriptions display
-# the primary.
-# ponytail: known ceilings — (1) changeAbility (Skill Swap / Trace / Mummy /
+# the primary unless chrooked_display is set (a composed ability stamps its
+# own symbol there — see chrooked_zz_zcompose.rb; zreduxinfo names the part
+# that fired).
+# ponytail: known ceiling — changeAbility (Skill Swap / Trace / Mummy /
 # Gastro Acid recovery) collapses the mon to the single new ability for the
-# rest of the battle; (2) messages and the ability box show the primary
-# ability's name only. Upgrade path: wrap changeAbility and getAbilityName.
+# rest of the battle. Upgrade path: wrap changeAbility.
 
 class ChrookedAbilitySet
   attr_reader :list, :primary
