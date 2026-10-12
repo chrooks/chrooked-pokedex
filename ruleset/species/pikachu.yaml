@@ -3,7 +3,7 @@ chrooked_id: pikachu
 aka: { pokeemerald: SPECIES_PIKACHU }
 types: [Electric]
 abilities:
-  primary: Static
+  primary: Overcharge
   secondary: Galvanize
   hidden: Lightning Rod
 stats: { hp: 43, atk: 74, spa: 74, spd: 54 }

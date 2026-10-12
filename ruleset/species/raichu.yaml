@@ -2,7 +2,7 @@ name: Raichu
 chrooked_id: raichu
 aka: { pokeemerald: SPECIES_RAICHU }
 abilities:
-  primary: Static
+  primary: Overcharge
   secondary: Galvanize
   hidden: Lightning Rod
 stats: { hp: 64, atk: 110, def: 55, spa: 110, spd: 81, spe: 120 }

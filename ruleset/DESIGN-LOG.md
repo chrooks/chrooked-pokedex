@@ -1466,3 +1466,13 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-10-12 — Spiritomb
 
 - **Direction:** Warden: trapper-staller. Keep Ghost/Dark plus Rock coverage. Pressure / Shadow Tag / Cursed Body. Atk 85 so the physical moves are usable; BST 535. Status tools early (Confuse Ray, Will-O-Wisp before Hex), Spite early, Curse mid, Netherstorm capstone.; The twin axes are IMPRISONMENT and COMPOSITE WICKEDNESS: 108 malevolent spirits forcibly merged and sealed inside a stone act as both the creature's identity and its narrative tension. Every design decision flows from 'a multitude of sinners bound into one cursed anchor' — its typing, its trapping utility, its curse-spreading, and its passive punishment of those who disturb it.
+
+## 2026-10-12 — Wyvernize and Overcharge get carriers (#84)
+
+- **Direction:** three Ruleset abilities had no carrier species. Method: the dex distribute call per ability (it returned type lists — every Dragon line, every Pikachu form) plus a keyword lore scan over hand-picked lines; only lines with an explicit dex claim went to the table.
+- **Wyvernize → Noibat / Noivern, slot 2 for Aerodynamic.** "Name origin: noise and wyvern"; Boomburst turns Dragon at 1.2x. Drampa was the first offer (Normal/Dragon, "based on a Chinese dragon"); Chris: "I don't know if I like Wyvernize on Drampa bc then it essentially loses its Normal STAB. Sub Aerodynamic for Wyvernize."
+- **Overcharge → Pichu / Pikachu / Raichu, slot 1 for Static.** "If the electrical sacs become excessively charged, Raichu plants its tail in the ground and discharges." Offered as the HA for Lightning Rod; Chris: "I like replacing Static on the Raichu line." Pikachu cosmetic forms and Raichu-Alola untouched (the forms already diverge on Galvanize). Jolteon mentions charge but all three slots are Electric-specific.
+- **Demolition: held.** Rampardos (slot 2 for Mold Breaker, "destroy a skyscraper with a headbutt") and Tyrantrum ("demolish a car") passed the screen, but Chris: "Demolition is incredibly OP, that's a Dragon Dance on KO." The ability itself disagrees with itself: ability text says Atk +1 and next-move priority, the behavior spec says Atk +1 and Spe +1, the Rejuv harness ships Atk +1 only (a Moxie clone). Resolve the mechanic before a carrier.
+- **Rejected:** Gyarados and Krookodile (Moxie-shaped kits already); Machamp, Hariyama, Donphan (three niche slots, nothing generic to displace); Dudunsparce (not in the dex).
+- **Read-back:** montext.rb Noibat / Noivern `[:Abilities][1] = :WYVERNIZE` MATCH; Pichu / Pikachu / Raichu `[:Abilities][0] = :OVERCHARGE` MATCH. patch/ mirrored to thor.
+- **Owed in-game:** Noivern Boomburst hits a Dragon-weak target super-effectively; Raichu Thunderbolt at a third HP does 1.5x.

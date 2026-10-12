@@ -4,7 +4,7 @@ aka: { pokeemerald: SPECIES_NOIBAT }
 types: [Flying, Dragon]
 abilities:
   primary: Amplifier
-  secondary: Aerodynamic
+  secondary: Wyvernize
   hidden: Mountaineer
 stats: { hp: 60, atk: 65, def: 55, spa: 70, spd: 53, spe: 87 }
 learnset:

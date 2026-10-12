@@ -3,7 +3,7 @@ chrooked_id: noivern
 aka: { pokeemerald: SPECIES_NOIVERN }
 abilities:
   primary: Amplifier
-  secondary: Aerodynamic
+  secondary: Wyvernize
   hidden: Mountaineer
 stats: { spa: 105, spe: 130 }
 learnset:

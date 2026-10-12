@@ -3,7 +3,7 @@ chrooked_id: pichu
 aka: { pokeemerald: SPECIES_PICHU }
 types: [Electric]
 abilities:
-  primary: Static
+  primary: Overcharge
   secondary: Galvanize
   hidden: Lightning Rod
 stats: { hp: 30, atk: 53, def: 26, spa: 52, spd: 39 }
