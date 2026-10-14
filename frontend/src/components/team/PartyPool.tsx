@@ -1,6 +1,8 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import type { Fit } from "../../lib/teamFit";
 import type { DexEntry } from "../../types";
+import { FitChips } from "./FitChips";
 import { DexCell } from "../DexCell";
 import { useElementWidth } from "../DexGrid";
 import "../dex-cell.css";
@@ -12,8 +14,13 @@ type Props = {
   partyIds: ReadonlySet<string>;
   onAdd: (chrookedId: string) => void;
   backdropTargetId: string | null;
+  /** Suggest mode: each card's team-fit reasons, shown as a chip line under it. */
+  fits?: ReadonlyMap<string, Fit> | null;
+  /** The card under the pointer or keyboard focus (null when it leaves). */
+  onPoint?: (chrookedId: string | null) => void;
 };
 
+const CHIP_ROW = 52; // the two-line FitChips block under each card in Suggest mode
 const MIN_CELL = 176; // matches the dex grid's MIN_CELL
 const GAP = 12;
 const ROW_HEIGHT = 214; // cell height + gap, as in DexGrid
@@ -24,7 +31,7 @@ const ROW_HEIGHT = 214; // cell height + gap, as in DexGrid
  * Rows are windowed (the DexGrid recipe) so the full ~1451-card pool costs only
  * the visible band; ARIA carries the real total that windowing hides.
  */
-export function PartyPool({ entries, partyIds, onAdd, backdropTargetId }: Props) {
+export function PartyPool({ entries, partyIds, onAdd, backdropTargetId, fits, onPoint }: Props) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const { width, measureRef } = useElementWidth();
   const columns = width === 0 ? 1 : Math.max(1, Math.floor((width + GAP) / (MIN_CELL + GAP)));
@@ -33,9 +40,14 @@ export function PartyPool({ entries, partyIds, onAdd, backdropTargetId }: Props)
   const virtualizer = useVirtualizer({
     count: rowCount,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => ROW_HEIGHT,
+    estimateSize: () => ROW_HEIGHT + (fits ? CHIP_ROW : 0),
     overscan: 3,
   });
+  // Row height changes when Suggest toggles; re-measure so rows don't overlap.
+  const hasFits = !!fits;
+  useEffect(() => {
+    virtualizer.measure();
+  }, [hasFits, virtualizer]);
 
   const setRefs = useCallback(
     (node: HTMLDivElement | null) => {
@@ -75,6 +87,10 @@ export function PartyPool({ entries, partyIds, onAdd, backdropTargetId }: Props)
                     role="option"
                     aria-selected={onTeam}
                     data-on-team={onTeam}
+                    onPointerEnter={onPoint && (() => onPoint(entry.chrooked_id))}
+                    onPointerLeave={onPoint && (() => onPoint(null))}
+                    onFocus={onPoint && (() => onPoint(entry.chrooked_id))}
+                    onBlur={onPoint && (() => onPoint(null))}
                   >
                     <DexCell
                       entry={entry}
@@ -83,6 +99,9 @@ export function PartyPool({ entries, partyIds, onAdd, backdropTargetId }: Props)
                       backdropTargetId={backdropTargetId}
                     />
                     {onTeam && <span className="party-pool__tag mono">on team</span>}
+                    {fits && !onTeam && fits.get(entry.chrooked_id) && (
+                      <FitChips fit={fits.get(entry.chrooked_id)!} />
+                    )}
                   </div>
                 );
               })}

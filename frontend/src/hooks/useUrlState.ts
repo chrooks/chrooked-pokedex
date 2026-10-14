@@ -57,6 +57,8 @@ export interface ViewState {
   teamRedux: boolean;
   /** Team tab: Offensive Coverage expanded (collapsed by default). */
   teamOffense: boolean;
+  /** Team tab: sort the pool by team fit and show each card's reasons. */
+  teamSuggest: boolean;
   /** The Makeover Workbench anchor species (its chrooked_id), or null when the
       workbench is closed. URL-persisted so a reload restores it. */
   makeover: string | null;
@@ -115,6 +117,7 @@ function readState(): ViewState {
     poolNewTypes: params.get("tnew") === "1",
     teamRedux: params.get("tredux") === "1",
     teamOffense: params.get("toff") === "1",
+    teamSuggest: params.get("tsuggest") === "1",
     makeover: mk.species,
     makeoverStage: mk.stage,
     makeoverSelect: mk.selected,
@@ -152,6 +155,7 @@ const OWNED_PARAMS = [
   "tnew",
   "tredux",
   "toff",
+  "tsuggest",
   ...MAKEOVER_PARAMS,
 ] as const;
 
@@ -176,6 +180,7 @@ function writeState(next: ViewState): void {
   if (next.poolNewTypes) params.set("tnew", "1");
   if (next.teamRedux) params.set("tredux", "1");
   if (next.teamOffense) params.set("toff", "1");
+  if (next.teamSuggest) params.set("tsuggest", "1");
   encodeMakeover(params, {
     species: next.makeover,
     stage: next.makeoverStage,

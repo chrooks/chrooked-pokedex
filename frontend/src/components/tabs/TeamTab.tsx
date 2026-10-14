@@ -25,7 +25,9 @@ import { PartyPool } from "../team/PartyPool";
 import { PartySlot } from "../team/PartySlot";
 import { SavedTeamsMenu } from "../team/SavedTeamsMenu";
 import { HolesPanel } from "../team/HolesPanel";
-import { teamHoles } from "../../lib/teamFit";
+import { candidateMember, teamFit, teamHoles, type Fit } from "../../lib/teamFit";
+import { bst } from "../../lib/format";
+import { WhyPanel } from "../team/WhyPanel";
 import { MatchupTable } from "../team/MatchupTable";
 import { ReplaceDialog } from "../team/ReplaceDialog";
 import "./tabs.css";
@@ -65,6 +67,9 @@ export function TeamTab() {
   const newTypesOnly = view.poolNewTypes;
   const redux = view.teamRedux;
   const offenseOpen = view.teamOffense;
+  const suggest = view.teamSuggest;
+  // The pool card under the pointer/focus — feeds the Why panel.
+  const [pointedId, setPointedId] = useState<string | null>(null);
   // The fresh species awaiting a swap decision — set when a pick lands on a full
   // team, cleared when the replace dialog resolves or is dismissed (ac10).
   const [replaceIncoming, setReplaceIncoming] = useState<DexEntry | null>(null);
@@ -152,6 +157,32 @@ export function TeamTab() {
   const holes = useMemo(() => teamHoles(matchups.defense), [matchups]);
 
   const partyIds = useMemo(() => new Set(party.map((m) => m.id)), [party]);
+
+  // Suggest mode: score every pool species against the team (Defense-first,
+  // lib/teamFit), then sort the pool by it — highest score, then BST, then dex
+  // order; species already on the team sink to the end. Off, or with an empty
+  // party, the pool keeps dex order and no fit is computed.
+  const isSuggesting = suggest && members.length > 0 && chartByKey !== null;
+  const fits = useMemo<Map<string, Fit> | null>(() => {
+    if (!isSuggesting || chartByKey === null) return null;
+    const out = new Map<string, Fit>();
+    for (const entry of pool) {
+      out.set(entry.chrooked_id, teamFit(matchups, candidateMember(entry, redux), chartByKey));
+    }
+    return out;
+  }, [isSuggesting, pool, matchups, redux, chartByKey]);
+  const shownPool = useMemo(() => {
+    if (fits === null) return pool;
+    const rank = (entry: DexEntry) => (partyIds.has(entry.chrooked_id) ? -Infinity : fits.get(entry.chrooked_id)?.score ?? 0);
+    return [...pool].sort(
+      (a, b) =>
+        rank(b) - rank(a) ||
+        (bst(b.stats) ?? 0) - (bst(a.stats) ?? 0) ||
+        (a.dex ?? 0) - (b.dex ?? 0),
+    );
+  }, [pool, fits, partyIds]);
+  const pointedEntry = pointedId ? byId.get(pointedId) ?? null : null;
+  const pointedFit = pointedId && fits ? fits.get(pointedId) ?? null : null;
 
   function addMember(id: string) {
     if (partyIds.has(id)) return; // no duplicates (the picker also guards this)
@@ -248,6 +279,19 @@ export function TeamTab() {
               Redux mode
             </button>
           )}
+          {resolved.length > 0 && (
+            <button
+              type="button"
+              id="team-suggest"
+              className="team__new-types"
+              data-on={suggest}
+              aria-pressed={suggest}
+              title="Sort the pool by how much each species shores up this team's defense, with the reasons on each card"
+              onClick={() => update({ teamSuggest: !suggest })}
+            >
+              Suggest
+            </button>
+          )}
         </div>
       </div>
 
@@ -258,7 +302,7 @@ export function TeamTab() {
             onQuery={(next) => update({ poolQuery: next })}
             resultCount={pool.length}
             onSubmit={() => {
-              const first = pool.find((entry) => !partyIds.has(entry.chrooked_id));
+              const first = shownPool.find((entry) => !partyIds.has(entry.chrooked_id));
               if (first) addMember(first.chrooked_id);
             }}
           />
@@ -296,12 +340,22 @@ export function TeamTab() {
               : "No species match this search."}
           </p>
         ) : (
-          <PartyPool
-            entries={pool}
-            partyIds={partyIds}
-            onAdd={addMember}
-            backdropTargetId={backdrop}
-          />
+          <>
+            {fits !== null && (
+              <p className="team__sort-note" id="team-sort-note">
+                Sorted by fit for this team, within your filters
+                {redux ? " · all abilities count" : " · base typing (Redux mode counts every ability)"}
+              </p>
+            )}
+            <PartyPool
+              entries={shownPool}
+              partyIds={partyIds}
+              onAdd={addMember}
+              backdropTargetId={backdrop}
+              fits={fits}
+              onPoint={fits ? setPointedId : undefined}
+            />
+          </>
         )}
       </section>
 
@@ -335,7 +389,10 @@ export function TeamTab() {
                 />
               ))}
             </ul>
-            <HolesPanel holes={holes} memberNames={members.map((m) => m.name)} />
+            <div className="team__inspector" data-split={fits !== null}>
+              <HolesPanel holes={holes} memberNames={members.map((m) => m.name)} />
+              {fits !== null && <WhyPanel entry={pointedEntry} fit={pointedFit} />}
+            </div>
             <MatchupTable
               id="team-defense"
               variant="defense"
