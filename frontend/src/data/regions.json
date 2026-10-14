@@ -1,0 +1,5533 @@
+{
+"1": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"2": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"3": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"4": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"5": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"6": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"7": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"8": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"9": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"10": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"11": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"12": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"13": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"14": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"15": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"16": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"17": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"18": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"19": [
+"Kanto",
+"Johto",
+"Unova",
+"Alola"
+],
+"20": [
+"Kanto",
+"Johto",
+"Unova",
+"Alola"
+],
+"21": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola"
+],
+"22": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola"
+],
+"23": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"24": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"25": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"26": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"27": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"28": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"29": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"30": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"31": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"32": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"33": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"34": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"35": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"36": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"37": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"38": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"39": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"40": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"41": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"42": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"43": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"44": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"45": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"46": [
+"Kanto",
+"Johto",
+"Alola",
+"Hisui"
+],
+"47": [
+"Kanto",
+"Johto",
+"Alola",
+"Hisui"
+],
+"48": [
+"Kanto",
+"Johto",
+"Paldea"
+],
+"49": [
+"Kanto",
+"Johto",
+"Paldea"
+],
+"50": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"51": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"52": [
+"Kanto",
+"Johto",
+"Alola",
+"Galar",
+"Paldea"
+],
+"53": [
+"Kanto",
+"Johto",
+"Alola",
+"Galar",
+"Paldea"
+],
+"54": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"55": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"56": [
+"Kanto",
+"Johto",
+"Alola",
+"Paldea"
+],
+"57": [
+"Kanto",
+"Johto",
+"Alola",
+"Paldea"
+],
+"58": [
+"Kanto",
+"Johto",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"59": [
+"Kanto",
+"Johto",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"60": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"61": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"62": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"63": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"64": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"65": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"66": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"67": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"68": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"69": [
+"Kanto",
+"Johto",
+"Kalos",
+"Paldea"
+],
+"70": [
+"Kanto",
+"Johto",
+"Kalos",
+"Paldea"
+],
+"71": [
+"Kanto",
+"Johto",
+"Kalos",
+"Paldea"
+],
+"72": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"73": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"74": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"75": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"76": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"77": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"78": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"79": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"80": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"81": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"82": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"83": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"84": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"85": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"86": [
+"Kanto",
+"Johto",
+"Unova",
+"Alola",
+"Paldea"
+],
+"87": [
+"Kanto",
+"Johto",
+"Unova",
+"Alola",
+"Paldea"
+],
+"88": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Alola",
+"Paldea"
+],
+"89": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Alola",
+"Paldea"
+],
+"90": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"91": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"92": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"93": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"94": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"95": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"96": [
+"Kanto",
+"Johto",
+"Alola",
+"Paldea"
+],
+"97": [
+"Kanto",
+"Johto",
+"Alola",
+"Paldea"
+],
+"98": [
+"Kanto",
+"Johto",
+"Galar"
+],
+"99": [
+"Kanto",
+"Johto",
+"Galar"
+],
+"100": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"101": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"102": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"103": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"104": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"105": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"106": [
+"Kanto",
+"Johto",
+"Galar",
+"Paldea"
+],
+"107": [
+"Kanto",
+"Johto",
+"Galar",
+"Paldea"
+],
+"108": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"109": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Galar",
+"Paldea"
+],
+"110": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Galar",
+"Paldea"
+],
+"111": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"112": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"113": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"114": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Galar",
+"Hisui"
+],
+"115": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"116": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"117": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"118": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar"
+],
+"119": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar"
+],
+"120": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"121": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"122": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"123": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"124": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"125": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"126": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"127": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"128": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"129": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"130": [
+"Kanto",
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"131": [
+"Kanto",
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"132": [
+"Kanto",
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"133": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"134": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"135": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"136": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"137": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"138": [
+"Kanto",
+"Johto",
+"Alola",
+"Galar"
+],
+"139": [
+"Kanto",
+"Johto",
+"Alola",
+"Galar"
+],
+"140": [
+"Kanto",
+"Johto",
+"Alola",
+"Galar"
+],
+"141": [
+"Kanto",
+"Johto",
+"Alola",
+"Galar"
+],
+"142": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"143": [
+"Kanto",
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"144": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"145": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"146": [
+"Kanto",
+"Johto",
+"Kalos",
+"Galar"
+],
+"147": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"148": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"149": [
+"Kanto",
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"150": [
+"Kanto",
+"Johto",
+"Kalos"
+],
+"151": [
+"Kanto",
+"Johto"
+],
+"152": [
+"Johto",
+"Paldea"
+],
+"153": [
+"Johto",
+"Paldea"
+],
+"154": [
+"Johto",
+"Paldea"
+],
+"155": [
+"Johto",
+"Hisui",
+"Paldea"
+],
+"156": [
+"Johto",
+"Hisui",
+"Paldea"
+],
+"157": [
+"Johto",
+"Hisui",
+"Paldea"
+],
+"158": [
+"Johto",
+"Paldea"
+],
+"159": [
+"Johto",
+"Paldea"
+],
+"160": [
+"Johto",
+"Paldea"
+],
+"161": [
+"Johto",
+"Kalos",
+"Paldea"
+],
+"162": [
+"Johto",
+"Kalos",
+"Paldea"
+],
+"163": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"164": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"165": [
+"Johto",
+"Kalos",
+"Alola"
+],
+"166": [
+"Johto",
+"Kalos",
+"Alola"
+],
+"167": [
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"168": [
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"169": [
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"170": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"171": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"172": [
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"173": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"174": [
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"175": [
+"Johto",
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"176": [
+"Johto",
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"177": [
+"Johto",
+"Hoenn",
+"Alola",
+"Galar"
+],
+"178": [
+"Johto",
+"Hoenn",
+"Alola",
+"Galar"
+],
+"179": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"180": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"181": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"182": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"183": [
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"184": [
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"185": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"186": [
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"187": [
+"Johto",
+"Kalos",
+"Paldea"
+],
+"188": [
+"Johto",
+"Kalos",
+"Paldea"
+],
+"189": [
+"Johto",
+"Kalos",
+"Paldea"
+],
+"190": [
+"Johto",
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"191": [
+"Johto",
+"Unova",
+"Paldea"
+],
+"192": [
+"Johto",
+"Unova",
+"Paldea"
+],
+"193": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"194": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"195": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"196": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"197": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"198": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"199": [
+"Johto",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"200": [
+"Johto",
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"201": [
+"Johto",
+"Sinnoh",
+"Hisui"
+],
+"202": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"203": [
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Paldea"
+],
+"204": [
+"Johto",
+"Alola",
+"Paldea"
+],
+"205": [
+"Johto",
+"Alola",
+"Paldea"
+],
+"206": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"207": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"208": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"209": [
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"210": [
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"211": [
+"Johto",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"212": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"213": [
+"Johto",
+"Unova",
+"Kalos",
+"Galar"
+],
+"214": [
+"Johto",
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"215": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"216": [
+"Johto",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"217": [
+"Johto",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"218": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"219": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"220": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"221": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"222": [
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"223": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"224": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"225": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"226": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"227": [
+"Johto",
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"228": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"229": [
+"Johto",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"230": [
+"Johto",
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"231": [
+"Johto",
+"Hoenn",
+"Paldea"
+],
+"232": [
+"Johto",
+"Hoenn",
+"Paldea"
+],
+"233": [
+"Johto",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"234": [
+"Johto",
+"Hisui",
+"Paldea"
+],
+"235": [
+"Johto",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"236": [
+"Johto",
+"Galar",
+"Paldea"
+],
+"237": [
+"Johto",
+"Galar",
+"Paldea"
+],
+"238": [
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"239": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"240": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"241": [
+"Johto",
+"Kalos",
+"Alola",
+"Galar"
+],
+"242": [
+"Johto",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"243": [
+"Johto"
+],
+"244": [
+"Johto"
+],
+"245": [
+"Johto"
+],
+"246": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"247": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"248": [
+"Johto",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"249": [
+"Johto"
+],
+"250": [
+"Johto"
+],
+"251": [
+"Johto"
+],
+"252": [
+"Hoenn",
+"Paldea"
+],
+"253": [
+"Hoenn",
+"Paldea"
+],
+"254": [
+"Hoenn",
+"Paldea"
+],
+"255": [
+"Hoenn",
+"Paldea"
+],
+"256": [
+"Hoenn",
+"Paldea"
+],
+"257": [
+"Hoenn",
+"Paldea"
+],
+"258": [
+"Hoenn",
+"Paldea"
+],
+"259": [
+"Hoenn",
+"Paldea"
+],
+"260": [
+"Hoenn",
+"Paldea"
+],
+"261": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"262": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"263": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"264": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"265": [
+"Hoenn",
+"Sinnoh",
+"Hisui"
+],
+"266": [
+"Hoenn",
+"Sinnoh",
+"Hisui"
+],
+"267": [
+"Hoenn",
+"Sinnoh",
+"Hisui"
+],
+"268": [
+"Hoenn",
+"Sinnoh",
+"Hisui"
+],
+"269": [
+"Hoenn",
+"Sinnoh",
+"Hisui"
+],
+"270": [
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"271": [
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"272": [
+"Hoenn",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"273": [
+"Hoenn",
+"Galar",
+"Paldea"
+],
+"274": [
+"Hoenn",
+"Galar",
+"Paldea"
+],
+"275": [
+"Hoenn",
+"Galar",
+"Paldea"
+],
+"276": [
+"Hoenn",
+"Kalos"
+],
+"277": [
+"Hoenn",
+"Kalos"
+],
+"278": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"279": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"280": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"281": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"282": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"283": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"284": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"285": [
+"Hoenn",
+"Paldea"
+],
+"286": [
+"Hoenn",
+"Paldea"
+],
+"287": [
+"Hoenn",
+"Unova",
+"Paldea"
+],
+"288": [
+"Hoenn",
+"Unova",
+"Paldea"
+],
+"289": [
+"Hoenn",
+"Unova",
+"Paldea"
+],
+"290": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"291": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"292": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"293": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"294": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"295": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"296": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"297": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"298": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"299": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"300": [
+"Hoenn",
+"Unova",
+"Kalos"
+],
+"301": [
+"Hoenn",
+"Unova",
+"Kalos"
+],
+"302": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"303": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar"
+],
+"304": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Galar"
+],
+"305": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Galar"
+],
+"306": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Galar"
+],
+"307": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Paldea"
+],
+"308": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Paldea"
+],
+"309": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar"
+],
+"310": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar"
+],
+"311": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"312": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"313": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"314": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"315": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"316": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"317": [
+"Hoenn",
+"Kalos",
+"Paldea"
+],
+"318": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar"
+],
+"319": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar"
+],
+"320": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"321": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"322": [
+"Hoenn",
+"Unova",
+"Paldea"
+],
+"323": [
+"Hoenn",
+"Unova",
+"Paldea"
+],
+"324": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"325": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Paldea"
+],
+"326": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Paldea"
+],
+"327": [
+"Hoenn",
+"Kalos",
+"Alola"
+],
+"328": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"329": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"330": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"331": [
+"Hoenn",
+"Paldea"
+],
+"332": [
+"Hoenn",
+"Paldea"
+],
+"333": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"334": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"335": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Paldea"
+],
+"336": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Paldea"
+],
+"337": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Galar"
+],
+"338": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Galar"
+],
+"339": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"340": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"341": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"342": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"343": [
+"Hoenn",
+"Unova",
+"Alola",
+"Galar"
+],
+"344": [
+"Hoenn",
+"Unova",
+"Alola",
+"Galar"
+],
+"345": [
+"Hoenn",
+"Alola",
+"Galar"
+],
+"346": [
+"Hoenn",
+"Alola",
+"Galar"
+],
+"347": [
+"Hoenn",
+"Alola",
+"Galar"
+],
+"348": [
+"Hoenn",
+"Alola",
+"Galar"
+],
+"349": [
+"Hoenn",
+"Sinnoh",
+"Alola",
+"Galar",
+"Paldea"
+],
+"350": [
+"Hoenn",
+"Sinnoh",
+"Alola",
+"Galar",
+"Paldea"
+],
+"351": [
+"Hoenn",
+"Unova",
+"Alola"
+],
+"352": [
+"Hoenn",
+"Kalos",
+"Alola"
+],
+"353": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"354": [
+"Hoenn",
+"Unova",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"355": [
+"Hoenn",
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"356": [
+"Hoenn",
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"357": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Alola",
+"Paldea"
+],
+"358": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"359": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"360": [
+"Hoenn",
+"Kalos",
+"Galar"
+],
+"361": [
+"Hoenn",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"362": [
+"Hoenn",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"363": [
+"Hoenn",
+"Unova",
+"Galar",
+"Hisui"
+],
+"364": [
+"Hoenn",
+"Unova",
+"Galar",
+"Hisui"
+],
+"365": [
+"Hoenn",
+"Unova",
+"Galar",
+"Hisui"
+],
+"366": [
+"Hoenn",
+"Kalos",
+"Alola"
+],
+"367": [
+"Hoenn",
+"Kalos",
+"Alola"
+],
+"368": [
+"Hoenn",
+"Kalos",
+"Alola"
+],
+"369": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar"
+],
+"370": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"371": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"372": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"373": [
+"Hoenn",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"374": [
+"Hoenn",
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"375": [
+"Hoenn",
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"376": [
+"Hoenn",
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"377": [
+"Hoenn",
+"Galar"
+],
+"378": [
+"Hoenn",
+"Galar"
+],
+"379": [
+"Hoenn",
+"Galar"
+],
+"380": [
+"Hoenn"
+],
+"381": [
+"Hoenn"
+],
+"382": [
+"Hoenn"
+],
+"383": [
+"Hoenn"
+],
+"384": [
+"Hoenn"
+],
+"385": [
+"Hoenn"
+],
+"386": [
+"Hoenn"
+],
+"387": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"388": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"389": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"390": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"391": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"392": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"393": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"394": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"395": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"396": [
+"Sinnoh",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"397": [
+"Sinnoh",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"398": [
+"Sinnoh",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"399": [
+"Sinnoh",
+"Kalos",
+"Hisui"
+],
+"400": [
+"Sinnoh",
+"Kalos",
+"Hisui"
+],
+"401": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"402": [
+"Sinnoh",
+"Hisui",
+"Paldea"
+],
+"403": [
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"404": [
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"405": [
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"406": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"407": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"408": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"409": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"410": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"411": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"412": [
+"Sinnoh",
+"Kalos",
+"Hisui"
+],
+"413": [
+"Sinnoh",
+"Kalos",
+"Hisui"
+],
+"414": [
+"Sinnoh",
+"Kalos",
+"Hisui"
+],
+"415": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"416": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"417": [
+"Sinnoh",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"418": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"419": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"420": [
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"421": [
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"422": [
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"423": [
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"424": [
+"Johto",
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"425": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"426": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"427": [
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui"
+],
+"428": [
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui"
+],
+"429": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"430": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"431": [
+"Sinnoh",
+"Hisui"
+],
+"432": [
+"Sinnoh",
+"Hisui"
+],
+"433": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"434": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"435": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"436": [
+"Sinnoh",
+"Unova",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"437": [
+"Sinnoh",
+"Unova",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"438": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"439": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"440": [
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"441": [
+"Sinnoh",
+"Kalos",
+"Hisui"
+],
+"442": [
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"443": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"444": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"445": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"446": [
+"Sinnoh",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"447": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"448": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"449": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"450": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"451": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"452": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui"
+],
+"453": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"454": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"455": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui"
+],
+"456": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"457": [
+"Sinnoh",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"458": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"459": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"460": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"461": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"462": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"463": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui"
+],
+"464": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"465": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Galar",
+"Hisui"
+],
+"466": [
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"467": [
+"Sinnoh",
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"468": [
+"Sinnoh",
+"Galar",
+"Hisui"
+],
+"469": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"470": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"471": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"472": [
+"Sinnoh",
+"Unova",
+"Kalos",
+"Hisui",
+"Paldea"
+],
+"473": [
+"Johto",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"474": [
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"475": [
+"Hoenn",
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"476": [
+"Hoenn",
+"Sinnoh",
+"Unova",
+"Kalos",
+"Alola",
+"Hisui",
+"Paldea"
+],
+"477": [
+"Hoenn",
+"Sinnoh",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"478": [
+"Hoenn",
+"Sinnoh",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"479": [
+"Sinnoh",
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"480": [
+"Sinnoh",
+"Hisui"
+],
+"481": [
+"Sinnoh",
+"Hisui"
+],
+"482": [
+"Sinnoh",
+"Hisui"
+],
+"483": [
+"Sinnoh",
+"Hisui"
+],
+"484": [
+"Sinnoh",
+"Hisui"
+],
+"485": [
+"Hisui"
+],
+"486": [
+"Hisui"
+],
+"487": [
+"Sinnoh",
+"Hisui"
+],
+"488": [
+"Hisui"
+],
+"489": [
+"Hisui"
+],
+"490": [
+"Sinnoh",
+"Hisui"
+],
+"491": [
+"Hisui"
+],
+"492": [
+"Hisui"
+],
+"493": [
+"Hisui"
+],
+"494": [
+"Unova"
+],
+"495": [
+"Unova",
+"Paldea"
+],
+"496": [
+"Unova",
+"Paldea"
+],
+"497": [
+"Unova",
+"Paldea"
+],
+"498": [
+"Unova",
+"Paldea"
+],
+"499": [
+"Unova",
+"Paldea"
+],
+"500": [
+"Unova",
+"Paldea"
+],
+"501": [
+"Unova",
+"Hisui",
+"Paldea"
+],
+"502": [
+"Unova",
+"Hisui",
+"Paldea"
+],
+"503": [
+"Unova",
+"Hisui",
+"Paldea"
+],
+"504": [
+"Unova",
+"Kalos"
+],
+"505": [
+"Unova",
+"Kalos"
+],
+"506": [
+"Unova",
+"Alola",
+"Galar"
+],
+"507": [
+"Unova",
+"Alola",
+"Galar"
+],
+"508": [
+"Unova",
+"Alola",
+"Galar"
+],
+"509": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"510": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"511": [
+"Unova",
+"Kalos"
+],
+"512": [
+"Unova",
+"Kalos"
+],
+"513": [
+"Unova",
+"Kalos"
+],
+"514": [
+"Unova",
+"Kalos"
+],
+"515": [
+"Unova",
+"Kalos"
+],
+"516": [
+"Unova",
+"Kalos"
+],
+"517": [
+"Unova",
+"Galar"
+],
+"518": [
+"Unova",
+"Galar"
+],
+"519": [
+"Unova",
+"Galar"
+],
+"520": [
+"Unova",
+"Galar"
+],
+"521": [
+"Unova",
+"Galar"
+],
+"522": [
+"Unova",
+"Paldea"
+],
+"523": [
+"Unova",
+"Paldea"
+],
+"524": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"525": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"526": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"527": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"528": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"529": [
+"Unova",
+"Galar",
+"Paldea"
+],
+"530": [
+"Unova",
+"Galar",
+"Paldea"
+],
+"531": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"532": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"533": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"534": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"535": [
+"Unova",
+"Galar"
+],
+"536": [
+"Unova",
+"Galar"
+],
+"537": [
+"Unova",
+"Galar"
+],
+"538": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"539": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"540": [
+"Unova",
+"Paldea"
+],
+"541": [
+"Unova",
+"Paldea"
+],
+"542": [
+"Unova",
+"Paldea"
+],
+"543": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"544": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"545": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"546": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"547": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"548": [
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"549": [
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"550": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"551": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"552": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"553": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"554": [
+"Unova",
+"Galar"
+],
+"555": [
+"Unova",
+"Galar"
+],
+"556": [
+"Unova",
+"Galar"
+],
+"557": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"558": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"559": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"560": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"561": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"562": [
+"Unova",
+"Galar"
+],
+"563": [
+"Unova",
+"Galar"
+],
+"564": [
+"Unova",
+"Alola",
+"Galar"
+],
+"565": [
+"Unova",
+"Alola",
+"Galar"
+],
+"566": [
+"Unova",
+"Alola",
+"Galar"
+],
+"567": [
+"Unova",
+"Alola",
+"Galar"
+],
+"568": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"569": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"570": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"571": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"572": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"573": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"574": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"575": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"576": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"577": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"578": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"579": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"580": [
+"Unova",
+"Kalos",
+"Paldea"
+],
+"581": [
+"Unova",
+"Kalos",
+"Paldea"
+],
+"582": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"583": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"584": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"585": [
+"Unova",
+"Paldea"
+],
+"586": [
+"Unova",
+"Paldea"
+],
+"587": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"588": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"589": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"590": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"591": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"592": [
+"Unova",
+"Alola",
+"Galar"
+],
+"593": [
+"Unova",
+"Alola",
+"Galar"
+],
+"594": [
+"Unova",
+"Kalos",
+"Alola",
+"Paldea"
+],
+"595": [
+"Unova",
+"Galar",
+"Paldea"
+],
+"596": [
+"Unova",
+"Galar",
+"Paldea"
+],
+"597": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"598": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"599": [
+"Unova",
+"Galar"
+],
+"600": [
+"Unova",
+"Galar"
+],
+"601": [
+"Unova",
+"Galar"
+],
+"602": [
+"Unova",
+"Paldea"
+],
+"603": [
+"Unova",
+"Paldea"
+],
+"604": [
+"Unova",
+"Paldea"
+],
+"605": [
+"Unova",
+"Alola",
+"Galar"
+],
+"606": [
+"Unova",
+"Alola",
+"Galar"
+],
+"607": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"608": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"609": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"610": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"611": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"612": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"613": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"614": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"615": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"616": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"617": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"618": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"619": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"620": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"621": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar"
+],
+"622": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"623": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"624": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"625": [
+"Unova",
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"626": [
+"Unova",
+"Galar"
+],
+"627": [
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"628": [
+"Unova",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"629": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"630": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"631": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"632": [
+"Unova",
+"Kalos",
+"Galar"
+],
+"633": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"634": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"635": [
+"Unova",
+"Kalos",
+"Galar",
+"Paldea"
+],
+"636": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"637": [
+"Unova",
+"Alola",
+"Galar",
+"Paldea"
+],
+"638": [
+"Unova",
+"Galar"
+],
+"639": [
+"Unova",
+"Galar"
+],
+"640": [
+"Unova",
+"Galar"
+],
+"641": [
+"Unova",
+"Hisui"
+],
+"642": [
+"Unova",
+"Hisui"
+],
+"643": [
+"Unova"
+],
+"644": [
+"Unova"
+],
+"645": [
+"Unova",
+"Hisui"
+],
+"646": [
+"Unova"
+],
+"647": [
+"Unova"
+],
+"648": [
+"Unova"
+],
+"649": [
+"Unova"
+],
+"650": [
+"Kalos",
+"Paldea"
+],
+"651": [
+"Kalos",
+"Paldea"
+],
+"652": [
+"Kalos",
+"Paldea"
+],
+"653": [
+"Kalos",
+"Paldea"
+],
+"654": [
+"Kalos",
+"Paldea"
+],
+"655": [
+"Kalos",
+"Paldea"
+],
+"656": [
+"Kalos",
+"Paldea"
+],
+"657": [
+"Kalos",
+"Paldea"
+],
+"658": [
+"Kalos",
+"Paldea"
+],
+"659": [
+"Kalos",
+"Galar"
+],
+"660": [
+"Kalos",
+"Galar"
+],
+"661": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"662": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"663": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"664": [
+"Kalos",
+"Paldea"
+],
+"665": [
+"Kalos",
+"Paldea"
+],
+"666": [
+"Kalos",
+"Paldea"
+],
+"667": [
+"Kalos",
+"Alola",
+"Paldea"
+],
+"668": [
+"Kalos",
+"Alola",
+"Paldea"
+],
+"669": [
+"Kalos",
+"Alola",
+"Paldea"
+],
+"670": [
+"Kalos",
+"Alola",
+"Paldea"
+],
+"671": [
+"Kalos",
+"Alola",
+"Paldea"
+],
+"672": [
+"Kalos",
+"Paldea"
+],
+"673": [
+"Kalos",
+"Paldea"
+],
+"674": [
+"Kalos",
+"Alola",
+"Galar"
+],
+"675": [
+"Kalos",
+"Alola",
+"Galar"
+],
+"676": [
+"Kalos",
+"Alola"
+],
+"677": [
+"Kalos",
+"Galar",
+"Paldea"
+],
+"678": [
+"Kalos",
+"Galar",
+"Paldea"
+],
+"679": [
+"Kalos",
+"Galar"
+],
+"680": [
+"Kalos",
+"Galar"
+],
+"681": [
+"Kalos",
+"Galar"
+],
+"682": [
+"Kalos",
+"Galar"
+],
+"683": [
+"Kalos",
+"Galar"
+],
+"684": [
+"Kalos",
+"Galar"
+],
+"685": [
+"Kalos",
+"Galar"
+],
+"686": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"687": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"688": [
+"Kalos",
+"Galar"
+],
+"689": [
+"Kalos",
+"Galar"
+],
+"690": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"691": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"692": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"693": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"694": [
+"Kalos",
+"Galar"
+],
+"695": [
+"Kalos",
+"Galar"
+],
+"696": [
+"Kalos",
+"Alola",
+"Galar"
+],
+"697": [
+"Kalos",
+"Alola",
+"Galar"
+],
+"698": [
+"Kalos",
+"Alola",
+"Galar"
+],
+"699": [
+"Kalos",
+"Alola",
+"Galar"
+],
+"700": [
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"701": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"702": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"703": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"704": [
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"705": [
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"706": [
+"Kalos",
+"Alola",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"707": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"708": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"709": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"710": [
+"Kalos",
+"Galar"
+],
+"711": [
+"Kalos",
+"Galar"
+],
+"712": [
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"713": [
+"Kalos",
+"Galar",
+"Hisui",
+"Paldea"
+],
+"714": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"715": [
+"Kalos",
+"Alola",
+"Galar",
+"Paldea"
+],
+"716": [
+"Kalos"
+],
+"717": [
+"Kalos"
+],
+"718": [
+"Kalos",
+"Alola"
+],
+"719": [
+"Kalos"
+],
+"720": [
+"Kalos"
+],
+"721": [
+"Kalos"
+],
+"722": [
+"Alola",
+"Hisui",
+"Paldea"
+],
+"723": [
+"Alola",
+"Hisui",
+"Paldea"
+],
+"724": [
+"Alola",
+"Hisui",
+"Paldea"
+],
+"725": [
+"Alola",
+"Paldea"
+],
+"726": [
+"Alola",
+"Paldea"
+],
+"727": [
+"Alola",
+"Paldea"
+],
+"728": [
+"Alola",
+"Paldea"
+],
+"729": [
+"Alola",
+"Paldea"
+],
+"730": [
+"Alola",
+"Paldea"
+],
+"731": [
+"Alola",
+"Paldea"
+],
+"732": [
+"Alola",
+"Paldea"
+],
+"733": [
+"Alola",
+"Paldea"
+],
+"734": [
+"Alola",
+"Paldea"
+],
+"735": [
+"Alola",
+"Paldea"
+],
+"736": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"737": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"738": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"739": [
+"Alola",
+"Paldea"
+],
+"740": [
+"Alola",
+"Paldea"
+],
+"741": [
+"Alola",
+"Paldea"
+],
+"742": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"743": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"744": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"745": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"746": [
+"Alola",
+"Galar"
+],
+"747": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"748": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"749": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"750": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"751": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"752": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"753": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"754": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"755": [
+"Alola",
+"Galar"
+],
+"756": [
+"Alola",
+"Galar"
+],
+"757": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"758": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"759": [
+"Alola",
+"Galar"
+],
+"760": [
+"Alola",
+"Galar"
+],
+"761": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"762": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"763": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"764": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"765": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"766": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"767": [
+"Alola",
+"Galar"
+],
+"768": [
+"Alola",
+"Galar"
+],
+"769": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"770": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"771": [
+"Alola",
+"Galar"
+],
+"772": [
+"Alola",
+"Galar"
+],
+"773": [
+"Alola",
+"Galar"
+],
+"774": [
+"Alola",
+"Paldea"
+],
+"775": [
+"Alola",
+"Paldea"
+],
+"776": [
+"Alola",
+"Galar"
+],
+"777": [
+"Alola",
+"Galar"
+],
+"778": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"779": [
+"Alola",
+"Paldea"
+],
+"780": [
+"Alola",
+"Galar"
+],
+"781": [
+"Alola",
+"Galar"
+],
+"782": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"783": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"784": [
+"Alola",
+"Galar",
+"Paldea"
+],
+"785": [
+"Alola"
+],
+"786": [
+"Alola"
+],
+"787": [
+"Alola"
+],
+"788": [
+"Alola"
+],
+"789": [
+"Alola"
+],
+"790": [
+"Alola"
+],
+"791": [
+"Alola"
+],
+"792": [
+"Alola"
+],
+"793": [
+"Alola"
+],
+"794": [
+"Alola"
+],
+"795": [
+"Alola"
+],
+"796": [
+"Alola"
+],
+"797": [
+"Alola"
+],
+"798": [
+"Alola"
+],
+"799": [
+"Alola"
+],
+"800": [
+"Alola"
+],
+"801": [
+"Alola"
+],
+"802": [
+"Alola"
+],
+"803": [
+"Alola"
+],
+"804": [
+"Alola"
+],
+"805": [
+"Alola"
+],
+"806": [
+"Alola"
+],
+"807": [
+"Alola"
+],
+"808": [
+"Kanto"
+],
+"809": [
+"Kanto"
+],
+"810": [
+"Galar",
+"Paldea"
+],
+"811": [
+"Galar",
+"Paldea"
+],
+"812": [
+"Galar",
+"Paldea"
+],
+"813": [
+"Galar",
+"Paldea"
+],
+"814": [
+"Galar",
+"Paldea"
+],
+"815": [
+"Galar",
+"Paldea"
+],
+"816": [
+"Galar",
+"Paldea"
+],
+"817": [
+"Galar",
+"Paldea"
+],
+"818": [
+"Galar",
+"Paldea"
+],
+"819": [
+"Galar",
+"Paldea"
+],
+"820": [
+"Galar",
+"Paldea"
+],
+"821": [
+"Galar",
+"Paldea"
+],
+"822": [
+"Galar",
+"Paldea"
+],
+"823": [
+"Galar",
+"Paldea"
+],
+"824": [
+"Galar"
+],
+"825": [
+"Galar"
+],
+"826": [
+"Galar"
+],
+"827": [
+"Galar"
+],
+"828": [
+"Galar"
+],
+"829": [
+"Galar"
+],
+"830": [
+"Galar"
+],
+"831": [
+"Galar"
+],
+"832": [
+"Galar"
+],
+"833": [
+"Galar",
+"Paldea"
+],
+"834": [
+"Galar",
+"Paldea"
+],
+"835": [
+"Galar"
+],
+"836": [
+"Galar"
+],
+"837": [
+"Galar",
+"Paldea"
+],
+"838": [
+"Galar",
+"Paldea"
+],
+"839": [
+"Galar",
+"Paldea"
+],
+"840": [
+"Galar",
+"Paldea"
+],
+"841": [
+"Galar",
+"Paldea"
+],
+"842": [
+"Galar",
+"Paldea"
+],
+"843": [
+"Galar",
+"Paldea"
+],
+"844": [
+"Galar",
+"Paldea"
+],
+"845": [
+"Galar",
+"Paldea"
+],
+"846": [
+"Galar",
+"Paldea"
+],
+"847": [
+"Galar",
+"Paldea"
+],
+"848": [
+"Galar",
+"Paldea"
+],
+"849": [
+"Galar",
+"Paldea"
+],
+"850": [
+"Galar"
+],
+"851": [
+"Galar"
+],
+"852": [
+"Galar"
+],
+"853": [
+"Galar"
+],
+"854": [
+"Galar",
+"Paldea"
+],
+"855": [
+"Galar",
+"Paldea"
+],
+"856": [
+"Galar",
+"Paldea"
+],
+"857": [
+"Galar",
+"Paldea"
+],
+"858": [
+"Galar",
+"Paldea"
+],
+"859": [
+"Galar",
+"Paldea"
+],
+"860": [
+"Galar",
+"Paldea"
+],
+"861": [
+"Galar",
+"Paldea"
+],
+"862": [
+"Galar"
+],
+"863": [
+"Galar"
+],
+"864": [
+"Galar"
+],
+"865": [
+"Galar"
+],
+"866": [
+"Galar"
+],
+"867": [
+"Galar"
+],
+"868": [
+"Galar",
+"Paldea"
+],
+"869": [
+"Galar",
+"Paldea"
+],
+"870": [
+"Galar",
+"Paldea"
+],
+"871": [
+"Galar",
+"Paldea"
+],
+"872": [
+"Galar",
+"Paldea"
+],
+"873": [
+"Galar",
+"Paldea"
+],
+"874": [
+"Galar",
+"Paldea"
+],
+"875": [
+"Galar",
+"Paldea"
+],
+"876": [
+"Galar",
+"Paldea"
+],
+"877": [
+"Galar",
+"Paldea"
+],
+"878": [
+"Galar",
+"Paldea"
+],
+"879": [
+"Galar",
+"Paldea"
+],
+"880": [
+"Galar"
+],
+"881": [
+"Galar"
+],
+"882": [
+"Galar"
+],
+"883": [
+"Galar"
+],
+"884": [
+"Galar",
+"Paldea"
+],
+"885": [
+"Galar",
+"Paldea"
+],
+"886": [
+"Galar",
+"Paldea"
+],
+"887": [
+"Galar",
+"Paldea"
+],
+"888": [
+"Galar"
+],
+"889": [
+"Galar"
+],
+"890": [
+"Galar"
+],
+"891": [
+"Galar"
+],
+"892": [
+"Galar"
+],
+"893": [
+"Galar"
+],
+"894": [
+"Galar"
+],
+"895": [
+"Galar"
+],
+"896": [
+"Galar"
+],
+"897": [
+"Galar"
+],
+"898": [
+"Galar"
+],
+"899": [
+"Hisui"
+],
+"900": [
+"Hisui",
+"Paldea"
+],
+"901": [
+"Hisui",
+"Paldea"
+],
+"902": [
+"Hisui",
+"Paldea"
+],
+"903": [
+"Hisui"
+],
+"904": [
+"Hisui",
+"Paldea"
+],
+"905": [
+"Hisui"
+],
+"906": [
+"Paldea"
+],
+"907": [
+"Paldea"
+],
+"908": [
+"Paldea"
+],
+"909": [
+"Paldea"
+],
+"910": [
+"Paldea"
+],
+"911": [
+"Paldea"
+],
+"912": [
+"Paldea"
+],
+"913": [
+"Paldea"
+],
+"914": [
+"Paldea"
+],
+"915": [
+"Paldea"
+],
+"916": [
+"Paldea"
+],
+"917": [
+"Paldea"
+],
+"918": [
+"Paldea"
+],
+"919": [
+"Paldea"
+],
+"920": [
+"Paldea"
+],
+"921": [
+"Paldea"
+],
+"922": [
+"Paldea"
+],
+"923": [
+"Paldea"
+],
+"924": [
+"Paldea"
+],
+"925": [
+"Paldea"
+],
+"926": [
+"Paldea"
+],
+"927": [
+"Paldea"
+],
+"928": [
+"Paldea"
+],
+"929": [
+"Paldea"
+],
+"930": [
+"Paldea"
+],
+"931": [
+"Paldea"
+],
+"932": [
+"Paldea"
+],
+"933": [
+"Paldea"
+],
+"934": [
+"Paldea"
+],
+"935": [
+"Paldea"
+],
+"936": [
+"Paldea"
+],
+"937": [
+"Paldea"
+],
+"938": [
+"Paldea"
+],
+"939": [
+"Paldea"
+],
+"940": [
+"Paldea"
+],
+"941": [
+"Paldea"
+],
+"942": [
+"Paldea"
+],
+"943": [
+"Paldea"
+],
+"944": [
+"Paldea"
+],
+"945": [
+"Paldea"
+],
+"946": [
+"Paldea"
+],
+"947": [
+"Paldea"
+],
+"948": [
+"Paldea"
+],
+"949": [
+"Paldea"
+],
+"950": [
+"Paldea"
+],
+"951": [
+"Paldea"
+],
+"952": [
+"Paldea"
+],
+"953": [
+"Paldea"
+],
+"954": [
+"Paldea"
+],
+"955": [
+"Paldea"
+],
+"956": [
+"Paldea"
+],
+"957": [
+"Paldea"
+],
+"958": [
+"Paldea"
+],
+"959": [
+"Paldea"
+],
+"960": [
+"Paldea"
+],
+"961": [
+"Paldea"
+],
+"962": [
+"Paldea"
+],
+"963": [
+"Paldea"
+],
+"964": [
+"Paldea"
+],
+"965": [
+"Paldea"
+],
+"966": [
+"Paldea"
+],
+"967": [
+"Paldea"
+],
+"968": [
+"Paldea"
+],
+"969": [
+"Paldea"
+],
+"970": [
+"Paldea"
+],
+"971": [
+"Paldea"
+],
+"972": [
+"Paldea"
+],
+"973": [
+"Paldea"
+],
+"974": [
+"Paldea"
+],
+"975": [
+"Paldea"
+],
+"976": [
+"Paldea"
+],
+"977": [
+"Paldea"
+],
+"978": [
+"Paldea"
+],
+"979": [
+"Paldea"
+],
+"980": [
+"Paldea"
+],
+"981": [
+"Paldea"
+],
+"982": [
+"Paldea"
+],
+"983": [
+"Paldea"
+],
+"984": [
+"Paldea"
+],
+"985": [
+"Paldea"
+],
+"986": [
+"Paldea"
+],
+"987": [
+"Paldea"
+],
+"988": [
+"Paldea"
+],
+"989": [
+"Paldea"
+],
+"990": [
+"Paldea"
+],
+"991": [
+"Paldea"
+],
+"992": [
+"Paldea"
+],
+"993": [
+"Paldea"
+],
+"994": [
+"Paldea"
+],
+"995": [
+"Paldea"
+],
+"996": [
+"Paldea"
+],
+"997": [
+"Paldea"
+],
+"998": [
+"Paldea"
+],
+"999": [
+"Paldea"
+],
+"1000": [
+"Paldea"
+],
+"1001": [
+"Paldea"
+],
+"1002": [
+"Paldea"
+],
+"1003": [
+"Paldea"
+],
+"1004": [
+"Paldea"
+],
+"1005": [
+"Paldea"
+],
+"1006": [
+"Paldea"
+],
+"1007": [
+"Paldea"
+],
+"1008": [
+"Paldea"
+],
+"1009": [
+"Paldea"
+],
+"1010": [
+"Paldea"
+],
+"1011": [
+"Paldea"
+],
+"1012": [
+"Paldea"
+],
+"1013": [
+"Paldea"
+],
+"1014": [
+"Paldea"
+],
+"1015": [
+"Paldea"
+],
+"1016": [
+"Paldea"
+],
+"1017": [
+"Paldea"
+],
+"1018": [
+"Paldea"
+],
+"1019": [
+"Paldea"
+],
+"1020": [
+"Paldea"
+],
+"1021": [
+"Paldea"
+],
+"1022": [
+"Paldea"
+],
+"1023": [
+"Paldea"
+],
+"1024": [
+"Paldea"
+],
+"1025": [
+"Paldea"
+]
+}

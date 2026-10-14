@@ -116,6 +116,29 @@ describe("applyFilter — Class by national dex (ac4)", () => {
   });
 });
 
+describe("applyFilter — Origin and Regional Dex", () => {
+  const origin = defFor("origin");
+  const pokedex = defFor("pokedex");
+  it("Alakazam is Kanto origin but fits the Kanto and Sinnoh dexes", () => {
+    const alakazam = makeEntry({ dex: 65, name: "Alakazam" });
+    expect(applyFilter(origin, alakazam, "Kanto")).toBe(true);
+    expect(applyFilter(origin, alakazam, "Sinnoh")).toBe(false);
+    expect(applyFilter(pokedex, alakazam, "Kanto")).toBe(true);
+    expect(applyFilter(pokedex, alakazam, "Sinnoh")).toBe(true);
+    expect(applyFilter(pokedex, alakazam, "Paldea")).toBe(false);
+  });
+  it("a regional form's origin is the region in its name", () => {
+    const raichu = makeEntry({ dex: 26, name: "Raichu Alola" });
+    expect(applyFilter(origin, raichu, "Alola")).toBe(true);
+    expect(applyFilter(origin, raichu, "Kanto")).toBe(false);
+  });
+  it("a numberless species matches no region", () => {
+    const eternal = makeEntry({ dex: null, name: "Floette Eternal" });
+    expect(applyFilter(origin, eternal, "Kalos")).toBe(false);
+    expect(applyFilter(pokedex, eternal, "Kalos")).toBe(false);
+  });
+});
+
 describe("Type matchup operators (weak to / SE against / …)", () => {
   // A Fire/Flying species (Charizard). The chart below only carries the cells
   // these cases read; a helper keeps each pair terse.

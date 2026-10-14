@@ -9,6 +9,7 @@ import { STAT_ORDER, TYPES, bst, isEdited } from "./format";
 import { COLUMNS, EVO_KINDS, evoKind, evoLevel } from "./dexColumns";
 import { CLASS_VALUES, classesOf } from "./dexTags";
 import type { ClassValue } from "./dexTags";
+import { REGIONS, originOf, regionalDexesOf } from "./dexRegions";
 import { memberDefense, memberOffense } from "./teamMatchups";
 import type { AbilitySlots } from "../types";
 import {
@@ -85,6 +86,10 @@ export function buildFilterDefs(_entries: DexEntry[]): FilterDef[] {
       operators: [...TYPE_OPERATORS],
     },
     { field: "class", label: "Class", method: "select", values: [...CLASS_VALUES] },
+    // Origin = where the species debuted (one region); Regional Dex = every
+    // regional Pokédex that lists it (Alakazam: Kanto origin, in the Sinnoh dex).
+    { field: "origin", label: "Origin", method: "select", values: [...REGIONS] },
+    { field: "pokedex", label: "Regional Dex", method: "select", values: [...REGIONS] },
     {
       field: "edited",
       label: "Edited",
@@ -198,6 +203,12 @@ function makeSelectMatch(byKey: ReadonlyMap<string, TypeChartCell> | null) {
     }
     if (field === "class") {
       return classesOf(entry).includes(value as ClassValue);
+    }
+    if (field === "origin") {
+      return originOf(entry) === value;
+    }
+    if (field === "pokedex") {
+      return regionalDexesOf(entry.dex).includes(value);
     }
     if (field === "evolution") {
       return evoKind(entry) === value;
