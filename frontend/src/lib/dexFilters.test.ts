@@ -127,10 +127,17 @@ describe("applyFilter — Origin and Regional Dex", () => {
     expect(applyFilter(pokedex, alakazam, "Sinnoh")).toBe(true);
     expect(applyFilter(pokedex, alakazam, "Paldea")).toBe(false);
   });
-  it("a regional form's origin is the region in its name", () => {
+  it("a regional form's origin and dex are the region in its name", () => {
     const raichu = makeEntry({ dex: 26, name: "Raichu Alola" });
     expect(applyFilter(origin, raichu, "Alola")).toBe(true);
     expect(applyFilter(origin, raichu, "Kanto")).toBe(false);
+    expect(applyFilter(pokedex, raichu, "Alola")).toBe(true);
+    expect(applyFilter(pokedex, raichu, "Sinnoh")).toBe(false);
+  });
+  it("a cosmetic form keeps its species' dexes", () => {
+    const cap = makeEntry({ dex: 25, name: "Pikachu Sinnoh" });
+    expect(applyFilter(origin, cap, "Kanto")).toBe(true);
+    expect(applyFilter(pokedex, cap, "Sinnoh")).toBe(true);
   });
   it("a numberless species matches no region", () => {
     const eternal = makeEntry({ dex: null, name: "Floette Eternal" });

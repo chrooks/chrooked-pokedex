@@ -208,7 +208,7 @@ function makeSelectMatch(byKey: ReadonlyMap<string, TypeChartCell> | null) {
       return originOf(entry) === value;
     }
     if (field === "pokedex") {
-      return regionalDexesOf(entry.dex).includes(value);
+      return regionalDexesOf(entry).includes(value);
     }
     if (field === "evolution") {
       return evoKind(entry) === value;
