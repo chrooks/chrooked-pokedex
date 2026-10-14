@@ -25,6 +25,9 @@ type Props = {
   /** Defense only: clicking a weak (×>1) cell asks the pool for an answer to
       that attacking type. */
   onWeakClick?: (type: string) => void;
+  /** Visually hide the title block when an outer disclosure already names the
+      table (it stays for screen readers via aria-labelledby). */
+  hideHeader?: boolean;
 };
 
 type TotalSpec = { key: string; label: string; get: (row: DefenseRow & OffenseRow) => number };
@@ -47,13 +50,13 @@ const OFFENSE_TOTALS: TotalSpec[] = [
  * combined dual-type × ability multiplier in tectonic's color/glyph language;
  * trailing count columns that blank at zero.
  */
-export function MatchupTable({ id, variant, title, subtitle, columns, rows, backdropTargetId, onWeakClick }: Props) {
+export function MatchupTable({ id, variant, title, subtitle, columns, rows, backdropTargetId, onWeakClick, hideHeader }: Props) {
   const totals = variant === "defense" ? DEFENSE_TOTALS : OFFENSE_TOTALS;
   const axisCaption = variant === "defense" ? "Attacking type" : "Defending type";
 
   return (
     <section className="matchup" id={id} aria-labelledby={`${id}-title`}>
-      <header className="matchup__head">
+      <header className={hideHeader ? "matchup__head sr-only" : "matchup__head"}>
         <h3 className="matchup__title" id={`${id}-title`}>
           {title}
         </h3>
@@ -68,17 +71,15 @@ export function MatchupTable({ id, variant, title, subtitle, columns, rows, back
                 <span className="matchup__corner-label">{axisCaption}</span>
               </th>
               {columns.map(({ entry }, index) => (
-                <th className="matchup__memberhead" scope="col" key={`${entry.chrooked_id}-${index}`}>
+                <th className="matchup__memberhead" scope="col" title={entry.name} key={`${entry.chrooked_id}-${index}`}>
                   <DexSprite
                     chrookedId={entry.chrooked_id}
                     dex={entry.dex}
                     name={entry.name}
                     backdropTargetId={backdropTargetId}
-                    size={44}
+                    size={36}
                   />
-                  <span className="matchup__memberhead-name" title={entry.name}>
-                    {entry.name}
-                  </span>
+                  <span className="sr-only">{entry.name}</span>
                   <span className="matchup__memberhead-types">
                     {entry.types.map((type) => (
                       <TypeChip key={type} type={type} variant="code" />

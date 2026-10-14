@@ -23,7 +23,7 @@ import { EntityControls } from "../filters/EntityControls";
 import { PartyPicker } from "../team/PartyPicker";
 import { PartyPool } from "../team/PartyPool";
 import { PartySlot } from "../team/PartySlot";
-import { SavedTeams } from "../team/SavedTeams";
+import { SavedTeamsMenu } from "../team/SavedTeamsMenu";
 import { MatchupTable } from "../team/MatchupTable";
 import { ReplaceDialog } from "../team/ReplaceDialog";
 import "./tabs.css";
@@ -62,6 +62,7 @@ export function TeamTab() {
   const poolQuery = view.poolQuery;
   const newTypesOnly = view.poolNewTypes;
   const redux = view.teamRedux;
+  const offenseOpen = view.teamOffense;
   // The fresh species awaiting a swap decision — set when a pick lands on a full
   // team, cleared when the replace dialog resolves or is dismissed (ac10).
   const [replaceIncoming, setReplaceIncoming] = useState<DexEntry | null>(null);
@@ -203,11 +204,16 @@ export function TeamTab() {
   return (
     <div className="tab tab--team" id="tab-team">
       <div className="team__toolbar">
-        <div className="team__toolbar-title">
-          <h2 className="team__heading">Team builder</h2>
-          <span className="team__count mono" data-full={full}>
-            {resolved.length}/{MAX_PARTY}
-          </span>
+        <h2 className="team__heading">Team builder</h2>
+        <span className="team__count mono" data-full={full}>
+          {resolved.length}/{MAX_PARTY}
+        </span>
+        <div className="team__toolbar-actions">
+          <SavedTeamsMenu
+            encodedParty={encodeParty(party)}
+            canSave={party.length > 0}
+            onLoad={(encoded) => update({ party: decodeParty(encoded) })}
+          />
           {party.length > 0 && (
             <button
               type="button"
@@ -226,140 +232,148 @@ export function TeamTab() {
               {confirmingClear ? "Confirm?" : "Clear"}
             </button>
           )}
+          {resolved.length > 0 && (
+            <button
+              type="button"
+              id="team-redux"
+              className="team__new-types"
+              data-on={redux}
+              aria-pressed={redux}
+              title="Treat every ability each member has as active at once, so all its immunities, resists, and weaknesses show together"
+              onClick={() => update({ teamRedux: !redux })}
+            >
+              Redux mode
+            </button>
+          )}
         </div>
-        <p className="team__hint">
-          Add species to see how the team stands up defensively and what it covers on offense.
-        </p>
       </div>
 
-      <div className="team__pool-search" id="team-pool-search">
-        <PartyPicker
-          query={poolQuery}
-          onQuery={(next) => update({ poolQuery: next })}
-          resultCount={pool.length}
-          onSubmit={() => {
-            const first = pool.find((entry) => !partyIds.has(entry.chrooked_id));
-            if (first) addMember(first.chrooked_id);
-          }}
-        />
-        {resolved.length > 0 && (
-          <button
-            type="button"
-            id="team-new-types"
-            className="team__new-types"
-            data-on={newTypesOnly}
-            aria-pressed={newTypesOnly}
-            title={`Hide every species sharing a type with the team (${[...coveredTypes].length} covered)`}
-            onClick={() => update({ poolNewTypes: !newTypesOnly })}
-          >
-            New types only
-          </button>
-        )}
-        {resolved.length > 0 && (
-          <button
-            type="button"
-            id="team-redux"
-            className="team__new-types"
-            data-on={redux}
-            aria-pressed={redux}
-            title="Treat every ability each member has as active at once, so all its immunities, resists, and weaknesses show together"
-            onClick={() => update({ teamRedux: !redux })}
-          >
-            Redux mode
-          </button>
-        )}
-      </div>
-
-      <EntityControls
-        idPrefix="teamc"
-        ariaLabel="Species pool filters"
-        defs={DEX_REGISTRY.defs}
-        sortable={[]}
-        columns={[]}
-        filter={controls.filter}
-        sort={controls.sort}
-        hidden={controls.hidden}
-        onChange={setControls}
-      />
-
-      {pool.length === 0 ? (
-        <p className="team__pool-empty" id="party-pool-empty">
-          {newTypesOnly
-            ? "No species left that avoids every type your team already covers."
-            : "No species match this search."}
-        </p>
-      ) : (
-        <PartyPool
-          entries={pool}
-          partyIds={partyIds}
-          onAdd={addMember}
-          backdropTargetId={backdrop}
-        />
-      )}
-
-      <SavedTeams
-        encodedParty={encodeParty(party)}
-        canSave={party.length > 0}
-        onLoad={(encoded) => update({ party: decodeParty(encoded) })}
-      />
-
-      {resolved.length > 0 && (
-        <ul className="team__party" id="team-party">
-          {resolved.map((r) => (
-            <PartySlot
-              key={r.partyIndex}
-              entry={r.entry}
-              ability={r.ability}
-              index={r.partyIndex}
-              onRemove={() => removeMember(r.partyIndex)}
-              onAbility={(ability) => setAbility(r.partyIndex, ability)}
-              onOpen={() => openProfile(r.entry.chrooked_id)}
-              backdropTargetId={backdrop}
-            />
-          ))}
-        </ul>
-      )}
-
-      {resolved.length === 0 ? (
-        <div className="team__empty" id="team-empty">
-          <div className="team__empty-mark" aria-hidden="true">
-            <span className="team__empty-slot" />
-            <span className="team__empty-slot" />
-            <span className="team__empty-slot" />
-          </div>
-          <h3 className="team__empty-title">Start building your team</h3>
-          <p className="team__empty-body">
-            Search above and add up to six Pokémon. Their combined type matchups — everything
-            that threatens the team and everything it covers — build here as you go.
-          </p>
-        </div>
-      ) : (
-        <div className="team__tables">
-          <MatchupTable
-            id="team-defense"
-            variant="defense"
-            title="Defensive Matchups"
-            subtitle="How hard each attacking type hits your team"
-            columns={columns}
-            rows={matchups.defense}
-            backdropTargetId={backdrop}
-            onWeakClick={(type) => {
-              setControls({ filter: appendAnswerFilter(controls.filter, type, uid) });
-              // The pool sits above the tables — bring it into view so the click shows.
-              document.getElementById("team-pool-search")?.scrollIntoView({ behavior: "smooth" });
+      <section className="team__main" aria-label="Species pool">
+        <div className="team__pool-search" id="team-pool-search">
+          <PartyPicker
+            query={poolQuery}
+            onQuery={(next) => update({ poolQuery: next })}
+            resultCount={pool.length}
+            onSubmit={() => {
+              const first = pool.find((entry) => !partyIds.has(entry.chrooked_id));
+              if (first) addMember(first.chrooked_id);
             }}
           />
-          <MatchupTable
-            id="team-offense"
-            variant="offense"
-            title="Offensive Coverage"
-            subtitle="Best STAB each member lands on every defending type"
-            columns={columns}
-            rows={matchups.offense}
+          {resolved.length > 0 && (
+            <button
+              type="button"
+              id="team-new-types"
+              className="team__new-types"
+              data-on={newTypesOnly}
+              aria-pressed={newTypesOnly}
+              title={`Hide every species sharing a type with the team (${[...coveredTypes].length} covered)`}
+              onClick={() => update({ poolNewTypes: !newTypesOnly })}
+            >
+              New types only
+            </button>
+          )}
+        </div>
+
+        <EntityControls
+          idPrefix="teamc"
+          ariaLabel="Species pool filters"
+          defs={DEX_REGISTRY.defs}
+          sortable={[]}
+          columns={[]}
+          filter={controls.filter}
+          sort={controls.sort}
+          hidden={controls.hidden}
+          onChange={setControls}
+        />
+
+        {pool.length === 0 ? (
+          <p className="team__pool-empty" id="party-pool-empty">
+            {newTypesOnly
+              ? "No species left that avoids every type your team already covers."
+              : "No species match this search."}
+          </p>
+        ) : (
+          <PartyPool
+            entries={pool}
+            partyIds={partyIds}
+            onAdd={addMember}
             backdropTargetId={backdrop}
           />
-        </div>
-      )}
+        )}
+      </section>
+
+      <aside className="team__side" aria-label="Your team">
+        {resolved.length === 0 ? (
+          <div className="team__empty" id="team-empty">
+            <div className="team__empty-mark" aria-hidden="true">
+              <span className="team__empty-slot" />
+              <span className="team__empty-slot" />
+              <span className="team__empty-slot" />
+            </div>
+            <h3 className="team__empty-title">Start building your team</h3>
+            <p className="team__empty-body">
+              Pick up to six Pokémon from the pool. Their combined type matchups — everything
+              that threatens the team and everything it covers — build here as you go.
+            </p>
+          </div>
+        ) : (
+          <>
+            <ul className="team__party" id="team-party">
+              {resolved.map((r) => (
+                <PartySlot
+                  key={r.partyIndex}
+                  entry={r.entry}
+                  ability={r.ability}
+                  index={r.partyIndex}
+                  onRemove={() => removeMember(r.partyIndex)}
+                  onAbility={(ability) => setAbility(r.partyIndex, ability)}
+                  onOpen={() => openProfile(r.entry.chrooked_id)}
+                  backdropTargetId={backdrop}
+                />
+              ))}
+            </ul>
+            <MatchupTable
+              id="team-defense"
+              variant="defense"
+              title="Defensive Matchups"
+              subtitle="How hard each attacking type hits your team · click a weak cell to find an answer"
+              columns={columns}
+              rows={matchups.defense}
+              backdropTargetId={backdrop}
+              onWeakClick={(type) =>
+                setControls({ filter: appendAnswerFilter(controls.filter, type, uid) })
+              }
+            />
+            <section className="team__offense" aria-labelledby="team-offense-toggle">
+              <button
+                type="button"
+                id="team-offense-toggle"
+                className="team__disclosure"
+                aria-expanded={offenseOpen}
+                aria-controls="team-offense"
+                onClick={() => update({ teamOffense: !offenseOpen })}
+              >
+                <span className="team__disclosure-caret" aria-hidden="true">
+                  {offenseOpen ? "▾" : "▸"}
+                </span>
+                Offensive Coverage
+              </button>
+              {offenseOpen && (
+                <MatchupTable
+                  id="team-offense"
+                  variant="offense"
+                  title="Offensive Coverage"
+                  subtitle="Best STAB each member lands on every defending type"
+                  columns={columns}
+                  rows={matchups.offense}
+                  backdropTargetId={backdrop}
+                  hideHeader
+                />
+              )}
+            </section>
+          </>
+        )}
+      </aside>
 
       {replaceIncoming !== null && (
         <ReplaceDialog

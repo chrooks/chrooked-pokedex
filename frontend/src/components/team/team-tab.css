@@ -5,24 +5,118 @@
    it's resisted, grey = no effect, blank = neutral ×1, with tectonic's fraction
    glyphs and per-cell tooltips. */
 
+/* The split workbench (#117): toolbar across the top, the pool on the left
+   (the rest), the team on the right (556px at least — what a full party's
+   defense grid needs). Each column scrolls on its own, so the
+   party and the defense grid never leave the screen while you sweep the pool,
+   and a pick shows up in the grid without a scroll. Below 1200px the columns
+   stack back into one scrolling page. */
 .tab--team {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(556px, 42%, 680px);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "toolbar toolbar"
+    "main side";
+  gap: var(--space-3) var(--space-5);
+  overflow: hidden;
+}
+
+.team__toolbar { grid-area: toolbar; }
+
+.team__main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.team__side {
+  grid-area: side;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: var(--space-1);
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+@media (max-width: 1199px) {
+  .tab--team {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "toolbar" "main" "side";
+    overflow-y: auto;
+  }
+  .team__side { overflow: visible; }
+  .tab--team .party-pool { height: 440px; flex: none; }
 }
 
 /* ── Toolbar ─────────────────────────────────────────────────────────────── */
 
 .team__toolbar {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
 }
 
-.team__toolbar-title {
+.team__toolbar-actions {
   display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: var(--space-2);
+}
+
+/* ── Saved-teams popover ─────────────────────────────────────────────────── */
+
+.saved-menu { position: relative; }
+
+.saved-menu__popover {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  z-index: 20;
+  width: min(36rem, 80vw);
+  padding: var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px color-mix(in oklch, black 35%, transparent);
+}
+
+/* ── Offense disclosure ──────────────────────────────────────────────────── */
+
+.team__offense {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.team__disclosure {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.team__disclosure:hover { color: var(--chrome); }
+
+.team__disclosure:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 2px;
+}
+
+.team__disclosure-caret {
+  width: 1ch;
+  color: var(--text-dim);
 }
 
 /* Wipe-the-party control: rides the title row, pulled in tight to the count. */
@@ -55,12 +149,6 @@
   color: var(--chrome);
   border-color: color-mix(in oklch, var(--chrome) 45%, var(--line));
   background: color-mix(in oklch, var(--chrome) 12%, var(--surface-1));
-}
-
-.team__hint {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--text-dim);
 }
 
 /* ── Party picker (pool search) ──────────────────────────────────────────── */
@@ -199,34 +287,39 @@
    the pool is a lane you sweep through, not a second grid competing with the
    party below it. Windowed, so the full dex costs only the visible band. */
 .party-pool {
-  /* The tab is a column flexbox, so the strip must refuse to shrink — its height
-     comes from the absolutely-positioned cards' sizer, which flex would
-     otherwise squeeze to nothing and `overflow-y: hidden` would then clip. */
-  flex: none;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: var(--space-1) 0 var(--space-2);
+  /* Fills what the left column has left and scrolls on its own. */
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: var(--space-2);
   border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
   scrollbar-color: var(--line-strong) transparent;
 }
 
 .party-pool__sizer {
   position: relative;
-  height: 202px; /* dex cell height; the strip is exactly one card tall */
+  width: 100%;
 }
 
-.party-pool__cell {
+.party-pool__row {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  padding-right: 12px; /* the GAP the virtualizer measures */
+  width: 100%;
+  display: grid;
+  gap: 12px; /* the GAP PartyPool measures */
+  padding-bottom: 12px;
+}
+
+.party-pool__cell {
+  position: relative;
+  display: flex;
+  min-width: 0;
 }
 
 .party-pool__cell > .dex-cell {
   width: 100%;
-  height: 100%;
 }
 
 /* Already on the team: the card recedes and says so, rather than vanishing from
@@ -401,8 +494,8 @@
 /* ── Party slots ─────────────────────────────────────────────────────────── */
 
 .team__party {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-3);
   margin: 0;
   padding: 0;
@@ -411,12 +504,12 @@
 
 .party-slot {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: var(--space-1);
-  width: 9.5rem;
-  padding: var(--space-3) var(--space-2) var(--space-2);
+  gap: 4px var(--space-2);
+  min-width: 0;
+  padding: var(--space-2);
   background: var(--surface-1);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
@@ -457,9 +550,11 @@
    card's column layout and signals the link on hover the way ledger names do. */
 .party-slot__open {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: var(--space-1);
+  min-width: 0;
+  padding-right: 1.5rem; /* clear the remove button */
   padding: 0;
   border: 0;
   background: none;
@@ -484,16 +579,20 @@
 }
 
 .party-slot__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--text-sm);
   font-weight: 700;
-  text-align: center;
+  text-align: left;
   color: var(--text);
 }
 
 .party-slot__types {
   display: inline-flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--space-1);
 }
 
@@ -502,7 +601,6 @@
   flex-direction: column;
   gap: 2px;
   width: 100%;
-  margin-top: var(--space-1);
 }
 
 .party-slot__ability-label {
@@ -576,21 +674,6 @@
   color: var(--text-dim);
 }
 
-/* ── Tables layout ───────────────────────────────────────────────────────── */
-
-.team__tables {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-5);
-}
-
-@media (min-width: 1600px) {
-  .team__tables {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-}
-
 .matchup {
   display: flex;
   flex-direction: column;
@@ -657,7 +740,7 @@
 .matchup__corner {
   left: 0;
   z-index: 3;
-  min-width: 6.5rem;
+  min-width: 5rem;
   padding: var(--space-2);
   text-align: left;
   vertical-align: bottom;
@@ -677,9 +760,9 @@
    centered lines inside the fixed box instead. */
 .matchup__memberhead {
   padding: var(--space-2) var(--space-1);
-  width: 4.5rem;
-  min-width: 4.5rem;
-  max-width: 4.5rem;
+  width: 3.25rem;
+  min-width: 3.25rem;
+  max-width: 3.25rem;
   vertical-align: bottom;
 }
 
@@ -715,8 +798,8 @@
 }
 
 .matchup__totalhead {
-  padding: var(--space-2) var(--space-1);
-  min-width: 3rem;
+  padding: var(--space-2) 2px;
+  min-width: 2.5rem;
   font-size: var(--text-xs);
   letter-spacing: 0.03em;
   font-weight: 700;

@@ -33,7 +33,9 @@ type Feedback = { kind: "saved" | "loaded" | "deleted"; text: string } | null;
  * subdued strip so it never competes with adding Pokémon.
  */
 export function SavedTeams({ encodedParty, canSave, onLoad }: Props) {
-  const [teams, setTeams] = useState<SavedTeamsMap>({});
+  // Read on first render, not in an effect: the strip mounts each time the
+  // Saved teams popover opens, and an effect would flash "No saved teams yet".
+  const [teams, setTeams] = useState<SavedTeamsMap>(() => loadSavedTeams(window.localStorage));
   const [name, setName] = useState("");
   /** The dropdown pick that Load/Delete act on; "" = nothing picked yet. */
   const [selected, setSelected] = useState("");
@@ -41,12 +43,6 @@ export function SavedTeams({ encodedParty, canSave, onLoad }: Props) {
   // Two-step delete: armed for the current selection; a second click confirms.
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const timerRef = useRef<number | null>(null);
-
-  // Load once on mount. localStorage is only read client-side; a corrupt key
-  // reads back as {} (the lib guards it), so this can't throw.
-  useEffect(() => {
-    setTeams(loadSavedTeams(window.localStorage));
-  }, []);
 
   useEffect(() => {
     return () => {

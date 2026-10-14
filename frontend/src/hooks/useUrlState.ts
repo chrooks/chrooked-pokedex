@@ -55,6 +55,8 @@ export interface ViewState {
   /** Team matchups: treat every one of a member's abilities as active at once,
       so all its immunities, resists, and weaknesses show together. */
   teamRedux: boolean;
+  /** Team tab: Offensive Coverage expanded (collapsed by default). */
+  teamOffense: boolean;
   /** The Makeover Workbench anchor species (its chrooked_id), or null when the
       workbench is closed. URL-persisted so a reload restores it. */
   makeover: string | null;
@@ -112,6 +114,7 @@ function readState(): ViewState {
     poolQuery: params.get("tq") ?? "",
     poolNewTypes: params.get("tnew") === "1",
     teamRedux: params.get("tredux") === "1",
+    teamOffense: params.get("toff") === "1",
     makeover: mk.species,
     makeoverStage: mk.stage,
     makeoverSelect: mk.selected,
@@ -148,6 +151,7 @@ const OWNED_PARAMS = [
   "tq",
   "tnew",
   "tredux",
+  "toff",
   ...MAKEOVER_PARAMS,
 ] as const;
 
@@ -171,6 +175,7 @@ function writeState(next: ViewState): void {
   if (next.poolQuery) params.set("tq", next.poolQuery);
   if (next.poolNewTypes) params.set("tnew", "1");
   if (next.teamRedux) params.set("tredux", "1");
+  if (next.teamOffense) params.set("toff", "1");
   encodeMakeover(params, {
     species: next.makeover,
     stage: next.makeoverStage,

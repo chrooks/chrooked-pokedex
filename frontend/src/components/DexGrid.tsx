@@ -89,7 +89,7 @@ export function DexGrid({ entries, selected, onOpen, backdropTargetId }: Props) 
 
 /** Track the observed width of an element via a callback ref + ResizeObserver,
     so observation starts the moment the node mounts (no null-guard race). */
-function useElementWidth(): {
+export function useElementWidth(): {
   width: number;
   measureRef: (node: HTMLElement | null) => void;
 } {

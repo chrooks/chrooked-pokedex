@@ -68,7 +68,7 @@ export function PartySlot({ entry, ability, index, onRemove, onAbility, onOpen, 
             dex={entry.dex}
             name={entry.name}
             backdropTargetId={backdropTargetId}
-            size={64}
+            size={40}
           />
         </span>
         <span className="party-slot__name">{entry.name}</span>
@@ -76,16 +76,16 @@ export function PartySlot({ entry, ability, index, onRemove, onAbility, onOpen, 
 
       <span className="party-slot__types">
         {entry.types.map((type) => (
-          <TypeChip key={type} type={type} variant="full" />
+          <TypeChip key={type} type={type} variant="code" />
         ))}
       </span>
 
       {hasAltering && (
         <label className="party-slot__ability" htmlFor={selectId}>
-          <span className="party-slot__ability-label">Ability</span>
-          <select
+                    <select
             id={selectId}
             className="party-slot__ability-select"
+            aria-label={`${entry.name} ability`}
             value={ability ?? ""}
             onChange={(event) => onAbility(event.target.value === "" ? null : event.target.value)}
           >
