@@ -88,6 +88,123 @@
   box-shadow: 0 8px 24px color-mix(in oklch, black 35%, transparent);
 }
 
+/* ── Holes panel (#118) ──────────────────────────────────────────────────── */
+
+.holes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.holes__title {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.holes__empty {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+}
+
+.holes__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.holes__row {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 3px var(--space-1);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
+.holes__row:hover { background: var(--surface-2); color: var(--text); }
+
+.holes__row:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: -2px;
+}
+
+.holes__count {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in oklch, var(--type-fire) 55%, var(--text));
+}
+
+.holes__badge {
+  padding: 0 var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: color-mix(in oklch, var(--type-fire) 70%, var(--text));
+  border: 1px solid color-mix(in oklch, var(--type-fire) 45%, var(--line));
+  border-radius: var(--radius-sm);
+}
+
+.holes__detail {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.holes__covered {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding-top: var(--space-1);
+}
+
+.holes__covered-label {
+  margin-right: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.holes__chip {
+  all: unset;
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.holes__chip:hover { filter: brightness(1.25); }
+
+.holes__chip:focus-visible {
+  outline: 2px solid var(--chrome);
+  outline-offset: 1px;
+}
+
+/* A grid row reached from the Holes panel flashes once so the eye lands on it. */
+.matchup__row[data-flash="true"] > * {
+  box-shadow: inset 0 0 0 999px color-mix(in oklch, var(--chrome) 16%, transparent);
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
 /* ── Offense disclosure ──────────────────────────────────────────────────── */
 
 .team__offense {

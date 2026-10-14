@@ -24,6 +24,8 @@ import { PartyPicker } from "../team/PartyPicker";
 import { PartyPool } from "../team/PartyPool";
 import { PartySlot } from "../team/PartySlot";
 import { SavedTeamsMenu } from "../team/SavedTeamsMenu";
+import { HolesPanel } from "../team/HolesPanel";
+import { teamHoles } from "../../lib/teamFit";
 import { MatchupTable } from "../team/MatchupTable";
 import { ReplaceDialog } from "../team/ReplaceDialog";
 import "./tabs.css";
@@ -147,6 +149,7 @@ export function TeamTab() {
   );
   const columns = useMemo(() => resolved.map((r) => ({ entry: r.entry })), [resolved]);
   const matchups = useMemo(() => teamMatchups(members, cells), [members, cells]);
+  const holes = useMemo(() => teamHoles(matchups.defense), [matchups]);
 
   const partyIds = useMemo(() => new Set(party.map((m) => m.id)), [party]);
 
@@ -332,6 +335,7 @@ export function TeamTab() {
                 />
               ))}
             </ul>
+            <HolesPanel holes={holes} memberNames={members.map((m) => m.name)} />
             <MatchupTable
               id="team-defense"
               variant="defense"

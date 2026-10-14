@@ -100,6 +100,7 @@ export function MatchupTable({ id, variant, title, subtitle, columns, rows, back
               <tr
                 key={row.type}
                 className="matchup__row"
+                data-type={row.type}
                 style={{ "--type": `var(--type-${typeSlug(row.type)}, var(--text-dim))` } as React.CSSProperties}
               >
                 <th scope="row" className="matchup__rowhead">
