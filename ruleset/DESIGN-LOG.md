@@ -1476,3 +1476,9 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Rejected:** Gyarados and Krookodile (Moxie-shaped kits already); Machamp, Hariyama, Donphan (three niche slots, nothing generic to displace); Dudunsparce (not in the dex).
 - **Read-back:** montext.rb Noibat / Noivern `[:Abilities][1] = :WYVERNIZE` MATCH; Pichu / Pikachu / Raichu `[:Abilities][0] = :OVERCHARGE` MATCH. patch/ mirrored to thor.
 - **Owed in-game:** Noivern Boomburst hits a Dragon-weak target super-effectively; Raichu Thunderbolt at a third HP does 1.5x.
+
+## 2026-10-14 — Demolition removed (#84)
+
+- **Direction:** Chris: "Demolition is incredibly OP, that's a Dragon Dance on KO", then "Remove demolition." The ability had three conflicting definitions (text: Atk +1 and next-move priority; spec: Atk +1 and Spe +1; Rejuv packet: Atk +1 only, a Moxie clone) and no carrier, so there was nothing in play to lose.
+- **Removed:** `abilities/demolition.yaml`, `behaviors/demolition.yaml`, the Rejuv and Essentials packets, the harness check. Stale `patch/Mods/chrooked_demolition.rb` deleted from the local target by hand — apply does not prune mods it no longer owns.
+- **Read-back:** apply 1817 applied (was 1819: the ability and its behavior), abiltext.rb has no Demolition, patch/Mods has no demolition file. Thor was off the network at apply time, so the mirror is owed.

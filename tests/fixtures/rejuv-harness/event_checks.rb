@@ -173,10 +173,7 @@ check(fails, "blitz first turn", bl.pbSpeed, 150)
 bl.turncount = 2
 check(fails, "blitz later turn", bl.pbSpeed, 100)
 
-# KO: demolition raises attack, carnivore heals
-dm = PokeBattle_Battler.new(:DEMOLITION, battle)
-dm.pbOnKillEffects([:x], nil)
-check(fails, "demolition ko", dm.log, [[:stats, PBStats::ATTACK, 1]])
+# KO: carnivore heals
 cv = PokeBattle_Battler.new(:CARNIVORE, battle)
 cv.pbOnKillEffects([:x], nil)
 check(fails, "carnivore ko heal", cv.log, [[:heal, 25]])
