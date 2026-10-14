@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { effectiveTypes, hasTypeModifier } from "./abilityTypeModifiers";
+import { applyAbilityModifier, effectiveTypes, hasTypeModifier } from "./abilityTypeModifiers";
 
 describe("effectiveTypes", () => {
   it("adds Phantom's Ghost on top of the species' two types", () => {
@@ -24,5 +24,20 @@ describe("effectiveTypes", () => {
 
   it("offers Phantom as a matchup-altering ability toggle", () => {
     expect(hasTypeModifier("Phantom")).toBe(true);
+  });
+});
+
+describe("applyAbilityModifier", () => {
+  it("makes Nocturnal and Witching Hour Dark-immune", () => {
+    expect(applyAbilityModifier(2, "Dark", "Nocturnal")).toBe(0);
+    expect(applyAbilityModifier(1, "Ground", "Witching Hour")).toBe(0);
+  });
+
+  it("Redux mode folds every listed ability in at once", () => {
+    const all = ["Nocturnal", "Levitate", "Thick Fat"];
+    expect(applyAbilityModifier(2, "Dark", all)).toBe(0);
+    expect(applyAbilityModifier(2, "Ground", all)).toBe(0);
+    expect(applyAbilityModifier(2, "Fire", all)).toBe(1);
+    expect(applyAbilityModifier(1, "Water", all)).toBe(1);
   });
 });

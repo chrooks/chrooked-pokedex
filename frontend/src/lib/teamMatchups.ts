@@ -8,7 +8,7 @@
    the member's own types per defender (a dual-type attacker picks its better
    STAB). No React — unit-tested in teamMatchups.test.ts. */
 
-import { applyAbilityModifier, effectiveTypes } from "./abilityTypeModifiers";
+import { applyAbilityModifier, effectiveTypes, type Abilities } from "./abilityTypeModifiers";
 import { axisOrder, cellKey, cellMap } from "./typeChartGrid";
 import type { TypeChartCell } from "../types";
 
@@ -17,8 +17,9 @@ export interface TeamMember {
   id: string;
   name: string;
   types: readonly string[];
-  /** The chosen matchup-altering ability, or null for base typing. */
-  ability: string | null;
+  /** The chosen matchup-altering ability, every ability at once (Redux
+      mode), or null for base typing. */
+  ability: Abilities;
 }
 
 export type Bucket =

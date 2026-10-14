@@ -43,6 +43,18 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
   "pastel veil": { immuneTo: ["Poison"] }, // "Immune to Poison-type moves"
   "poison heal": { immuneTo: ["Poison"] }, // "Immune to Poison-type moves"
   "thermal exchange": { immuneTo: ["Fire"] }, // "Immune to Fire moves"
+  nocturnal: { immuneTo: ["Dark"] }, // "Dark-type moves do not affect it"
+  "witching hour": { immuneTo: ["Dark", "Ground"] }, // "Dark-type and Ground-type moves do not affect it"
+  airborne: { immuneTo: ["Flying", "Ground"] }, // "Draws Flying moves. Not hit by Ground attacks"
+  wingspan: { immuneTo: ["Ground"] }, // "Ground immune"
+  repulsion: { immuneTo: ["Ground"] }, // "Gains Magnet Rise on entry"
+  "ice skater": { immuneTo: ["Ice"] }, // "Ice-type moves do not affect the user"
+  "winter coat": { immuneTo: ["Ice"] }, // "Immune to Ice-type moves"
+  hydrophyte: { immuneTo: ["Water"], multiplier: { Fire: 0.5 } }, // "Immune to Water. Half damage from Fire"
+  "thorned succulent": { immuneTo: ["Water"] }, // "Water moves heal the user instead"
+  stonebark: { immuneTo: ["Grass"], multiplier: { Water: 1.25 } }, // "Heals from Grass. Weak to Water"
+  liquified: { multiplier: { Water: 2 } }, // "Water moves are always super effective against it"
+  virtualized: { multiplier: { Dark: 2 } }, // "Dark-type moves always hit super effectively"
   "thick fat": { multiplier: { Fire: 0.5, Ice: 0.5 } },
   heatproof: { multiplier: { Fire: 0.5 } },
   "water bubble": { multiplier: { Fire: 0.5 } },
@@ -56,6 +68,15 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
   phantom: { addsTypes: ["Ghost"] }, // "Gains the Ghost type on switch-in" (Trick-or-Treat)
 };
 
+/** One chosen ability, or — Redux mode — every ability the mon has, all
+    treated as active at once. null ⇒ base typing. */
+export type Abilities = string | readonly string[] | null;
+
+function asList(ability: Abilities): readonly string[] {
+  if (ability === null) return [];
+  return typeof ability === "string" ? [ability] : ability;
+}
+
 /** The single definition of "what types does this mon battle as": the species'
     own types, then any the ability adds that it doesn't already have (compared
     case-insensitively). Always a new array. `ability` null or not type-adding →
@@ -65,12 +86,20 @@ const ABILITY_TYPE_MODIFIERS: Record<string, AbilityTypeModifier> = {
     in the games. */
 export function effectiveTypes(
   types: readonly string[],
-  ability: string | null,
+  ability: Abilities,
 ): string[] {
-  const added = ability ? ABILITY_TYPE_MODIFIERS[ability.toLowerCase()]?.addsTypes : undefined;
-  if (!added) return [...types];
+  const added = asList(ability).flatMap(
+    (name) => ABILITY_TYPE_MODIFIERS[name.toLowerCase()]?.addsTypes ?? [],
+  );
   const have = new Set(types.map((t) => t.toLowerCase()));
-  return [...types, ...added.filter((t) => !have.has(t.toLowerCase()))];
+  const out = [...types];
+  for (const t of added) {
+    if (!have.has(t.toLowerCase())) {
+      have.add(t.toLowerCase());
+      out.push(t);
+    }
+  }
+  return out;
 }
 
 /** True iff this ability changes at least one type matchup — drives whether
@@ -80,15 +109,18 @@ export function hasTypeModifier(ability: string | null): boolean {
   return ability.toLowerCase() in ABILITY_TYPE_MODIFIERS;
 }
 
-/** Apply the selected ability's effect to a combined (already both-types-
-    multiplied) defensive multiplier for one attacking `type`. `ability` null
-    or unrecognized is a no-op. */
+/** Apply the selected ability's (or, given a list, every listed ability's)
+    effect to a combined (already both-types-multiplied) defensive multiplier
+    for one attacking `type`. Null or unrecognized abilities are no-ops. */
 export function applyAbilityModifier(
   combined: number,
   type: string,
-  ability: string | null,
+  ability: Abilities,
 ): number {
-  if (!ability) return combined;
+  return asList(ability).reduce((value, name) => applyOne(value, type, name), combined);
+}
+
+function applyOne(combined: number, type: string, ability: string): number {
   const mod = ABILITY_TYPE_MODIFIERS[ability.toLowerCase()];
   if (!mod) return combined;
   if (mod.immuneTo?.includes(type)) return 0;

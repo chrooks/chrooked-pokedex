@@ -30,6 +30,12 @@ import "../team/team-tab.css";
 
 type Resolved = { entry: DexEntry; ability: string | null; partyIndex: number };
 
+/** Redux mode: every distinct ability the mon has, all treated as active. */
+function allAbilities(entry: DexEntry): string[] {
+  const { primary, secondary, hidden } = entry.abilities;
+  return [...new Set([primary, secondary, hidden].filter((a): a is string => !!a))];
+}
+
 /** The Team pool owns its own namespaced filter params so a pill set here never
     bleeds into the Species tab's `filter` (the same D3 rule Moves/Abilities
     follow). Sort and columns stay unused — the pool is one dex-ordered line. */
@@ -54,6 +60,7 @@ export function TeamTab() {
   const backdrop = view.backdrop;
   const poolQuery = view.poolQuery;
   const newTypesOnly = view.poolNewTypes;
+  const redux = view.teamRedux;
   // The fresh species awaiting a swap decision — set when a pick lands on a full
   // team, cleared when the replace dialog resolves or is dismissed (ac10).
   const [replaceIncoming, setReplaceIncoming] = useState<DexEntry | null>(null);
@@ -99,8 +106,13 @@ export function TeamTab() {
   // Every type the party already covers — the "New types only" toggle reads it.
   // A member's chosen type-adding ability counts (Phantom Rotom covers Ghost).
   const coveredTypes = useMemo(
-    () => teamTypeSet(resolved.map((r) => ({ types: effectiveTypes(r.entry.types, r.ability) }))),
-    [resolved],
+    () =>
+      teamTypeSet(
+        resolved.map((r) => ({
+          types: effectiveTypes(r.entry.types, redux ? allAbilities(r.entry) : r.ability),
+        })),
+      ),
+    [resolved, redux],
   );
 
   // The pool: the whole dex narrowed by the search text and the filter pills —
@@ -127,9 +139,9 @@ export function TeamTab() {
         id: r.entry.chrooked_id,
         name: r.entry.name,
         types: r.entry.types,
-        ability: r.ability,
+        ability: redux ? allAbilities(r.entry) : r.ability,
       })),
-    [resolved],
+    [resolved, redux],
   );
   const columns = useMemo(() => resolved.map((r) => ({ entry: r.entry })), [resolved]);
   const matchups = useMemo(() => teamMatchups(members, cells), [members, cells]);
@@ -240,6 +252,19 @@ export function TeamTab() {
             onClick={() => update({ poolNewTypes: !newTypesOnly })}
           >
             New types only
+          </button>
+        )}
+        {resolved.length > 0 && (
+          <button
+            type="button"
+            id="team-redux"
+            className="team__new-types"
+            data-on={redux}
+            aria-pressed={redux}
+            title="Treat every ability each member has as active at once, so all its immunities, resists, and weaknesses show together"
+            onClick={() => update({ teamRedux: !redux })}
+          >
+            Redux mode
           </button>
         )}
       </div>
