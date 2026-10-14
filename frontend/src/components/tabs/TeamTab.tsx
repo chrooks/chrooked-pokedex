@@ -3,7 +3,8 @@ import { api } from "../../api";
 import { useResource } from "../../hooks/useResource";
 import { useUrlState } from "../../hooks/useUrlState";
 import { useEntityView, type EntityParamKeys } from "../../hooks/useEntityView";
-import { DEX_REGISTRY, evalEntries, matchesQuery } from "../../lib/dexFilters";
+import { DEX_REGISTRY, appendAnswerFilter, evalEntries, matchesQuery } from "../../lib/dexFilters";
+import { uid } from "../../lib/uid";
 import { dexCodec } from "../../lib/dexViewCodec";
 import { cellMap } from "../../lib/typeChartGrid";
 import { teamMatchups, type TeamMember } from "../../lib/teamMatchups";
@@ -231,7 +232,7 @@ export function TeamTab() {
         </p>
       </div>
 
-      <div className="team__pool-search">
+      <div className="team__pool-search" id="team-pool-search">
         <PartyPicker
           query={poolQuery}
           onQuery={(next) => update({ poolQuery: next })}
@@ -342,6 +343,11 @@ export function TeamTab() {
             columns={columns}
             rows={matchups.defense}
             backdropTargetId={backdrop}
+            onWeakClick={(type) => {
+              setControls({ filter: appendAnswerFilter(controls.filter, type, uid) });
+              // The pool sits above the tables — bring it into view so the click shows.
+              document.getElementById("team-pool-search")?.scrollIntoView({ behavior: "smooth" });
+            }}
           />
           <MatchupTable
             id="team-offense"

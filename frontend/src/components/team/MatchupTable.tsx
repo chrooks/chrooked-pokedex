@@ -22,6 +22,9 @@ type Props = {
   columns: Column[];
   rows: DefenseRow[] | OffenseRow[];
   backdropTargetId: string | null;
+  /** Defense only: clicking a weak (×>1) cell asks the pool for an answer to
+      that attacking type. */
+  onWeakClick?: (type: string) => void;
 };
 
 type TotalSpec = { key: string; label: string; get: (row: DefenseRow & OffenseRow) => number };
@@ -44,7 +47,7 @@ const OFFENSE_TOTALS: TotalSpec[] = [
  * combined dual-type × ability multiplier in tectonic's color/glyph language;
  * trailing count columns that blank at zero.
  */
-export function MatchupTable({ id, variant, title, subtitle, columns, rows, backdropTargetId }: Props) {
+export function MatchupTable({ id, variant, title, subtitle, columns, rows, backdropTargetId, onWeakClick }: Props) {
   const totals = variant === "defense" ? DEFENSE_TOTALS : OFFENSE_TOTALS;
   const axisCaption = variant === "defense" ? "Attacking type" : "Defending type";
 
@@ -111,6 +114,11 @@ export function MatchupTable({ id, variant, title, subtitle, columns, rows, back
                       mult={mult}
                       atkLabel={atkLabel}
                       defLabel={defLabel}
+                      onClick={
+                        variant === "defense" && onWeakClick && mult !== null && mult > 1
+                          ? () => onWeakClick(row.type)
+                          : undefined
+                      }
                     />
                   );
                 })}
@@ -153,9 +161,10 @@ type CellProps = {
   mult: number | null;
   atkLabel: string;
   defLabel: string;
+  onClick?: () => void;
 };
 
-function MatchupCell({ mult, atkLabel, defLabel }: CellProps) {
+function MatchupCell({ mult, atkLabel, defLabel, onClick }: CellProps) {
   if (mult === null) {
     return (
       <td
@@ -176,9 +185,23 @@ function MatchupCell({ mult, atkLabel, defLabel }: CellProps) {
       title={title}
       aria-label={title}
     >
-      <span className="matchup__cell-glyph" aria-hidden="true">
-        {glyph}
-      </span>
+      {onClick ? (
+        <button
+          type="button"
+          className="matchup__cell-btn"
+          title={`${title} — click to filter for ${atkLabel} resists or immunities`}
+          aria-label={`Find species that resist or are immune to ${atkLabel}`}
+          onClick={onClick}
+        >
+          <span className="matchup__cell-glyph" aria-hidden="true">
+            {glyph}
+          </span>
+        </button>
+      ) : (
+        <span className="matchup__cell-glyph" aria-hidden="true">
+          {glyph}
+        </span>
+      )}
     </td>
   );
 }

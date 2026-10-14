@@ -780,6 +780,22 @@
   line-height: 1;
 }
 
+/* A weak cell is a button: click asks the pool for a resist/immunity to that type. */
+.matchup__cell-btn {
+  all: unset;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.matchup__cell-btn:hover,
+.matchup__cell-btn:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
 /* Neutral ×1 renders blank with no fill — the row-hover wash shows through it. */
 .matchup__cell[data-neutral="true"] {
   background: transparent;

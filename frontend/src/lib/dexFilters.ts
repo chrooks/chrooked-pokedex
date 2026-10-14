@@ -17,6 +17,7 @@ import {
   evalEntries as evalEntriesGeneric,
   type FieldRegistry,
   type FilterDef,
+  type FilterEntry,
 } from "./filterEngine";
 
 /** The Type filter's relation operator. `is` is a plain membership test (no
@@ -300,4 +301,33 @@ export function matchesQuery(entry: DexEntry, query: string): boolean {
     entry.name.toLowerCase().includes(query) ||
     String(entry.dex ?? "").includes(query)
   );
+}
+
+/** The Team tab's "find an answer" pill group: append `AND (Type resists <type>
+    OR Type immune to <type>)` so the pool narrows to species that cover a team
+    weakness. Returns the SAME array when an identical group is already present
+    or the two pills would pass the 10-pill cap. `makeId` keeps it pure. */
+export function appendAnswerFilter(
+  filter: FilterEntry[],
+  type: string,
+  makeId: () => string,
+): FilterEntry[] {
+  const leaves = filter.filter((e) => e.kind === "filter");
+  if (leaves.length + 2 > 10) return filter;
+  if (leaves.some((e) => e.field === "type" && e.value === `resists|${type}`)) return filter;
+  const pill = (value: string, connector: "AND" | "OR"): FilterEntry => ({
+    kind: "filter",
+    id: makeId(),
+    field: "type",
+    value,
+    connector,
+    negated: false,
+  });
+  return [
+    ...filter,
+    { kind: "paren", id: makeId(), paren: "(", connector: "AND" },
+    pill(`resists|${type}`, "AND"),
+    pill(`immune|${type}`, "OR"),
+    { kind: "paren", id: makeId(), paren: ")", connector: "AND" },
+  ];
 }

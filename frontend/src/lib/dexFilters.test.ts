@@ -7,6 +7,7 @@ import {
   evalEntries,
   type FilterDef,
   type FilterEntry,
+  appendAnswerFilter,
 } from "./dexFilters";
 import { cellMap } from "./typeChartGrid";
 
@@ -437,5 +438,26 @@ describe("evolution filter", () => {
     expect(applyFilter(def(), levelOverride, "Level|>|30")).toBe(false);
     expect(applyFilter(def(), levelDict, "Level|≥|50")).toBe(true);
     expect(applyFilter(def(), stone, "Level|≥|1")).toBe(false);
+  });
+});
+
+describe("appendAnswerFilter", () => {
+  let n = 0;
+  const makeId = () => `id${n++}`;
+
+  it("appends AND (resists OR immune) for the type", () => {
+    const out = appendAnswerFilter([], "Dark", makeId);
+    expect(out.map((e) => (e.kind === "paren" ? e.paren : `${e.connector} ${e.value}`))).toEqual([
+      "(",
+      "AND resists|Dark",
+      "OR immune|Dark",
+      ")",
+    ]);
+    expect(out[0].connector).toBe("AND");
+  });
+
+  it("returns the same array when the group already exists", () => {
+    const once = appendAnswerFilter([], "Dark", makeId);
+    expect(appendAnswerFilter(once, "Dark", makeId)).toBe(once);
   });
 });
