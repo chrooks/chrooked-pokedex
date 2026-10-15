@@ -1,0 +1,28 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Quick Feet
+chrooked_id: quickfeet
+applies_to: ability
+aka: { pokeemerald: ABILITY_QUICK_FEET }
+effects:
+  - summary: "Boosts Speed by 50% while statused, and paralysis does not lower its Speed."
+    trigger: turn-order
+    when: "this Pokemon has a status condition"
+    effect: "multiply Speed by 1.5 and skip paralysis's Speed drop"
+  - summary: "Burn and frostbite do not lower its damage, the way Guts works."
+    trigger: damage-calc
+    when: "this Pokemon is burned and uses a physical move, or is frostbitten and uses a special move"
+    effect: "skip the status's 0.5 damage penalty"
+test_cases:
+  - given: "a burned Quick Feet Pokemon uses a physical move"
+    expect: "full damage — no burn penalty"
+  - given: "a frostbitten Quick Feet Pokemon uses a special move"
+    expect: "full damage — no frostbite penalty"
+  - given: "a paralyzed Quick Feet Pokemon"
+    expect: "Speed x1.5, no paralysis Speed drop (vanilla)"
+notes:
+  - "The Speed half is mainline-canonical and native in both engines; only the damage-penalty exemption is chrooked."
+  - "Facade is already exempt from burn's penalty in the engine, so it gets no refund."
+engine_hints:
+  rejuv: "Burn's penalty is burnmult in pbCalcDamage (Battle_Move.rb:1190), gated on Guts only; chrooked_quickfeet.rb refunds it with a x2 CHROOKED_DAMAGE_MODS entry. Frostbite's penalty is chrooked code — CHROOKED_STATUS_DAMAGE_MODS[:FROZEN] in chrooked_frostbite.rb exempts Quick Feet alongside Guts."
+  essentials: "Add QUICKFEET next to GUTS in the burn damage check in pbCalcDamage (and in the frostbite one)."
+  pokeemerald: "Add ABILITY_QUICK_FEET next to ABILITY_GUTS in the burn check of the damage calc."

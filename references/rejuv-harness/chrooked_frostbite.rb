@@ -8,7 +8,7 @@
 # freeze block in pbTryUseMove is unconditional again and pbCalcDamage /
 # pbEndOfRoundPhase no longer know frostbite — so this file now implements
 # all three effects itself:
-#   special damage x0.5 (Guts exempt)  -> CHROOKED_STATUS_DAMAGE_MODS (core)
+#   special damage x0.5 (Guts/Quick Feet exempt)  -> CHROOKED_STATUS_DAMAGE_MODS (core)
 #   1/16 max HP chip each turn          -> CHROOKED_STATUS_TURN_END (core)
 #   no turn skip, no random thaw        -> prepend on pbTryUseMove below
 #
@@ -20,13 +20,13 @@
 #   - Guts holder suffers no special damage penalty (mirrors burn)
 #   - Ice-types cannot be frostbitten (vanilla pbCanFreeze? already blocks them)
 
-# --- Special damage halved, unless Guts ------------------------------------
+# --- Special damage halved, unless Guts or Quick Feet ------------------------------------
 # Mirrors the burn line directly above the frozen one in pbCalcDamage, which
 # reads `attacker.ability != :GUTS`. Guts already grants its own x1.5 Attack on
 # any status (Battle_Move.rb ~1515), so only the penalty exemption is new.
 CHROOKED_STATUS_DAMAGE_MODS[:FROZEN] = lambda { |move, attacker, opponent|
   next 1.0 if attacker.crested == :SUICUNE
-  next 1.0 if attacker.ability == :GUTS
+  next 1.0 if [:GUTS, :QUICKFEET].include?(attacker.ability)
   next 1.0 unless move.pbIsSpecial?(attacker, move.pbType(attacker))
   0.5
 }

@@ -5,6 +5,7 @@
 def _INTL(s, *a); a.each_with_index { |v, i| s = s.gsub("{#{i + 1}}", v.to_s) }; s; end
 CHROOKED_STATUS_DAMAGE_MODS = {}
 CHROOKED_STATUS_TURN_END = {}
+CHROOKED_DAMAGE_MODS = {}
 
 class PokeBattle_Battle
   attr_reader :shown
@@ -23,6 +24,7 @@ class PokeBattle_Move
   def canThawUser?; @thaws; end
   def name; @move.to_s.capitalize; end
   def pbIsSpecial?(a, t); @special; end
+  def pbIsPhysical?(a, t); !@special; end
   def pbType(a); :NORMAL; end
 end
 
@@ -49,7 +51,7 @@ class PokeBattle_Battler
   end
 end
 
-Dir[File.join(ARGV[0], "chrooked_frostbite.rb")].each { |f| eval(File.read(f), TOPLEVEL_BINDING, f) }
+Dir[File.join(ARGV[0], "chrooked_{frostbite,quickfeet}.rb")].each { |f| eval(File.read(f), TOPLEVEL_BINDING, f) }
 
 fails = []
 def check(fails, name, got, want); fails << "#{name}: got #{got.inspect}, want #{want.inspect}" unless got == want; end
@@ -85,6 +87,12 @@ sp = PokeBattle_Move.new(:ICEBEAM, b, special: true)
 check(fails, "special halved", CHROOKED_STATUS_DAMAGE_MODS[:FROZEN].call(sp, PokeBattle_Battler.new(b, :FROZEN), nil), 0.5)
 check(fails, "physical untouched", CHROOKED_STATUS_DAMAGE_MODS[:FROZEN].call(tackle, PokeBattle_Battler.new(b, :FROZEN), nil), 1.0)
 check(fails, "guts exempt", CHROOKED_STATUS_DAMAGE_MODS[:FROZEN].call(sp, PokeBattle_Battler.new(b, :FROZEN, :GUTS), nil), 1.0)
+check(fails, "quick feet exempt", CHROOKED_STATUS_DAMAGE_MODS[:FROZEN].call(sp, PokeBattle_Battler.new(b, :FROZEN, :QUICKFEET), nil), 1.0)
+qf = CHROOKED_DAMAGE_MODS[:QUICKFEET]
+check(fails, "quick feet refunds burned physical", qf.call(tackle, PokeBattle_Battler.new(b, :BURN, :QUICKFEET), nil), 2.0)
+check(fails, "quick feet burned special unchanged", qf.call(sp, PokeBattle_Battler.new(b, :BURN, :QUICKFEET), nil), 1.0)
+check(fails, "quick feet burned facade unchanged", qf.call(PokeBattle_Move.new(:FACADE, b), PokeBattle_Battler.new(b, :BURN, :QUICKFEET), nil), 1.0)
+check(fails, "quick feet paralyzed physical unchanged", qf.call(tackle, PokeBattle_Battler.new(b, :PARALYSIS, :QUICKFEET), nil), 1.0)
 b.state.effects[:NeverMeltIce] = true
 check(fails, "halves even under nevermelting hail", CHROOKED_STATUS_DAMAGE_MODS[:FROZEN].call(sp, PokeBattle_Battler.new(b, :FROZEN), nil), 0.5)
 ch = PokeBattle_Battler.new(b, :FROZEN)
@@ -95,4 +103,4 @@ mg = PokeBattle_Battler.new(b, :FROZEN, :MAGICGUARD)
 CHROOKED_STATUS_TURN_END[:FROZEN].call(mg, b)
 check(fails, "magic guard no chip", mg.log.any? { |e| e[0] == :chip }, false)
 
-if fails.empty? then puts "OK (frostbite 14.0.20: #{19} checks)" else puts fails; exit 1 end
+if fails.empty? then puts "OK (frostbite 14.0.20: #{24} checks)" else puts fails; exit 1 end
