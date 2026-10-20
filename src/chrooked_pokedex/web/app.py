@@ -34,6 +34,8 @@ from ..model.holds import hold_filtered_ruleset, load_holds
 from . import collections as colmod
 from . import crud as crudmod
 from . import design as designmod
+from . import mods as modsmod
+from ..appliers.rejuv.behavior_install import _DEFAULT_SOURCE_DIR as _REJUV_HARNESS
 from . import design_log as designlogmod
 from .design_store import DesignStore
 from . import dex as dexmod
@@ -1728,6 +1730,14 @@ def create_app(
                 queue_path=ruleset_dir / "QUEUE.md",
                 app=app,
             )
+        )
+    )
+
+    app.include_router(
+        modsmod.build_router(
+            ruleset_dir=ruleset_dir,
+            source_dir=_REJUV_HARNESS,
+            get_target=lambda target_id: app.state.targets_registry.get(target_id),
         )
     )
 

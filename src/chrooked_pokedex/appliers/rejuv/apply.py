@@ -16,7 +16,7 @@ from pathlib import Path
 from ...model import Ruleset
 from ...model.schema import DEFAULT_EFFECT, STAT_KEYS
 from ...report import ApplyReport, ReportEntry
-from . import behavior_install, compose, behavior_triage
+from . import behavior_install, compose, behavior_triage, static_mods
 from ...model.schema import composed_behaviors, is_composed
 from .emit import (
     Sym, abiltext_delta, itemtext_delta, montext_delta, movetext_delta, ruby_sym,
@@ -37,8 +37,13 @@ def apply_rejuv(
     *,
     category: str = "all",
     behavior_source_dir: Path | None = None,
+    mods_off: frozenset[str] = frozenset(),
 ) -> set[Path]:
-    """Write the patch/ delta files and return the set of paths written."""
+    """Write the patch/ delta files and return the set of paths written.
+
+    ``mods_off`` names the static mods this Target turns off (model/mods.py);
+    their files are removed from patch/Mods/ instead of installed.
+    """
     resolution = RejuvResolution.build(target)
     categories = _CATEGORIES if category == "all" else (category,)
     written: set[Path] = set()
@@ -122,8 +127,11 @@ def apply_rejuv(
         ))
 
     # Static mods (chrooked_zz_*.rb) — self-contained UI/mechanic tweaks that are
-    # not Ruleset behaviors, so they install unconditionally on every apply.
-    written |= _install_static_mods(target, behavior_source_dir)
+    # not Ruleset behaviors. Every mod installs unless the Target turns it off.
+    written |= static_mods.install(
+        target, behavior_source_dir or behavior_install._DEFAULT_SOURCE_DIR,
+        report, off=mods_off,
+    )
 
     # The compiler writes patch/Data/*.dat on boot; create the folder now so the
     # first compile has somewhere to land (the Init script also self-heals it).
@@ -139,23 +147,6 @@ def _write(path: Path, text: str) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
     return path
-
-
-def _install_static_mods(target: Path, source_dir: Path | None) -> set[Path]:
-    """Copy every chrooked_zz_*.rb into patch/Mods/ verbatim.
-
-    These are self-contained script mods (no dependency on the behavior core),
-    unlike behavior files which need chrooked_00_core.rb's tables.
-    """
-    src_root = source_dir or behavior_install._DEFAULT_SOURCE_DIR
-    mods_dir = target / "patch" / "Mods"
-    written: set[Path] = set()
-    for src in sorted(src_root.glob("chrooked_zz_*.rb")):
-        dest = mods_dir / src.name
-        mods_dir.mkdir(parents=True, exist_ok=True)
-        dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
-        written.add(dest)
-    return written
 
 
 # --- montext -----------------------------------------------------------------

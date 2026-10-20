@@ -1,5 +1,7 @@
 # chrooked:zz_darmanitan
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: form
+# mod-summary: Party menu Zen option: switch Darmanitan between Standard and Zen.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Adds a "Zen" option to the party menu for Darmanitan that switches between its
 # Standard and Zen form directly, the way chrooked_zz_season.rb does for Sawsbuck.
 # Elite Redux does the same thing: the form is a build choice the player makes out

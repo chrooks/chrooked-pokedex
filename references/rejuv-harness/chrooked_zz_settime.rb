@@ -1,5 +1,8 @@
 # chrooked:zz_settime
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Adds Set Time to the debug menu: pick the hour of day.
+# mod-needs: debug
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # Adds "Set Time" to the debug menu (needs chrooked_zz_debug). Pick an hour
 # and a minute; the game clock jumps there and keeps running from it.

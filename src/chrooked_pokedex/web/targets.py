@@ -50,6 +50,7 @@ from .. import ledger as ledgermod
 from ..model import Ruleset
 from ..model.compose import compose_ruleset, overlay_touched_fields
 from ..model.holds import HoldSet, load_holds
+from ..model.mods import load_mods_off
 from ..model.target_edits import TargetEdits, load_target_edits
 from ..report import ApplyReport
 from . import dex as dexmod
@@ -539,6 +540,7 @@ def _backup_essentials_data(fork: Path) -> dict[str, Any]:
 def _run_applier(
     target: Path, engine: str, ruleset: Ruleset,
     holds: "HoldSet | None" = None, target_edits: "TargetEdits | None" = None,
+    mods_off: frozenset[str] = frozenset(),
 ) -> ApplyReport:
     """Run the real applier for ``engine`` over ``target`` and return its report.
 
@@ -554,7 +556,8 @@ def _run_applier(
     """
     report = ApplyReport()
     _route_apply(
-        target, engine, ruleset, report, holds=holds, target_edits=target_edits
+        target, engine, ruleset, report, holds=holds, target_edits=target_edits,
+        mods_off=mods_off,
     )
     return report
 
@@ -571,6 +574,13 @@ def _load_target_layers(
     slug = target.namespace if ruleset_dir is not None else None
     base = Path(ruleset_dir) if ruleset_dir is not None else Path(".")
     return load_holds(base, slug), load_target_edits(base, slug)
+
+
+def _load_mods_off(ruleset_dir: Optional[Path], target: Target) -> frozenset[str]:
+    """The static mods this Target turns off (``ruleset/targets/<slug>/mods.yaml``)."""
+    if ruleset_dir is None:
+        return frozenset()
+    return load_mods_off(Path(ruleset_dir), target.namespace)
 
 
 # --- Orchestration -------------------------------------------------------- #
@@ -656,7 +666,8 @@ def preview_target(
         applier_error: BaseException | None = None
         try:
             report = _run_applier(
-                fork, target.engine, ruleset, holds=holds, target_edits=target_edits
+                fork, target.engine, ruleset, holds=holds, target_edits=target_edits,
+                mods_off=_load_mods_off(ruleset_dir, target),
             )
             payload = _report_payload(report)
             if cache_key is not None:
@@ -724,7 +735,8 @@ def apply_target(
         )
         holds, target_edits = _load_target_layers(ruleset_dir, target)
         report = _run_applier(
-            fork, target.engine, ruleset, holds=holds, target_edits=target_edits
+            fork, target.engine, ruleset, holds=holds, target_edits=target_edits,
+            mods_off=_load_mods_off(ruleset_dir, target),
         )
         report.write(fork / "apply-report.md")
         state.invalidate_snapshot(target.path)

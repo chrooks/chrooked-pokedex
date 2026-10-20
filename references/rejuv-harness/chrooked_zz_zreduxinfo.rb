@@ -1,6 +1,9 @@
 # encoding: utf-8
 # chrooked:zz_zreduxinfo
-# Static mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: battle
+# mod-summary: Under Redux Mode the ability box names the ability that fired.
+# mod-needs: redux
+# Static mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Sorts after zz_redux / zz_zcompose on purpose: it reopens ChrookedAbilitySet.
 #
 # 1. Ability box under Redux Mode names the ability that FIRED, not the primary.

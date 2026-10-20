@@ -1,6 +1,8 @@
 # encoding: utf-8
 # chrooked:zz_speedrange
-# Static UI mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Battle Stats shows the foe's possible Speed range, narrowed each turn.
+# Static UI mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # The R key on the fight menu already opens DemICE's Battle Stats screen for the
 # opposing mon: typing, base stats, stages. It prints "Base Spe: 102" and nothing

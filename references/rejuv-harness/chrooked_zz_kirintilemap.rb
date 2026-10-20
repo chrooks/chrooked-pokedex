@@ -1,4 +1,6 @@
 # chrooked:zz_kirintilemap — Kirin compatibility shim, hand-placed (not generated).
+# mod-group: shim
+# mod-summary: Kirin: draw oversized tilesets in chunks so the map never freezes.
 #
 # Symptom: on some maps the overworld freezes on its last frame while logic,
 # input and audio keep running. Cause: the map's tileset PNG is taller than the

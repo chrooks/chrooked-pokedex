@@ -1,5 +1,7 @@
 # chrooked:zz_pckey
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Press P to open PC storage anywhere.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # PC hotkey: press P (mnemonic: P for PC) to open the PC storage screen in
 # organize mode — on the overworld map AND in the party screen. Same screen

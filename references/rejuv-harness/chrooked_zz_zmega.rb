@@ -1,6 +1,9 @@
 # encoding: utf-8
 # chrooked:zz_zmega
-# Static mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: battle
+# mod-summary: A Mega keeps its pre-Mega abilities and gains the Mega ability.
+# mod-needs: redux
+# Static mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # A Mega keeps every ability it had before it Mega Evolved and gains the Mega
 # form's ability on top. With "All Abilities" On that is the base species'
 # whole list plus the Mega ability; with it Off, the one ability it had plus

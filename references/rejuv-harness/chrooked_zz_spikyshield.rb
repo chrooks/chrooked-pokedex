@@ -1,4 +1,6 @@
 # chrooked:zz_spikyshield
+# mod-group: battle
+# mod-summary: Spiky Shield contact chip rises from 1/8 to 1/6 of max HP.
 # Spiky Shield buff — contact chip raised from 1/8 to 1/6 of the attacker's max HP.
 #
 # Rejuv resolves every protect-variant's on-contact rider in one `case hitflag`

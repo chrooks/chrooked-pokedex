@@ -1,4 +1,6 @@
 # chrooked:zz_kirincull — Kirin compatibility shim, hand-placed (not generated).
+# mod-group: shim
+# mod-summary: Kirin: skip off-screen event sprites so city maps run at full speed.
 #
 # Rejuv's Spriteset_Map#update deliberately updates EVERY event sprite every
 # frame; the in_range? cull is commented out in base code over a sticky-sprite

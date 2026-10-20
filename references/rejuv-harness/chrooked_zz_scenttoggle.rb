@@ -1,5 +1,7 @@
 # chrooked:zz_scenttoggle
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Press E on the overworld to turn wild encounters off or on.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # Encounter toggle: press E (mnemonic: E for Encounters) on the overworld to
 # flip the Spice Scent between 0 (no wild encounters) and 9000 (an encounter

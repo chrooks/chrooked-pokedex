@@ -1,5 +1,7 @@
 # chrooked:zz_pcsort
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Sort PC boxes by date caught or by base stats.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # PC sort by date caught (both directions) and by base stats.
 #   Adds "Date Caught (Newest)", "Date Caught (Oldest)" and "Base Stats..." to

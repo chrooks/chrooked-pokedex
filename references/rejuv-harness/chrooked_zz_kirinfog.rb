@@ -1,4 +1,6 @@
 # chrooked:zz_kirinfog
+# mod-group: shim
+# mod-summary: Kirin: tame the full-screen fog layer that stutters under weather.
 # Kirin compatibility shim — NOT a Ruleset behavior. Hand-placed, not generated.
 #
 # Symptom: on thor, big maps stutter and the fan spikes when weather is active,

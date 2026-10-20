@@ -1,5 +1,7 @@
 # chrooked:zz_levelcap
-# Static UI/mechanic mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Press F8 on the party screen to raise the party to the level cap.
+# Static UI/mechanic mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # Party screen hotkey: press F8 to raise every party Pokemon to the current
 # level cap (PBExp.currentHardCapLevel, the same badge-based cap that gates

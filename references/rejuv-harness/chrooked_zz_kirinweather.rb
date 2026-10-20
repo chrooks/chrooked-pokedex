@@ -1,4 +1,6 @@
 # chrooked:zz_kirinweather
+# mod-group: shim
+# mod-summary: Kirin: fix a loaded save with active weather freezing the overworld.
 # Kirin compatibility shim — NOT a Ruleset behavior. Hand-placed, not generated.
 #
 # Symptom: under Kirin the overworld stops redrawing while menus, input and audio

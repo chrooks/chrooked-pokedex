@@ -1,4 +1,6 @@
 # chrooked:zz_kirintint — Kirin compatibility shim, hand-placed (not generated).
+# mod-group: shim
+# mod-summary: Kirin: drop per-sprite day/night tint passes on outdoor maps.
 #
 # Diagnosis (probe v3, 2026-08-22): outdoor maps run at ~5fps on Kirin with
 # ~200ms/frame inside Spriteset_Map#update, while tilemap=0ms and weather=0ms.

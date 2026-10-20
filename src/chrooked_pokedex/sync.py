@@ -312,12 +312,11 @@ def _prune_snapshots(root: Path, today: date) -> int:
     return removed
 
 
-def sync_config_for_path(targets_json: Path, fork: Path) -> SyncConfig | None:
-    """Find the sync block of the registered Target living at ``fork``.
+def registry_entry_for_path(targets_json: Path, fork: Path) -> dict | None:
+    """The ``targets.json`` row of the registered Target living at ``fork``.
 
-    Reads ``targets.json`` directly so the CLI never has to import the web
-    layer.  Returns None when the file is missing, unreadable, has no matching
-    Target, or that Target has no sync block — a sync is opt-in per Target.
+    Reads the file directly so the CLI never has to import the web layer.
+    Returns None when the file is missing, unreadable, or has no matching row.
     """
     try:
         raw = json.loads(targets_json.read_text(encoding="utf-8"))
@@ -327,15 +326,24 @@ def sync_config_for_path(targets_json: Path, fork: Path) -> SyncConfig | None:
         return None
     wanted = _resolve(fork)
     for entry in raw:
-        if not isinstance(entry, dict) or not entry.get("sync"):
-            continue
-        if _resolve(Path(str(entry.get("path", "")))) != wanted:
-            continue
-        try:
-            return SyncConfig.from_dict(entry["sync"])
-        except (ValueError, TypeError):
-            return None
+        if isinstance(entry, dict) and _resolve(Path(str(entry.get("path", "")))) == wanted:
+            return entry
     return None
+
+
+def sync_config_for_path(targets_json: Path, fork: Path) -> SyncConfig | None:
+    """Find the sync block of the registered Target living at ``fork``.
+
+    Returns None when there is no matching Target or that Target has no sync
+    block — a sync is opt-in per Target.
+    """
+    entry = registry_entry_for_path(targets_json, fork)
+    if not entry or not entry.get("sync"):
+        return None
+    try:
+        return SyncConfig.from_dict(entry["sync"])
+    except (ValueError, TypeError):
+        return None
 
 
 def _resolve(path: Path) -> Path:

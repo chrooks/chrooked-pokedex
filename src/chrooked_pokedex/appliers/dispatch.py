@@ -36,6 +36,7 @@ def route_apply(
     holds: "HoldSet | None" = None,
     target_edits: "TargetEdits | None" = None,
     create_absent: bool = True,
+    mods_off: frozenset[str] = frozenset(),
 ) -> None:
     """Detect the format, dispatch to the right applier, and mutate ``report``.
 
@@ -53,6 +54,9 @@ def route_apply(
     and pokeemerald appliers; ``target_edits`` (additive per-Target edits) by
     essentials162 only. Elsewhere they are accepted but not yet wired. Both
     default to empty, so an apply with no slug behaves exactly as before.
+
+    ``mods_off`` (static mods the Target turns off, model/mods.py) is honored by
+    the rejuv applier, the only engine with static mods today.
 
     Side effects: modifies ``report`` in-place by appending ``ReportEntry``
     objects.  All file I/O is in the applier functions, not here.
@@ -75,7 +79,7 @@ def route_apply(
         from ..cli import _apply_rejuv
 
         _warn_unsupported_target_layers(holds, target_edits, "rejuv", report)
-        _apply_rejuv(target, category, ruleset, report)
+        _apply_rejuv(target, category, ruleset, report, mods_off=mods_off)
         return
 
     # --- pokeemerald path ---------------------------------------------------

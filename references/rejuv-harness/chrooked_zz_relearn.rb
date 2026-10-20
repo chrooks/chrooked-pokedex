@@ -1,5 +1,7 @@
 # chrooked:zz_relearn
-# Static UI/mechanic mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Relearn level-up moves from the party menu, no NPC needed.
+# Static UI/mechanic mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # Rejuv gates the party "Learn" -> "Natural moves" page behind a per-mon
 # "can't remember its moves on its own yet..." flag (canRelearnAll?), which only

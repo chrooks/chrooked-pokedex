@@ -1,4 +1,6 @@
 # chrooked:zz_kirinprobe
+# mod-group: diagnostic
+# mod-summary: Kirin: log slow frames and suspect calls to probe-kirin.log.
 # Kirin DIAGNOSTIC probe — NOT a Ruleset behavior, NOT a permanent shim.
 # Hand-placed while hunting the weather-transition spike (2026-08-26).
 #

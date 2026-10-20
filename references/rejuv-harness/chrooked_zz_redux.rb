@@ -1,6 +1,9 @@
 # encoding: utf-8
 # chrooked:zz_redux
-# Static mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: battle
+# mod-summary: Redux Mode option: every battler has all of its species' abilities at once.
+# mod-locked: defines ChrookedAbilitySet, which composed abilities and Mega ability merging need; inert while the option is Off
+# Static mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # "Redux Mode" Options toggle: when On, every battler enters battle with ALL
 # of its species' abilities (regular + hidden) active at once, Tectonic-style.
 #

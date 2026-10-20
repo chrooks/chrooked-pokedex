@@ -1,5 +1,7 @@
 # chrooked:zz_run
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Press B in a wild battle to pick Run.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Overrides ONE method (pbCommandMenuEx) per Rejuv's patch/Mods method-override
 # modding (see Modding.txt): pressing B in a wild battle picks Run.
 # ponytail: full-method override — re-sync from Scripts/Battle_Scene.rb if a

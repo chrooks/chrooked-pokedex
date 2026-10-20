@@ -1,5 +1,7 @@
 # chrooked:zz_pc
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Party menu PC option: organize boxes anywhere.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Adds a "PC" option to the party menu that opens Box organize mode, so you can
 # swap party members without walking to a Pokémon Center.
 #

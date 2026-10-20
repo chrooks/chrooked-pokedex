@@ -1,5 +1,7 @@
 # chrooked:zz_season
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: form
+# mod-summary: Party menu Season option: set Deerling or Sawsbuck's season form.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Adds a "Season" option to the party menu for Deerling/Sawsbuck that opens a
 # Spring/Summer/Autumn/Winter picker and sets the form directly. Replaces the
 # vanilla petal-item flow (PINKPETAL/GREENPETAL/ORANGEPETAL/BLUEPETAL).

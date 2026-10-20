@@ -1,6 +1,8 @@
 # encoding: utf-8
 # chrooked:zz_multiability
-# Static mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: battle
+# mod-summary: All Abilities option: every battler has all of its species' abilities at once.
+# Static mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Harvested into the Ruleset 2026-09-03 — it had lived only in patch/ on hestia
 # and thor, where any apply would delete it.
 # "All Abilities" Options toggle: when On, every battler enters battle with ALL

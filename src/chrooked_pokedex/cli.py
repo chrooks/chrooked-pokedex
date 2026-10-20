@@ -45,6 +45,7 @@ from .behavior import render_manifest, render_packet
 from .harvest.harvester import apply_proposals, propose_changes
 from .model import Ruleset
 from .model.holds import HoldSet, load_holds
+from .model.mods import load_mods_off
 from .model.target_edits import TargetEdits, load_target_edits
 from .report import ApplyReport
 from .seed.extractor import seed_from_fork
@@ -276,11 +277,14 @@ def _confirm(message: str) -> bool:
     return answer in ("y", "yes")
 
 
-def _apply_rejuv(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+def _apply_rejuv(
+    target: Path, category: str, ruleset, report: ApplyReport,
+    mods_off: frozenset[str] = frozenset(),
+) -> None:
     """Emit the Rejuvenation patch/ overlay (delta Ruby definition files)."""
     from .appliers.rejuv import apply_rejuv
 
-    written = apply_rejuv(target, ruleset, report, category=category)
+    written = apply_rejuv(target, ruleset, report, category=category, mods_off=mods_off)
     print(f"rejuv: {len(written)} file(s) written under patch/")
 
 
@@ -509,9 +513,20 @@ def _run_apply(
         elif backup["status"] == "kept":
             print(f"Data.bak already exists — left untouched ({backup['path']}).")
 
+    if slug is None:
+        # No --as: use the registered Target's namespace, so a CLI apply honors
+        # the same holds, edits, and mod switches as an apply from the dex.
+        from .sync import registry_entry_for_path
+
+        entry = registry_entry_for_path(_DEFAULT_TARGETS, target) or {}
+        slug = entry.get("namespace") or None
+        if slug:
+            print(f"Target namespace '{slug}' (from {_DEFAULT_TARGETS.name}).")
+
     ruleset = Ruleset.load(ruleset_dir)
     holds = load_holds(ruleset_dir, slug)
     target_edits = load_target_edits(ruleset_dir, slug)
+    mods_off = load_mods_off(ruleset_dir, slug)
     report = ApplyReport()
 
     from .appliers.dispatch import route_apply
@@ -519,6 +534,7 @@ def _run_apply(
     route_apply(
         target, engine, ruleset, report, category=category, dialect=dialect,
         holds=holds, target_edits=target_edits, create_absent=create_absent,
+        mods_off=mods_off,
     )
 
     # When the format was unrecognized, route_apply writes a blocked entry and

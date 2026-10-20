@@ -1,5 +1,7 @@
 # chrooked:zz_eevee
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: form
+# mod-summary: Party menu Eevee option: switch an Eeveelution to any other.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 # Adds an "Eevee" option to the party menu for the eight Eeveelutions that
 # switches the Pokemon to any other Eeveelution directly, the way
 # chrooked_zz_darmanitan.rb toggles Zen. Idea from Elite Redux: once Eevee has

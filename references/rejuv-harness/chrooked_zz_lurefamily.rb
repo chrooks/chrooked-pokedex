@@ -1,5 +1,7 @@
 # chrooked:zz_lurefamily
-# Static QoL mod (not a Ruleset behavior) — always installed by apply.
+# mod-group: convenience
+# mod-summary: Magnetic Lure treats a species as owned when any member of its line is.
+# Static QoL mod (not a Ruleset behavior) — installed unless turned off for the Target.
 #
 # Magnetic Lure counts whole evolution families. Base Rejuv filters a wild
 # species out only when that exact species is owned, so owning Raichu still
