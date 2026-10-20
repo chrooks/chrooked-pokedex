@@ -22,6 +22,7 @@ import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { TeamTab } from "./components/tabs/TeamTab";
 import { StatusesTab } from "./components/tabs/StatusesTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
+import { ModsTab } from "./components/tabs/ModsTab";
 import { TargetsTab } from "./components/tabs/TargetsTab";
 import { LedgerTab } from "./components/tabs/LedgerTab";
 import { useGamepad, type GamepadAction } from "./hooks/useGamepad";
@@ -760,6 +761,8 @@ function KindScreen({
       return <StatusesTab />;
     case "behaviors":
       return <BehaviorsTab />;
+    case "mods":
+      return <ModsTab backdropTargetId={backdropTargetId} />;
     case "targets":
       return <TargetsTab onViewBackdrop={onViewBackdrop} />;
     case "ledger":

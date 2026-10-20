@@ -27,6 +27,8 @@ import type {
   LearnsetProposal,
   LedgerEntry,
   LoreMode,
+  ModCatalog,
+  ModTarget,
   Move,
   MoveWrite,
   SaveStatus,
@@ -385,6 +387,16 @@ export const api = {
       `/api/targets/${encodeURIComponent(id)}/namespace`,
       { slug },
     ),
+
+  /** The static-mod catalog, with one Target's switches when `targetId` is set. */
+  mods: (targetId: string | null, signal?: AbortSignal) =>
+    getJson<ModCatalog>(
+      `/api/mods${targetId ? `?target=${encodeURIComponent(targetId)}` : ""}`,
+      signal,
+    ),
+  /** Save the mods a Target turns off; apply removes their files. */
+  setTargetMods: (id: string, off: string[]) =>
+    sendJson<ModTarget>("PUT", `/api/targets/${encodeURIComponent(id)}/mods`, { off }),
 
   // Change Ledger (append-only history of every mutation)
   ledger: (

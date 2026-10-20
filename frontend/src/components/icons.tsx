@@ -86,6 +86,19 @@ export function IconBehaviors({ className }: IconProps) {
   );
 }
 
+/** Mods — a game cartridge: what plugs into the Target. Label window and
+    contact slots are cut out, so the silhouette differs from the Behaviors chip. */
+export function IconMods({ className }: IconProps) {
+  return (
+    <svg {...BASE} className={className}>
+      <path
+        fillRule="evenodd"
+        d="M3 1h7.5L13 3.5V15H3ZM5 3v5h6V3ZM5 11.5v2h1.2v-2ZM7.4 11.5v2h1.2v-2ZM9.8 11.5v2H11v-2Z"
+      />
+    </svg>
+  );
+}
+
 /** Team — a party of six. */
 export function IconTeam({ className }: IconProps) {
   return (

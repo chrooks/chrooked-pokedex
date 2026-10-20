@@ -12,6 +12,7 @@ import {
   IconFilters,
   IconGridView,
   IconLedger,
+  IconMods,
   IconTable,
   IconSpecies,
   IconMoves,
@@ -32,6 +33,7 @@ const KIND_TABS: TabDef[] = [
   { key: "type-chart", label: "Type Chart", Icon: IconTypeChart },
   { key: "statuses", label: "Statuses", Icon: IconStatuses },
   { key: "behaviors", label: "Behaviors", Icon: IconBehaviors },
+  { key: "mods", label: "Mods", Icon: IconMods },
 ];
 
 /** The rail's left-to-right order, for anything that steps through tabs (the
@@ -286,7 +288,7 @@ export function DeviceFrame({
             </button>
           )}
 
-          {!compact && kind !== "behaviors" && <ReseedNote />}
+          {!compact && kind !== "behaviors" && kind !== "mods" && <ReseedNote />}
         </nav>
 
         <main className="device__screen">{children}</main>

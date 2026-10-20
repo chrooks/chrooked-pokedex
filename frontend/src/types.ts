@@ -446,6 +446,7 @@ export type KindKey =
   | "type-chart"
   | "team"
   | "behaviors"
+  | "mods"
   | "targets"
   | "ledger";
 
@@ -608,4 +609,36 @@ export interface SaveConflict {
 export interface BehaviorPacket {
   chrooked_id: string;
   markdown: string;
+}
+
+/** One static mod: a self-contained script file an Applier installs into a
+    Target outside the Ruleset data. Its metadata lives in its own header. */
+export interface StaticMod {
+  id: string;
+  file: string;
+  group: "convenience" | "form" | "battle" | "shim" | "diagnostic";
+  summary: string;
+  /** Mod ids that must also be on, or this one does not install. */
+  needs: string[];
+  /** Why the mod cannot be turned off, or null. */
+  locked: string | null;
+  /** The file's full leading comment block. */
+  header: string;
+}
+
+/** One Target's mod switches. `off` is saved under ruleset/targets/<namespace>/. */
+export interface ModTarget {
+  id: string;
+  label: string;
+  engine: EngineKey;
+  namespace: string | null;
+  /** False when no mod has a port for this Target's engine. */
+  supported: boolean;
+  off: string[];
+}
+
+export interface ModCatalog {
+  engine: EngineKey;
+  mods: StaticMod[];
+  target: ModTarget | null;
 }
