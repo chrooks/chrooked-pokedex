@@ -136,12 +136,6 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "c2", "select": {"move": "THUNDERBOLT", "ability": "true", "hp_low": "false"}, "expect": {"result": "NORMAL"}},
         {"stage": "c3", "select": {"move": "ICEBEAM", "ability": "true", "hp_low": "true"}, "expect": {"result": "NORMAL"}},
     ],
-    # The NV-9 hand port (Essentials 21), proving the field-gated boost.
-    "forestry": [
-        {"stage": "Forestry user (grounded) uses Tackle under Grassy Terrain.", "select": {"move": "TACKLE", "ability": "true", "terrain": "Grassy", "grounded": "true"}, "expect": {"result": "BOOSTED"}},
-        {"stage": "Forestry user uses Tackle with no terrain up.", "select": {"move": "TACKLE", "ability": "true", "terrain": "None"}, "expect": {"result": "NORMAL"}},
-        {"stage": "Forestry user, airborne (Magnet Rise), uses Tackle under Grassy Terrain.", "select": {"move": "TACKLE", "ability": "true", "terrain": "Grassy", "grounded": "false"}, "expect": {"result": "NORMAL"}},
-    ],
     "amplifier": [
         {"stage": "matching sound move with Amplifier user is boosted", "select": {"move": "HYPERVOICE", "ability": "true"}, "expect": {"result": "BOOSTED"}},
         {"stage": "non-sound move with Amplifier user is unchanged", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},

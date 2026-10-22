@@ -21,7 +21,7 @@ import pytest
 from chrooked_pokedex.appliers.essentials import vocab
 from chrooked_pokedex.appliers.essentials.behavior_install import has_plugin
 from chrooked_pokedex.behavior.harness_scenarios import SCENARIOS
-from chrooked_pokedex.behavior.templates import harness_checks, render_essentials21, validate
+from chrooked_pokedex.behavior.templates import harness_checks, render_essentials21, validate_spec
 from chrooked_pokedex.model import Ruleset
 
 pytestmark = pytest.mark.unit
@@ -39,7 +39,7 @@ class _DefaultNames:
     def move(self, name):
         return vocab.internal_name(name)
 
-    type = ability = move
+    type = ability = item = move
 
 
 def _render(cid):
@@ -54,7 +54,7 @@ def test_the_proven_nova_ports_are_all_templated():
 @pytest.mark.parametrize("cid", _TEMPLATED)
 def test_template_validates_and_renders_a_registry_port(cid):
     spec = _RULESET.behaviors[cid]
-    validate(spec.template, len(spec.test_cases), cid)
+    validate_spec(spec)  # the shape's own check, and one effect per template
     text = _render(cid)
     assert text.startswith(f"# chrooked:{cid}\n")
     assert f".add(:{vocab.internal_name(spec.name)}," in text

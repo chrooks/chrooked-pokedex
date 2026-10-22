@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c attacker-ability damage modifier switch (~line 7370): case ABILITY_FORESTRY gates on (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN && IsBattlerGrounded(...)) → UQ_4_12(1.3)."
   essentials: "Battle::Move damage-calc hook — if user ability is Forestry and the field is Grassy Terrain and the user is grounded, apply a 1.3x multiplier."
+template:
+  shape: conditional_boost
+  params: {terrain: grassy, multiplier: 1.3}
+  probes:
+    - {move: Body Slam, result: boosted}
+    - {move: Body Slam, result: normal, field: false}
+    - {move: Body Slam, result: normal, airborne: true}

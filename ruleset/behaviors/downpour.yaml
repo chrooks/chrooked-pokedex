@@ -26,3 +26,11 @@ notes:
 engine_hints:
   pokeemerald: "Attacker-ability damage modifier alongside the Whiteout case in src/battle_util.c — when IsBattlerWeatherAffected(battlerAtk, B_WEATHER_RAIN): if attack >= spAttack boost physical moves x1.5, else boost special moves x1.5 (uq4_12_multiply_half_down)."
   essentials: "Rejuv: patch/Mods/chrooked_downpour.rb (canonical source references/rejuv-harness/) — CHROOKED_DAMAGE_MODS returns 1.5 in :RAINDANCE for the move category matching the user's higher attacking stat, 1.0 while a Utility Umbrella is held."
+template:
+  shape: conditional_boost
+  params: {weather: rain, moves: higher_stat, multiplier: 1.5}
+  probes:
+    - {move: Body Slam, result: boosted, stats: physical}
+    - {move: Hyper Voice, result: boosted, stats: special}
+    - {move: Hyper Voice, result: normal, stats: physical}
+    - {move: Body Slam, result: normal, stats: physical, item: Utility Umbrella}

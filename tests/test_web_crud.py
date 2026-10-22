@@ -743,6 +743,35 @@ def test_null_template_clears_the_block(
     assert "template:" not in _read(ruleset_dir / "behaviors" / "aquaboost.yaml")
 
 
+def test_second_effect_on_a_templated_behavior_is_422_writes_nothing(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    # A template generates one effect; a second one would ship as half a mechanic.
+    client.put("/api/behaviors/aquaboost", json=_templated_payload())
+    path = ruleset_dir / "behaviors" / "aquaboost.yaml"
+    before = _read(path)
+    edit = _behavior_payload()
+    edit["effects"].append({"summary": "Water moves may burn.", "trigger": "damage-calc",
+                            "effect": "20% burn chance", "when": None})
+
+    response = client.put("/api/behaviors/aquaboost", json=edit)
+
+    assert response.status_code == 422, response.text
+    assert "exactly one effect" in response.json()["detail"]
+    assert _read(path) == before
+
+
+def test_unknown_template_shape_is_422(client: TestClient, ruleset_dir: Path) -> None:
+    payload = _templated_payload()
+    payload["template"]["shape"] = "beam_boost"
+
+    response = client.put("/api/behaviors/aquaboost", json=payload)
+
+    assert response.status_code == 422, response.text
+    assert "unknown shape 'beam_boost'" in response.json()["detail"]
+    assert not (ruleset_dir / "behaviors" / "aquaboost.yaml").exists()
+
+
 @pytest.mark.unit
 def test_put_species_omitted_field_does_not_clear_existing_override(
     client: TestClient, ruleset_dir: Path

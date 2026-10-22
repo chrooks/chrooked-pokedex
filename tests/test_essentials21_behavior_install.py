@@ -326,6 +326,20 @@ def test_template_and_hand_port_together_is_ambiguous_and_blocked(tmp_path):
     assert has_port(ruleset.behaviors["cinderglow"], resmap, source_dir=src) is False
 
 
+def test_resolution_reads_items_from_every_items_file(tmp_path):
+    """Nova keeps its own items in items_nova.txt beside items.txt; Essentials 21
+    loads both, so a probe's held item resolves from either."""
+    target = _pbs_target(tmp_path)
+    (target / "PBS" / "items.txt").write_text("[UTILITYUMBRELLA]\nName = Utility Umbrella\n", encoding="utf-8")
+    (target / "PBS" / "items_nova.txt").write_text("[NOVACHARM]\nName = Nova Charm\n", encoding="utf-8")
+
+    resmap = build_resolution_map(target, _cinderglow_ruleset())
+
+    assert resmap.item("Utility Umbrella") == "UTILITYUMBRELLA"
+    assert resmap.item("nova charm") == "NOVACHARM"
+    assert resmap.item("Rain Hat") is None
+
+
 def test_has_port_is_what_the_installer_would_install(tmp_path):
     target = _pbs_target(tmp_path, extra_abilities="[CINDERGLOW]\nName = Cinderglow\n")
     ruleset = _cinderglow_ruleset()

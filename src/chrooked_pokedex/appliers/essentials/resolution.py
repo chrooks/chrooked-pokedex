@@ -26,6 +26,7 @@ class ResolutionMap:
     type_by_name: dict[str, str] = field(default_factory=dict)
     ability_by_name: dict[str, str] = field(default_factory=dict)
     move_by_name: dict[str, str] = field(default_factory=dict)
+    item_by_name: dict[str, str] = field(default_factory=dict)
 
     def species(self, chrooked_id: str, aka: dict) -> Optional[str]:
         symbol = aka.get("essentials") if aka else None
@@ -45,10 +46,21 @@ class ResolutionMap:
     def move(self, name: str) -> Optional[str]:
         return self.move_by_name.get(name.lower())
 
+    def item(self, name: str) -> Optional[str]:
+        return self.item_by_name.get(name.lower())
+
 
 def _read(target: Path, rel: str) -> str:
     path = target / "PBS" / rel
     return path.read_text(encoding="utf-8") if path.exists() else ""
+
+
+def _read_all(target: Path, stem: str) -> str:
+    """`<stem>.txt` plus any `<stem>_*.txt`: Essentials 21 loads every PBS file with
+    that prefix (Nova keeps its own items in `items_nova.txt`)."""
+    pbs = target / "PBS"
+    paths = sorted(pbs.glob(f"{stem}_*.txt")) if pbs.is_dir() else []
+    return "\n".join([_read(target, f"{stem}.txt")] + [p.read_text(encoding="utf-8") for p in paths])
 
 
 # The 18 standard types, used only as a fallback when the target's `types.txt`
@@ -67,6 +79,9 @@ def build_resolution_map(target: Path, ruleset: Ruleset) -> ResolutionMap:
         type_by_name = {name.lower(): vocab.type_internal(name) for name in _STANDARD_TYPES}
     ability_by_name = pbs_read.name_to_header(_read(target, "abilities.txt"))
     move_by_name = pbs_read.name_to_header(_read(target, "moves.txt"))
+    # Items are read only to resolve names a behavior template cites (a held item
+    # in a probe); no apply tier writes them.
+    item_by_name = pbs_read.name_to_header(_read_all(target, "items"))
 
     species_by_id: dict[str, str] = {}
     for chrooked_id, override in ruleset.species.items():
@@ -78,4 +93,5 @@ def build_resolution_map(target: Path, ruleset: Ruleset) -> ResolutionMap:
         type_by_name=type_by_name,
         ability_by_name=ability_by_name,
         move_by_name=move_by_name,
+        item_by_name=item_by_name,
     )

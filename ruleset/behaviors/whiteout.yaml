@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "Attacker-ability damage modifier, src/battle_util.c:7354 — when IsBattlerWeatherAffected(battlerAtk, B_WEATHER_HAIL): if attack >= spAttack boost physical moves x1.5, else boost special moves x1.5 (uq4_12_multiply_half_down)."
   essentials: "In hail, apply a 1.5x damage modifier to the move category that matches the user's higher attacking stat."
+template:
+  shape: conditional_boost
+  params: {weather: hail, moves: higher_stat, multiplier: 1.5}
+  probes:
+    - {move: Body Slam, result: boosted, stats: physical}
+    - {move: Hyper Voice, result: boosted, stats: special}
+    - {move: Hyper Voice, result: normal, stats: physical}

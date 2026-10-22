@@ -18,6 +18,7 @@ from chrooked_pokedex.behavior.templates import (
     harness_checks,
     render_essentials21,
     validate,
+    validate_spec,
 )
 from chrooked_pokedex.model.behavior_spec import (
     BehaviorEffect,
@@ -34,8 +35,10 @@ class _Names:
         "Flamethrower": "FLAMETHROWER", "Surf": "SURF", "Ember": "EMBER",
         "Thunderbolt": "THUNDERBOLT", "Ice Beam": "ICEBEAM", "Tackle": "TACKLE",
         "X-Scissor": "XSCISSOR", "High Jump Kick": "HIGHJUMPKICK", "Mach Punch": "MACHPUNCH",
+        "Body Slam": "BODYSLAM", "Hyper Voice": "HYPERVOICE",
     }
     TYPES = {"fire": "FIRE", "electric": "ELECTRIC", "bug": "BUG"}
+    ITEMS = {"utility umbrella": "UTILITYUMBRELLA"}
 
     def move(self, name):
         return self.MOVES.get(name)
@@ -45,6 +48,9 @@ class _Names:
 
     def ability(self, name):
         return name.upper().replace(" ", "")
+
+    def item(self, name):
+        return self.ITEMS.get(name.lower())
 
 
 def _spec(cid, shape, params, probes, name=None):
@@ -83,7 +89,18 @@ MARTIALARTIST = _spec("martialartist", "flag_boost",
     {"move": "High Jump Kick", "result": "boosted"},
     {"move": "Tackle", "result": "normal"},
 ], name="Martial Artist")
-ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST]
+FORESTRY = _spec("forestry", "conditional_boost", {"terrain": "grassy", "multiplier": 1.3}, [
+    {"move": "Body Slam", "result": "boosted"},
+    {"move": "Body Slam", "result": "normal", "field": False},
+    {"move": "Body Slam", "result": "normal", "airborne": True},
+])
+DOWNPOUR = _spec("downpour", "conditional_boost", {"weather": "rain", "moves": "higher_stat", "multiplier": 1.5}, [
+    {"move": "Body Slam", "result": "boosted", "stats": "physical"},
+    {"move": "Hyper Voice", "result": "boosted", "stats": "special"},
+    {"move": "Hyper Voice", "result": "normal", "stats": "physical"},
+    {"move": "Body Slam", "result": "normal", "stats": "physical", "item": "Utility Umbrella"},
+])
+ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST, FORESTRY, DOWNPOUR]
 
 
 def _render(spec):
@@ -151,6 +168,45 @@ def test_flag_boost_is_iron_fists_shape_on_the_flags():
     assert "f[/^(Punching|Kicking)$/i]" in martial
 
 
+def test_terrain_boost_is_the_hand_proven_forestry():
+    text = _render(FORESTRY)
+    # The code lines of the NV-9 hand port, which scored 3/3 in the lab.
+    assert ("      terrain  = user.battle.field.terrain\n"
+            "      grounded = user.affectedByTerrain?\n"
+            "      boosted  = terrain == :Grassy && grounded\n"
+            "      mults[:power_multiplier] *= 1.3 if boosted\n") in text
+    assert 'move=#{move.id} ability=true terrain=#{terrain} " \\\n' in text
+    assert '"grounded=#{grounded} result=#{boosted ? \'BOOSTED\' : \'NORMAL\'}")' in text
+    assert ("calc: [[:BODYSLAM, 1.0, {terrain: :Grassy}], [:BODYSLAM, 1.0, {}], "
+            "[:BODYSLAM, 1.0, {terrain: :Grassy, airborne: true}]]") in text
+    assert "fight: [:BODYSLAM]" in text
+
+
+def test_weather_boost_on_the_higher_stat_is_solar_powers_shape():
+    text = _render(DOWNPOUR)
+    assert ("      weather = user.battle.pbWeather\n"
+            "      higher  = (user.attack >= user.spatk) ? :physical : :special\n"
+            "      boosted = [:Rain, :HeavyRain].include?(user.effectiveWeather) &&\n"
+            "                (higher == :physical ? move.physicalMove? : move.specialMove?)\n"
+            "      mults[:attack_multiplier] *= 1.5 if boosted\n") in text
+    assert "ability=true weather=#{weather} item=#{user.item_id || 'none'} \" \\\n" in text
+    assert '"higher=#{higher} result=' in text
+    assert ("calc: [[:BODYSLAM, 1.0, {weather: :Rain, stats: :physical}], "
+            "[:HYPERVOICE, 1.0, {weather: :Rain, stats: :special}], "
+            "[:HYPERVOICE, 1.0, {weather: :Rain, stats: :physical}], "
+            "[:BODYSLAM, 1.0, {weather: :Rain, item: :UTILITYUMBRELLA, stats: :physical}]]") in text
+    assert "Utility Umbrella clears it" in text  # the header says why the item matters
+
+
+def test_hail_counts_novas_snowstorm_too():
+    whiteout = replace(DOWNPOUR, chrooked_id="whiteout", name="Whiteout", template=replace(
+        DOWNPOUR.template, params={"weather": "hail", "moves": "higher_stat", "multiplier": 1.5},
+        probes=DOWNPOUR.template.probes[:3]), test_cases=DOWNPOUR.test_cases[:3])
+    text = _render(whiteout)
+    assert "[:Hail, :Snowstorm].include?(user.effectiveWeather)" in text
+    assert "weather: :Hail, stats: :physical" in text
+
+
 def test_fight_keeps_at_most_four_moves():
     moves = ["Flamethrower", "Surf", "Ember", "Tackle", "Thunderbolt"]
     spec = _spec("kindle", "type_boost", {"type": "Fire", "multiplier": 1.5},
@@ -195,6 +251,39 @@ def test_type_conversion_checks():
     ]
 
 
+def test_terrain_boost_checks_select_the_scene():
+    assert _verdicts(FORESTRY) == [
+        ({"move": "BODYSLAM", "ability": "true", "terrain": "Grassy", "grounded": "true"}, {"result": "BOOSTED"}),
+        ({"move": "BODYSLAM", "ability": "true", "terrain": "None", "grounded": "true"}, {"result": "NORMAL"}),
+        ({"move": "BODYSLAM", "ability": "true", "terrain": "Grassy", "grounded": "false"}, {"result": "NORMAL"}),
+    ]
+
+
+def test_weather_boost_checks_select_weather_item_and_higher_stat():
+    assert _verdicts(DOWNPOUR) == [
+        ({"move": "BODYSLAM", "ability": "true", "weather": "Rain", "item": "none", "higher": "physical"},
+         {"result": "BOOSTED"}),
+        ({"move": "HYPERVOICE", "ability": "true", "weather": "Rain", "item": "none", "higher": "special"},
+         {"result": "BOOSTED"}),
+        ({"move": "HYPERVOICE", "ability": "true", "weather": "Rain", "item": "none", "higher": "physical"},
+         {"result": "NORMAL"}),
+        # The raw field weather is still Rain; the umbrella clears it for the holder only.
+        ({"move": "BODYSLAM", "ability": "true", "weather": "Rain", "item": "UTILITYUMBRELLA", "higher": "physical"},
+         {"result": "NORMAL"}),
+    ]
+
+
+def test_conditional_stage_text_sets_the_scene():
+    forestry = [c["stage"] for c in harness_checks(FORESTRY, _Names())]
+    assert forestry == [
+        "With your Forestry user on Grassy Terrain, use Body Slam on the foe.",
+        "With your Forestry user with no terrain, use Body Slam on the foe.",
+        "With your Forestry user (airborne) on Grassy Terrain, use Body Slam on the foe.",
+    ]
+    assert harness_checks(DOWNPOUR, _Names())[3]["stage"] == \
+        "With your Downpour user (higher stat Attack, holding Utility Umbrella) in rain, use Body Slam on the foe."
+
+
 def test_without_the_ability_checks_the_selftests_own_line():
     assert _verdicts(STRIKER)[2] == ({"move": "HIGHJUMPKICK", "ability": "false"}, {"result": "NORMAL"})
 
@@ -235,9 +324,35 @@ def test_unknown_type_fails():
         _render(spec)
 
 
+def test_unknown_item_fails():
+    spec = replace(DOWNPOUR, template=replace(DOWNPOUR.template, probes=DOWNPOUR.template.probes[:3] + (
+        {"move": "Body Slam", "result": "normal", "stats": "physical", "item": "Rain Hat"},)))
+    with pytest.raises(TemplateError, match="item 'Rain Hat'"):
+        _render(spec)
+
+
 def test_a_move_spec_cannot_use_an_ability_template():
     with pytest.raises(TemplateError, match="applies to a move"):
         _render(replace(KINDLE, applies_to="move"))
+
+
+# --- the effects guard (NV-9) ----------------------------------------------------
+
+
+def test_a_spec_with_more_effects_than_a_template_generates_is_refused():
+    """Infernal Maw boosts biting moves AND adds a burn chance: a flag_boost template
+    would mark it installed with the burn missing, so it is refused."""
+    two = replace(STRIKER, effects=STRIKER.effects + (
+        BehaviorEffect(summary="Kicking moves may burn.", trigger="damage-calc", effect="20% burn"),))
+    with pytest.raises(TemplateError, match="exactly one effect, and this spec has 2"):
+        validate_spec(two)
+    with pytest.raises(TemplateError, match="exactly one effect"):
+        _render(two)
+
+
+def test_the_proven_specs_pass_the_spec_check():
+    for spec in ALL:
+        validate_spec(spec)
 
 
 # --- validate --------------------------------------------------------------------
@@ -276,6 +391,25 @@ def test_the_proven_specs_validate():
      "converted must be true or false"),
     (_template("type_conversion", {"type": "Bug"}, [{"move": "Tackle", "converted": False, "holder": False}]),
      "unknown fields holder"),
+    (_template("conditional_boost", {"multiplier": 1.3}), "exactly one of params.weather or params.terrain"),
+    (_template("conditional_boost", {"weather": "rain", "terrain": "grassy", "multiplier": 1.3}),
+     "exactly one of params.weather or params.terrain"),
+    (_template("conditional_boost", {"weather": "fog", "multiplier": 1.3}), "params.weather must be one of"),
+    (_template("conditional_boost", {"terrain": "swamp", "multiplier": 1.3}), "params.terrain must be one of"),
+    (_template("conditional_boost", {"weather": "rain", "moves": "special", "multiplier": 1.5}),
+     "params.moves must be one of"),
+    (_template("conditional_boost", {"weather": "rain", "moves": "higher_stat", "multiplier": 1.5}),
+     "needs stats: physical or special"),
+    (_template("conditional_boost", {"weather": "rain", "multiplier": 1.5},
+               [{"move": "Ember", "result": "boosted", "stats": "physical"}]), "unknown fields stats"),
+    (_template("conditional_boost", {"weather": "rain", "multiplier": 1.5},
+               [{"move": "Ember", "result": "normal", "airborne": True}]), "unknown fields airborne"),
+    (_template("conditional_boost", {"terrain": "grassy", "multiplier": 1.3},
+               [{"move": "Ember", "result": "normal", "item": "Utility Umbrella"}]), "unknown fields item"),
+    (_template("conditional_boost", {"terrain": "grassy", "multiplier": 1.3},
+               [{"move": "Ember", "result": "normal", "holder": False}]), "unknown fields holder"),
+    (_template("conditional_boost", {"terrain": "grassy", "multiplier": 1.3},
+               [{"move": "Ember", "result": "normal", "field": "no"}]), "field must be true or false"),
 ])
 def test_validate_refuses(template, message):
     with pytest.raises(TemplateError, match=message):

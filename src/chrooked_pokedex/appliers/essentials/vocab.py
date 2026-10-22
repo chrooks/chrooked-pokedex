@@ -90,6 +90,22 @@ _TARGET = {
     "all_battlers": "AllBattlers",
 }
 
+# Neutral weather -> the Essentials 21 battle weathers that count as it, for ported
+# mechanics that test `battler.effectiveWeather` (which already drops sun and rain
+# for a Utility Umbrella holder). The first entry is what a lab self-test sets.
+# Hail includes :Snowstorm because Nova registers that weather and treats it as hail
+# everywhere ([:Hail, :Snowstorm].include?(effectiveWeather)); in a game without
+# it the extra symbol never matches.
+_WEATHER = {
+    "rain": ("Rain", "HeavyRain"),
+    "sun": ("Sun", "HarshSun"),
+    "sand": ("Sandstorm",),
+    "hail": ("Hail", "Snowstorm"),
+}
+
+# Neutral terrain -> the Essentials 21 field terrain (`battle.field.terrain`).
+_TERRAIN = {"grassy": "Grassy", "electric": "Electric", "psychic": "Psychic", "misty": "Misty"}
+
 
 def internal_name(name: str) -> str:
     """A display name as an Essentials INTERNAL name: `Mr Mime` -> `MRMIME`,
@@ -107,6 +123,14 @@ def category(neutral: str) -> str:
 
 def flag(neutral: str) -> Optional[str]:
     return _FLAG.get(neutral)
+
+
+def weathers(neutral: str) -> Optional[tuple[str, ...]]:
+    return _WEATHER.get(neutral)
+
+
+def terrain(neutral: str) -> Optional[str]:
+    return _TERRAIN.get(neutral)
 
 
 def function_code(primary_effect: str) -> Optional[str]:

@@ -25,6 +25,7 @@ from typing import Any, Callable, Optional
 
 import yaml
 
+from ..behavior import templates
 from ..model import Ruleset
 from ..model.behavior_spec import BehaviorEffect, BehaviorSpec, BehaviorTestCase
 from ..model.loader import (
@@ -869,7 +870,7 @@ def _behavior_from_payload(payload: dict[str, Any], chrooked_id: str) -> Behavio
         # Same structural check as the loader (one probe per test case, …), so a
         # UI edit that adds a test case without its probe is refused, not saved.
         template = load_behavior_template(payload["template"], len(test_cases), where)
-    return BehaviorSpec(
+    spec = BehaviorSpec(
         name=payload.get("name", ""),
         chrooked_id=chrooked_id,
         applies_to=payload.get("applies_to", ""),
@@ -880,3 +881,9 @@ def _behavior_from_payload(payload: dict[str, Any], chrooked_id: str) -> Behavio
         engine_hints=dict(payload.get("engine_hints") or {}),
         template=template,
     )
+    if template is not None:
+        # And the per-shape check the loader cannot import: a known shape with its
+        # params, and exactly one effect, so an edit that adds a second effect to a
+        # generated behavior is refused instead of shipping half a mechanic.
+        templates.validate_spec(spec)
+    return spec
