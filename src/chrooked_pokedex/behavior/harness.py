@@ -80,8 +80,17 @@ def parse_observations(log_text: str, mechanic_id: str) -> list[dict[str, str]]:
 
 
 def _match(observation: dict[str, str], criteria: dict[str, object]) -> bool:
-    """True when every criterion key equals the observation's value (as strings)."""
-    return all(str(observation.get(key)) == str(value) for key, value in criteria.items())
+    """True when every criterion key equals the observation's value (as strings).
+
+    A list value accepts any of its entries, for a move whose internal name
+    differs between engines (16.2's HIJUMPKICK is Essentials 21's HIGHJUMPKICK).
+    """
+    def ok(key: str, value: object) -> bool:
+        seen = str(observation.get(key))
+        if isinstance(value, (list, tuple)):
+            return seen in {str(v) for v in value}
+        return seen == str(value)
+    return all(ok(key, value) for key, value in criteria.items())
 
 
 def score(observations: list[dict[str, str]], checks: list[dict[str, object]],

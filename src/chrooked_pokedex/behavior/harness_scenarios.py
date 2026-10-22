@@ -153,7 +153,8 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
     ],
     "martialartist": [
         {"stage": "punch move with ability -> BOOSTED", "select": {"move": "MACHPUNCH", "ability": "true"}, "expect": {"result": "BOOSTED"}},
-        {"stage": "curated kick move with ability -> BOOSTED", "select": {"move": "HIJUMPKICK", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+        # 16.2 names the move HIJUMPKICK; Essentials 21 (Nova) names it HIGHJUMPKICK.
+        {"stage": "curated kick move with ability -> BOOSTED", "select": {"move": ["HIJUMPKICK", "HIGHJUMPKICK"], "ability": "true"}, "expect": {"result": "BOOSTED"}},
         {"stage": "neither punch nor kick with ability -> NORMAL", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
     ],
     "sledgehammer": [

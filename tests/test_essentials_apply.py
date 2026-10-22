@@ -276,20 +276,23 @@ def test_created_ability_with_behavior_spec_is_data_only(tmp_path):
     from chrooked_pokedex.model.behavior_spec import (
         BehaviorEffect, BehaviorSpec,
     )
+    # A made-up ability: it has a spec but no Essentials 21 port, so the honest
+    # line stays DATA ONLY. (A ported one, e.g. striker since NV-7, says
+    # "mechanic installed" instead; see test_essentials21_behavior_install.py.)
     target = _make_target(tmp_path)
-    ability = AbilityDef(name="Striker", chrooked_id="striker", aka={"essentials": "STRIKER"})
+    ability = AbilityDef(name="Pebblestep", chrooked_id="pebblestep", aka={"essentials": "PEBBLESTEP"})
     spec = BehaviorSpec(
-        name="Striker", chrooked_id="striker", applies_to="ability",
+        name="Pebblestep", chrooked_id="pebblestep", applies_to="ability",
         effects=(BehaviorEffect(summary="boost kicks", trigger="damage-calc",
                                 effect="multiply kicking move power by 1.3"),),
     )
-    ruleset = _ruleset(abilities={"striker": ability}, behaviors={"striker": spec})
+    ruleset = _ruleset(abilities={"pebblestep": ability}, behaviors={"pebblestep": spec})
     resmap = build_resolution_map(target, ruleset)
     report = ApplyReport()
 
     create_owned_content(target, ruleset, resmap, report)
-    striker = [e for e in report.entries if e.chrooked_id == "striker"][0]
-    assert "DATA ONLY" in striker.reason
+    entry = [e for e in report.entries if e.chrooked_id == "pebblestep"][0]
+    assert "DATA ONLY" in entry.reason
 
 
 # --- creation: names Essentials cannot compile ---------------------------------

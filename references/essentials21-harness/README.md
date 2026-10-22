@@ -102,7 +102,8 @@ arithmetic.
 
 | Rejuvenation table | Essentials 21 registry | status |
 | --- | --- | --- |
-| `CHROOKED_DAMAGE_MODS` (attacker ability) | `DamageCalcFromUser` | **verified** 2026-10-22: called from `Battle::Move#pbCalcDamageMultipliersAbilities` only `if user.abilityActive?`; 5 ports at PASS |
+| `CHROOKED_DAMAGE_MODS` (attacker ability) | `DamageCalcFromUser` | **verified** 2026-10-22: called from `Battle::Move#pbCalcDamageMultipliersAbilities` only `if user.abilityActive?`; 10 ports at PASS |
+| `Chrooked.hammer_move?` / `kick_move?` / `piercing_move?` (hard-coded lists or Rejuvenation's `:kickmove`) | the move's own `Flags`: `Kicking`, `Hammer`, `Piercing`, written by the dex | **verified** 2026-10-22 (NV-7): the dex's v21 vocabulary writes them from the Ruleset's move flags; Nova's compiler keeps Flags as free strings |
 | `register_ize` (`CHROOKED_TYPE_MODS` + 1.2x rider) | `ModifyMoveBaseType` + `DamageCalcFromUser` on `move.powerBoost` | **verified** 2026-10-22: the pair Nova's Aerilate and Dragonize use; damage identical to Aerilate; 12 ports at PASS |
 | `CHROOKED_DEFENSE_MODS` | `DamageCalcFromTarget` | candidate, unverified |
 | `CHROOKED_ON_DEAL`, `CHROOKED_ON_DEAL_DMG` | `OnDealingHit` | candidate, unverified |
@@ -121,13 +122,12 @@ A candidate becomes verified only after reading its call site in Nova's
 
 **Deferred from the first batch, and why:**
 
-- *Move categories the data does not carry.* hammerfist, impale, martialartist,
-  sledgehammer and striker read "kick", "hammer" and "piercing" moves. The Ruleset
-  flags them (`flags: [contact, kicking]`), and Nova's compiler accepts any flag
-  string, but the dex's vocabulary (`appliers/essentials/vocab.py`) deliberately
-  does not write those flags into Nova's data. Two ways forward: write custom
-  flags (`Kicking`, `Hammer`, `Piercing`) so ports read data, or hard-code move
-  lists in the ports, as Rejuvenation's core does. A design decision for Chris.
+- *Move categories* — **resolved 2026-10-22 (NV-7, Chris's decision):** the dex
+  now writes the Ruleset's `kicking`, `hammer` and `piercing` move flags into an
+  Essentials 21 game's data as the custom flags `Kicking`, `Hammer`, `Piercing`
+  (`appliers/essentials/vocab.py`). In Nova that is 17, 10 and 14 moves. The five
+  ports that read them are in the table below. `wing`, `bone` and `ballistic`
+  stay unwritten until a port needs them.
 - *Simple multipliers without a harness scenario yet:* downpour, forestry,
   mysticpower, nightstalker, updraft, violentblood, whiteout. Each needs its
   scenario written before it can be scored.
@@ -145,5 +145,15 @@ A candidate becomes verified only after reading its call site in Nova's
 | `chrooked_overcharge.rb` | `DamageCalcFromUser`, Blaze with Electric (`hp <= totalhp / 3`) | lab, 2026-10-22: 3/3; Thunderbolt 1.500x at 1/4 HP, 1.000x at full HP; Ice Beam 1.000x at 1/4 HP |
 | `chrooked_{chitinize,foliate,hydrate,immolate,martialize,mineralize,obfuscate,psyonize,spectralize,tectonize,venomize,wyvernize}.rb` | `ModifyMoveBaseType` + `DamageCalcFromUser` (Aerilate's pair) | lab, 2026-10-22: 3/3 each; Tackle converts and hits 17 vs 14 (1.214x), equal to Aerilate; already-typed moves unchanged. The foe-weak/foe-resists cases pass on `converted`/`boosted`; effectiveness itself was not measured (neutral `???` foe) |
 
-The CALC phase for these 16 sets both battlers to the `???` type (`neutral: true`),
+| `chrooked_{hammerfist,impale,martialartist,sledgehammer,striker}.rb` | `DamageCalcFromUser`, Iron Fist's shape (1.3x power) on the move's `Punching` / `Hammer` / `Kicking` / `Piercing` flags | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest` |
+
+The CALC phase for these sets both battlers to the `???` type (`neutral: true`),
 so the ratio is the ability alone: no same-type bonus, no type matchups.
+
+A spec case about a Pokémon **without** the ability cannot be logged by an
+Essentials 21 port, which only ever runs for its holder. The self-test's
+`without:` moves measure it instead: the holder, a Stench holder (no damage
+effect) and no ability, on the same battlers. The result is logged as the
+mechanic's `OBS` line, tagged `source=selftest`. A scenario `select` may list
+several move names (`["HIJUMPKICK", "HIGHJUMPKICK"]`) for moves 16.2 and
+Essentials 21 name differently.

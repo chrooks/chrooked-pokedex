@@ -65,7 +65,14 @@ def test_port_logs_every_key_its_scenario_reads(cid):
 def test_selftest_measures_every_move_its_scenario_selects(cid):
     entry = re.search(rf'"{cid}" => \{{(.*?)\n    \}}', _SELFTEST, re.S).group(1)
     calc = re.search(r"calc: \[(.*)\]", entry).group(1)
+    without = (re.search(r"without: \[(.*)\]", entry) or [None, ""])[1]
     for check in SCENARIOS[cid]:
-        move = check.get("select", {}).get("move")
-        if move:
-            assert f":{move}" in calc, f"{cid}: scenario selects {move}, CALC never uses it"
+        select = check.get("select", {})
+        move = select.get("move")
+        if not move:
+            continue
+        names = move if isinstance(move, list) else [move]
+        # A case about a Pokemon WITHOUT the ability is measured by `without`, not CALC.
+        pool = without if select.get("ability") == "false" else calc
+        assert any(f":{n}" in pool for n in names), \
+            f"{cid}: scenario selects {move} (ability={select.get('ability')}), the self-test never measures it"

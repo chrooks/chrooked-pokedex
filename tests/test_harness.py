@@ -59,3 +59,14 @@ def test_fail_when_action_not_staged():
     results = score(parse_observations(partial, "innerfocus"), _CHECKS, _CASES)
     assert results[2]["passed"] is False
     assert "not observed" in results[2]["reason"]
+
+
+def test_select_list_accepts_any_engine_name():
+    # 16.2 names it HIJUMPKICK, Essentials 21 HIGHJUMPKICK; one scenario serves both.
+    checks = [{"select": {"move": ["HIJUMPKICK", "HIGHJUMPKICK"]}, "expect": {"result": "BOOSTED"}}]
+    cases = (BehaviorTestCase(given="a kick", expect="boosted"),)
+    for name in ("HIJUMPKICK", "HIGHJUMPKICK"):
+        log = f"[chrooked:martialartist] OBS move={name} ability=true result=BOOSTED\n"
+        assert score(parse_observations(log, "martialartist"), checks, cases)[0]["passed"] is True
+    other = "[chrooked:martialartist] OBS move=JUMPKICK ability=true result=BOOSTED\n"
+    assert score(parse_observations(other, "martialartist"), checks, cases)[0]["passed"] is False

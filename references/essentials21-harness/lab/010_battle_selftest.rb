@@ -50,6 +50,12 @@ module ChrookedSelfTest
   #              in FIGHT (foe knows Tackle)     set the user's HP first (e.g. 0.25)
   #   neutral  - CALC sets both battlers' types to ??? (QMARKS): no same-type bonus,
   #              no type matchups, so the ratio is the ability's effect alone
+  #   without  - moves for a spec case about a Pokemon WITHOUT the ability. A port
+  #              only runs for its holder, so it can never log that case; the
+  #              self-test measures it instead (holder, a NON_HOLDER, and no ability
+  #              on the same battlers) and logs the result as the mechanic's OBS
+  #              line, tagged source=selftest
+  NON_HOLDER = :STENCH   # exists in Nova, no damage handler, no Ruleset behavior
   CASES = {
     "kindle" => {
       ability: :KINDLE, control: :BLAZE, user: :NUMEL, foe: :SNORLAX,
@@ -135,11 +141,47 @@ module ChrookedSelfTest
       ability: :WYVERNIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
       calc: [:TACKLE, :EMBER],
       fight: [:TACKLE, :EMBER]
+    },
+    # Move-category boosts: read the Kicking / Hammer / Piercing flags the dex
+    # writes into the move data (NV-7), and Nova's own Punching flag.
+    "hammerfist" => {
+      ability: :HAMMERFIST, control: :IRONFIST, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:MACHPUNCH, :BODYSLAM, :TACKLE],
+      fight: [:MACHPUNCH, :BODYSLAM, :TACKLE]
+    },
+    "impale" => {
+      ability: :IMPALE, control: nil, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:MEGAHORN, :TACKLE],
+      without: [:DRILLPECK],
+      fight: [:MEGAHORN, :TACKLE]
+    },
+    "martialartist" => {
+      ability: :MARTIALARTIST, control: :IRONFIST, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:MACHPUNCH, :HIGHJUMPKICK, :TACKLE],
+      fight: [:MACHPUNCH, :TACKLE]
+    },
+    "sledgehammer" => {
+      ability: :SLEDGEHAMMER, control: :IRONFIST, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:WOODHAMMER, :BODYSLAM, :MACHPUNCH],
+      fight: [:WOODHAMMER, :BODYSLAM, :MACHPUNCH]
+    },
+    "striker" => {
+      ability: :STRIKER, control: nil, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:HIGHJUMPKICK, :TACKLE],
+      without: [:BLAZEKICK],
+      fight: [:BLAZEKICK, :TACKLE]
     }
   }
 
   def self.log(msg)
     File.open(LOG, "a") { |f| f.puts("[chrooked:selftest] #{msg}") }
+  rescue StandardError
+    nil
+  end
+
+  # An observation the self-test measured on the mechanic's behalf (see `without`).
+  def self.obs(mechanic, fields)
+    File.open(LOG, "a") { |f| f.puts("[chrooked:#{mechanic}] OBS #{fields}") }
   rescue StandardError
     nil
   end
@@ -274,6 +316,15 @@ module ChrookedSelfTest
           damage(spec[:user], abilities, spec[:foe], move_id, hp_fraction: hp, neutral: !!spec[:neutral])
         log("CALC #{mechanic} move=#{move_id} hp=#{hp} type=#{type} eff=#{eff} with=#{with} none=#{none} " \
             "#{spec[:control] || 'control'}=#{control || '-'} ratio=#{format('%.3f', with.to_f / none)}")
+      end
+    end
+    guard("without") do
+      (spec[:without] || []).each do |move_id|
+        (holder, _, _), (nonholder, _, _), (none, _, _) =
+          damage(spec[:user], [spec[:ability], NON_HOLDER, nil], spec[:foe], move_id, neutral: !!spec[:neutral])
+        result = nonholder == none ? "NORMAL" : "BOOSTED"
+        obs(mechanic, "move=#{move_id} ability=false result=#{result} source=selftest " \
+                      "holder=#{holder} #{NON_HOLDER}=#{nonholder} none=#{none}")
       end
     end
     Graphics.update if defined?(Graphics)

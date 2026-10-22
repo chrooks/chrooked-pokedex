@@ -22,9 +22,13 @@ NO_FUNCTION_CODE = "None"
 
 _CATEGORY = {"physical": "Physical", "special": "Special", "status": "Status"}
 
-# Neutral move flag -> Essentials flag. Only the flags with a real, standard
-# Essentials counterpart are listed; the rest (wing, kicking, piercing, bone,
-# hammer, ballistic) have no stable equivalent and resolve to None.
+# Neutral move flag -> Essentials flag. Most entries are standard Essentials flags.
+# Kicking, Hammer and Piercing are not: they are custom flags, written because
+# ported mechanics read them (references/essentials21-harness/: striker,
+# martialartist, sledgehammer, hammerfist, impale; mjolnir NV-7). Essentials keeps
+# a move's Flags as free strings ("*s" in the PBS schema) and only tests the ones
+# it knows, so a game without those ports simply ignores them. The rest (wing,
+# bone, ballistic) stay unwritten and resolve to None until a port needs them.
 _FLAG = {
     "contact": "Contact",
     "punching": "Punching",
@@ -34,6 +38,9 @@ _FLAG = {
     "wind": "Wind",
     "pulse": "Pulse",
     "high_crit": "HighCriticalHitRate",
+    "kicking": "Kicking",
+    "hammer": "Hammer",
+    "piercing": "Piercing",
 }
 
 # The Essentials flag names the Ruleset models. When move_apply reconciles an
