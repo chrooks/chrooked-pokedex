@@ -208,8 +208,10 @@ exception, by design (below).
 | chitinize, foliate, hydrate, immolate, martialize, mineralize, obfuscate, psyonize, spectralize, tectonize, venomize, wyvernize | `type_conversion`, 1.2x, control Aerilate | lab, 2026-10-22: 3/3 each; Tackle converts and hits 17 vs 14 (1.214x), equal to Aerilate; already-typed moves unchanged. The foe-weak/foe-resists cases pass on `converted`/`boosted`; effectiveness itself was not measured (neutral `???` foe) |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
-On thor, only Kindle's hand port was ever proven; the generated ports are deployed
-there but not yet proven on the device.
+**thor, 2026-10-22 (NV-8):** all 22 generated ports were proven in one boot with
+`nova_thor_selftest.sh arm|read|disarm` (Kirin 0.3.5, Ruby 3.1.0 aarch64-linux-android).
+The score was 66/66, and all 52 damage measurements were identical to the PC lab's
+(mjolnir runbook 31).
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
