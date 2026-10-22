@@ -130,6 +130,20 @@ stored patch is stale.
    guarded logfile (`Scripts/chrooked_load.log`). That logfile is also the verification oracle: make
    the plugin log the gate decision per cast, since in-game evasion setup is impractical and a 70%
    move's raw hit-counts are an unreliable oracle.
+
+   **Essentials 21 dialect (e.g. Pokémon Nova, mjolnir NV-5).** Different Seam, different home, and
+   battles CAN run headlessly. The Seam is a handler registry (`Battle::AbilityEffects::DamageCalcFromUser`,
+   `AccuracyCalcFromUser`, …): a port is one `.add(:ID, proc)` at load, modelled on a vanilla
+   handler of the same shape (Kindle = Nova's Blaze minus the HP check), with no method overrides
+   or deferred install. Ruby 3.1. Ports live in `references/essentials21-harness/chrooked_<id>.rb`;
+   apply installs them into `Data/Scripts/998_ChrookedMods/` (Essentials loads `Data/Scripts/` in
+   name order, so that runs after the battle code and before `999_Main`). Logging is marker-gated
+   (`chrooked-oracle.on`); real hits log `OBS`, AI estimates `EST`. Verify in the debug-mode lab copy
+   with `scripts/nova_selftest.sh <id>`: a lab-only self-test runs a same-battler damage A/B and one
+   AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then the harness scores the OBS lines. No human
+   battle. Add a `CASES` entry in `references/essentials21-harness/lab/010_battle_selftest.rb` per
+   mechanic. Gotcha: measure the A/B on ONE battler with fixed IVs and nature; two `Pokemon.new`
+   calls roll different stats and once reported 1.438x and 1.594x for the same 1.5x boost.
 6. **Capture** BEFORE cleanup, and update the `references/README.md` row.
    - pokeemerald: `git -C <target> diff > references/<id>.<engine>-<version>.patch` — the patch must
      carry BOTH the mechanic edit AND the battle test (RED→GREEN).

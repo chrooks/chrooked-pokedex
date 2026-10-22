@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from .appliers.essentials import (
+    behavior_install as essentials_behaviors,
     creation as essentials_creation,
     evolution_apply as essentials_evolution,
     learnset_apply as essentials_learnset,
@@ -365,8 +366,9 @@ def _apply_polishedcrystal(target: Path, category: str, ruleset, report: ApplyRe
 
 # Essentials now covers the same tiers as pokeemerald. Evolution writes the
 # pre-evolution's `Evolution` lines in pokemon.txt; type-chart edits the defender
-# buckets in types.txt (a different shape than pokeemerald's matrix).
-_ESSENTIALS_CATEGORIES = ("moves", "create", "species", "learnset", "evolution", "type-chart")
+# buckets in types.txt (a different shape than pokeemerald's matrix). Behaviors
+# install ported mechanics as Ruby files in Data/Scripts/998_ChrookedMods/.
+_ESSENTIALS_CATEGORIES = ("moves", "create", "species", "learnset", "evolution", "type-chart", "behaviors")
 
 
 def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport) -> None:
@@ -390,6 +392,11 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
     if "type-chart" in categories:
         changed = essentials_type_chart.apply_type_chart(target, ruleset, resmap, report)
         print(f"type-chart: {len(changed)} file(s) changed")
+    if "behaviors" in categories:
+        # Install ported mechanics LAST: standalone Ruby files need no earlier
+        # ordering, and the created ability rows exist by now.
+        changed = essentials_behaviors.install_behaviors(target, ruleset, report)
+        print(f"behaviors: {len(changed)} file(s) changed")
 
 
 # The 16.2 dialect runs the same data tiers as v21 Essentials. Abilities are written

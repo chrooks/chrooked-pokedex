@@ -15,11 +15,16 @@ Two storage models, because the engines differ:
   `essentials-harness/chrooked_<id>.rb`. `chrooked-pokedex apply --engine essentials` **installs**
   it (copies it into the target's `Scripts/`) and flips that mechanic's `DATA ONLY` report line to
   "mechanic installed" (issue #16). No `.patch` for Essentials — the plugin is additive, not a diff.
+- **Essentials 21** also adds a standalone Ruby file, but it registers one entry in an Essentials 21
+  handler registry instead of wrapping a method. It lives under `essentials21-harness/chrooked_<id>.rb`
+  and `apply --engine essentials` installs it into the target's `Data/Scripts/998_ChrookedMods/`
+  (mjolnir NV-5). See `essentials21-harness/README.md`.
 
 ## Naming
 
 - pokeemerald: `<chrooked_id>.pokeemerald-expansion-<version>.patch` (`git apply` from the fork root).
 - essentials 16.2: `essentials-harness/chrooked_<chrooked_id>.rb` (installed on `apply --engine essentials`).
+- essentials 21: `essentials21-harness/chrooked_<chrooked_id>.rb` (installed on `apply --engine essentials`).
 
 ## How each was produced
 
@@ -39,6 +44,7 @@ The behavior-port loop (see `.claude/skills/port-behavior/SKILL.md`):
 | innerfocus | pokeemerald-expansion 1.15.3 | `.patch` | `make check` RED→GREEN (battle test) + compiles |
 | innerfocus | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify innerfocus` 3/3 (log oracle) |
 | kindle | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify kindle` 3/3 (log oracle); Seam `pbModifyDamage` |
+| kindle | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` port (installed on apply into `Data/Scripts/998_ChrookedMods/`) | `scripts/nova_selftest.sh kindle` 3/3, headless (AI vs AI); damage A/B Flamethrower 1.500x, Surf 1.000x; Seam `DamageCalcFromUser` |
 | soulsight | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/soulsight_check.rb` 20/20, RED 9/20 without the mechanic |
 | percussion | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/percussion_check.rb` 16/16, RED 11/16 without the mechanic |
 | finishingkick | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply); contact clause only, Speed Boost half via `behaviors: [finishingkick, speedboost]` composition | `ruby rejuv-harness/finishingkick_check.rb` 6/6, RED (nil handler) without the mechanic |

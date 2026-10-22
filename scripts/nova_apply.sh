@@ -6,13 +6,20 @@
 # compiled Data/*.dat, so the loop has a compile step Rejuvenation never needed:
 #
 #   1. git pull                     — the Ruleset (incl. ruleset/targets/nova/) is canon in git
-#   2. apply  → LAB copy's PBS/     — the dex writes PBS text (essentials engine, v21 dialect)
-#   3. compile in the LAB copy      — Game.exe in debug mode rebuilds Data/*.dat from PBS
-#   4. deploy changed Data/*.dat    — to the LIVE PC copy and to thor over SSH
+#   2. lab scripts → LAB            — references/essentials21-harness/lab/*.rb into the lab's
+#                                     Data/Scripts/998_ChrookedDexLab/ (save redirect, self-test)
+#   3. apply  → LAB copy            — the dex writes PBS text (essentials engine, v21 dialect)
+#                                     and installs ported mechanics in Data/Scripts/998_ChrookedMods/
+#   4. compile in the LAB copy      — Game.exe in debug mode rebuilds Data/*.dat from PBS
+#   5. deploy                       — changed Data/*.dat, and the chrooked_*.rb files of
+#                                     998_ChrookedMods/, to the LIVE PC copy and to thor over SSH
 #
 # Only the LAB copy ever runs in debug mode or carries lab-only scripts; the live
-# copies receive nothing but .dat files. thor keeps its own Data/Scripts/998_ChrookedKirin
-# controls shim untouched because only .dat files travel.
+# copies receive the .dat files and the ported mechanics in 998_ChrookedMods/, which
+# the dex owns and mirrors (a retired port is removed there too). Nothing else under
+# Data/Scripts/ travels, so thor keeps its own 998_ChrookedKirin controls shim.
+# Ported mechanics write their oracle log only while chrooked-oracle.on exists in a
+# game folder, so the live copies stay silent unless a proof run sets it.
 #
 # Usage: scripts/nova_apply.sh [--no-pull] [--no-deploy] [--create-species]
 #
@@ -63,6 +70,17 @@ if $PULL; then
   git -C "${REPO_ROOT}" pull --ff-only
 fi
 
+say "lab scripts → ${NOVA_LAB} (lab only, never deployed)"
+LAB_SCRIPTS_DST="${NOVA_LAB}/Data/Scripts/998_ChrookedDexLab"
+mkdir -p "${LAB_SCRIPTS_DST}"
+LAB_SYNCED=0
+for src in "${REPO_ROOT}/references/essentials21-harness/lab/"*.rb; do
+  if ! cmp -s "${src}" "${LAB_SCRIPTS_DST}/$(basename "${src}")"; then
+    cp "${src}" "${LAB_SCRIPTS_DST}/"; echo "  $(basename "${src}")"; LAB_SYNCED=1
+  fi
+done
+[ ${LAB_SYNCED} -eq 1 ] || echo "  already current"
+
 say "apply → ${NOVA_LAB}"
 APPLY_ARGS=(--target "${NOVA_LAB}" --engine essentials --no-sync)
 $CREATE_SPECIES || APPLY_ARGS+=(--no-create-species)
@@ -93,6 +111,45 @@ if [ ${#CHANGED[@]} -gt 0 ]; then
   echo "  (lab)"; (cd "${NOVA_LAB}/Data" && md5sum "${CHANGED[@]}" | cut -c1-8,33-)
 else
   echo "  nothing to send"
+fi
+
+# Ported mechanics: mirror the chrooked_*.rb files of the dex-owned 998_ChrookedMods/
+# folder. Only that folder, only those files — 998_ChrookedKirin and every other
+# script folder on the live copies is never touched.
+MODS_REL="Data/Scripts/998_ChrookedMods"
+LAB_MODS="${NOVA_LAB}/${MODS_REL}"
+PORTS=()
+if [ -d "${LAB_MODS}" ]; then
+  while IFS= read -r f; do PORTS+=("$f"); done < <(cd "${LAB_MODS}" && find . -maxdepth 1 -name 'chrooked_*.rb' -printf '%f\n' | sort)
+fi
+
+say "deploy ${MODS_REL}/chrooked_*.rb → live PC copy"
+LIVE_MODS="${NOVA_LIVE}/${MODS_REL}"
+MODS_CHANGED=0
+[ ${#PORTS[@]} -eq 0 ] || mkdir -p "${LIVE_MODS}"
+for f in "${PORTS[@]}"; do
+  if ! cmp -s "${LAB_MODS}/${f}" "${LIVE_MODS}/${f}"; then
+    cp -p "${LAB_MODS}/${f}" "${LIVE_MODS}/${f}"; echo "  ${f}"; MODS_CHANGED=1
+  fi
+done
+if [ -d "${LIVE_MODS}" ]; then
+  for path in "${LIVE_MODS}"/chrooked_*.rb; do
+    [ -e "${path}" ] || continue
+    f="$(basename "${path}")"
+    [ -f "${LAB_MODS}/${f}" ] || { rm -f "${path}"; echo "  removed ${f}"; MODS_CHANGED=1; }
+  done
+fi
+[ ${MODS_CHANGED} -eq 1 ] || echo "  nothing changed — live copy already current"
+
+say "deploy ${MODS_REL}/chrooked_*.rb → thor (${NOVA_THOR_HOST})"
+THOR_MODS="${NOVA_THOR_GAME}/${MODS_REL}"
+if [ ${#PORTS[@]} -gt 0 ]; then
+  (cd "${LAB_MODS}" && tar -cf - "${PORTS[@]}") | "${WIN_SSH}" -o BatchMode=yes -p "${NOVA_THOR_PORT}" "${NOVA_THOR_USER}@${NOVA_THOR_HOST}" \
+    "mkdir -p \"${THOR_MODS}\" && cd \"${THOR_MODS}\" && rm -f chrooked_*.rb && tar -xf - && md5sum chrooked_*.rb | cut -c1-8,33-"
+  echo "  (lab)"; (cd "${LAB_MODS}" && md5sum "${PORTS[@]}" | cut -c1-8,33-)
+else
+  "${WIN_SSH}" -o BatchMode=yes -p "${NOVA_THOR_PORT}" "${NOVA_THOR_USER}@${NOVA_THOR_HOST}" "rm -f \"${THOR_MODS}\"/chrooked_*.rb"
+  echo "  no ported mechanics in the lab — any on thor removed"
 fi
 
 say "done — relaunch the game (Kirin: kill + relaunch; stream: quit + relaunch) to load the new data"

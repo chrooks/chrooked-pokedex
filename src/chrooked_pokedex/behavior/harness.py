@@ -17,6 +17,13 @@ The driver is mechanic-agnostic: everything specific lives in the mechanic's
 plugin (what it logs) and its entry in ``harness_scenarios.py`` (which
 observation proves each test_case). Reported wording comes from the spec's own
 ``test_cases`` so the harness verifies the Contract, not a paraphrase.
+
+Essentials 21 targets (``references/essentials21-harness/``) use the same OBS
+lines and scenarios with two layout differences: the log sits in the game folder
+(``chrooked_load.log``), and ports write it only while ``chrooked-oracle.on``
+exists there at boot, so ``stage`` sets that marker. Their AI-estimate lines are
+tagged ``EST`` and never scored. A lab copy can produce the battle headlessly
+with ``scripts/nova_selftest.sh <id>`` instead of a played one.
 """
 
 from __future__ import annotations
@@ -27,6 +34,7 @@ import re
 import sys
 from pathlib import Path
 
+from ..appliers.essentials.dialect import detect_dialect
 from ..model import Ruleset
 from .harness_scenarios import SCENARIOS
 
@@ -37,6 +45,18 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 _RULESET_DIR = _REPO_ROOT / "ruleset"
 _TARGETS_JSON = _REPO_ROOT / "targets.json"
 _LOG_RELPATH = Path("Scripts") / "chrooked_load.log"
+# Essentials 21: ports log to the game folder, and only while the marker exists at boot.
+_V21_LOG_RELPATH = Path("chrooked_load.log")
+ORACLE_MARKER = "chrooked-oracle.on"
+
+
+def _is_v21(target: Path) -> bool:
+    return detect_dialect(target) == "essentials21"
+
+
+def log_path(target: Path) -> Path:
+    """Where this target's ports write their OBS lines."""
+    return target / (_V21_LOG_RELPATH if _is_v21(target) else _LOG_RELPATH)
 
 
 def parse_observations(log_text: str, mechanic_id: str) -> list[dict[str, str]]:
@@ -120,11 +140,17 @@ def _load_checks(mechanic_id: str, ruleset_dir: Path) -> tuple[list[dict[str, ob
 def cmd_stage(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
     """Clear the log and print the in-game actions that produce this mechanic's observations."""
     checks, _ = _load_checks(mechanic_id, ruleset_dir)
-    log_path = target / _LOG_RELPATH
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    log_path.write_text("")  # fresh session
-    print(f"Staged '{mechanic_id}'. Log cleared: {log_path}")
-    print("Boot the game (debug), start a debug battle, then do IN ORDER:\n")
+    path = log_path(target)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("")  # fresh session
+    print(f"Staged '{mechanic_id}'. Log cleared: {path}")
+    if _is_v21(target):
+        (target / ORACLE_MARKER).write_text("harness\n")
+        print(f"Oracle marker set: {target / ORACLE_MARKER} (ports log only while it exists at boot)")
+        print(f"Lab copy: run scripts/nova_selftest.sh {mechanic_id} instead of playing.")
+        print("Played copy: boot the game, battle with the ability's holder, then do IN ORDER:\n")
+    else:
+        print("Boot the game (debug), start a debug battle, then do IN ORDER:\n")
     for index, check in enumerate(checks, start=1):
         print(f"  {index}. {check.get('stage')}")
     print(f"\nThen quit and run:  python -m chrooked_pokedex.behavior.harness verify {mechanic_id}")
@@ -134,10 +160,10 @@ def cmd_stage(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
 def cmd_verify(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
     """Read the log and print PASS/FAIL per test_case; exit non-zero on any failure."""
     checks, test_cases = _load_checks(mechanic_id, ruleset_dir)
-    log_path = target / _LOG_RELPATH
-    if not log_path.exists():
-        raise SystemExit(f"no log at {log_path} — run `stage` and play the battle first")
-    results = score(parse_observations(log_path.read_text(), mechanic_id), checks, test_cases)
+    path = log_path(target)
+    if not path.exists():
+        raise SystemExit(f"no log at {path} — run `stage` and play the battle first")
+    results = score(parse_observations(path.read_text(), mechanic_id), checks, test_cases)
     passed = 0
     for result in results:
         tag = "PASS" if result["passed"] else "FAIL"
@@ -147,6 +173,8 @@ def cmd_verify(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
         print(line)
         passed += 1 if result["passed"] else 0
     print(f"\n{passed}/{len(results)} passed")
+    if _is_v21(target) and (target / ORACLE_MARKER).exists():
+        print(f"Note: {target / ORACLE_MARKER} is still set; delete it so a played copy stops logging.")
     return 0 if passed == len(results) else 1
 
 

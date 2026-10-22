@@ -8,7 +8,8 @@ the file is left alone.
 Honesty over silent inertness:
   * A created ability is DATA ONLY — its name and description are written, never the
     battle mechanic. If the Ruleset carries a behavior spec for it, the Apply Report
-    says so loudly.
+    says so loudly, unless a captured port exists for the behaviors tier to install
+    (`behavior_install.has_plugin`).
   * A move field the vocab cannot faithfully translate (a scripted primary effect, a
     flag with no Essentials counterpart) is left out and reported as unresolved,
     never written as a token Essentials would reject.
@@ -22,7 +23,7 @@ from ...model import Ruleset
 from ...model.schema import AbilityDef, MoveDef
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import normalize_description
-from . import move_render, pbs_edit, pbs_read, vocab
+from . import behavior_install, move_render, pbs_edit, pbs_read, vocab
 from .resolution import ResolutionMap
 
 
@@ -113,7 +114,11 @@ def _create_moves(target, ruleset, resmap, report) -> set[Path]:
 
 
 def _creation_reason(ruleset: Ruleset, name: str) -> str:
-    if ruleset.behavior_for(name) is not None:
+    spec = ruleset.behavior_for(name)
+    if spec is not None:
+        # A captured port is INSTALLED by the behaviors tier, so this is not DATA ONLY.
+        if behavior_install.has_plugin(spec.chrooked_id):
+            return f"created; mechanic installed via {_port_path(spec.chrooked_id)}"
         return "created — DATA ONLY: implement mechanic (behavior spec exists)"
     return "created — DATA ONLY"
 
@@ -122,9 +127,16 @@ def _move_reason(ruleset: Ruleset, name: str, unresolved: list[str]) -> str:
     """A created move is data; if its effect could not port AND it has a behavior
     spec, say so loudly so the mechanic gets implemented instead of shipping inert."""
     base = "created" if not unresolved else "created; some fields not ported"
-    if ruleset.behavior_for(name) is not None:
+    spec = ruleset.behavior_for(name)
+    if spec is not None:
+        if behavior_install.has_plugin(spec.chrooked_id):
+            return base + f"; mechanic installed via {_port_path(spec.chrooked_id)}"
         return base + " — behavior spec exists, implement mechanic"
     return base
+
+
+def _port_path(chrooked_id: str) -> str:
+    return f"{behavior_install.MODS_DIR.as_posix()}/chrooked_{chrooked_id}.rb"
 
 
 def _ability_block(internal: str, ability: AbilityDef) -> str:
