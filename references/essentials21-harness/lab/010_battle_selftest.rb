@@ -52,7 +52,11 @@ module ChrookedSelfTest
   #   ability  - the ability under test        control - a comparison ability, or nil
   #   user/foe - species for both phases       calc    - moves measured in CALC; an
   #   fight    - the ability holder's moves      entry may be [move, hp_fraction] to
-  #              in FIGHT (foe knows Tackle)     set the user's HP first (e.g. 0.25)
+  #              in FIGHT (foe knows Tackle)     set the user's HP first (e.g. 0.25),
+  #                                              or [move, hp_fraction, setup] to set
+  #              the field or the user first (see arrange): {weather: :Rain,
+  #              terrain: :Grassy, item: :UTILITYUMBRELLA, airborne: true,
+  #              stats: :physical|:special}
   #   neutral  - CALC sets both battlers' types to ??? (QMARKS): no same-type bonus,
   #              no type matchups, so the ratio is the ability's effect alone
   #   without  - moves for a spec case about a Pokemon WITHOUT the ability. A port
@@ -157,7 +161,7 @@ module ChrookedSelfTest
   # One hit's damage by Essentials' own formula, for each ability in turn, on
   # the SAME battlers. The target has no ability and the RNG is reseeded before
   # each hit, so the only difference between results is the user's ability.
-  def self.damage(user_species, abilities, foe_species, move_id, hp_fraction: 1.0, neutral: false)
+  def self.damage(user_species, abilities, foe_species, move_id, hp_fraction: 1.0, neutral: false, setup: {})
     b = battle(mon(user_species, [move_id]), mon(foe_species, [:TACKLE]))
     b.pbCreateBattler(0, b.pbParty(0)[0], 0)
     b.pbCreateBattler(1, b.pbParty(1)[0], 0)
@@ -169,6 +173,7 @@ module ChrookedSelfTest
       user.pbChangeTypes(:QMARKS)
       target.pbChangeTypes(:QMARKS)
     end
+    arrange(b, user, setup)
     move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
     abilities.map do |ability|
       user.ability = ability
@@ -178,6 +183,26 @@ module ChrookedSelfTest
       srand(SEED)
       move.pbCalcDamage(user, target)
       [target.damageState.calcDamage, move.calcType, target.damageState.typeMod]
+    end
+  end
+
+  # The field and user state one measurement needs (mjolnir NV-9), set once on the
+  # battlers before every ability is measured, so with/none/control share it:
+  #   weather  - the field's weather (:Rain, :Hail, ...)
+  #   terrain  - the field's terrain (:Grassy, ...)
+  #   item     - the user's held item (:UTILITYUMBRELLA, ...)
+  #   airborne - true lifts the user with Magnet Rise (ungrounded, off terrain)
+  #   stats    - :physical or :special: which of Attack and Sp. Atk is strictly
+  #              higher, by swapping the two (ties broken by one point)
+  def self.arrange(b, user, setup)
+    b.field.weather = setup[:weather] if setup[:weather]
+    b.field.terrain = setup[:terrain] if setup[:terrain]
+    user.item = setup[:item] if setup[:item]
+    user.effects[PBEffects::MagnetRise] = 5 if setup[:airborne]
+    if setup[:stats]
+      hi, lo = [user.attack, user.spatk].max, [user.attack, user.spatk].min
+      lo = hi - 1 if lo == hi
+      user.attack, user.spatk = (setup[:stats] == :physical) ? [hi, lo] : [lo, hi]
     end
   end
 
@@ -200,12 +225,14 @@ module ChrookedSelfTest
     log("mechanic #{mechanic} data ability=#{GameData::Ability.exists?(spec[:ability])}")
     guard("calc") do
       (spec[:calc] || []).each do |entry|
-        move_id, hp = entry.is_a?(Array) ? entry : [entry, 1.0]
+        move_id, hp, setup = entry.is_a?(Array) ? entry : [entry, 1.0]
+        setup ||= {}
         abilities = [spec[:ability], nil]
         abilities << spec[:control] if spec[:control]
         (with, type, eff), (none, _, _), (control, _, _) =
-          damage(spec[:user], abilities, spec[:foe], move_id, hp_fraction: hp, neutral: !!spec[:neutral])
-        log("CALC #{mechanic} move=#{move_id} hp=#{hp} type=#{type} eff=#{eff} with=#{with} none=#{none} " \
+          damage(spec[:user], abilities, spec[:foe], move_id, hp_fraction: hp, neutral: !!spec[:neutral], setup: setup)
+        field = setup.empty? ? "" : " setup=#{setup.map { |k, v| "#{k}:#{v}" }.join(',')}"
+        log("CALC #{mechanic} move=#{move_id} hp=#{hp}#{field} type=#{type} eff=#{eff} with=#{with} none=#{none} " \
             "#{spec[:control] || 'control'}=#{control || '-'} ratio=#{format('%.3f', with.to_f / none)}")
       end
     end
