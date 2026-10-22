@@ -69,6 +69,20 @@ module ChrookedSelfTest
   #              rates are checked against the expected ones (within 3 standard
   #              deviations, exactly 0 when 0 is expected) and logged as the
   #              mechanic's OBS line, tagged source=selftest
+  #   status   - for a status mechanic (frostbite, NV-12), the status the next
+  #              three phases set on the user; ability is then nil:
+  #   turn     - [move, n]: the user tries its move n times while in that status
+  #              (Battle::Battler#pbTryUseMove, fixed seed); counts acted / cured
+  #   status_damage - [move, ability] pairs: one hit's damage in the status vs
+  #              without it, on the same battlers, with that ability (or none)
+  #   chip     - abilities (nil = none): the end-of-round status damage the user
+  #              takes with each, against 1/16 of max HP
+  #   cure     - moves: whether the user is cured by using each
+  #              (Battle::Battler#pbUseMove_CureUserStatus, the self-cure step)
+  #   immune   - target type lists: whether the status can be inflicted on each
+  #              (pbCanInflictStatus?, the gate every inflicting move goes through)
+  #   (each logged as the mechanic's OBS line with case=turn|damage|chip|cure|immune
+  #   and source=selftest)
   #   neutral  - CALC sets both battlers' types to ??? (QMARKS): no same-type bonus,
   #              no type matchups, so the ratio is the ability's effect alone
   #   without  - moves for a spec case about a Pokemon WITHOUT the ability. A port
@@ -263,6 +277,78 @@ module ChrookedSelfTest
     [statused, flinched]
   end
 
+  # A fresh pair of battlers for the status phases: [battle, user, target].
+  def self.pair(spec, move_id)
+    b = battle(mon(spec[:user], [move_id]), mon(spec[:foe], [:TACKLE]))
+    b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+    b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+    user, target = b.battlers[0], b.battlers[1]
+    target.ability = nil
+    user.ability = nil
+    if spec[:neutral]
+      user.pbChangeTypes(:QMARKS)
+      target.pbChangeTypes(:QMARKS)
+    end
+    [b, user, target]
+  end
+
+  # The user tries its move n times while in the status (fixed seed): how often it
+  # acted, and how often the status was gone afterwards.
+  def self.turns(spec, move_id, n)
+    b, user, target = pair(spec, move_id)
+    move = user.moves[0]
+    srand(SEED)
+    acted = cured = 0
+    n.times do
+      user.status = spec[:status]
+      acted += 1 if user.pbTryUseMove([:UseMove, 0, move, target.index, 0], move, false, false)
+      cured += 1 if user.status != spec[:status]
+    end
+    [acted, cured]
+  end
+
+  # One hit's damage with the user in the status and without it, same battlers.
+  def self.status_damage(spec, move_id, ability)
+    b, user, target = pair(spec, move_id)
+    user.ability = ability
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    [spec[:status], :NONE].map do |status|
+      user.status = status
+      move.calcType = move.pbCalcType(user)
+      target.damageState.reset
+      target.damageState.typeMod = move.pbCalcTypeMod(move.calcType, user, target)
+      srand(SEED)
+      move.pbCalcDamage(user, target)
+      target.damageState.calcDamage
+    end
+  end
+
+  # The end-of-round status damage the user takes with an ability: [lost, max].
+  def self.chip(spec, ability)
+    b, user, _target = pair(spec, :TACKLE)
+    user.ability = ability
+    user.status = spec[:status]
+    before = user.hp
+    b.send(:pbEORStatusProblemDamage, [user])
+    [before - user.hp, user.totalhp]
+  end
+
+  # Whether using a move cures the user of the status (the self-cure step of pbUseMove).
+  def self.cured_by?(spec, move_id)
+    b, user, _target = pair(spec, move_id)
+    user.status = spec[:status]
+    user.pbUseMove_CureUserStatus(Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id)))
+    user.status != spec[:status]
+  end
+
+  # Whether the status can be inflicted on a target of these types.
+  def self.inflictable?(spec, target_types)
+    _b, user, target = pair(spec, :TACKLE)
+    target.types = target_types
+    target.effects[PBEffects::ExtraType] = nil
+    target.pbCanInflictStatus?(spec[:status], user, false)
+  end
+
   # Observed k of n against an expected rate: within 3 standard deviations, and
   # exactly 0 when 0 is expected.
   def self.rate_ok?(k, n, expected)
@@ -304,7 +390,8 @@ module ChrookedSelfTest
           "is chrooked_#{mechanic}.rb installed in 998_ChrookedMods/?")
       return
     end
-    log("mechanic #{mechanic} data ability=#{GameData::Ability.exists?(spec[:ability])}")
+    log("mechanic #{mechanic} data " +
+        (spec[:ability] ? "ability=#{GameData::Ability.exists?(spec[:ability])}" : "status=#{spec[:status]}"))
     guard("calc") do
       (spec[:calc] || []).each do |entry|
         move_id, hp, setup = entry.is_a?(Array) ? entry : [entry, 1.0]
@@ -355,8 +442,46 @@ module ChrookedSelfTest
                       "flinch_ok=#{rate_ok?(flinched, n, flinch_rate)}")
       end
     end
+    guard("turn") do
+      (spec[:turn] || []).each do |move_id, n|
+        n ||= 50
+        acted, cured = turns(spec, move_id, n)
+        obs(mechanic, "case=turn move=#{move_id} source=selftest status=#{spec[:status]} n=#{n} " \
+                      "acted=#{acted} cured=#{cured} result=#{acted == n && cured == 0 ? 'ACTS' : 'SKIPS'}")
+      end
+    end
+    guard("status_damage") do
+      (spec[:status_damage] || []).each do |move_id, ability|
+        with, none = status_damage(spec, move_id, ability)
+        obs(mechanic, "case=damage move=#{move_id} ability=#{ability || 'none'} source=selftest " \
+                      "status=#{spec[:status]} with=#{with} none=#{none} ratio=#{format('%.3f', with.to_f / none)} " \
+                      "result=#{with * 4 < none * 3 ? 'HALVED' : 'NORMAL'}")
+      end
+    end
+    guard("chip") do
+      (spec[:chip] || []).each do |ability|
+        lost, max = chip(spec, ability)
+        result = if lost == 0 then "NONE" elsif lost == max / 16 then "CHIP" else "WRONG" end
+        obs(mechanic, "case=chip ability=#{ability || 'none'} source=selftest status=#{spec[:status]} " \
+                      "lost=#{lost} max=#{max} expected=#{max / 16} result=#{result}")
+      end
+    end
+    guard("cure") do
+      (spec[:cure] || []).each do |move_id|
+        obs(mechanic, "case=cure move=#{move_id} source=selftest status=#{spec[:status]} " \
+                      "cured=#{cured_by?(spec, move_id)}")
+      end
+    end
+    guard("immune") do
+      (spec[:immune] || []).each do |target_types|
+        can = inflictable?(spec, target_types)
+        obs(mechanic, "case=immune target_types=#{target_types.join('/')} source=selftest " \
+                      "status=#{spec[:status]} can_inflict=#{can} result=#{can ? 'AFFECTED' : 'IMMUNE'}")
+      end
+    end
     Graphics.update if defined?(Graphics)
     guard("fight") do
+      next if (spec[:fight] || []).empty?
       p1 = mon(spec[:user], spec[:fight])
       p1.ability = spec[:ability]
       b = battle(p1, mon(spec[:foe], [:TACKLE]))

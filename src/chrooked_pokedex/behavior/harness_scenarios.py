@@ -255,6 +255,21 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
 # Rejuvenation scenario above predates its burn and flinch). The chance cases are
 # many rolls, counted by the lab self-test and logged with source=selftest.
 SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
+    # A status (NV-12): freeze reskinned as frostbite, every case measured by the
+    # lab self-test (case=turn|damage|chip).
+    "frostbite": [
+        {"stage": "A frostbitten Pokemon tries its move, many times.", "select": {"case": "turn", "source": "selftest"}, "expect": {"result": "ACTS"}},
+        {"stage": "A frostbitten Pokemon uses Surf (special).", "select": {"case": "damage", "move": "SURF", "ability": "none", "source": "selftest"}, "expect": {"result": "HALVED"}},
+        {"stage": "A frostbitten Pokemon uses Tackle (physical).", "select": {"case": "damage", "move": "TACKLE", "ability": "none", "source": "selftest"}, "expect": {"result": "NORMAL"}},
+        {"stage": "A frostbitten Pokemon with Guts uses Surf.", "select": {"case": "damage", "move": "SURF", "ability": "GUTS", "source": "selftest"}, "expect": {"result": "NORMAL"}},
+        {"stage": "A frostbitten Pokemon with Quick Feet uses Surf.", "select": {"case": "damage", "move": "SURF", "ability": "QUICKFEET", "source": "selftest"}, "expect": {"result": "NORMAL"}},
+        {"stage": "A frostbitten Pokemon ends the round.", "select": {"case": "chip", "ability": "none", "source": "selftest"}, "expect": {"result": "CHIP"}},
+        {"stage": "A frostbitten Pokemon with Magic Guard ends the round.", "select": {"case": "chip", "ability": "MAGICGUARD", "source": "selftest"}, "expect": {"result": "NONE"}},
+        # The spec's effect: a move that can thaw its user (Nova's ThawsUser flag,
+        # as Rejuvenation's canThawUser?); Flame Wheel is a Fire move that does.
+        {"stage": "A frostbitten Pokemon uses Flame Wheel.", "select": {"case": "cure", "move": "FLAMEWHEEL", "source": "selftest"}, "expect": {"cured": "true"}},
+        {"stage": "Frostbite is inflicted on an Ice-type.", "select": {"case": "immune", "target_types": "ICE", "source": "selftest"}, "expect": {"result": "IMMUNE"}},
+    ],
     "fullmoon": [
         {"stage": "Full Moon user (pure Normal type) uses Dark Pulse.", "select": {"move": "DARKPULSE", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "BOOSTED"}},
         {"stage": "Full Moon user (pure Normal type) uses Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "NORMAL"}},
@@ -269,5 +284,10 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": "Infernal Maw user bites (Crunch) a burnable foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "QMARKS"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
         {"stage": "Infernal Maw user uses Tackle, many times.", "select": {"move": "TACKLE", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
         {"stage": "Infernal Maw user bites (Crunch) a Fire-type foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "FIRE"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
+    ],
+    "rimefang": [
+        {"stage": "Rimefang user bites (Crunch) a foe that can be frostbitten, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "QMARKS"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
+        {"stage": "Rimefang user uses Tackle, many times.", "select": {"move": "TACKLE", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
+        {"stage": "Rimefang user bites (Crunch) an Ice-type foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "ICE"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
     ],
 }

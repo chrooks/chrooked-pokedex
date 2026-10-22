@@ -105,7 +105,11 @@ def test_every_hand_written_port_is_wired():
         spec = _RULESET.behaviors.get(cid)
         assert spec is not None, f"no behavior spec ruleset/behaviors/{cid}.yaml"
         assert has_plugin(cid), f"chrooked_{cid}.rb is empty or lacks its '# chrooked:{cid}' tag"
-        assert "Battle::AbilityEffects::" in text and "PokeBattle_" not in text
+        # An ability port adds to a handler registry; a status port (frostbite)
+        # wraps Battle methods. Either way it is Essentials 21 code, not 16.2's.
+        assert "Battle::" in text and "PokeBattle_" not in text
+        if spec.applies_to == "ability":
+            assert "Battle::AbilityEffects::" in text
         assert 'File.expand_path("chrooked-oracle.on")' in text  # marker-gated oracle
         assert f'($chrooked_selftest_cases ||= {{}})["{cid}"]' in text, \
             f"chrooked_{cid}.rb never registers its self-test case"

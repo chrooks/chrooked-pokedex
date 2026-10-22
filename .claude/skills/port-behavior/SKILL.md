@@ -146,7 +146,11 @@ stored patch is stale.
    Moonlight heal wrapper chained on `HealUserDependingOnWeather#pbOnStartUse`; NV-11:
    `chrooked_infernalmaw.rb`, a boost plus burn and flinch chances in `OnDealingHit`, proven by the
    self-test's `chance:` phase, 400 counted rolls). Its checks go in `SCENARIOS_ESSENTIALS21`, which
-   a v21 target reads before `SCENARIOS`, so another engine's older scenario cannot shadow it. A new shape
+   a v21 target reads before `SCENARIOS`, so another engine's older scenario cannot shadow it. A
+   STATUS has no registry: `chrooked_frostbite.rb` (NV-12) reskins `:FROZEN` with method wrappers
+   (unique alias names, `class_eval`, `@status` swapped around a long method rather than
+   redefining it), and the self-test's `turn` / `status_damage` / `chip` / `cure` / `immune`
+   phases prove it. A new shape
    starts as one hand port proven in the lab, then is generalised (NV-9: Forestry ->
    `conditional_boost`). Only a mechanic that fits no shape gets a
    hand-written `references/essentials21-harness/chrooked_<id>.rb`. That port must register its own

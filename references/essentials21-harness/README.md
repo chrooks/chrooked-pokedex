@@ -203,11 +203,10 @@ A candidate becomes verified only after reading its call site in Nova's
   hand port or a shape covering both.
 - *Two effects, hand-written (NV-10):* fullmoon and highnoon grant STAB *and* make
   Moonlight / Morning Sun heal 3/4. infernalmaw followed (NV-11, three effects).
-- *rimefang: blocked on frostbite.* Its rider inflicts the Ruleset's frostbite, a
-  reskin of freeze that halves special damage, chips 1/16 and never skips a turn.
-  Nova has only vanilla freeze, which skips turns. A faithful Rimefang needs the
-  `frostbite` behavior ported first, which would change every freeze in Nova. That
-  is a decision for Chris (mjolnir NV-11).
+- *frostbite and rimefang (NV-12, Chris's decision 2026-10-22):* the Ruleset's
+  frostbite is ported to Nova as a reskin of freeze (`chrooked_frostbite.rb`), so
+  every freeze in Nova is now frostbite. Rimefang inflicts it, built as Infernal
+  Maw is.
 - *Composition:* finishingkick, which borrows Speed Boost through
   `behaviors: [finishingkick, speedboost]`. Essentials 21 has no composition step
   yet; `HandlerHash#copy` might serve, unverified.
@@ -215,10 +214,16 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-31 in all. 28 are generated from their specs' `template:` blocks: 22 since
-2026-10-22 (NV-8), four more (NV-9) and two more (NV-10) the same day. Three are
-hand-written here because each has more than one effect: `chrooked_fullmoon.rb`
-and `chrooked_highnoon.rb` (NV-10) and `chrooked_infernalmaw.rb` (NV-11). Their
+33 in all. 28 are generated from their specs' `template:` blocks: 22 since
+2026-10-22 (NV-8), four more (NV-9) and two more (NV-10) the same day. Five are
+hand-written here:
+- `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
+  `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
+- `chrooked_rimefang.rb` (NV-12), for the same reason;
+- `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
+  rather than a registry entry.
+
+Their
 checks live in `SCENARIOS_ESSENTIALS21`, which an Essentials 21 target consults
 before `SCENARIOS`. For the NV-8 22, before the hand ports were deleted, the
 regeneration was checked three ways: each generated port's code matched its hand
@@ -237,6 +242,8 @@ exception, by design (below).
 | downpour, whiteout | `conditional_boost`, rain / hail, `moves: higher_stat`, 1.5x | NV-9, lab: Downpour 4/4, Whiteout 3/3. Body Slam 1.469x when Attack is higher, Hyper Voice 1.500x when Sp. Atk is higher, 1.000x for the other category; Downpour holding a Utility Umbrella in rain 1.000x |
 | mysticpower, violentblood | `stab_grant`, `all` / `[Dark]` | NV-10, lab 3/3 each. Mystic Power: Flamethrower from a Water-type 1.500x; Surf (its own type) 36 vs 36, STAB once; Struggle unchanged. Violent Blood: Crunch from a Water/Dragon 1.500x; from a Dark-type 42 vs 42; Waterfall unchanged |
 | fullmoon, highnoon (hand-written) | STAB grant for Dark+Fairy / Fire+Psychic, plus a 3/4 heal on Moonlight / Morning Sun (`HealUserDependingOnWeather#pbOnStartUse`, chained wrappers) | NV-10, lab 3/3 each. Dark Pulse (Full Moon) 1.478x and Flamethrower (High Noon) 1.500x from a Normal-type; the other type unchanged; the heal 101 of 135 HP at half HP (normally 68). In the AI battle, Numel's own-type Flamethrower under Full Moon logged `own=true` with no extra bonus |
+| frostbite (hand-written; a status) | freeze reskinned, keeping `:FROZEN`. No lost turns or random thaw (`pbTryUseMove` with `@status` cleared around it, as Rejuvenation's port does; also the multi-hit cut-off and the AI's `can_attack?`). Special damage halved unless Guts or Quick Feet (beside burn's halving). A 1/16 end-of-round chip unless Magic Guard (after burn's chip). Cured by a move that thaws its user (Nova's `ThawsUser`). Its text and name say frostbite | NV-12, lab 9/9: 50 of 50 turns acted, never cured; Surf 12 vs 24; Tackle, Guts and Quick Feet unchanged; chip 8 of 135 HP, Magic Guard 0; Flame Wheel cures, Ember does not; Ice-types immune. Kept from Nova (the spec is silent): a Fire hit cures the target, harsh sun prevents it, the catch bonus, the FRZ icon, Pursuit's skip |
+| rimefang (hand-written) | Infernal Maw's build with frostbite (`pbCanFreeze?`/`pbFreeze`) in place of burn | NV-12, lab 3/3: frostbite 0.308 and flinch 0.305 over 400 rolls; Ice-type 0 frostbite, flinch 0.300; Tackle 0 and 0; Crunch 36 vs 28 |
 | infernalmaw (hand-written) | 1.3x on `Biting` (Strong Jaw's shape), plus a 30% burn and an independent 30% flinch in `OnDealingHit` (Poison Touch's shape and gates) | NV-11, lab 3/3. Crunch 36 vs 28 (Strong Jaw control 41); 400 rolls each: burn 0.308 and flinch 0.305 on a burnable target; on a Fire-type 0 burns and flinch 0.300; Tackle 0 and 0 |
 | updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
@@ -250,7 +257,7 @@ of the self-test's scene setup (terrain, rain, hail, Utility Umbrella, Magnet
 Rise). The four NV-10 ports followed in one boot: 12/12, every damage and heal
 measurement identical to the lab's. Infernal Maw (NV-11) followed: 3/3, its 400-roll
 chance lines identical to the lab's (the same seed gives the same rolls on ARM).
-All 31 are proven on thor.
+Frostbite and Rimefang (NV-12) are deployed; their device proof follows.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
