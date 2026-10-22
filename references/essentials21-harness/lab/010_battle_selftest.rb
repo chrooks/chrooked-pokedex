@@ -3,8 +3,9 @@
 # never deployed to a played copy, except briefly, by hand, for a one-boot proof
 # (mjolnir runbook 31), and removed straight after.
 #
-# Runs only when chrooked-selftest.on exists in the game folder; its first word
-# names the mechanic (e.g. "kindle"). Boots without the marker are unaffected.
+# Runs only when chrooked-selftest.on exists in the game folder; its words name
+# the mechanics to test, in order (e.g. "kindle bloom"). Boots without the marker
+# are unaffected.
 # It triggers once per process, at the first of these hooks it reaches:
 #   1. GameData.load_all  - inside Game.initialize, the moment game data exists;
 #   2. Game.set_up_system - before the title screen and any language prompt;
@@ -43,14 +44,97 @@ module ChrookedSelfTest
   SEED         = 12_345
 
   # One entry per ported mechanic.
-  #   ability  - the ability under test        control - a comparison ability
-  #   user/foe - species for both phases       calc    - moves measured in CALC
-  #   fight    - the ability holder's moves in FIGHT (the foe only knows Tackle)
+  #   ability  - the ability under test        control - a comparison ability, or nil
+  #   user/foe - species for both phases       calc    - moves measured in CALC; an
+  #   fight    - the ability holder's moves      entry may be [move, hp_fraction] to
+  #              in FIGHT (foe knows Tackle)     set the user's HP first (e.g. 0.25)
+  #   neutral  - CALC sets both battlers' types to ??? (QMARKS): no same-type bonus,
+  #              no type matchups, so the ratio is the ability's effect alone
   CASES = {
     "kindle" => {
       ability: :KINDLE, control: :BLAZE, user: :NUMEL, foe: :SNORLAX,
       calc: [:FLAMETHROWER, :SURF, :TACKLE, :EMBER],
       fight: [:EMBER, :FLAMETHROWER, :TACKLE]
+    },
+    "bloom" => {
+      ability: :BLOOM, control: :OVERGROW, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:ENERGYBALL, :FLAMETHROWER, :VINEWHIP],
+      fight: [:ENERGYBALL, :FLAMETHROWER, :VINEWHIP]
+    },
+    "cryomancer" => {
+      ability: :CRYOMANCER, control: nil, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:ICEBEAM, :THUNDERBOLT, :POWDERSNOW],
+      fight: [:ICEBEAM, :THUNDERBOLT, :POWDERSNOW]
+    },
+    "deluge" => {
+      ability: :DELUGE, control: :TORRENT, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:SURF, :FLAMETHROWER, :WATERGUN],
+      fight: [:SURF, :FLAMETHROWER, :WATERGUN]
+    },
+    "overcharge" => {
+      ability: :OVERCHARGE, control: :BLAZE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [[:THUNDERBOLT, 0.25], [:THUNDERBOLT, 1.0], [:ICEBEAM, 0.25]],
+      fight: [:THUNDERBOLT, :ICEBEAM]
+    },
+    "chitinize" => {
+      ability: :CHITINIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :XSCISSOR],
+      fight: [:TACKLE, :XSCISSOR]
+    },
+    "foliate" => {
+      ability: :FOLIATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "hydrate" => {
+      ability: :HYDRATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :SURF],
+      fight: [:TACKLE, :SURF]
+    },
+    "immolate" => {
+      ability: :IMMOLATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "martialize" => {
+      ability: :MARTIALIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "mineralize" => {
+      ability: :MINERALIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :WATERGUN],
+      fight: [:TACKLE, :WATERGUN]
+    },
+    "obfuscate" => {
+      ability: :OBFUSCATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "psyonize" => {
+      ability: :PSYONIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "spectralize" => {
+      ability: :SPECTRALIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "tectonize" => {
+      ability: :TECTONIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EARTHQUAKE],
+      fight: [:TACKLE, :EARTHQUAKE]
+    },
+    "venomize" => {
+      ability: :VENOMIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
+    },
+    "wyvernize" => {
+      ability: :WYVERNIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
+      calc: [:TACKLE, :EMBER],
+      fight: [:TACKLE, :EMBER]
     }
   }
 
@@ -87,8 +171,8 @@ module ChrookedSelfTest
     log("hook #{where} armed=#{armed} ran=#{!!$chrooked_selftest_ran} cwd=#{Dir.pwd} #{owners}")
     return if !armed || $chrooked_selftest_ran
     $chrooked_selftest_ran = true
-    mechanic = File.read(MARKER).split.first.to_s.downcase
-    guard("run") { with_test_state { run(mechanic) } }
+    mechanics = File.read(MARKER).split.map(&:downcase)
+    guard("run") { with_test_state { run_all(mechanics) } }
   end
 
   def self.swap_save_dir(dir)
@@ -142,13 +226,18 @@ module ChrookedSelfTest
   # One hit's damage by Essentials' own formula, for each ability in turn, on
   # the SAME battlers. The target has no ability and the RNG is reseeded before
   # each hit, so the only difference between results is the user's ability.
-  def self.damage(user_species, abilities, foe_species, move_id)
+  def self.damage(user_species, abilities, foe_species, move_id, hp_fraction: 1.0, neutral: false)
     b = battle(mon(user_species, [move_id]), mon(foe_species, [:TACKLE]))
     b.pbCreateBattler(0, b.pbParty(0)[0], 0)
     b.pbCreateBattler(1, b.pbParty(1)[0], 0)
     user   = b.battlers[0]
     target = b.battlers[1]
     target.ability = nil
+    user.hp = [(user.totalhp * hp_fraction).floor, 1].max
+    if neutral
+      user.pbChangeTypes(:QMARKS)
+      target.pbChangeTypes(:QMARKS)
+    end
     move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
     abilities.map do |ability|
       user.ability = ability
@@ -161,20 +250,30 @@ module ChrookedSelfTest
     end
   end
 
+  def self.run_all(mechanics)
+    log("start mechanics=#{mechanics.join(',')} ruby=#{RUBY_VERSION} platform=#{RUBY_PLATFORM} " \
+        "saves=#{SaveData::DIRECTORY}")
+    mechanics.each { |mechanic| guard("mechanic #{mechanic}") { run(mechanic) } }
+  ensure
+    log("DONE")
+  end
+
   def self.run(mechanic)
     spec = CASES[mechanic]
-    log("start mechanic=#{mechanic} ruby=#{RUBY_VERSION} platform=#{RUBY_PLATFORM} saves=#{SaveData::DIRECTORY}")
     if spec.nil?
       log("ERROR no case for '#{mechanic}' in CASES (known: #{CASES.keys.join(', ')})")
       return
     end
-    log("data ability=#{GameData::Ability.exists?(spec[:ability])}")
+    log("mechanic #{mechanic} data ability=#{GameData::Ability.exists?(spec[:ability])}")
     guard("calc") do
-      (spec[:calc] || []).each do |move_id|
+      (spec[:calc] || []).each do |entry|
+        move_id, hp = entry.is_a?(Array) ? entry : [entry, 1.0]
+        abilities = [spec[:ability], nil]
+        abilities << spec[:control] if spec[:control]
         (with, type, eff), (none, _, _), (control, _, _) =
-          damage(spec[:user], [spec[:ability], nil, spec[:control]], spec[:foe], move_id)
-        log("CALC move=#{move_id} type=#{type} eff=#{eff} with=#{with} none=#{none} " \
-            "#{spec[:control]}=#{control} ratio=#{format('%.3f', with.to_f / none)}")
+          damage(spec[:user], abilities, spec[:foe], move_id, hp_fraction: hp, neutral: !!spec[:neutral])
+        log("CALC #{mechanic} move=#{move_id} hp=#{hp} type=#{type} eff=#{eff} with=#{with} none=#{none} " \
+            "#{spec[:control] || 'control'}=#{control || '-'} ratio=#{format('%.3f', with.to_f / none)}")
       end
     end
     Graphics.update if defined?(Graphics)
@@ -183,10 +282,8 @@ module ChrookedSelfTest
       p1.ability = spec[:ability]
       b = battle(p1, mon(spec[:foe], [:TACKLE]))
       outcome = b.pbStartBattle
-      log("FIGHT outcome=#{outcome} turns=#{b.turnCount}")
+      log("FIGHT #{mechanic} outcome=#{outcome} turns=#{b.turnCount}")
     end
-  ensure
-    log("DONE")
   end
 end
 

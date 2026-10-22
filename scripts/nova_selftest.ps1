@@ -11,6 +11,7 @@
 # the lab is not ready.
 #
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File nova_selftest.ps1 -Mechanic kindle
+#        (-Mechanic 'kindle bloom' runs several in the same boot)
 #        [-Lab 'D:\...\NovaV3.0-dexlab\Nova'] [-TimeoutSeconds 150]
 param(
   [Parameter(Mandatory = $true)][string]$Mechanic,

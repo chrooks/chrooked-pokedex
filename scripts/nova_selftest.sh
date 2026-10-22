@@ -12,7 +12,9 @@
 #                           measures the damage A/B and runs one AI-vs-AI battle
 #   4. score              — behavior harness verify: PASS/FAIL per spec test_case
 #
-# Usage: scripts/nova_selftest.sh <mechanic>      e.g. scripts/nova_selftest.sh kindle
+# Usage: scripts/nova_selftest.sh <mechanic>...    e.g. scripts/nova_selftest.sh kindle bloom
+#        scripts/nova_selftest.sh --all             every port in references/essentials21-harness/
+# Several mechanics share one boot; each is scored separately.
 #
 # Config: NOVA_LAB (default /mnt/d/Games/Pokemon FanGames/NovaV3.0-dexlab/Nova)
 set -euo pipefail
@@ -21,14 +23,23 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 NOVA_LAB="${NOVA_LAB:-/mnt/d/Games/Pokemon FanGames/NovaV3.0-dexlab/Nova}"
 POWERSHELL="${POWERSHELL:-/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe}"
-LAB_SCRIPTS_SRC="${REPO_ROOT}/references/essentials21-harness/lab"
-MECH="${1:?usage: nova_selftest.sh <mechanic>}"
+PORTS_SRC="${REPO_ROOT}/references/essentials21-harness"
+LAB_SCRIPTS_SRC="${PORTS_SRC}/lab"
+[ $# -gt 0 ] || { echo "usage: nova_selftest.sh <mechanic>... | --all" >&2; exit 2; }
+if [ "$1" = "--all" ]; then
+  MECHS=()
+  for port in "${PORTS_SRC}"/chrooked_*.rb; do MECHS+=("$(basename "${port}" .rb | sed 's/^chrooked_//')"); done
+else
+  MECHS=("$@")
+fi
 
 say() { printf '\n== %s\n' "$*"; }
 
 [ -f "${NOVA_LAB}/Game.exe" ] || { echo "lab copy not found at ${NOVA_LAB}" >&2; exit 1; }
 grep -q '"debugMode": true' "${NOVA_LAB}/mkxp.json" || { echo "${NOVA_LAB} is not the lab (no debugMode) — refusing" >&2; exit 1; }
-[ -f "${REPO_ROOT}/references/essentials21-harness/chrooked_${MECH}.rb" ] || { echo "no Essentials 21 port for '${MECH}' in references/essentials21-harness/" >&2; exit 1; }
+for MECH in "${MECHS[@]}"; do
+  [ -f "${PORTS_SRC}/chrooked_${MECH}.rb" ] || { echo "no Essentials 21 port for '${MECH}' in references/essentials21-harness/" >&2; exit 1; }
+done
 
 say "lab scripts → ${NOVA_LAB} (lab only)"
 dst="${NOVA_LAB}/Data/Scripts/998_ChrookedDexLab"
@@ -37,16 +48,22 @@ for src in "${LAB_SCRIPTS_SRC}"/*.rb; do
   cmp -s "${src}" "${dst}/$(basename "${src}")" || { cp "${src}" "${dst}/"; echo "  $(basename "${src}")"; }
 done
 
-port_rel="Data/Scripts/998_ChrookedMods/chrooked_${MECH}.rb"
-if ! cmp -s "${REPO_ROOT}/references/essentials21-harness/chrooked_${MECH}.rb" "${NOVA_LAB}/${port_rel}"; then
+stale=false
+for MECH in "${MECHS[@]}"; do
+  cmp -s "${PORTS_SRC}/chrooked_${MECH}.rb" "${NOVA_LAB}/Data/Scripts/998_ChrookedMods/chrooked_${MECH}.rb" || stale=true
+done
+if $stale; then
   say "install ported mechanics → lab (apply --category behaviors)"
   (cd "${REPO_ROOT}" && uv run chrooked-pokedex apply --target "${NOVA_LAB}" --engine essentials --category behaviors --no-sync)
 fi
 
-say "headless battle (lab Game.exe)"
+say "headless battle (lab Game.exe): ${MECHS[*]}"
 status=0
-"${POWERSHELL}" -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w "${SCRIPT_DIR}/nova_selftest.ps1")" -Mechanic "${MECH}" || status=$?
+"${POWERSHELL}" -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w "${SCRIPT_DIR}/nova_selftest.ps1")" -Mechanic "${MECHS[*]}" || status=$?
 
 say "score against the spec"
-(cd "${REPO_ROOT}" && uv run python -m chrooked_pokedex.behavior.harness verify "${MECH}" --target "${NOVA_LAB}") || status=$?
+for MECH in "${MECHS[@]}"; do
+  (cd "${REPO_ROOT}" && uv run python -m chrooked_pokedex.behavior.harness verify "${MECH}" --target "${NOVA_LAB}") || status=1
+  echo
+done
 exit "${status}"

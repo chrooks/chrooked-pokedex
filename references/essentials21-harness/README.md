@@ -90,8 +90,60 @@ lab once (`nova_selftest.ps1`, about 6 s), and scores the OBS lines with the
 harness. A new mechanic needs its port here, a `CASES` entry in
 `lab/010_battle_selftest.rb`, and a scenario in `harness_scenarios.py`.
 
+## From the Rejuvenation ports (`../rejuv-harness/`)
+
+Rejuvenation's engine has no ability registries, so its core
+(`chrooked_00_core.rb`) wraps the battle methods once and keeps its own tables;
+each Rejuvenation port is a lambda in one table, and the core multiplies **final
+damage** by what a damage lambda returns. Essentials 21 ships the registries and
+offers power, attack, defense and final multipliers, so a translation follows the
+matching vanilla handler in Nova (Blaze, Torrent, Aerilate…), not the Rejuvenation
+arithmetic.
+
+| Rejuvenation table | Essentials 21 registry | status |
+| --- | --- | --- |
+| `CHROOKED_DAMAGE_MODS` (attacker ability) | `DamageCalcFromUser` | **verified** 2026-10-22: called from `Battle::Move#pbCalcDamageMultipliersAbilities` only `if user.abilityActive?`; 5 ports at PASS |
+| `register_ize` (`CHROOKED_TYPE_MODS` + 1.2x rider) | `ModifyMoveBaseType` + `DamageCalcFromUser` on `move.powerBoost` | **verified** 2026-10-22: the pair Nova's Aerilate and Dragonize use; damage identical to Aerilate; 12 ports at PASS |
+| `CHROOKED_DEFENSE_MODS` | `DamageCalcFromTarget` | candidate, unverified |
+| `CHROOKED_ON_DEAL`, `CHROOKED_ON_DEAL_DMG` | `OnDealingHit` | candidate, unverified |
+| `CHROOKED_WHEN_HIT`, `CHROOKED_WHEN_HIT_DMG` | `OnBeingHit` | candidate, unverified |
+| `CHROOKED_SWITCH_IN` | `OnSwitchIn` | candidate, unverified |
+| `CHROOKED_ON_KO` | `OnEndOfUsingMove` | candidate, unverified |
+| `CHROOKED_TYPE_IMMUNITY` | `MoveImmunity` | candidate, unverified |
+| `CHROOKED_SURE_HIT`, `CHROOKED_ACCURACY_MODS` | `AccuracyCalcFromUser` | candidate, unverified |
+| `CHROOKED_PRIORITY_MODS` | `PriorityChange` | candidate, unverified |
+| `CHROOKED_SPEED_MODS` / `CHROOKED_CRIT_RATE` | `SpeedCalc` / `CriticalCalcFromUser` | candidate, unverified |
+| `CHROOKED_TURN_END` | `EndOfRoundEffect` / `EndOfRoundHealing` | candidate, unverified |
+| the rest (`STAT_SWAP`, `ADDED_TYPE`, `ABSORB_MODS`, `HEAL_OVERRIDE`, `TARGET_MODS`, `TYPEMOD_FLOOR`, `IMMUNITY_BYPASS`, `HP_LOSS_VETO`, `WEATHER_IMMUNE`, `WEATHER_FOR_USER`, `AFTER_MOVE`, `AI_HP_REFUND`) | no single registry; likely method-level work | unmapped |
+
+A candidate becomes verified only after reading its call site in Nova's
+`Data/Scripts/011_Battle/` and a port of it passing the self-test.
+
+**Deferred from the first batch, and why:**
+
+- *Move categories the data does not carry.* hammerfist, impale, martialartist,
+  sledgehammer and striker read "kick", "hammer" and "piercing" moves. The Ruleset
+  flags them (`flags: [contact, kicking]`), and Nova's compiler accepts any flag
+  string, but the dex's vocabulary (`appliers/essentials/vocab.py`) deliberately
+  does not write those flags into Nova's data. Two ways forward: write custom
+  flags (`Kicking`, `Hammer`, `Piercing`) so ports read data, or hard-code move
+  lists in the ports, as Rejuvenation's core does. A design decision for Chris.
+- *Simple multipliers without a harness scenario yet:* downpour, forestry,
+  mysticpower, nightstalker, updraft, violentblood, whiteout. Each needs its
+  scenario written before it can be scored.
+- *Composition:* finishingkick, which borrows Speed Boost through
+  `behaviors: [finishingkick, speedboost]`. Essentials 21 has no composition step
+  yet; `HandlerHash#copy` might serve, unverified.
+- *Every other table* above, and the 25 Nova abilities with no Rejuvenation port.
+
 ## Files
 
 | file | Seam | verified |
 | --- | --- | --- |
 | `chrooked_kindle.rb` | `DamageCalcFromUser` (Blaze's shape, no HP check) | `nova_selftest.sh kindle` 3/3, 2026-10-22, Nova V3.0 lab: Flamethrower 1.500x, Surf and Tackle 1.000x, Ember at full HP 1.474x, Blaze unchanged at full HP. **thor**, same day, Kirin 0.3.5 (Ruby 3.1.0 aarch64-linux-android): harness 3/3 with identical damage numbers |
+| `chrooked_bloom.rb`, `chrooked_cryomancer.rb`, `chrooked_deluge.rb` | `DamageCalcFromUser`, Kindle's shape for Grass / Ice / Water | lab, 2026-10-22: 3/3 each; 1.500x on full hits, 1.417x on Vine Whip-sized hits, off-type 1.000x; Overgrow and Torrent unchanged at full HP |
+| `chrooked_overcharge.rb` | `DamageCalcFromUser`, Blaze with Electric (`hp <= totalhp / 3`) | lab, 2026-10-22: 3/3; Thunderbolt 1.500x at 1/4 HP, 1.000x at full HP; Ice Beam 1.000x at 1/4 HP |
+| `chrooked_{chitinize,foliate,hydrate,immolate,martialize,mineralize,obfuscate,psyonize,spectralize,tectonize,venomize,wyvernize}.rb` | `ModifyMoveBaseType` + `DamageCalcFromUser` (Aerilate's pair) | lab, 2026-10-22: 3/3 each; Tackle converts and hits 17 vs 14 (1.214x), equal to Aerilate; already-typed moves unchanged. The foe-weak/foe-resists cases pass on `converted`/`boosted`; effectiveness itself was not measured (neutral `???` foe) |
+
+The CALC phase for these 16 sets both battlers to the `???` type (`neutral: true`),
+so the ratio is the ability alone: no same-type bonus, no type matchups.
