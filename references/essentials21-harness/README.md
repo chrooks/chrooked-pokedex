@@ -268,7 +268,9 @@ measurement identical to the lab's. Infernal Maw (NV-11) followed: 3/3, its 400-
 chance lines identical to the lab's (the same seed gives the same rolls on ARM).
 Frostbite and Rimefang (NV-12) followed: 9/9 and 3/3, then frostbite again 9/9
 after the any-Fire-move cure, every line identical to the lab's. All 33 are proven
-on thor. The six NV-13 ports are deployed and wait for their boot.
+on thor. The six NV-13 ports followed in one boot: 18/18, all 18 measurement lines
+identical to the lab's, the first device runs of a generated status chance and of
+the `defend` phase. All 39 are proven on thor.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
