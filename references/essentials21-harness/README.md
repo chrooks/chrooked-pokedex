@@ -122,7 +122,7 @@ Copied into the **lab copy's** `Data/Scripts/998_ChrookedDexLab/` by
 | --- | --- |
 | `001_register_black_weather.rb` | Nova only: registers the `:Black` weather map 050 uses, so the PBS writer and compiler finish; lands the debug boot on the title screen |
 | `002_lab_save_dir.rb` | points `SaveData::DIRECTORY` at the lab's own `LabSaves/`; lab and live share `Title=Nova`, so both otherwise save into the synced `%AppData%\Roaming\Nova` |
-| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:, types:}]`), applied to the same battlers before every ability is measured (NV-9, NV-10); `:STRUGGLE` is built as a battle builds it. A `heal:` list (`[[:MOONLIGHT, 0.5]]`) measures what a healing move restores with the ability and without (HEAL lines, NV-10). Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
+| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:, types:}]`), applied to the same battlers before every ability is measured (NV-9, NV-10); `:STRUGGLE` is built as a battle builds it. A `heal:` list (`[[:MOONLIGHT, 0.5]]`) measures what a healing move restores with the ability and without (HEAL lines, NV-10). A `chance:` list (`[[:CRUNCH, {status: :BURN, status_rate: 0.3, flinch_rate: 0.3}]]`) measures an on-hit chance: the damage A/B once, then the user's `OnDealingHit` handler fired 400 times on a fresh target with a fixed seed, the rates checked within 3 standard deviations (exactly 0 when 0 is expected) and logged as the mechanic's OBS line with `source=selftest` (NV-11). `setup:` may also set `target_types:`. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
 
 ### Why the self-test has four hooks
 
@@ -202,8 +202,12 @@ A candidate becomes verified only after reading its call site in Nova's
   nightstalker has two effects (a darkness boost and a crit stage), so it needs a
   hand port or a shape covering both.
 - *Two effects, hand-written (NV-10):* fullmoon and highnoon grant STAB *and* make
-  Moonlight / Morning Sun heal 3/4; the same pattern would serve the boost-plus-
-  status abilities (infernalmaw, rimefang).
+  Moonlight / Morning Sun heal 3/4. infernalmaw followed (NV-11, three effects).
+- *rimefang: blocked on frostbite.* Its rider inflicts the Ruleset's frostbite, a
+  reskin of freeze that halves special damage, chips 1/16 and never skips a turn.
+  Nova has only vanilla freeze, which skips turns. A faithful Rimefang needs the
+  `frostbite` behavior ported first, which would change every freeze in Nova. That
+  is a decision for Chris (mjolnir NV-11).
 - *Composition:* finishingkick, which borrows Speed Boost through
   `behaviors: [finishingkick, speedboost]`. Essentials 21 has no composition step
   yet; `HandlerHash#copy` might serve, unverified.
@@ -211,10 +215,12 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-30 in all. 28 are generated from their specs' `template:` blocks: 22 since
-2026-10-22 (NV-8), four more (NV-9) and two more (NV-10) the same day. Two are
-hand-written here, `chrooked_fullmoon.rb` and `chrooked_highnoon.rb`, because each
-has two effects (NV-10). For the NV-8 22, before the hand ports were deleted, the
+31 in all. 28 are generated from their specs' `template:` blocks: 22 since
+2026-10-22 (NV-8), four more (NV-9) and two more (NV-10) the same day. Three are
+hand-written here because each has more than one effect: `chrooked_fullmoon.rb`
+and `chrooked_highnoon.rb` (NV-10) and `chrooked_infernalmaw.rb` (NV-11). Their
+checks live in `SCENARIOS_ESSENTIALS21`, which an Essentials 21 target consults
+before `SCENARIOS`. For the NV-8 22, before the hand ports were deleted, the
 regeneration was checked three ways: each generated port's code matched its hand
 port line for line (comments and the self-test registration aside), its generated
 checks matched the old scenario, and `nova_selftest.sh --all` scored 66/66 with
@@ -231,6 +237,7 @@ exception, by design (below).
 | downpour, whiteout | `conditional_boost`, rain / hail, `moves: higher_stat`, 1.5x | NV-9, lab: Downpour 4/4, Whiteout 3/3. Body Slam 1.469x when Attack is higher, Hyper Voice 1.500x when Sp. Atk is higher, 1.000x for the other category; Downpour holding a Utility Umbrella in rain 1.000x |
 | mysticpower, violentblood | `stab_grant`, `all` / `[Dark]` | NV-10, lab 3/3 each. Mystic Power: Flamethrower from a Water-type 1.500x; Surf (its own type) 36 vs 36, STAB once; Struggle unchanged. Violent Blood: Crunch from a Water/Dragon 1.500x; from a Dark-type 42 vs 42; Waterfall unchanged |
 | fullmoon, highnoon (hand-written) | STAB grant for Dark+Fairy / Fire+Psychic, plus a 3/4 heal on Moonlight / Morning Sun (`HealUserDependingOnWeather#pbOnStartUse`, chained wrappers) | NV-10, lab 3/3 each. Dark Pulse (Full Moon) 1.478x and Flamethrower (High Noon) 1.500x from a Normal-type; the other type unchanged; the heal 101 of 135 HP at half HP (normally 68). In the AI battle, Numel's own-type Flamethrower under Full Moon logged `own=true` with no extra bonus |
+| infernalmaw (hand-written) | 1.3x on `Biting` (Strong Jaw's shape), plus a 30% burn and an independent 30% flinch in `OnDealingHit` (Poison Touch's shape and gates) | NV-11, lab 3/3. Crunch 36 vs 28 (Strong Jaw control 41); 400 rolls each: burn 0.308 and flinch 0.305 on a burnable target; on a Fire-type 0 burns and flinch 0.300; Tackle 0 and 0 |
 | updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 

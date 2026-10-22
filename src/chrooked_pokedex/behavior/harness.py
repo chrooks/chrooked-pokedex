@@ -40,7 +40,7 @@ from pathlib import Path
 from ..appliers.essentials.dialect import detect_dialect
 from ..appliers.essentials.resolution import build_resolution_map
 from ..model import Ruleset
-from .harness_scenarios import SCENARIOS
+from .harness_scenarios import SCENARIOS, SCENARIOS_ESSENTIALS21
 from .templates import TemplateError, harness_checks
 
 # One observation the plugin logged, e.g. "[chrooked:innerfocus] OBS move=FOCUSBLAST if=true result=ALWAYS_HIT".
@@ -139,20 +139,23 @@ def _load_checks(mechanic_id: str, ruleset_dir: Path, target: Path) -> tuple[lis
     """Return (checks, spec test_cases), failing loudly if they are out of sync.
 
     On an Essentials 21 target a templated spec's checks are generated from its
-    probes, resolved against the target's PBS; everything else uses SCENARIOS.
+    probes, resolved against the target's PBS, and a hand port's come from
+    SCENARIOS_ESSENTIALS21 when it has an entry there; everything else uses SCENARIOS.
     """
     ruleset = Ruleset.load(ruleset_dir)
     spec = ruleset.behaviors.get(mechanic_id)
-    if spec is not None and spec.template is not None and _is_v21(target):
+    v21 = _is_v21(target)
+    if spec is not None and spec.template is not None and v21:
         try:
             return harness_checks(spec, build_resolution_map(target, ruleset)), spec.test_cases
         except TemplateError as error:
             raise SystemExit(f"cannot generate checks for '{mechanic_id}': {error}") from error
-    if mechanic_id not in SCENARIOS:
+    table = SCENARIOS_ESSENTIALS21 if v21 and mechanic_id in SCENARIOS_ESSENTIALS21 else SCENARIOS
+    if mechanic_id not in table:
         raise SystemExit(f"no harness scenario for '{mechanic_id}' (add one in harness_scenarios.py)")
     if spec is None:
         raise SystemExit(f"no behavior spec '{mechanic_id}' in {ruleset_dir}/behaviors")
-    checks = SCENARIOS[mechanic_id]
+    checks = table[mechanic_id]
     if len(checks) != len(spec.test_cases):
         raise SystemExit(
             f"scenario for '{mechanic_id}' has {len(checks)} checks but the spec has "

@@ -20,7 +20,7 @@ import pytest
 
 from chrooked_pokedex.appliers.essentials import vocab
 from chrooked_pokedex.appliers.essentials.behavior_install import has_plugin
-from chrooked_pokedex.behavior.harness_scenarios import SCENARIOS
+from chrooked_pokedex.behavior.harness_scenarios import SCENARIOS, SCENARIOS_ESSENTIALS21
 from chrooked_pokedex.behavior.templates import harness_checks, render_essentials21, validate_spec
 from chrooked_pokedex.model import Ruleset
 
@@ -31,6 +31,7 @@ _PORTS_DIR = _REPO / "references" / "essentials21-harness"
 _RULESET = Ruleset.load(_REPO / "ruleset")
 _TEMPLATED = sorted(cid for cid, spec in _RULESET.behaviors.items() if spec.template is not None)
 _HAND = sorted(p.stem.removeprefix("chrooked_") for p in _PORTS_DIR.glob("chrooked_*.rb"))
+_SELFTEST_KEYS = set(re.findall(r"\b([a-z_]+)=", (_PORTS_DIR / "lab" / "010_battle_selftest.rb").read_text(encoding="utf-8")))
 
 
 class _DefaultNames:
@@ -83,6 +84,21 @@ def test_the_two_probes_follow_the_spec_prose():
         "move": "High Jump Kick", "result": "normal", "holder": False}
 
 
+def test_scenario_tables_have_no_duplicate_keys():
+    """A dict literal silently keeps the LAST duplicate key: NV-11's Essentials 21
+    Infernal Maw scenario was shadowed that way by the older Rejuvenation one."""
+    import ast
+    import collections
+
+    source = (_REPO / "src" / "chrooked_pokedex" / "behavior" / "harness_scenarios.py").read_text(encoding="utf-8")
+    for node in ast.walk(ast.parse(source)):
+        if isinstance(node, ast.Dict) and node.keys and all(isinstance(k, ast.Constant) for k in node.keys):
+            keys = [k.value for k in node.keys]
+            if len(keys) > 2 and all(isinstance(k, str) for k in keys):
+                dupes = [k for k, n in collections.Counter(keys).items() if n > 1]
+                assert not dupes, f"duplicate scenario keys (line {node.lineno}): {dupes}"
+
+
 def test_every_hand_written_port_is_wired():
     for cid in _HAND:
         text = (_PORTS_DIR / f"chrooked_{cid}.rb").read_text(encoding="utf-8")
@@ -93,8 +109,12 @@ def test_every_hand_written_port_is_wired():
         assert 'File.expand_path("chrooked-oracle.on")' in text  # marker-gated oracle
         assert f'($chrooked_selftest_cases ||= {{}})["{cid}"]' in text, \
             f"chrooked_{cid}.rb never registers its self-test case"
-        assert cid in SCENARIOS and len(SCENARIOS[cid]) == len(spec.test_cases)
+        checks = SCENARIOS_ESSENTIALS21.get(cid) or SCENARIOS.get(cid)
+        assert checks is not None and len(checks) == len(spec.test_cases), f"no aligned scenario for {cid}"
         logged = set(re.findall(r"\b([a-z_]+)=", text))
-        for check in SCENARIOS[cid]:
+        for check in checks:
+            # A case the self-test measures on the mechanic's behalf (source=selftest:
+            # a Pokemon without the ability, an on-hit chance) is logged by the self-test.
+            pool = _SELFTEST_KEYS if check.get("select", {}).get("source") == "selftest" else logged
             for key in {**check.get("select", {}), **check.get("expect", {})}:
-                assert key in logged, f"{cid} never logs '{key}=' but its scenario reads it"
+                assert key in pool, f"{cid} never logs '{key}=' but its scenario reads it"

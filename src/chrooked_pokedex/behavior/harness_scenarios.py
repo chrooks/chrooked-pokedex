@@ -136,17 +136,6 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "c2", "select": {"move": "THUNDERBOLT", "ability": "true", "hp_low": "false"}, "expect": {"result": "NORMAL"}},
         {"stage": "c3", "select": {"move": "ICEBEAM", "ability": "true", "hp_low": "true"}, "expect": {"result": "NORMAL"}},
     ],
-    # Essentials 21 hand port (NV-10): two effects, so no template.
-    "fullmoon": [
-        {"stage": "Full Moon user (pure Normal type) uses Dark Pulse.", "select": {"move": "DARKPULSE", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "BOOSTED"}},
-        {"stage": "Full Moon user (pure Normal type) uses Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "NORMAL"}},
-        {"stage": "Full Moon user at half HP uses Moonlight.", "select": {"move": "MOONLIGHT", "ability": "true"}, "expect": {"result": "BOOSTED"}},
-    ],
-    "highnoon": [
-        {"stage": "High Noon user (pure Normal type) uses Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "BOOSTED"}},
-        {"stage": "High Noon user (pure Normal type) uses Dark Pulse.", "select": {"move": "DARKPULSE", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "NORMAL"}},
-        {"stage": "High Noon user at half HP uses Morning Sun.", "select": {"move": "MORNINGSUN", "ability": "true"}, "expect": {"result": "BOOSTED"}},
-    ],
     "amplifier": [
         {"stage": "matching sound move with Amplifier user is boosted", "select": {"move": "HYPERVOICE", "ability": "true"}, "expect": {"result": "BOOSTED"}},
         {"stage": "non-sound move with Amplifier user is unchanged", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
@@ -256,5 +245,29 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
          "select": {"event": "entry", "ability": "true"}, "expect": {"effect": "stealthrock_waived"}},
         {"stage": "Hit the Mountaineer user with a GROUND move (e.g. Earthquake) — normal damage (only Rock is blocked).",
          "select": {"type": "GROUND", "ability": "true"}, "expect": {"result": "PASS"}},
+    ],
+}
+
+# Essentials 21 hand ports (mjolnir NV-10, NV-11): checks for an Essentials 21
+# target, consulted there before SCENARIOS. A templated spec needs none (its checks
+# are generated from its probes); a hand port with several effects does, and its
+# keys can differ from another engine's port of the same mechanic (Infernal Maw's
+# Rejuvenation scenario above predates its burn and flinch). The chance cases are
+# many rolls, counted by the lab self-test and logged with source=selftest.
+SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
+    "fullmoon": [
+        {"stage": "Full Moon user (pure Normal type) uses Dark Pulse.", "select": {"move": "DARKPULSE", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "Full Moon user (pure Normal type) uses Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Full Moon user at half HP uses Moonlight.", "select": {"move": "MOONLIGHT", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+    ],
+    "highnoon": [
+        {"stage": "High Noon user (pure Normal type) uses Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "High Noon user (pure Normal type) uses Dark Pulse.", "select": {"move": "DARKPULSE", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "NORMAL"}},
+        {"stage": "High Noon user at half HP uses Morning Sun.", "select": {"move": "MORNINGSUN", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+    ],
+    "infernalmaw": [
+        {"stage": "Infernal Maw user bites (Crunch) a burnable foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "QMARKS"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
+        {"stage": "Infernal Maw user uses Tackle, many times.", "select": {"move": "TACKLE", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
+        {"stage": "Infernal Maw user bites (Crunch) a Fire-type foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "FIRE"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
     ],
 }

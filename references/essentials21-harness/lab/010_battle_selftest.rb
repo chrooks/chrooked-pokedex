@@ -62,6 +62,13 @@ module ChrookedSelfTest
   #              mechanic changes (Moonlight under Full Moon): the user's HP is set,
   #              the move starts, and pbHealAmount is read with the ability and
   #              without (HEAL line); the port logs its own OBS line
+  #   chance   - [move, {status:, status_rate:, flinch_rate:, setup:, n:}] entries
+  #              for an on-hit chance (Infernal Maw's burn and flinch, NV-11): the
+  #              damage A/B once, then the user's OnDealingHit handler fired n times
+  #              (default 400) on a fresh target with a fixed seed; the observed
+  #              rates are checked against the expected ones (within 3 standard
+  #              deviations, exactly 0 when 0 is expected) and logged as the
+  #              mechanic's OBS line, tagged source=selftest
   #   neutral  - CALC sets both battlers' types to ??? (QMARKS): no same-type bonus,
   #              no type matchups, so the ratio is the ability's effect alone
   #   without  - moves for a spec case about a Pokemon WITHOUT the ability. A port
@@ -181,7 +188,7 @@ module ChrookedSelfTest
       user.pbChangeTypes(:QMARKS)
       target.pbChangeTypes(:QMARKS)
     end
-    arrange(b, user, setup)
+    arrange(b, user, target, setup)
     move = struggle ? Battle::Move::Struggle.new(b, nil) : Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
     abilities.map do |ability|
       user.ability = ability
@@ -204,7 +211,8 @@ module ChrookedSelfTest
   #              higher, by swapping the two (ties broken by one point)
   #   types    - the user's types, e.g. [:WATER, :DRAGON] (after neutral mode, so
   #              a same-type bonus can be measured; NV-10)
-  def self.arrange(b, user, setup)
+  #   target_types - the target's types, e.g. [:FIRE] for a burn-immune target (NV-11)
+  def self.arrange(b, user, target, setup)
     b.field.weather = setup[:weather] if setup[:weather]
     b.field.terrain = setup[:terrain] if setup[:terrain]
     user.item = setup[:item] if setup[:item]
@@ -218,6 +226,48 @@ module ChrookedSelfTest
       user.types = setup[:types]
       user.effects[PBEffects::ExtraType] = nil
     end
+    if setup[:target_types]
+      target.types = setup[:target_types]
+      target.effects[PBEffects::ExtraType] = nil
+    end
+  end
+
+  # An on-hit chance, counted: the user's OnDealingHit handler fired n times on the
+  # same target, reset before each roll (no status, no flinch), with a fixed seed.
+  # Nova fires that registry only after a hit that dealt damage and missed any
+  # substitute, so the count is of rolls on landed hits. Returns [statused, flinched].
+  def self.rolls(spec, move_id, setup, n, status)
+    b = battle(mon(spec[:user], [move_id]), mon(spec[:foe], [:TACKLE]))
+    b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+    b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+    user   = b.battlers[0]
+    target = b.battlers[1]
+    target.ability = nil
+    if spec[:neutral]
+      user.pbChangeTypes(:QMARKS)
+      target.pbChangeTypes(:QMARKS)
+    end
+    arrange(b, user, target, setup)
+    user.ability = spec[:ability]
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    srand(SEED)
+    statused = flinched = 0
+    n.times do
+      target.status      = :NONE
+      target.statusCount = 0
+      target.effects[PBEffects::Flinch] = false
+      Battle::AbilityEffects.triggerOnDealingHit(user.ability, user, target, move, b)
+      statused += 1 if status && target.status == status
+      flinched += 1 if target.effects[PBEffects::Flinch]
+    end
+    [statused, flinched]
+  end
+
+  # Observed k of n against an expected rate: within 3 standard deviations, and
+  # exactly 0 when 0 is expected.
+  def self.rate_ok?(k, n, expected)
+    return k == 0 if expected.to_f == 0
+    (k.to_f / n - expected).abs <= 3 * Math.sqrt(expected * (1 - expected) / n)
   end
 
   # What a healing move would restore, for each ability in turn, on the SAME user
@@ -283,6 +333,26 @@ module ChrookedSelfTest
         with, none, max = heal(spec[:user], [spec[:ability], nil], spec[:foe], move_id, hp)
         log("HEAL #{mechanic} move=#{move_id} hp=#{hp} with=#{with} none=#{none} max=#{max} " \
             "share=#{format('%.3f', with.to_f / max)}")
+      end
+    end
+    guard("chance") do
+      (spec[:chance] || []).each do |move_id, opts|
+        opts ||= {}
+        setup = opts[:setup] || {}
+        n = opts[:n] || 400
+        (with, _, _), (none, _, _) =
+          damage(spec[:user], [spec[:ability], nil], spec[:foe], move_id, neutral: !!spec[:neutral], setup: setup)
+        statused, flinched = rolls(spec, move_id, setup, n, opts[:status])
+        Graphics.update if defined?(Graphics)
+        status_rate = opts[:status_rate] || 0
+        flinch_rate = opts[:flinch_rate] || 0
+        target_types = setup[:target_types] ? setup[:target_types].join('/') : "QMARKS"
+        obs(mechanic, "move=#{move_id} ability=true source=selftest target_types=#{target_types} n=#{n} " \
+                      "damage=#{with > none ? 'BOOSTED' : 'NORMAL'} with=#{with} none=#{none} " \
+                      "status=#{opts[:status] || 'NONE'} status_rate=#{format('%.3f', statused.to_f / n)} " \
+                      "status_expected=#{status_rate} status_ok=#{rate_ok?(statused, n, status_rate)} " \
+                      "flinch_rate=#{format('%.3f', flinched.to_f / n)} flinch_expected=#{flinch_rate} " \
+                      "flinch_ok=#{rate_ok?(flinched, n, flinch_rate)}")
       end
     end
     Graphics.update if defined?(Graphics)

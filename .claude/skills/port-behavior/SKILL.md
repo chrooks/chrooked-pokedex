@@ -143,7 +143,10 @@ stored patch is stale.
    A template generates exactly ONE effect: a spec with more (a boost plus a status chance, a
    boost plus a stat swap) is refused, so read every effect before reaching for one; it gets one
    hand-written port covering every effect (NV-10: `chrooked_fullmoon.rb`, a STAB grant plus a
-   Moonlight heal wrapper chained on `HealUserDependingOnWeather#pbOnStartUse`). A new shape
+   Moonlight heal wrapper chained on `HealUserDependingOnWeather#pbOnStartUse`; NV-11:
+   `chrooked_infernalmaw.rb`, a boost plus burn and flinch chances in `OnDealingHit`, proven by the
+   self-test's `chance:` phase, 400 counted rolls). Its checks go in `SCENARIOS_ESSENTIALS21`, which
+   a v21 target reads before `SCENARIOS`, so another engine's older scenario cannot shadow it. A new shape
    starts as one hand port proven in the lab, then is generalised (NV-9: Forestry ->
    `conditional_boost`). Only a mechanic that fits no shape gets a
    hand-written `references/essentials21-harness/chrooked_<id>.rb`. That port must register its own
