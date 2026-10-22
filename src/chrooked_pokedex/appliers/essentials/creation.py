@@ -48,6 +48,12 @@ def _create_abilities(target, ruleset, resmap, report) -> set[Path]:
         if resmap.ability(ability.name) is not None:
             continue
         internal = _internal(ability.aka, "essentials", ability.name)
+        if internal is None:
+            report.add(ReportEntry(
+                status="blocked", category="ability", chrooked_id=chrooked_id,
+                reason=_UNNAMEABLE_REASON,
+            ))
+            continue
         if internal in existing:
             resmap.ability_by_name[ability.name.lower()] = internal
             continue
@@ -79,6 +85,12 @@ def _create_moves(target, ruleset, resmap, report) -> set[Path]:
         if resmap.move(move.name) is not None:
             continue
         internal = _internal(move.aka, "essentials", move.name)
+        if internal is None:
+            report.add(ReportEntry(
+                status="blocked", category="move", chrooked_id=chrooked_id,
+                reason=_UNNAMEABLE_REASON,
+            ))
+            continue
         if internal in existing:
             resmap.move_by_name[move.name.lower()] = internal
             continue
@@ -159,7 +171,28 @@ def _move_block(internal: str, move: MoveDef, resmap: ResolutionMap) -> tuple[st
     return "\n".join(lines) + "\n", unresolved
 
 
-def _internal(aka, key: str, name: str) -> str:
+_UNNAMEABLE_REASON = (
+    "blocked: no Essentials internal name — the display name would give an "
+    "identifier that starts with a digit, which Essentials' compiler rejects "
+    "(the whole PBS file then fails to compile). Add `aka: { essentials: NAME }` "
+    "to the Ruleset entry."
+)
+
+
+def _internal(aka, key: str, name: str) -> str | None:
+    """The INTERNAL name to create under: the Ruleset's alias for this engine when
+    it has one, else derived from the display name.
+
+    Returns None when there is no alias and the derived name would start with a
+    digit. Essentials validates every section name against ``^(?![0-9])\\w+$`` at
+    compile time, so writing such a name does not create the entry — it breaks the
+    compile of the whole file (seen 2026-10-22: "10,000,000 Volt Thunderbolt" →
+    ``10000000VOLTTHUNDERBOLT`` took down Nova's moves.txt). Callers report it
+    blocked instead of writing it.
+    """
     if aka and aka.get(key):
         return str(aka[key])
-    return vocab.internal_name(name)
+    derived = vocab.internal_name(name)
+    if not derived or derived[0].isdigit():
+        return None
+    return derived

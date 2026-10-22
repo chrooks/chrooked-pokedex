@@ -290,3 +290,58 @@ def test_created_ability_with_behavior_spec_is_data_only(tmp_path):
     create_owned_content(target, ruleset, resmap, report)
     striker = [e for e in report.entries if e.chrooked_id == "striker"][0]
     assert "DATA ONLY" in striker.reason
+
+
+# --- creation: names Essentials cannot compile ---------------------------------
+
+def test_created_move_with_digit_led_name_is_blocked_not_written(tmp_path):
+    # Essentials validates every section name against ^(?![0-9])\w+$ at compile
+    # time. Deriving an INTERNAL from "10,000,000 Volt Thunderbolt" gives
+    # 10000000VOLTTHUNDERBOLT, which would take the whole moves.txt compile down
+    # (seen on Nova, 2026-10-22). With no alias the entry is blocked, not written.
+    target = _make_target(tmp_path)
+    move = MoveDef(
+        name="10,000,000 Volt Thunderbolt", chrooked_id="10000000voltthunderbolt",
+        type="Fire", category="special", power=195, accuracy=0, pp=1,
+        aka={"pokeemerald": "MOVE_10000000_VOLT_THUNDERBOLT"},
+    )
+    ruleset = _ruleset(moves={"10000000voltthunderbolt": move})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    changed = create_owned_content(target, ruleset, resmap, report)
+    text = (target / "PBS" / "moves.txt").read_text(encoding="utf-8")
+    assert "10000000VOLTTHUNDERBOLT" not in text
+    assert (target / "PBS" / "moves.txt") not in changed
+    blocked = [e for e in report.entries if e.status == "blocked" and e.category == "move"]
+    assert blocked and blocked[0].chrooked_id == "10000000voltthunderbolt"
+    assert "aka" in blocked[0].reason
+
+
+def test_created_move_with_digit_led_name_uses_essentials_alias(tmp_path):
+    target = _make_target(tmp_path)
+    move = MoveDef(
+        name="10,000,000 Volt Thunderbolt", chrooked_id="10000000voltthunderbolt",
+        type="Fire", category="special", power=195, accuracy=0, pp=1,
+        aka={"essentials": "TENMILLIONVOLTTHUNDERBOLT"},
+    )
+    ruleset = _ruleset(moves={"10000000voltthunderbolt": move})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    create_owned_content(target, ruleset, resmap, report)
+    assert _field(target, "moves.txt", "TENMILLIONVOLTTHUNDERBOLT", "Power") == "195"
+    assert not [e for e in report.entries if e.status == "blocked"]
+
+
+def test_created_ability_with_digit_led_name_is_blocked(tmp_path):
+    target = _make_target(tmp_path)
+    ability = AbilityDef(name="9 Lives", chrooked_id="9lives", description="Nine lives.")
+    ruleset = _ruleset(abilities={"9lives": ability})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    create_owned_content(target, ruleset, resmap, report)
+    text = (target / "PBS" / "abilities.txt").read_text(encoding="utf-8")
+    assert "[9LIVES]" not in text
+    assert [e for e in report.entries if e.status == "blocked" and e.category == "ability"]
