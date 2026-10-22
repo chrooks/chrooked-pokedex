@@ -3,10 +3,11 @@
 A fake resolver stands in for the target's PBS: it knows a fixed set of moves, types
 and abilities and returns None for anything else, like the Essentials ResolutionMap.
 Each shape is rendered as the hand-written port it replaces (Kindle, Overcharge,
-Chitinize, Striker / Martial Artist), and `ruby -c` checks the Ruby parses (skipped
-where ruby is absent).
+Chitinize, Striker / Martial Artist; NV-13: Pyre, Nocturnal, Arctic Ariette), and
+`ruby -c` checks the Ruby parses (skipped where ruby is absent).
 """
 
+import re
 import shutil
 import subprocess
 from dataclasses import replace
@@ -38,9 +39,12 @@ class _Names:
         "X-Scissor": "XSCISSOR", "High Jump Kick": "HIGHJUMPKICK", "Mach Punch": "MACHPUNCH",
         "Body Slam": "BODYSLAM", "Hyper Voice": "HYPERVOICE",
         "Dark Pulse": "DARKPULSE", "Crunch": "CRUNCH", "Waterfall": "WATERFALL",
+        "Shadow Ball": "SHADOWBALL", "Dragon Pulse": "DRAGONPULSE", "Knock Off": "KNOCKOFF",
+        "Taunt": "TAUNT", "Bug Buzz": "BUGBUZZ",
     }
     TYPES = {"fire": "FIRE", "electric": "ELECTRIC", "bug": "BUG", "water": "WATER",
-             "dragon": "DRAGON", "dark": "DARK", "fairy": "FAIRY", "normal": "NORMAL"}
+             "dragon": "DRAGON", "dark": "DARK", "fairy": "FAIRY", "normal": "NORMAL",
+             "ghost": "GHOST", "ice": "ICE", "psychic": "PSYCHIC"}
     ITEMS = {"utility umbrella": "UTILITYUMBRELLA"}
 
     def move(self, name):
@@ -113,7 +117,41 @@ VIOLENTBLOOD = _spec("violentblood", "stab_grant", {"types": ["Dark"]}, [
     {"move": "Crunch", "result": "normal", "types": ["Dark"]},
     {"move": "Waterfall", "result": "normal", "types": ["Water", "Dragon"]},
 ], name="Violent Blood")
-ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST, FORESTRY, DOWNPOUR, MYSTICPOWER, VIOLENTBLOOD]
+PYRE = _spec("pyre", "hit_status", {"status": "burn", "chance": 30, "type": "Ghost"}, [
+    {"move": "Shadow Ball", "inflicts": True},
+    {"move": "Flamethrower", "inflicts": False},
+    {"move": "Shadow Ball", "inflicts": False, "target_types": ["Fire"]},
+])
+SCALDINGPULSE = _spec("scaldingpulse", "hit_status", {"status": "burn", "chance": 30, "flags": ["pulse"]}, [
+    {"move": "Dragon Pulse", "inflicts": True},
+    {"move": "Dragon Pulse", "inflicts": False, "target_types": ["Fire"]},
+    {"move": "Tackle", "inflicts": False},
+], name="Scalding Pulse")
+NOCTURNAL = _spec("nocturnal", "type_immunity", {"type": "Dark"}, [
+    {"move": "Knock Off", "immune": True},
+    {"move": "Shadow Ball", "immune": False},
+    {"move": "Taunt", "immune": True},
+])
+ARCTICARIETTE = _spec("arcticariette", "type_conversion",
+                      {"type": "Ice", "multiplier": 1.3, "flags": ["sound"], "control": "AERILATE"}, [
+    {"move": "Hyper Voice", "converted": True},
+    {"move": "Bug Buzz", "converted": False},
+    {"move": "Body Slam", "converted": False},
+], name="Arctic Ariette")
+SACREDTOLL = _spec("sacredtoll", "type_conversion",
+                   {"type": "Psychic", "multiplier": 1.2, "from": "any", "flags": ["sound"]}, [
+    {"move": "Hyper Voice", "converted": True},
+    {"move": "Tackle", "converted": False},
+    {"move": "Bug Buzz", "converted": True},
+], name="Sacred Toll")
+ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST, FORESTRY, DOWNPOUR, MYSTICPOWER, VIOLENTBLOOD,
+       PYRE, SCALDINGPULSE, NOCTURNAL, ARCTICARIETTE, SACREDTOLL]
+# The registry each shape's port adds to; DamageCalcFromUser unless named here.
+_REGISTRY = {"hit_status": "OnDealingHit", "type_immunity": "MoveImmunity"}
+# Every key the lab self-test logs, for checks scored on its own lines (source=selftest).
+_SELFTEST_KEYS = set(re.findall(r"\b([a-z_]+)=", (
+    Path(__file__).resolve().parents[1] / "references" / "essentials21-harness" / "lab" / "010_battle_selftest.rb"
+).read_text(encoding="utf-8")))
 
 
 def _render(spec):
@@ -132,7 +170,7 @@ def test_every_port_is_a_tagged_marker_gated_v21_registry_entry(spec):
     text = _render(spec)
     assert text.startswith(f"# chrooked:{spec.chrooked_id}\n")  # the installer's validity tag
     assert f"ruleset/behaviors/{spec.chrooked_id}.yaml" in text
-    assert "Battle::AbilityEffects::DamageCalcFromUser" in text
+    assert f"Battle::AbilityEffects::{_REGISTRY.get(spec.template.shape, 'DamageCalcFromUser')}" in text
     assert 'ENABLED = File.exist?(File.expand_path("chrooked-oracle.on"))' in text
     assert f'($chrooked_selftest_cases ||= {{}})["{spec.chrooked_id}"] = {{' in text
     assert "user: :NUMEL, foe: :SNORLAX, neutral: true" in text
@@ -254,6 +292,77 @@ def test_fight_keeps_at_most_four_moves():
     assert "fight: [:FLAMETHROWER, :SURF, :EMBER, :TACKLE]\n" in _render(spec)
 
 
+def test_hit_status_is_poison_touchs_shape_gated_on_the_type_as_used():
+    """NV-13: the hand-proven Pyre, with Nova's own message string."""
+    text = _render(PYRE)
+    assert "Battle::AbilityEffects::OnDealingHit.add(:PYRE," in text
+    assert "      next if move.calcType != :GHOST\n" in text
+    assert "      next if !target.affectedByAdditionalEffects?\n" in text
+    assert "next if target.hasActiveAbility?(:SHIELDDUST) && !target.beingMoldBroken?" in text
+    assert "can_inflict = target.pbCanBurn?(user, false)" in text
+    assert "if can_inflict && battle.pbRandom(100) < 30" in text
+    assert 'msg = _INTL("{1} {2} burned {3}!", user.pbOfThis, user.abilityName, target.pbThis(true))' in text
+    assert "target.pbBurn(user, msg)" in text
+    assert "calc: [],\n    chance: [\n" in text
+    assert "      [:SHADOWBALL, {status: :BURN, status_rate: 0.3, flinch_rate: 0}],\n" in text
+    assert "      [:FLAMETHROWER, {status: :BURN, status_rate: 0, flinch_rate: 0}],\n" in text
+    assert ("      [:SHADOWBALL, {status: :BURN, status_rate: 0, flinch_rate: 0, "
+            "setup: {target_types: [:FIRE]}}]\n    ],\n") in text
+    assert "fight: [:SHADOWBALL, :FLAMETHROWER]\n" in text
+    assert "] EST " not in text and "caller_locations" not in text  # OnDealingHit only follows a real hit
+
+
+def test_hit_status_on_a_flag_gates_on_the_flag():
+    text = _render(SCALDINGPULSE)
+    assert "      next if !move.flags.any? { |f| f[/^(Pulse)$/i] }\n" in text
+    assert "calcType != " not in text
+
+
+def test_hit_status_names_novas_method_and_message_per_status():
+    paralysis = replace(PYRE, template=replace(PYRE.template, params={"status": "paralysis", "chance": 10,
+                                                                      "type": "Ghost"}))
+    text = _render(paralysis)
+    assert "target.pbCanParalyze?(user, false)" in text and "target.pbParalyze(user, msg)" in text
+    assert '"{1} {2} paralyzed {3}! It may be unable to move!"' in text
+    assert "status: :PARALYSIS, status_rate: 0.1" in text
+
+
+def test_type_immunity_is_bulletproofs_shape_keyed_on_the_type():
+    """NV-13: the hand-proven Nocturnal, with Nova's own message string."""
+    text = _render(NOCTURNAL)
+    assert "Battle::AbilityEffects::MoveImmunity.add(:NOCTURNAL," in text
+    assert "immune = type == :DARK && user.index != target.index" in text
+    assert "next false if !immune" in text
+    assert '_INTL("{1} {2} made {3} ineffective!",' in text
+    assert "calc: [],\n    defend: [:KNOCKOFF, :SHADOWBALL, :TAUNT],\n    without: []," in text
+    assert "fight: []\n" in text  # the foe's moves to use; the defend phase asks the registry
+
+
+def test_type_conversion_gated_on_a_flag_keeps_the_normal_gate():
+    text = _render(ARCTICARIETTE)
+    assert ("      next if type != :NORMAL || !GameData::Type.exists?(:ICE)\n"
+            "      next if !move.flags.any? { |f| f[/^(Sound)$/i] }\n"
+            "      move.powerBoost = true\n") in text
+    assert "mults[:power_multiplier] *= 1.3 if move.powerBoost" in text
+
+
+def test_type_conversion_from_any_type_drops_the_normal_gate():
+    text = _render(SACREDTOLL)
+    assert ("    proc { |ability, user, move, type|\n"
+            "      next if !GameData::Type.exists?(:PSYCHIC)\n"
+            "      next if !move.flags.any? { |f| f[/^(Sound)$/i] }\n") in text
+    assert ":NORMAL" not in text
+    assert "calc: [[:HYPERVOICE, 1.0], [:TACKLE, 1.0], [:BUGBUZZ, 1.0]]" in text
+
+
+def test_the_default_conversion_is_unchanged_by_from_and_flags():
+    """The twelve -ize ports stay byte-identical: from defaults to normal, flags to none."""
+    explicit = replace(CHITINIZE, template=replace(CHITINIZE.template, params={
+        **CHITINIZE.template.params, "from": "normal"}))
+    assert _render(explicit) == _render(CHITINIZE)
+    assert "flags.any?" not in _render(CHITINIZE)
+
+
 @pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby not installed")
 @pytest.mark.parametrize("spec", ALL, ids=lambda s: s.chrooked_id)
 def test_rendered_port_is_valid_ruby(spec, tmp_path):
@@ -350,12 +459,42 @@ def test_stage_text_names_the_action():
     assert harness_checks(STRIKER, _Names())[2]["stage"] == "With a Pokemon WITHOUT Striker, use High Jump Kick on the foe."
 
 
+def test_hit_status_checks_score_the_selftests_rate_per_target_typing():
+    rate = {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}
+    assert _verdicts(PYRE) == [
+        ({"move": "SHADOWBALL", "ability": "true", "source": "selftest", "target_types": "QMARKS"}, rate),
+        ({"move": "FLAMETHROWER", "ability": "true", "source": "selftest", "target_types": "QMARKS"}, rate),
+        ({"move": "SHADOWBALL", "ability": "true", "source": "selftest", "target_types": "FIRE"}, rate),
+    ]
+    assert harness_checks(PYRE, _Names())[2]["stage"] == \
+        "With your Pyre user, use Shadow Ball on a Fire-type foe, many times."
+
+
+def test_type_immunity_checks():
+    assert _verdicts(NOCTURNAL) == [
+        ({"move": "KNOCKOFF", "ability": "true"}, {"result": "IMMUNE"}),
+        ({"move": "SHADOWBALL", "ability": "true"}, {"result": "NORMAL"}),
+        ({"move": "TAUNT", "ability": "true"}, {"result": "IMMUNE"}),
+    ]
+    assert harness_checks(NOCTURNAL, _Names())[0]["stage"] == "Have the foe use Knock Off on your Nocturnal Pokemon."
+
+
+def test_flagged_conversion_checks():
+    assert _verdicts(SACREDTOLL) == [
+        ({"move": "HYPERVOICE", "ability": "true"}, {"converted": "PSYCHIC", "boosted": "true"}),
+        ({"move": "TACKLE", "ability": "true"}, {"converted": "none", "boosted": "false"}),
+        ({"move": "BUGBUZZ", "ability": "true"}, {"converted": "PSYCHIC", "boosted": "true"}),
+    ]
+
+
 @pytest.mark.parametrize("spec", ALL, ids=lambda s: s.chrooked_id)
 def test_every_key_a_check_reads_is_logged_by_the_port(spec):
+    """Or by the lab self-test, for a check scored on its own line (source=selftest)."""
     text = _render(spec)
     for select, expect in _verdicts(spec):
         for key in {**select, **expect}:
-            assert f"{key}=" in text, f"{spec.chrooked_id} never logs '{key}='"
+            logged = key in _SELFTEST_KEYS if select.get("source") == "selftest" else f"{key}=" in text
+            assert logged, f"{spec.chrooked_id} never logs '{key}='"
 
 
 # --- names the target lacks ------------------------------------------------------
@@ -478,6 +617,35 @@ def test_the_proven_specs_validate():
      "types must be a non-empty list"),
     (_template("stab_grant", {"types": ["Dark"]}, [{"move": "Crunch", "result": "normal", "holder": False}]),
      "unknown fields holder"),
+    (_template("type_conversion", {"type": "Ice", "from": "fire"}, [{"move": "Tackle", "converted": True}]),
+     "params.from must be one of normal, any"),
+    (_template("type_conversion", {"type": "Ice", "flags": ["song"]}, [{"move": "Tackle", "converted": True}]),
+     "unknown move flags song"),
+    (_template("hit_status", {"status": "burn", "type": "Ghost"}, [{"move": "Hex", "inflicts": True}]),
+     "needs params chance"),
+    (_template("hit_status", {"status": "frostbite", "chance": 30, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": True}]), "params.status must be one of burn, poison, paralysis"),
+    (_template("hit_status", {"status": "burn", "chance": 0.3, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": True}]), "whole percent"),
+    (_template("hit_status", {"status": "burn", "chance": 101, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": True}]), "whole percent"),
+    (_template("hit_status", {"status": "burn", "chance": True, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": True}]), "whole percent"),
+    (_template("hit_status", {"status": "burn", "chance": 30}, [{"move": "Hex", "inflicts": True}]),
+     "exactly one of params.type or params.flags"),
+    (_template("hit_status", {"status": "burn", "chance": 30, "type": "Ghost", "flags": ["pulse"]},
+               [{"move": "Hex", "inflicts": True}]), "exactly one of params.type or params.flags"),
+    (_template("hit_status", {"status": "burn", "chance": 30, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": "yes"}]), "inflicts must be true or false"),
+    (_template("hit_status", {"status": "burn", "chance": 30, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": True, "hp": 0.5}]), "unknown fields hp"),
+    (_template("hit_status", {"status": "burn", "chance": 30, "type": "Ghost"},
+               [{"move": "Hex", "inflicts": False, "target_types": "Fire"}]), "target_types must be a non-empty list"),
+    (_template("type_immunity", {"type": "Dark"}, [{"move": "Bite", "immune": 1}]), "immune must be true or false"),
+    (_template("type_immunity", {"type": "Dark"}, [{"move": "Bite", "immune": True, "holder": False}]),
+     "unknown fields holder"),
+    (_template("type_immunity", {"type": "Dark", "multiplier": 1.5}, [{"move": "Bite", "immune": True}]),
+     "unknown params multiplier"),
 ])
 def test_validate_refuses(template, message):
     with pytest.raises(TemplateError, match=message):

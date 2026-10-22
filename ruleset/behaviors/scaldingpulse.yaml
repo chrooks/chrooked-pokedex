@@ -17,3 +17,10 @@ test_cases:
     expect: no burn
 notes:
   - Modeled on Infernal Maw's biting-move burn rider; pbCanBurn? gates it.
+template:
+  shape: hit_status
+  params: {status: burn, chance: 30, flags: [pulse]}
+  probes:
+    - {move: Dragon Pulse, inflicts: true}
+    - {move: Dragon Pulse, inflicts: false, target_types: [Fire]}
+    - {move: Tackle, inflicts: false}

@@ -290,20 +290,4 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": "Rimefang user uses Tackle, many times.", "select": {"move": "TACKLE", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
         {"stage": "Rimefang user bites (Crunch) an Ice-type foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "ICE"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
     ],
-    # NV-13 hand ports, proven before their templates replace them.
-    "pyre": [
-        {"stage": "Pyre user lands Shadow Ball on a burnable foe, many times.", "select": {"move": "SHADOWBALL", "ability": "true", "source": "selftest", "target_types": "QMARKS"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
-        {"stage": "Pyre user uses Flamethrower, many times.", "select": {"move": "FLAMETHROWER", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
-        {"stage": "Pyre user lands Shadow Ball on a Fire-type foe, many times.", "select": {"move": "SHADOWBALL", "ability": "true", "source": "selftest", "target_types": "FIRE"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
-    ],
-    "nocturnal": [
-        {"stage": "Use Knock Off on your Nocturnal Pokemon.", "select": {"move": "KNOCKOFF", "ability": "true"}, "expect": {"result": "IMMUNE"}},
-        {"stage": "Use Shadow Ball on your Nocturnal Pokemon.", "select": {"move": "SHADOWBALL", "ability": "true"}, "expect": {"result": "NORMAL"}},
-        {"stage": "Use Taunt on your Nocturnal Pokemon.", "select": {"move": "TAUNT", "ability": "true"}, "expect": {"result": "IMMUNE"}},
-    ],
-    "arcticariette": [
-        {"stage": "With your Arctic Ariette user, use Hyper Voice.", "select": {"move": "HYPERVOICE", "ability": "true"}, "expect": {"converted": "ICE", "boosted": "true"}},
-        {"stage": "With your Arctic Ariette user, use Bug Buzz.", "select": {"move": "BUGBUZZ", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
-        {"stage": "With your Arctic Ariette user, use Body Slam.", "select": {"move": "BODYSLAM", "ability": "true"}, "expect": {"converted": "none", "boosted": "false"}},
-    ],
 }

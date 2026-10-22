@@ -24,3 +24,10 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c after-hit handler (ABILITYEFFECT_MOVE_END_ATTACKER, model on Infernal Maw's burn): gate on moveType == TYPE_GHOST && CanBeBurned(target) && IsBattlerTurnDamaged(target) && RandomPercentage(RNG_PYRE, 30), then set MOVE_EFFECT_BURN. Remove the old pyreTimer field + set/boost/decrement sites."
   essentials: "After-hit hook: if the user has Pyre and the move resolved as Ghost-type and the target was damaged, roll 30% to burn the target when it can be burned."
+template:
+  shape: hit_status
+  params: {status: burn, chance: 30, type: Ghost}
+  probes:
+    - {move: Shadow Ball, inflicts: true}
+    - {move: Flamethrower, inflicts: false}
+    - {move: Shadow Ball, inflicts: false, target_types: [Fire]}

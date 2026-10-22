@@ -35,11 +35,14 @@ that fits no shape keeps a hand-written port in references/essentials21-harness/
 Shapes, their params, and the probe fields each accepts:
 
   type_boost         {type, multiplier, pinch?, control?}     {move, result, hp?, holder?}
-  type_conversion    {type, multiplier=1.2, control?}         {move, converted, hp?}
+  type_conversion    {type, multiplier=1.2, from=normal|any,  {move, converted, hp?}
+                      flags?, control?}
   flag_boost         {flags, multiplier, control?}            {move, result, hp?, holder?}
   conditional_boost  {weather | terrain, multiplier,          {move, result, hp?, field?,
                       moves=all|higher_stat, control?}         item?, airborne?, stats?}
   stab_grant         {types | all, multiplier=1.5, control?}  {move, result, hp?, types?}
+  hit_status         {status, chance, type | flags}           {move, inflicts, target_types?}
+  type_immunity      {type}                                   {move, immune}
 
 `result` is `boosted` or `normal`; `converted` is true or false. `pinch: true` limits a
 type boost to HP at or below 1/3, Blaze's threshold, and a probe's `hp` sets the
@@ -62,6 +65,22 @@ bonus without the type (NV-10): the same 1.5x on final damage that Nova's own ST
 applies, and only when the user lacks the type, so STAB never doubles; a typeless
 move (Struggle) gets none, as in Nova. A probe's `types` sets the user's types
 first (a list of type names; without it the user is the neutral ??? type).
+
+A type conversion takes Normal-type moves by default (`from: normal`, Aerilate's
+shape); `from: any` takes every move, as Normalize does, and `flags` limits either to
+moves carrying one of those flags (NV-13: Arctic Ariette's Normal sound moves, Sacred
+Toll's sound moves of any type).
+
+A hit status (NV-13) gives the user's damaging hits a `chance` percent roll to inflict
+`status` (burn, poison, paralysis) when the move, as used, is of `type` or carries one
+of `flags`: Nova's Poison Touch shape. A probe says whether the roll can land
+(`inflicts`), and `target_types` sets the target's types first (a Fire type cannot be
+burned). The lab self-test measures the rate over seeded rolls, so these checks score
+the self-test's own lines (source=selftest).
+
+A type immunity (NV-13) blocks every move of `type` aimed at the holder, status moves
+included: Nova's Bulletproof shape, keyed on the type. A probe says whether its move
+is blocked (`immune`).
 """
 
 from __future__ import annotations
@@ -76,20 +95,25 @@ from ..appliers.essentials import vocab
 from ..model.behavior_spec import BehaviorSpec, BehaviorTemplate
 from ..model.schema import MOVE_FLAGS
 
-SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant")
+SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
+          "hit_status", "type_immunity")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "type_boost": (frozenset({"type", "multiplier"}), {"pinch": False, "control": None}),
-    "type_conversion": (frozenset({"type"}), {"multiplier": 1.2, "control": None}),
+    "type_conversion": (frozenset({"type"}),
+                        {"multiplier": 1.2, "from": "normal", "flags": None, "control": None}),
     "flag_boost": (frozenset({"flags", "multiplier"}), {"control": None}),
     "conditional_boost": (frozenset({"multiplier"}),
                           {"weather": None, "terrain": None, "moves": "all", "control": None}),
     "stab_grant": (frozenset({"types"}), {"multiplier": 1.5, "control": None}),
+    "hit_status": (frozenset({"status", "chance"}), {"type": None, "flags": None}),
+    "type_immunity": (frozenset({"type"}), {}),
 }
 # The probe field that states the expected outcome, per shape.
 _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost": "result",
-            "conditional_boost": "result", "stab_grant": "result"}
+            "conditional_boost": "result", "stab_grant": "result",
+            "hit_status": "inflicts", "type_immunity": "immune"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -99,6 +123,16 @@ _WEATHERS = ("rain", "sun", "sand", "hail")
 _TERRAINS = ("grassy", "electric", "psychic", "misty")
 _MOVE_SETS = ("all", "higher_stat")
 _STATS = ("physical", "special")
+_CONVERT_FROM = ("normal", "any")
+# The shapes that never scale damage: no calc entry, and a probe's hp means nothing.
+_NON_DAMAGE_SHAPES = ("hit_status", "type_immunity")
+# status -> (Essentials status, the Battler method stem of pbCan<Stem>? and pb<Stem>,
+# Nova's own message for an ability inflicting it, as its Poison Touch and Static use)
+_STATUSES = {
+    "burn": ("BURN", "Burn", "{1} {2} burned {3}!"),
+    "poison": ("POISON", "Poison", "{1} {2} poisoned {3}!"),
+    "paralysis": ("PARALYSIS", "Paralyze", "{1} {2} paralyzed {3}! It may be unable to move!"),
+}
 _INTERNAL = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
 # The self-test's battlers. Fixed, because neutral mode (both battlers typed ???)
@@ -179,8 +213,12 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
         if bad:
             raise TemplateError(
                 f"{where}: unknown move flags {', '.join(bad)}; known: {', '.join(sorted(MOVE_FLAGS))}")
+    if "from" in params and params["from"] not in _CONVERT_FROM:
+        raise TemplateError(f"{where}: params.from must be one of {', '.join(_CONVERT_FROM)}, not {params['from']!r}")
     if template.shape == "conditional_boost":
         _validate_condition(params, where)
+    if template.shape == "hit_status":
+        _validate_hit_status(params, where)
     if template.shape == "stab_grant" and params["types"] != "all" and not _is_type_list(params["types"]):
         raise TemplateError(f"{where}: params.types must be all, or a non-empty list of type names, e.g. [Dark, Fairy]")
     if len(template.probes) != n_test_cases:
@@ -203,10 +241,22 @@ def _validate_condition(params: Mapping[str, object], where: str) -> None:
         raise TemplateError(f"{where}: params.moves must be one of {', '.join(_MOVE_SETS)}, not {moves!r}")
 
 
+def _validate_hit_status(params: Mapping[str, object], where: str) -> None:
+    if params["status"] not in _STATUSES:
+        raise TemplateError(f"{where}: params.status must be one of {', '.join(_STATUSES)}, not {params['status']!r}")
+    chance = params["chance"]
+    if not (isinstance(chance, int) and not isinstance(chance, bool) and 0 < chance <= 100):
+        raise TemplateError(f"{where}: params.chance must be a whole percent from 1 to 100, e.g. 30")
+    if (params.get("type") is None) == (params.get("flags") is None):
+        raise TemplateError(f"{where}: hit_status needs exactly one of params.type or params.flags")
+
+
 def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at: str) -> None:
     shape, params = template.shape, template.params
     outcome = _OUTCOME[shape]
-    allowed = {"move", outcome, "hp"}
+    allowed = {"move", outcome}
+    if shape not in _NON_DAMAGE_SHAPES:
+        allowed.add("hp")
     # A Pokemon without the ability is only measurable as "boosted or not", and the
     # self-test measures it on a bare field, so holder: false belongs to the
     # unconditional result shapes.
@@ -220,6 +270,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
             allowed.add("stats")
     if shape == "stab_grant":
         allowed.add("types")
+    if shape == "hit_status":
+        allowed.add("target_types")
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
@@ -228,8 +280,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
     value = probe.get(outcome)
     if outcome == "result" and value not in _RESULTS:
         raise TemplateError(f"{at}: result must be boosted or normal, not {value!r}")
-    if outcome == "converted" and not isinstance(value, bool):
-        raise TemplateError(f"{at}: converted must be true or false, not {value!r}")
+    if outcome != "result" and not isinstance(value, bool):
+        raise TemplateError(f"{at}: {outcome} must be true or false, not {value!r}")
     hp = probe.get("hp", 1.0)
     if not (_is_positive_number(hp) and hp <= 1):  # type: ignore[operator]
         raise TemplateError(f"{at}: hp must be a fraction of max HP in (0, 1], not {hp!r}")
@@ -240,6 +292,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         raise TemplateError(f"{at}: item must be an item name, e.g. Utility Umbrella")
     if "types" in probe and not _is_type_list(probe["types"]):
         raise TemplateError(f"{at}: types must be a non-empty list of type names, e.g. [Water, Dragon]")
+    if "target_types" in probe and not _is_type_list(probe["target_types"]):
+        raise TemplateError(f"{at}: target_types must be a non-empty list of type names, e.g. [Fire]")
     if higher_stat and probe.get("stats") not in _STATS:
         raise TemplateError(f"{at}: needs stats: physical or special (which of Attack and Sp. Atk is higher)")
     holder = probe.get("holder", True)
@@ -255,9 +309,10 @@ def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
     values = {
         "ID": spec.chrooked_id,
         "ABILITY": port.ability,
-        "MULTIPLIER": _ruby_float(port.params["multiplier"]),
         "SELFTEST": _selftest_case(spec, port),
     }
+    if "multiplier" in port.params:
+        values["MULTIPLIER"] = _ruby_float(port.params["multiplier"])
     if port.shape == "type_boost":
         if port.params["pinch"]:
             values["CONDITION"] = (
@@ -270,6 +325,7 @@ def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
         body = _TYPE_BOOST
     elif port.shape == "type_conversion":
         values["TYPE"] = port.type
+        values["GATE"] = _conversion_gate(port)
         body = _TYPE_CONVERSION
     elif port.shape == "flag_boost":
         values["FLAGS"] = "|".join(port.flags)
@@ -277,6 +333,14 @@ def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
     elif port.shape == "conditional_boost":
         values.update(_conditional_ruby(port))
         body = _CONDITIONAL_BOOST
+    elif port.shape == "hit_status":
+        _, stem, message = _STATUSES[str(port.params["status"])]
+        values.update({"GATE": _hit_gate(port), "CHANCE": str(port.params["chance"]),
+                       "STEM": stem, "MESSAGE": message})
+        body = _HIT_STATUS
+    elif port.shape == "type_immunity":
+        values["TYPE"] = port.type
+        body = _TYPE_IMMUNITY
     else:
         values["TYPE_GATE"] = (
             "" if port.grant_types is None
@@ -301,6 +365,13 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
     pinch = port.shape == "type_boost" and bool(port.params["pinch"])
     checks: list[dict[str, object]] = []
     for probe in port.probes:
+        if port.shape == "hit_status":
+            # The rate is the self-test's to measure: its own line, per target typing.
+            checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": {
+                "move": probe.move, "ability": "true", "source": "selftest",
+                "target_types": "/".join(probe.target_types) or "QMARKS",
+            }, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}})
+            continue
         select: dict[str, object] = {"move": probe.move, "ability": _flag(probe.holder)}
         if pinch and probe.holder:
             select["hp_low"] = _flag(probe.hp * 3 <= 1)  # the port's user.hp <= user.totalhp / 3
@@ -308,6 +379,8 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
             select.update(_scene(port, probe))
         if port.shape == "type_conversion":
             expect = {"converted": port.type if probe.outcome else "none", "boosted": _flag(bool(probe.outcome))}
+        elif port.shape == "type_immunity":
+            expect = {"result": "IMMUNE" if probe.outcome else "NORMAL"}
         else:
             expect = {"result": str(probe.outcome).upper()}
         checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": select, "expect": expect})
@@ -331,6 +404,8 @@ class _Probe:
     stats: Optional[str] = None      # "physical" / "special": the higher attacking stat
     types: tuple[str, ...] = ()      # INTERNAL types to give the user (stab_grant)
     type_names: tuple[str, ...] = ()  # their neutral names, for stage text
+    target_types: tuple[str, ...] = ()       # INTERNAL types to give the target (hit_status)
+    target_type_names: tuple[str, ...] = ()  # their neutral names, for stage text
 
 
 @dataclass(frozen=True)
@@ -407,6 +482,8 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             stats=str(probe["stats"]) if "stats" in probe else None,
             types=resolve_types(probe.get("types") or ()),
             type_names=tuple(str(t) for t in probe.get("types") or ()),  # type: ignore[union-attr]
+            target_types=resolve_types(probe.get("target_types") or ()),
+            target_type_names=tuple(str(t) for t in probe.get("target_types") or ()),  # type: ignore[union-attr]
         ))
     if missing:
         raise TemplateError(f"{where}: the target has no {', '.join(dict.fromkeys(missing))}")
@@ -430,6 +507,30 @@ def _fill(text: str, values: Mapping[str, str]) -> str:
             raise TemplateError(f"internal: no value for placeholder {{{{{key}}}}}")
         return values[key]
     return _PLACEHOLDER.sub(value, text)
+
+
+def _flag_test(port: _Port) -> str:
+    """Nova's flag test, as its Iron Fist and Liquid Voice read flags."""
+    return f"move.flags.any? {{ |f| f[/^({'|'.join(port.flags)})$/i] }}"
+
+
+def _conversion_gate(port: _Port) -> str:
+    """The moves a type conversion takes: Normal ones, or any, and only flagged ones
+    when it names flags."""
+    if port.params["from"] == "normal":
+        lines = [f"      next if type != :NORMAL || !GameData::Type.exists?(:{port.type})"]
+    else:
+        lines = [f"      next if !GameData::Type.exists?(:{port.type})"]
+    if port.flags:
+        lines.append(f"      next if !{_flag_test(port)}")
+    return "\n".join(lines)
+
+
+def _hit_gate(port: _Port) -> str:
+    """The hits a status chance rides on: the move's type as used, or its flags."""
+    if port.type is not None:
+        return f"      next if move.calcType != :{port.type}"
+    return f"      next if !{_flag_test(port)}"
 
 
 def _conditional_ruby(port: _Port) -> dict[str, str]:
@@ -468,8 +569,9 @@ def _conditional_ruby(port: _Port) -> dict[str, str]:
 
 
 def _header(spec: BehaviorSpec, port: _Port) -> str:
-    multiplier = _ruby_float(port.params["multiplier"])
+    multiplier = _ruby_float(port.params["multiplier"]) if "multiplier" in port.params else ""
     seam = "Battle::AbilityEffects::DamageCalcFromUser"
+    when_logged, estimates = "a real hit", True
     if port.shape == "type_boost":
         pinch = bool(port.params["pinch"])
         note = (f"Nova's Blaze handler{'' if pinch else ' minus its HP check'}, for {port.params['type']}: an "
@@ -479,9 +581,20 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
         obs = "move=<ID> type=<TYPE> ability=true " + ("hp_low=<true|false> " if pinch else "") + "result=<BOOSTED|NORMAL>"
     elif port.shape == "type_conversion":
         seam = "Battle::AbilityEffects::ModifyMoveBaseType (the conversion) plus DamageCalcFromUser (the rider)"
-        note = (f"The pair Nova's own Aerilate and Dragonize use: Normal moves become {port.params['type']} and set "
-                f"move.powerBoost, and the {multiplier}x power rider reads that flag, so moves that compute "
-                "their own type (Weather Ball, Judgment, Struggle, ...) are never converted.")
+        flags = " or ".join(port.flags)
+        if port.params["from"] == "normal" and not port.flags:
+            note = (f"The pair Nova's own Aerilate and Dragonize use: Normal moves become {port.params['type']} and set "
+                    f"move.powerBoost, and the {multiplier}x power rider reads that flag, so moves that compute "
+                    "their own type (Weather Ball, Judgment, Struggle, ...) are never converted.")
+        elif port.params["from"] == "normal":
+            note = (f"Nova's Aerilate pair with one more gate, the move's {flags} flag (read as Nova's Liquid "
+                    f"Voice reads Sound): Normal-type {flags} moves become {port.params['type']} and set "
+                    f"move.powerBoost, and the {multiplier}x power rider reads that flag.")
+        else:
+            which = f"{flags} moves of any type" if port.flags else "every move"
+            note = (f"{which[0].upper() + which[1:]} become {port.params['type']} (Nova's Normalize shape"
+                    f"{', gated on the flag as its Liquid Voice is' if port.flags else ''}) and set "
+                    f"move.powerBoost, and the {multiplier}x power rider reads that flag.")
         obs = "move=<ID> ability=true converted=<TYPE|none> boosted=<true|false>"
     elif port.shape == "flag_boost":
         note = (f"Nova's Iron Fist shape: a {multiplier}x power multiplier when the move carries a "
@@ -498,6 +611,28 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
                 "doubles; Struggle (type nil) gets none, as in Nova's STAB. Modelled on the hand-written "
                 "Full Moon port (mjolnir NV-10).")
         obs = "move=<ID> type=<TYPE> ability=true user_types=<T/T> own=<true|false> result=<BOOSTED|NORMAL>"
+    elif port.shape == "hit_status":
+        seam = "Battle::AbilityEffects::OnDealingHit"
+        verb = {"burn": "burn", "poison": "poison", "paralysis": "paralyze"}[str(port.params["status"])]
+        gate = (f"is {port.params['type']}-type as used (move.calcType)" if port.type is not None
+                else f"carries a {' or '.join(port.flags)} flag")
+        note = (f"Nova's Poison Touch shape: Nova fires this registry for the user's ability only after a "
+                f"hit that dealt damage and missed any substitute; when the move {gate}, a "
+                f"{port.params['chance']}% roll to {verb} the target. Never through Shield Dust or on a "
+                f"target unaffected by additional effects, and pbCan{_STATUSES[str(port.params['status'])][1]}? "
+                "is asked before the roll. The lab self-test measures the rate over seeded rolls and logs "
+                "it on this mechanic's behalf with source=selftest.")
+        obs = "move=<ID> type=<TYPE> ability=true hit=true can_inflict=<bool> inflicted=<bool>"
+        when_logged, estimates = "after a gated hit", False
+    elif port.shape == "type_immunity":
+        seam = "Battle::AbilityEffects::MoveImmunity"
+        note = (f"Nova's Bulletproof shape, keyed on the type: Nova asks this registry from "
+                f"pbImmunityByAbility for every move aimed at the holder (status moves included) with the "
+                f"move's type as used, unless Mold Breaker bypasses it, so {_a(str(port.params['type']))}-type move "
+                "deals no damage and lands no secondary effect. Like Nova's own type immunities (Volt "
+                "Absorb, Flash Fire) it never blocks a move the holder aims at itself.")
+        obs = "move=<ID> type=<TYPE> ability=true result=<IMMUNE|NORMAL>"
+        when_logged = "a move aimed at the holder"
     else:
         higher_stat = port.params["moves"] == "higher_stat"
         if higher_stat:
@@ -530,8 +665,8 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
         *_comment("Install, load order, the marker-gated oracle, the OBS/EST split and the "
                   "self-test registration at the end are explained once, in "
                   "references/essentials21-harness/README.md."),
-        f"#     [chrooked:{spec.chrooked_id}] OBS {obs}   a real hit",
-        f"#     [chrooked:{spec.chrooked_id}] EST ...   an AI estimate, never scored",
+        f"#     [chrooked:{spec.chrooked_id}] OBS {obs}   {when_logged}",
+        *([f"#     [chrooked:{spec.chrooked_id}] EST ...   an AI estimate, never scored"] if estimates else []),
         _RULE,
     ]
     return "\n".join(lines)
@@ -548,12 +683,14 @@ def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
     for probe in port.probes:
         setup = f", {_setup(port, probe)}" if port.shape in _SCENE_SHAPES else ""
         entry = f"[:{probe.move}, {_ruby_float(probe.hp)}{setup}]"
-        if probe.holder and entry not in calc:
+        if port.shape not in _NON_DAMAGE_SHAPES and probe.holder and entry not in calc:
             calc.append(entry)
     without = list(dict.fromkeys(f":{p.move}" for p in port.probes if not p.holder))
     # A built-in move (Struggle) cannot be learned, so it never joins the fight.
     learnable = [p for p in port.probes if p.holder and p.move.lower() not in _BUILTIN_MOVES]
     fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:_FIGHT_MOVES]
+    if port.shape == "type_immunity":
+        fight = []  # the moves are the foe's to use; the defend phase asks the registry itself
     control = port.params.get("control")
     return _fill(_SELFTEST, {
         "ID": spec.chrooked_id,
@@ -562,9 +699,28 @@ def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
         "USER": _SELFTEST_USER,
         "FOE": _SELFTEST_FOE,
         "CALC": ", ".join(calc),
+        "PHASES": _phases(port),
         "WITHOUT": ", ".join(without),
         "FIGHT": ", ".join(fight),
     })
+
+
+def _phases(port: _Port) -> str:
+    """The self-test phases a non-damage shape adds after calc: chance or defend."""
+    if port.shape == "hit_status":
+        status = _STATUSES[str(port.params["status"])][0]
+        entries: list[str] = []
+        for probe in port.probes:
+            rate = repr(int(port.params["chance"]) / 100) if probe.outcome else "0"  # type: ignore[call-overload]
+            setup = (f", setup: {{target_types: [{', '.join(':' + t for t in probe.target_types)}]}}"
+                     if probe.target_types else "")
+            entry = f"[:{probe.move}, {{status: :{status}, status_rate: {rate}, flinch_rate: 0{setup}}}]"
+            if entry not in entries:
+                entries.append(entry)
+        return "    chance: [\n" + ",\n".join("      " + e for e in entries) + "\n    ],\n"
+    if port.shape == "type_immunity":
+        return f"    defend: [{', '.join(dict.fromkeys(':' + p.move for p in port.probes))}],\n"
+    return ""
 
 
 def _setup(port: _Port, probe: _Probe) -> str:
@@ -605,6 +761,11 @@ def _scene(port: _Port, probe: _Probe) -> dict[str, object]:
 
 def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
     """The in-game action for a played battle (the harness prints it on `stage`)."""
+    if port.shape == "hit_status":
+        foe = f"{_a('/'.join(probe.target_type_names))}-type foe" if probe.target_type_names else "the foe"
+        return f"With your {name} user, use {probe.name} on {foe}, many times."
+    if port.shape == "type_immunity":
+        return f"Have the foe use {probe.name} on your {name} Pokemon."
     if not probe.holder:
         return f"With a Pokemon WITHOUT {name}, use {probe.name} on the foe."
     hp = ""
@@ -628,6 +789,11 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
     elif port.shape == "conditional_boost":
         where = f" on {str(port.params['terrain']).title()} Terrain" if probe.field else " with no terrain"
     return f"{who}{hp}{where}, use {probe.name} on the foe."
+
+
+def _a(word: str) -> str:
+    """The word with its indefinite article: a Fire, an Ice."""
+    return f"{'an' if word[:1].lower() in 'aeiou' else 'a'} {word}"
 
 
 def _comment(text: str) -> list[str]:
@@ -657,7 +823,8 @@ def _is_type_list(value: object) -> bool:
 # --- Ruby ------------------------------------------------------------------------
 # The shapes' Ruby, as proven by hand in NV-5..NV-9 (chrooked_kindle.rb,
 # chrooked_overcharge.rb, chrooked_chitinize.rb, chrooked_martialartist.rb,
-# chrooked_forestry.rb). `{{KEY}}` is filled by _fill; everything else is literal
+# chrooked_forestry.rb; NV-13's chrooked_pyre.rb, chrooked_nocturnal.rb and
+# chrooked_arcticariette.rb). `{{KEY}}` is filled by _fill; everything else is literal
 # Ruby, `#{...}` interpolation included.
 
 _PORT = """\
@@ -720,7 +887,7 @@ begin
                    "#{!Battle::AbilityEffects::ModifyMoveBaseType[:{{ABILITY}}].nil?}")
   Battle::AbilityEffects::ModifyMoveBaseType.add(:{{ABILITY}},
     proc { |ability, user, move, type|
-      next if type != :NORMAL || !GameData::Type.exists?(:{{TYPE}})
+{{GATE}}
       move.powerBoost = true
       next :{{TYPE}}
     }
@@ -809,6 +976,69 @@ rescue StandardError => e
 end
 """
 
+_HIT_STATUS = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_on_hit=#{!Battle::AbilityEffects::OnDealingHit[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::OnDealingHit.add(:{{ABILITY}},
+    proc { |ability, user, target, move, battle|
+{{GATE}}
+      next if !target.affectedByAdditionalEffects?
+      next if target.hasActiveAbility?(:SHIELDDUST) && !target.beingMoldBroken?
+      can_inflict = target.pbCan{{STEM}}?(user, false)
+      inflicted = false
+      if can_inflict && battle.pbRandom(100) < {{CHANCE}}
+        battle.pbShowAbilitySplash(user)
+        msg = nil
+        if !Battle::Scene::USE_ABILITY_SPLASH
+          msg = _INTL("{{MESSAGE}}", user.pbOfThis, user.abilityName, target.pbThis(true))
+        end
+        target.pb{{STEM}}(user, msg)
+        battle.pbHideAbilitySplash(user)
+        inflicted = true
+      end
+      ChrookedLog.line("[chrooked:{{ID}}] OBS move=#{move.id} type=#{move.calcType} ability=true hit=true " \\
+                       "can_inflict=#{can_inflict} inflicted=#{inflicted}")
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on OnDealingHit")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_TYPE_IMMUNITY = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!Battle::AbilityEffects::MoveImmunity[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::MoveImmunity.add(:{{ABILITY}},
+    proc { |ability, user, target, move, type, battle, show_message|
+      immune = type == :{{TYPE}} && user.index != target.index
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s =~ /AI[ _]?Move/ } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} type=#{type || 'NONE'} ability=true " \\
+                         "result=#{immune ? 'IMMUNE' : 'NORMAL'}")
+      end
+      next false if !immune
+      if show_message
+        battle.pbShowAbilitySplash(target)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+        else
+          battle.pbDisplay(_INTL("{1} {2} made {3} ineffective!",
+                                 target.pbOfThis, target.abilityName, move.name))
+        end
+        battle.pbHideAbilitySplash(target)
+      end
+      next true
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on MoveImmunity")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
 # Registered at load, so the lab self-test (which runs later, at GameData.load_all)
 # finds every installed port's case without a table of its own. Inert on a played
 # copy: one hash in a global, read only when chrooked-selftest.on arms the self-test.
@@ -816,6 +1046,6 @@ _SELFTEST = """\
   ($chrooked_selftest_cases ||= {})["{{ID}}"] = {
     ability: :{{ABILITY}}, control: {{CONTROL}}, user: :{{USER}}, foe: :{{FOE}}, neutral: true,
     calc: [{{CALC}}],
-    without: [{{WITHOUT}}],
+{{PHASES}}    without: [{{WITHOUT}}],
     fight: [{{FIGHT}}]
   }"""

@@ -64,10 +64,13 @@ def test_template_validates_and_renders_a_registry_port(cid):
 
 @pytest.mark.parametrize("cid", _TEMPLATED)
 def test_every_key_a_generated_check_reads_is_logged(cid):
+    """By the port, or by the lab self-test for a check on its own line (a rate it measured)."""
     text = _render(cid)
     for check in harness_checks(_RULESET.behaviors[cid], _DefaultNames()):
+        selftest = check["select"].get("source") == "selftest"
         for key in {**check["select"], **check["expect"]}:
-            assert f"{key}=" in text, f"{cid} never logs '{key}=' but its checks read it"
+            logged = key in _SELFTEST_KEYS if selftest else f"{key}=" in text
+            assert logged, f"{cid} never logs '{key}=' but its checks read it"
 
 
 @pytest.mark.parametrize("cid", _TEMPLATED)

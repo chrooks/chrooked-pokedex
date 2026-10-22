@@ -21,3 +21,10 @@ notes:
 engine_hints:
   essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:NOCTURNAL] = { type: :DARK, flag: :Soundproof } — mirrors chrooked_wintercoat.rb."
   pokeemerald: "Type-effectiveness ability gate in src/battle_util.c (the site that zeroes TYPE_GROUND for ABILITY_LEVITATE): return 0 for TYPE_DARK when the defender has ABILITY_NOCTURNAL."
+template:
+  shape: type_immunity
+  params: {type: Dark}
+  probes:
+    - {move: Knock Off, immune: true}
+    - {move: Shadow Ball, immune: false}
+    - {move: Taunt, immune: true}

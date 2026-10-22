@@ -22,3 +22,10 @@ notes:
 engine_hints:
   pokeemerald: "Type conversion: src/battle_main.c:6172 — IsSoundMove(move) && ability == ABILITY_SACRED_TOLL returns TYPE_PSYCHIC and sets ateBoost[battler]. Damage boost: src/battle_util.c:9646-9648 — UQ_4_12(1.2) when moveType == TYPE_PSYCHIC && gBattleStruct->ateBoost[battlerAtk]. NO switch-in / team-cure case exists anywhere in the C (verified against src/battle_util.c:4765+ switch-in handler and a full-tree grep)."
   essentials: "Convert sound moves to Psychic for this user and add a 1.2x damage modifier. Do NOT add team-cure-on-entry — it is not implemented in the seed source C, only in description text."
+template:
+  shape: type_conversion
+  params: {type: Psychic, multiplier: 1.2, from: any, flags: [sound], control: AERILATE}
+  probes:
+    - {move: Hyper Voice, converted: true}
+    - {move: Tackle, converted: false}
+    - {move: Bug Buzz, converted: true}

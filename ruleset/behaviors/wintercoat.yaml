@@ -21,3 +21,10 @@ notes:
   - Does not interact with weather, terrain, or any stat stage; it is purely a type-immunity gate.
   - Replaces Chlorophyll in Leavanny's secondary slot; Chlorophyll is not removed from any other species.
   - STUB — engine_hints ungrounded, needs human grounding pass
+template:
+  shape: type_immunity
+  params: {type: Ice}
+  probes:
+    - {move: Blizzard, immune: true}
+    - {move: Freeze-Dry, immune: true}
+    - {move: Icicle Crash, immune: true}
