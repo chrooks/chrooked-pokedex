@@ -676,6 +676,73 @@ def test_delete_behavior_404_when_absent(client: TestClient) -> None:
     assert response.status_code == 404
 
 
+# A generated behavior (mjolnir NV-8): the `template:` block rides along with
+# every save, and the editor never sends it, so the block must survive edits.
+def _templated_payload() -> dict:
+    payload = _behavior_payload()
+    payload["template"] = {
+        "shape": "type_boost",
+        "params": {"type": "Water", "multiplier": 1.3},
+        "probes": [{"move": "Surf", "result": "boosted"}],
+    }
+    return payload
+
+
+def test_put_behavior_with_template_writes_the_block(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    response = client.put("/api/behaviors/aquaboost", json=_templated_payload())
+    assert response.status_code == 200, response.text
+    assert response.json()["template"]["probes"] == [{"move": "Surf", "result": "boosted"}]
+    assert "  shape: type_boost" in _read(ruleset_dir / "behaviors" / "aquaboost.yaml")
+
+
+def test_editor_save_without_template_keeps_the_stored_block(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    client.put("/api/behaviors/aquaboost", json=_templated_payload())
+    edit = _behavior_payload()  # what BehaviorEditor sends: every field but template
+    edit["notes"] = ["Edited note."]
+
+    response = client.put("/api/behaviors/aquaboost", json=edit)
+
+    assert response.status_code == 200, response.text
+    assert response.json()["template"]["shape"] == "type_boost"
+    on_disk = _read(ruleset_dir / "behaviors" / "aquaboost.yaml")
+    assert "Edited note." in on_disk
+    assert "  shape: type_boost" in on_disk
+
+
+def test_test_case_added_without_its_probe_is_422_writes_nothing(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    client.put("/api/behaviors/aquaboost", json=_templated_payload())
+    path = ruleset_dir / "behaviors" / "aquaboost.yaml"
+    before = _read(path)
+    edit = _behavior_payload()
+    edit["test_cases"].append({"given": "a Fire move is used in rain", "expect": "no boost"})
+
+    response = client.put("/api/behaviors/aquaboost", json=edit)
+
+    assert response.status_code == 422, response.text
+    assert "probes for 2 test_cases" in response.json()["detail"]
+    assert _read(path) == before
+
+
+def test_null_template_clears_the_block(
+    client: TestClient, ruleset_dir: Path
+) -> None:
+    client.put("/api/behaviors/aquaboost", json=_templated_payload())
+    edit = _behavior_payload()
+    edit["template"] = None
+
+    response = client.put("/api/behaviors/aquaboost", json=edit)
+
+    assert response.status_code == 200, response.text
+    assert response.json()["template"] is None
+    assert "template:" not in _read(ruleset_dir / "behaviors" / "aquaboost.yaml")
+
+
 @pytest.mark.unit
 def test_put_species_omitted_field_does_not_clear_existing_override(
     client: TestClient, ruleset_dir: Path

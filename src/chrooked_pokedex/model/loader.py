@@ -18,6 +18,7 @@ from .behavior_spec import (
     TRIGGERS,
     BehaviorEffect,
     BehaviorSpec,
+    BehaviorTemplate,
     BehaviorTestCase,
 )
 from .schema import (
@@ -72,10 +73,11 @@ _STATUS_KEYS = ("name", "chrooked_id", "aka", "description", "effects")
 _TYPE_CHART_ENTRY_KEYS = ("attacker", "defender", "multiplier")
 _BEHAVIOR_KEYS = (
     "name", "chrooked_id", "applies_to", "aka",
-    "effects", "test_cases", "notes", "engine_hints",
+    "effects", "test_cases", "notes", "engine_hints", "template",
 )
 _EFFECT_KEYS = ("summary", "trigger", "effect", "when")
 _TEST_CASE_KEYS = ("given", "expect")
+_TEMPLATE_KEYS = ("shape", "params", "probes")
 
 
 def load_species(path: Path) -> SpeciesOverride:
@@ -251,6 +253,9 @@ def load_behavior(path: Path) -> BehaviorSpec:
     test_cases = tuple(
         _load_test_case(entry, where) for entry in (data.get("test_cases") or [])
     )
+    template = None
+    if data.get("template") is not None:
+        template = load_behavior_template(data["template"], len(test_cases), where)
     return BehaviorSpec(
         name=data["name"],
         chrooked_id=data["chrooked_id"],
@@ -260,7 +265,32 @@ def load_behavior(path: Path) -> BehaviorSpec:
         test_cases=test_cases,
         notes=tuple(data.get("notes") or []),
         engine_hints=dict(data.get("engine_hints") or {}),
+        template=template,
     )
+
+
+def load_behavior_template(entry: Any, n_test_cases: int, where: str) -> BehaviorTemplate:
+    """The structural check for a `template:` block. Whether the shape and its params
+    make sense is the template module's job (chrooked_pokedex.behavior.templates); here
+    only the layout is enforced, above all one probe per test case, so a test case
+    added without its probe fails loudly instead of desynchronising the checks."""
+    if not isinstance(entry, dict):
+        raise ValueError(f"{where}:template: expected a mapping")
+    _check_keys(entry, _TEMPLATE_KEYS, f"{where}:template")
+    shape = entry.get("shape")
+    if not isinstance(shape, str) or not shape:
+        raise ValueError(f"{where}:template: missing required field 'shape'")
+    params = entry.get("params") or {}
+    if not isinstance(params, dict):
+        raise ValueError(f"{where}:template: 'params' must be a mapping")
+    probes = entry.get("probes") or []
+    if not isinstance(probes, list) or not all(isinstance(p, dict) for p in probes):
+        raise ValueError(f"{where}:template: 'probes' must be a list of mappings")
+    if len(probes) != n_test_cases:
+        raise ValueError(
+            f"{where}:template: {len(probes)} probes for {n_test_cases} test_cases; "
+            "keep them aligned 1:1, in order")
+    return BehaviorTemplate(shape=shape, params=dict(params), probes=tuple(dict(p) for p in probes))
 
 
 def _load_effect(entry: dict[str, Any], where: str) -> BehaviorEffect:

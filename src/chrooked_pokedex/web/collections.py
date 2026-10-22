@@ -120,4 +120,11 @@ def serialize_behavior(spec: BehaviorSpec) -> dict[str, Any]:
         "test_cases": [{"given": t.given, "expect": t.expect} for t in spec.test_cases],
         "notes": list(spec.notes),
         "engine_hints": dict(spec.engine_hints),
+        # Rides along like aka, so an edit from the UI never strips a generated
+        # behavior back to hand-ported.
+        "template": None if spec.template is None else {
+            "shape": spec.template.shape,
+            "params": dict(spec.template.params),
+            "probes": [dict(p) for p in spec.template.probes],
+        },
     }

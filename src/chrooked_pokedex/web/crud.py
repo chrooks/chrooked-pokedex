@@ -30,6 +30,7 @@ from ..model.behavior_spec import BehaviorEffect, BehaviorSpec, BehaviorTestCase
 from ..model.loader import (
     load_ability,
     load_behavior,
+    load_behavior_template,
     load_move,
     load_species,
     load_status,
@@ -803,7 +804,7 @@ _TYPE_CHART_FIELDS = ("attacker", "defender", "multiplier")
 
 _BEHAVIOR_FIELDS = (
     "name", "chrooked_id", "applies_to", "aka",
-    "effects", "test_cases", "notes", "engine_hints",
+    "effects", "test_cases", "notes", "engine_hints", "template",
 )
 
 
@@ -863,6 +864,11 @@ def _behavior_from_payload(payload: dict[str, Any], chrooked_id: str) -> Behavio
         BehaviorTestCase(given=entry.get("given", ""), expect=entry.get("expect", ""))
         for entry in (payload.get("test_cases") or [])
     )
+    template = None
+    if payload.get("template") is not None:
+        # Same structural check as the loader (one probe per test case, …), so a
+        # UI edit that adds a test case without its probe is refused, not saved.
+        template = load_behavior_template(payload["template"], len(test_cases), where)
     return BehaviorSpec(
         name=payload.get("name", ""),
         chrooked_id=chrooked_id,
@@ -872,4 +878,5 @@ def _behavior_from_payload(payload: dict[str, Any], chrooked_id: str) -> Behavio
         test_cases=test_cases,
         notes=tuple(payload.get("notes") or ()),
         engine_hints=dict(payload.get("engine_hints") or {}),
+        template=template,
     )

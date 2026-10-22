@@ -70,6 +70,23 @@ class BehaviorTestCase:
 
 
 @dataclass(frozen=True)
+class BehaviorTemplate:
+    """A behavior that is one of a few known shapes, so code can emit its port.
+
+    `shape` names a template in `chrooked_pokedex.behavior.templates` (type_boost,
+    type_conversion, flag_boost), `params` configure it, and `probes` hold one
+    machine-checkable probe per test case, in the same order. From these the dex
+    emits the engine port, the self-test case and the harness checks with no
+    implementer in the loop. A mechanic that fits no shape leaves this unset and
+    keeps a hand-written port.
+    """
+
+    shape: str
+    params: Mapping[str, object] = field(default_factory=dict)
+    probes: tuple[Mapping[str, object], ...] = ()
+
+
+@dataclass(frozen=True)
 class BehaviorSpec:
     """The full behavior spec for one ability or move.
 
@@ -77,7 +94,8 @@ class BehaviorSpec:
     can attach to a *vanilla* ability the data layer does not own (e.g. Inner Focus) just
     as well as to a Ruleset-owned one. An entity can have several effects — a vanilla one
     plus a custom addition, say. `engine_hints` maps an engine name to an optional pointer
-    for the implementer; `notes` records interactions and edge cases.
+    for the implementer; `notes` records interactions and edge cases. `template`, when
+    set, makes the behavior generated rather than hand-ported.
     """
 
     name: str
@@ -88,3 +106,4 @@ class BehaviorSpec:
     test_cases: tuple[BehaviorTestCase, ...] = ()
     notes: tuple[str, ...] = ()
     engine_hints: Mapping[str, str] = field(default_factory=dict)
+    template: Optional[BehaviorTemplate] = None

@@ -8,6 +8,8 @@ makes the seed idempotent.
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
 from ..model.behavior_spec import BehaviorSpec
@@ -67,6 +69,30 @@ def _needs_quoting(value: str) -> bool:
 def _aka_flow(aka: dict) -> str:
     parts = [f"{key}: {_scalar(aka[key])}" for key in aka]
     return "{ " + ", ".join(parts) + " }"
+
+
+_FLOW_PLAIN = re.compile(r"^[A-Za-z][A-Za-z0-9 _.\-]*$")
+_YAML_KEYWORDS = {"true", "false", "yes", "no", "on", "off", "null", "y", "n"}
+
+
+def _flow(value: object) -> str:
+    """A value in YAML flow style (behavior `template:` params and probes).
+
+    Strings stay plain when that round-trips (`High Jump Kick`), otherwise they are
+    double-quoted; booleans and numbers are written bare so they load back typed.
+    """
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)):
+        return repr(value)
+    if isinstance(value, dict):
+        return "{" + ", ".join(f"{key}: {_flow(item)}" for key, item in value.items()) + "}"
+    if isinstance(value, (list, tuple)):
+        return "[" + ", ".join(_flow(item) for item in value) + "]"
+    text = str(value)
+    if _FLOW_PLAIN.match(text) and text.lower() not in _YAML_KEYWORDS and text == text.strip():
+        return text
+    return json.dumps(text)
 
 
 def species_yaml(species: SpeciesOverride) -> str:
@@ -227,6 +253,14 @@ def behavior_yaml(spec: BehaviorSpec) -> str:
         lines.append("engine_hints:")
         for engine, hint in spec.engine_hints.items():
             lines.append(f"  {engine}: {_scalar(hint)}")
+    if spec.template is not None:
+        lines.append("template:")
+        lines.append(f"  shape: {spec.template.shape}")
+        lines.append(f"  params: {_flow(dict(spec.template.params))}")
+        if spec.template.probes:
+            lines.append("  probes:")
+            for probe in spec.template.probes:
+                lines.append(f"    - {_flow(dict(probe))}")
     return "\n".join(lines) + "\n"
 
 
