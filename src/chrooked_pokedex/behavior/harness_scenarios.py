@@ -265,9 +265,9 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": "A frostbitten Pokemon with Quick Feet uses Surf.", "select": {"case": "damage", "move": "SURF", "ability": "QUICKFEET", "source": "selftest"}, "expect": {"result": "NORMAL"}},
         {"stage": "A frostbitten Pokemon ends the round.", "select": {"case": "chip", "ability": "none", "source": "selftest"}, "expect": {"result": "CHIP"}},
         {"stage": "A frostbitten Pokemon with Magic Guard ends the round.", "select": {"case": "chip", "ability": "MAGICGUARD", "source": "selftest"}, "expect": {"result": "NONE"}},
-        # The spec's effect: a move that can thaw its user (Nova's ThawsUser flag,
-        # as Rejuvenation's canThawUser?); Flame Wheel is a Fire move that does.
-        {"stage": "A frostbitten Pokemon uses Flame Wheel.", "select": {"case": "cure", "move": "FLAMEWHEEL", "source": "selftest"}, "expect": {"cured": "true"}},
+        # Any Fire-type move cures it (Chris, 2026-10-22); Ember is a plain one,
+        # with no thaw flag. The self-test also logs Flame Wheel, Scald and Tackle.
+        {"stage": "A frostbitten Pokemon uses Ember.", "select": {"case": "cure", "move": "EMBER", "source": "selftest"}, "expect": {"cured": "true"}},
         {"stage": "Frostbite is inflicted on an Ice-type.", "select": {"case": "immune", "target_types": "ICE", "source": "selftest"}, "expect": {"result": "IMMUNE"}},
     ],
     "fullmoon": [

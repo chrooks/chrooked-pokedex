@@ -20,7 +20,7 @@ effects:
     effect: "let the move proceed; no turn-skip and no random thaw roll"
   - summary: "A Fire move the holder uses clears the frostbite."
     trigger: on-hit
-    when: "the frostbitten holder uses a move that can thaw its user"
+    when: "the frostbitten holder uses any Fire-type move, or a move that can thaw its user"
     effect: "cure the status before the move resolves"
 test_cases:
   - given: "a frostbitten Pokemon takes its turn"
@@ -44,6 +44,7 @@ test_cases:
 notes:
   - "This is a reskin, not a rename. The engine keeps its :FROZEN symbol; only behavior and text change. Renaming would touch 46 references across 15 script files plus healing items, battle clauses, the AI, and save compatibility for any currently-frozen Pokemon."
   - "Freeze ceases to exist. Frostbite occupies its slot, which is why every freeze move now inflicts frostbite instead."
+  - "Cure widened 2026-10-22 (Chris, settling the effect vs test-case wording): any Fire-type move the holder uses cures it, not only the moves that thaw their user. Those (Scald, Steam Eruption...) still cure it too."
   - "Rejuv 14.0.1x shipped its own frostbite gated behind Nevermelting Hail (state.effects[:NeverMeltIce]); 14.0.20 deleted it (2026-09-05 update), so the mod now implements all three effects itself instead of ungating the engine's."
   - "The chip is 1/16 so it matches burn, per the Ruleset decision that frostbite mirrors burn."
   - "Guts already grants its x1.5 Attack on any status, so only the damage-penalty exemption is new code."

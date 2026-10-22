@@ -333,11 +333,14 @@ module ChrookedSelfTest
     [before - user.hp, user.totalhp]
   end
 
-  # Whether using a move cures the user of the status (the self-cure step of pbUseMove).
+  # Whether using a move cures the user of the status: the self-cure step of
+  # pbUseMove, after the move's type for this use is set, as pbUseMove does.
   def self.cured_by?(spec, move_id)
     b, user, _target = pair(spec, move_id)
     user.status = spec[:status]
-    user.pbUseMove_CureUserStatus(Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id)))
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move.calcType = move.pbCalcType(user)
+    user.pbUseMove_CureUserStatus(move)
     user.status != spec[:status]
   end
 

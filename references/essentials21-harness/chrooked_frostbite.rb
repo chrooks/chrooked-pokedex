@@ -17,8 +17,11 @@
 #      Truant and Toxic) so its freeze branch is skipped, then restored in an ensure.
 #      The same goes for the multi-hit cut-off (pbUseMove_StopPerformingHits?) and
 #      the AI's can_attack?, which otherwise treat the holder as unable to act.
-#   4. A move that thaws its user cures it: Nova's own pbUseMove_CureUserStatus
-#      (move.thawsUser?), kept; only its message changes.
+#   4. Any Fire-type move the holder uses cures it (Chris, 2026-10-22: "any fire
+#      move"), and so does a move that thaws its user (Nova's ThawsUser: Scald,
+#      Steam Eruption...), as before. A wrapper on pbUseMove_CureUserStatus, which
+#      pbUseMove calls right after setting move.calcType, so the type is the one the
+#      move is used with (Weather Ball in sun, a Normal move turned Fire by Immolate).
 # Text: being afflicted, the end-of-round chip, the cure, the self-cure and the
 # status's name say frostbite.
 #
@@ -108,10 +111,10 @@ begin
         @battle.pbDisplay(_INTL("{1}'s frostbite was healed.", pbThis))
       end
 
-      # 4. A move that thaws its user cures it (Nova's own rule), with frostbite's text.
+      # 4. Any Fire-type move cures it, as does a move that thaws its user.
       alias_method :chrooked_frostbite_pbUseMove_CureUserStatus, :pbUseMove_CureUserStatus
       def pbUseMove_CureUserStatus(move)
-        if @status == :FROZEN && move.thawsUser?
+        if @status == :FROZEN && (move.calcType == :FIRE || move.thawsUser?)
           pbCureStatus(false)
           @battle.pbDisplay(_INTL("{1}'s attack healed its frostbite!", pbThis))
         end
@@ -177,7 +180,7 @@ begin
     turn: [[:TACKLE, 50]],
     status_damage: [[:SURF, nil], [:TACKLE, nil], [:SURF, :GUTS], [:SURF, :QUICKFEET]],
     chip: [nil, :MAGICGUARD],
-    cure: [:FLAMEWHEEL, :EMBER],
+    cure: [:EMBER, :FLAMEWHEEL, :SCALD, :TACKLE],
     immune: [[:ICE], [:NORMAL]],
     calc: [], without: [], fight: []
   }
