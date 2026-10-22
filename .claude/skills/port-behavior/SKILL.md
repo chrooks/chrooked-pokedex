@@ -136,7 +136,8 @@ stored patch is stale.
    `AccuracyCalcFromUser`, …): a port is one `.add(:ID, proc)` at load, modelled on a vanilla
    handler of the same shape (Kindle = Nova's Blaze minus the HP check), with no method overrides
    or deferred install. Ruby 3.1. **Template first (NV-8):** if the mechanic is one of the proven
-   shapes (`type_boost`, `type_conversion`, `flag_boost`, `conditional_boost`, `stab_grant`; see
+   shapes (`type_boost`, `type_conversion`, `flag_boost`, `conditional_boost`, `stab_grant`,
+   `hit_status`, `type_immunity`; see
    `references/essentials21-harness/README.md`), do not write Ruby. Add a `template:` block to
    `ruleset/behaviors/<id>.yaml` (shape, params, one probe per test case, in order). Apply then
    generates the port, its self-test case and its harness checks against the target's own names.
@@ -152,7 +153,9 @@ stored patch is stale.
    redefining it), and the self-test's `turn` / `status_damage` / `chip` / `cure` / `immune`
    phases prove it. A new shape
    starts as one hand port proven in the lab, then is generalised (NV-9: Forestry ->
-   `conditional_boost`). Only a mechanic that fits no shape gets a
+   `conditional_boost`; NV-13: Pyre -> `hit_status`, Nocturnal -> `type_immunity`, Arctic
+   Ariette -> `type_conversion`'s `flags`), and an extended shape must render its existing ports
+   byte-identical. Only a mechanic that fits no shape gets a
    hand-written `references/essentials21-harness/chrooked_<id>.rb`. That port must register its own
    case (`($chrooked_selftest_cases ||= {})["<id>"] = {…}`) and have a `harness_scenarios.py`
    entry, and its spec must not also carry a template (apply blocks that as ambiguous).

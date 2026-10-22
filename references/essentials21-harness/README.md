@@ -38,10 +38,12 @@ block, and the dex generates the rest from it (`src/chrooked_pokedex/behavior/te
 | shape | params | the port | modelled on Nova's |
 | --- | --- | --- | --- |
 | `type_boost` | `type`, `multiplier`, optional `pinch`, `control` | `DamageCalcFromUser`: attack-stat multiplier on moves of the type; `pinch: true` adds `user.hp <= user.totalhp / 3` | Blaze (without its HP check unless `pinch`) |
-| `type_conversion` | `type`, `multiplier` (default 1.2), optional `control` | `ModifyMoveBaseType` turns Normal moves into the type and sets `move.powerBoost`; a `DamageCalcFromUser` power rider reads that flag | Aerilate, Dragonize |
+| `type_conversion` | `type`, `multiplier` (default 1.2), optional `from` (`normal`, the default, or `any`), `flags`, `control` | `ModifyMoveBaseType` turns Normal moves (or, with `from: any`, every move) into the type and sets `move.powerBoost`; `flags` limits it to moves carrying one of them (NV-13). A `DamageCalcFromUser` power rider reads that flag | Aerilate, Dragonize; Normalize (`from: any`); the flag test as Liquid Voice reads Sound |
 | `flag_boost` | `flags` (Ruleset move flags), `multiplier`, optional `control` | `DamageCalcFromUser`: power multiplier when the move carries one of the flags | Iron Fist |
 | `stab_grant` (NV-10) | `types` (a list of type names, or `all`), optional `multiplier` (1.5), `control` | `DamageCalcFromUser`: the same 1.5x on final damage that Nova's own STAB (`pbCalcDamageMultipliersSTAB`) applies, for moves of those types, only when the user lacks the type (never double STAB); Struggle (type nil) gets none | Nova's STAB step; generalised from the hand-written Full Moon |
 | `conditional_boost` (NV-9) | `weather` (rain, sun, sand, hail) or `terrain` (grassy, electric, psychic, misty), `multiplier`, `moves` (`all` or `higher_stat`), optional `control` | `DamageCalcFromUser`, gated on `user.effectiveWeather` (a Utility Umbrella clears sun and rain; hail counts Nova's `:Snowstorm`) or on the field's terrain plus `user.affectedByTerrain?`. `all` multiplies power; `higher_stat` multiplies the attacking stat behind the user's higher one (physical when Attack >= Sp. Atk) | Sand Force (`all`), Solar Power (`higher_stat`) |
+| `hit_status` (NV-13) | `status` (`burn`, `poison`, `paralysis`), `chance` (a whole percent), and `type` or `flags` | `OnDealingHit`: after a hit that dealt damage, when the move as used (`move.calcType`) is of the type or carries one of the flags, a `chance`% roll to inflict the status. Never through Shield Dust or on a target unaffected by additional effects; `pbCan<Status>?` is asked before the roll. Nova's own message strings | Poison Touch; generalised from the hand-written Pyre |
+| `type_immunity` (NV-13) | `type` | `MoveImmunity`: every move of the type aimed at the holder fails, status moves included ("It doesn't affect..."), unless Mold Breaker bypasses it; never a move the holder aims at itself | Bulletproof, keyed on the type; generalised from the hand-written Nocturnal |
 
 `probes` hold one checkable probe per `test_cases` entry, in the same order: the
 move (its display name), the outcome (`result: boosted|normal`, or `converted:
@@ -52,7 +54,9 @@ held item, weather only: `Utility Umbrella`), `airborne: true` (terrain only), a
 `stats: physical|special` (which attacking stat is higher; required for
 `higher_stat`). A STAB grant's probes may set the user's `types` (a list of type
 names; otherwise the user is the neutral `???`), and a probe may name `Struggle`,
-which Essentials builds in code. `control` is a vanilla ability, by INTERNAL name,
+which Essentials builds in code. A hit status's probes say `inflicts: true|false`
+(whether the roll can land) and may set `target_types` (a Fire type cannot be
+burned); a type immunity's say `immune: true|false`. Neither takes `hp`. `control` is a vanilla ability, by INTERNAL name,
 that the self-test measures beside the port. From the block, for one target:
 
 - **the port**, rendered by `apply` against the target's own PBS names. A probe,
@@ -122,7 +126,7 @@ Copied into the **lab copy's** `Data/Scripts/998_ChrookedDexLab/` by
 | --- | --- |
 | `001_register_black_weather.rb` | Nova only: registers the `:Black` weather map 050 uses, so the PBS writer and compiler finish; lands the debug boot on the title screen |
 | `002_lab_save_dir.rb` | points `SaveData::DIRECTORY` at the lab's own `LabSaves/`; lab and live share `Title=Nova`, so both otherwise save into the synced `%AppData%\Roaming\Nova` |
-| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:, types:}]`), applied to the same battlers before every ability is measured (NV-9, NV-10); `:STRUGGLE` is built as a battle builds it. A `heal:` list (`[[:MOONLIGHT, 0.5]]`) measures what a healing move restores with the ability and without (HEAL lines, NV-10). A `chance:` list (`[[:CRUNCH, {status: :BURN, status_rate: 0.3, flinch_rate: 0.3}]]`) measures an on-hit chance: the damage A/B once, then the user's `OnDealingHit` handler fired 400 times on a fresh target with a fixed seed, the rates checked within 3 standard deviations (exactly 0 when 0 is expected) and logged as the mechanic's OBS line with `source=selftest` (NV-11). `setup:` may also set `target_types:`. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
+| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:, types:}]`), applied to the same battlers before every ability is measured (NV-9, NV-10); `:STRUGGLE` is built as a battle builds it. A `heal:` list (`[[:MOONLIGHT, 0.5]]`) measures what a healing move restores with the ability and without (HEAL lines, NV-10). A `chance:` list (`[[:CRUNCH, {status: :BURN, status_rate: 0.3, flinch_rate: 0.3}]]`) measures an on-hit chance: the damage A/B once, then the user's `OnDealingHit` handler fired 400 times on a fresh target with a fixed seed, the rates checked within 3 standard deviations (exactly 0 when 0 is expected) and logged as the mechanic's OBS line with `source=selftest` (NV-11). `setup:` may also set `target_types:`. A `defend:` list (`[:KNOCKOFF, :TAUNT]`) asks the ability's `MoveImmunity` handler about each move aimed at the holder, typed as used, and logs DEFEND lines; the port's own OBS line is what is scored (NV-13). Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
 
 ### Why the self-test has four hooks
 
@@ -175,11 +179,11 @@ arithmetic.
 | `Chrooked.hammer_move?` / `kick_move?` / `piercing_move?` (hard-coded lists or Rejuvenation's `:kickmove`) | the move's own `Flags`: `Kicking`, `Hammer`, `Piercing`, written by the dex | **verified** 2026-10-22 (NV-7): the dex's v21 vocabulary writes them from the Ruleset's move flags; Nova's compiler keeps Flags as free strings |
 | `register_ize` (`CHROOKED_TYPE_MODS` + 1.2x rider) | `ModifyMoveBaseType` + `DamageCalcFromUser` on `move.powerBoost` | **verified** 2026-10-22: the pair Nova's Aerilate and Dragonize use; damage identical to Aerilate; 12 ports at PASS |
 | `CHROOKED_DEFENSE_MODS` | `DamageCalcFromTarget` | candidate, unverified |
-| `CHROOKED_ON_DEAL`, `CHROOKED_ON_DEAL_DMG` | `OnDealingHit` | candidate, unverified |
+| `CHROOKED_ON_DEAL`, `CHROOKED_ON_DEAL_DMG` | `OnDealingHit` | **verified** 2026-10-22 (NV-11, NV-13): called for the user's ability only after a hit that dealt damage and missed any substitute; Infernal Maw, Rimefang, Pyre and Scalding Pulse at PASS |
 | `CHROOKED_WHEN_HIT`, `CHROOKED_WHEN_HIT_DMG` | `OnBeingHit` | candidate, unverified |
 | `CHROOKED_SWITCH_IN` | `OnSwitchIn` | candidate, unverified |
 | `CHROOKED_ON_KO` | `OnEndOfUsingMove` | candidate, unverified |
-| `CHROOKED_TYPE_IMMUNITY` | `MoveImmunity` | candidate, unverified |
+| `CHROOKED_TYPE_IMMUNITY` | `MoveImmunity` | **verified** 2026-10-22 (NV-13): asked from `Battle::Move#pbImmunityByAbility` for every move aimed at the holder, typed as used, unless Mold Breaker; Nocturnal and Winter Coat at PASS |
 | `CHROOKED_SURE_HIT`, `CHROOKED_ACCURACY_MODS` | `AccuracyCalcFromUser` | candidate, unverified |
 | `CHROOKED_PRIORITY_MODS` | `PriorityChange` | candidate, unverified |
 | `CHROOKED_SPEED_MODS` / `CHROOKED_CRIT_RATE` | `SpeedCalc` / `CriticalCalcFromUser` | candidate, unverified |
@@ -214,9 +218,11 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-33 in all. 28 are generated from their specs' `template:` blocks: 22 since
-2026-10-22 (NV-8), four more (NV-9) and two more (NV-10) the same day. Five are
-hand-written here:
+39 in all. 34 are generated from their specs' `template:` blocks: 22 since
+2026-10-22 (NV-8), four more (NV-9), two more (NV-10) and six more (NV-13) the same
+day. NV-13's three new shapes were each hand-ported and proven first (Pyre,
+Nocturnal, Arctic Ariette), then generated with the same code apart from two
+message strings, which now use Nova's own. Five are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -245,6 +251,9 @@ exception, by design (below).
 | frostbite (hand-written; a status) | freeze reskinned, keeping `:FROZEN`. No lost turns or random thaw (`pbTryUseMove` with `@status` cleared around it, as Rejuvenation's port does; also the multi-hit cut-off and the AI's `can_attack?`). Special damage halved unless Guts or Quick Feet (beside burn's halving). A 1/16 end-of-round chip unless Magic Guard (after burn's chip). Cured by any Fire-type move or a move that thaws its user (Chris, 2026-10-22). Its text and name say frostbite | NV-12, lab 9/9: 50 of 50 turns acted, never cured; Surf 12 vs 24; Tackle, Guts and Quick Feet unchanged; chip 8 of 135 HP, Magic Guard 0; Ember, Flame Wheel and Scald cure (any Fire move, or a move that thaws its user), Tackle does not; Ice-types immune. Kept from Nova (the spec is silent): a Fire hit cures the target, harsh sun prevents it, the catch bonus, the FRZ icon, Pursuit's skip |
 | rimefang (hand-written) | Infernal Maw's build with frostbite (`pbCanFreeze?`/`pbFreeze`) in place of burn | NV-12, lab 3/3: frostbite 0.308 and flinch 0.305 over 400 rolls; Ice-type 0 frostbite, flinch 0.300; Tackle 0 and 0; Crunch 36 vs 28 |
 | infernalmaw (hand-written) | 1.3x on `Biting` (Strong Jaw's shape), plus a 30% burn and an independent 30% flinch in `OnDealingHit` (Poison Touch's shape and gates) | NV-11, lab 3/3. Crunch 36 vs 28 (Strong Jaw control 41); 400 rolls each: burn 0.308 and flinch 0.305 on a burnable target; on a Fire-type 0 burns and flinch 0.300; Tackle 0 and 0 |
+| pyre, scaldingpulse | `hit_status`, 30% burn, on Ghost moves / on `Pulse` moves | NV-13, lab 3/3 each, 400 rolls: Shadow Ball (Pyre) and Dragon Pulse (Scalding Pulse) burn 0.300; on a Fire-type 0; Flamethrower (Pyre) and Tackle (Scalding Pulse) 0. No damage change |
+| nocturnal, wintercoat | `type_immunity`, Dark / Ice | NV-13, lab 3/3 each: Knock Off and Taunt (Dark, a status move) IMMUNE, Shadow Ball NORMAL; Blizzard, Freeze-Dry and Icicle Crash IMMUNE |
+| arcticariette, sacredtoll | `type_conversion` on `Sound`: Ice 1.3x from Normal / Psychic 1.2x from any type, control Aerilate | NV-13, lab 3/3 each. Arctic Ariette: Hyper Voice turns Ice, 32 vs 24 (a small hit; Aerilate 30); Bug Buzz and Body Slam unchanged. Sacred Toll: Hyper Voice and Bug Buzz turn Psychic, 30 vs 24 (1.250x, equal to Aerilate on Hyper Voice); Tackle unchanged. Sacred Toll's Dark-target case is checked as the conversion to Psychic; the 0x itself was not measured (neutral foe) |
 | updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
@@ -259,7 +268,7 @@ measurement identical to the lab's. Infernal Maw (NV-11) followed: 3/3, its 400-
 chance lines identical to the lab's (the same seed gives the same rolls on ARM).
 Frostbite and Rimefang (NV-12) followed: 9/9 and 3/3, then frostbite again 9/9
 after the any-Fire-move cure, every line identical to the lab's. All 33 are proven
-on thor.
+on thor. The six NV-13 ports are deployed and wait for their boot.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
