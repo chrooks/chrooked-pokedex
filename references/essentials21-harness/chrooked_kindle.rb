@@ -23,8 +23,8 @@
 # HARNESS (log oracle, marker-gated): lines go to chrooked_load.log in the game
 # folder only when chrooked-oracle.on exists there at boot, so played copies
 # stay silent unless a proof run asks. Errors are always written. Essentials
-# evals each script with a bare file name, so relative paths resolve from the
-# game folder (PC and Kirin).
+# evals each script with a bare file name, so the paths are resolved from the
+# working directory once, at load, when it is the game folder (PC and Kirin).
 #     [chrooked:kindle] OBS move=<ID> type=<TYPE> kindle=true result=<BOOSTED|NORMAL>   a real hit
 #     [chrooked:kindle] EST move=<ID> type=<TYPE> kindle=true result=<BOOSTED|NORMAL>   an AI estimate
 # The harness scores OBS lines only.
@@ -36,7 +36,9 @@
 
 unless defined?(ChrookedLog)
   module ChrookedLog
-    ENABLED = File.exist?("chrooked-oracle.on")
+    # Resolved once, at load, while the working directory is the game folder.
+    LOG     = File.expand_path("chrooked_load.log")
+    ENABLED = File.exist?(File.expand_path("chrooked-oracle.on"))
 
     def self.line(msg)
       write(msg) if ENABLED
@@ -47,7 +49,7 @@ unless defined?(ChrookedLog)
     end
 
     def self.write(msg)
-      File.open("chrooked_load.log", "a") { |f| f.puts(msg) }
+      File.open(LOG, "a") { |f| f.puts(msg) }
     rescue StandardError
       nil
     end

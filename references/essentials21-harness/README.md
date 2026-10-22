@@ -56,7 +56,30 @@ Copied into the **lab copy's** `Data/Scripts/998_ChrookedDexLab/` by
 | --- | --- |
 | `001_register_black_weather.rb` | Nova only: registers the `:Black` weather map 050 uses, so the PBS writer and compiler finish; lands the debug boot on the title screen |
 | `002_lab_save_dir.rb` | points `SaveData::DIRECTORY` at the lab's own `LabSaves/`; lab and live share `Title=Nova`, so both otherwise save into the synced `%AppData%\Roaming\Nova` |
-| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. One `CASES` entry per mechanic |
+| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. One `CASES` entry per mechanic. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
+
+### Why the self-test has four hooks
+
+It runs at the first of `GameData.load_all`, `Game.set_up_system`, the title
+screen's `Scene_Intro#main`, or the first frame after game data exists. On the PC
+the first three all fire. On Kirin 0.3.5, `Game.set_up_system` is redefined after
+the game's scripts load by a file named `[I need this] translation_patches.rb`,
+which is in neither the game folder nor Kirin's shared folder, so it most likely
+ships inside the Kirin app. Our title-screen wrapper never fired there either. The
+`load_all` hook fired first and ran the test. Each hook logs where the two
+methods are defined when it fires, so a runtime that swaps them out shows up in
+the log.
+
+## Verify a mechanic on thor (one boot)
+
+    scripts/nova_apply.sh                       # the port must be deployed
+    scripts/nova_thor_selftest.sh arm <id>      # self-test + markers onto thor
+    # kill Kirin, launch Nova, stop at the title screen, do not load the save
+    scripts/nova_thor_selftest.sh read <id>     # fetch thor's log, score it
+    scripts/nova_thor_selftest.sh disarm        # take it all off; relaunch Kirin before playing
+
+The one deliberate exception to "no lab scripts on a played copy", kept to a
+folder of its own (`998_ChrookedSelfTest/`) and removed straight after.
 
 ## Verify a mechanic in the lab (no one playing)
 
@@ -71,4 +94,4 @@ harness. A new mechanic needs its port here, a `CASES` entry in
 
 | file | Seam | verified |
 | --- | --- | --- |
-| `chrooked_kindle.rb` | `DamageCalcFromUser` (Blaze's shape, no HP check) | `nova_selftest.sh kindle` 3/3, 2026-10-22, Nova V3.0 lab: Flamethrower 1.500x, Surf and Tackle 1.000x, Ember at full HP 1.474x, Blaze unchanged at full HP |
+| `chrooked_kindle.rb` | `DamageCalcFromUser` (Blaze's shape, no HP check) | `nova_selftest.sh kindle` 3/3, 2026-10-22, Nova V3.0 lab: Flamethrower 1.500x, Surf and Tackle 1.000x, Ember at full HP 1.474x, Blaze unchanged at full HP. **thor**, same day, Kirin 0.3.5 (Ruby 3.1.0 aarch64-linux-android): harness 3/3 with identical damage numbers |

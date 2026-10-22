@@ -183,7 +183,7 @@ def test_reference_kindle_port_is_valid_and_uses_the_v21_registry():
     assert has_plugin("kindle") is True
     assert "Battle::AbilityEffects::DamageCalcFromUser" in text
     assert ".add(:KINDLE" in text
-    assert 'File.exist?("chrooked-oracle.on")' in text  # marker-gated oracle
+    assert 'File.expand_path("chrooked-oracle.on")' in text  # marker-gated oracle, path fixed at load
     assert "PokeBattle_" not in text                    # no 16.2 class names
 
 
@@ -193,6 +193,14 @@ def test_lab_scripts_are_harvested_beside_the_ports():
     assert names == ["001_register_black_weather.rb", "002_lab_save_dir.rb", "010_battle_selftest.rb"]
     selftest = (lab / "010_battle_selftest.rb").read_text(encoding="utf-8")
     assert '"kindle" =>' in selftest  # every ported damage mechanic gets a CASES entry
+    # Safe to arm briefly on a played copy (runbook 31): scratch save dir, globals
+    # restored, run once per process, title-screen fallback, absolute log path.
+    assert "swap_save_dir(SAVE_SCRATCH)" in selftest
+    assert "$player, $bag, $stats, $game_switches, $game_variables = old" in selftest
+    assert "$chrooked_selftest_ran = true" in selftest
+    assert "class Scene_Intro" in selftest
+    assert 'LOG          = File.expand_path("chrooked_load.log")' in selftest
+    assert "load_new_game_values" not in selftest  # would mark save values loaded for real
 
 
 # --- the create path's honesty line ------------------------------------------

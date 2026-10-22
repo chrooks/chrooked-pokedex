@@ -1,16 +1,30 @@
 # chrooked dex lab: headless battle self-test for ported mechanics.
 # LAB-ONLY - lives in the lab copy's Data/Scripts/998_ChrookedDexLab/ and is
-# never deployed to a played copy.
+# never deployed to a played copy, except briefly, by hand, for a one-boot proof
+# (mjolnir runbook 31), and removed straight after.
 #
 # Runs only when chrooked-selftest.on exists in the game folder; its first word
-# names the mechanic (e.g. "kindle"). Compile boots without the marker are
-# unaffected. It runs at boot, after Game.initialize has loaded GameData and
-# before Game.set_up_system (which can stop at a language prompt), uses only
-# in-memory new-game values, never saves, and writes to chrooked_load.log.
-# The runner (scripts/nova_selftest.ps1) kills the game once it logs DONE.
+# names the mechanic (e.g. "kindle"). Boots without the marker are unaffected.
+# It triggers once per process, at the first of these hooks it reaches:
+#   1. GameData.load_all  - inside Game.initialize, the moment game data exists;
+#   2. Game.set_up_system - before the title screen and any language prompt;
+#   3. Scene_Intro#main   - the title screen;
+#   4. Graphics.update    - first frame after game data exists (armed boots only).
+# Kirin 0.3.5 reached Nova's title without calling 2 or 3 as wrapped here
+# (mjolnir NV-5, 2026-10-22), so the hooks are layered and each logs when it fires,
+# with where Game.set_up_system and Scene_Intro#main are defined at that moment.
+# It writes chrooked_load.log, and the runner stops the game once it logs DONE.
 #
-# The port's own OBS lines are marker-gated too: the runner also creates
-# chrooked-oracle.on, and the harness scores those OBS lines against the spec.
+# Safety, because a played copy's real save sits next to it:
+#   - it builds only the throwaway globals the battle code reads ($player, $bag,
+#     $stats, $game_switches, $game_variables) and restores the previous values
+#     afterwards, so nothing it made survives into the session;
+#   - while it runs, SaveData::DIRECTORY points at chrooked-selftest-saves/, so
+#     even an emergency save (Essentials' Hangup path) cannot touch the real save;
+#   - everything runs inside a rescue-all that logs, so the boot always continues.
+#
+# Paths are resolved when the file loads, while the working directory is the game
+# folder, so a runtime that changes directory later cannot hide the log.
 #
 # Two phases, both through Essentials' own battle code:
 #   CALC  - damage-calc mechanics: Battle::Move#pbCalcDamage on the SAME
@@ -18,10 +32,15 @@
 #           control ability, so the effect is measured rather than assumed.
 #   FIGHT - one AI-vs-AI battle in Battle::DebugSceneNoVisuals (the scene the
 #           Battle Frontier simulator uses), so the handler fires in real flow.
+# The port's own OBS lines are marker-gated too (chrooked-oracle.on); the runner
+# sets that marker and the harness scores those lines against the spec.
 module ChrookedSelfTest
-  MARKER = "chrooked-selftest.on"
-  LEVEL  = 50
-  SEED   = 12_345
+  MARKER       = File.expand_path("chrooked-selftest.on")
+  ARMED        = File.exist?(MARKER)
+  LOG          = File.expand_path("chrooked_load.log")
+  SAVE_SCRATCH = File.expand_path("chrooked-selftest-saves") + "/"
+  LEVEL        = 50
+  SEED         = 12_345
 
   # One entry per ported mechanic.
   #   ability  - the ability under test        control - a comparison ability
@@ -36,15 +55,61 @@ module ChrookedSelfTest
   }
 
   def self.log(msg)
-    File.open("chrooked_load.log", "a") { |f| f.puts("[chrooked:selftest] #{msg}") }
+    File.open(LOG, "a") { |f| f.puts("[chrooked:selftest] #{msg}") }
   rescue StandardError
     nil
   end
 
   def self.guard(phase)
     yield
-  rescue Exception => e   # report everything; the lab boot must survive
+  rescue Exception => e   # report everything (Hangup included); the boot must survive
     log("ERROR #{phase} #{e.class}: #{e.message} @ #{(e.backtrace || [])[0, 3].join(' | ')}")
+  end
+
+  # Where the two hooked methods are defined right now (file:line). A runtime
+  # that redefines them after the game's scripts load shows up here.
+  def self.owners
+    sus = (Game.method(:set_up_system).source_location rescue nil)
+    tm  = (Scene_Intro.instance_method(:main).source_location rescue nil)
+    "set_up_system@#{sus ? sus.join(':') : '?'} title_main@#{tm ? tm.join(':') : '?'}"
+  end
+
+  # Graphics.update fallback: fire once, on the first frame after game data exists.
+  def self.poll
+    return if $chrooked_selftest_ran || @polled
+    return unless defined?(GameData::Ability::DATA) && !GameData::Ability::DATA.empty?
+    @polled = true
+    trigger("graphics")
+  end
+
+  def self.trigger(where)
+    armed = File.exist?(MARKER)
+    log("hook #{where} armed=#{armed} ran=#{!!$chrooked_selftest_ran} cwd=#{Dir.pwd} #{owners}")
+    return if !armed || $chrooked_selftest_ran
+    $chrooked_selftest_ran = true
+    mechanic = File.read(MARKER).split.first.to_s.downcase
+    guard("run") { with_test_state { run(mechanic) } }
+  end
+
+  def self.swap_save_dir(dir)
+    SaveData.send(:remove_const, :DIRECTORY)
+    SaveData.const_set(:DIRECTORY, dir)
+  end
+
+  def self.with_test_state
+    old = [$player, $bag, $stats, $game_switches, $game_variables]
+    old_dir = SaveData::DIRECTORY
+    Dir.mkdir(SAVE_SCRATCH) unless File.directory?(SAVE_SCRATCH)
+    swap_save_dir(SAVE_SCRATCH)
+    $player         = Player.new("Lab", GameData::TrainerType.keys.first)
+    $bag            = PokemonBag.new
+    $stats          = GameStats.new
+    $game_switches  = Game_Switches.new
+    $game_variables = Game_Variables.new
+    yield
+  ensure
+    $player, $bag, $stats, $game_switches, $game_variables = old
+    swap_save_dir(old_dir) if old_dir
   end
 
   # Fixed IVs, EVs and nature, so stats are the same on every boot.
@@ -98,13 +163,12 @@ module ChrookedSelfTest
 
   def self.run(mechanic)
     spec = CASES[mechanic]
-    log("start mechanic=#{mechanic} ruby=#{RUBY_VERSION} platform=#{RUBY_PLATFORM}")
+    log("start mechanic=#{mechanic} ruby=#{RUBY_VERSION} platform=#{RUBY_PLATFORM} saves=#{SaveData::DIRECTORY}")
     if spec.nil?
       log("ERROR no case for '#{mechanic}' in CASES (known: #{CASES.keys.join(', ')})")
       return
     end
     log("data ability=#{GameData::Ability.exists?(spec[:ability])}")
-    guard("setup") { SaveData.load_new_game_values }
     guard("calc") do
       (spec[:calc] || []).each do |move_id|
         (with, type, eff), (none, _, _), (control, _, _) =
@@ -113,6 +177,7 @@ module ChrookedSelfTest
             "#{spec[:control]}=#{control} ratio=#{format('%.3f', with.to_f / none)}")
       end
     end
+    Graphics.update if defined?(Graphics)
     guard("fight") do
       p1 = mon(spec[:user], spec[:fight])
       p1.ability = spec[:ability]
@@ -125,17 +190,53 @@ module ChrookedSelfTest
   end
 end
 
+module GameData
+  class << self
+    unless method_defined?(:chrooked_selftest_load_all)
+      alias_method :chrooked_selftest_load_all, :load_all
+      def load_all
+        chrooked_selftest_load_all
+        ChrookedSelfTest.trigger("load_all")
+      end
+    end
+  end
+end
+
 module Game
   class << self
     unless method_defined?(:chrooked_selftest_set_up_system)
       alias_method :chrooked_selftest_set_up_system, :set_up_system
       def set_up_system
-        if File.exist?(ChrookedSelfTest::MARKER)
-          mechanic = File.read(ChrookedSelfTest::MARKER).split.first.to_s.downcase
-          ChrookedSelfTest.guard("run") { ChrookedSelfTest.run(mechanic) }
-        end
+        ChrookedSelfTest.trigger("set_up_system")
         chrooked_selftest_set_up_system
       end
     end
   end
 end
+
+class Scene_Intro
+  unless method_defined?(:chrooked_selftest_main)
+    alias_method :chrooked_selftest_main, :main
+    def main
+      ChrookedSelfTest.trigger("title")
+      chrooked_selftest_main
+    end
+  end
+end
+
+# The per-frame fallback costs nothing on unarmed boots: it is never installed.
+if ChrookedSelfTest::ARMED
+  module Graphics
+    class << self
+      unless method_defined?(:chrooked_selftest_update)
+        alias_method :chrooked_selftest_update, :update
+        def update(*args)
+          chrooked_selftest_update(*args)
+          ChrookedSelfTest.poll
+        end
+      end
+    end
+  end
+end
+
+ChrookedSelfTest.log("loaded armed=#{ChrookedSelfTest::ARMED} cwd=#{Dir.pwd} #{ChrookedSelfTest.owners}")

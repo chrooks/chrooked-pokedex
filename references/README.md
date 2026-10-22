@@ -44,7 +44,7 @@ The behavior-port loop (see `.claude/skills/port-behavior/SKILL.md`):
 | innerfocus | pokeemerald-expansion 1.15.3 | `.patch` | `make check` RED→GREEN (battle test) + compiles |
 | innerfocus | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify innerfocus` 3/3 (log oracle) |
 | kindle | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify kindle` 3/3 (log oracle); Seam `pbModifyDamage` |
-| kindle | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` port (installed on apply into `Data/Scripts/998_ChrookedMods/`) | `scripts/nova_selftest.sh kindle` 3/3, headless (AI vs AI); damage A/B Flamethrower 1.500x, Surf 1.000x; Seam `DamageCalcFromUser` |
+| kindle | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` port (installed on apply into `Data/Scripts/998_ChrookedMods/`) | `scripts/nova_selftest.sh kindle` 3/3, headless (AI vs AI); damage A/B Flamethrower 1.500x, Surf 1.000x; Seam `DamageCalcFromUser`. On thor (Kirin 0.3.5): `nova_thor_selftest.sh` path, 3/3, same numbers |
 | soulsight | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/soulsight_check.rb` 20/20, RED 9/20 without the mechanic |
 | percussion | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/percussion_check.rb` 16/16, RED 11/16 without the mechanic |
 | finishingkick | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply); contact clause only, Speed Boost half via `behaviors: [finishingkick, speedboost]` composition | `ruby rejuv-harness/finishingkick_check.rb` 6/6, RED (nil handler) without the mechanic |
