@@ -18,7 +18,8 @@
 #
 # Safety, because a played copy's real save sits next to it:
 #   - it builds only the throwaway globals the battle code reads ($player, $bag,
-#     $stats, $game_switches, $game_variables) and restores the previous values
+#     $stats, $game_switches, $game_variables, and $PokemonSystem when the game has
+#     not loaded it yet) and restores the previous values
 #     afterwards, so nothing it made survives into the session;
 #   - while it runs, SaveData::DIRECTORY points at chrooked-selftest-saves/, so
 #     even an emergency save (Essentials' Hangup path) cannot touch the real save;
@@ -73,6 +74,20 @@ module ChrookedSelfTest
   #              (a type immunity, NV-13): the target holds it and the move's
   #              MoveImmunity check runs as pbImmunityByAbility runs it, with the
   #              ability and without (DEFEND line); the port logs its own OBS line
+  #   drain    - [move, {hp_lost:, target_ability:}] entries for a heal-on-hit
+  #              (NV-14): a hit that took hp_lost HP (default 100) is handed to the
+  #              user's OnDealingHit handler, the user at half HP so a heal shows,
+  #              the target holding target_ability if given (:LIQUIDOOZE); DRAIN
+  #              line with the user's HP before and after; the port logs its own OBS
+  #   ko       - {kos:, hp:, stages:} entries for an effect on knocking out a foe
+  #              (NV-14): the user's move ends with kos foes fainted, as
+  #              pbEffectsAfterMove hands them to OnEndOfUsingMove (the one foe,
+  #              listed once per knockout and never really fainted, so the battle
+  #              is not over); the user's HP fraction (default 0.5) and stat stages
+  #              ({SPECIAL_ATTACK: 6}) are set first; KO line; the port logs its OBS
+  #   priority - [move, hp_fraction] entries: the move's priority as
+  #              pbCalculatePriority asks it of the user's ability (NV-14);
+  #              PRIORITY line; the port logs its own OBS line
   #   status   - for a status mechanic (frostbite, NV-12), the status the next
   #              three phases set on the user; ability is then nil:
   #   turn     - [move, n]: the user tries its move n times while in that status
@@ -146,7 +161,7 @@ module ChrookedSelfTest
   end
 
   def self.with_test_state
-    old = [$player, $bag, $stats, $game_switches, $game_variables]
+    old = [$player, $bag, $stats, $game_switches, $game_variables, $PokemonSystem]
     old_dir = SaveData::DIRECTORY
     Dir.mkdir(SAVE_SCRATCH) unless File.directory?(SAVE_SCRATCH)
     swap_save_dir(SAVE_SCRATCH)
@@ -155,9 +170,12 @@ module ChrookedSelfTest
     $stats          = GameStats.new
     $game_switches  = Game_Switches.new
     $game_variables = Game_Variables.new
+    # Message code reads the options' language (the drain message, NV-14); the
+    # self-test can run before the game has loaded them.
+    $PokemonSystem ||= PokemonSystem.new
     yield
   ensure
-    $player, $bag, $stats, $game_switches, $game_variables = old
+    $player, $bag, $stats, $game_switches, $game_variables, $PokemonSystem = old
     swap_save_dir(old_dir) if old_dir
   end
 
@@ -323,6 +341,51 @@ module ChrookedSelfTest
     [!!with, false, move.calcType]
   end
 
+  # A hit that took hp_lost HP, as pbEffectsOnMakingHit hands it to the user's
+  # OnDealingHit handler (damage dealt, no substitute), with the user at half HP:
+  # [the user's HP before, after].
+  def self.drain(spec, move_id, hp_lost, target_ability)
+    b, user, target = pair(spec, move_id)
+    user.ability   = spec[:ability]
+    target.ability = target_ability
+    user.hp = [user.totalhp / 2, 1].max
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move.calcType = move.pbCalcType(user)
+    target.damageState.calcDamage = hp_lost
+    target.damageState.hpLost     = hp_lost
+    before = user.hp
+    Battle::AbilityEffects.triggerOnDealingHit(user.ability, user, target, move, b)
+    [before, user.hp]
+  end
+
+  # The user's move ends with kos foes fainted, as pbEffectsAfterMove hands its
+  # targets to OnEndOfUsingMove. The one foe is listed once per knockout with its
+  # damage state marked fainted, but keeps its HP, so the battle is not over (a
+  # knockout that ends the battle triggers nothing, as in Nova's Moxie).
+  # Returns [hp before, hp after, stages before, stages after].
+  def self.knockout(spec, kos, hp_fraction, stages)
+    b, user, target = pair(spec, :TACKLE)
+    user.ability = spec[:ability]
+    user.hp = [(user.totalhp * hp_fraction).floor, 1].max
+    stages.each { |stat, n| user.stages[stat] = n }
+    target.damageState.fainted = kos > 0
+    targets = [target] * [kos, 1].max
+    hp, before = user.hp, user.stages.dup
+    Battle::AbilityEffects.triggerOnEndOfUsingMove(user.ability, user, targets, user.moves[0], b)
+    [hp, user.hp, before, user.stages.dup]
+  end
+
+  # The move's priority as pbCalculatePriority asks it of the user's ability, at
+  # hp_fraction of max HP: [the move's own priority, with the ability].
+  def self.priority(spec, move_id, hp_fraction)
+    b, user, target = pair(spec, move_id)
+    user.ability = spec[:ability]
+    user.hp = [(user.totalhp * hp_fraction).floor, 1].max
+    move = user.moves[0]
+    base = move.pbPriority(user)
+    [base, Battle::AbilityEffects.triggerPriorityChange(user.ability, user, move, base)]
+  end
+
   # One hit's damage with the user in the status and without it, same battlers.
   def self.status_damage(spec, move_id, ability)
     b, user, target = pair(spec, move_id)
@@ -465,6 +528,33 @@ module ChrookedSelfTest
       (spec[:defend] || []).each do |move_id|
         with, without, type = defend(spec, move_id)
         log("DEFEND #{mechanic} move=#{move_id} type=#{type} immune_with=#{with} immune_without=#{without}")
+      end
+    end
+    guard("drain") do
+      (spec[:drain] || []).each do |move_id, opts|
+        opts ||= {}
+        hp_lost = opts[:hp_lost] || 100
+        before, after = drain(spec, move_id, hp_lost, opts[:target_ability])
+        log("DRAIN #{mechanic} move=#{move_id} hp_lost=#{hp_lost} target_ability=#{opts[:target_ability] || 'none'} " \
+            "hp=#{before}->#{after} change=#{after - before}")
+      end
+    end
+    guard("ko") do
+      (spec[:ko] || []).each do |opts|
+        kos = opts[:kos] || 1
+        hp_fraction = opts[:hp] || 0.5
+        hp, hp_after, stages, stages_after = knockout(spec, kos, hp_fraction, opts[:stages] || {})
+        moved = stages_after.select { |stat, n| stages[stat] != n }
+                            .map { |stat, n| "#{stat}:#{stages[stat]}->#{n}" }
+        log("KO #{mechanic} kos=#{kos} hp_fraction=#{hp_fraction} hp=#{hp}->#{hp_after} " \
+            "stages=#{moved.empty? ? 'unchanged' : moved.join(',')}")
+      end
+    end
+    guard("priority") do
+      (spec[:priority] || []).each do |move_id, hp_fraction|
+        hp_fraction ||= 1.0
+        base, with = priority(spec, move_id, hp_fraction)
+        log("PRIORITY #{mechanic} move=#{move_id} hp_fraction=#{hp_fraction} base=#{base} with=#{with}")
       end
     end
     guard("turn") do

@@ -290,4 +290,20 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": "Rimefang user uses Tackle, many times.", "select": {"move": "TACKLE", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
         {"stage": "Rimefang user bites (Crunch) an Ice-type foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "ICE"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
     ],
+    # NV-14 hand ports, proven before their templates replace them.
+    "vampiric": [
+        {"stage": "With your Vampiric user below full HP, hit with Tackle.", "select": {"move": "TACKLE", "ability": "true", "ooze": "false", "can_heal": "true"}, "expect": {"result": "HEALED"}},
+        {"stage": "With your Vampiric user, hit with Water Gun.", "select": {"move": "WATERGUN", "ability": "true"}, "expect": {"result": "NONE"}},
+        {"stage": "With your Vampiric user, hit a Liquid Ooze foe with Tackle.", "select": {"move": "TACKLE", "ability": "true", "ooze": "true"}, "expect": {"result": "REVERSED"}},
+    ],
+    "carnivore": [
+        {"stage": "With your Carnivore user below full HP, knock out a foe.", "select": {"ability": "true", "kos": "1", "hp_full": "false"}, "expect": {"result": "HEALED"}},
+        {"stage": "With your Carnivore user below full HP, hit a foe without knocking it out.", "select": {"ability": "true", "kos": "0", "hp_full": "false"}, "expect": {"result": "NONE"}},
+        {"stage": "With your Carnivore user at full HP, knock out a foe.", "select": {"ability": "true", "kos": "1", "hp_full": "true"}, "expect": {"result": "NONE"}},
+    ],
+    "rapidcombustion": [
+        {"stage": "With your Rapid Combustion user at full HP, use Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "hp_full": "true"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "With your Rapid Combustion user below full HP, use Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "hp_full": "false"}, "expect": {"result": "NORMAL"}},
+        {"stage": "With your Rapid Combustion user at full HP, use Surf.", "select": {"move": "SURF", "ability": "true", "hp_full": "true"}, "expect": {"result": "NORMAL"}},
+    ],
 }
