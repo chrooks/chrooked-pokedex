@@ -136,12 +136,14 @@ stored patch is stale.
    `AccuracyCalcFromUser`, …): a port is one `.add(:ID, proc)` at load, modelled on a vanilla
    handler of the same shape (Kindle = Nova's Blaze minus the HP check), with no method overrides
    or deferred install. Ruby 3.1. **Template first (NV-8):** if the mechanic is one of the proven
-   shapes (`type_boost`, `type_conversion`, `flag_boost`, `conditional_boost`; see
+   shapes (`type_boost`, `type_conversion`, `flag_boost`, `conditional_boost`, `stab_grant`; see
    `references/essentials21-harness/README.md`), do not write Ruby. Add a `template:` block to
    `ruleset/behaviors/<id>.yaml` (shape, params, one probe per test case, in order). Apply then
    generates the port, its self-test case and its harness checks against the target's own names.
    A template generates exactly ONE effect: a spec with more (a boost plus a status chance, a
-   boost plus a stat swap) is refused, so read every effect before reaching for one. A new shape
+   boost plus a stat swap) is refused, so read every effect before reaching for one; it gets one
+   hand-written port covering every effect (NV-10: `chrooked_fullmoon.rb`, a STAB grant plus a
+   Moonlight heal wrapper chained on `HealUserDependingOnWeather#pbOnStartUse`). A new shape
    starts as one hand port proven in the lab, then is generalised (NV-9: Forestry ->
    `conditional_boost`). Only a mechanic that fits no shape gets a
    hand-written `references/essentials21-harness/chrooked_<id>.rb`. That port must register its own

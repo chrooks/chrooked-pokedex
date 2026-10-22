@@ -39,6 +39,7 @@ Shapes, their params, and the probe fields each accepts:
   flag_boost         {flags, multiplier, control?}            {move, result, hp?, holder?}
   conditional_boost  {weather | terrain, multiplier,          {move, result, hp?, field?,
                       moves=all|higher_stat, control?}         item?, airborne?, stats?}
+  stab_grant         {types | all, multiplier=1.5, control?}  {move, result, hp?, types?}
 
 `result` is `boosted` or `normal`; `converted` is true or false. `pinch: true` limits a
 type boost to HP at or below 1/3, Blaze's threshold, and a probe's `hp` sets the
@@ -55,6 +56,12 @@ when Attack >= Sp. Atk, special otherwise), as Solar Power does. Its probes set 
 scene: `field: false` (no weather or terrain), `item` (a held item, weather only, e.g.
 Utility Umbrella), `airborne: true` (terrain only), and `stats: physical|special`
 (which attacking stat is higher; required for higher_stat).
+
+A STAB grant gives moves of `types` (a list of type names, or `all`) the same-type
+bonus without the type (NV-10): the same 1.5x on final damage that Nova's own STAB
+applies, and only when the user lacks the type, so STAB never doubles; a typeless
+move (Struggle) gets none, as in Nova. A probe's `types` sets the user's types
+first (a list of type names; without it the user is the neutral ??? type).
 """
 
 from __future__ import annotations
@@ -69,7 +76,7 @@ from ..appliers.essentials import vocab
 from ..model.behavior_spec import BehaviorSpec, BehaviorTemplate
 from ..model.schema import MOVE_FLAGS
 
-SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost")
+SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -78,10 +85,15 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "flag_boost": (frozenset({"flags", "multiplier"}), {"control": None}),
     "conditional_boost": (frozenset({"multiplier"}),
                           {"weather": None, "terrain": None, "moves": "all", "control": None}),
+    "stab_grant": (frozenset({"types"}), {"multiplier": 1.5, "control": None}),
 }
 # The probe field that states the expected outcome, per shape.
 _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost": "result",
-            "conditional_boost": "result"}
+            "conditional_boost": "result", "stab_grant": "result"}
+# The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
+_SCENE_SHAPES = ("conditional_boost", "stab_grant")
+# Moves Essentials builds in code, with no PBS section to resolve them by.
+_BUILTIN_MOVES = {"struggle": "STRUGGLE"}
 _RESULTS = ("boosted", "normal")
 _WEATHERS = ("rain", "sun", "sand", "hail")
 _TERRAINS = ("grassy", "electric", "psychic", "misty")
@@ -169,6 +181,8 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
                 f"{where}: unknown move flags {', '.join(bad)}; known: {', '.join(sorted(MOVE_FLAGS))}")
     if template.shape == "conditional_boost":
         _validate_condition(params, where)
+    if template.shape == "stab_grant" and params["types"] != "all" and not _is_type_list(params["types"]):
+        raise TemplateError(f"{where}: params.types must be all, or a non-empty list of type names, e.g. [Dark, Fairy]")
     if len(template.probes) != n_test_cases:
         raise TemplateError(
             f"{where}: {len(template.probes)} probes for {n_test_cases} test_cases; keep them aligned 1:1")
@@ -204,6 +218,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         allowed |= {"item"} if params.get("weather") is not None else {"airborne"}
         if higher_stat:
             allowed.add("stats")
+    if shape == "stab_grant":
+        allowed.add("types")
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
@@ -222,6 +238,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
             raise TemplateError(f"{at}: {flag} must be true or false")
     if "item" in probe and not _is_text(probe["item"]):
         raise TemplateError(f"{at}: item must be an item name, e.g. Utility Umbrella")
+    if "types" in probe and not _is_type_list(probe["types"]):
+        raise TemplateError(f"{at}: types must be a non-empty list of type names, e.g. [Water, Dragon]")
     if higher_stat and probe.get("stats") not in _STATS:
         raise TemplateError(f"{at}: needs stats: physical or special (which of Attack and Sp. Atk is higher)")
     holder = probe.get("holder", True)
@@ -256,9 +274,14 @@ def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
     elif port.shape == "flag_boost":
         values["FLAGS"] = "|".join(port.flags)
         body = _FLAG_BOOST
-    else:
+    elif port.shape == "conditional_boost":
         values.update(_conditional_ruby(port))
         body = _CONDITIONAL_BOOST
+    else:
+        values["TYPE_GATE"] = (
+            "" if port.grant_types is None
+            else f" && [{', '.join(':' + t for t in port.grant_types)}].include?(type)")
+        body = _STAB_GRANT
     return _fill(_PORT, {
         "HEADER": _header(spec, port),
         "LOG": _CHROOKED_LOG,
@@ -281,7 +304,7 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
         select: dict[str, object] = {"move": probe.move, "ability": _flag(probe.holder)}
         if pinch and probe.holder:
             select["hp_low"] = _flag(probe.hp * 3 <= 1)  # the port's user.hp <= user.totalhp / 3
-        if port.shape == "conditional_boost":
+        if port.shape in _SCENE_SHAPES:
             select.update(_scene(port, probe))
         if port.shape == "type_conversion":
             expect = {"converted": port.type if probe.outcome else "none", "boosted": _flag(bool(probe.outcome))}
@@ -306,6 +329,8 @@ class _Probe:
     item_name: Optional[str] = None  # its neutral name, for stage text
     airborne: bool = False
     stats: Optional[str] = None      # "physical" / "special": the higher attacking stat
+    types: tuple[str, ...] = ()      # INTERNAL types to give the user (stab_grant)
+    type_names: tuple[str, ...] = ()  # their neutral names, for stage text
 
 
 @dataclass(frozen=True)
@@ -318,6 +343,7 @@ class _Port:
     probes: tuple[_Probe, ...]
     weathers: tuple[str, ...] = ()  # Essentials weathers that count, for a weather boost
     terrain: Optional[str] = None   # Essentials terrain, for a terrain boost
+    grant_types: Optional[tuple[str, ...]] = None  # stab_grant: INTERNAL types, None = all
 
 
 def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
@@ -348,10 +374,23 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
     if params.get("weather") is not None:
         weathers = vocab.weathers(str(params["weather"])) or ()
     terrain = vocab.terrain(str(params["terrain"])) if params.get("terrain") is not None else None
+
+    def resolve_types(type_names: object) -> tuple[str, ...]:
+        resolved = []
+        for type_name in type_names:  # type: ignore[union-attr]
+            internal = names.type(str(type_name))
+            if internal is None:
+                missing.append(f"type {type_name!r}")
+            resolved.append(internal or "")
+        return tuple(resolved)
+
+    grant_types = None
+    if template.shape == "stab_grant" and params["types"] != "all":
+        grant_types = resolve_types(params["types"])
     outcome = _OUTCOME[template.shape]
     probes: list[_Probe] = []
     for probe in template.probes:
-        move = names.move(str(probe["move"]))
+        move = names.move(str(probe["move"])) or _BUILTIN_MOVES.get(str(probe["move"]).lower())
         if move is None:
             missing.append(f"move {probe['move']!r}")
         item = None
@@ -366,11 +405,14 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             item_name=str(probe["item"]) if "item" in probe else None,
             airborne=bool(probe.get("airborne", False)),
             stats=str(probe["stats"]) if "stats" in probe else None,
+            types=resolve_types(probe.get("types") or ()),
+            type_names=tuple(str(t) for t in probe.get("types") or ()),  # type: ignore[union-attr]
         ))
     if missing:
         raise TemplateError(f"{where}: the target has no {', '.join(dict.fromkeys(missing))}")
     return _Port(shape=template.shape, params=params, ability=ability or "", type=type_,
-                 flags=tuple(flags), probes=tuple(probes), weathers=weathers, terrain=terrain)
+                 flags=tuple(flags), probes=tuple(probes), weathers=weathers, terrain=terrain,
+                 grant_types=grant_types)
 
 
 # --- rendering -------------------------------------------------------------------
@@ -447,6 +489,15 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
                 "writes into the game's move data (appliers/essentials/vocab.py); without the flag in "
                 "the data this port never fires.")
         obs = "move=<ID> ability=true category=<flag|none> result=<BOOSTED|NORMAL>"
+    elif port.shape == "stab_grant":
+        which = ("every move with a type" if port.grant_types is None
+                 else f"{' and '.join(str(t) for t in port.params['types'])}-type moves")
+        note = (f"Nova's own STAB (Battle::Move#pbCalcDamageMultipliersSTAB) multiplies final damage by "
+                f"1.5 when `type && user.pbHasType?(type)`. This grants {which} the same factor "
+                f"({multiplier}x) in the same slot, only when the user LACKS the type, so STAB never "
+                "doubles; Struggle (type nil) gets none, as in Nova's STAB. Modelled on the hand-written "
+                "Full Moon port (mjolnir NV-10).")
+        obs = "move=<ID> type=<TYPE> ability=true user_types=<T/T> own=<true|false> result=<BOOSTED|NORMAL>"
     else:
         higher_stat = port.params["moves"] == "higher_stat"
         if higher_stat:
@@ -495,12 +546,14 @@ def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
     """
     calc: list[str] = []
     for probe in port.probes:
-        setup = f", {_setup(port, probe)}" if port.shape == "conditional_boost" else ""
+        setup = f", {_setup(port, probe)}" if port.shape in _SCENE_SHAPES else ""
         entry = f"[:{probe.move}, {_ruby_float(probe.hp)}{setup}]"
         if probe.holder and entry not in calc:
             calc.append(entry)
     without = list(dict.fromkeys(f":{p.move}" for p in port.probes if not p.holder))
-    fight = list(dict.fromkeys(f":{p.move}" for p in port.probes if p.holder))[:_FIGHT_MOVES]
+    # A built-in move (Struggle) cannot be learned, so it never joins the fight.
+    learnable = [p for p in port.probes if p.holder and p.move.lower() not in _BUILTIN_MOVES]
+    fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:_FIGHT_MOVES]
     control = port.params.get("control")
     return _fill(_SELFTEST, {
         "ID": spec.chrooked_id,
@@ -527,12 +580,18 @@ def _setup(port: _Port, probe: _Probe) -> str:
         parts.append("airborne: true")
     if probe.stats:
         parts.append(f"stats: :{probe.stats}")
+    if probe.types:
+        parts.append(f"types: [{', '.join(':' + t for t in probe.types)}]")
     return "{" + ", ".join(parts) + "}"
 
 
 def _scene(port: _Port, probe: _Probe) -> dict[str, object]:
-    """The OBS keys a conditional boost's check selects on: the scene the self-test set."""
+    """The OBS keys a scene shape's check selects on: the scene the self-test set."""
     scene: dict[str, object] = {}
+    if port.shape == "stab_grant":
+        # Without probe types the self-test leaves the user neutral: ??? is QMARKS.
+        scene["user_types"] = "/".join(probe.types) if probe.types else "QMARKS"
+        return scene
     if port.weathers:
         scene["weather"] = port.weathers[0] if probe.field else "None"
         scene["item"] = probe.item or "none"
@@ -560,6 +619,8 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
         extras.append("airborne")
     if probe.item_name:
         extras.append(f"holding {probe.item_name}")
+    if probe.type_names:
+        extras.append(f"{'/'.join(probe.type_names)} type")
     who = f"With your {name} user" + (f" ({', '.join(extras)})" if extras else "")
     where = ""
     if port.shape == "conditional_boost" and port.weathers:
@@ -587,6 +648,10 @@ def _is_text(value: object) -> bool:
 
 def _is_positive_number(value: object) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
+
+
+def _is_type_list(value: object) -> bool:
+    return isinstance(value, list) and bool(value) and all(_is_text(t) for t in value)
 
 
 # --- Ruby ------------------------------------------------------------------------
@@ -711,6 +776,29 @@ begin
         tag = caller_locations(1, 6).any? { |l| l.path.to_s.include?("AIMove") } ? "EST" : "OBS"
         ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} ability=true {{FIELDS_A}}" \\
                          "{{FIELDS_B}}result=#{boosted ? 'BOOSTED' : 'NORMAL'}")
+      end
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on Battle::AbilityEffects::DamageCalcFromUser")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_STAB_GRANT = """\
+begin
+  chrooked_table = Battle::AbilityEffects::DamageCalcFromUser
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!chrooked_table[:{{ABILITY}}].nil?}")
+  chrooked_table.add(:{{ABILITY}},
+    proc { |ability, user, target, move, mults, power, type|
+      own     = !type.nil? && user.pbHasType?(type)
+      boosted = !type.nil? && !own{{TYPE_GATE}}
+      mults[:final_damage_multiplier] *= {{MULTIPLIER}} if boosted
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s.include?("AIMove") } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} type=#{type || 'NONE'} ability=true " \\
+                         "user_types=#{user.pbTypes.join('/')} own=#{own} result=#{boosted ? 'BOOSTED' : 'NORMAL'}")
       end
     }
   )

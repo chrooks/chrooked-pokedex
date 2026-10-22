@@ -17,3 +17,10 @@ test_cases:
     expect: unchanged
 notes:
   - Narrowed clone of Full Moon's Dark/Fairy STAB grant, via Chrooked.stab_grant.
+template:
+  shape: stab_grant
+  params: {types: [Dark]}
+  probes:
+    - {move: Crunch, result: boosted, types: [Water, Dragon]}
+    - {move: Crunch, result: normal, types: [Dark]}
+    - {move: Waterfall, result: normal, types: [Water, Dragon]}

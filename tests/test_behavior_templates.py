@@ -10,6 +10,7 @@ where ruby is absent).
 import shutil
 import subprocess
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 
@@ -36,8 +37,10 @@ class _Names:
         "Thunderbolt": "THUNDERBOLT", "Ice Beam": "ICEBEAM", "Tackle": "TACKLE",
         "X-Scissor": "XSCISSOR", "High Jump Kick": "HIGHJUMPKICK", "Mach Punch": "MACHPUNCH",
         "Body Slam": "BODYSLAM", "Hyper Voice": "HYPERVOICE",
+        "Dark Pulse": "DARKPULSE", "Crunch": "CRUNCH", "Waterfall": "WATERFALL",
     }
-    TYPES = {"fire": "FIRE", "electric": "ELECTRIC", "bug": "BUG"}
+    TYPES = {"fire": "FIRE", "electric": "ELECTRIC", "bug": "BUG", "water": "WATER",
+             "dragon": "DRAGON", "dark": "DARK", "fairy": "FAIRY", "normal": "NORMAL"}
     ITEMS = {"utility umbrella": "UTILITYUMBRELLA"}
 
     def move(self, name):
@@ -100,7 +103,17 @@ DOWNPOUR = _spec("downpour", "conditional_boost", {"weather": "rain", "moves": "
     {"move": "Hyper Voice", "result": "normal", "stats": "physical"},
     {"move": "Body Slam", "result": "normal", "stats": "physical", "item": "Utility Umbrella"},
 ])
-ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST, FORESTRY, DOWNPOUR]
+MYSTICPOWER = _spec("mysticpower", "stab_grant", {"types": "all"}, [
+    {"move": "Flamethrower", "result": "boosted", "types": ["Water"]},
+    {"move": "Surf", "result": "normal", "types": ["Water"]},
+    {"move": "Struggle", "result": "normal"},
+], name="Mystic Power")
+VIOLENTBLOOD = _spec("violentblood", "stab_grant", {"types": ["Dark"]}, [
+    {"move": "Crunch", "result": "boosted", "types": ["Water", "Dragon"]},
+    {"move": "Crunch", "result": "normal", "types": ["Dark"]},
+    {"move": "Waterfall", "result": "normal", "types": ["Water", "Dragon"]},
+], name="Violent Blood")
+ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST, FORESTRY, DOWNPOUR, MYSTICPOWER, VIOLENTBLOOD]
 
 
 def _render(spec):
@@ -207,6 +220,33 @@ def test_hail_counts_novas_snowstorm_too():
     assert "weather: :Hail, stats: :physical" in text
 
 
+def _handler(text, ability):
+    start = text.index(f"  chrooked_table.add(:{ability},")
+    return text[start:text.index("\n  )\n", start)]
+
+
+def test_stab_grant_is_the_hand_proven_full_moon_handler():
+    """The template's handler is the STAB half of the hand-written Full Moon port,
+    which scored 3/3 in the lab (NV-10), character for character."""
+    hand = (Path(__file__).resolve().parents[1] / "references" / "essentials21-harness"
+            / "chrooked_fullmoon.rb").read_text(encoding="utf-8")
+    fullmoon = _spec("fullmoon", "stab_grant", {"types": ["Dark", "Fairy"]}, [
+        {"move": "Dark Pulse", "result": "boosted", "types": ["Normal"]},
+        {"move": "Flamethrower", "result": "normal", "types": ["Normal"]},
+    ], name="Full Moon")
+    assert _handler(_render(fullmoon), "FULLMOON") == _handler(hand, "FULLMOON")
+
+
+def test_stab_grant_for_every_type_has_no_type_gate_and_skips_struggle_in_the_fight():
+    text = _render(MYSTICPOWER)
+    assert "      boosted = !type.nil? && !own\n" in text
+    assert "mults[:final_damage_multiplier] *= 1.5 if boosted" in text
+    assert ("calc: [[:FLAMETHROWER, 1.0, {types: [:WATER]}], [:SURF, 1.0, {types: [:WATER]}], "
+            "[:STRUGGLE, 1.0, {}]]") in text
+    assert "fight: [:FLAMETHROWER, :SURF]\n" in text  # Struggle is built in, never learned
+    assert "boosted = !type.nil? && !own && [:DARK].include?(type)" in _render(VIOLENTBLOOD)
+
+
 def test_fight_keeps_at_most_four_moves():
     moves = ["Flamethrower", "Surf", "Ember", "Tackle", "Thunderbolt"]
     spec = _spec("kindle", "type_boost", {"type": "Fire", "multiplier": 1.5},
@@ -273,6 +313,21 @@ def test_weather_boost_checks_select_weather_item_and_higher_stat():
     ]
 
 
+def test_stab_grant_checks_select_the_users_types():
+    assert _verdicts(MYSTICPOWER) == [
+        ({"move": "FLAMETHROWER", "ability": "true", "user_types": "WATER"}, {"result": "BOOSTED"}),
+        ({"move": "SURF", "ability": "true", "user_types": "WATER"}, {"result": "NORMAL"}),
+        ({"move": "STRUGGLE", "ability": "true", "user_types": "QMARKS"}, {"result": "NORMAL"}),
+    ]
+    assert _verdicts(VIOLENTBLOOD) == [
+        ({"move": "CRUNCH", "ability": "true", "user_types": "WATER/DRAGON"}, {"result": "BOOSTED"}),
+        ({"move": "CRUNCH", "ability": "true", "user_types": "DARK"}, {"result": "NORMAL"}),
+        ({"move": "WATERFALL", "ability": "true", "user_types": "WATER/DRAGON"}, {"result": "NORMAL"}),
+    ]
+    assert harness_checks(VIOLENTBLOOD, _Names())[0]["stage"] == \
+        "With your Violent Blood user (Water/Dragon type), use Crunch on the foe."
+
+
 def test_conditional_stage_text_sets_the_scene():
     forestry = [c["stage"] for c in harness_checks(FORESTRY, _Names())]
     assert forestry == [
@@ -316,6 +371,13 @@ def test_unresolved_names_fail_naming_each():
         _render(spec)
     with pytest.raises(TemplateError, match="Sludge Wave"):
         harness_checks(spec, _Names())
+
+
+def test_unknown_probe_type_fails():
+    spec = replace(VIOLENTBLOOD, template=replace(VIOLENTBLOOD.template, probes=(
+        {"move": "Crunch", "result": "boosted", "types": ["Shadow"]},) + VIOLENTBLOOD.template.probes[1:]))
+    with pytest.raises(TemplateError, match="type 'Shadow'"):
+        _render(spec)
 
 
 def test_unknown_type_fails():
@@ -410,6 +472,12 @@ def test_the_proven_specs_validate():
                [{"move": "Ember", "result": "normal", "holder": False}]), "unknown fields holder"),
     (_template("conditional_boost", {"terrain": "grassy", "multiplier": 1.3},
                [{"move": "Ember", "result": "normal", "field": "no"}]), "field must be true or false"),
+    (_template("stab_grant", {"types": []}), "params.types must be all, or a non-empty list"),
+    (_template("stab_grant", {"types": "some"}), "params.types must be all, or a non-empty list"),
+    (_template("stab_grant", {"types": ["Dark"]}, [{"move": "Crunch", "result": "boosted", "types": "Water"}]),
+     "types must be a non-empty list"),
+    (_template("stab_grant", {"types": ["Dark"]}, [{"move": "Crunch", "result": "normal", "holder": False}]),
+     "unknown fields holder"),
 ])
 def test_validate_refuses(template, message):
     with pytest.raises(TemplateError, match=message):

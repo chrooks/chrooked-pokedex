@@ -24,3 +24,10 @@ notes:
 engine_hints:
   pokeemerald: "GetSameTypeAttackBonusModifier in src/battle_util.c (~line 7753); branch `ctx->abilityAtk == ABILITY_MYSTIC_POWER && move != MOVE_STRUGGLE && move != MOVE_NONE` returns UQ_4_12(1.5)."
   essentials: "Override pbGetStabBonus / STAB step — return 1.5 when the user's ability is Mystic Power for any non-Struggle move, bypassing the type-match test."
+template:
+  shape: stab_grant
+  params: {types: all}
+  probes:
+    - {move: Flamethrower, result: boosted, types: [Water]}
+    - {move: Surf, result: normal, types: [Water]}
+    - {move: Struggle, result: normal}
