@@ -2,8 +2,9 @@
 
 Ported mechanics for Pokémon Essentials 21 games (v21.1 and the 21.99 line;
 first Target: Pokémon Nova V3.0, mkxp-z, Ruby 3.1), plus the lab-only scripts
-that prove them. Built for mjolnir NV-5. The 16.2 counterpart is
-`../essentials-harness/`.
+that prove them. Built for mjolnir NV-5. Since NV-8 a mechanic in a proven shape
+has no file here: `apply` generates its port from the `template:` block in its
+behavior spec. The 16.2 counterpart is `../essentials-harness/`.
 
 ## The Seam: handler registries
 
@@ -15,21 +16,66 @@ only when `user.abilityActive?`. A port is therefore one `.add(:ID, proc)` call:
 
 - no method is overridden, so a port cannot change any other ability;
 - suppression (Gastro Acid, Neutralizing Gas) stays the engine's job;
-- the AI's damage estimate reads the same table, so it accounts for the port too.
+- the AI's damage estimate (`Battle::AI::AIMove#rough_damage`) reads the same
+  table, so it accounts for the port too.
 
 The 16.2 ports needed `alias_method` chaining and a deferred install; these need
 neither.
 
+## Generated ports: templates (NV-8)
+
+A behavior spec whose mechanic is one of the proven shapes carries a `template:`
+block, and the dex generates the rest from it (`src/chrooked_pokedex/behavior/templates.py`):
+
+    template:
+      shape: flag_boost
+      params: {flags: [kicking], multiplier: 1.3}
+      probes:
+        - {move: High Jump Kick, result: boosted}
+        - {move: Tackle, result: normal}
+        - {move: High Jump Kick, result: normal, holder: false}
+
+| shape | params | the port | modelled on Nova's |
+| --- | --- | --- | --- |
+| `type_boost` | `type`, `multiplier`, optional `pinch`, `control` | `DamageCalcFromUser`: attack-stat multiplier on moves of the type; `pinch: true` adds `user.hp <= user.totalhp / 3` | Blaze (without its HP check unless `pinch`) |
+| `type_conversion` | `type`, `multiplier` (default 1.2), optional `control` | `ModifyMoveBaseType` turns Normal moves into the type and sets `move.powerBoost`; a `DamageCalcFromUser` power rider reads that flag | Aerilate, Dragonize |
+| `flag_boost` | `flags` (Ruleset move flags), `multiplier`, optional `control` | `DamageCalcFromUser`: power multiplier when the move carries one of the flags | Iron Fist |
+
+`probes` hold one checkable probe per `test_cases` entry, in the same order: the
+move (its display name), the outcome (`result: boosted|normal`, or `converted:
+true|false`), and optionally `hp` (a fraction of max HP to set first) or
+`holder: false` (a Pokémon without the ability). `control` is a vanilla ability,
+by INTERNAL name, that the self-test measures beside the port. From the block,
+for one target:
+
+- **the port**, rendered by `apply` against the target's own PBS names. A probe,
+  type or ability the game lacks blocks the port, says which, and keeps the
+  ability's `DATA ONLY` line;
+- **its self-test case**, which the port registers at load in
+  `$chrooked_selftest_cases` (see the lab scripts below);
+- **its harness checks**, one per probe, used instead of `harness_scenarios.py`
+  on an Essentials 21 target.
+
+A mechanic that fits no shape gets a hand-written `chrooked_<id>.rb` here. It must
+register its own self-test case and have a scenario in `harness_scenarios.py`. A
+spec with both a template and a file here is ambiguous, and apply blocks it.
+
 ## Install
 
 `chrooked-pokedex apply --engine essentials` (the `behaviors` category, last in the
-v21 tier order) copies each valid `chrooked_<id>.rb` into the target's
-`Data/Scripts/998_ChrookedMods/`. Essentials loads every `.rb` under
+v21 tier order) writes each port into the target's
+`Data/Scripts/998_ChrookedMods/`: generated from its spec's template, or copied
+from a hand-written `chrooked_<id>.rb` here. Essentials loads every `.rb` under
 `Data/Scripts/` in name order, files before folders, so that folder runs after
-the game's battle code and before `999_Main` starts the game. The dex owns the
-folder: an unchanged port is not rewritten, and a `chrooked_*.rb` with no valid
-port behind it is removed and reported. Nothing else under `Data/Scripts/` is
-touched. That matters on thor, where `998_ChrookedKirin/` holds the controls shim.
+the game's battle code defines the registries and before `999_Main` starts the
+game: a port registers at load, with no method override and no deferred install.
+The dex owns the folder: an unchanged port is not rewritten, and a `chrooked_*.rb`
+with no valid port behind it is removed and reported. Nothing else under
+`Data/Scripts/` is touched. That matters on thor, where `998_ChrookedKirin/` holds
+the controls shim.
+
+Every port carries the small `ChrookedLog` module behind `unless defined?`, so each
+file stands alone and the first one loaded defines it.
 
 `scripts/nova_apply.sh` deploys the folder's `chrooked_*.rb` files to Nova's
 live PC copy and to thor beside the compiled `.dat` files.
@@ -38,12 +84,17 @@ live PC copy and to thor beside the compiled `.dat` files.
 
 A port writes `chrooked_load.log` in the game folder only when
 `chrooked-oracle.on` exists there at boot. Played copies stay silent unless a
-proof run sets the marker. Errors are always written.
+proof run sets the marker. Errors are always written. Essentials evals each
+script under a bare file name, so a port resolves both paths from the working
+directory once, at load, while that is the game folder (on the PC and on Kirin).
 
     [chrooked:<id>] OBS key=value ...   a real battle event, scored by the harness
     [chrooked:<id>] EST key=value ...   an AI estimate, never scored
 
-The OBS keys match the 16.2 ports', so `harness_scenarios.py` is shared.
+A line is `EST` when the handler was called from the AI's damage estimate
+(`AIMove` in the caller's stack), `OBS` otherwise. A hand port's OBS keys match
+the 16.2 ports', so `harness_scenarios.py` is shared; a templated spec's checks
+are generated from its probes.
 `python -m chrooked_pokedex.behavior.harness stage|verify <id> --target <game>`
 detects the v21 dialect, reads the game-folder log, and `stage` sets the marker.
 
@@ -56,7 +107,7 @@ Copied into the **lab copy's** `Data/Scripts/998_ChrookedDexLab/` by
 | --- | --- |
 | `001_register_black_weather.rb` | Nova only: registers the `:Black` weather map 050 uses, so the PBS writer and compiler finish; lands the debug boot on the title screen |
 | `002_lab_save_dir.rb` | points `SaveData::DIRECTORY` at the lab's own `LabSaves/`; lab and live share `Title=Nova`, so both otherwise save into the synced `%AppData%\Roaming\Nova` |
-| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. One `CASES` entry per mechanic. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
+| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
 
 ### Why the self-test has four hooks
 
@@ -84,11 +135,14 @@ folder of its own (`998_ChrookedSelfTest/`) and removed straight after.
 ## Verify a mechanic in the lab (no one playing)
 
     scripts/nova_selftest.sh <id>     # e.g. kindle
+    scripts/nova_selftest.sh --all    # every port apply installed in the lab
 
-Syncs the lab scripts, installs the port if the lab's copy is stale, boots the
-lab once (`nova_selftest.ps1`, about 6 s), and scores the OBS lines with the
-harness. A new mechanic needs its port here, a `CASES` entry in
-`lab/010_battle_selftest.rb`, and a scenario in `harness_scenarios.py`.
+Syncs the lab scripts, runs `apply --category behaviors` (renders generated
+ports, copies hand ones, leaves unchanged ones alone), boots the lab once
+(`nova_selftest.ps1`, about 6 s), and scores the OBS lines with the harness. A new
+mechanic in a known shape needs only a `template:` block in its spec. A
+hand-written one needs its port here, registering its own self-test case, and a
+scenario in `harness_scenarios.py`.
 
 ## From the Rejuvenation ports (`../rejuv-harness/`)
 
@@ -129,26 +183,36 @@ A candidate becomes verified only after reading its call site in Nova's
   ports that read them are in the table below. `wing`, `bone` and `ballistic`
   stay unwritten until a port needs them.
 - *Simple multipliers without a harness scenario yet:* downpour, forestry,
-  mysticpower, nightstalker, updraft, violentblood, whiteout. Each needs its
-  scenario written before it can be scored.
+  mysticpower, nightstalker, updraft, violentblood, whiteout. With templates they
+  need probes in their specs, not scenarios, if they fit a shape.
 - *Composition:* finishingkick, which borrows Speed Boost through
   `behaviors: [finishingkick, speedboost]`. Essentials 21 has no composition step
   yet; `HandlerHash#copy` might serve, unverified.
 - *Every other table* above, and the 25 Nova abilities with no Rejuvenation port.
 
-## Files
+## Ported mechanics
 
-| file | Seam | verified |
+All 22 are generated from their specs' `template:` blocks since 2026-10-22 (NV-8),
+and no hand-written port remains here. Before the hand ports were deleted, the
+regeneration was checked three ways: each generated port's code matched its hand
+port line for line (comments and the self-test registration aside), its generated
+checks matched the old scenario, and `nova_selftest.sh --all` scored 66/66 with
+damage numbers identical to the hand ports' for 21 of the 22. Kindle is the
+exception, by design (below).
+
+| mechanics | template | verified |
 | --- | --- | --- |
-| `chrooked_kindle.rb` | `DamageCalcFromUser` (Blaze's shape, no HP check) | `nova_selftest.sh kindle` 3/3, 2026-10-22, Nova V3.0 lab: Flamethrower 1.500x, Surf and Tackle 1.000x, Ember at full HP 1.474x, Blaze unchanged at full HP. **thor**, same day, Kirin 0.3.5 (Ruby 3.1.0 aarch64-linux-android): harness 3/3 with identical damage numbers |
-| `chrooked_bloom.rb`, `chrooked_cryomancer.rb`, `chrooked_deluge.rb` | `DamageCalcFromUser`, Kindle's shape for Grass / Ice / Water | lab, 2026-10-22: 3/3 each; 1.500x on full hits, 1.417x on Vine Whip-sized hits, off-type 1.000x; Overgrow and Torrent unchanged at full HP |
-| `chrooked_overcharge.rb` | `DamageCalcFromUser`, Blaze with Electric (`hp <= totalhp / 3`) | lab, 2026-10-22: 3/3; Thunderbolt 1.500x at 1/4 HP, 1.000x at full HP; Ice Beam 1.000x at 1/4 HP |
-| `chrooked_{chitinize,foliate,hydrate,immolate,martialize,mineralize,obfuscate,psyonize,spectralize,tectonize,venomize,wyvernize}.rb` | `ModifyMoveBaseType` + `DamageCalcFromUser` (Aerilate's pair) | lab, 2026-10-22: 3/3 each; Tackle converts and hits 17 vs 14 (1.214x), equal to Aerilate; already-typed moves unchanged. The foe-weak/foe-resists cases pass on `converted`/`boosted`; effectiveness itself was not measured (neutral `???` foe) |
+| kindle | `type_boost`, Fire 1.5x, control Blaze | Hand port, 2026-10-22: lab 3/3 (Flamethrower 1.500x, Surf and Tackle 1.000x, Ember at full HP 1.474x, Blaze unchanged at full HP); **thor**, same day, Kirin 0.3.5 (Ruby 3.1.0 aarch64-linux-android): harness 3/3 with identical damage numbers. Regenerated (NV-8): now measured neutral like the rest and logging `ability=true` instead of `kindle=true`; its second probe is Surf, as the spec says, not Tackle. Lab 3/3: Flamethrower 1.500x, Surf 1.000x, Ember 1.462x (a smaller hit without the same-type bonus, so the flat +2 weighs more) |
+| bloom, cryomancer, deluge | `type_boost`, Grass / Ice / Water 1.5x | lab, 2026-10-22: 3/3 each; 1.500x on full hits, 1.417x on Vine Whip-sized hits, off-type 1.000x; Overgrow and Torrent unchanged at full HP |
+| overcharge | `type_boost`, Electric 1.5x, `pinch` | lab, 2026-10-22: 3/3; Thunderbolt 1.500x at 1/4 HP, 1.000x at full HP; Ice Beam 1.000x at 1/4 HP |
+| chitinize, foliate, hydrate, immolate, martialize, mineralize, obfuscate, psyonize, spectralize, tectonize, venomize, wyvernize | `type_conversion`, 1.2x, control Aerilate | lab, 2026-10-22: 3/3 each; Tackle converts and hits 17 vs 14 (1.214x), equal to Aerilate; already-typed moves unchanged. The foe-weak/foe-resists cases pass on `converted`/`boosted`; effectiveness itself was not measured (neutral `???` foe) |
+| hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
-| `chrooked_{hammerfist,impale,martialartist,sledgehammer,striker}.rb` | `DamageCalcFromUser`, Iron Fist's shape (1.3x power) on the move's `Punching` / `Hammer` / `Kicking` / `Piercing` flags | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest` |
+On thor, only Kindle's hand port was ever proven; the generated ports are deployed
+there but not yet proven on the device.
 
-The CALC phase for these sets both battlers to the `???` type (`neutral: true`),
-so the ratio is the ability alone: no same-type bonus, no type matchups.
+The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
+is the ability alone: no same-type bonus, no type matchups.
 
 A spec case about a Pokémon **without** the ability cannot be logged by an
 Essentials 21 port, which only ever runs for its holder. The self-test's

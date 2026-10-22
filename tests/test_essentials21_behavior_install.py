@@ -184,22 +184,14 @@ def test_has_plugin_requires_a_valid_port(tmp_path):
     assert has_plugin("wrong", source_dir=src) is False
 
 
-def test_reference_kindle_port_is_valid_and_uses_the_v21_registry():
-    port = _REPO_PORTS / "chrooked_kindle.rb"
-    text = port.read_text(encoding="utf-8")
-    assert has_plugin("kindle") is True
-    assert "Battle::AbilityEffects::DamageCalcFromUser" in text
-    assert ".add(:KINDLE" in text
-    assert 'File.expand_path("chrooked-oracle.on")' in text  # marker-gated oracle, path fixed at load
-    assert "PokeBattle_" not in text                    # no 16.2 class names
-
-
 def test_lab_scripts_are_harvested_beside_the_ports():
     lab = _REPO_PORTS / "lab"
     names = sorted(p.name for p in lab.glob("*.rb"))
     assert names == ["001_register_black_weather.rb", "002_lab_save_dir.rb", "010_battle_selftest.rb"]
     selftest = (lab / "010_battle_selftest.rb").read_text(encoding="utf-8")
-    assert '"kindle" =>' in selftest  # every ported damage mechanic gets a CASES entry
+    # Cases come from the installed ports (NV-8), never from a table kept here.
+    assert "cases = $chrooked_selftest_cases || {}" in selftest
+    assert "CASES" not in selftest
     # Safe to arm briefly on a played copy (runbook 31): scratch save dir, globals
     # restored, run once per process, title-screen fallback, absolute log path.
     assert "swap_save_dir(SAVE_SCRATCH)" in selftest

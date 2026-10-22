@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type set in TrySetAteType -> TYPE_FIGHTING (src/battle_main.c:5874); +20% in battle_util.c type-modifier switch, case ABILITY_MARTIALIZE, UQ_4_12(1.2) gated on moveType==TYPE_FIGHTING && ateBoost (src/battle_util.c:6908). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
   essentials: "Battle::Move type/damage calc — when user ability is Martialize and move is Normal, set type to :FIGHTING and apply a 1.2x base-power multiplier"
+template:
+  shape: type_conversion
+  params: {type: Fighting, multiplier: 1.2, control: AERILATE}
+  probes:
+    - {move: Tackle, converted: true}
+    - {move: Tackle, converted: true}
+    - {move: Ember, converted: false}

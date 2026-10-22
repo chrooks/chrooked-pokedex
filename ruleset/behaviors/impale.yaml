@@ -22,3 +22,10 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c attacker-ability damage modifier switch (~line 6953): case ABILITY_IMPALE gates on IsPiercingMove(move) → UQ_4_12(1.3). Flag = gMovesInfo[].piercingMove (custom flag, include/move.h:137)."
   essentials: "Battle::Move damage-calc hook — if user ability is Impale and move has the piercing flag, apply a 1.3x multiplier."
+template:
+  shape: flag_boost
+  params: {flags: [piercing], multiplier: 1.3}
+  probes:
+    - {move: Megahorn, result: boosted}
+    - {move: Tackle, result: normal}
+    - {move: Drill Peck, result: normal, holder: false}

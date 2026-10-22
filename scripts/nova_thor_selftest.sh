@@ -40,7 +40,7 @@ case "${1:-}" in
   arm)
     shift; [ $# -gt 0 ] || usage
     for MECH in "$@"; do
-      grep -q "\"${MECH}\" =>" "${SELFTEST}" || { echo "no CASES entry for '${MECH}' in ${SELFTEST}" >&2; exit 1; }
+      # The deployed port registers its own self-test case, so being on thor is the check.
       thor "test -f \"${NOVA_THOR_GAME}/${MODS_DIR}/chrooked_${MECH}.rb\"" \
         || { echo "chrooked_${MECH}.rb is not deployed on thor — run scripts/nova_apply.sh first" >&2; exit 1; }
     done

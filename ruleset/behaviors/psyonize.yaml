@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type set in TrySetAteType -> TYPE_PSYCHIC (src/battle_main.c:5896); +20% in battle_util.c type-modifier switch, case ABILITY_PSYONIZE, UQ_4_12(1.2) gated on moveType==TYPE_PSYCHIC && ateBoost (src/battle_util.c:6936). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
   essentials: "Battle::Move type/damage calc — when user ability is Psyonize and move is Normal, set type to :PSYCHIC and apply a 1.2x base-power multiplier"
+template:
+  shape: type_conversion
+  params: {type: Psychic, multiplier: 1.2, control: AERILATE}
+  probes:
+    - {move: Tackle, converted: true}
+    - {move: Tackle, converted: true}
+    - {move: Ember, converted: false}

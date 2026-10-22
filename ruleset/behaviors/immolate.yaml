@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type set in TrySetAteType -> TYPE_FIRE (src/battle_main.c:5872); +20% in battle_util.c type-modifier switch, case ABILITY_IMMOLATE, UQ_4_12(1.2) gated on moveType==TYPE_FIRE && ateBoost (src/battle_util.c:6904). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
   essentials: "Battle::Move type/damage calc — when user ability is Immolate and move is Normal, set type to :FIRE and apply a 1.2x base-power multiplier"
+template:
+  shape: type_conversion
+  params: {type: Fire, multiplier: 1.2, control: AERILATE}
+  probes:
+    - {move: Tackle, converted: true}
+    - {move: Tackle, converted: true}
+    - {move: Ember, converted: false}

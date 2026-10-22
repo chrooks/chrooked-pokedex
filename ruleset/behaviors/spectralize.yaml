@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type set in TrySetAteType -> TYPE_GHOST (src/battle_main.c:5866); +20% in battle_util.c type-modifier switch, case ABILITY_SPECTRALIZE, UQ_4_12(1.2) gated on moveType==TYPE_GHOST && ateBoost (src/battle_util.c:6896). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
   essentials: "Battle::Move type/damage calc — when user ability is Spectralize and move is Normal, set type to :GHOST and apply a 1.2x base-power multiplier"
+template:
+  shape: type_conversion
+  params: {type: Ghost, multiplier: 1.2, control: AERILATE}
+  probes:
+    - {move: Tackle, converted: true}
+    - {move: Tackle, converted: true}
+    - {move: Ember, converted: false}

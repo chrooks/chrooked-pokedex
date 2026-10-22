@@ -43,7 +43,12 @@ module ChrookedSelfTest
   LEVEL        = 50
   SEED         = 12_345
 
-  # One entry per ported mechanic.
+  # One case per ported mechanic, registered by the port itself when it loads:
+  #   ($chrooked_selftest_cases ||= {})["kindle"] = { ability: :KINDLE, ... }
+  # A port generated from its spec's template: block writes that line from the
+  # spec's probes (chrooked_pokedex.behavior.templates); a hand-written port adds
+  # its own. This file loads before 998_ChrookedMods/, but reads the cases only
+  # when it triggers (GameData.load_all at the earliest), after every port loaded.
   #   ability  - the ability under test        control - a comparison ability, or nil
   #   user/foe - species for both phases       calc    - moves measured in CALC; an
   #   fight    - the ability holder's moves      entry may be [move, hp_fraction] to
@@ -56,122 +61,6 @@ module ChrookedSelfTest
   #              on the same battlers) and logs the result as the mechanic's OBS
   #              line, tagged source=selftest
   NON_HOLDER = :STENCH   # exists in Nova, no damage handler, no Ruleset behavior
-  CASES = {
-    "kindle" => {
-      ability: :KINDLE, control: :BLAZE, user: :NUMEL, foe: :SNORLAX,
-      calc: [:FLAMETHROWER, :SURF, :TACKLE, :EMBER],
-      fight: [:EMBER, :FLAMETHROWER, :TACKLE]
-    },
-    "bloom" => {
-      ability: :BLOOM, control: :OVERGROW, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:ENERGYBALL, :FLAMETHROWER, :VINEWHIP],
-      fight: [:ENERGYBALL, :FLAMETHROWER, :VINEWHIP]
-    },
-    "cryomancer" => {
-      ability: :CRYOMANCER, control: nil, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:ICEBEAM, :THUNDERBOLT, :POWDERSNOW],
-      fight: [:ICEBEAM, :THUNDERBOLT, :POWDERSNOW]
-    },
-    "deluge" => {
-      ability: :DELUGE, control: :TORRENT, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:SURF, :FLAMETHROWER, :WATERGUN],
-      fight: [:SURF, :FLAMETHROWER, :WATERGUN]
-    },
-    "overcharge" => {
-      ability: :OVERCHARGE, control: :BLAZE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [[:THUNDERBOLT, 0.25], [:THUNDERBOLT, 1.0], [:ICEBEAM, 0.25]],
-      fight: [:THUNDERBOLT, :ICEBEAM]
-    },
-    "chitinize" => {
-      ability: :CHITINIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :XSCISSOR],
-      fight: [:TACKLE, :XSCISSOR]
-    },
-    "foliate" => {
-      ability: :FOLIATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "hydrate" => {
-      ability: :HYDRATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :SURF],
-      fight: [:TACKLE, :SURF]
-    },
-    "immolate" => {
-      ability: :IMMOLATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "martialize" => {
-      ability: :MARTIALIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "mineralize" => {
-      ability: :MINERALIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :WATERGUN],
-      fight: [:TACKLE, :WATERGUN]
-    },
-    "obfuscate" => {
-      ability: :OBFUSCATE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "psyonize" => {
-      ability: :PSYONIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "spectralize" => {
-      ability: :SPECTRALIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "tectonize" => {
-      ability: :TECTONIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EARTHQUAKE],
-      fight: [:TACKLE, :EARTHQUAKE]
-    },
-    "venomize" => {
-      ability: :VENOMIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    "wyvernize" => {
-      ability: :WYVERNIZE, control: :AERILATE, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:TACKLE, :EMBER],
-      fight: [:TACKLE, :EMBER]
-    },
-    # Move-category boosts: read the Kicking / Hammer / Piercing flags the dex
-    # writes into the move data (NV-7), and Nova's own Punching flag.
-    "hammerfist" => {
-      ability: :HAMMERFIST, control: :IRONFIST, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:MACHPUNCH, :BODYSLAM, :TACKLE],
-      fight: [:MACHPUNCH, :BODYSLAM, :TACKLE]
-    },
-    "impale" => {
-      ability: :IMPALE, control: nil, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:MEGAHORN, :TACKLE],
-      without: [:DRILLPECK],
-      fight: [:MEGAHORN, :TACKLE]
-    },
-    "martialartist" => {
-      ability: :MARTIALARTIST, control: :IRONFIST, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:MACHPUNCH, :HIGHJUMPKICK, :TACKLE],
-      fight: [:MACHPUNCH, :TACKLE]
-    },
-    "sledgehammer" => {
-      ability: :SLEDGEHAMMER, control: :IRONFIST, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:WOODHAMMER, :BODYSLAM, :MACHPUNCH],
-      fight: [:WOODHAMMER, :BODYSLAM, :MACHPUNCH]
-    },
-    "striker" => {
-      ability: :STRIKER, control: nil, user: :NUMEL, foe: :SNORLAX, neutral: true,
-      calc: [:HIGHJUMPKICK, :TACKLE],
-      without: [:BLAZEKICK],
-      fight: [:BLAZEKICK, :TACKLE]
-    }
-  }
 
   def self.log(msg)
     File.open(LOG, "a") { |f| f.puts("[chrooked:selftest] #{msg}") }
@@ -294,16 +183,18 @@ module ChrookedSelfTest
 
   def self.run_all(mechanics)
     log("start mechanics=#{mechanics.join(',')} ruby=#{RUBY_VERSION} platform=#{RUBY_PLATFORM} " \
-        "saves=#{SaveData::DIRECTORY}")
+        "saves=#{SaveData::DIRECTORY} registered=#{($chrooked_selftest_cases || {}).size}")
     mechanics.each { |mechanic| guard("mechanic #{mechanic}") { run(mechanic) } }
   ensure
     log("DONE")
   end
 
   def self.run(mechanic)
-    spec = CASES[mechanic]
+    cases = $chrooked_selftest_cases || {}
+    spec = cases[mechanic]
     if spec.nil?
-      log("ERROR no case for '#{mechanic}' in CASES (known: #{CASES.keys.join(', ')})")
+      log("ERROR no case registered for '#{mechanic}' (registered: #{cases.keys.sort.join(', ')}); " \
+          "is chrooked_#{mechanic}.rb installed in 998_ChrookedMods/?")
       return
     end
     log("mechanic #{mechanic} data ability=#{GameData::Ability.exists?(spec[:ability])}")

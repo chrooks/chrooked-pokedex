@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type-modifier switch in src/battle_util.c (~line 6871); case ABILITY_BLOOM multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_GRASS. Sits alongside Kindle/Cryomancer."
   essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Bloom and move.type == :GRASS (mirror the Overgrow hook but without the HP check)."
+template:
+  shape: type_boost
+  params: {type: Grass, multiplier: 1.5, control: OVERGROW}
+  probes:
+    - {move: Energy Ball, result: boosted}
+    - {move: Flamethrower, result: normal}
+    - {move: Vine Whip, result: boosted}

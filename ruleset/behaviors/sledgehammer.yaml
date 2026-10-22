@@ -24,3 +24,10 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c CalcAttackerAbilitiesModifier switch (~line 9729) — `case ABILITY_SLEDGEHAMMER: if (IsHammerMove(move)) modifier *= UQ_4_12(1.3);`. Flag: gMovesInfo[].hammerMove (IsHammerMove) in include/move.h."
   essentials: "In the damage-calc, if the user has Sledgehammer and the move belongs to the hammer/slam set, apply 1.3x. Define the hammer set as the hammer- and slam-named moves listed above."
+template:
+  shape: flag_boost
+  params: {flags: [hammer], multiplier: 1.3, control: IRONFIST}
+  probes:
+    - {move: Wood Hammer, result: boosted}
+    - {move: Body Slam, result: boosted}
+    - {move: Mach Punch, result: normal}

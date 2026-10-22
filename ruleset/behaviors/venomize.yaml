@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type set in TrySetAteType -> TYPE_POISON (src/battle_main.c:5884); +20% in battle_util.c type-modifier switch, case ABILITY_VENOMIZE, UQ_4_12(1.2) gated on moveType==TYPE_POISON && ateBoost (src/battle_util.c:6920). Conversion gated by GetDynamicMoveType at battle_main.c:6132."
   essentials: "Battle::Move type/damage calc — when user ability is Venomize and move is Normal, set type to :POISON and apply a 1.2x base-power multiplier"
+template:
+  shape: type_conversion
+  params: {type: Poison, multiplier: 1.2, control: AERILATE}
+  probes:
+    - {move: Tackle, converted: true}
+    - {move: Tackle, converted: true}
+    - {move: Ember, converted: false}

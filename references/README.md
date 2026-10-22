@@ -16,15 +16,19 @@ Two storage models, because the engines differ:
   it (copies it into the target's `Scripts/`) and flips that mechanic's `DATA ONLY` report line to
   "mechanic installed" (issue #16). No `.patch` for Essentials — the plugin is additive, not a diff.
 - **Essentials 21** also adds a standalone Ruby file, but it registers one entry in an Essentials 21
-  handler registry instead of wrapping a method. It lives under `essentials21-harness/chrooked_<id>.rb`
-  and `apply --engine essentials` installs it into the target's `Data/Scripts/998_ChrookedMods/`
-  (mjolnir NV-5). See `essentials21-harness/README.md`.
+  handler registry instead of wrapping a method, and `apply --engine essentials` installs it into the
+  target's `Data/Scripts/998_ChrookedMods/` (mjolnir NV-5). A mechanic in a proven shape has no file
+  here: apply generates its port from the `template:` block in its behavior spec (mjolnir NV-8).
+  Only a mechanic that fits no shape is captured as `essentials21-harness/chrooked_<id>.rb`. See
+  `essentials21-harness/README.md`.
 
 ## Naming
 
 - pokeemerald: `<chrooked_id>.pokeemerald-expansion-<version>.patch` (`git apply` from the fork root).
 - essentials 16.2: `essentials-harness/chrooked_<chrooked_id>.rb` (installed on `apply --engine essentials`).
-- essentials 21: `essentials21-harness/chrooked_<chrooked_id>.rb` (installed on `apply --engine essentials`).
+- essentials 21: a `template:` block in `ruleset/behaviors/<chrooked_id>.yaml` (generated on
+  `apply --engine essentials`), or, for a mechanic no template fits,
+  `essentials21-harness/chrooked_<chrooked_id>.rb` (installed on `apply --engine essentials`).
 
 ## How each was produced
 
@@ -44,10 +48,10 @@ The behavior-port loop (see `.claude/skills/port-behavior/SKILL.md`):
 | innerfocus | pokeemerald-expansion 1.15.3 | `.patch` | `make check` RED→GREEN (battle test) + compiles |
 | innerfocus | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify innerfocus` 3/3 (log oracle) |
 | kindle | essentials 16.2 (Africanvs) | `essentials-harness/` plugin (installed on apply) | harness `verify kindle` 3/3 (log oracle); Seam `pbModifyDamage` |
-| kindle | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` port (installed on apply into `Data/Scripts/998_ChrookedMods/`) | `scripts/nova_selftest.sh kindle` 3/3, headless (AI vs AI); damage A/B Flamethrower 1.500x, Surf 1.000x; Seam `DamageCalcFromUser`. On thor (Kirin 0.3.5): `nova_thor_selftest.sh` path, 3/3, same numbers |
-| bloom, cryomancer, deluge, overcharge | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` ports, translated from `rejuv-harness/` | `scripts/nova_selftest.sh` 3/3 each, lab; Seam `DamageCalcFromUser` |
-| hammerfist, impale, martialartist, sledgehammer, striker | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` ports reading the `Kicking` / `Hammer` / `Piercing` flags the dex writes (NV-7) | `scripts/nova_selftest.sh` 3/3 each, lab; Seam `DamageCalcFromUser`, as Nova's Iron Fist |
-| chitinize, foliate, hydrate, immolate, martialize, mineralize, obfuscate, psyonize, spectralize, tectonize, venomize, wyvernize | essentials 21.99 (Pokémon Nova V3.0) | `essentials21-harness/` ports, translated from `rejuv-harness/` `register_ize` | `scripts/nova_selftest.sh` 3/3 each, lab; Seam `ModifyMoveBaseType` + `DamageCalcFromUser`, as Nova's Aerilate |
+| kindle | essentials 21.99 (Pokémon Nova V3.0) | spec `template:` (`type_boost`), generated on apply into `Data/Scripts/998_ChrookedMods/` (NV-8; a hand port before) | `scripts/nova_selftest.sh kindle` 3/3, headless (AI vs AI); damage A/B Flamethrower 1.500x, Surf 1.000x; Seam `DamageCalcFromUser`. On thor (Kirin 0.3.5), the hand port: `nova_thor_selftest.sh` path, 3/3, same numbers |
+| bloom, cryomancer, deluge, overcharge | essentials 21.99 (Pokémon Nova V3.0) | spec `template:` (`type_boost`), generated on apply (NV-8); first translated from `rejuv-harness/` | `scripts/nova_selftest.sh` 3/3 each, lab; Seam `DamageCalcFromUser` |
+| hammerfist, impale, martialartist, sledgehammer, striker | essentials 21.99 (Pokémon Nova V3.0) | spec `template:` (`flag_boost`) on the `Kicking` / `Hammer` / `Piercing` flags the dex writes (NV-7), generated on apply (NV-8) | `scripts/nova_selftest.sh` 3/3 each, lab; Seam `DamageCalcFromUser`, as Nova's Iron Fist |
+| chitinize, foliate, hydrate, immolate, martialize, mineralize, obfuscate, psyonize, spectralize, tectonize, venomize, wyvernize | essentials 21.99 (Pokémon Nova V3.0) | spec `template:` (`type_conversion`), generated on apply (NV-8); first translated from `rejuv-harness/` `register_ize` | `scripts/nova_selftest.sh` 3/3 each, lab; Seam `ModifyMoveBaseType` + `DamageCalcFromUser`, as Nova's Aerilate |
 | soulsight | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/soulsight_check.rb` 20/20, RED 9/20 without the mechanic |
 | percussion | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply) | `ruby rejuv-harness/percussion_check.rb` 16/16, RED 11/16 without the mechanic |
 | finishingkick | rejuv (Rejuvenation) | `rejuv-harness/` mod (installed on apply); contact clause only, Speed Boost half via `behaviors: [finishingkick, speedboost]` composition | `ruby rejuv-harness/finishingkick_check.rb` 6/6, RED (nil handler) without the mechanic |

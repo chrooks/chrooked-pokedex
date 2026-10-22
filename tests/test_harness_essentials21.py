@@ -58,20 +58,21 @@ def test_est_lines_are_never_observations():
 
 
 def test_kindle_scenario_scores_a_v21_log_unchanged():
+    # The pre-NV-8 hand port's log, scored by the scenario 16.2 still uses.
     cases = tuple(BehaviorTestCase(given=f"case {i}", expect="") for i in range(1, 4))
     results = harness.score(harness.parse_observations(_V21_LOG, "kindle"), SCENARIOS["kindle"], cases)
     assert [r["passed"] for r in results] == [True, True, True]
 
 
 def test_stage_on_v21_sets_the_oracle_marker_and_clears_the_log(tmp_path, capsys):
-    v21 = _copy("modern_v21", tmp_path)
+    v21, ruleset = _templated(tmp_path)
     (v21 / "chrooked_load.log").write_text("old session\n")
 
-    assert harness.cmd_stage("kindle", _RULESET, v21) == 0
+    assert harness.cmd_stage("cinderglow", ruleset, v21) == 0
 
     assert (v21 / "chrooked_load.log").read_text() == ""
     assert (v21 / harness.ORACLE_MARKER).exists()
-    assert "nova_selftest.sh kindle" in capsys.readouterr().out
+    assert "nova_selftest.sh cinderglow" in capsys.readouterr().out
 
 
 def test_stage_on_162_sets_no_marker(tmp_path):
@@ -84,11 +85,11 @@ def test_stage_on_162_sets_no_marker(tmp_path):
 
 
 def test_verify_on_v21_passes_and_reminds_about_the_marker(tmp_path, capsys):
-    v21 = _copy("modern_v21", tmp_path)
-    (v21 / "chrooked_load.log").write_text(_V21_LOG)
+    v21, ruleset = _templated(tmp_path)
+    (v21 / "chrooked_load.log").write_text(_CINDERGLOW_LOG)
     (v21 / harness.ORACLE_MARKER).write_text("harness\n")
 
-    assert harness.cmd_verify("kindle", _RULESET, v21) == 0
+    assert harness.cmd_verify("cinderglow", ruleset, v21) == 0
 
     out = capsys.readouterr().out
     assert "3/3 passed" in out

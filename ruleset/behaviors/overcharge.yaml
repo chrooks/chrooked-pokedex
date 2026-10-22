@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type-modifier switch in src/battle_util.c (~line 7284); case ABILITY_OVERCHARGE multiplies modifier by UQ_4_12(1.5) via uq4_12_multiply_half_down when moveType == TYPE_ELECTRIC AND gBattleMons[battlerAtk].hp <= (maxHP / 3). Identical shape to ABILITY_BLAZE/TORRENT/OVERGROW."
   essentials: "Battle::Move damage calc — 1.5x multiplier when user's ability is Overcharge, move.type == :ELECTRIC, and user.hp <= user.totalhp / 3 (mirror the Blaze implementation)."
+template:
+  shape: type_boost
+  params: {type: Electric, multiplier: 1.5, pinch: true, control: BLAZE}
+  probes:
+    - {move: Thunderbolt, result: boosted, hp: 0.25}
+    - {move: Thunderbolt, result: normal}
+    - {move: Ice Beam, result: normal, hp: 0.25}

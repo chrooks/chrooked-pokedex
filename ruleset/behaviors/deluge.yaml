@@ -24,3 +24,10 @@ notes:
 engine_hints:
   pokeemerald: "type-modifier switch in src/battle_util.c; case ABILITY_DELUGE multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_WATER. Sits alongside Kindle/Bloom/Cryomancer."
   essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Deluge and move.type == :WATER (mirror the Torrent hook but without the HP check)."
+template:
+  shape: type_boost
+  params: {type: Water, multiplier: 1.5, control: TORRENT}
+  probes:
+    - {move: Surf, result: boosted}
+    - {move: Flamethrower, result: normal}
+    - {move: Water Gun, result: boosted}

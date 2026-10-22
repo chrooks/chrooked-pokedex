@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type-modifier switch in src/battle_util.c (~line 6863); case ABILITY_KINDLE multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_FIRE. Sits alongside Cryomancer/Bloom."
   essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Kindle and move.type == :FIRE (mirror the Blaze hook but without the HP check)."
+template:
+  shape: type_boost
+  params: {type: Fire, multiplier: 1.5, control: BLAZE}
+  probes:
+    - {move: Flamethrower, result: boosted}
+    - {move: Surf, result: normal}
+    - {move: Ember, result: boosted}

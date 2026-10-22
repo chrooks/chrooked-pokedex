@@ -23,3 +23,10 @@ notes:
 engine_hints:
   pokeemerald: "type-modifier switch in src/battle_util.c (~line 6867); case ABILITY_CRYOMANCER multiplies modifier by UQ_4_12(1.5) when moveType == TYPE_ICE. Sits alongside Kindle/Bloom."
   essentials: "Battle::Move damage calc — add a 1.5x multiplier when the user's ability is Cryomancer and move.type == :ICE."
+template:
+  shape: type_boost
+  params: {type: Ice, multiplier: 1.5}
+  probes:
+    - {move: Ice Beam, result: boosted}
+    - {move: Thunderbolt, result: normal}
+    - {move: Powder Snow, result: boosted}
