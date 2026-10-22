@@ -56,7 +56,12 @@ module ChrookedSelfTest
   #                                              or [move, hp_fraction, setup] to set
   #              the field or the user first (see arrange): {weather: :Rain,
   #              terrain: :Grassy, item: :UTILITYUMBRELLA, airborne: true,
-  #              stats: :physical|:special}
+  #              stats: :physical|:special, types: [:WATER]}. :STRUGGLE is
+  #              built as Essentials builds it (Battle::Move::Struggle)
+  #   heal     - [move, hp_fraction] entries for a healing move whose amount the
+  #              mechanic changes (Moonlight under Full Moon): the user's HP is set,
+  #              the move starts, and pbHealAmount is read with the ability and
+  #              without (HEAL line); the port logs its own OBS line
   #   neutral  - CALC sets both battlers' types to ??? (QMARKS): no same-type bonus,
   #              no type matchups, so the ratio is the ability's effect alone
   #   without  - moves for a spec case about a Pokemon WITHOUT the ability. A port
@@ -162,7 +167,10 @@ module ChrookedSelfTest
   # the SAME battlers. The target has no ability and the RNG is reseeded before
   # each hit, so the only difference between results is the user's ability.
   def self.damage(user_species, abilities, foe_species, move_id, hp_fraction: 1.0, neutral: false, setup: {})
-    b = battle(mon(user_species, [move_id]), mon(foe_species, [:TACKLE]))
+    # Struggle is no PBS move: Essentials builds it in code, so the user knows
+    # Tackle and the move object is made the way a battle makes it.
+    struggle = move_id == :STRUGGLE
+    b = battle(mon(user_species, struggle ? [:TACKLE] : [move_id]), mon(foe_species, [:TACKLE]))
     b.pbCreateBattler(0, b.pbParty(0)[0], 0)
     b.pbCreateBattler(1, b.pbParty(1)[0], 0)
     user   = b.battlers[0]
@@ -174,7 +182,7 @@ module ChrookedSelfTest
       target.pbChangeTypes(:QMARKS)
     end
     arrange(b, user, setup)
-    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move = struggle ? Battle::Move::Struggle.new(b, nil) : Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
     abilities.map do |ability|
       user.ability = ability
       move.calcType = move.pbCalcType(user)
@@ -194,6 +202,8 @@ module ChrookedSelfTest
   #   airborne - true lifts the user with Magnet Rise (ungrounded, off terrain)
   #   stats    - :physical or :special: which of Attack and Sp. Atk is strictly
   #              higher, by swapping the two (ties broken by one point)
+  #   types    - the user's types, e.g. [:WATER, :DRAGON] (after neutral mode, so
+  #              a same-type bonus can be measured; NV-10)
   def self.arrange(b, user, setup)
     b.field.weather = setup[:weather] if setup[:weather]
     b.field.terrain = setup[:terrain] if setup[:terrain]
@@ -204,6 +214,28 @@ module ChrookedSelfTest
       lo = hi - 1 if lo == hi
       user.attack, user.spatk = (setup[:stats] == :physical) ? [hi, lo] : [lo, hi]
     end
+    if setup[:types]
+      user.types = setup[:types]
+      user.effects[PBEffects::ExtraType] = nil
+    end
+  end
+
+  # What a healing move would restore, for each ability in turn, on the SAME user
+  # at the same HP: the move starts (pbOnStartUse, where weather-dependent heals
+  # decide their amount) and pbHealAmount is read. Returns the amounts, then max HP.
+  def self.heal(user_species, abilities, foe_species, move_id, hp_fraction)
+    b = battle(mon(user_species, [move_id]), mon(foe_species, [:TACKLE]))
+    b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+    b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+    user = b.battlers[0]
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    amounts = abilities.map do |ability|
+      user.ability = ability
+      user.hp = [(user.totalhp * hp_fraction).floor, 1].max
+      move.pbOnStartUse(user, [user])
+      move.pbHealAmount(user)
+    end
+    amounts + [user.totalhp]
   end
 
   def self.run_all(mechanics)
@@ -231,7 +263,7 @@ module ChrookedSelfTest
         abilities << spec[:control] if spec[:control]
         (with, type, eff), (none, _, _), (control, _, _) =
           damage(spec[:user], abilities, spec[:foe], move_id, hp_fraction: hp, neutral: !!spec[:neutral], setup: setup)
-        field = setup.empty? ? "" : " setup=#{setup.map { |k, v| "#{k}:#{v}" }.join(',')}"
+        field = setup.empty? ? "" : " setup=#{setup.map { |k, v| "#{k}:#{v.is_a?(Array) ? v.join('/') : v}" }.join(',')}"
         log("CALC #{mechanic} move=#{move_id} hp=#{hp}#{field} type=#{type} eff=#{eff} with=#{with} none=#{none} " \
             "#{spec[:control] || 'control'}=#{control || '-'} ratio=#{format('%.3f', with.to_f / none)}")
       end
@@ -243,6 +275,14 @@ module ChrookedSelfTest
         result = nonholder == none ? "NORMAL" : "BOOSTED"
         obs(mechanic, "move=#{move_id} ability=false result=#{result} source=selftest " \
                       "holder=#{holder} #{NON_HOLDER}=#{nonholder} none=#{none}")
+      end
+    end
+    guard("heal") do
+      (spec[:heal] || []).each do |move_id, hp|
+        hp ||= 0.5
+        with, none, max = heal(spec[:user], [spec[:ability], nil], spec[:foe], move_id, hp)
+        log("HEAL #{mechanic} move=#{move_id} hp=#{hp} with=#{with} none=#{none} max=#{max} " \
+            "share=#{format('%.3f', with.to_f / max)}")
       end
     end
     Graphics.update if defined?(Graphics)

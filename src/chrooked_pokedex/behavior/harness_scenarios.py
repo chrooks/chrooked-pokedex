@@ -136,6 +136,12 @@ SCENARIOS: dict[str, list[dict[str, object]]] = {
         {"stage": "c2", "select": {"move": "THUNDERBOLT", "ability": "true", "hp_low": "false"}, "expect": {"result": "NORMAL"}},
         {"stage": "c3", "select": {"move": "ICEBEAM", "ability": "true", "hp_low": "true"}, "expect": {"result": "NORMAL"}},
     ],
+    # Essentials 21 hand port (NV-10): two effects, so no template.
+    "fullmoon": [
+        {"stage": "Full Moon user (pure Normal type) uses Dark Pulse.", "select": {"move": "DARKPULSE", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "BOOSTED"}},
+        {"stage": "Full Moon user (pure Normal type) uses Flamethrower.", "select": {"move": "FLAMETHROWER", "ability": "true", "user_types": "NORMAL"}, "expect": {"result": "NORMAL"}},
+        {"stage": "Full Moon user at half HP uses Moonlight.", "select": {"move": "MOONLIGHT", "ability": "true"}, "expect": {"result": "BOOSTED"}},
+    ],
     "amplifier": [
         {"stage": "matching sound move with Amplifier user is boosted", "select": {"move": "HYPERVOICE", "ability": "true"}, "expect": {"result": "BOOSTED"}},
         {"stage": "non-sound move with Amplifier user is unchanged", "select": {"move": "TACKLE", "ability": "true"}, "expect": {"result": "NORMAL"}},
