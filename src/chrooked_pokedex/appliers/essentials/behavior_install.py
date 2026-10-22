@@ -1,9 +1,17 @@
-"""Install ported Essentials 21 mechanics into a target game (mjolnir NV-5).
+"""Install ported Essentials 21 mechanics into a target game (mjolnir NV-5, NV-8).
 
 The v21 counterpart of `essentials162/behavior_install.py`. A ported mechanic is
 a standalone Ruby file `chrooked_<id>.rb` that adds one entry to an Essentials 21
-handler registry (e.g. `Battle::AbilityEffects::DamageCalcFromUser`). The
-canonical copies live in the repo at `references/essentials21-harness/`.
+handler registry (e.g. `Battle::AbilityEffects::DamageCalcFromUser`). It comes
+from one of two places:
+
+  * generated: the behavior spec has a `template:` block, and
+    `behavior.templates.render_essentials21` writes the port against this target's
+    own names (its PBS, through the ResolutionMap);
+  * hand-written: a mechanic that fits no template keeps a captured port in the
+    repo at `references/essentials21-harness/`.
+
+A spec with both is ambiguous and is `blocked` rather than guessed at.
 
 Essentials 21 loads every `.rb` under `Data/Scripts/` in name order, files before
 folders, so the install home is `Data/Scripts/998_ChrookedMods/`: after the
@@ -17,16 +25,22 @@ ships a stale mechanic. Nothing else under `Data/Scripts/` is touched: a game's
 own `998_*` folders (thor's controls shim, the lab's scripts) stay as they are.
 
 The honesty Invariant is the same as 16.2's: a created ability's `DATA ONLY`
-line disappears only when its mechanic is genuinely installed. A port that is
-empty or lacks its `# chrooked:<id>` tag is reported `blocked` and never copied.
+line disappears only when its mechanic is genuinely installed (`has_port`). A
+hand port that is empty or lacks its `# chrooked:<id>` tag, or a template that
+names something this target lacks, is reported `blocked` and never written.
 """
 
 from __future__ import annotations
 
+import functools
 from pathlib import Path
+from typing import Callable, Optional
 
+from ...behavior import templates
 from ...model import Ruleset
+from ...model.behavior_spec import BehaviorSpec
 from ...report import ApplyReport, ReportEntry
+from .resolution import ResolutionMap, build_resolution_map
 
 # The repo's canonical port home: src/chrooked_pokedex/appliers/essentials/ -> repo root.
 _DEFAULT_SOURCE_DIR = Path(__file__).resolve().parents[4] / "references" / "essentials21-harness"
@@ -40,10 +54,14 @@ def install_behaviors(
     ruleset: Ruleset,
     report: ApplyReport,
     *,
+    resmap: ResolutionMap | None = None,
     source_dir: Path | None = None,
 ) -> set[Path]:
-    """Install every ported mechanic that has a valid port; remove stale ones.
+    """Install every mechanic that has a valid port; remove stale ones.
 
+    `resmap` resolves a template's names against this target; the apply passes the
+    one it already built (holding the abilities it just created). Without it, one
+    is built from the target's PBS the first time a template needs it.
     Returns the set of target paths written or removed.
     """
     source_dir = source_dir or _DEFAULT_SOURCE_DIR
@@ -51,25 +69,21 @@ def install_behaviors(
     changed: set[Path] = set()
     wanted: set[str] = set()
 
+    @functools.cache
+    def names() -> ResolutionMap:
+        return resmap if resmap is not None else build_resolution_map(target, ruleset)
+
     for chrooked_id in sorted(ruleset.behaviors):
-        port = source_dir / f"chrooked_{chrooked_id}.rb"
-        if not port.exists():
-            continue  # not ported - the ability-create path keeps its honest DATA ONLY line
         try:
-            contents = port.read_text(encoding="utf-8")
-        except OSError as exc:
+            contents = _port_text(ruleset.behaviors[chrooked_id], source_dir, names)
+        except _Blocked as exc:
             report.add(ReportEntry(
-                status="blocked", category="behavior", chrooked_id=chrooked_id,
-                reason=f"port source unreadable: {port}: {exc}",
+                status="blocked", category="behavior", chrooked_id=chrooked_id, reason=str(exc),
             ))
             continue
-        if not _is_valid_port(contents, chrooked_id):
-            report.add(ReportEntry(
-                status="blocked", category="behavior", chrooked_id=chrooked_id,
-                reason=f"port source invalid (empty or missing '# chrooked:{chrooked_id}' tag): {port}",
-            ))
-            continue
-        dest = mods_dir / port.name
+        if contents is None:
+            continue  # not ported - the ability-create path keeps its honest DATA ONLY line
+        dest = mods_dir / f"chrooked_{chrooked_id}.rb"
         wanted.add(dest.name)
         if _already_installed(dest, contents):
             continue  # no churn, no report line
@@ -147,3 +161,47 @@ def has_plugin(chrooked_id: str, source_dir: Path | None = None) -> bool:
         return _is_valid_port(port.read_text(encoding="utf-8"), chrooked_id)
     except OSError:
         return False
+
+
+def has_port(spec: BehaviorSpec, resmap: ResolutionMap, source_dir: Path | None = None) -> bool:
+    """True if `install_behaviors` would install this mechanic on the target `resmap`
+    describes: its template renders there, or it has a valid hand-written port (and
+    not both).
+
+    The create path asks this before it drops DATA ONLY, so it never promises
+    "installed" for a port the installer would block, e.g. a template whose probe
+    names a move this game lacks.
+    """
+    try:
+        return _port_text(spec, source_dir or _DEFAULT_SOURCE_DIR, lambda: resmap) is not None
+    except _Blocked:
+        return False
+
+
+class _Blocked(Exception):
+    """A mechanic that has a port source the installer must refuse; the message is the reason."""
+
+
+def _port_text(spec: BehaviorSpec, source_dir: Path, names: Callable[[], ResolutionMap]) -> Optional[str]:
+    """The port this mechanic installs: rendered from its template, or its captured
+    hand-written file. None when it has neither (not ported). Raises _Blocked."""
+    chrooked_id = spec.chrooked_id
+    port = source_dir / f"chrooked_{chrooked_id}.rb"
+    if getattr(spec, "template", None) is not None:
+        if port.exists():
+            raise _Blocked(
+                f"ambiguous port: ruleset/behaviors/{chrooked_id}.yaml has a template AND "
+                f"{port} is a hand-written port; keep one")
+        try:
+            return templates.render_essentials21(spec, names())
+        except templates.TemplateError as exc:
+            raise _Blocked(f"port not generated: {exc}") from exc
+    if not port.exists():
+        return None
+    try:
+        contents = port.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise _Blocked(f"port source unreadable: {port}: {exc}") from exc
+    if not _is_valid_port(contents, chrooked_id):
+        raise _Blocked(f"port source invalid (empty or missing '# chrooked:{chrooked_id}' tag): {port}")
+    return contents

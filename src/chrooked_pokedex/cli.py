@@ -394,8 +394,9 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
         print(f"type-chart: {len(changed)} file(s) changed")
     if "behaviors" in categories:
         # Install ported mechanics LAST: standalone Ruby files need no earlier
-        # ordering, and the created ability rows exist by now.
-        changed = essentials_behaviors.install_behaviors(target, ruleset, report)
+        # ordering, and the created ability rows exist by now, in the resmap too,
+        # which is where a template finds this game's names for its port.
+        changed = essentials_behaviors.install_behaviors(target, ruleset, report, resmap=resmap)
         print(f"behaviors: {len(changed)} file(s) changed")
 
 

@@ -8,8 +8,8 @@ the file is left alone.
 Honesty over silent inertness:
   * A created ability is DATA ONLY — its name and description are written, never the
     battle mechanic. If the Ruleset carries a behavior spec for it, the Apply Report
-    says so loudly, unless a captured port exists for the behaviors tier to install
-    (`behavior_install.has_plugin`).
+    says so loudly, unless the behaviors tier will install a port for it, generated
+    from its template or captured by hand (`behavior_install.has_port`).
   * A move field the vocab cannot faithfully translate (a scripted primary effect, a
     flag with no Essentials counterpart) is left out and reported as unresolved,
     never written as a token Essentials would reject.
@@ -64,7 +64,7 @@ def _create_abilities(target, ruleset, resmap, report) -> set[Path]:
         changed = True
         report.add(ReportEntry(
             status="applied", category="ability", chrooked_id=chrooked_id,
-            symbol=internal, reason=_creation_reason(ruleset, ability.name),
+            symbol=internal, reason=_creation_reason(ruleset, ability.name, resmap),
         ))
 
     if changed:
@@ -103,7 +103,7 @@ def _create_moves(target, ruleset, resmap, report) -> set[Path]:
         status = "partial" if unresolved else "applied"
         report.add(ReportEntry(
             status=status, category="move", chrooked_id=chrooked_id, symbol=internal,
-            reason=_move_reason(ruleset, move.name, unresolved),
+            reason=_move_reason(ruleset, move.name, unresolved, resmap),
             partial_fields=tuple(unresolved),
         ))
 
@@ -113,23 +113,24 @@ def _create_moves(target, ruleset, resmap, report) -> set[Path]:
     return set()
 
 
-def _creation_reason(ruleset: Ruleset, name: str) -> str:
+def _creation_reason(ruleset: Ruleset, name: str, resmap: ResolutionMap) -> str:
     spec = ruleset.behavior_for(name)
     if spec is not None:
-        # A captured port is INSTALLED by the behaviors tier, so this is not DATA ONLY.
-        if behavior_install.has_plugin(spec.chrooked_id):
+        # A port the behaviors tier will INSTALL (generated or captured) means this
+        # is not DATA ONLY. The resmap already holds the ability just created.
+        if behavior_install.has_port(spec, resmap):
             return f"created; mechanic installed via {_port_path(spec.chrooked_id)}"
         return "created — DATA ONLY: implement mechanic (behavior spec exists)"
     return "created — DATA ONLY"
 
 
-def _move_reason(ruleset: Ruleset, name: str, unresolved: list[str]) -> str:
+def _move_reason(ruleset: Ruleset, name: str, unresolved: list[str], resmap: ResolutionMap) -> str:
     """A created move is data; if its effect could not port AND it has a behavior
     spec, say so loudly so the mechanic gets implemented instead of shipping inert."""
     base = "created" if not unresolved else "created; some fields not ported"
     spec = ruleset.behavior_for(name)
     if spec is not None:
-        if behavior_install.has_plugin(spec.chrooked_id):
+        if behavior_install.has_port(spec, resmap):
             return base + f"; mechanic installed via {_port_path(spec.chrooked_id)}"
         return base + " — behavior spec exists, implement mechanic"
     return base

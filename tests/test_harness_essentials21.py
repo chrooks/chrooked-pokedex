@@ -93,3 +93,102 @@ def test_verify_on_v21_passes_and_reminds_about_the_marker(tmp_path, capsys):
     out = capsys.readouterr().out
     assert "3/3 passed" in out
     assert "still set" in out
+
+
+# --- a templated spec (mjolnir NV-8): checks generated from its probes ---------
+# A made-up ability, so these tests never depend on what the repo's Ruleset has
+# templated today.
+
+_CINDERGLOW_SPEC = """\
+name: Cinderglow
+chrooked_id: cinderglow
+applies_to: ability
+effects:
+  - summary: "Fire-type moves deal 50% more damage."
+    trigger: damage-calc
+    effect: "multiply the move's damage by 1.5"
+test_cases:
+  - given: "a Cinderglow user uses Flamethrower"
+    expect: "damage is 1.5x"
+  - given: "a Cinderglow user uses Surf"
+    expect: "no boost"
+  - given: "a Pokemon without Cinderglow uses Flamethrower"
+    expect: "no boost"
+template:
+  shape: type_boost
+  params: {type: Fire, multiplier: 1.5}
+  probes:
+    - {move: Flamethrower, result: boosted}
+    - {move: Surf, result: normal}
+    - {move: Flamethrower, result: normal, holder: false}
+"""
+
+# What the generated port and the self-test log for it in one lab boot.
+_CINDERGLOW_LOG = """\
+[chrooked:cinderglow] load prior_handler=false
+[chrooked:cinderglow] EST move=SURF type=WATER ability=true result=BOOSTED
+[chrooked:cinderglow] OBS move=FLAMETHROWER type=FIRE ability=true result=BOOSTED
+[chrooked:cinderglow] OBS move=SURF type=WATER ability=true result=NORMAL
+[chrooked:cinderglow] OBS move=FLAMETHROWER ability=false result=NORMAL source=selftest holder=54 STENCH=36 none=36
+[chrooked:selftest] DONE
+"""
+
+
+def _templated(tmp_path):
+    """A v21 game whose PBS knows the probes' moves and the ability, plus a Ruleset
+    holding the one templated spec."""
+    v21 = _copy("modern_v21", tmp_path)
+    with (v21 / "PBS" / "moves.txt").open("a", encoding="utf-8") as moves:
+        moves.write("\n[FLAMETHROWER]\nName = Flamethrower\nType = FIRE\n\n[SURF]\nName = Surf\nType = WATER\n")
+    (v21 / "PBS" / "abilities.txt").write_text("[CINDERGLOW]\nName = Cinderglow\n", encoding="utf-8")
+    ruleset = tmp_path / "ruleset"
+    (ruleset / "behaviors").mkdir(parents=True)
+    (ruleset / "behaviors" / "cinderglow.yaml").write_text(_CINDERGLOW_SPEC, encoding="utf-8")
+    return v21, ruleset
+
+
+def test_templated_spec_on_v21_is_scored_by_checks_from_its_probes(tmp_path, capsys):
+    v21, ruleset = _templated(tmp_path)
+    (v21 / "chrooked_load.log").write_text(_CINDERGLOW_LOG)
+
+    assert harness.cmd_verify("cinderglow", ruleset, v21) == 0
+    assert "3/3 passed" in capsys.readouterr().out
+
+
+def test_generated_checks_catch_a_misbehaving_port(tmp_path, capsys):
+    v21, ruleset = _templated(tmp_path)
+    wrong = _CINDERGLOW_LOG.replace("OBS move=SURF type=WATER ability=true result=NORMAL",
+                                    "OBS move=SURF type=WATER ability=true result=BOOSTED")
+    (v21 / "chrooked_load.log").write_text(wrong)
+
+    assert harness.cmd_verify("cinderglow", ruleset, v21) == 1
+    out = capsys.readouterr().out
+    assert "2/3 passed" in out
+    assert "FAIL cinderglow :: a Cinderglow user uses Surf" in out
+
+
+def test_stage_prints_the_generated_actions(tmp_path, capsys):
+    v21, ruleset = _templated(tmp_path)
+
+    assert harness.cmd_stage("cinderglow", ruleset, v21) == 0
+
+    out = capsys.readouterr().out
+    assert "1. With your Cinderglow user, use Flamethrower on the foe." in out
+    assert "3. With a Pokemon WITHOUT Cinderglow, use Flamethrower on the foe." in out
+    assert (v21 / harness.ORACLE_MARKER).exists()
+
+
+def test_templated_spec_on_162_still_needs_a_scenario(tmp_path):
+    _, ruleset = _templated(tmp_path)
+    old = _copy("english_162", tmp_path)
+
+    with pytest.raises(SystemExit, match="no harness scenario for 'cinderglow'"):
+        harness.cmd_verify("cinderglow", ruleset, old)
+
+
+def test_template_the_game_cannot_resolve_fails_loudly(tmp_path):
+    v21, ruleset = _templated(tmp_path)
+    (v21 / "PBS" / "abilities.txt").write_text("", encoding="utf-8")
+
+    with pytest.raises(SystemExit, match="cannot generate checks for 'cinderglow'.*ability 'Cinderglow'"):
+        harness.cmd_verify("cinderglow", ruleset, v21)

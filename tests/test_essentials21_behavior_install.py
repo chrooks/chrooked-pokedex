@@ -15,13 +15,20 @@ import pytest
 from chrooked_pokedex.appliers.essentials.behavior_install import (
     MODS_DIR,
     has_plugin,
+    has_port,
     install_behaviors,
 )
 from chrooked_pokedex.appliers.essentials.creation import create_owned_content
 from chrooked_pokedex.appliers.essentials.resolution import build_resolution_map
+from chrooked_pokedex.behavior.templates import render_essentials21
 from chrooked_pokedex.cli import _ESSENTIALS_CATEGORIES, _apply_essentials
 from chrooked_pokedex.model import Ruleset
-from chrooked_pokedex.model.behavior_spec import BehaviorSpec
+from chrooked_pokedex.model.behavior_spec import (
+    BehaviorEffect,
+    BehaviorSpec,
+    BehaviorTemplate,
+    BehaviorTestCase,
+)
 from chrooked_pokedex.model.schema import AbilityDef
 from chrooked_pokedex.report import ApplyReport
 
@@ -208,22 +215,46 @@ def test_lab_scripts_are_harvested_beside_the_ports():
 _POKEMON = "[NUMEL]\nName = Numel\nTypes = FIRE,GROUND\nBaseStats = 60,60,40,35,65,45\nAbilities = OBLIVIOUS\nMoves = 1,TACKLE\n"
 
 
-def _pbs_target(tmp_path):
+_MOVES = "".join(f"[{m.upper()}]\nName = {m}\n" for m in ("Tackle", "Flamethrower", "Surf", "Ember"))
+
+
+def _pbs_target(tmp_path, extra_abilities=""):
     target = tmp_path / "essentials"
     pbs = target / "PBS"
     pbs.mkdir(parents=True)
     (pbs / "pokemon.txt").write_text(_POKEMON, encoding="utf-8")
-    (pbs / "moves.txt").write_text("[TACKLE]\nName = Tackle\n", encoding="utf-8")
-    (pbs / "abilities.txt").write_text("[OBLIVIOUS]\nName = Oblivious\n", encoding="utf-8")
+    (pbs / "moves.txt").write_text(_MOVES, encoding="utf-8")
+    (pbs / "abilities.txt").write_text("[OBLIVIOUS]\nName = Oblivious\n" + extra_abilities, encoding="utf-8")
     (pbs / "types.txt").write_text("[FIRE]\nName = Fire\n[GROUND]\nName = Ground\n", encoding="utf-8")
     return target
 
 
-def _kindle_ruleset(extra_ability=None):
-    abilities = {"kindle": AbilityDef(name="Kindle", chrooked_id="kindle",
-                                      description="Fire-type moves are boosted by 50%.",
-                                      aka={"essentials": "KINDLE"})}
-    behaviors = {"kindle": BehaviorSpec(name="Kindle", chrooked_id="kindle", applies_to="ability")}
+# A made-up ability, so these tests never depend on which Ruleset mechanics are
+# templated or hand-ported in the repo today.
+_CINDERGLOW_PROBES = (
+    {"move": "Flamethrower", "result": "boosted"},
+    {"move": "Surf", "result": "normal"},
+    {"move": "Ember", "result": "boosted"},
+)
+
+
+def _cinderglow(probes=_CINDERGLOW_PROBES):
+    return BehaviorSpec(
+        name="Cinderglow", chrooked_id="cinderglow", applies_to="ability",
+        effects=(BehaviorEffect(summary="Fire-type moves deal 50% more damage.",
+                                trigger="damage-calc", effect="multiply by 1.5"),),
+        test_cases=tuple(BehaviorTestCase(given=f"case {i}", expect="x") for i in range(1, len(probes) + 1)),
+        template=BehaviorTemplate(shape="type_boost",
+                                  params={"type": "Fire", "multiplier": 1.5, "control": "BLAZE"},
+                                  probes=tuple(probes)),
+    )
+
+
+def _cinderglow_ruleset(spec=None, extra_ability=None):
+    abilities = {"cinderglow": AbilityDef(name="Cinderglow", chrooked_id="cinderglow",
+                                          description="Fire-type moves are boosted by 50%.",
+                                          aka={"essentials": "CINDERGLOW"})}
+    behaviors = {"cinderglow": spec or _cinderglow()}
     if extra_ability:
         cid, name = extra_ability
         abilities[cid] = AbilityDef(name=name, chrooked_id=cid, aka={"essentials": name.upper()})
@@ -233,25 +264,88 @@ def _kindle_ruleset(extra_ability=None):
 
 def test_created_ability_with_a_port_says_installed_not_data_only(tmp_path):
     target = _pbs_target(tmp_path)
-    ruleset = _kindle_ruleset(extra_ability=("unportedthing", "Unportedthing"))
+    ruleset = _cinderglow_ruleset(extra_ability=("unportedthing", "Unportedthing"))
     report = ApplyReport()
 
     create_owned_content(target, ruleset, build_resolution_map(target, ruleset), report)
 
-    kindle = next(e for e in report.entries if e.chrooked_id == "kindle")
-    assert "DATA ONLY" not in kindle.reason
-    assert "998_ChrookedMods/chrooked_kindle.rb" in kindle.reason
+    created = next(e for e in report.entries if e.chrooked_id == "cinderglow")
+    assert "DATA ONLY" not in created.reason
+    assert "998_ChrookedMods/chrooked_cinderglow.rb" in created.reason
     unported = next(e for e in report.entries if e.chrooked_id == "unportedthing")
     assert "DATA ONLY" in unported.reason
 
 
-def test_cli_essentials_apply_runs_the_behaviors_tier(tmp_path, capsys):
-    assert _ESSENTIALS_CATEGORIES[-1] == "behaviors"
+def test_template_naming_a_move_the_target_lacks_stays_data_only_and_is_blocked(tmp_path):
     target = _pbs_target(tmp_path)
+    probes = (_CINDERGLOW_PROBES[0], {"move": "Sludge Wave", "result": "normal"}, _CINDERGLOW_PROBES[2])
+    ruleset = _cinderglow_ruleset(spec=_cinderglow(probes))
+    resmap = build_resolution_map(target, ruleset)
     report = ApplyReport()
 
-    _apply_essentials(target, "behaviors", _kindle_ruleset(), report)
+    create_owned_content(target, ruleset, resmap, report)
+    install_behaviors(target, ruleset, report, resmap=resmap, source_dir=_source(tmp_path, {}))
 
-    installed = target / "Data" / "Scripts" / "998_ChrookedMods" / "chrooked_kindle.rb"
-    assert installed.read_text(encoding="utf-8") == (_REPO_PORTS / "chrooked_kindle.rb").read_text(encoding="utf-8")
+    created, blocked = [e for e in report.entries if e.chrooked_id == "cinderglow"]
+    assert "DATA ONLY" in created.reason  # never promises a port the installer refuses
+    assert blocked.status == "blocked"
+    assert "Sludge Wave" in blocked.reason
+    assert not (_mods(target) / "chrooked_cinderglow.rb").exists()
+
+
+def test_cli_essentials_apply_generates_the_templated_port(tmp_path, capsys):
+    assert _ESSENTIALS_CATEGORIES[-1] == "behaviors"
+    target = _pbs_target(tmp_path, extra_abilities="[CINDERGLOW]\nName = Cinderglow\n")
+    ruleset = _cinderglow_ruleset()
+    report = ApplyReport()
+
+    _apply_essentials(target, "behaviors", ruleset, report)
+
+    installed = (_mods(target) / "chrooked_cinderglow.rb").read_text(encoding="utf-8")
+    assert installed == render_essentials21(ruleset.behaviors["cinderglow"], build_resolution_map(target, ruleset))
+    assert "chrooked_table.add(:CINDERGLOW," in installed
     assert "behaviors: 1 file(s) changed" in capsys.readouterr().out
+    entry = next(e for e in report.entries if e.category == "behavior")
+    assert entry.status == "applied" and "mechanic installed" in entry.reason
+
+
+def test_generated_port_rerun_is_no_churn(tmp_path):
+    target = _pbs_target(tmp_path, extra_abilities="[CINDERGLOW]\nName = Cinderglow\n")
+    ruleset, src = _cinderglow_ruleset(), _source(tmp_path, {})
+    install_behaviors(target, ruleset, ApplyReport(), source_dir=src)  # builds its own resmap
+    report = ApplyReport()
+
+    assert install_behaviors(target, ruleset, report, source_dir=src) == set()
+    assert report.entries == []
+
+
+def test_template_and_hand_port_together_is_ambiguous_and_blocked(tmp_path):
+    target = _pbs_target(tmp_path, extra_abilities="[CINDERGLOW]\nName = Cinderglow\n")
+    ruleset = _cinderglow_ruleset()
+    src = _source(tmp_path, {"cinderglow": "# chrooked:cinderglow\nputs 'hand'\n"})
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    install_behaviors(target, ruleset, report, resmap=resmap, source_dir=src)
+
+    (entry,) = report.entries
+    assert entry.status == "blocked" and "ambiguous" in entry.reason
+    assert not (_mods(target) / "chrooked_cinderglow.rb").exists()
+    assert has_port(ruleset.behaviors["cinderglow"], resmap, source_dir=src) is False
+
+
+def test_has_port_is_what_the_installer_would_install(tmp_path):
+    target = _pbs_target(tmp_path, extra_abilities="[CINDERGLOW]\nName = Cinderglow\n")
+    ruleset = _cinderglow_ruleset()
+    resmap = build_resolution_map(target, ruleset)
+    empty = _source(tmp_path, {})
+    hand = tmp_path / "hand"
+    hand.mkdir()
+    (hand / "chrooked_handmade.rb").write_text("# chrooked:handmade\n", encoding="utf-8")
+    handmade = BehaviorSpec(name="Handmade", chrooked_id="handmade", applies_to="ability")
+
+    assert has_port(ruleset.behaviors["cinderglow"], resmap, source_dir=empty) is True
+    assert has_port(handmade, resmap, source_dir=hand) is True
+    assert has_port(handmade, resmap, source_dir=empty) is False
+    assert has_port(_cinderglow((_CINDERGLOW_PROBES[0], {"move": "Hyper Beam", "result": "normal"},
+                                 _CINDERGLOW_PROBES[2])), resmap, source_dir=empty) is False

@@ -19,11 +19,14 @@ observation proves each test_case). Reported wording comes from the spec's own
 ``test_cases`` so the harness verifies the Contract, not a paraphrase.
 
 Essentials 21 targets (``references/essentials21-harness/``) use the same OBS
-lines and scenarios with two layout differences: the log sits in the game folder
+lines with two layout differences: the log sits in the game folder
 (``chrooked_load.log``), and ports write it only while ``chrooked-oracle.on``
 exists there at boot, so ``stage`` sets that marker. Their AI-estimate lines are
 tagged ``EST`` and never scored. A lab copy can produce the battle headlessly
-with ``scripts/nova_selftest.sh <id>`` instead of a played one.
+with ``scripts/nova_selftest.sh <id>`` instead of a played one. A spec with a
+``template:`` block needs no scenario there: its checks are generated from the
+template's probes (``templates.harness_checks``), in the target's own move names,
+so they always match the generated port. Other engines keep ``SCENARIOS``.
 """
 
 from __future__ import annotations
@@ -35,8 +38,10 @@ import sys
 from pathlib import Path
 
 from ..appliers.essentials.dialect import detect_dialect
+from ..appliers.essentials.resolution import build_resolution_map
 from ..model import Ruleset
 from .harness_scenarios import SCENARIOS
+from .templates import TemplateError, harness_checks
 
 # One observation the plugin logged, e.g. "[chrooked:innerfocus] OBS move=FOCUSBLAST if=true result=ALWAYS_HIT".
 _OBS_RE = re.compile(r"^\[chrooked:(?P<id>[^\]]+)\]\s+OBS\s+(?P<kv>.+)$")
@@ -130,14 +135,23 @@ def _resolve_target(explicit: str | None) -> Path:
     return Path(pick["path"])
 
 
-def _load_checks(mechanic_id: str, ruleset_dir: Path) -> tuple[list[dict[str, object]], tuple]:
-    """Return (scenario checks, spec test_cases), failing loudly if they are out of sync."""
+def _load_checks(mechanic_id: str, ruleset_dir: Path, target: Path) -> tuple[list[dict[str, object]], tuple]:
+    """Return (checks, spec test_cases), failing loudly if they are out of sync.
+
+    On an Essentials 21 target a templated spec's checks are generated from its
+    probes, resolved against the target's PBS; everything else uses SCENARIOS.
+    """
+    ruleset = Ruleset.load(ruleset_dir)
+    spec = ruleset.behaviors.get(mechanic_id)
+    if spec is not None and spec.template is not None and _is_v21(target):
+        try:
+            return harness_checks(spec, build_resolution_map(target, ruleset)), spec.test_cases
+        except TemplateError as error:
+            raise SystemExit(f"cannot generate checks for '{mechanic_id}': {error}") from error
     if mechanic_id not in SCENARIOS:
         raise SystemExit(f"no harness scenario for '{mechanic_id}' (add one in harness_scenarios.py)")
-    ruleset = Ruleset.load(ruleset_dir)
-    if mechanic_id not in ruleset.behaviors:
+    if spec is None:
         raise SystemExit(f"no behavior spec '{mechanic_id}' in {ruleset_dir}/behaviors")
-    spec = ruleset.behaviors[mechanic_id]
     checks = SCENARIOS[mechanic_id]
     if len(checks) != len(spec.test_cases):
         raise SystemExit(
@@ -148,7 +162,7 @@ def _load_checks(mechanic_id: str, ruleset_dir: Path) -> tuple[list[dict[str, ob
 
 def cmd_stage(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
     """Clear the log and print the in-game actions that produce this mechanic's observations."""
-    checks, _ = _load_checks(mechanic_id, ruleset_dir)
+    checks, _ = _load_checks(mechanic_id, ruleset_dir, target)
     path = log_path(target)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("")  # fresh session
@@ -168,7 +182,7 @@ def cmd_stage(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
 
 def cmd_verify(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
     """Read the log and print PASS/FAIL per test_case; exit non-zero on any failure."""
-    checks, test_cases = _load_checks(mechanic_id, ruleset_dir)
+    checks, test_cases = _load_checks(mechanic_id, ruleset_dir, target)
     path = log_path(target)
     if not path.exists():
         raise SystemExit(f"no log at {path} — run `stage` and play the battle first")
