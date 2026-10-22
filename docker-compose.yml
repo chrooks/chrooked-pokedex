@@ -28,6 +28,9 @@ services:
       # path inside and out so targets.json needs one truth. Machine-specific
       # rows live in targets.json (gitignored).
       - /home/chrooks/projects/rejuv-game:/home/chrooks/projects/rejuv-game
+      # Nova (mjolnir NV-4): staging copy for the dex UI + overrides. Compile and
+      # deploy happen on the Windows PC (scripts/nova_apply.sh); no sync block here.
+      - /home/chrooks/projects/nova-game:/home/chrooks/projects/nova-game
       - ./targets.json:/app/targets.json
       # Key + known_hosts + config the in-process mirror uses to reach the Thor.
       - /home/chrooks/projects/rejuv-ssh:/root/.ssh:ro
