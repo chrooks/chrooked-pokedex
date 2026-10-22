@@ -25,7 +25,7 @@ from typing import Mapping, Optional
 from ...model import Ruleset, evolution_methods
 from ...report import ApplyReport, ReportEntry
 from ...seed.neutralize import slug
-from . import pbs_edit, vocab
+from . import pbs_edit, pbs_read, vocab
 from .resolution import ResolutionMap
 
 
@@ -38,7 +38,13 @@ def apply_evolutions(
     text = path.read_text(encoding="utf-8")
     original = text
 
-    groups = _group_by_source(ruleset, resmap, report)
+    # Only a species section can be an Evolution target. A regional form lives in
+    # pokemon_forms.txt as [SPECIES,n], so a name-derived symbol like MAROWAKALOLA
+    # resolves fine and then fails the whole file at compile time ("Undefined value
+    # MAROWAKALOLA in GameData::Species" — Nova, 2026-10-22). Validate against the
+    # file's own headers before writing.
+    species_sections = pbs_read.section_headers(text)
+    groups = _group_by_source(ruleset, resmap, report, species_sections)
     for source_symbol in sorted(groups):
         lines, partial = groups[source_symbol]
         if pbs_edit.find_section(text, source_symbol) is None:
@@ -70,7 +76,10 @@ def apply_evolutions(
 
 
 def _group_by_source(
-    ruleset: Ruleset, resmap: ResolutionMap, report: ApplyReport
+    ruleset: Ruleset,
+    resmap: ResolutionMap,
+    report: ApplyReport,
+    species_sections: set[str] | None = None,
 ) -> dict[str, tuple[list[str], list[str]]]:
     """Build `{source_symbol: (rendered_lines, unresolved_notes)}` from every backward
     `evolution.from` pointer. A source that only had unrenderable methods still gets an
@@ -100,6 +109,18 @@ def _group_by_source(
             # Also flag the source so its whole-set entry reads partial, not applied —
             # one of its intended branches did not make it into the written set.
             partials.setdefault(source_symbol, []).append(f"{chrooked_id}:unresolved_target")
+            continue
+        if species_sections is not None and target_symbol not in species_sections:
+            report.add(ReportEntry(
+                status="blocked", category="evolution", chrooked_id=chrooked_id,
+                symbol=target_symbol,
+                reason=(
+                    f"evolved species {target_symbol} is not a species section in this "
+                    "target — a regional form lives in pokemon_forms.txt and cannot be "
+                    "an Evolution target; Essentials would reject the whole file"
+                ),
+            ))
+            partials.setdefault(source_symbol, []).append(f"{chrooked_id}:target_not_a_species")
             continue
 
         line = _render_line(evo.method, target_symbol)

@@ -238,3 +238,31 @@ def test_no_evolution_override_no_entry_no_churn(tmp_path):
     assert changed == set()
     assert (target / "PBS" / "pokemon.txt").read_text(encoding="utf-8") == before
     assert report.entries == []
+
+
+def test_target_that_is_a_form_not_a_species_is_blocked_and_vanilla_kept(tmp_path):
+    # Regional forms live in pokemon_forms.txt as [SPECIES,n], never as a species
+    # section. "Marowak Alola" derives to MAROWAKALOLA, which resolves on paper and
+    # then fails the whole file at compile time ("Undefined value MAROWAKALOLA in
+    # GameData::Species" — Nova, 2026-10-22). Block it and keep Cubone's vanilla line.
+    body = (
+        "[CUBONE]\nName = Cubone\nEvolution = MAROWAK,Level,28\n\n"
+        "[MAROWAK]\nName = Marowak\n"
+    )
+    target = _target(tmp_path, body)
+    ruleset = _ruleset(tmp_path, {
+        "marowakalola": (
+            "name: Marowak Alola\nchrooked_id: marowakalola\n"
+            "evolution: { from: Cubone, method: { level: 28 } }\n"
+        ),
+    })
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+    changed = apply_evolutions(target, ruleset, resmap, report)
+    assert changed == set()
+    assert _evolutions(target, "CUBONE") == ["MAROWAK,Level,28"]
+    blocked = [e for e in report.entries if e.status == "blocked"]
+    assert blocked and "MAROWAKALOLA" in blocked[0].reason
+    # The source is flagged partial, not applied: one intended branch was dropped.
+    source = [e for e in report.entries if e.symbol == "CUBONE"]
+    assert source and source[0].status == "partial"
