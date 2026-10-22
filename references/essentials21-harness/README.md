@@ -228,8 +228,10 @@ exception, by design (below).
 **thor, 2026-10-22 (NV-8):** all 22 generated ports were proven in one boot with
 `nova_thor_selftest.sh arm|read|disarm` (Kirin 0.3.5, Ruby 3.1.0 aarch64-linux-android).
 The score was 66/66, and all 52 damage measurements were identical to the PC lab's
-(mjolnir runbook 31). The four NV-9 ports are deployed to thor but not yet proven
-there.
+(mjolnir runbook 31). The four NV-9 ports followed the same day in one boot:
+13/13, every measurement identical to the lab's, including the first on-device run
+of the self-test's scene setup (terrain, rain, hail, Utility Umbrella, Magnet
+Rise). All 26 are proven on thor.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
