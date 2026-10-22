@@ -248,7 +248,9 @@ The score was 66/66, and all 52 damage measurements were identical to the PC lab
 13/13, every measurement identical to the lab's, including the first on-device run
 of the self-test's scene setup (terrain, rain, hail, Utility Umbrella, Magnet
 Rise). The four NV-10 ports followed in one boot: 12/12, every damage and heal
-measurement identical to the lab's. All 30 are proven on thor.
+measurement identical to the lab's. Infernal Maw (NV-11) followed: 3/3, its 400-roll
+chance lines identical to the lab's (the same seed gives the same rolls on ARM).
+All 31 are proven on thor.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
