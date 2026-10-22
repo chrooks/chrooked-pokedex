@@ -1,0 +1,6 @@
+name: Poipole
+chrooked_id: poipole
+aka: { pokeemerald: SPECIES_POIPOLE }
+# Nova-only override (mjolnir NV-4 proof, 2026-10-22): the starter in Chris's
+# Nova save. Poison/Dragon matches its evolution Naganadel; nothing else changes.
+types: [Poison, Dragon]

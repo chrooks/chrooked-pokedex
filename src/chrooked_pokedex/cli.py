@@ -524,6 +524,21 @@ def _run_apply(
             print(f"Target namespace '{slug}' (from {_DEFAULT_TARGETS.name}).")
 
     ruleset = Ruleset.load(ruleset_dir)
+    if slug:
+        # Compose the Target Override namespace (ruleset/targets/<slug>/) onto the
+        # base, exactly as the web apply does — otherwise a CLI apply honors the
+        # slug's holds/edits/mods but silently drops its overrides (found 2026-10-22:
+        # a Nova-only Poipole override never reached the PBS).
+        from .model.compose import compose_ruleset
+
+        overlay = Ruleset.load_namespace(ruleset_dir, slug)
+        if overlay is not None:
+            ruleset = compose_ruleset(ruleset, overlay)
+            print(
+                f"Composed Target Override '{slug}': "
+                f"{len(overlay.species)} species, {len(overlay.moves)} moves, "
+                f"{len(overlay.abilities)} abilities."
+            )
     holds = load_holds(ruleset_dir, slug)
     target_edits = load_target_edits(ruleset_dir, slug)
     mods_off = load_mods_off(ruleset_dir, slug)
