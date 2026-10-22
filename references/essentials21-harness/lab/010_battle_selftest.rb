@@ -69,6 +69,10 @@ module ChrookedSelfTest
   #              rates are checked against the expected ones (within 3 standard
   #              deviations, exactly 0 when 0 is expected) and logged as the
   #              mechanic's OBS line, tagged source=selftest
+  #   defend   - moves used AGAINST the ability's holder, for a defensive ability
+  #              (a type immunity, NV-13): the target holds it and the move's
+  #              MoveImmunity check runs as pbImmunityByAbility runs it, with the
+  #              ability and without (DEFEND line); the port logs its own OBS line
   #   status   - for a status mechanic (frostbite, NV-12), the status the next
   #              three phases set on the user; ability is then nil:
   #   turn     - [move, n]: the user tries its move n times while in that status
@@ -264,6 +268,7 @@ module ChrookedSelfTest
     arrange(b, user, target, setup)
     user.ability = spec[:ability]
     move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move.calcType = move.pbCalcType(user)   # a handler may read the type as used (Pyre)
     srand(SEED)
     statused = flinched = 0
     n.times do
@@ -305,6 +310,17 @@ module ChrookedSelfTest
       cured += 1 if user.status != spec[:status]
     end
     [acted, cured]
+  end
+
+  # Whether the target is immune to the move by its ability, as pbImmunityByAbility
+  # asks (the move's type as used): [with the ability, without it, the type].
+  def self.defend(spec, move_id)
+    b, user, target = pair(spec, move_id)
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move.calcType = move.pbCalcType(user)
+    with = Battle::AbilityEffects.triggerMoveImmunity(spec[:ability], user, target, move,
+                                                       move.calcType, b, false)
+    [!!with, false, move.calcType]
   end
 
   # One hit's damage with the user in the status and without it, same battlers.
@@ -443,6 +459,12 @@ module ChrookedSelfTest
                       "status_expected=#{status_rate} status_ok=#{rate_ok?(statused, n, status_rate)} " \
                       "flinch_rate=#{format('%.3f', flinched.to_f / n)} flinch_expected=#{flinch_rate} " \
                       "flinch_ok=#{rate_ok?(flinched, n, flinch_rate)}")
+      end
+    end
+    guard("defend") do
+      (spec[:defend] || []).each do |move_id|
+        with, without, type = defend(spec, move_id)
+        log("DEFEND #{mechanic} move=#{move_id} type=#{type} immune_with=#{with} immune_without=#{without}")
       end
     end
     guard("turn") do
