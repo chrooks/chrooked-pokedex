@@ -40,13 +40,17 @@ block, and the dex generates the rest from it (`src/chrooked_pokedex/behavior/te
 | `type_boost` | `type`, `multiplier`, optional `pinch`, `control` | `DamageCalcFromUser`: attack-stat multiplier on moves of the type; `pinch: true` adds `user.hp <= user.totalhp / 3` | Blaze (without its HP check unless `pinch`) |
 | `type_conversion` | `type`, `multiplier` (default 1.2), optional `control` | `ModifyMoveBaseType` turns Normal moves into the type and sets `move.powerBoost`; a `DamageCalcFromUser` power rider reads that flag | Aerilate, Dragonize |
 | `flag_boost` | `flags` (Ruleset move flags), `multiplier`, optional `control` | `DamageCalcFromUser`: power multiplier when the move carries one of the flags | Iron Fist |
+| `conditional_boost` (NV-9) | `weather` (rain, sun, sand, hail) or `terrain` (grassy, electric, psychic, misty), `multiplier`, `moves` (`all` or `higher_stat`), optional `control` | `DamageCalcFromUser`, gated on `user.effectiveWeather` (a Utility Umbrella clears sun and rain; hail counts Nova's `:Snowstorm`) or on the field's terrain plus `user.affectedByTerrain?`. `all` multiplies power; `higher_stat` multiplies the attacking stat behind the user's higher one (physical when Attack >= Sp. Atk) | Sand Force (`all`), Solar Power (`higher_stat`) |
 
 `probes` hold one checkable probe per `test_cases` entry, in the same order: the
 move (its display name), the outcome (`result: boosted|normal`, or `converted:
 true|false`), and optionally `hp` (a fraction of max HP to set first) or
-`holder: false` (a Pokémon without the ability). `control` is a vanilla ability,
-by INTERNAL name, that the self-test measures beside the port. From the block,
-for one target:
+`holder: false` (a Pokémon without the ability). A conditional boost's probes set
+the scene instead of `holder`: `field: false` (no weather or terrain), `item` (a
+held item, weather only: `Utility Umbrella`), `airborne: true` (terrain only), and
+`stats: physical|special` (which attacking stat is higher; required for
+`higher_stat`). `control` is a vanilla ability, by INTERNAL name, that the
+self-test measures beside the port. From the block, for one target:
 
 - **the port**, rendered by `apply` against the target's own PBS names. A probe,
   type or ability the game lacks blocks the port, says which, and keeps the
@@ -56,9 +60,17 @@ for one target:
 - **its harness checks**, one per probe, used instead of `harness_scenarios.py`
   on an Essentials 21 target.
 
+**Every shape generates exactly one effect** (NV-9). A spec with more, such as
+Infernal Maw (a biting boost *and* a burn chance *and* a flinch chance), cannot
+take a template: `validate_spec` refuses it, at apply and on a web save (422),
+because a boost-only port would mark the ability installed with most of it
+missing. It needs a hand-written port, or a future shape that covers every effect.
+
 A mechanic that fits no shape gets a hand-written `chrooked_<id>.rb` here. It must
 register its own self-test case and have a scenario in `harness_scenarios.py`. A
-spec with both a template and a file here is ambiguous, and apply blocks it.
+spec with both a template and a file here is ambiguous, and apply blocks it. A new
+shape starts the same way: hand-port one mechanic, prove it in the lab, then
+generalise it (Forestry, NV-9).
 
 ## Install
 
@@ -107,7 +119,7 @@ Copied into the **lab copy's** `Data/Scripts/998_ChrookedDexLab/` by
 | --- | --- |
 | `001_register_black_weather.rb` | Nova only: registers the `:Black` weather map 050 uses, so the PBS writer and compiler finish; lands the debug boot on the title screen |
 | `002_lab_save_dir.rb` | points `SaveData::DIRECTORY` at the lab's own `LabSaves/`; lab and live share `Title=Nova`, so both otherwise save into the synced `%AppData%\Roaming\Nova` |
-| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
+| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:}]`), applied to the same battlers before every ability is measured (NV-9). Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
 
 ### Why the self-test has four hooks
 
@@ -180,11 +192,12 @@ A candidate becomes verified only after reading its call site in Nova's
   now writes the Ruleset's `kicking`, `hammer` and `piercing` move flags into an
   Essentials 21 game's data as the custom flags `Kicking`, `Hammer`, `Piercing`
   (`appliers/essentials/vocab.py`). In Nova that is 17, 10 and 14 moves. The five
-  ports that read them are in the table below. `wing`, `bone` and `ballistic`
-  stay unwritten until a port needs them.
-- *Simple multipliers without a harness scenario yet:* downpour, forestry,
-  mysticpower, nightstalker, updraft, violentblood, whiteout. With templates they
-  need probes in their specs, not scenarios, if they fit a shape.
+  ports that read them are in the table below. `wing` followed in NV-9 for Updraft
+  (8 moves); `bone` and `ballistic` stay unwritten until a port needs them.
+- *Simple multipliers:* downpour, forestry, updraft and whiteout are generated
+  since NV-9. mysticpower and violentblood grant the same-type bonus, a shape not
+  built yet; nightstalker has two effects (a darkness boost and a crit stage), so
+  it needs a hand port or a shape covering both.
 - *Composition:* finishingkick, which borrows Speed Boost through
   `behaviors: [finishingkick, speedboost]`. Essentials 21 has no composition step
   yet; `HandlerHash#copy` might serve, unverified.
@@ -192,8 +205,9 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-All 22 are generated from their specs' `template:` blocks since 2026-10-22 (NV-8),
-and no hand-written port remains here. Before the hand ports were deleted, the
+All 26 are generated from their specs' `template:` blocks: 22 since 2026-10-22
+(NV-8), four more the same day (NV-9). No hand-written port remains here. For the
+NV-8 22, before the hand ports were deleted, the
 regeneration was checked three ways: each generated port's code matched its hand
 port line for line (comments and the self-test registration aside), its generated
 checks matched the old scenario, and `nova_selftest.sh --all` scored 66/66 with
@@ -206,12 +220,16 @@ exception, by design (below).
 | bloom, cryomancer, deluge | `type_boost`, Grass / Ice / Water 1.5x | lab, 2026-10-22: 3/3 each; 1.500x on full hits, 1.417x on Vine Whip-sized hits, off-type 1.000x; Overgrow and Torrent unchanged at full HP |
 | overcharge | `type_boost`, Electric 1.5x, `pinch` | lab, 2026-10-22: 3/3; Thunderbolt 1.500x at 1/4 HP, 1.000x at full HP; Ice Beam 1.000x at 1/4 HP |
 | chitinize, foliate, hydrate, immolate, martialize, mineralize, obfuscate, psyonize, spectralize, tectonize, venomize, wyvernize | `type_conversion`, 1.2x, control Aerilate | lab, 2026-10-22: 3/3 each; Tackle converts and hits 17 vs 14 (1.214x), equal to Aerilate; already-typed moves unchanged. The foe-weak/foe-resists cases pass on `converted`/`boosted`; effectiveness itself was not measured (neutral `???` foe) |
+| forestry | `conditional_boost`, Grassy Terrain, `moves: all`, 1.3x | NV-9: hand-ported first, lab 3/3 (Tackle), then generated with identical code. Lab 3/3: Body Slam 1.300x on Grassy Terrain (grounded); 1.000x with no terrain and while airborne (Magnet Rise) |
+| downpour, whiteout | `conditional_boost`, rain / hail, `moves: higher_stat`, 1.5x | NV-9, lab: Downpour 4/4, Whiteout 3/3. Body Slam 1.469x when Attack is higher, Hyper Voice 1.500x when Sp. Atk is higher, 1.000x for the other category; Downpour holding a Utility Umbrella in rain 1.000x |
+| updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
 **thor, 2026-10-22 (NV-8):** all 22 generated ports were proven in one boot with
 `nova_thor_selftest.sh arm|read|disarm` (Kirin 0.3.5, Ruby 3.1.0 aarch64-linux-android).
 The score was 66/66, and all 52 damage measurements were identical to the PC lab's
-(mjolnir runbook 31).
+(mjolnir runbook 31). The four NV-9 ports are deployed to thor but not yet proven
+there.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.

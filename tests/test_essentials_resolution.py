@@ -51,13 +51,13 @@ def test_vocab_type_and_category():
 def test_vocab_flag_maps_known_and_refuses_unknown():
     assert vocab.flag("contact") == "Contact"
     assert vocab.flag("biting") == "Biting"
-    # Custom flags written because Essentials 21 ports read them (NV-7).
+    # Custom flags written because Essentials 21 ports read them (NV-7, NV-9).
     assert vocab.flag("kicking") == "Kicking"
     assert vocab.flag("hammer") == "Hammer"
     assert vocab.flag("piercing") == "Piercing"
+    assert vocab.flag("wing") == "Wing"
     # Not written until a port needs them -> honest None, caller marks unresolved.
     assert vocab.flag("bone") is None
-    assert vocab.flag("wing") is None
     assert vocab.flag("ballistic") is None
 
 
