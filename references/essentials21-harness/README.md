@@ -286,8 +286,10 @@ Frostbite and Rimefang (NV-12) followed: 9/9 and 3/3, then frostbite again 9/9
 after the any-Fire-move cure, every line identical to the lab's. All 33 are proven
 on thor. The six NV-13 ports followed in one boot: 18/18, all 18 measurement lines
 identical to the lab's, the first device runs of a generated status chance and of
-the `defend` phase. All 39 are proven on thor. The five NV-14 ports are deployed and
-wait for their boot.
+the `defend` phase. The five NV-14 ports followed in one boot: 15/15, all 15 DRAIN,
+KO and PRIORITY lines identical to the lab's (the AI battle's turn counts are not a
+measurement: it is not reseeded, so they depend on what ran before it). All 44 are
+proven on thor.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
