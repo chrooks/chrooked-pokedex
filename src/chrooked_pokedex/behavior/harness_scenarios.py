@@ -512,7 +512,7 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'Switch in with no Tatsugiri.', "select": {'case': 'check', 'label': 'none', 'source': 'selftest'}, "expect": {'stages': '0/0/0/0/0'}},
         {"stage": "In a multi battle, only the ally trainer has a Tatsugiri.", "select": {'case': 'check', 'label': 'multi', 'source': 'selftest'}, "expect": {'stages': '0/0/0/0/0', 'own_team': '1'}},
         {"stage": 'Re-enter at +6 in all five.', "select": {'case': 'check', 'label': 'maxed', 'source': 'selftest'}, "expect": {'stages': '6/6/6/6/6'}},
-        {"stage": 'Not in this game.', "absent": "Nova's AI rates a switch-in without its entry ability; it does not model Intrepid Sword either", "select": {}, "expect": {}},
+        {"stage": 'Let the AI rate switching it in, a Tatsugiri in the party.', "select": {'case': 'check', 'label': 'ai_switch', 'source': 'selftest'}, "expect": {'bonus': '25'}},
     ],
     "webweaver": [
         {"stage": 'Switch in with no Sticky Web on the foes.', "select": {'case': 'check', 'label': 'lays_web', 'source': 'selftest'}, "expect": {'web': 'true', 'web_messages': '1'}},

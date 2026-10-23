@@ -20,7 +20,7 @@ test_cases:
   - given: Dondozo is already at +6 in all five stats (for example, via Baton Pass) and re-enters.
     expect: No ability box, no message.
   - given: A trainer's AI weighs switching in its Order Taker Dondozo with a Tatsugiri in its party.
-    expect: The switch-in scorer models the +1s, as it does for Intrepid Sword.
+    expect: The switch-in scorer counts the +1s in the candidate's favour.
 notes:
   - "Chris, 2026-09-25: approved for the Dondozo blind design. The singles translation of Commander: the partner directs from the team."
   - Party means the holder's own trainer's party (Rejuv pbPartySingleOwner), not the whole side (pbParty), so a multi-battle ally trainer's Tatsugiri does not count. A Tatsugiri also on the field in a double battle still counts.
