@@ -290,4 +290,33 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": "Rimefang user uses Tackle, many times.", "select": {"move": "TACKLE", "ability": "true", "source": "selftest"}, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}},
         {"stage": "Rimefang user bites (Crunch) an Ice-type foe, many times.", "select": {"move": "CRUNCH", "ability": "true", "source": "selftest", "target_types": "ICE"}, "expect": {"damage": "BOOSTED", "status_ok": "true", "flinch_ok": "true"}},
     ],
+    # NV-21 hand ports: entry and end-of-round effects, measured by the self-test's scenes.
+    "dilation": [
+        {"stage": 'Switch your Dilation Pokemon in with no Trick Room up.', "select": {'case': 'entry', 'label': 'calm', 'source': 'selftest'}, "expect": {'trick_room': '5'}},
+        {"stage": 'Switch your Dilation Pokemon in under Trick Room.', "select": {'case': 'entry', 'label': 'twisted', 'source': 'selftest'}, "expect": {'trick_room': '0'}},
+    ],
+    "dualaegis": [
+        {"stage": 'Switch your Dual Aegis Pokemon in with no screens up.', "select": {'case': 'entry', 'label': 'bare', 'source': 'selftest'}, "expect": {'reflect': '5', 'light_screen': '5'}},
+        {"stage": 'Switch it in with Reflect already up.', "select": {'case': 'entry', 'label': 'reflect_up', 'source': 'selftest'}, "expect": {'reflect': '3', 'light_screen': '5'}},
+        {"stage": 'Switch it in holding Light Clay.', "select": {'case': 'entry', 'label': 'light_clay', 'source': 'selftest'}, "expect": {'reflect': '8', 'light_screen': '8'}},
+    ],
+    "waterveil": [
+        {"stage": 'Switch your Water Veil Pokemon in.', "select": {'case': 'entry', 'label': 'fresh', 'source': 'selftest'}, "expect": {'aqua_ring': 'true'}},
+        {"stage": 'Baton Pass Aqua Ring to your Water Veil Pokemon.', "select": {'ability': 'true', 'entry': 'true', 'aqua_ring_before': 'true'}, "expect": {'set': 'false'}},
+        {"stage": 'Switch it out and back in.', "select": {'case': 'entry', 'label': 'reentry', 'source': 'selftest'}, "expect": {'aqua_ring': 'true'}},
+        {"stage": 'Use Will-O-Wisp on it.', "select": {'case': 'keeps', 'kind': 'status', 'status': 'BURN', 'source': 'selftest'}, "expect": {'changed': 'true'}},
+        {"stage": 'Have it use Aqua Ring after entering.', "select": {'case': 'entry', 'label': 'fresh', 'source': 'selftest'}, "expect": {'aqua_ring_move_fails': 'true'}},
+    ],
+    "selfsufficient": [
+        {"stage": 'End a turn with your Self Sufficient Pokemon damaged.', "select": {'case': 'eor', 'label': 'damaged', 'source': 'selftest'}, "expect": {'holder_change': '8'}},
+        {"stage": 'End a turn with it at full HP.', "select": {'case': 'eor', 'label': 'full', 'source': 'selftest'}, "expect": {'holder_change': '0'}},
+        {"stage": 'End a turn with a very low-level holder damaged.', "select": {'case': 'eor', 'label': 'tiny', 'source': 'selftest'}, "expect": {'holder_change': '1'}},
+        {"stage": 'End a turn with it damaged and holding Leftovers.', "select": {'case': 'eor', 'label': 'leftovers', 'source': 'selftest'}, "expect": {'holder_change': '16'}},
+    ],
+    "heavyfumes": [
+        {"stage": 'End a turn against a Normal-type foe.', "select": {'case': 'eor', 'label': 'normal', 'source': 'selftest'}, "expect": {'foe_change': '-14'}},
+        {"stage": 'End a turn against a Poison-type foe.', "select": {'case': 'eor', 'label': 'poison', 'source': 'selftest'}, "expect": {'foe_change': '0'}},
+        {"stage": 'End a turn against a Magic Guard foe.', "select": {'case': 'eor', 'label': 'guarded', 'source': 'selftest'}, "expect": {'foe_change': '0'}},
+        {"stage": 'End a turn against a foe behind a Substitute.', "select": {'case': 'eor', 'label': 'substitute', 'source': 'selftest'}, "expect": {'foe_change': '-14'}},
+    ],
 }

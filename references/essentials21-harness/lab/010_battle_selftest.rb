@@ -77,6 +77,12 @@ module ChrookedSelfTest
   #              A defend entry may be [move, {mold_breaker: true}]: the attacker
   #              breaks the mold (NV-18). Every entry also logs the mechanic's OBS
   #              line with source=selftest, mold_breaker and immune
+  #   entry    - [label, preset] entries (NV-21): the holder enters (OnSwitchIn) in
+  #              the preset's scene (see scene); the field, sides and stages after,
+  #              logged as the mechanic's OBS line with case=entry and the label
+  #   eor      - [label, preset] entries (NV-21): one end of round for the holder
+  #              (its item's and ability's EndOfRoundHealing, its EndOfRoundEffect);
+  #              both battlers' HP changes, logged with case=eor and the label
   #   struck   - [move, {status:, status_rate:, setup:, n:}] entries for a status
   #              the holder gives an attacker that touches it (NV-19): the foe's
   #              move handed to the holder's OnBeingHit n times (default 400),
@@ -355,6 +361,44 @@ module ChrookedSelfTest
       count += 1 if attacker.status == status
     end
     count
+  end
+
+  # A holder and its foe for a scene phase (entry, eor; NV-21): the holder at the
+  # preset's level (default LEVEL), both neutral, then the preset applied:
+  #   level, hp (fraction), item           - the holder
+  #   foe_types, foe_ability, foe_substitute - the foe
+  #   weather, trick_room (turns)          - the field
+  #   reflect, light_screen (turns), aqua_ring - the holder's side and itself
+  def self.scene(spec, preset)
+    holder_mon = mon(spec[:user], [:TACKLE])
+    if preset[:level]
+      holder_mon.level = preset[:level]
+      holder_mon.calc_stats
+    end
+    b = battle(holder_mon, mon(spec[:foe], [:TACKLE]))
+    b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+    b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+    holder, foe = b.battlers[0], b.battlers[1]
+    holder.ability = nil
+    foe.ability = preset[:foe_ability]
+    if spec[:neutral]
+      holder.pbChangeTypes(:QMARKS)
+      foe.pbChangeTypes(:QMARKS)
+    end
+    if preset[:foe_types]
+      foe.types = preset[:foe_types]
+      foe.effects[PBEffects::ExtraType] = nil
+    end
+    foe.effects[PBEffects::Substitute] = foe.totalhp / 4 if preset[:foe_substitute]
+    holder.hp = [(holder.totalhp * preset[:hp]).floor, 1].max if preset[:hp]
+    holder.item = preset[:item] if preset[:item]
+    b.field.weather = preset[:weather] if preset[:weather]
+    b.field.effects[PBEffects::TrickRoom] = preset[:trick_room] if preset[:trick_room]
+    holder.pbOwnSide.effects[PBEffects::Reflect] = preset[:reflect] if preset[:reflect]
+    holder.pbOwnSide.effects[PBEffects::LightScreen] = preset[:light_screen] if preset[:light_screen]
+    holder.effects[PBEffects::AquaRing] = true if preset[:aqua_ring]
+    holder.ability = spec[:ability]
+    [b, holder, foe]
   end
 
   # A fresh pair of battlers for the status phases: [battle, user, target].
@@ -670,6 +714,31 @@ module ChrookedSelfTest
         obs(mechanic, "move=#{move_id} ability=true source=selftest mold_breaker=#{mold_breaker} " \
                       "hp_set=#{opts[:hp] || 1.0} stages_set=#{stages_set.empty? ? 'none' : stages_set} " \
                       "immune=#{with} effect=#{effect}")
+      end
+    end
+    guard("entry") do
+      (spec[:entry] || []).each do |label, preset|
+        b, holder, foe = scene(spec, preset || {})
+        Battle::AbilityEffects.triggerOnSwitchIn(holder.ability, holder, b, true)
+        ring = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(:AQUARING))
+        obs(mechanic, "case=entry label=#{label} source=selftest " \
+                      "trick_room=#{b.field.effects[PBEffects::TrickRoom]} " \
+                      "reflect=#{holder.pbOwnSide.effects[PBEffects::Reflect]} " \
+                      "light_screen=#{holder.pbOwnSide.effects[PBEffects::LightScreen]} " \
+                      "aqua_ring=#{holder.effects[PBEffects::AquaRing]} " \
+                      "aqua_ring_move_fails=#{ring.pbMoveFailed?(holder, [holder])} " \
+                      "foe_special_attack=#{foe.stages[:SPECIAL_ATTACK]}")
+      end
+    end
+    guard("eor") do
+      (spec[:eor] || []).each do |label, preset|
+        b, holder, foe = scene(spec, preset || {})
+        hp, foe_hp = holder.hp, foe.hp
+        Battle::ItemEffects.triggerEndOfRoundHealing(holder.item, holder, b) if holder.item
+        Battle::AbilityEffects.triggerEndOfRoundHealing(holder.ability, holder, b)
+        Battle::AbilityEffects.triggerEndOfRoundEffect(holder.ability, holder, b)
+        obs(mechanic, "case=eor label=#{label} source=selftest holder_change=#{holder.hp - hp} " \
+                      "holder_max=#{holder.totalhp} foe_change=#{foe.hp - foe_hp} foe_max=#{foe.totalhp}")
       end
     end
     guard("struck") do
