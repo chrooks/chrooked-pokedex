@@ -27,3 +27,12 @@ notes:
 engine_hints:
   pokeemerald: "TryAbsorbMove switch, src/battle_util.c:2485 — TYPE_BUG branch uses BattleScript_FlytrapBoost (raises ATK and SPATK); falls back to MonMadeMoveUseless when both at MAX_STAT_STAGE."
   essentials: "Bug-type absorb hook that raises Attack and Special Attack by 1 each; no-op stat change when both already maxed."
+template:
+  - shape: type_absorb
+    params: {type: Bug, stats: [attack, special_attack]}
+    effects: [1, 2]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Bug Buzz, absorbed: true}
+      - {move: Tackle, absorbed: false}
+      - {move: Bug Buzz, absorbed: true, stage: 6}

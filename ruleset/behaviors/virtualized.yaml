@@ -30,3 +30,13 @@ notes:
   - Ability-suppressing mechanics (Mold Breaker, Neutralizing Gas, etc.) remove both effects simultaneously.
   - This ability does NOT change the bearer's actual type chart for immunity purposes (e.g., a Dark-immune bearer via another effect would resolve that immunity before this ability's modifier).
   - STUB — engine_hints ungrounded, needs human grounding pass before an Applier can compile it.
+template:
+  - shape: damage_taken
+    params: {rules: [{contact: true, multiplier: "1/3"}, {type: Dark, multiplier: 2}]}
+    effects: [1, 2]
+    cases: [1, 2, 3, 4]
+    probes:
+      - {move: Close Combat, factor: "1/3"}
+      - {move: Dark Pulse, factor: 2}
+      - {move: Crunch, factor: "2/3"}
+      - {move: Earthquake, factor: 1}

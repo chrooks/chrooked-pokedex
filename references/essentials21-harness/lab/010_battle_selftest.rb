@@ -390,14 +390,21 @@ module ChrookedSelfTest
   # Whether the target is immune to the move by its ability, through Nova's own
   # pbImmunityByAbility (the move's type as used; the attacker's Mold Breaker lifts
   # it, NV-18): [with the ability, without it, the type].
-  def self.defend(spec, move_id, mold_breaker = false)
+  # opts may set the holder's HP fraction (hp:) and stat stages (stages:) first, and
+  # messages show, so an absorbing ability heals or raises as in a battle (NV-20):
+  # [immune with the ability, without it, the type, HEALED|RAISED|NONE].
+  def self.defend(spec, move_id, opts = {})
     b, user, target = pair(spec, move_id)
     target.ability = spec[:ability]
+    target.hp = [(target.totalhp * opts[:hp]).floor, 1].max if opts[:hp]
+    (opts[:stages] || {}).each { |stat, n| target.stages[stat] = n }
     move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
     move.calcType = move.pbCalcType(user)
-    b.moldBreaker = mold_breaker
-    with = move.pbImmunityByAbility(user, target, false)
-    [!!with, false, move.calcType]
+    b.moldBreaker = !!opts[:mold_breaker]
+    hp, stages = target.hp, target.stages.dup
+    with = move.pbImmunityByAbility(user, target, true)
+    effect = target.hp > hp ? "HEALED" : (target.stages != stages ? "RAISED" : "NONE")
+    [!!with, false, move.calcType, effect]
   end
 
   # What a kept effect of the game's own ability measures, with `ability` on the user:
@@ -654,11 +661,15 @@ module ChrookedSelfTest
     guard("defend") do
       (spec[:defend] || []).each do |entry|
         move_id, opts = entry.is_a?(Array) ? entry : [entry, {}]
-        mold_breaker = !!(opts || {})[:mold_breaker]
-        with, without, type = defend(spec, move_id, mold_breaker)
+        opts ||= {}
+        mold_breaker = !!opts[:mold_breaker]
+        with, without, type, effect = defend(spec, move_id, opts)
+        stages_set = (opts[:stages] || {}).map { |stat, n| "#{stat}:#{n}" }.join("/")
         log("DEFEND #{mechanic} move=#{move_id} type=#{type} mold_breaker=#{mold_breaker} " \
-            "immune_with=#{with} immune_without=#{without}")
-        obs(mechanic, "move=#{move_id} ability=true source=selftest mold_breaker=#{mold_breaker} immune=#{with}")
+            "immune_with=#{with} immune_without=#{without} effect=#{effect}")
+        obs(mechanic, "move=#{move_id} ability=true source=selftest mold_breaker=#{mold_breaker} " \
+                      "hp_set=#{opts[:hp] || 1.0} stages_set=#{stages_set.empty? ? 'none' : stages_set} " \
+                      "immune=#{with} effect=#{effect}")
       end
     end
     guard("struck") do

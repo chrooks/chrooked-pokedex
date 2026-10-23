@@ -28,3 +28,17 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c. Grass absorb: CanAbilityAbsorbMove (~line 4384) — `case ABILITY_STONEBARK: if (moveType == TYPE_GRASS) MOVE_ABSORBED_BY_DRAIN_HP_ABILITY;` heal = GetNonDynamaxMaxHP / 4 (~line 4435). Grass type-immunity in CalcSpeciesTypeEffectiveness (~line 11130, grouped with Sap Sipper → 0.0). Water weakness: GetDefenderAbilitiesModifier (~line 9795) — `case ABILITY_STONEBARK: if (moveType == TYPE_WATER) modifier *= UQ_4_12(1.25);`."
   essentials: "Grass → immune + heal 1/4 max HP (model on Sap Sipper for immunity, Water Absorb for the heal). Water → multiply damage taken by 1.25 (model on Dry Skin's Fire weakness)."
+template:
+  - shape: type_absorb
+    params: {type: Grass, heal: true}
+    effects: [1]
+    cases: [1]
+    probes:
+      - {move: Energy Ball, absorbed: true, hp: 0.5}
+  - shape: damage_taken
+    params: {rules: [{type: Water, multiplier: 1.25}]}
+    effects: [2]
+    cases: [2, 3]
+    probes:
+      - {move: Surf, factor: 1.25}
+      - {move: Flamethrower, factor: 1}

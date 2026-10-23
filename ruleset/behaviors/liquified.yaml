@@ -26,3 +26,12 @@ notes:
   - Ability-suppressing mechanics (Mold Breaker, Neutralizing Gas, etc.) remove both effects simultaneously.
   - This ability does NOT change the bearer's actual type chart for immunity purposes (e.g., a Water-immune bearer via Water Absorb would still trigger Water Absorb before this ability's modifier).
   - STUB — engine_hints ungrounded, needs human grounding pass
+template:
+  - shape: damage_taken
+    params: {rules: [{contact: true, multiplier: 0.5}, {type: Water, multiplier: 2}]}
+    effects: [1, 2]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Close Combat, factor: 0.5}
+      - {move: Scald, factor: 2}
+      - {move: Liquidation, factor: 1}

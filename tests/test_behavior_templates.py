@@ -892,3 +892,48 @@ def test_a_lone_keeps_template_is_refused():
     lone = replace(KINDLE, template=BehaviorTemplate(shape="keeps", probes=KINDLE.template.probes))
     with pytest.raises(TemplateError, match="keeps generates nothing"):
         validate_spec(lone)
+
+
+# --- NV-19, NV-20 shapes ---------------------------------------------------------
+
+
+def test_damage_taken_multiplies_its_rules_exactly():
+    spec = _blocks_spec(_block("damage_taken", {"rules": [{"contact": True, "multiplier": "1/3"},
+                                                          {"type": "Dark", "multiplier": 2}]},
+                               [1, 2], [1, 2, 3], [{"move": "Tackle", "factor": "1/3"},
+                                                    {"move": "Dark Pulse", "factor": 2},
+                                                    {"move": "Crunch", "factor": "2/3"}]), cid="virtualized")
+    text = _render(spec)
+    assert "      factor *= (1.0 / 3) if contact\n      factor *= 2.0 if type == :DARK\n" in text
+    assert [expect for _, expect in _verdicts(spec)] == [{"factor": "0.333"}, {"factor": "2.000"}, {"factor": "0.667"}]
+
+
+def test_type_absorb_uses_novas_helpers_and_reads_the_selftests_line():
+    heal = _blocks_spec(_block("type_absorb", {"type": "Fire", "heal": True}, [1, 2], [1, 2, 3],
+                               [{"move": "Ember", "absorbed": True, "hp": 0.5}, {"move": "Surf", "absorbed": False},
+                                {"move": "Ember", "absorbed": True}]))
+    text = _render(heal)
+    assert "next target.pbMoveImmunityHealingAbility(user, move, type, :FIRE, show_message)" in text
+    assert "defend: [[:EMBER, {hp: 0.5}], [:SURF, {hp: 1.0}], [:EMBER, {hp: 1.0}]]," in text
+    assert [expect for _, expect in _verdicts(heal)] == [
+        {"immune": "true", "effect": "HEALED"}, {"immune": "false", "effect": "NONE"},
+        {"immune": "true", "effect": "NONE"}]  # full HP: absorbed, nothing to heal
+    two = _blocks_spec(_block("type_absorb", {"type": "Bug", "stats": ["attack", "special_attack"]}, [1, 2], [1, 2, 3],
+                              [{"move": "X-Scissor", "absorbed": True}, {"move": "Tackle", "absorbed": False},
+                               {"move": "X-Scissor", "absorbed": True, "stage": 6}]))
+    assert "[:ATTACK, :SPECIAL_ATTACK].each do |stat|" in _render(two)
+    assert _verdicts(two)[2] == ({"move": "XSCISSOR", "ability": "true", "source": "selftest", "mold_breaker": "false",
+                                  "hp_set": "1.0", "stages_set": "ATTACK:6/SPECIAL_ATTACK:6"},
+                                 {"immune": "true", "effect": "NONE"})
+
+
+def test_struck_status_gives_the_attacker_the_status():
+    spec = _blocks_spec(_block("struck_status", {"status": "burn", "chance": 30}, [1, 2], [1, 2, 3],
+                               [{"move": "Tackle", "inflicts": True}, {"move": "Surf", "inflicts": False},
+                                {"move": "Tackle", "inflicts": False, "attacker_types": ["Fire"]}]))
+    text = _render(spec)
+    assert "next if !move.pbContactMove?(user) || !user.affectedByContactEffect?" in text
+    assert "can_inflict = user.pbCanBurn?(target, false)" in text and "user.pbBurn(target, msg)" in text
+    assert "[:TACKLE, {status: :BURN, status_rate: 0, setup: {types: [:FIRE]}}]" in text
+    assert _verdicts(spec)[2] == ({"move": "TACKLE", "ability": "true", "source": "selftest", "side": "struck",
+                                  "attacker_types": "FIRE"}, {"status_ok": "true"})

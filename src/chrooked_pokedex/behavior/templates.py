@@ -130,7 +130,7 @@ from ..model.schema import MOVE_FLAGS
 
 SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
           "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
-          "type_resist", "keeps", "struck_status")
+          "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -143,6 +143,8 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "stab_grant": (frozenset({"types"}), {"multiplier": 1.5, "control": None}),
     "hit_status": (frozenset({"status", "chance"}), {"type": None, "flags": None, "contact": None}),
     "struck_status": (frozenset({"status", "chance"}), {}),
+    "damage_taken": (frozenset({"rules"}), {}),
+    "type_absorb": (frozenset({"type"}), {"heal": None, "stats": None}),
     "type_immunity": (frozenset({"type"}), {}),
     "hit_drain": (frozenset({"fraction", "moves"}), {}),
     "ko_effect": (frozenset(), {"heal": None, "stat": None}),
@@ -155,7 +157,8 @@ _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost"
             "conditional_boost": "result", "stab_grant": "result",
             "hit_status": "inflicts", "type_immunity": "immune", "hit_drain": "drain",
             "ko_effect": "effect", "priority_boost": "result", "type_resist": "applies",
-            "keeps": "measure", "struck_status": "inflicts"}
+            "keeps": "measure", "struck_status": "inflicts", "damage_taken": "factor",
+            "type_absorb": "absorbed"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -168,7 +171,7 @@ _STATS = ("physical", "special")
 _CONVERT_FROM = ("normal", "any")
 # The shapes that never scale damage: no calc entry.
 _NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
-                      "type_resist", "keeps", "struck_status")
+                      "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb")
 # What a keeps probe measures, the ability against none (the self-test's keeps phase):
 # whether a foe can give the holder `status`, or the HP its status changes at end of round.
 _KEEP_MEASURES = ("status", "eor_status")
@@ -180,6 +183,7 @@ _REGISTRIES = {
     "hit_status": ("OnDealingHit",), "hit_drain": ("OnDealingHit",), "type_immunity": ("MoveImmunity",),
     "ko_effect": ("OnEndOfUsingMove",), "priority_boost": ("PriorityChange",),
     "type_resist": ("DamageCalcFromTarget",), "keeps": (), "struck_status": ("OnBeingHit",),
+    "damage_taken": ("DamageCalcFromTarget",), "type_absorb": ("MoveImmunity",),
 }
 _DRAINS = ("healed", "none", "reversed")
 _CONTACT = ("contact", "non_contact")
@@ -318,6 +322,17 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
         raise TemplateError(f"{where}: params.from must be one of {', '.join(_CONVERT_FROM)}, not {params['from']!r}")
     if template.shape == "conditional_boost":
         _validate_condition(params, where)
+    if template.shape == "damage_taken":
+        _validate_rules(params, where)
+    if template.shape == "type_absorb":
+        if (params.get("heal") is None) == (params.get("stats") is None):
+            raise TemplateError(f"{where}: type_absorb needs exactly one of params.heal or params.stats")
+        if params.get("heal") is not None and params["heal"] is not True:
+            raise TemplateError(f"{where}: params.heal is true (a quarter of max HP, as Volt Absorb)")
+        stats = params.get("stats")
+        if stats is not None and (not isinstance(stats, list) or not stats
+                                  or any(st not in _STAT_NAMES for st in stats)):
+            raise TemplateError(f"{where}: params.stats must be a list of {', '.join(_STAT_NAMES)}")
     if template.shape in ("hit_status", "struck_status"):
         _validate_hit_status(params, where, gated=template.shape == "hit_status")
     if template.shape == "hit_drain":
@@ -355,6 +370,31 @@ def _validate_condition(params: Mapping[str, object], where: str) -> None:
     moves = params.get("moves", "all")
     if moves not in _MOVE_SETS:
         raise TemplateError(f"{where}: params.moves must be one of {', '.join(_MOVE_SETS)}, not {moves!r}")
+
+
+def _fraction(value: object) -> Optional[Fraction]:
+    """A positive number, or a fraction written "1/3": exact where a decimal is not."""
+    if isinstance(value, bool):
+        return None
+    try:
+        number = Fraction(str(value)) if isinstance(value, str) else Fraction(value)  # type: ignore[arg-type]
+    except (ValueError, TypeError, ZeroDivisionError):
+        return None
+    return number if number > 0 else None
+
+
+def _validate_rules(params: Mapping[str, object], where: str) -> None:
+    rules = params.get("rules")
+    if not isinstance(rules, list) or not rules or not all(isinstance(r, dict) for r in rules):
+        raise TemplateError(f"{where}: params.rules must be a list of {{multiplier, type?, contact?}}")
+    for index, rule in enumerate(rules, start=1):
+        unknown = sorted(set(rule) - {"multiplier", "type", "contact"})
+        if unknown:
+            raise TemplateError(f"{where}: rule {index}: unknown keys {', '.join(unknown)}")
+        if _fraction(rule.get("multiplier")) is None:
+            raise TemplateError(f"{where}: rule {index}: multiplier must be a positive number or a fraction (1/3)")
+        if "type" not in rule and rule.get("contact") is not True:
+            raise TemplateError(f"{where}: rule {index}: needs a type, contact: true, or both")
 
 
 def _validate_hit_status(params: Mapping[str, object], where: str, gated: bool = True) -> None:
@@ -402,6 +442,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         allowed.add("target_types")
     if shape == "struck_status":
         allowed.add("attacker_types")
+    if shape == "type_absorb":
+        allowed |= {"hp", "stage"}
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
@@ -412,12 +454,14 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         raise TemplateError(f"{at}: result must be boosted or normal, not {value!r}")
     if outcome == "drain" and value not in _DRAINS:
         raise TemplateError(f"{at}: drain must be one of {', '.join(_DRAINS)}, not {value!r}")
+    if outcome == "factor" and _fraction(value) is None:
+        raise TemplateError(f"{at}: factor must be the multiplier the ability gives its move (0.5, 1/3, 2)")
     if outcome == "measure":
         if value not in _KEEP_MEASURES:
             raise TemplateError(f"{at}: measure must be one of {', '.join(_KEEP_MEASURES)}, not {value!r}")
         if probe.get("status") not in _STATUSES:
             raise TemplateError(f"{at}: status must be one of {', '.join(_STATUSES)}")
-    if outcome not in ("result", "drain", "measure") and not isinstance(value, bool):
+    if outcome not in ("result", "drain", "measure", "factor") and not isinstance(value, bool):
         raise TemplateError(f"{at}: {outcome} must be true or false, not {value!r}")
     hp = probe.get("hp", 1.0)
     if not (_is_positive_number(hp) and hp <= 1):  # type: ignore[operator]
@@ -535,6 +579,17 @@ def _body(spec: BehaviorSpec, port: _Port, selftest: str) -> str:
     elif port.shape == "type_resist":
         values["TYPE"] = port.type
         body = _TYPE_RESIST
+    elif port.shape == "damage_taken":
+        lines = []
+        for multiplier, rule_type, contact in port.rules:
+            gate = " && ".join(([] if not contact else ["contact"]) + ([f"type == :{rule_type}"] if rule_type else []))
+            lines.append(f"      factor *= {_ruby_fraction(multiplier)} if {gate}")
+        values["RULES"] = "\n".join(lines)
+        body = _DAMAGE_TAKEN
+    elif port.shape == "type_absorb":
+        values["TYPE"] = port.type
+        values["EFFECT"] = _absorb_effect(port)
+        body = _TYPE_ABSORB
     elif port.shape == "struck_status":
         _, stem, message = _STATUSES[str(port.params["status"])]
         values.update({"CHANCE": str(port.params["chance"]), "STEM": stem, "MESSAGE": message})
@@ -545,6 +600,44 @@ def _body(spec: BehaviorSpec, port: _Port, selftest: str) -> str:
             else f" && [{', '.join(':' + t for t in port.grant_types)}].include?(type)")
         body = _STAB_GRANT
     return _fill(body, values)
+
+
+def _ruby_fraction(value: Fraction) -> str:
+    """An exact Ruby float for a multiplier: 0.5, or (1.0 / 3) where no decimal is exact."""
+    if value.denominator in (1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100):
+        return _ruby_float(float(value))
+    return f"({float(value.numerator)} / {value.denominator})"
+
+
+def _absorb_effect(port: _Port) -> str:
+    """What absorbing does: Volt Absorb's quarter heal or Sap Sipper's stat, through
+    Nova's own battler helpers; several stats in turn, as those helpers would."""
+    if port.params.get("heal"):
+        return f"      next target.pbMoveImmunityHealingAbility(user, move, type, :{port.type}, show_message)"
+    stats = [_STAT_NAMES[str(st)][0] for st in port.params["stats"]]  # type: ignore[union-attr]
+    if len(stats) == 1:
+        return (f"      next target.pbMoveImmunityStatRaisingAbility(user, move, type, :{port.type}, "
+                f":{stats[0]}, 1, show_message)")
+    return "\n".join([
+        "      if show_message",
+        "        battle.pbShowAbilitySplash(target)",
+        "        raised = false",
+        f"        [{', '.join(':' + st for st in stats)}].each do |stat|",
+        "          next if !target.pbCanRaiseStatStage?(stat, target)",
+        "          if Battle::Scene::USE_ABILITY_SPLASH",
+        "            target.pbRaiseStatStage(stat, 1, target)",
+        "          else",
+        "            target.pbRaiseStatStageByCause(stat, 1, target, target.abilityName)",
+        "          end",
+        "          raised = true",
+        "        end",
+        "        if !raised",
+        "          battle.pbDisplay(_INTL(\"It doesn't affect {1}...\", target.pbThis(true)))",
+        "        end",
+        "        battle.pbHideAbilitySplash(target)",
+        "      end",
+        "      next true",
+    ])
 
 
 def _block_spec(spec: BehaviorSpec, block: BehaviorTemplate) -> BehaviorSpec:
@@ -652,10 +745,29 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
             expect = {"result": "IMMUNE" if probe.outcome else "NORMAL"}
         elif port.shape == "type_resist":
             expect = {"result": "APPLIED" if probe.outcome else "NORMAL"}
+        elif port.shape == "damage_taken":
+            expect = {"factor": f"{float(_fraction(probe.outcome) or 1):.3f}"}
+        elif port.shape == "type_absorb":
+            # Absorbing heals or raises inside the handler, so the self-test's own line says it.
+            select.update({"source": "selftest", "mold_breaker": "false", "hp_set": _ruby_float(probe.hp),
+                           "stages_set": _stages_set(port, probe)})
+            effect = "NONE"
+            if probe.outcome and port.params.get("heal") and probe.hp < 1:
+                effect = "HEALED"
+            elif probe.outcome and port.params.get("stats") and probe.stage < _MAX_STAGE:
+                effect = "RAISED"
+            expect = {"immune": _flag(bool(probe.outcome)), "effect": effect}
         else:
             expect = {"result": str(probe.outcome).upper()}
         checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": select, "expect": expect})
     return checks
+
+
+def _stages_set(port: _Port, probe: _Probe) -> str:
+    """The stages a type_absorb probe sets on the holder first, as the self-test logs them."""
+    if not probe.stage or not port.params.get("stats"):
+        return "none"
+    return "/".join(f"{_STAT_NAMES[str(st)][0]}:{probe.stage}" for st in port.params["stats"])  # type: ignore[union-attr]
 
 
 def _blocks_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
@@ -739,6 +851,7 @@ class _Port:
     weathers: tuple[str, ...] = ()  # Essentials weathers that count, for a weather boost
     terrain: Optional[str] = None   # Essentials terrain, for a terrain boost
     grant_types: Optional[tuple[str, ...]] = None  # stab_grant: INTERNAL types, None = all
+    rules: tuple[tuple[Fraction, Optional[str], bool], ...] = ()  # damage_taken: (multiplier, type, contact)
 
 
 def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
@@ -779,6 +892,14 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             resolved.append(internal or "")
         return tuple(resolved)
 
+    rules: list[tuple[Fraction, Optional[str], bool]] = []
+    for rule in params.get("rules") or ():  # type: ignore[union-attr]
+        rule_type = None
+        if "type" in rule:
+            rule_type = names.type(str(rule["type"]))
+            if rule_type is None:
+                missing.append(f"type {rule['type']!r}")
+        rules.append((_fraction(rule["multiplier"]) or Fraction(1), rule_type, bool(rule.get("contact"))))
     grant_types = None
     if template.shape == "stab_grant" and params["types"] != "all":
         grant_types = resolve_types(params["types"])
@@ -818,7 +939,7 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
         raise TemplateError(f"{where}: the target has no {', '.join(dict.fromkeys(missing))}")
     return _Port(shape=template.shape, params=params, ability=ability or "", type=type_,
                  flags=tuple(flags), probes=tuple(probes), weathers=weathers, terrain=terrain,
-                 grant_types=grant_types)
+                 grant_types=grant_types, rules=tuple(rules))
 
 
 # --- rendering -------------------------------------------------------------------
@@ -1140,7 +1261,7 @@ def _case(port: _Port) -> SelftestCase:
     # A built-in move (Struggle) cannot be learned, so it never joins the fight.
     learnable = [p for p in port.probes if p.holder and p.move.lower() not in _BUILTIN_MOVES]
     fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:FIGHT_MOVES]
-    if port.shape in ("type_immunity", "type_resist", "struck_status"):
+    if port.shape in ("type_immunity", "type_resist", "struck_status", "damage_taken", "type_absorb"):
         fight = []  # the moves are the foe's to use; the defend and taken phases measure them
     if port.shape == "ko_effect":
         fight = [":TACKLE"]  # its probes name no move; one, so the real path runs in the AI battle
@@ -1165,8 +1286,17 @@ def _phases(port: _Port) -> tuple[tuple[str, tuple[str, ...]], ...]:
     if port.shape == "type_immunity":
         entries = [f"[:{p.move}, {{mold_breaker: true}}]" if p.mold_breaker else f":{p.move}" for p in port.probes]
         return (("defend", tuple(dict.fromkeys(entries))),)
-    if port.shape == "type_resist":
+    if port.shape in ("type_resist", "damage_taken"):
         return (("taken", tuple(dict.fromkeys(':' + p.move for p in port.probes))),)
+    if port.shape == "type_absorb":
+        entries = []
+        for probe in port.probes:
+            opts = [f"hp: {_ruby_float(probe.hp)}"]
+            if probe.stage and port.params.get("stats"):
+                stats = ", ".join(f"{_STAT_NAMES[str(st)][0]}: {probe.stage}" for st in port.params["stats"])  # type: ignore[union-attr]
+                opts.append(f"stages: {{{stats}}}")
+            entries.append(f"[:{probe.move}, {{{', '.join(opts)}}}]")
+        return (("defend", tuple(dict.fromkeys(entries))),)
     if port.shape == "struck_status":
         status = _STATUSES[str(port.params["status"])][0]
         entries = []
@@ -1242,6 +1372,8 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
         foe = f"{_a('/'.join(probe.target_type_names))}-type foe" if probe.target_type_names else "the foe"
         return f"With your {name} user, use {probe.name} on {foe}, many times."
     if port.shape == "type_immunity":
+        return f"Have the foe use {probe.name} on your {name} Pokemon."
+    if port.shape in ("damage_taken", "type_absorb"):
         return f"Have the foe use {probe.name} on your {name} Pokemon."
     if port.shape == "struck_status":
         foe = f"{_a('/'.join(probe.attacker_types))}-type foe" if probe.attacker_types else "the foe"
@@ -1640,6 +1772,52 @@ begin
   )
 {{SELFTEST}}
   ChrookedLog.line("[chrooked:{{ID}}] installed on PriorityChange")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_DAMAGE_TAKEN = """\
+begin
+  chrooked_table = Battle::AbilityEffects::DamageCalcFromTarget
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!chrooked_table[:{{ABILITY}}].nil?}")
+  chrooked_table.add(:{{ABILITY}},
+    proc { |ability, user, target, move, mults, power, type|
+      contact = move.pbContactMove?(user)
+      factor  = 1.0
+{{RULES}}
+      mults[:final_damage_multiplier] *= factor
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s.include?("AIMove") } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} type=#{type || 'NONE'} ability=true " \\
+                         "contact=#{contact} factor=#{format('%.3f', factor)}")
+      end
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on Battle::AbilityEffects::DamageCalcFromTarget")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_TYPE_ABSORB = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!Battle::AbilityEffects::MoveImmunity[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::MoveImmunity.add(:{{ABILITY}},
+    proc { |ability, user, target, move, type, battle, show_message|
+      absorbed = type == :{{TYPE}} && user.index != target.index
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s =~ /AI[ _]?Move/ } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} type=#{type || 'NONE'} ability=true " \\
+                         "result=#{absorbed ? 'ABSORBED' : 'NORMAL'}")
+      end
+      next false if !absorbed
+{{EFFECT}}
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on MoveImmunity")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
 end
