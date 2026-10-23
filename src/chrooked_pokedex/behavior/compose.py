@@ -184,7 +184,10 @@ def harness_checks(ability: AbilityDef, ruleset: Ruleset,
                 select = dict(check["select"])  # type: ignore[call-overload]
                 if select.get("ability") == "true" and select.get("source") != "selftest":
                     select["part"] = part.chrooked_id
-                checks.append({**check, "select": select})
+                # A part's own "damage unchanged" (a status chance) cannot hold beside a
+                # part that boosts the same move (Cold Snap's Tough Claws), so it is not read.
+                expect = {k: v for k, v in check["expect"].items() if k != "damage"}  # type: ignore[union-attr]
+                checks.append({**check, "select": select, "expect": expect})
                 cases.append(BehaviorTestCase(given=f"{part.spec.name}: {case.given}", expect=case.expect))
             continue
         for measure in part.measures:

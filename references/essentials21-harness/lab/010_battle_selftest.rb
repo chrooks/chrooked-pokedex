@@ -77,6 +77,11 @@ module ChrookedSelfTest
   #              A defend entry may be [move, {mold_breaker: true}]: the attacker
   #              breaks the mold (NV-18). Every entry also logs the mechanic's OBS
   #              line with source=selftest, mold_breaker and immune
+  #   struck   - [move, {status:, status_rate:, setup:, n:}] entries for a status
+  #              the holder gives an attacker that touches it (NV-19): the foe's
+  #              move handed to the holder's OnBeingHit n times (default 400),
+  #              fixed seed; the foe's rate checked as chance's, logged as the
+  #              mechanic's OBS line with side=struck, tagged source=selftest
   #   taken    - moves the foe uses on the holder (a defensive multiplier, NV-18):
   #              the damage it takes with the ability and without (TAKEN line);
   #              the port logs its own OBS line
@@ -321,6 +326,35 @@ module ChrookedSelfTest
       flinched += 1 if target.effects[PBEffects::Flinch]
     end
     [statused, flinched]
+  end
+
+  # The holder struck n times: the foe's move handed to the holder's OnBeingHit
+  # handler, as pbEffectsOnMakingHit does after a damaging hit, the foe's status
+  # reset before each roll, fixed seed (NV-19). setup applies to the foe (types:)
+  # and the holder (target_types:). Returns how many rolls left the foe in status.
+  def self.struck_rolls(spec, move_id, setup, n, status)
+    b = battle(mon(spec[:foe], [move_id]), mon(spec[:user], [:TACKLE]))
+    b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+    b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+    attacker, holder = b.battlers[0], b.battlers[1]
+    attacker.ability = nil
+    if spec[:neutral]
+      attacker.pbChangeTypes(:QMARKS)
+      holder.pbChangeTypes(:QMARKS)
+    end
+    arrange(b, attacker, holder, setup)
+    holder.ability = spec[:ability]
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move.calcType = move.pbCalcType(attacker)
+    srand(SEED)
+    count = 0
+    n.times do
+      attacker.status      = :NONE
+      attacker.statusCount = 0
+      Battle::AbilityEffects.triggerOnBeingHit(holder.ability, attacker, holder, move, b)
+      count += 1 if attacker.status == status
+    end
+    count
   end
 
   # A fresh pair of battlers for the status phases: [battle, user, target].
@@ -625,6 +659,20 @@ module ChrookedSelfTest
         log("DEFEND #{mechanic} move=#{move_id} type=#{type} mold_breaker=#{mold_breaker} " \
             "immune_with=#{with} immune_without=#{without}")
         obs(mechanic, "move=#{move_id} ability=true source=selftest mold_breaker=#{mold_breaker} immune=#{with}")
+      end
+    end
+    guard("struck") do
+      (spec[:struck] || []).each do |move_id, opts|
+        opts ||= {}
+        setup = opts[:setup] || {}
+        n = opts[:n] || 400
+        count = struck_rolls(spec, move_id, setup, n, opts[:status])
+        Graphics.update if defined?(Graphics)
+        rate = opts[:status_rate] || 0
+        attacker_types = setup[:types] ? setup[:types].join('/') : "QMARKS"
+        obs(mechanic, "move=#{move_id} ability=true source=selftest side=struck attacker_types=#{attacker_types} " \
+                      "n=#{n} status=#{opts[:status] || 'NONE'} status_rate=#{format('%.3f', count.to_f / n)} " \
+                      "status_expected=#{rate} status_ok=#{rate_ok?(count, n, rate)}")
       end
     end
     guard("taken") do

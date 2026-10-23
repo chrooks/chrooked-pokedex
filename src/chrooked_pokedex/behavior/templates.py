@@ -130,7 +130,7 @@ from ..model.schema import MOVE_FLAGS
 
 SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
           "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
-          "type_resist", "keeps")
+          "type_resist", "keeps", "struck_status")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -141,7 +141,8 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "conditional_boost": (frozenset({"multiplier"}),
                           {"weather": None, "terrain": None, "moves": "all", "control": None}),
     "stab_grant": (frozenset({"types"}), {"multiplier": 1.5, "control": None}),
-    "hit_status": (frozenset({"status", "chance"}), {"type": None, "flags": None}),
+    "hit_status": (frozenset({"status", "chance"}), {"type": None, "flags": None, "contact": None}),
+    "struck_status": (frozenset({"status", "chance"}), {}),
     "type_immunity": (frozenset({"type"}), {}),
     "hit_drain": (frozenset({"fraction", "moves"}), {}),
     "ko_effect": (frozenset(), {"heal": None, "stat": None}),
@@ -154,7 +155,7 @@ _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost"
             "conditional_boost": "result", "stab_grant": "result",
             "hit_status": "inflicts", "type_immunity": "immune", "hit_drain": "drain",
             "ko_effect": "effect", "priority_boost": "result", "type_resist": "applies",
-            "keeps": "measure"}
+            "keeps": "measure", "struck_status": "inflicts"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -167,7 +168,7 @@ _STATS = ("physical", "special")
 _CONVERT_FROM = ("normal", "any")
 # The shapes that never scale damage: no calc entry.
 _NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
-                      "type_resist", "keeps")
+                      "type_resist", "keeps", "struck_status")
 # What a keeps probe measures, the ability against none (the self-test's keeps phase):
 # whether a foe can give the holder `status`, or the HP its status changes at end of round.
 _KEEP_MEASURES = ("status", "eor_status")
@@ -178,7 +179,7 @@ _REGISTRIES = {
     "type_conversion": ("ModifyMoveBaseType", "DamageCalcFromUser"),
     "hit_status": ("OnDealingHit",), "hit_drain": ("OnDealingHit",), "type_immunity": ("MoveImmunity",),
     "ko_effect": ("OnEndOfUsingMove",), "priority_boost": ("PriorityChange",),
-    "type_resist": ("DamageCalcFromTarget",), "keeps": (),
+    "type_resist": ("DamageCalcFromTarget",), "keeps": (), "struck_status": ("OnBeingHit",),
 }
 _DRAINS = ("healed", "none", "reversed")
 _CONTACT = ("contact", "non_contact")
@@ -195,6 +196,8 @@ _STATUSES = {
     "burn": ("BURN", "Burn", "{1} {2} burned {3}!"),
     "poison": ("POISON", "Poison", "{1} {2} poisoned {3}!"),
     "paralysis": ("PARALYSIS", "Paralyze", "{1} {2} paralyzed {3}! It may be unable to move!"),
+    # Nova's freeze is the Ruleset's frostbite (chrooked_frostbite.rb, NV-12).
+    "frostbite": ("FROZEN", "Freeze", "{1} {2} frostbit {3}!"),
 }
 _INTERNAL = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
@@ -315,8 +318,8 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
         raise TemplateError(f"{where}: params.from must be one of {', '.join(_CONVERT_FROM)}, not {params['from']!r}")
     if template.shape == "conditional_boost":
         _validate_condition(params, where)
-    if template.shape == "hit_status":
-        _validate_hit_status(params, where)
+    if template.shape in ("hit_status", "struck_status"):
+        _validate_hit_status(params, where, gated=template.shape == "hit_status")
     if template.shape == "hit_drain":
         if not (_is_positive_number(params["fraction"]) and params["fraction"] <= 1):  # type: ignore[operator]
             raise TemplateError(f"{where}: params.fraction must be a fraction of the damage in (0, 1], e.g. 0.25")
@@ -354,14 +357,18 @@ def _validate_condition(params: Mapping[str, object], where: str) -> None:
         raise TemplateError(f"{where}: params.moves must be one of {', '.join(_MOVE_SETS)}, not {moves!r}")
 
 
-def _validate_hit_status(params: Mapping[str, object], where: str) -> None:
+def _validate_hit_status(params: Mapping[str, object], where: str, gated: bool = True) -> None:
     if params["status"] not in _STATUSES:
         raise TemplateError(f"{where}: params.status must be one of {', '.join(_STATUSES)}, not {params['status']!r}")
     chance = params["chance"]
     if not (isinstance(chance, int) and not isinstance(chance, bool) and 0 < chance <= 100):
         raise TemplateError(f"{where}: params.chance must be a whole percent from 1 to 100, e.g. 30")
-    if (params.get("type") is None) == (params.get("flags") is None):
-        raise TemplateError(f"{where}: hit_status needs exactly one of params.type or params.flags")
+    if not gated:
+        return  # struck_status: a contact move, always
+    if "contact" in params and params["contact"] is not True:
+        raise TemplateError(f"{where}: params.contact gates on contact moves; give true or leave it out")
+    if sum(params.get(key) is not None for key in ("type", "flags", "contact")) != 1:
+        raise TemplateError(f"{where}: hit_status needs exactly one of params.type, params.flags or params.contact")
 
 
 def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at: str) -> None:
@@ -393,6 +400,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         allowed.add("types")
     if shape == "hit_status":
         allowed.add("target_types")
+    if shape == "struck_status":
+        allowed.add("attacker_types")
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
@@ -420,6 +429,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         raise TemplateError(f"{at}: item must be an item name, e.g. Utility Umbrella")
     if "types" in probe and not _is_type_list(probe["types"]):
         raise TemplateError(f"{at}: types must be a non-empty list of type names, e.g. [Water, Dragon]")
+    if "attacker_types" in probe and not _is_type_list(probe["attacker_types"]):
+        raise TemplateError(f"{at}: attacker_types must be a non-empty list of type names, e.g. [Ice]")
     if "target_types" in probe and not _is_type_list(probe["target_types"]):
         raise TemplateError(f"{at}: target_types must be a non-empty list of type names, e.g. [Fire]")
     if higher_stat and probe.get("stats") not in _STATS:
@@ -524,6 +535,10 @@ def _body(spec: BehaviorSpec, port: _Port, selftest: str) -> str:
     elif port.shape == "type_resist":
         values["TYPE"] = port.type
         body = _TYPE_RESIST
+    elif port.shape == "struck_status":
+        _, stem, message = _STATUSES[str(port.params["status"])]
+        values.update({"CHANCE": str(port.params["chance"]), "STEM": stem, "MESSAGE": message})
+        body = _STRUCK_STATUS
     else:
         values["TYPE_GATE"] = (
             "" if port.grant_types is None
@@ -604,6 +619,12 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
     pinch = port.shape == "type_boost" and bool(port.params["pinch"])
     checks: list[dict[str, object]] = []
     for probe in port.probes:
+        if port.shape == "struck_status":
+            checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": {
+                "move": probe.move, "ability": "true", "source": "selftest", "side": "struck",
+                "attacker_types": "/".join(probe.attacker_types) or "QMARKS",
+            }, "expect": {"status_ok": "true"}})
+            continue
         if port.shape == "hit_status":
             # The rate is the self-test's to measure: its own line, per target typing.
             checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": {
@@ -704,6 +725,7 @@ class _Probe:
     kos: int = 0         # ko_effect: foes the move knocked out
     stage: int = 0       # ko_effect: the user's stage in the raised stat
     mold_breaker: bool = False  # type_immunity: the attacker breaks the mold
+    attacker_types: tuple[str, ...] = ()  # struck_status: INTERNAL types to give the attacker
 
 
 @dataclass(frozen=True)
@@ -787,6 +809,7 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             ooze=bool(probe.get("ooze", False)), kos=int(probe.get("kos", 0)),  # type: ignore[call-overload]
             stage=int(probe.get("stage", 0)),  # type: ignore[call-overload]
             mold_breaker=bool(probe.get("mold_breaker", False)),
+            attacker_types=resolve_types(probe.get("attacker_types") or ()),
         ))
     if template.shape == "hit_drain" and any(p.get("ooze") for p in template.probes) \
             and names.ability("Liquid Ooze") is None:
@@ -836,6 +859,8 @@ def _hit_gate(port: _Port) -> str:
     """The hits a status chance rides on: the move's type as used, or its flags."""
     if port.type is not None:
         return f"      next if move.calcType != :{port.type}"
+    if port.params.get("contact"):
+        return "      next if !move.pbContactMove?(user)"
     return f"      next if !{_flag_test(port)}"
 
 
@@ -921,6 +946,7 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
         seam = "Battle::AbilityEffects::OnDealingHit"
         verb = {"burn": "burn", "poison": "poison", "paralysis": "paralyze"}[str(port.params["status"])]
         gate = (f"is {port.params['type']}-type as used (move.calcType)" if port.type is not None
+                else "makes contact (pbContactMove?)" if port.params.get("contact")
                 else f"carries a {' or '.join(port.flags)} flag")
         note = (f"Nova's Poison Touch shape: Nova fires this registry for the user's ability only after a "
                 f"hit that dealt damage and missed any substitute; when the move {gate}, a "
@@ -939,6 +965,16 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
                 "Absorb, Flash Fire) it never blocks a move the holder aims at itself.")
         obs = "move=<ID> type=<TYPE> ability=true result=<IMMUNE|NORMAL>"
         when_logged = "a move aimed at the holder"
+    elif port.shape == "struck_status":
+        seam = "Battle::AbilityEffects::OnBeingHit"
+        stem = _STATUSES[str(port.params["status"])][1]
+        note = (f"Nova's Flame Body shape: after a contact move that dealt damage to the holder (and missed any "
+                f"substitute), a {port.params['chance']}% roll to give the ATTACKER {port.params['status']}, "
+                f"unless Protective Pads or the like spare it (affectedByContactEffect?); pbCan{stem}? is "
+                "asked before the roll. The lab self-test measures the rate over seeded rolls (source=selftest, "
+                "side=struck).")
+        obs = "move=<ID> type=<TYPE> ability=true struck=true can_inflict=<bool> inflicted=<bool>"
+        when_logged, estimates = "after a contact hit on the holder", False
     elif port.shape == "hit_drain":
         seam = "Battle::AbilityEffects::OnDealingHit"
         which = "makes contact" if port.params["moves"] == "contact" else "does not make contact"
@@ -1104,7 +1140,7 @@ def _case(port: _Port) -> SelftestCase:
     # A built-in move (Struggle) cannot be learned, so it never joins the fight.
     learnable = [p for p in port.probes if p.holder and p.move.lower() not in _BUILTIN_MOVES]
     fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:FIGHT_MOVES]
-    if port.shape in ("type_immunity", "type_resist"):
+    if port.shape in ("type_immunity", "type_resist", "struck_status"):
         fight = []  # the moves are the foe's to use; the defend and taken phases measure them
     if port.shape == "ko_effect":
         fight = [":TACKLE"]  # its probes name no move; one, so the real path runs in the AI battle
@@ -1131,6 +1167,15 @@ def _phases(port: _Port) -> tuple[tuple[str, tuple[str, ...]], ...]:
         return (("defend", tuple(dict.fromkeys(entries))),)
     if port.shape == "type_resist":
         return (("taken", tuple(dict.fromkeys(':' + p.move for p in port.probes))),)
+    if port.shape == "struck_status":
+        status = _STATUSES[str(port.params["status"])][0]
+        entries = []
+        for probe in port.probes:
+            rate = repr(int(port.params["chance"]) / 100) if probe.outcome else "0"  # type: ignore[call-overload]
+            setup = (f", setup: {{types: [{', '.join(':' + t for t in probe.attacker_types)}]}}"
+                     if probe.attacker_types else "")
+            entries.append(f"[:{probe.move}, {{status: :{status}, status_rate: {rate}{setup}}}]")
+        return (("struck", tuple(dict.fromkeys(entries))),)
     if port.shape == "hit_drain":
         entries = [f"[:{p.move}, {{hp_lost: 100{', target_ability: :LIQUIDOOZE' if p.ooze else ''}}}]"
                    for p in port.probes]
@@ -1198,6 +1243,9 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
         return f"With your {name} user, use {probe.name} on {foe}, many times."
     if port.shape == "type_immunity":
         return f"Have the foe use {probe.name} on your {name} Pokemon."
+    if port.shape == "struck_status":
+        foe = f"{_a('/'.join(probe.attacker_types))}-type foe" if probe.attacker_types else "the foe"
+        return f"Have {foe} hit your {name} Pokemon with {probe.name}, many times."
     if port.shape == "hit_drain":
         foe = "a Liquid Ooze foe" if probe.ooze else "a foe"
         return f"With your {name} user below full HP, hit {foe} with {probe.name}."
@@ -1592,6 +1640,35 @@ begin
   )
 {{SELFTEST}}
   ChrookedLog.line("[chrooked:{{ID}}] installed on PriorityChange")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_STRUCK_STATUS = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_on_being_hit=#{!Battle::AbilityEffects::OnBeingHit[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::OnBeingHit.add(:{{ABILITY}},
+    proc { |ability, user, target, move, battle|
+      next if !move.pbContactMove?(user) || !user.affectedByContactEffect?
+      can_inflict = user.pbCan{{STEM}}?(target, false)
+      inflicted = false
+      if can_inflict && battle.pbRandom(100) < {{CHANCE}}
+        battle.pbShowAbilitySplash(target)
+        msg = nil
+        if !Battle::Scene::USE_ABILITY_SPLASH
+          msg = _INTL("{{MESSAGE}}", target.pbOfThis, target.abilityName, user.pbThis(true))
+        end
+        user.pb{{STEM}}(target, msg)
+        battle.pbHideAbilitySplash(target)
+        inflicted = true
+      end
+      ChrookedLog.line("[chrooked:{{ID}}] OBS move=#{move.id} type=#{move.calcType} ability=true struck=true " \\
+                       "can_inflict=#{can_inflict} inflicted=#{inflicted}")
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on OnBeingHit")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
 end

@@ -29,3 +29,17 @@ notes:
 engine_hints:
   pokeemerald: "Defensive path: src/battle_util.c ABILITYEFFECT_MOVE_END (case ABILITY_VENOMOUS ~line 4211), RandomPercentage(RNG_POISON_POINT, 30), gated by CanBePoisoned + CanBattlerAvoidContactEffects + IsBattlerTurnDamaged. Offensive path: same file ABILITYEFFECT_MOVE_END_ATTACKER (case ABILITY_VENOMOUS ~line 4409, grouped with ABILITY_POISON_TOUCH), RandomPercentage(RNG_POISON_TOUCH, 30), gated by IsMoveMakingContact + CanBePoisoned + IsBattlerTurnDamaged. Both apply MOVE_EFFECT_POISON via BattleScript_AbilityStatusEffect."
   essentials: "Combine Poison Point and Poison Touch handlers on one ability: in the on-being-hit contact hook and the on-dealing-contact hook, roll 30% each to apply :POISON to the other battler when the move makes contact and deals damage."
+template:
+  - shape: struck_status
+    params: {status: poison, chance: 30}
+    effects: [1]
+    cases: [1, 3]
+    probes:
+      - {move: Tackle, inflicts: true}
+      - {move: Water Gun, inflicts: false}
+  - shape: hit_status
+    params: {status: poison, chance: 30, contact: true}
+    effects: [2]
+    cases: [2]
+    probes:
+      - {move: Tackle, inflicts: true}
