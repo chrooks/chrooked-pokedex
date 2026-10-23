@@ -427,6 +427,34 @@ module ChrookedSelfTest
     [b, user, target]
   end
 
+  # A double battle, two Pokemon a side, for a hand port's own checks (NV-28):
+  # [battle, holder, ally, foe, foe2] at battler indexes 0, 2, 1 and 3, each with no
+  # ability, typeless when the case is neutral.
+  def self.doubles(spec, moves = [:TACKLE])
+    party1 = [mon(spec[:user], moves), mon(spec[:user], [:TACKLE])]
+    party2 = [mon(spec[:foe], [:TACKLE]), mon(spec[:foe], [:TACKLE])]
+    tt = GameData::TrainerType.keys.first
+    t1 = NPCTrainer.new("LabA", tt)
+    t1.party = party1
+    t2 = NPCTrainer.new("LabB", tt)
+    t2.party = party2
+    b = Battle.new(Battle::DebugSceneNoVisuals.new, party1, party2, t1, t2)
+    b.debug          = true
+    b.controlPlayer  = true
+    b.internalBattle = false
+    b.setBattleMode("double")
+    b.pbCreateBattler(0, party1[0], 0)
+    b.pbCreateBattler(1, party2[0], 0)
+    b.pbCreateBattler(2, party1[1], 1)
+    b.pbCreateBattler(3, party2[1], 1)
+    battlers = [0, 2, 1, 3].map { |i| b.battlers[i] }
+    battlers.each do |x|
+      x.ability = nil
+      x.pbChangeTypes(:QMARKS) if spec[:neutral]
+    end
+    [b, *battlers]
+  end
+
   # One hit's damage from user to target, the move typed as used, fixed seed: for a
   # hand port's own checks (NV-25), on battlers it has arranged. Never a critical hit:
   # Nova rolls the crit inside pbCalcDamage, so an ability that moves the crit stage

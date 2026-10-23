@@ -329,13 +329,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-100 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
+109 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Thirty-six are hand-written here:
+quarter as `* 0.25`. Forty-five are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -369,6 +369,14 @@ quarter as `* 0.25`. Thirty-six are hand-written here:
   `pbInitEffects` empties, so it is gone when the holder leaves, as Nova's own volatile
   effects are; `chrooked_finishingkick.rb` (NV-27) lists itself too (plus Speed
   Boost), so it is written whole like Thorned Succulent;
+- `chrooked_frighten.rb`, `chrooked_deadlock.rb`, `chrooked_pheromone.rb`,
+  `chrooked_pressure.rb`, `chrooked_frisk.rb`, `chrooked_phantom.rb`,
+  `chrooked_ordertaker.rb` (NV-28), entry effects and trapping; Pressure and Frisk
+  call the game's own `OnSwitchIn` handler first and add to it; Phantom also wraps the
+  AI's switch scoring (`Battle::AI#rate_replacement_pokemon`) so a holder is weighed
+  as part Ghost. `chrooked_webweaver.rb` and `chrooked_unattainable.rb` (NV-28) list
+  themselves (plus Arena Trap, plus Unaware) and are written whole. The self-test's
+  `doubles` helper builds a 2v2 battle for their double-battle cases;
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
@@ -376,7 +384,8 @@ Since NV-25 a hand port measures itself: its case's `checks:` list holds `[label
 proc]` pairs, and the self-test calls each proc with itself (its `pair`, `scene`,
 `damage`, `measure`, `keep_measure` and `hit` helpers) and the case, logging the
 `key=value` fields the proc returns as `case=check label=<label>` with
-`source=selftest`. The scenario selects that label. `hit` measures one hit on
+`source=selftest`. The scenario selects that label; a case this game cannot have
+is a scenario entry with `absent: <reason>`, scored N/A. `hit` measures one hit on
 battlers the proc arranged, never a critical one: Nova rolls the crit inside
 `pbCalcDamage`, so an ability that moves the crit stage (Night Stalker) would
 otherwise mix a crit into a damage comparison.
@@ -425,6 +434,9 @@ exception, by design (below).
 | coilup, stampede, sporulation (hand-written) | `PriorityChange` +1 while armed: biting moves after entry, spent by a biting hit / contact moves after a knockout, spent by a contact move / Spore after entry, spent by Spore | NV-27, lab 3/3, 3/3, 4/4: Crunch 1 then 0, Glare 0 keeps it, 1 again after re-entry; Tackle 1 after a knockout then 0, Water Gun 0 keeps it; Spore 1 then 0, Sleep Powder 0 keeps it, 1 again after re-entry |
 | starfall, savant, spitefulblock, battery (hand-written) | special moves x(1 + 0.2 N), N the damaging rounds in a row up to 3 / 1.3x on each move's first use this stay / 1.3x on the next Dark move after surviving a hit / on entry Charge 2 and Sp. Def +1 unless charged (Nova's Battery ally boost kept) | NV-27, lab 6/6, 3/3, 3/3, 3/3 with 1 N/A (no Electric field): Psybeam 1.000, 1.235, 1.588 at the cap, 1.000 after Recover or a switch, Tackle unboosted at N 3; Psychic boosted once, Shadow Ball's first use too, again after re-entry; Bite boosted once after a hit, Tackle leaves it armed; Thunderbolt 46 vs 23, Bug Buzz 23 vs 23, a charged holder unchanged |
 | finishingkick (hand-written whole) | its own 1.2x on contact moves at Speed +1 or more + Speed Boost's handler copied, answering to its name | NV-27, lab 4/4: Quick Attack at 0 unboosted, Wild Charge at +1 48 vs 40, Thunderbolt at +2 unboosted, Crunch at +6 32 vs 27; Speed Boost raises Speed at the round's end |
+| frighten, deadlock, pheromone, pressure, frisk (hand-written) | Intimidate's cadence for Sp. Atk / for Speed, plus a `TrappingByTarget` trap / the trap alone / Nova's Pressure, then near foes' raised stages reset / Nova's Frisk, then Embargo 2 on near foes | NV-28, lab 3/3, 7/7, 3/3, 4/4, 3/3: Sp. Atk -1, none with no foe, both foes in doubles; Speed -1 per entry (-2 twice), switching refused, allowed once the holder is gone, for a Ghost or a Shed Shell, Clear Body stops the drop not the trap; U-turn still switches; +2 Attack to 0 with -1 Speed kept, both doubles foes cleared, PP 2 per Tackle; Leftovers off for two rounds, a 5-round Embargo kept |
+| phantom, ordertaker (hand-written) | Ghost added on entry (Trick-or-Treat's slot), the AI weighing it / all five stats +1 with a healthy Tatsugiri in its own trainer's party | NV-28, lab 7/7, 5/5 with 1 N/A (Nova's AI models no entry ability): Electric/Fire/Ghost, Tackle and Karate Chop fail, Shadow Ball 43 vs 29, gone while out and back on entry, nothing for a Ghost, Forest's Curse writes Grass over it, Trick-or-Treat fails, the AI scores the switch-in 117 vs 109 after a Tackle; +1 x5, nothing when the Tatsugiri fainted, is absent or is the ally trainer's, nothing at +6 |
+| webweaver, unattainable (hand-written whole) | entry Sticky Web + Arena Trap's handler / Cute Charm with no gender check + Unaware by name and its accuracy handlers | NV-28, lab 5/5, 6/6: one web and one message, none when one is there, a grounded foe trapped, a Flying or Shed Shell foe free; 0.300 of 400 Tackles from a male or a genderless attacker, 0 through Oblivious, Aroma Veil, Water Gun or Protective Pads, an infatuated foe unchanged, a +6 Attack Tackle 17 as at 0 |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |
