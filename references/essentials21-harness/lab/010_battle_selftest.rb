@@ -460,7 +460,8 @@ module ChrookedSelfTest
   # What a kept effect of the game's own ability measures, with `ability` on the user:
   #   :status     - whether a foe can give it the status (pbCanInflictStatus?)
   #   :eor_status - the HP its status changes at end of round, from half HP
-  def self.keep_measure(spec, kind, status, ability)
+  #   (toxic: bad poison, its count started; NV-24)
+  def self.keep_measure(spec, kind, status, ability, toxic = false)
     b, user, target = pair(spec, :TACKLE)
     user.ability = ability
     case kind
@@ -468,6 +469,7 @@ module ChrookedSelfTest
     when :eor_status
       user.hp = [user.totalhp / 2, 1].max
       user.status = status
+      user.statusCount = 1 if toxic
       before = user.hp
       b.send(:pbEORStatusProblemDamage, [user])
       user.hp - before
@@ -752,6 +754,66 @@ module ChrookedSelfTest
         move.calcType = move.pbCalcType(user)
         obs(mechanic, "case=blocked move=#{move_id} foe_ability=#{foe_ability} source=selftest " \
                       "immune=#{!!move.pbImmunityByAbility(user, target, false)}")
+      end
+    end
+    guard("crit") do
+      # [label, move, {status:, toxic:, speed:, ability:}] (NV-24): the holder's move
+      # against a target in that state (bad poison with toxic:, a Speed stage, an
+      # ability), through Nova's own pbIsCritical? n times with a fixed seed; forced
+      # when every one was a critical hit.
+      (spec[:crit] || []).each do |label, move_id, opts|
+        opts ||= {}
+        n = opts[:n] || 30
+        b, user, target = pair(spec, move_id)
+        user.ability = spec[:ability]
+        target.status = opts[:status] if opts[:status]
+        target.statusCount = 1 if opts[:toxic]
+        target.stages[:SPEED] = opts[:speed] if opts[:speed]
+        target.ability = opts[:ability]
+        move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+        srand(SEED)
+        crits = n.times.count { move.pbIsCritical?(user, target) }
+        obs(mechanic, "case=crit label=#{label} move=#{move_id} source=selftest status=#{target.status} " \
+                      "toxic=#{!!opts[:toxic]} speed=#{target.stages[:SPEED]} " \
+                      "target_ability=#{opts[:ability] || 'none'} n=#{n} crits=#{crits} forced=#{crits == n}")
+      end
+    end
+    guard("status_hit") do
+      # [label, move, status] (NV-24): one hit with the holder in the status, against a
+      # Pokemon with no ability in it (vs_none) and against the holder healthy (vs_healthy).
+      (spec[:status_hit] || []).each do |label, move_id, status|
+        (with, _, _), (none, _, _) = damage(spec[:user], [spec[:ability], nil], spec[:foe], move_id,
+                                            neutral: !!spec[:neutral], setup: {status: status})
+        healthy = damage(spec[:user], [spec[:ability]], spec[:foe], move_id, neutral: !!spec[:neutral])[0][0]
+        vs = ->(a, z) { a > z ? "HIGHER" : (a < z ? "LOWER" : "SAME") }
+        obs(mechanic, "case=status_hit label=#{label} move=#{move_id} source=selftest status=#{status} " \
+                      "with=#{with} none=#{none} healthy=#{healthy} vs_none=#{vs.(with, none)} " \
+                      "vs_healthy=#{vs.(with, healthy)} ratio=#{format('%.3f', with.to_f / [none, 1].max)}")
+      end
+    end
+    guard("speed") do
+      # [label, {status:}] (NV-24): the holder's Speed in the status, against itself
+      # healthy and against a Pokemon with no ability in the status.
+      (spec[:speed] || []).each do |label, opts|
+        status  = (opts || {})[:status]
+        with    = measure(spec, :speed, nil, {status: status}, spec[:ability])
+        healthy = measure(spec, :speed, nil, {}, spec[:ability])
+        none    = measure(spec, :speed, nil, {status: status}, nil)
+        result  = with > healthy ? "RAISED" : (with < healthy ? "LOWERED" : "SAME")
+        obs(mechanic, "case=speed label=#{label} source=selftest status=#{status} with=#{with} " \
+                      "healthy=#{healthy} none=#{none} result=#{result}")
+      end
+    end
+    guard("eor_status") do
+      # [label, {status:, toxic:}] (NV-24): the HP the holder's own status changes at the
+      # end of a round, from half HP, against a Pokemon with no ability.
+      (spec[:eor_status] || []).each do |label, opts|
+        opts ||= {}
+        with, none = [spec[:ability], nil].map do |a|
+          keep_measure(spec, :eor_status, opts[:status], a, !!opts[:toxic])
+        end
+        obs(mechanic, "case=eor_status label=#{label} source=selftest status=#{opts[:status]} " \
+                      "toxic=#{!!opts[:toxic]} with=#{with} none=#{none}")
       end
     end
     guard("hit_rolls") do

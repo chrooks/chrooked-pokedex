@@ -130,7 +130,8 @@ from ..model.schema import MOVE_FLAGS
 
 SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
           "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
-          "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb", "stat_swap")
+          "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb", "stat_swap",
+          "crit_condition")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -147,6 +148,7 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "type_absorb": (frozenset({"type"}), {"heal": None, "stats": None}),
     "stat_swap": (frozenset({"attack"}), {"defense": None, "moves": "damaging", "flags": None, "contact": None,
                                           "burn": None}),
+    "crit_condition": (frozenset({"when"}), {}),
     "type_immunity": (frozenset({"type"}), {}),
     "hit_drain": (frozenset({"fraction", "moves"}), {}),
     "ko_effect": (frozenset(), {"heal": None, "stat": None}),
@@ -160,7 +162,7 @@ _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost"
             "hit_status": "inflicts", "type_immunity": "immune", "hit_drain": "drain",
             "ko_effect": "effect", "priority_boost": "result", "type_resist": "applies",
             "keeps": "measure", "struck_status": "inflicts", "damage_taken": "factor",
-            "type_absorb": "absorbed", "stat_swap": "uses"}
+            "type_absorb": "absorbed", "stat_swap": "uses", "crit_condition": "crit"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -173,7 +175,8 @@ _STATS = ("physical", "special")
 _CONVERT_FROM = ("normal", "any")
 # The shapes that never scale damage: no calc entry.
 _NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
-                      "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb", "stat_swap")
+                      "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb", "stat_swap",
+                      "crit_condition")
 # What a keeps probe measures, the ability against none (the self-test's keeps phase):
 # whether a foe can give the holder `status`, or the HP its status changes at end of round.
 _KEEP_MEASURES = ("status", "eor_status")
@@ -188,6 +191,12 @@ _REGISTRIES = {
     "damage_taken": ("DamageCalcFromTarget",), "type_absorb": ("MoveImmunity",),
     # Method wrappers, not registries: one per spec, each its own alias names.
     "stat_swap": ("pbGetAttackStats",),
+    "crit_condition": ("CriticalCalcFromUser",),
+}
+# What a crit_condition's `when` forces a critical hit on (Ruby on `target`).
+_CRIT_WHEN = {
+    # Elite Redux's impaired: poisoned (either), paralyzed, or slowed (a Speed stage below 0).
+    "impaired": "target.poisoned? || target.paralyzed? || target.stages[:SPEED] < 0",
 }
 _SWAP_ATTACK = ("attack", "special_attack", "higher")
 _SWAP_MOVES = ("physical", "special", "damaging")
@@ -331,6 +340,14 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
         _validate_condition(params, where)
     if template.shape == "damage_taken":
         _validate_rules(params, where)
+    if template.shape == "crit_condition" and params["when"] not in _CRIT_WHEN:
+        raise TemplateError(f"{where}: params.when must be one of {', '.join(_CRIT_WHEN)}")
+    if template.shape == "crit_condition":
+        for at, probe in enumerate(template.probes, start=1):
+            status = probe.get("target_status")
+            if status is not None and status not in (*_STATUSES, "toxic"):
+                raise TemplateError(f"{where}: probe {at} target_status must be one of "
+                                    f"{', '.join((*_STATUSES, 'toxic'))}, not {status!r}")
     if template.shape == "stat_swap":
         if params["attack"] not in _SWAP_ATTACK:
             raise TemplateError(f"{where}: params.attack must be one of {', '.join(_SWAP_ATTACK)}")
@@ -466,6 +483,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         allowed.add("types")  # the holder's types first (a super-effective hit)
     if shape == "stat_swap":
         allowed |= {"attack", "special_attack", "stages", "burned", "blocked_by"}
+    if shape == "crit_condition":
+        allowed |= {"target_status", "target_speed", "target_ability"}
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
@@ -620,6 +639,9 @@ def _body(spec: BehaviorSpec, port: _Port, selftest: str) -> str:
     elif port.shape == "stat_swap":
         values.update({k: v.replace("{{ID}}", spec.chrooked_id) for k, v in _swap_ruby(port).items()})
         body = _STAT_SWAP
+    elif port.shape == "crit_condition":
+        values["WHEN"] = _CRIT_WHEN[str(port.params["when"])]
+        body = _CRIT_CONDITION
     elif port.shape == "struck_status":
         _, stem, message = _STATUSES[str(port.params["status"])]
         values.update({"CHANCE": str(port.params["chance"]), "STEM": stem, "MESSAGE": message})
@@ -672,7 +694,7 @@ def _swap_ruby(port: _Port) -> dict[str, str]:
             "      def pbCalcDamageMultipliersStatusConditions(user, target, numTargets, type, baseDmg, multipliers)",
             "        chrooked_{{ID}}_status_mults(user, target, numTargets, type, baseDmg, multipliers)",
             "        return if !chrooked_{{ID}}_takes?(user) || user.status != :BURN",
-            f"        halves = {test}damageReducedByBurn? && !user.hasActiveAbility?(:GUTS)",
+            f"        halves = {test}damageReducedByBurn? && !user.hasActiveAbility?([:GUTS, :QUICKFEET])",
             f"        {fix}",
             '        ChrookedLog.line("[chrooked:{{ID}}] OBS move=#{@id} ability=true burn_check=true halves=#{'
             + ("!halves" if port.params["burn"] == "ignore" else "halves") + '}")',
@@ -822,6 +844,10 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
             expect = {"factor": f"{float(_fraction(probe.outcome) or 1):.3f}"}
         elif port.shape == "stat_swap":
             select, expect = _swap_check(port, probe, select)
+        elif port.shape == "crit_condition":
+            label = f"p{port.probes.index(probe) + 1}"
+            select = {"case": "crit", "label": label, "source": "selftest"}
+            expect = {"forced": _flag(bool(probe.outcome))}
         elif port.shape == "type_absorb":
             # Absorbing heals or raises inside the handler, so the self-test's own line says it.
             select.update({"source": "selftest", "mold_breaker": "false", "hp_set": _ruby_float(probe.hp),
@@ -944,6 +970,9 @@ class _Probe:
     stat_stages: tuple[tuple[str, int], ...] = ()  # stat_swap: (STAT, stage) set first
     burned: bool = False                            # stat_swap: the user is burned first
     blocked_by: Optional[str] = None                # stat_swap: INTERNAL ability of the foe
+    target_status: Optional[str] = None             # crit_condition: Essentials status of the target
+    target_speed: int = 0                           # crit_condition: the target's Speed stage
+    target_ability: Optional[str] = None            # crit_condition: INTERNAL ability of the target
 
 
 @dataclass(frozen=True)
@@ -1052,6 +1081,9 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
                               for k, v in (probe.get("stages") or {}).items()),  # type: ignore[union-attr]
             burned=bool(probe.get("burned", False)),
             blocked_by=resolve_ability(probe.get("blocked_by")),
+            target_status=str(probe["target_status"]) if probe.get("target_status") else None,
+            target_speed=int(probe.get("target_speed", 0)),  # type: ignore[call-overload]
+            target_ability=resolve_ability(probe.get("target_ability")),
         ))
     if template.shape == "hit_drain" and any(p.get("ooze") for p in template.probes) \
             and names.ability("Liquid Ooze") is None:
@@ -1253,6 +1285,15 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
                 "hand-written Rapid Combustion (mjolnir NV-14).")
         obs = "move=<ID> type=<TYPE> ability=true hp_full=<bool> priority=<n> result=<BOOSTED|NORMAL>"
         when_logged = "each round's priority"
+    elif port.shape == "crit_condition":
+        seam = "Battle::AbilityEffects::CriticalCalcFromUser"
+        note = ("Nova's Merciless shape, widened: the handler returns 99 when the target is "
+                f"{port.params['when']} ({_CRIT_WHEN[str(port.params['when'])]}), and pbIsCritical? takes any "
+                "stage above 50 as a certain critical hit. It asks the user's handler first, so the target's "
+                "Battle Armor or Shell Armor (CriticalCalcFromTarget, -1) and Lucky Chant still deny it, as "
+                "they deny Merciless.")
+        obs = "move=<ID> ability=true result=<FORCED|NORMAL>"
+        when_logged = "each critical-hit check"
     else:
         higher_stat = port.params["moves"] == "higher_stat"
         if higher_stat:
@@ -1413,6 +1454,20 @@ def _phases(port: _Port) -> tuple[tuple[str, tuple[str, ...]], ...]:
         entries = [f"[:{p.move}, {{types: [{', '.join(':' + t for t in p.types)}]}}]" if p.types else f":{p.move}"
                    for p in port.probes]
         return (("taken", tuple(dict.fromkeys(entries))),)
+    if port.shape == "crit_condition":
+        entries = []
+        for index, probe in enumerate(port.probes, start=1):
+            opts = []
+            if probe.target_status == "toxic":
+                opts.append("status: :POISON, toxic: true")   # bad poison: a poison with a toxic count
+            elif probe.target_status:
+                opts.append(f"status: :{_STATUSES[probe.target_status][0]}")
+            if probe.target_speed:
+                opts.append(f"speed: {probe.target_speed}")
+            if probe.target_ability:
+                opts.append(f"ability: :{probe.target_ability}")
+            entries.append(f'["p{index}", :{probe.move}, {{{", ".join(opts)}}}]')
+        return (("crit", tuple(entries)),)
     if port.shape == "stat_swap":
         calc, category, blocked = [], [], []
         for probe in port.probes:
@@ -1525,6 +1580,16 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
         return f"Have the foe use {probe.name} on your {name} Pokemon."
     if port.shape == "stat_swap":
         return f"With your {name} user, use {probe.name} on the foe."
+    if port.shape == "crit_condition":
+        state = []
+        if probe.target_status:
+            state.append({"toxic": "badly poisoned", "poison": "poisoned", "paralysis": "paralyzed",
+                          "burn": "burned", "frostbite": "frostbitten"}[probe.target_status])
+        if probe.target_speed:
+            state.append(f"at {probe.target_speed:+d} Speed")
+        if probe.target_ability:
+            state.append(f"with {probe.target_ability}")
+        return f"With your {name} user, use {probe.name} on a foe {' and '.join(state) or 'in no state'}."
     if port.shape == "struck_status":
         foe = f"{_a('/'.join(probe.attacker_types))}-type foe" if probe.attacker_types else "the foe"
         return f"Have {foe} hit your {name} Pokemon with {probe.name}, many times."
@@ -1922,6 +1987,28 @@ begin
   )
 {{SELFTEST}}
   ChrookedLog.line("[chrooked:{{ID}}] installed on PriorityChange")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_CRIT_CONDITION = """\
+begin
+  chrooked_table = Battle::AbilityEffects::CriticalCalcFromUser
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!chrooked_table[:{{ABILITY}}].nil?}")
+  chrooked_table.add(:{{ABILITY}},
+    proc { |ability, user, target, move, c|
+      forced = {{WHEN}}
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s.include?("AIMove") } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} ability=true " \\
+                         "result=#{forced ? 'FORCED' : 'NORMAL'}")
+      end
+      next 99 if forced   # pbIsCritical? takes any stage above 50 as certain, as Merciless's 99
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on CriticalCalcFromUser")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
 end

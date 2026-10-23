@@ -50,6 +50,7 @@ block, and the dex generates the rest from it (`src/chrooked_pokedex/behavior/te
 | `damage_taken` (NV-20) | `rules`: a list of `{multiplier, type?, contact?}` (a multiplier may be a fraction, `"1/3"`) | `DamageCalcFromTarget`: the damage the holder takes, times every matching rule (contact by `pbContactMove?`); logs `factor` | Fluffy, Thick Fat |
 | `type_absorb` (NV-20) | `type`, and `heal: true` or `stats` (a list) | `MoveImmunity`: a move of the type is absorbed: Nova's own `pbMoveImmunityHealingAbility` (a quarter of max HP) or `pbMoveImmunityStatRaisingAbility`, several stats in turn. The `defend` phase reports HEALED, RAISED or NONE | Volt Absorb, Sap Sipper |
 | `stat_swap` (NV-23) | `attack` (`special_attack`, `attack` or `higher`), optional `defense: defense`, `moves` (`physical`, `special`, `damaging`), `flags`, `contact`, `burn` (`ignore` or `physical`) | method wrappers, not a registry: `Battle::Move#pbGetAttackStats` (and `pbGetDefenseStats`, `pbCalcDamageMultipliersStatusConditions`) under the ability's own aliases, keyed on `user.hasActiveAbility?`, so a composed holder takes them too; probes set stats, stages or a burn; `status_move` and `blocked` probes read the self-test's `category` and `blocked` phases | Psyshock's and Body Press's own overrides |
+| `crit_condition` (NV-24) | `when` (`impaired`: poisoned, paralyzed or a Speed stage below 0) | `CriticalCalcFromUser`: 99 when the target is in that state, which `pbIsCritical?` takes as a certain critical hit; the target's Battle Armor or Shell Armor and Lucky Chant still deny it. Probes set the target's `target_status` (`toxic` is bad poison), `target_speed` and `target_ability`, and the self-test's `crit` phase runs Nova's own `pbIsCritical?` 30 times (forced when all 30 are critical) | Merciless |
 | `struck_status` (NV-19) | `status`, `chance` | `OnBeingHit`: after a contact move damaged the holder, a `chance`% roll to give the ATTACKER the status, unless it is spared contact effects; measured by the self-test struck phase (side=struck) | Flame Body, Poison Point, Static |
 | `type_resist` (NV-18) | `type`, `multiplier` | `DamageCalcFromTarget`: the damage the holder takes from moves of the type, times the multiplier (final damage, so a half is exact) | Thick Fat |
 | `keeps` (NV-18, blocks only) | none | generates nothing: the game's own ability of that name already does the effect. Its probes (`measure: status|eor_status`, `status`) measure the ability against none | — |
@@ -326,13 +327,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-74 ports and 15 compositions. 59 ports are generated from their specs' `template:` blocks: 22 since
+79 ports and 15 compositions. 61 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Fifteen are hand-written here:
+quarter as `* 0.25`. Eighteen are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -344,6 +345,10 @@ quarter as `* 0.25`. Fifteen are hand-written here:
   `chrooked_mindwipe.rb`, `chrooked_insidious.rb` (NV-22), on-hit, recoil, PP and
   status-move effects, proven by the self-test's `hit_rolls`, `recoil`, `pp` and `used`
   phases;
+- `chrooked_flareboost.rb`, `chrooked_toxicboost.rb`, `chrooked_quickfeet.rb` (NV-24),
+  a status's own chip and damage penalty, wrapping `Battle#pbEORStatusProblemDamage`
+  and `Battle::Move#pbCalcDamageMultipliersStatusConditions`; proven by the
+  self-test's `status_hit`, `eor_status` and `speed` phases;
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
@@ -382,6 +387,8 @@ exception, by design (below).
 | singingsands, permafrost | blocks: Ground immunity + `type_conversion` of Normal sound moves to Ground 1.2x / `damage_taken` rule `super_effective: true` 0.65 | NV-22, lab 3/3 each: Earthquake immune, Hyper Voice and Boomburst turn Ground; Flamethrower on an Ice holder 0.653, Close Combat on Ice/Rock 0.648, Tackle 1.000 |
 | exhaust, deathgrip, riposte, mindwipe, insidious (hand-written) | on contact 30% accuracy -1 / Bind trap; recoil 1/4 of HP lost; Spite's 4 PP per hit; Speed +1 after a status move | NV-22, lab 4/4, 3/3, 5/5, 4/4, 3/3: rates 0.300 on Tackle, 0 on Water Gun, at -6 and on a trapped foe; recoil -25 of a 100-HP hit, -1 of 2, none through a substitute, Protective Pads or Magic Guard; PP 10 to 6, 12 over three hits; Swords Dance Speed 0 to 1, not at +6 |
 | equinox, medium, percussion, mawcannon, magicalfists, mysticblades | `stat_swap` (Magical Fists and Mystic Blades in blocks beside `flag_boost` 1.3) | NV-23, lab 5/5, 3/3 each: Swift off Attack 170 (32 vs 14), +2 Attack 64, still Attack at +2 Sp. Atk; Lick off Sp. Atk; a burned contact hit not halved under Medium, a burned Hyper Voice halved under Percussion, Soundproof still blocks Boomburst; Dragon Pulse off Attack and Defense; Heal Pulse stays a status move. Heart of Rage 9/9 and Maw of Ruin 6/6 compose |
+| merciless, virulence (blocks) | `crit_condition` impaired (Virulence beside `type_boost` Poison 1.5) | NV-24, lab 5/5 each: 30 of 30 critical against bad poison, paralysis and -1 Speed; 0 of 30 against a burned target at +1 Speed and a poisoned Shell Armor one; Poison Fang 1.464x, Sludge Bomb 1.500x |
+| flareboost, toxicboost, quickfeet (hand-written) | the game's own boost kept, plus no chip from its own burn / poison (bad poison's count still climbs); Quick Feet undoes burn's halving as Guts does (frostbite's halving and `stat_swap`'s burn rule already spare it) | NV-24, lab 3/3 each: burned Swift 24 vs 17, Tackle 7 vs 7; poisoned Tackle 22 vs 14, Swift 17 vs 17; chip 0 vs -8 (burn, bad poison); burned Tackle 14 as healthy (7 with none), frostbitten Swift 17 as healthy (9 with none), paralyzed Speed 83 vs 55 healthy (28 with none) |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |

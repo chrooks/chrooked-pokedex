@@ -38,3 +38,12 @@ engine_hints:
     Rejuv: the crit-stage calc in Battle::Move#pbIsCritical? already special-cases
     Merciless for :POISON. Widen that branch to also return true when the target
     has :PARALYSIS or when target.stages[:SPEED] < 0.
+template:
+  shape: crit_condition
+  params: {when: impaired}
+  probes:
+    - {move: Tackle, crit: true, target_status: toxic}
+    - {move: Tackle, crit: true, target_status: paralysis}
+    - {move: Tackle, crit: true, target_speed: -1}
+    - {move: Tackle, crit: false, target_status: burn, target_speed: 1}
+    - {move: Tackle, crit: false, target_status: poison, target_ability: Shell Armor}

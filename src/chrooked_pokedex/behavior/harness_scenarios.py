@@ -349,4 +349,20 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'Use Tackle.', "select": {'case': 'used', 'source': 'selftest', 'move': 'TACKLE'}, "expect": {'raised': 'none'}},
         {"stage": 'Use Swords Dance at +6 Speed.', "select": {'case': 'used', 'source': 'selftest', 'move': 'SWORDSDANCE', 'preset': 'stages'}, "expect": {'raised': 'none'}},
     ],
+    # NV-24 hand ports: a status's own chip and damage penalty.
+    "flareboost": [
+        {"stage": 'While burned, use Swift.', "select": {'case': 'status_hit', 'label': 'special', 'source': 'selftest'}, "expect": {'vs_none': 'HIGHER'}},
+        {"stage": 'While burned, use Tackle.', "select": {'case': 'status_hit', 'label': 'physical', 'source': 'selftest'}, "expect": {'vs_none': 'SAME'}},
+        {"stage": 'End a turn burned.', "select": {'case': 'eor_status', 'label': 'burned', 'source': 'selftest'}, "expect": {'with': '0'}},
+    ],
+    "toxicboost": [
+        {"stage": 'While poisoned, use Tackle.', "select": {'case': 'status_hit', 'label': 'physical', 'source': 'selftest'}, "expect": {'vs_none': 'HIGHER'}},
+        {"stage": 'While poisoned, use Swift.', "select": {'case': 'status_hit', 'label': 'special', 'source': 'selftest'}, "expect": {'vs_none': 'SAME'}},
+        {"stage": 'End a turn badly poisoned.', "select": {'case': 'eor_status', 'label': 'toxic', 'source': 'selftest'}, "expect": {'with': '0'}},
+    ],
+    "quickfeet": [
+        {"stage": 'While burned, use Tackle.', "select": {'case': 'status_hit', 'label': 'burned_physical', 'source': 'selftest'}, "expect": {'vs_healthy': 'SAME'}},
+        {"stage": 'While frostbitten, use Swift.', "select": {'case': 'status_hit', 'label': 'frostbitten_special', 'source': 'selftest'}, "expect": {'vs_healthy': 'SAME'}},
+        {"stage": 'While paralyzed, outspeed the foe.', "select": {'case': 'speed', 'label': 'paralyzed', 'source': 'selftest'}, "expect": {'result': 'RAISED'}},
+    ],
 }

@@ -43,3 +43,19 @@ engine_hints:
     Merciless branch in Battle::Move#pbIsCritical? to also match :VIRULENCE
     (poisoned, :PARALYSIS, or stages[:SPEED] < 0). Damage half — the same 1.5x
     multiplier hook chrooked_kindle.rb uses, gated on move.type == :POISON.
+template:
+  - shape: crit_condition
+    params: {when: impaired}
+    effects: [1]
+    cases: [1, 3, 4]
+    probes:
+      - {move: Crunch, crit: true, target_status: paralysis}
+      - {move: Cross Poison, crit: true, target_status: poison}
+      - {move: Tackle, crit: true, target_speed: -1}
+  - shape: type_boost
+    params: {type: Poison, multiplier: 1.5}
+    effects: [2]
+    cases: [2, 5]
+    probes:
+      - {move: Poison Fang, result: boosted}
+      - {move: Sludge Bomb, result: boosted}
