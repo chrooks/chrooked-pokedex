@@ -403,7 +403,9 @@ quarter as `* 0.25`. Sixty-four are hand-written here:
 
 With NV-31 every Ruleset ability Nova has is ported, composed or written whole, but
 Aerilate, Galvanize, Pixilate and Refrigerate, whose Ruleset entries change only their
-descriptions: Nova's own already behave as the Ruleset says.
+descriptions: Nova's own already behave as the Ruleset says. All 147 mechanics were
+proven on thor in one boot on 2026-10-23 (mjolnir runbook 31): 547 passed, 3 N/A, and
+the 578 measured lines identical to the PC lab's.
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
