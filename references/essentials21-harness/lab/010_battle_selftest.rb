@@ -219,7 +219,8 @@ module ChrookedSelfTest
   # One hit's damage by Essentials' own formula, for each ability in turn, on
   # the SAME battlers. The target has no ability and the RNG is reseeded before
   # each hit, so the only difference between results is the user's ability.
-  def self.damage(user_species, abilities, foe_species, move_id, hp_fraction: 1.0, neutral: false, setup: {})
+  def self.damage(user_species, abilities, foe_species, move_id, hp_fraction: 1.0, neutral: false, setup: {},
+                  target_ability: nil)
     # Struggle is no PBS move: Essentials builds it in code, so the user knows
     # Tackle and the move object is made the way a battle makes it.
     struggle = move_id == :STRUGGLE
@@ -228,7 +229,7 @@ module ChrookedSelfTest
     b.pbCreateBattler(1, b.pbParty(1)[0], 0)
     user   = b.battlers[0]
     target = b.battlers[1]
-    target.ability = nil
+    target.ability = target_ability
     user.hp = [(user.totalhp * hp_fraction).floor, 1].max
     if neutral
       user.pbChangeTypes(:QMARKS)
@@ -394,10 +395,18 @@ module ChrookedSelfTest
   #   :stat_drop  - whether a foe can lower its Attack (Clear Body)
   #   :locked     - whether, locked into move by a choice, it can still pick Growl
   #   :ko         - the stat stages a knockout raises (Moxie)
+  #   :hit_taken  - one hit's damage TO it, the foe attacking (Grass Pelt; NV-17)
+  #   :speed      - its Speed, setup applied (Slush Rush in hail)
+  #   :immune     - whether the foe's move fails against it by ability (Soundproof)
+  #   :crit_taken - the critical-hit stage the foe's move gets against it (Battle Armor)
+  #   :switch_in  - the field after it enters (Grassy Surge)
   def self.measure(spec, kind, move_id, setup, ability)
     case kind
     when :hit
       damage(spec[:user], [ability], spec[:foe], move_id, neutral: !!spec[:neutral], setup: setup)[0][0]
+    when :hit_taken
+      damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral], setup: setup,
+             target_ability: ability)[0][0]
     when :ko
       _, _, before, after = knockout(spec, 1, 0.5, {}, ability)
       moved = after.select { |stat, n| before[stat] != n }.map { |stat, n| "#{stat}:#{before[stat]}->#{n}" }
@@ -405,7 +414,17 @@ module ChrookedSelfTest
     else
       b, user, target = pair(spec, move_id || :TACKLE)
       user.ability = ability
+      arrange(b, user, target, setup)
+      foe_move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id || :TACKLE))
+      foe_move.calcType = foe_move.pbCalcType(target)
       case kind
+      when :speed      then user.pbSpeed
+      when :immune
+        !!Battle::AbilityEffects.triggerMoveImmunity(ability, target, user, foe_move, foe_move.calcType, b, false)
+      when :crit_taken then Battle::AbilityEffects.triggerCriticalCalcFromTarget(ability, target, user, foe_move, 0)
+      when :switch_in
+        Battle::AbilityEffects.triggerOnSwitchIn(ability, user, b, true)
+        "#{b.field.weather}/#{b.field.terrain}"   # weather/terrain
       when :airborne   then user.airborne?
       when :forced_out then user.canBeForcedOutOfBattle?(false)
       when :stat_drop  then user.pbCanLowerStatStage?(:ATTACK, target, nil, false)

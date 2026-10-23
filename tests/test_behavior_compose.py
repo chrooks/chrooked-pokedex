@@ -24,7 +24,7 @@ pytestmark = pytest.mark.unit
 
 
 class _Names:
-    MOVES = {"Crunch": "CRUNCH", "Air Slash": "AIRSLASH", "Tackle": "TACKLE", "Shadow Ball": "SHADOWBALL",
+    MOVES = {"Crunch": "CRUNCH", "Hyper Voice": "HYPERVOICE", "Air Slash": "AIRSLASH", "Tackle": "TACKLE", "Shadow Ball": "SHADOWBALL",
              "Flamethrower": "FLAMETHROWER", "Ember": "EMBER", "Surf": "SURF"}
     TYPES = {"fire": "FIRE", "ghost": "GHOST"}
     MISSING_ABILITIES: frozenset = frozenset()
@@ -141,6 +141,20 @@ def test_each_proof_kind_has_its_compare_entry_and_a_by_name_part_its_identity()
     assert "Guts: Everything uses Tackle while it has a burn" in [c.given for c in cases]
     assert "Scrappy: Everything uses Tackle on a Ghost-type foe" in [c.given for c in cases]
     assert not any(c["select"].get("part") == "CLEARBODY" and c["select"].get("case") for c in checks)
+
+
+def test_field_and_target_side_proofs():
+    """NV-17: parts measured on a field, or as the foe's target."""
+    rs = _ruleset(["slushrush", "soundproof", "bulletproof", "battlearmor", "grassysurge", "grasspelt"],
+                  name="Fortress", cid="fortress")
+    text = _render(rs, cid="fortress")
+    assert ("compare: [[nil, :SLUSHRUSH, :speed, {weather: :Hail}], [:HYPERVOICE, :SOUNDPROOF, :immune], "
+            "[:SHADOWBALL, :BULLETPROOF, :immune], [:TACKLE, :BATTLEARMOR, :crit_taken], "
+            "[nil, :GRASSYSURGE, :switch_in], [:TACKLE, :GRASSPELT, :hit_taken, {terrain: :Grassy}]],\n") in text
+    assert "identity: [:SOUNDPROOF],\n" in text  # Uproar asks for it by name
+    _, cases = _checks(rs, cid="fortress")
+    assert "Grass Pelt: a foe's Tackle hits Fortress's holder on Grassy Terrain" in [c.given for c in cases]
+    assert "Slush Rush: Fortress's holder's Speed in hail" in [c.given for c in cases]
 
 
 def test_the_holder_answers_to_its_parts_names():

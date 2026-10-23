@@ -44,6 +44,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
+from ..appliers.essentials import vocab
 from ..model.behavior_spec import BehaviorSpec, BehaviorTestCase
 from ..model.ruleset import Ruleset
 from ..model.schema import AbilityDef, composed_behaviors, is_composed
@@ -61,6 +62,8 @@ class _Proof:
     move: Optional[str] = None                 # the move's name, for hit and locked
     target_types: tuple[str, ...] = ()         # hit: the foe's types first
     status: Optional[str] = None               # hit: the user's status first (burn)
+    weather: Optional[str] = None              # the field's weather first (hail)
+    terrain: Optional[str] = None              # the field's terrain first (grassy)
 
 
 # A vanilla ability a composition may borrow: its name in the game, whether the
@@ -80,6 +83,13 @@ VANILLA_PARTS: dict[str, tuple[str, bool, tuple[_Proof, ...]]] = {
     "guts": ("Guts", True, (_Proof("hit", "Tackle", status="burn"),)),    # burn's halving; its boost is a handler
     "gorillatactics": ("Gorilla Tactics", True,                           # its boost is a handler; the lock
                        (_Proof("hit", "Tackle"), _Proof("locked", "Tackle"))),  # is by name
+    # NV-17: parts measured as the foe's target, or on a field.
+    "slushrush": ("Slush Rush", False, (_Proof("speed", weather="hail"),)),          # a SpeedCalc handler
+    "soundproof": ("Soundproof", True, (_Proof("immune", "Hyper Voice"),)),          # MoveImmunity; Uproar asks by name
+    "bulletproof": ("Bulletproof", False, (_Proof("immune", "Shadow Ball"),)),       # MoveImmunity on Bomb moves
+    "battlearmor": ("Battle Armor", False, (_Proof("crit_taken", "Tackle"),)),       # CriticalCalcFromTarget
+    "grassysurge": ("Grassy Surge", False, (_Proof("switch_in"),)),                  # OnSwitchIn
+    "grasspelt": ("Grass Pelt", False, (_Proof("hit_taken", "Tackle", terrain="grassy"),)),  # DamageCalcFromTarget
 }
 
 # How a check's sentence says what a proof measured.
@@ -89,6 +99,11 @@ _PROOF_GIVEN = {
     "stat_drop": "a foe cannot lower the Attack of {ability}'s holder",
     "locked": "{ability}'s holder is locked into {move}",
     "ko": "a knockout by {ability}'s holder raises its stats",
+    "hit_taken": "a foe's {move} hits {ability}'s holder{scene}",
+    "speed": "{ability}'s holder's Speed{scene}",
+    "immune": "a foe's {move} fails against {ability}'s holder",
+    "crit_taken": "a foe's {move} cannot land a critical hit on {ability}'s holder",
+    "switch_in": "{ability}'s holder changes the field as it enters",
 }
 
 
@@ -104,6 +119,8 @@ class _Measure:
     move: Optional[str]              # INTERNAL move
     target_types: tuple[str, ...]    # INTERNAL types
     status: Optional[str]            # Essentials status
+    weather: Optional[str] = None    # Essentials weather
+    terrain: Optional[str] = None    # Essentials terrain
 
 
 @dataclass(frozen=True)
@@ -193,14 +210,18 @@ def harness_checks(ability: AbilityDef, ruleset: Ruleset,
 
 def _given(ability: AbilityDef, part: _Part, measure: _Measure) -> str:
     proof = measure.proof
+    scene = ""
+    if proof.target_types:
+        scene += f" on {templates._a('/'.join(proof.target_types))}-type foe"
+    if proof.status:
+        scene += f" while it has a {proof.status}"
+    if proof.weather:
+        scene += f" in {proof.weather}"
+    if proof.terrain:
+        scene += f" on {proof.terrain.title()} Terrain"
     if proof.kind == "hit":
-        scene = ""
-        if proof.target_types:
-            scene += f" on {templates._a('/'.join(proof.target_types))}-type foe"
-        if proof.status:
-            scene += f" while it has a {proof.status}"
         return f"{ability.name} uses {proof.move}{scene}"
-    return _PROOF_GIVEN[proof.kind].format(ability=ability.name, move=proof.move)
+    return _PROOF_GIVEN[proof.kind].format(ability=ability.name, move=proof.move, scene=scene)
 
 
 def _resolve(ability: AbilityDef, ruleset: Ruleset, names: Names) -> Optional[tuple[str, list[_Part]]]:
@@ -251,7 +272,12 @@ def _measure(proof: _Proof, names: Names, where: str) -> _Measure:
             raise CompositionError(f"{where}: the target has no type {type_name!r} to prove it")
         types.append(internal)
     status = _STATUSES[proof.status][0] if proof.status else None
-    return _Measure(proof=proof, move=move, target_types=tuple(types), status=status)
+    weather = (vocab.weathers(proof.weather) or (None,))[0] if proof.weather else None
+    terrain = vocab.terrain(proof.terrain) if proof.terrain else None
+    if (proof.weather and weather is None) or (proof.terrain and terrain is None):
+        raise CompositionError(f"{where}: no Essentials weather or terrain for its proof")
+    return _Measure(proof=proof, move=move, target_types=tuple(types), status=status,
+                    weather=weather, terrain=terrain)
 
 
 def _compare_entry(part: _Part, measure: _Measure) -> str:
@@ -263,6 +289,10 @@ def _compare_entry(part: _Part, measure: _Measure) -> str:
         setup.append(f"target_types: [{', '.join(':' + t for t in measure.target_types)}]")
     if measure.status:
         setup.append(f"status: :{measure.status}")
+    if measure.weather:
+        setup.append(f"weather: :{measure.weather}")
+    if measure.terrain:
+        setup.append(f"terrain: :{measure.terrain}")
     if measure.proof.kind == "hit" and not setup:
         return f"[{move}, :{part.symbol}]"
     extra = f", {{{', '.join(setup)}}}" if setup else ""

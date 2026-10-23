@@ -81,7 +81,8 @@ _COMPOSED = sorted(cid for cid, ability in _RULESET.abilities.items()
 
 def test_the_proven_compositions_compose():
     assert {"apexpredator", "razoredge", "requiem", "serratedjaw",  # NV-15
-            "witchinghour", "kickboxer", "gyroscope", "brawlersspirit", "compulsion"} <= set(_COMPOSED)  # NV-16
+            "witchinghour", "kickboxer", "gyroscope", "brawlersspirit", "compulsion",  # NV-16
+            "iceskater", "heavilyarmored", "breadbasket"} <= set(_COMPOSED)  # NV-17
 
 
 @pytest.mark.parametrize("cid", _COMPOSED)

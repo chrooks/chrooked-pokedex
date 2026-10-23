@@ -134,7 +134,12 @@ Apply writes the composed ability its own file, `chrooked_<ability>.rb`
     - `forced_out`: Suction Cups;
     - `stat_drop`: Clear Body;
     - `locked`: Gorilla Tactics, locked into Tackle and unable to pick Growl;
-    - `ko`: Moxie, Attack 0 to 1.
+    - `ko`: Moxie, Attack 0 to 1;
+    - NV-17, measured as the foe's target or on a field: `speed` (Slush Rush in
+      hail, 110 against 55), `immune` (Soundproof on Hyper Voice, Bulletproof on
+      Shadow Ball), `crit_taken` (Battle Armor, -1), `switch_in` (Grassy Surge
+      leaves Grassy Terrain), `hit_taken` (Grass Pelt on Grassy Terrain, 24
+      against 36).
   - A part checked by name also gets an `identity:` entry: its holder's
     `hasActiveAbility?` must say yes for the part, alone and in a list, and no for
     Stench.
@@ -285,7 +290,7 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-44 ports and 9 compositions. 39 ports are generated from their specs' `template:` blocks: 22 since
+44 ports and 12 compositions. 39 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
@@ -331,6 +336,7 @@ exception, by design (below).
 | requiem (composed) | Pyre + Spectralize | NV-15, lab 6/6: Pyre's burn rates and Spectralize's conversion, each scored on its re-tagged lines |
 | witchinghour, kickboxer (composed) | Nocturnal + Levitate / Striker + Scrappy | NV-16, lab 5/5 each: the part's own probes, plus airborne (true, true, false) / Tackle on a Ghost 14, 14, 1, and identity |
 | gyroscope, brawlersspirit, compulsion (composed) | Clear Body + Suction Cups / Guts + Moxie / Gorilla Tactics | NV-16, lab 3/3 each: Attack not lowered and not forced out; a burned Tackle 22 as Guts alone (7 with none) and Attack +1 on a knockout; Tackle 22 (14) and locked into it; identity for Suction Cups, Guts and Gorilla Tactics |
+| iceskater, heavilyarmored, breadbasket (composed) | Winter Coat + Slush Rush / Soundproof + Bulletproof + Battle Armor / Grassy Surge + Grass Pelt | NV-17, lab 4/4, 4/4, 2/2: Winter Coat's probes and Speed 110 in hail (55); Hyper Voice and Shadow Ball blocked through one `MoveImmunity` (`ANY`), crit stage -1, identity for Soundproof; Grassy Terrain on entry and Tackle taken 24 (36) |
 | updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
