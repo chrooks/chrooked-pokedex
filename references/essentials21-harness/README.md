@@ -335,7 +335,9 @@ identical to the lab's, the first device runs of a generated status chance and o
 the `defend` phase. The five NV-14 ports followed in one boot: 15/15, all 15 DRAIN,
 KO and PRIORITY lines identical to the lab's (the AI battle's turn counts are not a
 measurement: it is not reseeded, so they depend on what ran before it). All 44 are
-proven on thor. The four NV-15 compositions are deployed and wait for their boot.
+proven on thor. The four NV-15 compositions followed: 14/14, their wiring and all
+their measurement lines identical to the lab's (the game booted twice before the
+read, and both runs matched line for line). All 48 are proven on thor.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.
