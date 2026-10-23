@@ -27,3 +27,17 @@ notes:
 engine_hints:
   pokeemerald: "Boost: src/battle_util.c (~line 7375) case ABILITY_MYSTIC_BLADES gates on IsSlicingMove(move) → UQ_4_12(1.3). Stat override: CalcAttackStat (~line 7189) — when IsBattleMovePhysical(move) && atkAbility==ABILITY_MYSTIC_BLADES && IsSlicingMove(move), atkStat/atkStage are read from spAttack / STAT_SPATK."
   essentials: "Battle::Move damage-calc — if user ability is Mystic Blades and move has the slicing flag: apply 1.3x; and if the move is physical, swap the attack stat read to Special Attack (including its stat stages)."
+template:
+  - shape: flag_boost
+    params: {flags: [slicing], multiplier: 1.3}
+    effects: [1]
+    cases: [1]
+    probes:
+      - {move: Night Slash, result: boosted}
+  - shape: stat_swap
+    params: {attack: special_attack, moves: physical, flags: [slicing]}
+    effects: [2]
+    cases: [2, 3]
+    probes:
+      - {move: Tackle, uses: attack}
+      - {move: Night Slash, uses: special_attack, stages: {attack: -2, special_attack: 2}}

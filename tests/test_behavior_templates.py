@@ -937,3 +937,23 @@ def test_struck_status_gives_the_attacker_the_status():
     assert "[:TACKLE, {status: :BURN, status_rate: 0, setup: {types: [:FIRE]}}]" in text
     assert _verdicts(spec)[2] == ({"move": "TACKLE", "ability": "true", "source": "selftest", "side": "struck",
                                   "attacker_types": "FIRE"}, {"status_ok": "true"})
+
+
+def test_stat_swap_wraps_the_attacking_stat_and_reads_its_scene():
+    """NV-23: method wrappers, keyed on the holder answering to the ability's name."""
+    spec = _blocks_spec(_block("stat_swap", {"attack": "special_attack", "moves": "physical", "contact": True,
+                                             "burn": "ignore"}, [1, 2], [1, 2, 3],
+                               [{"move": "Tackle", "uses": "special_attack", "attack": 65, "special_attack": 130},
+                                {"move": "Tackle", "uses": "special_attack", "burned": True},
+                                {"move": "Ember", "uses": "status_move"}]), cid="medium")
+    text = _render(spec)
+    assert "alias_method :chrooked_medium_attack_stats, :pbGetAttackStats" in text
+    assert "user.hasActiveAbility?(:MEDIUM) && damagingMove? && physicalMove? && pbContactMove?(user)" in text
+    assert 'stat, stage, name = [user.spatk, user.stages[:SPECIAL_ATTACK] + 6, "SPECIAL_ATTACK"]' in text
+    assert "multipliers[:final_damage_multiplier] *= 2 if halves" in text
+    assert "swap: [[:TACKLE, 1.0, {stat_values: {ATTACK: 65, SPECIAL_ATTACK: 130}}], [:TACKLE, 1.0, {status: :BURN}]]," in text
+    assert "category: [:EMBER]," in text
+    assert [expect for _, expect in _verdicts(spec)] == [
+        {"attack_stat": "SPECIAL_ATTACK"}, {"halves": "false"}, {"status": "true"}]
+    assert _verdicts(spec)[0][0] == {"move": "TACKLE", "ability": "true", "block": "1", "atk": "65", "spatk": "130",
+                                     "atk_stage": "0", "spatk_stage": "0"}

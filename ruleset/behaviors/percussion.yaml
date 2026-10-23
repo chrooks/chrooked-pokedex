@@ -23,3 +23,12 @@ notes:
   - Unaware on the target ignores Attack and Defense boosts as it normally would for a physical hit.
   - Stat-using abilities on the user such as Hustle apply to the Attack stat used by these moves.
   - STUB — engine_hints ungrounded, needs human grounding pass
+template:
+  - shape: stat_swap
+    params: {attack: attack, defense: defense, flags: [sound], burn: physical}
+    effects: [1]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Boomburst, uses: attack}
+      - {move: Hyper Voice, uses: attack, burned: true}
+      - {move: Boomburst, uses: blocked, blocked_by: Soundproof}

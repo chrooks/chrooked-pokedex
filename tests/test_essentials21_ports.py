@@ -60,7 +60,9 @@ def test_template_validates_and_renders_a_registry_port(cid):
     validate_spec(spec)  # the shape's own check, and one effect per template
     text = _render(cid)
     assert text.startswith(f"# chrooked:{cid}\n")
-    assert f".add(:{vocab.internal_name(spec.name)}," in text
+    ability = vocab.internal_name(spec.name)
+    # A registry entry, or (stat_swap, NV-23) a method wrapper keyed on the holder's ability.
+    assert f".add(:{ability}," in text or f"user.hasActiveAbility?(:{ability})" in text
     assert f'($chrooked_selftest_cases ||= {{}})["{cid}"] = {{' in text
 
 

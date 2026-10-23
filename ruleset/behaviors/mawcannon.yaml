@@ -17,3 +17,12 @@ test_cases:
     expect: it stays a status move
 notes:
   - Same seam as Percussion — override pbIsPhysical?/pbIsSpecial?, never swap stat values.
+template:
+  - shape: stat_swap
+    params: {attack: attack, defense: defense, flags: [pulse]}
+    effects: [1]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Dragon Pulse, uses: attack}
+      - {move: Waterfall, uses: attack}
+      - {move: Heal Pulse, uses: status_move}

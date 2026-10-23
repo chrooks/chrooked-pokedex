@@ -281,8 +281,14 @@ module ChrookedSelfTest
   #              a same-type bonus can be measured; NV-10)
   #   target_types - the target's types, e.g. [:FIRE] for a burn-immune target (NV-11)
   #   status   - the user's status, e.g. :BURN (Guts, NV-16)
+  #   stat_values - the user's stats outright, e.g. {ATTACK: 170, SPECIAL_ATTACK: 65} (NV-23)
+  #   stages   - the user's stat stages, e.g. {ATTACK: 2} (NV-23)
   def self.arrange(b, user, target, setup)
     user.status = setup[:status] if setup[:status]
+    (setup[:stat_values] || {}).each do |stat, value|
+      stat == :ATTACK ? user.attack = value : user.spatk = value
+    end
+    (setup[:stages] || {}).each { |stat, n| user.stages[stat] = n }
     b.field.weather = setup[:weather] if setup[:weather]
     b.field.terrain = setup[:terrain] if setup[:terrain]
     user.item = setup[:item] if setup[:item]
@@ -714,6 +720,38 @@ module ChrookedSelfTest
         obs(mechanic, "move=#{move_id} ability=true source=selftest mold_breaker=#{mold_breaker} " \
                       "hp_set=#{opts[:hp] || 1.0} stages_set=#{stages_set.empty? ? 'none' : stages_set} " \
                       "immune=#{with} effect=#{effect}")
+      end
+    end
+    guard("swap") do
+      # [move, hp, setup] (NV-23): one measured hit in the setup's scene (stats,
+      # stages, a burn); the port logs the attacking stat it chose (SWAP line).
+      (spec[:swap] || []).each do |move_id, hp, setup|
+        (with, _, _), (none, _, _) = damage(spec[:user], [spec[:ability], nil], spec[:foe], move_id,
+                                            hp_fraction: hp || 1.0, neutral: !!spec[:neutral], setup: setup || {})
+        log("SWAP #{mechanic} move=#{move_id} setup=#{(setup || {}).inspect.delete(' ')} with=#{with} none=#{none}")
+      end
+    end
+    guard("category") do
+      # moves (NV-23): the category of each as the holder's move; a status move stays one.
+      (spec[:category] || []).each do |move_id|
+        b, user, target = pair(spec, move_id)
+        user.ability = spec[:ability]
+        move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+        obs(mechanic, "case=category move=#{move_id} source=selftest physical=#{move.physicalMove?} " \
+                      "special=#{move.specialMove?} status=#{move.statusMove?}")
+      end
+    end
+    guard("blocked") do
+      # [move, foe_ability] (NV-23): whether the foe's ability makes the holder's move fail
+      # (pbImmunityByAbility), as Soundproof against a sound move.
+      (spec[:blocked] || []).each do |move_id, foe_ability|
+        b, user, target = pair(spec, move_id)
+        user.ability = spec[:ability]
+        target.ability = foe_ability
+        move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+        move.calcType = move.pbCalcType(user)
+        obs(mechanic, "case=blocked move=#{move_id} foe_ability=#{foe_ability} source=selftest " \
+                      "immune=#{!!move.pbImmunityByAbility(user, target, false)}")
       end
     end
     guard("hit_rolls") do

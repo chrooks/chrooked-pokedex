@@ -397,6 +397,13 @@ unless defined?(ChrookedCompose)
       @parts[ability]
     end
 
+    # The composed ability's log tag, for a part that logs outside a handler (a
+    # method wrapper, NV-23); nil for any other ability.
+    def self.tag_of(ability)
+      entry = @compositions[ability]
+      entry && entry[0]
+    end
+
     # Once, before the first battle: every port and the game's own handlers exist.
     def self.wire
       return if @wired

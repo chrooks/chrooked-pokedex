@@ -25,3 +25,14 @@ notes:
   - Only the attacking stat is substituted. The defending stat still follows the move's category, so this is not a category change like Mystic Blades or Photon Geyser.
   - "It makes a dumped offensive stat harmless, which is the point: a holder can run a lopsided spread and still fire both move categories at full power."
   - STUB - engine_hints ungrounded, needs human grounding pass
+template:
+  - shape: stat_swap
+    params: {attack: higher}
+    effects: [1]
+    cases: [1, 2, 3, 4, 5]
+    probes:
+      - {move: Swift, uses: attack, attack: 170, special_attack: 65}
+      - {move: Swift, uses: attack, attack: 170, special_attack: 65, stages: {attack: 2}}
+      - {move: Swift, uses: attack, attack: 170, special_attack: 65, stages: {special_attack: 2}}
+      - {move: Tackle, uses: special_attack, attack: 60, special_attack: 150}
+      - {move: Tackle, uses: attack, attack: 100, special_attack: 100}

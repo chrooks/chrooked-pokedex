@@ -23,3 +23,12 @@ notes:
   - "Sibling abilities: Magical Fists (punching moves, Sp. Atk for Attack), Mystic Blades (slicing moves, Sp. Atk for Attack). Medium is broader — any contact move — but carries no power bonus to compensate."
   - Moves that are Special and make contact (e.g. Grass Knot) are unaffected; the ability only activates when the move is Physical (and contact-making).
   - STUB — engine_hints ungrounded, needs human grounding pass
+template:
+  - shape: stat_swap
+    params: {attack: special_attack, moves: physical, contact: true, burn: ignore}
+    effects: [1]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Lick, uses: special_attack, attack: 65, special_attack: 130}
+      - {move: Tackle, uses: special_attack, burned: true}
+      - {move: Shadow Ball, uses: special_attack}
