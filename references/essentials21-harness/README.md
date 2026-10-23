@@ -329,13 +329,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-92 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
+100 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Twenty-eight are hand-written here:
+quarter as `* 0.25`. Thirty-six are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -362,6 +362,13 @@ quarter as `* 0.25`. Twenty-eight are hand-written here:
   composition: the port is the whole ability, copying the vanilla parts' handlers
   (`HandlerHashSymbol#copy`) and answering to their names, and the installer leaves it
   be;
+- `chrooked_coilup.rb`, `chrooked_stampede.rb`, `chrooked_sporulation.rb`,
+  `chrooked_starfall.rb`, `chrooked_savant.rb`, `chrooked_spitefulblock.rb`,
+  `chrooked_battery.rb` (NV-27), armed and streak states. The state lives in
+  `Battle::Battler#chrooked_state`, a hash the first of these ports to load adds and
+  `pbInitEffects` empties, so it is gone when the holder leaves, as Nova's own volatile
+  effects are; `chrooked_finishingkick.rb` (NV-27) lists itself too (plus Speed
+  Boost), so it is written whole like Thorned Succulent;
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
@@ -415,6 +422,9 @@ exception, by design (below).
 | illusion, nightstalker, sandguard, fixation, blitz (hand-written) | 1.2x while disguised (Nova's own disguise and break) / at night 1.3x on the higher stat and crit stage +1 / special x0.5 taken in sand and no sand chip / special 1.5x and Gorilla Tactics' lock by name / Speed 1.5x and physical 1.3x on turn 1 | NV-25, lab 3/3, 4/4, 3/3, 3/3, 4/4: disguised as Pikachu, Tackle 17 vs 14, 14 once broken; Cross Poison 32 vs 25 at night, Air Cutter 16 vs 16, stage 1 at night and 0 by day, 0 of 30 crits into Shell Armor; Surf halved in sand, Earthquake and clear-weather Thunderbolt not, chip 0 vs -8; Flamethrower 36 vs 24, locked to it, Psychic refused; Speed 83 vs 55 and Tackle 19 vs 14 on turn 1, equal on turn 2, Swift unchanged |
 | impenetrable, mountaineer, bioturbation, repulsion (hand-written) | Magic Guard's `takesIndirectDamage?` answer, plus Toxic Spikes hidden for its entry / Rock `MoveImmunity` and Stealth Rock hidden for its entry / Stealth Rock at a neutral 1/8, then every hazard moved to the foes' side, capped / Magnet Rise on entry (`OnSwitchIn`), the rest Nova's | NV-26, lab 3/3 each: burn and sand chip 0 vs -8, Stealth Rock 0 vs -17, Head Smash recoil 0 vs -50, Toxic Spikes poison nothing while Sticky Web still slows; Rock Slide immune, Earthquake not; an Ice/Water holder loses 16 of 135 (1/8), three Spikes and Stealth Rock 49 (1/4 + 1/8), the foes' Spikes capped at 3; Magnet Rise 5 and Earthquake fails by Nova's own airborne check, Smack Down grounds it, a Magnet Rise already up keeps its 3 |
 | thornedsucculent (hand-written whole) | its own sandstorm immunity + Water Absorb's and Iron Barbs' handlers copied, answering to both names | NV-26, lab 3/3: Surf fails and heals 58 (a quarter) at half HP; a contact Poison Fang costs the attacker 16 (1/8; the case names Poison Jab, which the Ruleset lists without Contact); sand chip 0 vs -8 |
+| coilup, stampede, sporulation (hand-written) | `PriorityChange` +1 while armed: biting moves after entry, spent by a biting hit / contact moves after a knockout, spent by a contact move / Spore after entry, spent by Spore | NV-27, lab 3/3, 3/3, 4/4: Crunch 1 then 0, Glare 0 keeps it, 1 again after re-entry; Tackle 1 after a knockout then 0, Water Gun 0 keeps it; Spore 1 then 0, Sleep Powder 0 keeps it, 1 again after re-entry |
+| starfall, savant, spitefulblock, battery (hand-written) | special moves x(1 + 0.2 N), N the damaging rounds in a row up to 3 / 1.3x on each move's first use this stay / 1.3x on the next Dark move after surviving a hit / on entry Charge 2 and Sp. Def +1 unless charged (Nova's Battery ally boost kept) | NV-27, lab 6/6, 3/3, 3/3, 3/3 with 1 N/A (no Electric field): Psybeam 1.000, 1.235, 1.588 at the cap, 1.000 after Recover or a switch, Tackle unboosted at N 3; Psychic boosted once, Shadow Ball's first use too, again after re-entry; Bite boosted once after a hit, Tackle leaves it armed; Thunderbolt 46 vs 23, Bug Buzz 23 vs 23, a charged holder unchanged |
+| finishingkick (hand-written whole) | its own 1.2x on contact moves at Speed +1 or more + Speed Boost's handler copied, answering to its name | NV-27, lab 4/4: Quick Attack at 0 unboosted, Wild Charge at +1 48 vs 40, Thunderbolt at +2 unboosted, Crunch at +6 32 vs 27; Speed Boost raises Speed at the round's end |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |

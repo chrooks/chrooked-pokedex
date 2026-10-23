@@ -420,4 +420,51 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'Take a Poison Fang (contact, Poison-type).', "select": {'case': 'check', 'label': 'contact_poison', 'source': 'selftest'}, "expect": {'eighth': 'true'}},
         {"stage": 'End a turn in a sandstorm.', "select": {'case': 'check', 'label': 'sandstorm', 'source': 'selftest'}, "expect": {'sand_with': '0', 'spared': 'true'}},
     ],
+    # NV-27 hand ports: armed and streak states, each in the battler's chrooked_state.
+    "coilup": [
+        {"stage": 'Switch in, then use Crunch twice.', "select": {'case': 'check', 'label': 'entry_crunch', 'source': 'selftest'}, "expect": {'priorities': 'CRUNCH:1,CRUNCH:0'}},
+        {"stage": 'Switch in, use Glare, then Crunch twice.', "select": {'case': 'check', 'label': 'glare_first', 'source': 'selftest'}, "expect": {'priorities': 'GLARE:0,CRUNCH:1,CRUNCH:0'}},
+        {"stage": 'Spend the coil, switch out and back in, use Crunch.', "select": {'case': 'check', 'label': 'reentry', 'source': 'selftest'}, "expect": {'priorities': 'CRUNCH:1,CRUNCH:0,reentered,CRUNCH:1'}},
+    ],
+    "stampede": [
+        {"stage": 'Knock a foe out, then use Tackle twice.', "select": {'case': 'check', 'label': 'ko_then_contact', 'source': 'selftest'}, "expect": {'priorities': 'KO:0,TACKLE:1,TACKLE:0'}},
+        {"stage": 'Knock a foe out, use Water Gun, then Tackle.', "select": {'case': 'check', 'label': 'ko_then_water_gun', 'source': 'selftest'}, "expect": {'priorities': 'KO:0,WATERGUN:0,TACKLE:1'}},
+        {"stage": 'Use Tackle twice without a knockout.', "select": {'case': 'check', 'label': 'no_ko', 'source': 'selftest'}, "expect": {'priorities': 'TACKLE:0,TACKLE:0'}},
+    ],
+    "sporulation": [
+        {"stage": 'Switch in and use Spore.', "select": {'case': 'check', 'label': 'first_spore', 'source': 'selftest'}, "expect": {'priorities': 'SPORE:1'}},
+        {"stage": 'Use Spore again.', "select": {'case': 'check', 'label': 'second_spore', 'source': 'selftest'}, "expect": {'priorities': 'SPORE:1,SPORE:0'}},
+        {"stage": 'Use Sleep Powder, then Spore.', "select": {'case': 'check', 'label': 'sleep_powder', 'source': 'selftest'}, "expect": {'priorities': 'SLEEPPOWDER:0,SPORE:1'}},
+        {"stage": 'Spend it, switch out and back in, use Spore.', "select": {'case': 'check', 'label': 'reentry', 'source': 'selftest'}, "expect": {'priorities': 'SPORE:1,reentered,SPORE:1'}},
+    ],
+    "starfall": [
+        {"stage": 'On its first turn in, use Psybeam.', "select": {'case': 'check', 'label': 'first', 'source': 'selftest'}, "expect": {'streak': '0', 'boosted': 'false'}},
+        {"stage": 'After one attacking turn, use Psybeam.', "select": {'case': 'check', 'label': 'second', 'source': 'selftest'}, "expect": {'streak': '1', 'boosted': 'true'}},
+        {"stage": 'After four attacking turns, use Psybeam.', "select": {'case': 'check', 'label': 'fifth', 'source': 'selftest'}, "expect": {'streak': '3', 'boosted': 'true'}},
+        {"stage": 'Attack twice, use Recover, then Psybeam.', "select": {'case': 'check', 'label': 'after_recover', 'source': 'selftest'}, "expect": {'streak': '0', 'boosted': 'false'}},
+        {"stage": 'Attack three times, switch out and back, then Psybeam.', "select": {'case': 'check', 'label': 'after_switch', 'source': 'selftest'}, "expect": {'streak': '0', 'boosted': 'false'}},
+        {"stage": 'After three attacking turns, use Tackle.', "select": {'case': 'check', 'label': 'physical', 'source': 'selftest'}, "expect": {'streak': '3', 'boosted': 'false'}},
+    ],
+    "savant": [
+        {"stage": 'Use Psychic twice.', "select": {'case': 'check', 'label': 'twice', 'source': 'selftest'}, "expect": {'uses': 'PSYCHIC:BOOSTED,PSYCHIC:NORMAL'}},
+        {"stage": 'Use Psychic, then Shadow Ball.', "select": {'case': 'check', 'label': 'two_moves', 'source': 'selftest'}, "expect": {'uses': 'PSYCHIC:BOOSTED,SHADOWBALL:BOOSTED'}},
+        {"stage": 'Use Psychic, switch out and back, use Psychic.', "select": {'case': 'check', 'label': 'reentry', 'source': 'selftest'}, "expect": {'uses': 'PSYCHIC:BOOSTED,reentered,PSYCHIC:BOOSTED'}},
+    ],
+    "spitefulblock": [
+        {"stage": 'Survive a hit, then use Bite twice.', "select": {'case': 'check', 'label': 'hit_then_bite', 'source': 'selftest'}, "expect": {'steps': 'hit,BITE:BOOSTED,BITE:NORMAL'}},
+        {"stage": 'Use Bite without being hit first.', "select": {'case': 'check', 'label': 'no_hit', 'source': 'selftest'}, "expect": {'steps': 'BITE:NORMAL'}},
+        {"stage": 'Survive a hit, use Tackle, then Bite.', "select": {'case': 'check', 'label': 'hit_then_tackle', 'source': 'selftest'}, "expect": {'steps': 'hit,TACKLE:NORMAL,BITE:BOOSTED'}},
+    ],
+    "battery": [
+        {"stage": 'Switch in uncharged, then use Thunderbolt.', "select": {'case': 'check', 'label': 'entry_thunderbolt', 'source': 'selftest'}, "expect": {'charge': '2', 'spdef': '1', 'doubled': 'true'}},
+        {"stage": 'Switch in already charged.', "select": {'case': 'check', 'label': 'already_charged', 'source': 'selftest'}, "expect": {'charge': '1', 'spdef': '0'}},
+        {"stage": 'Not in this game.', "absent": "Nova has no field effects, and its Charge raises Sp. Def by 1 on any terrain", "select": {}, "expect": {}},
+        {"stage": 'Switch in, then use Bug Buzz.', "select": {'case': 'check', 'label': 'bug_move', 'source': 'selftest'}, "expect": {'doubled': 'false'}},
+    ],
+    "finishingkick": [
+        {"stage": 'At Speed 0, use Quick Attack.', "select": {'case': 'check', 'label': 'quick_attack_0', 'source': 'selftest'}, "expect": {'boosted': 'false'}},
+        {"stage": 'At Speed +1, use Wild Charge.', "select": {'case': 'check', 'label': 'wild_charge_1', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
+        {"stage": 'At Speed +2, use Thunderbolt.', "select": {'case': 'check', 'label': 'thunderbolt_2', 'source': 'selftest'}, "expect": {'boosted': 'false'}},
+        {"stage": 'At Speed +6, use Crunch.', "select": {'case': 'check', 'label': 'crunch_6', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
+    ],
 }
