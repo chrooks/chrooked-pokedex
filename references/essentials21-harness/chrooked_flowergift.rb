@@ -6,12 +6,14 @@
 #
 # HAND-WRITTEN (mjolnir NV-31). Full Moon's shape (chrooked_fullmoon.rb), for Fire and
 # Grass and Morning Sun:
-#   - DamageCalcFromUser: Nova's own Flower Gift handler runs first (its sun boost for
-#     a Cherrim; the spec does not mention it, and Nova's ally and defensive Flower
-#     Gift handlers are left as they are too), then 1.5x final damage on a Fire or
-#     Grass move the holder is not that type for, as Nova's STAB step applies it.
+#   - DamageCalcFromUser: 1.5x final damage on a Fire or Grass move the holder is not
+#     that type for, as Nova's STAB step applies it. It replaces Nova's own handler.
+#   - The old sun boost is gone, as the spec says ("FULLY REMOVED"; Chris, 2026-10-23):
+#     Nova's 1.5x Attack in sun (its own DamageCalcFromUser, replaced above, and
+#     DamageCalcFromAlly for its allies) and 1.5x Sp. Def in sun (DamageCalcFromTarget
+#     and DamageCalcFromTargetAlly) are removed from their registries.
 #   - HealUserDependingOnWeather#pbOnStartUse: Morning Sun heals 3/4, in any weather.
-#   Its forms change through Nova's own Cherrim code, untouched.
+#   Its forms change through Nova's own Cherrim code, keyed on the ability, untouched.
 #
 # Install, load order, the marker-gated oracle and the self-test registration at the
 # end: references/essentials21-harness/README.md.
@@ -41,11 +43,12 @@ unless defined?(ChrookedLog)
 end
 
 begin
-  chrooked_flowergift_own = Battle::AbilityEffects::DamageCalcFromUser[:FLOWERGIFT]
-  ChrookedLog.line("[chrooked:flowergift] load prior_handler=#{!chrooked_flowergift_own.nil?}")
+  ChrookedLog.line("[chrooked:flowergift] load prior_handler=" \
+                   "#{!Battle::AbilityEffects::DamageCalcFromUser[:FLOWERGIFT].nil?}")
+  [Battle::AbilityEffects::DamageCalcFromAlly, Battle::AbilityEffects::DamageCalcFromTarget,
+   Battle::AbilityEffects::DamageCalcFromTargetAlly].each { |registry| registry.remove(:FLOWERGIFT) }
   Battle::AbilityEffects::DamageCalcFromUser.add(:FLOWERGIFT,
     proc { |ability, user, target, move, mults, power, type|
-      chrooked_flowergift_own&.call(ability, user, target, move, mults, power, type)
       own     = !type.nil? && user.pbHasType?(type)
       boosted = !type.nil? && !own && [:FIRE, :GRASS].include?(type)
       mults[:final_damage_multiplier] *= 1.5 if boosted
@@ -66,8 +69,8 @@ begin
       end
     end
   end
-  # Cherrim (form, types as given) uses move_id in the weather: with Flower Gift, and
-  # with Flower Gift's handler only (Nova's own, no grant), no crit.
+  # Cherrim (form, types as given) uses move_id in the weather: with Flower Gift and
+  # with no ability, no crit.
   chrooked_flowergift_hit = lambda do |t, spec, move_id, form, types, weather|
     b, holder, foe = t.pair(spec, move_id)
     holder.pokemon.form = form
@@ -98,12 +101,33 @@ begin
         move.pbOnStartUse(holder, [holder])
         "heal=#{move.pbHealAmount(holder)} max=#{holder.totalhp} " \
         "three_quarters_healed=#{move.pbHealAmount(holder) == (holder.totalhp * 3 / 4.0).round}"
+      }],
+      # The spec's note, not a test case: no sun boost to its Attack, its Sp. Def or an
+      # ally's Attack (each with Flower Gift against no ability, in sun, no crit).
+      ["no_sun_boost", ->(t, spec) {
+        own = chrooked_flowergift_hit.call(t, spec, :TACKLE, 1, [:FIRE, :FAIRY], :Sun)[/boosted=(\w+)/, 1]
+        b, holder, foe = t.pair(spec, :TACKLE)
+        holder.pbChangeTypes(:QMARKS)
+        foe.pbChangeTypes(:QMARKS)
+        b.field.weather = :Sun
+        holder.ability = spec[:ability]
+        taken = t.hit(b, foe, holder, :SWIFT)
+        holder.ability = nil
+        taken_none = t.hit(b, foe, holder, :SWIFT)
+        b2, holder2, ally, foe2, _foe3 = t.doubles(spec)
+        b2.field.weather = :Sun
+        holder2.ability = spec[:ability]
+        ally_with = t.hit(b2, ally, foe2, :TACKLE)
+        holder2.ability = nil
+        ally_none = t.hit(b2, ally, foe2, :TACKLE)
+        "own_attack_boosted=#{own} spdef_boosted=#{taken < taken_none} ally_attack_boosted=#{ally_with > ally_none}"
       }]
     ],
     without: [],
     fight: [:PETALDANCE, :MORNINGSUN]
   }
-  ChrookedLog.line("[chrooked:flowergift] installed on DamageCalcFromUser and HealUserDependingOnWeather")
+  ChrookedLog.line("[chrooked:flowergift] installed on DamageCalcFromUser and HealUserDependingOnWeather; " \
+                   "sun boost removed")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:flowergift] ERROR #{e.class}: #{e.message}")
 end
