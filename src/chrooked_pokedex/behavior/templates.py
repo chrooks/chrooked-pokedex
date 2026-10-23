@@ -170,7 +170,7 @@ _INTERNAL = re.compile(r"^[A-Z][A-Z0-9_]*$")
 # makes the measured ratio the ability's effect alone, whatever the species.
 _SELFTEST_USER = "NUMEL"
 _SELFTEST_FOE = "SNORLAX"
-_FIGHT_MOVES = 4  # a Pokemon knows at most four
+FIGHT_MOVES = 4  # a Pokemon knows at most four
 
 
 class TemplateError(ValueError):
@@ -833,13 +833,51 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
     return "\n".join(lines)
 
 
-def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
-    """The `$chrooked_selftest_cases` entry: what the lab self-test measures.
+@dataclass(frozen=True)
+class SelftestCase:
+    """What the lab self-test measures for one port, as Ruby fragments, before they
+    are written into its `$chrooked_selftest_cases` entry. A composed ability merges
+    its parts' cases into one (behavior/compose.py).
 
-    calc: the holder probes, once per (move, HP, scene); without: the holder: false
-    moves; fight: the holder's distinct moves, at most four, for one AI-vs-AI battle.
-    A conditional boost's entries carry a setup hash (the self-test's `arrange`).
+    calc: the holder probes, once per (move, HP, scene); phases: the measurement
+    phases a non-damage shape adds after calc, (key, entries) in order; without: the
+    holder: false moves; fight: the holder's distinct moves, at most four, for one
+    AI-vs-AI battle. A conditional boost's entries carry a setup hash (the
+    self-test's `arrange`).
     """
+
+    control: Optional[str]  # INTERNAL comparison ability, or None
+    calc: tuple[str, ...]
+    phases: tuple[tuple[str, tuple[str, ...]], ...]
+    without: tuple[str, ...]
+    fight: tuple[str, ...]
+
+
+def selftest_case(spec: BehaviorSpec, names: Names) -> SelftestCase:
+    """A templated spec's self-test case, resolved against the target's names."""
+    return _case(_resolve(spec, names))
+
+
+def render_selftest_case(chrooked_id: str, ability: str, case: SelftestCase) -> str:
+    """The `$chrooked_selftest_cases["<id>"] = {...}` registration for a port."""
+    return _fill(_SELFTEST, {
+        "ID": chrooked_id,
+        "ABILITY": ability,
+        "CONTROL": f":{case.control}" if case.control else "nil",
+        "USER": _SELFTEST_USER,
+        "FOE": _SELFTEST_FOE,
+        "CALC": ", ".join(case.calc),
+        "PHASES": "".join(_render_phase(key, entries) for key, entries in case.phases),
+        "WITHOUT": ", ".join(case.without),
+        "FIGHT": ", ".join(case.fight),
+    })
+
+
+def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
+    return render_selftest_case(spec.chrooked_id, port.ability, _case(port))
+
+
+def _case(port: _Port) -> SelftestCase:
     calc: list[str] = []
     for probe in port.probes:
         setup = f", {_setup(port, probe)}" if port.shape in _SCENE_SHAPES else ""
@@ -849,27 +887,18 @@ def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
     without = list(dict.fromkeys(f":{p.move}" for p in port.probes if not p.holder))
     # A built-in move (Struggle) cannot be learned, so it never joins the fight.
     learnable = [p for p in port.probes if p.holder and p.move.lower() not in _BUILTIN_MOVES]
-    fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:_FIGHT_MOVES]
+    fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:FIGHT_MOVES]
     if port.shape == "type_immunity":
         fight = []  # the moves are the foe's to use; the defend phase asks the registry itself
     if port.shape == "ko_effect":
         fight = [":TACKLE"]  # its probes name no move; one, so the real path runs in the AI battle
     control = port.params.get("control")
-    return _fill(_SELFTEST, {
-        "ID": spec.chrooked_id,
-        "ABILITY": port.ability,
-        "CONTROL": f":{control}" if control else "nil",
-        "USER": _SELFTEST_USER,
-        "FOE": _SELFTEST_FOE,
-        "CALC": ", ".join(calc),
-        "PHASES": _phases(port),
-        "WITHOUT": ", ".join(without),
-        "FIGHT": ", ".join(fight),
-    })
+    return SelftestCase(control=str(control) if control else None, calc=tuple(calc),
+                        phases=_phases(port), without=tuple(without), fight=tuple(fight))
 
 
-def _phases(port: _Port) -> str:
-    """The self-test phases a non-damage shape adds after calc: chance or defend."""
+def _phases(port: _Port) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    """The self-test phases a non-damage shape adds after calc: chance, defend, ..."""
     if port.shape == "hit_status":
         status = _STATUSES[str(port.params["status"])][0]
         entries: list[str] = []
@@ -880,24 +909,31 @@ def _phases(port: _Port) -> str:
             entry = f"[:{probe.move}, {{status: :{status}, status_rate: {rate}, flinch_rate: 0{setup}}}]"
             if entry not in entries:
                 entries.append(entry)
-        return "    chance: [\n" + ",\n".join("      " + e for e in entries) + "\n    ],\n"
+        return (("chance", tuple(entries)),)
     if port.shape == "type_immunity":
-        return f"    defend: [{', '.join(dict.fromkeys(':' + p.move for p in port.probes))}],\n"
+        return (("defend", tuple(dict.fromkeys(':' + p.move for p in port.probes))),)
     if port.shape == "hit_drain":
         entries = [f"[:{p.move}, {{hp_lost: 100{', target_ability: :LIQUIDOOZE' if p.ooze else ''}}}]"
                    for p in port.probes]
-        return f"    drain: [{', '.join(dict.fromkeys(entries))}],\n"
+        return (("drain", tuple(dict.fromkeys(entries))),)
     if port.shape == "ko_effect":
         if port.params["heal"] is not None:
             entries = [f"{{kos: {p.kos}, hp: {_ruby_float(p.hp)}}}" for p in port.probes]
         else:
             stat = _STAT_NAMES[str(port.params["stat"])][0]
             entries = [f"{{kos: {p.kos}, stages: {{{stat}: {p.stage}}}}}" for p in port.probes]
-        return f"    ko: [{', '.join(dict.fromkeys(entries))}],\n"
+        return (("ko", tuple(dict.fromkeys(entries))),)
     if port.shape == "priority_boost":
         entries = [f"[:{p.move}, {_ruby_float(p.hp)}]" for p in port.probes]
-        return f"    priority: [{', '.join(dict.fromkeys(entries))}],\n"
-    return ""
+        return (("priority", tuple(dict.fromkeys(entries))),)
+    return ()
+
+
+def _render_phase(key: str, entries: tuple[str, ...]) -> str:
+    """One phase line of a case; chance entries are long, so one per line."""
+    if key == "chance":
+        return "    chance: [\n" + ",\n".join("      " + e for e in entries) + "\n    ],\n"
+    return f"    {key}: [{', '.join(entries)}],\n"
 
 
 def _setup(port: _Port, probe: _Probe) -> str:

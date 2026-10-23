@@ -114,6 +114,9 @@ def _create_moves(target, ruleset, resmap, report) -> set[Path]:
 
 
 def _creation_reason(ruleset: Ruleset, name: str, resmap: ResolutionMap) -> str:
+    ability = next((a for a in ruleset.abilities.values() if a.name == name), None)
+    if ability is not None and behavior_install.has_composition(ability, ruleset, resmap):
+        return f"created; mechanic installed via {_port_path(ability.chrooked_id)} (composed)"
     spec = ruleset.behavior_for(name)
     if spec is not None:
         # A port the behaviors tier will INSTALL (generated or captured) means this

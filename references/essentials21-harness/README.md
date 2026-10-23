@@ -90,6 +90,49 @@ spec with both a template and a file here is ambiguous, and apply blocks it. A n
 shape starts the same way: hand-port one mechanic, prove it in the lab, then
 generalise it (Forestry, NV-9).
 
+## Composed abilities (NV-15)
+
+A Ruleset ability may be built from parts, `behaviors: [carnivore, strongjaw]`:
+Apex Predator is Carnivore's knockout heal plus Strong Jaw's biting boost. A part
+is a Ruleset behavior with a generated port, or a vanilla ability the game ships.
+Apply writes the composed ability its own file, `chrooked_<ability>.rb`
+(`behavior/compose.py`), and the usual tooling treats it as one more port.
+
+- **Wiring.** Essentials keys every battle effect by ability id in its registries,
+  so the composed ability gets its parts' handlers. The wiring runs once, at the
+  first `Battle.new`, when every port has loaded (the composed file sorts before
+  `chrooked_carnivore.rb`), and logs `wired DamageCalcFromUser=strongjaw
+  OnEndOfUsingMove=carnivore`.
+- **Shared registries.** A registry one part uses gets that part's handler as it
+  is. Parts sharing a registry are combined the way its trigger in
+  `008_Battle_AbilityEffects.rb` reads the result:
+  - `EACH` (damage multipliers, on-hit, on-knockout, on-entry) runs every part;
+  - `THREAD` (speed, priority, move type, critical stage) passes the value
+    through each part;
+  - `ANY` (move and stat-loss immunity) is yes when any part says yes.
+
+  Any other shared registry logs an ERROR and runs only the first part. Razor
+  Edge (Sharpness + Tough Claws) and Serrated Jaw (Strong Jaw + Sharpness) prove
+  `EACH`.
+- **Logging.** While a part runs for the composed ability, its port's lines are
+  re-tagged as the composed ability's, with `part=<id>`. AI calls stay `EST`.
+- **Proof.**
+  - A ported part's own probes run under the composed ability, and its checks
+    select `part=`.
+  - A vanilla part gets a `compare:` entry: the composed ability must hit a move
+    exactly as hard as the part alone, and harder than no ability (Crunch: 41
+    with Apex Predator, 41 with Strong Jaw, 28 with none).
+  - `VANILLA_PARTS` in `compose.py` names that move for each vanilla part.
+- **Not composed yet** (the ability stays DATA ONLY, with no report line):
+  - a vanilla part with no `VANILLA_PARTS` entry. That includes every part the
+    battle code checks by name (`hasActiveAbility?(:LEVITATE)`: Levitate, Guts,
+    Scrappy, Suction Cups, Gorilla Tactics), which needs the battler to answer
+    to its parts' names;
+  - a Ruleset part with no template;
+  - an ability that lists itself (Finishing Kick, Web Weaver, Unattainable,
+    Thorned Succulent).
+- **Blocked:** a target lacking a vanilla part, or its proof move.
+
 ## Install
 
 `chrooked-pokedex apply --engine essentials` (the `behaviors` category, last in the
@@ -222,14 +265,14 @@ A candidate becomes verified only after reading its call site in Nova's
   frostbite is ported to Nova as a reskin of freeze (`chrooked_frostbite.rb`), so
   every freeze in Nova is now frostbite. Rimefang inflicts it, built as Infernal
   Maw is.
-- *Composition:* finishingkick, which borrows Speed Boost through
-  `behaviors: [finishingkick, speedboost]`. Essentials 21 has no composition step
-  yet; `HandlerHash#copy` might serve, unverified.
+- *Composition:* **resolved 2026-10-22 (NV-15)**, above. Not yet composed:
+  finishingkick, which lists itself (`behaviors: [finishingkick, speedboost]`),
+  and every composition with a part the battle code checks by name.
 - *Every other table* above, and the 25 Nova abilities with no Rejuvenation port.
 
 ## Ported mechanics
 
-44 in all. 39 are generated from their specs' `template:` blocks: 22 since
+44 ports and 4 compositions. 39 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
@@ -270,6 +313,9 @@ exception, by design (below).
 | vampiric, soulsiphon | `hit_drain`, 1/4 of the damage, on contact / non-contact moves | NV-14, lab 3/3 each: a 100-HP hit heals 25 (67 to 92 of 135) on Tackle (Vampiric) and Water Gun (Soul Siphon), 0 on the other move, and costs 25 against a Liquid Ooze target |
 | carnivore, hubris | `ko_effect`, heal 1/4 / Sp. Atk per knockout | NV-14, lab 3/3 each. Carnivore: a knockout at half HP heals 33 (67 to 100 of 135); no knockout or full HP, nothing. Hubris: Sp. Atk +1 for one knockout, +2 for two, nothing at +6 |
 | rapidcombustion | `priority_boost`, Fire, `full_hp` | NV-14, lab 3/3: Flamethrower priority 0 to 1 at full HP, 0 at half HP; Surf 0 |
+| apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |
+| serratedjaw, razoredge (composed) | Strong Jaw + Sharpness / Sharpness + Tough Claws, sharing `DamageCalcFromUser` | NV-15, lab 2/2 each: Crunch 41 as Strong Jaw alone, Air Slash 31 as Sharpness alone (none 21), Tackle 19 as Tough Claws alone (none 14) |
+| requiem (composed) | Pyre + Spectralize | NV-15, lab 6/6: Pyre's burn rates and Spectralize's conversion, each scored on its re-tagged lines |
 | updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
@@ -289,7 +335,7 @@ identical to the lab's, the first device runs of a generated status chance and o
 the `defend` phase. The five NV-14 ports followed in one boot: 15/15, all 15 DRAIN,
 KO and PRIORITY lines identical to the lab's (the AI battle's turn counts are not a
 measurement: it is not reseeded, so they depend on what ran before it). All 44 are
-proven on thor.
+proven on thor. The four NV-15 compositions are deployed and wait for their boot.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.

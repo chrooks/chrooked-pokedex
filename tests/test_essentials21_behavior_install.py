@@ -340,6 +340,63 @@ def test_resolution_reads_items_from_every_items_file(tmp_path):
     assert resmap.item("Rain Hat") is None
 
 
+def _emberjaw_ruleset(parts=("cinderglow", "strongjaw")):
+    ruleset = _cinderglow_ruleset()
+    abilities = {**ruleset.abilities, "emberjaw": AbilityDef(name="Emberjaw", chrooked_id="emberjaw",
+                                                             behaviors=tuple(parts))}
+    return Ruleset(abilities=abilities, behaviors=ruleset.behaviors)
+
+
+def _emberjaw_target(tmp_path, abilities="[CINDERGLOW]\nName = Cinderglow\n[STRONGJAW]\nName = Strong Jaw\n"):
+    target = _pbs_target(tmp_path, extra_abilities=abilities)
+    with (target / "PBS" / "moves.txt").open("a", encoding="utf-8") as moves:
+        moves.write("[CRUNCH]\nName = Crunch\n")
+    return target
+
+
+def test_a_composed_ability_is_created_installed_and_says_so(tmp_path):
+    """NV-15: a composition gets its own file, and its created line is not DATA ONLY."""
+    target, ruleset = _emberjaw_target(tmp_path), _emberjaw_ruleset()
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    create_owned_content(target, ruleset, resmap, report)
+    install_behaviors(target, ruleset, report, resmap=resmap, source_dir=_source(tmp_path, {}))
+
+    created = next(e for e in report.entries if e.chrooked_id == "emberjaw" and e.status == "applied"
+                   and "created" in e.reason)
+    assert "DATA ONLY" not in created.reason and "chrooked_emberjaw.rb (composed)" in created.reason
+    installed = (_mods(target) / "chrooked_emberjaw.rb").read_text(encoding="utf-8")
+    assert 'ChrookedCompose.register(:EMBERJAW, "emberjaw", [[:CINDERGLOW, "cinderglow"], [:STRONGJAW, "strongjaw"]])' \
+        in installed
+    assert (_mods(target) / "chrooked_cinderglow.rb").exists()  # the part's own port, beside it
+
+
+def test_a_composition_not_composable_yet_is_silent_and_stays_data_only(tmp_path):
+    target, ruleset = _emberjaw_target(tmp_path), _emberjaw_ruleset(("cinderglow", "levitate"))
+    resmap = build_resolution_map(target, ruleset)
+    report = ApplyReport()
+
+    create_owned_content(target, ruleset, resmap, report)
+    install_behaviors(target, ruleset, report, resmap=resmap, source_dir=_source(tmp_path, {}))
+
+    assert "DATA ONLY" in next(e for e in report.entries if e.chrooked_id == "emberjaw").reason
+    assert [e for e in report.entries if e.status == "blocked"] == []
+    assert not (_mods(target) / "chrooked_emberjaw.rb").exists()
+
+
+def test_a_composition_whose_target_lacks_a_vanilla_part_is_blocked(tmp_path):
+    target = _emberjaw_target(tmp_path, abilities="[CINDERGLOW]\nName = Cinderglow\n[EMBERJAW]\nName = Emberjaw\n")
+    ruleset = _emberjaw_ruleset()
+    report = ApplyReport()
+
+    install_behaviors(target, ruleset, report, source_dir=_source(tmp_path, {}))
+
+    blocked = next(e for e in report.entries if e.chrooked_id == "emberjaw")
+    assert blocked.status == "blocked" and "no ability 'Strong Jaw'" in blocked.reason
+    assert not (_mods(target) / "chrooked_emberjaw.rb").exists()
+
+
 def test_has_port_is_what_the_installer_would_install(tmp_path):
     target = _pbs_target(tmp_path, extra_abilities="[CINDERGLOW]\nName = Cinderglow\n")
     ruleset = _cinderglow_ruleset()

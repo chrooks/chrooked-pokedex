@@ -564,10 +564,15 @@ def _run_apply(
     # returns without touching any files.  Surface the block to the console and
     # write the report so the user has a record, then exit non-zero.
     counts = report.counts()
-    if counts["blocked"] > 0 and counts["applied"] == 0 and counts["partial"] == 0:
-        # All entries are blocked — the format was unrecognized (essentials) or
-        # some other total-block scenario.  Print the CLI-specific block message.
-        if engine == "essentials":
+    # Essentials says so with its (all) entry. Inferring it from "everything blocked"
+    # misfired on a behaviors-only re-apply with nothing to change and one blocked
+    # mechanic (NV-15).
+    format_blocked = any(e.status == "blocked" and e.chrooked_id == "(all)" for e in report.entries)
+    all_blocked = counts["blocked"] > 0 and counts["applied"] == 0 and counts["partial"] == 0
+    if format_blocked or (engine != "essentials" and all_blocked):
+        # The format was unrecognized (essentials) or some other total-block
+        # scenario.  Print the CLI-specific block message.
+        if format_blocked and engine == "essentials":
             print(
                 "blocked: unrecognized Essentials format. "
                 "Use --dialect essentials16 or --dialect essentials21 to override."

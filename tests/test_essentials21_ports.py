@@ -21,8 +21,10 @@ import pytest
 from chrooked_pokedex.appliers.essentials import vocab
 from chrooked_pokedex.appliers.essentials.behavior_install import has_plugin
 from chrooked_pokedex.behavior.harness_scenarios import SCENARIOS, SCENARIOS_ESSENTIALS21
+from chrooked_pokedex.behavior import compose
 from chrooked_pokedex.behavior.templates import harness_checks, render_essentials21, validate_spec
 from chrooked_pokedex.model import Ruleset
+from chrooked_pokedex.model.schema import is_composed
 
 pytestmark = pytest.mark.unit
 
@@ -70,6 +72,29 @@ def test_every_key_a_generated_check_reads_is_logged(cid):
         selftest = check["select"].get("source") == "selftest"
         for key in {**check["select"], **check["expect"]}:
             logged = key in _SELFTEST_KEYS if selftest else f"{key}=" in text
+            assert logged, f"{cid} never logs '{key}=' but its checks read it"
+
+
+_COMPOSED = sorted(cid for cid, ability in _RULESET.abilities.items()
+                   if is_composed(ability) and compose.render_essentials21(ability, _RULESET, _DefaultNames()))
+
+
+def test_the_proven_compositions_compose():
+    assert {"apexpredator", "razoredge", "requiem", "serratedjaw"} <= set(_COMPOSED)
+
+
+@pytest.mark.parametrize("cid", _COMPOSED)
+def test_every_key_a_composition_check_reads_is_logged(cid):
+    """NV-15: by a part's port (re-tagged, with part=), or by the lab self-test."""
+    ability = _RULESET.abilities[cid]
+    text = compose.render_essentials21(ability, _RULESET, _DefaultNames())
+    ports = text + "".join(_render(part) for part in ability.behaviors if part in _RULESET.behaviors)
+    checks, cases = compose.harness_checks(ability, _RULESET, _DefaultNames())
+    assert len(checks) == len(cases)
+    for check in checks:
+        selftest = check["select"].get("source") == "selftest"
+        for key in {**check["select"], **check["expect"]}:
+            logged = key in _SELFTEST_KEYS if selftest else (key == "part" or f"{key}=" in ports)
             assert logged, f"{cid} never logs '{key}=' but its checks read it"
 
 

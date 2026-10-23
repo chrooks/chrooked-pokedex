@@ -11,7 +11,9 @@ from one of two places:
   * hand-written: a mechanic that fits no template keeps a captured port in the
     repo at `references/essentials21-harness/`.
 
-A spec with both is ambiguous and is `blocked` rather than guessed at.
+A spec with both is ambiguous and is `blocked` rather than guessed at. A composed
+ability (`behaviors: [carnivore, strongjaw]`, NV-15) gets a file of its own,
+`chrooked_<ability>.rb`, that gives it its parts' handlers (`behavior.compose`).
 
 Essentials 21 loads every `.rb` under `Data/Scripts/` in name order, files before
 folders, so the install home is `Data/Scripts/998_ChrookedMods/`: after the
@@ -36,9 +38,10 @@ import functools
 from pathlib import Path
 from typing import Callable, Optional
 
-from ...behavior import templates
+from ...behavior import compose, templates
 from ...model import Ruleset
 from ...model.behavior_spec import BehaviorSpec
+from ...model.schema import AbilityDef, is_composed
 from ...report import ApplyReport, ReportEntry
 from .resolution import ResolutionMap, build_resolution_map
 
@@ -73,20 +76,13 @@ def install_behaviors(
     def names() -> ResolutionMap:
         return resmap if resmap is not None else build_resolution_map(target, ruleset)
 
-    for chrooked_id in sorted(ruleset.behaviors):
-        try:
-            contents = _port_text(ruleset.behaviors[chrooked_id], source_dir, names)
-        except _Blocked as exc:
-            report.add(ReportEntry(
-                status="blocked", category="behavior", chrooked_id=chrooked_id, reason=str(exc),
-            ))
-            continue
+    def install(chrooked_id: str, contents: Optional[str]) -> None:
         if contents is None:
-            continue  # not ported - the ability-create path keeps its honest DATA ONLY line
+            return  # not ported - the ability-create path keeps its honest DATA ONLY line
         dest = mods_dir / f"chrooked_{chrooked_id}.rb"
         wanted.add(dest.name)
         if _already_installed(dest, contents):
-            continue  # no churn, no report line
+            return  # no churn, no report line
         try:
             mods_dir.mkdir(parents=True, exist_ok=True)
             dest.write_text(contents, encoding="utf-8")
@@ -96,12 +92,40 @@ def install_behaviors(
                 status="blocked", category="behavior", chrooked_id=chrooked_id,
                 reason=f"port copy failed: {dest}: {exc}",
             ))
-            continue
+            return
         changed.add(dest)
         report.add(ReportEntry(
             status="applied", category="behavior", chrooked_id=chrooked_id,
             reason=f"mechanic installed ({MODS_DIR.as_posix()}/{dest.name})",
         ))
+
+    for chrooked_id in sorted(ruleset.behaviors):
+        try:
+            install(chrooked_id, _port_text(ruleset.behaviors[chrooked_id], source_dir, names))
+        except _Blocked as exc:
+            report.add(ReportEntry(
+                status="blocked", category="behavior", chrooked_id=chrooked_id, reason=str(exc),
+            ))
+
+    # A composed ability (NV-15) gets its own file, which wires its parts' handlers.
+    abilities = getattr(ruleset, "abilities", {})
+    for chrooked_id in sorted(abilities):
+        ability = abilities[chrooked_id]
+        if not is_composed(ability):
+            continue
+        if f"chrooked_{chrooked_id}.rb" in wanted:
+            report.add(ReportEntry(
+                status="blocked", category="behavior", chrooked_id=chrooked_id,
+                reason=f"composition not installed: a behavior port already uses chrooked_{chrooked_id}.rb",
+            ))
+            continue
+        try:
+            install(chrooked_id, compose.render_essentials21(ability, ruleset, names()))
+        except compose.CompositionError as exc:
+            report.add(ReportEntry(
+                status="blocked", category="behavior", chrooked_id=chrooked_id,
+                reason=f"composition not generated: {exc}",
+            ))
 
     changed |= _remove_stale(mods_dir, wanted, report)
     return changed
@@ -175,6 +199,20 @@ def has_port(spec: BehaviorSpec, resmap: ResolutionMap, source_dir: Path | None 
     try:
         return _port_text(spec, source_dir or _DEFAULT_SOURCE_DIR, lambda: resmap) is not None
     except _Blocked:
+        return False
+
+
+def has_composition(ability: AbilityDef, ruleset: Ruleset, resmap: ResolutionMap) -> bool:
+    """True if `install_behaviors` would install this composed ability's file on the
+    target `resmap` describes (NV-15): every part can be composed and proven there."""
+    if not is_composed(ability):
+        return False
+    own = ruleset.behaviors.get(ability.chrooked_id)
+    if own is not None and has_port(own, resmap):
+        return False  # its own port holds chrooked_<id>.rb, as the installer finds
+    try:
+        return compose.render_essentials21(ability, ruleset, resmap) is not None
+    except compose.CompositionError:
         return False
 
 

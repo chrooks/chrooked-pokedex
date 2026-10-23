@@ -88,6 +88,11 @@ module ChrookedSelfTest
   #   priority - [move, hp_fraction] entries: the move's priority as
   #              pbCalculatePriority asks it of the user's ability (NV-14);
   #              PRIORITY line; the port logs its own OBS line
+  #   compare  - [move, part] entries for a composed ability (NV-15): one hit's
+  #              damage with the composed ability, with that vanilla part alone,
+  #              and with none, on the same battlers and seed; the composition
+  #              carries the part when the first two match. Logged as the
+  #              mechanic's OBS line, tagged source=selftest
   #   status   - for a status mechanic (frostbite, NV-12), the status the next
   #              three phases set on the user; ability is then nil:
   #   turn     - [move, n]: the user tries its move n times while in that status
@@ -555,6 +560,14 @@ module ChrookedSelfTest
         hp_fraction ||= 1.0
         base, with = priority(spec, move_id, hp_fraction)
         log("PRIORITY #{mechanic} move=#{move_id} hp_fraction=#{hp_fraction} base=#{base} with=#{with}")
+      end
+    end
+    guard("compare") do
+      (spec[:compare] || []).each do |move_id, part|
+        (with, _, _), (alone, _, _), (none, _, _) =
+          damage(spec[:user], [spec[:ability], part, nil], spec[:foe], move_id, neutral: !!spec[:neutral])
+        obs(mechanic, "move=#{move_id} ability=true source=selftest part=#{part} with=#{with} alone=#{alone} " \
+                      "none=#{none} boosted=#{with > none} result=#{with == alone ? 'MATCHES' : 'DIFFERS'}")
       end
     end
     guard("turn") do

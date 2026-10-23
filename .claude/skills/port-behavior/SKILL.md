@@ -162,6 +162,12 @@ stored patch is stale.
    hand-written `references/essentials21-harness/chrooked_<id>.rb`. That port must register its own
    case (`($chrooked_selftest_cases ||= {})["<id>"] = {…}`) and have a `harness_scenarios.py`
    entry, and its spec must not also carry a template (apply blocks that as ambiguous).
+   A COMPOSED ability (`behaviors: [carnivore, strongjaw]`) needs no port of its own (NV-15):
+   once each Ruleset part is templated, apply generates `chrooked_<ability>.rb`, which gives it
+   its parts' registry handlers before the first battle (`behavior/compose.py`). A vanilla part
+   needs a proof move in `compose.VANILLA_PARTS` (the self-test compares the composed ability's
+   damage with the part's alone); a part the battle code checks by name (`hasActiveAbility?`)
+   cannot be composed yet.
    Apply installs ports into `Data/Scripts/998_ChrookedMods/` (Essentials loads `Data/Scripts/` in
    name order, so that runs after the battle code and before `999_Main`). Logging is marker-gated
    (`chrooked-oracle.on`); real hits log `OBS`, AI estimates `EST`. Verify in the debug-mode lab copy

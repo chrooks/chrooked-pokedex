@@ -40,6 +40,8 @@ from pathlib import Path
 from ..appliers.essentials.dialect import detect_dialect
 from ..appliers.essentials.resolution import build_resolution_map
 from ..model import Ruleset
+from ..model.schema import is_composed
+from . import compose
 from .harness_scenarios import SCENARIOS, SCENARIOS_ESSENTIALS21
 from .templates import TemplateError, harness_checks
 
@@ -141,6 +143,7 @@ def _load_checks(mechanic_id: str, ruleset_dir: Path, target: Path) -> tuple[lis
     On an Essentials 21 target a templated spec's checks are generated from its
     probes, resolved against the target's PBS, and a hand port's come from
     SCENARIOS_ESSENTIALS21 when it has an entry there; everything else uses SCENARIOS.
+    A composed ability (NV-15) is checked part by part (behavior.compose).
     """
     ruleset = Ruleset.load(ruleset_dir)
     spec = ruleset.behaviors.get(mechanic_id)
@@ -149,6 +152,12 @@ def _load_checks(mechanic_id: str, ruleset_dir: Path, target: Path) -> tuple[lis
         try:
             return harness_checks(spec, build_resolution_map(target, ruleset)), spec.test_cases
         except TemplateError as error:
+            raise SystemExit(f"cannot generate checks for '{mechanic_id}': {error}") from error
+    ability = ruleset.abilities.get(mechanic_id)
+    if spec is None and ability is not None and is_composed(ability) and v21:
+        try:
+            return compose.harness_checks(ability, ruleset, build_resolution_map(target, ruleset))
+        except (compose.CompositionError, TemplateError) as error:
             raise SystemExit(f"cannot generate checks for '{mechanic_id}': {error}") from error
     table = SCENARIOS_ESSENTIALS21 if v21 and mechanic_id in SCENARIOS_ESSENTIALS21 else SCENARIOS
     if mechanic_id not in table:
