@@ -365,4 +365,32 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'While frostbitten, use Swift.', "select": {'case': 'status_hit', 'label': 'frostbitten_special', 'source': 'selftest'}, "expect": {'vs_healthy': 'SAME'}},
         {"stage": 'While paralyzed, outspeed the foe.', "select": {'case': 'speed', 'label': 'paralyzed', 'source': 'selftest'}, "expect": {'result': 'RAISED'}},
     ],
+    # NV-25 hand ports, each measured by its own check procs (case=check).
+    "illusion": [
+        {"stage": 'Lead with it, a Pikachu last in the party.', "select": {'case': 'check', 'label': 'entry', 'source': 'selftest'}, "expect": {'disguised': 'true', 'shown': 'PIKACHU'}},
+        {"stage": 'Attack while disguised.', "select": {'case': 'check', 'label': 'disguised_hit', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
+        {"stage": 'Take a hit, then attack.', "select": {'case': 'check', 'label': 'broken', 'source': 'selftest'}, "expect": {'disguised': 'false', 'boosted': 'false'}},
+    ],
+    "nightstalker": [
+        {"stage": 'At night, with Attack higher, use Cross Poison.', "select": {'case': 'check', 'label': 'night_physical', 'source': 'selftest'}, "expect": {'boosted': 'true', 'crit_stage': '1'}},
+        {"stage": 'At night, with Attack higher, use Air Cutter.', "select": {'case': 'check', 'label': 'night_special', 'source': 'selftest'}, "expect": {'boosted': 'false', 'crit_stage': '1'}},
+        {"stage": 'By day, with Sp. Atk higher, use Air Slash.', "select": {'case': 'check', 'label': 'day', 'source': 'selftest'}, "expect": {'boosted': 'false', 'crit_stage': '0'}},
+        {"stage": 'At night, use Cross Poison on a Shell Armor foe.', "select": {'case': 'check', 'label': 'shell_armor', 'source': 'selftest'}, "expect": {'boosted': 'true', 'crits': '0'}},
+    ],
+    "sandguard": [
+        {"stage": 'In a sandstorm, take a Surf.', "select": {'case': 'check', 'label': 'special_sand', 'source': 'selftest'}, "expect": {'halved': 'true'}},
+        {"stage": 'In a sandstorm, take an Earthquake.', "select": {'case': 'check', 'label': 'physical_sand', 'source': 'selftest'}, "expect": {'halved': 'false'}},
+        {"stage": 'In clear weather, take a Thunderbolt.', "select": {'case': 'check', 'label': 'special_clear', 'source': 'selftest'}, "expect": {'halved': 'false'}},
+    ],
+    "fixation": [
+        {"stage": 'Use Flamethrower.', "select": {'case': 'check', 'label': 'boost', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
+        {"stage": 'Use Tackle.', "select": {'case': 'check', 'label': 'physical', 'source': 'selftest'}, "expect": {'boosted': 'false'}},
+        {"stage": 'Use Flamethrower, then try to pick Psychic.', "select": {'case': 'check', 'label': 'locked', 'source': 'selftest'}, "expect": {'locked_to': 'FLAMETHROWER', 'flamethrower': 'true', 'psychic': 'false'}},
+    ],
+    "blitz": [
+        {"stage": 'Send it out and act that turn.', "select": {'case': 'check', 'label': 'first_speed', 'source': 'selftest'}, "expect": {'faster': 'true'}},
+        {"stage": 'On its first turn, use Tackle.', "select": {'case': 'check', 'label': 'first_physical', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
+        {"stage": 'On its second turn, use Tackle.', "select": {'case': 'check', 'label': 'second_turn', 'source': 'selftest'}, "expect": {'faster': 'false', 'boosted': 'false'}},
+        {"stage": 'On its first turn, use Swift.', "select": {'case': 'check', 'label': 'first_special', 'source': 'selftest'}, "expect": {'boosted': 'false'}},
+    ],
 }

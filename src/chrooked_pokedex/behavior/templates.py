@@ -131,7 +131,9 @@ from ..model.schema import MOVE_FLAGS
 SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
           "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
           "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb", "stat_swap",
-          "crit_condition")
+          "crit_condition", "absent", "drops")
+# The shapes that only stand in a block beside one that generates an effect.
+_BLOCK_ONLY = ("keeps", "absent")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -155,6 +157,8 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "priority_boost": (frozenset({"type"}), {"full_hp": False}),
     "type_resist": (frozenset({"type", "multiplier"}), {}),
     "keeps": (frozenset(), {}),
+    "absent": (frozenset({"reason"}), {}),
+    "drops": (frozenset({"registry"}), {}),
 }
 # The probe field that states the expected outcome, per shape.
 _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost": "result",
@@ -162,7 +166,8 @@ _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost"
             "hit_status": "inflicts", "type_immunity": "immune", "hit_drain": "drain",
             "ko_effect": "effect", "priority_boost": "result", "type_resist": "applies",
             "keeps": "measure", "struck_status": "inflicts", "damage_taken": "factor",
-            "type_absorb": "absorbed", "stat_swap": "uses", "crit_condition": "crit"}
+            "type_absorb": "absorbed", "stat_swap": "uses", "crit_condition": "crit",
+            "absent": "absent", "drops": "measure"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -176,10 +181,13 @@ _CONVERT_FROM = ("normal", "any")
 # The shapes that never scale damage: no calc entry.
 _NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
                       "type_resist", "keeps", "struck_status", "damage_taken", "type_absorb", "stat_swap",
-                      "crit_condition")
-# What a keeps probe measures, the ability against none (the self-test's keeps phase):
-# whether a foe can give the holder `status`, or the HP its status changes at end of round.
-_KEEP_MEASURES = ("status", "eor_status")
+                      "crit_condition", "absent", "drops")
+# What a keeps (or drops) probe measures, the ability against none (the self-test's keeps
+# phase): whether a foe can give the holder `status`, the HP its status changes at end of
+# round, or the HP the end of a round in `weather` changes (NV-25).
+_KEEP_MEASURES = ("status", "eor_status", "eor_weather")
+# The registries a drops block may remove the game's own handler from (NV-25).
+_DROPPABLE = ("EndOfRoundWeather",)
 # The registries each shape's port adds to: two blocks of one spec may not share one.
 _REGISTRIES = {
     "type_boost": ("DamageCalcFromUser",), "flag_boost": ("DamageCalcFromUser",),
@@ -192,6 +200,7 @@ _REGISTRIES = {
     # Method wrappers, not registries: one per spec, each its own alias names.
     "stat_swap": ("pbGetAttackStats",),
     "crit_condition": ("CriticalCalcFromUser",),
+    "absent": (), "drops": ("EndOfRoundWeather",),
 }
 # What a crit_condition's `when` forces a critical hit on (Ruby on `target`).
 _CRIT_WHEN = {
@@ -258,8 +267,8 @@ def validate_spec(spec: BehaviorSpec) -> None:
     if spec.template.shape == "blocks":
         _validate_blocks(spec, where)
         return
-    if spec.template.shape == "keeps":
-        raise TemplateError(f"{where}: keeps generates nothing; it belongs in a block beside one that does")
+    if spec.template.shape in (*_BLOCK_ONLY, "drops"):
+        raise TemplateError(f"{where}: {spec.template.shape} belongs in a block beside one that generates an effect")
     if len(spec.effects) != 1:
         summaries = "; ".join(e.summary for e in spec.effects) or "none"
         raise TemplateError(
@@ -279,7 +288,11 @@ def _validate_blocks(spec: BehaviorSpec, where: str) -> None:
         if block.shape == "blocks":
             raise TemplateError(f"{at}: blocks do not nest")
         validate(block, len(block.cases), at)
-        if any(not 1 <= e <= len(spec.effects) for e in block.effects) or not block.effects:
+        if block.shape == "absent":
+            # A case this game cannot have (a field Nova lacks): no effect of its own.
+            if block.effects:
+                raise TemplateError(f"{at}: an absent block generates nothing; give it effects: []")
+        elif any(not 1 <= e <= len(spec.effects) for e in block.effects) or not block.effects:
             raise TemplateError(f"{at}: effects must number the spec's effects, 1 to {len(spec.effects)}")
         effects += block.effects
         cases += block.cases
@@ -294,7 +307,7 @@ def _validate_blocks(spec: BehaviorSpec, where: str) -> None:
     if sorted(cases) != list(range(1, len(spec.test_cases) + 1)):
         raise TemplateError(f"{where}: the blocks' cases must cover each of the {len(spec.test_cases)} test "
                             f"cases exactly once (got {sorted(cases)})")
-    if all(block.shape == "keeps" for block in template.blocks):
+    if all(block.shape in _BLOCK_ONLY for block in template.blocks):
         raise TemplateError(f"{where}: every block keeps the game's own ability; there is nothing to port")
 
 
@@ -340,6 +353,10 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
         _validate_condition(params, where)
     if template.shape == "damage_taken":
         _validate_rules(params, where)
+    if template.shape == "absent" and not _is_text(params["reason"]):
+        raise TemplateError(f"{where}: params.reason says why this game cannot have the case")
+    if template.shape == "drops" and params["registry"] not in _DROPPABLE:
+        raise TemplateError(f"{where}: params.registry must be one of {', '.join(_DROPPABLE)}")
     if template.shape == "crit_condition" and params["when"] not in _CRIT_WHEN:
         raise TemplateError(f"{where}: params.when must be one of {', '.join(_CRIT_WHEN)}")
     if template.shape == "crit_condition":
@@ -449,15 +466,15 @@ def _validate_hit_status(params: Mapping[str, object], where: str, gated: bool =
 def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at: str) -> None:
     shape, params = template.shape, template.params
     outcome = _OUTCOME[shape]
-    allowed = {outcome} if shape in ("ko_effect", "keeps") else {"move", outcome}
+    allowed = {outcome} if shape in ("ko_effect", "keeps", "absent", "drops") else {"move", outcome}
     if shape not in _NON_DAMAGE_SHAPES or shape == "priority_boost":
         allowed.add("hp")
     if shape == "hit_drain":
         allowed.add("ooze")
     if shape == "type_immunity":
         allowed.add("mold_breaker")
-    if shape == "keeps":
-        allowed.add("status")
+    if shape in ("keeps", "drops"):
+        allowed |= {"status", "weather"}
     if shape == "ko_effect":
         allowed |= {"kos", "hp"} if params.get("heal") is not None else {"kos", "stage"}
     # A Pokemon without the ability is only measurable as "boosted or not", and the
@@ -488,7 +505,7 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
-    if shape not in ("ko_effect", "keeps") and not _is_text(probe.get("move")):
+    if shape not in ("ko_effect", "keeps", "absent", "drops") and not _is_text(probe.get("move")):
         raise TemplateError(f"{at}: needs a move name, e.g. {{move: Tackle, ...}}")
     value = probe.get(outcome)
     if outcome == "result" and value not in _RESULTS:
@@ -504,8 +521,13 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
     if outcome == "measure":
         if value not in _KEEP_MEASURES:
             raise TemplateError(f"{at}: measure must be one of {', '.join(_KEEP_MEASURES)}, not {value!r}")
-        if probe.get("status") not in _STATUSES:
+        if value == "eor_weather":
+            if probe.get("weather") not in _WEATHERS or "status" in probe:
+                raise TemplateError(f"{at}: eor_weather takes weather: one of {', '.join(_WEATHERS)}")
+        elif probe.get("status") not in _STATUSES or "weather" in probe:
             raise TemplateError(f"{at}: status must be one of {', '.join(_STATUSES)}")
+    if outcome == "absent" and value is not True:
+        raise TemplateError(f"{at}: an absent probe is {{absent: true}}")
     if outcome not in ("result", "drain", "measure", "factor", "uses") and not isinstance(value, bool):
         raise TemplateError(f"{at}: {outcome} must be true or false, not {value!r}")
     hp = probe.get("hp", 1.0)
@@ -748,7 +770,14 @@ def _render_blocks(spec: BehaviorSpec, names: Names) -> str:
     bodies: list[str] = []
     ability = ""
     for n, block in enumerate(spec.template.blocks, start=1):
-        if block.shape == "keeps":
+        if block.shape in _BLOCK_ONLY:
+            continue
+        if block.shape == "drops":
+            ability = names.ability(spec.name) or ""
+            if not ability:
+                raise TemplateError(f"{spec.chrooked_id}.yaml:template: ability {spec.name!r} does not resolve")
+            bodies.append(_fill(_DROPS, {"ID": spec.chrooked_id, "ABILITY": ability, "N": str(n),
+                                         "REGISTRY": str(block.params["registry"])}))
             continue
         part = _block_spec(spec, block)
         port = _resolve(part, names)
@@ -767,12 +796,22 @@ def _render_blocks(spec: BehaviorSpec, names: Names) -> str:
     return _fill(_PORT, {"HEADER": _blocks_header(spec), "LOG": _CHROOKED_LOG, "BODY": "".join(bodies) + tail})
 
 
+def _weather_symbol(neutral: str) -> str:
+    """The Essentials weather a neutral name sets (sand -> Sandstorm)."""
+    weathers = vocab.weathers(neutral)
+    if not weathers:
+        raise TemplateError(f"no Essentials weather for {neutral!r}")
+    return weathers[0]
+
+
 def _blocks_header(spec: BehaviorSpec) -> str:
     assert spec.template is not None
     summary = " ".join(" ".join(e.summary.split()) for e in spec.effects)
     listed = "; ".join(
         f"block {n}, effects {', '.join(map(str, b.effects))}: "
         + (f"kept by the game's own {spec.name}" if b.shape == "keeps"
+           else f"not in this game ({b.params['reason']})" if b.shape == "absent"
+           else f"drops the game's own {spec.name} handler from {b.params['registry']}" if b.shape == "drops"
            else f"{b.shape} on {' and '.join(_REGISTRIES[b.shape])}")
         for n, b in enumerate(spec.template.blocks, start=1))
     return "\n".join([
@@ -905,13 +944,26 @@ def _blocks_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
     assert spec.template is not None
     by_case: dict[int, dict[str, object]] = {}
     for n, block in enumerate(spec.template.blocks, start=1):
-        if block.shape == "keeps":
+        if block.shape == "absent":
+            for case in block.cases:
+                reason = str(block.params["reason"])
+                by_case[case] = {"stage": f"Not in this game: {reason}", "absent": reason,
+                                 "select": {}, "expect": {}}
+            continue
+        if block.shape in ("keeps", "drops"):
             for case, probe in zip(block.cases, block.probes):
-                select = {"case": "keeps", "kind": str(probe["measure"]), "source": "selftest",
-                          "status": _STATUSES[str(probe["status"])][0]}
+                select = {"case": "keeps", "kind": str(probe["measure"]), "source": "selftest"}
+                if "weather" in probe:
+                    select["weather"] = _weather_symbol(str(probe["weather"]))
+                    scene = f"in {probe['weather']}"
+                else:
+                    select["status"] = _STATUSES[str(probe["status"])][0]
+                    scene = f"with {probe['status']}"
+                # keeps: the game's own ability still differs from none; drops: it no longer does.
+                kept = block.shape == "keeps"
                 by_case[case] = {"stage": f"Measured by the self-test: {spec.name}'s own {probe['measure']} "
-                                          f"with {probe['status']}.",
-                                 "select": select, "expect": {"changed": "true"}}
+                                          f"{scene}{'' if kept else ', dropped'}.",
+                                 "select": select, "expect": {"changed": _flag(kept)}}
             continue
         for case, check in zip(block.cases, harness_checks(_block_spec(spec, block), names)):
             select = dict(check["select"])  # type: ignore[call-overload]
@@ -1361,8 +1413,11 @@ def selftest_case(spec: BehaviorSpec, names: Names) -> SelftestCase:
     cases = []
     keeps: list[str] = []
     for block in spec.template.blocks:
-        if block.shape == "keeps":
-            keeps += [f"[:{p['measure']}, {{status: :{_STATUSES[str(p['status'])][0]}}}]" for p in block.probes]
+        if block.shape == "absent":
+            continue
+        if block.shape in ("keeps", "drops"):
+            keeps += [f"[:{p['measure']}, {{weather: :{_weather_symbol(str(p['weather']))}}}]" if "weather" in p
+                      else f"[:{p['measure']}, {{status: :{_STATUSES[str(p['status'])][0]}}}]" for p in block.probes]
         else:
             cases.append(_case(_resolve(_block_spec(spec, block), names)))
     return merge_cases(cases, extra=(("keeps", tuple(keeps)),) if keeps else ())
@@ -1987,6 +2042,17 @@ begin
   )
 {{SELFTEST}}
   ChrookedLog.line("[chrooked:{{ID}}] installed on PriorityChange")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_DROPS = """\
+begin
+  chrooked_table = Battle::AbilityEffects::{{REGISTRY}}
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!chrooked_table[:{{ABILITY}}].nil?}")
+  chrooked_table.remove(:{{ABILITY}})   # the spec removes this effect of the game's own ability
+  ChrookedLog.line("[chrooked:{{ID}}] dropped from {{REGISTRY}} block={{N}}")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
 end

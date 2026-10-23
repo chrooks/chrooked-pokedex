@@ -27,8 +27,10 @@ _CATEGORY = {"physical": "Physical", "special": "Special", "status": "Status"}
 # ported mechanics read them (striker, martialartist, sledgehammer, hammerfist,
 # impale; mjolnir NV-7; updraft, NV-9). Essentials keeps a move's Flags as free
 # strings ("*s" in the PBS schema) and only tests the ones it knows, so a game
-# without those ports simply ignores them. The rest (bone, ballistic) stay
-# unwritten and resolve to None until a port needs them.
+# without those ports simply ignores them. Ballistic is Essentials' own Bomb (True
+# Shot, NV-25; every Ruleset move Nova marks Bomb is ballistic in the Ruleset, so
+# reconciling it only adds the flag). Bone stays unwritten and resolves to None until
+# a port needs it.
 _FLAG = {
     "contact": "Contact",
     "punching": "Punching",
@@ -42,6 +44,7 @@ _FLAG = {
     "hammer": "Hammer",
     "piercing": "Piercing",
     "wing": "Wing",
+    "ballistic": "Bomb",
 }
 
 # The Essentials flag names the Ruleset models. When move_apply reconciles an

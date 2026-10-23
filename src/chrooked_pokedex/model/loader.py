@@ -313,7 +313,8 @@ def _load_template_blocks(entries: list[Any], n_test_cases: int, where: str) -> 
             if not isinstance(value, list) or not all(isinstance(n, int) and not isinstance(n, bool) for n in value):
                 raise ValueError(f"{at}: '{key}' must be a list of numbers (1-based)")
             numbers[key] = tuple(value)
-        if not numbers["effects"]:
+        # An absent block (NV-25) stands for cases the game cannot have, and generates nothing.
+        if not numbers["effects"] and entry.get("shape") != "absent":
             raise ValueError(f"{at}: name the effects this block generates ('effects: [1]')")
         cases = numbers["cases"]
         if any(not 1 <= n <= n_test_cases for n in cases):

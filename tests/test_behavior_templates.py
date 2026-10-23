@@ -890,8 +890,52 @@ def test_blocks_are_refused_when_they_cannot_be_generated(spec, message):
 
 def test_a_lone_keeps_template_is_refused():
     lone = replace(KINDLE, template=BehaviorTemplate(shape="keeps", probes=KINDLE.template.probes))
-    with pytest.raises(TemplateError, match="keeps generates nothing"):
+    with pytest.raises(TemplateError, match="keeps belongs in a block beside one that generates an effect"):
         validate_spec(lone)
+
+
+# --- NV-25: a case the game cannot have, a dropped effect, a weather measure -------
+
+SOLARISH = _blocks_spec(
+    _block("conditional_boost", {"weather": "sun", "moves": "higher_stat", "multiplier": 1.5}, [1], [1],
+           [{"move": "Body Slam", "result": "boosted", "stats": "physical"}]),
+    _block("drops", {"registry": "EndOfRoundWeather"}, [2], [2], [{"measure": "eor_weather", "weather": "sun"}]),
+    _block("absent", {"reason": "no fields"}, [], [3], [{"absent": True}]),
+    cid="solarish",
+)
+
+
+def test_drops_removes_the_games_own_handler_and_absent_generates_nothing():
+    text = _render(SOLARISH)
+    assert "chrooked_table = Battle::AbilityEffects::EndOfRoundWeather" in text
+    assert "chrooked_table.remove(:SOLARISH)" in text
+    assert "not in this game (no fields)" in " ".join(text.replace("#", " ").split())  # the header wraps
+    assert "keeps: [[:eor_weather, {weather: :Sun}]],\n" in text
+
+
+def test_drops_reads_unchanged_and_absent_carries_its_reason():
+    checks = harness_checks(SOLARISH, _Names())
+    assert checks[1]["select"] == {"case": "keeps", "kind": "eor_weather", "source": "selftest", "weather": "Sun"}
+    assert checks[1]["expect"] == {"changed": "false"}
+    assert checks[2]["absent"] == "no fields" and checks[2]["select"] == {}
+
+
+@pytest.mark.parametrize(("blocks", "message"), [
+    ((_block("absent", {"reason": "no fields"}, [1], [1], [{"absent": True}]),), "give it effects: \\[\\]"),
+    ((_block("drops", {"registry": "OnSwitchIn"}, [1], [1], [{"measure": "eor_weather", "weather": "sun"}]),),
+     "params.registry must be one of EndOfRoundWeather"),
+    ((_block("keeps", {}, [1], [1], [{"measure": "eor_weather", "status": "burn"}]),), "eor_weather takes weather"),
+])
+def test_the_nv25_blocks_are_refused_when_malformed(blocks, message):
+    spec = _blocks_spec(*blocks, HYDROPHYTE.template.blocks[1], n_cases=3)
+    with pytest.raises(TemplateError, match=message):
+        validate_spec(spec)
+
+
+def test_the_harness_scores_an_absent_case_as_not_in_this_game():
+    from chrooked_pokedex.behavior.harness import score
+    results = score([], [{"absent": "no fields", "select": {}, "expect": {}}], SOLARISH.test_cases)
+    assert results == [{"passed": None, "given": "case 1", "reason": "not in this game: no fields"}]
 
 
 # --- NV-19, NV-20 shapes ---------------------------------------------------------

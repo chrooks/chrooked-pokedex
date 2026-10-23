@@ -1,0 +1,35 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+# This describes HOW the mechanic works, engine-neutrally, so an implementer (Claude)
+# can compile it into any target engine. The data layer carries the ability itself.
+name: True Shot
+chrooked_id: trueshot
+applies_to: ability
+aka: { pokeemerald: ABILITY_TRUE_SHOT }
+effects:
+  - summary: "Ball and bomb moves deal 30% more damage."
+    trigger: damage-calc
+    when: "this Pokemon uses a move flagged as ballistic (a ball or bomb move)"
+    effect: "multiply the move's damage by 1.3"
+test_cases:
+  - given: "a True Shot user uses Seed Bomb (ballistic)"
+    expect: "damage is 1.3x what the same Pokemon would deal without True Shot"
+  - given: "a True Shot user uses Tackle (not ballistic)"
+    expect: "no boost; damage is unmodified"
+  - given: "a Pokemon without True Shot uses Seed Bomb"
+    expect: "no boost; the bonus belongs to the ability, not the move"
+notes:
+  - >-
+    Harvested from Rejuvenation (ability 302, 1.3x ball and bomb moves) as the
+    physical-artillery answer; Mega Launcher stays pulse-only (DESIGN-LOG). Written
+    2026-10-23 (mjolnir NV-25) from the ability's own description, the only statement
+    of it in the Ruleset; Nova lists True Shot but gives it no battle effect.
+  - "Iron Fist's shape on Bulletproof's flag: ballistic is Essentials' Bomb."
+engine_hints:
+  essentials: "DamageCalcFromUser: a 1.3x power multiplier when the move carries the Bomb flag, as Iron Fist does for Punching."
+template:
+  shape: flag_boost
+  params: {flags: [ballistic], multiplier: 1.3}
+  probes:
+    - {move: Seed Bomb, result: boosted}
+    - {move: Tackle, result: normal}
+    - {move: Seed Bomb, result: normal, holder: false}

@@ -150,7 +150,8 @@ def test_every_hand_written_port_is_wired():
         logged = set(re.findall(r"\b([a-z_]+)=", text))
         for check in checks:
             # A case the self-test measures on the mechanic's behalf (source=selftest:
-            # a Pokemon without the ability, an on-hit chance) is logged by the self-test.
-            pool = _SELFTEST_KEYS if check.get("select", {}).get("source") == "selftest" else logged
+            # a Pokemon without the ability, an on-hit chance) is logged by the self-test,
+            # or (NV-25, case=check) by the port's own check proc, which the self-test runs.
+            pool = _SELFTEST_KEYS | logged if check.get("select", {}).get("source") == "selftest" else logged
             for key in {**check.get("select", {}), **check.get("expect", {})}:
                 assert key in pool, f"{cid} never logs '{key}=' but its scenario reads it"

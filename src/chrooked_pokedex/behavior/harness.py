@@ -105,11 +105,16 @@ def score(observations: list[dict[str, str]], checks: list[dict[str, object]],
     """Score each check against the observations; return per-case results.
 
     A case fails if no observation matches its ``select`` (the staged action was
-    not seen) or if the matching observation violates ``expect``.
+    not seen) or if the matching observation violates ``expect``. A check marked
+    ``absent`` (NV-25: a case the target game cannot have, such as a field effect in
+    a game without fields) is neither: ``passed`` is None and ``reason`` says why.
     """
     results: list[dict[str, object]] = []
     for index, check in enumerate(checks):
         given = test_cases[index].given if index < len(test_cases) else f"case {index + 1}"
+        if check.get("absent"):
+            results.append({"passed": None, "given": given, "reason": f"not in this game: {check['absent']}"})
+            continue
         select = check.get("select", {})  # type: ignore[assignment]
         expect = check.get("expect", {})  # type: ignore[assignment]
         hit = next((o for o in observations if _match(o, select)), None)  # type: ignore[arg-type]
@@ -199,18 +204,19 @@ def cmd_verify(mechanic_id: str, ruleset_dir: Path, target: Path) -> int:
     if not path.exists():
         raise SystemExit(f"no log at {path} — run `stage` and play the battle first")
     results = score(parse_observations(path.read_text(), mechanic_id), checks, test_cases)
-    passed = 0
+    passed = absent = 0
     for result in results:
-        tag = "PASS" if result["passed"] else "FAIL"
+        tag = {True: "PASS", False: "FAIL", None: "N/A "}[result["passed"]]  # type: ignore[index]
         line = f"{tag} {mechanic_id} :: {result['given']}"
         if not result["passed"]:
             line += f"  ({result['reason']})"
         print(line)
         passed += 1 if result["passed"] else 0
-    print(f"\n{passed}/{len(results)} passed")
+        absent += 1 if result["passed"] is None else 0
+    print(f"\n{passed}/{len(results) - absent} passed" + (f", {absent} not in this game" if absent else ""))
     if _is_v21(target) and (target / ORACLE_MARKER).exists():
         print(f"Note: {target / ORACLE_MARKER} is still set; delete it so a played copy stops logging.")
-    return 0 if passed == len(results) else 1
+    return 0 if passed + absent == len(results) else 1
 
 
 def main(argv: list[str] | None = None) -> int:

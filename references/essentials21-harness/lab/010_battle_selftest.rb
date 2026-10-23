@@ -94,7 +94,12 @@ module ChrookedSelfTest
   #   keeps    - [kind, {status:}] entries for an effect the game's own ability
   #              keeps beside a port (NV-18): measured with the ability and with
   #              none (keep_measure), logged as the mechanic's OBS line with
-  #              case=keeps, tagged source=selftest
+  #              case=keeps, tagged source=selftest; [:eor_weather, {weather:}]
+  #              measures a round's end in the weather (NV-25), and a dropped
+  #              effect is measured the same way (it no longer changes anything)
+  #   checks   - [label, proc] entries, a hand port's own measurement (NV-25): the
+  #              proc gets this module (pair, scene, damage, measure ...) and the
+  #              case and returns "key=value ..." fields, logged as case=check
   #   drain    - [move, {hp_lost:, target_ability:}] entries for a heal-on-hit
   #              (NV-14): a hit that took hp_lost HP (default 100) is handed to the
   #              user's OnDealingHit handler, the user at half HP so a heal shows,
@@ -422,6 +427,26 @@ module ChrookedSelfTest
     [b, user, target]
   end
 
+  # One hit's damage from user to target, the move typed as used, fixed seed: for a
+  # hand port's own checks (NV-25), on battlers it has arranged. Never a critical hit:
+  # Nova rolls the crit inside pbCalcDamage, so an ability that moves the crit stage
+  # would otherwise mix a crit into a damage comparison. Lucky Chant on the target's
+  # side for the one calc stops it before any crit handler is asked.
+  def self.hit(b, user, target, move_id)
+    move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+    move.calcType = move.pbCalcType(user)
+    target.damageState.reset
+    target.damageState.typeMod = move.pbCalcTypeMod(move.calcType, user, target)
+    side = target.pbOwnSide
+    chant = side.effects[PBEffects::LuckyChant]
+    side.effects[PBEffects::LuckyChant] = 1
+    srand(SEED)
+    move.pbCalcDamage(user, target)
+    target.damageState.calcDamage
+  ensure
+    side.effects[PBEffects::LuckyChant] = chant if side
+  end
+
   # The user tries its move n times while in the status (fixed seed): how often it
   # acted, and how often the status was gone afterwards.
   def self.turns(spec, move_id, n)
@@ -460,18 +485,27 @@ module ChrookedSelfTest
   # What a kept effect of the game's own ability measures, with `ability` on the user:
   #   :status     - whether a foe can give it the status (pbCanInflictStatus?)
   #   :eor_status - the HP its status changes at end of round, from half HP
-  #   (toxic: bad poison, its count started; NV-24)
-  def self.keep_measure(spec, kind, status, ability, toxic = false)
+  #   :eor_weather - the HP the end of a round in the weather changes, from half HP
+  #                  (its weather abilities, then its damage: pbEOREndWeather; NV-25)
+  # opts: status:, toxic: (bad poison, its count started; NV-24), weather:
+  def self.keep_measure(spec, kind, opts, ability)
     b, user, target = pair(spec, :TACKLE)
     user.ability = ability
     case kind
-    when :status then user.pbCanInflictStatus?(status, target, false)
+    when :status then user.pbCanInflictStatus?(opts[:status], target, false)
     when :eor_status
       user.hp = [user.totalhp / 2, 1].max
-      user.status = status
-      user.statusCount = 1 if toxic
+      user.status = opts[:status]
+      user.statusCount = 1 if opts[:toxic]
       before = user.hp
       b.send(:pbEORStatusProblemDamage, [user])
+      user.hp - before
+    when :eor_weather
+      user.hp = [user.totalhp / 2, 1].max
+      b.field.weather = opts[:weather]
+      b.field.weatherDuration = 5
+      before = user.hp
+      b.send(:pbEOREndWeather, [user])
       user.hp - before
     else
       raise ArgumentError, "unknown keeps kind #{kind.inspect}"
@@ -809,9 +843,7 @@ module ChrookedSelfTest
       # end of a round, from half HP, against a Pokemon with no ability.
       (spec[:eor_status] || []).each do |label, opts|
         opts ||= {}
-        with, none = [spec[:ability], nil].map do |a|
-          keep_measure(spec, :eor_status, opts[:status], a, !!opts[:toxic])
-        end
+        with, none = [spec[:ability], nil].map { |a| keep_measure(spec, :eor_status, opts, a) }
         obs(mechanic, "case=eor_status label=#{label} source=selftest status=#{opts[:status]} " \
                       "toxic=#{!!opts[:toxic]} with=#{with} none=#{none}")
       end
@@ -953,10 +985,19 @@ module ChrookedSelfTest
     end
     guard("keeps") do
       (spec[:keeps] || []).each do |kind, opts|
-        status = (opts || {})[:status]
-        with, none = [spec[:ability], nil].map { |a| keep_measure(spec, kind, status, a) }
-        obs(mechanic, "case=keeps kind=#{kind} status=#{status} source=selftest with=#{with} none=#{none} " \
-                      "changed=#{with != none}")
+        opts ||= {}
+        with, none = [spec[:ability], nil].map { |a| keep_measure(spec, kind, opts, a) }
+        obs(mechanic, "case=keeps kind=#{kind} status=#{opts[:status]} weather=#{opts[:weather] || 'none'} " \
+                      "source=selftest with=#{with} none=#{none} changed=#{with != none}")
+      end
+    end
+    guard("checks") do
+      # [label, proc] (NV-25): a hand port's own measurement, each under its own guard.
+      (spec[:checks] || []).each do |label, probe|
+        guard("check #{label}") do
+          obs(mechanic, "case=check label=#{label} source=selftest #{probe.call(self, spec)}")
+        end
+        Graphics.update if defined?(Graphics)
       end
     end
     guard("drain") do

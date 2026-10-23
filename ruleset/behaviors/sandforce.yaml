@@ -35,3 +35,24 @@ notes:
 engine_hints:
   pokeemerald: "Replace the Sand Force branch in the attacker-ability damage modifier (src/battle_util.c) — when IsBattlerWeatherAffected(battlerAtk, B_WEATHER_SANDSTORM): drop the Rock/Ground/Steel type gate and the 1.3x, and instead boost x1.5 the move category matching the higher attacking stat (uq4_12_multiply_half_down), alongside the Whiteout case. Leave the sandstorm-damage immunity alone."
   essentials: "Rejuv: patch/Mods/chrooked_sandforce.rb (canonical source references/rejuv-harness/). Vanilla appends its 1.3 as a base-power rider at Battle_Move.rb:1276, so CHROOKED_DAMAGE_MODS refunds that on Rock/Ground/Steel moves and pays 1.5 on the category matching the user's higher attacking stat. The AI's mirrored rider (Battle_AI.rb:13677) is cancelled for free by the core's pbRoughDamage wrapper."
+template:
+  - shape: conditional_boost
+    params: {weather: sand, moves: higher_stat, multiplier: 1.5}
+    effects: [1]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Ice Punch, result: boosted, stats: physical}
+      - {move: Hyper Voice, result: normal, stats: physical}
+      - {move: Power Gem, result: boosted, stats: special}
+  - shape: absent
+    params: {reason: "Nova has no field effects, so no Desert field"}
+    effects: []
+    cases: [4]
+    probes:
+      - {absent: true}
+  - shape: keeps
+    params: {}
+    effects: [2]
+    cases: [5]
+    probes:
+      - {measure: eor_weather, weather: sand}

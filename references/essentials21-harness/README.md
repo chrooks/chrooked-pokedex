@@ -53,7 +53,9 @@ block, and the dex generates the rest from it (`src/chrooked_pokedex/behavior/te
 | `crit_condition` (NV-24) | `when` (`impaired`: poisoned, paralyzed or a Speed stage below 0) | `CriticalCalcFromUser`: 99 when the target is in that state, which `pbIsCritical?` takes as a certain critical hit; the target's Battle Armor or Shell Armor and Lucky Chant still deny it. Probes set the target's `target_status` (`toxic` is bad poison), `target_speed` and `target_ability`, and the self-test's `crit` phase runs Nova's own `pbIsCritical?` 30 times (forced when all 30 are critical) | Merciless |
 | `struck_status` (NV-19) | `status`, `chance` | `OnBeingHit`: after a contact move damaged the holder, a `chance`% roll to give the ATTACKER the status, unless it is spared contact effects; measured by the self-test struck phase (side=struck) | Flame Body, Poison Point, Static |
 | `type_resist` (NV-18) | `type`, `multiplier` | `DamageCalcFromTarget`: the damage the holder takes from moves of the type, times the multiplier (final damage, so a half is exact) | Thick Fat |
-| `keeps` (NV-18, blocks only) | none | generates nothing: the game's own ability of that name already does the effect. Its probes (`measure: status|eor_status`, `status`) measure the ability against none | — |
+| `keeps` (NV-18, blocks only) | none | generates nothing: the game's own ability of that name already does the effect. Its probes (`measure: status|eor_status|eor_weather`, with `status` or, for `eor_weather` (NV-25), `weather`) measure the ability against none | — |
+| `drops` (NV-25, blocks only) | `registry` (`EndOfRoundWeather`) | removes the game's own handler for the ability from that registry, an effect the spec takes away (Solar Power's sun drain). Its probes are `keeps` probes, expected to measure as no ability | — |
+| `absent` (NV-25, blocks only) | `reason` | generates nothing, for cases this game cannot have (a field effect in a game without fields); `effects: []` and one `{absent: true}` probe per case. The harness prints them `N/A` with the reason, counted apart from the passes | — |
 
 `probes` hold one checkable probe per `test_cases` entry, in the same order: the
 move (its display name), the outcome (`result: boosted|normal`, or `converted:
@@ -327,13 +329,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-79 ports and 15 compositions. 61 ports are generated from their specs' `template:` blocks: 22 since
+87 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Eighteen are hand-written here:
+quarter as `* 0.25`. Twenty-three are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -349,8 +351,20 @@ quarter as `* 0.25`. Eighteen are hand-written here:
   a status's own chip and damage penalty, wrapping `Battle#pbEORStatusProblemDamage`
   and `Battle::Move#pbCalcDamageMultipliersStatusConditions`; proven by the
   self-test's `status_hit`, `eor_status` and `speed` phases;
+- `chrooked_illusion.rb`, `chrooked_nightstalker.rb`, `chrooked_sandguard.rb`,
+  `chrooked_fixation.rb`, `chrooked_blitz.rb` (NV-25), each proven by its own check
+  procs (below);
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
+
+Since NV-25 a hand port measures itself: its case's `checks:` list holds `[label,
+proc]` pairs, and the self-test calls each proc with itself (its `pair`, `scene`,
+`damage`, `measure`, `keep_measure` and `hit` helpers) and the case, logging the
+`key=value` fields the proc returns as `case=check label=<label>` with
+`source=selftest`. The scenario selects that label. `hit` measures one hit on
+battlers the proc arranged, never a critical one: Nova rolls the crit inside
+`pbCalcDamage`, so an ability that moves the crit stage (Night Stalker) would
+otherwise mix a crit into a damage comparison.
 
 Their
 checks live in `SCENARIOS_ESSENTIALS21`, which an Essentials 21 target consults
@@ -389,6 +403,8 @@ exception, by design (below).
 | equinox, medium, percussion, mawcannon, magicalfists, mysticblades | `stat_swap` (Magical Fists and Mystic Blades in blocks beside `flag_boost` 1.3) | NV-23, lab 5/5, 3/3 each: Swift off Attack 170 (32 vs 14), +2 Attack 64, still Attack at +2 Sp. Atk; Lick off Sp. Atk; a burned contact hit not halved under Medium, a burned Hyper Voice halved under Percussion, Soundproof still blocks Boomburst; Dragon Pulse off Attack and Defense; Heal Pulse stays a status move. Heart of Rage 9/9 and Maw of Ruin 6/6 compose |
 | merciless, virulence (blocks) | `crit_condition` impaired (Virulence beside `type_boost` Poison 1.5) | NV-24, lab 5/5 each: 30 of 30 critical against bad poison, paralysis and -1 Speed; 0 of 30 against a burned target at +1 Speed and a poisoned Shell Armor one; Poison Fang 1.464x, Sludge Bomb 1.500x |
 | flareboost, toxicboost, quickfeet (hand-written) | the game's own boost kept, plus no chip from its own burn / poison (bad poison's count still climbs); Quick Feet undoes burn's halving as Guts does (frostbite's halving and `stat_swap`'s burn rule already spare it) | NV-24, lab 3/3 each: burned Swift 24 vs 17, Tackle 7 vs 7; poisoned Tackle 22 vs 14, Swift 17 vs 17; chip 0 vs -8 (burn, bad poison); burned Tackle 14 as healthy (7 with none), frostbitten Swift 17 as healthy (9 with none), paralyzed Speed 83 vs 55 healthy (28 with none) |
+| trueshot, sandforce, solarpower | `flag_boost` ballistic (Bomb) 1.3 / blocks: `conditional_boost` higher_stat in sand + `absent` (no Desert field) + `keeps` eor_weather / `conditional_boost` higher_stat in sun + `drops` EndOfRoundWeather | NV-25, lab 3/3, 4/4 with 1 N/A, 5/5: Seed Bomb 1.286x, Tackle and a non-holder unchanged; in sand Ice Punch 1.464x and Power Gem 1.500x (not vanilla's 1.3 on Rock only), Hyper Voice off the higher stat 1.000, sand chip 0 vs -8; in sun Body Slam 1.469x, Hyper Voice 1.500x, 1.000 under Utility Umbrella, and the sun drain gone (0, as with no ability) |
+| illusion, nightstalker, sandguard, fixation, blitz (hand-written) | 1.2x while disguised (Nova's own disguise and break) / at night 1.3x on the higher stat and crit stage +1 / special x0.5 taken in sand and no sand chip / special 1.5x and Gorilla Tactics' lock by name / Speed 1.5x and physical 1.3x on turn 1 | NV-25, lab 3/3, 4/4, 3/3, 3/3, 4/4: disguised as Pikachu, Tackle 17 vs 14, 14 once broken; Cross Poison 32 vs 25 at night, Air Cutter 16 vs 16, stage 1 at night and 0 by day, 0 of 30 crits into Shell Armor; Surf halved in sand, Earthquake and clear-weather Thunderbolt not, chip 0 vs -8; Flamethrower 36 vs 24, locked to it, Psychic refused; Speed 83 vs 55 and Tackle 19 vs 14 on turn 1, equal on turn 2, Swift unchanged |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |
