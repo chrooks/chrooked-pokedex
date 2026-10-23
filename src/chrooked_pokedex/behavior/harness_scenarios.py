@@ -555,7 +555,6 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
     ],
     "barrage": [
         {"stage": 'In a double battle, use Water Pulse on a foe at +6 evasion.', "select": {'case': 'check', 'label': 'water_pulse', 'source': 'selftest'}, "expect": {'target': 'AllNearFoes', 'never_misses': 'true'}},
-        # The Ruleset marks Hydro Pump a pulse move, so Fire Blast stands in for "not a pulse move".
         {"stage": 'Use Fire Blast on a foe at +6 evasion.', "select": {'case': 'check', 'label': 'not_pulse', 'source': 'selftest'}, "expect": {'target': 'NearOther', 'never_misses': 'false'}},
     ],
     # NV-30 hand ports: one-offs, and the move Gastric Snare that Corrosion's case needs.

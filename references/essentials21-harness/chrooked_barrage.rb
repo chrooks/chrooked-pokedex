@@ -72,8 +72,7 @@ begin
     calc: [],
     checks: [
       ["water_pulse", ->(t, spec) { chrooked_barrage_volley.call(t, spec, :WATERPULSE) }],
-      # The case names Hydro Pump as the move that is not a pulse move; the Ruleset marks
-      # Hydro Pump a pulse move (flags: [pulse]), so Fire Blast, 85 accuracy, stands in.
+      # Fire Blast, 85 accuracy, is not a pulse move (Hydro Pump is, in the Ruleset).
       ["not_pulse", ->(t, spec) { chrooked_barrage_volley.call(t, spec, :FIREBLAST) }]
     ],
     without: [],

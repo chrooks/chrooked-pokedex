@@ -15,7 +15,7 @@ effects:
 test_cases:
   - given: a Barrage user fires Water Pulse in a double battle
     expect: both foes are hit and neither can dodge
-  - given: the same user attacks with Hydro Pump
+  - given: the same user attacks with Fire Blast (not a pulse move)
     expect: normal accuracy, single target
 notes:
   - Built for Mega Blastoise, composed with Mega Launcher as the ability Artillery.
