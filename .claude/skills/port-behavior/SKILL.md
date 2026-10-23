@@ -165,9 +165,10 @@ stored patch is stale.
    A COMPOSED ability (`behaviors: [carnivore, strongjaw]`) needs no port of its own (NV-15):
    once each Ruleset part is templated, apply generates `chrooked_<ability>.rb`, which gives it
    its parts' registry handlers before the first battle (`behavior/compose.py`). A vanilla part
-   needs a proof move in `compose.VANILLA_PARTS` (the self-test compares the composed ability's
-   damage with the part's alone); a part the battle code checks by name (`hasActiveAbility?`)
-   cannot be composed yet.
+   needs its proofs in `compose.VANILLA_PARTS` (the self-test compares one value, damage or
+   airborne / forced-out / stat-drop / lock / knockout, with the part's alone). A part the battle
+   code checks by name (`hasActiveAbility?(:LEVITATE)`) works because the composed holder answers
+   to its parts' names (NV-16); it also gets an `identity` check.
    Apply installs ports into `Data/Scripts/998_ChrookedMods/` (Essentials loads `Data/Scripts/` in
    name order, so that runs after the battle code and before `999_Main`). Logging is marker-gated
    (`chrooked-oracle.on`); real hits log `OBS`, AI estimates `EST`. Verify in the debug-mode lab copy
