@@ -329,13 +329,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-123 ports and 16 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
+128 ports and 19 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Fifty-nine are hand-written here:
+quarter as `* 0.25`. Sixty-four are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -393,6 +393,17 @@ quarter as `* 0.25`. Fifty-nine are hand-written here:
   the AI's move-failure guess. `chrooked_gastricsnare.rb` (NV-30) is a move, not an
   ability: Corrosion's x4 case needs its Bug clause, and its Ruleset effect is its own,
   so apply writes it with no function code or effect chance;
+- `chrooked_daydreamer.rb`, `chrooked_sunbask.rb`, `chrooked_chloroplast.rb`,
+  `chrooked_petalbarrier.rb`, `chrooked_flowergift.rb` (NV-31). Chloroplast is Nova's
+  own Mega Sol, which Nova's move code and AI ask for by name everywhere a move reads
+  the sun, so the port answers to that name and nothing else. Daylily (Chloroplast +
+  Petal Barrier) and Heliotrope (Sunbask + Chlorophyll) compose from these; Solar
+  Dynamo composes from Solar Power and Drought, and is scored part by part although
+  it keeps a descriptive spec of its own with no port.
+
+With NV-31 every Ruleset ability Nova has is ported, composed or written whole, but
+Aerilate, Galvanize, Pixilate and Refrigerate, whose Ruleset entries change only their
+descriptions: Nova's own already behave as the Ruleset says.
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
@@ -457,6 +468,8 @@ exception, by design (below).
 | pastelveil, amplifier, barrage (hand-written); artillery (composed) | Poison moves fail against it (and Nova's entry cure mended) / sound 1.3x, single-target sound moves to all near foes / pulse moves never miss and spread / Barrage + Mega Launcher | NV-29, lab 3/3, 4/4, 2/2, 4/4: Sludge Bomb and Toxic fail, the ally is hit but cannot be poisoned, an entry cures the holder and its ally; Hyper Voice boosted, Tackle and a non-holder not, Bug Buzz AllNearFoes for the holder and NearOther for its ally; Water Pulse AllNearFoes and 30 of 30 into +6 evasion, Fire Blast NearOther and 7 of 30 (the case names Hydro Pump, which the Ruleset marks a pulse move); Artillery's Dark Pulse 32 as Mega Launcher's, 23 with none |
 | angerpoint, bonebreaker, corrosion, deeprooted, nematocyst (hand-written) | Nova's Anger Point on the higher base stat / bone moves (custom flag Bone) 1.2x and through type, airborne and ability immunities / Poison x2 on a Steel slot / drains x1.3 / Water hits 30% bad poison, and all its poison bad | NV-30, lab 5/5, 3/3, 6/6, 3/3, 3/3: Camerupt maxes Sp. Atk, Primeape and Mew Attack, nothing at +6 or off a crit; Bone Rush 1.200x, into a Flying type, Levitate and Earth Eater; Tackle still fails on a Ghost; Steelix x1, Registeel x2, Scizor x4 with Gastric Snare, x0 without Corrosion, Toxic badly poisons, Razor Leaf x0.5; 50 drained gives 65, 10 gives 13; Surf 0.300 all bad poison, Poison Sting's poison all bad, Toxapex never |
 | soulsight, deadeye, truant (hand-written); gastricsnare (hand-written move) | no flinch, Normal and Fighting hit Ghosts, special Fighting never misses / non-contact moves never miss and ignore raised defenses / a loaf turn lets a status move through / Bug x2 and a 30% poison | NV-30, lab 4/4, 5/5, 6/6, 5/5: Aura Sphere and Focus Blast 30 of 30, Aura Sphere x1 on a Ghost, Fake Out does not flinch it; Hydro Pump 30 of 30 into +6 evasion and 0 into Dive, Snipe Shot 22 at +2 as at 0 and 31 at -1, Liquidation 19 of 30 and 15 vs 29 at +2; Bulk Up acts on a loaf turn and the next turn acts, Double-Edge loafs, a recharge takes the turn, Metronome's damaging call loafs, the AI expects Double-Edge to fail and Slack Off not; Caterpie and Scyther x2, Kangaskhan x1, poison 0.300, never on a statused target |
+| daydreamer, sunbask, chloroplast, petalbarrier, flowergift (hand-written) | Dream Eater and Nightmare on the awake, Nightmare kept up while it faces the foe / sun: 1/8 at the round's end and drains doubled / Mega Sol by name / the first hit after entry halved / Fire and Grass same-type bonus and Morning Sun 3/4 | NV-31, lab 6/6, 4/4, 6/6, 5/5, 3/3: Dream Eater heals 20 of a 40 hit, Nightmare on an awake foe costs it a quarter, cleared with the holder gone; Giga Drain 80 in sun and 40 in clear, Air Lock or Umbrella, 1/8 only in sun; Solar Beam with no charge, Weather Ball Fire at 100, Fire Blast 43 vs 29 even in rain, Synthesis 90 of 135, Growth +2/+2; Surf halved once, Double Kick's second hit full, no regrowth until re-entry; Petal Dance in rain unchanged (own STAB), Solar Beam from a Fire/Fairy Cherrim 1.513x, Morning Sun 109 of 145 in sand |
+| daylily, heliotrope, solardynamo (composed) | Chloroplast + Petal Barrier / Sunbask + Chlorophyll / Solar Power + Drought | NV-31, lab 13/13, 6/6, 6/6: the hand-written parts' checks under the composed ability; Chlorophyll's Speed 110 as alone (55 with none); Drought sets sun on entry; Solar Power's boosts and no sun drain |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |

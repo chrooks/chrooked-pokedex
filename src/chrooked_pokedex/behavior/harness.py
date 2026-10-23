@@ -159,7 +159,10 @@ def _load_checks(mechanic_id: str, ruleset_dir: Path, target: Path) -> tuple[lis
         except TemplateError as error:
             raise SystemExit(f"cannot generate checks for '{mechanic_id}': {error}") from error
     ability = ruleset.abilities.get(mechanic_id)
-    if spec is None and ability is not None and is_composed(ability) and v21:
+    # A composed ability is scored part by part, also when it keeps a descriptive spec
+    # of its own with no port (Solar Dynamo, NV-31), as the installer composes it then.
+    unported_own = spec is None or (spec.template is None and mechanic_id not in SCENARIOS_ESSENTIALS21)
+    if unported_own and ability is not None and is_composed(ability) and v21:
         try:
             return compose.harness_checks(ability, ruleset, build_resolution_map(target, ruleset))
         except (compose.CompositionError, TemplateError) as error:

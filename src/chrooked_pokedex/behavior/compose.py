@@ -99,6 +99,9 @@ VANILLA_PARTS: dict[str, tuple[str, bool, tuple[_Proof, ...]]] = {
     "grasspelt": ("Grass Pelt", False, (_Proof("hit_taken", "Tackle", terrain="grassy"),)),  # DamageCalcFromTarget
     # NV-29: a pulse move's damage; Barrage's aim and spread leave the damage alone.
     "megalauncher": ("Mega Launcher", False, (_Proof("hit", "Dark Pulse"),)),        # DamageCalcFromUser
+    # NV-31: Heliotrope's and Solar Dynamo's sun halves.
+    "chlorophyll": ("Chlorophyll", False, (_Proof("speed", weather="sun"),)),        # SpeedCalc
+    "drought": ("Drought", False, (_Proof("switch_in"),)),                           # OnSwitchIn
 }
 
 # How a check's sentence says what a proof measured.

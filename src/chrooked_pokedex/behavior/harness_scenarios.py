@@ -618,4 +618,39 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": "Let the AI pick a move on the holder's loaf turn.", "select": {'case': 'check', 'label': 'ai_slack_off', 'source': 'selftest'}, "expect": {'predicted_fail': 'DOUBLEEDGE:true,SLACKOFF:false'}},
         {"stage": 'With a Pokemon without Truant, use Double-Edge.', "select": {'case': 'check', 'label': 'not_truant', 'source': 'selftest'}, "expect": {'acted': 'true'}},
     ],
+    # NV-31 hand ports: sun, sleep and petals; Daylily and Heliotrope compose from them.
+    "daydreamer": [
+        {"stage": 'Use Dream Eater on an awake foe.', "select": {'case': 'check', 'label': 'dream_eater', 'source': 'selftest'}, "expect": {'fails': 'false', 'healed': '20'}},
+        {"stage": 'Use Nightmare on an awake foe, then end the round.', "select": {'case': 'check', 'label': 'nightmare', 'source': 'selftest'}, "expect": {'fails': 'false', 'nightmare': 'true', 'quarter_lost': 'true'}},
+        {"stage": 'Leave the field; the awake foe under Nightmare ends a round.', "select": {'case': 'check', 'label': 'holder_gone', 'source': 'selftest'}, "expect": {'nightmare': 'false', 'lost': '0'}},
+        {"stage": 'Use Hypnosis, then Yawn.', "select": {'case': 'check', 'label': 'hypnosis_yawn', 'source': 'selftest'}, "expect": {'hypnosis_fails': 'false', 'yawn_fails': 'false'}},
+        {"stage": 'Use Snore while awake.', "select": {'case': 'check', 'label': 'snore_sleep_talk', 'source': 'selftest'}, "expect": {'snore_usable_awake': 'false'}},
+        {"stage": 'With an ally without Daydreamer, use Dream Eater on an awake foe.', "select": {'case': 'check', 'label': 'ally_without', 'source': 'selftest'}, "expect": {'dream_eater_fails': 'true'}},
+    ],
+    "sunbask": [
+        {"stage": 'End a round in sun, below full HP.', "select": {'case': 'check', 'label': 'sun', 'source': 'selftest'}, "expect": {'eighth_healed': 'true'}},
+        {"stage": 'In sun, Giga Drain for 80.', "select": {'case': 'check', 'label': 'sun', 'source': 'selftest'}, "expect": {'drained': '80'}},
+        {"stage": 'In clear weather, Giga Drain for 80, then end the round.', "select": {'case': 'check', 'label': 'clear', 'source': 'selftest'}, "expect": {'drained': '40', 'round_end_heal': '0'}},
+        {"stage": 'In sun under Air Lock, then holding a Utility Umbrella.', "select": {'case': 'check', 'label': 'air_lock_umbrella', 'source': 'selftest'}, "expect": {'air_lock_drained': '40', 'air_lock_heal': '0', 'umbrella_drained': '40', 'umbrella_heal': '0'}},
+    ],
+    "chloroplast": [
+        {"stage": 'In clear weather, use Solar Beam.', "select": {'case': 'check', 'label': 'solar_beam', 'source': 'selftest'}, "expect": {'charges': 'false'}},
+        {"stage": 'In clear weather, use Weather Ball.', "select": {'case': 'check', 'label': 'weather_ball', 'source': 'selftest'}, "expect": {'type': 'FIRE', 'power': '100'}},
+        {"stage": 'Use Fire Blast.', "select": {'case': 'check', 'label': 'fire_blast', 'source': 'selftest'}, "expect": {'sun_boosted': 'true'}},
+        {"stage": 'In rain, use Fire Blast.', "select": {'case': 'check', 'label': 'fire_in_rain', 'source': 'selftest'}, "expect": {'sun_boosted': 'true'}},
+        {"stage": 'In clear weather, use Synthesis.', "select": {'case': 'check', 'label': 'synthesis', 'source': 'selftest'}, "expect": {'two_thirds_healed': 'true'}},
+        {"stage": 'Use Growth.', "select": {'case': 'check', 'label': 'growth', 'source': 'selftest'}, "expect": {'attack': '2', 'spatk': '2'}},
+    ],
+    "petalbarrier": [
+        {"stage": 'Switch in and take a Surf.', "select": {'case': 'check', 'label': 'first_hit', 'source': 'selftest'}, "expect": {'hits': 'enter,SURF:HALF'}},
+        {"stage": 'Take a second Surf.', "select": {'case': 'check', 'label': 'second_hit', 'source': 'selftest'}, "expect": {'hits': 'enter,SURF:HALF,SURF:FULL'}},
+        {"stage": "Take Double Kick's two hits.", "select": {'case': 'check', 'label': 'double_kick', 'source': 'selftest'}, "expect": {'hits': 'enter,DOUBLEKICK:HALF,DOUBLEKICK:FULL'}},
+        {"stage": 'Take a Surf, wait two rounds unhit, take another.', "select": {'case': 'check', 'label': 'no_regrow', 'source': 'selftest'}, "expect": {'hits': 'enter,SURF:HALF,wait,wait,SURF:FULL'}},
+        {"stage": 'Take a Surf, switch out and back in, take another.', "select": {'case': 'check', 'label': 'reentry', 'source': 'selftest'}, "expect": {'hits': 'enter,SURF:HALF,enter,SURF:HALF'}},
+    ],
+    "flowergift": [
+        {"stage": 'Cherrim (Grass) uses Petal Dance in rain.', "select": {'case': 'check', 'label': 'petal_dance_rain', 'source': 'selftest'}, "expect": {'boosted': 'false'}},
+        {"stage": 'Cherrim Sunshine (Fire/Fairy) uses Solar Beam in sun.', "select": {'case': 'check', 'label': 'solar_beam_sun', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
+        {"stage": 'Use Morning Sun in a sandstorm.', "select": {'case': 'check', 'label': 'morning_sun_sand', 'source': 'selftest'}, "expect": {'three_quarters_healed': 'true'}},
+    ],
 }
