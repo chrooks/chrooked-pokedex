@@ -25,3 +25,17 @@ notes:
   - STUB — pokeemerald engine_hints ungrounded, needs human grounding pass
 engine_hints:
   essentials: "Rejuv: CHROOKED_TYPE_IMMUNITY[:IMMUNITY] = { type: :POISON, flag: :Soundproof } — the core's hitflag pass (chrooked_00_core.rb) blocks the hit and zeroes the Typemod; Mold Breaker is respected via opponent.moldbroken. Status prevention is native Rejuv behavior, untouched."
+template:
+  - shape: keeps
+    params: {}
+    effects: [1]
+    cases: [3]
+    probes:
+      - {measure: status, status: poison}
+  - shape: type_immunity
+    params: {type: Poison}
+    effects: [2]
+    cases: [1, 2]
+    probes:
+      - {move: Sludge Bomb, immune: true}
+      - {move: Toxic, immune: true}

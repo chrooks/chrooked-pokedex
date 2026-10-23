@@ -253,7 +253,17 @@ def behavior_yaml(spec: BehaviorSpec) -> str:
         lines.append("engine_hints:")
         for engine, hint in spec.engine_hints.items():
             lines.append(f"  {engine}: {_scalar(hint)}")
-    if spec.template is not None:
+    if spec.template is not None and spec.template.shape == "blocks":
+        lines.append("template:")
+        for block in spec.template.blocks:
+            lines.append(f"  - shape: {block.shape}")
+            lines.append(f"    params: {_flow(dict(block.params))}")
+            lines.append(f"    effects: {_flow(list(block.effects))}")
+            lines.append(f"    cases: {_flow(list(block.cases))}")
+            lines.append("    probes:")
+            for probe in block.probes:
+                lines.append(f"      - {_flow(dict(probe))}")
+    elif spec.template is not None:
         lines.append("template:")
         lines.append(f"  shape: {spec.template.shape}")
         lines.append(f"  params: {_flow(dict(spec.template.params))}")

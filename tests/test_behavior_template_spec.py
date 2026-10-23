@@ -67,6 +67,46 @@ def test_template_block_loads_typed(tmp_path: Path) -> None:
     )
 
 
+_BLOCKS = """\
+template:
+  - shape: keeps
+    params: {}
+    effects: [1]
+    cases: [3]
+    probes:
+      - {measure: status, status: poison}
+  - shape: flag_boost
+    params: {flags: [kicking], multiplier: 1.3}
+    effects: [1]
+    cases: [1, 2]
+    probes:
+      - {move: High Jump Kick, result: boosted}
+      - {move: Tackle, result: normal}
+"""
+
+
+def test_template_blocks_load_and_round_trip(tmp_path: Path) -> None:
+    """NV-18: a list of blocks, each naming its effects and the test cases it covers."""
+    spec = load_behavior(_write(tmp_path, _SPEC + _BLOCKS))
+
+    assert spec.template.shape == "blocks"
+    keeps, boost = spec.template.blocks
+    assert (keeps.shape, keeps.effects, keeps.cases) == ("keeps", (1,), (3,))
+    assert boost.probes == ({"move": "High Jump Kick", "result": "boosted"}, {"move": "Tackle", "result": "normal"})
+    assert behavior_yaml(spec).endswith(_BLOCKS)
+
+
+@pytest.mark.parametrize(("blocks", "message"), [
+    (_BLOCKS.replace("cases: [3]", "cases: [2]"), "cover each of the 3 test_cases exactly once"),
+    (_BLOCKS.replace("cases: [3]", "cases: [4]"), "cases must number test_cases, 1 to 3"),
+    (_BLOCKS.replace("    effects: [1]\n    cases: [3]", "    cases: [3]"), "name the effects"),
+    (_BLOCKS.replace("cases: [1, 2]", "cases: [1]"), "2 probes for 1 test_cases"),
+])
+def test_template_blocks_must_cover_every_case_once(tmp_path: Path, blocks: str, message: str) -> None:
+    with pytest.raises(ValueError, match=message):
+        load_behavior(_write(tmp_path, _SPEC + blocks))
+
+
 def test_spec_without_a_template_loads_none_and_writes_no_block(tmp_path: Path) -> None:
     spec = load_behavior(_write(tmp_path, _SPEC))
 

@@ -79,11 +79,19 @@ class BehaviorTemplate:
     emits the engine port, the self-test case and the harness checks with no
     implementer in the loop. A mechanic that fits no shape leaves this unset and
     keeps a hand-written port.
+
+    A spec whose effects are several shapes (an immunity AND a boost) lists blocks
+    instead (mjolnir NV-18): this template is then shape `blocks`, and each block
+    names the `effects` it generates and the `cases` (test cases, 1-based) its
+    probes cover, one probe per case, in order.
     """
 
     shape: str
     params: Mapping[str, object] = field(default_factory=dict)
     probes: tuple[Mapping[str, object], ...] = ()
+    effects: tuple[int, ...] = ()
+    cases: tuple[int, ...] = ()
+    blocks: tuple["BehaviorTemplate", ...] = ()
 
 
 @dataclass(frozen=True)

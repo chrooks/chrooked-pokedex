@@ -809,3 +809,86 @@ def test_validate_refuses(template, message):
 def test_validate_refuses_misaligned_probes():
     with pytest.raises(TemplateError, match="1 probes for 3 test_cases"):
         validate(_template(), 3)
+
+
+# --- blocks (NV-18) ------------------------------------------------------------------
+
+
+def _block(shape, params, effects, cases, probes):
+    return BehaviorTemplate(shape=shape, params=params, probes=tuple(probes), effects=tuple(effects),
+                            cases=tuple(cases))
+
+
+def _blocks_spec(*blocks, n_effects=2, n_cases=3, cid="hydrophyte"):
+    return BehaviorSpec(
+        name=cid.title(), chrooked_id=cid, applies_to="ability",
+        effects=tuple(BehaviorEffect(summary=f"Effect {i}.", trigger="x", effect="x") for i in range(1, n_effects + 1)),
+        test_cases=tuple(BehaviorTestCase(given=f"case {i}", expect="x") for i in range(1, n_cases + 1)),
+        template=BehaviorTemplate(shape="blocks", blocks=tuple(blocks)),
+    )
+
+
+HYDROPHYTE = _blocks_spec(
+    _block("type_immunity", {"type": "Water"}, [1], [1], [{"move": "Surf", "immune": True}]),
+    _block("type_resist", {"type": "Fire", "multiplier": 0.5}, [2], [2, 3],
+           [{"move": "Flamethrower", "applies": True}, {"move": "Tackle", "applies": False}]),
+)
+THERMALEXCHANGE = _blocks_spec(
+    _block("type_immunity", {"type": "Fire"}, [1], [1, 3],
+           [{"move": "Flamethrower", "immune": True}, {"move": "Flamethrower", "immune": False, "mold_breaker": True}]),
+    _block("keeps", {}, [2], [2], [{"measure": "status", "status": "burn"}]),
+    cid="thermalexchange",
+)
+
+
+def test_blocks_render_each_registry_entry_marked_and_one_merged_case():
+    text = _render(HYDROPHYTE)
+    assert text.startswith("# chrooked:hydrophyte\n") and "(template: blocks)" in text
+    assert "Battle::AbilityEffects::MoveImmunity.add(:HYDROPHYTE," in text
+    assert "chrooked_table = Battle::AbilityEffects::DamageCalcFromTarget" in text
+    assert "mults[:final_damage_multiplier] *= 0.5 if applies" in text  # Thick Fat's registry, exact halving
+    assert "ability=true block=1 " in text and "ability=true block=2 " in text
+    assert text.count('($chrooked_selftest_cases ||= {})["hydrophyte"]') == 1
+    assert "defend: [:SURF],\n    taken: [:FLAMETHROWER, :TACKLE],\n" in text
+    assert "fight: []\n" in text and 'installed: 2 blocks")' in text
+
+
+def test_blocks_checks_follow_the_test_cases_and_name_their_block():
+    assert _verdicts(HYDROPHYTE) == [
+        ({"move": "SURF", "ability": "true", "block": "1"}, {"result": "IMMUNE"}),
+        ({"move": "FLAMETHROWER", "ability": "true", "block": "2"}, {"result": "APPLIED"}),
+        ({"move": "TACKLE", "ability": "true", "block": "2"}, {"result": "NORMAL"}),
+    ]
+
+
+def test_a_kept_effect_and_mold_breaker_are_read_from_the_selftests_lines():
+    text = _render(THERMALEXCHANGE)
+    assert "defend: [:FLAMETHROWER, [:FLAMETHROWER, {mold_breaker: true}]],\n    keeps: [[:status, {status: :BURN}]],\n" \
+        in text
+    assert _verdicts(THERMALEXCHANGE) == [
+        ({"move": "FLAMETHROWER", "ability": "true", "block": "1"}, {"result": "IMMUNE"}),
+        ({"case": "keeps", "kind": "status", "source": "selftest", "status": "BURN"}, {"changed": "true"}),
+        ({"move": "FLAMETHROWER", "ability": "true", "source": "selftest", "mold_breaker": "true"}, {"immune": "false"}),
+    ]
+
+
+@pytest.mark.parametrize(("spec", "message"), [
+    (_blocks_spec(_block("flag_boost", {"flags": ["kicking"], "multiplier": 1.3}, [1], [1], [{"move": "Tackle", "result": "normal"}]),
+                  _block("type_boost", {"type": "Fire", "multiplier": 1.5}, [2], [2, 3],
+                         [{"move": "Ember", "result": "boosted"}, {"move": "Surf", "result": "normal"}])),
+     "adds to DamageCalcFromUser, as block 1 does"),
+    (_blocks_spec(HYDROPHYTE.template.blocks[0], n_effects=2, n_cases=1), "each of the 2 effects exactly once"),
+    (_blocks_spec(_block("keeps", {}, [1, 2], [1, 2, 3], [{"measure": "status", "status": "burn"}] * 3)),
+     "nothing to port"),
+    (_blocks_spec(_block("keeps", {}, [1], [1], [{"measure": "luck", "status": "burn"}]), HYDROPHYTE.template.blocks[1]),
+     "measure must be one of status, eor_status"),
+])
+def test_blocks_are_refused_when_they_cannot_be_generated(spec, message):
+    with pytest.raises(TemplateError, match=message):
+        validate_spec(spec)
+
+
+def test_a_lone_keeps_template_is_refused():
+    lone = replace(KINDLE, template=BehaviorTemplate(shape="keeps", probes=KINDLE.template.probes))
+    with pytest.raises(TemplateError, match="keeps generates nothing"):
+        validate_spec(lone)

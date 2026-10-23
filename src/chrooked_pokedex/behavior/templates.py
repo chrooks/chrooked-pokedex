@@ -46,6 +46,8 @@ Shapes, their params, and the probe fields each accepts:
   hit_drain          {fraction, moves=contact|non_contact}    {move, drain, ooze?}
   ko_effect          {heal | stat}                            {kos, effect, hp?, stage?}
   priority_boost     {type, full_hp?}                         {move, result, hp?}
+  type_resist        {type, multiplier}                       {move, applies}
+  keeps              {}                                       {measure, status?}  (blocks only)
 
 `result` is `boosted` or `normal`; `converted` is true or false. `pinch: true` limits a
 type boost to HP at or below 1/3, Blaze's threshold, and a probe's `hp` sets the
@@ -99,13 +101,26 @@ knocked nothing out), and `effect` says whether anything happened, with the user
 A priority boost (NV-14) gives moves of `type` +1 priority, only at full HP when
 `full_hp` is true: Nova's Gale Wings, which reads the move's own type. A probe's `hp`
 sets the user's HP fraction first.
+
+A type resist (NV-18) multiplies the damage the holder TAKES from moves of `type`
+(Hydrophyte halves Fire): Nova's Thick Fat shape on DamageCalcFromTarget. A probe's
+`applies` says whether the multiplier applies to its move. A type immunity's probe
+may set `mold_breaker: true`: the attacker's Mold Breaker lifts the immunity.
+
+Blocks (NV-18). A spec whose effects are several shapes lists blocks instead of one
+template: each names the `effects` it generates and the `cases` its probes cover.
+Each block is its own registry entry (two blocks on one registry are refused), and
+its log lines carry `block=<n>`. A `keeps` block generates nothing: the game's own
+ability of that name already does the effect (vanilla Immunity cannot be poisoned),
+and its probes measure the ability against none (`measure: status|eor_status`,
+`status`), so a port that replaces the ability's other handlers is seen to keep it.
 """
 
 from __future__ import annotations
 
 import re
 import textwrap
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from fractions import Fraction
 from typing import Mapping, Optional, Protocol
 
@@ -114,7 +129,8 @@ from ..model.behavior_spec import BehaviorSpec, BehaviorTemplate
 from ..model.schema import MOVE_FLAGS
 
 SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
-          "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost")
+          "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
+          "type_resist", "keeps")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -130,12 +146,15 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "hit_drain": (frozenset({"fraction", "moves"}), {}),
     "ko_effect": (frozenset(), {"heal": None, "stat": None}),
     "priority_boost": (frozenset({"type"}), {"full_hp": False}),
+    "type_resist": (frozenset({"type", "multiplier"}), {}),
+    "keeps": (frozenset(), {}),
 }
 # The probe field that states the expected outcome, per shape.
 _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost": "result",
             "conditional_boost": "result", "stab_grant": "result",
             "hit_status": "inflicts", "type_immunity": "immune", "hit_drain": "drain",
-            "ko_effect": "effect", "priority_boost": "result"}
+            "ko_effect": "effect", "priority_boost": "result", "type_resist": "applies",
+            "keeps": "measure"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -147,7 +166,20 @@ _MOVE_SETS = ("all", "higher_stat")
 _STATS = ("physical", "special")
 _CONVERT_FROM = ("normal", "any")
 # The shapes that never scale damage: no calc entry.
-_NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost")
+_NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost",
+                      "type_resist", "keeps")
+# What a keeps probe measures, the ability against none (the self-test's keeps phase):
+# whether a foe can give the holder `status`, or the HP its status changes at end of round.
+_KEEP_MEASURES = ("status", "eor_status")
+# The registries each shape's port adds to: two blocks of one spec may not share one.
+_REGISTRIES = {
+    "type_boost": ("DamageCalcFromUser",), "flag_boost": ("DamageCalcFromUser",),
+    "conditional_boost": ("DamageCalcFromUser",), "stab_grant": ("DamageCalcFromUser",),
+    "type_conversion": ("ModifyMoveBaseType", "DamageCalcFromUser"),
+    "hit_status": ("OnDealingHit",), "hit_drain": ("OnDealingHit",), "type_immunity": ("MoveImmunity",),
+    "ko_effect": ("OnEndOfUsingMove",), "priority_boost": ("PriorityChange",),
+    "type_resist": ("DamageCalcFromTarget",), "keeps": (),
+}
 _DRAINS = ("healed", "none", "reversed")
 _CONTACT = ("contact", "non_contact")
 # Ruleset stat -> (Essentials stat, its name in stage text)
@@ -200,12 +232,47 @@ def validate_spec(spec: BehaviorSpec) -> None:
         raise TemplateError(f"{spec.chrooked_id}: no template block")
     if spec.applies_to != "ability":
         raise TemplateError(f"{where}: templates generate ability ports; this spec applies to a {spec.applies_to}")
+    if spec.template.shape == "blocks":
+        _validate_blocks(spec, where)
+        return
+    if spec.template.shape == "keeps":
+        raise TemplateError(f"{where}: keeps generates nothing; it belongs in a block beside one that does")
     if len(spec.effects) != 1:
         summaries = "; ".join(e.summary for e in spec.effects) or "none"
         raise TemplateError(
             f"{where}: a template generates exactly one effect, and this spec has {len(spec.effects)} "
             f"({summaries}); give it a hand-written port, or a shape that covers every effect")
     validate(spec.template, len(spec.test_cases), where)
+
+
+def _validate_blocks(spec: BehaviorSpec, where: str) -> None:
+    template = spec.template
+    assert template is not None
+    effects: list[int] = []
+    cases: list[int] = []
+    used: dict[str, int] = {}
+    for n, block in enumerate(template.blocks, start=1):
+        at = f"{where}[{n}]"
+        if block.shape == "blocks":
+            raise TemplateError(f"{at}: blocks do not nest")
+        validate(block, len(block.cases), at)
+        if any(not 1 <= e <= len(spec.effects) for e in block.effects) or not block.effects:
+            raise TemplateError(f"{at}: effects must number the spec's effects, 1 to {len(spec.effects)}")
+        effects += block.effects
+        cases += block.cases
+        for registry in _REGISTRIES[block.shape]:
+            if registry in used:
+                raise TemplateError(f"{at}: {block.shape} adds to {registry}, as block {used[registry]} does; "
+                                    "blocks of one spec may not share a registry")
+            used[registry] = n
+    if sorted(effects) != list(range(1, len(spec.effects) + 1)):
+        raise TemplateError(f"{where}: the blocks must generate each of the {len(spec.effects)} effects exactly "
+                            f"once (got {sorted(effects)})")
+    if sorted(cases) != list(range(1, len(spec.test_cases) + 1)):
+        raise TemplateError(f"{where}: the blocks' cases must cover each of the {len(spec.test_cases)} test "
+                            f"cases exactly once (got {sorted(cases)})")
+    if all(block.shape == "keeps" for block in template.blocks):
+        raise TemplateError(f"{where}: every block keeps the game's own ability; there is nothing to port")
 
 
 def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "template") -> None:
@@ -300,11 +367,15 @@ def _validate_hit_status(params: Mapping[str, object], where: str) -> None:
 def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at: str) -> None:
     shape, params = template.shape, template.params
     outcome = _OUTCOME[shape]
-    allowed = {outcome} if shape == "ko_effect" else {"move", outcome}
+    allowed = {outcome} if shape in ("ko_effect", "keeps") else {"move", outcome}
     if shape not in _NON_DAMAGE_SHAPES or shape == "priority_boost":
         allowed.add("hp")
     if shape == "hit_drain":
         allowed.add("ooze")
+    if shape == "type_immunity":
+        allowed.add("mold_breaker")
+    if shape == "keeps":
+        allowed.add("status")
     if shape == "ko_effect":
         allowed |= {"kos", "hp"} if params.get("heal") is not None else {"kos", "stage"}
     # A Pokemon without the ability is only measurable as "boosted or not", and the
@@ -325,14 +396,19 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
-    if shape != "ko_effect" and not _is_text(probe.get("move")):
+    if shape not in ("ko_effect", "keeps") and not _is_text(probe.get("move")):
         raise TemplateError(f"{at}: needs a move name, e.g. {{move: Tackle, ...}}")
     value = probe.get(outcome)
     if outcome == "result" and value not in _RESULTS:
         raise TemplateError(f"{at}: result must be boosted or normal, not {value!r}")
     if outcome == "drain" and value not in _DRAINS:
         raise TemplateError(f"{at}: drain must be one of {', '.join(_DRAINS)}, not {value!r}")
-    if outcome not in ("result", "drain") and not isinstance(value, bool):
+    if outcome == "measure":
+        if value not in _KEEP_MEASURES:
+            raise TemplateError(f"{at}: measure must be one of {', '.join(_KEEP_MEASURES)}, not {value!r}")
+        if probe.get("status") not in _STATUSES:
+            raise TemplateError(f"{at}: status must be one of {', '.join(_STATUSES)}")
+    if outcome not in ("result", "drain", "measure") and not isinstance(value, bool):
         raise TemplateError(f"{at}: {outcome} must be true or false, not {value!r}")
     hp = probe.get("hp", 1.0)
     if not (_is_positive_number(hp) and hp <= 1):  # type: ignore[operator]
@@ -348,6 +424,10 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         raise TemplateError(f"{at}: target_types must be a non-empty list of type names, e.g. [Fire]")
     if higher_stat and probe.get("stats") not in _STATS:
         raise TemplateError(f"{at}: needs stats: physical or special (which of Attack and Sp. Atk is higher)")
+    if "mold_breaker" in probe and not isinstance(probe["mold_breaker"], bool):
+        raise TemplateError(f"{at}: mold_breaker must be true or false")
+    if probe.get("mold_breaker") and value:
+        raise TemplateError(f"{at}: Mold Breaker lifts the immunity; use immune: false")
     if "ooze" in probe and not isinstance(probe["ooze"], bool):
         raise TemplateError(f"{at}: ooze must be true or false")
     if probe.get("ooze") and value == "healed":
@@ -379,11 +459,22 @@ def _validate_ko_probe(probe: Mapping[str, object], params: Mapping[str, object]
 
 def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
     """The Essentials 21 port for a templated spec: `chrooked_<id>.rb`'s full text."""
+    if spec.template is not None and spec.template.shape == "blocks":
+        return _render_blocks(spec, names)
     port = _resolve(spec, names)
+    return _fill(_PORT, {
+        "HEADER": _header(spec, port),
+        "LOG": _CHROOKED_LOG,
+        "BODY": _body(spec, port, _selftest_case(spec, port)),
+    })
+
+
+def _body(spec: BehaviorSpec, port: _Port, selftest: str) -> str:
+    """One shape's registry entries, its self-test registration inside."""
     values = {
         "ID": spec.chrooked_id,
         "ABILITY": port.ability,
-        "SELFTEST": _selftest_case(spec, port),
+        "SELFTEST": selftest,
     }
     if "multiplier" in port.params:
         values["MULTIPLIER"] = _ruby_float(port.params["multiplier"])
@@ -430,16 +521,73 @@ def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
         gate = f"move.type == :{port.type}"
         values["CONDITION"] = f"hp_full && {gate}" if port.params["full_hp"] else gate
         body = _PRIORITY_BOOST
+    elif port.shape == "type_resist":
+        values["TYPE"] = port.type
+        body = _TYPE_RESIST
     else:
         values["TYPE_GATE"] = (
             "" if port.grant_types is None
             else f" && [{', '.join(':' + t for t in port.grant_types)}].include?(type)")
         body = _STAB_GRANT
-    return _fill(_PORT, {
-        "HEADER": _header(spec, port),
-        "LOG": _CHROOKED_LOG,
-        "BODY": _fill(body, values),
-    })
+    return _fill(body, values)
+
+
+def _block_spec(spec: BehaviorSpec, block: BehaviorTemplate) -> BehaviorSpec:
+    """One block as a one-effect spec of its own: its shape, its first effect, its cases."""
+    return replace(spec, template=BehaviorTemplate(shape=block.shape, params=block.params, probes=block.probes),
+                   effects=(spec.effects[block.effects[0] - 1],),
+                   test_cases=tuple(spec.test_cases[c - 1] for c in block.cases))
+
+
+def _render_blocks(spec: BehaviorSpec, names: Names) -> str:
+    validate_spec(spec)
+    assert spec.template is not None
+    bodies: list[str] = []
+    ability = ""
+    for n, block in enumerate(spec.template.blocks, start=1):
+        if block.shape == "keeps":
+            continue
+        part = _block_spec(spec, block)
+        port = _resolve(part, names)
+        ability = port.ability
+        body = _body(part, port, "").replace('\n\n  ChrookedLog.line("[chrooked:', '\n  ChrookedLog.line("[chrooked:')
+        bodies.append(body.replace(" ability=true", f" ability=true block={n}"))
+    tail = "\n".join([
+        "begin",
+        render_selftest_case(spec.chrooked_id, ability, selftest_case(spec, names)),
+        f'  ChrookedLog.line("[chrooked:{spec.chrooked_id}] installed: {len(bodies)} block{"s" if len(bodies) != 1 else ""}")',
+        "rescue StandardError => e",
+        f'  ChrookedLog.error("[chrooked:{spec.chrooked_id}] ERROR #{{e.class}}: #{{e.message}}")',
+        "end",
+        "",
+    ])
+    return _fill(_PORT, {"HEADER": _blocks_header(spec), "LOG": _CHROOKED_LOG, "BODY": "".join(bodies) + tail})
+
+
+def _blocks_header(spec: BehaviorSpec) -> str:
+    assert spec.template is not None
+    summary = " ".join(" ".join(e.summary.split()) for e in spec.effects)
+    listed = "; ".join(
+        f"block {n}, effects {', '.join(map(str, b.effects))}: "
+        + (f"kept by the game's own {spec.name}" if b.shape == "keeps"
+           else f"{b.shape} on {' and '.join(_REGISTRIES[b.shape])}")
+        for n, b in enumerate(spec.template.blocks, start=1))
+    return "\n".join([
+        f"# chrooked:{spec.chrooked_id}",
+        _RULE,
+        f"# GENERATED by chrooked-pokedex from ruleset/behaviors/{spec.chrooked_id}.yaml",
+        "# (template: blocks). Do not edit this file: change the spec and run apply.",
+        "#",
+        *_comment(f'Ruleset behavior "{spec.chrooked_id}": {summary}'),
+        "#",
+        *_comment(f"BLOCKS (mjolnir NV-18), each its own registry entry, its log lines marked block=<n>: "
+                  f"{listed}. A kept effect is the game's own ability's, which this port leaves in place."),
+        "#",
+        *_comment("Install, load order, the marker-gated oracle, the OBS/EST split and the "
+                  "self-test registration at the end are explained once, in "
+                  "references/essentials21-harness/README.md."),
+        _RULE,
+    ])
 
 
 def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
@@ -450,6 +598,8 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
     expects the probe's outcome, in the keys the generated port logs. Values are
     strings, as the harness compares them.
     """
+    if spec.template is not None and spec.template.shape == "blocks":
+        return _blocks_checks(spec, names)
     port = _resolve(spec, names)
     pinch = port.shape == "type_boost" and bool(port.params["pinch"])
     checks: list[dict[str, object]] = []
@@ -473,12 +623,41 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
             select.update(_scene(port, probe))
         if port.shape == "type_conversion":
             expect = {"converted": port.type if probe.outcome else "none", "boosted": _flag(bool(probe.outcome))}
+        elif port.shape == "type_immunity" and probe.mold_breaker:
+            # Mold Breaker skips the handler, so the self-test's own line says it.
+            select.update({"source": "selftest", "mold_breaker": "true"})
+            expect = {"immune": _flag(bool(probe.outcome))}
         elif port.shape == "type_immunity":
             expect = {"result": "IMMUNE" if probe.outcome else "NORMAL"}
+        elif port.shape == "type_resist":
+            expect = {"result": "APPLIED" if probe.outcome else "NORMAL"}
         else:
             expect = {"result": str(probe.outcome).upper()}
         checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": select, "expect": expect})
     return checks
+
+
+def _blocks_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
+    """Each block's checks, in test-case order; one on a port line also selects its
+    block, and a keeps block's read the self-test's comparison with no ability."""
+    validate_spec(spec)
+    assert spec.template is not None
+    by_case: dict[int, dict[str, object]] = {}
+    for n, block in enumerate(spec.template.blocks, start=1):
+        if block.shape == "keeps":
+            for case, probe in zip(block.cases, block.probes):
+                select = {"case": "keeps", "kind": str(probe["measure"]), "source": "selftest",
+                          "status": _STATUSES[str(probe["status"])][0]}
+                by_case[case] = {"stage": f"Measured by the self-test: {spec.name}'s own {probe['measure']} "
+                                          f"with {probe['status']}.",
+                                 "select": select, "expect": {"changed": "true"}}
+            continue
+        for case, check in zip(block.cases, harness_checks(_block_spec(spec, block), names)):
+            select = dict(check["select"])  # type: ignore[call-overload]
+            if select.get("ability") == "true" and select.get("source") != "selftest":
+                select["block"] = str(n)
+            by_case[case] = {**check, "select": select}
+    return [by_case[case] for case in sorted(by_case)]
 
 
 def _state_check(port: _Port, probe: _Probe) -> tuple[dict[str, object], dict[str, object]]:
@@ -524,6 +703,7 @@ class _Probe:
     ooze: bool = False   # hit_drain: the target holds Liquid Ooze
     kos: int = 0         # ko_effect: foes the move knocked out
     stage: int = 0       # ko_effect: the user's stage in the raised stat
+    mold_breaker: bool = False  # type_immunity: the attacker breaks the mold
 
 
 @dataclass(frozen=True)
@@ -606,6 +786,7 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             target_type_names=tuple(str(t) for t in probe.get("target_types") or ()),  # type: ignore[union-attr]
             ooze=bool(probe.get("ooze", False)), kos=int(probe.get("kos", 0)),  # type: ignore[call-overload]
             stage=int(probe.get("stage", 0)),  # type: ignore[call-overload]
+            mold_breaker=bool(probe.get("mold_breaker", False)),
         ))
     if template.shape == "hit_drain" and any(p.get("ooze") for p in template.probes) \
             and names.ability("Liquid Ooze") is None:
@@ -854,8 +1035,43 @@ class SelftestCase:
 
 
 def selftest_case(spec: BehaviorSpec, names: Names) -> SelftestCase:
-    """A templated spec's self-test case, resolved against the target's names."""
-    return _case(_resolve(spec, names))
+    """A templated spec's self-test case, resolved against the target's names; a
+    spec in blocks merges its blocks' cases."""
+    if spec.template is None or spec.template.shape != "blocks":
+        return _case(_resolve(spec, names))
+    cases = []
+    keeps: list[str] = []
+    for block in spec.template.blocks:
+        if block.shape == "keeps":
+            keeps += [f"[:{p['measure']}, {{status: :{_STATUSES[str(p['status'])][0]}}}]" for p in block.probes]
+        else:
+            cases.append(_case(_resolve(_block_spec(spec, block), names)))
+    return merge_cases(cases, extra=(("keeps", tuple(keeps)),) if keeps else ())
+
+
+def merge_cases(cases: list[SelftestCase], extra: tuple[tuple[str, tuple[str, ...]], ...] = (),
+                fight: tuple[str, ...] = ()) -> SelftestCase:
+    """Several ports' cases as one: the first control, every calc entry and phase
+    entry once, at most four fight moves."""
+    control: Optional[str] = None
+    calc: list[str] = []
+    phases: dict[str, list[str]] = {}
+    without: list[str] = []
+    moves: list[str] = []
+    for case in cases:
+        control = control or case.control
+        calc += case.calc
+        for key, entries in case.phases:
+            phases.setdefault(key, []).extend(entries)
+        without += case.without
+        moves += case.fight
+    for key, entries in extra:
+        phases.setdefault(key, []).extend(entries)
+    moves += fight
+    return SelftestCase(
+        control=control, calc=tuple(dict.fromkeys(calc)),
+        phases=tuple((key, tuple(dict.fromkeys(entries))) for key, entries in phases.items()),
+        without=tuple(dict.fromkeys(without)), fight=tuple(dict.fromkeys(moves))[:FIGHT_MOVES])
 
 
 def render_selftest_case(chrooked_id: str, ability: str, case: SelftestCase) -> str:
@@ -888,8 +1104,8 @@ def _case(port: _Port) -> SelftestCase:
     # A built-in move (Struggle) cannot be learned, so it never joins the fight.
     learnable = [p for p in port.probes if p.holder and p.move.lower() not in _BUILTIN_MOVES]
     fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:FIGHT_MOVES]
-    if port.shape == "type_immunity":
-        fight = []  # the moves are the foe's to use; the defend phase asks the registry itself
+    if port.shape in ("type_immunity", "type_resist"):
+        fight = []  # the moves are the foe's to use; the defend and taken phases measure them
     if port.shape == "ko_effect":
         fight = [":TACKLE"]  # its probes name no move; one, so the real path runs in the AI battle
     control = port.params.get("control")
@@ -911,7 +1127,10 @@ def _phases(port: _Port) -> tuple[tuple[str, tuple[str, ...]], ...]:
                 entries.append(entry)
         return (("chance", tuple(entries)),)
     if port.shape == "type_immunity":
-        return (("defend", tuple(dict.fromkeys(':' + p.move for p in port.probes))),)
+        entries = [f"[:{p.move}, {{mold_breaker: true}}]" if p.mold_breaker else f":{p.move}" for p in port.probes]
+        return (("defend", tuple(dict.fromkeys(entries))),)
+    if port.shape == "type_resist":
+        return (("taken", tuple(dict.fromkeys(':' + p.move for p in port.probes))),)
     if port.shape == "hit_drain":
         entries = [f"[:{p.move}, {{hp_lost: 100{', target_ability: :LIQUIDOOZE' if p.ooze else ''}}}]"
                    for p in port.probes]
@@ -1373,6 +1592,28 @@ begin
   )
 {{SELFTEST}}
   ChrookedLog.line("[chrooked:{{ID}}] installed on PriorityChange")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_TYPE_RESIST = """\
+begin
+  chrooked_table = Battle::AbilityEffects::DamageCalcFromTarget
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=#{!chrooked_table[:{{ABILITY}}].nil?}")
+  chrooked_table.add(:{{ABILITY}},
+    proc { |ability, user, target, move, mults, power, type|
+      applies = (type == :{{TYPE}})
+      mults[:final_damage_multiplier] *= {{MULTIPLIER}} if applies
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s.include?("AIMove") } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} type=#{type || 'NONE'} ability=true " \\
+                         "result=#{applies ? 'APPLIED' : 'NORMAL'}")
+      end
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on Battle::AbilityEffects::DamageCalcFromTarget")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
 end

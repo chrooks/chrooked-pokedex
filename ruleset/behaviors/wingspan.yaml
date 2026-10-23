@@ -27,3 +27,17 @@ notes:
 engine_hints:
   pokeemerald: "The ground-immunity kit now belongs to ABILITY_WINGSPAN, but existing fork C still implements it under ABILITY_UPDRAFT (Ground block in TryAbsorbMove switch via BattleScript_SoundproofProtected, src/battle_util.c:2451; 1.3x wing/wind boost at :6965) — the two case bodies must be swapped by hand when a pokeemerald target is next touched."
   essentials: "Rejuv symbols are name-derived, so this mechanic lives on :WINGSPAN — chrooked_wingspan.rb registers the Ground type-immunity hook (block, no effect) plus the 1.3x wing/wind damage modifier under :WINGSPAN."
+template:
+  - shape: type_immunity
+    params: {type: Ground}
+    effects: [1]
+    cases: [1]
+    probes:
+      - {move: Earthquake, immune: true}
+  - shape: flag_boost
+    params: {flags: [wing, wind], multiplier: 1.3}
+    effects: [2]
+    cases: [2, 3]
+    probes:
+      - {move: Hurricane, result: boosted}
+      - {move: Tackle, result: normal}

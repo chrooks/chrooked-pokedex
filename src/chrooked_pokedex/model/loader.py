@@ -78,6 +78,7 @@ _BEHAVIOR_KEYS = (
 _EFFECT_KEYS = ("summary", "trigger", "effect", "when")
 _TEST_CASE_KEYS = ("given", "expect")
 _TEMPLATE_KEYS = ("shape", "params", "probes")
+_TEMPLATE_BLOCK_KEYS = _TEMPLATE_KEYS + ("effects", "cases")
 
 
 def load_species(path: Path) -> SpeciesOverride:
@@ -273,9 +274,14 @@ def load_behavior_template(entry: Any, n_test_cases: int, where: str) -> Behavio
     """The structural check for a `template:` block. Whether the shape and its params
     make sense is the template module's job (chrooked_pokedex.behavior.templates); here
     only the layout is enforced, above all one probe per test case, so a test case
-    added without its probe fails loudly instead of desynchronising the checks."""
+    added without its probe fails loudly instead of desynchronising the checks.
+
+    A list is blocks (NV-18): each names the effects it generates and the test cases
+    its probes cover, and every test case is covered by exactly one block."""
+    if isinstance(entry, list):
+        return _load_template_blocks(entry, n_test_cases, where)
     if not isinstance(entry, dict):
-        raise ValueError(f"{where}:template: expected a mapping")
+        raise ValueError(f"{where}:template: expected a mapping, or a list of blocks")
     _check_keys(entry, _TEMPLATE_KEYS, f"{where}:template")
     shape = entry.get("shape")
     if not isinstance(shape, str) or not shape:
@@ -291,6 +297,35 @@ def load_behavior_template(entry: Any, n_test_cases: int, where: str) -> Behavio
             f"{where}:template: {len(probes)} probes for {n_test_cases} test_cases; "
             "keep them aligned 1:1, in order")
     return BehaviorTemplate(shape=shape, params=dict(params), probes=tuple(dict(p) for p in probes))
+
+
+def _load_template_blocks(entries: list[Any], n_test_cases: int, where: str) -> BehaviorTemplate:
+    blocks: list[BehaviorTemplate] = []
+    covered: list[int] = []
+    for index, entry in enumerate(entries, start=1):
+        at = f"{where}:template[{index}]"
+        if not isinstance(entry, dict):
+            raise ValueError(f"{at}: expected a mapping")
+        _check_keys(entry, _TEMPLATE_BLOCK_KEYS, at)
+        numbers = {}
+        for key in ("effects", "cases"):
+            value = entry.get(key) or []
+            if not isinstance(value, list) or not all(isinstance(n, int) and not isinstance(n, bool) for n in value):
+                raise ValueError(f"{at}: '{key}' must be a list of numbers (1-based)")
+            numbers[key] = tuple(value)
+        if not numbers["effects"]:
+            raise ValueError(f"{at}: name the effects this block generates ('effects: [1]')")
+        cases = numbers["cases"]
+        if any(not 1 <= n <= n_test_cases for n in cases):
+            raise ValueError(f"{at}: cases must number test_cases, 1 to {n_test_cases}")
+        block = load_behavior_template({k: v for k, v in entry.items() if k in _TEMPLATE_KEYS}, len(cases), at)
+        blocks.append(BehaviorTemplate(shape=block.shape, params=block.params, probes=block.probes,
+                                       effects=numbers["effects"], cases=cases))
+        covered += cases
+    if sorted(covered) != list(range(1, n_test_cases + 1)):
+        raise ValueError(f"{where}:template: the blocks' cases must cover each of the {n_test_cases} "
+                         f"test_cases exactly once (got {sorted(covered)})")
+    return BehaviorTemplate(shape="blocks", blocks=tuple(blocks))
 
 
 def _load_effect(entry: dict[str, Any], where: str) -> BehaviorEffect:

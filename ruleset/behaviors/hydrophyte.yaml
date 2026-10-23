@@ -22,3 +22,17 @@ test_cases:
 notes:
   - Adapted from Elite Redux's Seaweed. The offensive half (Grass deals x2 to Fire) is dropped; a Water immunity replaces it.
   - Distribute to aquatic plants - Ludicolo, Dhelmise, Cradily.
+template:
+  - shape: type_immunity
+    params: {type: Water}
+    effects: [1]
+    cases: [1]
+    probes:
+      - {move: Surf, immune: true}
+  - shape: type_resist
+    params: {type: Fire, multiplier: 0.5}
+    effects: [2]
+    cases: [2, 3]
+    probes:
+      - {move: Flamethrower, applies: true}
+      - {move: Tackle, applies: false}

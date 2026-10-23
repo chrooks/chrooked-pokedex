@@ -122,9 +122,16 @@ def serialize_behavior(spec: BehaviorSpec) -> dict[str, Any]:
         "engine_hints": dict(spec.engine_hints),
         # Rides along like aka, so an edit from the UI never strips a generated
         # behavior back to hand-ported.
-        "template": None if spec.template is None else {
-            "shape": spec.template.shape,
-            "params": dict(spec.template.params),
-            "probes": [dict(p) for p in spec.template.probes],
-        },
+        "template": _template_payload(spec.template),
     }
+
+
+def _template_payload(template):
+    """The `template:` as the editor round-trips it: a mapping, or a list of blocks."""
+    if template is None:
+        return None
+    if template.shape == "blocks":
+        return [{"shape": b.shape, "params": dict(b.params), "effects": list(b.effects),
+                 "cases": list(b.cases), "probes": [dict(p) for p in b.probes]} for b in template.blocks]
+    return {"shape": template.shape, "params": dict(template.params),
+            "probes": [dict(p) for p in template.probes]}

@@ -74,6 +74,16 @@ module ChrookedSelfTest
   #              (a type immunity, NV-13): the target holds it and the move's
   #              MoveImmunity check runs as pbImmunityByAbility runs it, with the
   #              ability and without (DEFEND line); the port logs its own OBS line
+  #              A defend entry may be [move, {mold_breaker: true}]: the attacker
+  #              breaks the mold (NV-18). Every entry also logs the mechanic's OBS
+  #              line with source=selftest, mold_breaker and immune
+  #   taken    - moves the foe uses on the holder (a defensive multiplier, NV-18):
+  #              the damage it takes with the ability and without (TAKEN line);
+  #              the port logs its own OBS line
+  #   keeps    - [kind, {status:}] entries for an effect the game's own ability
+  #              keeps beside a port (NV-18): measured with the ability and with
+  #              none (keep_measure), logged as the mechanic's OBS line with
+  #              case=keeps, tagged source=selftest
   #   drain    - [move, {hp_lost:, target_ability:}] entries for a heal-on-hit
   #              (NV-14): a hit that took hp_lost HP (default 100) is handed to the
   #              user's OnDealingHit handler, the user at half HP so a heal shows,
@@ -343,15 +353,36 @@ module ChrookedSelfTest
     [acted, cured]
   end
 
-  # Whether the target is immune to the move by its ability, as pbImmunityByAbility
-  # asks (the move's type as used): [with the ability, without it, the type].
-  def self.defend(spec, move_id)
+  # Whether the target is immune to the move by its ability, through Nova's own
+  # pbImmunityByAbility (the move's type as used; the attacker's Mold Breaker lifts
+  # it, NV-18): [with the ability, without it, the type].
+  def self.defend(spec, move_id, mold_breaker = false)
     b, user, target = pair(spec, move_id)
+    target.ability = spec[:ability]
     move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
     move.calcType = move.pbCalcType(user)
-    with = Battle::AbilityEffects.triggerMoveImmunity(spec[:ability], user, target, move,
-                                                       move.calcType, b, false)
+    b.moldBreaker = mold_breaker
+    with = move.pbImmunityByAbility(user, target, false)
     [!!with, false, move.calcType]
+  end
+
+  # What a kept effect of the game's own ability measures, with `ability` on the user:
+  #   :status     - whether a foe can give it the status (pbCanInflictStatus?)
+  #   :eor_status - the HP its status changes at end of round, from half HP
+  def self.keep_measure(spec, kind, status, ability)
+    b, user, target = pair(spec, :TACKLE)
+    user.ability = ability
+    case kind
+    when :status then user.pbCanInflictStatus?(status, target, false)
+    when :eor_status
+      user.hp = [user.totalhp / 2, 1].max
+      user.status = status
+      before = user.hp
+      b.send(:pbEORStatusProblemDamage, [user])
+      user.hp - before
+    else
+      raise ArgumentError, "unknown keeps kind #{kind.inspect}"
+    end
   end
 
   # A hit that took hp_lost HP, as pbEffectsOnMakingHit hands it to the user's
@@ -587,9 +618,30 @@ module ChrookedSelfTest
       end
     end
     guard("defend") do
-      (spec[:defend] || []).each do |move_id|
-        with, without, type = defend(spec, move_id)
-        log("DEFEND #{mechanic} move=#{move_id} type=#{type} immune_with=#{with} immune_without=#{without}")
+      (spec[:defend] || []).each do |entry|
+        move_id, opts = entry.is_a?(Array) ? entry : [entry, {}]
+        mold_breaker = !!(opts || {})[:mold_breaker]
+        with, without, type = defend(spec, move_id, mold_breaker)
+        log("DEFEND #{mechanic} move=#{move_id} type=#{type} mold_breaker=#{mold_breaker} " \
+            "immune_with=#{with} immune_without=#{without}")
+        obs(mechanic, "move=#{move_id} ability=true source=selftest mold_breaker=#{mold_breaker} immune=#{with}")
+      end
+    end
+    guard("taken") do
+      (spec[:taken] || []).each do |move_id|
+        with = damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral],
+                      target_ability: spec[:ability])[0][0]
+        none = damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral])[0][0]
+        log("TAKEN #{mechanic} move=#{move_id} with=#{with} none=#{none} " \
+            "ratio=#{format('%.3f', with.to_f / [none, 1].max)}")
+      end
+    end
+    guard("keeps") do
+      (spec[:keeps] || []).each do |kind, opts|
+        status = (opts || {})[:status]
+        with, none = [spec[:ability], nil].map { |a| keep_measure(spec, kind, status, a) }
+        obs(mechanic, "case=keeps kind=#{kind} status=#{status} source=selftest with=#{with} none=#{none} " \
+                      "changed=#{with != none}")
       end
     end
     guard("drain") do

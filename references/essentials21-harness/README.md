@@ -47,6 +47,8 @@ block, and the dex generates the rest from it (`src/chrooked_pokedex/behavior/te
 | `hit_drain` (NV-14) | `fraction` (of the damage), `moves` (`contact` or `non_contact`) | `OnDealingHit`: after a hit that dealt damage, when the move does (or does not) make contact (`pbContactMove?`), the user heals round(fraction x the HP the target lost) through Nova's drain path, `pbRecoverHPFromDrain`: Big Root adds 30%, Heal Block and full HP stop it, a Liquid Ooze target reverses it. Silent when the user could not heal and the target has no Liquid Ooze | Nova's drain moves (Giga Drain); generalised from the hand-written Vampiric |
 | `ko_effect` (NV-14) | `heal` (a fraction of max HP) or `stat` (`attack`, `defense`, `special_attack`, `special_defense`, `speed`) | `OnEndOfUsingMove`: after each move the holder uses, counting the targets whose damage state says they fainted; nothing if the knockout ended the battle. `heal`: once, while the user can heal, with Ice Body's message. `stat`: one stage per foe knocked out | Moxie; generalised from the hand-written Carnivore |
 | `priority_boost` (NV-14) | `type`, optional `full_hp` | `PriorityChange`: +1 priority for moves whose own type (`move.type`) is the type, only at full HP when `full_hp` is true | Gale Wings; generalised from the hand-written Rapid Combustion |
+| `type_resist` (NV-18) | `type`, `multiplier` | `DamageCalcFromTarget`: the damage the holder takes from moves of the type, times the multiplier (final damage, so a half is exact) | Thick Fat |
+| `keeps` (NV-18, blocks only) | none | generates nothing: the game's own ability of that name already does the effect. Its probes (`measure: status|eor_status`, `status`) measure the ability against none | — |
 
 `probes` hold one checkable probe per `test_cases` entry, in the same order: the
 move (its display name), the outcome (`result: boosted|normal`, or `converted:
@@ -83,6 +85,36 @@ Infernal Maw (a biting boost *and* a burn chance *and* a flinch chance), cannot
 take a template: `validate_spec` refuses it, at apply and on a web save (422),
 because a boost-only port would mark the ability installed with most of it
 missing. It needs a hand-written port, or a future shape that covers every effect.
+
+**Blocks (NV-18).** A spec whose effects are several shapes lists them, one block
+each, instead of one template. A block names the `effects` it generates and the
+test `cases` its probes cover:
+
+    template:
+      - shape: type_immunity
+        params: {type: Water}
+        effects: [1]
+        cases: [1]
+        probes:
+          - {move: Surf, immune: true}
+      - shape: type_resist
+        params: {type: Fire, multiplier: 0.5}
+        effects: [2]
+        cases: [2, 3]
+        probes:
+          - {move: Flamethrower, applies: true}
+          - {move: Tackle, applies: false}
+
+- **Coverage:** every effect and every test case belongs to exactly one block.
+- **Registries:** each block is its own registry entry under the ability. Two
+  blocks on one registry are refused.
+- **Logging:** each block's log lines carry `block=<n>`, and its checks select it.
+- **Kept effects:** a `keeps` block covers an effect the game's own ability already
+  has (vanilla Immunity cannot be poisoned). Its probes show the port left it in
+  place.
+- **Mold Breaker:** a type immunity probe may set `mold_breaker: true`. The
+  self-test's `defend` phase now goes through Nova's own `pbImmunityByAbility`, so
+  the attacker's Mold Breaker lifts the immunity (Thermal Exchange).
 
 A mechanic that fits no shape gets a hand-written `chrooked_<id>.rb` here. It must
 register its own self-test case and have a scenario in `harness_scenarios.py`. A
@@ -290,7 +322,7 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-44 ports and 12 compositions. 39 ports are generated from their specs' `template:` blocks: 22 since
+50 ports and 12 compositions. 45 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
@@ -331,6 +363,8 @@ exception, by design (below).
 | vampiric, soulsiphon | `hit_drain`, 1/4 of the damage, on contact / non-contact moves | NV-14, lab 3/3 each: a 100-HP hit heals 25 (67 to 92 of 135) on Tackle (Vampiric) and Water Gun (Soul Siphon), 0 on the other move, and costs 25 against a Liquid Ooze target |
 | carnivore, hubris | `ko_effect`, heal 1/4 / Sp. Atk per knockout | NV-14, lab 3/3 each. Carnivore: a knockout at half HP heals 33 (67 to 100 of 135); no knockout or full HP, nothing. Hubris: Sp. Atk +1 for one knockout, +2 for two, nothing at +6 |
 | rapidcombustion | `priority_boost`, Fire, `full_hp` | NV-14, lab 3/3: Flamethrower priority 0 to 1 at full HP, 0 at half HP; Surf 0 |
+| wingspan, liquidvoice, hydrophyte (blocks) | Ground immunity + `flag_boost` wing/wind 1.3x / `type_conversion` of sound moves to Water at 1.3x (one block, both effects) / Water immunity + `type_resist` Fire 0.5 | NV-18, lab 3/3, 2/2, 3/3: Earthquake immune, Hurricane 1.300x, Tackle 1.000x; Hyper Voice turns Water 32 vs 24, Surf unchanged; Surf immune, Flamethrower taken 24 vs 48, Tackle 36 vs 36 |
+| immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |
 | serratedjaw, razoredge (composed) | Strong Jaw + Sharpness / Sharpness + Tough Claws, sharing `DamageCalcFromUser` | NV-15, lab 2/2 each: Crunch 41 as Strong Jaw alone, Air Slash 31 as Sharpness alone (none 21), Tackle 19 as Tough Claws alone (none 14) |
 | requiem (composed) | Pyre + Spectralize | NV-15, lab 6/6: Pyre's burn rates and Spectralize's conversion, each scored on its re-tagged lines |
