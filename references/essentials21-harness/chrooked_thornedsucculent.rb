@@ -79,18 +79,17 @@ begin
         immune = !!surf.pbImmunityByAbility(attacker, holder, true)
         "immune=#{immune} healed=#{holder.hp - hp} quarter=#{holder.totalhp / 4} foe_change=#{attacker.hp - foe_hp}"
       }],
-      # The case names Poison Jab as a contact move; the Ruleset's Poison Jab has no Contact
-      # flag (piercing, punching), so Poison Fang, a contact Poison move, stands in.
-      ["contact_poison", ->(t, spec) {
-        b, attacker, holder = t.pair(spec, :POISONFANG)
+      ["poison_jab", ->(t, spec) {
+        b, attacker, holder = t.pair(spec, :POISONJAB)
         holder.ability = spec[:ability]
-        fang = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(:POISONFANG))
-        fang.calcType = fang.pbCalcType(attacker)
+        jab = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(:POISONJAB))
+        jab.calcType = jab.pbCalcType(attacker)
         holder.damageState.reset
         holder.damageState.hpLost = holder.damageState.calcDamage = 20
         hp = attacker.hp
-        Battle::AbilityEffects.triggerOnBeingHit(holder.ability, attacker, holder, fang, b)
-        "move=POISONFANG foe_change=#{attacker.hp - hp} eighth=#{attacker.hp - hp == -(attacker.totalhp / 8)}"
+        Battle::AbilityEffects.triggerOnBeingHit(holder.ability, attacker, holder, jab, b)
+        "move=POISONJAB contact=#{jab.pbContactMove?(attacker)} foe_change=#{attacker.hp - hp} " \
+        "eighth=#{attacker.hp - hp == -(attacker.totalhp / 8)}"
       }],
       ["sandstorm", ->(t, spec) {
         with, none = [spec[:ability], nil].map { |a| t.keep_measure(spec, :eor_weather, {weather: :Sandstorm}, a) }

@@ -416,8 +416,7 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
     ],
     "thornedsucculent": [
         {"stage": 'At half HP, take a Surf.', "select": {'case': 'check', 'label': 'surf', 'source': 'selftest'}, "expect": {'immune': 'true', 'foe_change': '0'}},
-        # The Ruleset's Poison Jab has no Contact flag, so a contact Poison move stands in.
-        {"stage": 'Take a Poison Fang (contact, Poison-type).', "select": {'case': 'check', 'label': 'contact_poison', 'source': 'selftest'}, "expect": {'eighth': 'true'}},
+        {"stage": 'Take a Poison Jab.', "select": {'case': 'check', 'label': 'poison_jab', 'source': 'selftest'}, "expect": {'contact': 'true', 'eighth': 'true'}},
         {"stage": 'End a turn in a sandstorm.', "select": {'case': 'check', 'label': 'sandstorm', 'source': 'selftest'}, "expect": {'sand_with': '0', 'spared': 'true'}},
     ],
     # NV-27 hand ports: armed and streak states, each in the battler's chrooked_state.

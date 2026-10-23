@@ -9,4 +9,4 @@ pp: 20
 description: A stabbing attack that may poison the foe.
 additional_effects:
   - { effect: poison, chance: 30 }
-flags: [piercing, punching]
+flags: [contact, piercing, punching]
