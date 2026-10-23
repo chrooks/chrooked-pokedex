@@ -43,6 +43,9 @@ Shapes, their params, and the probe fields each accepts:
   stab_grant         {types | all, multiplier=1.5, control?}  {move, result, hp?, types?}
   hit_status         {status, chance, type | flags}           {move, inflicts, target_types?}
   type_immunity      {type}                                   {move, immune}
+  hit_drain          {fraction, moves=contact|non_contact}    {move, drain, ooze?}
+  ko_effect          {heal | stat}                            {kos, effect, hp?, stage?}
+  priority_boost     {type, full_hp?}                         {move, result, hp?}
 
 `result` is `boosted` or `normal`; `converted` is true or false. `pinch: true` limits a
 type boost to HP at or below 1/3, Blaze's threshold, and a probe's `hp` sets the
@@ -81,6 +84,21 @@ the self-test's own lines (source=selftest).
 A type immunity (NV-13) blocks every move of `type` aimed at the holder, status moves
 included: Nova's Bulletproof shape, keyed on the type. A probe says whether its move
 is blocked (`immune`).
+
+A hit drain (NV-14) heals the user `fraction` of the HP each hit took, through Nova's
+own drain path (Big Root, Heal Block and a Liquid Ooze target all apply), on contact
+moves or on non-contact ones. A probe's `drain` is healed, none or reversed, and
+`ooze: true` puts Liquid Ooze on the target.
+
+A knockout effect (NV-14) fires when the user's move knocks out foes: a `heal` of a
+fraction of max HP while the user can heal (Carnivore), or a `stat` raised one stage
+per foe knocked out (Moxie). A probe names no move: `kos` foes fell (0 for a hit that
+knocked nothing out), and `effect` says whether anything happened, with the user's
+`hp` (heal) or its `stage` in that stat (stat) set first.
+
+A priority boost (NV-14) gives moves of `type` +1 priority, only at full HP when
+`full_hp` is true: Nova's Gale Wings, which reads the move's own type. A probe's `hp`
+sets the user's HP fraction first.
 """
 
 from __future__ import annotations
@@ -96,7 +114,7 @@ from ..model.behavior_spec import BehaviorSpec, BehaviorTemplate
 from ..model.schema import MOVE_FLAGS
 
 SHAPES = ("type_boost", "type_conversion", "flag_boost", "conditional_boost", "stab_grant",
-          "hit_status", "type_immunity")
+          "hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost")
 
 # shape -> (required params, optional params with their defaults)
 _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
@@ -109,11 +127,15 @@ _PARAMS: dict[str, tuple[frozenset[str], dict[str, object]]] = {
     "stab_grant": (frozenset({"types"}), {"multiplier": 1.5, "control": None}),
     "hit_status": (frozenset({"status", "chance"}), {"type": None, "flags": None}),
     "type_immunity": (frozenset({"type"}), {}),
+    "hit_drain": (frozenset({"fraction", "moves"}), {}),
+    "ko_effect": (frozenset(), {"heal": None, "stat": None}),
+    "priority_boost": (frozenset({"type"}), {"full_hp": False}),
 }
 # The probe field that states the expected outcome, per shape.
 _OUTCOME = {"type_boost": "result", "type_conversion": "converted", "flag_boost": "result",
             "conditional_boost": "result", "stab_grant": "result",
-            "hit_status": "inflicts", "type_immunity": "immune"}
+            "hit_status": "inflicts", "type_immunity": "immune", "hit_drain": "drain",
+            "ko_effect": "effect", "priority_boost": "result"}
 # The shapes whose self-test entries carry a setup hash (the self-test's `arrange`).
 _SCENE_SHAPES = ("conditional_boost", "stab_grant")
 # Moves Essentials builds in code, with no PBS section to resolve them by.
@@ -124,8 +146,17 @@ _TERRAINS = ("grassy", "electric", "psychic", "misty")
 _MOVE_SETS = ("all", "higher_stat")
 _STATS = ("physical", "special")
 _CONVERT_FROM = ("normal", "any")
-# The shapes that never scale damage: no calc entry, and a probe's hp means nothing.
-_NON_DAMAGE_SHAPES = ("hit_status", "type_immunity")
+# The shapes that never scale damage: no calc entry.
+_NON_DAMAGE_SHAPES = ("hit_status", "type_immunity", "hit_drain", "ko_effect", "priority_boost")
+_DRAINS = ("healed", "none", "reversed")
+_CONTACT = ("contact", "non_contact")
+# Ruleset stat -> (Essentials stat, its name in stage text)
+_STAT_NAMES = {
+    "attack": ("ATTACK", "Attack"), "defense": ("DEFENSE", "Defense"),
+    "special_attack": ("SPECIAL_ATTACK", "Sp. Atk"), "special_defense": ("SPECIAL_DEFENSE", "Sp. Def"),
+    "speed": ("SPEED", "Speed"),
+}
+_MAX_STAGE = 6
 # status -> (Essentials status, the Battler method stem of pbCan<Stem>? and pb<Stem>,
 # Nova's own message for an ability inflicting it, as its Poison Touch and Static use)
 _STATUSES = {
@@ -219,6 +250,21 @@ def validate(template: BehaviorTemplate, n_test_cases: int, where: str = "templa
         _validate_condition(params, where)
     if template.shape == "hit_status":
         _validate_hit_status(params, where)
+    if template.shape == "hit_drain":
+        if not (_is_positive_number(params["fraction"]) and params["fraction"] <= 1):  # type: ignore[operator]
+            raise TemplateError(f"{where}: params.fraction must be a fraction of the damage in (0, 1], e.g. 0.25")
+        if params["moves"] not in _CONTACT:
+            raise TemplateError(f"{where}: params.moves must be one of {', '.join(_CONTACT)}, not {params['moves']!r}")
+    if template.shape == "ko_effect":
+        heal, stat = params.get("heal"), params.get("stat")
+        if (heal is None) == (stat is None):
+            raise TemplateError(f"{where}: ko_effect needs exactly one of params.heal or params.stat")
+        if heal is not None and not (_is_positive_number(heal) and heal <= 1):  # type: ignore[operator]
+            raise TemplateError(f"{where}: params.heal must be a fraction of max HP in (0, 1], e.g. 0.25")
+        if stat is not None and stat not in _STAT_NAMES:
+            raise TemplateError(f"{where}: params.stat must be one of {', '.join(_STAT_NAMES)}, not {stat!r}")
+    if "full_hp" in params and not isinstance(params["full_hp"], bool):
+        raise TemplateError(f"{where}: params.full_hp must be true or false")
     if template.shape == "stab_grant" and params["types"] != "all" and not _is_type_list(params["types"]):
         raise TemplateError(f"{where}: params.types must be all, or a non-empty list of type names, e.g. [Dark, Fairy]")
     if len(template.probes) != n_test_cases:
@@ -254,9 +300,13 @@ def _validate_hit_status(params: Mapping[str, object], where: str) -> None:
 def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at: str) -> None:
     shape, params = template.shape, template.params
     outcome = _OUTCOME[shape]
-    allowed = {"move", outcome}
-    if shape not in _NON_DAMAGE_SHAPES:
+    allowed = {outcome} if shape == "ko_effect" else {"move", outcome}
+    if shape not in _NON_DAMAGE_SHAPES or shape == "priority_boost":
         allowed.add("hp")
+    if shape == "hit_drain":
+        allowed.add("ooze")
+    if shape == "ko_effect":
+        allowed |= {"kos", "hp"} if params.get("heal") is not None else {"kos", "stage"}
     # A Pokemon without the ability is only measurable as "boosted or not", and the
     # self-test measures it on a bare field, so holder: false belongs to the
     # unconditional result shapes.
@@ -275,12 +325,14 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
-    if not _is_text(probe.get("move")):
+    if shape != "ko_effect" and not _is_text(probe.get("move")):
         raise TemplateError(f"{at}: needs a move name, e.g. {{move: Tackle, ...}}")
     value = probe.get(outcome)
     if outcome == "result" and value not in _RESULTS:
         raise TemplateError(f"{at}: result must be boosted or normal, not {value!r}")
-    if outcome != "result" and not isinstance(value, bool):
+    if outcome == "drain" and value not in _DRAINS:
+        raise TemplateError(f"{at}: drain must be one of {', '.join(_DRAINS)}, not {value!r}")
+    if outcome not in ("result", "drain") and not isinstance(value, bool):
         raise TemplateError(f"{at}: {outcome} must be true or false, not {value!r}")
     hp = probe.get("hp", 1.0)
     if not (_is_positive_number(hp) and hp <= 1):  # type: ignore[operator]
@@ -296,11 +348,33 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         raise TemplateError(f"{at}: target_types must be a non-empty list of type names, e.g. [Fire]")
     if higher_stat and probe.get("stats") not in _STATS:
         raise TemplateError(f"{at}: needs stats: physical or special (which of Attack and Sp. Atk is higher)")
+    if "ooze" in probe and not isinstance(probe["ooze"], bool):
+        raise TemplateError(f"{at}: ooze must be true or false")
+    if probe.get("ooze") and value == "healed":
+        raise TemplateError(f"{at}: a Liquid Ooze target reverses the drain; use drain: reversed")
+    if shape == "ko_effect":
+        _validate_ko_probe(probe, params, at)
     holder = probe.get("holder", True)
     if not holder and value != "normal":
         raise TemplateError(f"{at}: a Pokemon without the ability cannot be boosted; use result: normal")
     if not holder and "hp" in probe:
         raise TemplateError(f"{at}: hp applies to the ability's holder; drop it from a holder: false probe")
+
+
+def _validate_ko_probe(probe: Mapping[str, object], params: Mapping[str, object], at: str) -> None:
+    kos, effect = probe.get("kos"), probe.get("effect")
+    if not (isinstance(kos, int) and not isinstance(kos, bool) and 0 <= kos <= 3):
+        raise TemplateError(f"{at}: kos must be how many foes the move knocked out, 0 to 3")
+    stage = probe.get("stage", 0)
+    if not (isinstance(stage, int) and not isinstance(stage, bool) and -_MAX_STAGE <= stage <= _MAX_STAGE):
+        raise TemplateError(f"{at}: stage must be a stat stage from -6 to 6")
+    if effect and kos == 0:
+        raise TemplateError(f"{at}: nothing happens without a knockout; use effect: false")
+    if effect and float(probe.get("hp", 1.0)) >= 1:  # type: ignore[arg-type]
+        if params.get("heal") is not None:
+            raise TemplateError(f"{at}: a user at full HP cannot heal; set hp below 1 or use effect: false")
+    if effect and stage == _MAX_STAGE:
+        raise TemplateError(f"{at}: the stat is already at +6; use effect: false")
 
 
 def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
@@ -341,6 +415,21 @@ def render_essentials21(spec: BehaviorSpec, names: Names) -> str:
     elif port.shape == "type_immunity":
         values["TYPE"] = port.type
         body = _TYPE_IMMUNITY
+    elif port.shape == "hit_drain":
+        contact = "move.pbContactMove?(user)"
+        values["GATE"] = contact if port.params["moves"] == "contact" else f"!{contact}"
+        values["FRACTION"] = _ruby_float(port.params["fraction"])
+        body = _HIT_DRAIN
+    elif port.shape == "ko_effect" and port.params["heal"] is not None:
+        values["FRACTION"] = _ruby_float(port.params["heal"])
+        body = _KO_HEAL
+    elif port.shape == "ko_effect":
+        values["STAT"] = _STAT_NAMES[str(port.params["stat"])][0]
+        body = _KO_STAT
+    elif port.shape == "priority_boost":
+        gate = f"move.type == :{port.type}"
+        values["CONDITION"] = f"hp_full && {gate}" if port.params["full_hp"] else gate
+        body = _PRIORITY_BOOST
     else:
         values["TYPE_GATE"] = (
             "" if port.grant_types is None
@@ -372,6 +461,11 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
                 "target_types": "/".join(probe.target_types) or "QMARKS",
             }, "expect": {"damage": "NORMAL", "status_ok": "true", "flinch_ok": "true"}})
             continue
+        if port.shape in ("hit_drain", "ko_effect", "priority_boost"):
+            state_select, state_expect = _state_check(port, probe)
+            checks.append({"stage": _stage(spec.name, probe, pinch, port),
+                           "select": state_select, "expect": state_expect})
+            continue
         select: dict[str, object] = {"move": probe.move, "ability": _flag(probe.holder)}
         if pinch and probe.holder:
             select["hp_low"] = _flag(probe.hp * 3 <= 1)  # the port's user.hp <= user.totalhp / 3
@@ -385,6 +479,27 @@ def harness_checks(spec: BehaviorSpec, names: Names) -> list[dict[str, object]]:
             expect = {"result": str(probe.outcome).upper()}
         checks.append({"stage": _stage(spec.name, probe, pinch, port), "select": select, "expect": expect})
     return checks
+
+
+def _state_check(port: _Port, probe: _Probe) -> tuple[dict[str, object], dict[str, object]]:
+    """A check on a port that logs the state deciding its outcome (NV-14): select that
+    state, so the first matching line is the one the probe describes."""
+    if port.shape == "hit_drain":
+        select: dict[str, object] = {"move": probe.move, "ability": "true", "ooze": _flag(probe.ooze)}
+        if probe.outcome == "healed":
+            select["can_heal"] = "true"
+        return select, {"result": str(probe.outcome).upper()}
+    if port.shape == "priority_boost":
+        select = {"move": probe.move, "ability": "true", "hp_full": _flag(probe.hp >= 1)}
+        return select, {"result": "BOOSTED" if probe.outcome == "boosted" else "NORMAL"}
+    select = {"ability": "true", "kos": str(probe.kos)}
+    if port.params["heal"] is not None:
+        select["hp_full"] = _flag(probe.hp >= 1)
+        return select, {"result": "HEALED" if probe.outcome else "NONE"}
+    select["stage"] = str(probe.stage)
+    if not probe.outcome:
+        return select, {"result": "NONE"}
+    return select, {"result": "RAISED", "change": str(min(probe.kos, _MAX_STAGE - probe.stage))}
 
 
 # --- resolution ------------------------------------------------------------------
@@ -406,6 +521,9 @@ class _Probe:
     type_names: tuple[str, ...] = ()  # their neutral names, for stage text
     target_types: tuple[str, ...] = ()       # INTERNAL types to give the target (hit_status)
     target_type_names: tuple[str, ...] = ()  # their neutral names, for stage text
+    ooze: bool = False   # hit_drain: the target holds Liquid Ooze
+    kos: int = 0         # ko_effect: foes the move knocked out
+    stage: int = 0       # ko_effect: the user's stage in the raised stat
 
 
 @dataclass(frozen=True)
@@ -465,16 +583,18 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
     outcome = _OUTCOME[template.shape]
     probes: list[_Probe] = []
     for probe in template.probes:
-        move = names.move(str(probe["move"])) or _BUILTIN_MOVES.get(str(probe["move"]).lower())
-        if move is None:
-            missing.append(f"move {probe['move']!r}")
+        move = None
+        if template.shape != "ko_effect":
+            move = names.move(str(probe["move"])) or _BUILTIN_MOVES.get(str(probe["move"]).lower())
+            if move is None:
+                missing.append(f"move {probe['move']!r}")
         item = None
         if "item" in probe:
             item = names.item(str(probe["item"]))
             if item is None:
                 missing.append(f"item {probe['item']!r}")
         probes.append(_Probe(
-            name=str(probe["move"]), move=move or "", outcome=probe[outcome],
+            name=str(probe.get("move", "")), move=move or "", outcome=probe[outcome],
             hp=float(probe.get("hp", 1.0)), holder=bool(probe.get("holder", True)),  # type: ignore[arg-type]
             field=bool(probe.get("field", True)), item=item,
             item_name=str(probe["item"]) if "item" in probe else None,
@@ -484,7 +604,12 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             type_names=tuple(str(t) for t in probe.get("types") or ()),  # type: ignore[union-attr]
             target_types=resolve_types(probe.get("target_types") or ()),
             target_type_names=tuple(str(t) for t in probe.get("target_types") or ()),  # type: ignore[union-attr]
+            ooze=bool(probe.get("ooze", False)), kos=int(probe.get("kos", 0)),  # type: ignore[call-overload]
+            stage=int(probe.get("stage", 0)),  # type: ignore[call-overload]
         ))
+    if template.shape == "hit_drain" and any(p.get("ooze") for p in template.probes) \
+            and names.ability("Liquid Ooze") is None:
+        missing.append("ability 'Liquid Ooze'")
     if missing:
         raise TemplateError(f"{where}: the target has no {', '.join(dict.fromkeys(missing))}")
     return _Port(shape=template.shape, params=params, ability=ability or "", type=type_,
@@ -633,6 +758,42 @@ def _header(spec: BehaviorSpec, port: _Port) -> str:
                 "Absorb, Flash Fire) it never blocks a move the holder aims at itself.")
         obs = "move=<ID> type=<TYPE> ability=true result=<IMMUNE|NORMAL>"
         when_logged = "a move aimed at the holder"
+    elif port.shape == "hit_drain":
+        seam = "Battle::AbilityEffects::OnDealingHit"
+        which = "makes contact" if port.params["moves"] == "contact" else "does not make contact"
+        note = (f"Nova fires this registry for the user's ability only after a hit that dealt damage and "
+                f"missed any substitute. When the move {which} (pbContactMove?, as Nova's Poison Touch asks), "
+                f"the user heals round({port.params['fraction']} x the HP the target lost) through Nova's own "
+                "drain path, Battle::Battler#pbRecoverHPFromDrain, as its drain moves do: Big Root adds 30%, "
+                "Heal Block and full HP stop it, and a Liquid Ooze target reverses it. Silent when the user "
+                "could not heal and the target has no Liquid Ooze. Modelled on the hand-written Vampiric "
+                "(mjolnir NV-14).")
+        obs = ("move=<ID> ability=true contact=<bool> ooze=<bool> can_heal=<bool> hp_lost=<n> change=<n> "
+               "result=<HEALED|REVERSED|NONE>")
+        when_logged, estimates = "after a hit", False
+    elif port.shape == "ko_effect":
+        seam = "Battle::AbilityEffects::OnEndOfUsingMove"
+        if port.params["heal"] is not None:
+            what = (f"heals {port.params['heal']} of max HP (floored) while the user can heal (alive, below "
+                    "full HP, no Heal Block), with Nova's Ice Body message; one heal however many foes fell. "
+                    "Modelled on the hand-written Carnivore (mjolnir NV-14)")
+            obs = "move=<ID> ability=true kos=<n> hp_full=<bool> change=<n> result=<HEALED|NONE>"
+        else:
+            stat = _STAT_NAMES[str(port.params["stat"])][1]
+            what = f"raises {stat} one stage per foe knocked out, as Moxie raises Attack"
+            obs = "move=<ID> ability=true kos=<n> stage=<n> change=<n> result=<RAISED|NONE>"
+        note = (f"Nova's Moxie shape: after each move the holder uses, a target counts when its damage state "
+                f"says it fainted, and nothing happens if the knockout ended the battle. The port {what}.")
+        when_logged, estimates = "after each move the holder uses", False
+    elif port.shape == "priority_boost":
+        seam = "Battle::AbilityEffects::PriorityChange"
+        hp = " while the holder is at full HP (battler.hp == battler.totalhp)" if port.params["full_hp"] else ""
+        note = (f"Nova's Gale Wings for {port.params['type']}: +1 priority for moves whose own type "
+                f"(move.type, as Gale Wings reads it) is {port.params['type']}{hp}. pbCalculatePriority asks "
+                "it each round for the holder's chosen move; the AI asks it too. Modelled on the "
+                "hand-written Rapid Combustion (mjolnir NV-14).")
+        obs = "move=<ID> type=<TYPE> ability=true hp_full=<bool> priority=<n> result=<BOOSTED|NORMAL>"
+        when_logged = "each round's priority"
     else:
         higher_stat = port.params["moves"] == "higher_stat"
         if higher_stat:
@@ -691,6 +852,8 @@ def _selftest_case(spec: BehaviorSpec, port: _Port) -> str:
     fight = list(dict.fromkeys(f":{p.move}" for p in learnable))[:_FIGHT_MOVES]
     if port.shape == "type_immunity":
         fight = []  # the moves are the foe's to use; the defend phase asks the registry itself
+    if port.shape == "ko_effect":
+        fight = [":TACKLE"]  # its probes name no move; one, so the real path runs in the AI battle
     control = port.params.get("control")
     return _fill(_SELFTEST, {
         "ID": spec.chrooked_id,
@@ -720,6 +883,20 @@ def _phases(port: _Port) -> str:
         return "    chance: [\n" + ",\n".join("      " + e for e in entries) + "\n    ],\n"
     if port.shape == "type_immunity":
         return f"    defend: [{', '.join(dict.fromkeys(':' + p.move for p in port.probes))}],\n"
+    if port.shape == "hit_drain":
+        entries = [f"[:{p.move}, {{hp_lost: 100{', target_ability: :LIQUIDOOZE' if p.ooze else ''}}}]"
+                   for p in port.probes]
+        return f"    drain: [{', '.join(dict.fromkeys(entries))}],\n"
+    if port.shape == "ko_effect":
+        if port.params["heal"] is not None:
+            entries = [f"{{kos: {p.kos}, hp: {_ruby_float(p.hp)}}}" for p in port.probes]
+        else:
+            stat = _STAT_NAMES[str(port.params["stat"])][0]
+            entries = [f"{{kos: {p.kos}, stages: {{{stat}: {p.stage}}}}}" for p in port.probes]
+        return f"    ko: [{', '.join(dict.fromkeys(entries))}],\n"
+    if port.shape == "priority_boost":
+        entries = [f"[:{p.move}, {_ruby_float(p.hp)}]" for p in port.probes]
+        return f"    priority: [{', '.join(dict.fromkeys(entries))}],\n"
     return ""
 
 
@@ -766,6 +943,21 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
         return f"With your {name} user, use {probe.name} on {foe}, many times."
     if port.shape == "type_immunity":
         return f"Have the foe use {probe.name} on your {name} Pokemon."
+    if port.shape == "hit_drain":
+        foe = "a Liquid Ooze foe" if probe.ooze else "a foe"
+        return f"With your {name} user below full HP, hit {foe} with {probe.name}."
+    if port.shape == "ko_effect":
+        if port.params["heal"] is not None:
+            who = f"With your {name} user at {_hp_text(probe.hp)}"
+        else:
+            stat = _STAT_NAMES[str(port.params["stat"])][1]
+            who = f"With your {name} user" + (f" at {probe.stage:+d} {stat}" if probe.stage else "")
+        if probe.kos == 0:
+            return f"{who}, hit a foe without knocking it out."
+        foes = "a foe" if probe.kos == 1 else f"{probe.kos} foes at once"
+        return f"{who}, knock out {foes}."
+    if port.shape == "priority_boost":
+        return f"With your {name} user at {_hp_text(probe.hp)}, use {probe.name}."
     if not probe.holder:
         return f"With a Pokemon WITHOUT {name}, use {probe.name} on the foe."
     hp = ""
@@ -789,6 +981,10 @@ def _stage(name: str, probe: _Probe, pinch: bool, port: _Port) -> str:
     elif port.shape == "conditional_boost":
         where = f" on {str(port.params['terrain']).title()} Terrain" if probe.field else " with no terrain"
     return f"{who}{hp}{where}, use {probe.name} on the foe."
+
+
+def _hp_text(hp: float) -> str:
+    return "full HP" if hp >= 1 else f"{Fraction(hp).limit_denominator(12)} max HP"
 
 
 def _a(word: str) -> str:
@@ -824,7 +1020,8 @@ def _is_type_list(value: object) -> bool:
 # The shapes' Ruby, as proven by hand in NV-5..NV-9 (chrooked_kindle.rb,
 # chrooked_overcharge.rb, chrooked_chitinize.rb, chrooked_martialartist.rb,
 # chrooked_forestry.rb; NV-13's chrooked_pyre.rb, chrooked_nocturnal.rb and
-# chrooked_arcticariette.rb). `{{KEY}}` is filled by _fill; everything else is literal
+# chrooked_arcticariette.rb; NV-14's chrooked_vampiric.rb, chrooked_carnivore.rb and
+# chrooked_rapidcombustion.rb). `{{KEY}}` is filled by _fill; everything else is literal
 # Ruby, `#{...}` interpolation included.
 
 _PORT = """\
@@ -1034,6 +1231,112 @@ begin
   )
 {{SELFTEST}}
   ChrookedLog.line("[chrooked:{{ID}}] installed on MoveImmunity")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_HIT_DRAIN = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_on_hit=#{!Battle::AbilityEffects::OnDealingHit[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::OnDealingHit.add(:{{ABILITY}},
+    proc { |ability, user, target, move, battle|
+      gated    = {{GATE}}
+      ooze     = target.hasActiveAbility?(:LIQUIDOOZE, true)
+      can_heal = user.canHeal?
+      amount   = (target.damageState.hpLost * {{FRACTION}}).round
+      before   = user.hp
+      if gated && amount > 0 && !user.fainted? && (can_heal || ooze)
+        battle.pbShowAbilitySplash(user)
+        user.pbRecoverHPFromDrain(amount, target)
+        battle.pbHideAbilitySplash(user)
+      end
+      change = user.hp - before
+      ChrookedLog.line("[chrooked:{{ID}}] OBS move=#{move.id} ability=true contact=#{move.pbContactMove?(user)} " \\
+                       "ooze=#{ooze} can_heal=#{can_heal} hp_lost=#{target.damageState.hpLost} change=#{change} " \\
+                       "result=#{change > 0 ? 'HEALED' : (change < 0 ? 'REVERSED' : 'NONE')}")
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on OnDealingHit")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_KO_HEAL = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=" \\
+                   "#{!Battle::AbilityEffects::OnEndOfUsingMove[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::OnEndOfUsingMove.add(:{{ABILITY}},
+    proc { |ability, user, targets, move, battle|
+      kos     = targets.count { |b| b.damageState.fainted }
+      hp_full = user.hp >= user.totalhp
+      before  = user.hp
+      if kos > 0 && !battle.pbAllFainted?(user.idxOpposingSide) && user.canHeal?
+        battle.pbShowAbilitySplash(user)
+        user.pbRecoverHP((user.totalhp * {{FRACTION}}).floor)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          battle.pbDisplay(_INTL("{1}'s HP was restored.", user.pbThis))
+        else
+          battle.pbDisplay(_INTL("{1} {2} restored its HP.", user.pbOfThis, user.abilityName))
+        end
+        battle.pbHideAbilitySplash(user)
+      end
+      change = user.hp - before
+      ChrookedLog.line("[chrooked:{{ID}}] OBS move=#{move.id} ability=true kos=#{kos} hp_full=#{hp_full} " \\
+                       "change=#{change} result=#{change > 0 ? 'HEALED' : 'NONE'}")
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on OnEndOfUsingMove")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_KO_STAT = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=" \\
+                   "#{!Battle::AbilityEffects::OnEndOfUsingMove[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::OnEndOfUsingMove.add(:{{ABILITY}},
+    proc { |ability, user, targets, move, battle|
+      kos   = targets.count { |b| b.damageState.fainted }
+      stage = user.stages[:{{STAT}}]
+      if kos > 0 && !battle.pbAllFainted?(user.idxOpposingSide) && user.pbCanRaiseStatStage?(:{{STAT}}, user)
+        user.pbRaiseStatStageByAbility(:{{STAT}}, kos, user)
+      end
+      change = user.stages[:{{STAT}}] - stage
+      ChrookedLog.line("[chrooked:{{ID}}] OBS move=#{move.id} ability=true kos=#{kos} stage=#{stage} " \\
+                       "change=#{change} result=#{change > 0 ? 'RAISED' : 'NONE'}")
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on OnEndOfUsingMove")
+rescue StandardError => e
+  ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
+end
+"""
+
+_PRIORITY_BOOST = """\
+begin
+  ChrookedLog.line("[chrooked:{{ID}}] load prior_handler=" \\
+                   "#{!Battle::AbilityEffects::PriorityChange[:{{ABILITY}}].nil?}")
+  Battle::AbilityEffects::PriorityChange.add(:{{ABILITY}},
+    proc { |ability, battler, move, pri|
+      hp_full = battler.hp == battler.totalhp
+      boosted = {{CONDITION}}
+      if ChrookedLog::ENABLED
+        tag = caller_locations(1, 6).any? { |l| l.path.to_s =~ /AI[ _]?Move/ } ? "EST" : "OBS"
+        ChrookedLog.line("[chrooked:{{ID}}] #{tag} move=#{move.id} type=#{move.type} ability=true " \\
+                         "hp_full=#{hp_full} priority=#{boosted ? pri + 1 : pri} " \\
+                         "result=#{boosted ? 'BOOSTED' : 'NORMAL'}")
+      end
+      next pri + 1 if boosted
+    }
+  )
+{{SELFTEST}}
+  ChrookedLog.line("[chrooked:{{ID}}] installed on PriorityChange")
 rescue StandardError => e
   ChrookedLog.error("[chrooked:{{ID}}] ERROR #{e.class}: #{e.message}")
 end

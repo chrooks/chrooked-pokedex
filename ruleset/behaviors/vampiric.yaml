@@ -28,3 +28,10 @@ engine_hints:
     CHROOKED_ON_DEAL never sees the damage amount). The mod gates on
     makesContact? and routes damage/4 through absorbHP with agent
     :HPDrainingMove, so Big Root, Liquid Ooze, and canHeal? are all respected.
+template:
+  shape: hit_drain
+  params: {fraction: 0.25, moves: contact}
+  probes:
+    - {move: Tackle, drain: healed}
+    - {move: Water Gun, drain: none}
+    - {move: Tackle, drain: reversed, ooze: true}

@@ -24,3 +24,10 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c case ABILITY_HUBRIS shares the ABILITY_MOXIE/BEAST_BOOST block (ref ~4625): stat forced to STAT_SPATK; SET_STATCHANGER(stat, numMonsFainted, FALSE) then BattleScript_RaiseStatOnFaintingTarget; gated on CompareStat(... MAX_STAT_STAGE, CMP_LESS_THAN)."
   essentials: "Clone of Moxie's OnEndOfUsingMove KO handler but raise :SPECIAL_ATTACK instead of :ATTACK."
+template:
+  shape: ko_effect
+  params: {stat: special_attack}
+  probes:
+    - {kos: 1, effect: true}
+    - {kos: 2, effect: true}
+    - {kos: 1, effect: false, stage: 6}

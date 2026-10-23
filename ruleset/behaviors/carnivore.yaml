@@ -25,3 +25,10 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c case ABILITY_CARNIVORE (ref ~4656): gated on IsBattlerAlive, !NoAliveMonsForEitherParty, NumFaintedBattlersByAttacker(battler) > 0, !healBlock, hp < maxHP; SetHealAmount(battler, GetNonDynamaxMaxHP(battler) / 4) then BattleScript_HospitalityActivates."
   essentials: "Battle::AbilityEffects::OnEndOfUsingMove or a faint hook — when the user's move KOs a target and user is below full HP, healDamage(user.totalhp/4)."
+template:
+  shape: ko_effect
+  params: {heal: 0.25}
+  probes:
+    - {kos: 1, effect: true, hp: 0.5}
+    - {kos: 0, effect: false, hp: 0.5}
+    - {kos: 1, effect: false, hp: 1.0}

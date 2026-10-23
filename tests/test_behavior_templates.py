@@ -40,7 +40,7 @@ class _Names:
         "Body Slam": "BODYSLAM", "Hyper Voice": "HYPERVOICE",
         "Dark Pulse": "DARKPULSE", "Crunch": "CRUNCH", "Waterfall": "WATERFALL",
         "Shadow Ball": "SHADOWBALL", "Dragon Pulse": "DRAGONPULSE", "Knock Off": "KNOCKOFF",
-        "Taunt": "TAUNT", "Bug Buzz": "BUGBUZZ",
+        "Taunt": "TAUNT", "Bug Buzz": "BUGBUZZ", "Water Gun": "WATERGUN",
     }
     TYPES = {"fire": "FIRE", "electric": "ELECTRIC", "bug": "BUG", "water": "WATER",
              "dragon": "DRAGON", "dark": "DARK", "fairy": "FAIRY", "normal": "NORMAL",
@@ -144,10 +144,37 @@ SACREDTOLL = _spec("sacredtoll", "type_conversion",
     {"move": "Tackle", "converted": False},
     {"move": "Bug Buzz", "converted": True},
 ], name="Sacred Toll")
+VAMPIRIC = _spec("vampiric", "hit_drain", {"fraction": 0.25, "moves": "contact"}, [
+    {"move": "Tackle", "drain": "healed"},
+    {"move": "Water Gun", "drain": "none"},
+    {"move": "Tackle", "drain": "reversed", "ooze": True},
+])
+SOULSIPHON = _spec("soulsiphon", "hit_drain", {"fraction": 0.25, "moves": "non_contact"}, [
+    {"move": "Water Gun", "drain": "healed"},
+    {"move": "Tackle", "drain": "none"},
+    {"move": "Water Gun", "drain": "reversed", "ooze": True},
+], name="Soul Siphon")
+CARNIVORE = _spec("carnivore", "ko_effect", {"heal": 0.25}, [
+    {"kos": 1, "effect": True, "hp": 0.5},
+    {"kos": 0, "effect": False, "hp": 0.5},
+    {"kos": 1, "effect": False, "hp": 1.0},
+])
+HUBRIS = _spec("hubris", "ko_effect", {"stat": "special_attack"}, [
+    {"kos": 1, "effect": True},
+    {"kos": 2, "effect": True},
+    {"kos": 1, "effect": False, "stage": 6},
+])
+RAPIDCOMBUSTION = _spec("rapidcombustion", "priority_boost", {"type": "Fire", "full_hp": True}, [
+    {"move": "Flamethrower", "result": "boosted"},
+    {"move": "Flamethrower", "result": "normal", "hp": 0.5},
+    {"move": "Surf", "result": "normal"},
+], name="Rapid Combustion")
 ALL = [KINDLE, OVERCHARGE, CHITINIZE, STRIKER, MARTIALARTIST, FORESTRY, DOWNPOUR, MYSTICPOWER, VIOLENTBLOOD,
-       PYRE, SCALDINGPULSE, NOCTURNAL, ARCTICARIETTE, SACREDTOLL]
+       PYRE, SCALDINGPULSE, NOCTURNAL, ARCTICARIETTE, SACREDTOLL,
+       VAMPIRIC, SOULSIPHON, CARNIVORE, HUBRIS, RAPIDCOMBUSTION]
 # The registry each shape's port adds to; DamageCalcFromUser unless named here.
-_REGISTRY = {"hit_status": "OnDealingHit", "type_immunity": "MoveImmunity"}
+_REGISTRY = {"hit_status": "OnDealingHit", "type_immunity": "MoveImmunity", "hit_drain": "OnDealingHit",
+             "ko_effect": "OnEndOfUsingMove", "priority_boost": "PriorityChange"}
 # Every key the lab self-test logs, for checks scored on its own lines (source=selftest).
 _SELFTEST_KEYS = set(re.findall(r"\b([a-z_]+)=", (
     Path(__file__).resolve().parents[1] / "references" / "essentials21-harness" / "lab" / "010_battle_selftest.rb"
@@ -363,6 +390,59 @@ def test_the_default_conversion_is_unchanged_by_from_and_flags():
     assert "flags.any?" not in _render(CHITINIZE)
 
 
+def test_hit_drain_is_the_hand_proven_vampiric_through_novas_drain_path():
+    """NV-14: Nova's drain-move path, so Big Root, Heal Block and Liquid Ooze apply."""
+    text = _render(VAMPIRIC)
+    assert "Battle::AbilityEffects::OnDealingHit.add(:VAMPIRIC," in text
+    assert "      gated    = move.pbContactMove?(user)\n" in text
+    assert "amount   = (target.damageState.hpLost * 0.25).round" in text
+    assert "if gated && amount > 0 && !user.fainted? && (can_heal || ooze)" in text
+    assert "user.pbRecoverHPFromDrain(amount, target)" in text
+    assert ("drain: [[:TACKLE, {hp_lost: 100}], [:WATERGUN, {hp_lost: 100}], "
+            "[:TACKLE, {hp_lost: 100, target_ability: :LIQUIDOOZE}]],\n") in text
+    assert "fight: [:TACKLE, :WATERGUN]\n" in text
+    assert "] EST " not in text
+    assert "      gated    = !move.pbContactMove?(user)\n" in _render(SOULSIPHON)
+
+
+def test_hit_drain_needs_liquid_ooze_in_the_target_for_an_ooze_probe():
+    class NoOoze(_Names):
+        def ability(self, name):
+            return None if name == "Liquid Ooze" else super().ability(name)
+
+    with pytest.raises(TemplateError, match="ability 'Liquid Ooze'"):
+        render_essentials21(VAMPIRIC, NoOoze())
+
+
+def test_ko_effect_heal_is_the_hand_proven_carnivore():
+    text = _render(CARNIVORE)
+    assert "Battle::AbilityEffects::OnEndOfUsingMove.add(:CARNIVORE," in text
+    assert "kos     = targets.count { |b| b.damageState.fainted }" in text
+    assert "if kos > 0 && !battle.pbAllFainted?(user.idxOpposingSide) && user.canHeal?" in text
+    assert "user.pbRecoverHP((user.totalhp * 0.25).floor)" in text
+    assert "ko: [{kos: 1, hp: 0.5}, {kos: 0, hp: 0.5}, {kos: 1, hp: 1.0}],\n" in text
+    assert "fight: [:TACKLE]\n" in text  # its probes name no move
+
+
+def test_ko_effect_stat_is_moxies_shape():
+    text = _render(HUBRIS)
+    assert "user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)" in text
+    assert "user.pbRaiseStatStageByAbility(:SPECIAL_ATTACK, kos, user)" in text
+    assert ("ko: [{kos: 1, stages: {SPECIAL_ATTACK: 0}}, {kos: 2, stages: {SPECIAL_ATTACK: 0}}, "
+            "{kos: 1, stages: {SPECIAL_ATTACK: 6}}],\n") in text
+    assert "pbRecoverHP" not in text
+
+
+def test_priority_boost_is_gale_wings_on_the_moves_own_type():
+    text = _render(RAPIDCOMBUSTION)
+    assert "Battle::AbilityEffects::PriorityChange.add(:RAPIDCOMBUSTION," in text
+    assert "      boosted = hp_full && move.type == :FIRE\n" in text
+    assert "      next pri + 1 if boosted\n" in text
+    assert "priority: [[:FLAMETHROWER, 1.0], [:FLAMETHROWER, 0.5], [:SURF, 1.0]],\n" in text
+    anytime = replace(RAPIDCOMBUSTION, template=replace(RAPIDCOMBUSTION.template, params={"type": "Fire"}))
+    assert "      boosted = move.type == :FIRE\n" in _render(anytime)
+
+
 @pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby not installed")
 @pytest.mark.parametrize("spec", ALL, ids=lambda s: s.chrooked_id)
 def test_rendered_port_is_valid_ruby(spec, tmp_path):
@@ -485,6 +565,52 @@ def test_flagged_conversion_checks():
         ({"move": "TACKLE", "ability": "true"}, {"converted": "none", "boosted": "false"}),
         ({"move": "BUGBUZZ", "ability": "true"}, {"converted": "PSYCHIC", "boosted": "true"}),
     ]
+
+
+def test_hit_drain_checks_select_the_state_that_decides_the_outcome():
+    """The harness scores the first matching line, so a check selects what decides it:
+    whether the user could heal, and whether the target held Liquid Ooze."""
+    assert _verdicts(VAMPIRIC) == [
+        ({"move": "TACKLE", "ability": "true", "ooze": "false", "can_heal": "true"}, {"result": "HEALED"}),
+        ({"move": "WATERGUN", "ability": "true", "ooze": "false"}, {"result": "NONE"}),
+        ({"move": "TACKLE", "ability": "true", "ooze": "true"}, {"result": "REVERSED"}),
+    ]
+    assert harness_checks(VAMPIRIC, _Names())[2]["stage"] == \
+        "With your Vampiric user below full HP, hit a Liquid Ooze foe with Tackle."
+
+
+def test_ko_effect_checks():
+    assert _verdicts(CARNIVORE) == [
+        ({"ability": "true", "kos": "1", "hp_full": "false"}, {"result": "HEALED"}),
+        ({"ability": "true", "kos": "0", "hp_full": "false"}, {"result": "NONE"}),
+        ({"ability": "true", "kos": "1", "hp_full": "true"}, {"result": "NONE"}),
+    ]
+    assert _verdicts(HUBRIS) == [  # one stage per knockout, as Moxie
+        ({"ability": "true", "kos": "1", "stage": "0"}, {"result": "RAISED", "change": "1"}),
+        ({"ability": "true", "kos": "2", "stage": "0"}, {"result": "RAISED", "change": "2"}),
+        ({"ability": "true", "kos": "1", "stage": "6"}, {"result": "NONE"}),
+    ]
+    stages = [c["stage"] for c in harness_checks(HUBRIS, _Names())]
+    assert stages == ["With your Hubris user, knock out a foe.", "With your Hubris user, knock out 2 foes at once.",
+                      "With your Hubris user at +6 Sp. Atk, knock out a foe."]
+    assert harness_checks(CARNIVORE, _Names())[1]["stage"] == \
+        "With your Carnivore user at 1/2 max HP, hit a foe without knocking it out."
+
+
+def test_ko_effect_raise_is_capped_at_plus_six():
+    spec = replace(HUBRIS, template=replace(HUBRIS.template, probes=(
+        {"kos": 2, "effect": True, "stage": 5},) + HUBRIS.template.probes[1:]))
+    assert _verdicts(spec)[0][1] == {"result": "RAISED", "change": "1"}
+
+
+def test_priority_boost_checks():
+    assert _verdicts(RAPIDCOMBUSTION) == [
+        ({"move": "FLAMETHROWER", "ability": "true", "hp_full": "true"}, {"result": "BOOSTED"}),
+        ({"move": "FLAMETHROWER", "ability": "true", "hp_full": "false"}, {"result": "NORMAL"}),
+        ({"move": "SURF", "ability": "true", "hp_full": "true"}, {"result": "NORMAL"}),
+    ]
+    assert harness_checks(RAPIDCOMBUSTION, _Names())[1]["stage"] == \
+        "With your Rapid Combustion user at 1/2 max HP, use Flamethrower."
 
 
 @pytest.mark.parametrize("spec", ALL, ids=lambda s: s.chrooked_id)
@@ -646,6 +772,34 @@ def test_the_proven_specs_validate():
      "unknown fields holder"),
     (_template("type_immunity", {"type": "Dark", "multiplier": 1.5}, [{"move": "Bite", "immune": True}]),
      "unknown params multiplier"),
+    (_template("hit_drain", {"fraction": 0, "moves": "contact"}, [{"move": "Bite", "drain": "healed"}]),
+     "params.fraction must be a fraction"),
+    (_template("hit_drain", {"fraction": 0.25, "moves": "biting"}, [{"move": "Bite", "drain": "healed"}]),
+     "params.moves must be one of contact, non_contact"),
+    (_template("hit_drain", {"fraction": 0.25, "moves": "contact"}, [{"move": "Bite", "drain": "yes"}]),
+     "drain must be one of healed, none, reversed"),
+    (_template("hit_drain", {"fraction": 0.25, "moves": "contact"}, [{"move": "Bite", "drain": "healed", "ooze": True}]),
+     "reverses the drain"),
+    (_template("hit_drain", {"fraction": 0.25, "moves": "contact"}, [{"move": "Bite", "drain": "none", "hp": 0.5}]),
+     "unknown fields hp"),
+    (_template("ko_effect", {}, [{"kos": 1, "effect": True}]), "exactly one of params.heal or params.stat"),
+    (_template("ko_effect", {"heal": 0.25, "stat": "speed"}, [{"kos": 1, "effect": True}]),
+     "exactly one of params.heal or params.stat"),
+    (_template("ko_effect", {"heal": 2}, [{"kos": 1, "effect": True, "hp": 0.5}]), "params.heal must be a fraction"),
+    (_template("ko_effect", {"stat": "luck"}, [{"kos": 1, "effect": True}]), "params.stat must be one of"),
+    (_template("ko_effect", {"stat": "speed"}, [{"kos": -1, "effect": False}]), "kos must be how many"),
+    (_template("ko_effect", {"stat": "speed"}, [{"kos": 0, "effect": True}]), "nothing happens without a knockout"),
+    (_template("ko_effect", {"stat": "speed"}, [{"kos": 1, "effect": True, "stage": 6}]), "already at \\+6"),
+    (_template("ko_effect", {"stat": "speed"}, [{"kos": 1, "effect": True, "stage": 7}]), "stage must be"),
+    (_template("ko_effect", {"stat": "speed"}, [{"kos": 1, "effect": True, "hp": 0.5}]), "unknown fields hp"),
+    (_template("ko_effect", {"heal": 0.25}, [{"kos": 1, "effect": True}]), "a user at full HP cannot heal"),
+    (_template("ko_effect", {"heal": 0.25}, [{"kos": 1, "effect": True, "hp": 0.5, "stage": 1}]),
+     "unknown fields stage"),
+    (_template("ko_effect", {"heal": 0.25}, [{"kos": 1, "effect": "yes", "hp": 0.5}]), "effect must be true or false"),
+    (_template("priority_boost", {"type": "Fire", "full_hp": "yes"}, [{"move": "Ember", "result": "boosted"}]),
+     "params.full_hp must be true or false"),
+    (_template("priority_boost", {"type": "Fire"}, [{"move": "Ember", "result": "boosted", "holder": False}]),
+     "unknown fields holder"),
 ])
 def test_validate_refuses(template, message):
     with pytest.raises(TemplateError, match=message):

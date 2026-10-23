@@ -27,3 +27,10 @@ engine_hints:
     — the same damage-aware on-deal table Vampiric uses — gated on
     !makesContact?, routing damage/4 through absorbHP with agent
     :HPDrainingMove (Big Root, Liquid Ooze, canHeal? all respected).
+template:
+  shape: hit_drain
+  params: {fraction: 0.25, moves: non_contact}
+  probes:
+    - {move: Water Gun, drain: healed}
+    - {move: Tackle, drain: none}
+    - {move: Water Gun, drain: reversed, ooze: true}

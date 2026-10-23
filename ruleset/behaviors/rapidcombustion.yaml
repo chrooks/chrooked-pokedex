@@ -21,3 +21,10 @@ notes:
 engine_hints:
   pokeemerald: "Priority assignment, src/battle_main.c:4847 — priority++ when ability == RAPID_COMBUSTION && IsBattlerAtMaxHp(battler) && GetMoveType(move) == TYPE_FIRE."
   essentials: "In the priority calculation, add +1 when the user has Rapid Combustion, is at full HP, and the move is Fire-type."
+template:
+  shape: priority_boost
+  params: {type: Fire, full_hp: true}
+  probes:
+    - {move: Flamethrower, result: boosted}
+    - {move: Flamethrower, result: normal, hp: 0.5}
+    - {move: Surf, result: normal}

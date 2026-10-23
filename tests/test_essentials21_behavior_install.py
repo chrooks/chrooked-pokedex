@@ -195,7 +195,7 @@ def test_lab_scripts_are_harvested_beside_the_ports():
     # Safe to arm briefly on a played copy (runbook 31): scratch save dir, globals
     # restored, run once per process, title-screen fallback, absolute log path.
     assert "swap_save_dir(SAVE_SCRATCH)" in selftest
-    assert "$player, $bag, $stats, $game_switches, $game_variables = old" in selftest
+    assert "$player, $bag, $stats, $game_switches, $game_variables, $PokemonSystem = old" in selftest
     assert "$chrooked_selftest_ran = true" in selftest
     assert "class Scene_Intro" in selftest
     assert 'LOG          = File.expand_path("chrooked_load.log")' in selftest
