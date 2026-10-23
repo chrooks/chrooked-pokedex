@@ -56,10 +56,12 @@ def test_vocab_flag_maps_known_and_refuses_unknown():
     assert vocab.flag("hammer") == "Hammer"
     assert vocab.flag("piercing") == "Piercing"
     assert vocab.flag("wing") == "Wing"
-    # Ballistic is Essentials' own Bomb, written since True Shot reads it (NV-25).
+    # Ballistic is Essentials' own Bomb, written since True Shot reads it (NV-25);
+    # Bone is custom, written since Bone Breaker reads it (NV-30).
     assert vocab.flag("ballistic") == "Bomb"
-    # Not written until a port needs it -> honest None, caller marks unresolved.
-    assert vocab.flag("bone") is None
+    assert vocab.flag("bone") == "Bone"
+    # A flag the Ruleset does not model -> honest None, caller marks unresolved.
+    assert vocab.flag("feathery") is None
 
 
 def test_vocab_primary_effect_hit_is_none_functioncode():

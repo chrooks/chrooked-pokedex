@@ -559,4 +559,63 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         # The Ruleset marks Hydro Pump a pulse move, so Fire Blast stands in for "not a pulse move".
         {"stage": 'Use Fire Blast on a foe at +6 evasion.', "select": {'case': 'check', 'label': 'not_pulse', 'source': 'selftest'}, "expect": {'target': 'NearOther', 'never_misses': 'false'}},
     ],
+    # NV-30 hand ports: one-offs, and the move Gastric Snare that Corrosion's case needs.
+    "angerpoint": [
+        {"stage": 'Camerupt takes a critical hit.', "select": {'case': 'check', 'label': 'camerupt', 'source': 'selftest'}, "expect": {'attack': '0', 'spatk': '6'}},
+        {"stage": 'Primeape takes a critical hit.', "select": {'case': 'check', 'label': 'primeape', 'source': 'selftest'}, "expect": {'attack': '6', 'spatk': '0'}},
+        {"stage": 'Mew (equal Attack and Sp. Atk) takes a critical hit.', "select": {'case': 'check', 'label': 'tie', 'source': 'selftest'}, "expect": {'attack': '6', 'spatk': '0'}},
+        {"stage": 'Camerupt at +6 Sp. Atk takes a critical hit.', "select": {'case': 'check', 'label': 'spatk_maxed', 'source': 'selftest'}, "expect": {'attack': '0', 'spatk': '6'}},
+        {"stage": 'Camerupt takes a hit that is not critical.', "select": {'case': 'check', 'label': 'not_critical', 'source': 'selftest'}, "expect": {'attack': '0', 'spatk': '0'}},
+    ],
+    "bonebreaker": [
+        {"stage": 'Use Bone Rush on a Flying-type.', "select": {'case': 'check', 'label': 'flying', 'source': 'selftest'}, "expect": {'connects': 'true'}},
+        {"stage": 'Use Bone Rush on a Levitate, then an Earth Eater foe.', "select": {'case': 'check', 'label': 'levitate_absorb', 'source': 'selftest'}, "expect": {'levitate_connects': 'true', 'earth_eater_connects': 'true'}},
+        {"stage": 'Use Tackle on a Ghost-type.', "select": {'case': 'check', 'label': 'tackle_ghost', 'source': 'selftest'}, "expect": {'connects': 'false'}},
+    ],
+    "corrosion": [
+        {"stage": 'Use Poison Jab on Steelix.', "select": {'case': 'check', 'label': 'steelix', 'source': 'selftest'}, "expect": {'factor': '1.00'}},
+        {"stage": 'Use Gunk Shot on Registeel.', "select": {'case': 'check', 'label': 'registeel', 'source': 'selftest'}, "expect": {'factor': '2.00'}},
+        {"stage": 'Use Gastric Snare on Scizor.', "select": {'case': 'check', 'label': 'scizor', 'source': 'selftest'}, "expect": {'factor': '4.00'}},
+        {"stage": 'With a Pokemon without Corrosion, use Poison Jab on Registeel.', "select": {'case': 'check', 'label': 'without', 'source': 'selftest'}, "expect": {'factor': '0.00'}},
+        {"stage": 'Use Toxic on Registeel.', "select": {'case': 'check', 'label': 'toxic', 'source': 'selftest'}, "expect": {'status': 'POISON', 'toxic': 'true'}},
+        {"stage": 'Use Razor Leaf on Registeel.', "select": {'case': 'check', 'label': 'razor_leaf', 'source': 'selftest'}, "expect": {'factor': '0.50'}},
+    ],
+    "gastricsnare": [
+        {"stage": 'Use Gastric Snare on Caterpie.', "select": {'case': 'check', 'label': 'caterpie', 'source': 'selftest'}, "expect": {'factor': '2.00'}},
+        {"stage": 'Use Gastric Snare on Scyther.', "select": {'case': 'check', 'label': 'scyther', 'source': 'selftest'}, "expect": {'factor': '2.00'}},
+        {"stage": 'Use Gastric Snare on Kangaskhan.', "select": {'case': 'check', 'label': 'kangaskhan', 'source': 'selftest'}, "expect": {'factor': '1.00'}},
+        {"stage": 'Use Gastric Snare on a Caterpie already paralyzed, many times.', "select": {'case': 'check', 'label': 'statused_bug', 'source': 'selftest'}, "expect": {'factor': '2.00', 'ok': 'true'}},
+        {"stage": 'With Corrosion, use Gastric Snare on Scizor.', "select": {'case': 'check', 'label': 'scizor_corrosion', 'source': 'selftest'}, "expect": {'factor': '4.00'}},
+    ],
+    "deeprooted": [
+        {"stage": 'Drain 50 HP with Giga Drain.', "select": {'case': 'check', 'label': 'giga_drain', 'source': 'selftest'}, "expect": {'recovered': '65'}},
+        {"stage": 'Receive 10 HP from Leech Seed.', "select": {'case': 'check', 'label': 'leech_seed', 'source': 'selftest'}, "expect": {'recovered': '13'}},
+        {"stage": 'Use Tackle.', "select": {'case': 'check', 'label': 'tackle', 'source': 'selftest'}, "expect": {'recovered': '0'}},
+    ],
+    "nematocyst": [
+        {"stage": 'Use Surf on Chansey, many times.', "select": {'case': 'check', 'label': 'surf_chansey', 'source': 'selftest'}, "expect": {'ok': 'true', 'all_toxic': 'true'}},
+        {"stage": 'Use Poison Sting on Snorlax, many times.', "select": {'case': 'check', 'label': 'poison_sting', 'source': 'selftest'}, "expect": {'all_toxic': 'true'}},
+        {"stage": 'Use Surf on Toxapex, many times.', "select": {'case': 'check', 'label': 'surf_toxapex', 'source': 'selftest'}, "expect": {'poisoned': '0'}},
+    ],
+    "soulsight": [
+        {"stage": 'At -6 accuracy, use Aura Sphere on a Sand Veil foe in a sandstorm.', "select": {'case': 'check', 'label': 'aura_sphere_sand_veil', 'source': 'selftest'}, "expect": {'never_misses': 'true'}},
+        {"stage": 'Use Focus Blast.', "select": {'case': 'check', 'label': 'focus_blast', 'source': 'selftest'}, "expect": {'never_misses': 'true'}},
+        {"stage": 'Use Aura Sphere on a Ghost-type.', "select": {'case': 'check', 'label': 'aura_sphere_ghost', 'source': 'selftest'}, "expect": {'factor': '1.00', 'never_misses': 'true'}},
+        {"stage": 'Take a Fake Out.', "select": {'case': 'check', 'label': 'fake_out', 'source': 'selftest'}, "expect": {'flinched': 'false', 'flinched_without': 'true'}},
+    ],
+    "deadeye": [
+        {"stage": 'Use Hydro Pump on a +6 evasion Sand Veil foe in a sandstorm.', "select": {'case': 'check', 'label': 'hydro_pump_evasive', 'source': 'selftest'}, "expect": {'never_misses': 'true'}},
+        {"stage": 'Use Snipe Shot on a foe at +2 Sp. Def.', "select": {'case': 'check', 'label': 'snipe_shot_raised', 'source': 'selftest'}, "expect": {'same_as_zero': 'true'}},
+        {"stage": 'Use Snipe Shot on a foe at -1 Sp. Def.', "select": {'case': 'check', 'label': 'snipe_shot_lowered', 'source': 'selftest'}, "expect": {'same_as_zero': 'false'}},
+        {"stage": 'At -2 accuracy, use Liquidation on a foe at +2 Defense.', "select": {'case': 'check', 'label': 'liquidation_contact', 'source': 'selftest'}, "expect": {'never_misses': 'false', 'same_as_zero': 'false'}},
+        {"stage": 'Use Hydro Pump on a foe mid-Dive.', "select": {'case': 'check', 'label': 'hydro_pump_dive', 'source': 'selftest'}, "expect": {'hits': '0'}},
+    ],
+    "truant": [
+        {"stage": 'On a loaf turn, use Bulk Up.', "select": {'case': 'check', 'label': 'bulk_up', 'source': 'selftest'}, "expect": {'acted': 'true', 'next_turn_acts': 'true'}},
+        {"stage": 'On a loaf turn, use Double-Edge.', "select": {'case': 'check', 'label': 'double_edge', 'source': 'selftest'}, "expect": {'acted': 'false'}},
+        {"stage": 'Recharge after Giga Impact, trying Bulk Up.', "select": {'case': 'check', 'label': 'recharge', 'source': 'selftest'}, "expect": {'acted': 'false', 'next_turn_acts': 'true'}},
+        {"stage": 'On a loaf turn, use Metronome, which calls a damaging move.', "select": {'case': 'check', 'label': 'metronome', 'source': 'selftest'}, "expect": {'metronome_acted': 'true', 'called_damaging_acted': 'false'}},
+        {"stage": "Let the AI pick a move on the holder's loaf turn.", "select": {'case': 'check', 'label': 'ai_slack_off', 'source': 'selftest'}, "expect": {'predicted_fail': 'DOUBLEEDGE:true,SLACKOFF:false'}},
+        {"stage": 'With a Pokemon without Truant, use Double-Edge.', "select": {'case': 'check', 'label': 'not_truant', 'source': 'selftest'}, "expect": {'acted': 'true'}},
+    ],
 }

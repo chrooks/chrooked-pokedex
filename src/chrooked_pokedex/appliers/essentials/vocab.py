@@ -29,8 +29,7 @@ _CATEGORY = {"physical": "Physical", "special": "Special", "status": "Status"}
 # strings ("*s" in the PBS schema) and only tests the ones it knows, so a game
 # without those ports simply ignores them. Ballistic is Essentials' own Bomb (True
 # Shot, NV-25; every Ruleset move Nova marks Bomb is ballistic in the Ruleset, so
-# reconciling it only adds the flag). Bone stays unwritten and resolves to None until
-# a port needs it.
+# reconciling it only adds the flag). Bone is custom too (Bone Breaker, NV-30).
 _FLAG = {
     "contact": "Contact",
     "punching": "Punching",
@@ -45,6 +44,7 @@ _FLAG = {
     "piercing": "Piercing",
     "wing": "Wing",
     "ballistic": "Bomb",
+    "bone": "Bone",
 }
 
 # The Essentials flag names the Ruleset models. When move_apply reconciles an

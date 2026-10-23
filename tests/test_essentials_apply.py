@@ -218,7 +218,7 @@ def test_create_owned_move_marks_unmappable_flag_partial(tmp_path):
     target = _make_target(tmp_path)
     move = MoveDef(
         name="Bone Rush", chrooked_id="bonerush", type="Ground", category="physical",
-        power=25, aka={"essentials": "BONERUSH"}, flags=("bone",),  # no Essentials flag
+        power=25, aka={"essentials": "BONERUSH"}, flags=("bypass_protect",),  # no Essentials flag
     )
     ruleset = _ruleset(moves={"bonerush": move})
     resmap = build_resolution_map(target, ruleset)

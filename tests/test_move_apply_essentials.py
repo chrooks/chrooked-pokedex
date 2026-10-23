@@ -183,13 +183,13 @@ def test_unmappable_flag_noted(tmp_path):
     target = _target(tmp_path)
     tackle = MoveDef(name="Tackle", chrooked_id="tackle", type="Normal",
                      category="physical", power=40, accuracy=100, pp=35,
-                     flags=("bone",), aka={"essentials": "TACKLE"})  # no Essentials flag
+                     flags=("bypass_protect",), aka={"essentials": "TACKLE"})  # no Essentials flag
     ruleset = Ruleset(moves={"tackle": tackle})
     resmap = build_resolution_map(target, ruleset)
     report = ApplyReport()
     apply_moves(target, ruleset, resmap, report)
     entry = [e for e in report.entries if e.chrooked_id == "tackle"][0]
-    assert any("flag:bone" in f for f in entry.partial_fields)
+    assert any("flag:bypass_protect" in f for f in entry.partial_fields)
 
 
 def test_unchanged_move_no_entry_no_churn(tmp_path):
