@@ -141,7 +141,8 @@ def test_every_hand_written_port_is_wired():
         # wraps Battle methods. Either way it is Essentials 21 code, not 16.2's.
         assert "Battle::" in text and "PokeBattle_" not in text
         if spec.applies_to == "ability":
-            assert "Battle::AbilityEffects::" in text
+            # A registry entry, or (NV-26, Impenetrable) a Battle method wrapped for the holder.
+            assert "Battle::AbilityEffects::" in text or "alias_method :chrooked_" in text
         assert 'File.expand_path("chrooked-oracle.on")' in text  # marker-gated oracle
         assert f'($chrooked_selftest_cases ||= {{}})["{cid}"]' in text, \
             f"chrooked_{cid}.rb never registers its self-test case"

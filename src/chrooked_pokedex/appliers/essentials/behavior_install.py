@@ -41,7 +41,7 @@ from typing import Callable, Optional
 from ...behavior import compose, templates
 from ...model import Ruleset
 from ...model.behavior_spec import BehaviorSpec
-from ...model.schema import AbilityDef, is_composed
+from ...model.schema import AbilityDef, composed_behaviors, is_composed
 from ...report import ApplyReport, ReportEntry
 from .resolution import ResolutionMap, build_resolution_map
 
@@ -113,6 +113,8 @@ def install_behaviors(
         ability = abilities[chrooked_id]
         if not is_composed(ability):
             continue
+        if f"chrooked_{chrooked_id}.rb" in wanted and chrooked_id in composed_behaviors(ability):
+            continue  # it lists itself, so its own hand port is written whole, every part in it (NV-26)
         if f"chrooked_{chrooked_id}.rb" in wanted:
             report.add(ReportEntry(
                 status="blocked", category="behavior", chrooked_id=chrooked_id,

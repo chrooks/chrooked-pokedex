@@ -412,3 +412,21 @@ def test_has_port_is_what_the_installer_would_install(tmp_path):
     assert has_port(handmade, resmap, source_dir=empty) is False
     assert has_port(_cinderglow((_CINDERGLOW_PROBES[0], {"move": "Hyper Beam", "result": "normal"},
                                  _CINDERGLOW_PROBES[2])), resmap, source_dir=empty) is False
+
+
+def test_an_ability_that_lists_itself_installs_its_whole_hand_port_silently(tmp_path):
+    """NV-26: Thorned Succulent is thornedsucculent + Water Absorb + Iron Barbs. Its own
+    port is written whole, every part in it, so the composition step leaves it be."""
+    from dataclasses import replace
+
+    target = _emberjaw_target(tmp_path)
+    base = _emberjaw_ruleset(("emberjaw", "strongjaw"))
+    own = replace(base.behaviors["cinderglow"], name="Emberjaw", chrooked_id="emberjaw", template=None)
+    ruleset = Ruleset(abilities=base.abilities, behaviors={**base.behaviors, "emberjaw": own})
+    report = ApplyReport()
+
+    install_behaviors(target, ruleset, report,
+                      source_dir=_source(tmp_path, {"emberjaw": "# chrooked:emberjaw\nputs 'whole'\n"}))
+
+    assert "puts 'whole'" in (_mods(target) / "chrooked_emberjaw.rb").read_text(encoding="utf-8")
+    assert [e for e in report.entries if e.status == "blocked"] == []

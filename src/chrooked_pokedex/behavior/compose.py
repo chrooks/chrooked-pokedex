@@ -36,7 +36,9 @@ way. Not composed yet:
   * a vanilla part without a VANILLA_PARTS entry;
   * a Ruleset part with no template (unported, or hand-written);
   * an ability that lists itself (Finishing Kick is finishingkick plus Speed Boost),
-    whose own port would share its file name.
+    whose own port would share its file name. Since NV-26 such an ability is
+    hand-written whole instead (Thorned Succulent): its own port copies its vanilla
+    parts' handlers and answers to their names, and the installer leaves it be.
 """
 
 from __future__ import annotations

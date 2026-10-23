@@ -393,4 +393,31 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'On its second turn, use Tackle.', "select": {'case': 'check', 'label': 'second_turn', 'source': 'selftest'}, "expect": {'faster': 'false', 'boosted': 'false'}},
         {"stage": 'On its first turn, use Swift.', "select": {'case': 'check', 'label': 'first_special', 'source': 'selftest'}, "expect": {'boosted': 'false'}},
     ],
+    # NV-26 hand ports: hazards, weather and indirect damage.
+    "impenetrable": [
+        {"stage": 'End a turn burned, in a sandstorm.', "select": {'case': 'check', 'label': 'burn_sand', 'source': 'selftest'}, "expect": {'burn_with': '0', 'sand_with': '0', 'spared': 'true'}},
+        {"stage": 'Switch in onto Stealth Rock.', "select": {'case': 'check', 'label': 'stealth_rock', 'source': 'selftest'}, "expect": {'rock_with': '0', 'spared': 'true'}},
+        {"stage": 'Use Head Smash.', "select": {'case': 'check', 'label': 'head_smash', 'source': 'selftest'}, "expect": {'recoil_with': '0', 'spared': 'true'}},
+    ],
+    "mountaineer": [
+        {"stage": 'Take a Rock Slide.', "select": {'move': 'ROCKSLIDE', 'ability': 'true'}, "expect": {'result': 'IMMUNE'}},
+        {"stage": 'Switch in onto Stealth Rock.', "select": {'case': 'check', 'label': 'stealth_rock', 'source': 'selftest'}, "expect": {'rock_with': '0', 'spared': 'true'}},
+        {"stage": 'Take an Earthquake.', "select": {'move': 'EARTHQUAKE', 'ability': 'true'}, "expect": {'result': 'NORMAL'}},
+    ],
+    "bioturbation": [
+        {"stage": 'Switch an Ice/Water holder in onto Stealth Rock.', "select": {'case': 'check', 'label': 'ice_water_rock', 'source': 'selftest'}, "expect": {'neutral': 'true', 'own_rock': 'false', 'foe_rock': 'true'}},
+        {"stage": 'Switch in onto three Spikes and Stealth Rock.', "select": {'case': 'check', 'label': 'spikes_rock', 'source': 'selftest'}, "expect": {'own_spikes': '0', 'foe_spikes': '3', 'foe_rock': 'true'}},
+        {"stage": 'Switch in onto two Spikes and Stealth Rock, three Spikes on the foes.', "select": {'case': 'check', 'label': 'capped', 'source': 'selftest'}, "expect": {'own_spikes': '0', 'foe_spikes': '3', 'own_rock': 'false', 'foe_rock': 'true'}},
+    ],
+    "repulsion": [
+        {"stage": 'Switch in; the foe uses Earthquake.', "select": {'case': 'check', 'label': 'earthquake', 'source': 'selftest'}, "expect": {'magnet_rise': '5', 'airborne': 'true', 'ground_immune': 'true'}},
+        {"stage": 'Switch in; the foe uses Smack Down.', "select": {'case': 'check', 'label': 'smack_down', 'source': 'selftest'}, "expect": {'magnet_rise': '0', 'airborne': 'false'}},
+        {"stage": 'Switch in with Magnet Rise already up (3 turns left).', "select": {'case': 'check', 'label': 'already_rising', 'source': 'selftest'}, "expect": {'magnet_rise': '3'}},
+    ],
+    "thornedsucculent": [
+        {"stage": 'At half HP, take a Surf.', "select": {'case': 'check', 'label': 'surf', 'source': 'selftest'}, "expect": {'immune': 'true', 'foe_change': '0'}},
+        # The Ruleset's Poison Jab has no Contact flag, so a contact Poison move stands in.
+        {"stage": 'Take a Poison Fang (contact, Poison-type).', "select": {'case': 'check', 'label': 'contact_poison', 'source': 'selftest'}, "expect": {'eighth': 'true'}},
+        {"stage": 'End a turn in a sandstorm.', "select": {'case': 'check', 'label': 'sandstorm', 'source': 'selftest'}, "expect": {'sand_with': '0', 'spared': 'true'}},
+    ],
 }

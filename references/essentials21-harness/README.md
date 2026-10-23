@@ -329,13 +329,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-87 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
+92 ports and 15 compositions. 64 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Twenty-three are hand-written here:
+quarter as `* 0.25`. Twenty-eight are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -354,6 +354,14 @@ quarter as `* 0.25`. Twenty-three are hand-written here:
 - `chrooked_illusion.rb`, `chrooked_nightstalker.rb`, `chrooked_sandguard.rb`,
   `chrooked_fixation.rb`, `chrooked_blitz.rb` (NV-25), each proven by its own check
   procs (below);
+- `chrooked_impenetrable.rb`, `chrooked_mountaineer.rb`, `chrooked_bioturbation.rb`,
+  `chrooked_repulsion.rb` (NV-26), hazards and indirect damage, mostly wrappers on
+  `Battle::Battler#takesIndirectDamage?` and `Battle#pbEntryHazards`;
+- `chrooked_thornedsucculent.rb` (NV-26), an ability that lists itself among its parts
+  (thornedsucculent + Water Absorb + Iron Barbs), so it cannot be a generated
+  composition: the port is the whole ability, copying the vanilla parts' handlers
+  (`HandlerHashSymbol#copy`) and answering to their names, and the installer leaves it
+  be;
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
@@ -405,6 +413,8 @@ exception, by design (below).
 | flareboost, toxicboost, quickfeet (hand-written) | the game's own boost kept, plus no chip from its own burn / poison (bad poison's count still climbs); Quick Feet undoes burn's halving as Guts does (frostbite's halving and `stat_swap`'s burn rule already spare it) | NV-24, lab 3/3 each: burned Swift 24 vs 17, Tackle 7 vs 7; poisoned Tackle 22 vs 14, Swift 17 vs 17; chip 0 vs -8 (burn, bad poison); burned Tackle 14 as healthy (7 with none), frostbitten Swift 17 as healthy (9 with none), paralyzed Speed 83 vs 55 healthy (28 with none) |
 | trueshot, sandforce, solarpower | `flag_boost` ballistic (Bomb) 1.3 / blocks: `conditional_boost` higher_stat in sand + `absent` (no Desert field) + `keeps` eor_weather / `conditional_boost` higher_stat in sun + `drops` EndOfRoundWeather | NV-25, lab 3/3, 4/4 with 1 N/A, 5/5: Seed Bomb 1.286x, Tackle and a non-holder unchanged; in sand Ice Punch 1.464x and Power Gem 1.500x (not vanilla's 1.3 on Rock only), Hyper Voice off the higher stat 1.000, sand chip 0 vs -8; in sun Body Slam 1.469x, Hyper Voice 1.500x, 1.000 under Utility Umbrella, and the sun drain gone (0, as with no ability) |
 | illusion, nightstalker, sandguard, fixation, blitz (hand-written) | 1.2x while disguised (Nova's own disguise and break) / at night 1.3x on the higher stat and crit stage +1 / special x0.5 taken in sand and no sand chip / special 1.5x and Gorilla Tactics' lock by name / Speed 1.5x and physical 1.3x on turn 1 | NV-25, lab 3/3, 4/4, 3/3, 3/3, 4/4: disguised as Pikachu, Tackle 17 vs 14, 14 once broken; Cross Poison 32 vs 25 at night, Air Cutter 16 vs 16, stage 1 at night and 0 by day, 0 of 30 crits into Shell Armor; Surf halved in sand, Earthquake and clear-weather Thunderbolt not, chip 0 vs -8; Flamethrower 36 vs 24, locked to it, Psychic refused; Speed 83 vs 55 and Tackle 19 vs 14 on turn 1, equal on turn 2, Swift unchanged |
+| impenetrable, mountaineer, bioturbation, repulsion (hand-written) | Magic Guard's `takesIndirectDamage?` answer, plus Toxic Spikes hidden for its entry / Rock `MoveImmunity` and Stealth Rock hidden for its entry / Stealth Rock at a neutral 1/8, then every hazard moved to the foes' side, capped / Magnet Rise on entry (`OnSwitchIn`), the rest Nova's | NV-26, lab 3/3 each: burn and sand chip 0 vs -8, Stealth Rock 0 vs -17, Head Smash recoil 0 vs -50, Toxic Spikes poison nothing while Sticky Web still slows; Rock Slide immune, Earthquake not; an Ice/Water holder loses 16 of 135 (1/8), three Spikes and Stealth Rock 49 (1/4 + 1/8), the foes' Spikes capped at 3; Magnet Rise 5 and Earthquake fails by Nova's own airborne check, Smack Down grounds it, a Magnet Rise already up keeps its 3 |
+| thornedsucculent (hand-written whole) | its own sandstorm immunity + Water Absorb's and Iron Barbs' handlers copied, answering to both names | NV-26, lab 3/3: Surf fails and heals 58 (a quarter) at half HP; a contact Poison Fang costs the attacker 16 (1/8; the case names Poison Jab, which the Ruleset lists without Contact); sand chip 0 vs -8 |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |
