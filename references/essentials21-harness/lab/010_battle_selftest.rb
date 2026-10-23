@@ -722,6 +722,21 @@ module ChrookedSelfTest
     end
     log("mechanic #{mechanic} data " +
         (spec[:ability] ? "ability=#{GameData::Ability.exists?(spec[:ability])}" : "status=#{spec[:status]}"))
+    run_phases(mechanic, spec)
+    # A composed ability's hand-written parts (NV-29): each part's own case, its ability
+    # replaced by the composed one, logged as the composed ability's.
+    (spec[:include] || []).each do |part|
+      included = cases[part]
+      if included.nil?
+        log("ERROR include #{part}: no case registered for it")
+        next
+      end
+      run_phases(mechanic, included.merge(ability: spec[:ability], control: nil, fight: [], include: nil))
+    end
+  end
+
+  # Every phase of one case, logged as `mechanic`'s.
+  def self.run_phases(mechanic, spec)
     guard("calc") do
       (spec[:calc] || []).each do |entry|
         move_id, hp, setup = entry.is_a?(Array) ? entry : [entry, 1.0]

@@ -530,4 +530,33 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'Take Tackles from a foe already in love.', "select": {'case': 'check', 'label': 'already', 'source': 'selftest'}, "expect": {'changed': '0'}},
         {"stage": 'Take a Tackle from a foe at +6 Attack.', "select": {'case': 'check', 'label': 'unaware', 'source': 'selftest'}, "expect": {'ignored': 'true'}},
     ],
+    # NV-29 hand ports: absorbing and drawing moves, sound and pulse spread.
+    "aerodynamic": [
+        {"stage": 'Take an Air Slash.', "select": {'case': 'check', 'label': 'air_slash', 'source': 'selftest'}, "expect": {'immune': 'true', 'speed': '1'}},
+        {"stage": 'Take a Tackle.', "select": {'case': 'check', 'label': 'tackle', 'source': 'selftest'}, "expect": {'immune': 'false', 'speed': '0'}},
+        {"stage": "In a double battle, a foe aims Air Slash at the holder's ally.", "select": {'case': 'check', 'label': 'redirect', 'source': 'selftest'}, "expect": {'drawn_to': '0'}},
+    ],
+    "airborne": [
+        {"stage": 'Take an Air Slash.', "select": {'case': 'check', 'label': 'air_slash', 'source': 'selftest'}, "expect": {'immune': 'true', 'speed': '1'}},
+        {"stage": 'Take an Earthquake.', "select": {'case': 'check', 'label': 'earthquake', 'source': 'selftest'}, "expect": {'misses_airborne': 'true', 'speed': '0'}},
+        {"stage": 'Take an Earthquake under Gravity, after Smack Down, from a Mold Breaker.', "select": {'case': 'check', 'label': 'earthquake_cancelled', 'source': 'selftest'}, "expect": {'gravity_hits': 'true', 'smack_down_hits': 'true', 'mold_breaker_hits': 'true'}},
+        {"stage": 'Take a Tackle.', "select": {'case': 'check', 'label': 'tackle', 'source': 'selftest'}, "expect": {'hits': 'true', 'speed': '0'}},
+        {"stage": "In a double battle, a foe aims Air Slash, then Drill Run, at the holder's ally.", "select": {'case': 'check', 'label': 'redirect', 'source': 'selftest'}, "expect": {'flying_to': '0', 'ground_to': '2'}},
+    ],
+    "pastelveil": [
+        {"stage": 'Take a Sludge Bomb.', "select": {'move': 'SLUDGEBOMB', 'type': 'POISON', 'ability': 'true'}, "expect": {'result': 'IMMUNE'}},
+        {"stage": "In a double battle, a foe uses Sludge Bomb on the holder's ally.", "select": {'case': 'check', 'label': 'ally', 'source': 'selftest'}, "expect": {'ally_immune': 'false', 'ally_can_be_poisoned': 'false'}},
+        {"stage": 'Take a Toxic.', "select": {'move': 'TOXIC', 'ability': 'true'}, "expect": {'result': 'IMMUNE'}},
+    ],
+    "amplifier": [
+        {"stage": 'Use Hyper Voice.', "select": {'move': 'HYPERVOICE', 'ability': 'true'}, "expect": {'sound': 'true'}},
+        {"stage": 'Use Tackle.', "select": {'move': 'TACKLE', 'ability': 'true'}, "expect": {'sound': 'false'}},
+        {"stage": 'With a Pokemon without Amplifier, use Hyper Voice.', "select": {'move': 'HYPERVOICE', 'ability': 'false', 'source': 'selftest'}, "expect": {'result': 'NORMAL'}},
+        {"stage": 'In a double battle, use Bug Buzz.', "select": {'case': 'check', 'label': 'doubles', 'source': 'selftest'}, "expect": {'holder_target': 'AllNearFoes', 'ally_target': 'NearOther'}},
+    ],
+    "barrage": [
+        {"stage": 'In a double battle, use Water Pulse on a foe at +6 evasion.', "select": {'case': 'check', 'label': 'water_pulse', 'source': 'selftest'}, "expect": {'target': 'AllNearFoes', 'never_misses': 'true'}},
+        # The Ruleset marks Hydro Pump a pulse move, so Fire Blast stands in for "not a pulse move".
+        {"stage": 'Use Fire Blast on a foe at +6 evasion.', "select": {'case': 'check', 'label': 'not_pulse', 'source': 'selftest'}, "expect": {'target': 'NearOther', 'never_misses': 'false'}},
+    ],
 }

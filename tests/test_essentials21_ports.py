@@ -92,13 +92,17 @@ def test_every_key_a_composition_check_reads_is_logged(cid):
     """NV-15: by a part's port (re-tagged, with part=), or by the lab self-test."""
     ability = _RULESET.abilities[cid]
     text = compose.render_essentials21(ability, _RULESET, _DefaultNames())
-    ports = text + "".join(_render(part) for part in ability.behaviors if part in _RULESET.behaviors)
+    # A part's port: generated from its template, or (NV-29) its hand-written file.
+    hand = {part: _PORTS_DIR / f"chrooked_{part}.rb" for part in ability.behaviors}
+    ports = text + "".join(hand[part].read_text(encoding="utf-8") if hand[part].exists() else _render(part)
+                           for part in ability.behaviors if part in _RULESET.behaviors)
     checks, cases = compose.harness_checks(ability, _RULESET, _DefaultNames())
     assert len(checks) == len(cases)
     for check in checks:
         selftest = check["select"].get("source") == "selftest"
         for key in {**check["select"], **check["expect"]}:
-            logged = key in _SELFTEST_KEYS if selftest else (key == "part" or f"{key}=" in ports)
+            # A hand-written part's check procs log their own keys (case=check).
+            logged = (key in _SELFTEST_KEYS or f"{key}=" in ports) if selftest else (key == "part" or f"{key}=" in ports)
             assert logged, f"{cid} never logs '{key}=' but its checks read it"
 
 

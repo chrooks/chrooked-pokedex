@@ -34,7 +34,11 @@ name (`identity`). A composition installs only when every part can be proven tha
 way. Not composed yet:
 
   * a vanilla part without a VANILLA_PARTS entry;
-  * a Ruleset part with no template (unported, or hand-written);
+  * a Ruleset part with no port at all. Since NV-29 a hand-written part composes: its
+    proof is its own scenario (SCENARIOS_ESSENTIALS21), its self-test case is included
+    in the composed one (the self-test runs it with the composed ability in its place),
+    and the composed holder answers to its name, since a hand port may key a method
+    wrapper on it;
   * an ability that lists itself (Finishing Kick is finishingkick plus Speed Boost),
     whose own port would share its file name. Since NV-26 such an ability is
     hand-written whole instead (Thorned Succulent): its own port copies its vanilla
@@ -51,6 +55,7 @@ from ..model.behavior_spec import BehaviorSpec, BehaviorTestCase
 from ..model.ruleset import Ruleset
 from ..model.schema import AbilityDef, composed_behaviors, is_composed
 from . import templates
+from .harness_scenarios import SCENARIOS_ESSENTIALS21
 from .templates import Names, TemplateError, _CHROOKED_LOG, _RULE, _STATUSES, _comment
 
 
@@ -92,6 +97,8 @@ VANILLA_PARTS: dict[str, tuple[str, bool, tuple[_Proof, ...]]] = {
     "battlearmor": ("Battle Armor", False, (_Proof("crit_taken", "Tackle"),)),       # CriticalCalcFromTarget
     "grassysurge": ("Grassy Surge", False, (_Proof("switch_in"),)),                  # OnSwitchIn
     "grasspelt": ("Grass Pelt", False, (_Proof("hit_taken", "Tackle", terrain="grassy"),)),  # DamageCalcFromTarget
+    # NV-29: a pulse move's damage; Barrage's aim and spread leave the damage alone.
+    "megalauncher": ("Mega Launcher", False, (_Proof("hit", "Dark Pulse"),)),        # DamageCalcFromUser
 }
 
 # How a check's sentence says what a proof measured.
@@ -131,8 +138,9 @@ class _Part:
     symbol: str                     # its ability's INTERNAL id in the target
     spec: Optional[BehaviorSpec]    # a Ruleset behavior part; None for a vanilla one
     name: str = ""                  # a vanilla part's name
-    by_name: bool = False           # a vanilla part the battle code checks by name
+    by_name: bool = False           # a part the battle code (or a hand port) checks by name
     measures: tuple[_Measure, ...] = field(default_factory=tuple)
+    hand: bool = False              # a Ruleset part with a hand-written port (NV-29)
 
 
 def render_essentials21(ability: AbilityDef, ruleset: Ruleset, names: Names) -> Optional[str]:
@@ -182,33 +190,38 @@ def harness_checks(ability: AbilityDef, ruleset: Ruleset,
     cases: list[BehaviorTestCase] = []
     for part in parts:
         if part.spec is not None:
-            for check, case in zip(templates.harness_checks(part.spec, names), part.spec.test_cases):
-                select = dict(check["select"])  # type: ignore[call-overload]
+            own = (SCENARIOS_ESSENTIALS21[part.chrooked_id] if part.hand
+                   else templates.harness_checks(part.spec, names))
+            for check, case in zip(own, part.spec.test_cases):
+                select = dict(check.get("select", {}))  # type: ignore[call-overload]
                 if select.get("ability") == "true" and select.get("source") != "selftest":
                     select["part"] = part.chrooked_id
                 # A part's own "damage unchanged" (a status chance) cannot hold beside a
                 # part that boosts the same move (Cold Snap's Tough Claws), so it is not read.
-                expect = {k: v for k, v in check["expect"].items() if k != "damage"}  # type: ignore[union-attr]
+                expect = {k: v for k, v in check.get("expect", {}).items() if k != "damage"}  # type: ignore[union-attr]
                 checks.append({**check, "select": select, "expect": expect})
                 cases.append(BehaviorTestCase(given=f"{part.spec.name}: {case.given}", expect=case.expect))
-            continue
-        for measure in part.measures:
-            given = _given(ability, part, measure)
-            checks.append({
-                "stage": f"Measured by the self-test: {given}.",
-                "select": {"move": measure.move or "NONE", "ability": "true", "source": "selftest",
-                           "part": part.symbol, "kind": measure.proof.kind},
-                "expect": {"changed": "true", "result": "MATCHES"},
-            })
-            cases.append(BehaviorTestCase(given=f"{part.name}: {given}",
-                                          expect=f"the same as {part.name} alone, unlike no ability"))
+            if not part.hand:
+                continue
+        else:
+            for measure in part.measures:
+                given = _given(ability, part, measure)
+                checks.append({
+                    "stage": f"Measured by the self-test: {given}.",
+                    "select": {"move": measure.move or "NONE", "ability": "true", "source": "selftest",
+                               "part": part.symbol, "kind": measure.proof.kind},
+                    "expect": {"changed": "true", "result": "MATCHES"},
+                })
+                cases.append(BehaviorTestCase(given=f"{part.name}: {given}",
+                                              expect=f"the same as {part.name} alone, unlike no ability"))
         if part.by_name:
+            name = part.spec.name if part.spec is not None else part.name
             checks.append({
-                "stage": f"Measured by the self-test: the battle code asks for {part.name} by name.",
+                "stage": f"Measured by the self-test: the battle code asks for {name} by name.",
                 "select": {"case": "identity", "part": part.symbol, "source": "selftest"},
                 "expect": {"has": "true", "array": "true", "other": "false"},
             })
-            cases.append(BehaviorTestCase(given=f"{part.name}: the battle code asks {ability.name} for {part.name}",
+            cases.append(BehaviorTestCase(given=f"{name}: the battle code asks {ability.name} for {name}",
                                           expect=f"hasActiveAbility?(:{part.symbol}) is true"))
     return checks, tuple(cases)
 
@@ -245,12 +258,13 @@ def _resolve(ability: AbilityDef, ruleset: Ruleset, names: Names) -> Optional[tu
             return None
         spec = ruleset.behaviors.get(part)
         if spec is not None:
-            if spec.template is None:
-                return None
+            hand = spec.template is None
+            if hand and part not in SCENARIOS_ESSENTIALS21:
+                return None  # not ported at all
             part_symbol = names.ability(spec.name)
             if part_symbol is None:
                 raise CompositionError(f"{where}: the target has no ability {spec.name!r} for part {part!r}")
-            parts.append(_Part(chrooked_id=part, symbol=part_symbol, spec=spec))
+            parts.append(_Part(chrooked_id=part, symbol=part_symbol, spec=spec, hand=hand, by_name=hand))
             continue
         vanilla = VANILLA_PARTS.get(part)
         if vanilla is None:
@@ -312,6 +326,11 @@ def _case(parts: list[_Part], names: Names) -> templates.SelftestCase:
     without: list[str] = []
     fight: list[str] = []
     for part in parts:
+        if part.hand:
+            # The part's own case, registered by its hand port, run for the composed ability.
+            phases.setdefault("include", []).append(f'"{part.chrooked_id}"')
+            phases.setdefault("identity", []).append(f":{part.symbol}")
+            continue
         if part.spec is not None:
             try:
                 case = templates.selftest_case(part.spec, names)
@@ -341,7 +360,9 @@ def _case(parts: list[_Part], names: Names) -> templates.SelftestCase:
 
 def _header(ability: AbilityDef, parts: list[_Part]) -> str:
     listed = ", ".join(
-        f"{p.symbol} (the Ruleset's {p.chrooked_id}, its port chrooked_{p.chrooked_id}.rb)" if p.spec is not None
+        f"{p.symbol} (the Ruleset's {p.chrooked_id}, its hand-written port chrooked_{p.chrooked_id}.rb, "
+        "answered to by name)" if p.hand
+        else f"{p.symbol} (the Ruleset's {p.chrooked_id}, its port chrooked_{p.chrooked_id}.rb)" if p.spec is not None
         else f"{p.symbol} (the game's own {p.name}{', checked by name' if p.by_name else ''})"
         for p in parts)
     description = " ".join(ability.description.split()) or ability.name
