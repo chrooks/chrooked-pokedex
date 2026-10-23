@@ -121,6 +121,36 @@ def test_vanilla_parts_each_get_a_comparison():
     assert "calc: []," in text
 
 
+def test_each_proof_kind_has_its_compare_entry_and_a_by_name_part_its_identity():
+    """NV-16: a part checked by name is proven by what it changes and by its name."""
+    rs = _ruleset(["levitate", "suctioncups", "clearbody", "guts", "moxie", "scrappy", "gorillatactics"],
+                  name="Everything", cid="everything")
+    text = _render(rs, cid="everything")
+    assert ("compare: [[nil, :LEVITATE, :airborne], [nil, :SUCTIONCUPS, :forced_out], "
+            "[nil, :CLEARBODY, :stat_drop], [:TACKLE, :GUTS, :hit, {status: :BURN}], [nil, :MOXIE, :ko], "
+            "[:TACKLE, :SCRAPPY, :hit, {target_types: [:GHOST]}], [:TACKLE, :GORILLATACTICS], "
+            "[:TACKLE, :GORILLATACTICS, :locked]],\n") in text
+    assert "identity: [:LEVITATE, :SUCTIONCUPS, :GUTS, :SCRAPPY, :GORILLATACTICS],\n" in text
+    checks, cases = _checks(rs, cid="everything")
+    assert checks[0] == {
+        "stage": "Measured by the self-test: Everything's holder is airborne.",
+        "select": {"move": "NONE", "ability": "true", "source": "selftest", "part": "LEVITATE", "kind": "airborne"},
+        "expect": {"changed": "true", "result": "MATCHES"}}
+    assert checks[1]["select"] == {"case": "identity", "part": "LEVITATE", "source": "selftest"}
+    assert checks[1]["expect"] == {"has": "true", "array": "true", "other": "false"}
+    assert "Guts: Everything uses Tackle while it has a burn" in [c.given for c in cases]
+    assert "Scrappy: Everything uses Tackle on a Ghost-type foe" in [c.given for c in cases]
+    assert not any(c["select"].get("part") == "CLEARBODY" and c["select"].get("case") for c in checks)
+
+
+def test_the_holder_answers_to_its_parts_names():
+    text = _render(_ruleset(["carnivore", "strongjaw"]))
+    assert "alias_method :chrooked_compose_has_active_ability?, :hasActiveAbility?" in text
+    assert "parts = ChrookedCompose.parts_of(@ability_id)" in text
+    assert "return false if parts.nil? || !abilityActive?(ignore_fainted, check_ability)" in text
+    assert "alias hasWorkingAbility hasActiveAbility?" in text
+
+
 @pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby not installed")
 def test_the_file_is_valid_ruby(tmp_path):
     port = tmp_path / "chrooked_apexpredator.rb"
@@ -137,8 +167,8 @@ def test_a_ported_parts_checks_select_its_retagged_lines():
     assert [(c["select"], c["expect"]) for c in checks] == [
         ({"ability": "true", "kos": "1", "hp_full": "false", "part": "carnivore"}, {"result": "HEALED"}),
         ({"ability": "true", "kos": "0", "hp_full": "false", "part": "carnivore"}, {"result": "NONE"}),
-        ({"move": "CRUNCH", "ability": "true", "source": "selftest", "part": "STRONGJAW"},
-         {"boosted": "true", "result": "MATCHES"}),
+        ({"move": "CRUNCH", "ability": "true", "source": "selftest", "part": "STRONGJAW", "kind": "hit"},
+         {"changed": "true", "result": "MATCHES"}),
     ]
     assert [c.given for c in cases] == ["Carnivore: carnivore case 1", "Carnivore: carnivore case 2",
                                         "Strong Jaw: Apex Predator uses Crunch"]
@@ -155,7 +185,7 @@ def test_a_check_on_the_selftests_own_line_has_no_part():
 
 
 @pytest.mark.parametrize("parts", [
-    ["carnivore", "levitate"],      # checked by name in the battle code: no proof move yet
+    ["carnivore", "pickup"],        # a vanilla part with no proof in VANILLA_PARTS
     ["apexpredator", "strongjaw"],  # lists itself
 ])
 def test_a_part_that_is_not_composable_yet_leaves_the_ability_data_only(parts):

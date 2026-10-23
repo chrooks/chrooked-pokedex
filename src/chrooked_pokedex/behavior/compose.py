@@ -1,19 +1,24 @@
-"""Composed abilities on Essentials 21: one ability built from several behaviors (mjolnir NV-15).
+"""Composed abilities on Essentials 21: one ability built from several behaviors (mjolnir NV-15, NV-16).
 
 A Ruleset ability may list its parts, `behaviors: [carnivore, strongjaw]`: Apex
 Predator is Carnivore's knockout heal plus Strong Jaw's biting boost. A part is
 either a Ruleset behavior whose port is generated from its template, or a vanilla
-ability the game already ships. Essentials 21 keys every battle effect by ability
-id in its handler registries (`Battle::AbilityEffects::DamageCalcFromUser`, ...),
-so the composed ability's file gives it its parts' handlers:
+ability the game already ships. Essentials 21 reaches an ability two ways, and a
+composed ability's file covers both:
 
-  * a registry only one part has a handler in gets that handler as it is;
-  * a registry several parts share gets one handler that combines them the way the
-    registry's trigger reads the result: multiplier and side-effect registries run
-    every part in turn; registries that pass a value along (speed, priority, the
-    move's type, the critical stage) hand each part the one before's result;
-    immunity registries answer yes when any part does. Two parts sharing a registry
-    with no such rule log an ERROR, and only the first runs.
+  * Handler registries (`Battle::AbilityEffects::DamageCalcFromUser`, ...), keyed by
+    ability id. The composed ability gets its parts' handlers: a registry only one
+    part has a handler in gets that handler as it is; a registry several parts
+    share gets one handler that combines them the way the registry's trigger reads
+    the result. Multiplier and side-effect registries run every part in turn;
+    registries that pass a value along (speed, priority, the move's type, the
+    critical stage) hand each part the one before's result; immunity registries
+    answer yes when any part does. Two parts sharing a registry with no such rule
+    log an ERROR, and only the first runs.
+  * Checks by name (NV-16): the battle code asks `hasActiveAbility?(:LEVITATE)` for
+    Levitate, Guts, Scrappy, Suction Cups and Gorilla Tactics instead of keeping a
+    handler. A composed battler answers yes for each of its parts as well, so every
+    such check (the AI's `has_active_ability?` delegates to it) sees the part.
 
 The wiring waits for the first battle, when every port has loaded: the composed
 ability's file sorts before its parts' (`chrooked_apexpredator.rb` before
@@ -22,13 +27,13 @@ its port's log lines are re-tagged as the composed ability's, with `part=<id>`, 
 the harness scores them for it.
 
 The proof reuses a ported part's own probes under the composed ability, and shows
-a vanilla part by comparison: the composed ability hits a move exactly as hard as
-the part alone (VANILLA_PARTS names the move). A composition installs only when
-every part can be proven that way. Not composed yet:
+a vanilla part by comparison: the self-test measures one value (VANILLA_PARTS says
+which) with the composed ability, with the part alone and with none, and the first
+two must match while the last differs. A part checked by name is also asked for by
+name (`identity`). A composition installs only when every part can be proven that
+way. Not composed yet:
 
-  * a vanilla part without a VANILLA_PARTS entry, including every part the battle
-    code checks by name (`hasActiveAbility?(:LEVITATE)`: Levitate, Guts, Scrappy,
-    Suction Cups), which would need the battler to answer to its parts' names too;
+  * a vanilla part without a VANILLA_PARTS entry;
   * a Ruleset part with no template (unported, or hand-written);
   * an ability that lists itself (Finishing Kick is finishingkick plus Speed Boost),
     whose own port would share its file name.
@@ -36,22 +41,54 @@ every part can be proven that way. Not composed yet:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 from ..model.behavior_spec import BehaviorSpec, BehaviorTestCase
 from ..model.ruleset import Ruleset
 from ..model.schema import AbilityDef, composed_behaviors, is_composed
 from . import templates
-from .templates import Names, TemplateError, _CHROOKED_LOG, _RULE, _comment
+from .templates import Names, TemplateError, _CHROOKED_LOG, _RULE, _STATUSES, _comment
 
-# A vanilla ability a composition may borrow: its name in the game, and the moves
-# whose damage it alone changes, for the self-test's `compare` phase. Each move is
-# picked so no other part of a composition that uses it changes it too.
-VANILLA_PARTS: dict[str, tuple[str, tuple[str, ...]]] = {
-    "strongjaw": ("Strong Jaw", ("Crunch",)),      # biting, not slicing
-    "sharpness": ("Sharpness", ("Air Slash",)),    # slicing, no contact
-    "toughclaws": ("Tough Claws", ("Tackle",)),    # contact, neither biting nor slicing
+
+@dataclass(frozen=True)
+class _Proof:
+    """What the self-test measures to show a vanilla part (its `measure`): a hit's
+    damage, or whether the holder is airborne, can be forced out, can have its
+    Attack lowered, is locked into its move, or what a knockout raises."""
+
+    kind: str = "hit"
+    move: Optional[str] = None                 # the move's name, for hit and locked
+    target_types: tuple[str, ...] = ()         # hit: the foe's types first
+    status: Optional[str] = None               # hit: the user's status first (burn)
+
+
+# A vanilla ability a composition may borrow: its name in the game, whether the
+# battle code checks it by name (`hasActiveAbility?`), and how the self-test shows
+# it. A hit's move is picked so no other part of a composition that uses it changes
+# that move too.
+VANILLA_PARTS: dict[str, tuple[str, bool, tuple[_Proof, ...]]] = {
+    "strongjaw": ("Strong Jaw", False, (_Proof("hit", "Crunch"),)),       # biting, not slicing
+    "sharpness": ("Sharpness", False, (_Proof("hit", "Air Slash"),)),     # slicing, no contact
+    "toughclaws": ("Tough Claws", False, (_Proof("hit", "Tackle"),)),     # contact, neither biting nor slicing
+    "clearbody": ("Clear Body", False, (_Proof("stat_drop"),)),           # a StatLossImmunity handler
+    "moxie": ("Moxie", False, (_Proof("ko"),)),                           # an OnEndOfUsingMove handler
+    # Checked by name, so these work only through the composed battler's identity:
+    "levitate": ("Levitate", True, (_Proof("airborne"),)),                # airborne?
+    "scrappy": ("Scrappy", True, (_Proof("hit", "Tackle", target_types=("Ghost",)),)),  # the type matchup
+    "suctioncups": ("Suction Cups", True, (_Proof("forced_out"),)),       # canBeForcedOutOfBattle?
+    "guts": ("Guts", True, (_Proof("hit", "Tackle", status="burn"),)),    # burn's halving; its boost is a handler
+    "gorillatactics": ("Gorilla Tactics", True,                           # its boost is a handler; the lock
+                       (_Proof("hit", "Tackle"), _Proof("locked", "Tackle"))),  # is by name
+}
+
+# How a check's sentence says what a proof measured.
+_PROOF_GIVEN = {
+    "airborne": "{ability}'s holder is airborne",
+    "forced_out": "a foe cannot force {ability}'s holder out",
+    "stat_drop": "a foe cannot lower the Attack of {ability}'s holder",
+    "locked": "{ability}'s holder is locked into {move}",
+    "ko": "a knockout by {ability}'s holder raises its stats",
 }
 
 
@@ -60,20 +97,31 @@ class CompositionError(ValueError):
 
 
 @dataclass(frozen=True)
+class _Measure:
+    """A vanilla part's proof, resolved against the target."""
+
+    proof: _Proof
+    move: Optional[str]              # INTERNAL move
+    target_types: tuple[str, ...]    # INTERNAL types
+    status: Optional[str]            # Essentials status
+
+
+@dataclass(frozen=True)
 class _Part:
     chrooked_id: str
     symbol: str                     # its ability's INTERNAL id in the target
     spec: Optional[BehaviorSpec]    # a Ruleset behavior part; None for a vanilla one
     name: str = ""                  # a vanilla part's name
-    moves: tuple[tuple[str, str], ...] = ()  # a vanilla part's (name, INTERNAL) compare moves
+    by_name: bool = False           # a vanilla part the battle code checks by name
+    measures: tuple[_Measure, ...] = field(default_factory=tuple)
 
 
 def render_essentials21(ability: AbilityDef, ruleset: Ruleset, names: Names) -> Optional[str]:
     """The composed ability's file, `chrooked_<id>.rb`, or None when it is not
     composable here yet (the target lacks the ability, or a part is one the module
     docstring lists as not composed yet). Raises CompositionError when a part that
-    should compose cannot: the target lacks its ability, its proof move, or a name
-    its template needs."""
+    should compose cannot: the target lacks its ability, a proof's move or type, or
+    a name its template needs."""
     resolved = _resolve(ability, ruleset, names)
     if resolved is None:
         return None
@@ -103,7 +151,8 @@ def harness_checks(ability: AbilityDef, ruleset: Ruleset,
 
     A ported part's checks are its own, run under the composed ability; one on the
     port's OBS line also selects `part`, as the re-tagged line carries it. A vanilla
-    part's check reads the self-test's comparison with that part alone.
+    part's checks read the self-test's comparisons with that part alone, and, for a
+    part checked by name, its identity line.
     """
     resolved = _resolve(ability, ruleset, names)
     if resolved is None:
@@ -121,16 +170,37 @@ def harness_checks(ability: AbilityDef, ruleset: Ruleset,
                 checks.append({**check, "select": select})
                 cases.append(BehaviorTestCase(given=f"{part.spec.name}: {case.given}", expect=case.expect))
             continue
-        for move_name, move in part.moves:
+        for measure in part.measures:
+            given = _given(ability, part, measure)
             checks.append({
-                "stage": f"With your {ability.name} user, use {move_name} on the foe.",
-                "select": {"move": move, "ability": "true", "source": "selftest", "part": part.symbol},
-                "expect": {"boosted": "true", "result": "MATCHES"},
+                "stage": f"Measured by the self-test: {given}.",
+                "select": {"move": measure.move or "NONE", "ability": "true", "source": "selftest",
+                           "part": part.symbol, "kind": measure.proof.kind},
+                "expect": {"changed": "true", "result": "MATCHES"},
             })
-            cases.append(BehaviorTestCase(
-                given=f"{part.name}: {ability.name} uses {move_name}",
-                expect=f"the same damage as {part.name} alone, more than with no ability"))
+            cases.append(BehaviorTestCase(given=f"{part.name}: {given}",
+                                          expect=f"the same as {part.name} alone, unlike no ability"))
+        if part.by_name:
+            checks.append({
+                "stage": f"Measured by the self-test: the battle code asks for {part.name} by name.",
+                "select": {"case": "identity", "part": part.symbol, "source": "selftest"},
+                "expect": {"has": "true", "array": "true", "other": "false"},
+            })
+            cases.append(BehaviorTestCase(given=f"{part.name}: the battle code asks {ability.name} for {part.name}",
+                                          expect=f"hasActiveAbility?(:{part.symbol}) is true"))
     return checks, tuple(cases)
+
+
+def _given(ability: AbilityDef, part: _Part, measure: _Measure) -> str:
+    proof = measure.proof
+    if proof.kind == "hit":
+        scene = ""
+        if proof.target_types:
+            scene += f" on {templates._a('/'.join(proof.target_types))}-type foe"
+        if proof.status:
+            scene += f" while it has a {proof.status}"
+        return f"{ability.name} uses {proof.move}{scene}"
+    return _PROOF_GIVEN[proof.kind].format(ability=ability.name, move=proof.move)
 
 
 def _resolve(ability: AbilityDef, ruleset: Ruleset, names: Names) -> Optional[tuple[str, list[_Part]]]:
@@ -159,22 +229,48 @@ def _resolve(ability: AbilityDef, ruleset: Ruleset, names: Names) -> Optional[tu
         vanilla = VANILLA_PARTS.get(part)
         if vanilla is None:
             return None
-        name, move_names = vanilla
+        name, by_name, proofs = vanilla
         part_symbol = names.ability(name)
         if part_symbol is None:
             raise CompositionError(f"{where}: the target has no ability {name!r} for part {part!r}")
-        moves = []
-        for move_name in move_names:
-            move = names.move(move_name)
-            if move is None:
-                raise CompositionError(f"{where}: the target has no move {move_name!r} to prove part {part!r}")
-            moves.append((move_name, move))
-        parts.append(_Part(chrooked_id=part, symbol=part_symbol, spec=None, name=name, moves=tuple(moves)))
+        parts.append(_Part(chrooked_id=part, symbol=part_symbol, spec=None, name=name, by_name=by_name,
+                           measures=tuple(_measure(proof, names, f"{where}: part {part!r}") for proof in proofs)))
     return symbol, parts
 
 
+def _measure(proof: _Proof, names: Names, where: str) -> _Measure:
+    move = None
+    if proof.move is not None:
+        move = names.move(proof.move)
+        if move is None:
+            raise CompositionError(f"{where}: the target has no move {proof.move!r} to prove it")
+    types = []
+    for type_name in proof.target_types:
+        internal = names.type(type_name)
+        if internal is None:
+            raise CompositionError(f"{where}: the target has no type {type_name!r} to prove it")
+        types.append(internal)
+    status = _STATUSES[proof.status][0] if proof.status else None
+    return _Measure(proof=proof, move=move, target_types=tuple(types), status=status)
+
+
+def _compare_entry(part: _Part, measure: _Measure) -> str:
+    """The self-test's compare entry: [move, part] for a plain hit, so the first
+    compositions' files did not change; [move, part, kind, setup] otherwise."""
+    move = f":{measure.move}" if measure.move else "nil"
+    setup = []
+    if measure.target_types:
+        setup.append(f"target_types: [{', '.join(':' + t for t in measure.target_types)}]")
+    if measure.status:
+        setup.append(f"status: :{measure.status}")
+    if measure.proof.kind == "hit" and not setup:
+        return f"[{move}, :{part.symbol}]"
+    extra = f", {{{', '.join(setup)}}}" if setup else ""
+    return f"[{move}, :{part.symbol}, :{measure.proof.kind}{extra}]"
+
+
 def _case(parts: list[_Part], names: Names) -> templates.SelftestCase:
-    """The parts' self-test cases merged into one, plus a comparison per vanilla move."""
+    """The parts' self-test cases merged into one, plus each vanilla part's proofs."""
     control: Optional[str] = None
     calc: list[str] = []
     phases: dict[str, list[str]] = {}
@@ -193,9 +289,12 @@ def _case(parts: list[_Part], names: Names) -> templates.SelftestCase:
             without += case.without
             fight += case.fight
             continue
-        for _, move in part.moves:
-            phases.setdefault("compare", []).append(f"[:{move}, :{part.symbol}]")
-            fight.append(f":{move}")
+        for measure in part.measures:
+            phases.setdefault("compare", []).append(_compare_entry(part, measure))
+            if measure.move:
+                fight.append(f":{measure.move}")
+        if part.by_name:
+            phases.setdefault("identity", []).append(f":{part.symbol}")
     return templates.SelftestCase(
         control=control,
         calc=tuple(dict.fromkeys(calc)),
@@ -208,7 +307,7 @@ def _case(parts: list[_Part], names: Names) -> templates.SelftestCase:
 def _header(ability: AbilityDef, parts: list[_Part]) -> str:
     listed = ", ".join(
         f"{p.symbol} (the Ruleset's {p.chrooked_id}, its port chrooked_{p.chrooked_id}.rb)" if p.spec is not None
-        else f"{p.symbol} (the game's own {p.name})"
+        else f"{p.symbol} (the game's own {p.name}{', checked by name' if p.by_name else ''})"
         for p in parts)
     description = " ".join(ability.description.split()) or ability.name
     lines = [
@@ -223,8 +322,9 @@ def _header(ability: AbilityDef, parts: list[_Part]) -> str:
         *_comment(f"COMPOSED (mjolnir NV-15). Before the first battle, when every port has loaded, "
                   f"{ability.name} gets its parts' handlers in each Battle::AbilityEffects registry: "
                   f"{listed}. One part's handler is used as it is; parts sharing a registry are combined "
-                  "the way its trigger reads the result (ChrookedCompose below). A part's port lines "
-                  f"are re-tagged as {ability.chrooked_id}'s, with part=<id>."),
+                  "the way its trigger reads the result (ChrookedCompose below), and its holder answers "
+                  "hasActiveAbility? for each part too (NV-16). A part's port lines are re-tagged as "
+                  f"{ability.chrooked_id}'s, with part=<id>."),
         "#",
         *_comment("Install, load order, the marker-gated oracle and the self-test registration are "
                   "explained once, in references/essentials21-harness/README.md."),
@@ -250,11 +350,18 @@ unless defined?(ChrookedCompose)
               :CriticalCalcFromTarget]
     ANY    = [:MoveImmunity, :StatLossImmunity]
     @compositions = {}
+    @parts = {}
     @stack = []
     @wired = false
 
     def self.register(ability, tag, parts)
       @compositions[ability] = [tag, parts]
+      @parts[ability] = parts.map(&:first)
+    end
+
+    # The part symbols a composed ability answers to by name; nil for any other.
+    def self.parts_of(ability)
+      @parts[ability]
     end
 
     # Once, before the first battle: every port and the game's own handlers exist.
@@ -330,6 +437,20 @@ unless defined?(ChrookedCompose)
       ChrookedCompose.wire
       chrooked_compose_initialize(*args, &block)
     end
+  end
+
+  class Battle::Battler
+    # A composed battler also answers to its parts' names, so the battle code's
+    # checks by name (airborne? asks for :LEVITATE, burn's halving for :GUTS) see
+    # them. Not for an ability it lacks; not while its ability is suppressed.
+    alias_method :chrooked_compose_has_active_ability?, :hasActiveAbility?
+    def hasActiveAbility?(check_ability, ignore_fainted = false)
+      return true if chrooked_compose_has_active_ability?(check_ability, ignore_fainted)
+      parts = ChrookedCompose.parts_of(@ability_id)
+      return false if parts.nil? || !abilityActive?(ignore_fainted, check_ability)
+      (check_ability.is_a?(Array) ? check_ability : [check_ability]).any? { |a| parts.include?(a) }
+    end
+    alias hasWorkingAbility hasActiveAbility?
   end
 end
 """

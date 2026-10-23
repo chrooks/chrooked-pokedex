@@ -116,18 +116,31 @@ Apply writes the composed ability its own file, `chrooked_<ability>.rb`
   `EACH`.
 - **Logging.** While a part runs for the composed ability, its port's lines are
   re-tagged as the composed ability's, with `part=<id>`. AI calls stay `EST`.
+- **By name (NV-16).** Some parts have no handler. The battle code asks
+  `hasActiveAbility?(:LEVITATE)` instead (Levitate through `airborne?`, Guts in
+  burn's halving, Scrappy in the type matchup, Suction Cups, Gorilla Tactics's
+  lock). A composed battler answers yes for each of its parts as well, unless its
+  ability is suppressed. The AI's `has_active_ability?` delegates to it, so it sees
+  them too.
 - **Proof.**
   - A ported part's own probes run under the composed ability, and its checks
     select `part=`.
-  - A vanilla part gets a `compare:` entry: the composed ability must hit a move
-    exactly as hard as the part alone, and harder than no ability (Crunch: 41
-    with Apex Predator, 41 with Strong Jaw, 28 with none).
-  - `VANILLA_PARTS` in `compose.py` names that move for each vanilla part.
+  - A vanilla part gets `compare:` entries, `[move, part, kind, setup]`. One value
+    is measured with the composed ability, with the part alone and with none; the
+    first two must match, and the last must differ. The kinds:
+    - `hit`: a hit's damage (Crunch: 41 with Apex Predator, 41 with Strong Jaw,
+      28 with none; Tackle burned under Guts 22, 22, 7);
+    - `airborne`: Levitate;
+    - `forced_out`: Suction Cups;
+    - `stat_drop`: Clear Body;
+    - `locked`: Gorilla Tactics, locked into Tackle and unable to pick Growl;
+    - `ko`: Moxie, Attack 0 to 1.
+  - A part checked by name also gets an `identity:` entry: its holder's
+    `hasActiveAbility?` must say yes for the part, alone and in a list, and no for
+    Stench.
+  - `VANILLA_PARTS` in `compose.py` holds each vanilla part's proofs.
 - **Not composed yet** (the ability stays DATA ONLY, with no report line):
-  - a vanilla part with no `VANILLA_PARTS` entry. That includes every part the
-    battle code checks by name (`hasActiveAbility?(:LEVITATE)`: Levitate, Guts,
-    Scrappy, Suction Cups, Gorilla Tactics), which needs the battler to answer
-    to its parts' names;
+  - a vanilla part with no `VANILLA_PARTS` entry;
   - a Ruleset part with no template;
   - an ability that lists itself (Finishing Kick, Web Weaver, Unattainable,
     Thorned Succulent).
@@ -267,12 +280,12 @@ A candidate becomes verified only after reading its call site in Nova's
   Maw is.
 - *Composition:* **resolved 2026-10-22 (NV-15)**, above. Not yet composed:
   finishingkick, which lists itself (`behaviors: [finishingkick, speedboost]`),
-  and every composition with a part the battle code checks by name.
+  and the compositions whose parts have no proof yet.
 - *Every other table* above, and the 25 Nova abilities with no Rejuvenation port.
 
 ## Ported mechanics
 
-44 ports and 4 compositions. 39 ports are generated from their specs' `template:` blocks: 22 since
+44 ports and 9 compositions. 39 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
@@ -316,6 +329,8 @@ exception, by design (below).
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |
 | serratedjaw, razoredge (composed) | Strong Jaw + Sharpness / Sharpness + Tough Claws, sharing `DamageCalcFromUser` | NV-15, lab 2/2 each: Crunch 41 as Strong Jaw alone, Air Slash 31 as Sharpness alone (none 21), Tackle 19 as Tough Claws alone (none 14) |
 | requiem (composed) | Pyre + Spectralize | NV-15, lab 6/6: Pyre's burn rates and Spectralize's conversion, each scored on its re-tagged lines |
+| witchinghour, kickboxer (composed) | Nocturnal + Levitate / Striker + Scrappy | NV-16, lab 5/5 each: the part's own probes, plus airborne (true, true, false) / Tackle on a Ghost 14, 14, 1, and identity |
+| gyroscope, brawlersspirit, compulsion (composed) | Clear Body + Suction Cups / Guts + Moxie / Gorilla Tactics | NV-16, lab 3/3 each: Attack not lowered and not forced out; a burned Tackle 22 as Guts alone (7 with none) and Attack +1 on a knockout; Tackle 22 (14) and locked into it; identity for Suction Cups, Guts and Gorilla Tactics |
 | updraft | `flag_boost`, 1.3x on `Wing` / `Wind` | NV-9, lab 3/3: Brave Bird 1.293x (the dex's new `Wing` flag), Hurricane 1.300x (Nova's own `Wind`), Tackle 1.000x |
 | hammerfist, impale, martialartist, sledgehammer, striker | `flag_boost`, 1.3x on `Punching` / `Hammer` / `Kicking` / `Piercing` | lab, 2026-10-22: 3/3 each; Body Slam 1.300x, Wood Hammer and Megahorn 1.293x, High Jump Kick 1.289x, Tackle 1.000x; Sledgehammer leaves Mach Punch at 14 while the Iron Fist control gives 17. The "without the ability" cases (Impale, Striker) are measured by the self-test's `without` option, which logs `source=selftest`. Striker's now uses High Jump Kick, as its spec says (it was Blaze Kick): holder 58, Stench and no ability 45 |
 
@@ -337,7 +352,8 @@ KO and PRIORITY lines identical to the lab's (the AI battle's turn counts are no
 measurement: it is not reseeded, so they depend on what ran before it). All 44 are
 proven on thor. The four NV-15 compositions followed: 14/14, their wiring and all
 their measurement lines identical to the lab's (the game booted twice before the
-read, and both runs matched line for line). All 48 are proven on thor.
+read, and both runs matched line for line). All 48 are proven on thor. The five
+NV-16 compositions (and the four, rebuilt with the by-name answer) wait for a boot.
 
 The CALC phase sets both battlers to the `???` type (`neutral: true`), so the ratio
 is the ability alone: no same-type bonus, no type matchups.

@@ -88,11 +88,16 @@ module ChrookedSelfTest
   #   priority - [move, hp_fraction] entries: the move's priority as
   #              pbCalculatePriority asks it of the user's ability (NV-14);
   #              PRIORITY line; the port logs its own OBS line
-  #   compare  - [move, part] entries for a composed ability (NV-15): one hit's
-  #              damage with the composed ability, with that vanilla part alone,
-  #              and with none, on the same battlers and seed; the composition
-  #              carries the part when the first two match. Logged as the
-  #              mechanic's OBS line, tagged source=selftest
+  #   compare  - [move, part, kind, setup] entries for a composed ability (NV-15,
+  #              NV-16): one value measured with the composed ability, with that
+  #              vanilla part alone, and with none, on the same battlers and seed;
+  #              the composition carries the part when the first two match. kind
+  #              (default :hit) is what is measured (see measure); setup as CALC's.
+  #              Logged as the mechanic's OBS line, tagged source=selftest
+  #   identity - parts a composed ability must answer to by name (NV-16): whether
+  #              its holder's hasActiveAbility? says yes for the part, alone and in
+  #              a list, and no for an ability it lacks. Logged as the mechanic's
+  #              OBS line with case=identity, tagged source=selftest
   #   status   - for a status mechanic (frostbite, NV-12), the status the next
   #              three phases set on the user; ability is then nil:
   #   turn     - [move, n]: the user tries its move n times while in that status
@@ -253,7 +258,9 @@ module ChrookedSelfTest
   #   types    - the user's types, e.g. [:WATER, :DRAGON] (after neutral mode, so
   #              a same-type bonus can be measured; NV-10)
   #   target_types - the target's types, e.g. [:FIRE] for a burn-immune target (NV-11)
+  #   status   - the user's status, e.g. :BURN (Guts, NV-16)
   def self.arrange(b, user, target, setup)
+    user.status = setup[:status] if setup[:status]
     b.field.weather = setup[:weather] if setup[:weather]
     b.field.terrain = setup[:terrain] if setup[:terrain]
     user.item = setup[:item] if setup[:item]
@@ -368,9 +375,9 @@ module ChrookedSelfTest
   # damage state marked fainted, but keeps its HP, so the battle is not over (a
   # knockout that ends the battle triggers nothing, as in Nova's Moxie).
   # Returns [hp before, hp after, stages before, stages after].
-  def self.knockout(spec, kos, hp_fraction, stages)
+  def self.knockout(spec, kos, hp_fraction, stages, ability = spec[:ability])
     b, user, target = pair(spec, :TACKLE)
-    user.ability = spec[:ability]
+    user.ability = ability
     user.hp = [(user.totalhp * hp_fraction).floor, 1].max
     stages.each { |stat, n| user.stages[stat] = n }
     target.damageState.fainted = kos > 0
@@ -378,6 +385,37 @@ module ChrookedSelfTest
     hp, before = user.hp, user.stages.dup
     Battle::AbilityEffects.triggerOnEndOfUsingMove(user.ability, user, targets, user.moves[0], b)
     [hp, user.hp, before, user.stages.dup]
+  end
+
+  # One value for a vanilla part's comparison, with `ability` on the user:
+  #   :hit        - one hit's damage (the CALC measurement, setup applied)
+  #   :airborne   - whether it is airborne (Levitate: how Ground moves miss it)
+  #   :forced_out - whether a foe's move can force it out (Suction Cups)
+  #   :stat_drop  - whether a foe can lower its Attack (Clear Body)
+  #   :locked     - whether, locked into move by a choice, it can still pick Growl
+  #   :ko         - the stat stages a knockout raises (Moxie)
+  def self.measure(spec, kind, move_id, setup, ability)
+    case kind
+    when :hit
+      damage(spec[:user], [ability], spec[:foe], move_id, neutral: !!spec[:neutral], setup: setup)[0][0]
+    when :ko
+      _, _, before, after = knockout(spec, 1, 0.5, {}, ability)
+      moved = after.select { |stat, n| before[stat] != n }.map { |stat, n| "#{stat}:#{before[stat]}->#{n}" }
+      moved.empty? ? "unchanged" : moved.join(",")
+    else
+      b, user, target = pair(spec, move_id || :TACKLE)
+      user.ability = ability
+      case kind
+      when :airborne   then user.airborne?
+      when :forced_out then user.canBeForcedOutOfBattle?(false)
+      when :stat_drop  then user.pbCanLowerStatStage?(:ATTACK, target, nil, false)
+      when :locked
+        user.effects[PBEffects::ChoiceBand] = move_id
+        user.pbCanChooseMove?(Battle::Move.from_pokemon_move(b, Pokemon::Move.new(:GROWL)), false, false)
+      else
+        raise ArgumentError, "unknown compare kind #{kind.inspect}"
+      end
+    end
   end
 
   # The move's priority as pbCalculatePriority asks it of the user's ability, at
@@ -563,11 +601,21 @@ module ChrookedSelfTest
       end
     end
     guard("compare") do
-      (spec[:compare] || []).each do |move_id, part|
-        (with, _, _), (alone, _, _), (none, _, _) =
-          damage(spec[:user], [spec[:ability], part, nil], spec[:foe], move_id, neutral: !!spec[:neutral])
-        obs(mechanic, "move=#{move_id} ability=true source=selftest part=#{part} with=#{with} alone=#{alone} " \
-                      "none=#{none} boosted=#{with > none} result=#{with == alone ? 'MATCHES' : 'DIFFERS'}")
+      (spec[:compare] || []).each do |move_id, part, kind, setup|
+        kind ||= :hit
+        with, alone, none = [spec[:ability], part, nil].map { |a| measure(spec, kind, move_id, setup || {}, a) }
+        obs(mechanic, "move=#{move_id || 'NONE'} ability=true source=selftest part=#{part} kind=#{kind} " \
+                      "with=#{with} alone=#{alone} none=#{none} changed=#{with != none} " \
+                      "result=#{with == alone ? 'MATCHES' : 'DIFFERS'}")
+      end
+    end
+    guard("identity") do
+      (spec[:identity] || []).each do |part|
+        b, user, target = pair(spec, :TACKLE)
+        user.ability = spec[:ability]
+        obs(mechanic, "case=identity part=#{part} source=selftest has=#{user.hasActiveAbility?(part)} " \
+                      "array=#{user.hasActiveAbility?([NON_HOLDER, part])} " \
+                      "other=#{user.hasActiveAbility?(NON_HOLDER)}")
       end
     end
     guard("turn") do

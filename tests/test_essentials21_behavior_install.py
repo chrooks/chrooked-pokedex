@@ -373,7 +373,7 @@ def test_a_composed_ability_is_created_installed_and_says_so(tmp_path):
 
 
 def test_a_composition_not_composable_yet_is_silent_and_stays_data_only(tmp_path):
-    target, ruleset = _emberjaw_target(tmp_path), _emberjaw_ruleset(("cinderglow", "levitate"))
+    target, ruleset = _emberjaw_target(tmp_path), _emberjaw_ruleset(("cinderglow", "pickup"))
     resmap = build_resolution_map(target, ruleset)
     report = ApplyReport()
 
