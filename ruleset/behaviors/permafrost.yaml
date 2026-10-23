@@ -24,3 +24,12 @@ notes:
 engine_hints:
   pokeemerald: "src/battle_util.c GetDefenderAbilitiesModifier switch (~line 10590) — `case ABILITY_PERMAFROST: if (typeEffectivenessModifier >= UQ_4_12(2.0)) return UQ_4_12(0.65);`. Directly mirrors the ABILITY_FILTER / ABILITY_SOLID_ROCK / ABILITY_PRISM_ARMOR case immediately above it (which returns 0.75)."
   essentials: "In the defender damage modifier, gate on the hit being super-effective and multiply damage taken by 0.65 (model on Solid Rock/Filter, with the multiplier set to 0.65 instead of 0.75)."
+template:
+  - shape: damage_taken
+    params: {rules: [{super_effective: true, multiplier: 0.65}]}
+    effects: [1]
+    cases: [1, 2, 3]
+    probes:
+      - {move: Flamethrower, factor: 0.65, types: [Ice]}
+      - {move: Tackle, factor: 1, types: [Ice]}
+      - {move: Close Combat, factor: 0.65, types: [Ice, Rock]}

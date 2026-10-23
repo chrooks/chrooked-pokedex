@@ -319,4 +319,34 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'End a turn against a Magic Guard foe.', "select": {'case': 'eor', 'label': 'guarded', 'source': 'selftest'}, "expect": {'foe_change': '0'}},
         {"stage": 'End a turn against a foe behind a Substitute.', "select": {'case': 'eor', 'label': 'substitute', 'source': 'selftest'}, "expect": {'foe_change': '-14'}},
     ],
+    # NV-22 hand ports: on-hit effects, recoil, PP and status-move effects.
+    "exhaust": [
+        {"stage": 'Hit with Tackle, many times.', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'TACKLE', 'preset': 'none'}, "expect": {'ok': 'true'}},
+        {"stage": 'Hit with Tackle, many times (the misses).', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'TACKLE', 'preset': 'none'}, "expect": {'ok': 'true'}},
+        {"stage": 'Hit with Water Gun, many times.', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'WATERGUN'}, "expect": {'ok': 'true'}},
+        {"stage": 'Hit a foe at -6 accuracy with Tackle.', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'TACKLE', 'preset': 'stages'}, "expect": {'ok': 'true'}},
+    ],
+    "deathgrip": [
+        {"stage": 'Hit with Tackle, many times.', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'TACKLE', 'preset': 'none'}, "expect": {'ok': 'true'}},
+        {"stage": 'Hit with Water Gun, many times.', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'WATERGUN'}, "expect": {'ok': 'true'}},
+        {"stage": 'Hit a trapped foe with Tackle.', "select": {'case': 'hit_rolls', 'source': 'selftest', 'move': 'TACKLE', 'preset': 'trapped'}, "expect": {'ok': 'true'}},
+    ],
+    "riposte": [
+        {"stage": 'Take a 100-HP contact hit.', "select": {'case': 'recoil', 'source': 'selftest', 'label': 'contact'}, "expect": {'foe_change': '-25'}},
+        {"stage": 'Take a 100-HP non-contact hit.', "select": {'case': 'recoil', 'source': 'selftest', 'label': 'no_contact'}, "expect": {'foe_change': '0'}},
+        {"stage": 'Take a contact hit on a substitute.', "select": {'case': 'recoil', 'source': 'selftest', 'label': 'substitute'}, "expect": {'foe_change': '0'}},
+        {"stage": 'Take a contact hit from a Protective Pads holder.', "select": {'case': 'recoil', 'source': 'selftest', 'label': 'pads'}, "expect": {'foe_change': '0'}},
+        {"stage": 'Take a 2-HP contact hit.', "select": {'case': 'recoil', 'source': 'selftest', 'label': 'graze'}, "expect": {'foe_change': '-1'}},
+    ],
+    "mindwipe": [
+        {"stage": 'Hit a foe that last used Recover (10 PP).', "select": {'case': 'pp', 'source': 'selftest', 'label': 'recover'}, "expect": {'erased': '4'}},
+        {"stage": 'Hit a foe that has not moved.', "select": {'case': 'pp', 'source': 'selftest', 'label': 'unmoved'}, "expect": {'erased': '0'}},
+        {"stage": 'Hit a foe whose last move has 0 PP.', "select": {'case': 'pp', 'source': 'selftest', 'label': 'empty'}, "expect": {'erased': '0'}},
+        {"stage": 'Land three hits on a foe whose last move has 16 PP.', "select": {'case': 'pp', 'source': 'selftest', 'label': 'three_hits'}, "expect": {'erased': '12'}},
+    ],
+    "insidious": [
+        {"stage": 'Use Swords Dance.', "select": {'case': 'used', 'source': 'selftest', 'move': 'SWORDSDANCE', 'preset': 'none'}, "expect": {'raised': 'SPEED:0->1'}},
+        {"stage": 'Use Tackle.', "select": {'case': 'used', 'source': 'selftest', 'move': 'TACKLE'}, "expect": {'raised': 'none'}},
+        {"stage": 'Use Swords Dance at +6 Speed.', "select": {'case': 'used', 'source': 'selftest', 'move': 'SWORDSDANCE', 'preset': 'stages'}, "expect": {'raised': 'none'}},
+    ],
 }

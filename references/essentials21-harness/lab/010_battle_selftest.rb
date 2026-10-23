@@ -716,6 +716,91 @@ module ChrookedSelfTest
                       "immune=#{with} effect=#{effect}")
       end
     end
+    guard("hit_rolls") do
+      # [move, {kind: :stat|:trap, stat:, rate:, target_stages:, target_trapped:, n:}] (NV-22):
+      # the user's OnDealingHit fired n times on a target reset to the preset each
+      # roll; counted when the target's stat stage or trap moved from the preset.
+      (spec[:hit_rolls] || []).each do |move_id, opts|
+        n = opts[:n] || 400
+        b, user, target = pair(spec, move_id)
+        user.ability = spec[:ability]
+        move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+        move.calcType = move.pbCalcType(user)
+        srand(SEED)
+        count = 0
+        n.times do
+          GameData::Stat.each_battle { |s| target.stages[s.id] = (opts[:target_stages] || {})[s.id] || 0 }
+          target.effects[PBEffects::Trapping]     = opts[:target_trapped] ? 3 : 0
+          target.effects[PBEffects::TrappingUser] = -1
+          before = [target.stages.dup, target.effects[PBEffects::Trapping]]
+          Battle::AbilityEffects.triggerOnDealingHit(user.ability, user, target, move, b)
+          count += 1 if (opts[:kind] == :trap ? target.effects[PBEffects::Trapping] != before[1] : target.stages != before[0])
+        end
+        Graphics.update if defined?(Graphics)
+        obs(mechanic, "case=hit_rolls move=#{move_id} kind=#{opts[:kind]} source=selftest " \
+                      "preset=#{opts[:target_trapped] ? 'trapped' : (opts[:target_stages] ? 'stages' : 'none')} n=#{n} " \
+                      "rate=#{format('%.3f', count.to_f / n)} expected=#{opts[:rate] || 0} " \
+                      "ok=#{rate_ok?(count, n, opts[:rate] || 0)}")
+      end
+    end
+    guard("recoil") do
+      # [label, {move:, hp_lost:, foe_item:, foe_ability:, substitute:}] (NV-22): the
+      # holder struck by the foe's move, having lost hp_lost (and the hit on a
+      # substitute if so), handed to its OnBeingHit; the foe's HP change.
+      (spec[:recoil] || []).each do |label, opts|
+        b = battle(mon(spec[:foe], [opts[:move]]), mon(spec[:user], [:TACKLE]))
+        b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+        b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+        attacker, holder = b.battlers[0], b.battlers[1]
+        attacker.ability = opts[:foe_ability]
+        attacker.item = opts[:foe_item] if opts[:foe_item]
+        holder.ability = spec[:ability]
+        move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(opts[:move]))
+        move.calcType = move.pbCalcType(attacker)
+        holder.damageState.reset
+        holder.damageState.hpLost     = opts[:hp_lost] || 100
+        holder.damageState.calcDamage = opts[:hp_lost] || 100
+        holder.damageState.substitute = !!opts[:substitute]
+        hp = attacker.hp
+        Battle::AbilityEffects.triggerOnBeingHit(holder.ability, attacker, holder, move, b)
+        obs(mechanic, "case=recoil label=#{label} source=selftest foe_change=#{attacker.hp - hp}")
+      end
+    end
+    guard("pp") do
+      # [label, {last_move:, pp:, hits:}] (NV-22): the foe last used last_move, which
+      # has pp left (or never moved, without last_move); the holder's OnDealingHit
+      # fired once per hit; that move's PP before and after.
+      (spec[:pp] || []).each do |label, opts|
+        b = battle(mon(spec[:user], [:TACKLE]), mon(spec[:foe], [:TACKLE, opts[:last_move] || :GROWL]))
+        b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+        b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+        holder, foe = b.battlers[0], b.battlers[1]
+        holder.ability = spec[:ability]
+        last = foe.moves[1]
+        foe.pbSetPP(last, opts[:pp]) if opts[:pp]
+        foe.lastRegularMoveUsed = opts[:last_move]
+        before = last.pp
+        move = holder.moves[0]
+        (opts[:hits] || 1).times { Battle::AbilityEffects.triggerOnDealingHit(holder.ability, holder, foe, move, b) }
+        obs(mechanic, "case=pp label=#{label} source=selftest before=#{before} after=#{last.pp} erased=#{before - last.pp}")
+      end
+    end
+    guard("used") do
+      # [move, {stages:}] (NV-22): the holder's OnEndOfUsingMove after it used move,
+      # with its stat stages set first; its stages before and after.
+      (spec[:used] || []).each do |move_id, opts|
+        opts ||= {}
+        b, user, target = pair(spec, move_id)
+        user.ability = spec[:ability]
+        (opts[:stages] || {}).each { |stat, n| user.stages[stat] = n }
+        before = user.stages.dup
+        move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(move_id))
+        Battle::AbilityEffects.triggerOnEndOfUsingMove(user.ability, user, [target], move, b)
+        moved = user.stages.select { |stat, n| before[stat] != n }.map { |stat, n| "#{stat}:#{before[stat]}->#{n}" }
+        obs(mechanic, "case=used move=#{move_id} source=selftest " \
+                      "preset=#{opts[:stages] ? 'stages' : 'none'} raised=#{moved.empty? ? 'none' : moved.join(',')}")
+      end
+    end
     guard("entry") do
       (spec[:entry] || []).each do |label, preset|
         b, holder, foe = scene(spec, preset || {})
@@ -756,12 +841,14 @@ module ChrookedSelfTest
       end
     end
     guard("taken") do
-      (spec[:taken] || []).each do |move_id|
-        with = damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral],
+      (spec[:taken] || []).each do |entry|
+        move_id, opts = entry.is_a?(Array) ? entry : [entry, {}]
+        setup = (opts || {})[:types] ? {target_types: opts[:types]} : {}   # the holder's types (NV-22)
+        with = damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral], setup: setup,
                       target_ability: spec[:ability])[0][0]
-        none = damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral])[0][0]
-        log("TAKEN #{mechanic} move=#{move_id} with=#{with} none=#{none} " \
-            "ratio=#{format('%.3f', with.to_f / [none, 1].max)}")
+        none = damage(spec[:foe], [nil], spec[:user], move_id, neutral: !!spec[:neutral], setup: setup)[0][0]
+        log("TAKEN #{mechanic} move=#{move_id} types=#{(setup[:target_types] || [:QMARKS]).join('/')} " \
+            "with=#{with} none=#{none} ratio=#{format('%.3f', with.to_f / [none, 1].max)}")
       end
     end
     guard("keeps") do

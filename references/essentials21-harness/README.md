@@ -325,13 +325,13 @@ A candidate becomes verified only after reading its call site in Nova's
 
 ## Ported mechanics
 
-61 ports and 13 compositions. 51 ports are generated from their specs' `template:` blocks: 22 since
+68 ports and 13 compositions. 53 ports are generated from their specs' `template:` blocks: 22 since
 2026-10-22 (NV-8), four more (NV-9), two more (NV-10), six more (NV-13) and five
 more (NV-14) the same day. NV-13's three new shapes were each hand-ported and proven
 first (Pyre, Nocturnal, Arctic Ariette), then generated with the same code apart
 from two message strings, which now use Nova's own. NV-14's were too (Vampiric,
 Carnivore, Rapid Combustion), the generated code differing only in writing a
-quarter as `* 0.25`. Ten are hand-written here:
+quarter as `* 0.25`. Fifteen are hand-written here:
 - `chrooked_fullmoon.rb` and `chrooked_highnoon.rb` (NV-10) and
   `chrooked_infernalmaw.rb` (NV-11), because each has more than one effect;
 - `chrooked_rimefang.rb` (NV-12), for the same reason;
@@ -339,6 +339,10 @@ quarter as `* 0.25`. Ten are hand-written here:
   `chrooked_selfsufficient.rb`, `chrooked_heavyfumes.rb` (NV-21), entry and end-of-round
   effects each unique to its ability, proven by the self-test's `entry` and `eor`
   scenes;
+- `chrooked_exhaust.rb`, `chrooked_deathgrip.rb`, `chrooked_riposte.rb`,
+  `chrooked_mindwipe.rb`, `chrooked_insidious.rb` (NV-22), on-hit, recoil, PP and
+  status-move effects, proven by the self-test's `hit_rolls`, `recoil`, `pp` and `used`
+  phases;
 - `chrooked_frostbite.rb` (NV-12), a status and not an ability: method wrappers
   rather than a registry entry.
 
@@ -374,6 +378,8 @@ exception, by design (below).
 | liquified, virtualized, stonebark, flytrap (blocks) | `damage_taken` contact 1/2 + Water 2 / contact 1/3 + Dark 2 / `type_absorb` Grass heal + Water 1.25 / `type_absorb` Bug, Attack and Sp. Atk | NV-20, lab 3/3, 4/4, 3/3, 3/3: Close Combat taken 0.500 / 0.337, Scald and Dark Pulse 2.000, Liquidation 1.000, Crunch 0.671; Energy Ball heals Stonebark, Surf 1.250; Bug Buzz raises Flytrap, not at +6 |
 | dilation, dualaegis, waterveil (hand-written) | `OnSwitchIn`: Trick Room toggle / Reflect and Light Screen / Aqua Ring beside Nova's own Water Veil | NV-21, lab 2/2, 3/3, 5/5 (entry scene): Trick Room 5 from calm, 0 when up; screens 5 and 5, Reflect left at 3, 8 and 8 with Light Clay; Aqua Ring on entry, not twice, the move then fails, still cannot be burned |
 | selfsufficient, heavyfumes (hand-written) | `EndOfRoundHealing` 1/16 at least 1 / `EndOfRoundEffect` foes 1/16 (Bad Dreams' shape) | NV-21, lab 4/4 each (eor scene): +8 of 135, 0 at full, +1 at 12 max HP, +16 with Leftovers; a Normal foe -14 of 235, Poison and Magic Guard 0, -14 through a Substitute |
+| singingsands, permafrost | blocks: Ground immunity + `type_conversion` of Normal sound moves to Ground 1.2x / `damage_taken` rule `super_effective: true` 0.65 | NV-22, lab 3/3 each: Earthquake immune, Hyper Voice and Boomburst turn Ground; Flamethrower on an Ice holder 0.653, Close Combat on Ice/Rock 0.648, Tackle 1.000 |
+| exhaust, deathgrip, riposte, mindwipe, insidious (hand-written) | on contact 30% accuracy -1 / Bind trap; recoil 1/4 of HP lost; Spite's 4 PP per hit; Speed +1 after a status move | NV-22, lab 4/4, 3/3, 5/5, 4/4, 3/3: rates 0.300 on Tackle, 0 on Water Gun, at -6 and on a trapped foe; recoil -25 of a 100-HP hit, -1 of 2, none through a substitute, Protective Pads or Magic Guard; PP 10 to 6, 12 over three hits; Swords Dance Speed 0 to 1, not at +6 |
 | venomous, frostbody (blocks) | `struck_status` + `hit_status` gated on contact; poison / frostbite, 30% | NV-19, lab 3/3, 4/4: 30% both ways over 400 rolls; never on Water Gun; never on an Ice-type. Cold Snap (Tough Claws + Frost Body) composes, 5/5 |
 | immunity, poisonheal, thermalexchange (blocks) | `keeps` + Poison immunity / `keeps` + Poison immunity / Fire immunity + `keeps` | NV-18, lab 3/3 each: Sludge Bomb and Toxic immune; Immunity still cannot be poisoned; Poison Heal +16 HP at end of round (none -16); Thermal Exchange still cannot be burned, and an attacker's Mold Breaker lifts its Fire immunity |
 | apexpredator (composed) | Carnivore + Strong Jaw | NV-15, lab 4/4: Carnivore's three knockout cases, re-tagged (67 to 100 HP); Crunch 41, as Strong Jaw alone (none 28) |

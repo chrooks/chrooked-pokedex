@@ -386,15 +386,15 @@ def _fraction(value: object) -> Optional[Fraction]:
 def _validate_rules(params: Mapping[str, object], where: str) -> None:
     rules = params.get("rules")
     if not isinstance(rules, list) or not rules or not all(isinstance(r, dict) for r in rules):
-        raise TemplateError(f"{where}: params.rules must be a list of {{multiplier, type?, contact?}}")
+        raise TemplateError(f"{where}: params.rules must be a list of {{multiplier, type?, contact?, super_effective?}}")
     for index, rule in enumerate(rules, start=1):
-        unknown = sorted(set(rule) - {"multiplier", "type", "contact"})
+        unknown = sorted(set(rule) - {"multiplier", "type", "contact", "super_effective"})
         if unknown:
             raise TemplateError(f"{where}: rule {index}: unknown keys {', '.join(unknown)}")
         if _fraction(rule.get("multiplier")) is None:
             raise TemplateError(f"{where}: rule {index}: multiplier must be a positive number or a fraction (1/3)")
-        if "type" not in rule and rule.get("contact") is not True:
-            raise TemplateError(f"{where}: rule {index}: needs a type, contact: true, or both")
+        if "type" not in rule and rule.get("contact") is not True and rule.get("super_effective") is not True:
+            raise TemplateError(f"{where}: rule {index}: needs a type, contact: true or super_effective: true")
 
 
 def _validate_hit_status(params: Mapping[str, object], where: str, gated: bool = True) -> None:
@@ -444,6 +444,8 @@ def _validate_probe(probe: Mapping[str, object], template: BehaviorTemplate, at:
         allowed.add("attacker_types")
     if shape == "type_absorb":
         allowed |= {"hp", "stage"}
+    if shape == "damage_taken":
+        allowed.add("types")  # the holder's types first (a super-effective hit)
     unknown = sorted(set(probe) - allowed)
     if unknown:
         raise TemplateError(f"{at}: unknown fields {', '.join(unknown)} (takes {', '.join(sorted(allowed))})")
@@ -581,8 +583,9 @@ def _body(spec: BehaviorSpec, port: _Port, selftest: str) -> str:
         body = _TYPE_RESIST
     elif port.shape == "damage_taken":
         lines = []
-        for multiplier, rule_type, contact in port.rules:
-            gate = " && ".join(([] if not contact else ["contact"]) + ([f"type == :{rule_type}"] if rule_type else []))
+        for multiplier, rule_type, contact, super_effective in port.rules:
+            gate = " && ".join(([] if not contact else ["contact"]) + ([f"type == :{rule_type}"] if rule_type else [])
+                               + (["Effectiveness.super_effective?(target.damageState.typeMod)"] if super_effective else []))
             lines.append(f"      factor *= {_ruby_fraction(multiplier)} if {gate}")
         values["RULES"] = "\n".join(lines)
         body = _DAMAGE_TAKEN
@@ -851,7 +854,7 @@ class _Port:
     weathers: tuple[str, ...] = ()  # Essentials weathers that count, for a weather boost
     terrain: Optional[str] = None   # Essentials terrain, for a terrain boost
     grant_types: Optional[tuple[str, ...]] = None  # stab_grant: INTERNAL types, None = all
-    rules: tuple[tuple[Fraction, Optional[str], bool], ...] = ()  # damage_taken: (multiplier, type, contact)
+    rules: tuple[tuple[Fraction, Optional[str], bool, bool], ...] = ()  # damage_taken: (multiplier, type, contact, SE)
 
 
 def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
@@ -892,14 +895,15 @@ def _resolve(spec: BehaviorSpec, names: Names) -> _Port:
             resolved.append(internal or "")
         return tuple(resolved)
 
-    rules: list[tuple[Fraction, Optional[str], bool]] = []
+    rules: list[tuple[Fraction, Optional[str], bool, bool]] = []
     for rule in params.get("rules") or ():  # type: ignore[union-attr]
         rule_type = None
         if "type" in rule:
             rule_type = names.type(str(rule["type"]))
             if rule_type is None:
                 missing.append(f"type {rule['type']!r}")
-        rules.append((_fraction(rule["multiplier"]) or Fraction(1), rule_type, bool(rule.get("contact"))))
+        rules.append((_fraction(rule["multiplier"]) or Fraction(1), rule_type, bool(rule.get("contact")),
+                      bool(rule.get("super_effective"))))
     grant_types = None
     if template.shape == "stab_grant" and params["types"] != "all":
         grant_types = resolve_types(params["types"])
@@ -1287,7 +1291,9 @@ def _phases(port: _Port) -> tuple[tuple[str, tuple[str, ...]], ...]:
         entries = [f"[:{p.move}, {{mold_breaker: true}}]" if p.mold_breaker else f":{p.move}" for p in port.probes]
         return (("defend", tuple(dict.fromkeys(entries))),)
     if port.shape in ("type_resist", "damage_taken"):
-        return (("taken", tuple(dict.fromkeys(':' + p.move for p in port.probes))),)
+        entries = [f"[:{p.move}, {{types: [{', '.join(':' + t for t in p.types)}]}}]" if p.types else f":{p.move}"
+                   for p in port.probes]
+        return (("taken", tuple(dict.fromkeys(entries))),)
     if port.shape == "type_absorb":
         entries = []
         for probe in port.probes:
