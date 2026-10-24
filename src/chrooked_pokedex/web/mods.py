@@ -15,7 +15,7 @@ from typing import Any, Callable, Optional
 from fastapi import APIRouter, HTTPException
 
 from .. import ledger as ledgermod
-from ..appliers.rejuv import static_mods
+from ..appliers import static_mods
 from ..model.mods import load_mods_off, write_mods_off
 from . import targets as targetsmod
 

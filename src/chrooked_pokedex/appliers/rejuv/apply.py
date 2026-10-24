@@ -16,7 +16,8 @@ from pathlib import Path
 from ...model import Ruleset
 from ...model.schema import DEFAULT_EFFECT, STAT_KEYS
 from ...report import ApplyReport, ReportEntry
-from . import behavior_install, compose, behavior_triage, static_mods
+from .. import static_mods
+from . import behavior_install, compose, behavior_triage
 from ...model.schema import composed_behaviors, is_composed
 from .emit import (
     Sym, abiltext_delta, itemtext_delta, montext_delta, movetext_delta, ruby_sym,

@@ -9,7 +9,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from chrooked_pokedex.appliers.rejuv import static_mods
+from chrooked_pokedex.appliers import static_mods
 from chrooked_pokedex.appliers.rejuv.behavior_install import _DEFAULT_SOURCE_DIR
 from chrooked_pokedex.model.mods import load_mods_off, write_mods_off
 from chrooked_pokedex.report import ApplyReport

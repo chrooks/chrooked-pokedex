@@ -56,7 +56,7 @@ def route_apply(
     default to empty, so an apply with no slug behaves exactly as before.
 
     ``mods_off`` (static mods the Target turns off, model/mods.py) is honored by
-    the rejuv applier, the only engine with static mods today.
+    the rejuv and essentials21 appliers, the engines with static mods.
 
     Side effects: modifies ``report`` in-place by appending ``ReportEntry``
     objects.  All file I/O is in the applier functions, not here.
@@ -126,7 +126,7 @@ def route_apply(
         from ..cli import _apply_essentials
 
         _warn_unsupported_target_layers(holds, target_edits, "essentials21", report)
-        _apply_essentials(target, category, ruleset, report)
+        _apply_essentials(target, category, ruleset, report, mods_off=mods_off)
 
 
 def _warn_unsupported_target_layers(

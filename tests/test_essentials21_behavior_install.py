@@ -60,6 +60,10 @@ def _mods(tgt):
     return tgt / MODS_DIR
 
 
+# Redux Mode (#121), the static mod every apply installs unless the Target turns it off.
+_REDUX = "chrooked_zz_redux.rb"
+
+
 def test_present_port_is_installed_into_998_chrookedmods(tmp_path):
     src = _source(tmp_path, {"kindle": "# chrooked:kindle\nputs 1\n"})
     tgt = _target(tmp_path)
@@ -69,7 +73,7 @@ def test_present_port_is_installed_into_998_chrookedmods(tmp_path):
 
     dest = tgt / "Data" / "Scripts" / "998_ChrookedMods" / "chrooked_kindle.rb"
     assert dest.read_text().startswith("# chrooked:kindle")
-    assert changed == {dest}
+    assert changed == {dest, _mods(tgt) / _REDUX}
     entry = next(e for e in report.entries if e.chrooked_id == "kindle")
     assert entry.status == "applied"
     assert "installed" in entry.reason
@@ -81,10 +85,10 @@ def test_missing_port_is_noop_and_creates_no_folder(tmp_path):
     tgt = _target(tmp_path)
     report = ApplyReport()
 
-    install_behaviors(tgt, _ruleset("someunported"), report, source_dir=src)
+    install_behaviors(tgt, _ruleset("someunported"), report, source_dir=src, mods_off=frozenset({"redux"}))
 
     assert not _mods(tgt).exists()
-    assert report.entries == []
+    assert [e.status for e in report.entries] == ["held"]  # only Redux, turned off
 
 
 @pytest.mark.parametrize("contents", ["", "puts 'no tag here'\n"])
@@ -296,7 +300,7 @@ def test_cli_essentials_apply_generates_the_templated_port(tmp_path, capsys):
     installed = (_mods(target) / "chrooked_cinderglow.rb").read_text(encoding="utf-8")
     assert installed == render_essentials21(ruleset.behaviors["cinderglow"], build_resolution_map(target, ruleset))
     assert "chrooked_table.add(:CINDERGLOW," in installed
-    assert "behaviors: 1 file(s) changed" in capsys.readouterr().out
+    assert "behaviors: 2 file(s) changed" in capsys.readouterr().out  # the port and Redux
     entry = next(e for e in report.entries if e.category == "behavior")
     assert entry.status == "applied" and "mechanic installed" in entry.reason
 
@@ -320,7 +324,7 @@ def test_template_and_hand_port_together_is_ambiguous_and_blocked(tmp_path):
 
     install_behaviors(target, ruleset, report, resmap=resmap, source_dir=src)
 
-    (entry,) = report.entries
+    (entry,) = [e for e in report.entries if e.chrooked_id != "zz_redux"]
     assert entry.status == "blocked" and "ambiguous" in entry.reason
     assert not (_mods(target) / "chrooked_cinderglow.rb").exists()
     assert has_port(ruleset.behaviors["cinderglow"], resmap, source_dir=src) is False
@@ -430,3 +434,29 @@ def test_an_ability_that_lists_itself_installs_its_whole_hand_port_silently(tmp_
 
     assert "puts 'whole'" in (_mods(target) / "chrooked_emberjaw.rb").read_text(encoding="utf-8")
     assert [e for e in report.entries if e.status == "blocked"] == []
+
+
+def test_redux_installs_by_default_and_a_rerun_is_no_churn(tmp_path):
+    src, tgt = _source(tmp_path, {}), _target(tmp_path)
+    report = ApplyReport()
+
+    install_behaviors(tgt, _ruleset(), report, source_dir=src)
+
+    assert (_mods(tgt) / _REDUX).read_text(encoding="utf-8").startswith("# chrooked:zz_redux\n")
+    assert [(e.chrooked_id, e.status) for e in report.entries] == [("zz_redux", "applied")]
+    rerun = ApplyReport()
+    assert install_behaviors(tgt, _ruleset(), rerun, source_dir=src) == set()
+    assert rerun.entries == []
+
+
+def test_redux_turned_off_is_removed_and_held_not_called_stale(tmp_path):
+    src, tgt = _source(tmp_path, {}), _target(tmp_path)
+    install_behaviors(tgt, _ruleset(), ApplyReport(), source_dir=src)
+    report = ApplyReport()
+
+    install_behaviors(tgt, _ruleset(), report, source_dir=src, mods_off=frozenset({"redux"}))
+
+    assert not (_mods(tgt) / _REDUX).exists()
+    (entry,) = report.entries
+    assert entry.status == "held" and entry.category == "mods"
+    assert "removed Data/Scripts/998_ChrookedMods/chrooked_zz_redux.rb" in entry.reason

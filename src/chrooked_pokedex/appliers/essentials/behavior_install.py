@@ -14,6 +14,8 @@ from one of two places:
 A spec with both is ambiguous and is `blocked` rather than guessed at. A composed
 ability (`behaviors: [carnivore, strongjaw]`, NV-15) gets a file of its own,
 `chrooked_<ability>.rb`, that gives it its parts' handlers (`behavior.compose`).
+A static mod (Redux Mode, `behavior.redux`, #121) installs here too, unless the
+Target turns it off (`appliers/static_mods.py`).
 
 Essentials 21 loads every `.rb` under `Data/Scripts/` in name order, files before
 folders, so the install home is `Data/Scripts/998_ChrookedMods/`: after the
@@ -43,6 +45,7 @@ from ...model import Ruleset
 from ...model.behavior_spec import BehaviorSpec
 from ...model.schema import AbilityDef, composed_behaviors, is_composed
 from ...report import ApplyReport, ReportEntry
+from .. import static_mods
 from .resolution import ResolutionMap, build_resolution_map
 
 # The repo's canonical port home: src/chrooked_pokedex/appliers/essentials/ -> repo root.
@@ -59,8 +62,10 @@ def install_behaviors(
     *,
     resmap: ResolutionMap | None = None,
     source_dir: Path | None = None,
+    mods_off: frozenset[str] = frozenset(),
 ) -> set[Path]:
-    """Install every mechanic that has a valid port; remove stale ones.
+    """Install every mechanic that has a valid port and every static mod the
+    Target leaves on (`mods_off` names the ones it turns off); remove stale ones.
 
     `resmap` resolves a template's names against this target; the apply passes the
     one it already built (holding the abilities it just created). Without it, one
@@ -128,6 +133,9 @@ def install_behaviors(
                 status="blocked", category="behavior", chrooked_id=chrooked_id,
                 reason=f"composition not generated: {exc}",
             ))
+
+    for mod in static_mods.select(static_mods.essentials21_catalog(), target, MODS_DIR, report, mods_off):
+        install(Path(mod.file).stem.removeprefix("chrooked_"), static_mods.essentials21_text(mod))
 
     changed |= _remove_stale(mods_dir, wanted, report)
     return changed

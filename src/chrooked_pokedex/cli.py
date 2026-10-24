@@ -371,7 +371,9 @@ def _apply_polishedcrystal(target: Path, category: str, ruleset, report: ApplyRe
 _ESSENTIALS_CATEGORIES = ("moves", "create", "species", "learnset", "evolution", "type-chart", "behaviors")
 
 
-def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+def _apply_essentials(
+    target: Path, category: str, ruleset, report: ApplyReport, *, mods_off: frozenset[str] = frozenset(),
+) -> None:
     resmap = essentials_resolution.build_resolution_map(target, ruleset)
     categories = _ESSENTIALS_CATEGORIES if category == "all" else (category,)
     if "moves" in categories:
@@ -396,7 +398,9 @@ def _apply_essentials(target: Path, category: str, ruleset, report: ApplyReport)
         # Install ported mechanics LAST: standalone Ruby files need no earlier
         # ordering, and the created ability rows exist by now, in the resmap too,
         # which is where a template finds this game's names for its port.
-        changed = essentials_behaviors.install_behaviors(target, ruleset, report, resmap=resmap)
+        changed = essentials_behaviors.install_behaviors(
+            target, ruleset, report, resmap=resmap, mods_off=mods_off,
+        )
         print(f"behaviors: {len(changed)} file(s) changed")
 
 
