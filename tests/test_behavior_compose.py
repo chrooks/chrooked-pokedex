@@ -10,6 +10,7 @@ import subprocess
 
 import pytest
 
+from chrooked_pokedex.behavior import compose
 from chrooked_pokedex.behavior.compose import CompositionError, harness_checks, render_essentials21
 from chrooked_pokedex.model.behavior_spec import (
     BehaviorEffect,
@@ -103,9 +104,11 @@ def test_the_wiring_waits_for_the_first_battle_and_retags_the_parts_lines():
     assert "alias_method :chrooked_compose_line, :line" in text
     assert 'line = "[chrooked:#{tag}] #{msg.delete_prefix(prefix)} part=#{part}"' in text
     # Each rule names registries whose trigger reads the result that way (Nova's 008_Battle_AbilityEffects.rb).
-    assert "EACH   = [:DamageCalcFromUser, :DamageCalcFromTarget, :OnBeingHit, :OnDealingHit," in text
-    assert "THREAD = [:SpeedCalc, :PriorityChange, :ModifyMoveBaseType, :CriticalCalcFromUser," in text
-    assert "ANY    = [:MoveImmunity, :StatLossImmunity]" in text
+    # Every other registry runs each part (#121), so no pair of parts goes uncombined.
+    assert "THREAD = [:SpeedCalc, :WeightCalc, :PriorityChange, :ModifyMoveBaseType," in text
+    assert "ANY    = [:MoveImmunity, :MoveBlocking, :StatLossImmunity," in text
+    assert "SUM    = [:PriorityBracketChange]" in text
+    assert "has no rule to combine them" not in text
 
 
 def test_two_ported_parts_merge_their_phases_and_keep_the_first_control():
@@ -171,6 +174,40 @@ def test_the_file_is_valid_ruby(tmp_path):
     port.write_text(_render(_ruleset(["carnivore", "strongjaw"])), encoding="utf-8")
     result = subprocess.run(["ruby", "-c", str(port)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+# Stubs for the classes _COMPOSE reopens, then each rule's result for two parts.
+_COMBINE_PROBE = """
+module ChrookedLog
+  ENABLED = false
+  def self.line(msg); end
+  def self.error(msg); raise msg; end
+end
+class Battle; def initialize(*); end; end
+class Battle::Battler; def hasActiveAbility?(*); false; end; end
+%s
+c = ChrookedCompose
+add = [["a", proc { |_s, _b, v| v + 1 }], ["b", proc { |_s, _b, v| v * 10 }]]
+yes = [["a", proc { nil }], ["b", proc { true }]]
+pri = [["a", proc { -1 }], ["b", proc { 1 }]]
+seen = []
+each = [["a", proc { seen << :a; nil }], ["b", proc { seen << :b; nil }]]
+puts c.combine(:SpeedCalc, nil, add).call(:X, nil, 2)
+puts c.combine(:MoveImmunity, nil, yes).call(:X)
+puts c.combine(:PriorityBracketChange, nil, pri).call(:X)
+c.combine(:EndOfRoundEffect, nil, each).call(:X)
+puts seen.join(",")
+"""
+
+
+@pytest.mark.skipif(shutil.which("ruby") is None, reason="ruby not installed")
+def test_every_registry_combines_two_parts(tmp_path):
+    probe = tmp_path / "probe.rb"
+    probe.write_text(_COMBINE_PROBE % compose._COMPOSE, encoding="utf-8")
+    result = subprocess.run(["ruby", str(probe)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    # Speed threads (2+1)*10; immunity is any; brackets add; others run both parts.
+    assert result.stdout.split() == ["30", "true", "0", "a,b"]
 
 
 # --- the checks --------------------------------------------------------------------

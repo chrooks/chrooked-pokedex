@@ -10,11 +10,11 @@ composed ability's file covers both:
     ability id. The composed ability gets its parts' handlers: a registry only one
     part has a handler in gets that handler as it is; a registry several parts
     share gets one handler that combines them the way the registry's trigger reads
-    the result. Multiplier and side-effect registries run every part in turn;
-    registries that pass a value along (speed, priority, the move's type, the
-    critical stage) hand each part the one before's result; immunity registries
-    answer yes when any part does. Two parts sharing a registry with no such rule
-    log an ERROR, and only the first runs.
+    the result. Registries that pass a value along (speed, weight, priority, the
+    move's type, the critical stage) hand each part the one before's result;
+    immunity, blocking and trapping registries answer yes when any part does; the
+    priority bracket adds the parts' answers; every other registry (multipliers
+    and side effects) runs every part in turn. Every registry has a rule (#121).
   * Checks by name (NV-16): the battle code asks `hasActiveAbility?(:LEVITATE)` for
     Levitate, Guts, Scrappy, Suction Cups and Gorilla Tactics instead of keeping a
     handler. A composed battler answers yes for each of its parts as well, so every
@@ -399,15 +399,20 @@ def _header(ability: AbilityDef, parts: list[_Part]) -> str:
 _COMPOSE = """\
 unless defined?(ChrookedCompose)
   module ChrookedCompose
-    # How a registry combines parts that share it, as its trigger reads the result:
-    # EACH runs every part (the result is unused, or a multipliers hash each part
-    # changes); THREAD passes the trigger's last argument through each part in turn
-    # (nil means unchanged); ANY answers with the first part that says yes.
-    EACH   = [:DamageCalcFromUser, :DamageCalcFromTarget, :OnBeingHit, :OnDealingHit,
-              :OnEndOfUsingMove, :OnSwitchIn]
-    THREAD = [:SpeedCalc, :PriorityChange, :ModifyMoveBaseType, :CriticalCalcFromUser,
-              :CriticalCalcFromTarget]
-    ANY    = [:MoveImmunity, :StatLossImmunity]
+    # How a registry combines parts that share it, as its trigger reads the result.
+    # Every one of Nova's 56 registries has a rule (#121):
+    # THREAD passes the trigger's last argument through each part in turn (nil
+    # means unchanged); ANY answers with the first part that says yes; SUM adds
+    # the parts' answers (Stall's -1 and Quick Draw's +1); and every other
+    # registry runs every part (the trigger's result is unused, or a hash each
+    # part changes).
+    THREAD = [:SpeedCalc, :WeightCalc, :PriorityChange, :ModifyMoveBaseType,
+              :CriticalCalcFromUser, :CriticalCalcFromTarget]
+    ANY    = [:MoveImmunity, :MoveBlocking, :StatLossImmunity, :StatLossImmunityNonIgnorable,
+              :StatLossImmunityFromAlly, :StatusImmunity, :StatusImmunityNonIgnorable,
+              :StatusImmunityFromAlly, :StatusCheckNonIgnorable, :OnHPDroppedBelowHalf,
+              :CertainSwitching, :TrappingByTarget, :CertainEscapeFromBattle]
+    SUM    = [:PriorityBracketChange]
     @compositions = {}
     @parts = {}
     @stack = []
@@ -453,16 +458,14 @@ unless defined?(ChrookedCompose)
     def self.combine(name, tag, handlers)
       calls = handlers.map { |part, handler| proc { |*args| as(tag, part) { handler.call(*args) } } }
       return calls[0] if calls.length == 1
-      if EACH.include?(name)
-        proc { |*args| calls.reduce(nil) { |ret, call| r = call.call(*args); r.nil? ? ret : r } }
-      elsif THREAD.include?(name)
+      if THREAD.include?(name)
         proc { |*args| calls.reduce(args[-1]) { |value, call| r = call.call(*args[0...-1], value); r.nil? ? value : r } }
       elsif ANY.include?(name)
         proc { |*args| calls.reduce(false) { |yes, call| yes || call.call(*args) } }
+      elsif SUM.include?(name)
+        proc { |*args| calls.sum { |call| call.call(*args) || 0 } }
       else
-        ChrookedLog.error("[chrooked:#{tag}] ERROR parts #{handlers.map(&:first).join(', ')} share #{name}, " \\
-                          "which has no rule to combine them; only #{handlers[0][0]} runs")
-        calls[0]
+        proc { |*args| calls.reduce(nil) { |ret, call| r = call.call(*args); r.nil? ? ret : r } }
       end
     end
 
