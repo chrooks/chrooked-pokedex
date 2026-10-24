@@ -117,9 +117,9 @@ def test_registry_entry_for_path(tmp_path: Path) -> None:
     assert registry_entry_for_path(targets, Path("/games/other")) is None
 
 
-def _client(ruleset_dir: Path, source: Path, namespace: str | None) -> TestClient:
+def _client(ruleset_dir: Path, source: Path, namespace: str | None, engine: str = "rejuv") -> TestClient:
     target = Target(id="t1", label="Rejuvenation", path="/games/rejuv",
-                    engine="rejuv", namespace=namespace)
+                    engine=engine, namespace=namespace)
 
     def get_target(target_id: str) -> Target:
         if target_id != "t1":
@@ -161,3 +161,22 @@ def test_api_put_rejects(tmp_path: Path, source: Path, namespace, off, status) -
     client = _client(tmp_path, source, namespace)
     assert client.put("/api/targets/t1/mods", json={"off": off}).status_code == status
     assert not (tmp_path / "targets").exists()
+
+
+@pytest.mark.unit
+def test_api_gives_an_essentials_target_its_own_catalog(tmp_path: Path, source: Path) -> None:
+    """Nova's one static mod is the generated Redux Mode (#121), and it can be turned off."""
+    client = _client(tmp_path, source, "nova", engine="essentials")
+    body = client.get("/api/mods?target=t1").json()
+    assert body["engine"] == "essentials" and [m["id"] for m in body["mods"]] == ["redux"]
+    assert body["target"]["supported"] is True
+    assert client.put("/api/targets/t1/mods", json={"off": ["redux"]}).status_code == 200
+    assert load_mods_off(tmp_path, "nova") == frozenset({"redux"})
+
+
+@pytest.mark.unit
+def test_api_engine_without_mods_is_unsupported(tmp_path: Path, source: Path) -> None:
+    client = _client(tmp_path, source, "pc", engine="pokeemerald")
+    body = client.get("/api/mods?target=t1").json()
+    assert body["engine"] == "rejuv" and body["target"]["supported"] is False
+    assert client.put("/api/targets/t1/mods", json={"off": []}).status_code == 409

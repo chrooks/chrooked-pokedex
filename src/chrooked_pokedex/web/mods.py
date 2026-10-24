@@ -1,7 +1,8 @@
 """The Mods API: the static-mod catalog and each Target's on/off switches.
 
-The catalog is read from the Rejuv harness on every request (the mod files are
-their own metadata — see appliers/rejuv/static_mods.py). A Target's switches
+The catalog is read on every request: Rejuv's from its harness (the mod files
+are their own metadata), Essentials 21's generated (Redux Mode) — see
+appliers/static_mods.py. A chosen Target gets its own engine's catalog. A Target's switches
 live in its committed namespace (``ruleset/targets/<slug>/mods.yaml``), so a
 Target must be bound to a namespace before a switch can be saved.
 """
@@ -19,7 +20,7 @@ from ..appliers import static_mods
 from ..model.mods import load_mods_off, write_mods_off
 from . import targets as targetsmod
 
-# The only engine with static mods today.
+# The catalog shown when no Target is chosen.
 MOD_ENGINE = "rejuv"
 
 
@@ -43,18 +44,21 @@ def build_router(
             "label": target.label,
             "engine": target.engine,
             "namespace": target.namespace,
-            "supported": target.engine == MOD_ENGINE,
+            "supported": static_mods.catalog_for(target.engine, source_dir) is not None,
             "off": sorted(load_mods_off(ruleset_dir, target.namespace)),
         }
 
     @router.get("/mods")
     def list_mods(target: Optional[str] = None) -> dict[str, Any]:
         """Every static mod, plus the chosen Target's switches when ``?target=`` is set."""
-        mods = [asdict(m) for m in static_mods.catalog(source_dir)]
+        chosen = _target(target) if target else None
+        engine = MOD_ENGINE
+        if chosen is not None and static_mods.catalog_for(chosen.engine, source_dir) is not None:
+            engine = chosen.engine
         return {
-            "engine": MOD_ENGINE,
-            "mods": mods,
-            "target": _target_payload(_target(target)) if target else None,
+            "engine": engine,
+            "mods": [asdict(m) for m in static_mods.catalog_for(engine, source_dir) or []],
+            "target": _target_payload(chosen) if chosen else None,
         }
 
     @router.put("/targets/{target_id}/mods")
@@ -70,7 +74,10 @@ def build_router(
         off = (payload or {}).get("off")
         if not isinstance(off, list) or not all(isinstance(i, str) for i in off):
             raise HTTPException(status_code=422, detail="'off' must be a list of mod ids.")
-        by_id = {m.id: m for m in static_mods.catalog(source_dir)}
+        mods = static_mods.catalog_for(target.engine, source_dir)
+        if mods is None:
+            raise HTTPException(status_code=409, detail=f"{target.engine} has no static mods.")
+        by_id = {m.id: m for m in mods}
         unknown = sorted(set(off) - by_id.keys())
         if unknown:
             raise HTTPException(status_code=422, detail=f"Unknown mod ids: {', '.join(unknown)}.")
