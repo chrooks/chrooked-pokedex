@@ -190,6 +190,53 @@ Apply writes the composed ability its own file, `chrooked_<ability>.rb`
     Thorned Succulent).
 - **Blocked:** a target lacking a vanilla part, or its proof move.
 
+## Redux Mode (static mod, #121)
+
+Redux Mode gives every battler, both sides, all of its species' abilities at
+once: the regular ones and the hidden one. It is a **static mod**, not a Ruleset
+behavior, so it has no spec and no `ruleset/behaviors/` entry. `behavior/redux.py`
+renders it as `chrooked_zz_redux.rb`, and apply installs it unless the Target
+turns it off in `ruleset/targets/<slug>/mods.yaml`. The `zz_` prefix sorts it
+after every port, so the composed abilities load first. The in-game switch is
+Options > Gameplay > Redux Mode, **Off by default**.
+
+It reuses the composed abilities' merge rules (`behavior/compose.py`) rather than
+inventing its own:
+
+- `Battler#ability` hands the battle code a copy of the primary ability's
+  GameData carrying the battler's list, so every registry's `trigger` (and `[]`,
+  which the AI asks) runs each listed ability's handler, combined by that
+  registry's rule.
+- `hasActiveAbility?` answers yes for any listed ability, and for a composed
+  one's parts.
+
+The list is empty — one ability, as before — while the option is Off, after the
+battler's ability changes (Skill Swap, Trace, Mummy) and while it is Transformed.
+
+Ceilings, on purpose: those four moves collapse a battler to one ability for the
+rest of the battle, the ability box names the primary, and Nova's 14 direct
+`ability_id ==` checks see the primary only.
+
+### Proving it
+
+`scripts/nova_selftest.sh redux` runs the self-test's `redux` probe. Mightyena
+carries Intimidate (`OnSwitchIn`), Quick Feet (`SpeedCalc`) and hidden Moxie
+(`OnEndOfUsingMove`), so one holder measures the fan-out across three registries
+and both merge rules it needs, EACH and THREAD. The probe runs with the option
+Off and On and scores itself, since there is no spec to verify against:
+
+    [chrooked:selftest] REDUX mode=0 ids=- primary=INTIMIDATE intimidate=-1 moxie=0 speed=100->100 result=PASS
+    [chrooked:selftest] REDUX mode=1 ids=INTIMIDATE/QUICKFEET/MOXIE primary=INTIMIDATE intimidate=-1 moxie=1 speed=100->150 result=PASS
+
+Off keeps Intimidate alone, which also shows the wrapper leaves the plain path
+intact. A static mod needs `pokemon.ability` set, not `battler.ability=`: the
+list is held back while `@ability_id` differs from the Pokémon's own, and the
+other cases set the battler's ability directly.
+
+Redux wraps `AbilityHandlerHash#trigger` for every registry, whether the option
+is On or not, so `--all` is its regression proof. With the file installed, one
+boot scored 147 specs, 548/548 cases, no FAIL and no ERROR line (2026-10-25).
+
 ## Install
 
 `chrooked-pokedex apply --engine essentials` (the `behaviors` category, last in the
@@ -237,7 +284,7 @@ Copied into the **lab copy's** `Data/Scripts/998_ChrookedDexLab/` by
 | --- | --- |
 | `001_register_black_weather.rb` | Nova only: registers the `:Black` weather map 050 uses, so the PBS writer and compiler finish; lands the debug boot on the title screen |
 | `002_lab_save_dir.rb` | points `SaveData::DIRECTORY` at the lab's own `LabSaves/`; lab and live share `Title=Nova`, so both otherwise save into the synced `%AppData%\Roaming\Nova` |
-| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:, types:}]`), applied to the same battlers before every ability is measured (NV-9, NV-10); `:STRUGGLE` is built as a battle builds it. A `heal:` list (`[[:MOONLIGHT, 0.5]]`) measures what a healing move restores with the ability and without (HEAL lines, NV-10). A `chance:` list (`[[:CRUNCH, {status: :BURN, status_rate: 0.3, flinch_rate: 0.3}]]`) measures an on-hit chance: the damage A/B once, then the user's `OnDealingHit` handler fired 400 times on a fresh target with a fixed seed, the rates checked within 3 standard deviations (exactly 0 when 0 is expected) and logged as the mechanic's OBS line with `source=selftest` (NV-11). `setup:` may also set `target_types:`. A `defend:` list (`[:KNOCKOFF, :TAUNT]`) asks the ability's `MoveImmunity` handler about each move aimed at the holder, typed as used, and logs DEFEND lines; the port's own OBS line is what is scored (NV-13). Three more phases drive a registry directly and log what changed, the port's OBS line being scored (NV-14): `drain:` (`[[:TACKLE, {hp_lost: 100, target_ability: :LIQUIDOOZE}]]`) hands a hit that took `hp_lost` HP to `OnDealingHit` with the user at half HP (DRAIN lines); `ko:` (`[{kos: 1, hp: 0.5, stages: {SPECIAL_ATTACK: 6}}]`) ends the user's move with `kos` foes marked fainted for `OnEndOfUsingMove`, the one foe listed once per knockout and never really fainted, so the battle is not over (KO lines); `priority:` (`[[:FLAMETHROWER, 0.5]]`) asks `PriorityChange` at that HP fraction (PRIORITY lines). It builds `$PokemonSystem` among its throwaway globals when the game has not loaded it yet, because Nova's drain message reads the language from it. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
+| `010_battle_selftest.rb` | headless self-test: when `chrooked-selftest.on` names a mechanic, it runs a measured damage A/B (same battlers and RNG seed, with the ability, with none, with a control) and one AI-vs-AI battle in `Battle::DebugSceneNoVisuals`, then logs `DONE`. It measures the cases the installed ports registered in `$chrooked_selftest_cases`, so a new port needs no edit here; it loads before `998_ChrookedMods/` but reads the cases only when it fires, after every port has loaded. A `redux` mechanic runs the Redux Mode probe instead of a spec's phases (#121). A CALC entry may carry a setup hash (`[move, hp, {weather:, terrain:, item:, airborne:, stats:, types:}]`), applied to the same battlers before every ability is measured (NV-9, NV-10); `:STRUGGLE` is built as a battle builds it. A `heal:` list (`[[:MOONLIGHT, 0.5]]`) measures what a healing move restores with the ability and without (HEAL lines, NV-10). A `chance:` list (`[[:CRUNCH, {status: :BURN, status_rate: 0.3, flinch_rate: 0.3}]]`) measures an on-hit chance: the damage A/B once, then the user's `OnDealingHit` handler fired 400 times on a fresh target with a fixed seed, the rates checked within 3 standard deviations (exactly 0 when 0 is expected) and logged as the mechanic's OBS line with `source=selftest` (NV-11). `setup:` may also set `target_types:`. A `defend:` list (`[:KNOCKOFF, :TAUNT]`) asks the ability's `MoveImmunity` handler about each move aimed at the holder, typed as used, and logs DEFEND lines; the port's own OBS line is what is scored (NV-13). Three more phases drive a registry directly and log what changed, the port's OBS line being scored (NV-14): `drain:` (`[[:TACKLE, {hp_lost: 100, target_ability: :LIQUIDOOZE}]]`) hands a hit that took `hp_lost` HP to `OnDealingHit` with the user at half HP (DRAIN lines); `ko:` (`[{kos: 1, hp: 0.5, stages: {SPECIAL_ATTACK: 6}}]`) ends the user's move with `kos` foes marked fainted for `OnEndOfUsingMove`, the one foe listed once per knockout and never really fainted, so the battle is not over (KO lines); `priority:` (`[[:FLAMETHROWER, 0.5]]`) asks `PriorityChange` at that HP fraction (PRIORITY lines). It builds `$PokemonSystem` among its throwaway globals when the game has not loaded it yet, because Nova's drain message reads the language from it. Safe to arm briefly on a played copy: saves point at `chrooked-selftest-saves/` while it runs, the globals it sets are restored, it runs once per process, and errors (Hangup included) are logged, never raised |
 
 ### Why the self-test has four hooks
 
