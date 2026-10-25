@@ -29,6 +29,8 @@ LAB_MODS="${NOVA_LAB}/Data/Scripts/998_ChrookedMods"
 [ $# -gt 0 ] || { echo "usage: nova_selftest.sh <mechanic>... | --all" >&2; exit 2; }
 
 say() { printf '\n== %s\n' "$*"; }
+# A static mod (Redux Mode) installs as chrooked_zz_<id>.rb and has no Ruleset spec.
+PREFIX_ZZ="chrooked_zz_"
 
 [ -f "${NOVA_LAB}/Game.exe" ] || { echo "lab copy not found at ${NOVA_LAB}" >&2; exit 1; }
 grep -q '"debugMode": true' "${NOVA_LAB}/mkxp.json" || { echo "${NOVA_LAB} is not the lab (no debugMode) — refusing" >&2; exit 1; }
@@ -47,14 +49,14 @@ if [ "$1" = "--all" ]; then
   MECHS=()
   for port in "${LAB_MODS}"/chrooked_*.rb; do
     [ -e "${port}" ] || continue
-    MECHS+=("$(basename "${port}" .rb | sed 's/^chrooked_//')")
+    MECHS+=("$(basename "${port}" .rb | sed -e 's/^chrooked_//' -e 's/^zz_//')")
   done
   [ ${#MECHS[@]} -gt 0 ] || { echo "apply installed no ports in ${LAB_MODS}" >&2; exit 1; }
 else
   MECHS=("$@")
 fi
 for MECH in "${MECHS[@]}"; do
-  [ -f "${LAB_MODS}/chrooked_${MECH}.rb" ] || {
+  [ -f "${LAB_MODS}/chrooked_${MECH}.rb" ] || [ -f "${LAB_MODS}/${PREFIX_ZZ}${MECH}.rb" ] || {
     echo "no port for '${MECH}' in the lab after apply: ruleset/behaviors/${MECH}.yaml needs a template," \
          "or references/essentials21-harness/ a hand-written port (the apply report above says if it was blocked)" >&2
     exit 1
@@ -67,7 +69,14 @@ status=0
 
 say "score against the spec"
 for MECH in "${MECHS[@]}"; do
-  (cd "${REPO_ROOT}" && uv run python -m chrooked_pokedex.behavior.harness verify "${MECH}" --target "${NOVA_LAB}") || status=1
+  if [ -f "${LAB_MODS}/${PREFIX_ZZ}${MECH}.rb" ]; then
+    # A static mod has no spec: its lab probe scored itself beside the measurement.
+    found="$(grep -F "] $(echo "${MECH}" | tr '[:lower:]' '[:upper:]') " "${NOVA_LAB}/chrooked_load.log" || true)"
+    echo "${found:-${MECH}: the self-test logged no measurement}"
+    case "${found}" in ""|*result=FAIL*) status=1 ;; esac
+  else
+    (cd "${REPO_ROOT}" && uv run python -m chrooked_pokedex.behavior.harness verify "${MECH}" --target "${NOVA_LAB}") || status=1
+  fi
   echo
 done
 exit "${status}"

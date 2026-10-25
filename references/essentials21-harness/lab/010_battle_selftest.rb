@@ -704,6 +704,49 @@ module ChrookedSelfTest
     amounts + [user.totalhp]
   end
 
+  # Redux Mode (#121): with the option On, a battler has every ability of its
+  # species at once. Mightyena carries Intimidate (OnSwitchIn), Quick Feet
+  # (SpeedCalc) and hidden Moxie (OnEndOfUsingMove), so one holder measures the
+  # fan-out across three registries and two merge rules, EACH and THREAD.
+  # Redux is a static mod, not a Ruleset behavior, so it has no spec and no
+  # registered case: the probe decides PASS or FAIL beside its own measurement.
+  def self.redux_probe
+    [0, 1].each do |mode|
+      pkmn = mon(:MIGHTYENA, [:CRUNCH])
+      pkmn.ability = :INTIMIDATE   # the primary, so the list is the species' own
+      b = battle(pkmn, mon(:RATTATA, [:TACKLE]))
+      b.pbCreateBattler(0, b.pbParty(0)[0], 0)
+      b.pbCreateBattler(1, b.pbParty(1)[0], 0)
+      user = b.battlers[0]
+      foe  = b.battlers[1]
+      foe.ability = nil            # the foe answers for nothing of its own
+      $PokemonSystem.chrooked_redux = mode
+      ids = user.chrooked_redux_ids
+      # Intimidate lowers the foe's Attack as the holder switches in. It is the
+      # primary either way, so it also shows the wrapper keeps the plain path.
+      Battle::AbilityEffects.triggerOnSwitchIn(user.ability, user, b, true)
+      intimidate = foe.stages[:ATTACK]
+      # Moxie raises the holder's Attack after a knockout. The target's damage
+      # state says it fainted while it keeps its HP, so its side is not all out.
+      move = Battle::Move.from_pokemon_move(b, Pokemon::Move.new(:CRUNCH))
+      foe.damageState.reset
+      foe.damageState.fainted = true
+      Battle::AbilityEffects.triggerOnEndOfUsingMove(user.ability, user, [foe], move, b)
+      moxie = user.stages[:ATTACK]
+      # Quick Feet multiplies the speed of a holder that has a status. The THREAD
+      # rule hands the running value from one listed ability to the next.
+      plain = user.pbSpeed
+      user.status = :BURN
+      quickfeet = user.pbSpeed
+      on = mode == 1
+      ok = intimidate == -1 && moxie == (on ? 1 : 0) && (quickfeet > plain) == on
+      log("REDUX mode=#{mode} ids=#{ids.empty? ? '-' : ids.join('/')} " \
+          "primary=#{user.ability_id} intimidate=#{intimidate} moxie=#{moxie} " \
+          "speed=#{plain}->#{quickfeet} result=#{ok ? 'PASS' : 'FAIL'}")
+      log("ERROR redux mode=#{mode} measured the wrong result") unless ok
+    end
+  end
+
   def self.run_all(mechanics)
     log("start mechanics=#{mechanics.join(',')} ruby=#{RUBY_VERSION} platform=#{RUBY_PLATFORM} " \
         "saves=#{SaveData::DIRECTORY} registered=#{($chrooked_selftest_cases || {}).size}")
@@ -713,6 +756,7 @@ module ChrookedSelfTest
   end
 
   def self.run(mechanic)
+    return redux_probe if mechanic == "redux"
     cases = $chrooked_selftest_cases || {}
     spec = cases[mechanic]
     if spec.nil?
