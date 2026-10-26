@@ -651,4 +651,26 @@ SCENARIOS_ESSENTIALS21: dict[str, list[dict[str, object]]] = {
         {"stage": 'Cherrim Sunshine (Fire/Fairy) uses Solar Beam in sun.', "select": {'case': 'check', 'label': 'solar_beam_sun', 'source': 'selftest'}, "expect": {'boosted': 'true'}},
         {"stage": 'Use Morning Sun in a sandstorm.', "select": {'case': 'check', 'label': 'morning_sun_sand', 'source': 'selftest'}, "expect": {'three_quarters_healed': 'true'}},
     ],
+    # 2026-10-26 hand ports: Allure, Rebound, Lullaby (Delcatty and Wigglytuff lines).
+    "allure": [
+        {"stage": 'Use Attract on a Magnezone.', "select": {'case': 'check', 'label': 'genderless', 'source': 'selftest'}, "expect": {'can_attract': 'true', 'without_ability': 'false'}},
+        {"stage": 'As a male Skitty, use Attract on a Nidorino.', "select": {'case': 'check', 'label': 'same_gender', 'source': 'selftest'}, "expect": {'can_attract': 'true', 'without_ability': 'false'}},
+        {"stage": 'Use Attract on an Oblivious foe, an Aroma Veil foe, then one already in love.', "select": {'case': 'check', 'label': 'oblivious_aroma_veil', 'source': 'selftest'}, "expect": {'never': 'true'}},
+        {"stage": 'Take a Tackle from a foe in love with you at +2 Sp. Atk, then from one not in love.', "select": {'case': 'check', 'label': 'spa_higher', 'source': 'selftest'}, "expect": {'spa_change': '-1', 'atk_change': '0', 'unloved_spa_change': '0', 'unloved_atk_change': '0'}},
+        {"stage": 'Take a Tackle from a foe in love with you whose Attack equals its Sp. Atk.', "select": {'case': 'check', 'label': 'tie_attack', 'source': 'selftest'}, "expect": {'atk_change': '-1', 'spa_change': '0'}},
+    ],
+    "rebound": [
+        {"stage": 'Take a 100-HP contact hit.', "select": {'case': 'check', 'label': 'contact', 'source': 'selftest'}, "expect": {'foe_change': '-25', 'defense_change': '1'}},
+        {"stage": 'Take a 100-HP non-contact hit.', "select": {'case': 'check', 'label': 'no_contact', 'source': 'selftest'}, "expect": {'foe_change': '0', 'defense_change': '0'}},
+        {"stage": 'Take a contact hit on a substitute.', "select": {'case': 'check', 'label': 'substitute', 'source': 'selftest'}, "expect": {'foe_change': '0', 'defense_change': '0'}},
+        {"stage": 'Take a contact hit from a Protective Pads holder, then from a Magic Guard holder.', "select": {'case': 'check', 'label': 'pads_guard', 'source': 'selftest'}, "expect": {'pads_foe_change': '0', 'pads_defense_change': '1', 'guard_foe_change': '0', 'guard_defense_change': '1'}},
+        {"stage": 'Take a 2-HP contact hit.', "select": {'case': 'check', 'label': 'graze', 'source': 'selftest'}, "expect": {'foe_change': '-1', 'defense_change': '1'}},
+    ],
+    "lullaby": [
+        {"stage": 'Land many Hyper Voices.', "select": {'case': 'check', 'label': 'hyper_voice', 'source': 'selftest'}, "expect": {'ok': 'true'}},
+        {"stage": 'Land many Tackles, then Sings.', "select": {'case': 'check', 'label': 'not_sound', 'source': 'selftest'}, "expect": {'never': 'true'}},
+        {"stage": 'Land Hyper Voices on a drowsy foe, then on a paralyzed one.', "select": {'case': 'check', 'label': 'already', 'source': 'selftest'}, "expect": {'never': 'true'}},
+        {"stage": 'Land Hyper Voices on an Insomnia foe, then a Vital Spirit foe.', "select": {'case': 'check', 'label': 'cannot_sleep', 'source': 'selftest'}, "expect": {'never': 'true'}},
+        {"stage": 'Land Hyper Voices into a substitute.', "select": {'case': 'check', 'label': 'substitute', 'source': 'selftest'}, "expect": {'never': 'true'}},
+    ],
 }
