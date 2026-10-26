@@ -2,9 +2,9 @@ name: Ferrothorn
 chrooked_id: ferrothorn
 aka: { pokeemerald: SPECIES_FERROTHORN }
 abilities:
-  primary: Iron Barbs
-  secondary: Impenetrable
-  hidden: Anticipation
+  secondary: Rough Skin
+  hidden: Impenetrable
+stats: { hp: 80, atk: 95, def: 135, spa: 55, spd: 120 }
 learnset:
   - { level: 0, move: Power Whip }
   - { level: 1, move: Harden }
@@ -28,3 +28,4 @@ learnset:
   - { level: 49, move: Gyro Ball }
   - { level: 56, move: Explosion }
   - { level: 57, move: Pile Driver }
+evolution: { from: Ferroseed, method: { level: 40 } }
