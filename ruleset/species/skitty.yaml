@@ -2,26 +2,32 @@ name: Skitty
 chrooked_id: skitty
 aka: { pokeemerald: SPECIES_SKITTY }
 abilities:
-  secondary: Normalize
+  primary: Allure
+  secondary: Natural Cure
+  hidden: Unaware
+stats: { hp: 66, atk: 49, def: 52, spa: 39, spd: 52, spe: 82 }
 learnset:
-  - { level: 1, move: Fake Out }
-  - { level: 1, move: Growl }
-  - { level: 1, move: Tail Whip }
-  - { level: 4, move: Tackle }
-  - { level: 7, move: Sing }
-  - { level: 10, move: Glitter Tap }
-  - { level: 13, move: Disarming Voice }
-  - { level: 16, move: Fury Swipes }
-  - { level: 19, move: Copycat }
-  - { level: 22, move: Payback }
-  - { level: 28, move: Cutsie Slap }
-  - { level: 29, move: Covet }
-  - { level: 31, move: Facade }
-  - { level: 34, move: Take Down }
-  - { level: 36, move: Rampage }
-  - { level: 37, move: Play Rough }
-  - { level: 38, move: Heal Bell }
-  - { level: 40, move: Double-Edge }
-  - { level: 43, move: Baby-Doll Eyes }
-  - { level: 46, move: Starfall Slam }
-  - { level: 64, move: Faeblitz }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Charm }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Fake Out }
+  - { level: 7, move: Feint }
+  - { level: 9, move: Covet }
+  - { level: 11, move: Glitter Tap }
+  - { level: 14, move: Attract }
+  - { level: 16, move: Quick Attack }
+  - { level: 20, move: Yawn }
+  - { level: 22, move: Disarming Voice }
+  - { level: 26, move: Heal Bell }
+  - { level: 28, move: Knock Off }
+  - { level: 30, move: Wish }
+  - { level: 32, move: Cutsie Slap }
+  - { level: 34, move: Lovely Bite }
+  - { level: 36, move: Baton Pass }
+  - { level: 38, move: Sucker Punch }
+  - { level: 44, move: Body Slam }
+  - { level: 46, move: Play Rough }
+  - { level: 48, move: Hyper Voice }
+  - { level: 52, move: Starfall Slam }
+  - { level: 54, move: Rampage }
+  - { level: 64, move: Double-Edge }
