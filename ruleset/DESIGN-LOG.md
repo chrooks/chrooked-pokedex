@@ -1482,3 +1482,13 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Direction:** Chris: "Demolition is incredibly OP, that's a Dragon Dance on KO", then "Remove demolition." The ability had three conflicting definitions (text: Atk +1 and next-move priority; spec: Atk +1 and Spe +1; Rejuv packet: Atk +1 only, a Moxie clone) and no carrier, so there was nothing in play to lose.
 - **Removed:** `abilities/demolition.yaml`, `behaviors/demolition.yaml`, the Rejuv and Essentials packets, the harness check. Stale `patch/Mods/chrooked_demolition.rb` deleted from the local target by hand — apply does not prune mods it no longer owns.
 - **Read-back:** apply 1817 applied (was 1819: the ability and its behavior), abiltext.rb has no Demolition, patch/Mods has no demolition file. Thor was off the network at apply time, so the mirror is owed.
+
+## 2026-10-26 — Delcatty
+
+- **Direction:** Agree w both. Normal/Fairy stays. Allure / Natural Cure / Unaware. 520 BST, Skitty mirrors. Correction: Heal Bell added (L26); Glitter Tap early at L11.; The two profile facts treated as the design axis are (1) the creature's absolute refusal to fight — it simply walks away — and (2) its effortless, style-forward allure that makes it the favorite of trend-conscious trainers. Together these paint a Pokémon that wins through evasion, charm, and unpredictability rather than raw power: a slippery, charisma-driven support-skirmisher that rewards switching and misdirection.
+- **New mechanics:** Allure (ability): Infatuation caused by this Pokemon ignores gender; when an infatuated foe attacks it, that foe's higher attacking stat falls one stage.
+
+## 2026-10-26 — Wigglytuff
+
+- **Direction:** Go. Normal/Fairy stays. Competitive / Rebound / Lullaby. 520 BST. Torch Song is an explicit signature-rule override; Skeledirge keeps it too. Correction: no Terrain Pulse; Uproar at L32, before Hyper Voice. No Weather Ball; keep Round.; The design axis is INFLATION AS POWER EXPRESSION combined with SLEEP-INDUCING SONG. At the final stage the creature has transcended fragile baby-singer into a tank-balloon that weaponizes its elastic body (enormous inflation → Body Slam, bouncing) and retains the lineage-wide lullaby identity. Every ability and move choice is anchored to one of those two pillars, with the luxurious fur adding a secondary 'untouchable softness' defensive dimension.
+- **New mechanics:** Rebound (ability): When hit by a contact move, the attacker takes a quarter of the damage dealt as recoil and this Pokemon's Defense rises one stage. (Lullaby, the second custom, is written too: sound moves have a 30% chance to make the target drowsy via Yawn.)

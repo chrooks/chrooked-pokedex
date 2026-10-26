@@ -3,32 +3,32 @@ chrooked_id: jigglypuff
 aka: { pokeemerald: SPECIES_JIGGLYPUFF }
 types: [Normal, Fairy]
 abilities:
-  secondary: Competitive
+  primary: Competitive
+  secondary: Rebound
+  hidden: Lullaby
+stats: { hp: 95, atk: 48, def: 58, spa: 65, spd: 58, spe: 31 }
 learnset:
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Sweet Kiss }
+  - { level: 1, move: Baby-Doll Eyes }
   - { level: 1, move: Defense Curl }
-  - { level: 1, move: Charm }
-  - { level: 2, move: Sing }
-  - { level: 3, move: Disable }
-  - { level: 4, move: Echoed Voice }
-  - { level: 5, move: Disarming Voice }
-  - { level: 6, move: Pound }
-  - { level: 8, move: Covet }
-  - { level: 11, move: Swallow }
-  - { level: 12, move: Glitter Tap }
-  - { level: 13, move: Spit Up }
-  - { level: 15, move: Bail Out }
-  - { level: 16, move: Round }
-  - { level: 17, move: Cutsie Slap }
-  - { level: 20, move: Rest }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Sing }
+  - { level: 5, move: Echoed Voice }
+  - { level: 9, move: Disarming Voice }
+  - { level: 16, move: Fairy Wind }
   - { level: 24, move: Body Slam }
-  - { level: 28, move: Mimic }
-  - { level: 29, move: Pixie Slash }
-  - { level: 32, move: Gyro Ball }
-  - { level: 36, move: Hyper Voice }
-  - { level: 43, move: Rampage }
-  - { level: 44, move: Double-Edge }
-  - { level: 45, move: Starfall Slam }
-  - { level: 57, move: Faeblitz }
+  - { level: 26, move: Round }
+  - { level: 28, move: Stockpile }
+  - { level: 30, move: Draining Kiss }
+  - { level: 32, move: Uproar }
+  - { level: 34, move: Wish }
+  - { level: 36, move: Rest }
+  - { level: 38, move: Alluring Voice }
+  - { level: 40, move: Dream Eater }
+  - { level: 42, move: Torch Song }
+  - { level: 44, move: Snarl }
+  - { level: 46, move: Hyper Voice }
+  - { level: 48, move: Dazzling Gleam }
+  - { level: 55, move: Resonance }
+  - { level: 58, move: Perish Song }
+  - { level: 70, move: Boomburst }
 evolution: { from: Igglybuff, method: { level: 16 } }

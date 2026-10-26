@@ -1,6 +1,4 @@
 Aevian Golisopod
-Delcatty
-Wigglytuff
 Samurott
 Ferrothorn
 Hatterene
