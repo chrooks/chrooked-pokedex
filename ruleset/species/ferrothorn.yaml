@@ -2,30 +2,34 @@ name: Ferrothorn
 chrooked_id: ferrothorn
 aka: { pokeemerald: SPECIES_FERROTHORN }
 abilities:
+  primary: Iron Barbs
   secondary: Rough Skin
   hidden: Impenetrable
-stats: { hp: 80, atk: 95, def: 135, spa: 55, spd: 120 }
+stats: { hp: 80, atk: 90, def: 145, spa: 45, spd: 125, spe: 20 }
 learnset:
   - { level: 0, move: Power Whip }
   - { level: 1, move: Harden }
-  - { level: 1, move: Pin Missile }
   - { level: 1, move: Tackle }
-  - { level: 1, move: Metal Claw }
-  - { level: 2, move: Leafage }
-  - { level: 3, move: Razor Leaf }
-  - { level: 15, move: Ingrain }
-  - { level: 16, move: Seed Bomb }
-  - { level: 17, move: Smart Strike }
-  - { level: 20, move: Flash Cannon }
-  - { level: 21, move: Root Shelter }
-  - { level: 25, move: Iron Head }
-  - { level: 29, move: Reap }
-  - { level: 30, move: Self-Destruct }
-  - { level: 35, move: Iron Defense }
-  - { level: 39, move: Power Whip }
-  - { level: 43, move: Curse }
-  - { level: 44, move: Iron Tail }
-  - { level: 49, move: Gyro Ball }
-  - { level: 56, move: Explosion }
-  - { level: 57, move: Pile Driver }
+  - { level: 5, move: Branch Poke }
+  - { level: 9, move: Bullet Punch }
+  - { level: 12, move: Vine Whip }
+  - { level: 16, move: Metal Claw }
+  - { level: 19, move: Leech Seed }
+  - { level: 21, move: Iron Defense }
+  - { level: 23, move: Needle Arm }
+  - { level: 25, move: Knock Off }
+  - { level: 27, move: Smart Strike }
+  - { level: 29, move: Curse }
+  - { level: 31, move: Ingrain }
+  - { level: 35, move: Body Press }
+  - { level: 37, move: Pin Missile }
+  - { level: 39, move: Spiky Shield }
+  - { level: 41, move: Iron Head }
+  - { level: 44, move: Seed Bomb }
+  - { level: 47, move: Stealth Rock }
+  - { level: 51, move: Reap }
+  - { level: 58, move: Spikes }
+  - { level: 61, move: Gyro Ball }
+  - { level: 72, move: Pile Driver }
+  - { level: 74, move: Wood Hammer }
 evolution: { from: Ferroseed, method: { level: 40 } }
