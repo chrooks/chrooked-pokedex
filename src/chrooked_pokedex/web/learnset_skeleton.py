@@ -80,6 +80,10 @@ _KIT_STARTERS: dict[str, tuple[str, ...]] = {
 # them. (Moved here from suggest.py so the slot builder and the ability
 # shortlist share one set.)
 SIGNATURE_MOVES: frozenset[str] = frozenset({
+    # Added 2026-10-27 — offered as filler during the Hatterene, Naganadel and
+    # Ferrothorn passes (Magearna, Latias, Galarian Slowbro, Necrozma, partner
+    # Eevee, Tinkaton, Keldeo).
+    "fleur cannon", "mist ball", "shell side arm", "photon geyser", "prismatic laser", "sparkly swirl", "gigaton hammer", "secret sword", "core enforcer", "eerie spell",
     # Added 2026-09-26 — Steam Eruption (Volcanion) offered to Milotic.
     "steam eruption",
     # Added 2026-09-25 — dropped as borrowed signatures during the Slaking,

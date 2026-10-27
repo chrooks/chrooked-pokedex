@@ -255,6 +255,15 @@ def ship(
             except Exception as error2:  # noqa: BLE001
                 fail(record, f"read-back failed: {error2}", apply=counts, bad_rows=bad)
                 continue
+        if any(s.get("missing") for s in readback.get("species", [])):
+            # The Rejuv snapshot omits canon Megas (slowbromega), so the snapshot
+            # read-back calls them missing although montext.rb carries the block.
+            # Read the applied file directly instead.
+            try:
+                readback = montext_readback(target.path, _expectations(record, snapshot))
+            except Exception as error:  # noqa: BLE001
+                fail(record, f"read-back failed: {error}", apply=counts, bad_rows=bad)
+                continue
         summary = {k: readback.get(k) for k in ("ok", "ok_count", "total")}
         if bad or not readback.get("ok"):
             diff = [s for s in readback.get("species", []) if not s.get("ok")]
