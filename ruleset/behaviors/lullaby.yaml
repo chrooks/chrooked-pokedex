@@ -1,0 +1,29 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Lullaby
+chrooked_id: lullaby
+applies_to: ability
+aka: { pokeemerald: ABILITY_LULLABY }
+effects:
+  - summary: Damaging sound moves may make the target drowsy.
+    trigger: on-hit
+    when: "this Pokemon's damaging sound move dealt damage (not into a Substitute), the target is not already drowsy, has no status, can sleep (the engine's can-sleep gate: Insomnia, Vital Spirit, Sweet Veil, Electric Terrain, Safeguard, Uproar), and is not shielded from additional effects (Shield Dust, Covert Cloak)"
+    effect: "30% flat: apply Yawn's effect (the target falls asleep at the end of the next turn unless it switches), with the message '{holder} made {target} drowsy!'"
+test_cases:
+  - given: a Lullaby Pokemon lands Hyper Voice many times on a healthy foe
+    expect: about 30% of hits leave the foe drowsy; it sleeps at the end of the next turn
+  - given: it lands Tackle (not a sound move) or uses Sing (a status sound move)
+    expect: never drowsy from Lullaby
+  - given: the foe is already drowsy, or already has a status (paralysis)
+    expect: nothing; no second roll lands
+  - given: the foe has Insomnia or Vital Spirit (or any can-sleep failure)
+    expect: never drowsy
+  - given: the sound move hits a Substitute
+    expect: never drowsy
+notes:
+  - "Serene Grace rule: the 30% is the port's own flat roll and is NOT doubled by Serene Grace. Do not pair Lullaby with Serene Grace on one species; the pair would read as a 60% promise the code does not keep."
+  - Only damaging sound moves roll; Sing, Growl and other status sound moves do not (they have their own effects).
+  - "Yawn's effect is written exactly as the move Yawn writes it (Rejuv effects[:Yawn] = 2; Nova effects[PBEffects::Yawn] = 2), so the end-of-turn tick, the switch-out clear and the AI's reads are vanilla."
+  - Shield Dust / Covert Cloak block it as they block any additional effect of a damaging move (Poison Touch's gates); Mold Breaker ignores Shield Dust.
+  - "Rejuv port: references/rejuv-harness/chrooked_lullaby.rb. Nova (Essentials 21) port: references/essentials21-harness/chrooked_lullaby.rb (hand-written; no template)."
+engine_hints:
+  essentials: "Nova: OnDealingHit handler: move.soundMove? && move.damagingMove?, target.effects[PBEffects::Yawn] > 0 skip, target.status != :NONE skip, affectedByAdditionalEffects? and Shield Dust, target.pbCanSleep?(user, false, move), battle.pbRandom(100) < 30, then effects[PBEffects::Yawn] = 2 with the message from 003_Move/007_MoveEffects_BattlerOther.rb:67. Rejuv: CHROOKED_ON_DEAL[:LULLABY] (core fires only after a damaging, non-Substitute hit): move.isSoundBased?, effects[:Yawn] > 0 skip, status.nil? check, pbCanSleep?(user, move), 30%, effects[:Yawn] = 2."

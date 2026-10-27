@@ -1,0 +1,5 @@
+name: Allure
+chrooked_id: allure
+aka: { pokeemerald: ABILITY_ALLURE }
+behaviors: [allure]
+description: Infatuation it causes ignores gender. An infatuated foe that attacks it has its higher attacking stat lowered.

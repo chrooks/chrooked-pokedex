@@ -2,25 +2,30 @@ name: Hatterene
 chrooked_id: hatterene
 aka: { pokeemerald: SPECIES_HATTERENE }
 abilities:
-  primary: Insidious
-stats: { def: 100 }
+  primary: Queenly Majesty
+  secondary: Pressure
+  hidden: Magic Bounce
+stats: { hp: 57, atk: 90, def: 100, spa: 146, spd: 103, spe: 29 }
 learnset:
-  - { level: 0, move: Psycho Cut }
-  - { level: 1, move: Play Nice }
-  - { level: 1, move: Life Dew }
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Disarming Voice }
-  - { level: 2, move: Brutal Swing }
-  - { level: 15, move: Aromatic Mist }
-  - { level: 20, move: Psybeam }
-  - { level: 22, move: Beguile }
-  - { level: 25, move: Heal Pulse }
-  - { level: 30, move: Dazzling Gleam }
-  - { level: 37, move: Calm Mind }
-  - { level: 41, move: Psychic }
-  - { level: 43, move: Moonblast }
-  - { level: 46, move: Mindwarp }
-  - { level: 55, move: Healing Wish }
-  - { level: 57, move: Future Sight }
-  - { level: 59, move: Rapture }
-  - { level: 64, move: Magic Powder }
+  - { level: 0, move: Mystical Power }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Disarming Voice }
+  - { level: 16, move: Fairy Wind }
+  - { level: 19, move: Draining Kiss }
+  - { level: 21, move: Calm Mind }
+  - { level: 24, move: Psybeam }
+  - { level: 26, move: Mystical Fire }
+  - { level: 28, move: Beguile }
+  - { level: 31, move: Dazzling Gleam }
+  - { level: 33, move: Glamour Drain }
+  - { level: 35, move: Shadow Ball }
+  - { level: 38, move: Hypnosis }
+  - { level: 41, move: Moonblast }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Psychic }
+  - { level: 51, move: Mindwarp }
+  - { level: 61, move: Trick Room }
+  - { level: 63, move: Future Sight }
+  - { level: 72, move: Rapture }

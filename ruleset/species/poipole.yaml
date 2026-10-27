@@ -1,0 +1,31 @@
+name: Poipole
+chrooked_id: poipole
+aka: {  }
+abilities:
+  primary: Beast Boost
+  secondary: Levitate
+  hidden: Merciless
+stats: { hp: 57, atk: 50, def: 58, spa: 101, spd: 58, spe: 96 }
+learnset:
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Acid }
+  - { level: 9, move: Twister }
+  - { level: 12, move: Acid Spray }
+  - { level: 16, move: Clear Smog }
+  - { level: 19, move: Dragon Breath }
+  - { level: 21, move: Toxic }
+  - { level: 23, move: Sludge }
+  - { level: 26, move: Toxic Spikes }
+  - { level: 30, move: Venoshock }
+  - { level: 35, move: Dark Pulse }
+  - { level: 37, move: Dragon Pulse }
+  - { level: 40, move: Miasma }
+  - { level: 44, move: Agility }
+  - { level: 46, move: Flamethrower }
+  - { level: 48, move: Sludge Bomb }
+  - { level: 54, move: Cataclysm }
+  - { level: 56, move: Sludge Wave }
+  - { level: 58, move: Nasty Plot }
+  - { level: 65, move: Air Slash }
+  - { level: 72, move: Draco Meteor }

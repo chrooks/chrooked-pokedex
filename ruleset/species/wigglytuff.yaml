@@ -3,34 +3,32 @@ chrooked_id: wigglytuff
 aka: { pokeemerald: SPECIES_WIGGLYTUFF }
 types: [Normal, Fairy]
 abilities:
-  secondary: Competitive
-stats: { spa: 85 }
+  primary: Competitive
+  secondary: Rebound
+  hidden: Lullaby
+stats: { hp: 140, atk: 70, def: 85, spa: 95, spd: 85, spe: 45 }
 learnset:
-  - { level: 1, move: Stockpile }
-  - { level: 1, move: Copycat }
-  - { level: 1, move: Gyro Ball }
-  - { level: 1, move: Swallow }
-  - { level: 2, move: Spit Up }
-  - { level: 3, move: Sweet Kiss }
-  - { level: 4, move: Rest }
-  - { level: 5, move: Glitter Tap }
-  - { level: 6, move: Defense Curl }
-  - { level: 7, move: Mimic }
-  - { level: 8, move: Disable }
-  - { level: 9, move: Sing }
-  - { level: 10, move: Play Rough }
-  - { level: 11, move: Charm }
-  - { level: 12, move: Echoed Voice }
-  - { level: 13, move: Covet }
-  - { level: 14, move: Disarming Voice }
-  - { level: 15, move: Beguile }
-  - { level: 16, move: Pound }
-  - { level: 17, move: Round }
-  - { level: 18, move: Hyper Voice }
-  - { level: 19, move: Body Slam }
-  - { level: 20, move: Double-Edge }
-  - { level: 29, move: Dazzling Gleam }
-  - { level: 43, move: Resonance }
-  - { level: 45, move: Moonblast }
-  - { level: 57, move: Hyper Beam }
-  - { level: 59, move: Rapture }
+  - { level: 0, move: Moonblast }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Sing }
+  - { level: 5, move: Echoed Voice }
+  - { level: 9, move: Disarming Voice }
+  - { level: 16, move: Fairy Wind }
+  - { level: 24, move: Body Slam }
+  - { level: 26, move: Round }
+  - { level: 28, move: Stockpile }
+  - { level: 30, move: Draining Kiss }
+  - { level: 32, move: Uproar }
+  - { level: 34, move: Wish }
+  - { level: 36, move: Rest }
+  - { level: 38, move: Alluring Voice }
+  - { level: 40, move: Dream Eater }
+  - { level: 42, move: Torch Song }
+  - { level: 44, move: Snarl }
+  - { level: 46, move: Hyper Voice }
+  - { level: 48, move: Dazzling Gleam }
+  - { level: 55, move: Resonance }
+  - { level: 58, move: Perish Song }
+  - { level: 70, move: Boomburst }

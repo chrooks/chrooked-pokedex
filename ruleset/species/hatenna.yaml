@@ -2,20 +2,29 @@ name: Hatenna
 chrooked_id: hatenna
 aka: { pokeemerald: SPECIES_HATENNA }
 abilities:
-  primary: Insidious
+  primary: Queenly Majesty
+  secondary: Pressure
+  hidden: Magic Bounce
+stats: { hp: 31, atk: 47, def: 52, spa: 76, spd: 54, spe: 15 }
 learnset:
-  - { level: 1, move: Confusion }
-  - { level: 1, move: Play Nice }
-  - { level: 5, move: Life Dew }
-  - { level: 10, move: Disarming Voice }
-  - { level: 15, move: Aromatic Mist }
-  - { level: 20, move: Psybeam }
-  - { level: 22, move: Beguile }
-  - { level: 25, move: Heal Pulse }
-  - { level: 30, move: Dazzling Gleam }
-  - { level: 35, move: Calm Mind }
-  - { level: 37, move: Psychic }
-  - { level: 40, move: Mindwarp }
-  - { level: 45, move: Healing Wish }
-  - { level: 57, move: Future Sight }
-  - { level: 64, move: Rapture }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Flicker }
+  - { level: 5, move: Confusion }
+  - { level: 9, move: Disarming Voice }
+  - { level: 16, move: Fairy Wind }
+  - { level: 19, move: Draining Kiss }
+  - { level: 21, move: Calm Mind }
+  - { level: 24, move: Psybeam }
+  - { level: 26, move: Mystical Fire }
+  - { level: 28, move: Beguile }
+  - { level: 31, move: Dazzling Gleam }
+  - { level: 33, move: Glamour Drain }
+  - { level: 35, move: Shadow Ball }
+  - { level: 38, move: Hypnosis }
+  - { level: 41, move: Moonblast }
+  - { level: 44, move: Psyshock }
+  - { level: 47, move: Psychic }
+  - { level: 51, move: Mindwarp }
+  - { level: 61, move: Trick Room }
+  - { level: 63, move: Future Sight }
+  - { level: 72, move: Rapture }

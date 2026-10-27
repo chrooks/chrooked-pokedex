@@ -1,0 +1,5 @@
+name: Rebound
+chrooked_id: rebound
+aka: { pokeemerald: ABILITY_REBOUND }
+behaviors: [rebound]
+description: Contact hits recoil a quarter of the damage dealt back at the attacker and raise this Pokemon's Defense.

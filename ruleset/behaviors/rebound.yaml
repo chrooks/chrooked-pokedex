@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Rebound
+chrooked_id: rebound
+applies_to: ability
+aka: { pokeemerald: ABILITY_REBOUND }
+effects:
+  - summary: A contact hit recoils a quarter of its damage back at the attacker.
+    trigger: on-contact
+    when: a foe lands a damaging contact move on this Pokemon, not into a Substitute, and the attacker is not protected (Protective Pads) or immune to indirect damage (Magic Guard and its Ruleset alikes)
+    effect: the attacker loses floor(damage dealt / 4) HP, minimum 1
+  - summary: The same contact hit raises this Pokemon's Defense.
+    trigger: on-contact
+    when: a foe lands a damaging contact move on this Pokemon, not into a Substitute (whether or not the recoil was blocked)
+    effect: this Pokemon's Defense rises one stage by ability
+test_cases:
+  - given: a Rebound Pokemon takes 100 damage from a contact move
+    expect: the attacker loses 25 HP and the holder's Defense rises +1
+  - given: it takes a non-contact hit
+    expect: no recoil, no Defense change
+  - given: a contact move hits its Substitute
+    expect: no recoil, no Defense change
+  - given: the attacker holds Protective Pads, or has Magic Guard
+    expect: no recoil, but Defense still rises +1
+  - given: it takes 2 damage from a contact move
+    expect: the attacker loses 1 HP (minimum) and Defense rises +1
+notes:
+  - "Magic Guard rule: the recoil respects the engine's Magic Guard gate. In Rejuv that is battle.magicGuardAbilities, which already carries every CHROOKED_MAGIC_GUARD member; in Nova it is Battle::Battler#takesIndirectDamage?. The Defense raise is not gated by it."
+  - "Protective Pads (Rejuv hasWorkingItem(:PROTECTIVEPADS); Nova affectedByContactEffect?) blocks the recoil only; Defense still rises."
+  - Recoil is scaled to the hit, Riposte's shape, not Iron Barbs' flat 1/8 of max HP.
+  - The Defense raise goes through the by-ability stat path, so Contrary inverts it and +6 is a no-op, as with Stamina.
+  - "Rejuv port: references/rejuv-harness/chrooked_rebound.rb. Nova (Essentials 21) port: references/essentials21-harness/chrooked_rebound.rb (hand-written; no template)."
+engine_hints:
+  essentials: "Nova: OnBeingHit modeled on :IRONBARBS (008_Battle_AbilityEffects.rb:2219): pbContactMove?, affectedByContactEffect?, takesIndirectDamage?, recoil = [damageState.hpLost / 4, 1].max via pbReduceHP, then target.pbRaiseStatStageByAbility(:DEFENSE, 1, target). Rejuv: CHROOKED_WHEN_HIT_DMG[:REBOUND], Riposte's gates plus pbChangeStats(PBStats::DEFENSE, 1, holder, nil)."

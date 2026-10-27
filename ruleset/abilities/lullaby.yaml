@@ -1,0 +1,5 @@
+name: Lullaby
+chrooked_id: lullaby
+aka: { pokeemerald: ABILITY_LULLABY }
+behaviors: [lullaby]
+description: Its sound moves have a 30% chance to make the target drowsy. It falls asleep at the end of the next turn.

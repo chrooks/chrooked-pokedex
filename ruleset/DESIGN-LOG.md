@@ -1482,3 +1482,46 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 - **Direction:** Chris: "Demolition is incredibly OP, that's a Dragon Dance on KO", then "Remove demolition." The ability had three conflicting definitions (text: Atk +1 and next-move priority; spec: Atk +1 and Spe +1; Rejuv packet: Atk +1 only, a Moxie clone) and no carrier, so there was nothing in play to lose.
 - **Removed:** `abilities/demolition.yaml`, `behaviors/demolition.yaml`, the Rejuv and Essentials packets, the harness check. Stale `patch/Mods/chrooked_demolition.rb` deleted from the local target by hand — apply does not prune mods it no longer owns.
 - **Read-back:** apply 1817 applied (was 1819: the ability and its behavior), abiltext.rb has no Demolition, patch/Mods has no demolition file. Thor was off the network at apply time, so the mirror is owed.
+
+## 2026-10-26 — Delcatty
+
+- **Direction:** Agree w both. Normal/Fairy stays. Allure / Natural Cure / Unaware. 520 BST, Skitty mirrors. Correction: Heal Bell added (L26); Glitter Tap early at L11.; The two profile facts treated as the design axis are (1) the creature's absolute refusal to fight — it simply walks away — and (2) its effortless, style-forward allure that makes it the favorite of trend-conscious trainers. Together these paint a Pokémon that wins through evasion, charm, and unpredictability rather than raw power: a slippery, charisma-driven support-skirmisher that rewards switching and misdirection.
+- **New mechanics:** Allure (ability): Infatuation caused by this Pokemon ignores gender; when an infatuated foe attacks it, that foe's higher attacking stat falls one stage.
+
+## 2026-10-26 — Wigglytuff
+
+- **Direction:** Go. Normal/Fairy stays. Competitive / Rebound / Lullaby. 520 BST. Torch Song is an explicit signature-rule override; Skeledirge keeps it too. Correction: no Terrain Pulse; Uproar at L32, before Hyper Voice. No Weather Ball; keep Round.; The design axis is INFLATION AS POWER EXPRESSION combined with SLEEP-INDUCING SONG. At the final stage the creature has transcended fragile baby-singer into a tank-balloon that weaponizes its elastic body (enormous inflation → Body Slam, bouncing) and retains the lineage-wide lullaby identity. Every ability and move choice is anchored to one of those two pillars, with the luxurious fur adding a secondary 'untouchable softness' defensive dimension.
+- **New mechanics:** Rebound (ability): When hit by a contact move, the attacker takes a quarter of the damage dealt as recoil and this Pokemon's Defense rises one stage. (Lullaby, the second custom, is written too: sound moves have a 30% chance to make the target drowsy via Yawn.)
+
+## 2026-10-27 — Golisopod (Aevian Form)
+
+- **Direction:** Re-sent from the 2026-10-14 sitting: bone breaker / battle armor / skill link; rock blast plus two other multi-hit coverage moves and shadow bone; kit centered on Skill Link. Skitter Smack and Bone Torch anchored to close the Bug STAB gap.; The design axis is **bone-armored sand ambush**: the final stage's defining traits are (1) wearing the bones of others as crafted armor and (2) burying itself in sand to lure prey. Every ability and move choice is evaluated first against those two facts. The secondary axis is the scavenger-to-apex pipeline implied by the grub's early predatory failures maturing into patient, deadly patience.
+- **Corrections:** L0 must be First Impression, the evolution reward. Sand Tomb seats early (around L9). Keep every anchor and pin.
+
+## 2026-10-27 — Ferrothorn
+
+- **Direction:** Keep Grass/Steel and the current trio (Iron Barbs / Rough Skin / Impenetrable; stacks under Redux). Body Press wall spread A. Chris: give it Spiky Shield.; The two facts I treat as the design axis are (1) the three spiky feelers used both as devastating physical flails and as mineral-absorbing feeding organs, and (2) the steel-hardness of its spikes combined with its mineral-mining lifestyle — together these make it a physically oriented, spike-launching, Rock/Steel creature whose kit revolves around multi-hit piercing attacks, iron absorption, and cave-ceiling ambush utility.
+- **Corrections:** L0 must be Power Whip, the evolution reward (keep the later Power Whip row). Spiky Shield seats mid-game around L33. Keep every anchor and pin.
+
+## 2026-10-27 — Hatterene
+
+- **Direction:** Trick Room witch. Stats: current with +10 Sp. Atk (BST 525). Trio stacks under Redux. Pre-evos mirror.; The design axis is the creature's absolute demand for silence and emotional neutrality enforced through escalating psychic and physical violence — a benevolent witch who will tear you apart if you disturb her peace. This drives every ability, move, and stat choice: Psychic typing for the passive headache aura, Fairy typing for the 'good witch' / fairy-tale aesthetic, and hair-based physical attacks that hit surprisingly hard for a gracile, reclusive creature.
+- **Corrections:** House rules: Stored Power is never an early move, remove it; Confusion opens at L5 and Psybeam near L24. Drop Fleur Cannon, Mist Ball and Synchronoise, they are other species' signatures. Mystical Power is the L0 evolution reward. Keep every anchor and pin.
+
+## 2026-10-27 — Naganadel
+
+- **Direction:** Keep Poison/Dragon. Beast Boost / Levitate / Merciless (Redux stack). Chris: Air Slash too early at 16 (moved to 65), swap Miasma and Agility, swap Dragon Breath and Toxic Spikes. Spread A.; The two facts treated as the absolute design axis are (1) the syringe-body morphology — abdomen = barrel, needle appendages = plunger/tip — which drives every piercing, injecting, and venom-delivery mechanic; and (2) the wyvern/wasp body plan — winged, two-armed, highly mobile — which drives the Flying secondary typing and aerial coverage. Everything else (hazard-setting, adhesive venom, Ultra Beast status) radiates from these two pillars.
+- **Corrections:** Drop Shell Side Arm (Galarian Slowbro's signature) and Stealth Rock (does not fit a wasp). Cataclysm is the L0 evolution reward. Keep every anchor and pin.
+
+## 2026-10-27 — Samurott
+
+- **Direction:** Special attacker built around Mystic Blades (slicing moves use Sp. Atk, +30%). No Sharpness. Designed for Redux Mode: Torrent + Mystic Blades + Inner Focus all active together. Pre-evos mirror. Shell Armor over Inner Focus (the murex-shell helmet).; The design axis for Variant A is the iaido draw-and-sheathe discipline — every offensive ability and move flows from instantaneous blade deployment and samurai precision. For Variant B the axis is the rōnin's dishonored ferocity — the Dark typing unlocks a second lane of fast, hard-hitting darkness that plays off the wave-crash flavor.
+- **Corrections:** Seat Razor Shell as the L0 evolution reward (keep the later Razor Shell row too, so it reads at L0 and L45). Close the Water hole: Surf or Scald near L37-40. Keep every anchor and pin.
+
+## 2026-10-27 — Slowking
+
+- **Direction:** Designed with Slowbro. The sage: Shell Armor / Analytic / Regenerator (Redux stack; Analytic pays the 30 Speed). BST 510. Slowpoke belongs to Slowbro. Chris: give it Teleport.; The design axis is poison-unlocked intellect and royal composure: every ability and move flows from the Shellder-crown granting genius-but-fleeting psychic mastery, set against the immovable calm of a creature that remains serene regardless of circumstance.
+
+## 2026-10-27 — Slowbro
+
+- **Direction:** Designed with Slowking. The numbed shell wall: Shell Armor / Unaware / Regenerator (Redux stack). BST 510. Slowpoke mirrors Slowbro. Chris: give it Teleport.; The design axis is the Shellder-tail symbiosis and enforced passivity: a creature that is constitutionally slow and pain-free, dragged into activity only by an external parasite/partner, with every ability and move radiating outward from that reluctant, numbed, coastal-predator identity.

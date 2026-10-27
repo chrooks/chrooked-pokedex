@@ -3,22 +3,31 @@ chrooked_id: igglybuff
 aka: { pokeemerald: SPECIES_IGGLYBUFF }
 types: [Normal, Fairy]
 abilities:
-  secondary: Competitive
+  primary: Competitive
+  secondary: Rebound
+  hidden: Lullaby
+stats: { hp: 79, atk: 40, def: 48, spa: 54, spd: 48, spe: 26 }
 learnset:
-  - { level: 1, move: Pound }
+  - { level: 1, move: Baby-Doll Eyes }
+  - { level: 1, move: Defense Curl }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Sing }
-  - { level: 1, move: Copycat }
-  - { level: 2, move: Echoed Voice }
-  - { level: 4, move: Defense Curl }
-  - { level: 8, move: Glitter Tap }
-  - { level: 12, move: Disarming Voice }
-  - { level: 15, move: Swift }
-  - { level: 16, move: Disable }
-  - { level: 17, move: Beguile }
-  - { level: 20, move: Charm }
-  - { level: 29, move: Uproar }
-  - { level: 31, move: Dazzling Gleam }
-  - { level: 43, move: Resonance }
-  - { level: 45, move: Moonblast }
-  - { level: 57, move: Hyper Beam }
-  - { level: 59, move: Rapture }
+  - { level: 5, move: Echoed Voice }
+  - { level: 9, move: Disarming Voice }
+  - { level: 16, move: Fairy Wind }
+  - { level: 24, move: Body Slam }
+  - { level: 26, move: Round }
+  - { level: 28, move: Stockpile }
+  - { level: 30, move: Draining Kiss }
+  - { level: 32, move: Uproar }
+  - { level: 34, move: Wish }
+  - { level: 36, move: Rest }
+  - { level: 38, move: Alluring Voice }
+  - { level: 40, move: Dream Eater }
+  - { level: 42, move: Torch Song }
+  - { level: 44, move: Snarl }
+  - { level: 46, move: Hyper Voice }
+  - { level: 48, move: Dazzling Gleam }
+  - { level: 55, move: Resonance }
+  - { level: 58, move: Perish Song }
+  - { level: 70, move: Boomburst }

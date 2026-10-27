@@ -1,0 +1,31 @@
+name: Golisopod (Aevian Mega Form)
+chrooked_id: golisopod--aevianmegaform
+aka: {  }
+stats: { hp: 75, atk: 160, def: 155, spa: 60, spd: 140, spe: 40 }
+learnset:
+  - { level: 0, move: First Impression }
+  - { level: 1, move: Sand Attack }
+  - { level: 1, move: Scratch }
+  - { level: 5, move: Fury Cutter }
+  - { level: 9, move: Sand Tomb }
+  - { level: 11, move: Clod Toss }
+  - { level: 13, move: Twineedle }
+  - { level: 16, move: Bone Chill }
+  - { level: 20, move: Shore Up }
+  - { level: 23, move: Skitter Smack }
+  - { level: 26, move: Bulldoze }
+  - { level: 29, move: Iron Defense }
+  - { level: 31, move: Shadow Bone }
+  - { level: 34, move: Rock Blast }
+  - { level: 38, move: Bone Club }
+  - { level: 41, move: Swords Dance }
+  - { level: 43, move: Bone Rush }
+  - { level: 45, move: X-Scissor }
+  - { level: 47, move: High Horsepower }
+  - { level: 49, move: Pin Missile }
+  - { level: 51, move: Bone Torch }
+  - { level: 53, move: Bullet Seed }
+  - { level: 55, move: Scale Shot }
+  - { level: 59, move: Earthquake }
+  - { level: 61, move: Bonemerang }
+  - { level: 72, move: Thousand Stings }

@@ -1,31 +1,34 @@
 name: Slowking
 chrooked_id: slowking
 aka: { dex: 199 }
+abilities:
+  primary: Shell Armor
+  secondary: Analytic
+  hidden: Regenerator
+stats: { hp: 95, atk: 60, def: 85, spa: 125, spd: 115, spe: 30 }
 learnset:
-  - { level: 1, move: Chilly Reception }
-  - { level: 1, move: Curse }
+  - { level: 0, move: Chilly Reception }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Growl }
-  - { level: 1, move: Nasty Plot }
-  - { level: 2, move: Swagger }
-  - { level: 3, move: Tackle }
-  - { level: 4, move: Water Gun }
-  - { level: 5, move: Power Gem }
-  - { level: 6, move: Confusion }
-  - { level: 9, move: Yawn }
-  - { level: 12, move: Dream Mist }
-  - { level: 15, move: Disable }
-  - { level: 16, move: Psychic }
-  - { level: 18, move: Water Pulse }
-  - { level: 21, move: Headbutt }
-  - { level: 24, move: Water Whip }
-  - { level: 27, move: Amnesia }
-  - { level: 29, move: Astral Hand }
-  - { level: 30, move: Surf }
-  - { level: 33, move: Slack Off }
-  - { level: 36, move: Mindwarp }
-  - { level: 37, move: Future Sight }
-  - { level: 39, move: Psych Up }
-  - { level: 42, move: Rain Dance }
-  - { level: 43, move: Hydro Pump }
-  - { level: 45, move: Heal Pulse }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Confusion }
+  - { level: 7, move: Bubble }
+  - { level: 12, move: Water Gun }
+  - { level: 19, move: Slack Off }
+  - { level: 21, move: Trick Room }
+  - { level: 23, move: Bubble Beam }
+  - { level: 26, move: Psybeam }
+  - { level: 29, move: Nasty Plot }
+  - { level: 31, move: Yawn }
+  - { level: 37, move: Chilling Water }
+  - { level: 39, move: Calm Mind }
+  - { level: 41, move: Psyshock }
+  - { level: 44, move: Scald }
+  - { level: 46, move: Ice Beam }
+  - { level: 48, move: Flamethrower }
+  - { level: 50, move: Surf }
+  - { level: 52, move: Teleport }
+  - { level: 54, move: Psychic }
+  - { level: 58, move: Mindwarp }
+  - { level: 68, move: Hydro Pump }
+  - { level: 70, move: Tsunami }
+  - { level: 72, move: Future Sight }

@@ -244,3 +244,21 @@ def test_bad_rows_ignore_evolution_rows_a_design_never_writes():
     assert ds._bad_rows(report, ["mrrime", "mrmimegalar"]) == [
         "| blocked | species | mrrime | x | missing |"
     ]
+
+
+def test_ship_falls_back_to_montext_when_snapshot_calls_a_stage_missing(env, monkeypatch):
+    env.store.save(_record("jolteon", ["jolteon"]))
+    env.app.state.read_back_ids = lambda target, ids: {
+        "ok": False, "ok_count": 0, "total": 1,
+        "species": [{"chrooked_id": ids[0], "ok": False, "missing": True}],
+    }
+    calls: list[Any] = []
+
+    def fake_montext(path, expectations):
+        calls.append(expectations)
+        return {"ok": True, "ok_count": 1, "total": 1, "species": []}
+
+    monkeypatch.setattr(design_ship, "montext_readback", fake_montext)
+    body = env.client.post("/api/design/ship", json={"target_id": "rejuv"}).json()
+    assert body["jolteon"]["state"] == "shipped"
+    assert calls and calls[0][0]["id"] == "jolteon"

@@ -1,0 +1,33 @@
+# Behavior spec — human-owned. The seed never touches this folder.
+name: Allure
+chrooked_id: allure
+applies_to: ability
+aka: { pokeemerald: ABILITY_ALLURE }
+effects:
+  - summary: Infatuation this Pokemon causes ignores gender.
+    trigger: status-apply
+    when: this Pokemon is the attractor of an infatuation (its Attract, or any other source routed through the engine's can-attract check)
+    effect: skip the gender / genderless test; keep every other gate (already infatuated, Oblivious, Aroma Veil on the target or its ally, mold-breaking)
+  - summary: An infatuated foe that hits it loses its higher attacking stat.
+    trigger: on-hit
+    when: a foe whose infatuation points at this Pokemon lands a damaging move on it, not into a Substitute
+    effect: lower that foe's higher attacking stat (Attack vs Sp. Atk, raw stat x stage; ties go to Attack) one stage by ability, through the engine's normal stat-drop gates (Clear Body, Mist, Mirror Armor, Substitute)
+test_cases:
+  - given: an Allure Pokemon uses Attract on a genderless foe
+    expect: the foe falls in love; without Allure it fails
+  - given: an Allure Pokemon uses Attract on a same-gender foe
+    expect: the foe falls in love; without Allure it fails
+  - given: an Allure Pokemon uses Attract on an Oblivious foe, an Aroma Veil foe, or one already in love
+    expect: it still fails, as vanilla
+  - given: a foe in love with the Allure holder hits it with a damaging move while its Sp. Atk (after stages) is higher than its Attack
+    expect: that foe's Sp. Atk falls one stage; a foe not in love with the holder loses nothing
+  - given: the infatuated attacker's Attack equals its Sp. Atk
+    expect: Attack falls (ties go to Attack)
+notes:
+  - "No contact-roll infatuation: Allure never infatuates on being touched. That is Cute Charm / Unattainable; do not add it here."
+  - Only infatuation the holder CAUSES is gender-free; a foe's Attract on the holder keeps the vanilla gender gate.
+  - The stat drop fires only on damaging moves that dealt damage and missed any Substitute; status moves from the infatuated foe do nothing.
+  - The drop goes through the engine's by-ability stat-drop path, so Clear Body, White Smoke, Mist, Mirror Armor and Contrary answer as they do to Gooey.
+  - "Rejuv port: references/rejuv-harness/chrooked_allure.rb. Nova (Essentials 21) port: references/essentials21-harness/chrooked_allure.rb (hand-written; no template)."
+engine_hints:
+  essentials: "Nova: OnBeingHit handler gated on user.effects[PBEffects::Attract] == target.index, then user.pbLowerStatStageByAbility(stat, 1, target) (002_Battler/005_Battler_StatStages.rb:300); Battle::Battler#pbCanAttract?(user, showMessages) (002_Battler/004_Battler_Statuses.rb:522) wrapped by alias_method with a method_defined? guard, skipping the gender test when the seducer hasActiveAbility?(:ALLURE). Rejuv: CHROOKED_WHEN_HIT[:ALLURE] lowers via pbChangeStats(stat, -1, holder, nil); the gender bypass is a prepend on PokeBattle_Battler#pbCanAttract? (Battle_Effects.rb:594), a copy of the body minus the gender line, as unattainable does."
