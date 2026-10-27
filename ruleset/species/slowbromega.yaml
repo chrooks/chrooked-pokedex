@@ -1,28 +1,30 @@
 name: Slowbro Mega
 chrooked_id: slowbromega
 aka: {  }
+stats: { hp: 95, atk: 65, def: 205, spa: 140, spd: 85, spe: 20 }
 learnset:
-  - { level: 1, move: Curse }
+  - { level: 0, move: Amnesia }
+  - { level: 1, move: Flicker }
   - { level: 1, move: Growl }
-  - { level: 1, move: Tackle }
-  - { level: 1, move: Withdraw }
-  - { level: 2, move: Water Gun }
-  - { level: 3, move: Confusion }
-  - { level: 9, move: Yawn }
-  - { level: 12, move: Dream Mist }
-  - { level: 14, move: Water Whip }
-  - { level: 15, move: Disable }
-  - { level: 16, move: Psychic }
-  - { level: 18, move: Water Pulse }
-  - { level: 21, move: Headbutt }
-  - { level: 24, move: Zen Headbutt }
-  - { level: 27, move: Amnesia }
-  - { level: 30, move: Surf }
-  - { level: 33, move: Slack Off }
-  - { level: 36, move: Mindwarp }
-  - { level: 38, move: Future Sight }
-  - { level: 41, move: Psych Up }
-  - { level: 43, move: Hydro Pump }
-  - { level: 46, move: Rain Dance }
-  - { level: 51, move: Heal Pulse }
-  - { level: 64, move: Tsunami }
+  - { level: 5, move: Confusion }
+  - { level: 7, move: Bubble }
+  - { level: 12, move: Water Gun }
+  - { level: 19, move: Slack Off }
+  - { level: 21, move: Trick Room }
+  - { level: 23, move: Bubble Beam }
+  - { level: 26, move: Psybeam }
+  - { level: 29, move: Iron Defense }
+  - { level: 31, move: Yawn }
+  - { level: 33, move: Extrasensory }
+  - { level: 35, move: Body Press }
+  - { level: 37, move: Chilling Water }
+  - { level: 39, move: Calm Mind }
+  - { level: 41, move: Psyshock }
+  - { level: 44, move: Scald }
+  - { level: 46, move: Ice Beam }
+  - { level: 49, move: Surf }
+  - { level: 51, move: Teleport }
+  - { level: 54, move: Psychic }
+  - { level: 65, move: Hydro Pump }
+  - { level: 68, move: Tsunami }
+  - { level: 72, move: Future Sight }
