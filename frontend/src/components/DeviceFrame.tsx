@@ -76,6 +76,8 @@ type Props = {
   /** The active-target switcher — the highest-hierarchy control (drives the
       backdrop across every tab), so it sits in the header, not the rail. */
   targetBar?: ReactNode;
+  /** The offline strip (#122): rides directly under the header on every tab. */
+  banner?: ReactNode;
   searchRef: RefObject<HTMLInputElement>;
   children: ReactNode;
 };
@@ -114,6 +116,7 @@ export function DeviceFrame({
   theme,
   onToggleTheme,
   readout,
+  banner,
   targetBar,
   searchRef,
   children,
@@ -242,6 +245,7 @@ export function DeviceFrame({
           </div>
         </div>
       </header>
+      {banner}
 
       <div className="device__body">
         <nav className="device__rail" aria-label="Sections">

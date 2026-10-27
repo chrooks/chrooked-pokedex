@@ -29,6 +29,7 @@ import { useGamepad, type GamepadAction } from "./hooks/useGamepad";
 import { activateFocused, clearPadFocus, focusInDirection } from "./lib/spatialNav";
 import { GamepadProbe } from "./components/GamepadProbe";
 import { ActiveTargetSwitcher } from "./components/targets/ActiveTargetSwitcher";
+import { OfflineBar } from "./components/OfflineBar";
 import { PatchDrawer } from "./components/targets/PatchDrawer";
 import { MakeoverWorkbench } from "./components/makeover/MakeoverWorkbench";
 import { ParkedMakeoverDock } from "./components/makeover/ParkedMakeover";
@@ -591,6 +592,7 @@ export default function App() {
       readout={
         <Readout kind={view.kind} total={all.length} edited={editedCount} shown={filtered.length} />
       }
+      banner={<OfflineBar entries={all} targetId={view.backdrop ?? null} />}
     >
       {/* Every open makeover stays mounted (hidden while parked) so unlocked
           drafts and in-flight suggests survive; keyed by species so a resumed

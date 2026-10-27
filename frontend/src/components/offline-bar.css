@@ -1,0 +1,83 @@
+/* The offline strip: a hairline band under the device header, read like the
+   device's own status line — micro type, a lamp that lights only when the
+   network is gone, and one small chrome-red action. */
+
+.offline-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 28px;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-0);
+  color: var(--text-dim);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+}
+
+.offline-bar[data-offline="true"] {
+  color: var(--text);
+}
+
+.offline-bar__lamp {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+.offline-bar__lamp[data-on="true"] {
+  background: var(--chrome);
+  box-shadow: 0 0 6px color-mix(in oklch, var(--chrome) 70%, transparent);
+}
+
+.offline-bar__track {
+  flex: 1;
+  max-width: 220px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.offline-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--edited);
+  transition: width 120ms linear;
+}
+
+.offline-bar__warn {
+  color: var(--edited);
+}
+
+.offline-bar__btn {
+  margin-left: auto;
+  padding: 2px var(--space-2);
+  border: 1px solid color-mix(in oklch, var(--chrome) 55%, var(--line));
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--chrome);
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.offline-bar__btn:hover,
+.offline-bar__btn:focus-visible {
+  background: var(--chrome);
+  color: var(--surface-1);
+  outline: none;
+}
+
+.offline-bar__btn:active {
+  transform: translateY(1px);
+}
+
+.offline-bar__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
