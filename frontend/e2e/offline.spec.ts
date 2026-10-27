@@ -10,7 +10,8 @@
 
 import { test, expect } from "@playwright/test";
 
-const APP = "http://localhost:5175";
+// DEX_URL points the same proof at the deployed dex (the Surface Thor opens).
+const APP = process.env.DEX_URL ?? "http://localhost:5175";
 // ~1,300 sprites on the CDN; generous so a slow link is not a false red.
 const WARM_TIMEOUT_MS = 240_000;
 // The API loads the Ruleset per request; a cold dex on a busy hestia takes a while.
