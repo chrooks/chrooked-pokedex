@@ -2,32 +2,31 @@ name: Oshawott
 chrooked_id: oshawott
 aka: { pokeemerald: SPECIES_OSHAWOTT }
 abilities:
+  primary: Torrent
   secondary: Mystic Blades
+  hidden: Shell Armor
+stats: { hp: 55, atk: 46, def: 48, spa: 71, spd: 40, spe: 48 }
 learnset:
-  - { level: 1, move: Tackle }
-  - { level: 3, move: Undertow }
-  - { level: 4, move: Cheap Shot }
-  - { level: 5, move: Tail Whip }
-  - { level: 7, move: Water Gun }
-  - { level: 11, move: Soak }
-  - { level: 13, move: Focus Energy }
-  - { level: 17, move: Razor Shell }
-  - { level: 19, move: Fury Cutter }
+  - { level: 1, move: Flicker }
+  - { level: 1, move: Leer }
+  - { level: 5, move: Bubble }
+  - { level: 9, move: Aura Spark }
+  - { level: 12, move: Water Gun }
+  - { level: 16, move: Vacuum Wave }
+  - { level: 20, move: Nasty Plot }
   - { level: 23, move: Water Pulse }
-  - { level: 25, move: Aerial Ace }
-  - { level: 29, move: Aqua Jet }
-  - { level: 30, move: Muddy Water }
-  - { level: 31, move: Encore }
-  - { level: 33, move: Aqua Tail }
-  - { level: 35, move: Maelstrom }
-  - { level: 37, move: Retaliate }
-  - { level: 39, move: Backstab }
-  - { level: 41, move: Swords Dance }
-  - { level: 43, move: Hydro Pump }
-  - { level: 46, move: Cross Chop }
-  - { level: 48, move: Aura Sphere }
-  - { level: 55, move: Pixie Slash }
-  - { level: 59, move: Havoc }
-  - { level: 60, move: Secret Sword }
-  - { level: 61, move: Wave Crash }
-  - { level: 64, move: Tsunami }
+  - { level: 26, move: Chi Wave }
+  - { level: 29, move: Detect }
+  - { level: 31, move: Ceaseless Edge }
+  - { level: 37, move: Surf }
+  - { level: 40, move: Aura Sphere }
+  - { level: 43, move: Aqua Cutter }
+  - { level: 45, move: Night Slash }
+  - { level: 47, move: Psycho Cut }
+  - { level: 49, move: Ice Beam }
+  - { level: 51, move: Razor Shell }
+  - { level: 54, move: Sacred Sword }
+  - { level: 58, move: Leaf Blade }
+  - { level: 60, move: Ki Blast }
+  - { level: 68, move: Kowtow Cleave }
+  - { level: 72, move: Hydro Pump }
