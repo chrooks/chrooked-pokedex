@@ -1770,7 +1770,9 @@ class _SpaFiles(StaticFiles):
         response = await super().get_response(path, scope)
         # `html=True` rewrites a directory or unknown path to index.html, so
         # match on what actually gets served rather than on the request path.
-        if path in ("", ".", "/", "index.html") or path.endswith("/index.html"):
+        # `sw.js` (#122) is the other build-naming document: its precache
+        # manifest lists the asset hashes, so it needs the same revalidation.
+        if path in ("", ".", "/", "index.html", "sw.js") or path.endswith("/index.html"):
             response.headers["Cache-Control"] = "no-cache, must-revalidate"
         elif path.startswith("assets/"):
             # The other half of the same contract. A hashed name never changes

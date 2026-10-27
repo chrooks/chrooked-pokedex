@@ -97,3 +97,26 @@ def test_the_api_is_unaffected_by_the_static_mount(client: TestClient) -> None:
     response = client.get("/api/targets")
     assert response.status_code == 200
     assert isinstance(json.loads(response.text), list)
+
+
+def test_service_worker_must_be_revalidated(client: TestClient, dist: Path) -> None:
+    """The service worker (#122) is the other document that names a build: a
+    cached ``sw.js`` keeps an old precache list alive for up to a day, so the
+    same no-cache contract as ``index.html`` applies."""
+    (dist / "sw.js").write_text("self.addEventListener('fetch', () => {})", encoding="utf-8")
+
+    response = client.get("/sw.js")
+
+    assert response.status_code == 200
+    assert "no-cache" in response.headers.get("cache-control", "")
+
+
+def test_manifest_answers_head_for_the_offline_probe(client: TestClient, dist: Path) -> None:
+    """The offline strip probes reachability with ``HEAD /manifest.webmanifest``
+    because no caching rule matches a HEAD; the server must answer it."""
+    (dist / "manifest.webmanifest").write_text('{"name":"x"}', encoding="utf-8")
+
+    response = client.head("/manifest.webmanifest")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("application/manifest+json")
