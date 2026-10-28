@@ -30,7 +30,8 @@
 #     sprites show the new species.
 #   - pick "Highest Pokémon (Lv M)" => same, with M the top level you own.
 #   - everyone already at target => one message, nothing changes.
-#   - cancel at either prompt => nothing changes.
+#   - cancel at any prompt => nothing changes.
+#   - "Skip them all" => no move prompts; levels and evolutions still happen.
 #   - No-EXP mode on => entry does nothing but say so.
 
 module ChrookedPCLevelAll
@@ -47,14 +48,16 @@ module ChrookedPCLevelAll
   end
 
   # The quiet core of pbChangeLevel: no per-mon message, no scene refresh.
-  def self.raise_to(mon, target)
+  def self.raise_to(mon, target, learn_moves)
     oldlevel = mon.level
     mon.level = target
     mon.exp = PBExp.startExperience(mon.level, mon.growthrate)
     mon.calcStats
     mon.changeHappiness(:LevelUp)
-    mon.getMoveList.each do |row|
-      pbTryLearnMove(mon, row[1], ignoreifknown: true) if row[0] <= mon.level && row[0] > oldlevel
+    if learn_moves
+      mon.getMoveList.each do |row|
+        pbTryLearnMove(mon, row[1], ignoreifknown: true) if row[0] <= mon.level && row[0] > oldlevel
+      end
     end
     newspecies = checkEvolution(mon)
     return unless newspecies
@@ -101,7 +104,11 @@ module ChrookedStorageLevelAllHooks
     return pbDisplay(_INTL("Everyone is already at Lv. {1} or above.", target)) if todo.empty?
     return unless pbConfirm(_INTL("Raise {1} Pokémon to Lv. {2}?", todo.length, target))
 
-    todo.each { |mon| ChrookedPCLevelAll.raise_to(mon, target) }
+    # Move prompts are the slow part of a big batch; let the player skip them.
+    learn = pbShowCommands(_INTL("New level-up moves?"), [_INTL("Ask for each"), _INTL("Skip them all")], *args, **kwargs)
+    return if learn < 0
+
+    todo.each { |mon| ChrookedPCLevelAll.raise_to(mon, target, learn == 0) }
     @scene.pbHardRefresh
     Chrooked.log("PC Level Up All: #{todo.length} mons -> Lv #{target}")
     pbDisplay(_INTL("Raised {1} Pokémon to Lv. {2}.", todo.length, target))

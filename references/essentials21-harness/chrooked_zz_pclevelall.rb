@@ -23,7 +23,8 @@
 #   - with under-levelled mons => confirm shows the count; after it every
 #     eligible mon reads the top level, evolutions ran, box icons updated.
 #   - everyone already at the top level => one message, nothing changes.
-#   - cancel at the prompt => nothing changes.
+#   - cancel at any prompt => nothing changes.
+#   - "Skip them all" => no move prompts; levels and evolutions still happen.
 
 module ChrookedPCLevelAll
   def self.all_mons(storage)
@@ -37,12 +38,12 @@ module ChrookedPCLevelAll
   end
 
   # The quiet core of pbChangeLevel: no per-mon message, no stat window.
-  def self.raise_to(mon, target, screen)
+  def self.raise_to(mon, target, screen, learn_moves)
     old_level = mon.level
     mon.level = target # also sets exp (Pokemon#level=)
     mon.calc_stats
     mon.changeHappiness("vitamin")
-    if $PokemonSystem.skip_move_learning == 0
+    if learn_moves && $PokemonSystem.skip_move_learning == 0
       mon.getMoveList.each do |row|
         next if row[0] <= old_level || row[0] > mon.level
 
@@ -67,7 +68,11 @@ module ChrookedPCLevelAll
     return screen.show_message(_INTL("Everyone is already at Lv. {1}.", target)) if todo.empty?
     return unless screen.show_confirm_message(_INTL("Raise {1} Pokémon to Lv. {2}?", todo.length, target))
 
-    todo.each { |mon| raise_to(mon, target, screen) }
+    # Move prompts are the slow part of a big batch; let the player skip them.
+    learn = screen.show_choice_message(_INTL("New level-up moves?"), [_INTL("Ask for each"), _INTL("Skip them all")])
+    return if learn.nil? || learn < 0
+
+    todo.each { |mon| raise_to(mon, target, screen, learn == 0) }
     screen.refresh
     screen.show_message(_INTL("Raised {1} Pokémon to Lv. {2}.", todo.length, target))
   end
