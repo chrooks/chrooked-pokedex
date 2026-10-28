@@ -8,8 +8,8 @@
 # or the level of the highest-level Pokémon you own — then raises every
 # Pokémon in the party and all boxes below that level to it. Each raise learns
 # the new level-up moves (pbTryLearnMove, so a full moveset still prompts) and
-# runs the normal evolution check + scene, so a Lv 16 Charmander becomes a
-# Charmeleon. Eggs, shadow mons, and Everstone holders behave as in vanilla
+# evolves silently — no animation, one text list of who became what at the
+# end — so a Lv 36 Charmander becomes a Charizard in two quiet hops. Eggs, shadow mons, and Everstone holders behave as in vanilla
 # (eggs/shadow skipped; Everstone levels but does not evolve).
 #
 # Why not reuse pbChangeLevel (the Rare Candy path chrooked_zz_levelcap.rb
@@ -26,8 +26,8 @@
 # Test cases (drive in-game — the harness can't open a PC):
 #   - PC -> click box name => "Level Up All" is the last entry before nothing.
 #   - pick "Level cap (Lv N)" with under-levelled mons => confirm shows the
-#     count; after it, every eligible mon reads Lv N, evolutions ran, box
-#     sprites show the new species.
+#     count; after it, every eligible mon reads Lv N, no evolution scene
+#     played, a text list names each evolution, box sprites show the new species.
 #   - pick "Highest Pokémon (Lv M)" => same, with M the top level you own.
 #   - everyone already at target => one message, nothing changes.
 #   - cancel at any prompt => nothing changes.
@@ -48,6 +48,8 @@ module ChrookedPCLevelAll
   end
 
   # The quiet core of pbChangeLevel: no per-mon message, no scene refresh.
+  # Returns "Name: Old → New" when it evolved (chained evolutions walk to the
+  # end), else nil.
   def self.raise_to(mon, target, learn_moves)
     oldlevel = mon.level
     mon.level = target
@@ -59,10 +61,31 @@ module ChrookedPCLevelAll
         pbTryLearnMove(mon, row[1], ignoreifknown: true) if row[0] <= mon.level && row[0] > oldlevel
       end
     end
-    newspecies = checkEvolution(mon)
-    return unless newspecies
+    evolve_quietly(mon, learn_moves)
+  end
 
-    pbFadeOutInWithMusic(99999) { pbCarryOutEvolution(mon, newspecies) }
+  # The silent branch of pbCarryOutEvolution (Evolution.rb:721): no scene, no
+  # cry, no "Congratulations". pbEndCore is the on-evolution move prompt, so it
+  # runs only when the player asked for move prompts.
+  def self.evolve_quietly(mon, learn_moves)
+    first = getMonName(mon.species, mon.form)
+    name = mon.name
+    hops = 0
+    while (evo = checkEvolution(mon)) && hops < 3
+      scene = PokemonEvolutionScene.new
+      scene.pbStartCore(mon, evo)
+      scene.pbEvolutionCore
+      scene.pbEndCore if learn_moves
+      hops += 1
+    end
+    return nil if hops == 0
+
+    "#{name}: #{first} → #{getMonName(mon.species, mon.form)}"
+  end
+
+  # One message per six lines so a big box stays readable.
+  def self.report(screen, evolved)
+    evolved.each_slice(6) { |lines| screen.pbDisplay(lines.join("\n")) }
   end
 end
 
@@ -108,10 +131,11 @@ module ChrookedStorageLevelAllHooks
     learn = pbShowCommands(_INTL("New level-up moves?"), [_INTL("Ask for each"), _INTL("Skip them all")], *args, **kwargs)
     return if learn < 0
 
-    todo.each { |mon| ChrookedPCLevelAll.raise_to(mon, target, learn == 0) }
+    evolved = todo.map { |mon| ChrookedPCLevelAll.raise_to(mon, target, learn == 0) }.compact
     @scene.pbHardRefresh
-    Chrooked.log("PC Level Up All: #{todo.length} mons -> Lv #{target}")
-    pbDisplay(_INTL("Raised {1} Pokémon to Lv. {2}.", todo.length, target))
+    Chrooked.log("PC Level Up All: #{todo.length} mons -> Lv #{target}, #{evolved.length} evolved")
+    pbDisplay(_INTL("Raised {1} Pokémon to Lv. {2}. {3} evolved.", todo.length, target, evolved.length))
+    ChrookedPCLevelAll.report(self, evolved)
   end
 end
 PokemonStorageScreen.prepend(ChrookedStorageLevelAllHooks)
