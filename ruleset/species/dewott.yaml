@@ -1,6 +1,7 @@
 name: Dewott
 chrooked_id: dewott
 aka: { pokeemerald: SPECIES_DEWOTT }
+types: [Water, Fighting]
 abilities:
   primary: Torrent
   secondary: Mystic Blades

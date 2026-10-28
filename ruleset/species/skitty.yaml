@@ -1,6 +1,7 @@
 name: Skitty
 chrooked_id: skitty
 aka: { pokeemerald: SPECIES_SKITTY }
+types: [Normal, Fairy]
 abilities:
   primary: Allure
   secondary: Natural Cure

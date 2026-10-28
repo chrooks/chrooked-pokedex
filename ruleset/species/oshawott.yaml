@@ -1,6 +1,7 @@
 name: Oshawott
 chrooked_id: oshawott
 aka: { pokeemerald: SPECIES_OSHAWOTT }
+types: [Water, Fighting]
 abilities:
   primary: Torrent
   secondary: Mystic Blades
