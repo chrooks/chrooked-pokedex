@@ -83,6 +83,10 @@ A species makeover is **not done** at Ruleset write. Done means:
 
 Dex UI changes get the same discipline: drive the running UI with a real query (screenshot or assertion) before calling it done — passing vitest alone has shipped broken filters.
 
+### Every mod ships to every Target
+
+A mod of any kind (custom ability or move port, static QoL mod, hotkey, PC button) gets a port for **every live Target in the same turn**: `references/rejuv-harness/chrooked_zz_<id>.rb` and `references/essentials21-harness/chrooked_zz_<id>.rb`, same id. A feature one engine lacks ships the subset and says so in the file header. Nova installs static mods from the essentials21 harness glob automatically; no installer change is needed.
+
 ### Batch blind design
 
 Lines to redesign go in `ruleset/QUEUE.md` (one row each, steer after a comma). `/blind-design preprocess` researches and stages a packet per row unattended through `/api/design`; `/blind-design review` walks the packets one decision each, realizes previews in the background, ships every confirmed line with one apply, and commits one commit per line. The definition of done above is unchanged: applied, read back, committed, pushed. The pipeline is server-side so the dex UI can drive the same routes later.

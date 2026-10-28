@@ -165,10 +165,12 @@ def test_api_put_rejects(tmp_path: Path, source: Path, namespace, off, status) -
 
 @pytest.mark.unit
 def test_api_gives_an_essentials_target_its_own_catalog(tmp_path: Path, source: Path) -> None:
-    """Nova's one static mod is the generated Redux Mode (#121), and it can be turned off."""
+    """Nova lists the generated Redux Mode (#121) plus the hand-written
+    essentials21-harness chrooked_zz_*.rb mods, and each can be turned off."""
     client = _client(tmp_path, source, "nova", engine="essentials")
     body = client.get("/api/mods?target=t1").json()
-    assert body["engine"] == "essentials" and [m["id"] for m in body["mods"]] == ["redux"]
+    ids = [m["id"] for m in body["mods"]]
+    assert body["engine"] == "essentials" and "redux" in ids and "pclevelall" in ids
     assert body["target"]["supported"] is True
     assert client.put("/api/targets/t1/mods", json={"off": ["redux"]}).status_code == 200
     assert load_mods_off(tmp_path, "nova") == frozenset({"redux"})

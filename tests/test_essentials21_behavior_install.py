@@ -20,6 +20,7 @@ from chrooked_pokedex.appliers.essentials.behavior_install import (
 )
 from chrooked_pokedex.appliers.essentials.creation import create_owned_content
 from chrooked_pokedex.appliers.essentials.resolution import build_resolution_map
+from chrooked_pokedex.appliers import static_mods
 from chrooked_pokedex.behavior.templates import render_essentials21
 from chrooked_pokedex.cli import _ESSENTIALS_CATEGORIES, _apply_essentials
 from chrooked_pokedex.model import Ruleset
@@ -62,6 +63,10 @@ def _mods(tgt):
 
 # Redux Mode (#121), the static mod every apply installs unless the Target turns it off.
 _REDUX = "chrooked_zz_redux.rb"
+# Every static mod Nova installs by default: Redux plus the hand-written
+# chrooked_zz_*.rb files in references/essentials21-harness.
+_STATIC = {m.file for m in static_mods.essentials21_catalog()}
+_STATIC_OFF = frozenset(Path(f).stem.removeprefix("chrooked_zz_") for f in _STATIC)
 
 
 def test_present_port_is_installed_into_998_chrookedmods(tmp_path):
@@ -73,7 +78,7 @@ def test_present_port_is_installed_into_998_chrookedmods(tmp_path):
 
     dest = tgt / "Data" / "Scripts" / "998_ChrookedMods" / "chrooked_kindle.rb"
     assert dest.read_text().startswith("# chrooked:kindle")
-    assert changed == {dest, _mods(tgt) / _REDUX}
+    assert changed == {dest, *(_mods(tgt) / f for f in _STATIC)}
     entry = next(e for e in report.entries if e.chrooked_id == "kindle")
     assert entry.status == "applied"
     assert "installed" in entry.reason
@@ -85,10 +90,10 @@ def test_missing_port_is_noop_and_creates_no_folder(tmp_path):
     tgt = _target(tmp_path)
     report = ApplyReport()
 
-    install_behaviors(tgt, _ruleset("someunported"), report, source_dir=src, mods_off=frozenset({"redux"}))
+    install_behaviors(tgt, _ruleset("someunported"), report, source_dir=src, mods_off=_STATIC_OFF)
 
     assert not _mods(tgt).exists()
-    assert [e.status for e in report.entries] == ["held"]  # only Redux, turned off
+    assert [e.status for e in report.entries] == ["held"] * len(_STATIC)  # every static mod, turned off
 
 
 @pytest.mark.parametrize("contents", ["", "puts 'no tag here'\n"])
@@ -300,7 +305,7 @@ def test_cli_essentials_apply_generates_the_templated_port(tmp_path, capsys):
     installed = (_mods(target) / "chrooked_cinderglow.rb").read_text(encoding="utf-8")
     assert installed == render_essentials21(ruleset.behaviors["cinderglow"], build_resolution_map(target, ruleset))
     assert "chrooked_table.add(:CINDERGLOW," in installed
-    assert "behaviors: 2 file(s) changed" in capsys.readouterr().out  # the port and Redux
+    assert f"behaviors: {1 + len(_STATIC)} file(s) changed" in capsys.readouterr().out  # the port and the static mods
     entry = next(e for e in report.entries if e.category == "behavior")
     assert entry.status == "applied" and "mechanic installed" in entry.reason
 
@@ -324,7 +329,7 @@ def test_template_and_hand_port_together_is_ambiguous_and_blocked(tmp_path):
 
     install_behaviors(target, ruleset, report, resmap=resmap, source_dir=src)
 
-    (entry,) = [e for e in report.entries if e.chrooked_id != "zz_redux"]
+    (entry,) = [e for e in report.entries if not e.chrooked_id.startswith("zz_")]
     assert entry.status == "blocked" and "ambiguous" in entry.reason
     assert not (_mods(target) / "chrooked_cinderglow.rb").exists()
     assert has_port(ruleset.behaviors["cinderglow"], resmap, source_dir=src) is False
@@ -443,7 +448,7 @@ def test_redux_installs_by_default_and_a_rerun_is_no_churn(tmp_path):
     install_behaviors(tgt, _ruleset(), report, source_dir=src)
 
     assert (_mods(tgt) / _REDUX).read_text(encoding="utf-8").startswith("# chrooked:zz_redux\n")
-    assert [(e.chrooked_id, e.status) for e in report.entries] == [("zz_redux", "applied")]
+    assert [(e.chrooked_id, e.status) for e in report.entries] == [(Path(f).stem.removeprefix("chrooked_"), "applied") for f in sorted(_STATIC)]
     rerun = ApplyReport()
     assert install_behaviors(tgt, _ruleset(), rerun, source_dir=src) == set()
     assert rerun.entries == []

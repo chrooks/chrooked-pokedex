@@ -75,17 +75,24 @@ def catalog(source_dir: Path) -> list[StaticMod]:
             for p in sorted(Path(source_dir).glob(f"{PREFIX}*.rb"))]
 
 
-# Essentials 21's static mods: file name -> its generated text.
-_ESSENTIALS21 = {redux.FILE: redux.render_essentials21}
+# Essentials 21's static mods: generated Redux Mode plus every hand-written
+# ``chrooked_zz_*.rb`` in the Essentials 21 harness (same shape as Rejuv's).
+ESSENTIALS21_DIR = Path(__file__).resolve().parents[3] / "references" / "essentials21-harness"
+_ESSENTIALS21_GENERATED = {redux.FILE: redux.render_essentials21}
+
+
+def _essentials21_sources() -> dict[str, "callable"]:
+    files = {p.name: p.read_text for p in sorted(ESSENTIALS21_DIR.glob(f"{PREFIX}*.rb"))}
+    return {**files, **_ESSENTIALS21_GENERATED}
 
 
 def essentials21_catalog() -> list[StaticMod]:
-    """Every Essentials 21 static mod (Redux Mode)."""
-    return [_parse(name, render()) for name, render in sorted(_ESSENTIALS21.items())]
+    """Every Essentials 21 static mod, sorted by file name (= load order)."""
+    return [_parse(name, render()) for name, render in sorted(_essentials21_sources().items())]
 
 
 def essentials21_text(mod: StaticMod) -> str:
-    return _ESSENTIALS21[mod.file]()
+    return _essentials21_sources()[mod.file]()
 
 
 def catalog_for(engine: str, source_dir: Path) -> list[StaticMod] | None:
