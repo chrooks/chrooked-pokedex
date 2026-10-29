@@ -66,6 +66,7 @@ EFFECT_TO_FUNCCODE: dict[str, str] = {
     "curse": "10D",           # verified via CURSE (Ghost: cut HP, curse; else raise Atk/Def)
     "moonlight": "0D8",       # verified via MOONLIGHT, MORNINGSUN, SYNTHESIS (weather heal)
     "attack_down_2": "04B",   # verified via CHARM, FEATHERDANCE (lower target Attack by 2)
+    "u-turn": "0EE",          # verified via UTURN, VOLTSWITCH (hit, then switch out)
 }
 
 # A few primary-effect funccodes use col 9 (effectchance) as a probability the effect

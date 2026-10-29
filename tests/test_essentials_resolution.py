@@ -76,6 +76,7 @@ def test_vocab_primary_effect_maps_standard_effects():
     assert vocab.function_code("multi_hit") == "HitTwoToFiveTimes"
     assert vocab.function_code("triple_kick") == "HitThreeTimesPowersUpWithEachHit"
     assert vocab.function_code("brick_break") == "RemoveScreens"
+    assert vocab.function_code("u-turn") == "SwitchOutUserDamagingMove"
     # something genuinely unknown stays unresolved (honest None).
     assert vocab.function_code("totally_made_up_effect") is None
 

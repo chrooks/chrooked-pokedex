@@ -67,6 +67,7 @@ _PRIMARY_FUNCTION_CODE = {
     "brick_break": "RemoveScreens",
     "recoil_if_miss": "CrashDamageIfFailsUnusableInGravity",
     "first_turn_only": "FlinchTargetFailsIfNotUserFirstTurn",
+    "u-turn": "SwitchOutUserDamagingMove",
 }
 
 # Neutral secondary effect -> Essentials FunctionCode for a damaging move that
