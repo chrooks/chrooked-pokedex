@@ -3,32 +3,34 @@ chrooked_id: gulpin
 aka: { pokeemerald: SPECIES_GULPIN }
 types: [Poison, Normal]
 abilities:
-  primary: Liquid Ooze
-  secondary: Liquified
-  hidden: Gluttony
+  primary: Liquified
+  secondary: Gluttony
+  hidden: Corrosion
+stats: { hp: 72, atk: 41, def: 57, spa: 63, spd: 57, spe: 32 }
 learnset:
-  - { level: 1, move: Pound }
-  - { level: 2, move: Poison Sting }
-  - { level: 5, move: Yawn }
-  - { level: 8, move: Poison Gas }
-  - { level: 10, move: Acid Spray }
-  - { level: 12, move: Amnesia }
-  - { level: 15, move: Cross Poison }
-  - { level: 17, move: Sludge }
-  - { level: 18, move: Bail Out }
-  - { level: 20, move: Encore }
-  - { level: 25, move: Toxic }
-  - { level: 27, move: Swallow }
-  - { level: 28, move: Stockpile }
-  - { level: 29, move: Spit Up }
-  - { level: 30, move: Gastric Snare }
-  - { level: 31, move: Take Down }
-  - { level: 33, move: Sludge Bomb }
-  - { level: 36, move: Gastro Acid }
-  - { level: 38, move: Rampage }
-  - { level: 39, move: Venom Slam }
-  - { level: 41, move: Belch }
-  - { level: 44, move: Pain Split }
-  - { level: 49, move: Gunk Shot }
-  - { level: 57, move: Double-Edge }
-  - { level: 64, move: Contagion }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Smog }
+  - { level: 10, move: Wrap }
+  - { level: 12, move: Acid Spray }
+  - { level: 20, move: Recycle }
+  - { level: 24, move: Sludge }
+  - { level: 26, move: Venoshock }
+  - { level: 28, move: Pain Split }
+  - { level: 31, move: Toxic Spikes }
+  - { level: 34, move: Jaw Lock }
+  - { level: 36, move: Toxic }
+  - { level: 39, move: Gastric Snare }
+  - { level: 42, move: Amnesia }
+  - { level: 45, move: Body Slam }
+  - { level: 49, move: Venom Drench }
+  - { level: 51, move: Sludge Bomb }
+  - { level: 54, move: Stockpile }
+  - { level: 56, move: Spit Up }
+  - { level: 57, move: Swallow }
+  - { level: 60, move: Sludge Wave }
+  - { level: 62, move: Disable }
+  - { level: 64, move: Yawn }
+  - { level: 66, move: Belch }
+  - { level: 68, move: Gastro Acid }
+  - { level: 70, move: Encore }
+  - { level: 72, move: Contagion }

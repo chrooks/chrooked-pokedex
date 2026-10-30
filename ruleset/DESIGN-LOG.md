@@ -1525,3 +1525,7 @@ Gets Roost, Tailwind, U-Turn, Hurricane at end of learnset
 ## 2026-10-27 — Slowbro
 
 - **Direction:** Designed with Slowking. The numbed shell wall: Shell Armor / Unaware / Regenerator (Redux stack). BST 510. Slowpoke mirrors Slowbro. Chris: give it Teleport.; The design axis is the Shellder-tail symbiosis and enforced passivity: a creature that is constitutionally slow and pain-free, dragged into activity only by an external parasite/partner, with every ability and move radiating outward from that reluctant, numbed, coastal-predator identity.
+
+## 2026-10-30 — Swalot
+
+- **Direction:** i like liquified corrosion and gluttony. it should get gastric snare, gastric acid, all of those predation flavor and utility moves + recycle. atk and spa were tied so special ladder for the STABs. bump bst to 510 Malignant Chain is a signature move and stays protected; special ladder: Smog, Acid Spray, Sludge, Venoshock, Sludge Bomb, Sludge Wave, Belch, Contagion.; The twin design axes are CORROSIVE DIGESTION and WHOLE-BODY TOXICITY: every mechanical choice flows from the creature being a walking poison gland whose mouth and stomach are its primary weapons, and whose pores actively secrete venom as a predation tool.

@@ -3,32 +3,35 @@ chrooked_id: swalot
 aka: { pokeemerald: SPECIES_SWALOT }
 types: [Poison, Normal]
 abilities:
-  primary: Liquid Ooze
-  secondary: Liquified
-  hidden: Gluttony
-stats: { hp: 115, atk: 75, def: 85, spa: 75, spd: 85 }
+  primary: Liquified
+  secondary: Gluttony
+  hidden: Corrosion
+stats: { hp: 115, atk: 65, def: 90, spa: 100, spd: 90, spe: 50 }
 learnset:
-  - { level: 0, move: Body Slam }
-  - { level: 1, move: Poison Gas }
-  - { level: 1, move: Yawn }
-  - { level: 1, move: Pound }
-  - { level: 1, move: Sludge }
-  - { level: 2, move: Poison Sting }
-  - { level: 3, move: Cross Poison }
-  - { level: 12, move: Amnesia }
-  - { level: 15, move: Gastric Snare }
-  - { level: 17, move: Acid Spray }
-  - { level: 18, move: Bail Out }
-  - { level: 20, move: Encore }
-  - { level: 25, move: Toxic }
-  - { level: 29, move: Venom Slam }
-  - { level: 30, move: Stockpile }
-  - { level: 31, move: Spit Up }
-  - { level: 32, move: Swallow }
-  - { level: 37, move: Sludge Bomb }
-  - { level: 42, move: Gastro Acid }
-  - { level: 45, move: Gunk Shot }
-  - { level: 46, move: Rampage }
-  - { level: 49, move: Belch }
-  - { level: 57, move: Double-Edge }
-  - { level: 64, move: Contagion }
+  - { level: 0, move: Acid Armor }
+  - { level: 1, move: Sweet Scent }
+  - { level: 5, move: Smog }
+  - { level: 10, move: Wrap }
+  - { level: 12, move: Acid Spray }
+  - { level: 20, move: Recycle }
+  - { level: 24, move: Sludge }
+  - { level: 26, move: Venoshock }
+  - { level: 28, move: Pain Split }
+  - { level: 31, move: Toxic Spikes }
+  - { level: 34, move: Jaw Lock }
+  - { level: 36, move: Toxic }
+  - { level: 39, move: Gastric Snare }
+  - { level: 42, move: Amnesia }
+  - { level: 45, move: Body Slam }
+  - { level: 49, move: Venom Drench }
+  - { level: 51, move: Sludge Bomb }
+  - { level: 54, move: Stockpile }
+  - { level: 56, move: Spit Up }
+  - { level: 57, move: Swallow }
+  - { level: 60, move: Sludge Wave }
+  - { level: 62, move: Disable }
+  - { level: 64, move: Yawn }
+  - { level: 66, move: Belch }
+  - { level: 68, move: Gastro Acid }
+  - { level: 70, move: Encore }
+  - { level: 72, move: Contagion }
