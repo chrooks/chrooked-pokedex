@@ -80,6 +80,7 @@ const KINDS: readonly KindKey[] = [
   "statuses",
   "targets",
   "ledger",
+  "companion",
 ];
 
 // useSyncExternalStore requires a STABLE snapshot: getSnapshot must return the

@@ -124,6 +124,15 @@ export function IconLedger({ className }: IconProps) {
   );
 }
 
+/** Live — the companion screen: a pulse line, the game's heartbeat. */
+export function IconLive({ className }: IconProps) {
+  return (
+    <svg {...BASE} className={className}>
+      <path d="M1.5 8h3l1.5-4 2.5 8 2-6 1 2h3" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 /** Search. */
 export function IconSearch({ className }: IconProps) {
   return (

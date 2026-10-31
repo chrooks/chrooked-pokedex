@@ -20,6 +20,7 @@ import { MovesTab } from "./components/tabs/MovesTab";
 import { AbilitiesTab } from "./components/tabs/AbilitiesTab";
 import { TypeChartTab } from "./components/tabs/TypeChartTab";
 import { TeamTab } from "./components/tabs/TeamTab";
+import { CompanionTab } from "./components/tabs/CompanionTab";
 import { StatusesTab } from "./components/tabs/StatusesTab";
 import { BehaviorsTab } from "./components/tabs/BehaviorsTab";
 import { ModsTab } from "./components/tabs/ModsTab";
@@ -759,6 +760,8 @@ function KindScreen({
       return <TypeChartTab />;
     case "team":
       return <TeamTab />;
+    case "companion":
+      return <CompanionTab />;
     case "statuses":
       return <StatusesTab />;
     case "behaviors":
@@ -809,6 +812,9 @@ function Readout({
   }
   if (kind === "team") {
     return <span>team · matchup planner</span>;
+  }
+  if (kind === "companion") {
+    return <span>live · companion screen</span>;
   }
   if (kind !== "dex") {
     return <span>{kind.replace("-", " ")} · read-only</span>;

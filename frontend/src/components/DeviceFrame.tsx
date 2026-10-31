@@ -12,6 +12,7 @@ import {
   IconFilters,
   IconGridView,
   IconLedger,
+  IconLive,
   IconMods,
   IconTable,
   IconSpecies,
@@ -47,6 +48,7 @@ export const RAIL_KIND_ORDER: readonly KindKey[] = KIND_TABS.map((tab) => tab.ke
 const HEADER_TABS: TabDef[] = [
   { key: "team", label: "Team", Icon: IconTeam },
   { key: "ledger", label: "Ledger", Icon: IconLedger },
+  { key: "companion", label: "Live", Icon: IconLive },
 ];
 
 type Props = {

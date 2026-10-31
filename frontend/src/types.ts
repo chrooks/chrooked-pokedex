@@ -448,7 +448,8 @@ export type KindKey =
   | "behaviors"
   | "mods"
   | "targets"
-  | "ledger";
+  | "ledger"
+  | "companion";
 
 /** The engines a Target fork can be (only pokeemerald applies end-to-end in M3;
     essentials is recorded for later). */
