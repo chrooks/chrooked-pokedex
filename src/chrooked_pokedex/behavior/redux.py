@@ -16,8 +16,9 @@ composes its parts (`behavior.compose`):
 The list is the species' regular and hidden abilities, the battler's own first.
 It is empty, so the battler has its one ability as before, while the option is
 Off, after its ability changes (Skill Swap, Trace, Mummy) and while it is
-Transformed. The ability box names the primary, and Nova's 14 direct
-`ability_id ==` checks see only the primary.
+Transformed. The ability box names the listed ability whose handler is running
+(the primary outside a handler), and Nova's 14 direct `ability_id ==` checks see
+only the primary.
 
 The file is generated, not hand-written, so it carries the one ChrookedCompose
 (and ChrookedLog) the composed abilities share; it sorts after them, so theirs
@@ -75,6 +76,19 @@ module ChrookedRedux
     $PokemonSystem.respond_to?(:chrooked_redux) && $PokemonSystem.chrooked_redux == 1
   end
 
+  # The listed ability whose handler is running right now, so the ability box can
+  # name it instead of the primary; a stack, since a handler can trigger another.
+  @firing = []
+  def self.firing(id = nil)
+    return @firing.last if id.nil?
+    @firing.push(id)
+    begin
+      yield
+    ensure
+      @firing.pop
+    end
+  end
+
   # The primary ability's GameData, copied once per list, carrying the list.
   # It is still a GameData::Ability, so == :INTIMIDATE, .name and try_get work.
   def self.held(ability, ids)
@@ -114,7 +128,7 @@ class AbilityHandlerHash
     # Each listed ability's handler gets its own id, as if it were the battler's only one.
     handlers = ids.filter_map do |id|
       handler = chrooked_redux_lookup(id)
-      handler && [id.to_s.downcase, proc { |_sym, *rest| handler.call(id, *rest) }]
+      handler && [id.to_s.downcase, proc { |_sym, *rest| ChrookedRedux.firing(id) { handler.call(id, *rest) } }]
     end
     return nil if handlers.empty?
     ChrookedCompose.combine(ChrookedRedux.name_of(self), nil, handlers).call(sym.id, *args)
@@ -153,6 +167,15 @@ class Battle::Battler
     ids.any? { |id| ([id] + (ChrookedCompose.parts_of(id) || [])).any? { |a| checks.include?(a) } }
   end
   alias hasWorkingAbility hasActiveAbility?
+
+  # The ability box (pbShowAbilitySplash reads abilityName) names the listed
+  # ability whose handler is running, when this battler is the one that holds it.
+  alias_method :chrooked_redux_ability_name, :abilityName
+  def abilityName
+    firing = ChrookedRedux.firing
+    return chrooked_redux_ability_name if firing.nil? || !chrooked_redux_ids.include?(firing)
+    GameData::Ability.get(firing).name
+  end
 end
 """
 

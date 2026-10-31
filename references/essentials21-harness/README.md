@@ -214,7 +214,7 @@ The list is empty — one ability, as before — while the option is Off, after 
 battler's ability changes (Skill Swap, Trace, Mummy) and while it is Transformed.
 
 Ceilings, on purpose: those four moves collapse a battler to one ability for the
-rest of the battle, the ability box names the primary, and Nova's 14 direct
+rest of the battle, the ability box names the listed ability whose handler is running (the primary outside one), and Nova's 14 direct
 `ability_id ==` checks see the primary only.
 
 ### Proving it

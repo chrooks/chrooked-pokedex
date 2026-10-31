@@ -48,6 +48,8 @@ module GameData
     ALL = {}
     def self.exists?(id); ALL.key?(id); end
     def self.try_get(id); ALL[id]; end
+    def self.get(id); ALL[id]; end
+    def name; @id.to_s.capitalize; end
   end
 end
 %i[INTIMIDATE MOXIE ANGERPOINT].each { |id| GameData::Ability::ALL[id] = GameData::Ability.new(id).freeze }
@@ -66,6 +68,7 @@ class Battle
     attr_accessor :ability_id, :effects
     def initialize(pokemon); @pokemon = pokemon; @ability_id = pokemon.ability_id; @effects = []; end
     def ability; GameData::Ability.try_get(@ability_id); end
+    def abilityName; ability ? ability.name : ""; end
     def abilityActive?(*); true; end
     def hasActiveAbility?(check, _ignore = false)
       return check.include?(@ability_id) if check.is_a?(Array)
@@ -80,18 +83,20 @@ $PokemonSystem = PokemonSystem.new
 __REDUX__
 fired = []
 Battle::AbilityEffects::OnSwitchIn.add(:INTIMIDATE, proc { |a, b| fired << a })
-Battle::AbilityEffects::OnEndOfUsingMove.add(:MOXIE, proc { |a, b| fired << a })
+splash = nil
+Battle::AbilityEffects::OnEndOfUsingMove.add(:MOXIE, proc { |a, b| fired << a; splash = b.abilityName })
 Battle::AbilityEffects::SpeedCalc.add(:INTIMIDATE, proc { |a, b, m| m * 2 })
 Battle::AbilityEffects::SpeedCalc.add(:MOXIE, proc { |a, b, m| m + 1 })
 krook = Battle::Battler.new(Pokemon.new(:INTIMIDATE, Species.new([:INTIMIDATE, :MOXIE], [:ANGERPOINT])))
 fx = Battle::AbilityEffects
 show = lambda do
   fired.clear
+  splash = nil
   fx.trigger(fx::OnSwitchIn, krook.ability, krook)
   fx.trigger(fx::OnEndOfUsingMove, krook.ability, krook)
   speed = fx.trigger(fx::SpeedCalc, krook.ability, krook, 1, ret: 1)
   puts [fired.join("+"), speed, krook.hasActiveAbility?(:MOXIE), krook.hasActiveAbility?([:ANGERPOINT]),
-        krook.ability == :INTIMIDATE].join(" ")
+        krook.ability == :INTIMIDATE, splash || "-", krook.abilityName].join(" ")
 end
 show.call
 $PokemonSystem.chrooked_redux = 1
@@ -108,7 +113,8 @@ def test_a_redux_battler_fires_every_species_ability(tmp_path):
     result = subprocess.run(["ruby", str(probe)], capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
     assert result.stdout.splitlines() == [
-        "INTIMIDATE 2 false false true",              # Off: its own ability only
-        "INTIMIDATE+MOXIE 3 true true true",         # On: Moxie fires too; speed threads (1*2)+1
-        "MOXIE 2 true false false",                  # changed ability: that one alone
+        "INTIMIDATE 2 false false true - Intimidate",            # Off: its own ability only
+        "INTIMIDATE+MOXIE 3 true true true Moxie Intimidate",   # On: Moxie fires too, and the box names
+                                                                # Moxie while it runs; speed threads (1*2)+1
+        "MOXIE 2 true false false Moxie Moxie",                 # changed ability: that one alone
     ]
