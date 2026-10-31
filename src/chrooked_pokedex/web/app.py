@@ -40,6 +40,7 @@ from . import design_log as designlogmod
 from .design_store import DesignStore
 from . import dex as dexmod
 from . import folder_picker as pickermod
+from . import live as livemod
 from . import llm as llmmod
 from . import lore as loremod
 from . import readback as readbackmod
@@ -148,6 +149,7 @@ def create_app(
     _dex_cache: dict[str, Any] = {"key": None, "dex": None}
     _dex_cache_lock = threading.Lock()
     app.state.dex_cache_stats = {"hits": 0, "misses": 0}
+    app.state.live_store = livemod.LiveStore()
 
     def _dex_cache_key() -> tuple[Any, ...] | None:
         # Stat (not read) the 2.9 MB snapshot for cheap identity; fingerprint the
@@ -203,6 +205,23 @@ def create_app(
     @app.get("/api/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
+
+    @app.post("/api/live/{engine}")
+    def post_live(engine: str, payload: dict[str, Any]) -> dict[str, Any]:
+        """The companion mod's push: one blob per game event, newest wins."""
+        if engine not in livemod.ENGINES:
+            raise HTTPException(status_code=404, detail=f"unknown engine: {engine}")
+        if len(json.dumps(payload)) > livemod.MAX_BYTES:
+            raise HTTPException(status_code=413, detail="live payload too large")
+        entry = app.state.live_store.put(engine, payload)
+        return {"ok": True, "seq": entry["seq"]}
+
+    @app.get("/api/live/{engine}")
+    def get_live(engine: str) -> dict[str, Any]:
+        """Newest live state for the companion screen; ``available: false`` until a push lands."""
+        if engine not in livemod.ENGINES:
+            raise HTTPException(status_code=404, detail=f"unknown engine: {engine}")
+        return app.state.live_store.get(engine)
 
     @app.get("/api/dex")
     def get_dex() -> list[dict[str, Any]]:
