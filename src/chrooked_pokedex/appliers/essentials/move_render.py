@@ -23,7 +23,7 @@ def function_code(move: MoveDef, unresolved: list[str]) -> tuple[str | None, int
         return None, None
 
     code = primary
-    chance: int | None = None
+    chance: int | None = vocab.primary_effect_chance(move.effect)
     if move.additional_effects:
         first = move.additional_effects[0]
         secondary = vocab.additional_function_code(first.effect)

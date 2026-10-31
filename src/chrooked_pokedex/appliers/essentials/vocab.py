@@ -70,6 +70,13 @@ _PRIMARY_FUNCTION_CODE = {
     "u-turn": "SwitchOutUserDamagingMove",
 }
 
+# A primary FunctionCode that reads EffectChance as its own probability. Without it
+# an existing move keeps the EffectChance of its old effect: Astonish carried its
+# canon 30 into FlinchTargetFailsIfNotUserFirstTurn and flinched on 30% of hits.
+_PRIMARY_EFFECT_CHANCE = {
+    "first_turn_only": 100,  # FAKEOUT always flinches
+}
+
 # Neutral secondary effect -> Essentials FunctionCode for a damaging move that
 # also applies that effect. Kept to the confidently-correct status effects; an
 # unknown effect resolves to None.
@@ -146,6 +153,10 @@ def function_code(primary_effect: str) -> Optional[str]:
     if primary_effect == "hit":
         return NO_FUNCTION_CODE
     return _PRIMARY_FUNCTION_CODE.get(primary_effect)
+
+
+def primary_effect_chance(primary_effect: str) -> Optional[int]:
+    return _PRIMARY_EFFECT_CHANCE.get(primary_effect)
 
 
 def additional_function_code(effect: str) -> Optional[str]:
