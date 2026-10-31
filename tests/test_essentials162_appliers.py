@@ -850,6 +850,7 @@ def test_effect_to_funccode_representative_mappings():
     assert et.EFFECT_TO_FUNCCODE["ohko"] == "070"
     assert et.EFFECT_TO_FUNCCODE["absorb"] == "0DD"
     assert et.EFFECT_TO_FUNCCODE["u-turn"] == "0EE"
+    assert et.SECONDARY_TO_FUNCCODE["sp_atk_minus_2"] == "03F"
     assert et.EFFECT_TO_FUNCCODE["roar"] == "0EB"
     assert et.EFFECT_TO_FUNCCODE["triple_kick"] == "0BF"
 

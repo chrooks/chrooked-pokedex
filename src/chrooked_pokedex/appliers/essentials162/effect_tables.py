@@ -117,6 +117,7 @@ SECONDARY_TO_FUNCCODE: dict[str, str] = {
     "acc_minus_1": "047",     # verified via MUDSLAP (lower Accuracy)
     "def_plus_1": "01D",      # verified via STEELWING (damaging, raises user Def; HARDEN status shares it)
     "spd_plus_1": "01F",      # verified via FLAMECHARGE, ESPERWING, AQUASTEP, TRAILBLAZE (raise user Speed)
+    "sp_atk_minus_2": "03F",  # verified via OVERHEAT, DRACOMETEOR, LEAFSTORM (user SpAtk -2 after hit)
 }
 # A biting move that applies BOTH a status AND a flinch (Fire/Thunder Fang) collapses to
 # ONE dedicated funccode that bundles both — distinct from the status-only secondary codes

@@ -87,6 +87,7 @@ _ADDITIONAL_FUNCTION_CODE = {
     "flinch": "FlinchTarget",
     "frostbite": "FreezeTarget",
     "confusion": "ConfuseTarget",
+    "sp_atk_minus_2": "LowerUserSpAtk2",  # Overheat drawback: without it Contagion was a free 130
 }
 
 # Neutral move target -> Essentials Target. Defaults to NearOther (standard single

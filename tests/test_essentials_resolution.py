@@ -80,6 +80,7 @@ def test_vocab_primary_effect_maps_standard_effects():
     # Fake Out's code reads EffectChance as its flinch rate: a first-turn move is 100.
     assert vocab.primary_effect_chance("first_turn_only") == 100
     assert vocab.primary_effect_chance("ohko") is None
+    assert vocab.additional_function_code("sp_atk_minus_2") == "LowerUserSpAtk2"
     # something genuinely unknown stays unresolved (honest None).
     assert vocab.function_code("totally_made_up_effect") is None
 
