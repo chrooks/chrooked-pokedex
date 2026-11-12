@@ -139,6 +139,19 @@ def main(argv: list[str] | None = None) -> int:
         "target that has a 'sync' block in targets.json; others never sync.",
     )
 
+    match = sub.add_parser(
+        "match", help="Propose Ruleset -> Target species matches (binary Targets)."
+    )
+    match.add_argument("--engine", choices=("gba-binary",), required=True)
+    match.add_argument("--target", required=True, type=Path, help="Target folder.")
+    match.add_argument(
+        "--ruleset", type=Path, default=_DEFAULT_RULESET, help="Ruleset folder."
+    )
+    match.add_argument(
+        "--write", action="store_true",
+        help="Store each name match as aka: {monomyth: <index>} in the species YAML.",
+    )
+
     sync_cmd = sub.add_parser(
         "sync", help="Mirror an already-applied patch/ folder to the handheld."
     )
@@ -221,6 +234,8 @@ def main(argv: list[str] | None = None) -> int:
             args.target, args.engine, args.category, args.ruleset, args.force,
             args.dialect, args.slug, args.create_absent, args.sync,
         )
+    if args.command == "match":
+        return _run_match(args.target, args.ruleset, args.write)
     if args.command == "sync":
         return _run_sync_command(args.target)
     if args.command == "save-backup":
@@ -231,6 +246,44 @@ def main(argv: list[str] | None = None) -> int:
         return _run_behaviors(args.ruleset, args.mechanic, args.engine)
     parser.error(f"unknown command {args.command}")
     return 2
+
+
+def _run_match(target: Path, ruleset_dir: Path, write: bool) -> int:
+    """Print one row per Ruleset species: its Monomyth index or (no match).
+
+    With `write`, every name match that lacks a hint is stored as
+    aka: {monomyth: <index>} through the dex's lossless species writer.
+    """
+    from .appliers.gba_binary.addresses import AddressesError, load_addresses
+    from .appliers.gba_binary.resolution import build_resolution_map
+    from .web.crud import upsert_species
+
+    try:
+        resmap = build_resolution_map(load_addresses(target))
+    except AddressesError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    ruleset = Ruleset.load(ruleset_dir)
+    to_write: list[tuple[str, dict, int]] = []
+    matched = 0
+    for cid in sorted(ruleset.species):
+        species = ruleset.species[cid]
+        aka = dict(species.aka or {})
+        index = resmap.species(aka, species.name)
+        found = f"#{index} {resmap.species_names[index]}" if index is not None else "(no match)"
+        hint = f"hint {aka['monomyth']}" if "monomyth" in aka else "-"
+        print(f"{cid:<28} {species.name:<24} {found:<28} {hint}")
+        matched += index is not None
+        if index is not None and "monomyth" not in aka:
+            to_write.append((cid, aka, index))
+    print(f"{matched}/{len(ruleset.species)} species matched.")
+    if write:
+        for cid, aka, index in to_write:
+            upsert_species(ruleset_dir, cid, {"aka": {**aka, "monomyth": index}}, ledger_dir=ruleset_dir)
+        print(f"wrote {len(to_write)} hint(s).")
+    elif to_write:
+        print(f"{len(to_write)} new hint(s); re-run with --write to store them.")
+    return 0
 
 
 def _run_behaviors(ruleset_dir: Path, mechanic: str | None, engine: str | None) -> int:

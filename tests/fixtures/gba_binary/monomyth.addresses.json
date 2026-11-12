@@ -1,0 +1,15 @@
+{
+  "format": 1,
+  "game": "monomyth",
+  "rom_sha1": "0000000000000000000000000000000000000000",
+  "species_count": 3,
+  "species_names": ["??????????", "Bulbasaur", "Mishimizu"],
+  "types": ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Mystery", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark", "Fairy"],
+  "tables": {
+    "base_stats": {
+      "address": "0x08000010",
+      "stride": 24,
+      "fields": {"hp": 0, "atk": 1, "def": 2, "spe": 3, "spa": 4, "spd": 5, "type1": 6, "type2": 7}
+    }
+  }
+}
