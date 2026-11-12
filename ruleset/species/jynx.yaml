@@ -3,9 +3,9 @@ chrooked_id: jynx
 aka: { pokeemerald: SPECIES_JYNX }
 types: [Psychic, Ice]
 abilities:
-  primary: Medium
-  secondary: Forewarn
-  hidden: Arctic Ariette
+  primary: Arctic Ariette
+  secondary: Queenly Majesty
+  hidden: Frost Body
 stats: { spa: 130 }
 learnset:
   - { level: 1, move: Sweet Kiss }

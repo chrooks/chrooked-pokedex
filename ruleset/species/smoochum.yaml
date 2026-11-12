@@ -3,9 +3,9 @@ chrooked_id: smoochum
 aka: { pokeemerald: SPECIES_SMOOCHUM }
 types: [Psychic, Ice]
 abilities:
-  primary: Medium
-  secondary: Forewarn
-  hidden: Arctic Ariette
+  primary: Arctic Ariette
+  secondary: Queenly Majesty
+  hidden: Frost Body
 learnset:
   - { level: 1, move: Lick }
   - { level: 1, move: Pound }
