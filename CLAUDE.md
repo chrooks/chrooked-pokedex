@@ -20,7 +20,8 @@ CLI (`chrooked-pokedex`, defined in `cli.py`):
 
 ```bash
 chrooked-pokedex seed --fork PATH --base PATH      # diff a fork vs base → write ruleset/ YAML
-chrooked-pokedex apply --target PATH [--engine pokeemerald|essentials] [--category all|...] [--dialect auto|essentials16|essentials21] [--force]
+chrooked-pokedex apply --target PATH [--engine pokeemerald|essentials|polishedcrystal|rejuv|gba-binary] [--category all|...] [--dialect auto|essentials16|essentials21] [--force]
+chrooked-pokedex match --engine gba-binary --target DIR [--write]  # propose Monomyth species matches; --write stores aka: {monomyth: N}
 chrooked-pokedex harvest --fork PATH [--dry-run]   # gated reverse sync: propose Ruleset edits from a fork
 chrooked-pokedex behaviors [--mechanic ID --engine ENG]  # list/print custom-mechanic implementation packets
 chrooked-pokedex snapshot --base PATH              # freeze base 1.11.2 → ruleset/.base/1.11.2.json (deterministic)
@@ -37,7 +38,7 @@ Data flows one direction by default: **Ruleset YAML → model → Applier → ta
 - `model/` — frozen dataclasses for the neutral schema (`schema.py`), the `Ruleset` aggregate with a fail-fast `Ruleset.load(dir)` loader (`ruleset.py`, `loader.py`), and the custom-mechanic schema (`behavior_spec.py`).
 - `readers/pokeemerald/` — vendored C parsers that read pokeemerald-expansion source (the baseline `seed`/`harvest` diff against).
 - `seed/` — extract a Ruleset by diffing a fork against its base, then write YAML.
-- `appliers/` — one subpackage per engine: `pokeemerald/` (writes C), `essentials/` (v21 section-based PBS), `essentials162/` (16.x flat-CSV PBS). `dispatch.py::route_apply` is the shared engine+dialect router both the CLI and web layer call so they cannot drift; it does **not** print or write the report (each entry point owns those side effects).
+- `appliers/` — one subpackage per engine: `pokeemerald/` (writes C), `essentials/` (v21 section-based PBS), `essentials162/` (16.x flat-CSV PBS), `gba_binary/` (closed GBA ROM: writes a Blocks file beside the ROM, never the ROM; see ADR 0003). `dispatch.py::route_apply` is the shared engine+dialect router both the CLI and web layer call so they cannot drift; it does **not** print or write the report (each entry point owns those side effects).
 - `report/` — the **Apply Report** (`applied`/`partial`/`blocked`). Apply never silently drops anything; an unresolvable entry becomes a report entry, not a stack trace.
 - `harvest/` — deliberate, per-field-confirmed reverse sync; never part of a normal apply.
 - `behavior/` — renders custom mechanics as engine-specific implementation packets (data-only abilities still need engine code).

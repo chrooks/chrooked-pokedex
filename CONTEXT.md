@@ -90,6 +90,21 @@ snapshot → base [[Override]] → Target Override, last wins per field.
 _Avoid_: per-game patch, target diff, local override, regional form (it is not a
 distinct entity — it shares the base entry's `chrooked_id`).
 
+**Addresses file**:
+The fork's statement of where each data table lives in a closed ROM
+(`monomyth.addresses.json`): the ROM's sha1, species and type names, and each
+table's address, stride, and field offsets. The input to the gba-binary Applier;
+the dex reads it and never derives an address itself.
+_Avoid_: offsets file, symbol map, ROM map.
+
+**Blocks file**:
+The dex's CRC-checked list of byte replacements for a closed ROM
+(`chrooked.blocks.json`), written beside the ROM by the gba-binary Applier. The
+emulator applies it in memory, so the ROM is never written; a block whose
+`original_crc32` does not match the ROM is refused. The output of the
+gba-binary Applier and the Contract with the PokeDaisy fork (ADR 0003).
+_Avoid_: patch, cheat file, sidecar (a sidecar is the shape, not the name).
+
 **Change Ledger**:
 An append-only record of every mutation, one entry per change, so any edit can be
 reviewed later (and, in a follow-up, reversed). It watches every writer: authoring
