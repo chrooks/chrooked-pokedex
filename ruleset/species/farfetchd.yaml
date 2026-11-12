@@ -1,6 +1,6 @@
 name: Farfetchd
 chrooked_id: farfetchd
-aka: { pokeemerald: SPECIES_FARFETCHD }
+aka: { pokeemerald: SPECIES_FARFETCHD, monomyth: 3 }
 types: [Fighting, Flying]
 abilities:
   primary: Sharpness

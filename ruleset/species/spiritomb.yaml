@@ -1,6 +1,6 @@
 name: Spiritomb
 chrooked_id: spiritomb
-aka: { pokeemerald: SPECIES_SPIRITOMB }
+aka: { pokeemerald: SPECIES_SPIRITOMB, monomyth: 85 }
 abilities:
   primary: Pressure
   secondary: Shadow Tag

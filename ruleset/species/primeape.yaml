@@ -1,6 +1,6 @@
 name: Primeape
 chrooked_id: primeape
-aka: { pokeemerald: SPECIES_PRIMEAPE }
+aka: { pokeemerald: SPECIES_PRIMEAPE, monomyth: 109 }
 types: [Fighting]
 abilities:
   primary: Blitz

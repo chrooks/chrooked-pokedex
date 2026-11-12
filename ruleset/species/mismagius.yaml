@@ -1,6 +1,6 @@
 name: Mismagius
 chrooked_id: mismagius
-aka: { pokeemerald: SPECIES_MISMAGIUS }
+aka: { pokeemerald: SPECIES_MISMAGIUS, monomyth: 31 }
 types: [Ghost, Psychic]
 abilities:
   primary: Serene Grace

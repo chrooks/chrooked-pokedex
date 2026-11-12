@@ -1,6 +1,6 @@
 name: Litwick
 chrooked_id: litwick
-aka: { pokeemerald: SPECIES_LITWICK }
+aka: { pokeemerald: SPECIES_LITWICK, monomyth: 134 }
 types: [Ghost, Fire]
 abilities:
   primary: Flash Fire

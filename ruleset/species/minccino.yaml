@@ -1,6 +1,6 @@
 name: Minccino
 chrooked_id: minccino
-aka: {  }
+aka: { monomyth: 122 }
 learnset:
   - { level: 1, move: Pound }
   - { level: 1, move: Baby-Doll Eyes }

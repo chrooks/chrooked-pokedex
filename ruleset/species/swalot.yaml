@@ -1,6 +1,6 @@
 name: Swalot
 chrooked_id: swalot
-aka: { pokeemerald: SPECIES_SWALOT }
+aka: { pokeemerald: SPECIES_SWALOT, monomyth: 148 }
 types: [Poison, Normal]
 abilities:
   primary: Liquid Ooze

@@ -1,6 +1,6 @@
 name: Glalie
 chrooked_id: glalie
-aka: { pokeemerald: SPECIES_GLALIE }
+aka: { pokeemerald: SPECIES_GLALIE, monomyth: 49 }
 abilities:
   primary: Levitate
   secondary: Deadlock

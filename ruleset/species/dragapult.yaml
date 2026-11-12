@@ -1,6 +1,6 @@
 name: Dragapult
 chrooked_id: dragapult
-aka: { dex: 887 }
+aka: { dex: 887, monomyth: 83 }
 learnset:
   - { level: 0, move: Dragon Darts }
   - { level: 1, move: Leer }

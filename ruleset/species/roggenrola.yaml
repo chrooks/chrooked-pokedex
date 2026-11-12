@@ -1,6 +1,6 @@
 name: Roggenrola
 chrooked_id: roggenrola
-aka: { pokeemerald: SPECIES_ROGGENROLA }
+aka: { pokeemerald: SPECIES_ROGGENROLA, monomyth: 126 }
 abilities:
   secondary: Weak Armor
 stats: { atk: 25, spa: 75 }

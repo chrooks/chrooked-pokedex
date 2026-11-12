@@ -1,6 +1,6 @@
 name: Galvantula
 chrooked_id: galvantula
-aka: { pokeemerald: SPECIES_GALVANTULA }
+aka: { pokeemerald: SPECIES_GALVANTULA, monomyth: 97 }
 abilities:
   primary: Web Weaver
   secondary: Compound Eyes

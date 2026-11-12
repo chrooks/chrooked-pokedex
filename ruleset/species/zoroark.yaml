@@ -1,6 +1,6 @@
 name: Zoroark
 chrooked_id: zoroark
-aka: { pokeemerald: SPECIES_ZOROARK }
+aka: { pokeemerald: SPECIES_ZOROARK, monomyth: 118 }
 stats: { spe: 115 }
 learnset:
   - { level: 0, move: Night Daze }

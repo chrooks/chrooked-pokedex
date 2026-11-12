@@ -1,6 +1,6 @@
 name: Loudred
 chrooked_id: loudred
-aka: { pokeemerald: SPECIES_LOUDRED }
+aka: { pokeemerald: SPECIES_LOUDRED, monomyth: 120 }
 abilities:
   secondary: Amplifier
 stats: { spa: 95 }

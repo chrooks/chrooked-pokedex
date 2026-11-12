@@ -1,6 +1,6 @@
 name: Togekiss
 chrooked_id: togekiss
-aka: { pokeemerald: SPECIES_TOGEKISS }
+aka: { pokeemerald: SPECIES_TOGEKISS, monomyth: 100 }
 abilities:
   primary: Aerodynamic
   hidden: Regenerator

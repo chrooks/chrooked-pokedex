@@ -1,6 +1,6 @@
 name: Meditite
 chrooked_id: meditite
-aka: { pokeemerald: SPECIES_MEDITITE }
+aka: { pokeemerald: SPECIES_MEDITITE, monomyth: 112 }
 abilities:
   primary: Huge Power
   secondary: Mountaineer

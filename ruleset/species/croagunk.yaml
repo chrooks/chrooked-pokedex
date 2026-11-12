@@ -1,6 +1,6 @@
 name: Croagunk
 chrooked_id: croagunk
-aka: { pokeemerald: SPECIES_CROAGUNK }
+aka: { pokeemerald: SPECIES_CROAGUNK, monomyth: 110 }
 types: [Poison, Fighting]
 abilities:
   primary: Venomous

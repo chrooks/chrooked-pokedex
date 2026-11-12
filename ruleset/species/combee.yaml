@@ -1,6 +1,6 @@
 name: Combee
 chrooked_id: combee
-aka: { pokeemerald: SPECIES_COMBEE }
+aka: { pokeemerald: SPECIES_COMBEE, monomyth: 104 }
 abilities:
   hidden: Aerodynamic
 stats: { atk: 36 }

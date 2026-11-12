@@ -1,6 +1,6 @@
 name: Growlithe
 chrooked_id: growlithe
-aka: { pokeemerald: SPECIES_GROWLITHE }
+aka: { pokeemerald: SPECIES_GROWLITHE, monomyth: 15 }
 types: [Fire]
 abilities:
   primary: Intimidate

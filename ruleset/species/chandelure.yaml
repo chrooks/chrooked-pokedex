@@ -1,6 +1,6 @@
 name: Chandelure
 chrooked_id: chandelure
-aka: { pokeemerald: SPECIES_CHANDELURE }
+aka: { pokeemerald: SPECIES_CHANDELURE, monomyth: 136 }
 abilities:
   primary: Flash Fire
   secondary: Pyre

@@ -1,6 +1,6 @@
 name: Sudowoodo
 chrooked_id: sudowoodo
-aka: { pokeemerald: SPECIES_SUDOWOODO }
+aka: { pokeemerald: SPECIES_SUDOWOODO, monomyth: 125 }
 types: [Rock, Grass]
 abilities:
   primary: Stonebark

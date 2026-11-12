@@ -1,6 +1,6 @@
 name: Boldore
 chrooked_id: boldore
-aka: { pokeemerald: SPECIES_BOLDORE }
+aka: { pokeemerald: SPECIES_BOLDORE, monomyth: 127 }
 abilities:
   secondary: Weak Armor
 stats: { hp: 80, atk: 50, spa: 105, spd: 60 }

@@ -1,6 +1,6 @@
 name: Starmie
 chrooked_id: starmie
-aka: { pokeemerald: SPECIES_STARMIE }
+aka: { pokeemerald: SPECIES_STARMIE, monomyth: 20 }
 abilities:
   primary: Starfall
   secondary: Regenerator

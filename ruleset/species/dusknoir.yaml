@@ -1,6 +1,6 @@
 name: Dusknoir
 chrooked_id: dusknoir
-aka: { pokeemerald: SPECIES_DUSKNOIR }
+aka: { pokeemerald: SPECIES_DUSKNOIR, monomyth: 56 }
 types: [Ghost, Fighting]
 abilities:
   primary: Pressure

@@ -1,6 +1,6 @@
 name: Numel
 chrooked_id: numel
-aka: { pokeemerald: SPECIES_NUMEL }
+aka: { pokeemerald: SPECIES_NUMEL, monomyth: 41 }
 abilities:
   primary: Kindle
   secondary: Solid Rock

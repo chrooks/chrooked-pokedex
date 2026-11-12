@@ -1,6 +1,6 @@
 name: Larvitar
 chrooked_id: larvitar
-aka: { pokeemerald: SPECIES_LARVITAR }
+aka: { pokeemerald: SPECIES_LARVITAR, monomyth: 38 }
 abilities:
   primary: Impenetrable
   secondary: Sand Stream

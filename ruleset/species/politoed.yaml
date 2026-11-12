@@ -1,6 +1,6 @@
 name: Politoed
 chrooked_id: politoed
-aka: { pokeemerald: SPECIES_POLITOED }
+aka: { pokeemerald: SPECIES_POLITOED, monomyth: 24 }
 types: [Water, Normal]
 abilities:
   primary: Downpour

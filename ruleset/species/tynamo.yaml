@@ -1,6 +1,6 @@
 name: Tynamo
 chrooked_id: tynamo
-aka: { pokeemerald: SPECIES_TYNAMO }
+aka: { pokeemerald: SPECIES_TYNAMO, monomyth: 141 }
 types: [Water, Electric]
 abilities:
   primary: Levitate

@@ -1,6 +1,6 @@
 name: Slugma
 chrooked_id: slugma
-aka: { pokeemerald: SPECIES_SLUGMA }
+aka: { pokeemerald: SPECIES_SLUGMA, monomyth: 77 }
 abilities:
   primary: Gooey
   hidden: Mountaineer

@@ -1,6 +1,6 @@
 name: Dusclops
 chrooked_id: dusclops
-aka: { pokeemerald: SPECIES_DUSCLOPS }
+aka: { pokeemerald: SPECIES_DUSCLOPS, monomyth: 55 }
 types: [Ghost, Fighting]
 abilities:
   primary: Pressure

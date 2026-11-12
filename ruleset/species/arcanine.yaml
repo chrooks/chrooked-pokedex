@@ -1,6 +1,6 @@
 name: Arcanine
 chrooked_id: arcanine
-aka: { pokeemerald: SPECIES_ARCANINE }
+aka: { pokeemerald: SPECIES_ARCANINE, monomyth: 16 }
 abilities:
   hidden: Immolate
 stats: { hp: 91, atk: 134, def: 80, spa: 100, spd: 85, spe: 110 }

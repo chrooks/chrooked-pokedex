@@ -1,6 +1,6 @@
 name: Forretress
 chrooked_id: forretress
-aka: { pokeemerald: SPECIES_FORRETRESS }
+aka: { pokeemerald: SPECIES_FORRETRESS, monomyth: 33 }
 stats: { hp: 85 }
 learnset:
   - { level: 0, move: Heavy Slam }

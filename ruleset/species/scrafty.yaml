@@ -1,6 +1,6 @@
 name: Scrafty
 chrooked_id: scrafty
-aka: { pokeemerald: SPECIES_SCRAFTY }
+aka: { pokeemerald: SPECIES_SCRAFTY, monomyth: 107 }
 abilities:
   primary: Rock Head
 stats: { hp: 70, atk: 95, spe: 60 }

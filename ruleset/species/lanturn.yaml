@@ -1,6 +1,6 @@
 name: Lanturn
 chrooked_id: lanturn
-aka: { pokeemerald: SPECIES_LANTURN }
+aka: { pokeemerald: SPECIES_LANTURN, monomyth: 140 }
 abilities:
   primary: Volt Absorb
   secondary: Water Absorb

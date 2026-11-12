@@ -1,5 +1,5 @@
 name: Cottonee
 chrooked_id: cottonee
-aka: { pokeemerald: SPECIES_COTTONEE }
+aka: { pokeemerald: SPECIES_COTTONEE, monomyth: 64 }
 abilities:
   hidden: Aerodynamic

@@ -1,6 +1,6 @@
 name: Cacturne
 chrooked_id: cacturne
-aka: { pokeemerald: SPECIES_CACTURNE }
+aka: { pokeemerald: SPECIES_CACTURNE, monomyth: 58 }
 abilities:
   primary: Sand Rush
   secondary: Stakeout

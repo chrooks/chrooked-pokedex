@@ -1,6 +1,6 @@
 name: Toxicroak
 chrooked_id: toxicroak
-aka: { pokeemerald: SPECIES_TOXICROAK }
+aka: { pokeemerald: SPECIES_TOXICROAK, monomyth: 111 }
 abilities:
   primary: Venomous
   secondary: Dry Skin

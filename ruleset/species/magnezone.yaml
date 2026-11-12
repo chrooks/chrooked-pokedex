@@ -1,6 +1,6 @@
 name: Magnezone
 chrooked_id: magnezone
-aka: { pokeemerald: SPECIES_MAGNEZONE }
+aka: { pokeemerald: SPECIES_MAGNEZONE, monomyth: 89 }
 abilities:
   primary: Magnet Pull
   secondary: Repulsion

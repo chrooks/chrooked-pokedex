@@ -1,6 +1,6 @@
 name: Sunflora
 chrooked_id: sunflora
-aka: { pokeemerald: SPECIES_SUNFLORA }
+aka: { pokeemerald: SPECIES_SUNFLORA, monomyth: 61 }
 types: [Grass, Fire]
 abilities:
   primary: Chlorophyll

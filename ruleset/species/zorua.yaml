@@ -1,6 +1,6 @@
 name: Zorua
 chrooked_id: zorua
-aka: {  }
+aka: { monomyth: 117 }
 learnset:
   - { level: 1, move: Scratch }
   - { level: 1, move: Leer }

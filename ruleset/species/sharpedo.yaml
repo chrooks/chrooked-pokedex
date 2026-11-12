@@ -1,6 +1,6 @@
 name: Sharpedo
 chrooked_id: sharpedo
-aka: { pokeemerald: SPECIES_SHARPEDO }
+aka: { pokeemerald: SPECIES_SHARPEDO, monomyth: 47 }
 abilities:
   primary: Carnivore
   secondary: Blitz

@@ -1,6 +1,6 @@
 name: Ursaring
 chrooked_id: ursaring
-aka: { pokeemerald: SPECIES_URSARING }
+aka: { pokeemerald: SPECIES_URSARING, monomyth: 115 }
 abilities:
   secondary: Quick Feet
 learnset:

@@ -1,6 +1,6 @@
 name: Gulpin
 chrooked_id: gulpin
-aka: { pokeemerald: SPECIES_GULPIN }
+aka: { pokeemerald: SPECIES_GULPIN, monomyth: 147 }
 types: [Poison, Normal]
 abilities:
   primary: Liquid Ooze

@@ -1,6 +1,6 @@
 name: Metang
 chrooked_id: metang
-aka: { pokeemerald: SPECIES_METANG }
+aka: { pokeemerald: SPECIES_METANG, monomyth: 52 }
 abilities:
   primary: Analytic
   secondary: Apex Predator

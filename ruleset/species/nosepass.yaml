@@ -1,6 +1,6 @@
 name: Nosepass
 chrooked_id: nosepass
-aka: { dex: 299 }
+aka: { dex: 299, monomyth: 129 }
 types: [Rock, Electric]
 abilities:
   primary: Magnet Pull

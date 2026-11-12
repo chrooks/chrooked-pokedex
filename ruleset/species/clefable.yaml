@@ -1,6 +1,6 @@
 name: Clefable
 chrooked_id: clefable
-aka: { pokeemerald: SPECIES_CLEFABLE }
+aka: { pokeemerald: SPECIES_CLEFABLE, monomyth: 92 }
 types: [Fairy]
 abilities:
   secondary: Magic Guard

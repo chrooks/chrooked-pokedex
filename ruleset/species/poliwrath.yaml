@@ -1,6 +1,6 @@
 name: Poliwrath
 chrooked_id: poliwrath
-aka: { pokeemerald: SPECIES_POLIWRATH }
+aka: { pokeemerald: SPECIES_POLIWRATH, monomyth: 23 }
 abilities:
   primary: Water Absorb
   secondary: Iron Fist

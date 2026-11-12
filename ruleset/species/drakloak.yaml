@@ -1,6 +1,6 @@
 name: Drakloak
 chrooked_id: drakloak
-aka: { dex: 886 }
+aka: { dex: 886, monomyth: 82 }
 types: [Dragon, Ghost]
 abilities:
   primary: Clear Body

@@ -1,6 +1,6 @@
 name: Phanpy
 chrooked_id: phanpy
-aka: { pokeemerald: SPECIES_PHANPY }
+aka: { pokeemerald: SPECIES_PHANPY, monomyth: 34 }
 types: [Ground]
 abilities:
   primary: Bioturbation

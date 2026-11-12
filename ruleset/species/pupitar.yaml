@@ -1,6 +1,6 @@
 name: Pupitar
 chrooked_id: pupitar
-aka: { pokeemerald: SPECIES_PUPITAR }
+aka: { pokeemerald: SPECIES_PUPITAR, monomyth: 39 }
 abilities:
   primary: Impenetrable
   secondary: Sand Stream

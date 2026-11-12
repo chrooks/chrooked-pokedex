@@ -1,6 +1,6 @@
 name: Metagross
 chrooked_id: metagross
-aka: { pokeemerald: SPECIES_METAGROSS }
+aka: { pokeemerald: SPECIES_METAGROSS, monomyth: 53 }
 abilities:
   primary: Analytic
   secondary: Apex Predator

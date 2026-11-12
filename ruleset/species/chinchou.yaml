@@ -1,6 +1,6 @@
 name: Chinchou
 chrooked_id: chinchou
-aka: { pokeemerald: SPECIES_CHINCHOU }
+aka: { pokeemerald: SPECIES_CHINCHOU, monomyth: 139 }
 abilities:
   primary: Volt Absorb
   secondary: Water Absorb

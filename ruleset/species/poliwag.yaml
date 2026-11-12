@@ -1,6 +1,6 @@
 name: Poliwag
 chrooked_id: poliwag
-aka: { pokeemerald: SPECIES_POLIWAG }
+aka: { pokeemerald: SPECIES_POLIWAG, monomyth: 21 }
 abilities:
   secondary: Hydrate
   hidden: Downpour

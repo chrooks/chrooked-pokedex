@@ -1,6 +1,6 @@
 name: Magnemite
 chrooked_id: magnemite
-aka: {  }
+aka: { monomyth: 87 }
 abilities:
   primary: Magnet Pull
   secondary: Repulsion

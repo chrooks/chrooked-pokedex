@@ -1,6 +1,6 @@
 name: Heracross
 chrooked_id: heracross
-aka: { pokeemerald: SPECIES_HERACROSS }
+aka: { pokeemerald: SPECIES_HERACROSS, monomyth: 102 }
 abilities:
   primary: Impale
   secondary: Sap Sipper

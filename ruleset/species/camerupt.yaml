@@ -1,6 +1,6 @@
 name: Camerupt
 chrooked_id: camerupt
-aka: { pokeemerald: SPECIES_CAMERUPT }
+aka: { pokeemerald: SPECIES_CAMERUPT, monomyth: 42 }
 abilities:
   primary: Kindle
   secondary: Solid Rock

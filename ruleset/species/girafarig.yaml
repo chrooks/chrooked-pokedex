@@ -1,6 +1,6 @@
 name: Girafarig
 chrooked_id: girafarig
-aka: { pokeemerald: SPECIES_GIRAFARIG }
+aka: { pokeemerald: SPECIES_GIRAFARIG, monomyth: 76 }
 types: [Dark, Psychic]
 abilities:
   primary: Armor Tail

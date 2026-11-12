@@ -1,6 +1,6 @@
 name: Gliscor
 chrooked_id: gliscor
-aka: { pokeemerald: SPECIES_GLISCOR }
+aka: { pokeemerald: SPECIES_GLISCOR, monomyth: 27 }
 abilities:
   primary: Tectonize
   secondary: Vampiric

@@ -1,6 +1,6 @@
 name: Scraggy
 chrooked_id: scraggy
-aka: { dex: 559 }
+aka: { dex: 559, monomyth: 106 }
 types: [Dark, Fighting]
 abilities:
   primary: Rock Head

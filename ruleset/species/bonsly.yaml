@@ -1,6 +1,6 @@
 name: Bonsly
 chrooked_id: bonsly
-aka: { pokeemerald: SPECIES_BONSLY }
+aka: { pokeemerald: SPECIES_BONSLY, monomyth: 124 }
 abilities:
   primary: Stonebark
   secondary: Rock Head

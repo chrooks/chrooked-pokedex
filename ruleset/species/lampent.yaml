@@ -1,6 +1,6 @@
 name: Lampent
 chrooked_id: lampent
-aka: { pokeemerald: SPECIES_LAMPENT }
+aka: { pokeemerald: SPECIES_LAMPENT, monomyth: 135 }
 types: [Ghost, Fire]
 abilities:
   primary: Flash Fire

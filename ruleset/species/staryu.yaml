@@ -1,6 +1,6 @@
 name: Staryu
 chrooked_id: staryu
-aka: { pokeemerald: SPECIES_STARYU }
+aka: { pokeemerald: SPECIES_STARYU, monomyth: 19 }
 abilities:
   primary: Starfall
   secondary: Regenerator

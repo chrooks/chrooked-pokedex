@@ -1,6 +1,6 @@
 name: Slurpuff
 chrooked_id: slurpuff
-aka: { pokeemerald: SPECIES_SLURPUFF }
+aka: { pokeemerald: SPECIES_SLURPUFF, monomyth: 353 }
 types: [Fairy, Normal]
 abilities:
   primary: Unburden

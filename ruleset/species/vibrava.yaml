@@ -1,6 +1,6 @@
 name: Vibrava
 chrooked_id: vibrava
-aka: { pokeemerald: SPECIES_VIBRAVA }
+aka: { pokeemerald: SPECIES_VIBRAVA, monomyth: 44 }
 types: [Bug, Dragon]
 abilities:
   primary: Singing Sands

@@ -1,6 +1,6 @@
 name: Ditto
 chrooked_id: ditto
-aka: {  }
+aka: { monomyth: 84 }
 learnset:
   - { level: 1, move: Transform }
   - { level: 2, move: Tackle }

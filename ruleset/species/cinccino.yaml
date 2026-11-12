@@ -1,6 +1,6 @@
 name: Cinccino
 chrooked_id: cinccino
-aka: {  }
+aka: { monomyth: 123 }
 learnset:
   - { level: 0, move: Tail Slap }
   - { level: 1, move: Encore }

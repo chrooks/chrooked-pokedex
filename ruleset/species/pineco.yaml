@@ -1,6 +1,6 @@
 name: Pineco
 chrooked_id: pineco
-aka: {  }
+aka: { monomyth: 32 }
 learnset:
   - { level: 1, move: Tackle }
   - { level: 1, move: Protect }

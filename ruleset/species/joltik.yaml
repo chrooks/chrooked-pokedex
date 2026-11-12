@@ -1,6 +1,6 @@
 name: Joltik
 chrooked_id: joltik
-aka: { pokeemerald: SPECIES_JOLTIK }
+aka: { pokeemerald: SPECIES_JOLTIK, monomyth: 96 }
 types: [Bug, Electric]
 abilities:
   primary: Web Weaver

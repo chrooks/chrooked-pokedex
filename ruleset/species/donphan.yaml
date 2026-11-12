@@ -1,6 +1,6 @@
 name: Donphan
 chrooked_id: donphan
-aka: { pokeemerald: SPECIES_DONPHAN }
+aka: { pokeemerald: SPECIES_DONPHAN, monomyth: 35 }
 abilities:
   primary: Bioturbation
   secondary: Blitz

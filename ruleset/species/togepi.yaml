@@ -1,6 +1,6 @@
 name: Togepi
 chrooked_id: togepi
-aka: { pokeemerald: SPECIES_TOGEPI }
+aka: { pokeemerald: SPECIES_TOGEPI, monomyth: 98 }
 learnset:
   - { level: 1, move: Growl }
   - { level: 1, move: Pound }

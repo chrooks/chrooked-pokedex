@@ -1,6 +1,6 @@
 name: Druddigon
 chrooked_id: druddigon
-aka: { pokeemerald: SPECIES_DRUDDIGON }
+aka: { pokeemerald: SPECIES_DRUDDIGON, monomyth: 66 }
 types: [Dragon, Rock]
 stats: { hp: 87, atk: 135, def: 100, spa: 60, spd: 95, spe: 63 }
 learnset:

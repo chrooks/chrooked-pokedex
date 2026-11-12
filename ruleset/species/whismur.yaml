@@ -1,6 +1,6 @@
 name: Whismur
 chrooked_id: whismur
-aka: { pokeemerald: SPECIES_WHISMUR }
+aka: { pokeemerald: SPECIES_WHISMUR, monomyth: 119 }
 abilities:
   secondary: Amplifier
 learnset:

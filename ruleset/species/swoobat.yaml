@@ -1,6 +1,6 @@
 name: Swoobat
 chrooked_id: swoobat
-aka: { pokeemerald: SPECIES_SWOOBAT }
+aka: { pokeemerald: SPECIES_SWOOBAT, monomyth: 306 }
 abilities:
   primary: Aerodynamic
   secondary: Psyonize

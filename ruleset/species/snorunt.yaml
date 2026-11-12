@@ -1,6 +1,6 @@
 name: Snorunt
 chrooked_id: snorunt
-aka: { pokeemerald: SPECIES_SNORUNT }
+aka: { pokeemerald: SPECIES_SNORUNT, monomyth: 48 }
 abilities:
   primary: Frost Body
   secondary: Deadlock

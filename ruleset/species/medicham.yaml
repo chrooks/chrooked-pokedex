@@ -1,6 +1,6 @@
 name: Medicham
 chrooked_id: medicham
-aka: { pokeemerald: SPECIES_MEDICHAM }
+aka: { pokeemerald: SPECIES_MEDICHAM, monomyth: 113 }
 abilities:
   primary: Huge Power
   secondary: Mountaineer

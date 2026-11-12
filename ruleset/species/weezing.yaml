@@ -1,6 +1,6 @@
 name: Weezing
 chrooked_id: weezing
-aka: { pokeemerald: SPECIES_WEEZING }
+aka: { pokeemerald: SPECIES_WEEZING, monomyth: 18 }
 types: [Poison]
 abilities:
   primary: Levitate

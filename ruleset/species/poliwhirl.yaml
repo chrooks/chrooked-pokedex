@@ -1,6 +1,6 @@
 name: Poliwhirl
 chrooked_id: poliwhirl
-aka: { pokeemerald: SPECIES_POLIWHIRL }
+aka: { pokeemerald: SPECIES_POLIWHIRL, monomyth: 22 }
 abilities:
   secondary: Hydrate
   hidden: Downpour

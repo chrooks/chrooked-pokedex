@@ -1,6 +1,6 @@
 name: Duskull
 chrooked_id: duskull
-aka: { pokeemerald: SPECIES_DUSKULL }
+aka: { pokeemerald: SPECIES_DUSKULL, monomyth: 54 }
 types: [Ghost, Fighting]
 abilities:
   primary: Pressure

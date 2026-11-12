@@ -1,6 +1,6 @@
 name: Eelektross
 chrooked_id: eelektross
-aka: { pokeemerald: SPECIES_EELEKTROSS }
+aka: { pokeemerald: SPECIES_EELEKTROSS, monomyth: 143 }
 types: [Electric, Water]
 abilities:
   secondary: Coil Up

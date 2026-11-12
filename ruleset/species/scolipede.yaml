@@ -1,6 +1,6 @@
 name: Scolipede
 chrooked_id: scolipede
-aka: { pokeemerald: SPECIES_SCOLIPEDE }
+aka: { pokeemerald: SPECIES_SCOLIPEDE, monomyth: 74 }
 abilities:
   primary: Venomous
   hidden: Speed Boost

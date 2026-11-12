@@ -1,6 +1,6 @@
 name: Carvanha
 chrooked_id: carvanha
-aka: { pokeemerald: SPECIES_CARVANHA }
+aka: { pokeemerald: SPECIES_CARVANHA, monomyth: 46 }
 abilities:
   primary: Carnivore
   secondary: Blitz

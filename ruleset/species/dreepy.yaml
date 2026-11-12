@@ -1,6 +1,6 @@
 name: Dreepy
 chrooked_id: dreepy
-aka: { dex: 885 }
+aka: { dex: 885, monomyth: 81 }
 types: [Dragon, Ghost]
 abilities:
   primary: Clear Body

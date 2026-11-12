@@ -1,6 +1,6 @@
 name: Ariados
 chrooked_id: ariados
-aka: { pokeemerald: SPECIES_ARIADOS }
+aka: { pokeemerald: SPECIES_ARIADOS, monomyth: 95 }
 types: [Bug, Dark]
 abilities:
   primary: Web Weaver

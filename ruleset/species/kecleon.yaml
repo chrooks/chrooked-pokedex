@@ -1,6 +1,6 @@
 name: Kecleon
 chrooked_id: kecleon
-aka: { pokeemerald: SPECIES_KECLEON }
+aka: { pokeemerald: SPECIES_KECLEON, monomyth: 101 }
 abilities:
   hidden: Protean
 learnset:

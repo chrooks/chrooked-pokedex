@@ -1,6 +1,6 @@
 name: Vespiquen
 chrooked_id: vespiquen
-aka: { pokeemerald: SPECIES_VESPIQUEN }
+aka: { pokeemerald: SPECIES_VESPIQUEN, monomyth: 105 }
 abilities:
   primary: Self Sufficient
   secondary: Intimidate

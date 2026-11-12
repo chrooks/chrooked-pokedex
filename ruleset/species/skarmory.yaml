@@ -1,6 +1,6 @@
 name: Skarmory
 chrooked_id: skarmory
-aka: { pokeemerald: SPECIES_SKARMORY }
+aka: { pokeemerald: SPECIES_SKARMORY, monomyth: 93 }
 abilities:
   primary: Keen Eye
   secondary: Sturdy

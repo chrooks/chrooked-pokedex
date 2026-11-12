@@ -1,6 +1,6 @@
 name: Togetic
 chrooked_id: togetic
-aka: { pokeemerald: SPECIES_TOGETIC }
+aka: { pokeemerald: SPECIES_TOGETIC, monomyth: 99 }
 abilities:
   primary: Aerodynamic
 learnset:

@@ -1,6 +1,6 @@
 name: Tangela
 chrooked_id: tangela
-aka: { pokeemerald: SPECIES_TANGELA }
+aka: { pokeemerald: SPECIES_TANGELA, monomyth: 5 }
 abilities:
   secondary: Leaf Guard
 learnset:

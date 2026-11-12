@@ -1,6 +1,6 @@
 name: Beldum
 chrooked_id: beldum
-aka: { pokeemerald: SPECIES_BELDUM }
+aka: { pokeemerald: SPECIES_BELDUM, monomyth: 51 }
 abilities:
   primary: Analytic
   secondary: Apex Predator

@@ -1,6 +1,6 @@
 name: Misdreavus
 chrooked_id: misdreavus
-aka: { pokeemerald: SPECIES_MISDREAVUS }
+aka: { pokeemerald: SPECIES_MISDREAVUS, monomyth: 30 }
 types: [Ghost, Psychic]
 abilities:
   primary: Serene Grace

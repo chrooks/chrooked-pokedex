@@ -1,6 +1,6 @@
 name: Koffing
 chrooked_id: koffing
-aka: { pokeemerald: SPECIES_KOFFING }
+aka: { pokeemerald: SPECIES_KOFFING, monomyth: 17 }
 types: [Poison]
 abilities:
   primary: Levitate

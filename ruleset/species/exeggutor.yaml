@@ -1,6 +1,6 @@
 name: Exeggutor
 chrooked_id: exeggutor
-aka: { pokeemerald: SPECIES_EXEGGUTOR }
+aka: { pokeemerald: SPECIES_EXEGGUTOR, monomyth: 14 }
 abilities:
   primary: Chlorophyll
   secondary: Amplifier

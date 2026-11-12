@@ -1,6 +1,6 @@
 name: Eelektrik
 chrooked_id: eelektrik
-aka: { pokeemerald: SPECIES_EELEKTRIK }
+aka: { pokeemerald: SPECIES_EELEKTRIK, monomyth: 142 }
 types: [Water, Electric]
 abilities:
   primary: Levitate

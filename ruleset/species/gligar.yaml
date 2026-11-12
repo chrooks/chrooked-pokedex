@@ -1,6 +1,6 @@
 name: Gligar
 chrooked_id: gligar
-aka: { pokeemerald: SPECIES_GLIGAR }
+aka: { pokeemerald: SPECIES_GLIGAR, monomyth: 26 }
 abilities:
   primary: Tectonize
   secondary: Vampiric

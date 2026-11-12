@@ -1,6 +1,6 @@
 name: Aromatisse
 chrooked_id: aromatisse
-aka: { pokeemerald: SPECIES_AROMATISSE }
+aka: { pokeemerald: SPECIES_AROMATISSE, monomyth: 138 }
 types: [Fairy, Poison]
 abilities:
   primary: Venomize

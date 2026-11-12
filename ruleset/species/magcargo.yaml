@@ -1,6 +1,6 @@
 name: Magcargo
 chrooked_id: magcargo
-aka: { pokeemerald: SPECIES_MAGCARGO }
+aka: { pokeemerald: SPECIES_MAGCARGO, monomyth: 78 }
 abilities:
   primary: Gooey
   hidden: Mountaineer

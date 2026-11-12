@@ -1,6 +1,6 @@
 name: Mankey
 chrooked_id: mankey
-aka: { pokeemerald: SPECIES_MANKEY }
+aka: { pokeemerald: SPECIES_MANKEY, monomyth: 108 }
 types: [Fighting]
 abilities:
   primary: Blitz

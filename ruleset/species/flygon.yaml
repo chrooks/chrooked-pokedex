@@ -1,6 +1,6 @@
 name: Flygon
 chrooked_id: flygon
-aka: { pokeemerald: SPECIES_FLYGON }
+aka: { pokeemerald: SPECIES_FLYGON, monomyth: 45 }
 types: [Bug, Dragon]
 abilities:
   primary: Singing Sands

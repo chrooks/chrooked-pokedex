@@ -1,6 +1,6 @@
 name: Pinsir
 chrooked_id: pinsir
-aka: { pokeemerald: SPECIES_PINSIR }
+aka: { pokeemerald: SPECIES_PINSIR, monomyth: 103 }
 types: [Bug, Dark]
 abilities:
   primary: Death Grip

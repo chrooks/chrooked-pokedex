@@ -1,6 +1,6 @@
 name: Trapinch
 chrooked_id: trapinch
-aka: { pokeemerald: SPECIES_TRAPINCH }
+aka: { pokeemerald: SPECIES_TRAPINCH, monomyth: 43 }
 types: [Bug, Ground]
 abilities:
   primary: Arena Trap

@@ -1,6 +1,6 @@
 name: Probopass
 chrooked_id: probopass
-aka: { pokeemerald: SPECIES_PROBOPASS }
+aka: { pokeemerald: SPECIES_PROBOPASS, monomyth: 130 }
 types: [Rock, Electric]
 abilities:
   primary: Magnet Pull

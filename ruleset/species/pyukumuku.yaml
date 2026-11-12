@@ -1,6 +1,6 @@
 name: Pyukumuku
 chrooked_id: pyukumuku
-aka: { dex: 771 }
+aka: { dex: 771, monomyth: 307 }
 learnset:
   - { level: 1, move: Baton Pass }
   - { level: 1, move: Harden }

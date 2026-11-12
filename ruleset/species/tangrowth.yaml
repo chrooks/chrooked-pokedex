@@ -1,6 +1,6 @@
 name: Tangrowth
 chrooked_id: tangrowth
-aka: { pokeemerald: SPECIES_TANGROWTH }
+aka: { pokeemerald: SPECIES_TANGROWTH, monomyth: 7 }
 abilities:
   secondary: Effect Spore
 learnset:

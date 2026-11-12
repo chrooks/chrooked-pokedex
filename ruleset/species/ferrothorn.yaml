@@ -1,6 +1,6 @@
 name: Ferrothorn
 chrooked_id: ferrothorn
-aka: { pokeemerald: SPECIES_FERROTHORN }
+aka: { pokeemerald: SPECIES_FERROTHORN, monomyth: 68 }
 abilities:
   primary: Iron Barbs
   secondary: Rough Skin

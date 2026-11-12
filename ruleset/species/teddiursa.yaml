@@ -1,6 +1,6 @@
 name: Teddiursa
 chrooked_id: teddiursa
-aka: { pokeemerald: SPECIES_TEDDIURSA }
+aka: { pokeemerald: SPECIES_TEDDIURSA, monomyth: 114 }
 abilities:
   secondary: Quick Feet
 learnset:

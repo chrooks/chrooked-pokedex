@@ -1,6 +1,6 @@
 name: Annihilape
 chrooked_id: annihilape
-aka: { pokeemerald: SPECIES_ANNIHILAPE }
+aka: { pokeemerald: SPECIES_ANNIHILAPE, monomyth: 355 }
 abilities:
   primary: Blitz
   secondary: Iron Fist

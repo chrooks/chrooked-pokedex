@@ -1,6 +1,6 @@
 name: Tyranitar
 chrooked_id: tyranitar
-aka: { pokeemerald: SPECIES_TYRANITAR }
+aka: { pokeemerald: SPECIES_TYRANITAR, monomyth: 40 }
 abilities:
   primary: Impenetrable
   secondary: Sand Stream
