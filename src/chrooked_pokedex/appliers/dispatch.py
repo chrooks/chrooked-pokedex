@@ -73,6 +73,15 @@ def route_apply(
         _apply_polishedcrystal(target, category, ruleset, report)
         return
 
+    # --- gba-binary path (closed ROM; writes the Blocks file only) -----------
+    if engine == "gba-binary":
+        # Imported inline to avoid circular: cli → dispatch → cli.
+        from ..cli import _apply_gba_binary
+
+        _warn_unsupported_target_layers(holds, target_edits, "gba-binary", report)
+        _apply_gba_binary(target, category, ruleset, report)
+        return
+
     # --- rejuv path ---------------------------------------------------------
     if engine == "rejuv":
         # Imported inline to avoid circular: cli → dispatch → cli.

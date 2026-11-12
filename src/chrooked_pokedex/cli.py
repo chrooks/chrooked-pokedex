@@ -84,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
     apply.add_argument("--target", required=True, type=Path, help="Path to the fork.")
     apply.add_argument(
         "--engine",
-        choices=("pokeemerald", "essentials", "polishedcrystal", "rejuv"),
+        choices=("pokeemerald", "essentials", "polishedcrystal", "rejuv", "gba-binary"),
         default="pokeemerald",
         help="Target engine (default: pokeemerald). 'essentials' writes Pokémon "
         "Essentials PBS text; the dialect (16.2 vs modern v21) is auto-detected from "
@@ -415,6 +415,36 @@ def _apply_polishedcrystal(target: Path, category: str, ruleset, report: ApplyRe
     if "abilities" in categories:
         changed = ability_apply.apply_abilities(target, ruleset, resmap, report)
         print(f"abilities: {len(changed)} file(s) changed")
+
+
+# Closed GBA ROM (Monomyth): species types + base stats only in slice 1. The ROM
+# is never written; the output is the Blocks file beside it (ADR 0003).
+_GBA_BINARY_CATEGORIES = ("species",)
+
+
+def _apply_gba_binary(target: Path, category: str, ruleset, report: ApplyReport) -> None:
+    from .appliers.gba_binary import species_apply
+    from .appliers.gba_binary.addresses import AddressesError, load_addresses, verify_rom
+    from .appliers.gba_binary.blocks import BLOCKS_FILE, write_blocks_file
+    from .appliers.gba_binary.resolution import build_resolution_map
+    from .report import ReportEntry
+
+    categories = _GBA_BINARY_CATEGORIES if category == "all" else (category,)
+    if "species" not in categories:
+        return  # leave the Blocks file alone: rewriting it empty would drop species
+    try:
+        addresses = load_addresses(target)
+        rom = verify_rom(target, addresses)
+    except AddressesError as error:
+        # Abort before any block is written; the (all) row makes the CLI exit 1.
+        print(f"ERROR: {error}", file=sys.stderr)
+        report.add(ReportEntry("blocked", "(all)", "(all)", reason=f"blocked: {error}"))
+        return
+    resmap = build_resolution_map(addresses)
+    with rom.open("rb") as handle:
+        blocks = species_apply.apply_species(handle, ruleset, resmap, addresses, report)
+    write_blocks_file(target, addresses.rom_sha1, blocks)
+    print(f"species: {len(blocks)} block(s) → {BLOCKS_FILE}")
 
 
 # Essentials now covers the same tiers as pokeemerald. Evolution writes the
